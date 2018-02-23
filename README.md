@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/scrumlr.png" alt="scrumlr.io" width="284" height="121" />
   </p>
   <p>
-    <a href="https://travis-ci.org/masinio/scrumlr.io">
+    <a href="https://travis-ci.org/masinio/scrumlr.io" target="_blank">
         <img src="https://travis-ci.org/masinio/scrumlr.io.svg?branch=master" alt="Build status" />
     </a>
   </p>
