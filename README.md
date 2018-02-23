@@ -6,6 +6,9 @@
     <a href="https://travis-ci.org/masinio/scrumlr.io" target="_blank">
         <img src="https://travis-ci.org/masinio/scrumlr.io.svg?branch=master" alt="Build status" />
     </a>
+    <a href="https://codecov.io/gh/masinio/scrumlr.io" target="_blank">
+      <img src="https://codecov.io/gh/masinio/scrumlr.io/branch/master/graph/badge.svg" />
+    </a>
   </p>
 </div>
 
