@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Footer /> should define default values 1`] = `
+Object {
+  "dotSize": "large",
+  "maxDotsShown": 5,
+}
+`;

@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - "node"
+  - "lts/*"
+cache: yarn
+sudo: required
+services:
+  - docker
+
+install:
+  - yarn install
+  - yarn lint
+
+script:
+  - yarn css:build
+  - yarn test
+  - yarn build
+
+after_success:
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=masinio/scrumlr
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -f Dockerfile -t $REPO:$COMMIT .
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker push $REPO

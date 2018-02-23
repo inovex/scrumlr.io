@@ -1,0 +1,6 @@
+{
+  "src/**/*.{ts,tsx}": [
+    "prettier --parser typescript --trailing-comma none --single-quote true --write",
+    "git add"
+  ]
+}

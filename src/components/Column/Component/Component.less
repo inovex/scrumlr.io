@@ -1,0 +1,15 @@
+.component {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+}
+
+.component__content {
+  flex: 1 1 0;
+  flex-basis: 0; // fixes firefox bug
+  overflow: auto;
+}
+
+.component__footer {
+  flex: 0 1 auto;
+}

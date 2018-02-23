@@ -1,0 +1,101 @@
+@import '../../../constants/style';
+@import (reference) '../Card';
+
+@icon__width: @theme-font-size * 2;
+@card-details-z-index: @card-z-index + @base-z-index-step;
+
+.card-details__backdrop {
+  position: fixed;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background-color: rgba(0, 0, 0, 0.75);
+
+  z-index: @card-details-z-index;
+}
+
+.card_details__content {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+  width: 100%;
+
+  z-index: @card-details-z-index;
+}
+
+.card_details__card {
+  .card();
+  overflow: inherit;
+
+  box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
+}
+
+.card-details__card-text {
+  .card__content();
+  overflow: inherit;
+  height: auto;
+  min-height: 4.5em;
+  cursor: text;
+
+  padding: 0;
+  margin: (@base-unit + @base-unit * 5) 0 0 0;
+}
+
+.card-details__card-text > *:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.card-details__content-text--edit-mode {
+  box-sizing: border-box;
+
+  height: 9.5em;
+  width: 100%;
+  padding: 1em;
+  font-size: @theme-font-size;
+  line-height: 1.5;
+}
+
+.card-details__options {
+  list-style-type: none;
+  margin: 0;
+  padding: 0em;
+
+  position: absolute;
+  top: -1em;
+  right: -1em;
+}
+
+.card-details__option {
+  box-sizing: border-box;
+  display: block;
+  width: @icon__width;
+  height: @icon__width;
+  border: 0;
+  border-radius: 100%;
+  text-align: center;
+
+  padding: 0;
+  background: none;
+  font-size: @theme-font-size;
+  line-height: @icon__width;
+
+  background: @theme-color-font;
+  color: @theme-color-secondary;
+
+  cursor: pointer;
+}
+
+.card-details__stack {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.card-details__stack-item {
+  margin-top: 1em;
+}

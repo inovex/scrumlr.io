@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Icon /> should have default props 1`] = `
+Object {
+  "height": 32,
+  "width": 32,
+}
+`;

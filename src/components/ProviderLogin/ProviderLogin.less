@@ -1,0 +1,86 @@
+@import '../../constants/style';
+
+.login-providers {
+  display: flex;
+  justify-content: flex-start;
+
+  margin-top: @default-margin;
+}
+
+.login-providers__button {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  transition: border-color 0.3s ease-in-out;
+  outline: none;
+  cursor: pointer;
+}
+
+.login-providers__button + .login-providers__button {
+  margin-left: @default-margin;
+}
+
+.login-providers__button > * {
+  align-self: center;
+}
+
+.selection-circle-provider {
+  position: relative;
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  justify-content: center;
+
+  background: @color-white;
+}
+
+.selection-circle-provider__border {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.selection-circle-provider__border > svg {
+  width: 48px;
+  height: 48px;
+}
+
+.selection-circle-provider__border > svg * {
+  transition: fill .15s ease-in-out;
+  fill: @color-alternative-gray;
+}
+
+.selection-circle-provider > img {
+  align-self: center;
+  filter: contrast(0);
+
+  transition: filter .3s ease-in-out;
+}
+
+.login-providers__button:focus .selection-circle-provider > img,
+.login-providers__button:hover .selection-circle-provider > img {
+  fill: @color-mint;
+  filter: contrast(1);
+}
+
+.login-providers__button:focus .selection-circle-provider__border > svg *,
+.login-providers__button:hover .selection-circle-provider__border > svg * {
+  fill: @color-mint;
+}
+
+.login-providers__button:focus .selection-circle-provider__border > svg,
+.login-providers__button:hover .selection-circle-provider__border > svg {
+  animation:spin .75s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  } to {
+      transform: rotate(360deg);
+    }
+}
+

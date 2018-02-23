@@ -1,0 +1,213 @@
+@import '../../constants/style';
+
+@card-z-index: @base-z-index + @base-z-index-step * 2;
+@card-font-size: @theme-font-size;
+@card-line-height: @base-unit * 5;
+@icon__width: 24px;
+
+.card__root {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  color: @theme-color-font;
+  background: @theme-color-background;
+
+  box-sizing: border-box;
+  padding: @base-unit * 5;
+
+  box-shadow: 0 @base-unit @base-unit*2 0 fade(@color-dark-gray, 15%);
+
+  position: relative;
+  overflow: hidden;
+
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  z-index: @card-z-index;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 @base-unit*2 @base-unit*4 0 fade(@color-dark-gray, 15%);
+}
+
+.card--focused {
+  transform: scale(1.03);
+  box-shadow: 0 @base-unit*4 @base-unit*8 0 fade(@color-dark-gray, 15%);
+}
+
+.card--drophover {
+  border: 1px solid @color-mint;
+}
+
+.card--disabled {
+  background: @theme-color-disabled;
+}
+
+.card-indicator {
+  position: absolute;
+
+  top: @base-unit * 5;
+  left: @base-unit * 5;
+  width: @base-unit * 8;
+  height: @base-unit;
+
+  border: 0;
+  border-radius: .25em;
+}
+
+.card-indicator--own {
+  background: @theme-color-primary;
+}
+
+.card-indicator--other {
+  background: @theme-color-disabled;
+}
+
+.card__selection-area:hover .card__admin-buttonbar {
+  display: inherit;
+}
+
+.card__admin-buttonbar {
+  position: absolute;
+  top: @base-unit * 3;
+  right: @base-unit * 5;
+  display: none;
+
+  margin: 0;
+  padding: 0;
+
+  z-index: @base-z-index + @base-z-index-step * 3;
+}
+
+.card__admin-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.card__admin-button:hover > .card__admin-button-icon > svg g {
+  fill: @color-dark-gray;
+}
+
+.card__admin-button:not(:first-child) {
+  margin-left: @base-unit*2;
+}
+
+.card__admin-button-icon {
+  width: @icon__width;
+  height: @icon__width;
+}
+
+.card__admin-button-icon > svg {
+  width: @icon__width;
+  height: @icon__width;
+}
+
+.card__admin-button-icon g {
+  fill: @color-alternative-gray;
+}
+
+.card--stacked {
+  margin: 1em;
+}
+
+.card__author-image {
+  flex: 0;
+  width: @theme-icon-width;
+  height: @theme-icon-height;
+  border: 0;
+  border-radius: 50%;
+}
+
+.card__content {
+  position: relative;
+
+  box-sizing: content-box;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-size: @card-font-size;
+  font-weight: normal;
+  line-height: @card-line-height;
+  letter-spacing: 0;
+
+  height: @card-line-height * 3;
+
+  margin: 0;
+  padding: (@base-unit + @base-unit * 5) 0 0 0;
+
+  cursor: pointer;
+}
+
+.card__content > *:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.card__more-content-indicator {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  color: @color-alternative-gray;
+
+  height: @card-line-height;
+  width: @base-unit * 8;
+  background: linear-gradient(
+    to right,
+    fade(@color-white, 0%) 0%,
+    @theme-color-background 50%
+  );
+
+  text-align: right;
+}
+
+.card__text--edit-mode {
+  width: 100%;
+}
+
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  line-height: @theme-icon-height;
+
+  margin-top: @default-margin;
+}
+
+.card__details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-right: 1em;
+  margin-left: 1em;
+}
+
+.card__stack {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card__in-stack {
+  box-sizing: border-box;
+  position: absolute;
+
+  // 100% - margin of @base-unit*2 on both sides of the stacked card
+  width: calc(100% ~"-" @base-unit*4);
+  height: 100%;
+
+  right: @base-unit*2;
+  bottom: -@base-unit*2;
+
+  opacity: 0.95;
+  box-shadow: 0 @base-unit @base-unit*2 0 fade(@color-dark-gray, 15%);
+
+  z-index: @card-z-index - @base-z-index-step;
+}

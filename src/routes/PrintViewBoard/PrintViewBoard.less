@@ -1,0 +1,96 @@
+@media print {
+  .buttonbar {
+    display: none;
+  }
+}
+
+html, body {
+  overflow: initial !important;
+  background: white !important;
+}
+
+.print-view-board {
+  margin: 0 1em;
+}
+
+.buttonbar {
+  margin: 1em 0;
+}
+
+.back-button {
+  background-color: #00E7C2;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  color: #FFFFFF;
+  padding: 4px 12px;
+  min-height: 50px;
+}
+
+.ad-text {
+
+}
+
+.ad-text--headline {
+  font-size: .55em;
+}
+
+.card-section {
+  margin-bottom: 4em;
+}
+
+.card-list {
+  list-style: none;
+  padding: 0 0 0 6em;
+}
+
+.card-list__item {
+  padding-bottom: 1.5em;
+  border-top: 1px dotted lightgray;
+}
+
+.card-list-meta {
+  list-style: none;
+  padding: 0;
+  font-size: .8em;
+}
+
+.card-list-meta__item {
+  display: inline-block;
+  margin-right: .5em;
+}
+
+[data-badge]::after {
+  content: attr(data-badge);
+  border-radius: 30px;
+  background: transparent;
+  border: 1px solid black;
+  text-align: center;
+  padding: 1px 8px;
+  min-width: 20px;
+}
+
+.headline-prefix {
+  display: inline-block;
+  margin-right: 1.4em;
+}
+
+.headline-prefix > svg {
+  vertical-align: bottom; 
+}
+
+.headline-badge {
+  font-size: .55em;
+  vertical-align: middle;
+}
+
+.headline-badge--after {
+  padding-left: .5em;
+}

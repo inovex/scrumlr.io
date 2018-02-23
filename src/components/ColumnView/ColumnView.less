@@ -1,0 +1,50 @@
+@import '../../constants/style';
+
+.board {
+  display: block;
+  height: 100%;
+}
+
+.column-view__wrapper {
+  flex: 1 1 0;
+}
+
+.column-view__active-indicator-list {
+  display: flex;
+}
+
+.column-view__active-indicator {
+  flex: 1 1 0;
+  height: 4px;
+  transition: background-color .2s ease-in-out;
+}
+
+.column-view__active-indicator--active {
+  background-color: @color-mint;
+}
+
+@media @desktop {
+  .board {
+    display: flex;
+  }
+}
+
+.board > * {
+  height: 100%;
+}
+
+.board__column {
+  flex: 1;
+}
+
+.board__column--background.board__column--theme-light {
+  background: @color-lightest-gray;
+}
+
+.board__column--background.board__column--theme-dark {
+  background: @color-light-gray;
+}
+
+.board__column--background.board__column--theme-mint {
+  background: @color-white;
+}

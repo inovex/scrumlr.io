@@ -1,0 +1,37 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": false,
+    "presence": {
+      "$uid": {
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "boards": {
+      "$boardId": {
+        ".write": "!root.child('boards').hasChild($boardId)",
+        "cards": {
+          "$cardId": {
+            ".write": "!root.child('boards/'+$boardId+'/cards').hasChild($cardId) || root.child('boards/'+$boardId+'/config/creatorUid').val() === auth.uid || data.child('authorUid').val() === auth.uid",
+            "userVotes": {
+              "$uid": {
+                ".write": "$uid === auth.uid"
+              }
+            },
+            "votes": {
+              ".write": "null !== auth.uid"
+            }
+          }
+        },
+        "config": {
+          ".write": "!data.child('creatorUid').exists() || data.child('creatorUid').val() === auth.uid",
+          "users": {
+            "$uid": {
+              ".write": "$uid === auth.uid"
+            }
+          }
+        }
+      }
+    }
+  }
+}

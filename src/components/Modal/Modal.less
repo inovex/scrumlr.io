@@ -1,0 +1,100 @@
+@import '../../constants/style';
+
+.modal {
+  display: none;
+}
+
+@media @tablet {
+  .modal {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.modal__backdrop {
+  position: fixed;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  background: fade(@color-dark, 80%);
+
+  backdrop-filter: blur(@base-unit);
+
+  z-index: @base-z-index + @base-z-index-step * @base-z-index;
+}
+
+.modal__content-wrapper {
+  overflow: auto;
+  margin-top: @large-margin;
+}
+
+.modal__content {
+  position: relative;
+  background: @color-white;
+  min-width: 200px;
+  max-width: 860px;
+  min-height: 100px;
+  padding: @large-padding * 1.5;
+  box-shadow: @base-unit/2 @base-unit*8 @base-unit*16 0 fade(@color-dark, 65%);
+  margin: @large-margin;
+}
+
+.modal__close-button {
+  position: absolute;
+  top: @large-margin;
+  right: @large-margin;
+
+  background: none;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+
+  cursor: pointer;
+}
+
+.modal__close-button * {
+  transition: fill .15s ease-in-out;
+  fill: @color-dark-gray;
+}
+
+.modal__close-button:focus *,
+.modal__close-button:hover * {
+  fill: @color-mint;
+}
+
+.modal__headline {
+  align-self: flex-start;
+  margin-top: @default-margin;
+}
+
+.modal__action-area {
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: @large-margin
+}
+
+.modal__ack-button {
+  align-self: flex-end;
+
+  border: 0;
+  background: none;
+  outline: none;
+
+  font-size: @theme-font-size;
+  font-weight: bold;
+  color: @color-mint;
+
+  padding: @default-padding;
+  transition: background .2s ease-in-out, color .15s ease-in-out;
+}
+
+.modal__ack-button:focus,
+.modal__ack-button:hover {
+  color: @color-white;
+  background: @color-mint;
+}

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UserVotes /> should have default values 1`] = `
+Object {
+  "maxDotsShown": 5,
+  "votes": 0,
+}
+`;

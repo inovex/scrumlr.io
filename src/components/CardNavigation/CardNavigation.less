@@ -1,0 +1,61 @@
+@import '../../constants/style';
+
+.card-navigation {
+  display: flex;
+}
+
+.card-navigation--theme-light {
+  color: @color-dark-gray;
+}
+
+.card-navigation--theme-dark {
+  color: @color-white;
+}
+
+.card-navigation__text {
+  flex: 1;
+
+  text-transform: uppercase;
+  font-size: @theme-font-size;
+  font-weight: bold;
+  line-height: @theme-line-height;
+
+  text-align: center;
+  align-self: center;
+}
+
+.card-navigation__button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+}
+
+.card-navigation__button:not(:disabled):hover .card-navigation__icon {
+  cursor: pointer;
+}
+
+.card-navigation__button:disabled .card-navigation__icon * {
+  fill: @color-alternative-gray !important;
+}
+
+.card-navigation__button:not(:disabled):hover .card-navigation__icon *,
+.card-navigation__button:not(:disabled):focus .card-navigation__icon *,
+.card-navigation__button:not(:disabled):active .card-navigation__icon * {
+  fill: @color-mint;
+}
+
+.card-navigation__icon {
+  width: @theme-icon-width;
+  height: @theme-icon-height;
+}
+
+.card-navigation--theme-light .card-navigation__button .card-navigation__icon * {
+  fill: @color-dark-gray;
+}
+
+.card-navigation--theme-dark .card-navigation__button .card-navigation__icon * {
+  fill: @color-white;
+}
+

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddCard /> mapStateToProps should push new card to firebase when onAdd is called 1`] = `
+Array [
+  Object {
+    "author": "somebody@example.com",
+    "authorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
+    "image": "https://www.gravatar.com/avatar/3e046b237bd8b23336231b3c0a577e56?s=32&d=retro",
+    "text": "foobar",
+    "timestamp": "2017-01-01T00:00:00.000Z",
+    "type": "positive",
+    "userVotes": Object {
+      "xNpM1E6XiigmfH7P8f42Vc3KyN02": 0,
+    },
+    "votes": 0,
+  },
+]
+`;
