@@ -33,6 +33,7 @@ export interface HeaderConnectedProps {
   user: string;
   users: BoardUsers;
   onToggleReadyState: () => void;
+  onDeleteBoard: () => void;
 }
 
 export interface HeaderProps extends HeaderOwnProps, HeaderConnectedProps {}
@@ -55,6 +56,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       onOpenDonate,
       loggedIn,
       onExport,
+      onDeleteBoard,
       onSignOut
     } = this.props;
 
@@ -89,6 +91,7 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenSettings={onOpenSettings}
                 onOpenFeedback={onOpenFeedback}
                 onOpenDonate={onOpenDonate}
+                onDeleteBoard={onDeleteBoard}
               />}
           </div>
         </div>

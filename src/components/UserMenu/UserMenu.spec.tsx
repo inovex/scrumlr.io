@@ -12,6 +12,7 @@ describe('<UserMenu />', () => {
   beforeEach(() => {
     props = {
       onSignOut: jest.fn(),
+      onDeleteBoard: jest.fn(),
       onOpenSettings: jest.fn(),
       onOpenFeedback: jest.fn(),
       onOpenDonate: jest.fn(),

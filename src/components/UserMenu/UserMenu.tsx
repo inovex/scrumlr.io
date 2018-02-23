@@ -8,6 +8,7 @@ import Input from '../Input/Input';
 
 export interface UserMenuProps {
   onSignOut: () => void;
+  onDeleteBoard: () => void;
   onExport: () => void;
   onOpenSettings: () => void;
   onOpenFeedback: () => void;
@@ -49,6 +50,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onOpenDonate,
       onExport,
       onSignOut,
+      onDeleteBoard,
       boardName,
       admin
     } = this.props;
@@ -152,6 +154,12 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           >
             <Icon className="user_menu__button-icon" name="download" />
             <span className="user_menu__button-text">Export</span>
+          </button>
+        </li>
+        <li key="user-menu__delete">
+          <button className="user-menu__button" onClick={onDeleteBoard}>
+            <Icon className="user_menu__button-icon" name="close" />
+            <span className="user_menu__button-text">Delete board</span>
           </button>
         </li>
         <li key="user-menu__logout" className="user-menu__logout">
