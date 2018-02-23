@@ -74,7 +74,6 @@
     "eject": "react-scripts-ts eject",
     "lint": "./node_modules/tslint/bin/tslint --config tslint.json --project tsconfig.json --type-check \"src/*.{ts,tsx} \" \"src/**/*.{ts,tsx}\"",
     "lint:fix": "npm run lint -- --fix",
-    "firebase:deploy": "firebase deploy --only database --project scrumlr-d74d6",
     "prettier:base": "prettier --parser typescript --trailing-comma none --single-quote \"src/*.{ts,tsx}\" \"src/**/*.{ts,tsx}\"",
     "prettier:list": "npm run prettier:base -- --list-different",
     "prettier:write": "npm run prettier:base -- --write"
