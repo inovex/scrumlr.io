@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/masinio/scrumlr.io.svg?branch=master)](https://travis-ci.org/masinio/scrumlr.io)
 
-# Scrumlr.io Frontend
+<div align="center" markdown="1">
+    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/scrumlr.png" alt="scrumlr.io" width="284" />
+</div>
 
 Frontend written in React with a Firebase backend.
 
