@@ -5,6 +5,7 @@ const DropdownMenu = reactDDMenu.DropdownMenu;
 import './UserMenu.css';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
+import MenuItem from './MenuItem';
 
 export interface UserMenuProps {
   onSignOut: () => void;
@@ -113,60 +114,22 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
               </span>}
           </li>}
         <li key="user-menu__settings" className="user_menu__li--hidden-mobile">
-          <button
-            className="user-menu__button"
-            onClick={() => {
-              onOpenSettings();
-            }}
-          >
-            <Icon className="user_menu__button-icon" name="settings" />
-            <span className="user_menu__button-text">Settings</span>
-          </button>
+          <MenuItem name="Settings" icon="settings" onClick={onOpenSettings} />
         </li>
         <li key="user-menu__feedback" className="user_menu__li--hidden-mobile">
-          <button
-            className="user-menu__button"
-            onClick={() => {
-              onOpenFeedback();
-            }}
-          >
-            <Icon className="user_menu__button-icon" name="feedback" />
-            <span className="user_menu__button-text">Feedback</span>
-          </button>
+          <MenuItem name="Feedback" icon="feedback" onClick={onOpenFeedback} />
         </li>
         <li key="user-menu__donate" className="user_menu__li--hidden-mobile">
-          <button
-            className="user-menu__button"
-            onClick={() => {
-              onOpenDonate();
-            }}
-          >
-            <Icon className="user_menu__button-icon" name="donate" />
-            <span className="user_menu__button-text">Donate</span>
-          </button>
+          <MenuItem name="Donate" icon="donate" onClick={onOpenDonate} />
         </li>
         <li key="user-menu__export" className="user_menu__li--hidden-mobile">
-          <button
-            className="user-menu__button"
-            onClick={() => {
-              onExport();
-            }}
-          >
-            <Icon className="user_menu__button-icon" name="download" />
-            <span className="user_menu__button-text">Export</span>
-          </button>
+          <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
-        <li key="user-menu__delete">
-          <button className="user-menu__button" onClick={onDeleteBoard}>
-            <Icon className="user_menu__button-icon" name="close" />
-            <span className="user_menu__button-text">Delete board</span>
-          </button>
+        <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
+          <MenuItem name="Delete board" icon="close" onClick={onDeleteBoard} />
         </li>
         <li key="user-menu__logout" className="user-menu__logout">
-          <button className="user-menu__button" onClick={onSignOut}>
-            <Icon className="user_menu__button-icon" name="logout" />
-            <span className="user_menu__button-text">Sign Out</span>
-          </button>
+          <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />
         </li>
       </DropdownMenu>
     );
