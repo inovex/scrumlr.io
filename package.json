@@ -6,7 +6,6 @@
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
     "firebase": "^3.9.0",
-    "keycode": "^2.1.9",
     "lodash": "^4.17.4",
     "raven-js": "^3.17.0",
     "react": "^15.6.1",
