@@ -19,6 +19,7 @@
     "experimentalDecorators": true
   },
   "exclude": [
+    "coverage",
     "node_modules",
     "build",
     "scripts",
