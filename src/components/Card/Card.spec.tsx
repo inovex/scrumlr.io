@@ -12,7 +12,7 @@ describe('<Card />', () => {
 
   describe('dumb component', () => {
     let props: CardProps;
-    let shallowWrapper: ShallowWrapper<StateCardProps, {}>;
+    let shallowWrapper: ShallowWrapper<CardProps, {}>;
 
     beforeEach(() => {
       props = {
