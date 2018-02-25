@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { ConnectedCardProps } from '../Card';
+import { CardProps } from '../Card';
 import { Card as TCard } from '../../../types';
 import Footer from '../Footer';
 
 import './Details.css';
 
-export interface DetailsProps extends ConnectedCardProps {
+export interface DetailsProps extends CardProps {
   onClose: () => void;
 }
 
@@ -15,7 +15,6 @@ export class Details extends React.Component<DetailsProps, {}> {
     const { textContent } = e.target as any;
     const { id, onUpdateText } = this.props;
     onUpdateText(id, textContent);
-    this.setState(state => ({ editMode: false }));
   };
 
   render() {

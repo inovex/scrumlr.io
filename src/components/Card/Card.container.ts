@@ -3,13 +3,15 @@ import pathToJS = helpers.pathToJS;
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
-import { BoardCards, Card, StoreState } from '../../types/index';
-import { CardProps, ConnectedCardProps } from './Card';
+import { BoardCards, Card, StoreState } from '../../types';
+import { CardProps, StateCardProps } from './Card';
+import { Dispatch } from 'redux';
+import { EDIT_STATUS } from '../../actions';
 
 export const mapStateToProps = (
   state: StoreState,
   ownProps: CardProps
-): ConnectedCardProps => {
+): StateCardProps => {
   const author = dataToJS(
     state.fbState,
     `${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
@@ -279,8 +281,14 @@ export const mapStateToProps = (
     onShowVotes: () => {},
     onCardStack: onStackCards,
     onCardStackReversed: onStackCardsReverse,
-    onFocus: onFocusCard,
-
-    ...ownProps
+    onFocus: onFocusCard
   };
 };
+
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    onEditMode: (active: boolean) => {
+      dispatch({ type: EDIT_STATUS, isActive: active });
+    }
+  };
+}

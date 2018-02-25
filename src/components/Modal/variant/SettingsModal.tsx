@@ -4,7 +4,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import './SettingsModal.css';
 import Input from '../../Input';
-import { Modal } from '../Modal';
+import Modal from '../Modal';
 import getRandomName from '../../../constants/Name';
 
 export interface SettingsModalProps {

@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 // import { mapStateToProps } from './Card.container';
 import { mockCard } from '../../builder';
-import { Card, ConnectedCardProps, CardState } from './Card';
+import { Card, StateCardProps, CardState, CardProps } from './Card';
 import Details from './Details';
 import Footer from './Footer';
 
@@ -11,8 +11,8 @@ describe('<Card />', () => {
   describe('mapStateToProps', () => {});
 
   describe('dumb component', () => {
-    let props: ConnectedCardProps;
-    let shallowWrapper: ShallowWrapper<ConnectedCardProps, {}>;
+    let props: CardProps;
+    let shallowWrapper: ShallowWrapper<StateCardProps, {}>;
 
     beforeEach(() => {
       props = {
@@ -43,7 +43,8 @@ describe('<Card />', () => {
         onColumnStack: jest.fn(),
         stacked: false,
         getCardsInTheStack: jest.fn(() => []),
-        ownVotes: 0
+        ownVotes: 0,
+        onEditMode: jest.fn()
       };
     });
 

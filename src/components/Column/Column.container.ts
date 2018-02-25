@@ -119,31 +119,37 @@ export const mapStateToProps = (
       return card.id === (focused as Card).id;
     });
 
-    window.onkeydown = (ev: KeyboardEvent) => {
-      if (isAdmin) {
-        // on escape
-        if (ev.keyCode === Key.Escape) {
-          onFocusCard(null);
-          ev.preventDefault();
-        }
-
-        // on arrow up
-        if (ev.keyCode === Key.UpArrow) {
-          if (index > 0) {
-            onFocusCard(cards[index - 1].id as string);
+    if (state.app.keyboardNavigationEnabled) {
+      window.onkeydown = (ev: KeyboardEvent) => {
+        if (isAdmin) {
+          // on escape
+          if (ev.keyCode === Key.Escape) {
+            onFocusCard(null);
             ev.preventDefault();
           }
-        }
 
-        // on arrow down
-        if (ev.keyCode === Key.DownArrow) {
-          if (index < cards.length - 1) {
-            onFocusCard(cards[index + (isFocusedStacked ? 0 : 1)].id as string);
-            ev.preventDefault();
+          // on arrow up
+          if (ev.keyCode === Key.UpArrow) {
+            if (index > 0) {
+              onFocusCard(cards[index - 1].id as string);
+              ev.preventDefault();
+            }
+          }
+
+          // on arrow down
+          if (ev.keyCode === Key.DownArrow) {
+            if (index < cards.length - 1) {
+              onFocusCard(
+                cards[index + (isFocusedStacked ? 0 : 1)].id as string
+              );
+              ev.preventDefault();
+            }
           }
         }
-      }
-    };
+      };
+    } else {
+      window.onkeydown = () => {};
+    }
   }
 
   const title = getColumnName(ownProps.type);
