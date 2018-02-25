@@ -125,9 +125,14 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
         <li key="user-menu__export" className="user_menu__li--hidden-mobile">
           <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
-        <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Delete board" icon="close" onClick={onDeleteBoard} />
-        </li>
+        {admin &&
+          <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
+            <MenuItem
+              name="Delete board"
+              icon="trash"
+              onClick={onDeleteBoard}
+            />
+          </li>}
         <li key="user-menu__logout" className="user-menu__logout">
           <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />
         </li>

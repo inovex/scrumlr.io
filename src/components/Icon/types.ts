@@ -30,6 +30,7 @@ export type IconNames =
   | 'star-inactive'
   | 'settings'
   | 'board'
+  | 'trash'
   | 'chevron-left'
   | 'chevron-right'
   | 'stack-top'
