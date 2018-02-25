@@ -26,8 +26,6 @@ export type IconNames =
   | 'key-up'
   | 'key-down'
   | 'key-esc'
-  | 'star-active'
-  | 'star-inactive'
   | 'settings'
   | 'board'
   | 'chevron-left'

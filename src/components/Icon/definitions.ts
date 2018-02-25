@@ -24,8 +24,6 @@ export const iconMap: { [key: string]: string } = {
   'key-down': 'icon-32-key-down',
   'key-up': 'icon-32-key-up',
   'key-esc': 'icon-32-key-esc',
-  'star-active': 'icon-64-star-active',
-  'star-inactive': 'icon-64-star-inactive',
   settings: 'icon-20-settings',
   board: 'icon-20-board',
   'arrow-left': 'icon-32-arrow-left-alt',
