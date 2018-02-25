@@ -53,6 +53,14 @@ describe('<UserMenu />', () => {
     expect(props.onExport).toHaveBeenCalled();
   });
 
+  it('should not display delete board button to non admins', () => {
+    wrapper = shallow(<UserMenu {...props} admin={false} />);
+    const ddMenu = wrapper.find(DropdownMenu);
+    expect(ddMenu.find(MenuItem).find({ name: 'Delete board' })).toHaveLength(
+      0
+    );
+  });
+
   it('should pass correct method to delete board button', () => {
     wrapper = shallow(<UserMenu {...props} />);
     const ddMenu = wrapper.find(DropdownMenu);
