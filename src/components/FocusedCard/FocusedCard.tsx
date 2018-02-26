@@ -2,12 +2,12 @@ import * as cx from 'classnames';
 import * as React from 'react';
 import './FocusedCard.css';
 
-import { Card as TCard } from '../../types/index';
-import { connectWithProps } from '../../util/redux';
+import { Card as TCard } from '../../types';
 import { mapStateToProps } from './FocusedCard.container';
-import { Icon } from '../Icon/Icon';
+import { Icon } from '../Icon';
 import KeyboardNavigationHint from './KeyboardNavigationHint/KeyboardNavigationHint';
 import { DropTarget } from 'react-dnd';
+import { connect } from 'react-redux';
 
 const Dotdotdot: React.ComponentClass<any> = require('react-dotdotdot');
 
@@ -21,14 +21,12 @@ export interface OwnFocusedCardProps {
   showVotes: boolean;
 }
 
-export interface ConnectedFocusedCardProps {
+export interface StateFocusedCardProps {
   onClose: () => void;
   isAdmin: boolean;
 }
 
-export interface FocusedCardProps
-  extends OwnFocusedCardProps,
-    ConnectedFocusedCardProps {}
+export type FocusedCardProps = OwnFocusedCardProps & StateFocusedCardProps;
 
 const focusedCardTarget = {
   drop(props: FocusedCardProps) {
@@ -121,7 +119,7 @@ export class FocusedCard extends React.Component<
   }
 }
 
-export default connectWithProps<OwnFocusedCardProps, FocusedCardProps>(
+export default connect<StateFocusedCardProps, null, OwnFocusedCardProps>(
   mapStateToProps
 )(
   DropTarget<

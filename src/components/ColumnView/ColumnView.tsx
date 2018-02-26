@@ -3,24 +3,26 @@ import * as React from 'react';
 import './ColumnView.css';
 import * as ReactSwipe from 'react-swipe';
 
-import { connectWithProps } from '../../util/redux';
 import {
   ColumnType,
   RetrospectivePhaseConfiguration
 } from '../../constants/Retrospective';
 import Column from '../Column';
 import { mapStateToProps } from './ColumnView.container';
+import { connect } from 'react-redux';
 
-export interface ColumnViewOwnProps {
+export interface OwnColumnViewProps {
   boardUrl: string;
   children?: any;
   className?: string;
 }
 
-export interface ColumnViewProps extends ColumnViewOwnProps {
+export interface StateColumnViewProps {
   phase: RetrospectivePhaseConfiguration;
   filteredCardType?: ColumnType;
 }
+
+export type ColumnViewProps = OwnColumnViewProps & StateColumnViewProps;
 
 export interface ColumnViewState {
   activeColumn: number;
@@ -148,6 +150,6 @@ export class ColumnView extends React.Component<
   }
 }
 
-export default connectWithProps<ColumnViewOwnProps, ColumnViewProps>(
+export default connect<StateColumnViewProps, null, OwnColumnViewProps>(
   mapStateToProps
 )(ColumnView);

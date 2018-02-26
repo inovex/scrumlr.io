@@ -1,6 +1,6 @@
 import { BoardCards, Card, StoreState } from '../../types/index';
 import { dataToJS, getFirebase, pathToJS } from 'react-redux-firebase';
-import { ColumnOwnProps, ColumnProps } from './Column';
+import { OwnColumnProps, StateColumnProps } from './Column';
 import { getColumnName, getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import Raven = require('raven-js');
@@ -35,8 +35,8 @@ function sortCards(cards: Card[], sortByVotes: boolean): Card[] {
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: ColumnOwnProps
-): ColumnProps => {
+  ownProps: OwnColumnProps
+): StateColumnProps => {
   const user = pathToJS(state.fbState, 'auth', undefined);
   const isAdmin =
     dataToJS(
@@ -158,7 +158,6 @@ export const mapStateToProps = (
     isVotingAllowed: configuration.votesAllowed,
     isSortedByVotes: configuration.sorted,
     isSummary: ownProps.phase.shownColumns.length === 3, // TODO
-    isVoteSummaryShown: configuration.showVotes,
-    ...ownProps
+    isVoteSummaryShown: configuration.showVotes
   };
 };
