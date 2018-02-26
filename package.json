@@ -1,6 +1,16 @@
 {
-  "name": "frontend",
+  "name": "scrumlr",
+  "description": "Webapp for collaborative online retrospectives",
+  "homepage": "https://github.com/masinio/scrumlr.io",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/masinio/scrumlr.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/masinio/scrumlr.io/issues"
+  },
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "blueimp-md5": "^2.7.0",
