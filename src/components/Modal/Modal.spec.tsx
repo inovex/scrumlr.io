@@ -3,6 +3,10 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import { Modal, ModalProps } from './Modal';
 
+jest.mock('!svg-inline-loader!../../assets/icon-48-close.svg', () => 'svg', {
+  virtual: true
+});
+
 describe('<Modal />', () => {
   describe('dumb component', () => {
     let props: ModalProps;
@@ -21,9 +25,7 @@ describe('<Modal />', () => {
 
     describe('rendering', () => {
       it('should match the snapshot', () => {
-        // FIXME use .html() when svg inline loader issues are fixed
-        // expect(shallowWrapper.html()).toMatchSnapshot();
-        expect(shallowWrapper.text()).toMatchSnapshot();
+        expect(shallowWrapper.html()).toMatchSnapshot();
       });
 
       it('should call onStatus on mount', () => {
