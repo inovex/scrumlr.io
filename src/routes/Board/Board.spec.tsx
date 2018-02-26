@@ -1,17 +1,19 @@
-describe('TODO', () => {
-  it('dummy', () => {
-    expect(true).toEqual(true);
-  });
-});
-/*import * as React from 'react';
-import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import * as React from 'react';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 
 import { mockBoardConfig, mockCard, mockUser } from '../../builder';
 import { BoardCards, BoardUsers } from '../../types';
 import { Board, BoardProps } from './Board';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+
+jest.mock(`!svg-inline-loader!./logo.svg`, () => 'svg', {
+  virtual: true
+});
+jest.mock(`!svg-inline-loader!./logo-s.svg`, () => 'svg', {
+  virtual: true
+});
 
 describe('<Board />', () => {
-  let reactWrapper: ReactWrapper<BoardProps, {}>;
   let shallowWrapper: ShallowWrapper<BoardProps, {}>;
   let mockProps: BoardProps;
 
@@ -43,16 +45,19 @@ describe('<Board />', () => {
         url: '/boards/-foobar'
       },
       location: null as any,
-      history: null as any
+      history: null as any,
+      boardSelector: 'test',
+      boardPrintUrl: '/print',
+      onChangeUsername: jest.fn(),
+      onChangeEmail: jest.fn(),
+      isAnonymous: false
     };
   });
 
   describe('lifecycle', () => {
     it('should register current user once component has been mounted', () => {
       const spy = jest.fn();
-      reactWrapper = mount(
-        <Board {...mockProps} onRegisterCurrentUser={spy} />
-      );
+      mount(<Board {...mockProps} onRegisterCurrentUser={spy} />);
       expect(spy).toHaveBeenCalled();
     });
   });
@@ -128,27 +133,6 @@ describe('<Board />', () => {
       expect((shallowWrapper.instance() as any).exportJson()).toMatchSnapshot();
     });
 
-    it('should export as JSON by default', () => {
-      const spy = jest.fn(() => {});
-      shallowWrapper = shallow(
-        <Board
-          {...mockProps}
-          cards={cards}
-          users={users}
-          setupCompleted={true}
-        />
-      );
-      const instance = shallowWrapper.instance() as any;
-      // Check that correct export method is passed
-      expect(shallowWrapper.find(Board).prop('onExport')).toEqual(
-        instance.handleExport
-      );
-      // On export by default PDF export should be called
-      instance.handleExportJson = spy;
-      instance.handleExport();
-      expect(spy).toHaveBeenCalled();
-    });
-
     it('should export as CSV if requested', () => {
       const spy = jest.fn(() => {});
       shallowWrapper = shallow(
@@ -203,35 +187,15 @@ describe('<Board />', () => {
     });
   });
 
-  describe('guided phases', () => {
-    it('should set guided accordingly to the board configuration', () => {
-      const boardConfig = mockBoardConfig({ guided: true });
-      shallowWrapper = shallow(
-        <Board {...mockProps} boardConfig={boardConfig} setupCompleted={true} />
-      );
-      expect(shallowWrapper.find(Board).prop('guided')).toBe(true);
-    });
-
-    it('should set guidedPhase accordingly to the board configuration', () => {
-      const boardConfig = mockBoardConfig({ guidedPhase: 2 });
-      shallowWrapper = shallow(
-        <Board {...mockProps} boardConfig={boardConfig} setupCompleted={true} />
-      );
-      expect(shallowWrapper.find(Board).prop('guidedPhase')).toBe(2);
-    });
-  });
-
   it('should show that app is loading if boardConfig is not ready yet', () => {
     shallowWrapper = shallow(
       <Board {...mockProps} boardConfig={undefined as any} />
     );
-    expect(shallowWrapper.text()).toEqual(
-      'Loading application configuration, please wait ...'
-    );
+    expect(shallowWrapper.find(LoadingScreen)).toHaveLength(1);
   });
 
   it('should that user must be registered if setup is not completed yet', () => {
     shallowWrapper = shallow(<Board {...mockProps} setupCompleted={false} />);
-    expect(shallowWrapper.text()).toEqual('Register user ...');
+    expect(shallowWrapper.find(LoadingScreen)).toHaveLength(1);
   });
-});*/
+});
