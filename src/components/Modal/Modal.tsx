@@ -16,10 +16,9 @@ export interface DispatchModalProps {
   onStatus: (open: boolean) => void;
 }
 
-export class Modal extends React.Component<
-  OwnModalProps & DispatchModalProps,
-  {}
-> {
+export type ModalProps = OwnModalProps & DispatchModalProps;
+
+export class Modal extends React.Component<ModalProps, {}> {
   componentWillMount() {
     this.props.onStatus(true);
   }

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import { DispatchModalProps, Modal, OwnModalProps } from './Modal';
+import { Modal, ModalProps } from './Modal';
 
 describe('<Modal />', () => {
   describe('dumb component', () => {
-    let props: OwnModalProps & DispatchModalProps;
-    let shallowWrapper: ShallowWrapper<OwnModalProps & DispatchModalProps, {}>;
+    let props: ModalProps;
+    let shallowWrapper: ShallowWrapper<ModalProps, {}>;
 
     beforeEach(() => {
       props = {
