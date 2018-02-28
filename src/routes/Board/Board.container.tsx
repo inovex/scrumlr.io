@@ -240,7 +240,7 @@ export function mergeProps(
   { dispatch }: { dispatch: Dispatch<any> },
   ownProps: BoardProps
 ): BoardProps {
-  const { uid, auth, boardSelector } = stateProps;
+  const { uid, auth, boardConfig, boardSelector } = stateProps;
   const { firebase } = ownProps;
 
   function onRegisterCurrentUser() {
@@ -250,6 +250,17 @@ export function mergeProps(
     const { displayName, photoURL } = auth;
 
     const promises: Promise<any>[] = [];
+
+    if (!boardConfig || !boardConfig.creatorUid) {
+      promises.push(
+        firebase
+          .ref(`${boardSelector}/config/creatorUid`)
+          .set(uid)
+          .catch(() => {
+            // Nothing to do. A admin has been set already for this board.
+          })
+      );
+    }
 
     const user: UserInformation = {
       name: displayName,
