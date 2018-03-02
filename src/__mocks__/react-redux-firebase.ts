@@ -42,7 +42,7 @@ function getVal(state: any, path: string, defaultValue: any) {
   const selector = (path.substring(0, 1) === '/'
     ? path.substring(1)
     : path).replace('/', '.');
-  return get(_state.data, selector, defaultValue);
+  return get(_state, selector, defaultValue);
 }
 
 mod.getVal = getVal;
