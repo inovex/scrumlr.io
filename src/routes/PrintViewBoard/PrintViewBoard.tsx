@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect, dataToJS } from 'react-redux-firebase';
+import { firebaseConnect, getVal } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
 import { groupBy, sortBy } from 'lodash';
 import { isEmpty } from 'lodash';
@@ -161,10 +161,10 @@ export function mapStateToProps(
   const { fbState } = state;
   const boardSelector = `/boards/${ownProps.match.params.id}`;
   const boardUrl = `/board/${ownProps.match.params.id}`;
-  const cards: BoardCards = dataToJS(fbState, `${boardSelector}/cards`, {});
-  const boardConfig: BoardConfig = dataToJS(
+  const cards: BoardCards = getVal(fbState, `data/${boardSelector}/cards`, {});
+  const boardConfig: BoardConfig = getVal(
     fbState,
-    `${boardSelector}/config`,
+    `data/${boardSelector}/config`,
     {}
   );
 

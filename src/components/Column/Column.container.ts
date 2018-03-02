@@ -1,5 +1,5 @@
 import { BoardCards, Card, StoreState } from '../../types/index';
-import { dataToJS, getFirebase, pathToJS } from 'react-redux-firebase';
+import { getVal, getFirebase } from 'react-redux-firebase';
 import { ColumnOwnProps, ColumnProps } from './Column';
 import { getColumnName, getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
@@ -37,17 +37,17 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: ColumnOwnProps
 ): ColumnProps => {
-  const user = pathToJS(state.fbState, 'auth', undefined);
+  const user = getVal(state.fbState, 'auth', undefined);
   const isAdmin =
-    dataToJS(
+    getVal(
       state.fbState,
-      `${ownProps.boardUrl}/config/creatorUid`,
+      `data/${ownProps.boardUrl}/config/creatorUid`,
       undefined
     ) === user.uid;
 
-  const boardCards: BoardCards = dataToJS(
+  const boardCards: BoardCards = getVal(
     state.fbState,
-    `${ownProps.boardUrl}/cards`,
+    `data/${ownProps.boardUrl}/cards`,
     {}
   );
 
@@ -55,9 +55,9 @@ export const mapStateToProps = (
 
   let isHidden = false;
 
-  const focusedCardId: string = dataToJS(
+  const focusedCardId: string = getVal(
     state.fbState,
-    `${ownProps.boardUrl}/config/focusedCardId`,
+    `data/${ownProps.boardUrl}/config/focusedCardId`,
     undefined
   );
 

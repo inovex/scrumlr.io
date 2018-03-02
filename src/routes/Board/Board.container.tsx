@@ -1,10 +1,5 @@
 import { Dispatch } from 'redux';
-import {
-  getFirebase,
-  isLoaded,
-  dataToJS,
-  pathToJS
-} from 'react-redux-firebase';
+import { getFirebase, isLoaded, getVal } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
 
@@ -27,14 +22,14 @@ export const mapStateToProps = (
   const { app, fbState } = state;
   const firebase = ownProps.firebase as FirebaseProp;
 
-  const boardSelector = `/boards/${ownProps.match.params.id}`;
+  const boardSelector = `boards/${ownProps.match.params.id}`;
   const boardUrl = `/board/${ownProps.match.params.id}`;
   const boardPrintUrl = `/print/${ownProps.match.params.id}`;
-  const auth = pathToJS(fbState, 'auth', {});
-  const cards: BoardCards = dataToJS(fbState, `${boardSelector}/cards`, {});
-  const boardConfig: BoardConfig = dataToJS(
+  const auth = getVal(fbState, 'auth', {});
+  const cards: BoardCards = getVal(fbState, `data/${boardSelector}/cards`, {});
+  const boardConfig: BoardConfig = getVal(
     fbState,
-    `${boardSelector}/config`,
+    `data/${boardSelector}/config`,
     {}
   );
   const users = isLoaded(boardConfig) ? boardConfig.users : {};
@@ -43,9 +38,9 @@ export const mapStateToProps = (
 
   let focusedCard: Card | undefined = undefined;
   if (boardConfig.focusedCardId) {
-    focusedCard = dataToJS(
+    focusedCard = getVal(
       fbState,
-      `${boardSelector}/cards/${boardConfig.focusedCardId}`,
+      `data/${boardSelector}/cards/${boardConfig.focusedCardId}`,
       undefined
     );
   }

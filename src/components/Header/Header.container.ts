@@ -1,8 +1,7 @@
 import { BoardConfig, StoreState, BoardUsers } from '../../types/index';
-import { dataToJS, getFirebase, helpers } from 'react-redux-firebase';
+import { getVal, getFirebase, helpers } from 'react-redux-firebase';
 import { HeaderOwnProps, HeaderProps } from './Header';
 import isLoaded = helpers.isLoaded;
-import pathToJS = helpers.pathToJS;
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
 
@@ -14,11 +13,15 @@ export const mapStateToProps = (
   const firebase = getFirebase();
 
   const boardUrl = ownProps.boardId;
-  const auth = pathToJS(fbState, 'auth', {});
-  const boardConfig: BoardConfig = dataToJS(fbState, `${boardUrl}/config`, {});
-  const presence: { [key: string]: boolean } = dataToJS(
+  const auth = getVal(fbState, 'auth', {});
+  const boardConfig: BoardConfig = getVal(
     fbState,
-    `/presence`,
+    `data/${boardUrl}/config`,
+    {}
+  );
+  const presence: { [key: string]: boolean } = getVal(
+    fbState,
+    `data/presence`,
     {}
   );
   // Get a list of all users that have been interacted with this board.
