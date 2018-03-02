@@ -36,7 +36,6 @@ export interface ConnectedCardProps extends CardProps, DragAndDropProps {
   onShowVotes: (id: string) => void;
   onFocus: (id: string) => void;
   onCardStack: (cardSourceId: string, cardTargetId: string) => void;
-  onCardStackReversed: (cardSourceId: string, cardTargetId: string) => void;
   onColumnStack: (cardSourceId: string, columnTargetId: string) => void;
   stacked: boolean;
   getCardsInTheStack: () => TCard[];
@@ -73,7 +72,7 @@ const cardSource: any = {
 
       if (dropResult) {
         if ('focus' === dropResult.type) {
-          props.onCardStackReversed(item.id, dropResult.id);
+          props.onCardStack(dropResult.id, item.id);
         } else if ('card' === dropResult.type) {
           props.onCardStack(item.id, dropResult.id);
         }

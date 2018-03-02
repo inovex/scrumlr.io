@@ -150,32 +150,6 @@ export const mapStateToProps = (
     }
   }
 
-  function onStackCardsReverse(cardSourceId: string, cardTargetId: string) {
-    if (
-      cards[cardSourceId].type === cards[cardTargetId].type &&
-      cardSourceId !== cardTargetId
-    ) {
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardSourceId}`).update({
-        ...cards[cardSourceId],
-        parent: cardTargetId
-      });
-
-      const userVotes = cards[cardTargetId].userVotes;
-      Object.keys(cards[cardSourceId].userVotes).forEach(userId => {
-        userVotes[userId] =
-          (userVotes[userId] || 0) + cards[cardSourceId].userVotes[userId];
-      });
-      const votes =
-        (cards[cardTargetId].votes || 0) + (cards[cardSourceId].votes || 0);
-
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardTargetId}`).update({
-        ...cards[cardTargetId],
-        userVotes,
-        votes
-      });
-    }
-  }
-
   function onFocusCard(cardId: string) {
     const { focusedCardId } = getVal(
       state.fbState,
@@ -277,7 +251,6 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
-    onCardStackReversed: onStackCardsReverse,
     onFocus: onFocusCard,
 
     ...ownProps
