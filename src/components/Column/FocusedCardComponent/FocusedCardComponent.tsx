@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Component from '../Component/Component';
 import FocusedCard from '../../FocusedCard';
-import { Action } from '../../Action/Action';
+import Action from '../../Action';
 import CardNavigation from '../../CardNavigation/CardNavigation';
 import { Card as CardModel } from '../../../types';
 import { connectWithProps } from '../../../util/redux';
@@ -62,7 +62,7 @@ class FocusedCardComponent extends React.Component<
   };
 
   render() {
-    let theme = 'dark';
+    let theme: 'dark' | 'light' = 'dark';
     if (!this.props.isSummary) {
       theme = this.props.focused.type === 'positive' ? 'dark' : 'light';
     }
