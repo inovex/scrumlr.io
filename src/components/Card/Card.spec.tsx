@@ -109,17 +109,16 @@ describe('<Card />', () => {
         );
       });
 
-      // FIXME
-      xit('should toggle expanded state when card is expanded', () => {
+      it('should toggle expanded state when card is expanded', () => {
         shallowWrapper = shallow(<Card {...props} />);
         const instance: any = shallowWrapper.instance();
         instance.expand();
+        shallowWrapper.update();
         expect((instance.state as CardState).expanded).toBe(true);
         expect(shallowWrapper.find(Details)).toHaveLength(1);
       });
 
-      // FIXME
-      xit('should toggle expand state then expanded card is closed', () => {
+      it('should toggle expand state then expanded card is closed', () => {
         // Prepare state of card instance
         shallowWrapper = shallow(<Card {...props} />);
         const instance: any = shallowWrapper.instance();
@@ -127,13 +126,14 @@ describe('<Card />', () => {
           ...state,
           expanded: true
         }));
-
+        shallowWrapper.update();
         // Check that correct method is passed to Details component
         expect(shallowWrapper.find(Details).prop('onClose')).toEqual(
           instance.onDetailsCloseListener
         );
         // Call listener and check if state is correcty toggled
         instance.onDetailsCloseListener();
+        shallowWrapper.update();
         expect((instance.state as CardState).expanded).toBe(false);
         expect(shallowWrapper.find(Details)).toHaveLength(0);
       });
@@ -161,12 +161,15 @@ describe('<Card />', () => {
     });
 
     describe('text overflow', async () => {
-      // FIXME
-      xit('should have an indicator for text overflow', () => {
+      it('should have an indicator for text overflow', () => {
         shallowWrapper = shallow(<Card {...props} />);
         const instance: any = shallowWrapper.instance();
         instance.contentHasOverflowingContent = jest.fn(() => true);
-        instance.forceUpdate();
+        instance.setState((state: CardState): CardState => ({
+          ...state,
+          hasOverflow: true
+        }));
+        shallowWrapper.update();
         expect(
           shallowWrapper.find('.card__more-content-indicator')
         ).toHaveLength(1);
