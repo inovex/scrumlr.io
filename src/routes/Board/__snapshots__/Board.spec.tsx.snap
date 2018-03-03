@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Board /> export should be possible to generate CSV from cards 1`] = `
+"data:text/csv;charset=utf-8,sep=|
+Type|Text|Author|Votes|Timestamp
+positive|Text card 1|User1||2017-07-31T16:30:39.537Z
+negative|Text card 2|User2||2017-07-31T16:30:39.537Z
+positive|Text card 3|User1||2017-07-31T16:30:39.537Z
+"
+`;
+
+exports[`<Board /> export should be possible to generate JSON from cards 1`] = `
+Object {
+  "cards": Array [
+    Object {
+      "authorref": "user1",
+      "childCards": Array [
+        Object {
+          "authorref": "user1",
+          "childCards": Array [],
+          "text": "Text card 3",
+          "timestamp": "2017-07-31T16:30:39.537Z",
+          "type": "positive",
+          "votes": -4,
+        },
+      ],
+      "text": "Text card 1",
+      "timestamp": "2017-07-31T16:30:39.537Z",
+      "type": "positive",
+      "votes": 13,
+    },
+    Object {
+      "authorref": "user2",
+      "childCards": Array [],
+      "text": "Text card 2",
+      "timestamp": "2017-07-31T16:30:39.537Z",
+      "type": "negative",
+      "votes": -1,
+    },
+  ],
+  "date": "",
+  "title": "Unnamed Board",
+  "users": Array [
+    Object {
+      "id": "user1",
+      "name": "User1",
+    },
+    Object {
+      "id": "user2",
+      "name": "User2",
+    },
+  ],
+}
+`;
