@@ -2,14 +2,14 @@ import { getVal, getFirebase } from 'react-redux-firebase';
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
-import { BoardCards, Card, StoreState } from '../../types/index';
-import { CardProps, ConnectedCardProps } from './Card';
+import { BoardCards, Card, StoreState } from '../../types';
+import { OwnCardProps, StateCardProps } from './Card';
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: CardProps
-): ConnectedCardProps => {
-  const author = getVal(
+  ownProps: OwnCardProps
+): StateCardProps => {
+  const author = dataToJS(
     state.fbState,
     `data/${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
     undefined
@@ -251,8 +251,6 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
-    onFocus: onFocusCard,
-
-    ...ownProps
+    onFocus: onFocusCard
   };
 };

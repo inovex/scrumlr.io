@@ -1,5 +1,5 @@
-import { BoardCards, BoardConfig, StoreState } from '../../types/index';
-import { ColumnViewOwnProps, ColumnViewProps } from './ColumnView';
+import { BoardCards, BoardConfig, StoreState } from '../../types';
+import { OwnColumnViewProps, StateColumnViewProps } from './ColumnView';
 import { getVal } from 'react-redux-firebase';
 import {
   ColumnType,
@@ -8,8 +8,8 @@ import {
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: ColumnViewOwnProps
-): ColumnViewProps => {
+  ownProps: OwnColumnViewProps
+): StateColumnViewProps => {
   const boardConfig: BoardConfig = getVal(
     state.fbState,
     `data/${ownProps.boardUrl}/config`,
@@ -31,7 +31,6 @@ export const mapStateToProps = (
 
   return {
     phase: getPhaseConfiguration(boardConfig.guidedPhase),
-    filteredCardType,
-    ...ownProps
+    filteredCardType
   };
 };
