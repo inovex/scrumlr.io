@@ -4,13 +4,13 @@ import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
 import { BoardCards, Card, StoreState } from '../../types';
-import { CardProps, StateCardProps } from './Card';
+import { OwnCardProps, StateCardProps } from './Card';
 import { Dispatch } from 'redux';
 import { EDIT_STATUS } from '../../actions';
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: CardProps
+  ownProps: OwnCardProps
 ): StateCardProps => {
   const author = dataToJS(
     state.fbState,

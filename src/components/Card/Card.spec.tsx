@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 // import { mapStateToProps } from './Card.container';
 import { mockCard } from '../../builder';
-import { Card, CardState, CardProps } from './Card';
+import { Card, CardProps, CardState } from './Card';
 import Details from './Details';
 import Footer from './Footer';
 

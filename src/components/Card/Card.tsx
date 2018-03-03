@@ -48,11 +48,10 @@ export interface DispatchCardProps {
   onEditMode: (active: boolean) => void;
 }
 
-export interface CardProps
-  extends OwnCardProps,
-    StateCardProps,
-    DispatchCardProps,
-    DragAndDropProps {}
+export type CardProps = OwnCardProps &
+  StateCardProps &
+  DispatchCardProps &
+  DragAndDropProps;
 
 export interface CardState {
   expanded: boolean;
@@ -60,13 +59,13 @@ export interface CardState {
 }
 
 const cardTarget = {
-  drop(props: StateCardProps) {
+  drop(props: CardProps) {
     return { type: 'card', id: props.id };
   }
 };
 
 const cardSource: any = {
-  beginDrag(props: StateCardProps) {
+  beginDrag(props: CardProps) {
     if (props.isAdmin) {
       return {
         id: props.id,
@@ -76,7 +75,7 @@ const cardSource: any = {
     return null;
   },
 
-  endDrag(props: StateCardProps, monitor: any) {
+  endDrag(props: CardProps, monitor: any) {
     if (props.isAdmin) {
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult();
@@ -133,7 +132,7 @@ const animateScroll = throttle(
 );
 
 export class Card extends Component<CardProps, CardState> {
-  static defaultProps: Partial<CardProps> = defaultProps;
+  static defaultProps: Partial<OwnCardProps> = defaultProps;
 
   content: HTMLElement | null;
 
@@ -150,7 +149,7 @@ export class Card extends Component<CardProps, CardState> {
       hasOverflow: this.contentHasOverflowingContent()
     });
   }
-  componentDidUpdate(prevProps: StateCardProps) {
+  componentDidUpdate(prevProps: CardProps) {
     const hasOverflow = this.contentHasOverflowingContent();
     if (hasOverflow !== this.state.hasOverflow) {
       this.setState({ ...this.state, hasOverflow });
