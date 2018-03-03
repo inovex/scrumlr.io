@@ -8,7 +8,7 @@ import {
   AddCardProps,
   AddCardState,
   AddCardTheme,
-  AddCardOwnProps
+  OwnAddCardProps
 } from './AddCard';
 import { mapStateToProps } from './AddCard.container';
 import { mockStoreState } from '../../builder';
@@ -125,7 +125,7 @@ describe('<AddCard />', () => {
   });
 
   describe('mapStateToProps', () => {
-    let ownProps: AddCardOwnProps;
+    let ownProps: OwnAddCardProps;
 
     // TODO: Write a mock function for this after Johanns Definitions have been merged.
     const fbState = {

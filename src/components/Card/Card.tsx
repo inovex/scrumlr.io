@@ -6,19 +6,19 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { BoardProp, Card as TCard, DragAndDropProps } from '../../types';
 import Details from './Details';
 import Footer from './Footer';
-import { connectWithProps } from '../../util/redux';
 import { mapStateToProps } from './Card.container';
 import Icon from '../Icon/Icon';
 import { throttle } from 'lodash';
+import { connect } from 'react-redux';
 
-export interface CardProps extends BoardProp {
+export interface OwnCardProps extends BoardProp {
   card: TCard;
   votable: boolean;
   showVotes: boolean;
   children?: React.ReactNode;
 }
 
-export interface ConnectedCardProps extends CardProps, DragAndDropProps {
+export interface StateCardProps {
   id: string;
   author: { name: string | null | undefined; image?: string | null };
   column: string;
@@ -44,19 +44,21 @@ export interface ConnectedCardProps extends CardProps, DragAndDropProps {
   ownVotes: number;
 }
 
+export type CardProps = OwnCardProps & StateCardProps & DragAndDropProps;
+
 export interface CardState {
   expanded: boolean;
   hasOverflow: boolean;
 }
 
 const cardTarget = {
-  drop(props: ConnectedCardProps) {
+  drop(props: CardProps) {
     return { type: 'card', id: props.id };
   }
 };
 
 const cardSource: any = {
-  beginDrag(props: ConnectedCardProps) {
+  beginDrag(props: CardProps) {
     if (props.isAdmin) {
       return {
         id: props.id,
@@ -66,7 +68,7 @@ const cardSource: any = {
     return null;
   },
 
-  endDrag(props: ConnectedCardProps, monitor: any) {
+  endDrag(props: CardProps, monitor: any) {
     if (props.isAdmin) {
       const item = monitor.getItem();
       const dropResult = monitor.getDropResult();
@@ -82,7 +84,7 @@ const cardSource: any = {
   }
 };
 
-const defaultProps: Partial<ConnectedCardProps> = {
+const defaultProps: Partial<CardProps> = {
   showAuthor: true,
 
   // Add some default props for drag and drop.
@@ -122,8 +124,8 @@ const animateScroll = throttle(
   }
 );
 
-export class Card extends Component<ConnectedCardProps, CardState> {
-  static defaultProps: Partial<CardProps> = defaultProps;
+export class Card extends Component<CardProps, CardState> {
+  static defaultProps: Partial<OwnCardProps> = defaultProps;
 
   content: HTMLElement | null;
 
@@ -140,7 +142,7 @@ export class Card extends Component<ConnectedCardProps, CardState> {
       hasOverflow: this.contentHasOverflowingContent()
     });
   }
-  componentDidUpdate(prevProps: ConnectedCardProps) {
+  componentDidUpdate(prevProps: CardProps) {
     const hasOverflow = this.contentHasOverflowingContent();
     if (hasOverflow !== this.state.hasOverflow) {
       this.setState({ ...this.state, hasOverflow });
@@ -293,17 +295,13 @@ export class Card extends Component<ConnectedCardProps, CardState> {
   }
 }
 
-export default connectWithProps<CardProps, ConnectedCardProps>(mapStateToProps)(
-  DropTarget<
-    ConnectedCardProps
-  >('card', cardTarget, (connect: any, monitor: any) => ({
+export default connect<StateCardProps, null, OwnCardProps>(mapStateToProps)(
+  DropTarget<CardProps>('card', cardTarget, (connect: any, monitor: any) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     canDrop: monitor.canDrop()
   }))(
-    DragSource<
-      ConnectedCardProps
-    >('card', cardSource, (connect: any, monitor: any) => ({
+    DragSource<CardProps>('card', cardSource, (connect: any, monitor: any) => ({
       connectDragSource: connect.dragSource(),
       isDragging: monitor.isDragging(),
       dragSource: monitor.getItem(),

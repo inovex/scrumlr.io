@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { ConnectedCardProps } from '../Card';
+import { CardProps } from '../Card';
 import { Card as TCard } from '../../../types';
 import Footer from '../Footer';
 
 import './Details.css';
 
-export interface DetailsProps extends ConnectedCardProps {
+export interface DetailsProps extends CardProps {
   onClose: () => void;
 }
 

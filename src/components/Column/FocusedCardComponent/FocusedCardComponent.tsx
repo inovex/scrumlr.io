@@ -4,9 +4,9 @@ import FocusedCard from '../../FocusedCard';
 import Action, { ActionTheme } from '../../Action';
 import CardNavigation from '../../CardNavigation/CardNavigation';
 import { Card as CardModel } from '../../../types';
-import { connectWithProps } from '../../../util/redux';
 import { mapStateToProps } from './FocusedCardComponent.container';
 import { getInversedTheme } from '../../../constants/Retrospective';
+import { connect } from 'react-redux';
 
 export interface OwnFocusedCardComponentProps {
   boardUrl: string;
@@ -16,14 +16,13 @@ export interface OwnFocusedCardComponentProps {
   showVotes: boolean;
 }
 
-export interface ConnectedFocusedCardComponentProps {
+export interface StateFocusedCardComponentProps {
   cards: CardModel[];
   setRootCard: (index: number) => void;
 }
 
-export interface FocusedCardComponentProps
-  extends OwnFocusedCardComponentProps,
-    ConnectedFocusedCardComponentProps {}
+export type FocusedCardComponentProps = OwnFocusedCardComponentProps &
+  StateFocusedCardComponentProps;
 
 export interface FocusedCardComponentState {
   currentCardIndex: number;
@@ -99,7 +98,8 @@ class FocusedCardComponent extends React.Component<
   }
 }
 
-export default connectWithProps<
-  OwnFocusedCardComponentProps,
-  FocusedCardComponentProps
+export default connect<
+  StateFocusedCardComponentProps,
+  null,
+  OwnFocusedCardComponentProps
 >(mapStateToProps)(FocusedCardComponent);
