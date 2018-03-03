@@ -1,14 +1,17 @@
 {
   "rules": {
-    ".read": true,
+    ".read": false,
     ".write": false,
     "presence": {
+      ".read": true,
       "$uid": {
         ".write": "$uid === auth.uid"
       }
     },
     "boards": {
+      ".read": "root.child('presence').hasChild(auth.uid)",
       "$boardId": {
+        ".read": "data.child('config/users').hasChild(auth.uid)",
         ".write": "!root.child('boards').hasChild($boardId) || data.child('config/creatorUid').val() === auth.uid",
         "cards": {
           "$cardId": {
