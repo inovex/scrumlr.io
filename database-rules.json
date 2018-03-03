@@ -9,7 +9,7 @@
     },
     "boards": {
       "$boardId": {
-        ".write": "!root.child('boards').hasChild($boardId)",
+        ".write": "!root.child('boards').hasChild($boardId) || data.child('config/creatorUid').val() === auth.uid",
         "cards": {
           "$cardId": {
             ".write": "!root.child('boards/'+$boardId+'/cards').hasChild($cardId) || root.child('boards/'+$boardId+'/config/creatorUid').val() === auth.uid || data.child('authorUid').val() === auth.uid",

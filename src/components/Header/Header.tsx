@@ -33,6 +33,7 @@ export interface StateHeaderProps {
   user: string;
   users: BoardUsers;
   onToggleReadyState: () => void;
+  onDeleteBoard: () => void;
   onSignOut: () => void;
 }
 
@@ -56,6 +57,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       onOpenDonate,
       loggedIn,
       onExport,
+      onDeleteBoard,
       onSignOut
     } = this.props;
 
@@ -90,6 +92,7 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenSettings={onOpenSettings}
                 onOpenFeedback={onOpenFeedback}
                 onOpenDonate={onOpenDonate}
+                onDeleteBoard={onDeleteBoard}
               />}
           </div>
         </div>
