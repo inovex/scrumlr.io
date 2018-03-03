@@ -30,7 +30,7 @@ const Router = (props: RouterProps) => (
       <ToastContainer
         position={toast.POSITION.BOTTOM_RIGHT}
         autoClose={5000}
-        className="dark-toast"
+        toastClassName="dark-toast"
         progressClassName="dark-toast-progress"
         closeButton={<Icon name="close20" className="toast__close-button" />}
       />
