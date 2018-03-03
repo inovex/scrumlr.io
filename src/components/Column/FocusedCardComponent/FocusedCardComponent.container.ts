@@ -1,9 +1,9 @@
 import { dataToJS, getFirebase } from 'react-redux-firebase';
 import {
-  FocusedCardComponentProps,
-  OwnFocusedCardComponentProps
+  OwnFocusedCardComponentProps,
+  StateFocusedCardComponentProps
 } from './FocusedCardComponent';
-import { BoardCards, Card, StoreState } from '../../../types/index';
+import { BoardCards, Card, StoreState } from '../../../types';
 import Raven = require('raven-js');
 
 const getRootCard = (
@@ -31,7 +31,7 @@ const getCardsInTheStack = (parentId: string, cards: BoardCards): Card[] => {
 export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnFocusedCardComponentProps
-): FocusedCardComponentProps => {
+): StateFocusedCardComponentProps => {
   const boardCards: BoardCards = dataToJS(
     state.fbState,
     `${ownProps.boardUrl}/cards`,
@@ -82,7 +82,6 @@ export const mapStateToProps = (
 
   return {
     cards: cardsInStack,
-    setRootCard,
-    ...ownProps
+    setRootCard
   };
 };

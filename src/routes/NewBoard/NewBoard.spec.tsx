@@ -5,6 +5,7 @@ import { mockStoreState } from '../../builder';
 import { StoreState } from '../../types';
 import { NewBoard, NewBoardProps } from './NewBoard';
 import { mapStateToProps } from './NewBoard.container';
+import Input from '../../components/Input';
 const firebaseMock = require('react-redux-firebase');
 
 // TODO: Write a mock function for this after Johanns Definitions have been merged.
@@ -109,7 +110,7 @@ describe('<NewBoard />', () => {
     });
   });
 
-  xdescribe('dumb component', () => {
+  describe('dumb component', () => {
     let props: NewBoardProps;
     let shallowWrapper: ShallowWrapper<NewBoardProps, {}>;
 
@@ -147,34 +148,34 @@ describe('<NewBoard />', () => {
     it('should not show the logout button if uid is truthy', () => {
       const uid = 'someId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-      const result = shallowWrapper.find('button.init-board__logout-btn');
+      const result = shallowWrapper.find('.new-board__logout-btn');
       expect(result).toHaveLength(1);
     });
 
     it('should trigger onLogout method if logout button is clicked', () => {
       const uid = 'someId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-      shallowWrapper.find('button.init-board__logout-btn').simulate('click');
+      shallowWrapper.find('.new-board__logout-btn').simulate('click');
       expect(props.onLogout).toBeCalled();
     });
 
     it('should show email field if user is not logged in', () => {
       const uid = null;
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-      expect(shallowWrapper.find('input[type="email"]')).toHaveLength(1);
+      expect(shallowWrapper.find(Input)).toHaveLength(1);
     });
 
     it('should not show email field if user is logged in', () => {
       const uid = 'myUserId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-      expect(shallowWrapper.find('input[type="email"]')).toHaveLength(0);
+      expect(shallowWrapper.find(Input)).toHaveLength(0);
     });
 
     it('should show login button if user is not logged in', () => {
       const uid = null;
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.init-board__start button');
+      const btn = shallowWrapper.find('.new-board__action-button');
       expect(btn.text()).toMatchSnapshot();
     });
 
@@ -183,7 +184,7 @@ describe('<NewBoard />', () => {
       const email = 'foo@bar.com';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.init-board__start button');
+      const btn = shallowWrapper.find('.new-board__action-button');
       shallowWrapper.setState({ email });
 
       btn.simulate('click');
@@ -194,7 +195,7 @@ describe('<NewBoard />', () => {
       const uid = 'myUserId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.init-board__start button');
+      const btn = shallowWrapper.find('.new-board__action-button');
       expect(btn.text()).toMatchSnapshot();
     });
 
@@ -202,7 +203,7 @@ describe('<NewBoard />', () => {
       const uid = 'myUserId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.init-board__start button');
+      const btn = shallowWrapper.find('.new-board__action-button');
       btn.simulate('click');
       expect(props.onCreateNewBoard).toHaveBeenCalled();
     });
@@ -214,7 +215,7 @@ describe('<NewBoard />', () => {
       //expect(shallowWrapper.instance().state).toEqual({ email: '' });
 
       shallowWrapper
-        .find('input[type="email"]')
+        .find(Input)
         .simulate('change', { target: { value: 'abc' } });
       expect(shallowWrapper.instance().state).toEqual({ email: 'abc' });
     });

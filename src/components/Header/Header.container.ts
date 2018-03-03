@@ -1,6 +1,6 @@
-import { BoardConfig, StoreState, BoardUsers } from '../../types/index';
+import { BoardConfig, StoreState, BoardUsers } from '../../types';
 import { dataToJS, getFirebase, helpers } from 'react-redux-firebase';
-import { HeaderOwnProps, HeaderProps } from './Header';
+import { OwnHeaderProps, StateHeaderProps } from './Header';
 import isLoaded = helpers.isLoaded;
 import pathToJS = helpers.pathToJS;
 import * as Raven from 'raven-js';
@@ -8,8 +8,8 @@ import { debounce } from 'lodash';
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: HeaderOwnProps
-): HeaderProps => {
+  ownProps: OwnHeaderProps
+): StateHeaderProps => {
   const { fbState } = state;
   const firebase = getFirebase();
 
@@ -27,8 +27,7 @@ export const mapStateToProps = (
   // Not all users must be neccessarily online right know. Determine which users
   // are online and remove those users that are not connected right now.
   const userIds = users ? Object.keys(users) : [];
-  let activeUsers: BoardUsers = {};
-  activeUsers = userIds
+  let activeUsers: BoardUsers = userIds
     .filter(id => Object.prototype.hasOwnProperty.call(presence, id))
     .reduce((acc, id) => {
       acc[id] = users[id];
@@ -171,7 +170,6 @@ export const mapStateToProps = (
     onChangeBoardName,
     loggedIn: Boolean(firebase.auth()),
     onDeleteBoard,
-    onSignOut,
-    ...ownProps
+    onSignOut
   };
 };

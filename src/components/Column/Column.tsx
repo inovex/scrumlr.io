@@ -7,15 +7,15 @@ import {
   ColumnType,
   RetrospectivePhaseConfiguration
 } from '../../constants/Retrospective';
-import { connectWithProps } from '../../util/redux';
 import { mapStateToProps } from './Column.container';
 import FocusedCardComponent from './FocusedCardComponent';
 import StackComponent from './StackComponent';
 import Title from './Title';
 import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Icon } from '../Icon/Icon';
+import { Icon } from '../Icon';
+import { connect } from 'react-redux';
 
-export interface ColumnOwnProps {
+export interface OwnColumnProps {
   boardUrl: string;
 
   /** The unique column type. */
@@ -32,7 +32,7 @@ export interface ColumnOwnProps {
   className?: string;
 }
 
-export interface ColumnConnectedProps {
+export interface StateColumnProps {
   title: string;
   theme: string;
   cards: CardModel[];
@@ -45,7 +45,7 @@ export interface ColumnConnectedProps {
   isSummary: boolean;
 }
 
-export interface ColumnProps extends ColumnOwnProps, ColumnConnectedProps {}
+export type ColumnProps = OwnColumnProps & StateColumnProps;
 
 export class Column extends React.Component<ColumnProps, {}> {
   render() {
@@ -153,6 +153,6 @@ export class Column extends React.Component<ColumnProps, {}> {
   }
 }
 
-export default connectWithProps<ColumnOwnProps, ColumnConnectedProps>(
-  mapStateToProps
-)(Column);
+export default connect<StateColumnProps, null, OwnColumnProps>(mapStateToProps)(
+  Column
+);

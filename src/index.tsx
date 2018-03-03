@@ -20,8 +20,6 @@ if (Boolean(sentry.dsn)) {
   Raven.config(sentry.dsn).install();
 }
 
-Raven.captureMessage('MO');
-
 window.addEventListener('unhandledrejection', (err: PromiseRejectionEvent) => {
   Raven.captureMessage(err.reason);
 });

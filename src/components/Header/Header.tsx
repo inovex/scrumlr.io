@@ -1,17 +1,17 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import { PhaseMenu } from '../PhaseMenu/PhaseMenu';
-import { UserList } from '../UserList/UserList';
-import { UserMenu } from '../UserMenu/UserMenu';
-import { BoardUsers } from '../../types/index';
+import { PhaseMenu } from '../PhaseMenu';
+import { UserList } from '../UserList';
+import { UserMenu } from '../UserMenu';
+import { BoardUsers } from '../../types';
 import { Logo } from './subcomponents/Logo';
 
 import './Header.css';
-import { connectWithProps } from '../../util/redux';
 import { mapStateToProps } from './Header.container';
+import { connect } from 'react-redux';
 
-export interface HeaderOwnProps {
+export interface OwnHeaderProps {
   boardId: string;
   onSignOut: () => void;
   onExport: () => void;
@@ -21,7 +21,7 @@ export interface HeaderOwnProps {
   className?: string;
 }
 
-export interface HeaderConnectedProps {
+export interface StateHeaderProps {
   admin: boolean;
   phase: number;
   sorted: boolean;
@@ -34,9 +34,10 @@ export interface HeaderConnectedProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   onDeleteBoard: () => void;
+  onSignOut: () => void;
 }
 
-export interface HeaderProps extends HeaderOwnProps, HeaderConnectedProps {}
+export type HeaderProps = OwnHeaderProps & StateHeaderProps;
 
 export class Header extends React.Component<HeaderProps, {}> {
   render() {
@@ -100,6 +101,6 @@ export class Header extends React.Component<HeaderProps, {}> {
   }
 }
 
-export default connectWithProps<HeaderOwnProps, HeaderConnectedProps>(
-  mapStateToProps
-)(Header);
+export default connect<StateHeaderProps, null, OwnHeaderProps>(mapStateToProps)(
+  Header
+);

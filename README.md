@@ -9,6 +9,9 @@
     <a href="https://codecov.io/gh/masinio/scrumlr.io" target="_blank">
       <img src="https://codecov.io/gh/masinio/scrumlr.io/branch/master/graph/badge.svg" />
     </a>
+    <a href="https://beta.gemnasium.com/projects/github.com/masinio/scrumlr.io" target="_blank">
+      <img src="https://beta.gemnasium.com/badges/github.com/masinio/scrumlr.io.svg" alt="Dependency Status" />
+    </a>
   </p>
 </div>
 
