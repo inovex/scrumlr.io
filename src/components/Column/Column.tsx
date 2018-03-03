@@ -12,7 +12,7 @@ import { mapStateToProps } from './Column.container';
 import FocusedCardComponent from './FocusedCardComponent';
 import StackComponent from './StackComponent';
 import Title from './Title';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import * as ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import { Icon } from '../Icon/Icon';
 
 export interface ColumnOwnProps {
@@ -77,35 +77,35 @@ export class Column extends React.Component<ColumnProps, {}> {
         })}
       >
         {!focused &&
-          this.props.hasPreviousColumn &&
-          <button
-            className={classNames(
-              'column__navigation',
-              'column__navigation-left'
-            )}
-            type="button"
-            onClick={this.props.onGoToPrevColumn}
-          >
-            <Icon name="chevron-left" width={48} height={48} />
-          </button>}
+          this.props.hasPreviousColumn && (
+            <button
+              className={classNames(
+                'column__navigation',
+                'column__navigation-left'
+              )}
+              type="button"
+              onClick={this.props.onGoToPrevColumn}
+            >
+              <Icon name="chevron-left" width={48} height={48} />
+            </button>
+          )}
 
         {!focused &&
-          this.props.hasNextColumn &&
-          <button
-            className={classNames(
-              'column__navigation',
-              'column__navigation-right'
-            )}
-            type="button"
-            onClick={this.props.onGoToNextColumn}
-            disabled={!this.props.hasNextColumn}
-          >
-            <Icon name="chevron-right" width={48} height={48} />
-          </button>}
+          this.props.hasNextColumn && (
+            <button
+              className={classNames(
+                'column__navigation',
+                'column__navigation-right'
+              )}
+              type="button"
+              onClick={this.props.onGoToNextColumn}
+              disabled={!this.props.hasNextColumn}
+            >
+              <Icon name="chevron-right" width={48} height={48} />
+            </button>
+          )}
 
-        <Title count={cardsCount}>
-          {title}
-        </Title>
+        <Title count={cardsCount}>{title}</Title>
 
         <ReactCSSTransitionGroup
           transitionName="column__content-animation"
@@ -115,17 +115,18 @@ export class Column extends React.Component<ColumnProps, {}> {
           className="column__content"
         >
           {type === 'negative' &&
-            focused &&
-            <FocusedCardComponent
-              key={focused.id}
-              boardUrl={boardUrl}
-              focused={focused}
-              isSummary={isSummary}
-              className="component--large"
-              showVotes={phase.showVotes}
-            />}
+            focused && (
+              <FocusedCardComponent
+                key={focused.id}
+                boardUrl={boardUrl}
+                focused={focused}
+                isSummary={isSummary}
+                className="component--large"
+                showVotes={phase.showVotes}
+              />
+            )}
 
-          {(!isSummary || !focused) &&
+          {(!isSummary || !focused) && (
             <StackComponent
               boardUrl={boardUrl}
               cards={cards}
@@ -135,18 +136,20 @@ export class Column extends React.Component<ColumnProps, {}> {
               className={classNames('column__stack-component', {
                 ['column__stack-component--hidden']: Boolean(focused)
               })}
-            />}
+            />
+          )}
 
           {type === 'positive' &&
-            focused &&
-            <FocusedCardComponent
-              key={focused.id}
-              boardUrl={boardUrl}
-              focused={focused}
-              isSummary={isSummary}
-              className="component--large"
-              showVotes={phase.showVotes}
-            />}
+            focused && (
+              <FocusedCardComponent
+                key={focused.id}
+                boardUrl={boardUrl}
+                focused={focused}
+                isSummary={isSummary}
+                className="component--large"
+                showVotes={phase.showVotes}
+              />
+            )}
         </ReactCSSTransitionGroup>
       </div>
     );

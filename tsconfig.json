@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "outDir": "build/dist",
     "module": "commonjs",
     "target": "es5",
@@ -27,6 +28,5 @@
     "webpack",
     "jest",
     "src/setupTests.ts"
-  ],
-  "types": ["typePatches"]
+  ]
 }
