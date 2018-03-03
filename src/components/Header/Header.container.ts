@@ -71,6 +71,20 @@ export const mapStateToProps = (
       });
   }
 
+  function onDeleteBoard() {
+    firebase
+      .ref(`${boardUrl}`)
+      .remove()
+      .then(() => {
+        location.hash = '/';
+      })
+      .catch((err: Error) => {
+        Raven.captureMessage('Could not delete board', {
+          extra: { reason: err.message, uid: auth.uid, boardId: boardUrl }
+        });
+      });
+  }
+
   function onSwitchPhaseIndex(delta: number) {
     firebase
       .ref(`${boardUrl}/config/guidedPhase`)
@@ -158,6 +172,7 @@ export const mapStateToProps = (
     onToggleReadyState,
     onChangeBoardName,
     loggedIn: Boolean(firebase.auth()),
+    onDeleteBoard,
     onSignOut
   };
 };

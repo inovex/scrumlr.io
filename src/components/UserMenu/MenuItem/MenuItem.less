@@ -1,0 +1,55 @@
+@import '../../../constants/style';
+
+.menu-item__button {
+  display: flex !important;
+  align-items: center;
+
+  min-width: 120px;
+
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+
+  padding: @default-margin;
+}
+
+.menu-item__button:hover,
+.menu-item__button:active,
+.menu-item__button:focus {
+  background: @color-gray !important;
+}
+
+.menu-item__button-icon {
+  align-self: center;
+
+  display: block;
+
+  width: 20px;
+  height: 20px;
+  min-width: @default-margin !important;
+  max-width: 20px;
+  line-height: 32px;
+
+  margin-right: @default-margin;
+  padding: 0 !important;
+}
+
+.menu-item__button-icon > svg {
+  margin-top: 6px;
+}
+
+.menu-item__button-icon--inverted * {
+  fill: @color-white;
+}
+
+.menu-item__button-text {
+  flex: 1;
+  text-align: left;
+
+  font-size: @default-margin;
+  font-weight: bold;
+  color: @color-dark-gray;
+  letter-spacing: 1px;
+  line-height: 24px;
+}

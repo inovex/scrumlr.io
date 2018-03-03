@@ -1,9 +1,4 @@
-describe('TODO', () => {
-  it('dummy', () => {
-    expect(true).toEqual(true);
-  });
-});
-/*import * as React from 'react';
+import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { Header, HeaderProps } from './Header';
@@ -11,6 +6,14 @@ import { PhaseMenu } from '../PhaseMenu';
 import { UserList } from '../UserList';
 import { UserMenu } from '../UserMenu';
 import { mockUser } from '../../builder';
+
+jest.mock('!svg-inline-loader!./logo.svg', () => 'svg', {
+  virtual: true
+});
+
+jest.mock('!svg-inline-loader!./logo-s.svg', () => 'svg', {
+  virtual: true
+});
 
 describe('<Header />', () => {
   let wrapper: ShallowWrapper<HeaderProps, {}>;
@@ -30,7 +33,11 @@ describe('<Header />', () => {
       onChangeBoardName: jest.fn(),
       user: 'user1',
       users: { user1: mockUser() },
-      onToggleReadyState: jest.fn()
+      onToggleReadyState: jest.fn(),
+      onOpenSettings: jest.fn(),
+      onOpenFeedback: jest.fn(),
+      onOpenDonate: jest.fn(),
+      onDeleteBoard: jest.fn()
     };
   });
 
@@ -85,4 +92,4 @@ describe('<Header />', () => {
       expect(userMenu.prop('onSignOut')).toEqual(props.onSignOut);
     });
   });
-});*/
+});
