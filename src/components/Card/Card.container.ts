@@ -3,13 +3,13 @@ import pathToJS = helpers.pathToJS;
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
-import { BoardCards, Card, StoreState } from '../../types/index';
-import { CardProps, ConnectedCardProps } from './Card';
+import { BoardCards, Card, StoreState } from '../../types';
+import { OwnCardProps, StateCardProps } from './Card';
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: CardProps
-): ConnectedCardProps => {
+  ownProps: OwnCardProps
+): StateCardProps => {
   const author = dataToJS(
     state.fbState,
     `${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
@@ -279,8 +279,6 @@ export const mapStateToProps = (
     onShowVotes: () => {},
     onCardStack: onStackCards,
     onCardStackReversed: onStackCardsReverse,
-    onFocus: onFocusCard,
-
-    ...ownProps
+    onFocus: onFocusCard
   };
 };

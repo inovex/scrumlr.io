@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './WelcomeArea.css';
 
-export const WelcomeArea: React.SFC<{}> = props =>
+export const WelcomeArea: React.SFC<{}> = ({ children }) =>
   <div className="welcome-area">
     <div className="welcome-area__promotion-wrapper">
       <div className="welcome-area__promotion">
@@ -23,7 +23,7 @@ export const WelcomeArea: React.SFC<{}> = props =>
     </div>
 
     <div className="welcome-area__action-area">
-      {props.children}
+      {children}
     </div>
   </div>;
 
