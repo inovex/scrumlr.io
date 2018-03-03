@@ -18,6 +18,8 @@ export interface BoardGuardState {
   authenticated: boolean;
   /** Refers to the unsubscribe callback of firebase auth state change event. */
   unsubscribeAuthStateChange: (() => void) | undefined;
+  /** Value may change once board is deleted and reference is invalid. */
+  invalidReference: boolean;
 }
 
 export class BoardGuard extends React.Component<
@@ -27,8 +29,21 @@ export class BoardGuard extends React.Component<
   state: BoardGuardState = {
     ready: false,
     authenticated: false,
-    unsubscribeAuthStateChange: undefined
+    unsubscribeAuthStateChange: undefined,
+    invalidReference: false
   };
+
+  componentWillMount() {
+    // add callback for board deletion
+    const boardId = this.props.match.params.id;
+    getFirebase()
+      .ref(`/boards/${boardId}/config/creatorUid`)
+      .on('value', (snapshot: any) => {
+        if (!snapshot.exists()) {
+          this.setState({ ...this.state, invalidReference: true });
+        }
+      });
+  }
 
   componentDidMount() {
     const unsubscribeAuthStateChange = getFirebase()
@@ -65,8 +80,25 @@ export class BoardGuard extends React.Component<
   }
 
   render() {
-    const { ready, authenticated, unsubscribeAuthStateChange } = this.state;
-    // const { id } = this.props.match.params;
+    const {
+      ready,
+      authenticated,
+      unsubscribeAuthStateChange,
+      invalidReference
+    } = this.state;
+    const url = window.location.href;
+
+    if (invalidReference) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/new',
+            state: { referrer: url }
+          }}
+        />
+      );
+    }
+
     if (!ready) {
       return <LoadingScreen />;
     }
@@ -74,9 +106,7 @@ export class BoardGuard extends React.Component<
     // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
     // after user has been logged in successfully.
     if (!authenticated) {
-      const url = window.location.href;
-      const boardId = url.substr(url.lastIndexOf('/') + 1);
-
+      const boardId = this.props.match.params.id;
       return (
         <Redirect
           to={{
