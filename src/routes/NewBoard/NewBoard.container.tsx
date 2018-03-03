@@ -3,7 +3,7 @@ import { dataToJS, getFirebase } from 'react-redux-firebase';
 import { Board, Boards, StoreState } from '../../types';
 import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
-import { loginAnonymously } from '../../util/auth';
+import { authController } from '../../controller/auth';
 
 function initialBoardConfig(creatorUid: string | null): Board {
   return {
@@ -53,7 +53,7 @@ export function mapStateToProps(
   function onLogin(email: string) {
     onSignIn = true;
 
-    loginAnonymously(firebase, email).then(() => {
+    authController(firebase).signInAnonymously(email).then(() => {
       const { state = { referrer: null } } = ownProps.location;
       if (state.referrer) {
         location.assign(state.referrer);

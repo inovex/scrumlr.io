@@ -3,7 +3,7 @@ import { dataToJS, getFirebase, isLoaded } from 'react-redux-firebase';
 import { BoardConfig, BoardUsers, StoreState } from '../../types';
 import { LoginBoardProps } from './LoginBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
-import { loginAnonymously } from '../../util/auth';
+import { authController } from '../../controller/auth';
 
 export function mapStateToProps(
   state: StoreState,
@@ -26,7 +26,7 @@ export function mapStateToProps(
 
   function onLogin(email: string) {
     if (!uid) {
-      loginAnonymously(firebase, email).then(() => {
+      authController(firebase).signInAnonymously(email).then(() => {
         location.assign(`/#/board/${(ownProps.match.params as any).id}`);
       });
     } else {
