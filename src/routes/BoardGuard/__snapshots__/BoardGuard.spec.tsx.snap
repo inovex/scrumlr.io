@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BoardGuard /> should render a redirect if user has not been authenticated 1`] = `
+Object {
+  "pathname": "/join/-foobar",
+  "state": Object {
+    "referrer": "http://localhost/",
+  },
+}
+`;
