@@ -43,6 +43,14 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
     this.props.onChangeBoardName(e.target.value);
   };
 
+  handleDeleteBoard = (e: any) => {
+    const warning =
+      'Are you sure you want to delete the board? This action cannot be undone.';
+    if (window.confirm(warning)) {
+      this.props.onDeleteBoard();
+    }
+  };
+
   render() {
     const { isOpen } = this.state;
     const {
@@ -51,7 +59,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onOpenDonate,
       onExport,
       onSignOut,
-      onDeleteBoard,
       boardName,
       admin
     } = this.props;
@@ -130,7 +137,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             <MenuItem
               name="Delete board"
               icon="trash"
-              onClick={onDeleteBoard}
+              onClick={this.handleDeleteBoard}
             />
           </li>}
         <li key="user-menu__logout" className="user-menu__logout">

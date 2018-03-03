@@ -5,7 +5,7 @@ import { Icon, IconNames } from '../../Icon';
 import './MenuItem.css';
 
 export interface MenuItemProps {
-  onClick: () => void;
+  onClick: (e: any) => void;
   name: string;
   icon: IconNames;
   className?: string;

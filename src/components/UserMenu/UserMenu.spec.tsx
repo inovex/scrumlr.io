@@ -61,13 +61,26 @@ describe('<UserMenu />', () => {
     );
   });
 
-  it('should pass correct method to delete board button', () => {
-    wrapper = shallow(<UserMenu {...props} />);
-    const ddMenu = wrapper.find(DropdownMenu);
+  describe('delete board', () => {
+    let _confirm: (message?: string) => boolean;
 
-    expect(props.onDeleteBoard).not.toHaveBeenCalled();
-    ddMenu.find(MenuItem).find({ name: 'Delete board' }).simulate('click');
-    expect(props.onDeleteBoard).toHaveBeenCalled();
+    beforeAll(() => {
+      _confirm = ((global as any) as Window).confirm;
+      ((global as any) as Window).confirm = () => true;
+    });
+
+    afterAll(() => {
+      ((global as any) as Window).confirm = _confirm;
+    });
+
+    it('should pass correct method to delete board button', () => {
+      wrapper = shallow(<UserMenu {...props} />);
+      const ddMenu = wrapper.find(DropdownMenu);
+
+      expect(props.onDeleteBoard).not.toHaveBeenCalled();
+      ddMenu.find(MenuItem).find({ name: 'Delete board' }).simulate('click');
+      expect(props.onDeleteBoard).toHaveBeenCalled();
+    });
   });
 
   it('should pass correct method to sign out button', () => {
