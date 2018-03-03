@@ -111,7 +111,7 @@ export const mapStateToProps = (
       });
   }
 
-  if (focused) {
+  if (focused && focused.type === ownProps.type) {
     const isFocusedStacked = cards.length !== cardsWithFocused.length;
     const stackToSearch = isFocusedStacked ? cardsWithFocused : cards;
 
