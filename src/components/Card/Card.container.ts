@@ -9,7 +9,7 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnCardProps
 ): StateCardProps => {
-  const author = dataToJS(
+  const author = getVal(
     state.fbState,
     `data/${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
     undefined
