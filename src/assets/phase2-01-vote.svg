@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="172px" height="172px" viewBox="0 0 172 172" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="phase2-01-vote">
-            <g id="circle-adjusted-copy-2" transform="translate(7.000000, 3.000000)" stroke="#00E7C2">
-                <circle id="Oval-4-Copy-4" stroke-width="2" cx="83" cy="84" r="75"></circle>
-                <circle id="Oval-4-Copy-5" stroke-width="2" cx="76.5" cy="74.5" r="74.5"></circle>
-                <circle id="Oval-4-Copy-6" cx="75" cy="92" r="75.5"></circle>
-                <ellipse id="Oval-4-Copy" stroke-width="3" cx="74.5" cy="83" rx="66.5" ry="67"></ellipse>
-            </g>
-            <g id="Orion_new-sticker" transform="translate(55.000000, 53.000000)" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round">
-                <path d="M30,0 C13.4314575,-5.10702591e-15 1.99840144e-15,13.4314575 0,30 C-1.99840144e-15,46.5685425 13.4314575,60 30,60 C46.5685425,60 60,46.5685425 60,30" id="Shape"></path>
-                <path d="M60,30 L30,0 C26,22 38,34 60,30 Z" id="Shape" stroke-linejoin="round"></path>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg width="172" height="172" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g transform="translate(7 3)" stroke="#00E7C2"><circle stroke-width="2" cx="83" cy="84" r="75"/><circle stroke-width="2" cx="76.5" cy="74.5" r="74.5"/><circle cx="75" cy="92" r="75.5"/><ellipse stroke-width="3" cx="74.5" cy="83" rx="66.5" ry="67"/></g><g stroke="#FFF" stroke-width="3" stroke-linecap="round"><path d="M85 53c-16.569 0-30 13.431-30 30 0 16.569 13.431 30 30 30 16.569 0 30-13.431 30-30"/><path d="M115 83L85 53c-4 22 8 34 30 30z" stroke-linejoin="round"/></g></g></svg>

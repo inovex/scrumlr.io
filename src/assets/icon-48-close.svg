@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-48-close" fill-rule="nonzero" fill="#FFFFFF">
-            <path d="M24.5,44 C35.8218374,44 45,34.8218374 45,23.5 C45,12.1781626 35.8218374,3 24.5,3 C13.1781626,3 4,12.1781626 4,23.5 C4,34.8218374 13.1781626,44 24.5,44 Z M24.5,46 C12.0735931,46 2,35.9264069 2,23.5 C2,11.0735931 12.0735931,1 24.5,1 C36.9264069,1 47,11.0735931 47,23.5 C47,35.9264069 36.9264069,46 24.5,46 Z" id="Oval-2"></path>
-            <path d="M26,23 L26,14 L24,14 L24,23 L15,23 L15,25 L24,25 L24,34 L26,34 L26,25 L35,25 L35,23 L26,23 Z" id="Combined-Shape" transform="translate(25.000000, 24.000000) rotate(-45.000000) translate(-25.000000, -24.000000) "></path>
-        </g>
-    </g>
-</svg>
+<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg"><g fill-rule="nonzero" fill="#FFF"><path d="M24.5 44C35.822 44 45 34.822 45 23.5S35.822 3 24.5 3 4 12.178 4 23.5 13.178 44 24.5 44zm0 2C12.074 46 2 35.926 2 23.5S12.074 1 24.5 1 47 11.074 47 23.5 36.926 46 24.5 46z"/><path d="M25 22.586l-6.364-6.364-1.414 1.414L23.586 24l-6.364 6.364 1.414 1.414L25 25.414l6.364 6.364 1.414-1.414L26.414 24l6.364-6.364-1.414-1.414L25 22.586z"/></g></svg>
