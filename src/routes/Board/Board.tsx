@@ -288,7 +288,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
       <div className="board-page">
         <Header
           boardId={this.props.boardSelector}
-          onExport={this.handleExport}
+          onExport={() => this.handleExport()}
           onSignOut={this.props.onSignOut}
           onOpenSettings={() => {
             this.setState({
