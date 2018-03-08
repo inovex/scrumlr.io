@@ -318,7 +318,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           className="board-page__column-view"
         />
 
-        {showSettings &&
+        {showSettings && (
           <SettingsModal
             isAdmin={this.props.isBoardAdmin}
             boardName={boardConfig.name}
@@ -335,9 +335,10 @@ export class Board extends React.Component<BoardProps, BoardState> {
                 showModal: undefined
               });
             }}
-          />}
+          />
+        )}
 
-        {showFeedback &&
+        {showFeedback && (
           <FeedbackModal
             sendMail={(content: string, email?: string) => {
               /* FIXME */
@@ -349,9 +350,10 @@ export class Board extends React.Component<BoardProps, BoardState> {
                 showModal: undefined
               });
             }}
-          />}
+          />
+        )}
 
-        {showDonate &&
+        {showDonate && (
           <DonateModal
             onClose={() => {
               this.setState({
@@ -360,7 +362,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
                 showModal: undefined
               });
             }}
-          />}
+          />
+        )}
 
         <ReactCSSTransitionGroup
           transitionName="phase-splash__animation"
@@ -373,12 +376,13 @@ export class Board extends React.Component<BoardProps, BoardState> {
           transitionEnter={true}
           transitionLeave={true}
         >
-          {showIntro &&
+          {showIntro && (
             <PhaseSplash
               key="phase-splash"
               phase={getPhaseConfiguration(this.props.boardConfig.guidedPhase)}
               onClose={this.closePhaseIntro}
-            />}
+            />
+          )}
         </ReactCSSTransitionGroup>
       </div>
     );

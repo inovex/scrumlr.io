@@ -15,7 +15,7 @@ export interface RouterProps {
   firebase?: any;
 }
 
-const Router = (props: RouterProps) =>
+const Router = (props: RouterProps) => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div style={{ flex: 1 }}>
       <HashRouter>
@@ -35,6 +35,7 @@ const Router = (props: RouterProps) =>
         closeButton={<Icon name="close20" className="toast__close-button" />}
       />
     </div>
-  </div>;
+  </div>
+);
 
 export default connect()(Router);
