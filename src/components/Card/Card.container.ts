@@ -1,5 +1,4 @@
-import { dataToJS, getFirebase, helpers } from 'react-redux-firebase';
-import pathToJS = helpers.pathToJS;
+import { getVal, getFirebase } from 'react-redux-firebase';
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
@@ -10,21 +9,21 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnCardProps
 ): StateCardProps => {
-  const author = dataToJS(
+  const author = getVal(
     state.fbState,
-    `${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
+    `data/${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
     undefined
   );
-  const user = pathToJS(state.fbState, 'auth', undefined);
+  const user = getVal(state.fbState, 'auth', undefined);
   const admin =
-    dataToJS(
+    getVal(
       state.fbState,
-      `${ownProps.boardId}/config/creatorUid`,
+      `data/${ownProps.boardId}/config/creatorUid`,
       undefined
     ) === user.uid;
-  const cards: { [key: string]: Card } = dataToJS(
+  const cards: { [key: string]: Card } = getVal(
     state.fbState,
-    `${ownProps.boardId}/cards`,
+    `data/${ownProps.boardId}/cards`,
     {}
   );
 
@@ -151,36 +150,10 @@ export const mapStateToProps = (
     }
   }
 
-  function onStackCardsReverse(cardSourceId: string, cardTargetId: string) {
-    if (
-      cards[cardSourceId].type === cards[cardTargetId].type &&
-      cardSourceId !== cardTargetId
-    ) {
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardSourceId}`).update({
-        ...cards[cardSourceId],
-        parent: cardTargetId
-      });
-
-      const userVotes = cards[cardTargetId].userVotes;
-      Object.keys(cards[cardSourceId].userVotes).forEach(userId => {
-        userVotes[userId] =
-          (userVotes[userId] || 0) + cards[cardSourceId].userVotes[userId];
-      });
-      const votes =
-        (cards[cardTargetId].votes || 0) + (cards[cardSourceId].votes || 0);
-
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardTargetId}`).update({
-        ...cards[cardTargetId],
-        userVotes,
-        votes
-      });
-    }
-  }
-
   function onFocusCard(cardId: string) {
-    const { focusedCardId } = dataToJS(
+    const { focusedCardId } = getVal(
       state.fbState,
-      `${ownProps.boardId}/config`,
+      `data/${ownProps.boardId}/config`,
       {}
     );
     getFirebase()
@@ -238,7 +211,7 @@ export const mapStateToProps = (
     return (): Card[] => {
       const keys = sortCardKeys(
         cards,
-        dataToJS(state.fbState, `${ownProps.boardId}/config/sorted`, {})
+        getVal(state.fbState, `data/${ownProps.boardId}/config/sorted`, {})
       );
 
       return keys
@@ -247,9 +220,9 @@ export const mapStateToProps = (
     };
   };
 
-  const focusedCardId: string = dataToJS(
+  const focusedCardId: string = getVal(
     state.fbState,
-    `${ownProps.boardId}/config/focusedCardId`,
+    `data/${ownProps.boardId}/config/focusedCardId`,
     undefined
   );
 
@@ -278,7 +251,6 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
-    onCardStackReversed: onStackCardsReverse,
     onFocus: onFocusCard
   };
 };

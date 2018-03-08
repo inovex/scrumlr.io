@@ -98,7 +98,7 @@ export class FeedbackModal extends React.Component<
               onChange={this.setMessageBody}
               invertPlaceholder={false}
               focusTheme="mint"
-              placeholder="Hello friend\n\nhere is some space for your feedback and your thoughts.\n\nThank you for your support!"
+              placeholder="Hello friend&#10;&#10;here is some space for your feedback and your thoughts.&#10;&#10;Thank you for your support!"
               showUnderline={true}
               description="Your message"
               className="feedback-modal__textarea"

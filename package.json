@@ -27,7 +27,7 @@
     "react-dom": "^16.2.0",
     "react-dotdotdot": "^1.2.3",
     "react-redux": "^5.0.4",
-    "react-redux-firebase": "^1.5.0-beta.3",
+    "react-redux-firebase": "^2.0.4",
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "react-swipe": "^5.1.0",

@@ -17,6 +17,9 @@ jest.mock('react-redux-firebase', () => ({
   getFirebase: () => ({
     ref: () => ({
       on: () => jest.fn()
+    }),
+    auth: () => ({
+      onAuthStateChanged: () => jest.fn()
     })
   }),
   firebaseConnect: () => () => jest.fn(),

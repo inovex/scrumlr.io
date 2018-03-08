@@ -1,4 +1,4 @@
-import { dataToJS, getFirebase } from 'react-redux-firebase';
+import { getVal, getFirebase } from 'react-redux-firebase';
 
 import { Board, Boards, StoreState } from '../../types';
 import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
@@ -31,7 +31,7 @@ export function mapStateToProps(
   let uid: string | null = null;
   const auth = onSignIn ? {} : firebase.auth();
 
-  const boards: Boards = dataToJS(fbState, '/boards', undefined);
+  const boards: Boards = getVal(fbState, 'data/boards', undefined);
 
   if (auth.currentUser) {
     uid = auth.currentUser.uid;

@@ -1,4 +1,4 @@
-import { dataToJS, getFirebase, isLoaded } from 'react-redux-firebase';
+import { getVal, getFirebase, isLoaded } from 'react-redux-firebase';
 
 import { BoardConfig, BoardUsers, StoreState } from '../../types';
 import { LoginBoardProps } from './LoginBoard';
@@ -19,8 +19,12 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  const boardUrl = `/boards/${(ownProps.match.params as any).id}`;
-  const boardConfig: BoardConfig = dataToJS(fbState, `${boardUrl}/config`, {});
+  const boardUrl = `boards/${(ownProps.match.params as any).id}`;
+  const boardConfig: BoardConfig = getVal(
+    fbState,
+    `data/${boardUrl}/config`,
+    {}
+  );
 
   const users: BoardUsers = isLoaded(boardConfig) ? boardConfig.users : {};
 

@@ -1,4 +1,4 @@
-import { dataToJS, getFirebase } from 'react-redux-firebase';
+import { getVal, getFirebase } from 'react-redux-firebase';
 import {
   OwnFocusedCardComponentProps,
   StateFocusedCardComponentProps
@@ -32,9 +32,9 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnFocusedCardComponentProps
 ): StateFocusedCardComponentProps => {
-  const boardCards: BoardCards = dataToJS(
+  const boardCards: BoardCards = getVal(
     state.fbState,
-    `${ownProps.boardUrl}/cards`,
+    `data/${ownProps.boardUrl}/cards`,
     {}
   );
 
@@ -45,9 +45,9 @@ export const mapStateToProps = (
   cardsInStack.unshift(ownProps.focused);
 
   const setParentOfCard = (cardId: string, parentId: string | null) => {
-    const card: Card = dataToJS(
+    const card: Card = getVal(
       state.fbState,
-      `${ownProps.boardUrl}/cards/${cardId}`,
+      `data/${ownProps.boardUrl}/cards/${cardId}`,
       {}
     );
 

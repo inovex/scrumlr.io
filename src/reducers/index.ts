@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { firebaseStateReducer } from 'react-redux-firebase';
+import { firebaseReducer } from 'react-redux-firebase';
 
 import { StoreState } from '../types/index';
 import { app } from './app';
@@ -7,7 +7,7 @@ import { app } from './app';
 export * from './app';
 
 const rootReducer = combineReducers<StoreState>({
-  fbState: firebaseStateReducer,
+  fbState: firebaseReducer,
   app
 });
 

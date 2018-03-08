@@ -39,7 +39,6 @@ describe('<Card />', () => {
         onShowVotes: jest.fn(),
         onFocus: jest.fn(),
         onCardStack: jest.fn(),
-        onCardStackReversed: jest.fn(),
         onColumnStack: jest.fn(),
         stacked: false,
         getCardsInTheStack: jest.fn(() => []),

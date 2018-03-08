@@ -1,6 +1,6 @@
 import { BoardCards, BoardConfig, StoreState } from '../../types';
 import { OwnColumnViewProps, StateColumnViewProps } from './ColumnView';
-import { dataToJS } from 'react-redux-firebase';
+import { getVal } from 'react-redux-firebase';
 import {
   ColumnType,
   getPhaseConfiguration
@@ -10,18 +10,18 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnColumnViewProps
 ): StateColumnViewProps => {
-  const boardConfig: BoardConfig = dataToJS(
+  const boardConfig: BoardConfig = getVal(
     state.fbState,
-    `${ownProps.boardUrl}/config`,
+    `data/${ownProps.boardUrl}/config`,
     {}
   );
 
   let filteredCardType: ColumnType | undefined = undefined;
   const focusedCardId = boardConfig.focusedCardId;
   if (focusedCardId) {
-    const boardCards: BoardCards = dataToJS(
+    const boardCards: BoardCards = getVal(
       state.fbState,
-      `${ownProps.boardUrl}/cards`,
+      `data/${ownProps.boardUrl}/cards`,
       {}
     );
 
