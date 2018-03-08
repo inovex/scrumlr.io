@@ -11,7 +11,7 @@ import { mapStateToProps } from './Column.container';
 import FocusedCardComponent from './FocusedCardComponent';
 import StackComponent from './StackComponent';
 import Title from './Title';
-import * as ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import * as ReactCSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import { Icon } from '../Icon';
 import { connect } from 'react-redux';
 

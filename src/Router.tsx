@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 // TODO: Use ES6 import if typings have been adjusted.
 const { HashRouter, Route, Redirect, Switch } = require('react-router-dom');
 const { ToastContainer, toast } = require('react-toastify');
-import 'react-toastify/dist/ReactToastify.min.css';
 
 import BoardGuard from './routes/BoardGuard';
 import NewBoard from './routes/NewBoard';
@@ -16,7 +15,7 @@ export interface RouterProps {
   firebase?: any;
 }
 
-const Router = (props: RouterProps) =>
+const Router = (props: RouterProps) => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div style={{ flex: 1 }}>
       <HashRouter>
@@ -31,11 +30,12 @@ const Router = (props: RouterProps) =>
       <ToastContainer
         position={toast.POSITION.BOTTOM_RIGHT}
         autoClose={5000}
-        className="dark-toast"
+        toastClassName="dark-toast"
         progressClassName="dark-toast-progress"
         closeButton={<Icon name="close20" className="toast__close-button" />}
       />
     </div>
-  </div>;
+  </div>
+);
 
 export default connect()(Router);
