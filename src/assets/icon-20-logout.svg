@@ -1,12 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-20-logout">
-            <g id="Group" transform="translate(10.500000, 10.000000) rotate(-270.000000) translate(-10.500000, -10.000000) translate(2.500000, 1.500000)">
-                <path d="M0,11.75 L0,11 L2,11 L2,12 L14,12 L14,11 L16,11 L16,12.5 L16,15 C16,16.1045695 15.2040618,17 14.2222222,17 L1.77777778,17 C0.795938223,17 0,16.1045695 0,15 L0,11.5 L0,11.75 Z M2,12 L2,15 L14,15 L14,12 L2,12 Z" id="Combined-Shape" fill="#27322F" fill-rule="nonzero"></path>
-                <path d="M6.94974747,9.12132034 L4.41421356,6.58578644 L3,8 L7.94974747,12.9497475 L12.8994949,8 L11.4852814,6.58578644 L8.94974747,9.12132034 L8.94974747,0 L6.94974747,0 L6.94974747,9.12132034 Z" id="Combined-Shape" fill="#27322F" fill-rule="nonzero" transform="translate(7.949747, 6.474874) rotate(-180.000000) translate(-7.949747, -6.474874) "></path>
-                <g id="Group-2" transform="translate(8.000000, 6.500000) rotate(-180.000000) translate(-8.000000, -6.500000) translate(3.000000, 0.000000)"></g>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M7.25 2H8v2H7v12h1v2H4c-1.105 0-2-.796-2-1.778V3.778C2 2.796 2.895 2 4 2h3.5-.25zM7 4H4v12h3V4z" fill="#27322F" fill-rule="nonzero"/><path d="M15.172 10.95l-2.536 2.535L14.05 14.9 19 9.95 14.05 5l-1.414 1.414 2.536 2.536H6.05v2h9.122z" fill="#27322F" fill-rule="nonzero"/></g></svg>
