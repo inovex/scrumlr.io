@@ -18,7 +18,7 @@ import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
 import PhaseSplash from '../../components/PhaseSplash/PhaseSplash';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
-import ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+import ReactCSSTransitionGroup = require('react-transition-group/CSSTransitionGroup');
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import DonateModal from '../../components/Modal/variant/DonateModal';
@@ -288,7 +288,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
       <div className="board-page">
         <Header
           boardId={this.props.boardSelector}
-          onExport={this.handleExport}
+          onExport={() => this.handleExport()}
           onSignOut={this.props.onSignOut}
           onOpenSettings={() => {
             this.setState({

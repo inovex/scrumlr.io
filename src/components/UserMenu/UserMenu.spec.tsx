@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { UserMenu, UserMenuProps, UserMenuState } from './UserMenu';
+import MenuItem from './MenuItem';
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
@@ -12,6 +13,7 @@ describe('<UserMenu />', () => {
   beforeEach(() => {
     props = {
       onSignOut: jest.fn(),
+      onDeleteBoard: jest.fn(),
       onOpenSettings: jest.fn(),
       onOpenFeedback: jest.fn(),
       onOpenDonate: jest.fn(),
@@ -47,8 +49,38 @@ describe('<UserMenu />', () => {
     const ddMenu = wrapper.find(DropdownMenu);
 
     expect(props.onExport).not.toHaveBeenCalled();
-    ddMenu.find('button').at(3).simulate('click');
+    ddMenu.find(MenuItem).find({ name: 'Export' }).simulate('click');
     expect(props.onExport).toHaveBeenCalled();
+  });
+
+  it('should not display delete board button to non admins', () => {
+    wrapper = shallow(<UserMenu {...props} admin={false} />);
+    const ddMenu = wrapper.find(DropdownMenu);
+    expect(ddMenu.find(MenuItem).find({ name: 'Delete board' })).toHaveLength(
+      0
+    );
+  });
+
+  describe('delete board', () => {
+    let _confirm: (message?: string) => boolean;
+
+    beforeAll(() => {
+      _confirm = ((global as any) as Window).confirm;
+      ((global as any) as Window).confirm = () => true;
+    });
+
+    afterAll(() => {
+      ((global as any) as Window).confirm = _confirm;
+    });
+
+    it('should pass correct method to delete board button', () => {
+      wrapper = shallow(<UserMenu {...props} />);
+      const ddMenu = wrapper.find(DropdownMenu);
+
+      expect(props.onDeleteBoard).not.toHaveBeenCalled();
+      ddMenu.find(MenuItem).find({ name: 'Delete board' }).simulate('click');
+      expect(props.onDeleteBoard).toHaveBeenCalled();
+    });
   });
 
   it('should pass correct method to sign out button', () => {
@@ -56,7 +88,7 @@ describe('<UserMenu />', () => {
     const ddMenu = wrapper.find(DropdownMenu);
 
     expect(props.onSignOut).not.toHaveBeenCalled();
-    ddMenu.find('button').at(4).simulate('click');
+    ddMenu.find(MenuItem).find({ name: 'Sign Out' }).simulate('click');
     expect(props.onSignOut).toHaveBeenCalled();
   });
 });

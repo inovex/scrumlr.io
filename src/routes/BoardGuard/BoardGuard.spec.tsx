@@ -1,15 +1,29 @@
-describe('TODO', () => {
-  it('dummy', () => {
-    expect(true).toEqual(true);
-  });
-});
-/*import * as React from 'react';
+import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 // TODO: Types are not working with most recent version of Typescript.
 // TODO: Use ES6 import if typings have been adjusted.
 const { Redirect } = require('react-router-dom');
 
 import BoardGuard, { BoardGuardProps, BoardGuardState } from './BoardGuard';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+
+jest.mock('!svg-inline-loader!./logo.svg', () => 'svg', {
+  virtual: true
+});
+jest.mock('!svg-inline-loader!./logo-s.svg', () => 'svg', {
+  virtual: true
+});
+jest.mock('react-redux-firebase', () => ({
+  getFirebase: () => ({
+    ref: () => ({
+      on: () => jest.fn()
+    })
+  }),
+  firebaseConnect: () => () => jest.fn(),
+  helpers: {
+    isLoaded: () => jest.fn()
+  }
+}));
 
 describe('<BoardGuard />', () => {
   let wrapper: ShallowWrapper<BoardGuardProps, BoardGuardState>;
@@ -34,11 +48,7 @@ describe('<BoardGuard />', () => {
 
   it('should render loading screen by default', () => {
     wrapper = shallow(<BoardGuard {...props} />);
-    expect(wrapper.find(Redirect)).toHaveLength(0);
-    expect(wrapper.find('firebaseConnector')).toHaveLength(0);
-    // Unfortunately in shallow mode the wrapped component is not available,
-    // so test against the firebase connection method.
-    expect(wrapper.text()).toContain('Loading user data');
+    expect(wrapper.find(LoadingScreen)).toHaveLength(1);
   });
 
   it('should render a redirect if user has not been authenticated', () => {
@@ -47,21 +57,13 @@ describe('<BoardGuard />', () => {
     const redirect = wrapper.find(Redirect);
     expect(redirect).toHaveLength(1);
     expect(redirect.prop('to')).toMatchSnapshot();
-    // Unfortunately in shallow mode the wrapped component is not available,
-    // so test against the firebase connection method.
-    expect(wrapper.find('firebaseConnector')).toHaveLength(0);
   });
 
-  it('should render a board component if user is authenticatd', () => {
+  it('should render a board component if user is authenticated', () => {
     wrapper = shallow(<BoardGuard {...props} />);
     wrapper.setState({ ready: true, authenticated: true });
+    wrapper.update();
+    expect(wrapper.find(LoadingScreen)).toHaveLength(0);
     expect(wrapper.find(Redirect)).toHaveLength(0);
-    // Unfortunately in shallow mode the wrapped component is not available,
-    // so test against the firebase connection method.
-    const firebaseConnector = wrapper.find('firebaseConnector');
-    expect(firebaseConnector).toHaveLength(1);
-    // Test if a onSignOut method is passed. The method is undefined in
-    // shallow rendering, as its content will be defined in componentDidMount.
-    expect(Object.keys(firebaseConnector.props())).toContain('onSignOut');
   });
-});*/
+});

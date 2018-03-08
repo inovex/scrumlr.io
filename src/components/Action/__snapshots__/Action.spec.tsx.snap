@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Action /> should match snapshot 1`] = `"<div class=\\"action-wrapper action-wrapper--theme-mint\\"><div class=\\"action\\">Test</div></div>"`;

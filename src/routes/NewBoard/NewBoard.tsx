@@ -12,7 +12,9 @@ import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
 import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
 
-export interface NewBoardProps extends RouteComponentProps<{}> {
+export type OwnNewBoardProps = RouteComponentProps<{}>;
+
+export interface StateNewBoardProps {
   uid: string | null;
   boards: Boards;
   onLogin: (name: string) => void;
@@ -20,6 +22,8 @@ export interface NewBoardProps extends RouteComponentProps<{}> {
   onLogout: () => void;
   onCreateNewBoard: () => void;
 }
+
+export type NewBoardProps = OwnNewBoardProps & StateNewBoardProps;
 
 export interface NewBoardState {
   email: string;

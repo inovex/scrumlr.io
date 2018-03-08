@@ -112,6 +112,7 @@ describe('<Card />', () => {
         shallowWrapper = shallow(<Card {...props} />);
         const instance: any = shallowWrapper.instance();
         instance.expand();
+        shallowWrapper.update();
         expect((instance.state as CardState).expanded).toBe(true);
         expect(shallowWrapper.find(Details)).toHaveLength(1);
       });
@@ -124,13 +125,14 @@ describe('<Card />', () => {
           ...state,
           expanded: true
         }));
-
+        shallowWrapper.update();
         // Check that correct method is passed to Details component
         expect(shallowWrapper.find(Details).prop('onClose')).toEqual(
           instance.onDetailsCloseListener
         );
         // Call listener and check if state is correcty toggled
         instance.onDetailsCloseListener();
+        shallowWrapper.update();
         expect((instance.state as CardState).expanded).toBe(false);
         expect(shallowWrapper.find(Details)).toHaveLength(0);
       });
@@ -162,7 +164,11 @@ describe('<Card />', () => {
         shallowWrapper = shallow(<Card {...props} />);
         const instance: any = shallowWrapper.instance();
         instance.contentHasOverflowingContent = jest.fn(() => true);
-        instance.forceUpdate();
+        instance.setState((state: CardState): CardState => ({
+          ...state,
+          hasOverflow: true
+        }));
+        shallowWrapper.update();
         expect(
           shallowWrapper.find('.card__more-content-indicator')
         ).toHaveLength(1);

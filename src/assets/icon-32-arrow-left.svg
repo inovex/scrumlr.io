@@ -1,9 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="icon-32-arrow-left" fill-rule="nonzero" fill="#27322F">
-            <path d="M16,30 C23.7319865,30 30,23.7319865 30,16 C30,8.2680135 23.7319865,2 16,2 C8.2680135,2 2,8.2680135 2,16 C2,23.7319865 8.2680135,30 16,30 Z M16,32 C7.163444,32 0,24.836556 0,16 C0,7.163444 7.163444,0 16,0 C24.836556,0 32,7.163444 32,16 C32,24.836556 24.836556,32 16,32 Z" id="Oval-2"></path>
-            <polygon id="Shape" transform="translate(16.000000, 16.000000) rotate(-180.000000) translate(-16.000000, -16.000000) " points="16 8 14.59 9.41 20.17 15 8 15 8 17 20.17 17 14.59 22.59 16 24 24 16"></polygon>
-        </g>
-    </g>
-</svg>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g fill-rule="nonzero" fill="#27322F"><path d="M16 30c7.732 0 14-6.268 14-14S23.732 2 16 2 2 8.268 2 16s6.268 14 14 14zm0 2C7.163 32 0 24.837 0 16S7.163 0 16 0s16 7.163 16 16-7.163 16-16 16z"/><path d="M16 24l1.41-1.41L11.83 17H24v-2H11.83l5.58-5.59L16 8l-8 8z"/></g></svg>

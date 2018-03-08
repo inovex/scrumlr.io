@@ -28,6 +28,7 @@ export type IconNames =
   | 'key-esc'
   | 'settings'
   | 'board'
+  | 'trash'
   | 'chevron-left'
   | 'chevron-right'
   | 'stack-top'
