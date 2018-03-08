@@ -5,7 +5,7 @@ import { PhaseMenu } from '../PhaseMenu';
 import { UserList } from '../UserList';
 import { UserMenu } from '../UserMenu';
 import { BoardUsers } from '../../types';
-import { Logo } from './subcomponents/Logo';
+import Logo from './subcomponents/Logo';
 
 import './Header.css';
 import { mapStateToProps } from './Header.container';

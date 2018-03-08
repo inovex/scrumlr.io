@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Logo /> should have default props 1`] = `
+Object {
+  "href": "/",
+}
+`;
+
+exports[`<Logo /> should match snapshot 1`] = `"<a href=\\"/\\" class=\\"header__logo-link\\" aria-label=\\"Link back to home page\\"><span class=\\"header__logo-image\\" aria-hidden=\\"true\\">svg</span><span class=\\"header__logo-image-small\\" aria-hidden=\\"true\\">svg</span></a>"`;
