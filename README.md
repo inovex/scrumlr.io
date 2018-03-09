@@ -12,6 +12,9 @@
     <a href="https://beta.gemnasium.com/projects/github.com/masinio/scrumlr.io" target="_blank">
       <img src="https://beta.gemnasium.com/badges/github.com/masinio/scrumlr.io.svg" alt="Dependency Status" />
     </a>
+    <a href="https://www.browserstack.com/automate/public-build/d1hHdzAreUJ6cnByVHlVNVlET3lWU2g4YVA2am51MXczVzFCVk14SjNPQT0tLXUxMEpKQlBvQ2xhZ2MyNVhuNWZBaVE9PQ==--2d493680853e126d56d28f5c8cc8385a3f56292a%" target="_blank">
+        <img src='https://www.browserstack.com/automate/badge.svg?badge_key=d1hHdzAreUJ6cnByVHlVNVlET3lWU2g4YVA2am51MXczVzFCVk14SjNPQT0tLXUxMEpKQlBvQ2xhZ2MyNVhuNWZBaVE9PQ==--2d493680853e126d56d28f5c8cc8385a3f56292a%'/>
+    </a>
   </p>
 </div>
 
