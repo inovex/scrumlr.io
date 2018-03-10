@@ -2,20 +2,15 @@ language: node_js
 node_js:
   - "node"
 cache: yarn
-sudo: required
-services:
-  - docker
 
 install:
-  - npm install -g codecov firebase-tools
+  - npm install -g codecov
   - yarn install
 
 script:
   - yarn lint
   - yarn css:build
   - yarn test -- --coverage
-  - yarn build
-  - ./scripts/travis-deployment.sh
 
 after_success:
   - codecov
