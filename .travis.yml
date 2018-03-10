@@ -7,7 +7,7 @@ services:
   - docker
 
 install:
-  - npm install -g codecov
+  - npm install -g codecov firebase-tools
   - yarn install
 
 script:
@@ -15,7 +15,7 @@ script:
   - yarn css:build
   - yarn test -- --coverage
   - yarn build
-  - ./scripts/travis-ci-push-docker-image.sh
+  -
 
 after_success:
   - codecov
