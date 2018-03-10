@@ -3,11 +3,11 @@ const webdriver = require('selenium-webdriver');
 
 class CustomWorld {
   constructor() {
-    const username = process.env.REACT_APP_BROWSERSTACK_USER;
-    const accessKey = process.env.REACT_APP_BROWSERSTACK_KEY;
+    const username = process.env.BROWSERSTACK_USER;
+    const accessKey = process.env.BROWSERSTACK_KEY;
 
     if (username && accessKey) {
-      this.url = 'https://scrumlr.io';
+      this.url = 'https://staging.scrumlr.io';
       this.driver = new webdriver.Builder().
         usingServer('http://hub-cloud.browserstack.com/wd/hub').
         withCapabilities({

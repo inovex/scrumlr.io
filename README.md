@@ -23,6 +23,8 @@ Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://sc
 This project is written in React and its data is stored in a Firebase database.
 The database rules are manifested in `database-rules.json`.
 
+
+
 ## Getting started
 
 ```bash
@@ -30,3 +32,10 @@ yarn install
 yarn start
 # go to localhost:3000
 ```
+
+## Public availability
+
+The latest considered stable version is hosted on [scrumlr.io](https://scrumlr.io).
+
+The latest `master` build is always available on the staging URL [staging.scrumlr.io](https://staging.scrumlr.io).
+While the E2E test suite is not large enough to guarantee a working app, releases will be performed manually.
