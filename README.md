@@ -29,18 +29,11 @@ The database rules are manifested in `database.rules.json`.
 The webapp is hosted on Firebase. The [staging](https://staging.scrumlr.io) system is always
 up to date with the `master` branch and is the target for the end-to-end tests.
 
-## Development
+## Contributing
 
-### Getting started
-
-```bash
-yarn install
-yarn start
-# go to localhost:3000
-```
-
-You can open a pull request anytime, just make sure that the jobs `yarn test` and `yarn lint`
-are passing and that every change is covered by unit tests.
+You're very welcome to be part of this project. You can contribute by opening an issue, by
+fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
+`yarn test` and `yarn lint` are passing and that every change is covered by unit tests.
 
 ## Thank you
 
