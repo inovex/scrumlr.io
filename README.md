@@ -39,3 +39,11 @@ The latest considered stable version is hosted on [scrumlr.io](https://scrumlr.i
 
 The latest `master` build is always available on the staging URL [staging.scrumlr.io](https://staging.scrumlr.io).
 While the E2E test suite is not large enough to guarantee a working app, releases will be performed manually.
+
+## Thanks
+
+We are grateful to BrowserStack for providing the infrastructure that we use to test code in this repository.
+
+<a href="https://www.browserstack.com" target="_blank">
+    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/browserstack.png" width="600" height="315" alt="BrowserStack" />
+</a>
