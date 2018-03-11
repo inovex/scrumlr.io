@@ -11,8 +11,8 @@ case "$STAGE" in
             export REACT_APP_PROJECT_ID=scrumlr-staging
             export REACT_APP_FIREBASE_API_KEY=AIzaSyBvrxlE-gSrWvC6ir_LVzyPEba65EYth2w
             export REACT_APP_FIREBASE_AUTH_DOMAIN=scrumlr-staging.firebaseapp.com
-            export REACT_APP_DATABASE_URL=https://scrumlr-dev.firebaseio.com
-            export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-dev.appspot.com
+            export REACT_APP_DATABASE_URL=https://scrumlr-staging.firebaseio.com
+            export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-staging.appspot.com
             export REACT_APP_FIREBASE_MESSAGING_SENDER_ID=775711400697
             unset REACT_APP_SENTRY_DSN
             unset REACT_APP_SLACK_FEEDBACK_HOOK
