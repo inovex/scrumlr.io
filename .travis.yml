@@ -1,10 +1,8 @@
 language: node_js
 node_js:
-  - "node"
+  - node
+
 cache: yarn
-sudo: required
-services:
-  - docker
 
 install:
   - npm install -g codecov
@@ -15,7 +13,18 @@ script:
   - yarn css:build
   - yarn test -- --coverage
   - yarn build
-  - ./scripts/travis-ci-push-docker-image.sh
+
+deploy:
+  provider: firebase
+  project: staging
+  skip_cleanup: true
+  on:
+    branch: master
+  token:
+    secure: Lw0GYhzZ/V6KG1YP4oKVqRSmnt1csMXvW5hixF6Ccod/lS/ryJtt07/e1PqhgzxjpzUsb8RSwQZlN0yB5iOMd3G3dhTJYVwaG22aqP2IkO1ySNA8TKMHuVs060fouW+gV8oDRS1lODRjAiBEP39B24LOrFRLcmcq95ccNDaS0yJeqjnwE3RtE+oWfCtNS1XgUioXzd/yPC0m6KKMBnNIhJpkIqupQkuglQNWTTTNE9b0kdZht3Sa5XLGuD9cYvtDXQLYtEBGgADVuF+AyFIOW3aSbDEdp9x8Mo4W+pctL+d+SxABcYiA9zqrmP585FaF/kqF3N/L1iJda0+uIVD5TYoBmfnatHzS4klDkiMB4HGx4nzJl+YmIVDIE0DUexJwaQgPUum6o6/HcHh0+eNA7SpuQxJdYGYYqcRnIzONNPI5I+998r9GCqXLTyU5QhA4ZpTteoJXpF1rJKk7EFtkZygMIET9bow2AwcxW1BPcjS3GN6kvzQXG9yc7xBq8iBi7B3fozI7KJF7DlrkApTZpiQ2mSaoRmPpC4PvZZl4dTOn87P24q0/7OIYA5BYWlZphGrgF+n5wjASnbBp7HasT+tEtfKp+jRuNldsHPCJxq59zh0/3a4lkdQ2RJf7aBr2qGOntzQmLGFe5rcYx5loVK1u8jhcXaOMXmcn/wBnLMw=
+
+after_deploy:
+  - yarn e2e
 
 after_success:
   - codecov

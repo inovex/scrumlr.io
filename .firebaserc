@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "scrumlr-staging",
+    "staging": "scrumlr-staging",
+    "live": "scrumlr-d74d6"
+  }
+}

@@ -20,6 +20,7 @@
     "experimentalDecorators": true
   },
   "exclude": [
+    "features",
     "coverage",
     "node_modules",
     "build",
