@@ -1,4 +1,4 @@
-<div align="center" markdown="1">
+<div align="center" markdown="1" style="margin-bottom: 2.5em">
   <p>
     <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
@@ -14,6 +14,9 @@
     </a>
     <a href="https://www.browserstack.com/automate/public-build/d1hHdzAreUJ6cnByVHlVNVlET3lWU2g4YVA2am51MXczVzFCVk14SjNPQT0tLXUxMEpKQlBvQ2xhZ2MyNVhuNWZBaVE9PQ==--2d493680853e126d56d28f5c8cc8385a3f56292a%" target="_blank">
         <img src='https://www.browserstack.com/automate/badge.svg?badge_key=d1hHdzAreUJ6cnByVHlVNVlET3lWU2g4YVA2am51MXczVzFCVk14SjNPQT0tLXUxMEpKQlBvQ2xhZ2MyNVhuNWZBaVE9PQ==--2d493680853e126d56d28f5c8cc8385a3f56292a%'/>
+    </a>
+    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io?ref=badge_shield" alt="FOSSA Status" target="_blank">
+        <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io.svg?type=shield"/>
     </a>
   </p>
 </div>
@@ -45,10 +48,14 @@ Thanks to all our users, contributors & supporters!
 
 ### Browserstack
 
-We are grateful to BrowserStack for providing the infrastructure that we use to test code in this repository.
+We are grateful to [BrowserStack](https://www.browserstack.com) for our open source account to the end-to-end test infrastructure.
 
 <div align="center" markdown="1">
     <a href="https://www.browserstack.com" target="_blank">
         <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/browserstack.png" style="width: 600px; max-width: 80%; height: auto;" alt="BrowserStack" />
     </a>
 </div>
+
+## License
+
+Scrumlr is [MIT licensed](https://github.com/masinio/scrumlr.io/blob/tech/doc/LICENSE).
