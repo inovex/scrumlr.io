@@ -14,8 +14,11 @@ class CustomWorld {
           'browserstack.user': username,
           'browserstack.key': accessKey,
           'browserstack.local': false,
+          os : 'OS X',
+          'os_version' : 'High Sierra',
+          browserName: 'chrome',
           project: 'scrumlr',
-          browserName: 'chrome'
+          build: process.env.TRAVIS_COMMIT || 'local'
         }).
         build();
     } else {
