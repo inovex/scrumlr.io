@@ -9,6 +9,7 @@
     <a href="https://codecov.io/gh/masinio/scrumlr.io" target="_blank">
       <img src="https://codecov.io/gh/masinio/scrumlr.io/branch/master/graph/badge.svg" />
     </a>
+<a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io.svg?type=shield"/></a>
     <a href="https://beta.gemnasium.com/projects/github.com/masinio/scrumlr.io" target="_blank">
       <img src="https://beta.gemnasium.com/badges/github.com/masinio/scrumlr.io.svg" alt="Dependency Status" />
     </a>
@@ -47,3 +48,6 @@ We are grateful to BrowserStack for providing the infrastructure that we use to 
 <a href="https://www.browserstack.com" target="_blank">
     <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/browserstack.png" width="600" height="315" alt="BrowserStack" />
 </a>
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io?ref=badge_large)
