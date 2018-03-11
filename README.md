@@ -1,6 +1,6 @@
 <div align="center" markdown="1">
   <p>
-    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/scrumlr.png" alt="scrumlr.io" width="284" height="121" />
+    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
   <p>
     <a href="https://travis-ci.org/masinio/scrumlr.io" target="_blank">
@@ -21,11 +21,14 @@
 Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://scrumlr.io).
 
 This project is written in React and its data is stored in a Firebase database.
-The database rules are manifested in `database-rules.json`.
+The database rules are manifested in `database.rules.json`.
 
+The webapp is hosted on Firebase. The [staging](https://staging.scrumlr.io) system is always
+up to date with the `master` branch and is the target for the end-to-end tests.
 
+## Development
 
-## Getting started
+### Getting started
 
 ```bash
 yarn install
@@ -33,17 +36,19 @@ yarn start
 # go to localhost:3000
 ```
 
-## Public availability
+You can open a pull request anytime, just make sure that the jobs `yarn test` and `yarn lint`
+are passing and that every change is covered by unit tests.
 
-The latest considered stable version is hosted on [scrumlr.io](https://scrumlr.io).
+## Thank you
 
-The latest `master` build is always available on the staging URL [staging.scrumlr.io](https://staging.scrumlr.io).
-While the E2E test suite is not large enough to guarantee a working app, releases will be performed manually.
+Thanks to all our users, contributors & supporters!
 
-## Thanks
+### Browserstack
 
 We are grateful to BrowserStack for providing the infrastructure that we use to test code in this repository.
 
-<a href="https://www.browserstack.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/browserstack.png" width="600" height="315" alt="BrowserStack" />
-</a>
+<div align="center" markdown="1">
+    <a href="https://www.browserstack.com" target="_blank">
+        <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/master/browserstack.png" style="width: 600px; max-width: 80%; height: auto;" alt="BrowserStack" />
+    </a>
+</div>
