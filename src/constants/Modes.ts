@@ -1,7 +1,7 @@
 import { AddCardTheme } from '../components/AddCard';
 import { IconNames } from '../components/Icon';
 
-export type RetroMode = 'lean' | 'positiveNegative' | '4L';
+export type RetroMode = 'lean' | 'positiveNegative';
 export type ColumnType = 'positive' | 'negative' | 'actions';
 
 export interface PhaseActivity {
@@ -19,7 +19,7 @@ export interface Column {
   };
   focus: {
     enabled: boolean;
-    column: number;
+    column: string;
     align: 'left' | 'right';
   };
   sorted: boolean;
@@ -47,7 +47,7 @@ const leanCoffeeModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 0,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -73,7 +73,7 @@ const leanCoffeeModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: false,
-          column: 0,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -95,7 +95,7 @@ const leanCoffeeModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 0,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -120,7 +120,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 0,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -135,7 +135,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 1,
+          column: 'negative',
           align: 'left'
         },
         sorted: false
@@ -161,7 +161,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: false,
-          column: 0,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -176,7 +176,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: false,
-          column: 1,
+          column: 'negative',
           align: 'left'
         },
         sorted: false
@@ -198,7 +198,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 2,
+          column: 'positive',
           align: 'right'
         },
         sorted: false
@@ -213,7 +213,7 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: true,
-          column: 2,
+          column: 'negative',
           align: 'right'
         },
         sorted: false
@@ -228,236 +228,10 @@ const simpleRetroModeConfiguration: RetroPhase[] = [
         },
         focus: {
           enabled: false,
-          column: 2,
+          column: 'actions',
           align: 'right'
         },
         sorted: true
-      }
-    ],
-    activities: [
-      { icon: 'phase3-discuss', description: 'Discuss top-voted' },
-      { icon: 'phase3-define', description: 'Define actions' }
-    ]
-  }
-];
-
-const fourLRetroModeConfiguration: RetroPhase[] = [
-  {
-    name: 'Write',
-    description: 'Create cards, communicate your thoughts & stack common',
-    columns: [
-      {
-        id: 'liked',
-        name: 'Liked',
-        type: 'positive',
-        voting: {
-          enabled: false,
-          displayed: false
-        },
-        focus: {
-          enabled: true,
-          column: 0,
-          align: 'right'
-        },
-        sorted: false
-      },
-      {
-        id: 'learned',
-        name: 'Learned',
-        type: 'positive',
-        voting: {
-          enabled: false,
-          displayed: false
-        },
-        focus: {
-          enabled: true,
-          column: 1,
-          align: 'left'
-        },
-        sorted: false
-      },
-      {
-        id: 'lacked',
-        name: 'Lacked',
-        type: 'negative',
-        voting: {
-          enabled: false,
-          displayed: false
-        },
-        focus: {
-          enabled: true,
-          column: 2,
-          align: 'left'
-        },
-        sorted: false
-      },
-      {
-        id: 'longed',
-        name: 'Longed For',
-        type: 'negative',
-        voting: {
-          enabled: false,
-          displayed: false
-        },
-        focus: {
-          enabled: true,
-          column: 3,
-          align: 'left'
-        },
-        sorted: false
-      }
-    ],
-    activities: [
-      { icon: 'phase1-create', description: 'Create cards' },
-      { icon: 'phase1-communicate', description: 'Communicate meaning' },
-      { icon: 'phase1-combine', description: 'Combine to stack' }
-    ]
-  },
-  {
-    name: 'Vote',
-    description: 'Vote on the most important cards for yourself',
-    columns: [
-      {
-        id: 'liked',
-        name: 'Liked',
-        type: 'positive',
-        voting: {
-          enabled: true,
-          displayed: false
-        },
-        focus: {
-          enabled: false,
-          column: 0,
-          align: 'right'
-        },
-        sorted: false
-      },
-      {
-        id: 'learned',
-        name: 'Learned',
-        type: 'positive',
-        voting: {
-          enabled: true,
-          displayed: false
-        },
-        focus: {
-          enabled: false,
-          column: 1,
-          align: 'left'
-        },
-        sorted: false
-      },
-      {
-        id: 'lacked',
-        name: 'Lacked',
-        type: 'negative',
-        voting: {
-          enabled: true,
-          displayed: false
-        },
-        focus: {
-          enabled: false,
-          column: 2,
-          align: 'left'
-        },
-        sorted: false
-      },
-      {
-        id: 'longed',
-        name: 'Longed For',
-        type: 'negative',
-        voting: {
-          enabled: false,
-          displayed: false
-        },
-        focus: {
-          enabled: true,
-          column: 3,
-          align: 'left'
-        },
-        sorted: false
-      }
-    ],
-    activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
-  },
-  {
-    name: 'Discuss',
-    description: 'Discuss top-voted cards and define actions',
-    columns: [
-      {
-        id: 'liked',
-        name: 'Liked',
-        type: 'positive',
-        voting: {
-          enabled: false,
-          displayed: true
-        },
-        focus: {
-          enabled: true,
-          column: 4,
-          align: 'right'
-        },
-        sorted: true
-      },
-      {
-        id: 'learned',
-        name: 'Learned',
-        type: 'positive',
-        voting: {
-          enabled: false,
-          displayed: true
-        },
-        focus: {
-          enabled: true,
-          column: 4,
-          align: 'right'
-        },
-        sorted: true
-      },
-      {
-        id: 'lacked',
-        name: 'Lacked',
-        type: 'negative',
-        voting: {
-          enabled: false,
-          displayed: true
-        },
-        focus: {
-          enabled: true,
-          column: 4,
-          align: 'right'
-        },
-        sorted: true
-      },
-      {
-        id: 'longed',
-        name: 'Longed For',
-        type: 'negative',
-        voting: {
-          enabled: false,
-          displayed: true
-        },
-        focus: {
-          enabled: true,
-          column: 4,
-          align: 'right'
-        },
-        sorted: true
-      },
-      {
-        id: 'actions',
-        name: 'Actions',
-        type: 'actions',
-        voting: {
-          enabled: false,
-          displayed: true
-        },
-        focus: {
-          enabled: false,
-          column: 4,
-          align: 'right'
-        },
-        sorted: false
       }
     ],
     activities: [
@@ -469,8 +243,7 @@ const fourLRetroModeConfiguration: RetroPhase[] = [
 
 const retroModes = {
   lean: leanCoffeeModeConfiguration,
-  positiveNegative: simpleRetroModeConfiguration,
-  '4L': fourLRetroModeConfiguration
+  positiveNegative: simpleRetroModeConfiguration
 };
 
 export function getPhaseConfiguration(
