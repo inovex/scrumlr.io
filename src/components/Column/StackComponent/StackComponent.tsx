@@ -5,7 +5,7 @@ import Component from '../Component';
 import Stack from '../../Stack';
 import Action from '../../Action';
 import AddCard from '../../AddCard';
-import { ColumnType, getTheme } from '../../../constants/Retrospective';
+import { Column, getTheme } from '../../../constants/Retrospective';
 import { Card as CardModel } from '../../../types';
 
 import './StackComponent.css';
@@ -13,8 +13,7 @@ import './StackComponent.css';
 export interface StackComponentProps {
   boardUrl: string;
   cards: CardModel[];
-  name: string;
-  type: ColumnType;
+  column: Column;
   isVotingAllowed: boolean;
   isVoteSummaryShown: boolean;
   className?: string;
@@ -25,14 +24,13 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
     const {
       className,
       boardUrl,
-      name,
-      type,
+      column,
       cards,
       isVotingAllowed,
       isVoteSummaryShown
     } = this.props;
 
-    const theme = getTheme(type);
+    const theme = getTheme(column.type);
 
     return (
       <Component
@@ -50,7 +48,7 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
           className="stack-component__stack"
         />
         <Action theme={theme}>
-          <AddCard boardId={boardUrl} name={name} type={type} />
+          <AddCard boardId={boardUrl} column={column} />
         </Action>
       </Component>
     );

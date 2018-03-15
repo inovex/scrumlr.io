@@ -12,6 +12,7 @@ import {
 } from './AddCard';
 import { mapStateToProps } from './AddCard.container';
 import { mockStoreState } from '../../builder';
+import { RetroMode } from '../../types';
 
 const KEYCODE_ENTER = 13;
 
@@ -23,8 +24,11 @@ describe('<AddCard />', () => {
     beforeEach(() => {
       props = {
         boardId: 'boardId',
-        type: 'positive',
-        name: 'Positive',
+        column: {
+          id: 'positive',
+          type: 'positive',
+          name: 'Positive'
+        },
         onAdd: jest.fn()
       };
     });
@@ -80,7 +84,7 @@ describe('<AddCard />', () => {
       });
 
       it('should call onAdd callback when enter is pressed and text has been entered', () => {
-        wrapper = shallow(<AddCard {...props} type={type} />);
+        wrapper = shallow(<AddCard {...props} />);
         wrapper.setState({ text });
         let input = wrapper.find('Input');
 
@@ -112,7 +116,7 @@ describe('<AddCard />', () => {
       });
 
       it('should call onAdd callback when button is pressed and text has been entered', () => {
-        wrapper = shallow(<AddCard {...props} type={type} />);
+        wrapper = shallow(<AddCard {...props} />);
         wrapper.setState({ text });
 
         expect(props.onAdd).not.toHaveBeenCalled();
@@ -154,6 +158,7 @@ describe('<AddCard />', () => {
               guided: true,
               guidedPhase: 0,
               sorted: false,
+              mode: 'positiveNegative' as RetroMode,
               users: {
                 xNpM1E6XiigmfH7P8f42Vc3KyN02: {
                   image:
@@ -171,6 +176,7 @@ describe('<AddCard />', () => {
               guided: true,
               guidedPhase: 0,
               sorted: false,
+              mode: 'positiveNegative' as RetroMode,
               users: {
                 xNpM1E6XiigmfH7P8f42Vc3KyN02: {
                   image:
@@ -190,18 +196,24 @@ describe('<AddCard />', () => {
       firebaseMock.__setState(state.fbState);
       ownProps = {
         boardId: 'boardId',
-        type: 'positive',
-        name: 'Positive'
+        column: {
+          id: 'positive',
+          type: 'positive',
+          name: 'Positive'
+        }
       };
     });
 
     it('should push new card to firebase when onAdd is called', () => {
       const state = mockStoreState();
-      const props = mapStateToProps(state, ownProps);
+      const props = mapStateToProps(state, {
+        firebase: { push: jest.fn() },
+        ...ownProps
+      });
       const text = 'foobar';
       const timestamp = '2017-01-01T00:00:00.000Z';
 
-      props.onAdd(ownProps.type, text, timestamp);
+      props.onAdd(ownProps.column.id, text, timestamp);
       const firebase = firebaseMock.getFirebase();
 
       expect(firebase.ref().push.mock.calls[0]).toMatchSnapshot();

@@ -3,7 +3,10 @@ import * as React from 'react';
 import './ColumnView.css';
 import * as ReactSwipe from 'react-swipe';
 
-import { ColumnType, PhaseConfiguration } from '../../constants/Retrospective';
+import {
+  ColumnType,
+  IndexedPhaseConfiguration
+} from '../../constants/Retrospective';
 import Column from '../Column';
 import { mapStateToProps } from './ColumnView.container';
 import { connect } from 'react-redux';
@@ -15,7 +18,7 @@ export interface OwnColumnViewProps {
 }
 
 export interface StateColumnViewProps {
-  phase: PhaseConfiguration;
+  phase: IndexedPhaseConfiguration;
   filteredCardType?: ColumnType;
 }
 
@@ -99,10 +102,9 @@ export class ColumnView extends React.Component<
       )
       .map((column, index, values) => (
         <Column
-          id={column.id}
+          column={column}
           key={column.id}
           boardUrl={this.props.boardUrl}
-          type={column.type}
           phase={this.props.phase}
           isActive={this.state.activeColumn === index}
           hasPreviousColumn={index > 0}

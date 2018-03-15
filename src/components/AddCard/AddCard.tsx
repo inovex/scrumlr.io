@@ -4,25 +4,27 @@ import { Component } from 'react';
 import './AddCard.css';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
-import { ColumnType, getTheme } from '../../constants/Retrospective';
+import { Column, getTheme } from '../../constants/Retrospective';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import { connect } from 'react-redux';
+import { withFirebase } from 'react-redux-firebase';
 
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
-  id: string;
+  column: Column;
+}
 
-  /** Callback function on add of card. */
-  type: ColumnType;
-
-  /** The name of the card type. */
-  name: string;
+export interface OwnAddCardPropsWithFirebase extends OwnAddCardProps {
+  firebase: {
+    push: (ref: string, value: any) => Promise<any>;
+  };
 }
 
 export interface StateAddCardProps {
-  onAdd: (id: string, text: string, timestamp?: string) => void;
+  /** Callback function on add of card. */
+  onAdd: (columnId: string, text: string, timestamp?: string) => void;
 }
 
 export type AddCardProps = OwnAddCardProps & StateAddCardProps;
@@ -51,27 +53,27 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
   };
 
   handleAdd = () => {
-    const { type, onAdd } = this.props;
+    const { column, onAdd } = this.props;
     const { text } = this.state;
 
     if (text.length > 0) {
-      onAdd(type, text);
+      onAdd(column.id, text);
       this.setState(() => ({ text: '' }));
     }
   };
 
   render() {
-    const { type, name } = this.props;
+    const { column } = this.props;
     const { text } = this.state;
 
-    const theme = getTheme(type);
+    const theme = getTheme(column.type);
 
     return (
       <div className={cx('add-card', `add-card--theme-${theme}`)}>
         <Input
           invertPlaceholder={theme === 'mint'}
           showUnderline={false}
-          placeholder={`Add ${name} card`}
+          placeholder={`Add ${column.name} card`}
           value={text}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
@@ -92,4 +94,4 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
 
 export default connect<StateAddCardProps, null, OwnAddCardProps>(
   mapStateToProps
-)(AddCard);
+)(withFirebase(AddCard));

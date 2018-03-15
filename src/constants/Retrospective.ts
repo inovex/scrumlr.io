@@ -9,10 +9,13 @@ export interface Activity {
   description: string;
 }
 
-export interface ColumnConfiguration {
+export interface Column {
   id: string;
   name: string;
   type: ColumnType;
+}
+
+export interface ColumnConfiguration extends Column {
   voting: {
     enabled: boolean;
     displayed: boolean;

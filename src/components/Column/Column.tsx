@@ -4,9 +4,8 @@ import * as React from 'react';
 import './Column.css';
 import { Card as CardModel } from '../../types';
 import {
-  ColumnConfiguration,
-  ColumnType,
-  PhaseConfiguration
+  Column as ColumnDefinition,
+  IndexedPhaseConfiguration
 } from '../../constants/Retrospective';
 import { mapStateToProps } from './Column.container';
 import FocusedCardComponent from './FocusedCardComponent';
@@ -20,9 +19,8 @@ export interface OwnColumnProps {
   boardUrl: string;
 
   /** The unique column type. */
-  id: string;
-  type: ColumnType;
-  phase: PhaseConfiguration;
+  column: ColumnDefinition;
+  phase: IndexedPhaseConfiguration;
 
   isActive: boolean;
 
@@ -39,8 +37,6 @@ export interface StateColumnProps {
   cards: CardModel[];
   focused?: CardModel;
   isHidden: boolean;
-
-  columnConfiguration: ColumnConfiguration;
 }
 
 export type ColumnProps = OwnColumnProps & StateColumnProps;
@@ -52,11 +48,10 @@ export class Column extends React.Component<ColumnProps, {}> {
       isHidden,
       className,
       focused,
-      type,
+      column,
       theme,
       boardUrl,
-      cards,
-      columnConfiguration
+      cards
     } = this.props;
 
     const cardsCount = cards.filter(c => !c.parent).length;
@@ -66,9 +61,9 @@ export class Column extends React.Component<ColumnProps, {}> {
       <div
         className={classNames('column', `column--theme-${theme}`, className, {
           'column--inactive':
-            !isActive && (focused ? focused.type !== type : true),
-          'column--hidden': type !== 'actions' && isHidden,
-          'column--extended': type !== 'actions' && focused && isSummary
+            !isActive && (focused ? focused.type !== column.type : true),
+          'column--hidden': column.type !== 'actions' && isHidden,
+          'column--extended': column.type !== 'actions' && focused && isSummary
         })}
       >
         {!focused &&
@@ -126,14 +121,14 @@ export class Column extends React.Component<ColumnProps, {}> {
               cards={cards}
               isVotingAllowed={columnConfiguration.voting.enabled}
               isVoteSummaryShown={columnConfiguration.voting.displayed}
-              type={type}
+              column={column}
               className={classNames('column__stack-component', {
                 ['column__stack-component--hidden']: Boolean(focused)
               })}
             />
           )}
 
-          {type === 'positive' &&
+          {column.type === 'positive' &&
             focused && (
               <FocusedCardComponent
                 key={focused.id}

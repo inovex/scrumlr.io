@@ -2,13 +2,15 @@ import { getFirebase } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 
 import { Card, StoreState } from '../../types';
-import { OwnAddCardProps, StateAddCardProps } from './AddCard';
+import { OwnAddCardPropsWithFirebase, StateAddCardProps } from './AddCard';
 import { ColumnType } from '../../constants/Retrospective';
 
 export const mapStateToProps = (
   store: StoreState,
-  ownProps: OwnAddCardProps
+  ownProps: OwnAddCardPropsWithFirebase
 ): StateAddCardProps => {
+  const { firebase } = ownProps;
+
   // TODO: Currently the third parameter, timestamp, is needed for testing.
   // Can this be done by mocking the `Date.now` method in Jest?
   function onAddCard(type: ColumnType, value: string, timestamp?: string) {
@@ -33,18 +35,16 @@ export const mapStateToProps = (
         [user.uid]: 0
       }
     };
-    getFirebase()
-      .ref(`${ownProps.boardId}/cards`)
-      .push(card)
-      .catch((err: Error) => {
-        Raven.captureMessage('Could not create new card', {
-          extra: {
-            reason: err.message,
-            uid: user.uid,
-            boardId: ownProps.boardId
-          }
-        });
+
+    firebase.push(`${ownProps.boardId}/cards`, card).catch((err: Error) => {
+      Raven.captureMessage('Could not create new card', {
+        extra: {
+          reason: err.message,
+          uid: user.uid,
+          boardId: ownProps.boardId
+        }
       });
+    });
   }
 
   return {
