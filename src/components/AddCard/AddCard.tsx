@@ -8,7 +8,8 @@ import { Column, getTheme } from '../../constants/Retrospective';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import { connect } from 'react-redux';
-import { withFirebase } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { firebaseConnect } from 'react-redux-firebase';
 
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
@@ -92,6 +93,6 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
   }
 }
 
-export default connect<StateAddCardProps, null, OwnAddCardProps>(
-  mapStateToProps
-)(withFirebase(AddCard));
+export default compose(firebaseConnect(), connect(mapStateToProps))(
+  AddCard as any
+) as React.ComponentClass<any>;

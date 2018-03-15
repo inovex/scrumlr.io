@@ -4,7 +4,7 @@ const firebaseMock = require('react-redux-firebase');
 
 import { ColumnType } from '../../constants/Retrospective';
 import {
-  AddCard,
+  default as AddCard,
   AddCardProps,
   AddCardState,
   AddCardTheme,
