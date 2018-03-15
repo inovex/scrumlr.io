@@ -4,7 +4,7 @@ import * as React from 'react';
 import './Column.css';
 import { Card as CardModel } from '../../types';
 import {
-  Column as ColumnDefinition,
+  ColumnConfiguration,
   IndexedPhaseConfiguration
 } from '../../constants/Retrospective';
 import { mapStateToProps } from './Column.container';
@@ -19,7 +19,7 @@ export interface OwnColumnProps {
   boardUrl: string;
 
   /** The unique column type. */
-  column: ColumnDefinition;
+  column: ColumnConfiguration;
   phase: IndexedPhaseConfiguration;
 
   isActive: boolean;
@@ -60,10 +60,10 @@ export class Column extends React.Component<ColumnProps, {}> {
     return (
       <div
         className={classNames('column', `column--theme-${theme}`, className, {
-          'column--inactive':
+          ['column--inactive']:
             !isActive && (focused ? focused.type !== column.type : true),
-          'column--hidden': column.type !== 'actions' && isHidden,
-          'column--extended': column.type !== 'actions' && focused && isSummary
+          ['column--hidden']: column.type !== 'actions' && isHidden,
+          ['column--extended']: Boolean(column.type !== 'actions' && focused)
         })}
       >
         {!focused &&
@@ -95,7 +95,7 @@ export class Column extends React.Component<ColumnProps, {}> {
             </button>
           )}
 
-        <Title count={cardsCount}>{columnConfiguration.name}</Title>
+        <Title count={cardsCount}>{column.name}</Title>
 
         <ReactCSSTransitionGroup
           transitionName="column__content-animation"
@@ -104,23 +104,23 @@ export class Column extends React.Component<ColumnProps, {}> {
           transitionLeave={false}
           className="column__content"
         >
-          {type === 'negative' &&
-            focused && (
+          {focused &&
+            column.focus.align === 'left' && (
               <FocusedCardComponent
                 key={focused.id}
                 boardUrl={boardUrl}
                 focused={focused}
                 className="component--large"
-                showVotes={columnConfiguration.voting.displayed}
+                showVotes={column.voting.displayed}
               />
             )}
 
-          {(!isSummary || !focused) && (
+          {!focused && (
             <StackComponent
               boardUrl={boardUrl}
               cards={cards}
-              isVotingAllowed={columnConfiguration.voting.enabled}
-              isVoteSummaryShown={columnConfiguration.voting.displayed}
+              isVotingAllowed={column.voting.enabled}
+              isVoteSummaryShown={column.voting.displayed}
               column={column}
               className={classNames('column__stack-component', {
                 ['column__stack-component--hidden']: Boolean(focused)
@@ -128,14 +128,14 @@ export class Column extends React.Component<ColumnProps, {}> {
             />
           )}
 
-          {column.type === 'positive' &&
-            focused && (
+          {focused &&
+            column.focus.align === 'left' && (
               <FocusedCardComponent
                 key={focused.id}
                 boardUrl={boardUrl}
                 focused={focused}
                 className="component--large"
-                showVotes={columnConfiguration.voting.displayed}
+                showVotes={column.voting.displayed}
               />
             )}
         </ReactCSSTransitionGroup>

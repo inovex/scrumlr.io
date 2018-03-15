@@ -1,11 +1,10 @@
 import * as React from 'react';
 import Component from '../Component/Component';
 import FocusedCard from '../../FocusedCard';
-import Action, { ActionTheme } from '../../Action';
+import Action from '../../Action';
 import CardNavigation from '../../CardNavigation/CardNavigation';
 import { Card as CardModel } from '../../../types';
 import { mapStateToProps } from './FocusedCardComponent.container';
-import { getInversedTheme } from '../../../constants/Retrospective';
 import { connect } from 'react-redux';
 
 export interface OwnFocusedCardComponentProps {
@@ -60,11 +59,6 @@ class FocusedCardComponent extends React.Component<
   };
 
   render() {
-    let theme: ActionTheme = 'dark';
-    if (!this.props.isSummary) {
-      theme = this.props.focused.type === 'positive' ? 'dark' : 'light';
-    }
-
     return (
       <Component className={this.props.className}>
         <FocusedCard
@@ -77,15 +71,9 @@ class FocusedCardComponent extends React.Component<
           }}
           showVotes={this.props.showVotes}
         />
-        <Action theme={theme}>
+        <Action theme="dark">
           <CardNavigation
-            theme={
-              this.props.isSummary
-                ? 'dark'
-                : getInversedTheme(
-                    this.props.cards[this.state.currentCardIndex].type
-                  )
-            }
+            theme="dark"
             size={this.props.cards.length}
             currentIndex={this.state.currentCardIndex}
             onNext={this.onNextCard}

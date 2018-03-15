@@ -1,7 +1,7 @@
-import { BoardCards, Card, StoreState } from '../../types/index';
+import { BoardCards, Card, StoreState } from '../../types';
 import { getVal, getFirebase } from 'react-redux-firebase';
 import { OwnColumnProps, StateColumnProps } from './Column';
-import { ColumnConfiguration, getTheme } from '../../constants/Retrospective';
+import { getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import Raven = require('raven-js');
 
@@ -51,8 +51,6 @@ export const mapStateToProps = (
     {}
   );
 
-  const configuration = ownProps.phase;
-
   let isHidden = false;
 
   const focusedCardId: string = getVal(
@@ -68,7 +66,7 @@ export const mapStateToProps = (
   const focusedCard = boardCards[focusedCardId];
   let focused: Card | undefined = undefined;
   if (focusedCard) {
-    if (focusedCard.type === ownProps.type) {
+    if (focusedCard.type === ownProps.column.type) {
       focused = focusedCard;
       focused.id = focusedCardId;
     } else {
@@ -80,20 +78,20 @@ export const mapStateToProps = (
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.type)
+    .filter(card => card.type === ownProps.column.type)
     .filter(card => !Boolean(card.parent));
-  cards = sortCards(cards, configuration.sorted);
+  cards = sortCards(cards, ownProps.column.sorted);
 
   let cardsWithFocused: Card[] = Object.keys(boardCards)
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.type)
+    .filter(card => card.type === ownProps.column.type)
     .filter(
       card =>
         !Boolean(card.parent) || (focused && card.id === (focused as Card).id)
     );
-  cardsWithFocused = sortCards(cardsWithFocused, configuration.sorted);
+  cardsWithFocused = sortCards(cardsWithFocused, ownProps.column.sorted);
 
   function onFocusCard(cardId: string | null) {
     getFirebase()
@@ -146,20 +144,12 @@ export const mapStateToProps = (
     };
   }
 
-  const columnConfiguration = ownProps.phase.columns.find(
-    c => c.id === ownProps.id
-  );
-  if (columnConfiguration === undefined) {
-    throw new Error();
-  }
-
-  const theme = getTheme(ownProps.type);
+  const theme = getTheme(ownProps.column.type);
 
   return {
     theme,
     cards,
     focused,
-    isHidden,
-    columnConfiguration
+    isHidden
   };
 };
