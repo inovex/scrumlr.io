@@ -4,7 +4,7 @@ import * as React from 'react';
 import { PhaseMenu } from '../PhaseMenu';
 import { UserList } from '../UserList';
 import { UserMenu } from '../UserMenu';
-import { BoardUsers } from '../../types';
+import { BoardUsers, RetroMode } from '../../types';
 import Logo from './subcomponents/Logo';
 
 import './Header.css';
@@ -23,6 +23,7 @@ export interface OwnHeaderProps {
 
 export interface StateHeaderProps {
   admin: boolean;
+  mode: RetroMode;
   phase: number;
   sorted: boolean;
   boardName?: string;
@@ -45,6 +46,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       admin,
       className,
       boardName,
+      mode,
       phase: guidedPhase,
       onPrevPhase,
       onNextPhase,
@@ -70,6 +72,7 @@ export class Header extends React.Component<HeaderProps, {}> {
 
           <PhaseMenu
             admin={admin}
+            mode={mode}
             guidedPhase={guidedPhase}
             onPrevPhase={onPrevPhase}
             onNextPhase={onNextPhase}
@@ -82,7 +85,7 @@ export class Header extends React.Component<HeaderProps, {}> {
               onToggleReadyState={onToggleReadyState}
             />
 
-            {loggedIn &&
+            {loggedIn && (
               <UserMenu
                 boardName={boardName}
                 admin={admin}
@@ -93,7 +96,8 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenFeedback={onOpenFeedback}
                 onOpenDonate={onOpenDonate}
                 onDeleteBoard={onDeleteBoard}
-              />}
+              />
+            )}
           </div>
         </div>
       </header>

@@ -3,10 +3,7 @@ import * as React from 'react';
 import './ColumnView.css';
 import * as ReactSwipe from 'react-swipe';
 
-import {
-  ColumnType,
-  RetrospectivePhaseConfiguration
-} from '../../constants/Retrospective';
+import { ColumnType, PhaseConfiguration } from '../../constants/Retrospective';
 import Column from '../Column';
 import { mapStateToProps } from './ColumnView.container';
 import { connect } from 'react-redux';
@@ -18,7 +15,7 @@ export interface OwnColumnViewProps {
 }
 
 export interface StateColumnViewProps {
-  phase: RetrospectivePhaseConfiguration;
+  phase: PhaseConfiguration;
   filteredCardType?: ColumnType;
 }
 
@@ -72,7 +69,7 @@ export class ColumnView extends React.Component<
   };
 
   gotoNextColumn = () => {
-    if (this.state.activeColumn < this.props.phase.shownColumns.length - 1) {
+    if (this.state.activeColumn < this.props.phase.columns.length - 1) {
       this.setState({
         ...this.state,
         activeColumn: this.state.activeColumn + 1
@@ -91,20 +88,21 @@ export class ColumnView extends React.Component<
   }
 
   render() {
-    const { shownColumns: columns } = this.props.phase;
+    const { columns } = this.props.phase;
 
     const renderedColumns = columns
       .filter(
-        type =>
+        column =>
           this.state.showCarousel && this.props.filteredCardType
-            ? type === this.props.filteredCardType
+            ? column.type === this.props.filteredCardType
             : true
       )
-      .map((column, index, values) =>
+      .map((column, index, values) => (
         <Column
-          key={column}
+          id={column.id}
+          key={column.id}
           boardUrl={this.props.boardUrl}
-          type={column}
+          type={column.type}
           phase={this.props.phase}
           isActive={this.state.activeColumn === index}
           hasPreviousColumn={index > 0}
@@ -113,9 +111,9 @@ export class ColumnView extends React.Component<
           onGoToNextColumn={this.gotoNextColumn}
           className="board__column"
         />
-      );
+      ));
 
-    const activeIndicators = renderedColumns.map((column, index) =>
+    const activeIndicators = renderedColumns.map((column, index) => (
       <div
         key={`indicator-${index}`}
         className={cx('column-view__active-indicator', {
@@ -123,30 +121,31 @@ export class ColumnView extends React.Component<
             index === this.state.activeColumn
         })}
       />
-    );
+    ));
 
     const componentClassName = cx('board', this.props.className);
-    return this.state.showCarousel
-      ? <div className="column-view__wrapper">
-          {!this.props.filteredCardType &&
-            <div className="column-view__active-indicator-list">
-              {activeIndicators}
-            </div>}
-          <ReactSwipe
-            key={`column-view-${renderedColumns.length}`}
-            ref={(rs: any) => (this.reactSwipe = rs)}
-            className={componentClassName}
-            swipeOptions={{
-              continuous: false,
-              callback: this.updateActiveColumn
-            }}
-          >
-            {renderedColumns}
-          </ReactSwipe>
-        </div>
-      : <main className={componentClassName}>
+    return this.state.showCarousel ? (
+      <div className="column-view__wrapper">
+        {!this.props.filteredCardType && (
+          <div className="column-view__active-indicator-list">
+            {activeIndicators}
+          </div>
+        )}
+        <ReactSwipe
+          key={`column-view-${renderedColumns.length}`}
+          ref={(rs: any) => (this.reactSwipe = rs)}
+          className={componentClassName}
+          swipeOptions={{
+            continuous: false,
+            callback: this.updateActiveColumn
+          }}
+        >
           {renderedColumns}
-        </main>;
+        </ReactSwipe>
+      </div>
+    ) : (
+      <main className={componentClassName}>{renderedColumns}</main>
+    );
   }
 }
 

@@ -4,11 +4,7 @@ import { Component } from 'react';
 import './AddCard.css';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
-import {
-  ColumnType,
-  getColumnName,
-  getTheme
-} from '../../constants/Retrospective';
+import { ColumnType, getTheme } from '../../constants/Retrospective';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import { connect } from 'react-redux';
@@ -16,12 +12,17 @@ import { connect } from 'react-redux';
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
+  id: string;
+
   /** Callback function on add of card. */
   type: ColumnType;
+
+  /** The name of the card type. */
+  name: string;
 }
 
 export interface StateAddCardProps {
-  onAdd: (type: ColumnType, text: string, timestamp?: string) => void;
+  onAdd: (id: string, text: string, timestamp?: string) => void;
 }
 
 export type AddCardProps = OwnAddCardProps & StateAddCardProps;
@@ -60,7 +61,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
   };
 
   render() {
-    const { type } = this.props;
+    const { type, name } = this.props;
     const { text } = this.state;
 
     const theme = getTheme(type);
@@ -70,7 +71,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
         <Input
           invertPlaceholder={theme === 'mint'}
           showUnderline={false}
-          placeholder={`Add ${getColumnName(type)} card`}
+          placeholder={`Add ${name} card`}
           value={text}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}

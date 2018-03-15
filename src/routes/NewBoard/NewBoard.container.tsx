@@ -14,7 +14,8 @@ function initialBoardConfig(creatorUid: string | null): Board {
       creatorUid,
       guided: true,
       guidedPhase: 0,
-      created: new Date().toISOString()
+      created: new Date().toISOString(),
+      mode: 'positiveNegative' // TODO configurable
     }
   };
 }
@@ -44,25 +45,30 @@ export function mapStateToProps(
       creatorUid = auth.currentUser.uid;
     }
     const board: Board = initialBoardConfig(creatorUid);
-    getFirebase().ref('/boards').push(board).then((item: any) => {
-      const key = item.getKey();
-      location.hash = `/board/${key}`;
-    });
+    getFirebase()
+      .ref('/boards')
+      .push(board)
+      .then((item: any) => {
+        const key = item.getKey();
+        location.hash = `/board/${key}`;
+      });
   }
 
   function onLogin(email: string) {
     onSignIn = true;
 
-    authController(firebase).signInAnonymously(email).then(() => {
-      const { state = { referrer: null } } = ownProps.location;
-      if (state.referrer) {
-        location.assign(state.referrer);
-      } else {
-        onCreateNewBoard();
-      }
+    authController(firebase)
+      .signInAnonymously(email)
+      .then(() => {
+        const { state = { referrer: null } } = ownProps.location;
+        if (state.referrer) {
+          location.assign(state.referrer);
+        } else {
+          onCreateNewBoard();
+        }
 
-      onSignIn = false;
-    });
+        onSignIn = false;
+      });
   }
 
   const onProviderLogin = (provider: AuthProvider) => () => {
@@ -71,9 +77,12 @@ export function mapStateToProps(
   };
 
   function onLogout() {
-    firebase.auth().signOut().then(() => {
-      location.hash = '/new';
-    });
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/new';
+      });
   }
 
   return {

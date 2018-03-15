@@ -128,16 +128,19 @@ export const mapStateToProps = (
 
   const onChangeBoardName = debounce((boardName: string) => {
     const { focusedCardId } = boardConfig;
-    firebase.ref(`${boardUrl}/config/name`).set(boardName).catch((err: any) => {
-      Raven.captureMessage('Could not set boardname', {
-        extra: {
-          reason: err.message,
-          uid: auth.uid,
-          boardId: boardUrl,
-          focusedCardId
-        }
+    firebase
+      .ref(`${boardUrl}/config/name`)
+      .set(boardName)
+      .catch((err: any) => {
+        Raven.captureMessage('Could not set boardname', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardUrl,
+            focusedCardId
+          }
+        });
       });
-    });
   }, 2000);
 
   function onSignOut() {
@@ -148,9 +151,12 @@ export const mapStateToProps = (
       ownProps.onSignOut();
     }
     // User is still signed in at this point. Sign out the user and redirect to home page.
-    getFirebase().auth().signOut().then(() => {
-      location.hash = '/';
-    });
+    getFirebase()
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/';
+      });
   }
 
   const onPrevPhase = () => {
@@ -163,6 +169,7 @@ export const mapStateToProps = (
   return {
     admin: isBoardAdmin,
     boardName: boardConfig.name,
+    mode: boardConfig.mode,
     phase: boardConfig.guidedPhase,
     sorted: boardConfig.sorted,
     onPrevPhase,

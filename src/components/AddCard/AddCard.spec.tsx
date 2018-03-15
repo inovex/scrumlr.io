@@ -24,6 +24,7 @@ describe('<AddCard />', () => {
       props = {
         boardId: 'boardId',
         type: 'positive',
+        name: 'Positive',
         onAdd: jest.fn()
       };
     });
@@ -189,7 +190,8 @@ describe('<AddCard />', () => {
       firebaseMock.__setState(state.fbState);
       ownProps = {
         boardId: 'boardId',
-        type: 'positive'
+        type: 'positive',
+        name: 'Positive'
       };
     });
 

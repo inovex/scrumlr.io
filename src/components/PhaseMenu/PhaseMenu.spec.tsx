@@ -4,13 +4,14 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { PhaseMenu, PhaseMenuProps } from './PhaseMenu';
 import {
   getPhaseConfiguration,
-  RETRO_PHASES_MAX_INDEX
+  getPhasesCount
 } from '../../constants/Retrospective';
 
 describe('<PhaseMenu />', () => {
   let wrapper: ShallowWrapper<PhaseMenuProps, {}>;
   let props: PhaseMenuProps = {
     admin: false,
+    mode: 'positiveNegative',
     guidedPhase: 0,
     onPrevPhase: jest.fn(),
     onNextPhase: jest.fn()
@@ -35,7 +36,11 @@ describe('<PhaseMenu />', () => {
 
   it('should not allow to jump to next phase if guided phase index equal to or larger than RETRO_PHASES_MAX_INDEX', () => {
     wrapper = shallow(
-      <PhaseMenu {...props} admin={true} guidedPhase={RETRO_PHASES_MAX_INDEX} />
+      <PhaseMenu
+        {...props}
+        admin={true}
+        guidedPhase={getPhasesCount('positiveNegative')}
+      />
     );
     const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
     expect(prevBtn).toHaveLength(1);
@@ -47,7 +52,7 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu
         {...props}
         admin={true}
-        guidedPhase={RETRO_PHASES_MAX_INDEX - 1}
+        guidedPhase={getPhasesCount('positiveNegative') - 1}
       />
     );
     const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
@@ -64,6 +69,8 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu {...props} admin={true} guidedPhase={phaseIndex} />
     );
     expect(wrapper.text()).toContain(`Phase ${phaseIndex + 1}`);
-    expect(wrapper.text()).toContain(getPhaseConfiguration(phaseIndex).name);
+    expect(wrapper.text()).toContain(
+      getPhaseConfiguration('positiveNegative', phaseIndex).name
+    );
   });
 });

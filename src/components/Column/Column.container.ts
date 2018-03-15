@@ -1,7 +1,7 @@
 import { BoardCards, Card, StoreState } from '../../types/index';
 import { getVal, getFirebase } from 'react-redux-firebase';
 import { OwnColumnProps, StateColumnProps } from './Column';
-import { getColumnName, getTheme } from '../../constants/Retrospective';
+import { ColumnConfiguration, getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import Raven = require('raven-js');
 
@@ -146,18 +146,20 @@ export const mapStateToProps = (
     };
   }
 
-  const title = getColumnName(ownProps.type);
+  const columnConfiguration = ownProps.phase.columns.find(
+    c => c.id === ownProps.id
+  );
+  if (columnConfiguration === undefined) {
+    throw new Error();
+  }
+
   const theme = getTheme(ownProps.type);
 
   return {
-    title,
     theme,
     cards,
     focused,
     isHidden,
-    isVotingAllowed: configuration.votesAllowed,
-    isSortedByVotes: configuration.sorted,
-    isSummary: ownProps.phase.shownColumns.length === 3, // TODO
-    isVoteSummaryShown: configuration.showVotes
+    columnConfiguration
   };
 };

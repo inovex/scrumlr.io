@@ -40,6 +40,8 @@ export interface Card {
   };
 }
 
+export type RetroMode = 'lean' | 'positiveNegative';
+
 export interface BoardConfig {
   sorted: boolean;
   users: BoardUsers;
@@ -49,6 +51,7 @@ export interface BoardConfig {
   focusedCardId?: string;
   created: string;
   name?: string;
+  mode: RetroMode;
 }
 
 export interface UserInformation {

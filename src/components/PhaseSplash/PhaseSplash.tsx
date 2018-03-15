@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { RetrospectivePhaseConfiguration } from '../../constants/Retrospective';
+import { IndexedPhaseConfiguration } from '../../constants/Retrospective';
 import Icon from '../Icon/Icon';
 import './PhaseSplash.css';
 import ReactSwipe = require('react-swipe');
 
 export interface PhaseSplashProps {
-  phase: RetrospectivePhaseConfiguration;
+  phase: IndexedPhaseConfiguration;
   onClose?: () => void;
 }
 
@@ -47,14 +47,14 @@ export class PhaseSplash extends React.Component<
   render() {
     const { phase, onClose } = this.props;
 
-    const activities = phase.activities.map(activity =>
+    const activities = phase.activities.map(activity => (
       <span className="phase-splash__activity" key={activity.icon}>
         <Icon name={activity.icon} width={172} height={172} />
         <p className="phase-splash__activity-description">
           {activity.description}
         </p>
       </span>
-    );
+    ));
 
     return (
       <div className="phase-splash">
@@ -66,19 +66,14 @@ export class PhaseSplash extends React.Component<
           <Icon name="close-circle" width={48} height={48} />
         </button>
 
-        <h2 className="phase-splash__index">
-          Phase {phase.index}
-        </h2>
-        <h1 className="phase-splash__name">
-          {phase.name}
-        </h1>
+        <h2 className="phase-splash__index">Phase {phase.index}</h2>
+        <h1 className="phase-splash__name">{phase.name}</h1>
 
-        {!this.state.showCarousel &&
-          <div className="phase-splash__activities">
-            {activities}
-          </div>}
+        {!this.state.showCarousel && (
+          <div className="phase-splash__activities">{activities}</div>
+        )}
 
-        {this.state.showCarousel &&
+        {this.state.showCarousel && (
           <div className="phase-splash__carousel-wrapper">
             <Icon
               name="chevron-left"
@@ -103,7 +98,8 @@ export class PhaseSplash extends React.Component<
               width={48}
               height={48}
             />
-          </div>}
+          </div>
+        )}
 
         <button
           className="phase-splash__button"

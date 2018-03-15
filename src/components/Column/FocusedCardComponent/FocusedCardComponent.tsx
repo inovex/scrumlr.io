@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 export interface OwnFocusedCardComponentProps {
   boardUrl: string;
   focused: CardModel;
-  isSummary: boolean;
   className?: string;
   showVotes: boolean;
 }

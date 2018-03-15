@@ -2,7 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { mockStoreState } from '../../builder';
-import { StoreState } from '../../types';
+import { RetroMode, StoreState } from '../../types';
 import { NewBoard, NewBoardProps } from './NewBoard';
 import { mapStateToProps } from './NewBoard.container';
 import Input from '../../components/Input';
@@ -34,6 +34,7 @@ const fbState = {
           guided: true,
           guidedPhase: 0,
           sorted: false,
+          mode: 'positiveNegative' as RetroMode,
           users: {
             xNpM1E6XiigmfH7P8f42Vc3KyN02: {
               image:
@@ -51,6 +52,7 @@ const fbState = {
           guided: true,
           guidedPhase: 0,
           sorted: false,
+          mode: 'positiveNegative' as RetroMode,
           users: {
             xNpM1E6XiigmfH7P8f42Vc3KyN02: {
               image:

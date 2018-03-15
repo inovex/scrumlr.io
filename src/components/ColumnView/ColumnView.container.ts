@@ -30,7 +30,7 @@ export const mapStateToProps = (
   }
 
   return {
-    phase: getPhaseConfiguration(boardConfig.guidedPhase),
+    phase: getPhaseConfiguration(boardConfig.mode, boardConfig.guidedPhase),
     filteredCardType
   };
 };
