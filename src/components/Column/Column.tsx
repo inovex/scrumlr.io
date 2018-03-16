@@ -63,7 +63,7 @@ export class Column extends React.Component<ColumnProps, {}> {
       <div
         className={classNames('column', `column--theme-${theme}`, className, {
           ['column--inactive']:
-            !isActive && (focused ? focused.type !== column.type : true),
+            !isActive && (focused ? focused.type !== column.id : true),
           ['column--hidden']: isHidden
         })}
         style={{ flex: isExtended ? phase.columns.length - 1 : 1 }}

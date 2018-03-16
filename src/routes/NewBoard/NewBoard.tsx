@@ -81,6 +81,12 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 Start Lean
               </button>
               <button
+                onClick={this.handleClickLogin('startStopContinue')}
+                className="new-board__action-button"
+              >
+                Start,Stop,Continue
+              </button>
+              <button
                 onClick={this.handleClickLogin('positiveNegative')}
                 className="new-board__action-button"
               >
@@ -104,6 +110,12 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
               className="new-board__action-button"
             >
               Start Lean
+            </button>
+            <button
+              onClick={() => this.props.onCreateNewBoard('startStopContinue')}
+              className="new-board__action-button"
+            >
+              Start,Stop,Continue
             </button>
             <button
               onClick={() => this.props.onCreateNewBoard('positiveNegative')}

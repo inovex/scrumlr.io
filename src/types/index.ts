@@ -40,7 +40,7 @@ export interface Card {
   };
 }
 
-export type RetroMode = 'lean' | 'positiveNegative';
+export type RetroMode = 'lean' | 'positiveNegative' | 'startStopContinue';
 
 export interface BoardConfig {
   sorted: boolean;
