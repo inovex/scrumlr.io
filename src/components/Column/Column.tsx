@@ -51,6 +51,7 @@ export class Column extends React.Component<ColumnProps, {}> {
       className,
       focused,
       column,
+      phase,
       theme,
       boardUrl,
       cards
@@ -63,9 +64,9 @@ export class Column extends React.Component<ColumnProps, {}> {
         className={classNames('column', `column--theme-${theme}`, className, {
           ['column--inactive']:
             !isActive && (focused ? focused.type !== column.type : true),
-          ['column--hidden']: isHidden,
-          ['column--extended']: isExtended
+          ['column--hidden']: isHidden
         })}
+        style={{ flex: isExtended ? phase.columns.length - 1 : 1 }}
       >
         {!focused &&
           this.props.hasPreviousColumn && (

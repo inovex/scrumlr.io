@@ -27,7 +27,7 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
         ? getPhaseConfiguration(mode, guidedPhase - 1).name
         : undefined;
     const nextPhaseName =
-      guidedPhase < getPhasesCount(mode)
+      guidedPhase < getPhasesCount(mode) - 1
         ? getPhaseConfiguration(mode, guidedPhase + 1).name
         : undefined;
 
@@ -70,7 +70,7 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
             <button
               className="phase-menu__phase-button"
               aria-label="Go to next phase"
-              disabled={guidedPhase >= getPhasesCount(mode)}
+              disabled={guidedPhase >= getPhasesCount(mode) - 1}
               onClick={onNextPhase}
               data-tip={
                 nextPhaseName
