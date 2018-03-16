@@ -213,7 +213,7 @@ describe('<AddCard />', () => {
       const text = 'foobar';
       const timestamp = '2017-01-01T00:00:00.000Z';
 
-      props.onAdd(ownProps.column.id, text, timestamp);
+      props.onAdd(ownProps.column.id, ownProps.column.type, text, timestamp);
       const firebase = firebaseMock.getFirebase();
 
       expect(firebase.ref().push.mock.calls[0]).toMatchSnapshot();

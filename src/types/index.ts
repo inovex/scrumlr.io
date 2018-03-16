@@ -31,7 +31,8 @@ export interface Card {
   author: string | null;
   image: string | null;
   text: string;
-  type: ColumnType;
+  type: string;
+  theme: ColumnType;
   votes: number;
   timestamp: string;
   parent?: string;

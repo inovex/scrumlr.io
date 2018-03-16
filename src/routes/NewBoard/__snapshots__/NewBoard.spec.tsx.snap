@@ -12,6 +12,7 @@ Object {
       "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
       "guided": true,
       "guidedPhase": 0,
+      "mode": "positiveNegative",
       "sorted": false,
       "users": Object {
         "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
@@ -28,6 +29,7 @@ Object {
       "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
       "guided": true,
       "guidedPhase": 0,
+      "mode": "positiveNegative",
       "sorted": false,
       "users": Object {
         "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {

@@ -13,7 +13,12 @@ export const mapStateToProps = (
 
   // TODO: Currently the third parameter, timestamp, is needed for testing.
   // Can this be done by mocking the `Date.now` method in Jest?
-  function onAddCard(type: ColumnType, value: string, timestamp?: string) {
+  function onAddCard(
+    type: string,
+    theme: ColumnType,
+    value: string,
+    timestamp?: string
+  ) {
     if (value.length === 0) {
       return;
     }
@@ -29,6 +34,7 @@ export const mapStateToProps = (
       image: authorImage,
       text: value,
       type,
+      theme,
       votes: 0,
       timestamp: timestamp || new Date().toJSON(),
       userVotes: {

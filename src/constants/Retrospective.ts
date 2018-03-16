@@ -294,7 +294,7 @@ const startStopContinueRetroModeConfiguration: PhaseConfiguration[] = [
         focus: {
           enabled: true,
           column: 'continue',
-          align: 'left'
+          align: 'right'
         },
         sorted: false
       }
@@ -350,7 +350,7 @@ const startStopContinueRetroModeConfiguration: PhaseConfiguration[] = [
         focus: {
           enabled: false,
           column: 'continue',
-          align: 'left'
+          align: 'right'
         },
         sorted: false
       }

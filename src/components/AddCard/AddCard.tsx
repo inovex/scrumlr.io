@@ -4,7 +4,7 @@ import { Component } from 'react';
 import './AddCard.css';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
-import { Column, getTheme } from '../../constants/Retrospective';
+import { Column, ColumnType, getTheme } from '../../constants/Retrospective';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import { connect } from 'react-redux';
@@ -25,7 +25,12 @@ export interface OwnAddCardPropsWithFirebase extends OwnAddCardProps {
 
 export interface StateAddCardProps {
   /** Callback function on add of card. */
-  onAdd: (columnId: string, text: string, timestamp?: string) => void;
+  onAdd: (
+    type: string,
+    theme: ColumnType,
+    text: string,
+    timestamp?: string
+  ) => void;
 }
 
 export type AddCardProps = OwnAddCardProps & StateAddCardProps;
@@ -58,7 +63,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     const { text } = this.state;
 
     if (text.length > 0) {
-      onAdd(column.id, text);
+      onAdd(column.id, column.type, text);
       this.setState(() => ({ text: '' }));
     }
   };
