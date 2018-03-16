@@ -205,7 +205,7 @@ const simpleRetroModeConfiguration: PhaseConfiguration[] = [
         },
         focus: {
           enabled: true,
-          column: 'positive',
+          column: 'actions',
           align: 'right'
         },
         sorted: false
@@ -220,7 +220,7 @@ const simpleRetroModeConfiguration: PhaseConfiguration[] = [
         },
         focus: {
           enabled: true,
-          column: 'negative',
+          column: 'actions',
           align: 'right'
         },
         sorted: false

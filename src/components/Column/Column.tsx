@@ -37,6 +37,7 @@ export interface StateColumnProps {
   cards: CardModel[];
   focused?: CardModel;
   isHidden: boolean;
+  isExtended: boolean;
 }
 
 export type ColumnProps = OwnColumnProps & StateColumnProps;
@@ -46,6 +47,7 @@ export class Column extends React.Component<ColumnProps, {}> {
     const {
       isActive,
       isHidden,
+      isExtended,
       className,
       focused,
       column,
@@ -55,15 +57,14 @@ export class Column extends React.Component<ColumnProps, {}> {
     } = this.props;
 
     const cardsCount = cards.filter(c => !c.parent).length;
-    // TODO get focus orientation
 
     return (
       <div
         className={classNames('column', `column--theme-${theme}`, className, {
           ['column--inactive']:
             !isActive && (focused ? focused.type !== column.type : true),
-          ['column--hidden']: column.type !== 'actions' && isHidden,
-          ['column--extended']: Boolean(column.type !== 'actions' && focused)
+          ['column--hidden']: isHidden,
+          ['column--extended']: isExtended
         })}
       >
         {!focused &&
@@ -115,7 +116,7 @@ export class Column extends React.Component<ColumnProps, {}> {
               />
             )}
 
-          {!focused && (
+          {!isExtended && (
             <StackComponent
               boardUrl={boardUrl}
               cards={cards}
@@ -129,7 +130,7 @@ export class Column extends React.Component<ColumnProps, {}> {
           )}
 
           {focused &&
-            column.focus.align === 'left' && (
+            column.focus.align === 'right' && (
               <FocusedCardComponent
                 key={focused.id}
                 boardUrl={boardUrl}

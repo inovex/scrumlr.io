@@ -4,6 +4,7 @@ import { OwnColumnProps, StateColumnProps } from './Column';
 import { getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import Raven = require('raven-js');
+import { get } from 'lodash';
 
 function sortCards(cards: Card[], sortByVotes: boolean): Card[] {
   const compareTimestamps = (a: Card, b: Card) => {
@@ -51,8 +52,6 @@ export const mapStateToProps = (
     {}
   );
 
-  let isHidden = false;
-
   const focusedCardId: string = getVal(
     state.fbState,
     `data/${ownProps.boardUrl}/config/focusedCardId`,
@@ -63,22 +62,42 @@ export const mapStateToProps = (
     window.onkeydown = () => {};
   }
 
+  let stackType = ownProps.column.id;
+  let focusTarget = undefined;
+
   const focusedCard = boardCards[focusedCardId];
   let focused: Card | undefined = undefined;
   if (focusedCard) {
     if (focusedCard.type === ownProps.column.type) {
+      stackType = ownProps.column.focus.column;
       focused = focusedCard;
       focused.id = focusedCardId;
     } else {
-      isHidden = true;
+      stackType = '';
     }
+    focusTarget = get(
+      ownProps.phase.columns.find(column => column.id === focusedCard.type),
+      'focus.column'
+    );
   }
+
+  const showAsFocusTarget = focusedCard
+    ? ownProps.column.id === focusTarget
+    : false;
+  const isFocusOrigin = focusedCard
+    ? focusedCard.type === ownProps.column.id
+    : false;
+
+  const isHidden = focusedCard ? !isFocusOrigin && !showAsFocusTarget : false;
+  const isExtended = focusedCard
+    ? isFocusOrigin && ownProps.column.id !== focusTarget
+    : false;
 
   let cards: Card[] = Object.keys(boardCards)
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.column.type)
+    .filter(card => card.type === stackType)
     .filter(card => !Boolean(card.parent));
   cards = sortCards(cards, ownProps.column.sorted);
 
@@ -150,6 +169,7 @@ export const mapStateToProps = (
     theme,
     cards,
     focused,
-    isHidden
+    isHidden,
+    isExtended
   };
 };
