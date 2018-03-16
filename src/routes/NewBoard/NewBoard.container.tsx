@@ -1,11 +1,11 @@
 import { getVal, getFirebase } from 'react-redux-firebase';
 
-import { Board, Boards, StoreState } from '../../types';
+import { Board, Boards, RetroMode, StoreState } from '../../types';
 import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
 
-function initialBoardConfig(creatorUid: string | null): Board {
+function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
   return {
     cards: {},
     config: {
@@ -15,7 +15,7 @@ function initialBoardConfig(creatorUid: string | null): Board {
       guided: true,
       guidedPhase: 0,
       created: new Date().toISOString(),
-      mode: 'positiveNegative' // TODO configurable
+      mode
     }
   };
 }
@@ -38,13 +38,13 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  function onCreateNewBoard() {
+  function onCreateNewBoard(mode: RetroMode) {
     let creatorUid: string | null = null;
     const auth = getFirebase().auth();
     if (auth.currentUser) {
       creatorUid = auth.currentUser.uid;
     }
-    const board: Board = initialBoardConfig(creatorUid);
+    const board: Board = initialBoardConfig(creatorUid, mode);
     getFirebase()
       .ref('/boards')
       .push(board)
@@ -54,7 +54,7 @@ export function mapStateToProps(
       });
   }
 
-  function onLogin(email: string) {
+  function onLogin(email: string, mode: RetroMode) {
     onSignIn = true;
 
     authController(firebase)
@@ -64,7 +64,7 @@ export function mapStateToProps(
         if (state.referrer) {
           location.assign(state.referrer);
         } else {
-          onCreateNewBoard();
+          onCreateNewBoard(mode);
         }
 
         onSignIn = false;
