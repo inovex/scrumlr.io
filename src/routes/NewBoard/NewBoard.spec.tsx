@@ -7,6 +7,7 @@ import { NewBoard, NewBoardProps } from './NewBoard';
 import { mapStateToProps } from './NewBoard.container';
 import Input from '../../components/Input';
 import { RetroMode } from '../../constants/mode';
+import StartButton from '../../components/StartButton';
 const firebaseMock = require('react-redux-firebase');
 
 // TODO: Write a mock function for this after Johanns Definitions have been merged.
@@ -178,37 +179,16 @@ describe('<NewBoard />', () => {
       const uid = null;
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.new-board__action-button');
+      const btn = shallowWrapper.find(StartButton);
       expect(btn.text()).toMatchSnapshot();
-    });
-
-    it('should trigger onLogin method if user is not logged in and press on login button', () => {
-      const uid = null;
-      const email = 'foo@bar.com';
-      shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-
-      const btn = shallowWrapper.find('.new-board__action-button');
-      shallowWrapper.setState({ email });
-
-      btn.simulate('click');
-      expect(props.onLogin).toHaveBeenCalledWith(email);
     });
 
     it('should show create board button if user is logged in', () => {
       const uid = 'myUserId';
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
 
-      const btn = shallowWrapper.find('.new-board__action-button');
+      const btn = shallowWrapper.find(StartButton);
       expect(btn.text()).toMatchSnapshot();
-    });
-
-    it('should trigger onCreateNewBoard method if user is logged in and clicks on new board button', () => {
-      const uid = 'myUserId';
-      shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-
-      const btn = shallowWrapper.find('.new-board__action-button');
-      btn.simulate('click');
-      expect(props.onCreateNewBoard).toHaveBeenCalled();
     });
 
     it('should update state if email address is entered', () => {

@@ -11,6 +11,12 @@ describe('<Column />', () => {
     props = {
       boardUrl: 'test',
       cards: [],
+      column: {
+        name: 'Column',
+        voting: {
+          enabled: false
+        }
+      },
 
       title: 'Column 1',
       type: 'positive',

@@ -9,13 +9,17 @@ import {
 
 describe('<PhaseMenu />', () => {
   let wrapper: ShallowWrapper<PhaseMenuProps, {}>;
-  let props: PhaseMenuProps = {
-    admin: false,
-    mode: 'positiveNegative',
-    guidedPhase: 0,
-    onPrevPhase: jest.fn(),
-    onNextPhase: jest.fn()
-  };
+  let props: PhaseMenuProps;
+
+  beforeEach(() => {
+    props = {
+      admin: false,
+      mode: 'positiveNegative',
+      guidedPhase: 0,
+      onPrevPhase: jest.fn(),
+      onNextPhase: jest.fn()
+    };
+  });
 
   it('should not allow to jump to previous phase if guided phase index is 0', () => {
     wrapper = shallow(<PhaseMenu {...props} admin={true} guidedPhase={0} />);
@@ -55,12 +59,12 @@ describe('<PhaseMenu />', () => {
         guidedPhase={getPhasesCount('positiveNegative') - 1}
       />
     );
-    const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
+    const prevBtn = wrapper.find('[aria-label="Go to previous phase"]');
     expect(prevBtn).toHaveLength(1);
     expect(prevBtn.prop('disabled')).toEqual(false);
-    expect(props.onNextPhase).not.toHaveBeenCalled();
+    expect(props.onPrevPhase).not.toHaveBeenCalled();
     prevBtn.simulate('click');
-    expect(props.onNextPhase).toHaveBeenCalled();
+    expect(props.onPrevPhase).toHaveBeenCalled();
   });
 
   it('should render current phase index and name', () => {

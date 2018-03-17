@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<NewBoard /> dumb component should show create board button if user is logged in 1`] = `"Start"`;
+exports[`<NewBoard /> dumb component should show create board button if user is logged in 1`] = `"<StartButton />"`;
 
-exports[`<NewBoard /> dumb component should show login button if user is not logged in 1`] = `"Start"`;
+exports[`<NewBoard /> dumb component should show login button if user is not logged in 1`] = `"<StartButton />"`;
 
 exports[`<NewBoard /> mapStateToProps should list all available boards 1`] = `
 Object {
