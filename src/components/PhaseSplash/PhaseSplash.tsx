@@ -66,7 +66,7 @@ export class PhaseSplash extends React.Component<
           <Icon name="close-circle" width={48} height={48} />
         </button>
 
-        <h2 className="phase-splash__index">Phase {phase.index}</h2>
+        <h2 className="phase-splash__index">Phase {phase.index + 1}</h2>
         <h1 className="phase-splash__name">{phase.name}</h1>
 
         {!this.state.showCarousel && (

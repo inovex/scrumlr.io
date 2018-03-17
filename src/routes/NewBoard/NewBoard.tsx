@@ -12,6 +12,7 @@ import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
 import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
 import { RetroMode } from '../../constants/mode';
+import StartButton from '../../components/StartButton';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
@@ -46,7 +47,7 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
   };
 
   handleClickLogin = (mode: RetroMode) => {
-    return () => this.props.onLogin(this.state.email, mode);
+    return this.props.onLogin(this.state.email, mode);
   };
 
   render() {
@@ -75,24 +76,9 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
               />
             </div>
             <div>
-              <button
-                onClick={this.handleClickLogin('lean')}
-                className="new-board__action-button"
-              >
-                Start Lean
-              </button>
-              <button
-                onClick={this.handleClickLogin('startStopContinue')}
-                className="new-board__action-button"
-              >
-                Start,Stop,Continue
-              </button>
-              <button
-                onClick={this.handleClickLogin('positiveNegative')}
-                className="new-board__action-button"
-              >
-                Start as usual
-              </button>
+              <StartButton
+                onStart={(mode: RetroMode) => this.handleClickLogin(mode)}
+              />
               <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
             </div>
           </div>
@@ -106,24 +92,9 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 registration required - completely free.
               </p>
             </div>
-            <button
-              onClick={() => this.props.onCreateNewBoard('lean')}
-              className="new-board__action-button"
-            >
-              Start Lean
-            </button>
-            <button
-              onClick={() => this.props.onCreateNewBoard('startStopContinue')}
-              className="new-board__action-button"
-            >
-              Start,Stop,Continue
-            </button>
-            <button
-              onClick={() => this.props.onCreateNewBoard('positiveNegative')}
-              className="new-board__action-button"
-            >
-              Start as usual
-            </button>
+            <StartButton
+              onStart={(mode: RetroMode) => this.props.onCreateNewBoard(mode)}
+            />
             <button
               className="new-board__logout-btn"
               onClick={this.props.onLogout}
