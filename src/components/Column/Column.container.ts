@@ -128,7 +128,7 @@ export const mapStateToProps = (
       });
   }
 
-  if (focused && focused.type === ownProps.type) {
+  if (focused && focused.type === ownProps.column.id) {
     const isFocusedStacked = cards.length !== cardsWithFocused.length;
     const stackToSearch = isFocusedStacked ? cardsWithFocused : cards;
 
@@ -156,9 +156,8 @@ export const mapStateToProps = (
           // on arrow down
           if (ev.keyCode === Key.DownArrow) {
             if (index < cards.length - 1) {
-              onFocusCard(
-                cards[index + (isFocusedStacked ? 0 : 1)].id as string
-              );
+              onFocusCard(cards[index + (isFocusedStacked ? 0 : 1)]
+                .id as string);
               ev.preventDefault();
             }
           }
