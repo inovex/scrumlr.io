@@ -3,6 +3,7 @@
 
 .start-button {
   display: flex;
+  min-height: 50px;
 
   margin-bottom: @default-margin;
 }
@@ -32,24 +33,24 @@
 }
 
 .start-button__start-label {
-  margin-top: 0;
+  margin: 0;
   font-size: 1em;
 }
 
 .start-button__start-mode {
-  font-size: .8em;
+  font-size: .75em;
 }
 
 .start-button__dropdown-toggle {
   box-sizing: border-box;
-  border: none;
+  border: 2px solid @color-mint;
   outline: none;
   font-size: 16px;
   font-weight: 700;
-  color: @color-white;
+  color: @color-mint;
   padding: 9px;
 
-  background-color: @color-middle-gray;
+  background-color: @color-white;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
   transition: background 0.15s ease;
@@ -57,9 +58,20 @@
   text-transform: uppercase;
 }
 
+.start-button__dropdown-toggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.start-button__dropdown-toggle svg * {
+  fill: currentColor;
+  transition: fill 0.15s ease;
+}
+
 .start-button__dropdown-toggle:focus,
 .start-button__dropdown-toggle:hover {
   background: @color-dark-mint;
+  color: @color-white;
 }
 
 .start-button__dropdown-wrapper {

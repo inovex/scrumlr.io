@@ -4,6 +4,7 @@ const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
 import './StartButton.css';
+import Icon from '../Icon';
 
 export interface StartButtonProps {
   onStart: (retroMode: RetroMode) => void;
@@ -63,7 +64,7 @@ export class StartButton extends React.Component<
         className="start-button__dropdown-toggle"
         onClick={this.toggleSelectionMenu}
       >
-        Dropdown
+        <Icon name="more" />
       </button>
     );
 
