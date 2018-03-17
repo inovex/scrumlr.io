@@ -1,4 +1,3 @@
-
 const {Then, When} = require('cucumber');
 const webdriver = require('selenium-webdriver');
 

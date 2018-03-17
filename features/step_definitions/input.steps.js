@@ -8,11 +8,13 @@ When(/^I click on the "([^"]*)" button$/, function (buttonText, next) {
     })
 });
 
-When(/^I click on the button with class "([^"]*)"/, function (className, next) {
+When(/^I click on the button with class "([^"]*)"$/, function (className, next) {
   this.driver.findElement(webdriver.By.className(className))
     .then((button) => {
       button.click().then(next);
     })
 });
+
+
 
 

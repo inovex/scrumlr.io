@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<StartButton /> should match expected structure 1`] = `"<div class=\\"start-button\\"><button class=\\"start-button__start\\"><h1 class=\\"start-button__start-label\\">Start</h1><span class=\\"start-button__start-mode\\">Simple Retro</span></button><div class=\\"dd-menu dd-menu-right start-button__dropdown-wrapper\\"><button class=\\"start-button__dropdown-toggle\\"><span class=\\"icon\\" style=\\"width:32px;height:32px\\">svg</span><img src=\\"new.svg\\" class=\\"start-button__dropdown-toggle-button\\"/></button><div class=\\"dd-menu-items\\"></div></div></div>"`;
