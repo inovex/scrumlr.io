@@ -3,6 +3,7 @@ import { IconNames } from '../components/Icon';
 import retroModes, { RetroMode } from './mode';
 
 export type ColumnType = 'positive' | 'negative' | 'actions';
+export const DEFAULT_RETRO_MODE = 'positiveNegative';
 
 export interface Activity {
   icon: IconNames;
@@ -39,15 +40,18 @@ export interface IndexedPhaseConfiguration extends PhaseConfiguration {
   index: number;
 }
 
-export function getPhasesCount(retroMode: RetroMode) {
-  return retroModes[retroMode].length;
+export function getPhasesCount(retroMode?: RetroMode) {
+  return retroModes[retroMode || DEFAULT_RETRO_MODE].length;
 }
 
 export function getPhaseConfiguration(
-  retroMode: RetroMode,
+  retroMode: RetroMode | undefined,
   phase: number
 ): IndexedPhaseConfiguration {
-  return { index: phase, ...retroModes[retroMode][phase] };
+  return {
+    index: phase,
+    ...retroModes[retroMode || DEFAULT_RETRO_MODE][phase]
+  };
 }
 
 export function getTheme(type: ColumnType): AddCardTheme {
