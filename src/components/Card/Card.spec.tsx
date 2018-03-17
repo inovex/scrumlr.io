@@ -42,7 +42,8 @@ describe('<Card />', () => {
         onColumnStack: jest.fn(),
         stacked: false,
         getCardsInTheStack: jest.fn(() => []),
-        ownVotes: 0
+        ownVotes: 0,
+        onEditMode: jest.fn()
       };
     });
 

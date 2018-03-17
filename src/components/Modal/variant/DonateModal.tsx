@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import './DonateModal.css';
-import { Modal } from '../Modal';
+import Modal from '../Modal';
 
 export interface DonateModalProps {
   onClose: () => void;

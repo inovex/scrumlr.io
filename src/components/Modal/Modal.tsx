@@ -2,15 +2,31 @@ import * as cx from 'classnames';
 import * as React from 'react';
 
 import './Modal.css';
-import Icon from '../Icon/Icon';
+import Icon from '../Icon';
+import { mapDispatchToProps } from './Modal.container';
+import { connect } from 'react-redux';
 
-export interface ModalProps {
+export interface OwnModalProps {
   onClose: () => void;
   onSubmit?: () => void;
   children: any;
 }
 
+export interface DispatchModalProps {
+  onStatus: (open: boolean) => void;
+}
+
+export type ModalProps = OwnModalProps & DispatchModalProps;
+
 export class Modal extends React.Component<ModalProps, {}> {
+  componentWillMount() {
+    this.props.onStatus(true);
+  }
+
+  componentWillUnmount() {
+    this.props.onStatus(false);
+  }
+
   render() {
     return (
       <div className={cx('modal', 'modal__backdrop')}>
@@ -43,4 +59,7 @@ export class Modal extends React.Component<ModalProps, {}> {
   }
 }
 
-export default Modal;
+export default connect<{}, DispatchModalProps, OwnModalProps>(
+  null,
+  mapDispatchToProps
+)(Modal);

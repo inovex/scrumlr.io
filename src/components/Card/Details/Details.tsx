@@ -15,7 +15,6 @@ export class Details extends React.Component<DetailsProps, {}> {
     const { textContent } = e.target as any;
     const { id, onUpdateText } = this.props;
     onUpdateText(id, textContent);
-    this.setState(state => ({ editMode: false }));
   };
 
   render() {

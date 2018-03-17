@@ -4,6 +4,8 @@ import * as Raven from 'raven-js';
 
 import { BoardCards, Card, StoreState } from '../../types';
 import { OwnCardProps, StateCardProps } from './Card';
+import { Dispatch } from 'redux';
+import { EDIT_STATUS } from '../../actions';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -254,3 +256,11 @@ export const mapStateToProps = (
     onFocus: onFocusCard
   };
 };
+
+export function mapDispatchToProps(dispatch: Dispatch<any>) {
+  return {
+    onEditMode: (active: boolean) => {
+      dispatch({ type: EDIT_STATUS, isActive: active });
+    }
+  };
+}

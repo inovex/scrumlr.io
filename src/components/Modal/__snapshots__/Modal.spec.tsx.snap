@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Modal /> dumb component rendering should match the snapshot 1`] = `"<div class=\\"modal modal__backdrop\\"><div class=\\"modal__content-wrapper\\"><div class=\\"modal__content\\">Test<div class=\\"modal__action-area\\"><button class=\\"modal__close-button\\" type=\\"button\\"><span class=\\"icon\\" style=\\"width:48px;height:48px;\\">svg</span></button><button type=\\"button\\" class=\\"modal__ack-button\\">OK</button></div></div></div></div>"`;

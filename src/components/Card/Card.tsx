@@ -6,7 +6,7 @@ import { DragSource, DropTarget } from 'react-dnd';
 import { BoardProp, Card as TCard, DragAndDropProps } from '../../types';
 import Details from './Details';
 import Footer from './Footer';
-import { mapStateToProps } from './Card.container';
+import { mapDispatchToProps, mapStateToProps } from './Card.container';
 import Icon from '../Icon/Icon';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
@@ -43,7 +43,14 @@ export interface StateCardProps {
   ownVotes: number;
 }
 
-export type CardProps = OwnCardProps & StateCardProps & DragAndDropProps;
+export interface DispatchCardProps {
+  onEditMode: (active: boolean) => void;
+}
+
+export type CardProps = OwnCardProps &
+  StateCardProps &
+  DispatchCardProps &
+  DragAndDropProps;
 
 export interface CardState {
   expanded: boolean;
@@ -171,10 +178,12 @@ export class Card extends Component<CardProps, CardState> {
 
   expand = () => {
     this.setState({ ...this.state, expanded: true });
+    this.props.onEditMode(true);
   };
 
   onDetailsCloseListener = () => {
     this.setState({ ...this.state, expanded: false });
+    this.props.onEditMode(false);
   };
 
   render() {
@@ -195,7 +204,6 @@ export class Card extends Component<CardProps, CardState> {
       votable,
       ownVotes,
       card,
-
       connectDropTarget,
       connectDragSource
     } = this.props;
@@ -233,8 +241,7 @@ export class Card extends Component<CardProps, CardState> {
                   <button
                     type="button"
                     className="card__admin-button"
-                    onClick={(event: React.FormEvent<HTMLButtonElement>) =>
-                      onFocus(id)}
+                    onClick={() => onFocus(id)}
                     aria-label="Select card"
                   >
                     <Icon
@@ -294,7 +301,10 @@ export class Card extends Component<CardProps, CardState> {
   }
 }
 
-export default connect<StateCardProps, null, OwnCardProps>(mapStateToProps)(
+export default connect<StateCardProps, DispatchCardProps, OwnCardProps>(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   DropTarget<CardProps>('card', cardTarget, (connect: any, monitor: any) => ({
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),

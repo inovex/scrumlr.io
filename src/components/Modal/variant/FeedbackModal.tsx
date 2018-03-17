@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import './FeedbackModal.css';
 import Input from '../../Input';
-import { Modal } from '../Modal';
+import Modal from '../Modal';
 import Textarea from '../../Textarea';
 import Raven = require('raven-js');
 import { slack } from '../../../config';

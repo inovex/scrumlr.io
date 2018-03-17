@@ -1,3 +1,6 @@
 export const USER_REGISTERED = 'USER_REGISTERED';
 export const SETUP_COMPLETED = 'SETUP_COMPLETED';
 export const SETUP_FAILED = 'SETUP_FAILED';
+
+export const EDIT_STATUS = 'EDIT_STATUS';
+export const MODAL_STATUS = 'MODAL_STATUS';
