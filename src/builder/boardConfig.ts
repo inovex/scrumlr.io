@@ -10,6 +10,7 @@ export const mockBoardConfig = (
     guided: false,
     guidedPhase: 0,
     created: '',
+    mode: 'positiveNegative',
     ...overwrite
   };
 };

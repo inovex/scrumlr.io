@@ -12,6 +12,8 @@ import {
 } from './AddCard';
 import { mapStateToProps } from './AddCard.container';
 import { mockStoreState } from '../../builder';
+import { RetroMode } from '../../constants/mode';
+import Input from '../Input';
 
 const KEYCODE_ENTER = 13;
 
@@ -23,7 +25,11 @@ describe('<AddCard />', () => {
     beforeEach(() => {
       props = {
         boardId: 'boardId',
-        type: 'positive',
+        column: {
+          id: 'negative',
+          type: 'negative',
+          name: 'Negative'
+        },
         onAdd: jest.fn()
       };
     });
@@ -50,6 +56,7 @@ describe('<AddCard />', () => {
 
     describe('add card via enter key', () => {
       const text = 'foobar';
+      const id = 'negative';
       const type: ColumnType = 'negative';
 
       it('should not call onAdd callback when enter is not pressed', () => {
@@ -79,22 +86,23 @@ describe('<AddCard />', () => {
       });
 
       it('should call onAdd callback when enter is pressed and text has been entered', () => {
-        wrapper = shallow(<AddCard {...props} type={type} />);
+        wrapper = shallow(<AddCard {...props} />);
         wrapper.setState({ text });
-        let input = wrapper.find('Input');
+        let input = wrapper.find(Input);
 
         expect(props.onAdd).not.toHaveBeenCalled();
 
         input.simulate('focus');
         input.simulate('keydown', { keyCode: KEYCODE_ENTER });
 
-        expect(props.onAdd).toHaveBeenCalledWith(type, text);
+        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
         expect(wrapper.state().text).toEqual('');
       });
     });
 
     describe('add card via button', () => {
       const text = 'foobar';
+      const id = 'negative';
       const type: ColumnType = 'negative';
 
       it('should disable button if no text is entered', () => {
@@ -111,7 +119,7 @@ describe('<AddCard />', () => {
       });
 
       it('should call onAdd callback when button is pressed and text has been entered', () => {
-        wrapper = shallow(<AddCard {...props} type={type} />);
+        wrapper = shallow(<AddCard {...props} />);
         wrapper.setState({ text });
 
         expect(props.onAdd).not.toHaveBeenCalled();
@@ -119,7 +127,7 @@ describe('<AddCard />', () => {
         const button = wrapper.find('button');
         button.simulate('click');
 
-        expect(props.onAdd).toHaveBeenCalledWith(type, text);
+        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
       });
     });
   });
@@ -153,6 +161,7 @@ describe('<AddCard />', () => {
               guided: true,
               guidedPhase: 0,
               sorted: false,
+              mode: 'positiveNegative' as RetroMode,
               users: {
                 xNpM1E6XiigmfH7P8f42Vc3KyN02: {
                   image:
@@ -170,6 +179,7 @@ describe('<AddCard />', () => {
               guided: true,
               guidedPhase: 0,
               sorted: false,
+              mode: 'positiveNegative' as RetroMode,
               users: {
                 xNpM1E6XiigmfH7P8f42Vc3KyN02: {
                   image:
@@ -189,20 +199,28 @@ describe('<AddCard />', () => {
       firebaseMock.__setState(state.fbState);
       ownProps = {
         boardId: 'boardId',
-        type: 'positive'
+        column: {
+          id: 'positive',
+          type: 'positive',
+          name: 'Positive'
+        }
       };
     });
 
     it('should push new card to firebase when onAdd is called', () => {
+      const pushMock = jest.fn();
+      pushMock.mockReturnValue(new Promise(() => true));
+
       const state = mockStoreState();
-      const props = mapStateToProps(state, ownProps);
+      const props = mapStateToProps(state, {
+        firebase: { push: pushMock },
+        ...ownProps
+      });
       const text = 'foobar';
       const timestamp = '2017-01-01T00:00:00.000Z';
 
-      props.onAdd(ownProps.type, text, timestamp);
-      const firebase = firebaseMock.getFirebase();
-
-      expect(firebase.ref().push.mock.calls[0]).toMatchSnapshot();
+      props.onAdd(ownProps.column.id, ownProps.column.type, text, timestamp);
+      expect(pushMock.mock.calls[0]).toMatchSnapshot();
     });
   });
 });

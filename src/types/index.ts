@@ -1,5 +1,6 @@
 import { AppState } from '../reducers';
 import { ColumnType } from '../constants/Retrospective';
+import { RetroMode } from '../constants/mode';
 
 export type FirebaseProp = firebase.auth.Auth &
   firebase.app.App &
@@ -31,7 +32,8 @@ export interface Card {
   author: string | null;
   image: string | null;
   text: string;
-  type: ColumnType;
+  type: string;
+  theme: ColumnType;
   votes: number;
   timestamp: string;
   parent?: string;
@@ -49,6 +51,7 @@ export interface BoardConfig {
   focusedCardId?: string;
   created: string;
   name?: string;
+  mode: RetroMode;
 }
 
 export interface UserInformation {

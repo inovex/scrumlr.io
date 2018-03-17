@@ -1,0 +1,89 @@
+@import '../../mixins';
+@import '../../constants/style';
+
+.start-button {
+  display: flex;
+  min-height: 50px;
+
+  margin-bottom: @default-margin;
+}
+
+.start-button__start {
+  flex: 1 0 auto;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: @color-white;
+  padding: 9px 24px;
+  align-self: stretch;
+
+  background-color: @theme-color-primary;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.start-button__start:focus,
+.start-button__start:hover {
+  background: @color-dark-mint;
+}
+
+.start-button__start-label {
+  margin: 0;
+  font-size: 1em;
+}
+
+.start-button__start-mode {
+  font-size: .75em;
+}
+
+.start-button__dropdown-toggle {
+  box-sizing: border-box;
+  border: 2px solid @color-mint;
+  outline: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: @color-mint;
+  padding: 9px;
+
+  background-color: @color-white;
+  border-left: none;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.start-button__dropdown-toggle-button {
+  position: absolute;
+  top: -10px;
+  left: -16px;
+}
+
+.start-button__dropdown-toggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.start-button__dropdown-toggle svg * {
+  fill: currentColor;
+  transition: fill 0.15s ease;
+}
+
+.start-button__dropdown-toggle:focus,
+.start-button__dropdown-toggle:hover {
+  background: @color-dark-mint;
+  color: @color-white;
+}
+
+.start-button__dropdown-wrapper {
+  box-sizing: border-box;
+  margin-left: 0;
+  flex: 0 0 auto;
+  align-self: stretch !important;
+}

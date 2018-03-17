@@ -11,16 +11,18 @@ import getRandomName from '../../constants/Name';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
 import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
+import { RetroMode } from '../../constants/mode';
+import StartButton from '../../components/StartButton';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
 export interface StateNewBoardProps {
   uid: string | null;
   boards: Boards;
-  onLogin: (name: string) => void;
+  onLogin: (name: string, mode: RetroMode) => void;
   onProviderLogin: (provider: AuthProvider) => () => void;
   onLogout: () => void;
-  onCreateNewBoard: () => void;
+  onCreateNewBoard: (mode: RetroMode) => void;
 }
 
 export type NewBoardProps = OwnNewBoardProps & StateNewBoardProps;
@@ -44,15 +46,15 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     this.setState(state => ({ ...state, email }));
   };
 
-  handleClickLogin = () => {
-    this.props.onLogin(this.state.email);
+  handleClickLogin = (mode: RetroMode) => {
+    return this.props.onLogin(this.state.email, mode);
   };
 
   render() {
     const { uid } = this.props;
     return (
       <WelcomeArea>
-        {!uid &&
+        {!uid && (
           <div className="new-board__action-area-content">
             <div>
               <h1 className="new-board__action-area-header">Try it now!</h1>
@@ -68,22 +70,20 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 onChange={this.handleChangeEmail}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                   if (e.keyCode === 13) {
-                    this.handleClickLogin();
+                    this.handleClickLogin('lean');
                   }
                 }}
               />
             </div>
             <div>
-              <button
-                onClick={this.handleClickLogin}
-                className="new-board__action-button"
-              >
-                Start
-              </button>
+              <StartButton
+                onStart={(mode: RetroMode) => this.handleClickLogin(mode)}
+              />
               <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
             </div>
-          </div>}
-        {uid &&
+          </div>
+        )}
+        {uid && (
           <div className="new-board__action-area-content">
             <div>
               <h1 className="new-board__action-area-header">Try it now!</h1>
@@ -92,19 +92,17 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 registration required - completely free.
               </p>
             </div>
-            <button
-              onClick={this.props.onCreateNewBoard}
-              className="new-board__action-button"
-            >
-              Start
-            </button>
+            <StartButton
+              onStart={(mode: RetroMode) => this.props.onCreateNewBoard(mode)}
+            />
             <button
               className="new-board__logout-btn"
               onClick={this.props.onLogout}
             >
               Log out
             </button>
-          </div>}
+          </div>
+        )}
       </WelcomeArea>
     );
   }

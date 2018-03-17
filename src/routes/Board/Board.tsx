@@ -379,7 +379,10 @@ export class Board extends React.Component<BoardProps, BoardState> {
           {showIntro && (
             <PhaseSplash
               key="phase-splash"
-              phase={getPhaseConfiguration(this.props.boardConfig.guidedPhase)}
+              phase={getPhaseConfiguration(
+                boardConfig.mode,
+                this.props.boardConfig.guidedPhase
+              )}
               onClose={this.closePhaseIntro}
             />
           )}

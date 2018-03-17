@@ -4,17 +4,22 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { PhaseMenu, PhaseMenuProps } from './PhaseMenu';
 import {
   getPhaseConfiguration,
-  RETRO_PHASES_MAX_INDEX
+  getPhasesCount
 } from '../../constants/Retrospective';
 
 describe('<PhaseMenu />', () => {
   let wrapper: ShallowWrapper<PhaseMenuProps, {}>;
-  let props: PhaseMenuProps = {
-    admin: false,
-    guidedPhase: 0,
-    onPrevPhase: jest.fn(),
-    onNextPhase: jest.fn()
-  };
+  let props: PhaseMenuProps;
+
+  beforeEach(() => {
+    props = {
+      admin: false,
+      mode: 'positiveNegative',
+      guidedPhase: 0,
+      onPrevPhase: jest.fn(),
+      onNextPhase: jest.fn()
+    };
+  });
 
   it('should not allow to jump to previous phase if guided phase index is 0', () => {
     wrapper = shallow(<PhaseMenu {...props} admin={true} guidedPhase={0} />);
@@ -35,7 +40,11 @@ describe('<PhaseMenu />', () => {
 
   it('should not allow to jump to next phase if guided phase index equal to or larger than RETRO_PHASES_MAX_INDEX', () => {
     wrapper = shallow(
-      <PhaseMenu {...props} admin={true} guidedPhase={RETRO_PHASES_MAX_INDEX} />
+      <PhaseMenu
+        {...props}
+        admin={true}
+        guidedPhase={getPhasesCount('positiveNegative')}
+      />
     );
     const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
     expect(prevBtn).toHaveLength(1);
@@ -47,15 +56,15 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu
         {...props}
         admin={true}
-        guidedPhase={RETRO_PHASES_MAX_INDEX - 1}
+        guidedPhase={getPhasesCount('positiveNegative') - 1}
       />
     );
-    const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
+    const prevBtn = wrapper.find('[aria-label="Go to previous phase"]');
     expect(prevBtn).toHaveLength(1);
     expect(prevBtn.prop('disabled')).toEqual(false);
-    expect(props.onNextPhase).not.toHaveBeenCalled();
+    expect(props.onPrevPhase).not.toHaveBeenCalled();
     prevBtn.simulate('click');
-    expect(props.onNextPhase).toHaveBeenCalled();
+    expect(props.onPrevPhase).toHaveBeenCalled();
   });
 
   it('should render current phase index and name', () => {
@@ -64,6 +73,8 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu {...props} admin={true} guidedPhase={phaseIndex} />
     );
     expect(wrapper.text()).toContain(`Phase ${phaseIndex + 1}`);
-    expect(wrapper.text()).toContain(getPhaseConfiguration(phaseIndex).name);
+    expect(wrapper.text()).toContain(
+      getPhaseConfiguration('positiveNegative', phaseIndex).name
+    );
   });
 });

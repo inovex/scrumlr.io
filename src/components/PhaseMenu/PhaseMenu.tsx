@@ -5,12 +5,14 @@ import './PhaseMenu.css';
 import Icon from '../Icon';
 import {
   getPhaseConfiguration,
-  RETRO_PHASES_MAX_INDEX
+  getPhasesCount
 } from '../../constants/Retrospective';
 import ReactTooltip = require('react-tooltip');
+import { RetroMode } from '../../constants/mode';
 
 export interface PhaseMenuProps {
   admin: boolean;
+  mode: RetroMode;
   guidedPhase: number;
   onPrevPhase: () => void;
   onNextPhase: () => void;
@@ -18,21 +20,24 @@ export interface PhaseMenuProps {
 
 export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
   render() {
-    const { admin, guidedPhase, onPrevPhase, onNextPhase } = this.props;
+    const { admin, mode, guidedPhase, onPrevPhase, onNextPhase } = this.props;
 
     const prevPhaseName =
-      guidedPhase > 0 ? getPhaseConfiguration(guidedPhase - 1).name : undefined;
+      guidedPhase > 0
+        ? getPhaseConfiguration(mode, guidedPhase - 1).name
+        : undefined;
     const nextPhaseName =
-      guidedPhase < RETRO_PHASES_MAX_INDEX
-        ? getPhaseConfiguration(guidedPhase + 1).name
+      guidedPhase < getPhasesCount(mode) - 1
+        ? getPhaseConfiguration(mode, guidedPhase + 1).name
         : undefined;
 
-    const phaseDescription = getPhaseConfiguration(guidedPhase).description;
+    const phaseDescription = getPhaseConfiguration(mode, guidedPhase)
+      .description;
 
     return (
       <div className={cx('phase-menu')}>
         <span className="phase-menu__navigation">
-          {admin &&
+          {admin && (
             <button
               className="phase-menu__phase-button"
               aria-label="Go to previous phase"
@@ -45,25 +50,27 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
               }
               data-for="prev-phase-button"
             >
-              {prevPhaseName &&
+              {prevPhaseName && (
                 <ReactTooltip
                   id="prev-phase-button"
                   place="bottom"
                   effect="solid"
                   delayShow={500}
-                />}
+                />
+              )}
               <Icon
                 name="circle-arrow-left"
                 className="phase-menu__phase-button-icon"
                 aria-hidden="true"
               />
-            </button>}
+            </button>
+          )}
 
-          {admin &&
+          {admin && (
             <button
               className="phase-menu__phase-button"
               aria-label="Go to next phase"
-              disabled={guidedPhase >= RETRO_PHASES_MAX_INDEX}
+              disabled={guidedPhase >= getPhasesCount(mode) - 1}
               onClick={onNextPhase}
               data-tip={
                 nextPhaseName
@@ -72,19 +79,21 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
               }
               data-for="next-phase-button"
             >
-              {nextPhaseName &&
+              {nextPhaseName && (
                 <ReactTooltip
                   id="next-phase-button"
                   place="bottom"
                   effect="solid"
                   delayShow={500}
-                />}
+                />
+              )}
               <Icon
                 name="circle-arrow-right"
                 className="phase-menu__phase-button-icon"
                 aria-hidden="true"
               />
-            </button>}
+            </button>
+          )}
 
           <span data-tip={phaseDescription} data-for="phase-description">
             Phase {guidedPhase + 1}
@@ -101,7 +110,7 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
             data-tip={phaseDescription}
             data-for="phase-name-description"
           >
-            {getPhaseConfiguration(guidedPhase).name}
+            {getPhaseConfiguration(mode, guidedPhase).name}
           </span>
           <ReactTooltip
             id="phase-name-description"

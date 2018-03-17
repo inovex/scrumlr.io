@@ -1,9 +1,10 @@
-import { BoardCards, Card, StoreState } from '../../types/index';
+import { BoardCards, Card, StoreState } from '../../types';
 import { getVal, getFirebase } from 'react-redux-firebase';
 import { OwnColumnProps, StateColumnProps } from './Column';
-import { getColumnName, getTheme } from '../../constants/Retrospective';
+import { getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import Raven = require('raven-js');
+import { get } from 'lodash';
 
 function sortCards(cards: Card[], sortByVotes: boolean): Card[] {
   const compareTimestamps = (a: Card, b: Card) => {
@@ -51,10 +52,6 @@ export const mapStateToProps = (
     {}
   );
 
-  const configuration = ownProps.phase;
-
-  let isHidden = false;
-
   const focusedCardId: string = getVal(
     state.fbState,
     `data/${ownProps.boardUrl}/config/focusedCardId`,
@@ -65,35 +62,55 @@ export const mapStateToProps = (
     window.onkeydown = () => {};
   }
 
+  let stackType = ownProps.column.id;
+  let focusTarget = undefined;
+
   const focusedCard = boardCards[focusedCardId];
   let focused: Card | undefined = undefined;
   if (focusedCard) {
-    if (focusedCard.type === ownProps.type) {
+    if (focusedCard.type === ownProps.column.id) {
+      stackType = ownProps.column.focus.column;
       focused = focusedCard;
       focused.id = focusedCardId;
     } else {
-      isHidden = true;
+      stackType = '';
     }
+    focusTarget = get(
+      ownProps.phase.columns.find(column => column.id === focusedCard.type),
+      'focus.column'
+    );
   }
+
+  const showAsFocusTarget = focusedCard
+    ? ownProps.column.id === focusTarget
+    : false;
+  const isFocusOrigin = focusedCard
+    ? focusedCard.type === ownProps.column.id
+    : false;
+
+  const isHidden = focusedCard ? !isFocusOrigin && !showAsFocusTarget : false;
+  const isExtended = focusedCard
+    ? isFocusOrigin && ownProps.column.id !== focusTarget
+    : false;
 
   let cards: Card[] = Object.keys(boardCards)
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.type)
+    .filter(card => card.type === stackType)
     .filter(card => !Boolean(card.parent));
-  cards = sortCards(cards, configuration.sorted);
+  cards = sortCards(cards, ownProps.column.sorted);
 
   let cardsWithFocused: Card[] = Object.keys(boardCards)
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.type)
+    .filter(card => card.type === ownProps.column.id)
     .filter(
       card =>
         !Boolean(card.parent) || (focused && card.id === (focused as Card).id)
     );
-  cardsWithFocused = sortCards(cardsWithFocused, configuration.sorted);
+  cardsWithFocused = sortCards(cardsWithFocused, ownProps.column.sorted);
 
   function onFocusCard(cardId: string | null) {
     getFirebase()
@@ -146,18 +163,13 @@ export const mapStateToProps = (
     };
   }
 
-  const title = getColumnName(ownProps.type);
-  const theme = getTheme(ownProps.type);
+  const theme = getTheme(ownProps.column.type);
 
   return {
-    title,
     theme,
     cards,
     focused,
     isHidden,
-    isVotingAllowed: configuration.votesAllowed,
-    isSortedByVotes: configuration.sorted,
-    isSummary: ownProps.phase.shownColumns.length === 3, // TODO
-    isVoteSummaryShown: configuration.showVotes
+    isExtended
   };
 };

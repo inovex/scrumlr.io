@@ -9,6 +9,7 @@ import { isEmpty } from 'lodash';
 import HeadlinePrefix from './subcomponents/HeadlinePrefix';
 import { StoreState, BoardCards, BoardConfig, Card } from '../../types';
 import './PrintViewBoard.css';
+import { getPhaseConfiguration } from '../../constants/Retrospective';
 
 export interface PrintViewBoardProps
   extends RouteComponentProps<{ id: string }> {
@@ -99,9 +100,7 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
   renderCardItem(card: Card, TagName: string) {
     return (
       <TagName className="card-list__item" key={card.id}>
-        <h3>
-          {card.text}
-        </h3>
+        <h3>{card.text}</h3>
         <ul className="card-list-meta">
           <li
             className="card-list-meta__item meta-votes"
@@ -122,11 +121,7 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
     const adText = (
       <span className="ad-text ad-text--headline">powered by scrumlr.io</span>
     );
-    let title = (
-      <h1>
-        Retrospective results {adText}
-      </h1>
-    );
+    let title = <h1>Retrospective results {adText}</h1>;
 
     if (boardConfig.name) {
       title = (
@@ -146,9 +141,16 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
 
         {title}
 
-        {this.renderCardSection('Positive', 'positive', cardsSorted.positive)}
-        {this.renderCardSection('Negative', 'negative', cardsSorted.negative)}
-        {this.renderCardSection('Actions', 'actions', cardsSorted.actions)}
+        {getPhaseConfiguration(
+          boardConfig.mode,
+          boardConfig.guidedPhase
+        ).columns.map(column =>
+          this.renderCardSection(
+            column.name,
+            column.type,
+            cardsSorted[column.id]
+          )
+        )}
       </div>
     );
   }

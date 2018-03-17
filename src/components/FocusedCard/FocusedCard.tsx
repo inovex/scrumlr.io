@@ -67,11 +67,11 @@ export class FocusedCard extends React.Component<
 
     const content = (
       <div
-        className={cx('focus-card', `focus-card--type-${card.type}`, {
+        className={cx('focus-card', `focus-card--type-${card.theme}`, {
           'focus-card--drophover': this.props.isOver
         })}
       >
-        {isAdmin &&
+        {isAdmin && (
           <button
             disabled={isRootCard}
             onClick={this.props.setAsRoot}
@@ -80,8 +80,9 @@ export class FocusedCard extends React.Component<
             onMouseLeave={this.mouseLeaveStackButton}
           >
             <Icon name={stackIcon} />
-          </button>}
-        {isAdmin &&
+          </button>
+        )}
+        {isAdmin && (
           <button
             type="button"
             onClick={onClose}
@@ -89,26 +90,27 @@ export class FocusedCard extends React.Component<
           >
             <span className="focus-card__close-button-text">CLOSE</span>
             <Icon name="close20" className="focus-card__close-button-icon" />
-          </button>}
+          </button>
+        )}
 
         <div className="focus-card__vertical-alignment">
-          <Dotdotdot clamp={3}>
-            {card.text}
-          </Dotdotdot>
+          <Dotdotdot clamp={3}>{card.text}</Dotdotdot>
         </div>
 
-        {isAdmin &&
-          <KeyboardNavigationHint className="focus-card__navigation-hint" />}
+        {isAdmin && (
+          <KeyboardNavigationHint className="focus-card__navigation-hint" />
+        )}
 
-        {showVotes &&
+        {showVotes && (
           <span
             className={cx(
               'focus-card__number-of-votes',
-              `focus-card__number-of-votes--type-${card.type}`
+              `focus-card__number-of-votes--type-${card.theme}`
             )}
           >
             {card.votes}
-          </span>}
+          </span>
+        )}
       </div>
     );
 
@@ -122,11 +124,13 @@ export class FocusedCard extends React.Component<
 export default connect<StateFocusedCardProps, null, OwnFocusedCardProps>(
   mapStateToProps
 )(
-  DropTarget<
-    FocusedCardProps
-  >('card', focusedCardTarget, (connect: any, monitor: any) => ({
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-  }))(FocusedCard)
+  DropTarget<FocusedCardProps>(
+    'card',
+    focusedCardTarget,
+    (connect: any, monitor: any) => ({
+      connectDropTarget: connect.dropTarget(),
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  )(FocusedCard)
 );

@@ -1,69 +1,57 @@
 import { AddCardTheme } from '../components/AddCard';
-import { IconNames } from '../components/Icon/types';
+import { IconNames } from '../components/Icon';
+import retroModes, { RetroMode } from './mode';
 
 export type ColumnType = 'positive' | 'negative' | 'actions';
+export const DEFAULT_RETRO_MODE = 'positiveNegative';
 
-export interface PhaseActivity {
+export interface Activity {
   icon: IconNames;
   description: string;
 }
 
-export interface RetrospectivePhaseConfiguration {
-  index: number;
+export interface Column {
+  id: string;
   name: string;
-  description: string;
-  votesAllowed: boolean;
-  showVotes: boolean;
-  sorted: boolean;
-  shownColumns: ColumnType[];
-  activities: PhaseActivity[];
+  type: ColumnType;
 }
 
-export const RETRO_PHASES: RetrospectivePhaseConfiguration[] = [
-  {
-    index: 1,
-    name: 'Write',
-    description: 'Create cards, communicate your thoughts & stack common',
-    votesAllowed: false,
-    showVotes: false,
-    sorted: false,
-    shownColumns: ['positive', 'negative'],
-    activities: [
-      { icon: 'phase1-create', description: 'Create cards' },
-      { icon: 'phase1-communicate', description: 'Communicate meaning' },
-      { icon: 'phase1-combine', description: 'Combine to stack' }
-    ]
-  },
-  {
-    index: 2,
-    name: 'Vote',
-    description: 'Vote on the most important cards for yourself',
-    votesAllowed: true,
-    showVotes: false,
-    sorted: false,
-    shownColumns: ['positive', 'negative'],
-    activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
-  },
-  {
-    index: 3,
-    name: 'Discuss',
-    description: 'Discuss top-voted cards and define actions',
-    votesAllowed: false,
-    showVotes: true,
-    sorted: true,
-    shownColumns: ['positive', 'negative', 'actions'],
-    activities: [
-      { icon: 'phase3-discuss', description: 'Discuss top-voted' },
-      { icon: 'phase3-define', description: 'Define actions' }
-    ]
-  }
-];
-export const RETRO_PHASES_MAX_INDEX = RETRO_PHASES.length - 1;
+export interface ColumnConfiguration extends Column {
+  voting: {
+    enabled: boolean;
+    displayed: boolean;
+  };
+  focus: {
+    enabled: boolean;
+    column: string;
+    align: 'left' | 'right';
+  };
+  sorted: boolean;
+}
+
+export interface PhaseConfiguration {
+  name: string;
+  description: string;
+  columns: ColumnConfiguration[];
+  activities: Activity[];
+}
+
+export interface IndexedPhaseConfiguration extends PhaseConfiguration {
+  index: number;
+}
+
+export function getPhasesCount(retroMode?: RetroMode) {
+  return retroModes[retroMode || DEFAULT_RETRO_MODE].length;
+}
 
 export function getPhaseConfiguration(
+  retroMode: RetroMode | undefined,
   phase: number
-): RetrospectivePhaseConfiguration {
-  return RETRO_PHASES[phase];
+): IndexedPhaseConfiguration {
+  return {
+    index: phase,
+    ...retroModes[retroMode || DEFAULT_RETRO_MODE][phase]
+  };
 }
 
 export function getTheme(type: ColumnType): AddCardTheme {
@@ -86,18 +74,5 @@ export function getInversedTheme(type: ColumnType): AddCardTheme {
     case 'positive':
     default:
       return 'dark';
-  }
-}
-
-export function getColumnName(type: ColumnType): string {
-  switch (type) {
-    case 'positive':
-      return 'Positive';
-    case 'negative':
-      return 'Negative';
-    case 'actions':
-      return 'Actions';
-    default:
-      return 'Unknown';
   }
 }

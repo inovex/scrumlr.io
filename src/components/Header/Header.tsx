@@ -10,6 +10,7 @@ import Logo from './subcomponents/Logo';
 import './Header.css';
 import { mapStateToProps } from './Header.container';
 import { connect } from 'react-redux';
+import { RetroMode } from '../../constants/mode';
 
 export interface OwnHeaderProps {
   boardId: string;
@@ -23,6 +24,7 @@ export interface OwnHeaderProps {
 
 export interface StateHeaderProps {
   admin: boolean;
+  mode: RetroMode;
   phase: number;
   sorted: boolean;
   boardName?: string;
@@ -45,6 +47,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       admin,
       className,
       boardName,
+      mode,
       phase: guidedPhase,
       onPrevPhase,
       onNextPhase,
@@ -70,6 +73,7 @@ export class Header extends React.Component<HeaderProps, {}> {
 
           <PhaseMenu
             admin={admin}
+            mode={mode}
             guidedPhase={guidedPhase}
             onPrevPhase={onPrevPhase}
             onNextPhase={onNextPhase}
@@ -82,7 +86,7 @@ export class Header extends React.Component<HeaderProps, {}> {
               onToggleReadyState={onToggleReadyState}
             />
 
-            {loggedIn &&
+            {loggedIn && (
               <UserMenu
                 boardName={boardName}
                 admin={admin}
@@ -93,7 +97,8 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenFeedback={onOpenFeedback}
                 onOpenDonate={onOpenDonate}
                 onDeleteBoard={onDeleteBoard}
-              />}
+              />
+            )}
           </div>
         </div>
       </header>
