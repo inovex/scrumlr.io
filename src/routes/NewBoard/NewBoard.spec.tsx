@@ -2,10 +2,11 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { mockStoreState } from '../../builder';
-import { RetroMode, StoreState } from '../../types';
+import { StoreState } from '../../types';
 import { NewBoard, NewBoardProps } from './NewBoard';
 import { mapStateToProps } from './NewBoard.container';
 import Input from '../../components/Input';
+import { RetroMode } from '../../constants/mode';
 const firebaseMock = require('react-redux-firebase');
 
 // TODO: Write a mock function for this after Johanns Definitions have been merged.

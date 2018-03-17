@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 
-import { Boards, RetroMode } from '../../types';
+import { Boards } from '../../types';
 import { mapStateToProps } from './NewBoard.container';
 import './NewBoard.css';
 import { AuthProvider } from '../../constants/Auth';
@@ -11,6 +11,7 @@ import getRandomName from '../../constants/Name';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
 import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
+import { RetroMode } from '../../constants/mode';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 

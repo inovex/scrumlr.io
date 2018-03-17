@@ -1,9 +1,10 @@
 import { getVal, getFirebase } from 'react-redux-firebase';
 
-import { Board, Boards, RetroMode, StoreState } from '../../types';
+import { Board, Boards, StoreState } from '../../types';
 import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
+import { RetroMode } from '../../constants/mode';
 
 function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
   return {

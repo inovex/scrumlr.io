@@ -1,5 +1,6 @@
 import { AppState } from '../reducers';
 import { ColumnType } from '../constants/Retrospective';
+import { RetroMode } from '../constants/mode';
 
 export type FirebaseProp = firebase.auth.Auth &
   firebase.app.App &
@@ -40,8 +41,6 @@ export interface Card {
     [key: string]: number;
   };
 }
-
-export type RetroMode = 'lean' | 'positiveNegative' | 'startStopContinue';
 
 export interface BoardConfig {
   sorted: boolean;

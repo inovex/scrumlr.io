@@ -12,7 +12,7 @@ import {
 } from './AddCard';
 import { mapStateToProps } from './AddCard.container';
 import { mockStoreState } from '../../builder';
-import { RetroMode } from '../../types';
+import { RetroMode } from '../../constants/mode';
 
 const KEYCODE_ENTER = 13;
 

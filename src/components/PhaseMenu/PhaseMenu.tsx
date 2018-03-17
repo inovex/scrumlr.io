@@ -8,7 +8,7 @@ import {
   getPhasesCount
 } from '../../constants/Retrospective';
 import ReactTooltip = require('react-tooltip');
-import { RetroMode } from '../../types';
+import { RetroMode } from '../../constants/mode';
 
 export interface PhaseMenuProps {
   admin: boolean;
