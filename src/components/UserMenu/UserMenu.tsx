@@ -6,14 +6,13 @@ import './UserMenu.css';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import MenuItem from './MenuItem';
+import { ModalType } from '../../types';
 
 export interface UserMenuProps {
   onSignOut: () => void;
   onDeleteBoard: () => void;
   onExport: () => void;
-  onOpenSettings: () => void;
-  onOpenFeedback: () => void;
-  onOpenDonate: () => void;
+  onOpenModal: (modal: ModalType) => void;
   onChangeBoardName: (boardName: string) => void;
   boardName?: string;
   admin: boolean;
@@ -53,15 +52,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
   render() {
     const { isOpen } = this.state;
-    const {
-      onOpenSettings,
-      onOpenFeedback,
-      onOpenDonate,
-      onExport,
-      onSignOut,
-      boardName,
-      admin
-    } = this.props;
+    const { onOpenModal, onExport, onSignOut, boardName, admin } = this.props;
 
     const toggleIcon = (
       <button
@@ -92,13 +83,13 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
     return (
       <DropdownMenu {...ddMenuProps}>
-        {(boardName || admin) &&
+        {(boardName || admin) && (
           <li key="user-menu__board-name" className="user-menu__board-name">
             <Icon
               className="user_menu__button-icon user_menu__button-icon--inverted"
               name={admin ? 'pencil' : 'board'}
             />
-            {admin &&
+            {admin && (
               <Input
                 type="text"
                 className="user-menu__input dd-item-ignore"
@@ -114,32 +105,64 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                 showUnderline={true}
                 focusTheme="mint"
                 invertPlaceholder={true}
-              />}
-            {!admin &&
+              />
+            )}
+            {!admin && (
               <span className="user-menu__boardname dd-item-ignore">
                 {boardName || ''}
-              </span>}
-          </li>}
+              </span>
+            )}
+          </li>
+        )}
         <li key="user-menu__settings" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Settings" icon="settings" onClick={onOpenSettings} />
+          <MenuItem
+            name="Settings"
+            icon="settings"
+            onClick={() => {
+              onOpenModal('settings');
+            }}
+          />
         </li>
         <li key="user-menu__feedback" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Feedback" icon="feedback" onClick={onOpenFeedback} />
+          <MenuItem
+            name="Feedback"
+            icon="feedback"
+            onClick={() => {
+              onOpenModal('feedback');
+            }}
+          />
         </li>
         <li key="user-menu__donate" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Donate" icon="donate" onClick={onOpenDonate} />
+          <MenuItem
+            name="Donate"
+            icon="donate"
+            onClick={() => {
+              onOpenModal('donate');
+            }}
+          />
+        </li>
+        <li key="user-menu__share" className="user_menu__li--hidden-mobile">
+          <MenuItem
+            name="Share"
+            icon="share"
+            onClick={() => {
+              onOpenModal('share');
+            }}
+          />
         </li>
         <li key="user-menu__export" className="user_menu__li--hidden-mobile">
           <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
-        {admin &&
+
+        {admin && (
           <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
             <MenuItem
               name="Delete board"
               icon="trash"
               onClick={this.handleDeleteBoard}
             />
-          </li>}
+          </li>
+        )}
         <li key="user-menu__logout" className="user-menu__logout">
           <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />
         </li>

@@ -13,7 +13,13 @@ import {
   mapStateToProps,
   mergeProps
 } from './Board.container';
-import { BoardConfig, BoardCards, BoardUsers, Card } from '../../types';
+import {
+  BoardConfig,
+  BoardCards,
+  BoardUsers,
+  Card,
+  ModalType
+} from '../../types';
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
 import PhaseSplash from '../../components/PhaseSplash/PhaseSplash';
@@ -23,6 +29,7 @@ import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import DonateModal from '../../components/Modal/variant/DonateModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import ShareModal from '../../components/Modal/variant/ShareModal';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -55,8 +62,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 }
 
 export interface BoardState {
-  showSettings: boolean;
-  showModal?: 'settings' | 'feedback' | 'donate';
+  showModal?: ModalType;
   showPhaseIntro: boolean;
 }
 
@@ -96,7 +102,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
   constructor(props: BoardProps) {
     super(props);
     this.state = {
-      showSettings: false,
       showPhaseIntro: true
     };
   }
@@ -271,6 +276,18 @@ export class Board extends React.Component<BoardProps, BoardState> {
     this.setState({ ...this.state, showPhaseIntro: false });
   };
 
+  handleCloseModal = () => {
+    this.setState({
+      showModal: undefined
+    });
+  };
+
+  handleOpenModal = (modal: ModalType) => {
+    this.setState({
+      showModal: modal
+    });
+  };
+
   render() {
     let { boardConfig, setupCompleted } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -280,6 +297,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
     const showSettings = this.state.showModal === 'settings';
     const showFeedback = this.state.showModal === 'feedback';
+    const showShareDialog = this.state.showModal === 'share';
     const showDonate = this.state.showModal === 'donate';
     const showIntro =
       !showSettings && !showFeedback && this.state.showPhaseIntro;
@@ -290,27 +308,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           boardId={this.props.boardSelector}
           onExport={() => this.handleExport()}
           onSignOut={this.props.onSignOut}
-          onOpenSettings={() => {
-            this.setState({
-              ...this.state,
-              showSettings: true,
-              showModal: 'settings'
-            });
-          }}
-          onOpenFeedback={() => {
-            this.setState({
-              ...this.state,
-              showSettings: true,
-              showModal: 'feedback'
-            });
-          }}
-          onOpenDonate={() => {
-            this.setState({
-              ...this.state,
-              showSettings: true,
-              showModal: 'donate'
-            });
-          }}
+          onOpenModal={this.handleOpenModal}
         />
 
         <ColumnView
@@ -328,42 +326,15 @@ export class Board extends React.Component<BoardProps, BoardState> {
             onChangeBoardName={this.props.onChangeBoardName}
             onChangeUsername={this.props.onChangeUsername}
             onChangeEmail={this.props.onChangeEmail}
-            onClose={() => {
-              this.setState({
-                ...this.state,
-                showSettings: false,
-                showModal: undefined
-              });
-            }}
+            onClose={this.handleCloseModal}
           />
         )}
 
-        {showFeedback && (
-          <FeedbackModal
-            sendMail={(content: string, email?: string) => {
-              /* FIXME */
-            }}
-            onClose={() => {
-              this.setState({
-                ...this.state,
-                showSettings: false,
-                showModal: undefined
-              });
-            }}
-          />
-        )}
+        {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
-        {showDonate && (
-          <DonateModal
-            onClose={() => {
-              this.setState({
-                ...this.state,
-                showSettings: false,
-                showModal: undefined
-              });
-            }}
-          />
-        )}
+        {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+
+        {showDonate && <DonateModal onClose={this.handleCloseModal} />}
 
         <ReactCSSTransitionGroup
           transitionName="phase-splash__animation"

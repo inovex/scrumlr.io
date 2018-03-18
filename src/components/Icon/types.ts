@@ -16,6 +16,7 @@ export type IconNames =
   | 'logout'
   | 'download'
   | 'edit'
+  | 'share'
   | 'donate'
   | 'pencil'
   | 'focus'

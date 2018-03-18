@@ -28,48 +28,6 @@
   margin-top: @default-margin;
 }
 
-.modal__qr {
-  padding: @default-margin;
-}
-
-.modal__qr:focus {
-  outline: 2px solid @color-mint;
-}
-
-.modal__invite-button {
-  border: 0;
-  background: none;
-  outline: none;
-  width: 100%;
-
-  font-size: @theme-font-size;
-  font-weight: bold;
-  text-transform: uppercase;
-
-  padding: @default-padding @large-padding;
-
-  margin-bottom: @default-margin;
-  color: @color-white;
-  background: @color-mint;
-
-  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
-}
-
-.modal__invite-button:focus,
-.modal__invite-button:hover {
-  background: darken(@color-mint, 15%);
-  box-shadow: 0 @base-unit*2 @base-unit*4 0 fade(@color-dark, 15%);
-}
-
-.modal__copy-text {
-  font-size: @theme-font-size - @base-unit / 2;
-  color: @color-alternative-gray;
-}
-
-.modal__copy-text--hidden {
-  visibility: hidden;
-}
-
 .settings-modal__input + .settings-modal__input {
   margin-top: 2em;
 }

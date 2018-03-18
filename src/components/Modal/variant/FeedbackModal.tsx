@@ -9,7 +9,6 @@ import { slack } from '../../../config';
 
 export interface FeedbackModalProps {
   onClose: () => void;
-  sendMail: (content: string, email?: string) => void;
 }
 
 export interface FeedbackModalState {
