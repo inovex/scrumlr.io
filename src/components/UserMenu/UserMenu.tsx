@@ -14,6 +14,7 @@ export interface UserMenuProps {
   onOpenSettings: () => void;
   onOpenFeedback: () => void;
   onOpenDonate: () => void;
+  onOpenShareDialog: () => void;
   onChangeBoardName: (boardName: string) => void;
   boardName?: string;
   admin: boolean;
@@ -57,6 +58,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onOpenSettings,
       onOpenFeedback,
       onOpenDonate,
+      onOpenShareDialog,
       onExport,
       onSignOut,
       boardName,
@@ -136,13 +138,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
         <li key="user-menu__share" className="user_menu__li--hidden-mobile">
-          <MenuItem
-            name="Share"
-            icon="share"
-            onClick={() => {
-              /* TODO */
-            }}
-          />
+          <MenuItem name="Share" icon="share" onClick={onOpenShareDialog} />
         </li>
         {admin && (
           <li key="user-menu__delete" className="user_menu__li--hidden-mobile">

@@ -17,6 +17,7 @@ describe('<UserMenu />', () => {
       onOpenSettings: jest.fn(),
       onOpenFeedback: jest.fn(),
       onOpenDonate: jest.fn(),
+      onOpenShareDialog: jest.fn(),
       onExport: jest.fn(),
       onChangeBoardName: jest.fn(),
       admin: true
@@ -49,7 +50,10 @@ describe('<UserMenu />', () => {
     const ddMenu = wrapper.find(DropdownMenu);
 
     expect(props.onExport).not.toHaveBeenCalled();
-    ddMenu.find(MenuItem).find({ name: 'Export' }).simulate('click');
+    ddMenu
+      .find(MenuItem)
+      .find({ name: 'Export' })
+      .simulate('click');
     expect(props.onExport).toHaveBeenCalled();
   });
 
@@ -78,7 +82,10 @@ describe('<UserMenu />', () => {
       const ddMenu = wrapper.find(DropdownMenu);
 
       expect(props.onDeleteBoard).not.toHaveBeenCalled();
-      ddMenu.find(MenuItem).find({ name: 'Delete board' }).simulate('click');
+      ddMenu
+        .find(MenuItem)
+        .find({ name: 'Delete board' })
+        .simulate('click');
       expect(props.onDeleteBoard).toHaveBeenCalled();
     });
   });
@@ -88,7 +95,10 @@ describe('<UserMenu />', () => {
     const ddMenu = wrapper.find(DropdownMenu);
 
     expect(props.onSignOut).not.toHaveBeenCalled();
-    ddMenu.find(MenuItem).find({ name: 'Sign Out' }).simulate('click');
+    ddMenu
+      .find(MenuItem)
+      .find({ name: 'Sign Out' })
+      .simulate('click');
     expect(props.onSignOut).toHaveBeenCalled();
   });
 });

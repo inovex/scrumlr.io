@@ -38,6 +38,7 @@ describe('<Header />', () => {
       onOpenSettings: jest.fn(),
       onOpenFeedback: jest.fn(),
       onOpenDonate: jest.fn(),
+      onOpenShareDialog: jest.fn(),
       onDeleteBoard: jest.fn()
     };
   });

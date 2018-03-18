@@ -23,6 +23,7 @@ import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import DonateModal from '../../components/Modal/variant/DonateModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import ShareModal from '../../components/Modal/variant/ShareModal';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -55,8 +56,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 }
 
 export interface BoardState {
-  showSettings: boolean;
-  showModal?: 'settings' | 'feedback' | 'donate';
+  showModal?: 'settings' | 'feedback' | 'donate' | 'share';
   showPhaseIntro: boolean;
 }
 
@@ -96,7 +96,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
   constructor(props: BoardProps) {
     super(props);
     this.state = {
-      showSettings: false,
       showPhaseIntro: true
     };
   }
@@ -280,6 +279,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
     const showSettings = this.state.showModal === 'settings';
     const showFeedback = this.state.showModal === 'feedback';
+    const showShareDialog = this.state.showModal === 'share';
     const showDonate = this.state.showModal === 'donate';
     const showIntro =
       !showSettings && !showFeedback && this.state.showPhaseIntro;
@@ -292,23 +292,22 @@ export class Board extends React.Component<BoardProps, BoardState> {
           onSignOut={this.props.onSignOut}
           onOpenSettings={() => {
             this.setState({
-              ...this.state,
-              showSettings: true,
               showModal: 'settings'
             });
           }}
           onOpenFeedback={() => {
             this.setState({
-              ...this.state,
-              showSettings: true,
               showModal: 'feedback'
             });
           }}
           onOpenDonate={() => {
             this.setState({
-              ...this.state,
-              showSettings: true,
               showModal: 'donate'
+            });
+          }}
+          onOpenShareDialog={() => {
+            this.setState({
+              showModal: 'share'
             });
           }}
         />
@@ -330,10 +329,16 @@ export class Board extends React.Component<BoardProps, BoardState> {
             onChangeEmail={this.props.onChangeEmail}
             onClose={() => {
               this.setState({
-                ...this.state,
-                showSettings: false,
                 showModal: undefined
               });
+            }}
+          />
+        )}
+
+        {showShareDialog && (
+          <ShareModal
+            onClose={() => {
+              this.setState({ showModal: undefined });
             }}
           />
         )}
@@ -345,8 +350,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
             }}
             onClose={() => {
               this.setState({
-                ...this.state,
-                showSettings: false,
                 showModal: undefined
               });
             }}
@@ -357,8 +360,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
           <DonateModal
             onClose={() => {
               this.setState({
-                ...this.state,
-                showSettings: false,
                 showModal: undefined
               });
             }}

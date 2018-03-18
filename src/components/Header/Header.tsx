@@ -19,6 +19,7 @@ export interface OwnHeaderProps {
   onOpenSettings: () => void;
   onOpenFeedback: () => void;
   onOpenDonate: () => void;
+  onOpenShareDialog: () => void;
   className?: string;
 }
 
@@ -58,6 +59,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       onOpenSettings,
       onOpenFeedback,
       onOpenDonate,
+      onOpenShareDialog,
       loggedIn,
       onExport,
       onDeleteBoard,
@@ -97,6 +99,7 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenFeedback={onOpenFeedback}
                 onOpenDonate={onOpenDonate}
                 onDeleteBoard={onDeleteBoard}
+                onOpenShareDialog={onOpenShareDialog}
               />
             )}
           </div>
