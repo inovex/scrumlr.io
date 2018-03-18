@@ -62,18 +62,14 @@ export const mapStateToProps = (
     window.onkeydown = () => {};
   }
 
-  let stackType = ownProps.column.id;
   let focusTarget = undefined;
 
   const focusedCard = boardCards[focusedCardId];
   let focused: Card | undefined = undefined;
   if (focusedCard) {
     if (focusedCard.type === ownProps.column.id) {
-      stackType = ownProps.column.focus.column;
       focused = focusedCard;
       focused.id = focusedCardId;
-    } else {
-      stackType = '';
     }
     focusTarget = get(
       ownProps.phase.columns.find(column => column.id === focusedCard.type),
@@ -97,7 +93,7 @@ export const mapStateToProps = (
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === stackType)
+    .filter(card => card.type === ownProps.column.id)
     .filter(card => !Boolean(card.parent));
   cards = sortCards(cards, ownProps.column.sorted);
 
