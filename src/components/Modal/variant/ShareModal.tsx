@@ -27,11 +27,13 @@ export class ShareModal extends React.Component<
   };
 
   render() {
+    const { onClose } = this.props;
+
     const link = window.location.href.replace('board', 'join');
     const encoded = encodeURI(link).replace('#', '%23');
 
     return (
-      <Modal onClose={this.props.onClose} onSubmit={this.props.onClose}>
+      <Modal onClose={onClose} onSubmit={onClose}>
         <div className="share-modal">
           <h2 className="share-modal__headline">Invite</h2>
 
