@@ -12,6 +12,7 @@ export const iconMap: { [key: string]: string } = {
   logout: 'icon-20-logout',
   download: 'icon-20-download',
   edit: 'icon-20-create',
+  share: 'icon-20-share',
   pencil: 'icon-20-edit',
   donate: 'icon-20-donate',
   focus: 'icon-20-fix',

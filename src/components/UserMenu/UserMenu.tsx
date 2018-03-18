@@ -92,13 +92,13 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
     return (
       <DropdownMenu {...ddMenuProps}>
-        {(boardName || admin) &&
+        {(boardName || admin) && (
           <li key="user-menu__board-name" className="user-menu__board-name">
             <Icon
               className="user_menu__button-icon user_menu__button-icon--inverted"
               name={admin ? 'pencil' : 'board'}
             />
-            {admin &&
+            {admin && (
               <Input
                 type="text"
                 className="user-menu__input dd-item-ignore"
@@ -114,12 +114,15 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                 showUnderline={true}
                 focusTheme="mint"
                 invertPlaceholder={true}
-              />}
-            {!admin &&
+              />
+            )}
+            {!admin && (
               <span className="user-menu__boardname dd-item-ignore">
                 {boardName || ''}
-              </span>}
-          </li>}
+              </span>
+            )}
+          </li>
+        )}
         <li key="user-menu__settings" className="user_menu__li--hidden-mobile">
           <MenuItem name="Settings" icon="settings" onClick={onOpenSettings} />
         </li>
@@ -132,14 +135,24 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
         <li key="user-menu__export" className="user_menu__li--hidden-mobile">
           <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
-        {admin &&
+        <li key="user-menu__share" className="user_menu__li--hidden-mobile">
+          <MenuItem
+            name="Share"
+            icon="share"
+            onClick={() => {
+              /* TODO */
+            }}
+          />
+        </li>
+        {admin && (
           <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
             <MenuItem
               name="Delete board"
               icon="trash"
               onClick={this.handleDeleteBoard}
             />
-          </li>}
+          </li>
+        )}
         <li key="user-menu__logout" className="user-menu__logout">
           <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />
         </li>
