@@ -89,3 +89,5 @@ export interface DragAndDropProps {
   isOver?: any;
   canDrop?: any;
 }
+
+export type ModalType = 'settings' | 'feedback' | 'donate' | 'share';

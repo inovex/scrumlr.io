@@ -13,7 +13,13 @@ import {
   mapStateToProps,
   mergeProps
 } from './Board.container';
-import { BoardConfig, BoardCards, BoardUsers, Card } from '../../types';
+import {
+  BoardConfig,
+  BoardCards,
+  BoardUsers,
+  Card,
+  ModalType
+} from '../../types';
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
 import PhaseSplash from '../../components/PhaseSplash/PhaseSplash';
@@ -56,7 +62,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 }
 
 export interface BoardState {
-  showModal?: 'settings' | 'feedback' | 'donate' | 'share';
+  showModal?: ModalType;
   showPhaseIntro: boolean;
 }
 
@@ -270,6 +276,18 @@ export class Board extends React.Component<BoardProps, BoardState> {
     this.setState({ ...this.state, showPhaseIntro: false });
   };
 
+  handleCloseModal = () => {
+    this.setState({
+      showModal: undefined
+    });
+  };
+
+  handleOpenModal = (modal: ModalType) => {
+    this.setState({
+      showModal: modal
+    });
+  };
+
   render() {
     let { boardConfig, setupCompleted } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -290,26 +308,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           boardId={this.props.boardSelector}
           onExport={() => this.handleExport()}
           onSignOut={this.props.onSignOut}
-          onOpenSettings={() => {
-            this.setState({
-              showModal: 'settings'
-            });
-          }}
-          onOpenFeedback={() => {
-            this.setState({
-              showModal: 'feedback'
-            });
-          }}
-          onOpenDonate={() => {
-            this.setState({
-              showModal: 'donate'
-            });
-          }}
-          onOpenShareDialog={() => {
-            this.setState({
-              showModal: 'share'
-            });
-          }}
+          onOpenModal={this.handleOpenModal}
         />
 
         <ColumnView
@@ -327,44 +326,15 @@ export class Board extends React.Component<BoardProps, BoardState> {
             onChangeBoardName={this.props.onChangeBoardName}
             onChangeUsername={this.props.onChangeUsername}
             onChangeEmail={this.props.onChangeEmail}
-            onClose={() => {
-              this.setState({
-                showModal: undefined
-              });
-            }}
+            onClose={this.handleCloseModal}
           />
         )}
 
-        {showShareDialog && (
-          <ShareModal
-            onClose={() => {
-              this.setState({ showModal: undefined });
-            }}
-          />
-        )}
+        {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
-        {showFeedback && (
-          <FeedbackModal
-            sendMail={(content: string, email?: string) => {
-              /* FIXME */
-            }}
-            onClose={() => {
-              this.setState({
-                showModal: undefined
-              });
-            }}
-          />
-        )}
+        {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
 
-        {showDonate && (
-          <DonateModal
-            onClose={() => {
-              this.setState({
-                showModal: undefined
-              });
-            }}
-          />
-        )}
+        {showDonate && <DonateModal onClose={this.handleCloseModal} />}
 
         <ReactCSSTransitionGroup
           transitionName="phase-splash__animation"

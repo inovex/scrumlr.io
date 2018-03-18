@@ -14,10 +14,7 @@ describe('<UserMenu />', () => {
     props = {
       onSignOut: jest.fn(),
       onDeleteBoard: jest.fn(),
-      onOpenSettings: jest.fn(),
-      onOpenFeedback: jest.fn(),
-      onOpenDonate: jest.fn(),
-      onOpenShareDialog: jest.fn(),
+      onOpenModal: jest.fn(),
       onExport: jest.fn(),
       onChangeBoardName: jest.fn(),
       admin: true

@@ -35,10 +35,7 @@ describe('<Header />', () => {
       user: 'user1',
       users: { user1: mockUser() },
       onToggleReadyState: jest.fn(),
-      onOpenSettings: jest.fn(),
-      onOpenFeedback: jest.fn(),
-      onOpenDonate: jest.fn(),
-      onOpenShareDialog: jest.fn(),
+      onOpenModal: jest.fn(),
       onDeleteBoard: jest.fn()
     };
   });

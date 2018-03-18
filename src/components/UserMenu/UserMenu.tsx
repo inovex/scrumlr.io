@@ -6,15 +6,13 @@ import './UserMenu.css';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import MenuItem from './MenuItem';
+import { ModalType } from '../../types';
 
 export interface UserMenuProps {
   onSignOut: () => void;
   onDeleteBoard: () => void;
   onExport: () => void;
-  onOpenSettings: () => void;
-  onOpenFeedback: () => void;
-  onOpenDonate: () => void;
-  onOpenShareDialog: () => void;
+  onOpenModal: (modal: ModalType) => void;
   onChangeBoardName: (boardName: string) => void;
   boardName?: string;
   admin: boolean;
@@ -54,16 +52,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
   render() {
     const { isOpen } = this.state;
-    const {
-      onOpenSettings,
-      onOpenFeedback,
-      onOpenDonate,
-      onOpenShareDialog,
-      onExport,
-      onSignOut,
-      boardName,
-      admin
-    } = this.props;
+    const { onOpenModal, onExport, onSignOut, boardName, admin } = this.props;
 
     const toggleIcon = (
       <button
@@ -126,20 +115,45 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           </li>
         )}
         <li key="user-menu__settings" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Settings" icon="settings" onClick={onOpenSettings} />
+          <MenuItem
+            name="Settings"
+            icon="settings"
+            onClick={() => {
+              onOpenModal('settings');
+            }}
+          />
         </li>
         <li key="user-menu__feedback" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Feedback" icon="feedback" onClick={onOpenFeedback} />
+          <MenuItem
+            name="Feedback"
+            icon="feedback"
+            onClick={() => {
+              onOpenModal('feedback');
+            }}
+          />
         </li>
         <li key="user-menu__donate" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Donate" icon="donate" onClick={onOpenDonate} />
+          <MenuItem
+            name="Donate"
+            icon="donate"
+            onClick={() => {
+              onOpenModal('donate');
+            }}
+          />
+        </li>
+        <li key="user-menu__share" className="user_menu__li--hidden-mobile">
+          <MenuItem
+            name="Share"
+            icon="share"
+            onClick={() => {
+              onOpenModal('share');
+            }}
+          />
         </li>
         <li key="user-menu__export" className="user_menu__li--hidden-mobile">
           <MenuItem name="Export" icon="download" onClick={onExport} />
         </li>
-        <li key="user-menu__share" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Share" icon="share" onClick={onOpenShareDialog} />
-        </li>
+
         {admin && (
           <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
             <MenuItem

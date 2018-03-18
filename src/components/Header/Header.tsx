@@ -4,7 +4,7 @@ import * as React from 'react';
 import { PhaseMenu } from '../PhaseMenu';
 import { UserList } from '../UserList';
 import { UserMenu } from '../UserMenu';
-import { BoardUsers } from '../../types';
+import { BoardUsers, ModalType } from '../../types';
 import Logo from './subcomponents/Logo';
 
 import './Header.css';
@@ -16,10 +16,7 @@ export interface OwnHeaderProps {
   boardId: string;
   onSignOut: () => void;
   onExport: () => void;
-  onOpenSettings: () => void;
-  onOpenFeedback: () => void;
-  onOpenDonate: () => void;
-  onOpenShareDialog: () => void;
+  onOpenModal: (modal: ModalType) => void;
   className?: string;
 }
 
@@ -56,10 +53,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       users,
       onToggleReadyState,
       onChangeBoardName,
-      onOpenSettings,
-      onOpenFeedback,
-      onOpenDonate,
-      onOpenShareDialog,
+      onOpenModal,
       loggedIn,
       onExport,
       onDeleteBoard,
@@ -95,11 +89,8 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onChangeBoardName={onChangeBoardName}
                 onExport={onExport}
                 onSignOut={onSignOut}
-                onOpenSettings={onOpenSettings}
-                onOpenFeedback={onOpenFeedback}
-                onOpenDonate={onOpenDonate}
+                onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}
-                onOpenShareDialog={onOpenShareDialog}
               />
             )}
           </div>
