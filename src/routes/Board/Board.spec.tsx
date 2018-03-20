@@ -25,7 +25,6 @@ describe('<Board />', () => {
       cards,
       boardConfig,
       users,
-      boardUrl: '/boards/-foobar',
       isBoardAdmin: false,
       uid: '',
       registered: false,

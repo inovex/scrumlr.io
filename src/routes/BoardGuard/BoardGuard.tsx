@@ -16,8 +16,6 @@ export interface BoardGuardState {
   ready: boolean;
   /** If the current user is authenticated this flag will be true. */
   authenticated: boolean;
-  /** Refers to the unsubscribe callback of firebase auth state change event. */
-  unsubscribeAuthStateChange: (() => void) | undefined;
   /** Value may change once board is deleted and reference is invalid. */
   invalidReference: boolean;
 }
@@ -29,7 +27,6 @@ export class BoardGuard extends React.Component<
   state: BoardGuardState = {
     ready: false,
     authenticated: false,
-    unsubscribeAuthStateChange: undefined,
     invalidReference: false
   };
 
@@ -46,7 +43,7 @@ export class BoardGuard extends React.Component<
   }
 
   componentDidMount() {
-    const unsubscribeAuthStateChange = getFirebase()
+    getFirebase()
       .auth()
       .onAuthStateChanged((user: User) => {
         // Test if user is authenticated.
@@ -56,36 +53,22 @@ export class BoardGuard extends React.Component<
           // For details see: https://firebase.googleblog.com/2013/06/how-to-build-presence-system.html
           const userRef = getFirebase().ref(`/presence/${user.uid}`);
           const amOnline = getFirebase().ref('.info/connected');
+          console.log('userRef', userRef, amOnline);
           amOnline.on('value', (snapshot: any) => {
             if (snapshot.val()) {
-              userRef.onDisconnect().remove();
+              userRef.onDisconnect().remove((err: any) => console.log(err));
               userRef.set(true);
             }
           });
         }
 
         // At this point firebase is ready.
-        this.setState(state => ({ ...state, ready: true, authenticated }));
+        this.setState({ ready: true, authenticated });
       });
-    this.setState(state => ({ ...state, unsubscribeAuthStateChange }));
-  }
-
-  componentWillUnmount() {
-    // Unsubscribe from authentication state change handler.
-    // This is necessary in case the user is not authenticated and will be redirected to the login form.
-    const { unsubscribeAuthStateChange } = this.state;
-    if (typeof unsubscribeAuthStateChange === 'function') {
-      unsubscribeAuthStateChange();
-    }
   }
 
   render() {
-    const {
-      ready,
-      authenticated,
-      unsubscribeAuthStateChange,
-      invalidReference
-    } = this.state;
+    const { ready, authenticated, invalidReference } = this.state;
     const url = window.location.href;
 
     if (invalidReference) {
@@ -119,8 +102,7 @@ export class BoardGuard extends React.Component<
 
     // If the user is logged in render the board page.
     const props: Partial<BoardProps> = {
-      ...this.props,
-      onSignOut: unsubscribeAuthStateChange
+      ...this.props
     };
     return <Board {...props} />;
   }
