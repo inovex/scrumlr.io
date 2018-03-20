@@ -34,7 +34,6 @@ export interface StateHeaderProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   onDeleteBoard: () => void;
-  onSignOut: () => void;
 }
 
 export type HeaderProps = OwnHeaderProps & StateHeaderProps;

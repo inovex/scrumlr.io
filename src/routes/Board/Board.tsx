@@ -36,7 +36,6 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   boardConfig: BoardConfig;
   users: BoardUsers;
   boardSelector: string;
-  boardUrl: string;
   boardPrintUrl: string;
   isBoardAdmin: boolean;
   uid: string; // ID of the current user
@@ -49,7 +48,6 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onChangeUsername: (usernaame: string) => void;
   onChangeEmail: (email: string) => void;
   onSwitchPhaseIndex: (delta: number) => void;
-  onSignOut: () => void;
 
   // Added by mergeProps
   onRegisterCurrentUser: () => void;
@@ -113,6 +111,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
   componentDidUpdate(prevProps: BoardProps) {
     if (
+      prevProps.boardConfig &&
       prevProps.boardConfig.guidedPhase !== this.props.boardConfig.guidedPhase
     ) {
       this.setState({ ...this.state, showPhaseIntro: true });

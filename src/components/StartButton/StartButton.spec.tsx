@@ -5,10 +5,6 @@ import { StartButton, StartButtonProps, StartButtonState } from './StartButton';
 import { DEFAULT_RETRO_MODE } from '../../constants/Retrospective';
 import { RetroMode } from '../../constants/mode';
 
-jest.mock(`!svg-inline-loader!../../assets/icon-32-more.svg`, () => 'svg', {
-  virtual: true
-});
-
 describe('<StartButton />', () => {
   let wrapper: ShallowWrapper<StartButtonProps, StartButtonState>;
   let onStart: any;
@@ -19,7 +15,7 @@ describe('<StartButton />', () => {
   });
 
   it('should match expected structure', () => {
-    expect(wrapper.html()).toMatchSnapshot();
+    expect(wrapper.debug()).toMatchSnapshot();
   });
 
   it('should callback with the default retro mode on initial click', () => {

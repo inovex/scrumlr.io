@@ -4,6 +4,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { iconSvgNames } from './definitions';
 
 // Jest cannot work with external webpack loaders, so mock all svg imports.
+jest.unmock('./Icon');
 iconSvgNames.forEach(name => {
   jest.mock(`!svg-inline-loader!../../assets/${name}.svg`, () => 'svg', {
     virtual: true

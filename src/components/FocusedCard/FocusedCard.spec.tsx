@@ -33,7 +33,9 @@ describe('<FocusedCard />', () => {
         );
         const indicator = wrapper.find('.focus-card__star-button');
         expect(indicator.prop('disabled')).toEqual(true);
-        expect(indicator.find('Icon').prop('name')).toEqual('stack-top');
+        expect(indicator.find('mockConstructor').prop('name')).toEqual(
+          'stack-top'
+        );
       });
 
       it('should indicate if card is not root card', () => {
@@ -42,7 +44,9 @@ describe('<FocusedCard />', () => {
         );
         const indicator = wrapper.find('.focus-card__star-button');
         expect(indicator.prop('disabled')).toEqual(false);
-        expect(indicator.find('Icon').prop('name')).toEqual('stack-mid');
+        expect(indicator.find('mockConstructor').prop('name')).toEqual(
+          'stack-mid'
+        );
       });
 
       it('should allow to change root card', () => {

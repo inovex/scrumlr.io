@@ -1,3 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<StartButton /> should match expected structure 1`] = `"<div class=\\"start-button\\"><button class=\\"start-button__start\\"><h1 class=\\"start-button__start-label\\">Start</h1><span class=\\"start-button__start-mode\\">Simple Retro</span></button><div class=\\"dd-menu dd-menu-right start-button__dropdown-wrapper\\"><button class=\\"start-button__dropdown-toggle\\"><span class=\\"icon\\" style=\\"width:32px;height:32px\\">svg</span><img src=\\"new.svg\\" class=\\"start-button__dropdown-toggle-button\\"/></button><div class=\\"dd-menu-items\\"></div></div></div>"`;
+exports[`<StartButton /> should match expected structure 1`] = `
+"<div className=\\"start-button\\">
+  <button className=\\"start-button__start\\" onClick={[Function: onClick]}>
+    <h1 className=\\"start-button__start-label\\">
+      Start
+    </h1>
+    <span className=\\"start-button__start-mode\\">
+      Simple Retro
+    </span>
+  </button>
+  <DropdownMenu isOpen={false} close={[Function]} toggle={{...}} align=\\"right\\" closeOnInsideClick={true} className=\\"start-button__dropdown-wrapper\\" inverse={false} animAlign={{...}} textAlign={{...}} menuAlign={{...}} size={{...}} upwards={false} animate={true} enterTimeout={150} leaveTimeout={150} closeOnOutsideClick={true}>
+    <li>
+      <button onClick={[Function]}>
+        Lean Coffee
+      </button>
+    </li>
+    <li>
+      <button onClick={[Function]}>
+        Simple Retro
+      </button>
+    </li>
+    <li>
+      <button onClick={[Function]}>
+        Start, Stop, Continue
+      </button>
+    </li>
+  </DropdownMenu>
+</div>"
+`;

@@ -5,7 +5,11 @@ import { RetroMode } from '../constants/mode';
 export type FirebaseProp = firebase.auth.Auth &
   firebase.app.App &
   firebase.database.Database &
-  firebase.database.Reference;
+  firebase.database.Reference & {
+    update: (ref: string, value: any) => firebase.Promise<any>;
+    set: (ref: string, value: any) => firebase.Promise<any>;
+    remove: (ref: string) => firebase.Promise<any>;
+  };
 
 export interface StoreState {
   fbState: FirebaseState;
@@ -91,3 +95,5 @@ export interface DragAndDropProps {
 }
 
 export type ModalType = 'settings' | 'feedback' | 'donate' | 'share';
+
+export type Optional<T> = T | undefined;

@@ -6,13 +6,6 @@ import { BoardCards, BoardUsers } from '../../types';
 import { Board, BoardProps } from './Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
-jest.mock(`!svg-inline-loader!./logo.svg`, () => 'svg', {
-  virtual: true
-});
-jest.mock(`!svg-inline-loader!./logo-s.svg`, () => 'svg', {
-  virtual: true
-});
-
 describe('<Board />', () => {
   let shallowWrapper: ShallowWrapper<BoardProps, {}>;
   let mockProps: BoardProps;
@@ -25,7 +18,6 @@ describe('<Board />', () => {
       cards,
       boardConfig,
       users,
-      boardUrl: '/boards/-foobar',
       isBoardAdmin: false,
       uid: '',
       registered: false,

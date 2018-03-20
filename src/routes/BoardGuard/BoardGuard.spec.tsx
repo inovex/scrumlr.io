@@ -7,12 +7,6 @@ const { Redirect } = require('react-router-dom');
 import BoardGuard, { BoardGuardProps, BoardGuardState } from './BoardGuard';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
-jest.mock('!svg-inline-loader!./logo.svg', () => 'svg', {
-  virtual: true
-});
-jest.mock('!svg-inline-loader!./logo-s.svg', () => 'svg', {
-  virtual: true
-});
 jest.mock('react-redux-firebase', () => ({
   getFirebase: () => ({
     ref: () => ({

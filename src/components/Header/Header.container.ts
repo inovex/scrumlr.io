@@ -143,22 +143,6 @@ export const mapStateToProps = (
       });
   }, 2000);
 
-  function onSignOut() {
-    // Note that the `onSignOut` method given via `ownProps` could be avaiable and should
-    // be called in case it is defined as a function. If it is defined, it has been defined
-    // in the BoardGuard and passed from there.
-    if (typeof ownProps.onSignOut === 'function') {
-      ownProps.onSignOut();
-    }
-    // User is still signed in at this point. Sign out the user and redirect to home page.
-    getFirebase()
-      .auth()
-      .signOut()
-      .then(() => {
-        location.hash = '/';
-      });
-  }
-
   const onPrevPhase = () => {
     onSwitchPhaseIndex(-1);
   };
@@ -179,7 +163,6 @@ export const mapStateToProps = (
     onToggleReadyState,
     onChangeBoardName,
     loggedIn: Boolean(firebase.auth()),
-    onDeleteBoard,
-    onSignOut
+    onDeleteBoard
   };
 };

@@ -3,10 +3,6 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import { Modal, ModalProps } from './Modal';
 
-jest.mock('!svg-inline-loader!../../assets/icon-48-close.svg', () => 'svg', {
-  virtual: true
-});
-
 describe('<Modal />', () => {
   describe('dumb component', () => {
     let props: ModalProps;
@@ -25,7 +21,7 @@ describe('<Modal />', () => {
 
     describe('rendering', () => {
       it('should match the snapshot', () => {
-        expect(shallowWrapper.html()).toMatchSnapshot();
+        expect(shallowWrapper.debug()).toMatchSnapshot();
       });
 
       it('should call onStatus on mount', () => {

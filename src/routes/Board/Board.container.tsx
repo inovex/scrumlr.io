@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { getFirebase, isLoaded, getVal } from 'react-redux-firebase';
+import { isLoaded, getVal } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
 
@@ -11,14 +11,12 @@ import {
   FirebaseProp,
   StoreState,
   BoardCards,
-  Card
+  Card,
+  Board,
+  Optional
 } from '../../types';
-import md5 = require('blueimp-md5');
-
-export const getImageURL = (uid: string, email?: string) => {
-  const mailHash = email ? md5(email) : md5(`${uid}@scrumlr.io`);
-  return `https://www.gravatar.com/avatar/${mailHash}?s=32&d=retro`;
-};
+import { authController } from '../../controller/auth';
+import { getGravatar } from '../../controller/gravatar';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -28,33 +26,34 @@ export const mapStateToProps = (
   const firebase = ownProps.firebase as FirebaseProp;
 
   const boardSelector = `boards/${ownProps.match.params.id}`;
-  const boardUrl = `/board/${ownProps.match.params.id}`;
   const boardPrintUrl = `/print/${ownProps.match.params.id}`;
   const auth: firebase.User | any = firebase.auth().currentUser || {};
-  const cards: BoardCards = getVal(fbState, `data/${boardSelector}/cards`, {});
-  const boardConfig: BoardConfig = getVal(
-    fbState,
-    `data/${boardSelector}/config`,
-    {}
-  );
-  const users = isLoaded(boardConfig) ? boardConfig.users : {};
-  const isBoardAdmin =
-    auth && isLoaded(boardConfig) ? auth.uid === boardConfig.creatorUid : false;
 
-  let focusedCard: Card | undefined = undefined;
+  const board: Optional<Board> = getVal(
+    fbState,
+    `data/${boardSelector}`,
+    undefined
+  );
+  if (!board) {
+    return { boardSelector, boardConfig: undefined, auth } as any;
+  }
+
+  const cards: BoardCards = board.cards || {};
+  const boardConfig: BoardConfig = board.config;
+
+  const users = isLoaded(boardConfig) ? boardConfig.users : {};
+  const isBoardAdmin = isLoaded(boardConfig)
+    ? auth.uid === boardConfig.creatorUid
+    : false;
+
+  let focusedCard: Optional<Card> = undefined;
   if (boardConfig.focusedCardId) {
-    focusedCard = getVal(
-      fbState,
-      `data/${boardSelector}/cards/${boardConfig.focusedCardId}`,
-      undefined
-    );
+    focusedCard = cards[boardConfig.focusedCardId];
   }
 
   function onToggleReadyState() {
     firebase
-      .ref(`${boardSelector}/config/users/${auth.uid}`)
-      .set({
-        ...boardConfig.users[auth.uid],
+      .update(`${boardSelector}/config/users/${auth.uid}`, {
         ready: !boardConfig.users[auth.uid].ready
       })
       .catch((err: Error) => {
@@ -67,8 +66,10 @@ export const mapStateToProps = (
   function onFocusCard(cardId: string) {
     const { focusedCardId } = boardConfig;
     firebase
-      .ref(`${boardSelector}/config/focusedCardId`)
-      .set(focusedCardId !== cardId ? cardId : null)
+      .set(
+        `${boardSelector}/config/focusedCardId`,
+        focusedCardId !== cardId ? cardId : null
+      )
       .catch(err => {
         Raven.captureMessage('Could not focus card', {
           extra: {
@@ -88,14 +89,14 @@ export const mapStateToProps = (
   const onChangeEmail = debounce((email: string) => {
     const user = firebase.auth().currentUser;
     if (user) {
-      const imageUrl = getImageURL(auth.uid, email);
+      const imageUrl = getGravatar(auth.uid, email);
       user
         .updateProfile({
           displayName: user.displayName,
           photoURL: imageUrl
         })
         .then(() => {
-          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).update({
+          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
             image: imageUrl
           });
         });
@@ -111,7 +112,7 @@ export const mapStateToProps = (
           photoURL: user.photoURL
         })
         .then(() => {
-          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).update({
+          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
             name: username
           });
         });
@@ -121,8 +122,7 @@ export const mapStateToProps = (
   const onChangeBoardName = debounce((boardName: string) => {
     const { focusedCardId } = boardConfig;
     firebase
-      .ref(`${boardSelector}/config/name`)
-      .set(boardName)
+      .set(`${boardSelector}/config/name`, boardName)
       .catch((err: any) => {
         Raven.captureMessage('Could not set boardname', {
           extra: {
@@ -147,9 +147,7 @@ export const mapStateToProps = (
 
     Object.keys(boardConfig.users).forEach(uid => {
       firebase
-        .ref(`${boardSelector}/config/users/${uid}`)
-        .set({
-          ...boardConfig.users[uid],
+        .update(`${boardSelector}/config/users/${uid}`, {
           ready: false
         })
         .catch((err: Error) => {
@@ -159,44 +157,16 @@ export const mapStateToProps = (
         });
     });
 
-    const phasesWithSortedResults = [2, 3];
-    if (phasesWithSortedResults.indexOf(boardConfig.guidedPhase + 1) > -1) {
-      if (!boardConfig.sorted) {
-        // this.setSorted(true);
-      }
-    } else {
-      if (boardConfig.sorted) {
-        // this.setSorted(false);
-      }
-    }
-
     // Always remove card selection if new phase is entered.
     if (boardConfig.focusedCardId) {
       onFocusCard(boardConfig.focusedCardId);
     }
   }
 
-  function onSignOut() {
-    // Note that the `onSignOut` method given via `ownProps` could be avaiable and should
-    // be called in case it is defined as a function. If it is defined, it has been defined
-    // in the BoardGuard and passed from there.
-    if (typeof ownProps.onSignOut === 'function') {
-      ownProps.onSignOut();
-    }
-    // User is still signed in at this point. Sign out the user and redirect to home page.
-    getFirebase()
-      .auth()
-      .signOut()
-      .then(() => {
-        location.hash = '/';
-      });
-  }
-
   return {
     ...ownProps,
     cards,
     boardSelector,
-    boardUrl,
     boardConfig,
     boardPrintUrl,
     users,
@@ -209,7 +179,7 @@ export const mapStateToProps = (
     onToggleReadyState,
     onFocusCard,
     onSwitchPhaseIndex,
-    onSignOut,
+    onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
     onChangeEmail,
@@ -232,7 +202,7 @@ export function mergeProps(
   { dispatch }: { dispatch: Dispatch<any> },
   ownProps: BoardProps
 ): BoardProps {
-  const { uid, auth, boardConfig, boardSelector } = stateProps;
+  const { auth, boardConfig, boardSelector } = stateProps;
   const { firebase } = ownProps;
 
   function onRegisterCurrentUser() {
@@ -244,8 +214,7 @@ export function mergeProps(
     if (!boardConfig || !boardConfig.creatorUid) {
       promises.push(
         firebase
-          .ref(`${boardSelector}/config/creatorUid`)
-          .set(uid)
+          .set(`${boardSelector}/config/creatorUid`, auth.uid)
           .catch(() => {
             // Nothing to do. An admin has been set already for this board.
           })
@@ -258,7 +227,7 @@ export function mergeProps(
       ready: false
     };
     promises.push(
-      firebase.ref(`${boardSelector}/config/users/${uid}`).set(user)
+      firebase.set(`${boardSelector}/config/users/${auth.uid}`, user)
     );
 
     Promise.all(promises)
@@ -267,7 +236,7 @@ export function mergeProps(
       })
       .catch((err: PromiseRejectionEvent) => {
         Raven.captureMessage('Could not register current user', {
-          extra: { reason: err.reason, uid, boardId: boardSelector }
+          extra: { reason: err.reason, uid: auth.uid, boardId: boardSelector }
         });
       });
   }
