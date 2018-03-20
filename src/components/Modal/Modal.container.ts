@@ -5,7 +5,6 @@ import { DispatchModalProps } from './Modal';
 export function mapDispatchToProps(
   dispatch: Dispatch<any>
 ): DispatchModalProps {
-  console.log();
   return {
     onStatus: (active: boolean) => {
       dispatch({ type: MODAL_STATUS, isActive: active });

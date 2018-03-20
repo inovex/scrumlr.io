@@ -15,6 +15,11 @@ import {
 } from '../../types';
 import md5 = require('blueimp-md5');
 
+export const getImageURL = (uid: string, email?: string) => {
+  const mailHash = email ? md5(email) : md5(`${uid}@scrumlr.io`);
+  return `https://www.gravatar.com/avatar/${mailHash}?s=32&d=retro`;
+};
+
 export const mapStateToProps = (
   state: StoreState,
   ownProps: BoardProps
@@ -25,7 +30,7 @@ export const mapStateToProps = (
   const boardSelector = `boards/${ownProps.match.params.id}`;
   const boardUrl = `/board/${ownProps.match.params.id}`;
   const boardPrintUrl = `/print/${ownProps.match.params.id}`;
-  const auth = getVal(fbState, 'auth', {});
+  const auth: firebase.User | any = firebase.auth().currentUser || {};
   const cards: BoardCards = getVal(fbState, `data/${boardSelector}/cards`, {});
   const boardConfig: BoardConfig = getVal(
     fbState,
@@ -76,31 +81,22 @@ export const mapStateToProps = (
       });
   }
 
-  let username: string | undefined = undefined;
-  let email: string | undefined = undefined;
-  let isAnonymous: boolean = true;
-
-  const firebaseUser = firebase.auth().currentUser;
-  if (firebaseUser) {
-    username = firebaseUser.displayName ? firebaseUser.displayName : undefined;
-    email = firebaseUser.email ? firebaseUser.email : undefined;
-    isAnonymous = firebaseUser.isAnonymous;
-  }
+  const username = auth.displayName || undefined;
+  const email = auth.email || undefined;
+  const isAnonymous = auth.isAnonymous;
 
   const onChangeEmail = debounce((email: string) => {
     const user = firebase.auth().currentUser;
     if (user) {
-      const mailHash = email ? md5(email) : md5(`${auth.uid}@scrumlr.io`);
+      const imageUrl = getImageURL(auth.uid, email);
       user
         .updateProfile({
           displayName: user.displayName,
-          photoURL: `https://www.gravatar.com/avatar/${mailHash}?s=32&d=retro`
+          photoURL: imageUrl
         })
         .then(() => {
-          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).set({
-            name: user.displayName,
-            image: `https://www.gravatar.com/avatar/${mailHash}?s=32&d=retro`,
-            ready: users[auth.uid].ready
+          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).update({
+            image: imageUrl
           });
         });
     }
@@ -115,10 +111,8 @@ export const mapStateToProps = (
           photoURL: user.photoURL
         })
         .then(() => {
-          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).set({
-            name: username,
-            image: user.photoURL,
-            ready: users[auth.uid].ready
+          firebase.ref(`${boardSelector}/config/users/${auth.uid}`).update({
+            name: username
           });
         });
     }
@@ -190,9 +184,12 @@ export const mapStateToProps = (
       ownProps.onSignOut();
     }
     // User is still signed in at this point. Sign out the user and redirect to home page.
-    getFirebase().auth().signOut().then(() => {
-      location.hash = '/';
-    });
+    getFirebase()
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/';
+      });
   }
 
   return {
@@ -208,7 +205,7 @@ export const mapStateToProps = (
     username,
     email,
     isAnonymous,
-    uid: auth ? auth.uid : null,
+    uid: auth.uid,
     onToggleReadyState,
     onFocusCard,
     onSwitchPhaseIndex,
@@ -242,8 +239,6 @@ export function mergeProps(
     if (!auth.uid) {
       return;
     }
-    const { displayName, photoURL } = auth;
-
     const promises: Promise<any>[] = [];
 
     if (!boardConfig || !boardConfig.creatorUid) {
@@ -252,14 +247,14 @@ export function mergeProps(
           .ref(`${boardSelector}/config/creatorUid`)
           .set(uid)
           .catch(() => {
-            // Nothing to do. A admin has been set already for this board.
+            // Nothing to do. An admin has been set already for this board.
           })
       );
     }
 
     const user: UserInformation = {
-      name: displayName,
-      image: photoURL,
+      name: auth.displayName,
+      image: auth.photoURL,
       ready: false
     };
     promises.push(
