@@ -53,10 +53,9 @@ export class BoardGuard extends React.Component<
           // For details see: https://firebase.googleblog.com/2013/06/how-to-build-presence-system.html
           const userRef = getFirebase().ref(`/presence/${user.uid}`);
           const amOnline = getFirebase().ref('.info/connected');
-          console.log('userRef', userRef, amOnline);
           amOnline.on('value', (snapshot: any) => {
             if (snapshot.val()) {
-              userRef.onDisconnect().remove((err: any) => console.log(err));
+              userRef.onDisconnect().remove();
               userRef.set(true);
             }
           });
