@@ -7,14 +7,6 @@ import { UserList } from '../UserList';
 import { UserMenu } from '../UserMenu';
 import { mockUser } from '../../builder';
 
-jest.mock('!svg-inline-loader!./logo.svg', () => 'svg', {
-  virtual: true
-});
-
-jest.mock('!svg-inline-loader!./logo-s.svg', () => 'svg', {
-  virtual: true
-});
-
 describe('<Header />', () => {
   let wrapper: ShallowWrapper<HeaderProps, {}>;
   let props: HeaderProps;

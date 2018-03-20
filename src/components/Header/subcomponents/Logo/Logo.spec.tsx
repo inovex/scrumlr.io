@@ -3,6 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 
 import { default as Logo, LogoProps } from './Logo';
 
+jest.unmock('./Logo');
 jest.mock('!svg-inline-loader!./logo.svg', () => 'svg', {
   virtual: true
 });

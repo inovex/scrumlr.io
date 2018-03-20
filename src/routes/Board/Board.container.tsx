@@ -15,13 +15,8 @@ import {
   Board,
   Optional
 } from '../../types';
-import md5 = require('blueimp-md5');
 import { authController } from '../../controller/auth';
-
-export const getImageURL = (uid: string, email?: string) => {
-  const mailHash = email ? md5(email) : md5(`${uid}@scrumlr.io`);
-  return `https://www.gravatar.com/avatar/${mailHash}?s=32&d=retro`;
-};
+import { getGravatar } from '../../controller/gravatar';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -94,7 +89,7 @@ export const mapStateToProps = (
   const onChangeEmail = debounce((email: string) => {
     const user = firebase.auth().currentUser;
     if (user) {
-      const imageUrl = getImageURL(auth.uid, email);
+      const imageUrl = getGravatar(auth.uid, email);
       user
         .updateProfile({
           displayName: user.displayName,
