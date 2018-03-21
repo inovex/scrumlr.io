@@ -215,15 +215,16 @@
 
 .card__author {
   position: absolute;
-  width: 44px;
   top: @default-margin;
-  left: @default-margin;
-}
+  left: 20px;
 
-.card__content--showAuthor {
-  padding-top: 54px;
-}
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: .8em;
+  color: @color-gray;
 
-.card__admin-buttonbar--showAuthor {
-  top: 24px;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
