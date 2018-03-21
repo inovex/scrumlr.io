@@ -11,6 +11,7 @@ export type IconNames =
   | 'circle'
   | 'more'
   | 'plus'
+  | 'minus'
   | 'circle-selection'
   | 'circle-selection-grey'
   | 'logout'
