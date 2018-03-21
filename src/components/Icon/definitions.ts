@@ -7,6 +7,8 @@ export const iconMap: { [key: string]: string } = {
   circle: 'icon-32-circle',
   more: 'icon-32-more',
   plus: 'icon-14-plus',
+  minus: 'icon-14-minus',
+  check: 'icon-14-check',
   'circle-selection': 'icon-44-selection-circle',
   'circle-selection-grey': 'icon-44-selection-circle-grey',
   logout: 'icon-20-logout',

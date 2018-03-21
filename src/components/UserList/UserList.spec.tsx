@@ -82,19 +82,28 @@ describe('<UserList />', () => {
       );
       allUsers = wrapper.find('.board__user-list > li');
 
-      expect(allUsers.at(0).find('.board__user--ready')).toHaveLength(0);
+      expect(allUsers.at(0).find({ name: 'check' })).toHaveLength(0);
       expect(
-        allUsers.at(0).find('.board__user-image').prop('alt')
+        allUsers
+          .at(0)
+          .find('.board__user-image')
+          .prop('alt')
       ).not.toContain('ready');
 
-      expect(allUsers.at(1).find('.board__user--ready')).toHaveLength(1);
-      expect(allUsers.at(1).find('.board__user-image').prop('alt')).toContain(
-        'ready'
-      );
-
-      expect(allUsers.at(2).find('.board__user--ready')).toHaveLength(0);
+      expect(allUsers.at(1).find({ name: 'check' })).toHaveLength(1);
       expect(
-        allUsers.at(2).find('.board__user-image').prop('alt')
+        allUsers
+          .at(1)
+          .find('.board__user-image')
+          .prop('alt')
+      ).toContain('ready');
+
+      expect(allUsers.at(2).find({ name: 'check' })).toHaveLength(0);
+      expect(
+        allUsers
+          .at(2)
+          .find('.board__user-image')
+          .prop('alt')
       ).not.toContain('ready');
     });
 

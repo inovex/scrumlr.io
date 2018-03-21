@@ -5,6 +5,7 @@ import { Card as TCard } from '../../../types';
 import Footer from '../Footer';
 
 import './Details.css';
+import Icon from '../../Icon';
 
 export interface DetailsProps extends CardProps {
   onClose: () => void;
@@ -61,23 +62,29 @@ export class Details extends React.Component<DetailsProps, {}> {
 
             <aside>
               <ul className="card-details__options">
-                {deletable &&
+                {deletable && (
                   <li
                     key="delete"
                     className="card-details__option"
                     aria-label="Delete this card"
                     onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                      onRemove(id)}
+                      onRemove(id)
+                    }
                   >
-                    <i className="fa fa-trash" aria-hidden="true" />
-                  </li>}
+                    <Icon
+                      name="trash"
+                      aria-hidden="true"
+                      className="card-details__delete-icon"
+                    />
+                  </li>
+                )}
               </ul>
             </aside>
           </div>
 
-          {cardsInStack.length > 0 &&
+          {cardsInStack.length > 0 && (
             <ul className="card-details__stack">
-              {cardsInStack.map((card: TCard) =>
+              {cardsInStack.map((card: TCard) => (
                 <li key={card.id} className="card-details__stack-item">
                   <div className="card_details__card">
                     <blockquote className="card-details__card-text">
@@ -86,22 +93,29 @@ export class Details extends React.Component<DetailsProps, {}> {
 
                     <aside>
                       <ul className="card-details__options">
-                        {deletable &&
+                        {deletable && (
                           <li
                             key="delete"
                             aria-label="Delete this card"
                             className="card-details__option"
                             onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                              card.id && onRemove(card.id)}
+                              card.id && onRemove(card.id)
+                            }
                           >
-                            <i className="fa fa-trash" aria-hidden="true" />
-                          </li>}
+                            <Icon
+                              name="trash"
+                              aria-hidden="true"
+                              className="card-details__delete-icon"
+                            />
+                          </li>
+                        )}
                       </ul>
                     </aside>
                   </div>
                 </li>
-              )}
-            </ul>}
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     );

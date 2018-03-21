@@ -25,3 +25,22 @@
 .dot__downvote-custom-content {
   font-weight: 600;
 }
+
+.dot__downvote-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.dot_downvote-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: @theme-color-primary;
+  align-self: center;
+  .animate(fill, 0.6s);
+}
+
+.dot:hover .dot_downvote-icon svg {
+  fill: @theme-color-secondary;
+}

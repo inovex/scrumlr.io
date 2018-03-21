@@ -90,10 +90,17 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           alt={altText}
           title={altText}
         />
-        {user.ready &&
+        {user.ready && (
           <span className="user-list__ready-state-wrapper">
-            <i className="fa fa-check board__user--ready" aria-hidden="true" />
-          </span>}
+            <Icon
+              name="check"
+              aria-hidden="true"
+              width={14}
+              height={14}
+              className="user-list__ready-check-icon"
+            />
+          </span>
+        )}
       </div>
     );
   }
@@ -129,12 +136,13 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           width={44}
           height={44}
         />
-        {!this.state.displayUserListDropdown &&
+        {!this.state.displayUserListDropdown && (
           <ReactTooltip
             id="user-list-summary-icon"
             place="bottom"
             effect="solid"
-          />}
+          />
+        )}
         <img
           className={cx('board__user-image', 'board__user-image--faded')}
           src={
@@ -142,14 +150,16 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             'https://www.gravatar.com/avatar/912ec803b2ce49e4a541068d495ab570?s=32&d=retro'
           }
         />
-        <span className="board__user-count">
-          {otherUsers.length}
-        </span>
+        <span className="board__user-count">{otherUsers.length}</span>
         <span className="user-list__ready-state-wrapper">
-          <span className="board__user-ready-count">
-            {readyCount}
-          </span>
-          <i className="fa fa-check board__user--ready" aria-hidden="true" />
+          <span className="board__user-ready-count">{readyCount}</span>
+          <Icon
+            name="check"
+            aria-hidden="true"
+            width={14}
+            height={14}
+            className="user-list__ready-check-icon"
+          />
         </span>
       </div>
     );
@@ -164,16 +174,14 @@ export class UserList extends React.Component<UserListProps, UserListState> {
       closeOnInsideClick: false
     };
 
-    const userList = otherUsers.map(user =>
+    const userList = otherUsers.map(user => (
       <li key={user.id + 'otherList'}>
         <div className="user-list__other-wrapper">
-          <span className="user-list__other-list-name">
-            {user.name}
-          </span>
+          <span className="user-list__other-list-name">{user.name}</span>
           {this.renderUserContent(user, false)}
         </div>
       </li>
-    );
+    ));
 
     return (
       <li key="user-summary">
@@ -182,9 +190,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           data-tip={otherUserNames}
           data-for="user-list-summary-icon"
         >
-          <DropdownMenu {...ddMenuProps}>
-            {userList}
-          </DropdownMenu>
+          <DropdownMenu {...ddMenuProps}>{userList}</DropdownMenu>
         </div>
       </li>
     );
@@ -215,13 +221,13 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           this.renderUserSummary()}
 
         {this.state.showAllUsers &&
-          slicedList.map(userInfo =>
+          slicedList.map(userInfo => (
             <li key={'ALL' + userInfo.id} aria-label={`User ${userInfo.name}`}>
               {this.renderUserContent(userInfo, false)}
             </li>
-          )}
+          ))}
 
-        {tUser.filter(({ id }) => id === currentUserId).map(userInfo =>
+        {tUser.filter(({ id }) => id === currentUserId).map(userInfo => (
           <li key="OWN" aria-label="Yourself">
             <button
               type="button"
@@ -233,12 +239,13 @@ export class UserList extends React.Component<UserListProps, UserListState> {
                 this.setState({ ...this.state, focusedAvatar: true });
               }}
               onBlur={() =>
-                this.setState({ ...this.state, focusedAvatar: false })}
+                this.setState({ ...this.state, focusedAvatar: false })
+              }
             >
               {this.renderUserContent(userInfo, true)}
             </button>
           </li>
-        )}
+        ))}
       </ul>
     );
   }
