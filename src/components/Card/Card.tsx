@@ -41,6 +41,7 @@ export interface StateCardProps {
   getCardsInTheStack: () => TCard[];
   showAuthor?: boolean;
   ownVotes: number;
+  isShowAuthor?: boolean;
 }
 
 export interface DispatchCardProps {
@@ -205,7 +206,9 @@ export class Card extends Component<CardProps, CardState> {
       ownVotes,
       card,
       connectDropTarget,
-      connectDragSource
+      connectDragSource,
+      isShowAuthor,
+      author
     } = this.props;
 
     const isActionCard = card.type === 'actions';
@@ -232,26 +235,32 @@ export class Card extends Component<CardProps, CardState> {
                 'card-indicator--own': owner,
                 'card-indicator--other': !owner
               })}
-            />
+            >
+              {/* FIXME implement user icon here */}
+              {isShowAuthor && (
+                <span style={{ display: 'none' }}>{author.name}</span>
+              )}
+            </div>
 
             <div className="card__selection-area">
               <div className={classNames('card__admin-buttonbar')}>
                 {!isActionCard &&
-                  isFocusable &&
-                  <button
-                    type="button"
-                    className="card__admin-button"
-                    onClick={() => onFocus(id)}
-                    aria-label="Select card"
-                  >
-                    <Icon
-                      name="focus"
-                      width={24}
-                      height={24}
-                      className="card__admin-button-icon"
-                    />
-                  </button>}
-                {editable &&
+                  isFocusable && (
+                    <button
+                      type="button"
+                      className="card__admin-button"
+                      onClick={() => onFocus(id)}
+                      aria-label="Select card"
+                    >
+                      <Icon
+                        name="focus"
+                        width={24}
+                        height={24}
+                        className="card__admin-button-icon"
+                      />
+                    </button>
+                  )}
+                {editable && (
                   <button
                     type="button"
                     className="card__admin-button"
@@ -264,7 +273,8 @@ export class Card extends Component<CardProps, CardState> {
                       height={24}
                       className="card__admin-button-icon"
                     />
-                  </button>}
+                  </button>
+                )}
               </div>
               <blockquote
                 className="card__content"
@@ -275,10 +285,9 @@ export class Card extends Component<CardProps, CardState> {
               >
                 {children}
 
-                {this.state.hasOverflow &&
-                  <span className="card__more-content-indicator">
-                    &hellip;
-                  </span>}
+                {this.state.hasOverflow && (
+                  <span className="card__more-content-indicator">&hellip;</span>
+                )}
               </blockquote>
             </div>
 
@@ -291,10 +300,12 @@ export class Card extends Component<CardProps, CardState> {
             />
           </div>
 
-          {this.props.getCardsInTheStack().length > 0 &&
-            <div className="card__in-stack" aria-hidden="true" />}
-          {this.state.expanded &&
-            <Details {...this.props} onClose={this.onDetailsCloseListener} />}
+          {this.props.getCardsInTheStack().length > 0 && (
+            <div className="card__in-stack" aria-hidden="true" />
+          )}
+          {this.state.expanded && (
+            <Details {...this.props} onClose={this.onDetailsCloseListener} />
+          )}
         </li>
       )
     );

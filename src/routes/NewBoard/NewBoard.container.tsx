@@ -16,6 +16,7 @@ function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
       guided: true,
       guidedPhase: 0,
       created: new Date().toISOString(),
+      showAuthor: false,
       mode
     }
   };

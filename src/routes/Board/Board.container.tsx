@@ -51,6 +51,18 @@ export const mapStateToProps = (
     focusedCard = cards[boardConfig.focusedCardId];
   }
 
+  function onToggleShowAuthor() {
+    firebase
+      .update(`${boardSelector}/config`, {
+        showAuthor: !boardConfig.showAuthor
+      })
+      .catch((err: Error) => {
+        Raven.captureMessage('Could not toggle show author state', {
+          extra: { reason: err.message, uid: auth.uid, boardId: boardSelector }
+        });
+      });
+  }
+
   function onToggleReadyState() {
     firebase
       .update(`${boardSelector}/config/users/${auth.uid}`, {
@@ -179,10 +191,12 @@ export const mapStateToProps = (
     onToggleReadyState,
     onFocusCard,
     onSwitchPhaseIndex,
+    isShowAuthor: Boolean(boardConfig.showAuthor),
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
     onChangeEmail,
+    onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
     ...app,
 
