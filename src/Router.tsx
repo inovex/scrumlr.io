@@ -15,6 +15,14 @@ export interface RouterProps {
   firebase?: any;
 }
 
+const CloseButton = (props: any) => (
+  <Icon
+    name="close20"
+    className="toast__close-button"
+    onClick={props.closeToast}
+  />
+);
+
 const Router = (props: RouterProps) => (
   <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
     <div style={{ flex: 1 }}>
@@ -32,7 +40,7 @@ const Router = (props: RouterProps) => (
         autoClose={5000}
         toastClassName="dark-toast"
         progressClassName="dark-toast-progress"
-        closeButton={<Icon name="close20" className="toast__close-button" />}
+        closeButton={<CloseButton />}
       />
     </div>
   </div>
