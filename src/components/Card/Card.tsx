@@ -10,6 +10,7 @@ import { mapDispatchToProps, mapStateToProps } from './Card.container';
 import Icon from '../Icon/Icon';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
+import { IconNames } from '../Icon';
 
 export interface OwnCardProps extends BoardProp {
   card: TCard;
@@ -213,6 +214,10 @@ export class Card extends Component<CardProps, CardState> {
 
     const isActionCard = card.type === 'actions';
 
+    const authorBorder: IconNames = owner
+      ? 'circle-selection'
+      : 'circle-selection-grey';
+
     return connectDropTarget(
       connectDragSource(
         <li
@@ -230,20 +235,39 @@ export class Card extends Component<CardProps, CardState> {
               'card--focused': isFocused
             })}
           >
-            <div
-              className={classNames('card-indicator', {
-                'card-indicator--own': owner,
-                'card-indicator--other': !owner
-              })}
-            >
-              {/* FIXME implement user icon here */}
-              {isShowAuthor && (
-                <span style={{ display: 'none' }}>{author.name}</span>
-              )}
-            </div>
+            {!isShowAuthor && (
+              <div
+                className={classNames('card-indicator', {
+                  'card-indicator--own': owner,
+                  'card-indicator--other': !owner
+                })}
+              />
+            )}
+
+            {isShowAuthor && (
+              <div className="board__user-image-wrapper card__author">
+                <Icon
+                  className="board__user-image-border"
+                  name={authorBorder}
+                  width={44}
+                  height={44}
+                />
+                <img
+                  className="board__user-image"
+                  src={
+                    author.image ||
+                    'https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32&d=retro'
+                  }
+                />
+              </div>
+            )}
 
             <div className="card__selection-area">
-              <div className={classNames('card__admin-buttonbar')}>
+              <div
+                className={classNames('card__admin-buttonbar', {
+                  ['card__admin-buttonbar--showAuthor']: isShowAuthor
+                })}
+              >
                 {!isActionCard &&
                   isFocusable && (
                     <button
@@ -277,7 +301,9 @@ export class Card extends Component<CardProps, CardState> {
                 )}
               </div>
               <blockquote
-                className="card__content"
+                className={classNames('card__content', {
+                  ['card__content--showAuthor']: isShowAuthor
+                })}
                 onClick={this.expand}
                 ref={content => {
                   this.content = content;

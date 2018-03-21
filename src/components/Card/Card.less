@@ -87,6 +87,7 @@
   background: none;
   cursor: pointer;
   padding: 0;
+  outline: none;
 }
 
 .card__admin-button:hover > .card__admin-button-icon > svg g {
@@ -210,4 +211,19 @@
   box-shadow: 0 @base-unit @base-unit*2 0 fade(@color-dark-gray, 15%);
 
   z-index: @card-z-index - @base-z-index-step;
+}
+
+.card__author {
+  position: absolute;
+  width: 44px;
+  top: @default-margin;
+  left: @default-margin;
+}
+
+.card__content--showAuthor {
+  padding-top: 54px;
+}
+
+.card__admin-buttonbar--showAuthor {
+  top: 24px;
 }
