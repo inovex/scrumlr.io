@@ -70,8 +70,7 @@ describe('<UserList />', () => {
       );
     });
 
-    // FIXME re-enable test
-    xit('should mark user as non-ready / ready depending on prop', () => {
+    it('should mark user as non-ready / ready depending on prop', () => {
       users = {
         user1: mockUser({ name: 'User 1', ready: false }),
         user2: mockUser({ name: 'User 2', ready: true }),
@@ -83,7 +82,7 @@ describe('<UserList />', () => {
       );
       allUsers = wrapper.find('.board__user-list > li');
 
-      expect(allUsers.at(0).find('.board__user--ready')).toHaveLength(0);
+      expect(allUsers.at(0).find({ name: 'check' })).toHaveLength(0);
       expect(
         allUsers
           .at(0)
@@ -91,7 +90,7 @@ describe('<UserList />', () => {
           .prop('alt')
       ).not.toContain('ready');
 
-      expect(allUsers.at(1).find('.board__user--ready')).toHaveLength(1);
+      expect(allUsers.at(1).find({ name: 'check' })).toHaveLength(1);
       expect(
         allUsers
           .at(1)
@@ -99,7 +98,7 @@ describe('<UserList />', () => {
           .prop('alt')
       ).toContain('ready');
 
-      expect(allUsers.at(2).find('.board__user--ready')).toHaveLength(0);
+      expect(allUsers.at(2).find({ name: 'check' })).toHaveLength(0);
       expect(
         allUsers
           .at(2)
