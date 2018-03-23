@@ -39,7 +39,8 @@ export class ShareModal extends React.Component<
 
           <a href={link} className="share-modal__qr">
             <img
-              src={`https://chart.googleapis.com/chart?cht=qr&chs=250x250&chld=L|0&chl=${encoded}`}
+              src={`https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=L|0&chl=${encoded}`}
+              className="share-modal__qr-image"
             />
           </a>
           <CopyToClipboard text={link} onCopy={this.displayCopyMessage}>
