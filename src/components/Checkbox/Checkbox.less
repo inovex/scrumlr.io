@@ -1,0 +1,66 @@
+@import '../../constants/style';
+
+@checkbox__scale-factor: 16/90;
+
+@checkbox__margin: 5px*@checkbox__scale-factor + 1px;
+@checkbox__marker-width: 90px*@checkbox__scale-factor - 2px;
+@checkbox__active-marker-width: 130px*@checkbox__scale-factor;
+@checkbox__width: 200px*@checkbox__scale-factor;
+@checkbox__height: 100px*@checkbox__scale-factor;
+
+.checkbox__input[type=checkbox]{
+  height: 0;
+  width: 0;
+  visibility: hidden;
+  margin: 0;
+}
+
+.checkbox__label-wrapper {
+  display: inline-flex;
+}
+
+.checkbox__control {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: @checkbox__width;
+  height: @checkbox__height;
+  background: @color-stone-gray;
+  transition: background .3s ease-in-out;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+
+  align-self: center;
+}
+
+.checkbox__control:after {
+  content: '';
+  position: absolute;
+  top: @checkbox__margin;
+  left: @checkbox__margin;
+  width: @checkbox__marker-width;
+  height: @checkbox__marker-width;
+  background: #fff;
+  border-radius: @checkbox__marker-width;
+  transition: 0.3s;
+}
+
+.checkbox__input:checked + .checkbox__label-wrapper > .checkbox__control {
+  background: @color-mint;
+}
+
+.checkbox__input:checked + .checkbox__label-wrapper > .checkbox__control:after {
+  left: calc(100% - @checkbox__margin*2);
+  transform: translateX(-100%);
+}
+
+.checkbox__control:active:after {
+  width: @checkbox__active-marker-width;
+}
+
+.checkbox__label {
+  font-family: @theme-font-family;
+  font-size: @theme-font-size;
+  align-self: center;
+  margin-left: @default-margin/2;
+}

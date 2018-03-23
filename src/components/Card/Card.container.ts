@@ -17,6 +17,11 @@ export const mapStateToProps = (
     undefined
   );
   const user = getVal(state.fbState, 'auth', undefined);
+  const isShowAuthor = getVal(
+    state.fbState,
+    `data/${ownProps.boardId}/config/showAuthor`,
+    false
+  );
   const admin =
     getVal(
       state.fbState,
@@ -103,10 +108,12 @@ export const mapStateToProps = (
 
   function onColumnStack(cardSourceId: string, columnTargetId: string) {
     if (cards[cardSourceId].type !== columnTargetId) {
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardSourceId}`).update({
-        ...cards[cardSourceId],
-        type: columnTargetId
-      });
+      getFirebase()
+        .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
+        .update({
+          ...cards[cardSourceId],
+          type: columnTargetId
+        });
     }
   }
 
@@ -131,10 +138,12 @@ export const mapStateToProps = (
       cards[cardSourceId].type === cards[cardTargetId].type &&
       cardSourceId !== cardTargetId
     ) {
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardTargetId}`).update({
-        ...cards[cardTargetId],
-        parent: cardSourceId
-      });
+      getFirebase()
+        .ref(`${ownProps.boardId}/cards/${cardTargetId}`)
+        .update({
+          ...cards[cardTargetId],
+          parent: cardSourceId
+        });
 
       const userVotes = cards[cardSourceId].userVotes;
       Object.keys(cards[cardTargetId].userVotes).forEach(userId => {
@@ -144,11 +153,13 @@ export const mapStateToProps = (
       const votes =
         (cards[cardSourceId].votes || 0) + (cards[cardTargetId].votes || 0);
 
-      getFirebase().ref(`${ownProps.boardId}/cards/${cardSourceId}`).update({
-        ...cards[cardSourceId],
-        userVotes,
-        votes
-      });
+      getFirebase()
+        .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
+        .update({
+          ...cards[cardSourceId],
+          userVotes,
+          votes
+        });
     }
   }
 
@@ -176,13 +187,16 @@ export const mapStateToProps = (
   const sortCardKeys = (cards: BoardCards, sortByVotes: boolean) => {
     const doSortKey = (bc: BoardCards, sortKeys: string[]) => {
       let keys = Object.keys(bc);
-      const temp = keys.reduce((acc, key: string) => {
-        const item = { key };
-        acc[key] = key;
-        sortKeys.forEach(sk => (item[sk] = bc[key][sk]));
-        acc.push(item);
-        return acc;
-      }, [] as any[]); // tslint:disable-line
+      const temp = keys.reduce(
+        (acc, key: string) => {
+          const item = { key };
+          acc[key] = key;
+          sortKeys.forEach(sk => (item[sk] = bc[key][sk]));
+          acc.push(item);
+          return acc;
+        },
+        [] as any[]
+      ); // tslint:disable-line
       const sortedKeys = sortBy(temp, sortKeys).map(obj => obj.key);
       sortedKeys.reverse();
       keys = sortedKeys;
@@ -253,7 +267,8 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
-    onFocus: onFocusCard
+    onFocus: onFocusCard,
+    isShowAuthor
   };
 };
 

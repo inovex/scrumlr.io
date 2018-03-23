@@ -4,6 +4,7 @@ import './SettingsModal.css';
 import Input from '../../Input';
 import Modal from '../Modal';
 import getRandomName from '../../../constants/Name';
+import Checkbox from '../../Checkbox';
 
 export interface SettingsModalProps {
   isAdmin: boolean;
@@ -15,6 +16,8 @@ export interface SettingsModalProps {
   onChangeBoardName: (name: string) => void;
   onChangeUsername: (name: string) => void;
   onChangeEmail: (name: string) => void;
+  onToggleShowAuthor: () => void;
+  isShowAuthor: boolean;
 }
 
 export class SettingsModal extends React.Component<SettingsModalProps, {}> {
@@ -28,18 +31,29 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
         <h2 className="modal__headline">Settings</h2>
 
         {this.props.isAdmin && (
-          <Input
-            id="modal__board-name-input"
-            label="Name"
-            description="The name of this session"
-            invertPlaceholder={false}
-            focusTheme="mint"
-            showUnderline={true}
-            placeholder={`Retrospective ${formattedDate}`}
-            onChange={(e: any) => this.props.onChangeBoardName(e.target.value)}
-            defaultValue={this.props.boardName}
-            className="settings-modal__input"
-          />
+          <>
+            <Input
+              id="modal__board-name-input"
+              label="Name"
+              description="The name of this session"
+              invertPlaceholder={false}
+              focusTheme="mint"
+              showUnderline={true}
+              placeholder={`Retrospective ${formattedDate}`}
+              onChange={(e: any) =>
+                this.props.onChangeBoardName(e.target.value)
+              }
+              defaultValue={this.props.boardName}
+              className="settings-modal__input"
+            />
+            <Checkbox
+              onChange={this.props.onToggleShowAuthor}
+              checked={Boolean(this.props.isShowAuthor)}
+              className="settings-modal__show-author-checkbox"
+            >
+              Show author of cards
+            </Checkbox>
+          </>
         )}
 
         <Input

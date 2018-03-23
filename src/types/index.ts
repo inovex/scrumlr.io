@@ -56,6 +56,7 @@ export interface BoardConfig {
   created: string;
   name?: string;
   mode: RetroMode;
+  showAuthor?: boolean;
 }
 
 export interface UserInformation {

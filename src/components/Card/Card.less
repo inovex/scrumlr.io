@@ -87,6 +87,7 @@
   background: none;
   cursor: pointer;
   padding: 0;
+  outline: none;
 }
 
 .card__admin-button:hover > .card__admin-button-icon > svg g {
@@ -210,4 +211,20 @@
   box-shadow: 0 @base-unit @base-unit*2 0 fade(@color-dark-gray, 15%);
 
   z-index: @card-z-index - @base-z-index-step;
+}
+
+.card__author {
+  position: absolute;
+  top: @default-margin;
+  left: 20px;
+
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: .8em;
+  color: @color-gray;
+
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

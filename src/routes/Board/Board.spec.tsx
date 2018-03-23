@@ -42,6 +42,8 @@ describe('<Board />', () => {
       boardPrintUrl: '/print',
       onChangeUsername: jest.fn(),
       onChangeEmail: jest.fn(),
+      onToggleShowAuthor: jest.fn(),
+      isShowAuthor: false,
       isAnonymous: false
     };
   });

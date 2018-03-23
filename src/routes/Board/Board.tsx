@@ -38,6 +38,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   boardSelector: string;
   boardPrintUrl: string;
   isBoardAdmin: boolean;
+  isShowAuthor: boolean;
   uid: string; // ID of the current user
   setupCompleted: boolean;
   focusedCard?: Card;
@@ -47,6 +48,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
   onChangeEmail: (email: string) => void;
+  onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
 
   // Added by mergeProps
@@ -326,6 +328,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
             onChangeUsername={this.props.onChangeUsername}
             onChangeEmail={this.props.onChangeEmail}
             onClose={this.handleCloseModal}
+            onToggleShowAuthor={this.props.onToggleShowAuthor}
+            isShowAuthor={this.props.isShowAuthor}
           />
         )}
 
