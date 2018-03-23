@@ -27,12 +27,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   constructor(props: UserListProps) {
     super(props);
 
-    const showAllUsers =
-      Boolean(props.userDisplayLimit) ||
-      (window.innerWidth > 768 &&
-        this.props.users &&
-        Object.keys(this.props.users).length <
-          5 + (window.innerWidth - 768) / 50);
+    const showAllUsers = this.showAllUsers();
     this.state = {
       showAllUsers,
       displayUserListDropdown: false,
@@ -41,14 +36,19 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   }
 
   updateDimensions = () => {
-    const showAllUsers =
-      Boolean(this.props.userDisplayLimit) ||
-      (window.innerWidth > 768 &&
-        this.props.users &&
-        Object.keys(this.props.users).length < 7);
+    const showAllUsers = this.showAllUsers();
     if (showAllUsers !== this.state.showAllUsers) {
       this.setState({ ...this.state, showAllUsers });
     }
+  };
+
+  showAllUsers = () => {
+    return (
+      Boolean(this.props.userDisplayLimit) ||
+      (window.innerWidth > 768 &&
+        this.props.users &&
+        Object.keys(this.props.users).length < (window.innerWidth - 768) / 50)
+    );
   };
 
   componentDidMount() {
