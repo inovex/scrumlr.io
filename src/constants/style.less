@@ -7,16 +7,13 @@
 @color-dark: #333333;
 @color-white: #FCFCFC;
 @color-green: #00E7C2;
-@color-blue: #147ECC;
 
 // theme colors
 @theme-color-background: @color-white;
 @theme-color-font: @color-dark;
 @theme-color-primary: @color-green;
 @theme-color-secondary: @color-white;
-@theme-color-third: @color-blue;
 @theme-color-disabled: @color-gray;
-@theme-color-border: @color-gray;
 
 // font options
 @theme-font-family: 'Heebo', sans-serif;
@@ -47,8 +44,8 @@
 @large-padding: @large-margin;
 
 // dimensions
-@theme-icon-width: @large-margin;
-@theme-icon-height: @large-margin;
+@theme-icon-width: @base-unit*8;
+@theme-icon-height: @base-unit*8;
 
 // mixins
 .animate(@property, @duration: 0.3s) {
