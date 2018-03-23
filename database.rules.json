@@ -28,6 +28,9 @@
         },
         "config": {
           ".write": "!data.child('creatorUid').exists() || data.child('creatorUid').val() === auth.uid",
+          "creatorUid": {
+            ".read": true
+          },
           "users": {
             "$uid": {
               ".write": "$uid === auth.uid"

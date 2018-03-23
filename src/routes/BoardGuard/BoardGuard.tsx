@@ -18,6 +18,8 @@ export interface BoardGuardState {
   authenticated: boolean;
   /** Value may change once board is deleted and reference is invalid. */
   invalidReference: boolean;
+  isBoardConfigurationLoading: boolean;
+  boardReference: any;
 }
 
 export class BoardGuard extends React.Component<
@@ -27,19 +29,50 @@ export class BoardGuard extends React.Component<
   state: BoardGuardState = {
     ready: false,
     authenticated: false,
-    invalidReference: false
+    invalidReference: false,
+    isBoardConfigurationLoading: true,
+    boardReference: undefined
   };
 
-  componentWillMount() {
-    // add callback for board deletion
-    const boardId = this.props.match.params.id;
-    getFirebase()
-      .ref(`/boards/${boardId}/config/creatorUid`)
-      .on('value', (snapshot: any) => {
+  checkBoardReference(boardId: string) {
+    const boardReference = getFirebase().ref(
+      `/boards/${boardId}/config/creatorUid`
+    );
+    this.setState({ boardReference });
+    boardReference.on(
+      'value',
+      (snapshot: any) => {
         if (!snapshot.exists()) {
-          this.setState({ ...this.state, invalidReference: true });
+          this.setState({
+            invalidReference: true,
+            isBoardConfigurationLoading: false
+          });
+        } else {
+          this.setState({
+            invalidReference: false,
+            isBoardConfigurationLoading: false
+          });
         }
-      });
+      },
+      () => {
+        this.setState({
+          invalidReference: true,
+          isBoardConfigurationLoading: false
+        });
+      }
+    );
+  }
+
+  componentWillMount() {
+    this.checkBoardReference(this.props.match.params.id);
+  }
+
+  componentWillReceiveProps(nextProps: BoardGuardProps) {
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      this.state.boardReference.off();
+      this.setState({ isBoardConfigurationLoading: true });
+      this.checkBoardReference(nextProps.match.params.id);
+    }
   }
 
   componentDidMount() {
@@ -67,7 +100,12 @@ export class BoardGuard extends React.Component<
   }
 
   render() {
-    const { ready, authenticated, invalidReference } = this.state;
+    const {
+      ready,
+      isBoardConfigurationLoading,
+      authenticated,
+      invalidReference
+    } = this.state;
     const url = window.location.href;
 
     if (invalidReference) {
@@ -81,7 +119,7 @@ export class BoardGuard extends React.Component<
       );
     }
 
-    if (!ready) {
+    if (!ready || isBoardConfigurationLoading) {
       return <LoadingScreen />;
     }
 
