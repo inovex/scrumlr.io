@@ -14,24 +14,25 @@
 }
 
 .phase-splash__animation-enter, .phase-splash__animation-appear {
-  transform: scale(.1);
-  opacity: .005;
+  // FIXME adding scale on enter breaks carousel calculation
+  //transform: scale(.1);
+  opacity: .005 !important;
 }
 
 .phase-splash__animation-appear.phase-splash__animation-appear-active,
 .phase-splash__animation-enter.phase-splash__animation-enter-active {
   transform: scale(1);
-  opacity: .95;
-  transition: opacity 300ms ease-in, transform 300ms ease-in;
+  opacity: .95 !important;
+  transition: opacity 200ms ease-in, transform 300ms ease-in;
 }
 
 .phase-splash__animation-leave {
   transform: scale(1);
-  opacity: .95;
+  opacity: .95 !important;
 }
 
 .phase-splash__animation-leave.phase-splash__animation-leave-active {
   transform: scale(4);
-  opacity: .005;
+  opacity: .005 !important;
   transition: opacity 300ms ease-in, transform 300ms ease-in;
 }
