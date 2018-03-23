@@ -341,9 +341,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
         <ReactCSSTransitionGroup
           transitionName="phase-splash__animation"
-          transitionAppear={
-            false /* TODO true breaks carousel width calculation */
-          }
+          transitionAppear={true}
           transitionAppearTimeout={600}
           transitionEnterTimeout={600}
           transitionLeaveTimeout={600}
