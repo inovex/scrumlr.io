@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Column /> should match the expected structure 1`] = `"<label><input type=\\"checkbox\\" class=\\"checkbox__input\\"/><span class=\\"checkbox__label-wrapper\\"><span class=\\"checkbox__control\\" aria-hidden=\\"true\\"></span><span class=\\"checkbox__label\\">Test</span></span></label>"`;
+exports[`<Column /> should match the expected structure 1`] = `"<label><input type=\\"checkbox\\" class=\\"checkbox__input\\"/><span class=\\"checkbox__label-wrapper\\"><span class=\\"checkbox__control\\" aria-hidden=\\"true\\"></span><span class=\\"checkbox__label\\">Some label</span></span></label>"`;

@@ -47,11 +47,12 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
               className="settings-modal__input"
             />
             <Checkbox
-              label="Show author of cards"
               onChange={this.props.onToggleShowAuthor}
               checked={Boolean(this.props.isShowAuthor)}
               className="settings-modal__show-author-checkbox"
-            />
+            >
+              Show author of cards
+            </Checkbox>
           </>
         )}
 

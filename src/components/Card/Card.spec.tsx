@@ -160,6 +160,27 @@ describe('<Card />', () => {
       });
     });
 
+    describe('show author', () => {
+      it('should display author name when it is enabled', () => {
+        shallowWrapper = shallow(<Card {...props} isShowAuthor={true} />);
+        expect(shallowWrapper.find('.card__author').text()).toEqual(
+          props.author.name
+        );
+      });
+
+      it('should not display author name when not enabled', () => {
+        shallowWrapper = shallow(<Card {...props} isShowAuthor={false} />);
+        expect(shallowWrapper.find('.card__author').length).toEqual(0);
+      });
+
+      it('should not show author name for card owners', () => {
+        shallowWrapper = shallow(
+          <Card {...props} isShowAuthor={true} owner={true} />
+        );
+        expect(shallowWrapper.find('.card__author').length).toEqual(0);
+      });
+    });
+
     describe('text overflow', async () => {
       it('should have an indicator for text overflow', () => {
         shallowWrapper = shallow(<Card {...props} />);
