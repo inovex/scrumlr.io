@@ -50,7 +50,11 @@ describe('<BoardGuard />', () => {
 
   it('should render a redirect if user has not been authenticated', () => {
     wrapper = shallow(<BoardGuard {...props} />);
-    wrapper.setState({ ready: true, authenticated: false });
+    wrapper.setState({
+      ready: true,
+      authenticated: false,
+      isBoardConfigurationLoading: false
+    });
     const redirect = wrapper.find(Redirect);
     expect(redirect).toHaveLength(1);
     expect(redirect.prop('to')).toMatchSnapshot();
@@ -58,7 +62,11 @@ describe('<BoardGuard />', () => {
 
   it('should render a board component if user is authenticated', () => {
     wrapper = shallow(<BoardGuard {...props} />);
-    wrapper.setState({ ready: true, authenticated: true });
+    wrapper.setState({
+      ready: true,
+      authenticated: true,
+      isBoardConfigurationLoading: false
+    });
     wrapper.update();
     expect(wrapper.find(LoadingScreen)).toHaveLength(0);
     expect(wrapper.find(Redirect)).toHaveLength(0);
