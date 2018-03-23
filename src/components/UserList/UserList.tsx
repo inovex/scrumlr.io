@@ -80,7 +80,14 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           data-for={'ALL' + user.id}
           {...isCurrentUser && { onClick: onToggleReadyState }}
         />
-        <ReactTooltip id={'ALL' + user.id} place="bottom" effect="solid" />
+        {!isCurrentUser && (
+          <ReactTooltip
+            id={'ALL' + user.id}
+            place="bottom"
+            effect="solid"
+            isCapture={true}
+          />
+        )}
         <img
           className="board__user-image"
           src={

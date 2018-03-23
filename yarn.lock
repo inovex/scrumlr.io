@@ -6056,7 +6056,7 @@ react-toastify@^3.3.4:
     prop-types "^15.6.0"
     react-transition-group "^2.2.1"
 
-react-tooltip@^3.3.1:
+react-tooltip@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-3.4.0.tgz#037f38f797c3e6b1b58d2534ccc8c2c76af4f52d"
   dependencies:
