@@ -17,7 +17,8 @@ describe('<UserMenu />', () => {
       onOpenModal: jest.fn(),
       onExport: jest.fn(),
       onChangeBoardName: jest.fn(),
-      admin: true
+      admin: true,
+      isLastPhase: false
     };
   });
 
@@ -42,16 +43,32 @@ describe('<UserMenu />', () => {
     expect(wrapper.state('isOpen')).toEqual(true);
   });
 
-  it('should pass correct method to export button', () => {
-    wrapper = shallow(<UserMenu {...props} />);
-    const ddMenu = wrapper.find(DropdownMenu);
+  describe('export', () => {
+    it('should not display export menu item before last phase', () => {
+      wrapper = shallow(<UserMenu {...props} />);
+      const ddMenu = wrapper.find(DropdownMenu);
 
-    expect(props.onExport).not.toHaveBeenCalled();
-    ddMenu
-      .find(MenuItem)
-      .find({ name: 'Export' })
-      .simulate('click');
-    expect(props.onExport).toHaveBeenCalled();
+      expect(ddMenu.find(MenuItem).find({ name: 'Export' }).length).toEqual(0);
+    });
+
+    it('should display export menu item on last phase', () => {
+      wrapper = shallow(<UserMenu {...props} />);
+      const ddMenu = wrapper.find(DropdownMenu);
+
+      expect(ddMenu.find(MenuItem).find({ name: 'Export' }).length).toEqual(0);
+    });
+
+    it('should pass correct method to export button', () => {
+      wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
+      const ddMenu = wrapper.find(DropdownMenu);
+
+      expect(props.onExport).not.toHaveBeenCalled();
+      ddMenu
+        .find(MenuItem)
+        .find({ name: 'Export' })
+        .simulate('click');
+      expect(props.onExport).toHaveBeenCalled();
+    });
   });
 
   it('should not display delete board button to non admins', () => {

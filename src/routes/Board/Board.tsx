@@ -27,7 +27,6 @@ import { getPhaseConfiguration } from '../../constants/Retrospective';
 import ReactCSSTransitionGroup = require('react-transition-group/CSSTransitionGroup');
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
-import DonateModal from '../../components/Modal/variant/DonateModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 
@@ -299,7 +298,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = this.state.showModal === 'settings';
     const showFeedback = this.state.showModal === 'feedback';
     const showShareDialog = this.state.showModal === 'share';
-    const showDonate = this.state.showModal === 'donate';
     const showIntro =
       !showSettings && !showFeedback && this.state.showPhaseIntro;
 
@@ -336,8 +334,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
         {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
         {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-
-        {showDonate && <DonateModal onClose={this.handleCloseModal} />}
 
         <ReactCSSTransitionGroup
           transitionName="phase-splash__animation"

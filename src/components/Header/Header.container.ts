@@ -4,6 +4,7 @@ import { OwnHeaderProps, StateHeaderProps } from './Header';
 import isLoaded = helpers.isLoaded;
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
+import { getPhasesCount } from '../../constants/Retrospective';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -150,11 +151,15 @@ export const mapStateToProps = (
     onSwitchPhaseIndex(1);
   };
 
+  const isLastPhase =
+    boardConfig.guidedPhase === getPhasesCount(boardConfig.mode) - 1;
+
   return {
     admin: isBoardAdmin,
     boardName: boardConfig.name,
     mode: boardConfig.mode,
     phase: boardConfig.guidedPhase,
+    isLastPhase,
     sorted: boardConfig.sorted,
     onPrevPhase,
     onNextPhase,

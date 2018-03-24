@@ -95,6 +95,6 @@ export interface DragAndDropProps {
   canDrop?: any;
 }
 
-export type ModalType = 'settings' | 'feedback' | 'donate' | 'share';
+export type ModalType = 'settings' | 'feedback' | 'share';
 
 export type Optional<T> = T | undefined;

@@ -16,7 +16,6 @@ export const iconMap: { [key: string]: string } = {
   edit: 'icon-20-create',
   share: 'icon-20-share',
   pencil: 'icon-20-edit',
-  donate: 'icon-20-donate',
   focus: 'icon-20-fix',
   feedback: 'icon-20-feedback',
   trash: 'icon-20-trash',

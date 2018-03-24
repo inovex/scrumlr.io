@@ -19,7 +19,6 @@ export type IconNames =
   | 'download'
   | 'edit'
   | 'share'
-  | 'donate'
   | 'pencil'
   | 'focus'
   | 'close'

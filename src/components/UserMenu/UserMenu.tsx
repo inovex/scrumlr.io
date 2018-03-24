@@ -16,6 +16,7 @@ export interface UserMenuProps {
   onChangeBoardName: (boardName: string) => void;
   boardName?: string;
   admin: boolean;
+  isLastPhase: boolean;
 }
 
 export interface UserMenuState {
@@ -42,7 +43,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
     this.props.onChangeBoardName(e.target.value);
   };
 
-  handleDeleteBoard = (e: any) => {
+  handleDeleteBoard = () => {
     const warning =
       'Are you sure you want to delete the board? This action cannot be undone.';
     if (window.confirm(warning)) {
@@ -52,7 +53,14 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
   render() {
     const { isOpen } = this.state;
-    const { onOpenModal, onExport, onSignOut, boardName, admin } = this.props;
+    const {
+      onOpenModal,
+      onExport,
+      onSignOut,
+      boardName,
+      admin,
+      isLastPhase
+    } = this.props;
 
     const toggleIcon = (
       <button
@@ -132,15 +140,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             }}
           />
         </li>
-        <li key="user-menu__donate" className="user_menu__li--hidden-mobile">
-          <MenuItem
-            name="Donate"
-            icon="donate"
-            onClick={() => {
-              onOpenModal('donate');
-            }}
-          />
-        </li>
         <li key="user-menu__share" className="user_menu__li--hidden-mobile">
           <MenuItem
             name="Share"
@@ -150,9 +149,12 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             }}
           />
         </li>
-        <li key="user-menu__export" className="user_menu__li--hidden-mobile">
-          <MenuItem name="Export" icon="download" onClick={onExport} />
-        </li>
+
+        {isLastPhase && (
+          <li key="user-menu__export" className="user_menu__li--hidden-mobile">
+            <MenuItem name="Export" icon="download" onClick={onExport} />
+          </li>
+        )}
 
         {admin && (
           <li key="user-menu__delete" className="user_menu__li--hidden-mobile">

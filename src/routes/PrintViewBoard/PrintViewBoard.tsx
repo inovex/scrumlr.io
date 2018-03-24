@@ -98,9 +98,16 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
   }
 
   renderCardItem(card: Card, TagName: string) {
+    const { boardConfig } = this.props;
+
     return (
       <TagName className="card-list__item" key={card.id}>
-        <h3>{card.text}</h3>
+        <blockquote className="print-view-board__card-blockquote">
+          {boardConfig.showAuthor && (
+            <cite className="print-view-board__cite">{card.author}</cite>
+          )}
+          {card.text}
+        </blockquote>
         <ul className="card-list-meta">
           <li
             className="card-list-meta__item meta-votes"
