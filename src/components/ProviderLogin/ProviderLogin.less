@@ -3,6 +3,7 @@
 .login-providers {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 
   margin-top: @default-margin;
 }
@@ -74,6 +75,14 @@
 .login-providers__button:focus .selection-circle-provider__border > svg,
 .login-providers__button:hover .selection-circle-provider__border > svg {
   animation:spin .75s linear infinite;
+}
+
+.login-providers__login-with {
+  margin-right: @default-margin;
+  color: @color-alternative-gray;
+  text-transform: uppercase;
+  font-weight: bold;
+  cursor: default;
 }
 
 @keyframes spin {

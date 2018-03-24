@@ -18,14 +18,15 @@ interface SelectionCircleProps {
   imageTitle: string;
 }
 
-const SelectionCircle: React.SFC<SelectionCircleProps> = props =>
+const SelectionCircle: React.SFC<SelectionCircleProps> = props => (
   <div className="selection-circle-provider">
     <Icon
       name="circle-selection"
       className="selection-circle-provider__border"
     />
     <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} />
-  </div>;
+  </div>
+);
 
 class ProviderLogin extends React.Component<ProviderLoginProps, {}> {
   render() {
@@ -33,6 +34,7 @@ class ProviderLogin extends React.Component<ProviderLoginProps, {}> {
 
     return (
       <div className="login-providers">
+        <span className="login-providers__login-with">Login with</span>
         <button
           onClick={onProviderLogin('google')}
           type="button"
