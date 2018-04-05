@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DownvoteDot /> should match expected structure 1`] = `
+"<Dot animate={true} size=\\"small\\" onClick={[Function: mockConstructor]} className=\\"dot__downvote\\">
+  <mockConstructor name=\\"minus\\" aria-hidden=\\"true\\" className=\\"dot_downvote-icon\\" width={28} height={28} />
+</Dot>"
+`;

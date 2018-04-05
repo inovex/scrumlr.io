@@ -257,7 +257,7 @@ export const mapStateToProps = (
     owner: user.uid === ownProps.card.authorUid,
     stacked: Boolean(ownProps.card.parent),
     ownVotes: ownProps.card.userVotes[user.uid],
-    votes: ownProps.showVotes ? ownProps.card.votes : null,
+    votes: ownProps.card.votes,
 
     getCardsInTheStack: getCardsInTheStack(ownProps.card.id || ''),
     onRemove: onRemoveCard,
