@@ -203,6 +203,7 @@ export class Card extends Component<CardProps, CardState> {
       isFocusable,
       isFocused,
       votable,
+      showVotes,
       ownVotes,
       card,
       connectDropTarget,
@@ -298,7 +299,7 @@ export class Card extends Component<CardProps, CardState> {
               ownVotes={isActionCard ? 0 : ownVotes}
               onDownvote={() => onDownvote(id)}
               onUpvote={() => onUpvote(id)}
-              votes={isActionCard ? null : votes}
+              votes={isActionCard ? null : showVotes || votable ? votes : null}
             />
           </div>
 
