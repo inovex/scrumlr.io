@@ -200,6 +200,7 @@ export class Card extends Component<CardProps, CardState> {
       onFocus,
       owner,
       votes,
+      isAdmin,
       isFocusable,
       isFocused,
       votable,
@@ -307,7 +308,11 @@ export class Card extends Component<CardProps, CardState> {
             <div className="card__in-stack" aria-hidden="true" />
           )}
           {this.state.expanded && (
-            <Details {...this.props} onClose={this.onDetailsCloseListener} />
+            <Details
+              {...this.props}
+              onClose={this.onDetailsCloseListener}
+              editable={owner || isAdmin}
+            />
           )}
         </li>
       )

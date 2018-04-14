@@ -8,6 +8,7 @@ import './Details.css';
 import Icon from '../../Icon';
 
 export interface DetailsProps extends CardProps {
+  editable: boolean;
   onClose: () => void;
 }
 
@@ -46,7 +47,7 @@ export class Details extends React.Component<DetailsProps, {}> {
           <div className="card_details__card">
             <blockquote
               className="card-details__card-text"
-              contentEditable={true}
+              contentEditable={this.props.editable}
               onBlur={this.handleBlur}
             >
               {children}
