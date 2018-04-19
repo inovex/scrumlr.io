@@ -85,7 +85,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             id={'ALL' + user.id}
             place="bottom"
             effect="solid"
-            isCapture={true}
+            isCapture={false}
           />
         )}
         <img
