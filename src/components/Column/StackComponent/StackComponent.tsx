@@ -17,6 +17,7 @@ export interface StackComponentProps {
   isVotingAllowed: boolean;
   isVoteSummaryShown: boolean;
   className?: string;
+  isActive: boolean;
 }
 
 class StackComponent extends React.Component<StackComponentProps, {}> {
@@ -27,7 +28,8 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
       column,
       cards,
       isVotingAllowed,
-      isVoteSummaryShown
+      isVoteSummaryShown,
+      isActive
     } = this.props;
 
     const theme = getTheme(column.type);
@@ -48,7 +50,7 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
           className="stack-component__stack"
         />
         <Action theme={theme}>
-          <AddCard boardId={boardUrl} column={column} />
+          <AddCard boardId={boardUrl} column={column} disabled={!isActive} />
         </Action>
       </Component>
     );

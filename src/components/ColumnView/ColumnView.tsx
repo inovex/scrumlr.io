@@ -109,6 +109,7 @@ export class ColumnView extends React.Component<
           onGoToPrevColumn={this.gotoPreviousColumn}
           onGoToNextColumn={this.gotoNextColumn}
           className="board__column"
+          isCompactView={this.state.showCarousel}
         />
       ));
 

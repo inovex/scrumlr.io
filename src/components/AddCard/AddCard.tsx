@@ -15,6 +15,7 @@ export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
   column: Column;
+  disabled?: boolean;
 }
 
 export interface OwnAddCardPropsWithFirebase extends OwnAddCardProps {
@@ -69,7 +70,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
   };
 
   render() {
-    const { column } = this.props;
+    const { column, disabled } = this.props;
     const { text } = this.state;
 
     const theme = getTheme(column.type);
@@ -83,13 +84,14 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
           value={text}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
+          disabled={disabled}
         />
 
         <button
           type="button"
           className="add-card__button"
           onClick={this.handleAdd}
-          disabled={text.length === 0}
+          disabled={disabled || text.length === 0}
         >
           <Icon name="plus" width={null} height={null} aria-hidden="true" />
         </button>

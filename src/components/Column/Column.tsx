@@ -28,6 +28,7 @@ export interface OwnColumnProps {
   hasPreviousColumn?: boolean;
   onGoToNextColumn?: () => void;
   onGoToPrevColumn?: () => void;
+  isCompactView: boolean;
 
   className?: string;
 }
@@ -54,7 +55,8 @@ export class Column extends React.Component<ColumnProps, {}> {
       phase,
       theme,
       boardUrl,
-      cards
+      cards,
+      isCompactView
     } = this.props;
 
     const cardsCount = cards.filter(c => !c.parent).length;
@@ -77,6 +79,7 @@ export class Column extends React.Component<ColumnProps, {}> {
               )}
               type="button"
               onClick={this.props.onGoToPrevColumn}
+              disabled={!isActive}
             >
               <Icon name="chevron-left" width={48} height={48} />
             </button>
@@ -91,7 +94,7 @@ export class Column extends React.Component<ColumnProps, {}> {
               )}
               type="button"
               onClick={this.props.onGoToNextColumn}
-              disabled={!this.props.hasNextColumn}
+              disabled={!isActive}
             >
               <Icon name="chevron-right" width={48} height={48} />
             </button>
@@ -124,6 +127,7 @@ export class Column extends React.Component<ColumnProps, {}> {
               isVotingAllowed={column.voting.enabled}
               isVoteSummaryShown={column.voting.displayed}
               column={column}
+              isActive={isActive || !isCompactView}
               className={classNames('column__stack-component', {
                 ['column__stack-component--hidden']: Boolean(focused)
               })}
