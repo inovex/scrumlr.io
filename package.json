@@ -22,8 +22,8 @@
     "react": "^16.4.1",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dd-menu": "^2.0.1",
-    "react-dnd": "^2.4.0",
-    "react-dnd-html5-backend": "^2.4.1",
+    "react-dnd": "^5.0.0",
+    "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.4.1",
     "react-dotdotdot": "^1.2.3",
     "react-redux": "^5.0.4",
@@ -75,7 +75,7 @@
     "selenium-webdriver": "3.x",
     "svg-inline-loader": "^0.8.0",
     "ts-keycode-enum": "^1.0.4",
-    "ts-node": "^5.0.1",
+    "ts-node": "^7.0.0",
     "typescript": "^2.9.2"
   },
   "scripts": {
