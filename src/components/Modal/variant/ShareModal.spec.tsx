@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
+const { JSDOM } = require('jsdom');
 
 import { ShareModal, ShareModalProps, ShareModalState } from './ShareModal';
 
@@ -16,10 +17,10 @@ describe('<ShareModal />', () => {
     closeFunction = jest.fn();
     shallowWrapper = shallow(<ShareModal onClose={closeFunction} />);
 
-    Object.defineProperty(window.location, 'href', {
-      writable: true,
-      value: `${baseUrl}/board/${boardId}`
-    });
+    // FIXME workaround https://github.com/facebook/jest/issues/890
+    delete global.window;
+    const window = new JSDOM(``, { url: `${baseUrl}/board/${boardId}` }).window;
+    global.window = window;
   });
 
   it('should match the expected structure', () => {

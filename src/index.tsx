@@ -17,7 +17,7 @@ const dnd = require('react-dnd');
 const store = configureStore({});
 
 if (Boolean(sentry.dsn)) {
-  Raven.config(sentry.dsn).install();
+  Raven.config(sentry.dsn as string).install();
 }
 
 window.addEventListener('unhandledrejection', (err: PromiseRejectionEvent) => {
@@ -25,10 +25,9 @@ window.addEventListener('unhandledrejection', (err: PromiseRejectionEvent) => {
 });
 
 const renderLoadingScreen = () => {
-  ReactDOM.render(
-    <LoadingScreen />,
-    document.getElementById('root') as HTMLElement
-  );
+  ReactDOM.render(<LoadingScreen />, document.getElementById(
+    'root'
+  ) as HTMLElement);
 };
 
 const renderApp = () => {
