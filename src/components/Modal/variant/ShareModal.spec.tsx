@@ -18,9 +18,9 @@ describe('<ShareModal />', () => {
     shallowWrapper = shallow(<ShareModal onClose={closeFunction} />);
 
     // FIXME workaround https://github.com/facebook/jest/issues/890
-    delete global.window;
+    delete (global as any).window;
     const window = new JSDOM(``, { url: `${baseUrl}/board/${boardId}` }).window;
-    global.window = window;
+    (global as any).window = window;
   });
 
   it('should match the expected structure', () => {
