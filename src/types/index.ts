@@ -6,9 +6,9 @@ export type FirebaseProp = firebase.auth.Auth &
   firebase.app.App &
   firebase.database.Database &
   firebase.database.Reference & {
-    update: (ref: string, value: any) => firebase.Promise<any>;
-    set: (ref: string, value: any) => firebase.Promise<any>;
-    remove: (ref: string) => firebase.Promise<any>;
+    update: (ref: string, value: any) => Promise<any>;
+    set: (ref: string, value: any) => Promise<any>;
+    remove: (ref: string) => Promise<any>;
   };
 
 export interface StoreState {

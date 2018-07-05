@@ -364,7 +364,11 @@ function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
   return [`/boards/${props.match.params.id}`, `/presence`];
 }
 
-export default compose(
+export default compose<any, any, any>(
   firebaseConnect(firebaseConnector),
-  connect(mapStateToProps, mapDispatchToProps, mergeProps)
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    mergeProps
+  )
 )(Board) as React.ComponentClass<any>;

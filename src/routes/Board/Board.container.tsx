@@ -1,4 +1,4 @@
-import { Dispatch } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 import { isLoaded, getVal } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
@@ -82,7 +82,7 @@ export const mapStateToProps = (
         `${boardSelector}/config/focusedCardId`,
         focusedCardId !== cardId ? cardId : null
       )
-      .catch(err => {
+      .catch((err: any) => {
         Raven.captureMessage('Could not focus card', {
           extra: {
             reason: err.message,
@@ -205,7 +205,7 @@ export const mapStateToProps = (
   };
 };
 
-export function mapDispatchToProps(dispatch: Dispatch<any>) {
+export function mapDispatchToProps(dispatch: Dispatch<AnyAction>) {
   return {
     dispatch
   };

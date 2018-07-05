@@ -6,10 +6,10 @@ export const authController = (firebase: FirebaseProp) => ({
     return firebase
       .auth()
       .signInAnonymously()
-      .then((auth: firebase.UserInfo) => {
+      .then((auth: firebase.auth.UserCredential) => {
         return (firebase.auth().currentUser as firebase.User).updateProfile({
           displayName: email,
-          photoURL: getGravatar(auth.uid, email)
+          photoURL: getGravatar((auth.user as firebase.User).uid, email)
         });
       });
   },

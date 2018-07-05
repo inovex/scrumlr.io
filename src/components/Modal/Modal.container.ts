@@ -1,9 +1,9 @@
-import { Dispatch } from 'redux';
+import { AnyAction, Dispatch } from 'redux';
 import { MODAL_STATUS } from '../../actions';
 import { DispatchModalProps } from './Modal';
 
 export function mapDispatchToProps(
-  dispatch: Dispatch<any>
+  dispatch: Dispatch<AnyAction>
 ): DispatchModalProps {
   return {
     onStatus: (active: boolean) => {

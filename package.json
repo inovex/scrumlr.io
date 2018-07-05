@@ -15,7 +15,7 @@
   "dependencies": {
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
-    "firebase": "^3.9.0",
+    "firebase": "^5.2.0",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.1",
     "raven-js": "^3.17.0",
@@ -34,7 +34,7 @@
     "react-toastify": "^3.3.4",
     "react-tooltip": "^3.4.0",
     "react-transition-group": "1.x",
-    "redux": "^3.7.2",
+    "redux": "^4.0.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
     "swipe-js-iso": "^2.0.4"
@@ -51,7 +51,7 @@
     "@types/react-dnd": "^2.0.32",
     "@types/react-dnd-html5-backend": "^2.1.7",
     "@types/react-dom": "^16.0.6",
-    "@types/react-redux": "^4.4.47",
+    "@types/react-redux": "^6.0.3",
     "@types/react-router": "^4.0.28",
     "@types/react-router-dom": "^4.2.7",
     "@types/react-swipe": "^5.0.1",
