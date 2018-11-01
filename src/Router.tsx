@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Test } from './Test';
+
 // TODO: Types are not working with most recent version of Typescript.
 // TODO: Use ES6 import if typings have been adjusted.
 const { HashRouter, Route, Redirect, Switch } = require('react-router-dom');
@@ -28,7 +30,8 @@ const Router = (props: RouterProps) => (
     <div style={{ flex: 1 }}>
       <HashRouter>
         <Switch>
-          <Redirect exact from="/" to="/new" />
+          <Redirect exact from="/" to="/test" />
+          <Route path="/test" component={Test as any} />
           <Route path="/new" component={NewBoard as any} />
           <Route path="/board/:id" component={BoardGuard as any} />
           <Route path="/join/:id" component={LoginBoard as any} />
