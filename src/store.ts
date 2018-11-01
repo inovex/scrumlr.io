@@ -3,16 +3,17 @@ import { reactReduxFirebase } from 'react-redux-firebase';
 
 import rootReducer from './reducers';
 import { firebase as fbConfig } from './config';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+require('firebase/auth');
+require('firebase/database');
 
 export default function configureStore(initialState: {}, history?: {}) {
-  firebase.initializeApp(fbConfig);
+  const app = firebase.initializeApp(fbConfig);
 
   const composeEnhancers =
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const createStoreWithMiddleware = composeEnhancers(
-    reactReduxFirebase(firebase, {
-      userProfile: 'users',
+    reactReduxFirebase(app, {
       enableLogging: false
     })
   )(createStore);

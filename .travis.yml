@@ -11,7 +11,7 @@ install:
 script:
   - yarn lint
   - yarn css:build
-  - yarn test -- --coverage
+  - yarn test --coverage
   - yarn build
 
 deploy:

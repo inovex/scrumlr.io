@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { getFirebase } from 'react-redux-firebase';
-import { User } from 'firebase';
+import { User } from 'firebase/app';
 import { RouteComponentProps } from 'react-router';
 // TODO: Types are not working with most recent version of Typescript.
 // TODO: Use ES6 import if typings have been adjusted.
