@@ -41,7 +41,8 @@ mod.getFirebase = jest.fn().mockReturnValue({
 function getVal(state: any, path: string, defaultValue: any) {
   const selector = (path.substring(0, 1) === '/'
     ? path.substring(1)
-    : path).replace('/', '.');
+    : path
+  ).replace('/', '.');
   return get(_state, selector, defaultValue);
 }
 

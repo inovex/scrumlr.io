@@ -66,6 +66,7 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "husky": "^1.1.2",
+    "jsdom": "^13.0.0",
     "less": "^3.5.1",
     "lessig": "^0.3.0",
     "lint-staged": "^8.0.4",
