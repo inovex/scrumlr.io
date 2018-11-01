@@ -36,7 +36,7 @@ export class FeedbackModal extends React.Component<
           : 'Someone wrote:\n> ') + this.state.messageBody;
 
       if (Boolean(slack.feedbackHook)) {
-        fetch(slack.feedbackHook, {
+        fetch(slack.feedbackHook as string, {
           method: 'POST',
           mode: 'no-cors',
           headers: {
