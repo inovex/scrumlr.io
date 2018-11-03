@@ -13,12 +13,12 @@ function initialBoardConfig(
   mode: RetroMode,
   secure: boolean = false
 ): Board {
-  let publicKey: string | undefined = undefined;
-  let privateKey: string | undefined = undefined;
+  let publicKey: string | null = null;
+  let privateKey: string | null = null;
   if (secure) {
     const keypair = generateKeypair();
     publicKey = keypair.publicKey;
-    privateKey = keypair.privateKey;
+    privateKey = keypair.privateKey || null;
   }
 
   return {
@@ -47,10 +47,10 @@ function initialBoardConfig(
         name: 'test',
         mode,
         phase: 'write',
-        focusedCardId: undefined,
+        focusedCardId: null,
         showAuthor: true,
-        voteLimit: undefined,
-        timer: undefined
+        voteLimit: null,
+        timer: null
       },
       members: {
         [user.uid]: {

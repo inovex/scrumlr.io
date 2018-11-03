@@ -84,7 +84,7 @@ export interface Board {
   public?: {
     config: {
       secure: boolean;
-      key?: string;
+      key?: string | null;
     };
     applicants?: {
       [key: string]: {
@@ -100,19 +100,19 @@ export interface Board {
 
   private?: {
     config: {
-      key?: string;
+      key?: string | null;
       adminUid: string;
       creationDate: string;
       name: string;
       mode: string;
       phase: string;
-      focusedCardId?: string;
+      focusedCardId?: string | null;
       showAuthor: boolean;
-      voteLimit?: number;
+      voteLimit?: number | null;
       timer?: {
         start: string;
         duration: number;
-      };
+      } | null;
     };
     cards?: {
       [key: string]: any;

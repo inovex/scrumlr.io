@@ -97,7 +97,7 @@ export class BoardGuard extends React.Component<
       firebase.database.Database;
 
     const boardConfigReference = firebase.ref(
-      `/boards/${boardId}/public/secure`
+      `/boards/${boardId}/public/config`
     );
 
     this.setState({ boardConfigReference });
@@ -271,6 +271,8 @@ export class BoardGuard extends React.Component<
       isApplicantAuthorized,
       isAuthenticated
     } = this.state;
+    console.log('GUARD', this.state);
+
     const url = window.location.href;
 
     if (
