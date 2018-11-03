@@ -18,6 +18,9 @@ function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
       created: new Date().toISOString(),
       showAuthor: false,
       mode
+    },
+    public: {
+      secure: false
     }
   };
 }

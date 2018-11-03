@@ -2,38 +2,51 @@
   "rules": {
     ".read": false,
     ".write": false,
-    "presence": {
-      ".read": true,
-      "$uid": {
-        ".write": "$uid === auth.uid"
-      }
-    },
     "boards": {
-      ".read": "root.child('presence').hasChild(auth.uid)",
       "$boardId": {
-        ".read": "data.child('config/users').hasChild(auth.uid)",
-        ".write": "!root.child('boards').hasChild($boardId) || data.child('config/creatorUid').val() === auth.uid",
-        "cards": {
-          "$cardId": {
-            ".write": "!root.child('boards/'+$boardId+'/cards').hasChild($cardId) || root.child('boards/'+$boardId+'/config/creatorUid').val() === auth.uid || data.child('authorUid').val() === auth.uid",
-            "userVotes": {
-              "$uid": {
-                ".write": "$uid === auth.uid"
-              }
-            },
-            "votes": {
-              ".write": "null !== auth.uid"
+        ".read": "!root.child('boards').hasChild($boardId) || data.child('private/config/adminUid').val() === auth.uid",
+        ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/adminUid').val() === auth.uid",
+
+        "public": {
+          "secure": {
+            ".read": true
+          },
+          "applicants": {
+            "$uid": {
+              ".read": "$uid === auth.uid",
+              ".write": "$uid === auth.uid"
+            }
+          },
+          "accessAuthorized": {
+            "$uid": {
+              ".read": "$uid === auth.uid"
             }
           }
         },
-        "config": {
-          ".write": "!data.child('creatorUid').exists() || data.child('creatorUid').val() === auth.uid",
-          "creatorUid": {
-            ".read": true
+
+        "private": {
+          ".read": "data.child('members').hasChild(auth.uid)",
+          "cards": {
+            "$cardId": {
+              ".write": "!root.child('boards/'+$boardId+'/private/cards').hasChild($cardId)",
+              "userVotes": {
+                "$uid": {
+                  ".write": "$uid === auth.uid"
+                }
+              },
+              "votes": {
+                ".write": "null !== auth.uid"
+              }
+            }
           },
-          "users": {
+          "members": {
             "$uid": {
-              ".write": "$uid === auth.uid"
+              ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
+            }
+          },
+          "online": {
+            "$uid": {
+              ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
             }
           }
         }
