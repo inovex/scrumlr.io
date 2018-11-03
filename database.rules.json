@@ -8,7 +8,7 @@
         ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/adminUid').val() === auth.uid",
 
         "public": {
-          "secure": {
+          "config": {
             ".read": true
           },
           "applicants": {

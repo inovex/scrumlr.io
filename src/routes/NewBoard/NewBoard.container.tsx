@@ -5,14 +5,28 @@ import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
 import { RetroMode } from '../../constants/mode';
+import * as firebase from 'firebase/app';
+import { generateKeypair } from '../../util/encrypt';
 
-function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
+function initialBoardConfig(
+  user: firebase.User,
+  mode: RetroMode,
+  secure: boolean = false
+): Board {
+  let publicKey: string | undefined = undefined;
+  let privateKey: string | undefined = undefined;
+  if (secure) {
+    const keypair = generateKeypair();
+    publicKey = keypair.publicKey;
+    privateKey = keypair.privateKey;
+  }
+
   return {
     cards: {},
     config: {
       sorted: false,
       users: {},
-      creatorUid,
+      creatorUid: user.uid,
       guided: true,
       guidedPhase: 0,
       created: new Date().toISOString(),
@@ -20,7 +34,31 @@ function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
       mode
     },
     public: {
-      secure: false
+      config: {
+        secure,
+        key: publicKey
+      }
+    },
+    private: {
+      config: {
+        key: privateKey,
+        adminUid: user.uid,
+        creationDate: new Date().toISOString(),
+        name: 'test',
+        mode,
+        phase: 'write',
+        focusedCardId: undefined,
+        showAuthor: true,
+        voteLimit: undefined,
+        timer: undefined
+      },
+      members: {
+        [user.uid]: {
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          ready: false
+        }
+      }
     }
   };
 }
@@ -44,12 +82,8 @@ export function mapStateToProps(
   }
 
   function onCreateNewBoard(mode: RetroMode) {
-    let creatorUid: string | null = null;
     const auth = getFirebase().auth();
-    if (auth.currentUser) {
-      creatorUid = auth.currentUser.uid;
-    }
-    const board: Board = initialBoardConfig(creatorUid, mode);
+    const board: Board = initialBoardConfig(auth.currentUser!!, mode);
     getFirebase()
       .ref('/boards')
       .push(board)

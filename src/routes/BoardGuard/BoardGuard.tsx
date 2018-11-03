@@ -10,41 +10,32 @@ import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
+import { Chiffre } from '../../util/encrypt';
 
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
 
 export interface BoardGuardState {
-  boardSecuredReference: firebase.database.Reference | undefined;
-  memberReference: firebase.database.Reference | undefined;
-  authorizationReference: firebase.database.Reference | undefined;
-  authStateHandle: firebase.Unsubscribe | undefined;
+  boardConfigReference?: firebase.database.Reference;
+  memberReference?: firebase.database.Reference;
+  authorizationReference?: firebase.database.Reference;
+  authStateHandle?: firebase.Unsubscribe;
 
-  isInvalidBoard: boolean | undefined;
-  isSecuredBoard: boolean | undefined;
-  isApplicantAuthorized: boolean | undefined;
-  isMember: boolean | undefined;
-  isAddedAsApplicant: boolean | undefined;
-  isAddedAsMember: boolean | undefined;
-  isAuthenticated: boolean | undefined;
+  isInvalidBoard?: boolean;
+  isSecuredBoard?: boolean;
+  isApplicantAuthorized?: boolean;
+  isMember?: boolean;
+  isAddedAsApplicant?: boolean;
+  isAddedAsMember?: boolean;
+  isAuthenticated?: boolean;
+
+  publicKey?: string;
 }
 
 export class BoardGuard extends React.Component<
   BoardGuardProps,
   BoardGuardState
 > {
-  state: BoardGuardState = {
-    boardSecuredReference: undefined,
-    memberReference: undefined,
-    authorizationReference: undefined,
-    authStateHandle: undefined,
-    isInvalidBoard: undefined,
-    isSecuredBoard: undefined,
-    isApplicantAuthorized: undefined,
-    isMember: undefined,
-    isAddedAsApplicant: undefined,
-    isAddedAsMember: undefined,
-    isAuthenticated: undefined
-  };
+  state: BoardGuardState = {};
 
   isReady() {
     if (this.state.isMember) {
@@ -105,19 +96,20 @@ export class BoardGuard extends React.Component<
     const firebase = getFirebase() as firebase.app.App &
       firebase.database.Database;
 
-    const boardSecuredReference = firebase.ref(
+    const boardConfigReference = firebase.ref(
       `/boards/${boardId}/public/secure`
     );
 
-    this.setState({ boardSecuredReference });
+    this.setState({ boardConfigReference });
 
-    boardSecuredReference.on(
+    boardConfigReference.on(
       'value',
       (securedBoard: DataSnapshot) => {
         if (securedBoard.exists()) {
           this.setState({
             isInvalidBoard: false,
-            isSecuredBoard: securedBoard.val()
+            isSecuredBoard: securedBoard.val().secure,
+            publicKey: securedBoard.val().key
           });
         } else {
           this.setState({ isInvalidBoard: true });
@@ -131,8 +123,8 @@ export class BoardGuard extends React.Component<
 
   componentWillReceiveProps(nextProps: BoardGuardProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      if (this.state.boardSecuredReference) {
-        this.state.boardSecuredReference.off();
+      if (this.state.boardConfigReference) {
+        this.state.boardConfigReference.off();
       }
       if (this.state.authorizationReference) {
         this.state.authorizationReference.off();
@@ -143,7 +135,7 @@ export class BoardGuard extends React.Component<
 
       this.setState(
         {
-          boardSecuredReference: undefined,
+          boardConfigReference: undefined,
           memberReference: undefined,
           authorizationReference: undefined,
           authStateHandle: undefined,
@@ -166,7 +158,6 @@ export class BoardGuard extends React.Component<
       firebase.database.Database;
 
     const user = firebase.auth().currentUser as User;
-
     firebase.ref(`/boards/${boardId}/private/members/${user.uid}`).set({
       displayName: user.displayName,
       photoURL: user.photoURL
@@ -187,9 +178,20 @@ export class BoardGuard extends React.Component<
     const firebase = getFirebase() as firebase.app.App &
       firebase.database.Database;
     const user = firebase.auth().currentUser as User;
+
+    let displayName = user.displayName || ''; // FIXME
+    let photoURL = user.photoURL;
+    if (this.state.publicKey) {
+      const chiffre = new Chiffre({ publicKey: this.state.publicKey });
+      displayName = chiffre.encrypt(displayName);
+      if (photoURL) {
+        photoURL = chiffre.encrypt(photoURL);
+      }
+    }
+
     firebase.ref(`/boards/${boardId}/public/applicants/${user.uid}`).set({
-      displayName: user.displayName,
-      photoURL: user.photoURL
+      displayName,
+      photoURL
     });
   }
 
@@ -249,8 +251,8 @@ export class BoardGuard extends React.Component<
   }
 
   componentWillUnmount() {
-    if (this.state.boardSecuredReference) {
-      this.state.boardSecuredReference.off();
+    if (this.state.boardConfigReference) {
+      this.state.boardConfigReference.off();
     }
     if (this.state.authorizationReference) {
       this.state.authorizationReference.off();

@@ -82,7 +82,10 @@ export interface Board {
   cards?: BoardCards;
 
   public?: {
-    secure: boolean;
+    config: {
+      secure: boolean;
+      key?: string;
+    };
     applicants?: {
       [key: string]: {
         uid: string;
@@ -97,15 +100,16 @@ export interface Board {
 
   private?: {
     config: {
+      key?: string;
       adminUid: string;
       creationDate: string;
       name: string;
       mode: string;
       phase: string;
-      focusedCardId: string;
+      focusedCardId?: string;
       showAuthor: boolean;
-      voteLimit: number;
-      timer: {
+      voteLimit?: number;
+      timer?: {
         start: string;
         duration: number;
       };
@@ -115,13 +119,12 @@ export interface Board {
     };
     members: {
       [key: string]: {
-        uid: string;
-        displayName: string;
-        photoURL: string;
+        displayName: string | null;
+        photoURL: string | null;
         ready: boolean;
       };
     };
-    online: {
+    online?: {
       [key: string]: boolean;
     };
   };
