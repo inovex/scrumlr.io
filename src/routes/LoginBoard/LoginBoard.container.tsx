@@ -1,6 +1,6 @@
-import { getVal, getFirebase, isLoaded } from 'react-redux-firebase';
+import { getFirebase } from 'react-redux-firebase';
 
-import { BoardUsers, PrivateBoardData, StoreState } from '../../types';
+import { StoreState } from '../../types';
 import { LoginBoardProps } from './LoginBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
@@ -9,7 +9,6 @@ export function mapStateToProps(
   state: StoreState,
   ownProps: LoginBoardProps
 ): LoginBoardProps {
-  const { fbState } = state;
   const firebase = getFirebase();
 
   let uid: string | null = null;
@@ -18,11 +17,6 @@ export function mapStateToProps(
   if (auth.currentUser) {
     uid = auth.currentUser.uid;
   }
-
-  const boardUrl = `boards/${(ownProps.match.params as any).id}/private`;
-  const boardConfig: PrivateBoardData = getVal(fbState, `data/${boardUrl}`, {});
-
-  const users: BoardUsers = isLoaded(boardConfig) ? boardConfig.users : {};
 
   function onLogin(email: string) {
     if (!uid) {
@@ -53,10 +47,7 @@ export function mapStateToProps(
 
   return {
     ...ownProps,
-    boards: {},
     uid,
-    name: boardConfig.config.name,
-    users,
     onLogin,
     onProviderLogin,
     onLogout
