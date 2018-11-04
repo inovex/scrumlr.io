@@ -13,11 +13,6 @@ import { Chiffre } from '../../util/encrypt';
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
 
 export interface BoardGuardState {
-  boardConfigReference?: firebase.database.Reference;
-  memberReference?: firebase.database.Reference;
-  authorizationReference?: firebase.database.Reference;
-  authStateHandle?: firebase.Unsubscribe;
-
   isInvalidBoard?: boolean;
   isSecuredBoard?: boolean;
   isApplicantAuthorized?: boolean;
@@ -37,6 +32,11 @@ export class BoardGuard extends React.Component<
 > {
   state: BoardGuardState = {};
 
+  boardConfigReference: firebase.database.Reference;
+  memberReference: firebase.database.Reference;
+  authorizationReference: firebase.database.Reference;
+  authStateHandle: firebase.Unsubscribe;
+
   isReady() {
     if (!this.state.isAddingMember && this.state.isMember) {
       return true;
@@ -51,18 +51,16 @@ export class BoardGuard extends React.Component<
       firebase.database.Database;
 
     if (firebase.auth().currentUser) {
-      const authorizationReference = firebase.ref(
+      this.authorizationReference = firebase.ref(
         `/boards/${boardId}/public/accessAuthorized/${
           firebase.auth().currentUser!!.uid
         }`
       );
-      const memberReference = firebase.ref(
+      this.memberReference = firebase.ref(
         `/boards/${boardId}/private/users/${firebase.auth().currentUser!!.uid}`
       );
 
-      this.setState({ memberReference, authorizationReference });
-
-      authorizationReference.on(
+      this.authorizationReference.on(
         'value',
         (accessAuthorized: DataSnapshot) => {
           if (accessAuthorized.exists()) {
@@ -76,7 +74,7 @@ export class BoardGuard extends React.Component<
         }
       );
 
-      memberReference.on(
+      this.memberReference.on(
         'value',
         (memberReference: DataSnapshot) => {
           this.setState({ isMember: memberReference.exists() });
@@ -94,13 +92,11 @@ export class BoardGuard extends React.Component<
     const firebase = getFirebase() as firebase.app.App &
       firebase.database.Database;
 
-    const boardConfigReference = firebase.ref(
+    this.boardConfigReference = firebase.ref(
       `/boards/${boardId}/public/config`
     );
 
-    this.setState({ boardConfigReference });
-
-    boardConfigReference.on(
+    this.boardConfigReference.on(
       'value',
       (securedBoard: DataSnapshot) => {
         if (securedBoard.exists()) {
@@ -121,22 +117,18 @@ export class BoardGuard extends React.Component<
 
   componentWillReceiveProps(nextProps: BoardGuardProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      if (this.state.boardConfigReference) {
-        this.state.boardConfigReference.off();
+      if (this.boardConfigReference) {
+        this.boardConfigReference.off();
       }
-      if (this.state.authorizationReference) {
-        this.state.authorizationReference.off();
+      if (this.authorizationReference) {
+        this.authorizationReference.off();
       }
-      if (this.state.memberReference) {
-        this.state.memberReference.off();
+      if (this.memberReference) {
+        this.memberReference.off();
       }
 
       this.setState(
         {
-          boardConfigReference: undefined,
-          memberReference: undefined,
-          authorizationReference: undefined,
-          authStateHandle: undefined,
           isInvalidBoard: undefined,
           isSecuredBoard: undefined,
           isApplicantAuthorized: undefined,
@@ -237,35 +229,33 @@ export class BoardGuard extends React.Component<
   componentDidMount() {
     this.checkBoardReference(this.props.match.params.id);
 
-    this.setState({
-      authStateHandle: getFirebase()
-        .auth()
-        .onAuthStateChanged(
-          (user: User) => {
-            // Test if user is authenticated.
-            const authenticated = user !== null;
-            // At this point firebase is ready.
-            this.setState({ isAuthenticated: authenticated });
-          },
-          () => {
-            this.setState({ isAuthenticated: false });
-          }
-        )
-    });
+    this.authStateHandle = getFirebase()
+      .auth()
+      .onAuthStateChanged(
+        (user: User) => {
+          // Test if user is authenticated.
+          const authenticated = user !== null;
+          // At this point firebase is ready.
+          this.setState({ isAuthenticated: authenticated });
+        },
+        () => {
+          this.setState({ isAuthenticated: false });
+        }
+      );
   }
 
   componentWillUnmount() {
-    if (this.state.boardConfigReference) {
-      this.state.boardConfigReference.off();
+    if (this.boardConfigReference) {
+      this.boardConfigReference.off();
     }
-    if (this.state.authorizationReference) {
-      this.state.authorizationReference.off();
+    if (this.authorizationReference) {
+      this.authorizationReference.off();
     }
-    if (this.state.memberReference) {
-      this.state.memberReference.off();
+    if (this.memberReference) {
+      this.memberReference.off();
     }
-    if (this.state.authStateHandle) {
-      this.state.authStateHandle();
+    if (this.authStateHandle) {
+      this.authStateHandle();
     }
   }
 
