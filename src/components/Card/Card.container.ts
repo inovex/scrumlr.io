@@ -13,7 +13,7 @@ export const mapStateToProps = (
 ): StateCardProps => {
   const author = getVal(
     state.fbState,
-    `data/${ownProps.boardId}/config/users/${ownProps.card.authorUid}`,
+    `data/${ownProps.boardId}/users/${ownProps.card.authorUid}`,
     undefined
   );
   const user = getVal(state.fbState, 'auth', undefined);

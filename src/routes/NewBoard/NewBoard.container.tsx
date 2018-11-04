@@ -32,7 +32,6 @@ function initialBoardConfig(
       config: {
         key: privateKey,
         sorted: false,
-        users: {},
         creatorUid: user.uid,
         guided: true,
         guidedPhase: 0,

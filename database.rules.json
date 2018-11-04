@@ -25,7 +25,7 @@
         },
 
         "private": {
-          ".read": "data.child('members').hasChild(auth.uid)",
+          ".read": "data.child('users').hasChild(auth.uid)",
           "cards": {
             "$cardId": {
               ".write": "!root.child('boards/'+$boardId+'/private/cards').hasChild($cardId)",
@@ -39,12 +39,12 @@
               }
             }
           },
-          "members": {
+          "users": {
             "$uid": {
               ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/config/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
             }
           },
-          "online": {
+          "presence": {
             "$uid": {
               ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/config/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
             }

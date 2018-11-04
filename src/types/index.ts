@@ -48,7 +48,6 @@ export interface Card {
 
 export interface BoardConfig {
   sorted: boolean;
-  users: BoardUsers;
   creatorUid: string | null;
   guided: boolean;
   guidedPhase: number;
@@ -97,7 +96,7 @@ export interface PublicBoardData {
 export interface PrivateBoardData {
   config: BoardConfig & { key?: string | null };
   cards?: BoardCards;
-  users?: BoardUsers;
+  users: BoardUsers;
   presence?: {
     [key: string]: boolean;
   };

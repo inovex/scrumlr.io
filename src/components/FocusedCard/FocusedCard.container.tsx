@@ -14,7 +14,7 @@ export const mapStateToProps = (
   const auth = getVal(fbState, 'auth', {});
   const boardConfig: BoardConfig = getVal(
     fbState,
-    `data/${boardUrl}/config`,
+    `data/${boardUrl}/private/config`,
     {}
   );
   const isBoardAdmin =

@@ -30,6 +30,7 @@ const fbState = {
     boards: {
       '-KqhC0R4ywKluWRz0cZ8': {
         private: {
+          users: {},
           config: {
             created: '2017-08-04T12:24:32.064Z',
             creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
@@ -50,6 +51,7 @@ const fbState = {
       },
       '-AqhC0R4ywKluWRz0cZ8': {
         private: {
+          users: {},
           config: {
             created: '2017-08-04T12:24:32.064Z',
             creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',

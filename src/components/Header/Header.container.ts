@@ -1,4 +1,4 @@
-import { BoardConfig, StoreState, BoardUsers } from '../../types';
+import { StoreState, BoardUsers, PrivateBoardData } from '../../types';
 import { getVal, getFirebase, helpers } from 'react-redux-firebase';
 import { OwnHeaderProps, StateHeaderProps } from './Header';
 import isLoaded = helpers.isLoaded;
@@ -15,14 +15,11 @@ export const mapStateToProps = (
 
   const boardUrl = ownProps.boardId;
   const auth = getVal(fbState, 'auth', {});
-  const boardConfig: BoardConfig = getVal(
-    fbState,
-    `data/${boardUrl}/config`,
-    {}
-  );
+
+  const boardConfig: PrivateBoardData = getVal(fbState, `data/${boardUrl}`, {});
   const presence: { [key: string]: boolean } = getVal(
     fbState,
-    `data/${boardUrl}/private/presence`,
+    `data/${boardUrl}/presence`,
     {}
   );
   // Get a list of all users that have been interacted with this board.
@@ -39,11 +36,13 @@ export const mapStateToProps = (
     }, {});
 
   const isBoardAdmin =
-    auth && isLoaded(boardConfig) ? auth.uid === boardConfig.creatorUid : false;
+    auth && isLoaded(boardConfig)
+      ? auth.uid === boardConfig.config.creatorUid
+      : false;
 
   function onToggleReadyState() {
     firebase
-      .ref(`${boardUrl}/config/users/${auth.uid}`)
+      .ref(`${boardUrl}/users/${auth.uid}`)
       .set({
         ...boardConfig.users[auth.uid],
         ready: !boardConfig.users[auth.uid].ready
@@ -56,7 +55,7 @@ export const mapStateToProps = (
   }
 
   function onFocusCard(cardId: string) {
-    const { focusedCardId } = boardConfig;
+    const { focusedCardId } = boardConfig.config;
     firebase
       .ref(`${boardUrl}/config/focusedCardId`)
       .set(focusedCardId !== cardId ? cardId : null)
@@ -98,7 +97,7 @@ export const mapStateToProps = (
 
     Object.keys(boardConfig.users).forEach(uid => {
       firebase
-        .ref(`${boardUrl}/config/users/${uid}`)
+        .ref(`${boardUrl}/users/${uid}`)
         .set({
           ...boardConfig.users[uid],
           ready: false
@@ -111,24 +110,26 @@ export const mapStateToProps = (
     });
 
     const phasesWithSortedResults = [2, 3];
-    if (phasesWithSortedResults.indexOf(boardConfig.guidedPhase + 1) > -1) {
-      if (!boardConfig.sorted) {
+    if (
+      phasesWithSortedResults.indexOf(boardConfig.config.guidedPhase + 1) > -1
+    ) {
+      if (!boardConfig.config.sorted) {
         // this.setSorted(true);
       }
     } else {
-      if (boardConfig.sorted) {
+      if (boardConfig.config.sorted) {
         // this.setSorted(false);
       }
     }
 
     // Always remove card selection if new phase is entered.
-    if (boardConfig.focusedCardId) {
-      onFocusCard(boardConfig.focusedCardId);
+    if (boardConfig.config.focusedCardId) {
+      onFocusCard(boardConfig.config.focusedCardId);
     }
   }
 
   const onChangeBoardName = debounce((boardName: string) => {
-    const { focusedCardId } = boardConfig;
+    const { focusedCardId } = boardConfig.config;
     firebase
       .ref(`${boardUrl}/config/name`)
       .set(boardName)
@@ -152,15 +153,16 @@ export const mapStateToProps = (
   };
 
   const isLastPhase =
-    boardConfig.guidedPhase === getPhasesCount(boardConfig.mode) - 1;
+    boardConfig.config.guidedPhase ===
+    getPhasesCount(boardConfig.config.mode) - 1;
 
   return {
     admin: isBoardAdmin,
-    boardName: boardConfig.name,
-    mode: boardConfig.mode,
-    phase: boardConfig.guidedPhase,
+    boardName: boardConfig.config.name,
+    mode: boardConfig.config.mode,
+    phase: boardConfig.config.guidedPhase,
     isLastPhase,
-    sorted: boardConfig.sorted,
+    sorted: boardConfig.config.sorted,
     onPrevPhase,
     onNextPhase,
     user: auth ? auth.uid : null,

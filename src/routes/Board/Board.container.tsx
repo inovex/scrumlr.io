@@ -41,8 +41,8 @@ export const mapStateToProps = (
   const cards: BoardCards = board.cards || {};
   const boardConfig: BoardConfig = board.config;
 
-  const users = isLoaded(boardConfig) ? boardConfig.users : {};
-  const isBoardAdmin = isLoaded(boardConfig)
+  const users = isLoaded(board) ? board.users : {};
+  const isBoardAdmin = isLoaded(board)
     ? auth.uid === boardConfig.creatorUid
     : false;
 
@@ -65,8 +65,8 @@ export const mapStateToProps = (
 
   function onToggleReadyState() {
     firebase
-      .update(`${boardSelector}/config/users/${auth.uid}`, {
-        ready: !boardConfig.users[auth.uid].ready
+      .update(`${boardSelector}/users/${auth.uid}`, {
+        ready: !board!!.users[auth.uid].ready
       })
       .catch((err: Error) => {
         Raven.captureMessage('Could not toggle user state', {
@@ -108,7 +108,7 @@ export const mapStateToProps = (
           photoURL: imageUrl
         })
         .then(() => {
-          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
+          firebase.update(`${boardSelector}/users/${auth.uid}`, {
             image: imageUrl
           });
         });
@@ -124,7 +124,7 @@ export const mapStateToProps = (
           photoURL: user.photoURL
         })
         .then(() => {
-          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
+          firebase.update(`${boardSelector}/users/${auth.uid}`, {
             name: username
           });
         });
@@ -157,9 +157,9 @@ export const mapStateToProps = (
         });
       });
 
-    Object.keys(boardConfig.users).forEach(uid => {
+    Object.keys(board!!.users).forEach(uid => {
       firebase
-        .update(`${boardSelector}/config/users/${uid}`, {
+        .update(`${boardSelector}/users/${uid}`, {
           ready: false
         })
         .catch((err: Error) => {
@@ -216,7 +216,7 @@ export function mergeProps(
   { dispatch }: { dispatch: Dispatch<any> },
   ownProps: BoardProps
 ): BoardProps {
-  const { auth, boardConfig, boardSelector } = stateProps;
+  const { auth, boardSelector } = stateProps;
   const { firebase } = ownProps;
 
   function onRegisterCurrentUser() {
@@ -225,7 +225,8 @@ export function mergeProps(
     }
     const promises: Promise<any>[] = [];
 
-    if (!boardConfig || !boardConfig.creatorUid) {
+    // FIXME is this needed?
+    /*if (!boardConfig || !boardConfig.creatorUid) {
       promises.push(
         firebase
           .set(`${boardSelector}/config/creatorUid`, auth.uid)
@@ -233,16 +234,14 @@ export function mergeProps(
             // Nothing to do. An admin has been set already for this board.
           })
       );
-    }
+    }*/
 
     const user: UserInformation = {
       name: auth.displayName,
       image: auth.photoURL,
       ready: false
     };
-    promises.push(
-      firebase.set(`${boardSelector}/config/users/${auth.uid}`, user)
-    );
+    promises.push(firebase.set(`${boardSelector}/users/${auth.uid}`, user));
 
     Promise.all(promises)
       .then(() => {

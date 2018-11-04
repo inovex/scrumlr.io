@@ -155,6 +155,7 @@ describe('<AddCard />', () => {
         boards: {
           '-KqhC0R4ywKluWRz0cZ8': {
             private: {
+              users: {},
               config: {
                 created: '2017-08-04T12:24:32.064Z',
                 creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
@@ -175,6 +176,7 @@ describe('<AddCard />', () => {
           },
           '-AqhC0R4ywKluWRz0cZ8': {
             private: {
+              users: {},
               config: {
                 created: '2017-08-04T12:24:32.064Z',
                 creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
