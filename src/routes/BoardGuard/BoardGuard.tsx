@@ -2,9 +2,7 @@ import * as React from 'react';
 import { getFirebase } from 'react-redux-firebase';
 import { User } from 'firebase/app';
 import { RouteComponentProps } from 'react-router';
-// TODO: Types are not working with most recent version of Typescript.
-// TODO: Use ES6 import if typings have been adjusted.
-const { Redirect } = require('react-router-dom');
+import { Redirect } from 'react-router-dom';
 
 import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
@@ -269,8 +267,6 @@ export class BoardGuard extends React.Component<
       isApplicantAuthorized,
       isAuthenticated
     } = this.state;
-    console.log('GUARD', this.state);
-
     const url = window.location.href;
 
     if (

@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-// TODO: Types are not working with most recent version of Typescript.
-// TODO: Use ES6 import if typings have been adjusted.
 //const { Redirect } = require('react-router-dom');
 
 import BoardGuard, { BoardGuardProps, BoardGuardState } from './BoardGuard';
