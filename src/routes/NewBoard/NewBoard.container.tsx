@@ -18,7 +18,7 @@ function initialBoardConfig(
   if (secure) {
     const keypair = generateKeypair();
     publicKey = keypair.publicKey;
-    privateKey = keypair.privateKey || null;
+    privateKey = keypair.privateKey;
   }
 
   return {

@@ -4,7 +4,7 @@ const ENCODING = 'latin1';
 
 export interface Keypair {
   publicKey: string;
-  privateKey?: string;
+  privateKey: string;
 }
 
 export const generateKeypair = (keysize: number = 1024): Keypair => {
@@ -23,7 +23,7 @@ export class Chiffre {
   private jsEncrypt: any;
   private decriptionAllowed: boolean;
 
-  constructor(keypair: Keypair) {
+  constructor(keypair: { publicKey: string; privateKey?: string }) {
     this.jsEncrypt = new JSEncrypt();
     this.jsEncrypt.setPublicKey(keypair.publicKey, ENCODING);
     if (keypair.privateKey) {

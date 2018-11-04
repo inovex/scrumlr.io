@@ -35,5 +35,22 @@ describe('encrypt', () => {
 
       expect(decryptedMessage).toEqual(message);
     });
+
+    it('should be possible to create an instance only with public key', () => {
+      const keypair = generateKeypair(128);
+      chiffre = new Chiffre({ publicKey: keypair.publicKey });
+    });
+
+    it('should not be possible to use decryption if private key is not set', () => {
+      const keypair = generateKeypair(128);
+      chiffre = new Chiffre(keypair);
+
+      const encryptedMessage = chiffre.encrypt('Test');
+
+      chiffre = new Chiffre({ publicKey: keypair.publicKey });
+      expect(() => {
+        chiffre.decrypt(encryptedMessage);
+      }).toThrow('private key not set, decryption not available');
+    });
   });
 });
