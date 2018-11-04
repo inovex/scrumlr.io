@@ -168,7 +168,7 @@ export function mapStateToProps(
   ownProps: PrintViewBoardProps
 ) {
   const { fbState } = state;
-  const boardSelector = `/boards/${ownProps.match.params.id}`;
+  const boardSelector = `/boards/${ownProps.match.params.id}/private`;
   const boardUrl = `/board/${ownProps.match.params.id}`;
   const cards: BoardCards = getVal(fbState, `data/${boardSelector}/cards`, {});
   const boardConfig: BoardConfig = getVal(
@@ -185,7 +185,7 @@ export function mapStateToProps(
 }
 
 function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
-  return [`/boards/${props.match.params.id}`];
+  return [`/boards/${props.match.params.id}/private`];
 }
 
 export default compose(

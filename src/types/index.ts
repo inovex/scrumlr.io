@@ -77,57 +77,35 @@ export interface Boards {
   [key: string]: Board;
 }
 
-export interface Board {
-  config: BoardConfig;
+export interface PublicBoardData {
+  config: {
+    secure: boolean;
+    key?: string | null;
+  };
+  applicants?: {
+    [key: string]: {
+      uid: string;
+      displayName: string;
+      photoUrl: string;
+    };
+  };
+  accessAuthorized?: {
+    [key: string]: boolean;
+  };
+}
+
+export interface PrivateBoardData {
+  config: BoardConfig & { key?: string | null };
   cards?: BoardCards;
-
-  public?: {
-    config: {
-      secure: boolean;
-      key?: string | null;
-    };
-    applicants?: {
-      [key: string]: {
-        uid: string;
-        displayName: string;
-        photoUrl: string;
-      };
-    };
-    accessAuthorized?: {
-      [key: string]: boolean;
-    };
+  users?: BoardUsers;
+  presence?: {
+    [key: string]: boolean;
   };
+}
 
-  private?: {
-    config: {
-      key?: string | null;
-      adminUid: string;
-      creationDate: string;
-      name: string;
-      mode: string;
-      phase: string;
-      focusedCardId?: string | null;
-      showAuthor: boolean;
-      voteLimit?: number | null;
-      timer?: {
-        start: string;
-        duration: number;
-      } | null;
-    };
-    cards?: {
-      [key: string]: any;
-    };
-    members: {
-      [key: string]: {
-        displayName: string | null;
-        photoURL: string | null;
-        ready: boolean;
-      };
-    };
-    online?: {
-      [key: string]: boolean;
-    };
-  };
+export interface Board {
+  public?: PublicBoardData;
+  private?: PrivateBoardData;
 }
 
 export interface BoardProp {

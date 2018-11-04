@@ -25,3 +25,6 @@ yarn-error.log*
 
 # Styles
 *.css
+
+# Firebase
+.firebase

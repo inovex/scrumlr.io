@@ -361,7 +361,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 }
 
 function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
-  return [`/boards/${props.match.params.id}`, `/presence`];
+  return [`/boards/${props.match.params.id}/private`];
 }
 
 export default compose<any, any, any>(

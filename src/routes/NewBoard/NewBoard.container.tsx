@@ -22,17 +22,6 @@ function initialBoardConfig(
   }
 
   return {
-    cards: {},
-    config: {
-      sorted: false,
-      users: {},
-      creatorUid: user.uid,
-      guided: true,
-      guidedPhase: 0,
-      created: new Date().toISOString(),
-      showAuthor: false,
-      mode
-    },
     public: {
       config: {
         secure,
@@ -42,23 +31,24 @@ function initialBoardConfig(
     private: {
       config: {
         key: privateKey,
-        adminUid: user.uid,
-        creationDate: new Date().toISOString(),
-        name: 'test',
-        mode,
-        phase: 'write',
-        focusedCardId: null,
-        showAuthor: true,
-        voteLimit: null,
-        timer: null
+        sorted: false,
+        users: {},
+        creatorUid: user.uid,
+        guided: true,
+        guidedPhase: 0,
+        created: new Date().toISOString(),
+        showAuthor: false,
+        mode
       },
-      members: {
+      cards: {},
+      users: {
         [user.uid]: {
-          displayName: user.displayName,
-          photoURL: user.photoURL,
+          name: user.displayName || '',
+          image: user.photoURL || '',
           ready: false
         }
-      }
+      },
+      presence: {}
     }
   };
 }

@@ -19,7 +19,7 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  const boardUrl = `boards/${(ownProps.match.params as any).id}`;
+  const boardUrl = `boards/${(ownProps.match.params as any).id}/private`;
   const boardConfig: BoardConfig = getVal(
     fbState,
     `data/${boardUrl}/config`,
@@ -30,9 +30,11 @@ export function mapStateToProps(
 
   function onLogin(email: string) {
     if (!uid) {
-      authController(firebase).signInAnonymously(email).then(() => {
-        location.assign(`/#/board/${(ownProps.match.params as any).id}`);
-      });
+      authController(firebase)
+        .signInAnonymously(email)
+        .then(() => {
+          location.assign(`/#/board/${(ownProps.match.params as any).id}`);
+        });
     } else {
       location.assign(`/#/board/${(ownProps.match.params as any).id}`);
     }
@@ -45,9 +47,12 @@ export function mapStateToProps(
   };
 
   function onLogout() {
-    firebase.auth().signOut().then(() => {
-      location.hash = '/new';
-    });
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/new';
+      });
   }
 
   return {

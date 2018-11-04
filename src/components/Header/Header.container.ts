@@ -22,7 +22,7 @@ export const mapStateToProps = (
   );
   const presence: { [key: string]: boolean } = getVal(
     fbState,
-    `data/presence`,
+    `data/${boardUrl}/private/presence`,
     {}
   );
   // Get a list of all users that have been interacted with this board.

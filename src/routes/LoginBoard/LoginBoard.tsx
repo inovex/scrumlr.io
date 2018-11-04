@@ -63,23 +63,28 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
           </h1>
 
           <p className="new-board__action-area-paragraph">
-            {this.props.name &&
+            {this.props.name && (
               <span>
                 You were invited to join the online retrospective{' '}
                 <strong>{this.props.name}</strong>.
-              </span>}
-            {!this.props.name &&
-              <span>You were invited to join an online retrospective.</span>}
-            {uid &&
-              <span> These participants are already waiting for you …</span>}
-            {!uid &&
+              </span>
+            )}
+            {!this.props.name && (
+              <span>You were invited to join an online retrospective.</span>
+            )}
+            {uid && (
+              <span> These participants are already waiting for you …</span>
+            )}
+            {!uid && (
               <span>
-                {' '}Jump right into the action - no registration required,
+                {' '}
+                Jump right into the action - no registration required,
                 completely for free.
-              </span>}
+              </span>
+            )}
           </p>
 
-          {uid &&
+          {uid && (
             <div className="login-board__user-list">
               <UserList
                 currentUserId={uid || ''}
@@ -87,9 +92,10 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
                 onToggleReadyState={() => {}}
                 userDisplayLimit={4}
               />
-            </div>}
+            </div>
+          )}
 
-          {!uid &&
+          {!uid && (
             <div>
               <Input
                 type="text"
@@ -111,16 +117,19 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
               >
                 Join
               </button>
-            </div>}
-          {!uid &&
-            <ProviderLogin onProviderLogin={this.props.onProviderLogin} />}
-          {uid &&
+            </div>
+          )}
+          {!uid && (
+            <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
+          )}
+          {uid && (
             <button
               onClick={this.handleClickLogin}
               className="new-board__action-button"
             >
               Join
-            </button>}
+            </button>
+          )}
         </div>
       </WelcomeArea>
     );
@@ -128,7 +137,7 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
 }
 
 function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
-  return [`/boards/${props.match.params.id}/config`];
+  return [`/boards/${props.match.params.id}/private/config`];
 }
 
 export default compose(

@@ -57,9 +57,7 @@ export class BoardGuard extends React.Component<
         }`
       );
       const memberReference = firebase.ref(
-        `/boards/${boardId}/private/members/${
-          firebase.auth().currentUser!!.uid
-        }`
+        `/boards/${boardId}/private/users/${firebase.auth().currentUser!!.uid}`
       );
 
       this.setState({ memberReference, authorizationReference });
@@ -158,12 +156,12 @@ export class BoardGuard extends React.Component<
       firebase.database.Database;
 
     const user = firebase.auth().currentUser as User;
-    firebase.ref(`/boards/${boardId}/private/members/${user.uid}`).set({
-      displayName: user.displayName,
-      photoURL: user.photoURL
+    firebase.ref(`/boards/${boardId}/private/users/${user.uid}`).set({
+      name: user.displayName,
+      image: user.photoURL
     });
     const onlineRef = firebase.ref(
-      `/boards/${boardId}/private/online/${user.uid}`
+      `/boards/${boardId}/private/presence/${user.uid}`
     );
     const amOnline = firebase.ref('.info/connected');
     amOnline.on('value', (snapshot: any) => {

@@ -12,8 +12,8 @@ import {
   StoreState,
   BoardCards,
   Card,
-  Board,
-  Optional
+  Optional,
+  PrivateBoardData
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { getGravatar } from '../../controller/gravatar';
@@ -25,11 +25,11 @@ export const mapStateToProps = (
   const { app, fbState } = state;
   const firebase = ownProps.firebase as FirebaseProp;
 
-  const boardSelector = `boards/${ownProps.match.params.id}`;
+  const boardSelector = `boards/${ownProps.match.params.id}/private`;
   const boardPrintUrl = `/print/${ownProps.match.params.id}`;
   const auth: firebase.User | any = firebase.auth().currentUser || {};
 
-  const board: Optional<Board> = getVal(
+  const board: Optional<PrivateBoardData> = getVal(
     fbState,
     `data/${boardSelector}`,
     undefined
