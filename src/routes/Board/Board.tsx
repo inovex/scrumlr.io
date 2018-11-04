@@ -6,7 +6,7 @@ import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
 const { toast } = require('react-toastify');
 
-import './Board.css';
+import './Board.scss';
 
 import {
   mapDispatchToProps,

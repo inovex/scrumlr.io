@@ -70,9 +70,10 @@
     "less": "^3.5.1",
     "lessig": "^0.3.0",
     "lint-staged": "^8.0.4",
+    "node-sass": "^4.10.0",
     "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
-    "react-scripts-ts": "^3.1.0",
+    "react-scripts-ts": "4.0.8",
     "react-test-renderer": "^16.4.1",
     "selenium-webdriver": "3.x",
     "svg-inline-loader": "^0.8.0",
@@ -98,5 +99,11 @@
     "prettier:list": "npm run prettier:base -- --list-different",
     "prettier:write": "npm run prettier:base -- --write",
     "e2e": "cucumber-js features/*.feature"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
