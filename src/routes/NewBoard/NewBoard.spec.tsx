@@ -29,6 +29,11 @@ const fbState = {
   data: {
     boards: {
       '-KqhC0R4ywKluWRz0cZ8': {
+        public: {
+          config: {
+            secure: false
+          }
+        },
         private: {
           users: {},
           config: {
@@ -50,6 +55,11 @@ const fbState = {
         }
       },
       '-AqhC0R4ywKluWRz0cZ8': {
+        public: {
+          config: {
+            secure: false
+          }
+        },
         private: {
           users: {},
           config: {

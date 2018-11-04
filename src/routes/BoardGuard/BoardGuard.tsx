@@ -22,11 +22,13 @@ export interface BoardGuardState {
   isSecuredBoard?: boolean;
   isApplicantAuthorized?: boolean;
   isMember?: boolean;
-  isAddedAsApplicant?: boolean;
-  isAddedAsMember?: boolean;
   isAuthenticated?: boolean;
 
   publicKey?: string;
+
+  // wait until member is added synchronously on the database, otherwise
+  // can't proceed, because user won't have permissions to read data
+  isAddingMember?: boolean;
 }
 
 export class BoardGuard extends React.Component<
@@ -36,7 +38,7 @@ export class BoardGuard extends React.Component<
   state: BoardGuardState = {};
 
   isReady() {
-    if (this.state.isMember) {
+    if (!this.state.isAddingMember && this.state.isMember) {
       return true;
     }
     return !!(
@@ -138,9 +140,7 @@ export class BoardGuard extends React.Component<
           isInvalidBoard: undefined,
           isSecuredBoard: undefined,
           isApplicantAuthorized: undefined,
-          isMember: undefined,
-          isAddedAsApplicant: undefined,
-          isAddedAsMember: undefined
+          isMember: undefined
         },
         () => {
           this.checkBoardReference(nextProps.match.params.id);
@@ -153,20 +153,28 @@ export class BoardGuard extends React.Component<
     const firebase = getFirebase() as firebase.app.App &
       firebase.database.Database;
 
-    const user = firebase.auth().currentUser as User;
-    firebase.ref(`/boards/${boardId}/private/users/${user.uid}`).set({
-      name: user.displayName,
-      image: user.photoURL
-    });
-    const onlineRef = firebase.ref(
-      `/boards/${boardId}/private/presence/${user.uid}`
-    );
-    const amOnline = firebase.ref('.info/connected');
-    amOnline.on('value', (snapshot: any) => {
-      if (snapshot.val()) {
-        onlineRef.onDisconnect().remove();
-        onlineRef.set(true);
-      }
+    this.setState({ isAddingMember: true }, () => {
+      const user = firebase.auth().currentUser as User;
+      firebase
+        .ref(`/boards/${boardId}/private/users/${user.uid}`)
+        .set({
+          name: user.displayName,
+          image: user.photoURL
+        })
+        .then(() => {
+          const onlineRef = firebase.ref(
+            `/boards/${boardId}/private/presence/${user.uid}`
+          );
+          const amOnline = firebase.ref('.info/connected');
+          amOnline.on('value', (snapshot: any) => {
+            if (snapshot.val()) {
+              onlineRef.onDisconnect().remove();
+              onlineRef.set(true);
+            }
+          });
+
+          this.setState({ isAddingMember: false });
+        });
     });
   }
 
@@ -201,14 +209,14 @@ export class BoardGuard extends React.Component<
         ((prevState.isSecuredBoard === undefined || prevState.isSecuredBoard) &&
           !this.state.isSecuredBoard)
       ) {
-        this.addAsMember(boardId);
+        setTimeout(() => this.addAsMember(boardId), 0);
       }
       if (
         !prevState.isSecuredBoard &&
         this.state.isSecuredBoard &&
         !this.state.isMember
       ) {
-        this.addAsApplicant(boardId);
+        setTimeout(() => this.addAsApplicant(boardId), 0);
       }
     }
 
@@ -219,9 +227,9 @@ export class BoardGuard extends React.Component<
         this.state.isSecuredBoard !== undefined &&
         !this.state.isSecuredBoard
       ) {
-        this.addAsMember(boardId);
+        setTimeout(() => this.addAsMember(boardId), 0);
       } else if (this.state.isSecuredBoard) {
-        this.addAsApplicant(boardId);
+        setTimeout(() => this.addAsApplicant(boardId), 0);
       }
     }
   }
@@ -306,6 +314,7 @@ export class BoardGuard extends React.Component<
     const props: Partial<BoardProps> = {
       ...this.props
     };
+
     return <Board {...props} />;
   }
 }

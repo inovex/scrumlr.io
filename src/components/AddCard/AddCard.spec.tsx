@@ -154,6 +154,11 @@ describe('<AddCard />', () => {
       data: {
         boards: {
           '-KqhC0R4ywKluWRz0cZ8': {
+            public: {
+              config: {
+                secure: false
+              }
+            },
             private: {
               users: {},
               config: {
@@ -175,6 +180,11 @@ describe('<AddCard />', () => {
             }
           },
           '-AqhC0R4ywKluWRz0cZ8': {
+            public: {
+              config: {
+                secure: false
+              }
+            },
             private: {
               users: {},
               config: {

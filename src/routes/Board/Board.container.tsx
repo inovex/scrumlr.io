@@ -34,7 +34,8 @@ export const mapStateToProps = (
     `data/${boardSelector}`,
     undefined
   );
-  if (!board) {
+
+  if (!isLoaded(board) || !board) {
     return { boardSelector, boardConfig: undefined, auth } as any;
   }
 

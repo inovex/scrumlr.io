@@ -103,8 +103,8 @@ export interface PrivateBoardData {
 }
 
 export interface Board {
-  public?: PublicBoardData;
-  private?: PrivateBoardData;
+  public: PublicBoardData;
+  private: PrivateBoardData;
 }
 
 export interface BoardProp {
