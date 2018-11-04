@@ -38,12 +38,13 @@ export class BoardGuard extends React.Component<
   authStateHandle: firebase.Unsubscribe;
 
   isReady() {
+    if (this.state.isAuthenticated === undefined) {
+      return false;
+    }
     if (!this.state.isAddingMember && this.state.isMember) {
       return true;
     }
-    return (
-      this.state.isInvalidBoard !== undefined && !this.state.isInvalidBoard
-    );
+    return true;
   }
 
   registerUserReferences(boardId: string) {

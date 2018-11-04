@@ -23,6 +23,12 @@ Object {
           },
         },
       },
+      "users": Object {},
+    },
+    "public": Object {
+      "config": Object {
+        "secure": false,
+      },
     },
   },
   "-KqhC0R4ywKluWRz0cZ8": Object {
@@ -41,6 +47,12 @@ Object {
             "ready": false,
           },
         },
+      },
+      "users": Object {},
+    },
+    "public": Object {
+      "config": Object {
+        "secure": false,
       },
     },
   },

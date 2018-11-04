@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BoardGuard /> should redirect to homepage if access is denied 1`] = `
+Object {
+  "pathname": "/new",
+  "state": Object {
+    "referrer": "http://localhost/",
+  },
+}
+`;
+
+exports[`<BoardGuard /> should redirect to homepage if board is invalid 1`] = `
+Object {
+  "pathname": "/new",
+  "state": Object {
+    "referrer": "http://localhost/",
+  },
+}
+`;
+
+exports[`<BoardGuard /> should render a redirect if user has not been authenticated 1`] = `
+Object {
+  "pathname": "/join/-foobar",
+  "state": Object {
+    "referrer": "http://localhost/",
+  },
+}
+`;
