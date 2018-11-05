@@ -72,7 +72,7 @@ export function mapStateToProps(
 
   function onCreateNewBoard(mode: RetroMode) {
     const auth = getFirebase().auth();
-    const board: Board = initialBoardConfig(auth.currentUser!!, mode);
+    const board: Board = initialBoardConfig(auth.currentUser!!, mode, true);
     getFirebase()
       .ref('/boards')
       .push(board)

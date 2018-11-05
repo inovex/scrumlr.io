@@ -41,10 +41,30 @@ export class BoardGuard extends React.Component<
     if (this.state.isAuthenticated === undefined) {
       return false;
     }
-    if (!this.state.isAddingMember && this.state.isMember) {
-      return true;
+    return Boolean(!this.state.isAddingMember && this.state.isMember);
+  }
+
+  reinitializeMemberReference(boardId: string) {
+    const firebase = getFirebase() as firebase.app.App &
+      firebase.database.Database;
+
+    if (firebase.auth().currentUser) {
+      this.memberReference = firebase.ref(
+        `/boards/${boardId}/private/users/${firebase.auth().currentUser!!.uid}`
+      );
+
+      this.memberReference.on(
+        'value',
+        (memberReference: DataSnapshot) => {
+          this.setState({
+            isMember: memberReference.exists() && !!memberReference.val()
+          });
+        },
+        () => {
+          this.setState({ isMember: false });
+        }
+      );
     }
-    return true;
   }
 
   registerUserReferences(boardId: string) {
@@ -57,9 +77,8 @@ export class BoardGuard extends React.Component<
           firebase.auth().currentUser!!.uid
         }`
       );
-      this.memberReference = firebase.ref(
-        `/boards/${boardId}/private/users/${firebase.auth().currentUser!!.uid}`
-      );
+
+      this.reinitializeMemberReference(boardId);
 
       this.authorizationReference.on(
         'value',
@@ -72,16 +91,6 @@ export class BoardGuard extends React.Component<
         },
         () => {
           this.setState({ isApplicantAuthorized: false });
-        }
-      );
-
-      this.memberReference.on(
-        'value',
-        (memberReference: DataSnapshot) => {
-          this.setState({ isMember: memberReference.exists() });
-        },
-        () => {
-          this.setState({ isMember: false });
         }
       );
     } else {
@@ -207,15 +216,21 @@ export class BoardGuard extends React.Component<
         (!prevState.isApplicantAuthorized &&
           this.state.isApplicantAuthorized) ||
         ((prevState.isSecuredBoard === undefined || prevState.isSecuredBoard) &&
+          this.state.isSecuredBoard !== undefined &&
           !this.state.isSecuredBoard)
       ) {
-        setTimeout(() => this.addAsMember(boardId), 0);
+        setTimeout(() => {
+          this.addAsMember(boardId);
+          this.reinitializeMemberReference(boardId);
+        }, 0);
       }
 
       // add as applicant if board is secured
       if (
-        !prevState.isSecuredBoard &&
+        (!prevState.isSecuredBoard !== this.state.isSecuredBoard ||
+          !prevState.isMember !== this.state.isMember) &&
         this.state.isSecuredBoard &&
+        this.state.isMember !== undefined &&
         !this.state.isMember
       ) {
         setTimeout(() => this.addAsApplicant(boardId), 0);
