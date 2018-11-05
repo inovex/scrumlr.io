@@ -1,7 +1,11 @@
 import * as React from 'react';
-import './LoadingScreen.css';
+import './LoadingScreen.scss';
 
-export const LoadingScreen: React.SFC<{}> = props =>
+export interface LoadingScreenProps {
+  status?: string;
+}
+
+export const LoadingScreen: React.SFC<LoadingScreenProps> = props => (
   <div className="loading-screen">
     <h1 className="loading-screen__headline">Scrumlr</h1>
 
@@ -10,6 +14,11 @@ export const LoadingScreen: React.SFC<{}> = props =>
       <div className="bounce2" />
       <div className="bounce3" />
     </div>
-  </div>;
+
+    {props.status && (
+      <span className="loading-screen__status">{props.status}</span>
+    )}
+  </div>
+);
 
 export default LoadingScreen;

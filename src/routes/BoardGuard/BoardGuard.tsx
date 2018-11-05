@@ -266,7 +266,19 @@ export class BoardGuard extends React.Component<
 
     const ready = this.isReady();
     if (!ready) {
-      return <LoadingScreen />;
+      let status: string | undefined = undefined;
+      if (this.state.isAddingMember) {
+        status = 'Registering as board member';
+      } else if (
+        this.state.isSecuredBoard &&
+        !this.state.isApplicantAuthorized
+      ) {
+        status = 'Waiting for board admin approval';
+      } else if (this.state.isAuthenticated === undefined) {
+        status = 'Authentication in progress';
+      }
+
+      return <LoadingScreen status={status} />;
     }
 
     // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
