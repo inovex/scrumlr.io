@@ -8,7 +8,6 @@ import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
-import { Chiffre } from '../../util/encrypt';
 
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
 
@@ -159,19 +158,9 @@ export class BoardGuard extends React.Component<
       firebase.database.Database;
     const user = firebase.auth().currentUser as User;
 
-    let displayName = user.displayName || ''; // FIXME
-    let photoURL = user.photoURL;
-    if (this.state.publicKey) {
-      const chiffre = new Chiffre({ publicKey: this.state.publicKey });
-      displayName = chiffre.encrypt(displayName);
-      if (photoURL) {
-        photoURL = chiffre.encrypt(photoURL);
-      }
-    }
-
     firebase.ref(`/boards/${boardId}/public/applicants/${user.uid}`).set({
-      displayName,
-      photoURL
+      displayName: user.displayName || '', // FIXME
+      photoURL: user.photoURL
     });
   }
 

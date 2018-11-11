@@ -62,6 +62,7 @@ export interface UserInformation {
   name: string;
   image: string;
   ready: boolean;
+  publicKey?: string;
 }
 
 export interface BoardUsers {
@@ -79,26 +80,28 @@ export interface Boards {
 export interface PublicBoardData {
   config: {
     secure: boolean;
-    key?: string | null;
   };
   applicants?: {
-    [key: string]: {
+    [memberUid: string]: {
       uid: string;
       displayName: string;
       photoUrl: string;
     };
   };
   accessAuthorized?: {
-    [key: string]: boolean;
+    [memberUid: string]: boolean;
   };
 }
 
 export interface PrivateBoardData {
-  config: BoardConfig & { key?: string | null };
+  config: BoardConfig;
   cards?: BoardCards;
   users: BoardUsers;
+  keyShare?: {
+    [memberUid: string]: string;
+  };
   presence?: {
-    [key: string]: boolean;
+    [memberUid: string]: boolean;
   };
 }
 

@@ -6,50 +6,50 @@ import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
 import { RetroMode } from '../../constants/mode';
 import * as firebase from 'firebase/app';
-import { generateKeypair } from '../../util/encrypt';
+import { Crypto } from '../../util/crypto';
 
 function initialBoardConfig(
   user: firebase.User,
   mode: RetroMode,
   secure: boolean = false
-): Board {
-  let publicKey: string | null = null;
-  let privateKey: string | null = null;
-  if (secure) {
-    const keypair = generateKeypair();
-    publicKey = keypair.publicKey;
-    privateKey = keypair.privateKey;
-  }
+): Promise<Board> {
+  const crypto = new Crypto();
 
-  return {
-    public: {
-      config: {
-        secure,
-        key: publicKey
-      }
-    },
-    private: {
-      config: {
-        key: privateKey,
-        sorted: false,
-        creatorUid: user.uid,
-        guided: true,
-        guidedPhase: 0,
-        created: new Date().toISOString(),
-        showAuthor: false,
-        mode
-      },
-      cards: {},
-      users: {
-        [user.uid]: {
-          name: user.displayName || '',
-          image: user.photoURL || '',
-          ready: false
+  return Promise.all([crypto.initKeypair(), crypto.initSymmetricKey()]).then(
+    async () => {
+      return {
+        public: {
+          config: {
+            secure
+          }
+        },
+        private: {
+          config: {
+            sorted: false,
+            creatorUid: user.uid,
+            guided: true,
+            guidedPhase: 0,
+            created: new Date().toISOString(),
+            showAuthor: false,
+            mode
+          },
+          cards: {},
+          users: {
+            [user.uid]: {
+              name: user.displayName || '',
+              image: user.photoURL || '',
+              ready: false,
+              publicKey: crypto.getPublicKey()!!
+            }
+          },
+          keyShare: {
+            [user.uid]: await crypto.exportSymmetricKey(crypto.getPublicKey()!!)
+          },
+          presence: {}
         }
-      },
-      presence: {}
+      };
     }
-  };
+  );
 }
 
 let onSignIn = false;
@@ -72,14 +72,17 @@ export function mapStateToProps(
 
   function onCreateNewBoard(mode: RetroMode) {
     const auth = getFirebase().auth();
-    const board: Board = initialBoardConfig(auth.currentUser!!, mode, true);
-    getFirebase()
-      .ref('/boards')
-      .push(board)
-      .then((item: any) => {
-        const key = item.getKey();
-        location.hash = `/board/${key}`;
-      });
+    initialBoardConfig(auth.currentUser!!, mode, true).then(board => {
+      console.log('BB', board);
+
+      getFirebase()
+        .ref('/boards')
+        .push(board)
+        .then((item: any) => {
+          const key = item.getKey();
+          location.hash = `/board/${key}`;
+        });
+    });
   }
 
   function onLogin(email: string, mode: RetroMode) {

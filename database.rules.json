@@ -4,7 +4,7 @@
     ".write": false,
     "boards": {
       "$boardId": {
-        ".read": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid",
+        ".read": "data.child('private/config/creatorUid').val() === auth.uid",
         ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid",
 
         "public": {
@@ -41,7 +41,7 @@
           },
           "users": {
             "$uid": {
-              ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/config/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
+              ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/config/secure').val() === false || (root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid) && root.child('boards/'+$boardId+'/public/accessAuthorized'+auth.uid).val() === true))"
             }
           },
           "presence": {
