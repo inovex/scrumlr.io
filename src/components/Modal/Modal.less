@@ -14,21 +14,29 @@
 .modal__backdrop {
   position: fixed;
 
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  top: -100px;
+  bottom: -100px;
+  left: -100px;
+  right: -100px;
   overflow: hidden;
-  background: fade(@color-dark, 80%);
+  background: rgba(0, 1, 15, 0.89); //fade(@color-dark, 80%);
 
-  backdrop-filter: blur(@base-unit);
+  backdrop-filter: blur(2px);
 
   z-index: @base-z-index + @base-z-index-step * @base-z-index;
 }
 
 .modal__content-wrapper {
   overflow: auto;
-  margin-top: @large-margin;
+  //margin-top: @large-margin;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100px;
+
+  width: 100%;
+  height: 100%;
 }
 
 .modal__content {
@@ -38,8 +46,9 @@
   max-width: 860px;
   min-height: 100px;
   padding: @large-padding * 1.5;
-  box-shadow: @base-unit/2 @base-unit*8 @base-unit*16 0 fade(@color-dark, 65%);
-  margin: @large-margin;
+  box-shadow: 0px 32px 64px 0 rgba(0, 0, 0, 0.75);
+  margin: 64px;
+  border-radius: 6px;
 }
 
 .modal__close-button {
