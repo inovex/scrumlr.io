@@ -13,6 +13,8 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@material/react-ripple": "^0.6.2",
+    "base-x": "^3.0.5",
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
     "firebase": "^5.2.0",
@@ -41,6 +43,7 @@
     "swipe-js-iso": "^2.0.4"
   },
   "devDependencies": {
+    "@types/base-x": "^1.0.29",
     "@types/blueimp-md5": "^2.7.0",
     "@types/classnames": "^2.2.0",
     "@types/enzyme": "^3.1.9",
@@ -83,7 +86,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "start:js": "react-scripts-ts start",
+    "start:js": "SASS_PATH='./node_modules' react-scripts-ts start",
     "start": "npm-run-all -p css:watch start:js",
     "start:no-browser": "BROWSER=none npm start",
     "css:build": "lessig src/",

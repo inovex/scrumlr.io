@@ -83,7 +83,6 @@ export interface PublicBoardData {
   };
   applicants?: {
     [memberUid: string]: {
-      uid: string;
       displayName: string;
       photoUrl: string;
     };
@@ -97,8 +96,8 @@ export interface PrivateBoardData {
   config: BoardConfig;
   cards?: BoardCards;
   users: BoardUsers;
-  keyShare?: {
-    [memberUid: string]: string;
+  keyStore?: {
+    [publicKey: string]: string;
   };
   presence?: {
     [memberUid: string]: boolean;

@@ -42,8 +42,10 @@ function initialBoardConfig(
               publicKey: crypto.getPublicKey()!!
             }
           },
-          keyShare: {
-            [user.uid]: await crypto.exportSymmetricKey(crypto.getPublicKey()!!)
+          keyStore: {
+            [crypto.getPublicKey()!!]: await crypto.exportSymmetricKey(
+              crypto.getPublicKey()!!
+            )
           },
           presence: {}
         }
@@ -73,8 +75,6 @@ export function mapStateToProps(
   function onCreateNewBoard(mode: RetroMode) {
     const auth = getFirebase().auth();
     initialBoardConfig(auth.currentUser!!, mode, true).then(board => {
-      console.log('BB', board);
-
       getFirebase()
         .ref('/boards')
         .push(board)

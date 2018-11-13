@@ -8,6 +8,7 @@ import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
+import { Crypto } from '../../util/crypto';
 
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
 
@@ -17,8 +18,6 @@ export interface BoardGuardState {
   isApplicantAuthorized?: boolean;
   isMember?: boolean;
   isAuthenticated?: boolean;
-
-  publicKey?: string;
 
   // wait until member is added synchronously on the database, otherwise
   // can't proceed, because user won't have permissions to read data
@@ -35,12 +34,33 @@ export class BoardGuard extends React.Component<
   memberReference: firebase.database.Reference;
   authorizationReference: firebase.database.Reference;
   authStateHandle: firebase.Unsubscribe;
+  crypto: Crypto;
 
   isReady() {
     if (this.state.isAuthenticated === undefined) {
       return false;
     }
-    return Boolean(!this.state.isAddingMember && this.state.isMember);
+
+    const isMember = Boolean(!this.state.isAddingMember && this.state.isMember);
+    if (isMember) {
+      const firebase = getFirebase() as firebase.app.App &
+        firebase.database.Database;
+      const boardId = this.props.match.params.id;
+      const user = firebase.auth().currentUser as User;
+
+      // add presence link
+      const presenceIndicatorReference = firebase.ref(
+        `/boards/${boardId}/private/presence/${user.uid}`
+      );
+      const whileOnlineReference = firebase.ref('.info/connected');
+      whileOnlineReference.on('value', (snapshot: any) => {
+        if (snapshot.val()) {
+          presenceIndicatorReference.onDisconnect().remove();
+          presenceIndicatorReference.set(true);
+        }
+      });
+    }
+    return isMember;
   }
 
   reinitializeMemberReference(boardId: string) {
@@ -111,8 +131,7 @@ export class BoardGuard extends React.Component<
         if (securedBoard.exists()) {
           this.setState({
             isInvalidBoard: false,
-            isSecuredBoard: securedBoard.val().secure,
-            publicKey: securedBoard.val().key
+            isSecuredBoard: securedBoard.val().secure
           });
         } else {
           this.setState({ isInvalidBoard: true });
@@ -134,20 +153,10 @@ export class BoardGuard extends React.Component<
         .ref(`/boards/${boardId}/private/users/${user.uid}`)
         .set({
           name: user.displayName,
-          image: user.photoURL
+          image: user.photoURL,
+          publicKey: this.crypto.getPublicKey()
         })
         .then(() => {
-          const presenceIndicatorReference = firebase.ref(
-            `/boards/${boardId}/private/presence/${user.uid}`
-          );
-          const whileOnlineReference = firebase.ref('.info/connected');
-          whileOnlineReference.on('value', (snapshot: any) => {
-            if (snapshot.val()) {
-              presenceIndicatorReference.onDisconnect().remove();
-              presenceIndicatorReference.set(true);
-            }
-          });
-
           this.setState({ isAddingMember: false });
         });
     });
@@ -160,7 +169,8 @@ export class BoardGuard extends React.Component<
 
     firebase.ref(`/boards/${boardId}/public/applicants/${user.uid}`).set({
       displayName: user.displayName || '', // FIXME
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      publicKey: this.crypto.getPublicKey()
     });
   }
 
@@ -228,18 +238,21 @@ export class BoardGuard extends React.Component<
   }
 
   componentDidMount() {
-    this.checkBoardReference(this.props.match.params.id);
+    this.crypto = new Crypto();
+    this.crypto.initKeypair().then(() => {
+      this.checkBoardReference(this.props.match.params.id);
 
-    this.authStateHandle = getFirebase()
-      .auth()
-      .onAuthStateChanged(
-        (user: User) => {
-          this.setState({ isAuthenticated: user !== null });
-        },
-        () => {
-          this.setState({ isAuthenticated: false });
-        }
-      );
+      this.authStateHandle = getFirebase()
+        .auth()
+        .onAuthStateChanged(
+          (user: User) => {
+            this.setState({ isAuthenticated: user !== null });
+          },
+          () => {
+            this.setState({ isAuthenticated: false });
+          }
+        );
+    });
   }
 
   componentWillUnmount() {
@@ -268,6 +281,20 @@ export class BoardGuard extends React.Component<
       );
     }
 
+    // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
+    // after user has been logged in successfully.
+    if (isAuthenticated !== undefined && !isAuthenticated) {
+      const boardId = this.props.match.params.id;
+      return (
+        <Redirect
+          to={{
+            pathname: `/join/${boardId}`,
+            state: { referrer: url }
+          }}
+        />
+      );
+    }
+
     const ready = this.isReady();
     if (!ready) {
       let status: string | undefined = undefined;
@@ -283,20 +310,6 @@ export class BoardGuard extends React.Component<
       }
 
       return <LoadingScreen status={status} />;
-    }
-
-    // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
-    // after user has been logged in successfully.
-    if (isAuthenticated !== undefined && !isAuthenticated) {
-      const boardId = this.props.match.params.id;
-      return (
-        <Redirect
-          to={{
-            pathname: `/join/${boardId}`,
-            state: { referrer: url }
-          }}
-        />
-      );
     }
 
     // If the user is logged in render the board page.

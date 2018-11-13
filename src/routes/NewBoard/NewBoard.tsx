@@ -13,6 +13,7 @@ import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
 import { RetroMode } from '../../constants/mode';
 import StartButton from '../../components/StartButton';
+import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
@@ -54,6 +55,13 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     const { uid } = this.props;
     return (
       <WelcomeArea>
+        <MembershipRequestModal
+          member={{
+            name: 'Karl',
+            photo:
+              'https://static.intercomassets.com/avatars/822775/square_128/user-avatar-1478085513.png?1478085513'
+          }}
+        />
         {!uid && (
           <div className="new-board__action-area-content">
             <div>

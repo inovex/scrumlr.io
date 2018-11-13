@@ -1,3 +1,8 @@
+import * as baseX from 'base-x';
+
+const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+const bs58 = baseX(BASE58);
+
 const KEY_CAPABILITIES = ['encrypt', 'decrypt'];
 
 const ENCRYPTION_ALGORITHM: RsaHashedImportParams = {
@@ -7,10 +12,6 @@ const ENCRYPTION_ALGORITHM: RsaHashedImportParams = {
 
 const LOCAL_STORAGE_PUBLIC_KEY = 'publicKey';
 const LOCAL_STORAGE_PRIVATE_KEY = 'privateKey';
-
-function ab2str(buf: ArrayBuffer) {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
-}
 
 function str2ab(str: string) {
   const buf = new ArrayBuffer(str.length); // 2 bytes for each char
@@ -22,12 +23,11 @@ function str2ab(str: string) {
 }
 
 function base64ab2str(buf: ArrayBuffer) {
-  return btoa(ab2str(buf));
+  return bs58.encode(new Buffer(buf));
 }
 
 function base64str2ab(str: string) {
-  const decodedString = atob(str);
-  return str2ab(decodedString);
+  return new Uint8Array(bs58.decode(str));
 }
 
 export class Crypto {

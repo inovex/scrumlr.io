@@ -1,0 +1,29 @@
+.membership-request-modal__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.membership-request-modal__request-message {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 24px;
+}
+
+.membership-request-modal__member-photo {
+  border-radius: 100%;
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+}
+
+.membership-request-modal__prompt {
+  max-width: 300px;
+}
+
+.membership-request-modal__action-area {
+  display: flex;
+  justify-content: flex-end;
+}

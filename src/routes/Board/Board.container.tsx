@@ -7,7 +7,6 @@ import { SETUP_COMPLETED } from '../../actions';
 import { BoardProps } from './Board';
 import {
   BoardConfig,
-  UserInformation,
   FirebaseProp,
   StoreState,
   BoardCards,
@@ -17,6 +16,7 @@ import {
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { getGravatar } from '../../controller/gravatar';
+import { Crypto } from '../../util/crypto';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -50,6 +50,37 @@ export const mapStateToProps = (
   let focusedCard: Optional<Card> = undefined;
   if (boardConfig.focusedCardId) {
     focusedCard = cards[boardConfig.focusedCardId];
+  }
+
+  // TODO cleanup symmetric key sync
+  if (isBoardAdmin && users) {
+    const keyStore = board.keyStore;
+
+    if (keyStore) {
+      const crypto = new Crypto();
+      crypto.initKeypair().then(() => {
+        const key = keyStore[crypto.getPublicKey()!!];
+
+        if (key) {
+          crypto.importSymmetricKey(key).then(() => {
+            for (let uid in users) {
+              if (keyStore && !keyStore[users[uid].publicKey!!]) {
+                crypto
+                  .exportSymmetricKey(users[uid].publicKey!!)
+                  .then(exportedKey => {
+                    firebase.update(
+                      `${boardSelector}/keyStore/${users[uid].publicKey}`,
+                      {
+                        [users[uid].publicKey!!]: exportedKey
+                      }
+                    );
+                  });
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   function onToggleShowAuthor() {
@@ -217,42 +248,8 @@ export function mergeProps(
   { dispatch }: { dispatch: Dispatch<any> },
   ownProps: BoardProps
 ): BoardProps {
-  const { auth, boardSelector } = stateProps;
-  const { firebase } = ownProps;
-
   function onRegisterCurrentUser() {
-    if (!auth.uid) {
-      return;
-    }
-    const promises: Promise<any>[] = [];
-
-    // FIXME is this needed?
-    /*if (!boardConfig || !boardConfig.creatorUid) {
-      promises.push(
-        firebase
-          .set(`${boardSelector}/config/creatorUid`, auth.uid)
-          .catch(() => {
-            // Nothing to do. An admin has been set already for this board.
-          })
-      );
-    }*/
-
-    const user: UserInformation = {
-      name: auth.displayName,
-      image: auth.photoURL,
-      ready: false
-    };
-    promises.push(firebase.set(`${boardSelector}/users/${auth.uid}`, user));
-
-    Promise.all(promises)
-      .then(() => {
-        dispatch({ type: SETUP_COMPLETED });
-      })
-      .catch((err: PromiseRejectionEvent) => {
-        Raven.captureMessage('Could not register current user', {
-          extra: { reason: err.reason, uid: auth.uid, boardId: boardSelector }
-        });
-      });
+    dispatch({ type: SETUP_COMPLETED });
   }
 
   return {

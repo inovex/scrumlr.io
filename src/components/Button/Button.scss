@@ -1,0 +1,20 @@
+@import "@material/react-ripple/index.scss";
+
+.button {
+  outline: none;
+  overflow: hidden;
+
+  height: 48px;
+  min-width: 100px;
+
+  color: white;
+  background: blue;
+
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states;
+  @include mdc-states-base-color(white);
+  @include mdc-states-hover-opacity(.1);
+  @include mdc-states-focus-opacity(.2);
+  @include mdc-states-press-opacity(.3);
+}

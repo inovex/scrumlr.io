@@ -772,6 +772,35 @@
   version "0.2.11"
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.11.tgz#32a853fad9974cbbc9fc766ec5699a18b22ccee6"
 
+"@material/animation@^0.40.1":
+  version "0.40.1"
+  resolved "https://registry.elements.inovex.io/@material%2fanimation/-/animation-0.40.1.tgz#c5ff31e7d7e17324a0045e889d3530b150b9fcec"
+
+"@material/base@^0.40.1":
+  version "0.40.1"
+  resolved "https://registry.elements.inovex.io/@material%2fbase/-/base-0.40.1.tgz#a0d8e19cee98dae0f96dbf0887a14b3f7acd2aac"
+
+"@material/react-ripple@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.elements.inovex.io/@material%2freact-ripple/-/react-ripple-0.6.2.tgz#94c3c0e16c9bc772a0b6482a34655b1e31e00a05"
+  dependencies:
+    "@material/ripple" "^0.40.1"
+    classnames "^2.2.5"
+    prop-types "^15.6.1"
+    react "^16.4.2"
+
+"@material/ripple@^0.40.1":
+  version "0.40.1"
+  resolved "https://registry.elements.inovex.io/@material%2fripple/-/ripple-0.40.1.tgz#57cbc689303b48282229cb9b62556af7442e852a"
+  dependencies:
+    "@material/animation" "^0.40.1"
+    "@material/base" "^0.40.1"
+    "@material/theme" "^0.40.1"
+
+"@material/theme@^0.40.1":
+  version "0.40.1"
+  resolved "https://registry.elements.inovex.io/@material%2ftheme/-/theme-0.40.1.tgz#3cc3f1bf87ee9581df03e347a1979e53ae617221"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -811,6 +840,10 @@
     "@babel/preset-react" "^7.0.0"
     "@svgr/core" "^2.4.1"
     loader-utils "^1.1.0"
+
+"@types/base-x@^1.0.29":
+  version "1.0.29"
+  resolved "https://registry.elements.inovex.io/@types%2fbase-x/-/base-x-1.0.29.tgz#8a2d73e4a5c3121757a5f8870cfa4509655186b6"
 
 "@types/blueimp-md5@^2.7.0":
   version "2.7.0"
@@ -1746,6 +1779,12 @@ babylon@^6.18.0:
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
+
+base-x@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.elements.inovex.io/base-x/-/base-x-3.0.5.tgz#d3ada59afed05b921ab581ec3112e6444ba0795a"
+  dependencies:
+    safe-buffer "^5.0.1"
 
 base64-js@^1.0.2:
   version "1.3.0"
@@ -8806,6 +8845,15 @@ react@^16.4.1:
     prop-types "^15.6.2"
     scheduler "^0.10.0"
 
+react@^16.4.2:
+  version "16.6.3"
+  resolved "https://registry.elements.inovex.io/react/-/react-16.6.3.tgz#25d77c91911d6bbdd23db41e70fb094cc1e0871c"
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.11.2"
+
 read-pkg-up@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-1.0.1.tgz#9d63c13276c065918d57f002a57f40a1b643fb02"
@@ -9363,6 +9411,13 @@ saxes@^3.1.3:
 scheduler@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.10.0.tgz#7988de90fe7edccc774ea175a783e69c40c521e1"
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+
+scheduler@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.elements.inovex.io/scheduler/-/scheduler-0.11.2.tgz#a8db5399d06eba5abac51b705b7151d2319d33d3"
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
