@@ -23,13 +23,15 @@ const MembershipRequestModal: React.SFC<MembershipRequestModalProps> = ({
     <div className="membership-request-modal__container">
       <h1 className="membership-request-modal__h1">Grant access</h1>
       <div className="membership-request-modal__request-message">
-        <img
-          src={member.photo}
-          className="membership-request-modal__member-photo"
-        />
+        {member.photo && (
+          <img
+            src={member.photo}
+            className="membership-request-modal__member-photo"
+          />
+        )}
         <p className="membership-request-modal__prompt">
           <strong>{member.name}</strong> requests access to this session. Do you
-          want to grant him access to this board?
+          want to grant him the permission to access this board?
         </p>
       </div>
 

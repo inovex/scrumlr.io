@@ -168,9 +168,8 @@ export class BoardGuard extends React.Component<
     const user = firebase.auth().currentUser as User;
 
     firebase.ref(`/boards/${boardId}/public/applicants/${user.uid}`).set({
-      displayName: user.displayName || '', // FIXME
-      photoURL: user.photoURL,
-      publicKey: this.crypto.getPublicKey()
+      name: user.displayName || '', // FIXME
+      image: user.photoURL
     });
   }
 

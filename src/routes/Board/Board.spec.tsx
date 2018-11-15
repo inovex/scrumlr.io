@@ -44,7 +44,9 @@ describe('<Board />', () => {
       onChangeEmail: jest.fn(),
       onToggleShowAuthor: jest.fn(),
       isShowAuthor: false,
-      isAnonymous: false
+      isAnonymous: false,
+      acceptUser: jest.fn(),
+      waitingUsers: []
     };
   });
 

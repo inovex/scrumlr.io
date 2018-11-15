@@ -1,7 +1,7 @@
 import { AnyAction, Dispatch } from 'redux';
 import { isLoaded, getVal } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
-import { debounce } from 'lodash';
+import { debounce, difference } from 'lodash';
 
 import { SETUP_COMPLETED } from '../../actions';
 import { BoardProps } from './Board';
@@ -12,7 +12,8 @@ import {
   BoardCards,
   Card,
   Optional,
-  PrivateBoardData
+  PrivateBoardData,
+  PublicBoardData
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { getGravatar } from '../../controller/gravatar';
@@ -50,6 +51,43 @@ export const mapStateToProps = (
   let focusedCard: Optional<Card> = undefined;
   if (boardConfig.focusedCardId) {
     focusedCard = cards[boardConfig.focusedCardId];
+  }
+
+  // TODO check applicants and show request dialogs
+  const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
+  const publicBoard: Optional<PublicBoardData> = getVal(
+    fbState,
+    `data/${publicBoardSelector}`,
+    undefined
+  );
+
+  let waitingUsers: { uid: string; name: string; image: string }[] = [];
+  if (isLoaded(publicBoard) && publicBoard) {
+    const { accessAuthorized, applicants } = publicBoard;
+
+    if (applicants) {
+      const waitingUserUids = difference(
+        Object.keys(applicants),
+        Object.keys(accessAuthorized || {})
+      );
+      waitingUsers = waitingUserUids.map(uid => ({ uid, ...applicants[uid] }));
+    }
+  }
+
+  function acceptUser(uid: string, accept: boolean) {
+    firebase
+      .set(`${publicBoardSelector}/accessAuthorized/${uid}`, accept)
+      .catch((err: any) => {
+        Raven.captureMessage('unable to accept user access', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardSelector,
+            user: uid,
+            accept
+          }
+        });
+      });
   }
 
   // TODO cleanup symmetric key sync
@@ -230,6 +268,8 @@ export const mapStateToProps = (
     onChangeEmail,
     onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
+    waitingUsers,
+    acceptUser,
     ...app,
 
     // other props, only used in mergeProps

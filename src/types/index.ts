@@ -83,8 +83,8 @@ export interface PublicBoardData {
   };
   applicants?: {
     [memberUid: string]: {
-      displayName: string;
-      photoUrl: string;
+      name: string;
+      image: string;
     };
   };
   accessAuthorized?: {

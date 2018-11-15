@@ -29,6 +29,7 @@ import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
+import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -56,6 +57,13 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   username?: string;
   email?: string;
   isAnonymous: boolean;
+
+  waitingUsers: {
+    uid: string;
+    name: string;
+    image: string;
+  }[];
+  acceptUser: (uid: string, accept: boolean) => void;
 
   [key: string]: any;
 }
@@ -289,7 +297,12 @@ export class Board extends React.Component<BoardProps, BoardState> {
   };
 
   render() {
-    let { boardConfig, setupCompleted } = this.props;
+    const {
+      boardConfig,
+      setupCompleted,
+      waitingUsers,
+      acceptUser
+    } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
     if (!configLoaded || !setupCompleted) {
       return <LoadingScreen />;
@@ -301,61 +314,80 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showIntro =
       !showSettings && !showFeedback && this.state.showPhaseIntro;
 
+    let waitingUser;
+    if (waitingUsers && waitingUsers.length > 0) {
+      const user = waitingUsers[0];
+      waitingUser = (
+        <MembershipRequestModal
+          onAccept={() => {
+            acceptUser(user.uid, true);
+          }}
+          onDeny={() => {
+            acceptUser(user.uid, false);
+          }}
+          member={user}
+        />
+      );
+    }
+
     return (
-      <div className="board-page">
-        <Header
-          boardId={this.props.boardSelector}
-          onExport={() => this.handleExport()}
-          onSignOut={this.props.onSignOut}
-          onOpenModal={this.handleOpenModal}
-        />
-
-        <ColumnView
-          boardUrl={this.props.boardSelector}
-          className="board-page__column-view"
-        />
-
-        {showSettings && (
-          <SettingsModal
-            isAdmin={this.props.isBoardAdmin}
-            boardName={boardConfig.name}
-            username={this.props.username}
-            email={this.props.email}
-            isAnonymous={this.props.isAnonymous}
-            onChangeBoardName={this.props.onChangeBoardName}
-            onChangeUsername={this.props.onChangeUsername}
-            onChangeEmail={this.props.onChangeEmail}
-            onClose={this.handleCloseModal}
-            onToggleShowAuthor={this.props.onToggleShowAuthor}
-            isShowAuthor={this.props.isShowAuthor}
+      <>
+        {waitingUser}
+        <div className="board-page">
+          <Header
+            boardId={this.props.boardSelector}
+            onExport={() => this.handleExport()}
+            onSignOut={this.props.onSignOut}
+            onOpenModal={this.handleOpenModal}
           />
-        )}
 
-        {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
+          <ColumnView
+            boardUrl={this.props.boardSelector}
+            className="board-page__column-view"
+          />
 
-        {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-
-        <ReactCSSTransitionGroup
-          transitionName="phase-splash__animation"
-          transitionAppear={true}
-          transitionAppearTimeout={600}
-          transitionEnterTimeout={600}
-          transitionLeaveTimeout={600}
-          transitionEnter={true}
-          transitionLeave={true}
-        >
-          {showIntro && (
-            <PhaseSplash
-              key="phase-splash"
-              phase={getPhaseConfiguration(
-                boardConfig.mode,
-                this.props.boardConfig.guidedPhase
-              )}
-              onClose={this.closePhaseIntro}
+          {showSettings && (
+            <SettingsModal
+              isAdmin={this.props.isBoardAdmin}
+              boardName={boardConfig.name}
+              username={this.props.username}
+              email={this.props.email}
+              isAnonymous={this.props.isAnonymous}
+              onChangeBoardName={this.props.onChangeBoardName}
+              onChangeUsername={this.props.onChangeUsername}
+              onChangeEmail={this.props.onChangeEmail}
+              onClose={this.handleCloseModal}
+              onToggleShowAuthor={this.props.onToggleShowAuthor}
+              isShowAuthor={this.props.isShowAuthor}
             />
           )}
-        </ReactCSSTransitionGroup>
-      </div>
+
+          {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
+
+          {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+
+          <ReactCSSTransitionGroup
+            transitionName="phase-splash__animation"
+            transitionAppear={true}
+            transitionAppearTimeout={600}
+            transitionEnterTimeout={600}
+            transitionLeaveTimeout={600}
+            transitionEnter={true}
+            transitionLeave={true}
+          >
+            {showIntro && (
+              <PhaseSplash
+                key="phase-splash"
+                phase={getPhaseConfiguration(
+                  boardConfig.mode,
+                  this.props.boardConfig.guidedPhase
+                )}
+                onClose={this.closePhaseIntro}
+              />
+            )}
+          </ReactCSSTransitionGroup>
+        </div>
+      </>
     );
   }
 }
