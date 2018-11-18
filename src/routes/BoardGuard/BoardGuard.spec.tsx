@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import BoardGuard, { BoardGuardProps, BoardGuardState } from './BoardGuard';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+import { Board } from '../Board';
 
 jest.mock('react-redux-firebase', () => ({
   getFirebase: () => ({
@@ -37,7 +38,8 @@ describe('<BoardGuard />', () => {
           referrer: 'http://example.com/some/url'
         }
       } as any,
-      history: null as any
+      history: null as any,
+      component: Board
     };
   });
 

@@ -10,7 +10,9 @@ import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
 import { CRYPTO } from '../../util/global';
 
-export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
+export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {
+  component: React.ComponentType<any>;
+}
 
 export interface BoardGuardState {
   isInvalidBoard?: boolean;
@@ -181,7 +183,7 @@ export class BoardGuard extends React.Component<
       firebase
         .ref(`/boards/${boardId}/private/users/${user.uid}`)
         .set({
-          name: user.displayName,
+          name: user.displayName || '', // FIXME
           image: user.photoURL,
           publicKey: CRYPTO.getPublicKey()
         })

@@ -10,6 +10,7 @@ import HeadlinePrefix from './subcomponents/HeadlinePrefix';
 import { StoreState, BoardCards, BoardConfig, Card } from '../../types';
 import './PrintViewBoard.css';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
+import Deferred from '../../components/Deferred';
 
 export interface PrintViewBoardProps
   extends RouteComponentProps<{ id: string }> {
@@ -18,10 +19,8 @@ export interface PrintViewBoardProps
   boardUrl: string;
 }
 
-interface PrintColumnCards {
-  positive: Card[];
-  negative: Card[];
-  actions: Card[];
+export interface PrintViewBoardState {
+  decryptedCards: BoardCards;
 }
 
 function callBrowserPrintDialog() {
@@ -31,10 +30,13 @@ function callBrowserPrintDialog() {
   }, 100);
 }
 
-export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
-  static sortCards(cards: BoardCards): PrintColumnCards {
+export class PrintViewBoard extends React.Component<
+  PrintViewBoardProps,
+  PrintViewBoardState
+> {
+  static sortCards(cards: BoardCards): { [columnName: string]: Card[] } {
     const cardsArray = Object.keys(cards).map(key => cards[key]);
-    const groups = (groupBy(cardsArray, 'type') as any) as PrintColumnCards;
+    const groups = groupBy(cardsArray, 'type') as any;
     for (let key in groups) {
       const sorted = sortBy(groups[key], ['votes', 'timestamp']);
       sorted.reverse();
@@ -55,12 +57,12 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
     }
   }
 
-  componentWillReceiveProps(newProps: PrintViewBoardProps) {
+  componentDidUpdate(oldProps: PrintViewBoardProps) {
     // If data has not been available already during mounting (e.g. when reloading the page),
     // call the browser dialog when data has arrived.
     if (
-      isEmpty(this.props.cards) &&
-      !isEmpty(newProps.cards) &&
+      isEmpty(oldProps.cards) &&
+      !isEmpty(this.props.cards) &&
       window &&
       typeof window.print === 'function'
     ) {
@@ -106,7 +108,7 @@ export class PrintViewBoard extends React.Component<PrintViewBoardProps, {}> {
           {boardConfig.showAuthor && (
             <cite className="print-view-board__cite">{card.author}</cite>
           )}
-          {card.text}
+          <Deferred value={card.text} iv={card.iv} />
         </blockquote>
         <ul className="card-list-meta">
           <li
