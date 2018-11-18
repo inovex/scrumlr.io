@@ -11,7 +11,7 @@ import NewBoard from './routes/NewBoard';
 import LoginBoard from './routes/LoginBoard';
 import PrintViewBoard from './routes/PrintViewBoard';
 import Icon from './components/Icon/Icon';
-import { Board } from './routes/Board';
+import Board from './routes/Board';
 
 export interface RouterProps {
   firebase?: any;
