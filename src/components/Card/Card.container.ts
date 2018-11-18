@@ -6,6 +6,7 @@ import { BoardCards, Card, StoreState } from '../../types';
 import { OwnCardProps, StateCardProps } from './Card';
 import { AnyAction, Dispatch } from 'redux';
 import { EDIT_STATUS } from '../../actions';
+import { CRYPTO } from '../../util/global';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -118,19 +119,21 @@ export const mapStateToProps = (
   }
 
   function onUpdateCardText(key: string, text: string) {
-    getFirebase()
-      .ref(`${ownProps.boardId}/cards/${key}`)
-      .update({ text })
-      .catch((err: Error) => {
-        Raven.captureMessage('Could not update text on card', {
-          extra: {
-            reason: err.message,
-            uid: user.uid,
-            boardId: ownProps.boardId,
-            cardId: key
-          }
+    CRYPTO.encrypt(text).then(value => {
+      getFirebase()
+        .ref(`${ownProps.boardId}/cards/${key}`)
+        .update({ text: value })
+        .catch((err: Error) => {
+          Raven.captureMessage('Could not update text on card', {
+            extra: {
+              reason: err.message,
+              uid: user.uid,
+              boardId: ownProps.boardId,
+              cardId: key
+            }
+          });
         });
-      });
+    });
   }
 
   function onStackCards(cardSourceId: string, cardTargetId: string) {

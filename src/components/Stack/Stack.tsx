@@ -5,6 +5,7 @@ import './Stack.css';
 
 import { Card as CardModel } from '../../types';
 import Card from '../Card';
+import Deferred from '../Deferred';
 
 export interface StackProps {
   boardUrl: string;
@@ -13,7 +14,6 @@ export interface StackProps {
   isVoteSummaryShown: boolean;
   className?: string;
 }
-
 class Stack extends React.Component<StackProps, {}> {
   renderCard(card: CardModel) {
     return (
@@ -24,7 +24,7 @@ class Stack extends React.Component<StackProps, {}> {
         votable={this.props.isVotingAllowed}
         showVotes={this.props.isVoteSummaryShown}
       >
-        {card.text}
+        <Deferred value={card.text} />
       </Card>
     );
   }

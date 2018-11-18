@@ -10,7 +10,7 @@ import Input from '../Input/Input';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-
+import { CRYPTO } from '../../util/global';
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
@@ -59,12 +59,13 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     }
   };
 
-  handleAdd = () => {
+  handleAdd = async () => {
     const { column, onAdd } = this.props;
     const { text } = this.state;
 
     if (text.length > 0) {
-      onAdd(column.id, column.type, text);
+      const encryptedText = await CRYPTO.encrypt(text);
+      onAdd(column.id, column.type, encryptedText);
       this.setState(() => ({ text: '' }));
     }
   };
@@ -99,7 +100,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     );
   }
 }
-
-export default compose(firebaseConnect(), connect(mapStateToProps))(
-  AddCard as any
-) as React.ComponentClass<any>;
+export default compose(
+  firebaseConnect(),
+  connect(mapStateToProps)
+)(AddCard as any) as React.ComponentClass<any>;

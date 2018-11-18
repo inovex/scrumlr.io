@@ -8,7 +8,7 @@ import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
-import { Crypto } from '../../util/crypto';
+import { CRYPTO } from '../../util/global';
 
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {}
 
@@ -18,6 +18,7 @@ export interface BoardGuardState {
   isApplicantAuthorized?: boolean;
   isMember?: boolean;
   isAuthenticated?: boolean;
+  isKeyImported?: boolean;
 
   // wait until member is added synchronously on the database, otherwise
   // can't proceed, because user won't have permissions to read data
@@ -33,6 +34,7 @@ export class BoardGuard extends React.Component<
   boardConfigReference: firebase.database.Reference;
   memberReference: firebase.database.Reference;
   authorizationReference: firebase.database.Reference;
+  keyReference: firebase.database.Reference;
   authStateHandle: firebase.Unsubscribe;
   crypto: Crypto;
 
@@ -48,17 +50,43 @@ export class BoardGuard extends React.Component<
       const boardId = this.props.match.params.id;
       const user = firebase.auth().currentUser as User;
 
+      if (this.state.isSecuredBoard) {
+        this.keyReference = firebase.ref(
+          `/boards/${boardId}/private/keyStore/${CRYPTO.getPublicKey()}`
+        );
+
+        this.keyReference.on(
+          'value',
+          (key: DataSnapshot) => {
+            if (key.exists() && !!key.val()) {
+              CRYPTO.importSymmetricKey(key.val()).then(() => {
+                this.setState({ isKeyImported: true });
+              });
+            }
+          },
+          () => {
+            this.setState({ isKeyImported: false });
+          }
+        );
+      } else {
+        this.setState({ isKeyImported: true });
+      }
+
       // add presence link
-      const presenceIndicatorReference = firebase.ref(
-        `/boards/${boardId}/private/presence/${user.uid}`
-      );
-      const whileOnlineReference = firebase.ref('.info/connected');
-      whileOnlineReference.on('value', (snapshot: any) => {
-        if (snapshot.val()) {
-          presenceIndicatorReference.onDisconnect().remove();
-          presenceIndicatorReference.set(true);
-        }
-      });
+      if (this.state.isKeyImported) {
+        const presenceIndicatorReference = firebase.ref(
+          `/boards/${boardId}/private/presence/${user.uid}`
+        );
+        const whileOnlineReference = firebase.ref('.info/connected');
+        whileOnlineReference.on('value', (snapshot: any) => {
+          if (snapshot.val()) {
+            presenceIndicatorReference.onDisconnect().remove();
+            presenceIndicatorReference.set(true);
+          }
+        });
+      } else {
+        return false;
+      }
     }
     return isMember;
   }
@@ -133,6 +161,7 @@ export class BoardGuard extends React.Component<
             isInvalidBoard: false,
             isSecuredBoard: securedBoard.val().secure
           });
+          CRYPTO.setActive(securedBoard.val().secure);
         } else {
           this.setState({ isInvalidBoard: true });
         }
@@ -154,7 +183,7 @@ export class BoardGuard extends React.Component<
         .set({
           name: user.displayName,
           image: user.photoURL,
-          publicKey: this.crypto.getPublicKey()
+          publicKey: CRYPTO.getPublicKey()
         })
         .then(() => {
           this.setState({ isAddingMember: false });
@@ -237,8 +266,7 @@ export class BoardGuard extends React.Component<
   }
 
   componentDidMount() {
-    this.crypto = new Crypto();
-    this.crypto.initKeypair().then(() => {
+    CRYPTO.initKeypair().then(() => {
       this.checkBoardReference(this.props.match.params.id);
 
       this.authStateHandle = getFirebase()
@@ -306,6 +334,8 @@ export class BoardGuard extends React.Component<
         status = 'Waiting for board admin approval';
       } else if (this.state.isAuthenticated === undefined) {
         status = 'Authentication in progress';
+      } else if (this.state.isKeyImported) {
+        status = 'Checking encryption key';
       }
 
       return <LoadingScreen status={status} />;

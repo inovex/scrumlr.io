@@ -13,6 +13,10 @@ const ENCRYPTION_ALGORITHM: RsaHashedImportParams = {
 const LOCAL_STORAGE_PUBLIC_KEY = 'publicKey';
 const LOCAL_STORAGE_PRIVATE_KEY = 'privateKey';
 
+function ab2str(buf: ArrayBuffer) {
+  return String.fromCharCode.apply(null, new Uint8Array(buf));
+}
+
 function str2ab(str: string) {
   const buf = new ArrayBuffer(str.length); // 2 bytes for each char
   const bufView = new Uint8Array(buf);
@@ -35,6 +39,7 @@ export class Crypto {
   privateKey: CryptoKey;
 
   symmetricKey: CryptoKey;
+  activated: boolean = false;
 
   // import or generate keypair
   async initKeypair() {
@@ -133,31 +138,47 @@ export class Crypto {
     );
   }
 
+  setActive(active: boolean) {
+    this.activated = active;
+  }
+
   getPublicKey() {
     return localStorage.getItem(LOCAL_STORAGE_PUBLIC_KEY);
   }
 
   async encrypt(message: string) {
-    return await window.crypto.subtle.encrypt(
-      {
-        name: 'AES-CTR',
-        counter: new Uint8Array(16),
-        length: 128
-      },
-      this.symmetricKey,
-      str2ab(message)
-    );
+    if (this.activated) {
+      return bs58.encode(
+        new Buffer(
+          await window.crypto.subtle.encrypt(
+            {
+              name: 'AES-CTR',
+              counter: new Uint8Array(16),
+              length: 128
+            },
+            this.symmetricKey,
+            str2ab(message)
+          )
+        )
+      );
+    }
+    return message;
   }
 
   async decrypt(message: string) {
-    return await window.crypto.subtle.decrypt(
-      {
-        name: 'AES-CTR',
-        counter: new ArrayBuffer(16),
-        length: 128
-      },
-      this.symmetricKey,
-      str2ab(message)
-    );
+    if (this.activated) {
+      return ab2str(
+        await window.crypto.subtle.decrypt(
+          {
+            name: 'AES-CTR',
+            counter: new ArrayBuffer(16),
+            length: 128
+          },
+          this.symmetricKey,
+          base64str2ab(message)
+        )
+      );
+    }
+    return message;
   }
 }

@@ -8,6 +8,7 @@ import { Icon } from '../Icon';
 import KeyboardNavigationHint from './KeyboardNavigationHint/KeyboardNavigationHint';
 import { DropTarget } from 'react-dnd';
 import { connect } from 'react-redux';
+import Deferred from '../Deferred';
 
 const Dotdotdot: React.ComponentClass<any> = require('react-dotdotdot');
 
@@ -63,7 +64,9 @@ export class FocusedCard extends React.Component<
 
     const stackIcon = isRootCard
       ? 'stack-top'
-      : this.state.stackIconHover ? 'stack-hover' : 'stack-mid';
+      : this.state.stackIconHover
+        ? 'stack-hover'
+        : 'stack-mid';
 
     const content = (
       <div
@@ -94,7 +97,9 @@ export class FocusedCard extends React.Component<
         )}
 
         <div className="focus-card__vertical-alignment">
-          <Dotdotdot clamp={3}>{card.text}</Dotdotdot>
+          <Dotdotdot clamp={3}>
+            <Deferred value={card.text} />
+          </Dotdotdot>
         </div>
 
         {isAdmin && (
