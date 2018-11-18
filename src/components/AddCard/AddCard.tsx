@@ -30,6 +30,7 @@ export interface StateAddCardProps {
     type: string,
     theme: ColumnType,
     text: string,
+    iv: string,
     timestamp?: string
   ) => void;
 }
@@ -64,8 +65,9 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     const { text } = this.state;
 
     if (text.length > 0) {
-      const encryptedText = await CRYPTO.encrypt(text);
-      onAdd(column.id, column.type, encryptedText);
+      const iv = await CRYPTO.generateInitializationVector();
+      const encryptedText = await CRYPTO.encrypt(text, iv);
+      onAdd(column.id, column.type, encryptedText, iv);
       this.setState(() => ({ text: '' }));
     }
   };

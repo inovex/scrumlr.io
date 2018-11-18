@@ -24,7 +24,7 @@ class Stack extends React.Component<StackProps, {}> {
         votable={this.props.isVotingAllowed}
         showVotes={this.props.isVoteSummaryShown}
       >
-        <Deferred value={card.text} />
+        <Deferred value={card.text} iv={card.iv} />
       </Card>
     );
   }

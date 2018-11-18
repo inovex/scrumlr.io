@@ -98,7 +98,7 @@ export class FocusedCard extends React.Component<
 
         <div className="focus-card__vertical-alignment">
           <Dotdotdot clamp={3}>
-            <Deferred value={card.text} />
+            <Deferred value={card.text} iv={card.iv} />
           </Dotdotdot>
         </div>
 

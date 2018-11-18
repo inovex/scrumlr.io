@@ -32,7 +32,7 @@ export interface StateCardProps {
   onRemove: (id: string) => void;
   onDownvote: (id: string) => void;
   onUpvote: (id: string) => void;
-  onUpdateText: (key: string, value: string) => void;
+  onUpdateText: (key: string, value: string, iv: string) => void;
   onShowVotes: (id: string) => void;
   onFocus: (id: string) => void;
   onCardStack: (cardSourceId: string, cardTargetId: string) => void;

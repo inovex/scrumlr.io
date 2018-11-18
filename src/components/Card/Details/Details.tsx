@@ -16,7 +16,7 @@ export class Details extends React.Component<DetailsProps, {}> {
   handleBlur = (e: React.FormEvent<any>) => {
     const { textContent } = e.target as any;
     const { id, onUpdateText } = this.props;
-    onUpdateText(id, textContent);
+    onUpdateText(id, textContent, this.props.card.iv);
   };
 
   render() {

@@ -17,6 +17,7 @@ export const mapStateToProps = (
     type: string,
     theme: ColumnType,
     value: string,
+    iv: string,
     timestamp?: string
   ) {
     if (value.length === 0) {
@@ -33,6 +34,7 @@ export const mapStateToProps = (
       author: authorName,
       image: authorImage,
       text: value,
+      iv,
       type,
       theme,
       votes: 0,

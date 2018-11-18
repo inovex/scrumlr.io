@@ -3,6 +3,7 @@ import { CRYPTO } from '../../util/global';
 
 export interface DeferredProps {
   value: string;
+  iv: string;
 }
 
 export interface DeferredState {
@@ -14,8 +15,20 @@ export class Deferred extends React.Component<DeferredProps, DeferredState> {
     value: undefined
   };
 
+  shouldComponentUpdate(nextProps: DeferredProps, nextState: DeferredState) {
+    // FIXME loop here because of state update in componentDidUpdate
+    if (
+      this.props.value === nextProps.value &&
+      this.props.iv === nextProps.iv &&
+      this.state.value === nextState.value
+    ) {
+      return false;
+    }
+    return true;
+  }
+
   resolveValue = () => {
-    CRYPTO.decrypt(this.props.value).then((value: any) => {
+    CRYPTO.decrypt(this.props.value, this.props.iv).then((value: any) => {
       this.setState({ value });
     });
   };

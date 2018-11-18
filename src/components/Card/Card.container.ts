@@ -118,8 +118,8 @@ export const mapStateToProps = (
     }
   }
 
-  function onUpdateCardText(key: string, text: string) {
-    CRYPTO.encrypt(text).then(value => {
+  function onUpdateCardText(key: string, text: string, iv: string) {
+    CRYPTO.encrypt(text, iv).then(value => {
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${key}`)
         .update({ text: value })

@@ -6,6 +6,7 @@ export const mockCard = (overwrite?: Partial<Card>): Card => {
     author: 'MockedAuthor',
     image: 'MockedImage',
     text: 'MockedText',
+    iv: '...',
     type: 'positive',
     theme: 'positive',
     votes: 0,

@@ -94,7 +94,7 @@ export class Crypto {
   async initSymmetricKey() {
     this.symmetricKey = await window.crypto.subtle.generateKey(
       {
-        name: 'AES-CTR',
+        name: 'AES-CBC',
         length: 256
       },
       true,
@@ -132,7 +132,7 @@ export class Crypto {
     this.symmetricKey = await window.crypto.subtle.importKey(
       'raw',
       symmtericKeyBuffer,
-      { name: 'AES-CTR', length: 256 },
+      { name: 'AES-CBC', length: 256 },
       true,
       KEY_CAPABILITIES
     );
@@ -146,15 +146,15 @@ export class Crypto {
     return localStorage.getItem(LOCAL_STORAGE_PUBLIC_KEY);
   }
 
-  async encrypt(message: string) {
+  async encrypt(message: string, iv: string) {
+    console.log('E', message, iv);
     if (this.activated) {
       return bs58.encode(
         new Buffer(
           await window.crypto.subtle.encrypt(
             {
-              name: 'AES-CTR',
-              counter: new Uint8Array(16),
-              length: 128
+              name: 'AES-CBC',
+              iv: base64str2ab(iv)
             },
             this.symmetricKey,
             str2ab(message)
@@ -165,14 +165,14 @@ export class Crypto {
     return message;
   }
 
-  async decrypt(message: string) {
+  async decrypt(message: string, iv: string) {
+    console.log('D', message, iv);
     if (this.activated) {
       return ab2str(
         await window.crypto.subtle.decrypt(
           {
-            name: 'AES-CTR',
-            counter: new ArrayBuffer(16),
-            length: 128
+            name: 'AES-CBC',
+            iv: base64str2ab(iv)
           },
           this.symmetricKey,
           base64str2ab(message)
@@ -180,5 +180,11 @@ export class Crypto {
       );
     }
     return message;
+  }
+
+  async generateInitializationVector() {
+    return base64ab2str(
+      await window.crypto.getRandomValues(new Uint8Array(16)).buffer
+    );
   }
 }
