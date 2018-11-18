@@ -34,6 +34,10 @@ $theme-font-family: 'Heebo', sans-serif;
 $theme-font-size: $base-unit * 4;
 $theme-line-height: $base-unit * 6;
 
+// responsive
+$tablet: "screen and (min-width : 768px)";
+$desktop: "screen and (min-width : 1280px)";
+
 // margins & paddings
 $default-margin: $base-unit * 4;
 $large-margin: 2*$default-margin;

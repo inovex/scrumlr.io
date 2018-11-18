@@ -72,9 +72,9 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  function onCreateNewBoard(mode: RetroMode) {
+  function onCreateNewBoard(mode: RetroMode, secure: boolean) {
     const auth = getFirebase().auth();
-    initialBoardConfig(auth.currentUser!!, mode, true).then(board => {
+    initialBoardConfig(auth.currentUser!!, mode, secure).then(board => {
       getFirebase()
         .ref('/boards')
         .push(board)
@@ -85,7 +85,7 @@ export function mapStateToProps(
     });
   }
 
-  function onLogin(email: string, mode: RetroMode) {
+  function onLogin(email: string, mode: RetroMode, secure: boolean) {
     onSignIn = true;
 
     authController(firebase)
@@ -95,7 +95,7 @@ export function mapStateToProps(
         if (state.referrer) {
           location.assign(state.referrer);
         } else {
-          onCreateNewBoard(mode);
+          onCreateNewBoard(mode, secure);
         }
 
         onSignIn = false;

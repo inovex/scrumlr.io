@@ -115,7 +115,7 @@ describe('<NewBoard />', () => {
     xit('should login user correctly', () => {
       const result = mapStateToProps(state, ownProps);
       const email = 'me@example.com';
-      result.onLogin(email, 'positiveNegative');
+      result.onLogin(email, 'positiveNegative', false);
       const firebase = firebaseMock.getFirebase();
       expect(firebase.auth().signInAnonymously).toBeCalled();
       // TODO: can this be tested somehow?

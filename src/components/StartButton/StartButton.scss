@@ -4,7 +4,7 @@
   display: flex;
   min-height: 50px;
 
-  margin-bottom: @default-margin;
+  margin-bottom: $default-margin;
 }
 
 .start-button__start {
@@ -14,11 +14,11 @@
   outline: none;
   font-size: 16px;
   font-weight: 700;
-  color: @color-white;
+  color: $color-white;
   padding: 9px 24px;
   align-self: stretch;
 
-  background-color: @theme-color-primary;
+  background-color: $theme-color-primary;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   transition: background 0.15s ease;
@@ -28,7 +28,7 @@
 
 .start-button__start:focus,
 .start-button__start:hover {
-  background: @color-dark-mint;
+  background: $color-dark-mint;
 }
 
 .start-button__start-label {
@@ -42,14 +42,14 @@
 
 .start-button__dropdown-toggle {
   box-sizing: border-box;
-  border: 2px solid @color-mint;
+  border: 2px solid $color-mint;
   outline: none;
   font-size: 16px;
   font-weight: 700;
-  color: @color-mint;
+  color: $color-mint;
   padding: 9px;
 
-  background-color: @color-white;
+  background-color: $color-white;
   border-left: none;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
@@ -76,8 +76,8 @@
 
 .start-button__dropdown-toggle:focus,
 .start-button__dropdown-toggle:hover {
-  background: @color-dark-mint;
-  color: @color-white;
+  background: $color-dark-mint;
+  color: $color-white;
 }
 
 .start-button__dropdown-wrapper {

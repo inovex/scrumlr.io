@@ -7,8 +7,6 @@ import './StartButton.css';
 import Icon from '../Icon';
 import { DEFAULT_RETRO_MODE } from '../../constants/Retrospective';
 
-const newButton = require('./new.svg');
-
 export interface StartButtonProps {
   onStart: (retroMode: RetroMode) => void;
 }
@@ -68,7 +66,6 @@ export class StartButton extends React.Component<
         onClick={this.toggleSelectionMenu}
       >
         <Icon name="more" />
-        <img src={newButton} className="start-button__dropdown-toggle-button" />
       </button>
     );
 

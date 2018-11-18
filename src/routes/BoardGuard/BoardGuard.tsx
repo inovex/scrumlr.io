@@ -68,7 +68,7 @@ export class BoardGuard extends React.Component<
             this.setState({ isKeyImported: false });
           }
         );
-      } else {
+      } else if (!this.state.isKeyImported) {
         this.setState({ isKeyImported: true });
       }
 

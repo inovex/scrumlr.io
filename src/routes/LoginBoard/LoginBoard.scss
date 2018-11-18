@@ -1,10 +1,10 @@
 @import '../../constants/style';
 
 p.login-board__participants-text {
-  margin-top: @large-margin;
-  margin-bottom: @default-padding;
+  margin-top: $large-margin;
+  margin-bottom: $default-padding;
 }
 
 .login-board__user-list {
-  margin-bottom: @large-margin;
+  margin-bottom: $large-margin;
 }
