@@ -106,11 +106,9 @@ export const mapStateToProps = (
                 crypto
                   .exportSymmetricKey(users[uid].publicKey!!)
                   .then(exportedKey => {
-                    firebase.update(
+                    firebase.set(
                       `${boardSelector}/keyStore/${users[uid].publicKey}`,
-                      {
-                        [users[uid].publicKey!!]: exportedKey
-                      }
+                      exportedKey
                     );
                   });
               }
