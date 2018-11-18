@@ -147,7 +147,6 @@ export class Crypto {
   }
 
   async encrypt(message: string, iv: string) {
-    console.log('E', message, iv);
     if (this.activated) {
       return bs58.encode(
         new Buffer(
@@ -166,7 +165,6 @@ export class Crypto {
   }
 
   async decrypt(message: string, iv: string) {
-    console.log('D', message, iv);
     if (this.activated) {
       return ab2str(
         await window.crypto.subtle.decrypt(
