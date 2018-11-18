@@ -41,7 +41,9 @@ const Router = (props: RouterProps) => (
           <Route path="/join/:id" component={LoginBoard as any} />
           <Route
             path="/print/:id"
-            render={routeProps => <PrintViewBoard {...routeProps} />}
+            render={routeProps => (
+              <BoardGuard {...routeProps} component={PrintViewBoard} />
+            )}
           />
         </Switch>
       </HashRouter>

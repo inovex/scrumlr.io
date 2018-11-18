@@ -4,7 +4,6 @@ import { User } from 'firebase/app';
 import { RouteComponentProps } from 'react-router';
 import { Redirect } from 'react-router-dom';
 
-import Board, { BoardProps } from '../Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
@@ -343,12 +342,8 @@ export class BoardGuard extends React.Component<
       return <LoadingScreen status={status} />;
     }
 
-    // If the user is logged in render the board page.
-    const props: Partial<BoardProps> = {
-      ...this.props
-    };
-
-    return <Board {...props} />;
+    const WrappedComponent = this.props.component;
+    return <WrappedComponent {...this.props} />;
   }
 }
 
