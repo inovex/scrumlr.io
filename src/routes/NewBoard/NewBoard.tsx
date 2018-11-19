@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { Boards } from '../../types';
 import { mapStateToProps } from './NewBoard.container';
-import './NewBoard.css';
+import './NewBoard.scss';
 import { AuthProvider } from '../../constants/Auth';
 import getRandomName from '../../constants/Name';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';

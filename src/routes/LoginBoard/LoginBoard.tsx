@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 
 import { mapStateToProps } from './LoginBoard.container';
-import './LoginBoard.css';
+import './LoginBoard.scss';
 import '../NewBoard/NewBoard.css';
 import { compose } from 'redux';
 import { AuthProvider } from '../../constants/Auth';

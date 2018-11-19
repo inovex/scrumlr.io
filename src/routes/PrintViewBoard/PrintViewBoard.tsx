@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 
 import HeadlinePrefix from './subcomponents/HeadlinePrefix';
 import { StoreState, BoardCards, BoardConfig, Card } from '../../types';
-import './PrintViewBoard.css';
+import './PrintViewBoard.scss';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
 import Deferred from '../../components/Deferred';
 

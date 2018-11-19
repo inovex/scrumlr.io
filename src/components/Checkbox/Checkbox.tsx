@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './Checkbox.css';
+import './Checkbox.scss';
 
 export interface CheckboxProps {
   className?: string;
