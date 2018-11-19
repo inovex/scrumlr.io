@@ -93,7 +93,7 @@
     "css:build": "lessig src/",
     "css:watch": "lessig src/ --watch",
     "prebuild": "yarn run css:build",
-    "build": "PUBLIC_URL='/' react-scripts-ts build",
+    "build": "SASS_PATH='./node_modules' PUBLIC_URL='/' react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "test:watch": "yarn test -- --watchAll",
     "eject": "react-scripts-ts eject",
