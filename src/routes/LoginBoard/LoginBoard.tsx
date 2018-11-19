@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { mapStateToProps } from './LoginBoard.container';
 import './LoginBoard.scss';
-import '../NewBoard/NewBoard.css';
+import '../NewBoard/NewBoard.scss';
 import { compose } from 'redux';
 import { AuthProvider } from '../../constants/Auth';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
