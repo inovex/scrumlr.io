@@ -16,7 +16,7 @@ export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {
 export interface BoardGuardState {
   isInvalidBoard?: boolean;
   isSecuredBoard?: boolean;
-  isApplicantAuthorized?: boolean;
+  isApplicantAuthorized?: boolean | undefined;
   isMember?: boolean;
   isAuthenticated?: boolean;
   isKeyImported?: boolean;
@@ -26,11 +26,13 @@ export interface BoardGuardState {
   isAddingMember?: boolean;
 }
 
-export class BoardGuard extends React.Component<
+export class BoardGuard extends React.PureComponent<
   BoardGuardProps,
   BoardGuardState
 > {
   state: BoardGuardState = {};
+
+  currentBoardId: string;
 
   boardConfigReference: firebase.database.Reference;
   memberReference: firebase.database.Reference;
@@ -48,7 +50,7 @@ export class BoardGuard extends React.Component<
     if (isMember) {
       const firebase = getFirebase() as firebase.app.App &
         firebase.database.Database;
-      const boardId = this.props.match.params.id;
+      const boardId = this.currentBoardId;
       const user = firebase.auth().currentUser as User;
 
       if (this.state.isSecuredBoard) {
@@ -220,6 +222,7 @@ export class BoardGuard extends React.Component<
 
   componentDidUpdate(prevProps: BoardGuardProps, prevState: BoardGuardState) {
     const boardId = this.props.match.params.id;
+    this.currentBoardId = boardId;
 
     if (boardId !== prevProps.match.params.id) {
       this.removeReferences();
@@ -236,7 +239,7 @@ export class BoardGuard extends React.Component<
       );
     } else if (this.state.isAuthenticated) {
       if (!prevState.isAuthenticated) {
-        this.registerUserReferences(this.props.match.params.id);
+        this.registerUserReferences(this.currentBoardId);
       }
 
       // add is member if authorized or board became public
@@ -267,8 +270,10 @@ export class BoardGuard extends React.Component<
   }
 
   componentDidMount() {
+    this.currentBoardId = this.props.match.params.id;
+
     CRYPTO.initKeypair().then(() => {
-      this.checkBoardReference(this.props.match.params.id);
+      this.checkBoardReference(this.currentBoardId);
 
       this.authStateHandle = getFirebase()
         .auth()
@@ -294,6 +299,7 @@ export class BoardGuard extends React.Component<
       isAuthenticated
     } = this.state;
     const url = window.location.href;
+    const boardId = this.props.match.params.id;
 
     if (
       isInvalidBoard ||
@@ -312,7 +318,6 @@ export class BoardGuard extends React.Component<
     // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
     // after user has been logged in successfully.
     if (isAuthenticated !== undefined && !isAuthenticated) {
-      const boardId = this.props.match.params.id;
       return (
         <Redirect
           to={{
@@ -324,7 +329,7 @@ export class BoardGuard extends React.Component<
     }
 
     const ready = this.isReady();
-    if (!ready) {
+    if (!ready || boardId !== this.currentBoardId) {
       let status: string | undefined = undefined;
       if (this.state.isAddingMember) {
         status = 'Registering as board member';

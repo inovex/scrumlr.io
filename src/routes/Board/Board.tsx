@@ -22,14 +22,12 @@ import {
 } from '../../types';
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
-import PhaseSplash from '../../components/PhaseSplash/PhaseSplash';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
-import ReactCSSTransitionGroup = require('react-transition-group/CSSTransitionGroup');
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
+import { getPhaseConfiguration } from '../../constants/Retrospective';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -70,7 +68,6 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 
 export interface BoardState {
   showModal?: ModalType;
-  showPhaseIntro: boolean;
 }
 
 export interface JsonExportCard {
@@ -108,9 +105,7 @@ function countReadyUsers(boardUsers: BoardUsers) {
 export class Board extends React.Component<BoardProps, BoardState> {
   constructor(props: BoardProps) {
     super(props);
-    this.state = {
-      showPhaseIntro: true
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -123,7 +118,16 @@ export class Board extends React.Component<BoardProps, BoardState> {
       prevProps.boardConfig &&
       prevProps.boardConfig.guidedPhase !== this.props.boardConfig.guidedPhase
     ) {
-      this.setState({ ...this.state, showPhaseIntro: true });
+      if (
+        prevProps.boardConfig.guidedPhase > 0 ||
+        this.props.boardConfig.guidedPhase > 0
+      ) {
+        const phase = getPhaseConfiguration(
+          this.props.boardConfig.mode,
+          this.props.boardConfig.guidedPhase
+        );
+        toast(`Switched to phase ${phase.index + 1} - ${phase.name}`);
+      }
     }
   }
 
@@ -280,10 +284,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
     return this.props.onSwitchPhaseIndex(-1);
   };
 
-  closePhaseIntro = () => {
-    this.setState({ ...this.state, showPhaseIntro: false });
-  };
-
   handleCloseModal = () => {
     this.setState({
       showModal: undefined
@@ -311,8 +311,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = this.state.showModal === 'settings';
     const showFeedback = this.state.showModal === 'feedback';
     const showShareDialog = this.state.showModal === 'share';
-    const showIntro =
-      !showSettings && !showFeedback && this.state.showPhaseIntro;
 
     let waitingUser;
     if (waitingUsers && waitingUsers.length > 0) {
@@ -365,27 +363,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
           {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-
-          <ReactCSSTransitionGroup
-            transitionName="phase-splash__animation"
-            transitionAppear={true}
-            transitionAppearTimeout={600}
-            transitionEnterTimeout={600}
-            transitionLeaveTimeout={600}
-            transitionEnter={true}
-            transitionLeave={true}
-          >
-            {showIntro && (
-              <PhaseSplash
-                key="phase-splash"
-                phase={getPhaseConfiguration(
-                  boardConfig.mode,
-                  this.props.boardConfig.guidedPhase
-                )}
-                onClose={this.closePhaseIntro}
-              />
-            )}
-          </ReactCSSTransitionGroup>
         </div>
       </>
     );
