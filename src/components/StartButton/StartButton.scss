@@ -82,7 +82,7 @@
 
 .start-button__dropdown-wrapper {
   box-sizing: border-box;
-  margin-left: 0;
+  margin-left: 0 !important;
   flex: 0 0 auto;
   align-self: stretch !important;
 }

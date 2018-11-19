@@ -3,7 +3,7 @@ import './LoadingScreen.scss';
 import LoadingIndicator from '../LoadingIndicator';
 
 export interface LoadingScreenProps {
-  status?: string;
+  status?: string | JSX.Element;
 }
 
 export const LoadingScreen: React.SFC<LoadingScreenProps> = props => (

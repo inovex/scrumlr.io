@@ -3,7 +3,7 @@ import { RetroMode } from '../../constants/mode';
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
-import './StartButton.css';
+import './StartButton.scss';
 import Icon from '../Icon';
 import { DEFAULT_RETRO_MODE } from '../../constants/Retrospective';
 

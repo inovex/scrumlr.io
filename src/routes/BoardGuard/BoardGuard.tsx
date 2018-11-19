@@ -8,6 +8,7 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import * as firebase from 'firebase/app';
 import DataSnapshot = firebase.database.DataSnapshot;
 import { CRYPTO } from '../../util/global';
+import './BoardGuard.scss';
 
 export interface BoardGuardProps extends RouteComponentProps<{ id: string }> {
   component: React.ComponentType<any>;
@@ -301,10 +302,7 @@ export class BoardGuard extends React.PureComponent<
     const url = window.location.href;
     const boardId = this.props.match.params.id;
 
-    if (
-      isInvalidBoard ||
-      (isApplicantAuthorized !== undefined && !isApplicantAuthorized)
-    ) {
+    if (isInvalidBoard) {
       return (
         <Redirect
           to={{
@@ -313,6 +311,19 @@ export class BoardGuard extends React.PureComponent<
           }}
         />
       );
+    }
+
+    if (isApplicantAuthorized !== undefined && !isApplicantAuthorized) {
+      const DeniedMessage = (
+        <>
+          <p>Access denied by the board administrator</p>
+          <a href="/" className="board-guard__denied-link">
+            Return to homepage
+          </a>
+        </>
+      );
+
+      return <LoadingScreen status={DeniedMessage} />;
     }
 
     // In case user is not authenticated, redirect him to the login form, which will redirect him to the board
