@@ -4,6 +4,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { mockCard } from '../../builder';
 import { FocusedCard, FocusedCardProps } from './FocusedCard';
 import KeyboardNavigationHint from './KeyboardNavigationHint/KeyboardNavigationHint';
+import Deferred from '../Deferred';
 
 describe('<FocusedCard />', () => {
   let wrapper: ShallowWrapper<FocusedCardProps, {}>;
@@ -79,7 +80,7 @@ describe('<FocusedCard />', () => {
     it('should add cards text as DotDotDot children', () => {
       wrapper = shallow(<FocusedCard {...props} />);
       const el = wrapper.find('Dotdotdot');
-      expect(el.prop('children')).toEqual(props.card.text);
+      expect(el.find(Deferred).length).toEqual(1);
     });
 
     describe('votes', () => {

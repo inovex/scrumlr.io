@@ -210,13 +210,13 @@ describe('<NewBoard />', () => {
     it('should update state if email address is entered', () => {
       const uid = null;
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-
-      //expect(shallowWrapper.instance().state).toEqual({ email: '' });
-
       shallowWrapper
         .find(Input)
         .simulate('change', { target: { value: 'abc' } });
-      expect(shallowWrapper.instance().state).toEqual({ email: 'abc' });
+      expect(shallowWrapper.instance().state).toEqual({
+        email: 'abc',
+        secure: false
+      });
     });
   });
 });

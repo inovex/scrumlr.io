@@ -85,15 +85,15 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
           showUnderline={false}
           placeholder={`Add ${column.name} card`}
           value={text}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
+          onChange={(e: any) => this.handleChange(e)}
+          onKeyDown={(e: any) => this.handleKeyDown(e)}
           disabled={disabled}
         />
 
         <button
           type="button"
           className="add-card__button"
-          onClick={this.handleAdd}
+          onClick={() => this.handleAdd()}
           disabled={disabled || text.length === 0}
         >
           <Icon name="plus" width={null} height={null} aria-hidden="true" />

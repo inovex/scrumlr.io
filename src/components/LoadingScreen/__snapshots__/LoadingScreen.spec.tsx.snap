@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<LoadingScreen /> should render loading screen with status 1`] = `"<div class=\\"loading-screen\\"><h1 class=\\"loading-screen__headline\\">Scrumlr</h1><div class=\\"loading-screen__spinner\\"><div class=\\"bounce1\\"></div><div class=\\"bounce2\\"></div><div class=\\"bounce3\\"></div></div><span class=\\"loading-screen__status\\">Test status message</span></div>"`;
+exports[`<LoadingScreen /> should render loading screen with status 1`] = `"<div class=\\"loading-screen\\"><h1 class=\\"loading-screen__headline\\">Scrumlr</h1><div class=\\"loading-indicator\\"><div class=\\"bounce1\\"></div><div class=\\"bounce2\\"></div><div class=\\"bounce3\\"></div></div><span class=\\"loading-screen__status\\">Test status message</span></div>"`;
 
-exports[`<LoadingScreen /> should render loading screen without status 1`] = `"<div class=\\"loading-screen\\"><h1 class=\\"loading-screen__headline\\">Scrumlr</h1><div class=\\"loading-screen__spinner\\"><div class=\\"bounce1\\"></div><div class=\\"bounce2\\"></div><div class=\\"bounce3\\"></div></div></div>"`;
+exports[`<LoadingScreen /> should render loading screen without status 1`] = `"<div class=\\"loading-screen\\"><h1 class=\\"loading-screen__headline\\">Scrumlr</h1><div class=\\"loading-indicator\\"><div class=\\"bounce1\\"></div><div class=\\"bounce2\\"></div><div class=\\"bounce3\\"></div></div></div>"`;

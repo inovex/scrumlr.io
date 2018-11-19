@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 const firebaseMock = require('react-redux-firebase');
 
-import { ColumnType } from '../../constants/Retrospective';
 import {
   AddCard,
   AddCardProps,
@@ -19,7 +18,7 @@ const KEYCODE_ENTER = 13;
 
 describe('<AddCard />', () => {
   describe('dumb component', () => {
-    let wrapper: ShallowWrapper<AddCardProps, AddCardState>;
+    let wrapper: ShallowWrapper<AddCardProps, AddCardState, AddCard>;
     let props: AddCardProps;
 
     beforeEach(() => {
@@ -56,8 +55,6 @@ describe('<AddCard />', () => {
 
     describe('add card via enter key', () => {
       const text = 'foobar';
-      const id = 'negative';
-      const type: ColumnType = 'negative';
 
       it('should not call onAdd callback when enter is not pressed', () => {
         wrapper = shallow(<AddCard {...props} />);
@@ -90,20 +87,21 @@ describe('<AddCard />', () => {
         wrapper.setState({ text });
         let input = wrapper.find(Input);
 
-        expect(props.onAdd).not.toHaveBeenCalled();
+        const spy = jest
+          .spyOn(wrapper.instance(), 'handleKeyDown')
+          .mockImplementation();
+        expect(spy).not.toHaveBeenCalled();
 
         input.simulate('focus');
         input.simulate('keydown', { keyCode: KEYCODE_ENTER });
 
-        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
-        expect(wrapper.state().text).toEqual('');
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
       });
     });
 
     describe('add card via button', () => {
       const text = 'foobar';
-      const id = 'negative';
-      const type: ColumnType = 'negative';
 
       it('should disable button if no text is entered', () => {
         wrapper = shallow(<AddCard {...props} />);
@@ -120,14 +118,18 @@ describe('<AddCard />', () => {
 
       it('should call onAdd callback when button is pressed and text has been entered', () => {
         wrapper = shallow(<AddCard {...props} />);
+
+        const spy = jest
+          .spyOn(wrapper.instance(), 'handleAdd')
+          .mockImplementation();
+        expect(spy).not.toHaveBeenCalled();
+
         wrapper.setState({ text });
-
-        expect(props.onAdd).not.toHaveBeenCalled();
-
         const button = wrapper.find('button');
         button.simulate('click');
 
-        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
       });
     });
   });
