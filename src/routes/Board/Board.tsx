@@ -126,7 +126,11 @@ export class Board extends React.Component<BoardProps, BoardState> {
           this.props.boardConfig.mode,
           this.props.boardConfig.guidedPhase
         );
-        toast(`Switched to phase ${phase.index + 1} - ${phase.name}`);
+        toast(
+          `Switched to Phase ${phase.index + 1} ${
+            phase.name
+          } - ${phase.activities.map(a => a.description).join(', ')}`
+        );
       }
     }
   }
