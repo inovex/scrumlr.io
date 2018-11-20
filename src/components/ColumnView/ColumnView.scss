@@ -20,10 +20,10 @@
 }
 
 .column-view__active-indicator--active {
-  background-color: @color-mint;
+  background-color: $color-mint;
 }
 
-@media @desktop {
+@media #{$desktop} {
   .board {
     display: flex;
   }
@@ -38,13 +38,13 @@
 }
 
 .board__column--background.board__column--theme-light {
-  background: @color-lightest-gray;
+  background: $color-lightest-gray;
 }
 
 .board__column--background.board__column--theme-dark {
-  background: @color-light-gray;
+  background: $color-light-gray;
 }
 
 .board__column--background.board__column--theme-mint {
-  background: @color-white;
+  background: $color-white;
 }

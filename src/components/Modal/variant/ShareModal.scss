@@ -7,11 +7,11 @@
 
 .share-modal__headline {
   align-self: flex-start;
-  margin-top: @default-margin;
+  margin-top: $default-margin;
 }
 
 .share-modal__qr:focus {
-  outline: 2px solid @color-mint;
+  outline: 2px solid $color-mint;
 }
 
 .share-modal__qr-image {
@@ -24,29 +24,29 @@
   outline: none;
   width: 100%;
 
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: bold;
   text-transform: uppercase;
 
-  padding: @default-padding @large-padding;
+  padding: $default-padding $large-padding;
 
-  margin-top: @default-margin;
-  margin-bottom: @default-margin;
-  color: @color-white;
-  background: @color-mint;
+  margin-top: $default-margin;
+  margin-bottom: $default-margin;
+  color: $color-white;
+  background: $color-mint;
 
   transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 }
 
 .share-modal__invite-button:focus,
 .share-modal__invite-button:hover {
-  background: darken(@color-mint, 15%);
-  box-shadow: 0 @base-unit*2 @base-unit*4 0 fade(@color-dark, 15%);
+  background: darken($color-mint, 15%);
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
 }
 
 .share-modal__copy-text {
-  font-size: @theme-font-size - @base-unit / 2;
-  color: @color-alternative-gray;
+  font-size: $theme-font-size - $base-unit / 2;
+  color: $color-alternative-gray;
 }
 
 .share-modal__copy-text--hidden {

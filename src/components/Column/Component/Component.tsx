@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Component.css';
+import './Component.scss';
 
 export interface ComponentProps {
   className?: string;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 
-import './PhaseMenu.css';
+import './PhaseMenu.scss';
 import Icon from '../Icon';
 import {
   getPhaseConfiguration,

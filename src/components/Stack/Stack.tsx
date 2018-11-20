@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Stack.css';
+import './Stack.scss';
 
 import { Card as CardModel } from '../../types';
 import Card from '../Card';

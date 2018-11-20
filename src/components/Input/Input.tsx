@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Input.css';
+import './Input.scss';
 
 export interface InputProps {
   invertPlaceholder?: boolean;
@@ -39,10 +39,11 @@ export class Input extends React.Component<InputProps, {}> {
           [`input__focus-theme-${focusTheme}`]: Boolean(focusTheme)
         })}
       >
-        {label &&
+        {label && (
           <label htmlFor={id} className="input__label">
             {label}
-          </label>}
+          </label>
+        )}
         <input
           {...other}
           id={id}
@@ -51,10 +52,9 @@ export class Input extends React.Component<InputProps, {}> {
           })}
         />
         <span className={cx('input__underline')} />
-        {description &&
-          <span className="input__description">
-            {description}
-          </span>}
+        {description && (
+          <span className="input__description">{description}</span>
+        )}
       </div>
     );
   }

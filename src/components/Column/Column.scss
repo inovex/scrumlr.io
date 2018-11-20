@@ -13,7 +13,7 @@
     position: relative;
 }
 
-@media @desktop {
+@media #{$desktop} {
     .column {
         float: inherit;
         position: inherit;
@@ -29,7 +29,7 @@
 }
 
 .column--drophover {
-    background: darken(@theme-color-background, 15%);
+    background: darken($theme-color-background, 15%);
 }
 
 .column__content {
@@ -50,13 +50,13 @@
 }
 
 .column--theme-light {
-    background: @color-lightest-gray;
+    background: $color-lightest-gray;
 }
 .column--theme-dark {
-    background: @color-light-gray;
+    background: $color-light-gray;
 }
 .column--theme-mint {
-    background: @color-white;
+    background: $color-white;
 }
 
 .component--large {
@@ -79,18 +79,18 @@
     position: fixed;
     max-height: 56px;
 
-    background: @color-dark-gray;
+    background: $color-dark-gray;
     border: none;
     border-radius: 0;
     outline: none;
     margin: 0;
-    padding: @base-unit;
+    padding: $base-unit;
 
     opacity: .1;
     transition: opacity .25s ease-in-out;
 
     top: 50%;
-    z-index: @base-z-index + @base-z-index-step * 10;
+    z-index: $base-z-index + $base-z-index-step * 10;
 }
 
 .column__navigation:focus,
@@ -106,7 +106,7 @@
     right: 0;
 }
 
-@media @desktop{
+@media #{$desktop} {
     .column__navigation {
         display: none;
     }

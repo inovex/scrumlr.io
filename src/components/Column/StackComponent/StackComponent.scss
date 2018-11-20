@@ -1,0 +1,35 @@
+@import '../../../constants/style';
+
+.stack-component {
+  position: relative;
+}
+
+.stack-component__stack::before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: $default-padding;
+  right: $default-padding;
+  height: $default-padding;
+  z-index: $base-z-index + $base-z-index-step * 2.5;
+}
+
+.stack-component--theme-light .stack-component__stack::before {
+  background: linear-gradient(to bottom, $color-lightest-gray, rgba(255,255,255,0));
+}
+.stack-component--theme-dark .stack-component__stack::before {
+  background: linear-gradient(to bottom, $color-light-gray, rgba(255,255,255,0));
+}
+.stack-component--theme-mint .stack-component__stack::before {
+  background: linear-gradient(to bottom, $color-white, rgba(255,255,255,0));
+}
+
+.stack-component .stack-component__stack {
+  padding: $default-padding;
+}
+
+@media #{$desktop} {
+  .stack-component .stack-component__stack {
+    padding: $default-padding $large-padding;
+  }
+}

@@ -7,21 +7,21 @@
   flex: 1;
   height: 100%;
 
-  padding-right: @default-margin;
+  padding-right: $default-margin;
 
   min-width: 256px;
 }
 
 .textarea__label {
   text-transform: uppercase;
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: bold;
-  margin-bottom: @base-unit * 2;
+  margin-bottom: $base-unit * 2;
 }
 
 .textarea__description {
-  margin-top: @base-unit * 1.5;
-  font-size: @theme-font-size - @base-unit / 2;
+  margin-top: $base-unit * 1.5;
+  font-size: $theme-font-size - $base-unit / 2;
 }
 
 .textarea {
@@ -42,7 +42,7 @@
 }
 
 .textarea--underlined > .textarea {
-  border-bottom: 1px solid @color-middle-gray;
+  border-bottom: 1px solid $color-middle-gray;
 }
 
 .textarea--underlined > .textarea__underline {
@@ -68,11 +68,11 @@
 
 .textarea__focus-theme-mint > .textarea:hover::placeholder,
 .textarea__focus-theme-mint > .textarea:focus::placeholder {
-  color: @color-mint;
+  color: $color-mint;
 }
 
 .textarea__focus-theme-mint > .textarea__underline {
-  background-color: @color-mint;
+  background-color: $color-mint;
 }
 
 .textarea:focus + .textarea__underline,
@@ -87,12 +87,12 @@
 
 .textarea::placeholder {
   font-weight: bold;
-  color: @color-alternative-gray;
+  color: $color-alternative-gray;
 
   transition: color .25s linear;
 }
 
 .textarea--inverted-placeholder::placeholder {
-  color: @color-white;
+  color: $color-white;
   opacity: 0.8;
 }

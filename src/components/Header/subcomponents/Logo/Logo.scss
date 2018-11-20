@@ -4,10 +4,9 @@
   box-sizing: border-box;
   height: 100%;
 
-  padding: @default-padding;
+  padding: $default-padding;
 
-  background: @color-mint;
-
+  background: $color-mint;
 }
 
 .header__logo-image,
@@ -17,7 +16,7 @@
 
 .header__logo-image *,
 .header__logo-image-small * {
-   fill: @color-white;
+   fill: $color-white;
 }
 
 .header__logo-image > svg,
@@ -36,7 +35,7 @@
   padding-left: 3px;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .header__logo-image {
     display: block;
   }

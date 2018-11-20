@@ -6,21 +6,21 @@
 
   flex: 1;
 
-  padding-right: @default-margin;
+  padding-right: $default-margin;
 
   min-width: 256px;
 }
 
 .input__label {
   text-transform: uppercase;
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: 500;
-  margin-bottom: @base-unit * 2;
+  margin-bottom: $base-unit * 2;
 }
 
 .input__description {
-  margin-top: @base-unit * 1.5;
-  font-size: @theme-font-size - @base-unit / 2;
+  margin-top: $base-unit * 1.5;
+  font-size: $theme-font-size - $base-unit / 2;
 }
 
 .input {
@@ -42,7 +42,7 @@
 }
 
 .input--underlined > .input {
-  border-bottom: 1px solid @color-middle-gray;
+  border-bottom: 1px solid $color-middle-gray;
 }
 
 .input--underlined > .input:focus {
@@ -72,11 +72,11 @@
 
 .input__focus-theme-mint > .input:hover::placeholder,
 .input__focus-theme-mint > .input:focus::placeholder {
-  color: @color-mint;
+  color: $color-mint;
 }
 
 .input__focus-theme-mint > .input__underline {
-  background-color: @color-mint;
+  background-color: $color-mint;
 }
 
 .input:focus + .input__underline,
@@ -91,13 +91,13 @@
 
 .input::placeholder {
   font-weight: bold;
-  color: @color-alternative-gray;
+  color: $color-alternative-gray;
   text-transform: uppercase;
 
   transition: color .25s linear;
 }
 
 .input--inverted-placeholder::placeholder {
-  color: @color-white;
+  color: $color-white;
   opacity: 0.8;
 }

@@ -17,11 +17,11 @@
 
 .feedback-modal__headline {
   align-self: flex-start;
-  margin-top: @default-margin;
+  margin-top: $default-margin;
 }
 
 .feedback-modal__textarea {
   box-sizing: border-box;
   padding-top: 60px;
-  padding-left: @default-padding;
+  padding-left: $default-padding;
 }

@@ -1,6 +1,6 @@
 @import '../../constants/style';
 
-@focus-card-inner-margin: 88px;
+$focus-card-inner-margin: 88px;
 
 .focus-card {
   display: flex;
@@ -21,7 +21,7 @@
   overflow: hidden;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .focus-card {
     font-size: 72px;
     line-height: 96px;
@@ -29,19 +29,19 @@
 }
 
 .focus-card--type-positive {
-  background: linear-gradient(to right bottom, @color-lightest-gray 50%, @color-mint 50%);
+  background: linear-gradient(to right bottom, $color-lightest-gray 50%, $color-mint 50%);
 }
 
 .focus-card--type-negative {
-  background: linear-gradient(to left bottom, @color-light-gray 50%, @color-mint 50%);
+  background: linear-gradient(to left bottom, $color-light-gray 50%, $color-mint 50%);
 }
 
 .focus-card--type-positive.focus-card--drophover {
-  background: linear-gradient(to right bottom, @color-lightest-gray 50%, darken(@color-mint, 10%) 50%);
+  background: linear-gradient(to right bottom, $color-lightest-gray 50%, darken($color-mint, 10%) 50%);
 }
 
 .focus-card--type-negative.focus-card--drophover {
-  background: linear-gradient(to left bottom, @color-light-gray 50%, darken(@color-mint, 10%) 50%);
+  background: linear-gradient(to left bottom, $color-light-gray 50%, darken($color-mint, 10%) 50%);
 }
 
 .focus-card__star-button {
@@ -64,7 +64,7 @@
   position: absolute;
 
   top: 0;
-  right: @default-margin;
+  right: $default-margin;
 
   border: 0;
   background: none;
@@ -76,32 +76,32 @@
 
 .focus-card__close-button >.focus-card__close-button-text {
   opacity: 0;
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: bold;
-  color: @color-dark;
-  margin-right: @base-unit;
+  color: $color-dark;
+  margin-right: $base-unit;
 
   transition: opacity .5s ease-in-out, margin-right .5s ease-in-out;
 }
 
 .focus-card__close-button:hover > .focus-card__close-button-text,
 .focus-card__close-button:focus > .focus-card__close-button-text {
-  margin-right: @base-unit * 2;
+  margin-right: $base-unit * 2;
   opacity: 1;
 }
 
-@media @desktop {
+@media #{$desktop} {
   .focus-card__close-button {
-    right: @large-margin;
+    right: $large-margin;
   }
 }
 
 .focus-card__vertical-alignment {
   min-height: 1px; // required by Edge
-  max-height: ~"calc(100% -" @focus-card-inner-margin * 2 ~")";
+  max-height: calc(100% - #{$focus-card-inner-margin * 2});
   overflow: hidden;
   align-self: center;
-  margin: @focus-card-inner-margin;
+  margin: $focus-card-inner-margin;
   text-overflow: ellipsis;
   z-index: 1;
 }
@@ -116,11 +116,11 @@
   display: none !important;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .focus-card__navigation-hint {
     display: flex !important;
     position: absolute;
-    bottom: @large-margin;
+    bottom: $large-margin;
     left: auto;
     right: auto;
   }
@@ -129,33 +129,33 @@
 .focus-card__number-of-votes {
   position: absolute;
   bottom: 0;
-  color: @color-white;
+  color: $color-white;
   font-size: 20vw;
   line-height: 20vw;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .focus-card__number-of-votes {
-    font-size: @theme-font-size * @theme-font-size * .75;
-    line-height: @theme-font-size * @theme-font-size * .75;
+    font-size: $theme-font-size * 1.75;
+    line-height: $theme-font-size * 1.75;
   }
 }
 
 .focus-card__number-of-votes--type-positive {
-  right: @default-margin;
+  right: $default-margin;
 }
 
 .focus-card__number-of-votes--type-negative {
-  left: @default-margin;
+  left: $default-margin;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .focus-card__number-of-votes--type-positive {
-    right: @large-margin;
+    right: $large-margin;
   }
 
   .focus-card__number-of-votes--type-negative {
-    left: @large-margin;
+    left: $large-margin;
   }
 
 }

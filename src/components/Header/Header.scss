@@ -1,14 +1,14 @@
 @import '../../constants/style';
 
-@header__control-height: 74px;
+$header__control-height: 74px;
 
 .header__control {
   position: relative;
 
-  background: @theme-color-secondary;
-  padding: 0 @default-margin 0 0;
-  height: @header__control-height;
-  box-shadow: 0 4px 8px 0 fade(@color-dark-gray, 15%);
+  background: $theme-color-secondary;
+  padding: 0 $default-margin 0 0;
+  height: $header__control-height;
+  box-shadow: 0 4px 8px 0 transparentize($color-dark-gray, .85);
 
   display: flex;
 }
@@ -25,18 +25,18 @@
 
 .header__control-logo {
   flex-basis: 74px;
-  margin-right: @default-margin;
+  margin-right: $default-margin;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .header__control {
-    padding: 0 @large-margin 0 0;
+    padding: 0 $large-margin 0 0;
   }
 
   .header__control-logo {
     display: block;
     justify-content: center;
     flex-basis: 170px;
-    margin-right: @large-margin;
+    margin-right: $large-margin;
   }
 }

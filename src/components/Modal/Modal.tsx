@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Modal.css';
+import './Modal.scss';
 import Icon from '../Icon';
 import { mapDispatchToProps } from './Modal.container';
 import { connect } from 'react-redux';

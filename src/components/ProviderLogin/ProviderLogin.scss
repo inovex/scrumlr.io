@@ -5,7 +5,7 @@
   justify-content: flex-start;
   align-items: center;
 
-  margin-top: @default-margin;
+  margin-top: $default-margin;
 }
 
 .login-providers__button {
@@ -20,7 +20,7 @@
 }
 
 .login-providers__button + .login-providers__button {
-  margin-left: @default-margin;
+  margin-left: $default-margin;
 }
 
 .login-providers__button > * {
@@ -35,7 +35,7 @@
   display: flex;
   justify-content: center;
 
-  background: @color-white;
+  background: $color-white;
 }
 
 .selection-circle-provider__border {
@@ -51,7 +51,7 @@
 
 .selection-circle-provider__border > svg * {
   transition: fill .15s ease-in-out;
-  fill: @color-alternative-gray;
+  fill: $color-alternative-gray;
 }
 
 .selection-circle-provider > img {
@@ -63,13 +63,13 @@
 
 .login-providers__button:focus .selection-circle-provider > img,
 .login-providers__button:hover .selection-circle-provider > img {
-  fill: @color-mint;
+  fill: $color-mint;
   filter: contrast(1);
 }
 
 .login-providers__button:focus .selection-circle-provider__border > svg *,
 .login-providers__button:hover .selection-circle-provider__border > svg * {
-  fill: @color-mint;
+  fill: $color-mint;
 }
 
 .login-providers__button:focus .selection-circle-provider__border > svg,
@@ -78,8 +78,8 @@
 }
 
 .login-providers__login-with {
-  margin-right: @default-margin;
-  color: @color-alternative-gray;
+  margin-right: $default-margin;
+  color: $color-alternative-gray;
   text-transform: uppercase;
   font-weight: bold;
   cursor: default;

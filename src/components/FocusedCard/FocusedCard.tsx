@@ -1,6 +1,6 @@
 import * as cx from 'classnames';
 import * as React from 'react';
-import './FocusedCard.css';
+import './FocusedCard.scss';
 
 import { Card as TCard } from '../../types';
 import { mapStateToProps } from './FocusedCard.container';

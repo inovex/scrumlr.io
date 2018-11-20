@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './ProviderLogin.css';
+import './ProviderLogin.scss';
 import { AuthProvider } from '../../constants/Auth';
 import Icon from '../Icon/Icon';
 

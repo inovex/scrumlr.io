@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './KeyboardNavigationHint.css';
+import './KeyboardNavigationHint.scss';
 import Icon from '../../Icon/Icon';
 
 export interface KeyboardNavigationHintProps {

@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Textarea.css';
+import './Textarea.scss';
 
 export interface TextareaProps {
   invertPlaceholder?: boolean;
@@ -39,10 +39,11 @@ export class Textarea extends React.Component<TextareaProps, {}> {
           [`textarea__focus-theme-${focusTheme}`]: Boolean(focusTheme)
         })}
       >
-        {label &&
+        {label && (
           <label htmlFor={id} className="textarea__label">
             {label}
-          </label>}
+          </label>
+        )}
         <textarea
           {...other}
           id={id}
@@ -51,10 +52,9 @@ export class Textarea extends React.Component<TextareaProps, {}> {
           })}
         />
         <span className={cx('textarea__underline')} />
-        {description &&
-          <span className="textarea__description">
-            {description}
-          </span>}
+        {description && (
+          <span className="textarea__description">{description}</span>
+        )}
       </div>
     );
   }

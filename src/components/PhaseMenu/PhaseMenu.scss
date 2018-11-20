@@ -4,10 +4,10 @@
   display: flex;
 
   text-transform: uppercase;
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: bold;
-  color: @color-dark-gray;
-  line-height: @theme-line-height;
+  color: $color-dark-gray;
+  line-height: $theme-line-height;
 }
 
 .phase-menu__navigation * {
@@ -15,12 +15,12 @@
 }
 
 .phase-menu__current-phase-name {
-  color: @theme-color-primary;
+  color: $theme-color-primary;
 }
 
 .phase-menu__dash {
   display: inline-block;
-  border-bottom: 2px solid @color-dark-gray;
+  border-bottom: 2px solid $color-dark-gray;
   width: 44px;
   margin-left: 6px;
   margin-right: 6px;
@@ -45,7 +45,7 @@
   display: none;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .phase-menu__phase-button {
     display: block;
   }
@@ -56,21 +56,21 @@
 }
 
 .phase-menu__phase-button:disabled .phase-menu__phase-button-icon * {
-  fill: @color-alternative-gray;
+  fill: $color-alternative-gray;
 }
 
 .phase-menu__phase-button:not(:disabled):hover .phase-menu__phase-button-icon *,
 .phase-menu__phase-button:not(:disabled):focus .phase-menu__phase-button-icon *,
 .phase-menu__phase-button:not(:disabled):active .phase-menu__phase-button-icon * {
-  fill: @color-mint;
+  fill: $color-mint;
 }
 
 .phase-menu__phase-button + .phase-menu__phase-button {
-  margin-left: @default-margin;
-  margin-right: @default-margin;
+  margin-left: $default-margin;
+  margin-right: $default-margin;
 }
 
 .phase-menu__phase-button-icon {
-  width: @theme-icon-width;
-  height: @theme-icon-height;
+  width: $theme-icon-width;
+  height: $theme-icon-height;
 }

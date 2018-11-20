@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './SettingsModal.css';
+import './SettingsModal.scss';
 import Input from '../../Input';
 import Modal from '../Modal';
 import getRandomName from '../../../constants/Name';

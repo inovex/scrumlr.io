@@ -3,8 +3,8 @@
 .keyboard-navigation-hint {
   display: flex;
 
-  color: @color-white;
-  font-size: @theme-font-size;
+  color: $color-white;
+  font-size: $theme-font-size;
   line-height: 32px;
 }
 
@@ -13,6 +13,6 @@
 }
 
 .keyboard-navigation-hint > span + span {
-  padding-left: @base-unit*2.5;
+  padding-left: $base-unit*2.5;
 }
 

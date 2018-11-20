@@ -16,7 +16,7 @@
   flex-direction: column;
   justify-content: center;
 
-  margin-left: @large-margin * 2;
+  margin-left: $large-margin * 2;
 }
 
 .modal__invite-panel > * {
@@ -25,7 +25,7 @@
 
 .modal__headline {
   align-self: flex-start;
-  margin-top: @default-margin;
+  margin-top: $default-margin;
 }
 
 .settings-modal__input + .settings-modal__input {

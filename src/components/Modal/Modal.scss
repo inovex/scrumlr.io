@@ -4,7 +4,7 @@
   display: none;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .modal {
     display: flex;
     justify-content: center;
@@ -19,16 +19,16 @@
   left: -100px;
   right: -100px;
   overflow: hidden;
-  background: rgba(0, 1, 15, 0.89); //fade(@color-dark, 80%);
+  background: rgba(0, 1, 15, 0.89); //fade($color-dark, 80%);
 
   backdrop-filter: blur(2px);
 
-  z-index: @base-z-index + @base-z-index-step * @base-z-index;
+  z-index: $base-z-index + $base-z-index-step * $base-z-index;
 }
 
 .modal__content-wrapper {
   overflow: auto;
-  //margin-top: @large-margin;
+  //margin-top: $large-margin;
 
   display: flex;
   flex-direction: column;
@@ -41,11 +41,11 @@
 
 .modal__content {
   position: relative;
-  background: @color-white;
+  background: $color-white;
   min-width: 200px;
   max-width: 860px;
   min-height: 100px;
-  padding: @large-padding * 1.5;
+  padding: $large-padding * 1.5;
   box-shadow: 0px 32px 64px 0 rgba(0, 0, 0, 0.75);
   margin: 64px;
   border-radius: 6px;
@@ -53,8 +53,8 @@
 
 .modal__close-button {
   position: absolute;
-  top: @large-margin;
-  right: @large-margin;
+  top: $large-margin;
+  right: $large-margin;
 
   background: none;
   margin: 0;
@@ -67,24 +67,24 @@
 
 .modal__close-button * {
   transition: fill .15s ease-in-out;
-  fill: @color-dark-gray;
+  fill: $color-dark-gray;
 }
 
 .modal__close-button:focus *,
 .modal__close-button:hover * {
-  fill: @color-mint;
+  fill: $color-mint;
 }
 
 .modal__headline {
   align-self: flex-start;
-  margin-top: @default-margin;
+  margin-top: $default-margin;
 }
 
 .modal__action-area {
   display: flex;
   justify-content: flex-end;
 
-  margin-top: @large-margin
+  margin-top: $large-margin
 }
 
 .modal__ack-button {
@@ -94,16 +94,16 @@
   background: none;
   outline: none;
 
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   font-weight: bold;
-  color: @color-mint;
+  color: $color-mint;
 
-  padding: @default-padding;
+  padding: $default-padding;
   transition: background .2s ease-in-out, color .15s ease-in-out;
 }
 
 .modal__ack-button:focus,
 .modal__ack-button:hover {
-  color: @color-white;
-  background: @color-mint;
+  color: $color-white;
+  background: $color-mint;
 }

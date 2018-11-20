@@ -7,7 +7,7 @@ import { UserMenu } from '../UserMenu';
 import { BoardUsers, ModalType } from '../../types';
 import Logo from './subcomponents/Logo';
 
-import './Header.css';
+import './Header.scss';
 import { mapStateToProps } from './Header.container';
 import { connect } from 'react-redux';
 import { RetroMode } from '../../constants/mode';
