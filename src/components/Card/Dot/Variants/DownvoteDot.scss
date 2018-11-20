@@ -6,20 +6,20 @@
 }
 
 .dot__downvote .dot {
-  .animate(background);
+  @include animate(background);
 }
 
 .dot__downvote .dot:hover {
-  background: lighten(@theme-color-primary, 10%);
+  background: lighten($theme-color-primary, 10%);
 }
 
 .dot__downvote-content {
-  color: @theme-color-primary;
-  .animate(color, 0.6s);
+  color: $theme-color-primary;
+  @include animate(color, 0.6s);
 }
 
 .dot:hover .dot__downvote-content {
-  color: @theme-color-secondary;
+  color: $theme-color-secondary;
 }
 
 .dot__downvote-custom-content {
@@ -36,11 +36,11 @@
 .dot_downvote-icon svg {
   width: 14px;
   height: 14px;
-  fill: @theme-color-primary;
+  fill: $theme-color-primary;
   align-self: center;
-  .animate(fill, 0.6s);
+  @include animate(fill, 0.6s);
 }
 
 .dot:hover .dot_downvote-icon svg {
-  fill: @theme-color-secondary;
+  fill: $theme-color-secondary;
 }

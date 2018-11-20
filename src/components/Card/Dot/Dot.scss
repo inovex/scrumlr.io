@@ -1,6 +1,6 @@
 @import '../../../constants/style';
 
-@dot-color: @theme-color-primary;
+$dot-color: $theme-color-primary;
 
 .dot__small {
   width: 28px;
@@ -20,8 +20,8 @@
   border: 0;
   margin: 0;
   padding: 0;
-  background: @dot-color;
-  color: @theme-color-secondary;
+  background: $dot-color;
+  color: $theme-color-secondary;
   border-radius: 100%;
   position: relative;
   outline: none;
@@ -43,9 +43,9 @@
   box-shadow: 2px -2px 0px #fff, 0 1px 1px rgba(0, 0, 0, 0.1),
     -1px 1px 1px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 0 16px;
-  border-color: @theme-color-background @theme-color-background transparent
+  border-color: $theme-color-background $theme-color-background transparent
     transparent;
-  .animate(border-width);
+  @include animate(border-width);
 }
 
 .dot.dot__small:hover .dot__folded-corner {

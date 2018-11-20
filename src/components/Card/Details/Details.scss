@@ -1,8 +1,8 @@
 @import '../../../constants/style';
-@import (reference) '../Card';
+@import '../Card';
 
-@icon__width: @theme-font-size * 2;
-@card-details-z-index: @card-z-index + @base-z-index-step;
+$icon__width: $theme-font-size * 2;
+$card-details-z-index: $card-z-index + $base-z-index-step;
 
 .card-details__backdrop {
   position: fixed;
@@ -14,7 +14,7 @@
 
   background-color: rgba(0, 0, 0, 0.75);
 
-  z-index: @card-details-z-index;
+  z-index: $card-details-z-index;
 }
 
 .card_details__content {
@@ -24,32 +24,32 @@
   top: 0;
   width: 100%;
 
-  z-index: @card-details-z-index;
+  z-index: $card-details-z-index;
 }
 
 .card_details__card {
-  .card();
+  @extend .card;
   overflow: inherit;
 
   box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
 }
 
 .card-details__card-text {
-  .card__content();
+  @extend .card__content;
   overflow: inherit;
   height: auto;
   min-height: 4.5em;
   cursor: text;
 
   padding: 0;
-  margin: (@base-unit + @base-unit * 5) 0 0 0;
+  margin: ($base-unit + $base-unit * 5) 0 0 0;
   transition: outline .3s ease-in-out;
   outline: solid 2px transparent;
-  outline-offset: @base-unit * 1.5;
+  outline-offset: $base-unit * 1.5;
 }
 
 .card-details__card-text:focus {
-  outline: solid 2px @color-alternative-gray;
+  outline: solid 2px $color-alternative-gray;
 }
 
 .card-details__card-text > *:first-child {
@@ -63,7 +63,7 @@
   height: 9.5em;
   width: 100%;
   padding: 1em;
-  font-size: @theme-font-size;
+  font-size: $theme-font-size;
   line-height: 1.5;
 }
 
@@ -80,19 +80,19 @@
 .card-details__option {
   box-sizing: border-box;
   display: block;
-  width: @icon__width;
-  height: @icon__width;
+  width: $icon__width;
+  height: $icon__width;
   border: 0;
   border-radius: 100%;
   text-align: center;
 
   padding: 0;
   background: none;
-  font-size: @theme-font-size;
-  line-height: @icon__width;
+  font-size: $theme-font-size;
+  line-height: $icon__width;
 
-  background: @theme-color-font;
-  color: @theme-color-secondary;
+  background: $theme-color-font;
+  color: $theme-color-secondary;
 
   cursor: pointer;
 }

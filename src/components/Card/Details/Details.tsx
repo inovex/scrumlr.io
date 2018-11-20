@@ -4,7 +4,7 @@ import { CardProps } from '../Card';
 import { Card as TCard } from '../../../types';
 import Footer from '../Footer';
 
-import './Details.css';
+import './Details.scss';
 import Icon from '../../Icon';
 
 export interface DetailsProps extends CardProps {

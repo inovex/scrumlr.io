@@ -19,11 +19,11 @@
   width: 164px;
   text-indent: -10000px;
 
-  margin-bottom: @large-margin*2;
+  margin-bottom: $large-margin*2;
 }
 
 .welcome-area__promotion-wrapper {
-  background: url('../../assets/visual-chair-scrumlr.svg') no-repeat @large-margin 72px, linear-gradient(to bottom, @color-mint, @color-darkest-mint);
+  background: url('../../assets/visual-chair-scrumlr.svg') no-repeat $large-margin 72px, linear-gradient(to bottom, $color-mint, $color-darkest-mint);
   background-size: auto 100%;
 
   flex: 2 1 66%;
@@ -42,11 +42,11 @@
 
   align-self: center;
 
-  padding: @large-padding;
+  padding: $large-padding;
 }
 
 .welcome-area__promotion-text > p {
-  color: @color-white;
+  color: $color-white;
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 1px;
@@ -54,7 +54,7 @@
 }
 
 .welcome-area__promotion-text > h2 {
-  color: @color-white;
+  color: $color-white;
   font-weight: 900;
   font-size: 6vw;
   letter-spacing: 0;
@@ -69,10 +69,10 @@
   flex: 1 1 33%;
 
   background-color: #fff;
-  padding: @large-padding*2;
+  padding: $large-padding*2;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .welcome-area__promotion-text > h2 {
     font-size: 36px;
     letter-spacing: 0;
@@ -90,7 +90,7 @@
 
   .welcome-area__action-area {
     z-index:1;
-    box-shadow: 0 0 @base-unit*16 0 fade(@color-dark, 65%);
+    box-shadow: 0 0 $base-unit*16 0 transparentize($color-dark, .45);
   }
 }
 

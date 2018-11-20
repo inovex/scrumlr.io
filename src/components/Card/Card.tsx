@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { Component } from 'react';
-import './Card.css';
+import './Card.scss';
 import { DragSource, DropTarget } from 'react-dnd';
 import { BoardProp, Card as TCard, DragAndDropProps } from '../../types';
 import Details from './Details';

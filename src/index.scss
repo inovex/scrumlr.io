@@ -22,11 +22,11 @@ body {
   margin: 0;
   padding: 0;
 
-  font-family: @theme-font-family;
-  font-size: @theme-font-size;
+  font-family: $theme-font-family;
+  font-size: $theme-font-size;
 
-  color: @theme-color-font;
-  background: darken(@theme-color-background, 5%);
+  color: $theme-color-font;
+  background: darken($theme-color-background, 5%);
 }
 
 .dark-toast {
@@ -46,18 +46,18 @@ body {
 }
 
 .dark-toast .toast__close-button:hover{
-  color: @theme-color-primary;
+  color: $theme-color-primary;
 }
 
 .dark-toast .dark-toast-progress{
-  background: @theme-color-primary;
+  background: $theme-color-primary;
 }
 
 .toast__close-button svg * {
-  fill: @color-white;
+  fill: $color-white;
 }
 
 .toast__close-button:focus svg *,
 .toast__close-button:hover svg * {
-  fill: @color-mint;
+  fill: $color-mint;
 }

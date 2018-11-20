@@ -2,7 +2,7 @@ import * as React from 'react';
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
-import './UserMenu.css';
+import './UserMenu.scss';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import MenuItem from './MenuItem';

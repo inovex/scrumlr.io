@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import './Dot.css';
+import './Dot.scss';
 
 export type DotSize = 'small' | 'large';
 
@@ -36,11 +36,7 @@ export class Dot extends React.Component<DotProps, {}> {
       );
     }
 
-    return (
-      <div className={classNames('dot', `dot__${size}`)}>
-        {children}
-      </div>
-    );
+    return <div className={classNames('dot', `dot__${size}`)}>{children}</div>;
   };
 
   render() {

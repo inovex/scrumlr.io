@@ -1,14 +1,14 @@
 @import '../../constants/style';
-@import (inline) '../../../node_modules/react-dd-menu/dist/react-dd-menu.css';
+@import '../../../node_modules/react-dd-menu/dist/react-dd-menu';
 
-@icon__width: 32px;
-@icon__height: @icon__width;
+$icon__width: 32px;
+$icon__height: $icon__width;
 
 .dd-menu {
   position: relative;
 
   display: flex;
-  margin-left: @default-margin;
+  margin-left: $default-margin;
 }
 
 .dd-menu.dd-menu-right {
@@ -25,8 +25,8 @@
   border: none;
   background: none;
 
-  width: @icon__width;
-  height: @icon__height;
+  width: $icon__width;
+  height: $icon__height;
 }
 
 .user-menu__toggle-icon {
@@ -35,8 +35,8 @@
   top: 0;
   left: 0;
 
-  width: @icon__width;
-  height: @icon__height;
+  width: $icon__width;
+  height: $icon__height;
 }
 
 .user-menu__toogle-icon-hover-circle {
@@ -52,7 +52,7 @@
   right: 0;
   top: calc(100% - 20px);
 
-  z-index: @base-z-index + @base-z-index-step * 5;
+  z-index: $base-z-index + $base-z-index-step * 5;
 }
 
 .dd-menu .dd-menu-items li {
@@ -72,11 +72,11 @@
 
   width: 20px;
   height: 20px;
-  min-width: @default-margin !important;
+  min-width: $default-margin !important;
   max-width: 20px;
   line-height: 32px;
 
-  margin-right: @default-margin;
+  margin-right: $default-margin;
   padding: 0 !important;
 }
 
@@ -87,11 +87,11 @@
 }
 
 .user_menu__button-icon--inverted * {
-  fill: @color-white;
+  fill: $color-white;
 }
 
 .dd-menu .dd-menu-items li.user-menu__board-name {
-  background-color: @color-dark-gray !important;
+  background-color: $color-dark-gray !important;
   padding: 1em 1.5em;
   display: flex;
 }
@@ -103,14 +103,14 @@
   white-space: pre;
   text-decoration: none;
   font-size: inherit;
-  color: @color-white;
+  color: $color-white;
 
   min-width: 100px !important;
   max-width: 200px;
 }
 
 .user-menu__input:focus {
-  background-color: @theme-color-background;
+  background-color: $theme-color-background;
 }
 
 .user-menu__boardname {
@@ -118,13 +118,13 @@
   min-width: 160px;
   display: block;
   border: none;
-  color: @color-white;
+  color: $color-white;
   line-height: 30px;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .dd-menu {
-    margin-left: @large-margin;
+    margin-left: $large-margin;
   }
 }
 
@@ -132,7 +132,7 @@
   content: ' ';
   display: block;
   height: 1px;
-  background-color: @color-alternative-gray;
+  background-color: $color-alternative-gray;
   margin: 0 1.5em;
 }
 
@@ -140,7 +140,7 @@
   display: none;
 }
 
-@media @tablet {
+@media #{$tablet} {
   .dd-menu-items li.user_menu__li--hidden-mobile {
     display: inherit;
   }

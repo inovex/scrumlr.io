@@ -1,7 +1,7 @@
 @import '../../../constants/style';
 
-@icon__width: 24px;
-@dot-color: #3991f4;
+$icon__width: 24px;
+$dot-color: #3991f4;
 
 .user-votes {
   display: flex;

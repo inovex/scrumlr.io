@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Action.css';
+import './Action.scss';
 
 export type ActionTheme = 'light' | 'dark' | 'mint';
 
@@ -22,9 +22,7 @@ const Action: React.SFC<ActionProps> = ({ theme, className, children }) => {
 
   return (
     <div className={componentClassName}>
-      <div className="action">
-        {children}
-      </div>
+      <div className="action">{children}</div>
     </div>
   );
 };

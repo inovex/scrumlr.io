@@ -6,7 +6,7 @@ import * as Raven from 'raven-js';
 
 import Router from './Router';
 import configureStore from './store';
-import './index.css';
+import './index.scss';
 import { getFirebase } from 'react-redux-firebase';
 import LoadingScreen from './components/LoadingScreen/LoadingScreen';
 import { sentry } from './config';

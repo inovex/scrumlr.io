@@ -2,7 +2,7 @@ import * as cx from 'classnames';
 import * as React from 'react';
 import { Icon } from '../Icon';
 
-import './CardNavigation.css';
+import './CardNavigation.scss';
 
 export interface CardNavigationProps {
   theme: string;
@@ -52,7 +52,8 @@ class CardNavigation extends React.Component<CardNavigationProps, {}> {
         </button>
         <span className="card-navigation__text">
           {currentIndex + 1}
-          {suffix} of {size} card{size > 1 ? 's' : null}
+          {suffix} of {size} card
+          {size > 1 ? 's' : null}
         </span>
         <button
           className="card-navigation__button"

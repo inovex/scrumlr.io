@@ -6,15 +6,15 @@
 }
 
 .dot__add:hover > svg g {
-  .animate(fill);
+  @include animate(fill);
 }
 
 .dot__add:hover > svg g {
-  fill: @theme-color-primary;
+  fill: $theme-color-primary;
 }
 
 .dot__add .dot:hover {
-  .animate(font-size, 0.2s);
+  @include animate(font-size, 0.2s);
 }
 
 .dot__add .dot:hover {

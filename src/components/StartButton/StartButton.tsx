@@ -25,6 +25,9 @@ const availableRetroModes = {
   },
   startStopContinue: {
     label: 'Start, Stop, Continue'
+  },
+  madSadGlad: {
+    label: 'Mad, Sad, Glad'
   }
 };
 

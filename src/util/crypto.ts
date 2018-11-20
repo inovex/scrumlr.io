@@ -26,11 +26,11 @@ function str2ab(str: string) {
   return buf;
 }
 
-function base64ab2str(buf: ArrayBuffer) {
+function base58ab2str(buf: ArrayBuffer) {
   return bs58.encode(new Buffer(buf));
 }
 
-function base64str2ab(str: string) {
+function base56str2ar(str: string) {
   return new Uint8Array(bs58.decode(str));
 }
 
@@ -49,14 +49,14 @@ export class Crypto {
     if (localPublicKey && localPrivateKey) {
       this.publicKey = await window.crypto.subtle.importKey(
         'spki',
-        base64str2ab(localPublicKey),
+        base56str2ar(localPublicKey),
         ENCRYPTION_ALGORITHM,
         true,
         ['encrypt']
       );
       this.privateKey = await window.crypto.subtle.importKey(
         'pkcs8',
-        base64str2ab(localPrivateKey),
+        base56str2ar(localPrivateKey),
         ENCRYPTION_ALGORITHM,
         true,
         ['decrypt']
@@ -78,13 +78,13 @@ export class Crypto {
 
       localStorage.setItem(
         LOCAL_STORAGE_PUBLIC_KEY,
-        base64ab2str(
+        base58ab2str(
           await window.crypto.subtle.exportKey('spki', this.publicKey)
         )
       );
       localStorage.setItem(
         LOCAL_STORAGE_PRIVATE_KEY,
-        base64ab2str(
+        base58ab2str(
           await window.crypto.subtle.exportKey('pkcs8', this.privateKey)
         )
       );
@@ -105,7 +105,7 @@ export class Crypto {
   async exportSymmetricKey(publicKey: string) {
     const importedPublicKey = await window.crypto.subtle.importKey(
       'spki',
-      base64str2ab(publicKey),
+      base56str2ar(publicKey),
       ENCRYPTION_ALGORITHM,
       true,
       ['encrypt']
@@ -114,7 +114,7 @@ export class Crypto {
       'raw',
       this.symmetricKey
     );
-    return base64ab2str(
+    return base58ab2str(
       await window.crypto.subtle.encrypt(
         { name: 'RSA-OAEP' },
         importedPublicKey,
@@ -127,7 +127,7 @@ export class Crypto {
     const symmtericKeyBuffer = await window.crypto.subtle.decrypt(
       { name: 'RSA-OAEP' },
       this.privateKey,
-      base64str2ab(symmetricKey)
+      base56str2ar(symmetricKey)
     );
     this.symmetricKey = await window.crypto.subtle.importKey(
       'raw',
@@ -153,7 +153,7 @@ export class Crypto {
           await window.crypto.subtle.encrypt(
             {
               name: 'AES-CBC',
-              iv: base64str2ab(iv)
+              iv: base56str2ar(iv)
             },
             this.symmetricKey,
             str2ab(message)
@@ -170,10 +170,10 @@ export class Crypto {
         await window.crypto.subtle.decrypt(
           {
             name: 'AES-CBC',
-            iv: base64str2ab(iv)
+            iv: base56str2ar(iv)
           },
           this.symmetricKey,
-          base64str2ab(message)
+          base56str2ar(message)
         )
       );
     }
@@ -181,7 +181,7 @@ export class Crypto {
   }
 
   async generateInitializationVector() {
-    return base64ab2str(
+    return base58ab2str(
       await window.crypto.getRandomValues(new Uint8Array(16)).buffer
     );
   }

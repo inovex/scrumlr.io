@@ -57,8 +57,8 @@
   height: 44px;
   line-height: 44px;
 
-  color: @color-white;
-  font-size: @theme-font-size - @base-unit;
+  color: $color-white;
+  font-size: $theme-font-size - $base-unit;
   font-weight: bold;
 }
 
@@ -74,8 +74,8 @@
 }
 
 .user-list__ready-state-wrapper {
-  color: @color-lightest-gray;
-  background-color: @theme-color-primary;
+  color: $color-lightest-gray;
+  background-color: $theme-color-primary;
 
   box-sizing: content-box;
 
@@ -94,7 +94,7 @@
 .board__user--ready {
   font-size: 14px;
   line-height: 20px;
-  color: @color-lightest-gray;
+  color: $color-lightest-gray;
 
   margin-left: 3px;
   margin-right: 3px;
@@ -121,7 +121,7 @@
 
 .user-list__other-list-name {
   align-self: center;
-  margin-right: @theme-font-size;
+  margin-right: $theme-font-size;
   flex: 1;
 
   text-align: left;

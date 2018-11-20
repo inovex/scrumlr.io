@@ -48,3 +48,8 @@ $large-padding: $large-margin;
 $theme-icon-width: $base-unit*8;
 $theme-icon-height: $base-unit*8;
 
+
+// mixins
+@mixin animate($property, $duration: 0.3s) {
+  transition: $property $duration ease-in-out;
+}

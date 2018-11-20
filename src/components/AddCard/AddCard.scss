@@ -53,32 +53,32 @@
 .add-card.add-card--theme-light > .add-card__button:hover *,
 .add-card.add-card--theme-light > .add-card__button:focus *,
 .add-card.add-card--theme-light > .add-card__button:active * {
-    color: @color-white;
+    color: $color-white;
 }
 
 .add-card.add-card--theme-dark > .add-card__button:hover *,
 .add-card.add-card--theme-dark > .add-card__button:focus *,
 .add-card.add-card--theme-dark > .add-card__button:active * {
-    color: @color-dark-gray;
+    color: $color-dark-gray;
 }
 
 .add-card.add-card--theme-mint > .add-card__button:hover *,
 .add-card.add-card--theme-mint > .add-card__button:focus *,
 .add-card.add-card--theme-mint > .add-card__button:active * {
-    color: @color-mint;
+    color: $color-mint;
 }
 
 .add-card.add-card--theme-light {
-    color: @color-dark-gray;
-    background: @color-white;
+    color: $color-dark-gray;
+    background: $color-white;
 }
 
 .add-card.add-card--theme-dark {
-    color: @color-white;
-    background: @color-dark-gray;
+    color: $color-white;
+    background: $color-dark-gray;
 }
 
 .add-card.add-card--theme-mint {
-    color: @color-white;
-    background: @color-mint;
+    color: $color-white;
+    background: $color-mint;
 }

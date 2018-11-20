@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 import { Component } from 'react';
-import './AddCard.css';
+import './AddCard.scss';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
 import { Column, ColumnType, getTheme } from '../../constants/Retrospective';
