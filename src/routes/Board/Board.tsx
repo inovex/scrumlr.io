@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { flattenDeep } from 'lodash';
 import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
 const { toast } = require('react-toastify');
@@ -91,7 +90,7 @@ export interface JsonExportData {
   cards: JsonExportCard[];
 }
 
-export type ExportFormats = 'pdf' | 'csv' | 'json' | 'print';
+export type ExportFormats = 'print';
 
 function countReadyUsers(boardUsers: BoardUsers) {
   const userKeys = Object.keys(boardUsers);
@@ -158,123 +157,12 @@ export class Board extends React.Component<BoardProps, BoardState> {
     return this.props.users[id].name;
   };
 
-  exportCsv = (separatorChar = String.fromCharCode(31)) => {
-    const { users, cards } = this.props;
-
-    const header = ['Type', 'Text', 'Author', 'Votes', 'Timestamp'];
-    const data = Object.keys(cards)
-      .map(key => cards[key])
-      .map(({ text, authorUid, timestamp, type, votes }) => [
-        type || '',
-        text.replace('\n', '\\n') || '',
-        (users[authorUid] || { name: '' }).name || '',
-        votes || '',
-        timestamp || ''
-      ]);
-
-    let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'sep=' + separatorChar + '\n';
-    csvContent += `${header.join(separatorChar)}\n`;
-    data.forEach(function(dataItem: string[], index: number) {
-      let dataString = dataItem.join(separatorChar);
-      csvContent += index < data.length ? dataString + '\n' : dataString;
-    });
-
-    return csvContent;
-  };
-
-  handleExportCsv = (separatorChar = String.fromCharCode(31)) => {
-    const encodedUri = encodeURI(this.exportCsv(separatorChar));
-    window.open(encodedUri);
-  };
-
-  exportJson = (): JsonExportData => {
-    const { cards, users, boardConfig } = this.props;
-
-    function getChildCards(parentCardId: string): any[] {
-      return Object.keys(cards)
-        .map(id => ({ id, card: cards[id] }))
-        .filter(({ id, card }) => card.parent === parentCardId)
-        .map(({ id, card }) => {
-          return {
-            ...getJsonFromCard(id, card),
-            childCards: getChildCards(id)
-          };
-        });
-    }
-
-    function flattenCard(card: JsonExportCard): any[] {
-      return [
-        {
-          ...card,
-          childCards: []
-        },
-        ...card.childCards.map(flattenCard)
-      ];
-    }
-
-    function getJsonFromCard(id: string, card: Card) {
-      return {
-        authorref: card.authorUid,
-        text: card.text,
-        type: card.type,
-        votes: Object.keys(card.userVotes)
-          .map(key => card.userVotes[key])
-          .reduce((acc, sum) => acc + sum, 0),
-        timestamp: card.timestamp,
-        childCards: getChildCards(id)
-      };
-    }
-
-    const jsonCards = Object.keys(cards)
-      .map(id => ({ id, card: cards[id] }))
-      .filter(({ id, card }) => !card.parent)
-      .map(({ id, card }) => getJsonFromCard(id, card))
-      .map(jsonCard => ({
-        ...jsonCard,
-        childCards: flattenDeep(jsonCard.childCards.map(flattenCard))
-      }));
-
-    return {
-      title: boardConfig.name || 'Unnamed Board',
-      date: boardConfig.created,
-      users: Object.keys(users).map(id => ({ id, name: users[id].name })),
-      cards: jsonCards
-    };
-  };
-
-  handleExportPdf = () => {
-    // TODO: Implement Michaels PDF backend once it's implemented.
-    throw Error('PDF export is not implemented yet');
-  };
-
-  handleExportJson = () => {
-    const data = this.exportJson();
-    const dataStr =
-      'data:application/json;charset=utf-8,' + encodeURI(JSON.stringify(data));
-
-    // Trick to trigger download dialog in browser:
-    // create anchor element, set data encoded as href and click that element, then remove it
-    const anchor = document.createElement('a');
-    anchor.setAttribute('href', dataStr);
-    anchor.setAttribute('download', 'export.json');
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-  };
-
   handleExportPrint = () => {
     window.location.hash = this.props.boardPrintUrl;
   };
 
   handleExport = (format: ExportFormats = 'print') => {
     switch (format) {
-      case 'pdf':
-        return this.handleExportPdf();
-      case 'csv':
-        return this.handleExportCsv();
-      case 'json':
-        return this.handleExportJson();
       case 'print':
         return this.handleExportPrint();
     }
