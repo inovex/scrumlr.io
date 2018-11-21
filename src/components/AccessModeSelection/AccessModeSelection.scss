@@ -1,0 +1,32 @@
+.access-mode-selection {
+  display: flex;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  max-width: 420px;
+  box-shadow: 0 4px 8px 0 rgba(39,50,47,.15);
+}
+
+.access-mode-selection__radio {
+  display: flex;
+  flex: 1 1 100%;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.access-mode-selection__radio + .access-mode-selection__radio {
+  border-left: 1px solid lightgray;
+}
+
+.access-mode-selection__label {
+  margin-left: 16px;
+}
+
+.access-mode-selection__title {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.access-mode-selection__description {
+  font-size: 14px;
+  margin-bottom: 0;
+}

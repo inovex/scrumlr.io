@@ -13,7 +13,9 @@ import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
 import { RetroMode } from '../../constants/mode';
 import StartButton from '../../components/StartButton';
-import Checkbox from '../../components/Checkbox';
+import AccessModeSelection, {
+  AccessMode
+} from '../../components/AccessModeSelection';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
@@ -52,20 +54,19 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     return this.props.onLogin(this.state.email, mode, this.state.secure);
   };
 
-  onToggleSecureBoard = () => {
-    this.setState({ secure: !this.state.secure });
+  handleChangeMode = (mode: AccessMode) => {
+    this.setState({ secure: mode === 'private' });
   };
 
   render() {
     const { uid } = this.props;
 
     const SecureBoardCheckbox = (
-      <Checkbox
-        onChange={this.onToggleSecureBoard}
-        checked={Boolean(this.state.secure)}
-      >
-        Restricted access & encrypted data
-      </Checkbox>
+      <AccessModeSelection
+        mode={this.state.secure ? 'private' : 'public'}
+        onChange={this.handleChangeMode}
+        className="new-board__access-mode-selection"
+      />
     );
 
     return (

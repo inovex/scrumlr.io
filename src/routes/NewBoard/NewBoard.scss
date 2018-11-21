@@ -70,6 +70,10 @@
   margin-bottom: $large-margin;
 }
 
+.new-board__access-mode-selection {
+  margin-bottom: 16px;
+}
+
 @media #{$tablet} {
   .new-board__action-area {
     min-width: 300px;
