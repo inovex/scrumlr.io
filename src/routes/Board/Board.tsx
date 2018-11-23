@@ -140,6 +140,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
       const totalUsers = Object.keys(nextProps.users).length;
       const count = countReadyUsers(nextProps.users);
       if (
+        this.props.boardConfig.guidedPhase ===
+          nextProps.boardConfig.guidedPhase && // inform only in single phase
         count === totalUsers - 1 && // inform only last user
         countReadyUsers(this.props.users) !== count && // counter must have changed
         !nextProps.users[uid].ready // current person must be last that is not ready yet

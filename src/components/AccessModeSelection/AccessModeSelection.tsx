@@ -12,6 +12,32 @@ export interface AccessModeSelectionProps {
   [key: string]: any;
 }
 
+const AccessModeSelectRadio: React.SFC<any> = ({
+  id,
+  value,
+  mode,
+  onChange,
+  name,
+  description
+}) => (
+  <div className="access-mode-selection__radio">
+    <input
+      id={id}
+      type="radio"
+      value={value}
+      name="access-mode-selection"
+      checked={mode === value}
+      onChange={(e: any) => {
+        onChange(e.target.value);
+      }}
+    />
+    <label htmlFor={id} className="access-mode-selection__label">
+      <h3 className="access-mode-selection__title">{name}</h3>
+      <p className="access-mode-selection__description">{description}</p>
+    </label>
+  </div>
+);
+
 export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
   mode,
   onChange,
@@ -20,48 +46,22 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
 }) => {
   return (
     <div className={classNames('access-mode-selection', className)} {...other}>
-      <div className="access-mode-selection__radio">
-        <input
-          id="access-mode-selection__public"
-          type="radio"
-          value="public"
-          name="access-mode-selection"
-          checked={mode === 'public'}
-          onChange={(e: any) => {
-            onChange(e.target.value);
-          }}
-        />
-        <label
-          htmlFor="access-mode-selection__public"
-          className="access-mode-selection__label"
-        >
-          <h3 className="access-mode-selection__title">Public</h3>
-          <p className="access-mode-selection__description">
-            All users that know the board URL will have access
-          </p>
-        </label>
-      </div>
-      <div className="access-mode-selection__radio">
-        <input
-          id="access-mode-selection__private"
-          type="radio"
-          value="private"
-          name="access-mode-selection"
-          checked={mode === 'private'}
-          onChange={(e: any) => {
-            onChange(e.target.value);
-          }}
-        />
-        <label
-          htmlFor="access-mode-selection__private"
-          className="access-mode-selection__label"
-        >
-          <h3 className="access-mode-selection__title">Private</h3>
-          <p className="access-mode-selection__description">
-            Restricted access to boards, all texts will be encrypted
-          </p>
-        </label>
-      </div>
+      <AccessModeSelectRadio
+        id="access-mode-selection__public"
+        value="public"
+        mode={mode}
+        onChange={onChange}
+        name="Public"
+        description="All users who know the board URL have access"
+      />
+      <AccessModeSelectRadio
+        id="access-mode-selection__private"
+        value="private"
+        mode={mode}
+        onChange={onChange}
+        name="Private"
+        description="Restricted access to boards, all texts will be encrypted"
+      />
     </div>
   );
 };

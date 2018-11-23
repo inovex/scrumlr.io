@@ -14,6 +14,7 @@
   font-size: 15px;
   line-height: 13px;
 
+  min-height: 50px;
   height: 50px;
 }
 
@@ -71,7 +72,7 @@
 }
 
 .new-board__access-mode-selection {
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 }
 
 @media #{$tablet} {

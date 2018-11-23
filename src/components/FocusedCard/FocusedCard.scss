@@ -136,8 +136,8 @@ $focus-card-inner-margin: 88px;
 
 @media #{$tablet} {
   .focus-card__number-of-votes {
-    font-size: $theme-font-size * 1.75;
-    line-height: $theme-font-size * 1.75;
+    font-size: $theme-font-size * 8;
+    line-height: $theme-font-size * 8;
   }
 }
 
