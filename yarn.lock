@@ -990,7 +990,7 @@
 
 "@types/text-encoding-utf-8@^1.0.1":
   version "1.0.1"
-  resolved "https://registry.elements.inovex.io/@types%2ftext-encoding-utf-8/-/text-encoding-utf-8-1.0.1.tgz#908d884af1114e5d8df47597b1e04f833383d23d"
+  resolved "https://registry.yarnpkg.com/@types%2ftext-encoding-utf-8/-/text-encoding-utf-8-1.0.1.tgz#908d884af1114e5d8df47597b1e04f833383d23d"
 
 "@webassemblyjs/ast@1.7.6":
   version "1.7.6"
@@ -10037,7 +10037,7 @@ test-exclude@^4.2.1:
 
 text-encoding-utf-8@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.elements.inovex.io/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz#585b62197b0ae437e3c7b5d0af27ac1021e10d13"
+  resolved "https://registry.yarnpkg.com/text-encoding-utf-8/-/text-encoding-utf-8-1.0.2.tgz#585b62197b0ae437e3c7b5d0af27ac1021e10d13"
 
 text-table@0.2.0, text-table@^0.2.0:
   version "0.2.0"
