@@ -31,7 +31,7 @@ case "$STAGE" in
 esac
 
 # Build app
-yarn build
+npm run build
 
 # Deploy app (default to staging)
 firebase login

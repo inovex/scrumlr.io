@@ -24,7 +24,7 @@ up to date with the `master` branch and is the target for the end-to-end tests.
 
 You're very welcome to be part of this project. You can contribute by opening an issue, by
 fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
-`yarn test` and `yarn lint` are passing and that every change is covered by unit tests.
+`npm run test` and `npm run lint` are passing and that every change is covered by unit tests.
 
 ## Thank you
 
