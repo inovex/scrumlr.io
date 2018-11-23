@@ -1,0 +1,22 @@
+@import '../../../../constants/style';
+
+.dot__add {
+  margin-left: .25em;
+  cursor: pointer;
+}
+
+.dot__add:hover > svg g {
+  @include animate(fill);
+}
+
+.dot__add:hover > svg g {
+  fill: $theme-color-primary;
+}
+
+.dot__add .dot:hover {
+  @include animate(font-size, 0.2s);
+}
+
+.dot__add .dot:hover {
+  font-size: 1.5em;
+}

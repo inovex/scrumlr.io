@@ -1,0 +1,36 @@
+.board-page {
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.board-page__column-view {
+  flex: 1;
+}
+
+.phase-splash__animation-enter, .phase-splash__animation-appear {
+  // FIXME adding scale on enter breaks carousel calculation
+  //transform: scale(.1);
+  opacity: .005 !important;
+}
+
+.phase-splash__animation-appear.phase-splash__animation-appear-active,
+.phase-splash__animation-enter.phase-splash__animation-enter-active {
+  transform: scale(1);
+  opacity: .95 !important;
+  transition: opacity 200ms ease-in, transform 300ms ease-in;
+}
+
+.phase-splash__animation-leave {
+  transform: scale(1);
+  opacity: .95 !important;
+}
+
+.phase-splash__animation-leave.phase-splash__animation-leave-active {
+  transform: scale(4);
+  opacity: .005 !important;
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}

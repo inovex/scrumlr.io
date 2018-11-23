@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './AddDot.css';
+import './AddDot.scss';
 import Icon from '../../../Icon';
 
 export interface AddDotProps {

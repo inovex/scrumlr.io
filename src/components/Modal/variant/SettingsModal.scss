@@ -1,0 +1,38 @@
+@import '../../../constants/style';
+
+
+.settings-modal__content {
+  min-width: 200px;
+  min-height: 100px;
+  display: flex;
+}
+
+.modal__settings-panel {
+  flex: 1 1 100%;
+}
+
+.modal__invite-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: $large-margin * 2;
+}
+
+.modal__invite-panel > * {
+  align-self: center;
+}
+
+.modal__headline {
+  align-self: flex-start;
+  margin-top: $default-margin;
+}
+
+.settings-modal__input + .settings-modal__input {
+  margin-top: 2em;
+}
+
+.settings-modal__show-author-checkbox {
+  display: block;
+  margin: 1.5em 0;
+}

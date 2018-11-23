@@ -2,7 +2,7 @@ import * as React from 'react';
 import { range } from 'lodash';
 
 import { AddDot, DownvoteDot } from '../Dot';
-import './UserVotes.css';
+import './UserVotes.scss';
 
 export interface UserVotesProps {
   onDownvote: () => void;
@@ -21,9 +21,7 @@ export class UserVotes extends React.Component<UserVotesProps, {}> {
 
   renderDownvote(votes?: number) {
     return (
-      <DownvoteDot onClick={() => this.props.onDownvote()}>
-        {votes}
-      </DownvoteDot>
+      <DownvoteDot onClick={() => this.props.onDownvote()}>{votes}</DownvoteDot>
     );
   }
 
@@ -36,11 +34,11 @@ export class UserVotes extends React.Component<UserVotesProps, {}> {
 
     return (
       <ul className="user-votes__dots">
-        {range(votes).map((x, i) =>
+        {range(votes).map((x, i) => (
           <li key={votes - i} className="user-votes__dots-item">
             {this.renderDownvote()}
           </li>
-        )}
+        ))}
       </ul>
     );
   }

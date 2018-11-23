@@ -1,0 +1,153 @@
+@import '../../constants/style';
+
+.board__user-list {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+
+.board__user-list li {
+  display: inline;
+  margin-left: 1em;
+}
+
+.board__user-list li:first-child {
+  margin-left: 0;
+}
+
+.board__user-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.board__user-image-border {
+  position: absolute;
+  width: 43px;
+  height: 43px;
+}
+
+.board__user-image-border svg {
+  width: 44px;
+  height: 44px;
+}
+
+.board__user-image {
+  margin-top: 6px;
+  margin-left: 6px;
+
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+}
+
+.board__user-image--faded {
+  filter: brightness(75%);
+}
+
+.board__user-count {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  text-align: center;
+
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+
+  color: $color-white;
+  font-size: $theme-font-size - $base-unit;
+  font-weight: bold;
+}
+
+.board__user-ready-count {
+  font-weight: bold;
+  font-size: 12px;
+  vertical-align: top;
+
+  line-height: 20px;
+
+  margin-top: 1px;
+  margin-left: 6px;
+}
+
+.user-list__ready-state-wrapper {
+  color: $color-lightest-gray;
+  background-color: $theme-color-primary;
+
+  box-sizing: content-box;
+
+  border-radius: 22px;
+  font-size: 15px;
+
+  position: absolute;
+  top: -5px;
+  right: -11px;
+  min-width: 20px;
+  height: 20px;
+
+  text-align: center;
+}
+
+.board__user--ready {
+  font-size: 14px;
+  line-height: 20px;
+  color: $color-lightest-gray;
+
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.board__user-ready-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+.board__user-ready-toggle:not(.board__user-ready-toggle-focused):focus .board__user-image-border,
+.board__user-ready-toggle:hover .board__user-image-border {
+  animation: spin .75s linear infinite;
+}
+
+.user-list__other-wrapper {
+  box-sizing: border-box;
+  display: flex !important;
+}
+
+.user-list__other-list-name {
+  align-self: center;
+  margin-right: $theme-font-size;
+  flex: 1;
+
+  text-align: left;
+
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-list__other-cursor {
+  cursor: pointer;
+}
+
+.user-list__ready-check-icon {
+  margin-top: 2px;
+}
+
+.user-list__ready-check-icon svg {
+  fill: #fff;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  } to {
+    transform: rotate(360deg);
+  }
+}

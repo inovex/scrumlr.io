@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { flattenDeep } from 'lodash';
 import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
 const { toast } = require('react-toastify');
 
-import './Board.css';
+import './Board.scss';
 
 import {
   mapDispatchToProps,
@@ -22,13 +21,12 @@ import {
 } from '../../types';
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
-import PhaseSplash from '../../components/PhaseSplash/PhaseSplash';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
-import ReactCSSTransitionGroup = require('react-transition-group/CSSTransitionGroup');
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
 import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
+import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
+import { getPhaseConfiguration } from '../../constants/Retrospective';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -57,12 +55,18 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   email?: string;
   isAnonymous: boolean;
 
+  waitingUsers: {
+    uid: string;
+    name: string;
+    image: string;
+  }[];
+  acceptUser: (uid: string, accept: boolean) => void;
+
   [key: string]: any;
 }
 
 export interface BoardState {
   showModal?: ModalType;
-  showPhaseIntro: boolean;
 }
 
 export interface JsonExportCard {
@@ -86,7 +90,7 @@ export interface JsonExportData {
   cards: JsonExportCard[];
 }
 
-export type ExportFormats = 'pdf' | 'csv' | 'json' | 'print';
+export type ExportFormats = 'print';
 
 function countReadyUsers(boardUsers: BoardUsers) {
   const userKeys = Object.keys(boardUsers);
@@ -100,9 +104,7 @@ function countReadyUsers(boardUsers: BoardUsers) {
 export class Board extends React.Component<BoardProps, BoardState> {
   constructor(props: BoardProps) {
     super(props);
-    this.state = {
-      showPhaseIntro: true
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -115,7 +117,20 @@ export class Board extends React.Component<BoardProps, BoardState> {
       prevProps.boardConfig &&
       prevProps.boardConfig.guidedPhase !== this.props.boardConfig.guidedPhase
     ) {
-      this.setState({ ...this.state, showPhaseIntro: true });
+      if (
+        prevProps.boardConfig.guidedPhase > 0 ||
+        this.props.boardConfig.guidedPhase > 0
+      ) {
+        const phase = getPhaseConfiguration(
+          this.props.boardConfig.mode,
+          this.props.boardConfig.guidedPhase
+        );
+        toast(
+          `Switched to Phase ${phase.index + 1} ${
+            phase.name
+          } - ${phase.activities.map(a => a.description).join(', ')}`
+        );
+      }
     }
   }
 
@@ -125,6 +140,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
       const totalUsers = Object.keys(nextProps.users).length;
       const count = countReadyUsers(nextProps.users);
       if (
+        this.props.boardConfig.guidedPhase ===
+          nextProps.boardConfig.guidedPhase && // inform only in single phase
         count === totalUsers - 1 && // inform only last user
         countReadyUsers(this.props.users) !== count && // counter must have changed
         !nextProps.users[uid].ready // current person must be last that is not ready yet
@@ -142,123 +159,12 @@ export class Board extends React.Component<BoardProps, BoardState> {
     return this.props.users[id].name;
   };
 
-  exportCsv = (separatorChar = String.fromCharCode(31)) => {
-    const { users, cards } = this.props;
-
-    const header = ['Type', 'Text', 'Author', 'Votes', 'Timestamp'];
-    const data = Object.keys(cards)
-      .map(key => cards[key])
-      .map(({ text, authorUid, timestamp, type, votes }) => [
-        type || '',
-        text.replace('\n', '\\n') || '',
-        (users[authorUid] || { name: '' }).name || '',
-        votes || '',
-        timestamp || ''
-      ]);
-
-    let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'sep=' + separatorChar + '\n';
-    csvContent += `${header.join(separatorChar)}\n`;
-    data.forEach(function(dataItem: string[], index: number) {
-      let dataString = dataItem.join(separatorChar);
-      csvContent += index < data.length ? dataString + '\n' : dataString;
-    });
-
-    return csvContent;
-  };
-
-  handleExportCsv = (separatorChar = String.fromCharCode(31)) => {
-    const encodedUri = encodeURI(this.exportCsv(separatorChar));
-    window.open(encodedUri);
-  };
-
-  exportJson = (): JsonExportData => {
-    const { cards, users, boardConfig } = this.props;
-
-    function getChildCards(parentCardId: string): any[] {
-      return Object.keys(cards)
-        .map(id => ({ id, card: cards[id] }))
-        .filter(({ id, card }) => card.parent === parentCardId)
-        .map(({ id, card }) => {
-          return {
-            ...getJsonFromCard(id, card),
-            childCards: getChildCards(id)
-          };
-        });
-    }
-
-    function flattenCard(card: JsonExportCard): any[] {
-      return [
-        {
-          ...card,
-          childCards: []
-        },
-        ...card.childCards.map(flattenCard)
-      ];
-    }
-
-    function getJsonFromCard(id: string, card: Card) {
-      return {
-        authorref: card.authorUid,
-        text: card.text,
-        type: card.type,
-        votes: Object.keys(card.userVotes)
-          .map(key => card.userVotes[key])
-          .reduce((acc, sum) => acc + sum, 0),
-        timestamp: card.timestamp,
-        childCards: getChildCards(id)
-      };
-    }
-
-    const jsonCards = Object.keys(cards)
-      .map(id => ({ id, card: cards[id] }))
-      .filter(({ id, card }) => !card.parent)
-      .map(({ id, card }) => getJsonFromCard(id, card))
-      .map(jsonCard => ({
-        ...jsonCard,
-        childCards: flattenDeep(jsonCard.childCards.map(flattenCard))
-      }));
-
-    return {
-      title: boardConfig.name || 'Unnamed Board',
-      date: boardConfig.created,
-      users: Object.keys(users).map(id => ({ id, name: users[id].name })),
-      cards: jsonCards
-    };
-  };
-
-  handleExportPdf = () => {
-    // TODO: Implement Michaels PDF backend once it's implemented.
-    throw Error('PDF export is not implemented yet');
-  };
-
-  handleExportJson = () => {
-    const data = this.exportJson();
-    const dataStr =
-      'data:application/json;charset=utf-8,' + encodeURI(JSON.stringify(data));
-
-    // Trick to trigger download dialog in browser:
-    // create anchor element, set data encoded as href and click that element, then remove it
-    const anchor = document.createElement('a');
-    anchor.setAttribute('href', dataStr);
-    anchor.setAttribute('download', 'export.json');
-    document.body.appendChild(anchor);
-    anchor.click();
-    document.body.removeChild(anchor);
-  };
-
   handleExportPrint = () => {
     window.location.hash = this.props.boardPrintUrl;
   };
 
   handleExport = (format: ExportFormats = 'print') => {
     switch (format) {
-      case 'pdf':
-        return this.handleExportPdf();
-      case 'csv':
-        return this.handleExportCsv();
-      case 'json':
-        return this.handleExportJson();
       case 'print':
         return this.handleExportPrint();
     }
@@ -270,10 +176,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
   handlePrevPhase = () => {
     return this.props.onSwitchPhaseIndex(-1);
-  };
-
-  closePhaseIntro = () => {
-    this.setState({ ...this.state, showPhaseIntro: false });
   };
 
   handleCloseModal = () => {
@@ -289,7 +191,12 @@ export class Board extends React.Component<BoardProps, BoardState> {
   };
 
   render() {
-    let { boardConfig, setupCompleted } = this.props;
+    const {
+      boardConfig,
+      setupCompleted,
+      waitingUsers,
+      acceptUser
+    } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
     if (!configLoaded || !setupCompleted) {
       return <LoadingScreen />;
@@ -298,70 +205,69 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = this.state.showModal === 'settings';
     const showFeedback = this.state.showModal === 'feedback';
     const showShareDialog = this.state.showModal === 'share';
-    const showIntro =
-      !showSettings && !showFeedback && this.state.showPhaseIntro;
+
+    let waitingUser;
+    if (waitingUsers && waitingUsers.length > 0) {
+      const user = waitingUsers[0];
+      waitingUser = (
+        <MembershipRequestModal
+          onAccept={() => {
+            acceptUser(user.uid, true);
+          }}
+          onDeny={() => {
+            acceptUser(user.uid, false);
+          }}
+          member={user}
+        />
+      );
+    }
 
     return (
-      <div className="board-page">
-        <Header
-          boardId={this.props.boardSelector}
-          onExport={() => this.handleExport()}
-          onSignOut={this.props.onSignOut}
-          onOpenModal={this.handleOpenModal}
-        />
-
-        <ColumnView
-          boardUrl={this.props.boardSelector}
-          className="board-page__column-view"
-        />
-
-        {showSettings && (
-          <SettingsModal
-            isAdmin={this.props.isBoardAdmin}
-            boardName={boardConfig.name}
-            username={this.props.username}
-            email={this.props.email}
-            isAnonymous={this.props.isAnonymous}
-            onChangeBoardName={this.props.onChangeBoardName}
-            onChangeUsername={this.props.onChangeUsername}
-            onChangeEmail={this.props.onChangeEmail}
-            onClose={this.handleCloseModal}
-            onToggleShowAuthor={this.props.onToggleShowAuthor}
-            isShowAuthor={this.props.isShowAuthor}
+      <>
+        {waitingUser}
+        <div className="board-page">
+          <Header
+            boardId={this.props.boardSelector}
+            onExport={() => this.handleExport()}
+            onSignOut={this.props.onSignOut}
+            onOpenModal={this.handleOpenModal}
           />
-        )}
 
-        {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
+          <ColumnView
+            boardUrl={this.props.boardSelector}
+            className="board-page__column-view"
+          />
 
-        {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-
-        <ReactCSSTransitionGroup
-          transitionName="phase-splash__animation"
-          transitionAppear={true}
-          transitionAppearTimeout={600}
-          transitionEnterTimeout={600}
-          transitionLeaveTimeout={600}
-          transitionEnter={true}
-          transitionLeave={true}
-        >
-          {showIntro && (
-            <PhaseSplash
-              key="phase-splash"
-              phase={getPhaseConfiguration(
-                boardConfig.mode,
-                this.props.boardConfig.guidedPhase
-              )}
-              onClose={this.closePhaseIntro}
+          {showSettings && (
+            <SettingsModal
+              isAdmin={this.props.isBoardAdmin}
+              boardName={boardConfig.name}
+              username={this.props.username}
+              email={this.props.email}
+              isAnonymous={this.props.isAnonymous}
+              onChangeBoardName={this.props.onChangeBoardName}
+              onChangeUsername={this.props.onChangeUsername}
+              onChangeEmail={this.props.onChangeEmail}
+              onClose={this.handleCloseModal}
+              onToggleShowAuthor={this.props.onToggleShowAuthor}
+              isShowAuthor={this.props.isShowAuthor}
             />
           )}
-        </ReactCSSTransitionGroup>
-      </div>
+
+          {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
+
+          {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+        </div>
+      </>
     );
   }
 }
 
 function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
-  return [`/boards/${props.match.params.id}`, `/presence`];
+  return [
+    `/boards/${props.match.params.id}/public`,
+    `/boards/${props.match.params.id}/private`
+  ];
 }
 
 export default compose<any, any, any>(

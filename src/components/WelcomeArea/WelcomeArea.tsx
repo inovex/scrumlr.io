@@ -1,7 +1,7 @@
 import * as React from 'react';
-import './WelcomeArea.css';
+import './WelcomeArea.scss';
 
-export const WelcomeArea: React.SFC<{}> = ({ children }) =>
+export const WelcomeArea: React.SFC<{}> = ({ children }) => (
   <div className="welcome-area">
     <div className="welcome-area__promotion-wrapper">
       <div className="welcome-area__promotion">
@@ -22,9 +22,8 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) =>
       </div>
     </div>
 
-    <div className="welcome-area__action-area">
-      {children}
-    </div>
-  </div>;
+    <div className="welcome-area__action-area">{children}</div>
+  </div>
+);
 
 export default WelcomeArea;

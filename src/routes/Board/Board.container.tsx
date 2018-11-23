@@ -1,22 +1,23 @@
 import { AnyAction, Dispatch } from 'redux';
 import { isLoaded, getVal } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
-import { debounce } from 'lodash';
+import { debounce, difference } from 'lodash';
 
 import { SETUP_COMPLETED } from '../../actions';
 import { BoardProps } from './Board';
 import {
   BoardConfig,
-  UserInformation,
   FirebaseProp,
   StoreState,
   BoardCards,
   Card,
-  Board,
-  Optional
+  Optional,
+  PrivateBoardData,
+  PublicBoardData
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { getGravatar } from '../../controller/gravatar';
+import { Crypto } from '../../util/crypto';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -25,30 +26,97 @@ export const mapStateToProps = (
   const { app, fbState } = state;
   const firebase = ownProps.firebase as FirebaseProp;
 
-  const boardSelector = `boards/${ownProps.match.params.id}`;
+  const boardSelector = `boards/${ownProps.match.params.id}/private`;
   const boardPrintUrl = `/print/${ownProps.match.params.id}`;
   const auth: firebase.User | any = firebase.auth().currentUser || {};
 
-  const board: Optional<Board> = getVal(
+  const board: Optional<PrivateBoardData> = getVal(
     fbState,
     `data/${boardSelector}`,
     undefined
   );
-  if (!board) {
+
+  if (!isLoaded(board) || !board) {
     return { boardSelector, boardConfig: undefined, auth } as any;
   }
 
   const cards: BoardCards = board.cards || {};
   const boardConfig: BoardConfig = board.config;
 
-  const users = isLoaded(boardConfig) ? boardConfig.users : {};
-  const isBoardAdmin = isLoaded(boardConfig)
+  const users = isLoaded(board) ? board.users : {};
+  const isBoardAdmin = isLoaded(board)
     ? auth.uid === boardConfig.creatorUid
     : false;
 
   let focusedCard: Optional<Card> = undefined;
   if (boardConfig.focusedCardId) {
     focusedCard = cards[boardConfig.focusedCardId];
+  }
+
+  // TODO check applicants and show request dialogs
+  const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
+  const publicBoard: Optional<PublicBoardData> = getVal(
+    fbState,
+    `data/${publicBoardSelector}`,
+    undefined
+  );
+
+  let waitingUsers: { uid: string; name: string; image: string }[] = [];
+  if (isLoaded(publicBoard) && publicBoard) {
+    const { accessAuthorized, applicants } = publicBoard;
+
+    if (applicants) {
+      const waitingUserUids = difference(
+        Object.keys(applicants),
+        Object.keys(accessAuthorized || {})
+      );
+      waitingUsers = waitingUserUids.map(uid => ({ uid, ...applicants[uid] }));
+    }
+  }
+
+  function acceptUser(uid: string, accept: boolean) {
+    firebase
+      .set(`${publicBoardSelector}/accessAuthorized/${uid}`, accept)
+      .catch((err: any) => {
+        Raven.captureMessage('unable to accept user access', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardSelector,
+            user: uid,
+            accept
+          }
+        });
+      });
+  }
+
+  // TODO cleanup symmetric key sync
+  if (isBoardAdmin && users) {
+    const keyStore = board.keyStore;
+
+    if (keyStore) {
+      const crypto = new Crypto();
+      crypto.initKeypair().then(() => {
+        const key = keyStore[crypto.getPublicKey()!!];
+
+        if (key) {
+          crypto.importSymmetricKey(key).then(() => {
+            for (let uid in users) {
+              if (keyStore && !keyStore[users[uid].publicKey!!]) {
+                crypto
+                  .exportSymmetricKey(users[uid].publicKey!!)
+                  .then(exportedKey => {
+                    firebase.set(
+                      `${boardSelector}/keyStore/${users[uid].publicKey}`,
+                      exportedKey
+                    );
+                  });
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   function onToggleShowAuthor() {
@@ -65,8 +133,8 @@ export const mapStateToProps = (
 
   function onToggleReadyState() {
     firebase
-      .update(`${boardSelector}/config/users/${auth.uid}`, {
-        ready: !boardConfig.users[auth.uid].ready
+      .update(`${boardSelector}/users/${auth.uid}`, {
+        ready: !board!!.users[auth.uid].ready
       })
       .catch((err: Error) => {
         Raven.captureMessage('Could not toggle user state', {
@@ -108,7 +176,7 @@ export const mapStateToProps = (
           photoURL: imageUrl
         })
         .then(() => {
-          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
+          firebase.update(`${boardSelector}/users/${auth.uid}`, {
             image: imageUrl
           });
         });
@@ -124,7 +192,7 @@ export const mapStateToProps = (
           photoURL: user.photoURL
         })
         .then(() => {
-          firebase.update(`${boardSelector}/config/users/${auth.uid}`, {
+          firebase.update(`${boardSelector}/users/${auth.uid}`, {
             name: username
           });
         });
@@ -157,9 +225,9 @@ export const mapStateToProps = (
         });
       });
 
-    Object.keys(boardConfig.users).forEach(uid => {
+    Object.keys(board!!.users).forEach(uid => {
       firebase
-        .update(`${boardSelector}/config/users/${uid}`, {
+        .update(`${boardSelector}/users/${uid}`, {
           ready: false
         })
         .catch((err: Error) => {
@@ -198,6 +266,8 @@ export const mapStateToProps = (
     onChangeEmail,
     onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
+    waitingUsers,
+    acceptUser,
     ...app,
 
     // other props, only used in mergeProps
@@ -216,43 +286,8 @@ export function mergeProps(
   { dispatch }: { dispatch: Dispatch<any> },
   ownProps: BoardProps
 ): BoardProps {
-  const { auth, boardConfig, boardSelector } = stateProps;
-  const { firebase } = ownProps;
-
   function onRegisterCurrentUser() {
-    if (!auth.uid) {
-      return;
-    }
-    const promises: Promise<any>[] = [];
-
-    if (!boardConfig || !boardConfig.creatorUid) {
-      promises.push(
-        firebase
-          .set(`${boardSelector}/config/creatorUid`, auth.uid)
-          .catch(() => {
-            // Nothing to do. An admin has been set already for this board.
-          })
-      );
-    }
-
-    const user: UserInformation = {
-      name: auth.displayName,
-      image: auth.photoURL,
-      ready: false
-    };
-    promises.push(
-      firebase.set(`${boardSelector}/config/users/${auth.uid}`, user)
-    );
-
-    Promise.all(promises)
-      .then(() => {
-        dispatch({ type: SETUP_COMPLETED });
-      })
-      .catch((err: PromiseRejectionEvent) => {
-        Raven.captureMessage('Could not register current user', {
-          extra: { reason: err.reason, uid: auth.uid, boardId: boardSelector }
-        });
-      });
+    dispatch({ type: SETUP_COMPLETED });
   }
 
   return {

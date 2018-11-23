@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 
-import { mockBoardConfig, mockCard, mockUser } from '../../builder';
-import { BoardCards, BoardUsers } from '../../types';
+import { mockBoardConfig, mockUser } from '../../builder';
+import { BoardUsers } from '../../types';
 import { Board, BoardProps } from './Board';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
@@ -44,7 +44,9 @@ describe('<Board />', () => {
       onChangeEmail: jest.fn(),
       onToggleShowAuthor: jest.fn(),
       isShowAuthor: false,
-      isAnonymous: false
+      isAnonymous: false,
+      acceptUser: jest.fn(),
+      waitingUsers: []
     };
   });
 
@@ -75,90 +77,6 @@ describe('<Board />', () => {
       expect((shallowWrapper.instance() as any).getUsername('user2')).toEqual(
         undefined
       );
-    });
-  });
-
-  describe('export', () => {
-    let cards: BoardCards;
-    let users: BoardUsers;
-
-    beforeEach(() => {
-      users = {
-        user1: mockUser({ name: 'User1' }),
-        user2: mockUser({ name: 'User2' })
-      };
-      cards = {
-        card1: mockCard({
-          text: 'Text card 1',
-          authorUid: 'user1',
-          userVotes: { user1: 10, user2: 3 },
-          type: 'positive'
-        }),
-        card2: mockCard({
-          text: 'Text card 2',
-          authorUid: 'user2',
-          userVotes: { user1: 3, user2: -4 },
-          type: 'negative'
-        }),
-        card3: mockCard({
-          text: 'Text card 3',
-          authorUid: 'user1',
-          userVotes: { user2: -4 },
-          parent: 'card1',
-          type: 'positive'
-        })
-      };
-    });
-
-    it('should be possible to generate CSV from cards', () => {
-      const separatorChar = '|';
-      shallowWrapper = shallow(
-        <Board {...mockProps} cards={cards} users={users} />
-      );
-      expect(
-        (shallowWrapper.instance() as any).exportCsv(separatorChar)
-      ).toMatchSnapshot();
-    });
-
-    it('should be possible to generate JSON from cards', () => {
-      shallowWrapper = shallow(
-        <Board {...mockProps} cards={cards} users={users} />
-      );
-      expect((shallowWrapper.instance() as any).exportJson()).toMatchSnapshot();
-    });
-
-    it('should export as CSV if requested', () => {
-      const spy = jest.fn(() => {});
-      shallowWrapper = shallow(
-        <Board
-          {...mockProps}
-          cards={cards}
-          users={users}
-          setupCompleted={true}
-        />
-      );
-      const instance = shallowWrapper.instance() as any;
-
-      instance.handleExportCsv = spy;
-      instance.handleExport('csv');
-      expect(spy).toHaveBeenCalled();
-    });
-
-    it('should export as PDF if requested', () => {
-      const spy = jest.fn(() => {});
-      shallowWrapper = shallow(
-        <Board
-          {...mockProps}
-          cards={cards}
-          users={users}
-          setupCompleted={true}
-        />
-      );
-      const instance = shallowWrapper.instance() as any;
-
-      instance.handleExportPdf = spy;
-      instance.handleExport('pdf');
-      expect(spy).toHaveBeenCalled();
     });
   });
 

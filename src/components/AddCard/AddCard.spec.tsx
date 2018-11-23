@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 const firebaseMock = require('react-redux-firebase');
 
-import { ColumnType } from '../../constants/Retrospective';
 import {
   AddCard,
   AddCardProps,
@@ -19,7 +18,7 @@ const KEYCODE_ENTER = 13;
 
 describe('<AddCard />', () => {
   describe('dumb component', () => {
-    let wrapper: ShallowWrapper<AddCardProps, AddCardState>;
+    let wrapper: ShallowWrapper<AddCardProps, AddCardState, AddCard>;
     let props: AddCardProps;
 
     beforeEach(() => {
@@ -56,8 +55,6 @@ describe('<AddCard />', () => {
 
     describe('add card via enter key', () => {
       const text = 'foobar';
-      const id = 'negative';
-      const type: ColumnType = 'negative';
 
       it('should not call onAdd callback when enter is not pressed', () => {
         wrapper = shallow(<AddCard {...props} />);
@@ -90,20 +87,21 @@ describe('<AddCard />', () => {
         wrapper.setState({ text });
         let input = wrapper.find(Input);
 
-        expect(props.onAdd).not.toHaveBeenCalled();
+        const spy = jest
+          .spyOn(wrapper.instance(), 'handleKeyDown')
+          .mockImplementation();
+        expect(spy).not.toHaveBeenCalled();
 
         input.simulate('focus');
         input.simulate('keydown', { keyCode: KEYCODE_ENTER });
 
-        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
-        expect(wrapper.state().text).toEqual('');
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
       });
     });
 
     describe('add card via button', () => {
       const text = 'foobar';
-      const id = 'negative';
-      const type: ColumnType = 'negative';
 
       it('should disable button if no text is entered', () => {
         wrapper = shallow(<AddCard {...props} />);
@@ -120,14 +118,18 @@ describe('<AddCard />', () => {
 
       it('should call onAdd callback when button is pressed and text has been entered', () => {
         wrapper = shallow(<AddCard {...props} />);
+
+        const spy = jest
+          .spyOn(wrapper.instance(), 'handleAdd')
+          .mockImplementation();
+        expect(spy).not.toHaveBeenCalled();
+
         wrapper.setState({ text });
-
-        expect(props.onAdd).not.toHaveBeenCalled();
-
         const button = wrapper.find('button');
         button.simulate('click');
 
-        expect(props.onAdd).toHaveBeenCalledWith(id, type, text);
+        expect(spy).toHaveBeenCalled();
+        spy.mockRestore();
       });
     });
   });
@@ -135,7 +137,6 @@ describe('<AddCard />', () => {
   describe('mapStateToProps', () => {
     let ownProps: OwnAddCardProps;
 
-    // TODO: Write a mock function for this after Johanns Definitions have been merged.
     const fbState = {
       auth: {
         uid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
@@ -155,37 +156,53 @@ describe('<AddCard />', () => {
       data: {
         boards: {
           '-KqhC0R4ywKluWRz0cZ8': {
-            config: {
-              created: '2017-08-04T12:24:32.064Z',
-              creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
-              guided: true,
-              guidedPhase: 0,
-              sorted: false,
-              mode: 'positiveNegative' as RetroMode,
-              users: {
-                xNpM1E6XiigmfH7P8f42Vc3KyN02: {
-                  image:
-                    'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
-                  name: 'xx@xx.de',
-                  ready: false
+            public: {
+              config: {
+                secure: false
+              }
+            },
+            private: {
+              users: {},
+              config: {
+                created: '2017-08-04T12:24:32.064Z',
+                creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
+                guided: true,
+                guidedPhase: 0,
+                sorted: false,
+                mode: 'positiveNegative' as RetroMode,
+                users: {
+                  xNpM1E6XiigmfH7P8f42Vc3KyN02: {
+                    image:
+                      'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
+                    name: 'xx@xx.de',
+                    ready: false
+                  }
                 }
               }
             }
           },
           '-AqhC0R4ywKluWRz0cZ8': {
-            config: {
-              created: '2017-08-04T12:24:32.064Z',
-              creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
-              guided: true,
-              guidedPhase: 0,
-              sorted: false,
-              mode: 'positiveNegative' as RetroMode,
-              users: {
-                xNpM1E6XiigmfH7P8f42Vc3KyN02: {
-                  image:
-                    'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
-                  name: 'xx@xx.de',
-                  ready: false
+            public: {
+              config: {
+                secure: false
+              }
+            },
+            private: {
+              users: {},
+              config: {
+                created: '2017-08-04T12:24:32.064Z',
+                creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
+                guided: true,
+                guidedPhase: 0,
+                sorted: false,
+                mode: 'positiveNegative' as RetroMode,
+                users: {
+                  xNpM1E6XiigmfH7P8f42Vc3KyN02: {
+                    image:
+                      'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
+                    name: 'xx@xx.de',
+                    ready: false
+                  }
                 }
               }
             }
@@ -219,7 +236,13 @@ describe('<AddCard />', () => {
       const text = 'foobar';
       const timestamp = '2017-01-01T00:00:00.000Z';
 
-      props.onAdd(ownProps.column.id, ownProps.column.type, text, timestamp);
+      props.onAdd(
+        ownProps.column.id,
+        ownProps.column.type,
+        text,
+        timestamp,
+        timestamp
+      );
       expect(pushMock.mock.calls[0]).toMatchSnapshot();
     });
   });

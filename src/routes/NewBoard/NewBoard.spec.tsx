@@ -10,7 +10,6 @@ import { RetroMode } from '../../constants/mode';
 import StartButton from '../../components/StartButton';
 const firebaseMock = require('react-redux-firebase');
 
-// TODO: Write a mock function for this after Johanns Definitions have been merged.
 const fbState = {
   auth: {
     uid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
@@ -30,37 +29,53 @@ const fbState = {
   data: {
     boards: {
       '-KqhC0R4ywKluWRz0cZ8': {
-        config: {
-          created: '2017-08-04T12:24:32.064Z',
-          creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
-          guided: true,
-          guidedPhase: 0,
-          sorted: false,
-          mode: 'positiveNegative' as RetroMode,
-          users: {
-            xNpM1E6XiigmfH7P8f42Vc3KyN02: {
-              image:
-                'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
-              name: 'xx@xx.de',
-              ready: false
+        public: {
+          config: {
+            secure: false
+          }
+        },
+        private: {
+          users: {},
+          config: {
+            created: '2017-08-04T12:24:32.064Z',
+            creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
+            guided: true,
+            guidedPhase: 0,
+            sorted: false,
+            mode: 'positiveNegative' as RetroMode,
+            users: {
+              xNpM1E6XiigmfH7P8f42Vc3KyN02: {
+                image:
+                  'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
+                name: 'xx@xx.de',
+                ready: false
+              }
             }
           }
         }
       },
       '-AqhC0R4ywKluWRz0cZ8': {
-        config: {
-          created: '2017-08-04T12:24:32.064Z',
-          creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
-          guided: true,
-          guidedPhase: 0,
-          sorted: false,
-          mode: 'positiveNegative' as RetroMode,
-          users: {
-            xNpM1E6XiigmfH7P8f42Vc3KyN02: {
-              image:
-                'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
-              name: 'xx@xx.de',
-              ready: false
+        public: {
+          config: {
+            secure: false
+          }
+        },
+        private: {
+          users: {},
+          config: {
+            created: '2017-08-04T12:24:32.064Z',
+            creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
+            guided: true,
+            guidedPhase: 0,
+            sorted: false,
+            mode: 'positiveNegative' as RetroMode,
+            users: {
+              xNpM1E6XiigmfH7P8f42Vc3KyN02: {
+                image:
+                  'https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro',
+                name: 'xx@xx.de',
+                ready: false
+              }
             }
           }
         }
@@ -100,7 +115,7 @@ describe('<NewBoard />', () => {
     xit('should login user correctly', () => {
       const result = mapStateToProps(state, ownProps);
       const email = 'me@example.com';
-      result.onLogin(email, 'positiveNegative');
+      result.onLogin(email, 'positiveNegative', false);
       const firebase = firebaseMock.getFirebase();
       expect(firebase.auth().signInAnonymously).toBeCalled();
       // TODO: can this be tested somehow?
@@ -195,13 +210,13 @@ describe('<NewBoard />', () => {
     it('should update state if email address is entered', () => {
       const uid = null;
       shallowWrapper = shallow(<NewBoard {...props} uid={uid} />);
-
-      //expect(shallowWrapper.instance().state).toEqual({ email: '' });
-
       shallowWrapper
         .find(Input)
         .simulate('change', { target: { value: 'abc' } });
-      expect(shallowWrapper.instance().state).toEqual({ email: 'abc' });
+      expect(shallowWrapper.instance().state).toEqual({
+        email: 'abc',
+        secure: false
+      });
     });
   });
 });

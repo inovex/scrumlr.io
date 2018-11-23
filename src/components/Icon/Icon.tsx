@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { IconNames } from './types';
 import { iconMap } from './definitions';
-import './Icon.css';
+import './Icon.scss';
 
 export interface IconProps {
   name: IconNames;

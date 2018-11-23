@@ -1,6 +1,6 @@
-import { getVal, getFirebase, isLoaded } from 'react-redux-firebase';
+import { getFirebase } from 'react-redux-firebase';
 
-import { BoardConfig, BoardUsers, StoreState } from '../../types';
+import { StoreState } from '../../types';
 import { LoginBoardProps } from './LoginBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
@@ -9,7 +9,6 @@ export function mapStateToProps(
   state: StoreState,
   ownProps: LoginBoardProps
 ): LoginBoardProps {
-  const { fbState } = state;
   const firebase = getFirebase();
 
   let uid: string | null = null;
@@ -19,20 +18,13 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  const boardUrl = `boards/${(ownProps.match.params as any).id}`;
-  const boardConfig: BoardConfig = getVal(
-    fbState,
-    `data/${boardUrl}/config`,
-    {}
-  );
-
-  const users: BoardUsers = isLoaded(boardConfig) ? boardConfig.users : {};
-
   function onLogin(email: string) {
     if (!uid) {
-      authController(firebase).signInAnonymously(email).then(() => {
-        location.assign(`/#/board/${(ownProps.match.params as any).id}`);
-      });
+      authController(firebase)
+        .signInAnonymously(email)
+        .then(() => {
+          location.assign(`/#/board/${(ownProps.match.params as any).id}`);
+        });
     } else {
       location.assign(`/#/board/${(ownProps.match.params as any).id}`);
     }
@@ -45,17 +37,17 @@ export function mapStateToProps(
   };
 
   function onLogout() {
-    firebase.auth().signOut().then(() => {
-      location.hash = '/new';
-    });
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/new';
+      });
   }
 
   return {
     ...ownProps,
-    boards: {},
     uid,
-    name: boardConfig.name,
-    users,
     onLogin,
     onProviderLogin,
     onLogout

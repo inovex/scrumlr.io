@@ -2,18 +2,20 @@
 
 exports[`<Modal /> dumb component rendering should match the snapshot 1`] = `
 "<div className=\\"modal modal__backdrop\\">
-  <div className=\\"modal__content-wrapper\\">
-    <div className=\\"modal__content\\">
-      Test
-      <div className=\\"modal__action-area\\">
-        <button className=\\"modal__close-button\\" type=\\"button\\" onClick={[Function: mockConstructor]}>
-          <mockConstructor name=\\"close-circle\\" width={48} height={48} />
-        </button>
-        <button type=\\"button\\" onClick={[Function: mockConstructor]} className=\\"modal__ack-button\\">
-          OK
-        </button>
+  <FocusLock disabled={false} returnFocus={false} noFocusGuards={false} autoFocus={true} persistentFocus={false} allowTextSelection={[undefined]} group={[undefined]} className={[undefined]} whiteList={[undefined]} as=\\"div\\" lockProps={{...}} onActivation={[undefined]} onDeactivation={[undefined]}>
+    <div className=\\"modal__content-wrapper\\">
+      <div className=\\"modal__content\\">
+        Test
+        <div className=\\"modal__action-area\\">
+          <button className=\\"modal__close-button\\" type=\\"button\\" onClick={[Function: mockConstructor]}>
+            <mockConstructor name=\\"close-circle\\" width={48} height={48} />
+          </button>
+          <button type=\\"button\\" onClick={[Function: mockConstructor]} className=\\"modal__ack-button\\">
+            OK
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </FocusLock>
 </div>"
 `;

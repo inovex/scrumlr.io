@@ -1,0 +1,98 @@
+@import '../../constants/style';
+
+.textarea__wrapper {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+  height: 100%;
+
+  padding-right: $default-margin;
+
+  min-width: 256px;
+}
+
+.textarea__label {
+  text-transform: uppercase;
+  font-size: $theme-font-size;
+  font-weight: bold;
+  margin-bottom: $base-unit * 2;
+}
+
+.textarea__description {
+  margin-top: $base-unit * 1.5;
+  font-size: $theme-font-size - $base-unit / 2;
+}
+
+.textarea {
+  flex: 1;
+  background: none;
+
+  box-sizing: border-box;
+
+  border: none;
+  outline: none;
+
+  font-family: 'Heebo', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  line-height: 24px;
+
+  color: currentColor;
+}
+
+.textarea--underlined > .textarea {
+  border-bottom: 1px solid $color-middle-gray;
+}
+
+.textarea--underlined > .textarea__underline {
+  margin-top: -1px;
+  margin-bottom: 1px;
+}
+
+.textarea--underlined > .textarea:focus + .textarea__underline {
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+
+.textarea__underline {
+  align-self: center;
+
+  background-color: currentColor;
+  height: 1px;
+  transition: width 0.25s linear;
+  width: 0;
+
+  margin-top: 1px;
+}
+
+.textarea__focus-theme-mint > .textarea:hover::placeholder,
+.textarea__focus-theme-mint > .textarea:focus::placeholder {
+  color: $color-mint;
+}
+
+.textarea__focus-theme-mint > .textarea__underline {
+  background-color: $color-mint;
+}
+
+.textarea:focus + .textarea__underline,
+.textarea:hover + .textarea__underline {
+  width: 100%;
+}
+
+.textarea:focus + .textarea__underline {
+  margin-top: 0px;
+  height: 2px;
+}
+
+.textarea::placeholder {
+  font-weight: bold;
+  color: $color-alternative-gray;
+
+  transition: color .25s linear;
+}
+
+.textarea--inverted-placeholder::placeholder {
+  color: $color-white;
+  opacity: 0.8;
+}

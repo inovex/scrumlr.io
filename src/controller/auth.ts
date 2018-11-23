@@ -15,14 +15,14 @@ export const authController = (firebase: FirebaseProp) => ({
   },
   signOut: () => {
     // User is still signed in at this point. Sign out the user and redirect to home page.
-    const { uid } = firebase.auth().currentUser as firebase.User;
-    firebase.remove(`/presence/${uid}`).then(() => {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          location.hash = '/';
-        });
-    });
+    //const { uid } = firebase.auth().currentUser as firebase.User;
+    //firebase.remove(`/presence/${uid}`).then(() => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        location.hash = '/';
+      });
+    //});
   }
 });

@@ -1,0 +1,51 @@
+@import "@material/react-ripple/index.scss";
+
+$button__default-color: #ffffff;
+$button__accent-color: #0057ff;
+
+.button {
+  position: relative;
+
+  border: none;
+  outline: none;
+  overflow: hidden;
+
+  border-radius: 18px;
+
+  height: 36px;
+  min-width: 120px;
+
+  font-family: 'Heebo', sans-serif;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.button--primary {
+  $color: $button__default-color;
+
+  color: $color;
+  background: $button__accent-color;
+
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states-base-color($color);
+  @include mdc-states-hover-opacity(.1);
+  @include mdc-states-focus-opacity(.175);
+  @include mdc-states-press-opacity(.25);
+}
+
+.button--secondary {
+  $color: $button__accent-color;
+
+  color: $color;
+  background: $button__default-color;
+
+  @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
+  @include mdc-states-base-color($color);
+  @include mdc-states-hover-opacity(.06);
+  @include mdc-states-focus-opacity(.095);
+  @include mdc-states-press-opacity(.14);
+}

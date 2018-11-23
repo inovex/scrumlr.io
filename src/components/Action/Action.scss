@@ -1,0 +1,36 @@
+@import '../../constants/style';
+
+.action-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.action {
+  box-sizing: border-box;
+  align-self: center;
+  width: 100%;
+  height: $default-padding * 2 + 32px;
+  max-height: $default-padding * 2 + 32px;
+  padding: $default-padding;
+}
+
+@media #{$desktop} {
+  .action {
+    padding: $default-padding $large-padding;
+  }
+}
+
+.action-wrapper--theme-light {
+  color: $color-dark-gray;
+  background: $color-white;
+}
+
+.action-wrapper--theme-dark {
+  color: $color-white;
+  background: $color-dark-gray;
+}
+
+.action-wrapper--theme-mint {
+  color: $color-white;
+  background: $color-mint;
+}

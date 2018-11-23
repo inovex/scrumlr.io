@@ -17,6 +17,7 @@ export const mapStateToProps = (
     `data/${boardUrl}/config`,
     {}
   );
+
   const isBoardAdmin =
     auth && isLoaded(boardConfig) ? auth.uid === boardConfig.creatorUid : false;
 

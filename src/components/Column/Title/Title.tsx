@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 
-import './Title.css';
+import './Title.scss';
 
 export interface TitleProps {
   children?: React.ReactNode;
@@ -20,9 +20,7 @@ class Title extends React.Component<TitleProps, {}> {
         <div className="title__title-wrapper">
           <h1 className="title__title">
             {children}
-            <span className="title__count">
-              {count}
-            </span>
+            <span className="title__count">{count}</span>
           </h1>
         </div>
       </header>

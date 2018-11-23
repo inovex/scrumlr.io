@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { Component } from 'react';
-import './Card.css';
+import './Card.scss';
 import { DragSource, DropTarget } from 'react-dnd';
 import { BoardProp, Card as TCard, DragAndDropProps } from '../../types';
 import Details from './Details';
@@ -32,7 +32,7 @@ export interface StateCardProps {
   onRemove: (id: string) => void;
   onDownvote: (id: string) => void;
   onUpvote: (id: string) => void;
-  onUpdateText: (key: string, value: string) => void;
+  onUpdateText: (key: string, value: string, iv: string) => void;
   onShowVotes: (id: string) => void;
   onFocus: (id: string) => void;
   onCardStack: (cardSourceId: string, cardTargetId: string) => void;

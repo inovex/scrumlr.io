@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dot } from '../Dot';
-import './DownvoteDot.css';
+import './DownvoteDot.scss';
 import Icon from '../../../Icon';
 
 export interface DownvoteDotProps {

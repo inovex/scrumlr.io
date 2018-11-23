@@ -1,0 +1,16 @@
+@import '../../constants/style.scss';
+
+.board-guard__denied-link {
+  background-color: $color-dark;
+  font-weight: bold;
+  color: $color-white;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px 2em;
+  border-radius: 12px;
+}
+
+.board-guard__denied-link:focus,
+.board-guard__denied-link:hover {
+  background-color: $color-dark-gray;
+}

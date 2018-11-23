@@ -1,0 +1,19 @@
+@import '../../../constants/style';
+
+$icon__width: 24px;
+$dot-color: #3991f4;
+
+.user-votes {
+  display: flex;
+  align-items: center;
+}
+
+.user-votes__dots {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.user-votes__dots-item {
+  display: inline-block;
+}

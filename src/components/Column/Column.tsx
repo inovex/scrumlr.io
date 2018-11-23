@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import './Column.css';
+import './Column.scss';
 import { Card as CardModel } from '../../types';
 import {
   ColumnConfiguration,

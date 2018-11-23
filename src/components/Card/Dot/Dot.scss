@@ -1,0 +1,57 @@
+@import '../../../constants/style';
+
+$dot-color: $theme-color-primary;
+
+.dot__small {
+  width: 28px;
+  height: 28px;
+  line-height: 30px;
+}
+
+.dot__large {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.dot {
+  display: block;
+  text-align: center;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  background: $dot-color;
+  color: $theme-color-secondary;
+  border-radius: 100%;
+  position: relative;
+  outline: none;
+}
+
+.dot__interactive {
+  cursor: pointer;
+}
+
+.dot__folded-corner {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0;
+  border-style: solid;
+  background: hsla(260, 5%, 75%, 0.5);
+  box-shadow: 2px -2px 0px #fff, 0 1px 1px rgba(0, 0, 0, 0.1),
+    -1px 1px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0 16px;
+  border-color: $theme-color-background $theme-color-background transparent
+    transparent;
+  @include animate(border-width);
+}
+
+.dot.dot__small:hover .dot__folded-corner {
+  border-width: 12px 0 0 12px;
+}
+
+.dot.dot__large:hover .dot__folded-corner {
+  border-width: 18px 0 0 18px;
+}

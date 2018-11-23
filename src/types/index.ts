@@ -36,6 +36,7 @@ export interface Card {
   author: string | null;
   image: string | null;
   text: string;
+  iv: string;
   type: string;
   theme: ColumnType;
   votes: number;
@@ -48,7 +49,6 @@ export interface Card {
 
 export interface BoardConfig {
   sorted: boolean;
-  users: BoardUsers;
   creatorUid: string | null;
   guided: boolean;
   guidedPhase: number;
@@ -63,6 +63,7 @@ export interface UserInformation {
   name: string;
   image: string;
   ready: boolean;
+  publicKey?: string;
 }
 
 export interface BoardUsers {
@@ -77,9 +78,36 @@ export interface Boards {
   [key: string]: Board;
 }
 
-export interface Board {
+export interface PublicBoardData {
+  config: {
+    secure: boolean;
+  };
+  applicants?: {
+    [memberUid: string]: {
+      name: string;
+      image: string;
+    };
+  };
+  accessAuthorized?: {
+    [memberUid: string]: boolean;
+  };
+}
+
+export interface PrivateBoardData {
   config: BoardConfig;
   cards?: BoardCards;
+  users: BoardUsers;
+  keyStore?: {
+    [publicKey: string]: string;
+  };
+  presence?: {
+    [memberUid: string]: boolean;
+  };
+}
+
+export interface Board {
+  public: PublicBoardData;
+  private: PrivateBoardData;
 }
 
 export interface BoardProp {

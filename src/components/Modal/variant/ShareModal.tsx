@@ -2,7 +2,7 @@ import * as cx from 'classnames';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import './ShareModal.css';
+import './ShareModal.scss';
 import Modal from '../Modal';
 
 export interface ShareModalProps {

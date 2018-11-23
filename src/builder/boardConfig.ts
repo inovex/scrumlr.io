@@ -5,7 +5,6 @@ export const mockBoardConfig = (
 ): BoardConfig => {
   return {
     sorted: false,
-    users: {},
     creatorUid: null,
     guided: false,
     guidedPhase: 0,

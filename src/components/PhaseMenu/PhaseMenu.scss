@@ -1,0 +1,76 @@
+@import '../../constants/style';
+
+.phase-menu__navigation {
+  display: flex;
+
+  text-transform: uppercase;
+  font-size: $theme-font-size;
+  font-weight: bold;
+  color: $color-dark-gray;
+  line-height: $theme-line-height;
+}
+
+.phase-menu__navigation * {
+  align-self: center;
+}
+
+.phase-menu__current-phase-name {
+  color: $theme-color-primary;
+}
+
+.phase-menu__dash {
+  display: inline-block;
+  border-bottom: 2px solid $color-dark-gray;
+  width: 44px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+@media screen and (max-width : 480px) {
+  .phase-menu__dash {
+    display: none;
+  }
+
+  .phase-menu__current-phase-name {
+    display: none;
+  }
+}
+
+.phase-menu__phase-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  display: none;
+}
+
+@media #{$tablet} {
+  .phase-menu__phase-button {
+    display: block;
+  }
+}
+
+.phase-menu__phase-button:not(:disabled):hover .phase-menu__phase-button-icon {
+  cursor: pointer;
+}
+
+.phase-menu__phase-button:disabled .phase-menu__phase-button-icon * {
+  fill: $color-alternative-gray;
+}
+
+.phase-menu__phase-button:not(:disabled):hover .phase-menu__phase-button-icon *,
+.phase-menu__phase-button:not(:disabled):focus .phase-menu__phase-button-icon *,
+.phase-menu__phase-button:not(:disabled):active .phase-menu__phase-button-icon * {
+  fill: $color-mint;
+}
+
+.phase-menu__phase-button + .phase-menu__phase-button {
+  margin-left: $default-margin;
+  margin-right: $default-margin;
+}
+
+.phase-menu__phase-button-icon {
+  width: $theme-icon-width;
+  height: $theme-icon-height;
+}

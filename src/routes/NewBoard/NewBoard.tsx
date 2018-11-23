@@ -5,7 +5,7 @@ import { RouteComponentProps } from 'react-router';
 
 import { Boards } from '../../types';
 import { mapStateToProps } from './NewBoard.container';
-import './NewBoard.css';
+import './NewBoard.scss';
 import { AuthProvider } from '../../constants/Auth';
 import getRandomName from '../../constants/Name';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
@@ -13,22 +13,26 @@ import Input from '../../components/Input/Input';
 import WelcomeArea from '../../components/WelcomeArea/WelcomeArea';
 import { RetroMode } from '../../constants/mode';
 import StartButton from '../../components/StartButton';
+import AccessModeSelection, {
+  AccessMode
+} from '../../components/AccessModeSelection';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
 export interface StateNewBoardProps {
   uid: string | null;
   boards: Boards;
-  onLogin: (name: string, mode: RetroMode) => void;
+  onLogin: (name: string, mode: RetroMode, secure: boolean) => void;
   onProviderLogin: (provider: AuthProvider) => () => void;
   onLogout: () => void;
-  onCreateNewBoard: (mode: RetroMode) => void;
+  onCreateNewBoard: (mode: RetroMode, secure: boolean) => void;
 }
 
 export type NewBoardProps = OwnNewBoardProps & StateNewBoardProps;
 
 export interface NewBoardState {
   email: string;
+  secure: boolean;
 }
 
 export class NewBoard extends Component<NewBoardProps, NewBoardState> {
@@ -38,7 +42,7 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     super(props);
 
     this.defaultName = getRandomName();
-    this.state = { email: this.defaultName };
+    this.state = { email: this.defaultName, secure: false };
   }
 
   handleChangeEmail = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -47,11 +51,24 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
   };
 
   handleClickLogin = (mode: RetroMode) => {
-    return this.props.onLogin(this.state.email, mode);
+    return this.props.onLogin(this.state.email, mode, this.state.secure);
+  };
+
+  handleChangeMode = (mode: AccessMode) => {
+    this.setState({ secure: mode === 'private' });
   };
 
   render() {
     const { uid } = this.props;
+
+    const SecureBoardCheckbox = (
+      <AccessModeSelection
+        mode={this.state.secure ? 'private' : 'public'}
+        onChange={this.handleChangeMode}
+        className="new-board__access-mode-selection"
+      />
+    );
+
     return (
       <WelcomeArea>
         {!uid && (
@@ -79,6 +96,7 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
               <StartButton
                 onStart={(mode: RetroMode) => this.handleClickLogin(mode)}
               />
+              {SecureBoardCheckbox}
               <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
             </div>
           </div>
@@ -93,8 +111,11 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
               </p>
             </div>
             <StartButton
-              onStart={(mode: RetroMode) => this.props.onCreateNewBoard(mode)}
+              onStart={(mode: RetroMode) =>
+                this.props.onCreateNewBoard(mode, this.state.secure)
+              }
             />
+            {SecureBoardCheckbox}
             <button
               className="new-board__logout-btn"
               onClick={this.props.onLogout}

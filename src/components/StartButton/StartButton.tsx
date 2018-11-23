@@ -3,11 +3,9 @@ import { RetroMode } from '../../constants/mode';
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
-import './StartButton.css';
+import './StartButton.scss';
 import Icon from '../Icon';
 import { DEFAULT_RETRO_MODE } from '../../constants/Retrospective';
-
-const newButton = require('./new.svg');
 
 export interface StartButtonProps {
   onStart: (retroMode: RetroMode) => void;
@@ -23,10 +21,16 @@ const availableRetroModes = {
     label: 'Lean Coffee'
   },
   positiveNegative: {
-    label: 'Simple Retro'
+    label: 'Simple Retro (Delta+)'
   },
   startStopContinue: {
     label: 'Start, Stop, Continue'
+  },
+  madSadGlad: {
+    label: 'Mad, Sad, Glad'
+  },
+  kalm: {
+    label: 'KALM (Keep, Add, Less, More)'
   }
 };
 
@@ -68,7 +72,6 @@ export class StartButton extends React.Component<
         onClick={this.toggleSelectionMenu}
       >
         <Icon name="more" />
-        <img src={newButton} className="start-button__dropdown-toggle-button" />
       </button>
     );
 

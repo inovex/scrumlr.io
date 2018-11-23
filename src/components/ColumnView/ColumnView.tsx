@@ -1,6 +1,6 @@
 import * as cx from 'classnames';
 import * as React from 'react';
-import './ColumnView.css';
+import './ColumnView.scss';
 import * as ReactSwipe from 'react-swipe';
 
 import { IndexedPhaseConfiguration } from '../../constants/Retrospective';

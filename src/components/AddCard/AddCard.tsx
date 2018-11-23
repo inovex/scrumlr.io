@@ -1,7 +1,7 @@
 import * as cx from 'classnames';
 import * as React from 'react';
 import { Component } from 'react';
-import './AddCard.css';
+import './AddCard.scss';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
 import { Column, ColumnType, getTheme } from '../../constants/Retrospective';
@@ -10,7 +10,7 @@ import Input from '../Input/Input';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
-
+import { CRYPTO } from '../../util/global';
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
@@ -30,6 +30,7 @@ export interface StateAddCardProps {
     type: string,
     theme: ColumnType,
     text: string,
+    iv: string,
     timestamp?: string
   ) => void;
 }
@@ -59,12 +60,14 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     }
   };
 
-  handleAdd = () => {
+  handleAdd = async () => {
     const { column, onAdd } = this.props;
     const { text } = this.state;
 
     if (text.length > 0) {
-      onAdd(column.id, column.type, text);
+      const iv = await CRYPTO.generateInitializationVector();
+      const encryptedText = await CRYPTO.encrypt(text, iv);
+      onAdd(column.id, column.type, encryptedText, iv);
       this.setState(() => ({ text: '' }));
     }
   };
@@ -82,15 +85,15 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
           showUnderline={false}
           placeholder={`Add ${column.name} card`}
           value={text}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
+          onChange={(e: any) => this.handleChange(e)}
+          onKeyDown={(e: any) => this.handleKeyDown(e)}
           disabled={disabled}
         />
 
         <button
           type="button"
           className="add-card__button"
-          onClick={this.handleAdd}
+          onClick={() => this.handleAdd()}
           disabled={disabled || text.length === 0}
         >
           <Icon name="plus" width={null} height={null} aria-hidden="true" />
@@ -99,7 +102,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     );
   }
 }
-
-export default compose(firebaseConnect(), connect(mapStateToProps))(
-  AddCard as any
-) as React.ComponentClass<any>;
+export default compose(
+  firebaseConnect(),
+  connect(mapStateToProps)
+)(AddCard as any) as React.ComponentClass<any>;

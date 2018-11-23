@@ -1,0 +1,76 @@
+@import '../../constants/style';
+
+.loading-screen {
+  background: url('../../assets/visual-chair-scrumlr.svg') no-repeat $large-margin 72px, linear-gradient(to bottom, $color-mint, $color-darkest-mint);
+  background-size: auto 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loading-screen > * {
+  align-self: center;
+}
+
+.loading-screen__headline {
+  background: url('../../assets/logo-scrumlr-beta.svg') no-repeat;
+  background-position-x: center;
+
+  height: 74px;
+  width: 164px;
+  text-indent: -10000px;
+
+  margin-bottom: $default-margin;
+}
+
+.loading-screen__spinner {
+  margin: $default-margin auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.loading-screen__spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: $color-white;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.loading-screen__spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.loading-screen__spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+    }
+}
+
+.loading-screen__status {
+  display: block;
+  font-family: $theme-font-family;
+  font-size: $theme-font-size;
+  color: $color-white;
+  margin-top: $default-margin;
+  text-align: center;
+}

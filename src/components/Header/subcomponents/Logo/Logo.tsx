@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 
-import './Logo.css';
+import './Logo.scss';
 
 const logo = require(`!svg-inline-loader!./logo.svg`);
 const logoSmall = require(`!svg-inline-loader!./logo-s.svg`);

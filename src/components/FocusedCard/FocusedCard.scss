@@ -1,0 +1,161 @@
+@import '../../constants/style';
+
+$focus-card-inner-margin: 88px;
+
+.focus-card {
+  display: flex;
+  justify-content: center;
+
+  flex: 2;
+
+  font-family: Heebo, sans-serif;
+  font-size: 12vw;
+  font-weight: bold;
+  color: #27322F;
+  letter-spacing: 0;
+  line-height: 16vw;
+
+  position: relative;
+  height: 100%;
+
+  overflow: hidden;
+}
+
+@media #{$tablet} {
+  .focus-card {
+    font-size: 72px;
+    line-height: 96px;
+  }
+}
+
+.focus-card--type-positive {
+  background: linear-gradient(to right bottom, $color-lightest-gray 50%, $color-mint 50%);
+}
+
+.focus-card--type-negative {
+  background: linear-gradient(to left bottom, $color-light-gray 50%, $color-mint 50%);
+}
+
+.focus-card--type-positive.focus-card--drophover {
+  background: linear-gradient(to right bottom, $color-lightest-gray 50%, darken($color-mint, 10%) 50%);
+}
+
+.focus-card--type-negative.focus-card--drophover {
+  background: linear-gradient(to left bottom, $color-light-gray 50%, darken($color-mint, 10%) 50%);
+}
+
+.focus-card__star-button {
+  position: absolute;
+  right: auto;
+  left: auto;
+  top: 0;
+
+  border: 0;
+  background: none;
+  outline: none;
+}
+
+.focus-card__star-button svg {
+  width: 32px;
+  height: 32px;
+}
+
+.focus-card__close-button {
+  position: absolute;
+
+  top: 0;
+  right: $default-margin;
+
+  border: 0;
+  background: none;
+  outline: none;
+
+  display: inline-flex;
+  align-items: center;
+}
+
+.focus-card__close-button >.focus-card__close-button-text {
+  opacity: 0;
+  font-size: $theme-font-size;
+  font-weight: bold;
+  color: $color-dark;
+  margin-right: $base-unit;
+
+  transition: opacity .5s ease-in-out, margin-right .5s ease-in-out;
+}
+
+.focus-card__close-button:hover > .focus-card__close-button-text,
+.focus-card__close-button:focus > .focus-card__close-button-text {
+  margin-right: $base-unit * 2;
+  opacity: 1;
+}
+
+@media #{$desktop} {
+  .focus-card__close-button {
+    right: $large-margin;
+  }
+}
+
+.focus-card__vertical-alignment {
+  min-height: 1px; // required by Edge
+  max-height: calc(100% - #{$focus-card-inner-margin * 2});
+  overflow: hidden;
+  align-self: center;
+  margin: $focus-card-inner-margin;
+  text-overflow: ellipsis;
+  z-index: 1;
+}
+
+@supports (-ms-ime-align:auto) {
+  .focus-card__vertical-alignment {
+    position: absolute;
+  }
+}
+
+.focus-card__navigation-hint {
+  display: none !important;
+}
+
+@media #{$tablet} {
+  .focus-card__navigation-hint {
+    display: flex !important;
+    position: absolute;
+    bottom: $large-margin;
+    left: auto;
+    right: auto;
+  }
+}
+
+.focus-card__number-of-votes {
+  position: absolute;
+  bottom: 0;
+  color: $color-white;
+  font-size: 20vw;
+  line-height: 20vw;
+}
+
+@media #{$tablet} {
+  .focus-card__number-of-votes {
+    font-size: $theme-font-size * 8;
+    line-height: $theme-font-size * 8;
+  }
+}
+
+.focus-card__number-of-votes--type-positive {
+  right: $default-margin;
+}
+
+.focus-card__number-of-votes--type-negative {
+  left: $default-margin;
+}
+
+@media #{$tablet} {
+  .focus-card__number-of-votes--type-positive {
+    right: $large-margin;
+  }
+
+  .focus-card__number-of-votes--type-negative {
+    left: $large-margin;
+  }
+
+}

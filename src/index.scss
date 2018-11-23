@@ -1,0 +1,63 @@
+@import './constants/style';
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+#root,
+[data-reactroot] {
+  height: 100%;
+}
+
+[data-reactroot] {
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+
+  font-family: $theme-font-family;
+  font-size: $theme-font-size;
+
+  color: $theme-color-font;
+  background: darken($theme-color-background, 5%);
+}
+
+.dark-toast {
+  background: rgba(50,50,50,.9) !important;
+  color: #fff !important;
+  padding: 1em 2em !important;
+  letter-spacing: .1em;
+  font-size: .8em;
+}
+
+.dark-toast .toast__close-button {
+  opacity: .7;
+}
+
+.dark-toast .toast__close-button {
+  color: white;
+}
+
+.dark-toast .toast__close-button:hover{
+  color: $theme-color-primary;
+}
+
+.dark-toast .dark-toast-progress{
+  background: $theme-color-primary;
+}
+
+.toast__close-button svg * {
+  fill: $color-white;
+}
+
+.toast__close-button:focus svg *,
+.toast__close-button:hover svg * {
+  fill: $color-mint;
+}

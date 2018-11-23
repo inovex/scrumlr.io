@@ -1,15 +1,21 @@
 import * as React from 'react';
-import './LoadingScreen.css';
+import './LoadingScreen.scss';
+import LoadingIndicator from '../LoadingIndicator';
 
-export const LoadingScreen: React.SFC<{}> = props =>
+export interface LoadingScreenProps {
+  status?: string | JSX.Element;
+}
+
+export const LoadingScreen: React.SFC<LoadingScreenProps> = props => (
   <div className="loading-screen">
     <h1 className="loading-screen__headline">Scrumlr</h1>
 
-    <div className="loading-screen__spinner">
-      <div className="bounce1" />
-      <div className="bounce2" />
-      <div className="bounce3" />
-    </div>
-  </div>;
+    <LoadingIndicator />
+
+    {props.status && (
+      <span className="loading-screen__status">{props.status}</span>
+    )}
+  </div>
+);
 
 export default LoadingScreen;

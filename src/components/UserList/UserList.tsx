@@ -3,7 +3,7 @@ import * as cx from 'classnames';
 
 import { BoardUsers, UserInformation } from '../../types/index';
 import Icon, { IconNames } from '../Icon';
-import './UserList.css';
+import './UserList.scss';
 import * as ReactTooltip from 'react-tooltip';
 
 const reactDDMenu = require('react-dd-menu');

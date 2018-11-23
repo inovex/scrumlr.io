@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as cx from 'classnames';
 import { Icon, IconNames } from '../../Icon';
 
-import './MenuItem.css';
+import './MenuItem.scss';
 
 export interface MenuItemProps {
   onClick: (e: any) => void;
@@ -20,9 +20,7 @@ export const MenuItem: React.SFC<MenuItemProps> = ({
   return (
     <button className={cx('menu-item__button', className)} onClick={onClick}>
       <Icon className="menu-item__button-icon" name={icon} />
-      <span className="menu-item__button-text">
-        {name}
-      </span>
+      <span className="menu-item__button-text">{name}</span>
     </button>
   );
 };

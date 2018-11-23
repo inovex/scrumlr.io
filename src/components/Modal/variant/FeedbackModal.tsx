@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './FeedbackModal.css';
+import './FeedbackModal.scss';
 import Input from '../../Input';
 import Modal from '../Modal';
 import Textarea from '../../Textarea';

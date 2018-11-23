@@ -3,13 +3,10 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 
-import { Boards, BoardUsers } from '../../types';
 import { mapStateToProps } from './LoginBoard.container';
-import './LoginBoard.css';
-import '../NewBoard/NewBoard.css';
-import UserList from '../../components/UserList/UserList';
+import './LoginBoard.scss';
+import '../NewBoard/NewBoard.scss';
 import { compose } from 'redux';
-import { firebaseConnect } from 'react-redux-firebase';
 import { AuthProvider } from '../../constants/Auth';
 import ProviderLogin from '../../components/ProviderLogin/ProviderLogin';
 import getRandomName from '../../constants/Name';
@@ -18,13 +15,10 @@ import Input from '../../components/Input/Input';
 
 export interface LoginBoardProps extends RouteComponentProps<{}> {
   uid: string | null;
-  boards: Boards;
   onLogin: (name: string) => void;
   onProviderLogin: (provider: AuthProvider) => () => void;
   onLogout: () => void;
   onCreateNewBoard: () => void;
-  users: BoardUsers;
-  name?: string;
 
   [key: string]: any;
 }
@@ -63,33 +57,18 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
           </h1>
 
           <p className="new-board__action-area-paragraph">
-            {this.props.name &&
+            <span>You were invited to join an online retrospective.</span>
+            {uid && <span>Some people already joined the group …</span>}
+            {!uid && (
               <span>
-                You were invited to join the online retrospective{' '}
-                <strong>{this.props.name}</strong>.
-              </span>}
-            {!this.props.name &&
-              <span>You were invited to join an online retrospective.</span>}
-            {uid &&
-              <span> These participants are already waiting for you …</span>}
-            {!uid &&
-              <span>
-                {' '}Jump right into the action - no registration required,
+                {' '}
+                Jump right into the action - no registration required,
                 completely for free.
-              </span>}
+              </span>
+            )}
           </p>
 
-          {uid &&
-            <div className="login-board__user-list">
-              <UserList
-                currentUserId={uid || ''}
-                users={this.props.users}
-                onToggleReadyState={() => {}}
-                userDisplayLimit={4}
-              />
-            </div>}
-
-          {!uid &&
+          {!uid && (
             <div>
               <Input
                 type="text"
@@ -111,27 +90,25 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
               >
                 Join
               </button>
-            </div>}
-          {!uid &&
-            <ProviderLogin onProviderLogin={this.props.onProviderLogin} />}
-          {uid &&
+            </div>
+          )}
+          {!uid && (
+            <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
+          )}
+          {uid && (
             <button
               onClick={this.handleClickLogin}
               className="new-board__action-button"
             >
               Join
-            </button>}
+            </button>
+          )}
         </div>
       </WelcomeArea>
     );
   }
 }
 
-function firebaseConnector(props: RouteComponentProps<{ id: string }>) {
-  return [`/boards/${props.match.params.id}/config`];
-}
-
-export default compose(
-  firebaseConnect(firebaseConnector),
-  connect(mapStateToProps)
-)(LoginBoard) as React.ComponentClass<any>;
+export default compose(connect(mapStateToProps))(
+  LoginBoard
+) as React.ComponentClass<any>;

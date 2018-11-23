@@ -1,0 +1,46 @@
+@import '../../../../constants/style';
+
+.dot__downvote {
+  display: inline-block;
+  margin-right: .25em;
+}
+
+.dot__downvote .dot {
+  @include animate(background);
+}
+
+.dot__downvote .dot:hover {
+  background: lighten($theme-color-primary, 10%);
+}
+
+.dot__downvote-content {
+  color: $theme-color-primary;
+  @include animate(color, 0.6s);
+}
+
+.dot:hover .dot__downvote-content {
+  color: $theme-color-secondary;
+}
+
+.dot__downvote-custom-content {
+  font-weight: 600;
+}
+
+.dot__downvote-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.dot_downvote-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: $theme-color-primary;
+  align-self: center;
+  @include animate(fill, 0.6s);
+}
+
+.dot:hover .dot_downvote-icon svg {
+  fill: $theme-color-secondary;
+}

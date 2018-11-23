@@ -7,36 +7,52 @@ exports[`<NewBoard /> dumb component should show login button if user is not log
 exports[`<NewBoard /> mapStateToProps should list all available boards 1`] = `
 Object {
   "-AqhC0R4ywKluWRz0cZ8": Object {
-    "config": Object {
-      "created": "2017-08-04T12:24:32.064Z",
-      "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
-      "guided": true,
-      "guidedPhase": 0,
-      "mode": "positiveNegative",
-      "sorted": false,
-      "users": Object {
-        "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
-          "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",
-          "name": "xx@xx.de",
-          "ready": false,
+    "private": Object {
+      "config": Object {
+        "created": "2017-08-04T12:24:32.064Z",
+        "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
+        "guided": true,
+        "guidedPhase": 0,
+        "mode": "positiveNegative",
+        "sorted": false,
+        "users": Object {
+          "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
+            "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",
+            "name": "xx@xx.de",
+            "ready": false,
+          },
         },
+      },
+      "users": Object {},
+    },
+    "public": Object {
+      "config": Object {
+        "secure": false,
       },
     },
   },
   "-KqhC0R4ywKluWRz0cZ8": Object {
-    "config": Object {
-      "created": "2017-08-04T12:24:32.064Z",
-      "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
-      "guided": true,
-      "guidedPhase": 0,
-      "mode": "positiveNegative",
-      "sorted": false,
-      "users": Object {
-        "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
-          "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",
-          "name": "xx@xx.de",
-          "ready": false,
+    "private": Object {
+      "config": Object {
+        "created": "2017-08-04T12:24:32.064Z",
+        "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
+        "guided": true,
+        "guidedPhase": 0,
+        "mode": "positiveNegative",
+        "sorted": false,
+        "users": Object {
+          "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
+            "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",
+            "name": "xx@xx.de",
+            "ready": false,
+          },
         },
+      },
+      "users": Object {},
+    },
+    "public": Object {
+      "config": Object {
+        "secure": false,
       },
     },
   },

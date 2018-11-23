@@ -8,7 +8,7 @@ import AddCard from '../../AddCard';
 import { Column, getTheme } from '../../../constants/Retrospective';
 import { Card as CardModel } from '../../../types';
 
-import './StackComponent.css';
+import './StackComponent.scss';
 
 export interface StackComponentProps {
   boardUrl: string;

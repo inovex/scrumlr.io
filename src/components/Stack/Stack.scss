@@ -1,0 +1,49 @@
+@import '../../constants/style';
+
+.stack {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin old-browser() {
+  .stack {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  .stack > * {
+    margin: $default-margin / 2;
+    min-width: 260px;
+    flex: 1 1 360px;
+  }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* IE10+ CSS styles go here */
+  @include old-browser();
+}
+
+@supports not (display: grid) {
+  @include old-browser();
+}
+
+@supports (display: grid) {
+  .stack {
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-flow: row;
+
+    grid-row-gap: $default-margin;
+    grid-column-gap: $default-margin;
+  }
+
+  @media #{$desktop} {
+    .stack {
+      grid-row-gap: $large-margin;
+      grid-column-gap: $large-margin;
+    }
+  }
+}
+

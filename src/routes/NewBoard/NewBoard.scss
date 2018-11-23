@@ -1,0 +1,85 @@
+@import '../../constants/style.scss';
+
+.new-board__logout-btn {
+  cursor: pointer;
+
+  outline: none;
+  color: $color-mint;
+  background: none;
+  border: 2px solid $color-mint;
+  border-radius: 3px;
+  text-transform: uppercase;
+  padding: 12px;
+  transition: color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  font-size: 15px;
+  line-height: 13px;
+
+  min-height: 50px;
+  height: 50px;
+}
+
+.new-board__logout-btn:focus,
+.new-board__logout-btn:hover {
+  color: $color-dark-mint;
+  border-color: $color-dark-mint;
+}
+
+.new-board__input {
+  padding-right: 0;
+  margin-bottom: $large-margin;
+}
+
+.new-board__action-area-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  width: 100%;
+}
+
+.new-board__action-area-paragraph {
+  margin-bottom: $large-margin;
+}
+
+.new-board__action-button {
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: $color-white;
+  padding: 9px 24px;
+  height: 50px;
+
+  background-color: $theme-color-primary;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  transition: background 0.15s ease;
+  cursor: pointer;
+  text-transform: uppercase;
+
+  margin-bottom: $default-margin;
+}
+
+.new-board__action-button:focus,
+.new-board__action-button:hover {
+  background: $color-dark-mint;
+}
+
+.new-board__action-area-header {
+  margin-bottom: $large-margin;
+}
+
+.new-board__access-mode-selection {
+  margin-bottom: 32px;
+}
+
+@media #{$tablet} {
+  .new-board__action-area {
+    min-width: 300px;
+    max-width: 420px;
+  }
+}
+
+

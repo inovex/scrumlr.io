@@ -5,21 +5,53 @@ import { OwnNewBoardProps, StateNewBoardProps } from './NewBoard';
 import { AuthProvider, instantiateAuthProviders } from '../../constants/Auth';
 import { authController } from '../../controller/auth';
 import { RetroMode } from '../../constants/mode';
+import * as firebase from 'firebase/app';
+import { Crypto } from '../../util/crypto';
 
-function initialBoardConfig(creatorUid: string | null, mode: RetroMode): Board {
-  return {
-    cards: {},
-    config: {
-      sorted: false,
-      users: {},
-      creatorUid,
-      guided: true,
-      guidedPhase: 0,
-      created: new Date().toISOString(),
-      showAuthor: false,
-      mode
+function initialBoardConfig(
+  user: firebase.User,
+  mode: RetroMode,
+  secure: boolean = false
+): Promise<Board> {
+  const crypto = new Crypto();
+
+  return Promise.all([crypto.initKeypair(), crypto.initSymmetricKey()]).then(
+    async () => {
+      return {
+        public: {
+          config: {
+            secure
+          }
+        },
+        private: {
+          config: {
+            sorted: false,
+            creatorUid: user.uid,
+            guided: true,
+            guidedPhase: 0,
+            created: new Date().toISOString(),
+            showAuthor: false,
+            mode
+          },
+          cards: {},
+          users: {
+            [user.uid]: {
+              name: user.displayName || '',
+              image: user.photoURL || '',
+              ready: false,
+              publicKey: crypto.getPublicKey()!!
+            }
+          },
+          keyStore: {
+            [crypto.getPublicKey()!!]: await crypto.exportSymmetricKey(
+              crypto.getPublicKey()!!
+            )
+          },
+          presence: {}
+        }
+      };
     }
-  };
+  );
 }
 
 let onSignIn = false;
@@ -40,23 +72,20 @@ export function mapStateToProps(
     uid = auth.currentUser.uid;
   }
 
-  function onCreateNewBoard(mode: RetroMode) {
-    let creatorUid: string | null = null;
+  function onCreateNewBoard(mode: RetroMode, secure: boolean) {
     const auth = getFirebase().auth();
-    if (auth.currentUser) {
-      creatorUid = auth.currentUser.uid;
-    }
-    const board: Board = initialBoardConfig(creatorUid, mode);
-    getFirebase()
-      .ref('/boards')
-      .push(board)
-      .then((item: any) => {
-        const key = item.getKey();
-        location.hash = `/board/${key}`;
-      });
+    initialBoardConfig(auth.currentUser!!, mode, secure).then(board => {
+      getFirebase()
+        .ref('/boards')
+        .push(board)
+        .then((item: any) => {
+          const key = item.getKey();
+          location.hash = `/board/${key}`;
+        });
+    });
   }
 
-  function onLogin(email: string, mode: RetroMode) {
+  function onLogin(email: string, mode: RetroMode, secure: boolean) {
     onSignIn = true;
 
     authController(firebase)
@@ -66,7 +95,7 @@ export function mapStateToProps(
         if (state.referrer) {
           location.assign(state.referrer);
         } else {
-          onCreateNewBoard(mode);
+          onCreateNewBoard(mode, secure);
         }
 
         onSignIn = false;
