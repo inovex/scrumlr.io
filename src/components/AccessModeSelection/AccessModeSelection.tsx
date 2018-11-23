@@ -60,7 +60,7 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
         mode={mode}
         onChange={onChange}
         name="Private"
-        description="Restricted access to the boards, all texts will be encrypted"
+        description="Restricted access to the boards and encrypted sensitive information"
       />
     </div>
   );
