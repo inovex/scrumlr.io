@@ -1,4 +1,5 @@
 import * as baseX from 'base-x';
+import { TextDecoder, TextEncoder } from 'text-encoding-utf-8';
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 const bs58 = baseX(BASE58);
@@ -14,16 +15,11 @@ const LOCAL_STORAGE_PUBLIC_KEY = 'publicKey';
 const LOCAL_STORAGE_PRIVATE_KEY = 'privateKey';
 
 function ab2str(buf: ArrayBuffer) {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
+  return TextDecoder('utf-8').decode(buf);
 }
 
 function str2ab(str: string) {
-  const buf = new ArrayBuffer(str.length); // 2 bytes for each char
-  const bufView = new Uint8Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
+  return TextEncoder('utf-8').encode(str);
 }
 
 function base58ab2str(buf: ArrayBuffer) {

@@ -93,10 +93,10 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
               />
             </div>
             <div>
+              {SecureBoardCheckbox}
               <StartButton
                 onStart={(mode: RetroMode) => this.handleClickLogin(mode)}
               />
-              {SecureBoardCheckbox}
               <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
             </div>
           </div>
@@ -110,12 +110,12 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 registration required - completely free.
               </p>
             </div>
+            {SecureBoardCheckbox}
             <StartButton
               onStart={(mode: RetroMode) =>
                 this.props.onCreateNewBoard(mode, this.state.secure)
               }
             />
-            {SecureBoardCheckbox}
             <button
               className="new-board__logout-btn"
               onClick={this.props.onLogout}
