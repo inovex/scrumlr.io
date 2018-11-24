@@ -19,12 +19,12 @@ case "$STAGE" in
             ;;
 
         live)
-            export REACT_APP_PROJECT_ID=scrumlr-d74d6
-            export REACT_APP_FIREBASE_API_KEY=AIzaSyDGc60nvYXIbZu8EinVdtUD-evpXSjP6qI
-            export REACT_APP_FIREBASE_AUTH_DOMAIN=scrumlr-d74d6.firebaseapp.com
-            export REACT_APP_DATABASE_URL=https://scrumlr-d74d6.firebaseio.com/
-            export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-d74d6.appspot.com
-            export REACT_APP_FIREBASE_MESSAGING_SENDER_ID=1013557222626
+            export REACT_APP_PROJECT_ID=scrumlr-live
+            export REACT_APP_FIREBASE_API_KEY=AIzaSyBZnbPSmFsKGKd2BzHgB_wXGCcNuUZFtgo
+            export REACT_APP_FIREBASE_AUTH_DOMAIN=scrumlr-live.firebaseapp.com
+            export REACT_APP_DATABASE_URL=https://scrumlr-live.firebaseio.com/
+            export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-live.appspot.com
+            export REACT_APP_FIREBASE_MESSAGING_SENDER_ID=1021745671120
             export REACT_APP_SENTRY_DSN=https://d3f0283a37e34b08a72fcdd38981ce69@sentry.io/206110
             export REACT_APP_SLACK_FEEDBACK_HOOK=https://hooks.slack.com/services/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
             ;;
