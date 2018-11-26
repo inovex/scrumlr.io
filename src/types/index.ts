@@ -86,6 +86,7 @@ export interface PublicBoardData {
     [memberUid: string]: {
       name: string;
       image: string;
+      time: string;
     };
   };
   accessAuthorized?: {

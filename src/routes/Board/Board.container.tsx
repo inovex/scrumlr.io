@@ -53,7 +53,6 @@ export const mapStateToProps = (
     focusedCard = cards[boardConfig.focusedCardId];
   }
 
-  // TODO check applicants and show request dialogs
   const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
   const publicBoard: Optional<PublicBoardData> = getVal(
     fbState,
@@ -61,7 +60,12 @@ export const mapStateToProps = (
     undefined
   );
 
-  let waitingUsers: { uid: string; name: string; image: string }[] = [];
+  let waitingUsers: {
+    uid: string;
+    name: string;
+    image: string;
+    time: Date;
+  }[] = [];
   if (isLoaded(publicBoard) && publicBoard) {
     const { accessAuthorized, applicants } = publicBoard;
 
@@ -70,7 +74,20 @@ export const mapStateToProps = (
         Object.keys(applicants),
         Object.keys(accessAuthorized || {})
       );
-      waitingUsers = waitingUserUids.map(uid => ({ uid, ...applicants[uid] }));
+      waitingUsers = waitingUserUids
+        .map(uid => ({
+          uid,
+          ...applicants[uid],
+          time: new Date(applicants[uid].time)
+        }))
+        .sort((a, b) => {
+          if (a.time > b.time) {
+            return 1;
+          } else if (a.time < b.time) {
+            return -1;
+          }
+          return 0;
+        });
     }
   }
 

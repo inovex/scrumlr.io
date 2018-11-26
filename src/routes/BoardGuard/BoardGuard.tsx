@@ -202,7 +202,8 @@ export class BoardGuard extends React.PureComponent<
 
     firebase.ref(`/boards/${boardId}/public/applicants/${user.uid}`).set({
       name: user.displayName || '', // FIXME
-      image: user.photoURL
+      image: user.photoURL,
+      time: new Date().toISOString()
     });
   }
 
