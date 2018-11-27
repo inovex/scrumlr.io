@@ -202,10 +202,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
       return <LoadingScreen />;
     }
 
-    const showSettings = this.state.showModal === 'settings';
-    const showFeedback = this.state.showModal === 'feedback';
-    const showShareDialog = this.state.showModal === 'share';
-
     let waitingUser;
     if (waitingUsers && waitingUsers.length > 0) {
       const user = waitingUsers[0];
@@ -221,6 +217,10 @@ export class Board extends React.Component<BoardProps, BoardState> {
         />
       );
     }
+
+    const showSettings = !waitingUser && this.state.showModal === 'settings';
+    const showFeedback = !waitingUser && this.state.showModal === 'feedback';
+    const showShareDialog = !waitingUser && this.state.showModal === 'share';
 
     return (
       <>
