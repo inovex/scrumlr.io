@@ -31,6 +31,7 @@ $icon__height: $icon__width;
 
 .user-menu__toggle-icon {
   position: absolute;
+  overflow: hidden;
 
   top: 0;
   left: 0;
