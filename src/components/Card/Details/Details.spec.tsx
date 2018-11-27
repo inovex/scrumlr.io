@@ -4,6 +4,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { Details, DetailsProps } from './Details';
 import { mockCard } from '../../../builder';
 import { Card } from '../../../types';
+import Deferred from '../../Deferred';
 
 describe('<Details />', () => {
   let props: DetailsProps;
@@ -45,11 +46,7 @@ describe('<Details />', () => {
   });
 
   it('should render a backdrop that closes the card when clicked', () => {
-    wrapper = shallow(
-      <Details {...props}>
-        {content}
-      </Details>
-    );
+    wrapper = shallow(<Details {...props}>{content}</Details>);
     const backdropEl = wrapper.find('.card-details__backdrop');
     expect(backdropEl).toHaveLength(1);
     expect(props.onClose).not.toHaveBeenCalled();
@@ -59,11 +56,7 @@ describe('<Details />', () => {
 
   describe('edit mode', () => {
     it('should should show the content as a blockquote if not in edit mode', () => {
-      wrapper = shallow(
-        <Details {...props}>
-          {content}
-        </Details>
-      );
+      wrapper = shallow(<Details {...props}>{content}</Details>);
       const blockquote = wrapper.find('.card-details__card-text');
       const textarea = wrapper.find('.card-details__content-text--edit-mode');
       expect(blockquote).toHaveLength(1);
@@ -83,44 +76,30 @@ describe('<Details />', () => {
       expect(wrapper.state('editMode')).toEqual(true);
     });
 
-    xit(
-      'should not switch to edit mode if blockquote is clicked and editable is false',
-      () => {
-        wrapper = shallow(
-          <Details {...props} editable={false}>
-            {content}
-          </Details>
-        );
-        const blockquote = wrapper.find('.card-details__card-text');
-        expect(wrapper.state('editMode')).toEqual(false);
-        blockquote.simulate('click');
-        expect(wrapper.state('editMode')).toEqual(false);
-      }
-    );
-
-    xit(
-      'should show the content within a textarea if edit mode is enabled',
-      () => {
-        wrapper = shallow(
-          <Details {...props}>
-            {content}
-          </Details>
-        );
-        wrapper.setState({ editMode: true });
-        const blockquote = wrapper.find('.card-details__card-text');
-        const textarea = wrapper.find('.card-details__content-text--edit-mode');
-        expect(blockquote).toHaveLength(0);
-        expect(textarea).toHaveLength(1);
-        expect(textarea.prop('defaultValue')).toEqual(content);
-      }
-    );
-
-    xit('should automatically focus the text area', () => {
+    xit('should not switch to edit mode if blockquote is clicked and editable is false', () => {
       wrapper = shallow(
-        <Details {...props}>
+        <Details {...props} editable={false}>
           {content}
         </Details>
       );
+      const blockquote = wrapper.find('.card-details__card-text');
+      expect(wrapper.state('editMode')).toEqual(false);
+      blockquote.simulate('click');
+      expect(wrapper.state('editMode')).toEqual(false);
+    });
+
+    xit('should show the content within a textarea if edit mode is enabled', () => {
+      wrapper = shallow(<Details {...props}>{content}</Details>);
+      wrapper.setState({ editMode: true });
+      const blockquote = wrapper.find('.card-details__card-text');
+      const textarea = wrapper.find('.card-details__content-text--edit-mode');
+      expect(blockquote).toHaveLength(0);
+      expect(textarea).toHaveLength(1);
+      expect(textarea.prop('defaultValue')).toEqual(content);
+    });
+
+    xit('should automatically focus the text area', () => {
+      wrapper = shallow(<Details {...props}>{content}</Details>);
       wrapper.setState({ editMode: true });
       const textarea = wrapper.find('.card-details__content-text--edit-mode');
       expect(textarea.prop('autoFocus')).toEqual(true);
@@ -128,11 +107,7 @@ describe('<Details />', () => {
 
     xit('should call onUpdateText if element textarea is blurred', () => {
       const text = 'my text';
-      wrapper = shallow(
-        <Details {...props}>
-          {content}
-        </Details>
-      );
+      wrapper = shallow(<Details {...props}>{content}</Details>);
       wrapper.setState({ editMode: true });
       const textarea = wrapper.find('.card-details__content-text--edit-mode');
       textarea.simulate('focus');
@@ -213,7 +188,7 @@ describe('<Details />', () => {
       expect(stackCards).toHaveLength(2);
     });
 
-    it('should render the content of all cards', () => {
+    it('should render the deferred resolution of all cards', () => {
       const spy = jest.fn(() => cards);
       wrapper = shallow(
         <Details {...props} getCardsInTheStack={spy}>
@@ -221,15 +196,8 @@ describe('<Details />', () => {
         </Details>
       );
 
-      const stackCards = wrapper.find('.card-details__stack-item');
+      const stackCards = wrapper.find(Deferred);
       expect(stackCards.length).toEqual(cards.length);
-
-      cards.forEach((card, index) => {
-        const blockquote = stackCards
-          .at(index)
-          .find('.card-details__card-text');
-        expect(blockquote.text()).toEqual(cards[index].text);
-      });
     });
 
     it('should now allow to delete cards if parent card is not deletable', () => {

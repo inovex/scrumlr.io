@@ -6,6 +6,7 @@ import Footer from '../Footer';
 
 import './Details.scss';
 import Icon from '../../Icon';
+import Deferred from '../../Deferred';
 
 export interface DetailsProps extends CardProps {
   editable: boolean;
@@ -89,7 +90,7 @@ export class Details extends React.Component<DetailsProps, {}> {
                 <li key={card.id} className="card-details__stack-item">
                   <div className="card_details__card">
                     <blockquote className="card-details__card-text">
-                      {card.text}
+                      <Deferred value={card.text} iv={card.iv} />
                     </blockquote>
 
                     <aside>
