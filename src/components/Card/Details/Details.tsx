@@ -49,6 +49,7 @@ export class Details extends React.Component<DetailsProps, {}> {
             <blockquote
               className="card-details__card-text"
               contentEditable={this.props.editable}
+              suppressContentEditableWarning={true}
               onBlur={this.handleBlur}
             >
               {children}
