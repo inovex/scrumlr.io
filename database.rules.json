@@ -28,7 +28,7 @@
           ".read": "data.child('users').hasChild(auth.uid)",
           "cards": {
             "$cardId": {
-              ".write": "!root.child('boards/'+$boardId+'/private/cards').hasChild($cardId)",
+              ".write": "!root.child('boards/'+$boardId+'/private/cards').hasChild($cardId) || data.child('authorUid').val() === auth.uid",
               "userVotes": {
                 "$uid": {
                   ".write": "$uid === auth.uid"
