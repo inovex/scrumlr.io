@@ -8,6 +8,7 @@
         ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid",
 
         "public": {
+          ".read": "root.child('boards/'+$boardId+'/private/users').hasChild(auth.uid)",
           "config": {
             ".read": true
           },

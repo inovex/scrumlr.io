@@ -191,6 +191,7 @@ export class BoardGuard extends React.PureComponent<
         })
         .then(() => {
           this.setState({ isAddingMember: false });
+          this.reinitializeMemberReference(boardId);
         });
     });
   }
@@ -246,16 +247,14 @@ export class BoardGuard extends React.PureComponent<
 
       // add is member if authorized or board became public
       if (
-        (!prevState.isApplicantAuthorized &&
-          this.state.isApplicantAuthorized) ||
+        (!this.state.isAddingMember &&
+          (!prevState.isApplicantAuthorized &&
+            this.state.isApplicantAuthorized)) ||
         ((prevState.isSecuredBoard === undefined || prevState.isSecuredBoard) &&
           this.state.isSecuredBoard !== undefined &&
           !this.state.isSecuredBoard)
       ) {
-        setTimeout(() => {
-          this.addAsMember(boardId);
-          this.reinitializeMemberReference(boardId);
-        }, 0);
+        this.addAsMember(boardId);
       }
 
       // add as applicant if board is secured
@@ -266,7 +265,7 @@ export class BoardGuard extends React.PureComponent<
         this.state.isMember !== undefined &&
         !this.state.isMember
       ) {
-        setTimeout(() => this.addAsApplicant(boardId), 0);
+        this.addAsApplicant(boardId);
       }
     }
   }
