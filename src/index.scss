@@ -8,6 +8,12 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+// fix for contentEditable blocks on safari
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 #root,
 [data-reactroot] {
   height: 100%;
