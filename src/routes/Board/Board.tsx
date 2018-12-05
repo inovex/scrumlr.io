@@ -192,6 +192,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
   render() {
     const {
+      isBoardAdmin,
       boardConfig,
       setupCompleted,
       waitingUsers,
@@ -203,7 +204,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     }
 
     let waitingUser;
-    if (waitingUsers && waitingUsers.length > 0) {
+    if (isBoardAdmin && waitingUsers && waitingUsers.length > 0) {
       const user = waitingUsers[0];
       waitingUser = (
         <MembershipRequestModal
