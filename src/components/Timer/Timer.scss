@@ -5,11 +5,15 @@
   left: 50%;
   transform: translateX(-50%);
   bottom: 92px;
-  z-index: $base-z-index + $base-z-index-step * 3;
-
-  box-sizing: border-box;
 
   display: flex;
+}
+
+.timer__box {
+  display: flex;
+
+  z-index: $base-z-index + $base-z-index-step * 3;
+  box-sizing: border-box;
 
   background: $color-orange;
   box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
@@ -32,7 +36,6 @@
   max-width: 20px;
   line-height: 32px;
 
-  margin-right: $default-margin;
   padding: 0 !important;
 }
 
@@ -46,4 +49,18 @@
   color: $color-white;
   letter-spacing: .19em;
   align-self: center;
+
+  margin-left: $default-margin;
+}
+
+.timer__close-button {
+  outline: none;
+  transition: background-color .2s ease-in-out;
+
+  margin-left: $small-margin;
+}
+
+.timer__close-button:focus,
+.timer__close-button:hover {
+  background: darken($color-orange, 10%);
 }

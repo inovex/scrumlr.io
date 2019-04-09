@@ -23,6 +23,7 @@ describe('<Board />', () => {
       registered: false,
       setupCompleted: false,
 
+      onDeleteTimer: jest.fn(),
       onRegisterCurrentUser: jest.fn(),
       onToggleReadyState: jest.fn(),
       onFocusCard: jest.fn(),

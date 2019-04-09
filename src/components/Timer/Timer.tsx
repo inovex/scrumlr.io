@@ -6,7 +6,7 @@ import Icon from '../../components/Icon/Icon';
 
 export interface TimerProps {
   expirationDate?: string;
-
+  onDeleteTimer?: () => void;
   [key: string]: any;
 }
 
@@ -73,7 +73,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
   }
 
   render() {
-    const { expirationDate, className, ...other } = this.props;
+    const { expirationDate, onDeleteTimer, className, ...other } = this.props;
 
     if (this.state.running) {
       const remainingMinutes = Math.floor(this.state.countdownSeconds / 60);
@@ -81,23 +81,27 @@ export class Timer extends React.Component<TimerProps, TimerState> {
       const remainingSecondsString =
         remainingSeconds < 10 ? `0${remainingSeconds}` : `${remainingSeconds}`;
 
+      let text = `${remainingMinutes}:${remainingSecondsString}`;
       if (remainingSeconds < 0) {
-        return (
-          <div className={cx('timer', className)} {...other}>
-            <Icon className="timer__icon" name="timer" />
-            <span className="timer__text">Time's up!</span>
-          </div>
-        );
-      } else {
-        return (
-          <div className={cx('timer', className)} {...other}>
-            <Icon className="timer__icon" name="timer" />
-            <span className="timer__text">
-              {remainingMinutes}:{remainingSecondsString}
-            </span>
-          </div>
-        );
+        text = `Time's up`;
       }
+
+      return (
+        <div className={cx('timer', className)} {...other}>
+          <div className="timer__box">
+            <Icon className="timer__icon" name="timer" />
+            <span className="timer__text">{text}</span>
+          </div>
+          {!!onDeleteTimer && (
+            <button
+              className="timer__box timer__close-button"
+              onClick={() => onDeleteTimer()}
+            >
+              <Icon className="timer__icon" name="close20" />
+            </button>
+          )}
+        </div>
+      );
     }
 
     return <></>;

@@ -46,6 +46,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
   onChangeEmail: (email: string) => void;
+  onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
 
@@ -199,6 +200,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
       setupCompleted,
       waitingUsers,
       expirationDate,
+      onDeleteTimer,
       acceptUser
     } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -225,6 +227,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = !waitingUser && this.state.showModal === 'settings';
     const showFeedback = !waitingUser && this.state.showModal === 'feedback';
     const showShareDialog = !waitingUser && this.state.showModal === 'share';
+    const onDeleteTimerAuthorized = isBoardAdmin ? onDeleteTimer : undefined;
 
     return (
       <>
@@ -242,7 +245,10 @@ export class Board extends React.Component<BoardProps, BoardState> {
             className="board-page__column-view"
           />
 
-          <Timer expirationDate={expirationDate} />
+          <Timer
+            expirationDate={expirationDate}
+            onDeleteTimer={onDeleteTimerAuthorized}
+          />
 
           {showSettings && (
             <SettingsModal

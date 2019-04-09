@@ -40,6 +40,7 @@ $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 
 // margins & paddings
+$small-margin: $base-unit * 2;
 $default-margin: $base-unit * 4;
 $large-margin: 2*$default-margin;
 $default-padding: $default-margin;
