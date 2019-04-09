@@ -11,6 +11,7 @@ Object {
       "config": Object {
         "created": "2017-08-04T12:24:32.064Z",
         "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
+        "expirationDate": null,
         "guided": true,
         "guidedPhase": 0,
         "mode": "positiveNegative",
@@ -36,6 +37,7 @@ Object {
       "config": Object {
         "created": "2017-08-04T12:24:32.064Z",
         "creatorUid": "xNpM1E6XiigmfH7P8f42Vc3KyN02",
+        "expirationDate": null,
         "guided": true,
         "guidedPhase": 0,
         "mode": "positiveNegative",
