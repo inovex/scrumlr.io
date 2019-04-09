@@ -21,6 +21,7 @@ describe('<Header />', () => {
       sorted: false,
       onPrevPhase: jest.fn(),
       onNextPhase: jest.fn(),
+      onSetTimer: jest.fn(),
       loggedIn: false,
       onExport: jest.fn(),
       onSignOut: jest.fn(),

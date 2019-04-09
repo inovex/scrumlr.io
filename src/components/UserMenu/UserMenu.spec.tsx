@@ -17,6 +17,7 @@ describe('<UserMenu />', () => {
       onOpenModal: jest.fn(),
       onExport: jest.fn(),
       onChangeBoardName: jest.fn(),
+      onSetTimer: jest.fn(),
       admin: true,
       isLastPhase: false
     };

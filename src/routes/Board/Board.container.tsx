@@ -53,6 +53,11 @@ export const mapStateToProps = (
     focusedCard = cards[boardConfig.focusedCardId];
   }
 
+  let expirationDate: Optional<string> = undefined;
+  if (boardConfig.expirationDate) {
+    expirationDate = boardConfig.expirationDate;
+  }
+
   const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
   const publicBoard: Optional<PublicBoardData> = getVal(
     fbState,
@@ -271,6 +276,7 @@ export const mapStateToProps = (
     isBoardAdmin,
     username,
     email,
+    expirationDate,
     isAnonymous,
     uid: auth.uid,
     onToggleReadyState,

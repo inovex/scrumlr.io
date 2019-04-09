@@ -19,6 +19,7 @@ export const iconMap: { [key: string]: string } = {
   focus: 'icon-20-fix',
   feedback: 'icon-20-feedback',
   trash: 'icon-20-trash',
+  timer: 'icon-20-timer',
   close: 'icon-32-close',
   close20: 'icon-20-close',
   'close-circle': 'icon-48-close',

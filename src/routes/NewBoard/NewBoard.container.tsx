@@ -29,6 +29,7 @@ function initialBoardConfig(
             creatorUid: user.uid,
             guided: true,
             guidedPhase: 0,
+            expirationDate: null,
             created: new Date().toISOString(),
             showAuthor: false,
             mode

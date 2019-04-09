@@ -95,6 +95,8 @@ export const mapStateToProps = (
         });
       });
 
+    firebase.ref(`${boardUrl}/config/expirationDate`).set(null);
+
     Object.keys(boardConfig.users).forEach(uid => {
       firebase
         .ref(`${boardUrl}/users/${uid}`)
@@ -145,6 +147,22 @@ export const mapStateToProps = (
       });
   }, 2000);
 
+  const onSetTimer = (seconds: number) => {
+    firebase
+      .ref(`${boardUrl}/config/expirationDate`)
+      .set(new Date(new Date().getTime() + seconds * 1000).toUTCString())
+      .catch((err: any) => {
+        Raven.captureMessage('Could not set timer', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardUrl,
+            seconds
+          }
+        });
+      });
+  };
+
   const onPrevPhase = () => {
     onSwitchPhaseIndex(-1);
   };
@@ -165,6 +183,7 @@ export const mapStateToProps = (
     sorted: boardConfig.config.sorted,
     onPrevPhase,
     onNextPhase,
+    onSetTimer,
     user: auth ? auth.uid : null,
     users: activeUsers,
     onToggleReadyState,

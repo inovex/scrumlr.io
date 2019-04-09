@@ -27,6 +27,7 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
+import Timer from '../../components/Timer';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -53,6 +54,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 
   username?: string;
   email?: string;
+  expirationDate?: string;
   isAnonymous: boolean;
 
   waitingUsers: {
@@ -196,6 +198,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
       boardConfig,
       setupCompleted,
       waitingUsers,
+      expirationDate,
       acceptUser
     } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -238,6 +241,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
             boardUrl={this.props.boardSelector}
             className="board-page__column-view"
           />
+
+          <Timer expirationDate={expirationDate} />
 
           {showSettings && (
             <SettingsModal
