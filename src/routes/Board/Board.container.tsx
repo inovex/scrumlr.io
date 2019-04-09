@@ -53,9 +53,9 @@ export const mapStateToProps = (
     focusedCard = cards[boardConfig.focusedCardId];
   }
 
-  let expirationDate: Optional<string> = undefined;
-  if (boardConfig.expirationDate) {
-    expirationDate = boardConfig.expirationDate;
+  let timerExpiration: Optional<string> = undefined;
+  if (boardConfig.timerExpiration) {
+    timerExpiration = boardConfig.timerExpiration;
   }
 
   const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
@@ -239,7 +239,7 @@ export const mapStateToProps = (
 
   const onDeleteTimer = () => {
     firebase
-      .set(`${boardSelector}/config/expirationDate`, null)
+      .set(`${boardSelector}/config/timerExpiration`, null)
       .catch((err: any) => {
         Raven.captureMessage('Unable to delete timer', {
           extra: {
@@ -290,7 +290,7 @@ export const mapStateToProps = (
     isBoardAdmin,
     username,
     email,
-    expirationDate,
+    timerExpiration,
     isAnonymous,
     uid: auth.uid,
     onToggleReadyState,

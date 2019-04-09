@@ -95,7 +95,7 @@ export const mapStateToProps = (
         });
       });
 
-    firebase.ref(`${boardUrl}/config/expirationDate`).set(null);
+    firebase.ref(`${boardUrl}/config/timerExpiration`).set(null);
 
     Object.keys(boardConfig.users).forEach(uid => {
       firebase
@@ -149,7 +149,7 @@ export const mapStateToProps = (
 
   const onSetTimer = (seconds: number) => {
     firebase
-      .ref(`${boardUrl}/config/expirationDate`)
+      .ref(`${boardUrl}/config/timerExpiration`)
       .set(new Date(new Date().getTime() + seconds * 1000).toUTCString())
       .catch((err: any) => {
         Raven.captureMessage('Could not set timer', {

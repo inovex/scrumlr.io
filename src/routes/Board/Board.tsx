@@ -55,7 +55,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 
   username?: string;
   email?: string;
-  expirationDate?: string;
+  timerExpiration?: string;
   isAnonymous: boolean;
 
   waitingUsers: {
@@ -199,7 +199,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
       boardConfig,
       setupCompleted,
       waitingUsers,
-      expirationDate,
+      timerExpiration,
       onDeleteTimer,
       acceptUser
     } = this.props;
@@ -246,7 +246,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           />
 
           <Timer
-            expirationDate={expirationDate}
+            timerExpiration={timerExpiration}
             onDeleteTimer={onDeleteTimerAuthorized}
           />
 

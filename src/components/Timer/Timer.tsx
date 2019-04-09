@@ -5,7 +5,7 @@ import './Timer.scss';
 import Icon from '../../components/Icon/Icon';
 
 export interface TimerProps {
-  expirationDate?: string;
+  timerExpiration?: string;
   onDeleteTimer?: () => void;
   [key: string]: any;
 }
@@ -28,14 +28,14 @@ export class Timer extends React.Component<TimerProps, TimerState> {
   }
 
   componentDidUpdate(prevProps: TimerProps) {
-    if (this.props.expirationDate !== prevProps.expirationDate) {
+    if (this.props.timerExpiration !== prevProps.timerExpiration) {
       this.tick();
     }
   }
 
   tick() {
-    if (!!this.props.expirationDate) {
-      const timeRemaining = this.getTimeRemaining(this.props.expirationDate);
+    if (!!this.props.timerExpiration) {
+      const timeRemaining = this.getTimeRemaining(this.props.timerExpiration);
       const remainingSeconds =
         timeRemaining.minutes * 60 + timeRemaining.seconds;
       if (timeRemaining.minutes >= -1 && timeRemaining.seconds > -10) {
@@ -73,7 +73,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
   }
 
   render() {
-    const { expirationDate, onDeleteTimer, className, ...other } = this.props;
+    const { timerExpiration, onDeleteTimer, className, ...other } = this.props;
 
     if (this.state.running) {
       const remainingMinutes = Math.floor(this.state.countdownSeconds / 60);

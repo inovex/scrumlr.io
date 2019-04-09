@@ -52,7 +52,7 @@ export interface BoardConfig {
   creatorUid: string | null;
   guided: boolean;
   guidedPhase: number;
-  expirationDate: string | null;
+  timerExpiration: string | null;
   focusedCardId?: string;
   created: string;
   name?: string;

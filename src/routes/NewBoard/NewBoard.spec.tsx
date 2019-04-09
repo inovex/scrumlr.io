@@ -41,7 +41,7 @@ const fbState = {
             creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
             guided: true,
             guidedPhase: 0,
-            expirationDate: null,
+            timerExpiration: null,
             sorted: false,
             mode: 'positiveNegative' as RetroMode,
             users: {
@@ -68,7 +68,7 @@ const fbState = {
             creatorUid: 'xNpM1E6XiigmfH7P8f42Vc3KyN02',
             guided: true,
             guidedPhase: 0,
-            expirationDate: null,
+            timerExpiration: null,
             sorted: false,
             mode: 'positiveNegative' as RetroMode,
             users: {
