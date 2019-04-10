@@ -15,6 +15,7 @@ Object {
         "guidedPhase": 0,
         "mode": "positiveNegative",
         "sorted": false,
+        "timerExpiration": null,
         "users": Object {
           "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
             "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",
@@ -40,6 +41,7 @@ Object {
         "guidedPhase": 0,
         "mode": "positiveNegative",
         "sorted": false,
+        "timerExpiration": null,
         "users": Object {
           "xNpM1E6XiigmfH7P8f42Vc3KyN02": Object {
             "image": "https://www.gravatar.com/avatar/3e046b237cd8b23336231b3c0a577e56?s=32&d=retro",

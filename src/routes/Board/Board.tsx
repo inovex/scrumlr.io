@@ -27,6 +27,7 @@ import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
+import Timer from '../../components/Timer';
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -45,6 +46,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
   onChangeEmail: (email: string) => void;
+  onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
 
@@ -53,6 +55,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
 
   username?: string;
   email?: string;
+  timerExpiration?: string;
   isAnonymous: boolean;
 
   waitingUsers: {
@@ -196,6 +199,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
       boardConfig,
       setupCompleted,
       waitingUsers,
+      timerExpiration,
+      onDeleteTimer,
       acceptUser
     } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -222,6 +227,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = !waitingUser && this.state.showModal === 'settings';
     const showFeedback = !waitingUser && this.state.showModal === 'feedback';
     const showShareDialog = !waitingUser && this.state.showModal === 'share';
+    const onDeleteTimerAuthorized = isBoardAdmin ? onDeleteTimer : undefined;
 
     return (
       <>
@@ -237,6 +243,11 @@ export class Board extends React.Component<BoardProps, BoardState> {
           <ColumnView
             boardUrl={this.props.boardSelector}
             className="board-page__column-view"
+          />
+
+          <Timer
+            timerExpiration={timerExpiration}
+            onDeleteTimer={onDeleteTimerAuthorized}
           />
 
           {showSettings && (

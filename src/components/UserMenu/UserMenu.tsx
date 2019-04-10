@@ -7,6 +7,7 @@ import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import MenuItem from './MenuItem';
 import { ModalType } from '../../types';
+import classNames = require('classnames');
 
 export interface UserMenuProps {
   onSignOut: () => void;
@@ -14,6 +15,7 @@ export interface UserMenuProps {
   onExport: () => void;
   onOpenModal: (modal: ModalType) => void;
   onChangeBoardName: (boardName: string) => void;
+  onSetTimer: (seconds: number) => void;
   boardName?: string;
   admin: boolean;
   isLastPhase: boolean;
@@ -57,6 +59,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onOpenModal,
       onExport,
       onSignOut,
+      onSetTimer,
       boardName,
       admin,
       isLastPhase
@@ -157,13 +160,58 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
         )}
 
         {admin && (
-          <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
-            <MenuItem
-              name="Delete board"
-              icon="trash"
-              onClick={this.handleDeleteBoard}
-            />
-          </li>
+          <>
+            <li key="user-menu__timer" className="user_menu__li-hidden-mobile">
+              <div className="user-menu__timer">
+                <Icon className="menu-item__button-icon" name="timer" />
+                <span
+                  className={classNames(
+                    'menu-item__button-text',
+                    'user-menu__timer__text'
+                  )}
+                >
+                  Timer
+                </span>
+                <button
+                  className="user-menu__timer__button"
+                  onClick={() => {
+                    onSetTimer(5 * 60);
+                    this.setState({ isOpen: false });
+                  }}
+                >
+                  5 min.
+                </button>
+                <button
+                  className="user-menu__timer__button"
+                  onClick={() => {
+                    onSetTimer(10 * 60);
+                    this.setState({ isOpen: false });
+                  }}
+                >
+                  10
+                </button>
+                <button
+                  className="user-menu__timer__button"
+                  onClick={() => {
+                    onSetTimer(15 * 60);
+                    this.setState({ isOpen: false });
+                  }}
+                >
+                  15
+                </button>
+              </div>
+            </li>
+            <li
+              key="user-menu__delete"
+              className="user_menu__li--hidden-mobile"
+            >
+              <MenuItem
+                name="Delete board"
+                icon="trash"
+                onClick={this.handleDeleteBoard}
+              />
+            </li>
+          </>
         )}
         <li key="user-menu__logout" className="user-menu__logout">
           <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />

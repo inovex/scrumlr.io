@@ -8,6 +8,7 @@ export const mockBoardConfig = (
     creatorUid: null,
     guided: false,
     guidedPhase: 0,
+    timerExpiration: null,
     created: '',
     mode: 'positiveNegative',
     ...overwrite

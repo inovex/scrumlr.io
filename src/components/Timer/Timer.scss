@@ -1,0 +1,66 @@
+@import '../../constants/style';
+
+.timer {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 92px;
+
+  display: flex;
+}
+
+.timer__box {
+  display: flex;
+
+  z-index: $base-z-index + $base-z-index-step * 3;
+  box-sizing: border-box;
+
+  background: $color-orange;
+  box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
+  padding: 16px;
+
+  border: 0 solid transparent;
+  border-radius: 26px;
+
+  height: 52px;
+}
+
+.timer__icon {
+  align-self: center;
+
+  display: block;
+
+  width: 20px !important;
+  height: 20px !important;
+  min-width: $default-margin !important;
+  max-width: 20px;
+  line-height: 32px;
+
+  padding: 0 !important;
+}
+
+.timer__icon * {
+  fill: $color-white;
+}
+
+.timer__text {
+  font-size: 16px;
+  font-weight: bold;
+  color: $color-white;
+  letter-spacing: .19em;
+  align-self: center;
+
+  margin-left: $default-margin;
+}
+
+.timer__close-button {
+  outline: none;
+  transition: background-color .2s ease-in-out;
+
+  margin-left: $small-margin;
+}
+
+.timer__close-button:focus,
+.timer__close-button:hover {
+  background: darken($color-orange, 10%);
+}

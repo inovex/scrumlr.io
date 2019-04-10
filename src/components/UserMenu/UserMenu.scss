@@ -146,3 +146,44 @@ $icon__height: $icon__width;
     display: inherit;
   }
 }
+
+.user-menu__timer {
+  display: flex !important;
+}
+
+.user-menu__timer__text {
+  align-self: center;
+  flex: 0 1 !important;
+  margin-right: 16px;
+}
+
+.user-menu__timer__button {
+  align-self: center;
+  height: 32px;
+  min-width: 42px;
+  background: transparent;
+
+  padding-left: 8px;
+  padding-right: 8px;
+
+  border: 2px solid black;
+  border-radius: 12px;
+
+  font-size: 12px;
+  font-weight: bold;
+  color: $color-dark-gray;
+  letter-spacing: 1px;
+  line-height: 24px;
+
+  transition: background .2s ease-in-out;
+  outline: none;
+}
+
+.user-menu__timer__button:focus,
+.user-menu__timer__button:hover {
+  background: $color-green;
+}
+
+.user-menu__timer__button + .user-menu__timer__button {
+  margin-left: 8px;
+}

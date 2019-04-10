@@ -53,6 +53,11 @@ export const mapStateToProps = (
     focusedCard = cards[boardConfig.focusedCardId];
   }
 
+  let timerExpiration: Optional<string> = undefined;
+  if (boardConfig.timerExpiration) {
+    timerExpiration = boardConfig.timerExpiration;
+  }
+
   const publicBoardSelector = `boards/${ownProps.match.params.id}/public`;
   const publicBoard: Optional<PublicBoardData> = getVal(
     fbState,
@@ -232,6 +237,20 @@ export const mapStateToProps = (
       });
   }, 2000);
 
+  const onDeleteTimer = () => {
+    firebase
+      .set(`${boardSelector}/config/timerExpiration`, null)
+      .catch((err: any) => {
+        Raven.captureMessage('Unable to delete timer', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardSelector
+          }
+        });
+      });
+  };
+
   function onSwitchPhaseIndex(delta: number) {
     firebase
       .ref(`${boardSelector}/config/guidedPhase`)
@@ -271,6 +290,7 @@ export const mapStateToProps = (
     isBoardAdmin,
     username,
     email,
+    timerExpiration,
     isAnonymous,
     uid: auth.uid,
     onToggleReadyState,
@@ -281,6 +301,7 @@ export const mapStateToProps = (
     onChangeBoardName,
     onChangeUsername,
     onChangeEmail,
+    onDeleteTimer,
     onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
     waitingUsers,

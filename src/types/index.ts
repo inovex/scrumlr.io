@@ -52,6 +52,7 @@ export interface BoardConfig {
   creatorUid: string | null;
   guided: boolean;
   guidedPhase: number;
+  timerExpiration: string | null;
   focusedCardId?: string;
   created: string;
   name?: string;

@@ -31,6 +31,7 @@ export type IconNames =
   | 'settings'
   | 'board'
   | 'trash'
+  | 'timer'
   | 'chevron-left'
   | 'chevron-right'
   | 'stack-top'

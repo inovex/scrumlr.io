@@ -29,6 +29,7 @@ export interface StateHeaderProps {
   boardName?: string;
   onPrevPhase: () => void;
   onNextPhase: () => void;
+  onSetTimer: (seconds: number) => void;
   onChangeBoardName: (boardName: string) => void;
   loggedIn: boolean;
   user: string;
@@ -50,6 +51,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       isLastPhase,
       onPrevPhase,
       onNextPhase,
+      onSetTimer,
       user,
       users,
       onToggleReadyState,
@@ -93,6 +95,7 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}
                 isLastPhase={isLastPhase}
+                onSetTimer={onSetTimer}
               />
             )}
           </div>
