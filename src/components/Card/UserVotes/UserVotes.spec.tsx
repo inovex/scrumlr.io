@@ -9,8 +9,7 @@ describe('<UserVotes />', () => {
   let props: UserVotesProps = {
     votes: 0,
     onDownvote: jest.fn(),
-    onUpvote: jest.fn(),
-    maxDotsShown: 0
+    onUpvote: jest.fn()
   };
 
   it('should have default values', () => {
@@ -18,25 +17,25 @@ describe('<UserVotes />', () => {
   });
 
   it('should as many dots as votes are available', () => {
-    wrapper = shallow(<UserVotes {...props} votes={0} maxDotsShown={3} />);
+    wrapper = shallow(<UserVotes {...props} votes={0} />);
     let dots = wrapper.find(DownvoteDot);
     expect(dots).toHaveLength(0);
 
-    wrapper = shallow(<UserVotes {...props} votes={3} maxDotsShown={3} />);
+    wrapper = shallow(<UserVotes {...props} votes={3} />);
     dots = wrapper.find(DownvoteDot);
     expect(dots).toHaveLength(3);
   });
 
   it('should render only one dot if more votes are available than maximal allowed dots', () => {
     const votes = 5;
-    wrapper = shallow(<UserVotes {...props} votes={votes} maxDotsShown={3} />);
+    wrapper = shallow(<UserVotes {...props} votes={votes} />);
     const dots = wrapper.find(DownvoteDot);
     expect(dots).toHaveLength(1);
     expect(dots.prop('children')).toEqual(votes);
   });
 
   it('should call onDownvote callback if a DownvoteDot is clicked', () => {
-    wrapper = shallow(<UserVotes {...props} votes={1} maxDotsShown={3} />);
+    wrapper = shallow(<UserVotes {...props} votes={1} />);
     const dots = wrapper.find(DownvoteDot);
     expect(props.onDownvote).not.toHaveBeenCalled();
     dots.at(0).simulate('click');

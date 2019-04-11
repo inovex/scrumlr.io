@@ -46,6 +46,11 @@
   filter: brightness(75%);
 }
 
+.user-list__avatar {
+  margin-top: 6px !important;
+  margin-left: 6px !important;
+}
+
 .board__user-count {
   position: absolute;
   top: 0;

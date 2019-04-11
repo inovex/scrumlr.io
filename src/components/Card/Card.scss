@@ -49,21 +49,15 @@ $icon__width: 24px;
 .card-indicator {
   position: absolute;
 
-  top: $base-unit * 5;
-  left: $base-unit * 5;
-  width: $base-unit * 8;
-  height: $base-unit;
+  top: 16px;
+  left: 0;
+  width: 3px;
+  height: 34px;
 
   border: 0;
-  border-radius: .25em;
-}
+  border-radius: 0 3px 0 3px;
 
-.card-indicator--own {
   background: $theme-color-primary;
-}
-
-.card-indicator--other {
-  background: $theme-color-disabled;
 }
 
 .card__selection-area:hover .card__admin-buttonbar {
@@ -140,7 +134,7 @@ $icon__width: 24px;
   height: $card-line-height * 3;
 
   margin: 0;
-  padding: ($base-unit + $base-unit * 5) 0 0 0;
+  padding: 0;
 
   cursor: pointer;
 }
@@ -174,10 +168,15 @@ $icon__width: 24px;
 
 .card__footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   line-height: $theme-icon-height;
 
   margin-top: $default-margin;
+}
+
+.card__footer-spacer {
+  flex: 1 100 100%;
 }
 
 .card__details {
@@ -214,10 +213,6 @@ $icon__width: 24px;
 }
 
 .card__author {
-  position: absolute;
-  top: $default-margin;
-  left: 20px;
-
   text-transform: uppercase;
   font-weight: bold;
   font-size: .8em;
@@ -227,4 +222,10 @@ $icon__width: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  flex: 1 1 100%;
+}
+
+.card__avatar {
+  margin-right: 8px;
 }

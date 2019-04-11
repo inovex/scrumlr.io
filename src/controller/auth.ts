@@ -1,4 +1,4 @@
-import { getGravatar } from './gravatar';
+//import { getGravatar } from './gravatar';
 import { FirebaseProp } from '../types';
 
 export const authController = (firebase: FirebaseProp) => ({
@@ -9,7 +9,7 @@ export const authController = (firebase: FirebaseProp) => ({
       .then((auth: firebase.auth.UserCredential) => {
         return (firebase.auth().currentUser as firebase.User).updateProfile({
           displayName: email,
-          photoURL: getGravatar((auth.user as firebase.User).uid, email)
+          photoURL: null
         });
       });
   },

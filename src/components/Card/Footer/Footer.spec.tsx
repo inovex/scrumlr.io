@@ -41,14 +41,6 @@ describe('<Footer />', () => {
     expect(wrapper.find(Dot).prop('children')).toEqual(votes);
   });
 
-  it('should pass maxDotsShown to UserVotes component', () => {
-    const maxDotsShown = 3;
-    wrapper = shallow(
-      <Footer {...props} votable={true} maxDotsShown={maxDotsShown} />
-    );
-    expect(wrapper.find(UserVotes).prop('maxDotsShown')).toEqual(maxDotsShown);
-  });
-
   it('should pass onUpvote and onDownvote method to UserVotes', () => {
     wrapper = shallow(<Footer {...props} votable={true} />);
     const userVotes = wrapper.find(UserVotes);
