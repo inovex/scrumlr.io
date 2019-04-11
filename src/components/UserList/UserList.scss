@@ -26,6 +26,9 @@
   position: absolute;
   width: 43px;
   height: 43px;
+
+  top: -6px;
+  left: -6px;
 }
 
 .board__user-image-border svg {
@@ -44,11 +47,6 @@
 
 .board__user-image--faded {
   filter: brightness(75%);
-}
-
-.user-list__avatar {
-  margin-top: 6px !important;
-  margin-left: 6px !important;
 }
 
 .board__user-count {

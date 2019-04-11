@@ -1,8 +1,8 @@
 @import '../../constants/style';
 
 $card-z-index: $base-z-index + $base-z-index-step * 2;
-$card-font-size: $theme-font-size;
-$card-line-height: $base-unit * 5;
+$card-font-size: 14px;
+$card-line-height: 18px;
 $icon__width: 24px;
 
 .card__root {
@@ -17,7 +17,7 @@ $icon__width: 24px;
   background: $theme-color-background;
 
   box-sizing: border-box;
-  padding: $base-unit * 5;
+  padding: 16px 20px;
 
   box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
 
@@ -55,7 +55,7 @@ $icon__width: 24px;
   height: 34px;
 
   border: 0;
-  border-radius: 0 3px 0 3px;
+  border-radius: 0 3px 3px 0;
 
   background: $theme-color-primary;
 }
@@ -172,7 +172,7 @@ $icon__width: 24px;
   align-items: center;
   line-height: $theme-icon-height;
 
-  margin-top: $default-margin;
+  margin-top: 8px;
 }
 
 .card__footer-spacer {
@@ -226,6 +226,10 @@ $icon__width: 24px;
   flex: 1 1 100%;
 }
 
-.card__avatar {
+.card__avatar.avatar {
   margin-right: 8px;
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+  font-size: 14px;
 }

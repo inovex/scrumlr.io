@@ -41,8 +41,8 @@
 
   @media #{$desktop} {
     .stack {
-      grid-row-gap: $large-margin;
-      grid-column-gap: $large-margin;
+      grid-row-gap: 20px;
+      grid-column-gap: 20px;
     }
   }
 }
