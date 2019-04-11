@@ -223,6 +223,8 @@ $icon__width: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
 
+  margin-right: 8px;
+
   flex: 1 1 100%;
 }
 
@@ -230,6 +232,7 @@ $icon__width: 24px;
   margin-right: 8px;
   height: 24px;
   width: 24px;
+  min-width: 24px;
   line-height: 24px;
   font-size: 14px;
 }

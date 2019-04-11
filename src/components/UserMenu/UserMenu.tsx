@@ -75,11 +75,15 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           name="more"
           className="user-menu__toggle-icon"
           aria-hidden="true"
+          width={24}
+          height={24}
         />
         <Icon
           name="circle"
           className="user-menu__toggle-icon user-menu__toogle-icon-hover-circle"
           aria-hidden="true"
+          width={24}
+          height={24}
         />
       </button>
     );
