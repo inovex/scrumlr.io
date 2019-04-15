@@ -7,6 +7,7 @@ import Footer from '../Footer';
 import './Details.scss';
 import Icon from '../../Icon';
 import Deferred from '../../Deferred';
+import IconButton from '../../IconButton';
 
 export interface DetailsProps extends CardProps {
   editable: boolean;
@@ -67,20 +68,43 @@ export class Details extends React.Component<DetailsProps, {}> {
 
             <aside>
               <ul className="card-details__options">
+                {!isActionCard && this.props.isFocusable && (
+                  <li key="share" className="card-details__option">
+                    <IconButton
+                      icon={
+                        <Icon
+                          name="focus"
+                          aria-hidden="true"
+                          className="card-details__delete-icon"
+                        />
+                      }
+                      aria-label="Share this card for all"
+                      onClick={() => {
+                        this.props.onClose();
+                        this.props.onFocus(this.props.id);
+                      }}
+                    >
+                      Share
+                    </IconButton>
+                  </li>
+                )}
                 {deletable && (
-                  <li
-                    key="delete"
-                    className="card-details__option"
-                    aria-label="Delete this card"
-                    onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                      onRemove(id)
-                    }
-                  >
-                    <Icon
-                      name="trash"
-                      aria-hidden="true"
-                      className="card-details__delete-icon"
-                    />
+                  <li key="delete" className="card-details__option">
+                    <IconButton
+                      icon={
+                        <Icon
+                          name="trash"
+                          aria-hidden="true"
+                          className="card-details__delete-icon"
+                        />
+                      }
+                      aria-label="Delete this card"
+                      onClick={(e: React.FormEvent<HTMLLIElement>) =>
+                        onRemove(id)
+                      }
+                    >
+                      Delete
+                    </IconButton>
                   </li>
                 )}
               </ul>
@@ -99,19 +123,22 @@ export class Details extends React.Component<DetailsProps, {}> {
                     <aside>
                       <ul className="card-details__options">
                         {deletable && (
-                          <li
-                            key="delete"
-                            aria-label="Delete this card"
-                            className="card-details__option"
-                            onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                              card.id && onRemove(card.id)
-                            }
-                          >
-                            <Icon
-                              name="trash"
-                              aria-hidden="true"
-                              className="card-details__delete-icon"
-                            />
+                          <li key="delete" className="card-details__option">
+                            <IconButton
+                              icon={
+                                <Icon
+                                  name="trash"
+                                  aria-hidden="true"
+                                  className="card-details__delete-icon"
+                                />
+                              }
+                              aria-label="Delete this card"
+                              onClick={(e: React.FormEvent<HTMLLIElement>) =>
+                                card.id && onRemove(card.id)
+                              }
+                            >
+                              Delete
+                            </IconButton>
                           </li>
                         )}
                       </ul>

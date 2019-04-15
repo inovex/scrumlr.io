@@ -18,11 +18,14 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 }
 
 .card_details__content {
-  position: absolute;
+  position: fixed;
 
+  top: 86px;
   left: 0;
-  top: 0;
-  width: 100%;
+  right: 0;
+  margin: 0 auto;
+
+  width: 480px;
 
   z-index: $card-details-z-index;
 }
@@ -70,31 +73,20 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 .card-details__options {
   list-style-type: none;
   margin: 0;
-  padding: 0em;
+  padding: 0;
 
   position: absolute;
-  top: -1em;
-  right: -1em;
+  top: 0;
+  right: -44px - $default-margin;
 }
 
 .card-details__option {
   box-sizing: border-box;
   display: block;
-  width: $icon__width;
-  height: $icon__width;
-  border: 0;
-  border-radius: 100%;
-  text-align: center;
+}
 
-  padding: 0;
-  background: none;
-  font-size: $theme-font-size;
-  line-height: $icon__width;
-
-  background: $theme-color-font;
-  color: $theme-color-secondary;
-
-  cursor: pointer;
+.card-details__option + .card-details__option {
+  margin-top: $small-margin;
 }
 
 .card-details__stack {

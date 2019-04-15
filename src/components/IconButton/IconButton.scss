@@ -1,0 +1,72 @@
+@import '../../constants/style';
+
+.icon-button {
+  outline: none;
+  border: none;
+  background: none;
+
+  position: relative;
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+  margin: 0;
+}
+
+.icon-button__icon-wrapper {
+  background: $theme-color-primary;
+  border-radius: 22px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background .2s ease-in-out;
+}
+
+.icon-button__icon * {
+  fill: $color-white;
+}
+
+.icon-button__text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  border-radius: 22px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 22px;
+
+  background: none;
+  border: 2px solid $theme-color-primary;
+  color: $color-white;
+  overflow: hidden;
+
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  transition: right .2s ease-in-out, border-color .2s ease-in-out;
+}
+
+.icon-button:focus .icon-button__text,
+.icon-button:hover .icon-button__text {
+  right: -120px;
+  border-color: lighten($theme-color-primary, 10%);
+}
+
+.icon-button:focus .icon-button__icon-wrapper,
+.icon-button:hover .icon-button__icon-wrapper {
+  background: lighten($theme-color-primary, 10%);
+}
