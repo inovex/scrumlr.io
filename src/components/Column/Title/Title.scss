@@ -8,7 +8,7 @@
   .title {
     margin-left: $large-margin;
     margin-right: $large-margin;
-    margin-top: $large-margin + $default-margin;
+    margin-top: $large-margin;
   }
 
   .title__navigation {
@@ -30,9 +30,9 @@
   flex: 1;
   margin: 0;
 
-  font-family: Heebo;
+  font-family: Heebo, sans-serif;
   font-weight: bold;
-  font-size: 36px;
+  font-size: calc(24px + .4vw);
   color: $color-dark-gray;
   letter-spacing: 1px;
   line-height: 54px;
@@ -40,8 +40,8 @@
 
 .title__count {
   float: right;
-  font-family: Heebo;
-  font-size: 36px;
+  font-family: Heebo, sans-serif;
+  font-size: calc(24px + .4vw);
   font-weight: bold;
   margin-left: $default-margin;
   color: $color-stone-gray;
