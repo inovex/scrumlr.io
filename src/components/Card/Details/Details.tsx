@@ -30,10 +30,12 @@ export class Details extends React.Component<DetailsProps, {}> {
       votable,
       ownVotes,
       votes,
-      deletable
+      deletable,
+      showVotes
     } = this.props;
 
     const cardsInStack = this.props.getCardsInTheStack();
+    const isActionCard = this.props.card.type === 'actions';
 
     return (
       <div>
@@ -60,7 +62,7 @@ export class Details extends React.Component<DetailsProps, {}> {
               ownVotes={ownVotes}
               onDownvote={() => onDownvote(id)}
               onUpvote={() => onUpvote(id)}
-              votes={votes}
+              votes={isActionCard ? null : showVotes || votable ? votes : null}
             />
 
             <aside>
