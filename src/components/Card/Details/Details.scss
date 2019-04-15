@@ -42,7 +42,7 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   cursor: text;
 
   padding: 0;
-  margin: ($base-unit + $base-unit * 5) 0 0 0;
+  margin: 0;
   transition: outline .3s ease-in-out;
   outline: solid 2px transparent;
   outline-offset: $base-unit * 1.5;
