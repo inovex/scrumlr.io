@@ -20,19 +20,40 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 .card_details__content {
   position: fixed;
 
-  top: 86px;
-  left: 0;
-  right: 0;
+  top: 0;
+  left: $default-margin;
+  right: $default-margin;
+  bottom: 0;
   margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 64px;
 
-  width: 480px;
+  overflow-y: scroll;
+
+  width: auto;
 
   z-index: $card-details-z-index;
 }
 
+@media #{$tablet} {
+  .card_details__content {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 86px 200px 64px;
+
+    width: calc(280px + 10vw);
+
+    z-index: $card-details-z-index;
+  }
+}
+
 .card_details__card {
   @extend .card;
-  overflow: inherit;
+  overflow: visible;
 
   box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
 }
@@ -71,6 +92,7 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 }
 
 .card-details__options {
+  display: none;
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -78,6 +100,12 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   position: absolute;
   top: 0;
   right: -44px - $default-margin;
+}
+
+@media #{$tablet} {
+  .card-details__options {
+    display: block;
+  }
 }
 
 .card-details__option {

@@ -8,6 +8,7 @@ import './Details.scss';
 import Icon from '../../Icon';
 import Deferred from '../../Deferred';
 import IconButton from '../../IconButton';
+import Avatar from '../../Avatar';
 
 export interface DetailsProps extends CardProps {
   editable: boolean;
@@ -59,12 +60,25 @@ export class Details extends React.Component<DetailsProps, {}> {
             </blockquote>
 
             <Footer
-              votable={votable}
-              ownVotes={ownVotes}
+              votable={isActionCard ? false : votable}
+              ownVotes={isActionCard ? 0 : ownVotes}
               onDownvote={() => onDownvote(id)}
               onUpvote={() => onUpvote(id)}
               votes={isActionCard ? null : showVotes || votable ? votes : null}
-            />
+            >
+              {this.props.isShowAuthor && (
+                <>
+                  <Avatar
+                    user={{
+                      name: this.props.author.name || '',
+                      image: this.props.author.image || undefined
+                    }}
+                    className="card__avatar"
+                  />
+                  <span className="card__author">{this.props.author.name}</span>
+                </>
+              )}
+            </Footer>
 
             <aside>
               <ul className="card-details__options">
@@ -119,6 +133,27 @@ export class Details extends React.Component<DetailsProps, {}> {
                     <blockquote className="card-details__card-text">
                       <Deferred value={card.text} iv={card.iv} />
                     </blockquote>
+
+                    <Footer
+                      votable={false}
+                      ownVotes={0}
+                      onDownvote={() => {}}
+                      onUpvote={() => {}}
+                      votes={null}
+                    >
+                      {this.props.isShowAuthor && (
+                        <>
+                          <Avatar
+                            user={{
+                              name: card.author || '',
+                              image: card.image || undefined
+                            }}
+                            className="card__avatar"
+                          />
+                          <span className="card__author">{card.author}</span>
+                        </>
+                      )}
+                    </Footer>
 
                     <aside>
                       <ul className="card-details__options">
