@@ -45,6 +45,7 @@ $icon__width: 24px;
   background: transparent;
 
   transition: background .2s ease-in-out, color .2s ease-in-out;
+  cursor: pointer;
 }
 
 .card__edit-button svg * {
