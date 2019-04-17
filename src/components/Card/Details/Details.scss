@@ -22,9 +22,15 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   overflow: visible;
   min-width: calc(240px + 10vw);
   width: calc(100vw - 32px);
-  max-width: 440px;
+  max-width: 380px;
 
   box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
+}
+
+@media #{$desktop} {
+  .card_details__card {
+    max-width: 440px;
+  }
 }
 
 .card-details__card-text {

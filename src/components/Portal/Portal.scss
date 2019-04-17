@@ -20,8 +20,7 @@
 }
 
 .portal__close-button {
-  position: fixed;
-
+  position: absolute;
   top: $default-margin;
   right: $default-margin;
 
@@ -38,6 +37,7 @@
 
 @media #{$tablet} {
   .portal__close-button {
+    position: fixed;
     top: $large-margin;
     right: $large-margin + $default-margin;
   }
@@ -70,7 +70,7 @@
   left: 0;
   right: 0;
 
-  padding: 128px $default-margin;
+  padding: 72px $default-margin;
 
   // enable scroll of content
   overflow: auto;

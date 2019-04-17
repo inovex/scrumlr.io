@@ -50,23 +50,23 @@ export const Portal: React.FunctionComponent<PortalProps> = ({
       }}
     >
       <FocusLock>
-        {closeable && (
-          <button
-            className="portal__close-button"
-            onClick={() => {
-              onClose!();
-            }}
-          >
-            <Icon
-              name="key-esc"
-              className="portal__close-button-icon"
-              width={32}
-              height={32}
-            />
-            <span className="portal__close-button-text">Close</span>
-          </button>
-        )}
         <div className={cx('portal__content', className)}>
+          {closeable && (
+            <button
+              className="portal__close-button"
+              onClick={() => {
+                onClose!();
+              }}
+            >
+              <Icon
+                name="key-esc"
+                className="portal__close-button-icon"
+                width={32}
+                height={32}
+              />
+              <span className="portal__close-button-text">Close</span>
+            </button>
+          )}
           <div
             onClick={e => e.stopPropagation()}
             style={{ alignSelf: verticallyAlignContent }}
