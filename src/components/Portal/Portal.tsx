@@ -38,17 +38,6 @@ export class Portal extends React.PureComponent<PortalProps, {}> {
     window.addEventListener('keydown', this.handleKeydown);
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<PortalProps>,
-    prevState: Readonly<{}>,
-    snapshot?: any
-  ): void {
-    if (prevProps.onClose !== this.props.onClose) {
-      this.componentWillUnmount();
-      this.componentDidMount();
-    }
-  }
-
   componentWillUnmount(): void {
     window.removeEventListener('keydown', this.handleKeydown);
   }
