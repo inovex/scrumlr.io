@@ -23,7 +23,7 @@ describe('<UserVotes />', () => {
 
     wrapper = shallow(<UserVotes {...props} votes={3} />);
     dots = wrapper.find(DownvoteDot);
-    expect(dots).toHaveLength(3);
+    expect(dots).toHaveLength(1);
   });
 
   it('should render only one dot if more votes are available than maximal allowed dots', () => {

@@ -3,6 +3,5 @@
 exports[`<Footer /> should define default values 1`] = `
 Object {
   "dotSize": "large",
-  "maxDotsShown": 5,
 }
 `;
