@@ -6,16 +6,16 @@ $base-z-index-step: 10;
 // color constants
 $color-dark: #333333;
 $color-white: #FCFCFC;
-$color-green: #00E7C2;
+$color-green: #0057FF;
 
 // new font colors
 $color-white: #FFFFFF;
 $color-dark-gray: #27322F;
 $color-middle-gray: #5F746E;
 $color-alternative-gray: #C8CBCA;
-$color-mint: #00E7C2;
-$color-dark-mint: #00AD91;
-$color-darkest-mint: #3EB399;
+$color-mint: #0057FF;
+$color-dark-mint: darken($color-mint, 10%);
+$color-darkest-mint: darken($color-mint, 20%);
 $color-gray: #E4E6E5;
 $color-light-gray: #F0F1F1;
 $color-lightest-gray: #F7F7F7;
