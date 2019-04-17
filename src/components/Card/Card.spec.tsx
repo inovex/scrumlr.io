@@ -65,17 +65,13 @@ describe('<Card />', () => {
     });
 
     describe('ownership', () => {
-      it('should add necessary css classes if user owns card', () => {
+      it('should add indicator classes if user owns card', () => {
         shallowWrapper = shallow(<Card {...props} owner={true} />);
-        const target = shallowWrapper.find('.card-indicator');
-        expect(target.prop('className')).toContain('card-indicator--own');
-        expect(target.prop('className')).not.toContain('card-indicator--other');
+        expect(shallowWrapper.find('.card-indicator')).toHaveLength(1);
       });
-      it('should add necessary css classes if user does not own card', () => {
+      it('should not add indicator if user does not own card', () => {
         shallowWrapper = shallow(<Card {...props} owner={false} />);
-        const target = shallowWrapper.find('.card-indicator');
-        expect(target.prop('className')).not.toContain('card-indicator--own');
-        expect(target.prop('className')).toContain('card-indicator--other');
+        expect(shallowWrapper.find('.card-indicator')).toHaveLength(0);
       });
     });
 
@@ -141,27 +137,6 @@ describe('<Card />', () => {
       });
     });
 
-    describe('select behaviour', () => {
-      it('should not be isFocusable if isFocusable is false', () => {
-        shallowWrapper = shallow(<Card {...props} isFocusable={false} />);
-        const buttonBar = shallowWrapper.find('.card__admin-buttonbar');
-        expect(buttonBar.find('button[aria-label="Select card"]')).toHaveLength(
-          0
-        );
-      });
-
-      it('should be isFocusable if isFocusable is true', () => {
-        shallowWrapper = shallow(<Card {...props} isFocusable={true} />);
-        const buttonBar = shallowWrapper.find('.card__admin-buttonbar');
-        const selectCardBtn = buttonBar.find(
-          'button[aria-label="Select card"]'
-        );
-        expect(selectCardBtn).toHaveLength(1);
-        selectCardBtn.simulate('click');
-        expect(props.onFocus).toHaveBeenCalledWith(props.id);
-      });
-    });
-
     describe('show author', () => {
       it('should display author name when it is enabled', () => {
         shallowWrapper = shallow(<Card {...props} isShowAuthor={true} />);
@@ -175,11 +150,11 @@ describe('<Card />', () => {
         expect(shallowWrapper.find('.card__author').length).toEqual(0);
       });
 
-      it('should not show author name for card owners', () => {
+      it('should show author name for card owners', () => {
         shallowWrapper = shallow(
           <Card {...props} isShowAuthor={true} owner={true} />
         );
-        expect(shallowWrapper.find('.card__author').length).toEqual(0);
+        expect(shallowWrapper.find('.card__author').length).toEqual(1);
       });
     });
 
