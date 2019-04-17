@@ -74,7 +74,7 @@ export class PrintViewBoard extends React.Component<
     const colorMap = {
       positive: 'lightgray',
       negative: 'black',
-      actions: '#0057FF'
+      actions: '#00E7C2'
     };
     const headlinePrefixColor = colorMap[type] || 'lightgray';
     return (
