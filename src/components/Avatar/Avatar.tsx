@@ -38,7 +38,7 @@ export const Avatar: React.FunctionComponent<AvatarProps> = ({
 }) => {
   const altText = user.name;
 
-  if (!user.image) {
+  if (!user.image || user.image.includes('www.gravatar.com')) {
     const color =
       user.name
         .split('')

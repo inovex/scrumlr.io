@@ -187,9 +187,6 @@ export const mapStateToProps = (
   const email = auth.email || undefined;
   const isAnonymous = auth.isAnonymous;
 
-  // FIXME remove email
-  const onChangeEmail = debounce((email: string) => {}, 2000);
-
   const onChangeUsername = debounce((username: string) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -285,7 +282,6 @@ export const mapStateToProps = (
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
-    onChangeEmail,
     onDeleteTimer,
     onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps

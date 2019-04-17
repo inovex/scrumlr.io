@@ -45,7 +45,6 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onFocusCard: (cardId: string) => void;
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
-  onChangeEmail: (email: string) => void;
   onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
@@ -259,7 +258,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
               isAnonymous={this.props.isAnonymous}
               onChangeBoardName={this.props.onChangeBoardName}
               onChangeUsername={this.props.onChangeUsername}
-              onChangeEmail={this.props.onChangeEmail}
               onClose={this.handleCloseModal}
               onToggleShowAuthor={this.props.onToggleShowAuthor}
               isShowAuthor={this.props.isShowAuthor}
