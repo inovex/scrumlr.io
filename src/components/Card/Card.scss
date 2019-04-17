@@ -28,6 +28,35 @@ $icon__width: 24px;
   z-index: $card-z-index;
 }
 
+.card__edit-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  height: 20px;
+
+  border: none;
+  outline: none;
+
+  padding-left: 8px;
+  padding-bottom: 8px;
+
+  color: transparent;
+  background: transparent;
+
+  transition: background .2s ease-in-out, color .2s ease-in-out;
+}
+
+.card__edit-button svg * {
+  fill: currentColor;
+}
+
+.card__edit-button:focus,
+.card__content:hover .card__edit-button {
+  color: $color-dark;
+  background: $color-white;
+}
+
 .card:hover {
   transform: scale(1.02);
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
@@ -172,7 +201,7 @@ $icon__width: 24px;
   align-items: center;
   line-height: $theme-icon-height;
 
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .card__footer-spacer {

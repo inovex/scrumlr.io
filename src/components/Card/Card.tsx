@@ -10,6 +10,7 @@ import { mapDispatchToProps, mapStateToProps } from './Card.container';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import Avatar from '../Avatar';
+import Icon from '../Icon';
 
 export interface OwnCardProps extends BoardProp {
   card: TCard;
@@ -195,13 +196,10 @@ export class Card extends Component<CardProps, CardState> {
       dragSource,
       children = '',
       onDownvote,
-      //editable,
       onUpvote,
-      //onFocus,
       owner,
       votes,
       isAdmin,
-      //isFocusable,
       isFocused,
       votable,
       showVotes,
@@ -242,6 +240,10 @@ export class Card extends Component<CardProps, CardState> {
                   this.content = content;
                 }}
               >
+                <button className="card__edit-button" onClick={this.expand}>
+                  <Icon name="pencil" width={20} height={20} />
+                </button>
+
                 {children}
 
                 {this.state.hasOverflow && (
@@ -249,26 +251,30 @@ export class Card extends Component<CardProps, CardState> {
                 )}
               </blockquote>
             </div>
-            <Footer
-              votable={isActionCard ? false : votable}
-              ownVotes={isActionCard ? 0 : ownVotes}
-              onDownvote={() => onDownvote(id)}
-              onUpvote={() => onUpvote(id)}
-              votes={isActionCard ? null : showVotes || votable ? votes : null}
-            >
-              {isShowAuthor && (
-                <>
-                  <Avatar
-                    user={{
-                      name: author.name || '',
-                      image: author.image || undefined
-                    }}
-                    className="card__avatar"
-                  />
-                  <span className="card__author">{author.name}</span>
-                </>
-              )}
-            </Footer>
+            {(isShowAuthor || showVotes || votable) && (
+              <Footer
+                votable={isActionCard ? false : votable}
+                ownVotes={isActionCard ? 0 : ownVotes}
+                onDownvote={() => onDownvote(id)}
+                onUpvote={() => onUpvote(id)}
+                votes={
+                  isActionCard ? null : showVotes || votable ? votes : null
+                }
+              >
+                {isShowAuthor && (
+                  <>
+                    <Avatar
+                      user={{
+                        name: author.name || '',
+                        image: author.image || undefined
+                      }}
+                      className="card__avatar"
+                    />
+                    <span className="card__author">{author.name}</span>
+                  </>
+                )}
+              </Footer>
+            )}
           </div>
 
           {this.props.getCardsInTheStack().length > 0 && (
