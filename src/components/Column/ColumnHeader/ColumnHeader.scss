@@ -1,0 +1,27 @@
+@import '../../../constants/style';
+
+.column-header {
+  margin: $large-margin $default-margin $default-margin;
+}
+
+@media #{$desktop} {
+  .column-header {
+    margin-left: $large-margin;
+    margin-right: $large-margin;
+    margin-top: $large-margin;
+  }
+
+  .column-header__navigation {
+    display: none;
+  }
+}
+
+.column-header__hr {
+  background: $color-dark-gray;
+  height: 4px;
+  border: none;
+}
+
+.column-header__title-wrapper {
+  display: flex;
+}
