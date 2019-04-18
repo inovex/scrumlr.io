@@ -99,11 +99,15 @@
 }
 
 .column__navigation-left {
-    left: 0;
+    left: -6px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
 }
 
 .column__navigation-right {
-    right: 0;
+    right: -6px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
 }
 
 @media #{$desktop} {

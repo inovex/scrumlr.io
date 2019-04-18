@@ -45,6 +45,7 @@ $icon__height: $icon__width;
   transition: opacity .15s ease-in-out;
 }
 
+.user-menu__toggle-button:focus > .user-menu__toogle-icon-hover-circle,
 .user-menu__toggle-button:hover > .user-menu__toogle-icon-hover-circle {
   opacity: 1;
 }

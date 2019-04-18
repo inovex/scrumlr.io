@@ -6,7 +6,15 @@
 
   padding: $default-padding;
 
+  outline: none;
   background: $color-mint;
+
+  transition: background .2s ease-in-out;
+}
+
+.header__logo-link:focus,
+.header__logo-link:hover {
+  background: $color-dark;
 }
 
 .header__logo-image,
