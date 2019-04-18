@@ -68,6 +68,7 @@ export class StartButton extends React.Component<
 
     const dropdownButton = (
       <button
+        aria-label="Board mode selection dropdown"
         className="start-button__dropdown-toggle"
         onClick={this.toggleSelectionMenu}
       >
@@ -86,6 +87,7 @@ export class StartButton extends React.Component<
     return (
       <div className="start-button">
         <button
+          aria-label="Start session"
           className="start-button__start"
           onClick={() => onStart(selectedMode)}
         >
@@ -101,7 +103,10 @@ export class StartButton extends React.Component<
         >
           {Object.keys(availableRetroModes).map((retroMode: RetroMode) => (
             <li key={retroMode}>
-              <button onClick={this.selectRetroMode(retroMode)}>
+              <button
+                onClick={this.selectRetroMode(retroMode)}
+                aria-label={`Mode: ${availableRetroModes[retroMode].label}`}
+              >
                 {availableRetroModes[retroMode].label}
               </button>
             </li>
