@@ -62,6 +62,8 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
                 name="circle-arrow-left"
                 className="phase-menu__phase-button-icon"
                 aria-hidden="true"
+                width={28}
+                height={28}
               />
             </button>
           )}
@@ -91,6 +93,8 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
                 name="circle-arrow-right"
                 className="phase-menu__phase-button-icon"
                 aria-hidden="true"
+                width={28}
+                height={28}
               />
             </button>
           )}

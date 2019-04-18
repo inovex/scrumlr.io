@@ -15,7 +15,6 @@ export interface SettingsModalProps {
   onClose: () => void;
   onChangeBoardName: (name: string) => void;
   onChangeUsername: (name: string) => void;
-  onChangeEmail: (name: string) => void;
   onToggleShowAuthor: () => void;
   isShowAuthor: boolean;
 }
@@ -68,21 +67,6 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
           defaultValue={this.props.username}
           className="settings-modal__input"
         />
-
-        {this.props.isAnonymous && (
-          <Input
-            id="modal__email-input"
-            label="E-Mail"
-            description="(optional) The e-mail will be used to grab your Gravatar profile. It will be kept secret and will not be shown to any other users."
-            invertPlaceholder={false}
-            focusTheme="mint"
-            showUnderline={true}
-            placeholder="yourmail@scrumlr.io"
-            onChange={(e: any) => this.props.onChangeEmail(e.target.value)}
-            defaultValue={this.props.email}
-            className="settings-modal__input"
-          />
-        )}
       </Modal>
     );
   }

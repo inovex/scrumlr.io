@@ -28,12 +28,6 @@ describe('<Modal />', () => {
         expect(props.onStatus).toHaveBeenCalled();
       });
 
-      it('should call onClose on click on close icon', () => {
-        expect(props.onClose).not.toHaveBeenCalled();
-        shallowWrapper.find('.modal__close-button').simulate('click');
-        expect(props.onClose).toHaveBeenCalled();
-      });
-
       it('should call onSubmit on click on OK button', () => {
         expect(props.onSubmit).not.toHaveBeenCalled();
         shallowWrapper.find('.modal__ack-button').simulate('click');

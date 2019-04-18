@@ -1,22 +1,31 @@
 @import '../../../../constants/style';
 
 .dot__add {
-  margin-left: .25em;
+  margin: 0 0 0 .25em;
+  padding: 0;
   cursor: pointer;
+
+  background: none;
+  border: none;
+  outline: none;
 }
 
-.dot__add:hover > svg g {
+.dot__add:focus svg g,
+.dot__add:hover svg g {
   @include animate(fill);
 }
 
-.dot__add:hover > svg g {
+.dot__add:focus svg g,
+.dot__add:hover svg g {
   fill: $theme-color-primary;
 }
 
+.dot__add .dot:focus,
 .dot__add .dot:hover {
   @include animate(font-size, 0.2s);
 }
 
+.dot__add .dot:focus,
 .dot__add .dot:hover {
   font-size: 1.5em;
 }

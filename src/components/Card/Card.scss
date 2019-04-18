@@ -1,8 +1,8 @@
 @import '../../constants/style';
 
 $card-z-index: $base-z-index + $base-z-index-step * 2;
-$card-font-size: $theme-font-size;
-$card-line-height: $base-unit * 5;
+$card-font-size: 14px;
+$card-line-height: 18px;
 $icon__width: 24px;
 
 .card__root {
@@ -17,7 +17,7 @@ $icon__width: 24px;
   background: $theme-color-background;
 
   box-sizing: border-box;
-  padding: $base-unit * 5;
+  padding: 16px 20px;
 
   box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
 
@@ -26,6 +26,36 @@ $icon__width: 24px;
 
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   z-index: $card-z-index;
+}
+
+.card__edit-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  height: 20px;
+
+  border: none;
+  outline: none;
+
+  padding-left: 8px;
+  padding-bottom: 8px;
+
+  color: transparent;
+  background: transparent;
+
+  transition: background .2s ease-in-out, color .2s ease-in-out;
+  cursor: pointer;
+}
+
+.card__edit-button svg * {
+  fill: currentColor;
+}
+
+.card__edit-button:focus,
+.card__content:hover .card__edit-button {
+  color: $color-dark;
+  background: $color-white;
 }
 
 .card:hover {
@@ -49,21 +79,15 @@ $icon__width: 24px;
 .card-indicator {
   position: absolute;
 
-  top: $base-unit * 5;
-  left: $base-unit * 5;
-  width: $base-unit * 8;
-  height: $base-unit;
+  top: 16px;
+  left: 0;
+  width: 3px;
+  height: 34px;
 
   border: 0;
-  border-radius: .25em;
-}
+  border-radius: 0 3px 3px 0;
 
-.card-indicator--own {
   background: $theme-color-primary;
-}
-
-.card-indicator--other {
-  background: $theme-color-disabled;
 }
 
 .card__selection-area:hover .card__admin-buttonbar {
@@ -140,7 +164,7 @@ $icon__width: 24px;
   height: $card-line-height * 3;
 
   margin: 0;
-  padding: ($base-unit + $base-unit * 5) 0 0 0;
+  padding: 0;
 
   cursor: pointer;
 }
@@ -174,10 +198,15 @@ $icon__width: 24px;
 
 .card__footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   line-height: $theme-icon-height;
 
-  margin-top: $default-margin;
+  margin-top: 16px;
+}
+
+.card__footer-spacer {
+  flex: 1 100 100%;
 }
 
 .card__details {
@@ -214,10 +243,6 @@ $icon__width: 24px;
 }
 
 .card__author {
-  position: absolute;
-  top: $default-margin;
-  left: 20px;
-
   text-transform: uppercase;
   font-weight: bold;
   font-size: .8em;
@@ -227,4 +252,17 @@ $icon__width: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  margin-right: 8px;
+
+  flex: 1 1 100%;
+}
+
+.card__avatar.avatar {
+  margin-right: 8px;
+  height: 24px;
+  width: 24px;
+  min-width: 24px;
+  line-height: 24px;
+  font-size: 14px;
 }

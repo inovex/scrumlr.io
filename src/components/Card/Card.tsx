@@ -7,9 +7,10 @@ import { BoardProp, Card as TCard, DragAndDropProps } from '../../types';
 import Details from './Details';
 import Footer from './Footer';
 import { mapDispatchToProps, mapStateToProps } from './Card.container';
-import Icon from '../Icon/Icon';
 import { throttle } from 'lodash';
 import { connect } from 'react-redux';
+import Avatar from '../Avatar';
+import Icon from '../Icon';
 
 export interface OwnCardProps extends BoardProp {
   card: TCard;
@@ -195,13 +196,10 @@ export class Card extends Component<CardProps, CardState> {
       dragSource,
       children = '',
       onDownvote,
-      editable,
       onUpvote,
-      onFocus,
       owner,
       votes,
       isAdmin,
-      isFocusable,
       isFocused,
       votable,
       showVotes,
@@ -232,54 +230,9 @@ export class Card extends Component<CardProps, CardState> {
               'card--focused': isFocused
             })}
           >
-            {(owner || !isShowAuthor) && (
-              <div
-                className={classNames('card-indicator', {
-                  'card-indicator--own': owner,
-                  'card-indicator--other': !owner
-                })}
-              />
-            )}
-
-            {!owner &&
-              isShowAuthor && (
-                <span className="card__author">{author.name}</span>
-              )}
+            {owner && <div className="card-indicator" />}
 
             <div className="card__selection-area">
-              <div className="card__admin-buttonbar">
-                {!isActionCard &&
-                  isFocusable && (
-                    <button
-                      type="button"
-                      className="card__admin-button"
-                      onClick={() => onFocus(id)}
-                      aria-label="Select card"
-                    >
-                      <Icon
-                        name="focus"
-                        width={24}
-                        height={24}
-                        className="card__admin-button-icon"
-                      />
-                    </button>
-                  )}
-                {editable && (
-                  <button
-                    type="button"
-                    className="card__admin-button"
-                    onClick={this.expand}
-                    aria-label="Expand card"
-                  >
-                    <Icon
-                      name="edit"
-                      width={24}
-                      height={24}
-                      className="card__admin-button-icon"
-                    />
-                  </button>
-                )}
-              </div>
               <blockquote
                 className="card__content"
                 onClick={this.expand}
@@ -287,6 +240,10 @@ export class Card extends Component<CardProps, CardState> {
                   this.content = content;
                 }}
               >
+                <button className="card__edit-button" onClick={this.expand}>
+                  <Icon name="pencil" width={20} height={20} />
+                </button>
+
                 {children}
 
                 {this.state.hasOverflow && (
@@ -294,14 +251,30 @@ export class Card extends Component<CardProps, CardState> {
                 )}
               </blockquote>
             </div>
-
-            <Footer
-              votable={isActionCard ? false : votable}
-              ownVotes={isActionCard ? 0 : ownVotes}
-              onDownvote={() => onDownvote(id)}
-              onUpvote={() => onUpvote(id)}
-              votes={isActionCard ? null : showVotes || votable ? votes : null}
-            />
+            {(isShowAuthor || showVotes || votable) && (
+              <Footer
+                votable={isActionCard ? false : votable}
+                ownVotes={isActionCard ? 0 : ownVotes}
+                onDownvote={() => onDownvote(id)}
+                onUpvote={() => onUpvote(id)}
+                votes={
+                  isActionCard ? null : showVotes || votable ? votes : null
+                }
+              >
+                {isShowAuthor && (
+                  <>
+                    <Avatar
+                      user={{
+                        name: author.name || '',
+                        image: author.image || undefined
+                      }}
+                      className="card__avatar"
+                    />
+                    <span className="card__author">{author.name}</span>
+                  </>
+                )}
+              </Footer>
+            )}
           </div>
 
           {this.props.getCardsInTheStack().length > 0 && (

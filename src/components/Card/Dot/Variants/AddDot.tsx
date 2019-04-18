@@ -9,11 +9,9 @@ export interface AddDotProps {
 export class AddDot extends React.Component<AddDotProps, any> {
   render() {
     return (
-      <Icon
-        name="circle-add"
-        onClick={this.props.onClick}
-        className="dot__add"
-      />
+      <button onClick={this.props.onClick} className="dot__add">
+        <Icon name="circle-add" />
+      </button>
     );
   }
 }

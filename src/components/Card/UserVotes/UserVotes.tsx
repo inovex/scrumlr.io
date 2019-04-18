@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { range } from 'lodash';
 
 import { AddDot, DownvoteDot } from '../Dot';
 import './UserVotes.scss';
@@ -8,12 +7,10 @@ export interface UserVotesProps {
   onDownvote: () => void;
   onUpvote: () => void;
   votes?: number;
-  maxDotsShown?: number;
 }
 
 const defaultProps: Partial<UserVotesProps> = {
-  votes: 0,
-  maxDotsShown: 5
+  votes: 0
 };
 
 export class UserVotes extends React.Component<UserVotesProps, {}> {
@@ -25,28 +22,12 @@ export class UserVotes extends React.Component<UserVotesProps, {}> {
     );
   }
 
-  renderDots() {
-    const { votes = 0, maxDotsShown } = this.props;
-
-    if (maxDotsShown && votes && votes > maxDotsShown) {
-      return this.renderDownvote(votes);
-    }
-
-    return (
-      <ul className="user-votes__dots">
-        {range(votes).map((x, i) => (
-          <li key={votes - i} className="user-votes__dots-item">
-            {this.renderDownvote()}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
   render() {
+    const { votes = 0 } = this.props;
+
     return (
       <span className="user-votes">
-        {this.renderDots()}
+        {votes > 0 && this.renderDownvote(votes)}
         <AddDot onClick={() => this.props.onUpvote()} />
       </span>
     );

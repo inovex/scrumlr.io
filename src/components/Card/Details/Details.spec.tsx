@@ -5,6 +5,7 @@ import { Details, DetailsProps } from './Details';
 import { mockCard } from '../../../builder';
 import { Card } from '../../../types';
 import Deferred from '../../Deferred';
+import Portal from '../../Portal';
 
 describe('<Details />', () => {
   let props: DetailsProps;
@@ -45,13 +46,9 @@ describe('<Details />', () => {
     };
   });
 
-  it('should render a backdrop that closes the card when clicked', () => {
+  it('should render a portal', () => {
     wrapper = shallow(<Details {...props}>{content}</Details>);
-    const backdropEl = wrapper.find('.card-details__backdrop');
-    expect(backdropEl).toHaveLength(1);
-    expect(props.onClose).not.toHaveBeenCalled();
-    backdropEl.simulate('click');
-    expect(props.onClose).toHaveBeenCalledTimes(1);
+    expect(wrapper.find(Portal)).toHaveLength(1);
   });
 
   describe('edit mode', () => {
@@ -235,7 +232,7 @@ describe('<Details />', () => {
       );
 
       const stack = wrapper.find('.card-details__stack');
-      const stackCardsOpts = stack.find('.card-details__option');
+      const stackCardsOpts = stack.find('[aria-label="Delete this card"]');
 
       stackCardsOpts.at(0).simulate('click');
       expect(props.onRemove).toHaveBeenCalledWith(cards[0].id);

@@ -1,31 +1,5 @@
 @import '../../constants/style';
 
-.modal {
-  display: none;
-}
-
-@media #{$tablet} {
-  .modal {
-    display: flex;
-    justify-content: center;
-  }
-}
-
-.modal__backdrop {
-  position: fixed;
-
-  top: -100px;
-  bottom: -100px;
-  left: -100px;
-  right: -100px;
-  overflow: hidden;
-  background: rgba(0, 1, 15, 0.89); //fade($color-dark, 80%);
-
-  backdrop-filter: blur(2px);
-
-  z-index: $base-z-index + $base-z-index-step * $base-z-index;
-}
-
 .modal__content-wrapper {
   overflow: auto;
   //margin-top: $large-margin;

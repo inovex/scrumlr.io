@@ -15,13 +15,13 @@
 }
 
 .stack-component--theme-light .stack-component__stack::before {
-  background: linear-gradient(to bottom, $color-lightest-gray, rgba(255,255,255,0));
+  background: linear-gradient(to bottom, $color-lightest-gray, rgba(247,247,247,0));
 }
 .stack-component--theme-dark .stack-component__stack::before {
-  background: linear-gradient(to bottom, $color-light-gray, rgba(255,255,255,0));
+  background: linear-gradient(to bottom, $color-light-gray, rgba(240,241,241,0));
 }
 .stack-component--theme-mint .stack-component__stack::before {
-  background: linear-gradient(to bottom, $color-white, rgba(255,255,255,0));
+  background: linear-gradient(to bottom, $color-white, rgba(252,252,252,0));
 }
 
 .stack-component .stack-component__stack {

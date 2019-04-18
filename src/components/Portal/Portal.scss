@@ -1,0 +1,87 @@
+@import '../../constants/style';
+
+.portal {
+  position: fixed;
+
+  display: flex;
+  justify-content: center;
+
+  top: -100px;
+  bottom: -100px;
+  left: -100px;
+  right: -100px;
+
+  overflow: hidden;
+  background: rgba(0, 1, 15, 0.89);
+
+  backdrop-filter: blur(2px);
+
+  z-index: $base-z-index + $base-z-index-step * $base-z-index;
+}
+
+.portal__close-button {
+  position: absolute;
+  top: $default-margin;
+  right: $default-margin;
+
+  background: none;
+  outline: none;
+  border: none;
+
+  color: $color-white;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  z-index: 1;
+}
+
+@media #{$tablet} {
+  .portal__close-button {
+    position: fixed;
+    top: $large-margin;
+    right: $large-margin + $default-margin;
+  }
+}
+
+.portal__close-button-icon {
+  float: left;
+}
+
+.portal__close-button-text {
+  line-height: 32px ;
+  vertical-align: middle;
+  margin-left: $small-margin;
+}
+
+.portal__close-button:focus .portal__close-button-text,
+.portal__close-button:hover .portal__close-button-text {
+  text-decoration: underline;
+}
+
+.portal__close-button svg * {
+  fill: currentColor;
+}
+
+.portal__content {
+  position: fixed;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  padding: 72px $default-margin;
+
+  // enable scroll of content
+  overflow: auto;
+
+  // horizontal centering of content
+  display: flex;
+  justify-content: center;
+}
+
+@media #{$tablet} {
+  .portal__content {
+    padding: 128px 128px;
+  }
+}

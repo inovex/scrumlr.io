@@ -26,6 +26,9 @@
   position: absolute;
   width: 43px;
   height: 43px;
+
+  top: -6px;
+  left: -6px;
 }
 
 .board__user-image-border svg {
@@ -53,12 +56,12 @@
 
   text-align: center;
 
-  width: 44px;
-  height: 44px;
-  line-height: 44px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
 
   color: $color-white;
-  font-size: $theme-font-size - $base-unit;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -83,7 +86,7 @@
   font-size: 15px;
 
   position: absolute;
-  top: -5px;
+  top: -9px;
   right: -11px;
   min-width: 20px;
   height: 20px;

@@ -31,7 +31,7 @@ function initialBoardConfig(
             guidedPhase: 0,
             timerExpiration: null,
             created: new Date().toISOString(),
-            showAuthor: false,
+            showAuthor: true,
             mode
           },
           cards: {},

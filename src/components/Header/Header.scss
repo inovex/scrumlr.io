@@ -1,6 +1,6 @@
 @import '../../constants/style';
 
-$header__control-height: 74px;
+$header__control-height: 66px;
 
 .header__control {
   position: relative;
@@ -24,7 +24,7 @@ $header__control-height: 74px;
 }
 
 .header__control-logo {
-  flex-basis: 74px;
+  flex-basis: 66px;
   margin-right: $default-margin;
 }
 
@@ -36,7 +36,7 @@ $header__control-height: 74px;
   .header__control-logo {
     display: block;
     justify-content: center;
-    flex-basis: 170px;
+    flex-basis: 150px;
     margin-right: $large-margin;
   }
 }

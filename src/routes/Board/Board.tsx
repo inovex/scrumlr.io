@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
+const Div100vh: any = require('react-div-100vh').default;
 const { toast } = require('react-toastify');
 
 import './Board.scss';
@@ -45,7 +46,6 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onFocusCard: (cardId: string) => void;
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
-  onChangeEmail: (email: string) => void;
   onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
@@ -232,7 +232,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     return (
       <>
         {waitingUser}
-        <div className="board-page">
+        <Div100vh className="board-page">
           <Header
             boardId={this.props.boardSelector}
             onExport={() => this.handleExport()}
@@ -259,7 +259,6 @@ export class Board extends React.Component<BoardProps, BoardState> {
               isAnonymous={this.props.isAnonymous}
               onChangeBoardName={this.props.onChangeBoardName}
               onChangeUsername={this.props.onChangeUsername}
-              onChangeEmail={this.props.onChangeEmail}
               onClose={this.handleCloseModal}
               onToggleShowAuthor={this.props.onToggleShowAuthor}
               isShowAuthor={this.props.isShowAuthor}
@@ -269,7 +268,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
           {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-        </div>
+        </Div100vh>
       </>
     );
   }

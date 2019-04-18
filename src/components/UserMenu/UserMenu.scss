@@ -1,7 +1,7 @@
 @import '../../constants/style';
 @import '../../../node_modules/react-dd-menu/dist/react-dd-menu';
 
-$icon__width: 32px;
+$icon__width: 24px;
 $icon__height: $icon__width;
 
 .dd-menu {
@@ -45,6 +45,7 @@ $icon__height: $icon__width;
   transition: opacity .15s ease-in-out;
 }
 
+.user-menu__toggle-button:focus > .user-menu__toogle-icon-hover-circle,
 .user-menu__toggle-button:hover > .user-menu__toogle-icon-hover-circle {
   opacity: 1;
 }
@@ -125,7 +126,7 @@ $icon__height: $icon__width;
 
 @media #{$tablet} {
   .dd-menu {
-    margin-left: $large-margin;
+    margin-left: $default-margin;
   }
 }
 

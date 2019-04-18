@@ -16,7 +16,6 @@ import {
   PublicBoardData
 } from '../../types';
 import { authController } from '../../controller/auth';
-import { getGravatar } from '../../controller/gravatar';
 import { Crypto } from '../../util/crypto';
 
 export const mapStateToProps = (
@@ -188,23 +187,6 @@ export const mapStateToProps = (
   const email = auth.email || undefined;
   const isAnonymous = auth.isAnonymous;
 
-  const onChangeEmail = debounce((email: string) => {
-    const user = firebase.auth().currentUser;
-    if (user) {
-      const imageUrl = getGravatar(auth.uid, email);
-      user
-        .updateProfile({
-          displayName: user.displayName,
-          photoURL: imageUrl
-        })
-        .then(() => {
-          firebase.update(`${boardSelector}/users/${auth.uid}`, {
-            image: imageUrl
-          });
-        });
-    }
-  }, 2000);
-
   const onChangeUsername = debounce((username: string) => {
     const user = firebase.auth().currentUser;
     if (user) {
@@ -300,7 +282,6 @@ export const mapStateToProps = (
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
-    onChangeEmail,
     onDeleteTimer,
     onToggleShowAuthor,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 
-import { BoardUsers, UserInformation } from '../../types/index';
+import { BoardUsers, UserInformation } from '../../types';
 import Icon, { IconNames } from '../Icon';
 import './UserList.scss';
 import * as ReactTooltip from 'react-tooltip';
+import Avatar from '../Avatar';
 
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
@@ -64,7 +65,6 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     isCurrentUser: boolean
   ) {
     const { onToggleReadyState } = this.props;
-    const altText = user.name + (user.ready ? ' (ready)' : '');
     const iconName: IconNames = isCurrentUser
       ? 'circle-selection'
       : 'circle-selection-grey';
@@ -88,15 +88,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             isCapture={false}
           />
         )}
-        <img
-          className="board__user-image"
-          src={
-            user.image ||
-            'https://www.gravatar.com/avatar/00000000000000000000000000000000?s=32&d=retro'
-          }
-          alt={altText}
-          title={altText}
-        />
+        <Avatar user={user} className="user-list__avatar" />
         {user.ready && (
           <span className="user-list__ready-state-wrapper">
             <Icon
@@ -150,13 +142,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             effect="solid"
           />
         )}
-        <img
-          className={cx('board__user-image', 'board__user-image--faded')}
-          src={
-            otherUser.image ||
-            'https://www.gravatar.com/avatar/912ec803b2ce49e4a541068d495ab570?s=32&d=retro'
-          }
-        />
+        <Avatar user={otherUser} className="user-list__avatar" faded />
         <span className="board__user-count">{otherUsers.length}</span>
         <span className="user-list__ready-state-wrapper">
           <span className="board__user-ready-count">{readyCount}</span>
@@ -234,25 +220,27 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             </li>
           ))}
 
-        {tUser.filter(({ id }) => id === currentUserId).map(userInfo => (
-          <li key="OWN" aria-label="Yourself">
-            <button
-              type="button"
-              className={cx('board__user-ready-toggle', {
-                ['board__user-ready-toggle-focused']: this.state.focusedAvatar
-              })}
-              onClick={() => {
-                onToggleReadyState();
-                this.setState({ ...this.state, focusedAvatar: true });
-              }}
-              onBlur={() =>
-                this.setState({ ...this.state, focusedAvatar: false })
-              }
-            >
-              {this.renderUserContent(userInfo, true)}
-            </button>
-          </li>
-        ))}
+        {tUser
+          .filter(({ id }) => id === currentUserId)
+          .map(userInfo => (
+            <li key="OWN" aria-label="Yourself">
+              <button
+                type="button"
+                className={cx('board__user-ready-toggle', {
+                  ['board__user-ready-toggle-focused']: this.state.focusedAvatar
+                })}
+                onClick={() => {
+                  onToggleReadyState();
+                  this.setState({ ...this.state, focusedAvatar: true });
+                }}
+                onBlur={() =>
+                  this.setState({ ...this.state, focusedAvatar: false })
+                }
+              >
+                {this.renderUserContent(userInfo, true)}
+              </button>
+            </li>
+          ))}
       </ul>
     );
   }

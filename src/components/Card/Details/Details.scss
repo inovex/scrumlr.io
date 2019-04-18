@@ -17,21 +17,20 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   z-index: $card-details-z-index;
 }
 
-.card_details__content {
-  position: absolute;
-
-  left: 0;
-  top: 0;
-  width: 100%;
-
-  z-index: $card-details-z-index;
-}
-
 .card_details__card {
   @extend .card;
-  overflow: inherit;
+  overflow: visible;
+  min-width: calc(240px + 10vw);
+  width: calc(100vw - 32px);
+  max-width: 380px;
 
   box-shadow: 3px 3px 3px 3px rgba(0,0,0,0.2);
+}
+
+@media #{$desktop} {
+  .card_details__card {
+    max-width: 440px;
+  }
 }
 
 .card-details__card-text {
@@ -42,7 +41,7 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   cursor: text;
 
   padding: 0;
-  margin: ($base-unit + $base-unit * 5) 0 0 0;
+  margin: 0;
   transition: outline .3s ease-in-out;
   outline: solid 2px transparent;
   outline-offset: $base-unit * 1.5;
@@ -68,33 +67,29 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 }
 
 .card-details__options {
+  display: none;
   list-style-type: none;
   margin: 0;
-  padding: 0em;
+  padding: 0;
 
   position: absolute;
-  top: -1em;
-  right: -1em;
+  top: 0;
+  right: -44px - $default-margin;
+}
+
+@media #{$tablet} {
+  .card-details__options {
+    display: block;
+  }
 }
 
 .card-details__option {
   box-sizing: border-box;
   display: block;
-  width: $icon__width;
-  height: $icon__width;
-  border: 0;
-  border-radius: 100%;
-  text-align: center;
+}
 
-  padding: 0;
-  background: none;
-  font-size: $theme-font-size;
-  line-height: $icon__width;
-
-  background: $theme-color-font;
-  color: $theme-color-secondary;
-
-  cursor: pointer;
+.card-details__option + .card-details__option {
+  margin-top: $small-margin;
 }
 
 .card-details__stack {

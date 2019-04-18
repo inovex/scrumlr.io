@@ -70,35 +70,33 @@ export class Column extends React.Component<ColumnProps, {}> {
         })}
         style={{ flex: isExtended ? phase.columns.length - 1 : 1 }}
       >
-        {!focused &&
-          this.props.hasPreviousColumn && (
-            <button
-              className={classNames(
-                'column__navigation',
-                'column__navigation-left'
-              )}
-              type="button"
-              onClick={this.props.onGoToPrevColumn}
-              disabled={!isActive}
-            >
-              <Icon name="chevron-left" width={48} height={48} />
-            </button>
-          )}
+        {!focused && this.props.hasPreviousColumn && (
+          <button
+            className={classNames(
+              'column__navigation',
+              'column__navigation-left'
+            )}
+            type="button"
+            onClick={this.props.onGoToPrevColumn}
+            disabled={!isActive}
+          >
+            <Icon name="chevron-left" width={32} height={32} />
+          </button>
+        )}
 
-        {!focused &&
-          this.props.hasNextColumn && (
-            <button
-              className={classNames(
-                'column__navigation',
-                'column__navigation-right'
-              )}
-              type="button"
-              onClick={this.props.onGoToNextColumn}
-              disabled={!isActive}
-            >
-              <Icon name="chevron-right" width={48} height={48} />
-            </button>
-          )}
+        {!focused && this.props.hasNextColumn && (
+          <button
+            className={classNames(
+              'column__navigation',
+              'column__navigation-right'
+            )}
+            type="button"
+            onClick={this.props.onGoToNextColumn}
+            disabled={!isActive}
+          >
+            <Icon name="chevron-right" width={32} height={32} />
+          </button>
+        )}
 
         <Title count={cardsCount}>{column.name}</Title>
 
@@ -109,16 +107,15 @@ export class Column extends React.Component<ColumnProps, {}> {
           transitionLeave={false}
           className="column__content"
         >
-          {focused &&
-            column.focus.align === 'left' && (
-              <FocusedCardComponent
-                key={focused.id}
-                boardUrl={boardUrl}
-                focused={focused}
-                className="component--large"
-                showVotes={column.voting.displayed}
-              />
-            )}
+          {focused && column.focus.align === 'left' && (
+            <FocusedCardComponent
+              key={focused.id}
+              boardUrl={boardUrl}
+              focused={focused}
+              className="component--large"
+              showVotes={column.voting.displayed}
+            />
+          )}
 
           {!isExtended && (
             <StackComponent
@@ -134,16 +131,15 @@ export class Column extends React.Component<ColumnProps, {}> {
             />
           )}
 
-          {focused &&
-            column.focus.align === 'right' && (
-              <FocusedCardComponent
-                key={focused.id}
-                boardUrl={boardUrl}
-                focused={focused}
-                className="component--large"
-                showVotes={column.voting.displayed}
-              />
-            )}
+          {focused && column.focus.align === 'right' && (
+            <FocusedCardComponent
+              key={focused.id}
+              boardUrl={boardUrl}
+              focused={focused}
+              className="component--large"
+              showVotes={column.voting.displayed}
+            />
+          )}
         </ReactCSSTransitionGroup>
       </div>
     );
