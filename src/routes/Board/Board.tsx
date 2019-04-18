@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
+const Div100vh: any = require('react-div-100vh').default;
 const { toast } = require('react-toastify');
 
 import './Board.scss';
@@ -231,7 +232,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     return (
       <>
         {waitingUser}
-        <div className="board-page">
+        <Div100vh className="board-page">
           <Header
             boardId={this.props.boardSelector}
             onExport={() => this.handleExport()}
@@ -267,7 +268,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
           {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
-        </div>
+        </Div100vh>
       </>
     );
   }

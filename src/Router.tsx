@@ -26,7 +26,7 @@ const CloseButton = (props: any) => (
 );
 
 const Router = (props: RouterProps) => (
-  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
     <div style={{ flex: 1 }}>
       <HashRouter>
         <Switch>
