@@ -5,6 +5,7 @@ import { default as FocusLock } from 'react-focus-lock';
 import './ColumnOverview.scss';
 import * as ReactDOM from 'react-dom';
 import ColumnName from '../Column/ColumnName';
+import Icon from '../Icon';
 
 export interface ColumnOverviewProps {
   boardUrl: string;
@@ -38,7 +39,18 @@ export const ColumnOverview: React.FunctionComponent<ColumnOverviewProps> = ({
         <div className="column-overview__decorator">
           <div className="column-overview__header">
             <ColumnName title={column} count={cardsCount} />
-            <button onClick={() => toggleOverview()}>Close</button>
+            <button
+              aria-label="Close overview"
+              className="column-overview__close-button"
+              onClick={() => toggleOverview()}
+            >
+              <Icon
+                name="close-circle"
+                className="column-overview__close-button-icon"
+                width={48}
+                height={48}
+              />
+            </button>
           </div>
           <div className="column-overview__stack">
             <Stack

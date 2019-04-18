@@ -25,3 +25,16 @@
 .column-header__title-wrapper {
   display: flex;
 }
+
+.column-header__overview-button {
+  background: none;
+  border: none;
+  outline: none;
+
+  margin: 0;
+  padding: 0;
+}
+
+.column-header__overview-icon svg * {
+  fill: $color-dark;
+}
