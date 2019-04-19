@@ -25,6 +25,7 @@ export const iconMap: { [key: string]: string } = {
   'close-circle': 'icon-48-close',
   'chevron-left': 'icon-48-chevron-left',
   'chevron-right': 'icon-48-chevron-right',
+  overview: 'icon-32-overview',
   'key-down': 'icon-32-key-down',
   'key-up': 'icon-32-key-up',
   'key-esc': 'icon-32-key-esc',

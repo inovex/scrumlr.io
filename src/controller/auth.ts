@@ -1,4 +1,3 @@
-//import { getGravatar } from './gravatar';
 import { FirebaseProp } from '../types';
 
 export const authController = (firebase: FirebaseProp) => ({
@@ -15,8 +14,6 @@ export const authController = (firebase: FirebaseProp) => ({
   },
   signOut: () => {
     // User is still signed in at this point. Sign out the user and redirect to home page.
-    //const { uid } = firebase.auth().currentUser as firebase.User;
-    //firebase.remove(`/presence/${uid}`).then(() => {
     firebase
       .auth()
       .signOut()

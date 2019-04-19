@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<Modal /> dumb component rendering should match the snapshot 1`] = `
-"<Portal onClose={[Function: mockConstructor]} verticallyAlignContent=\\"center\\">
+"<Portal onClose={[Function: mockConstructor]} verticallyAlignContent=\\"center\\" fullWidth={false}>
   <div className=\\"modal__content-wrapper\\">
     <div className=\\"modal__content\\">
       Test

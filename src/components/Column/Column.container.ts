@@ -137,8 +137,10 @@ export const mapStateToProps = (
         if (isAdmin) {
           // on escape
           if (ev.keyCode === Key.Escape) {
-            onFocusCard(null);
-            ev.preventDefault();
+            if (document.getElementById('portal')!.children.length === 0) {
+              onFocusCard(null);
+              ev.preventDefault();
+            }
           }
 
           // on arrow up

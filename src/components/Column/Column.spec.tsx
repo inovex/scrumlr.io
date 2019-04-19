@@ -34,12 +34,14 @@ describe('<Column />', () => {
     it('should add a class depending on the theme', () => {
       const theme = 'my-theme';
       wrapper = shallow(<Column {...props} theme={theme} />);
-      expect(wrapper.prop('className')).toContain(`column--theme-${theme}`);
+      const column = wrapper.find('.column').first();
+      expect(column.prop('className')).toContain(`column--theme-${theme}`);
     });
 
     it('should add a class if column is inactive', () => {
       wrapper = shallow(<Column {...props} isActive={false} />);
-      expect(wrapper.prop('className')).toContain(`column--inactive`);
+      const column = wrapper.find('.column').first();
+      expect(column.prop('className')).toContain(`column--inactive`);
     });
   });
 });

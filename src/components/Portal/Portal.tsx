@@ -14,6 +14,7 @@ export interface PortalProps {
 
   /** Vertical alignment of inner elements. */
   verticallyAlignContent?: 'start' | 'center';
+  fullWidth?: boolean;
 
   [key: string]: any;
 }
@@ -23,7 +24,8 @@ export interface PortalProps {
  */
 export class Portal extends React.PureComponent<PortalProps, {}> {
   static defaultProps: Partial<PortalProps> = {
-    verticallyAlignContent: 'center'
+    verticallyAlignContent: 'center',
+    fullWidth: false
   };
 
   handleKeydown = (event: KeyboardEvent) => {
@@ -47,6 +49,7 @@ export class Portal extends React.PureComponent<PortalProps, {}> {
       className,
       children,
       verticallyAlignContent,
+      fullWidth,
       onClose,
       ...other
     } = this.props;
@@ -88,7 +91,10 @@ export class Portal extends React.PureComponent<PortalProps, {}> {
             )}
             <div
               onClick={e => e.stopPropagation()}
-              style={{ alignSelf: verticallyAlignContent }}
+              style={{
+                alignSelf: verticallyAlignContent,
+                width: fullWidth ? '100%' : undefined
+              }}
             >
               {children}
             </div>

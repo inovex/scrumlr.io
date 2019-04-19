@@ -45,7 +45,11 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
   ...other
 }) => {
   return (
-    <div className={classNames('access-mode-selection', className)} {...other}>
+    <div
+      className={classNames('access-mode-selection', className)}
+      role="group"
+      {...other}
+    >
       <AccessModeSelectRadio
         id="access-mode-selection__public"
         value="public"

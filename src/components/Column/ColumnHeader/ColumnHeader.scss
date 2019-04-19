@@ -1,0 +1,47 @@
+@import '../../../constants/style';
+
+.column-header {
+  margin: $large-margin $default-margin $default-margin;
+}
+
+@media #{$desktop} {
+  .column-header {
+    margin-left: $large-margin;
+    margin-right: $large-margin;
+    margin-top: $large-margin;
+  }
+
+  .column-header__navigation {
+    display: none;
+  }
+}
+
+.column-header__hr {
+  background: $color-dark-gray;
+  height: 4px;
+  border: none;
+}
+
+.column-header__title-wrapper {
+  display: flex;
+}
+
+.column-header__overview-button {
+  background: none;
+  border: none;
+  outline: none;
+
+  margin: 0;
+  padding: 0;
+}
+
+.column-header__overview-icon svg * {
+  fill: $color-dark;
+  transition: fill .2s ease-in-out;
+}
+
+.column-header__overview-button:focus .column-header__overview-icon svg *,
+.column-header__overview-button:hover .column-header__overview-icon svg * {
+  fill: $color-dark-mint;
+}
+
