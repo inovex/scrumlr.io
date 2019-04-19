@@ -3,15 +3,12 @@
 .portal {
   position: fixed;
 
-  display: flex;
-  justify-content: center;
-
   top: -100px;
-  bottom: -100px;
   left: -100px;
   right: -100px;
+  bottom: -100px;
 
-  overflow: hidden;
+  overflow: auto;
   background: rgba(0, 1, 15, 0.89);
 
   backdrop-filter: blur(2px);
@@ -63,12 +60,15 @@
 }
 
 .portal__content {
-  position: fixed;
+  position: absolute;
 
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  top: 100px;
+  left: 100px;
+  right: 100px;
+  bottom: 100px;
+
+  box-sizing: border-box;
+  min-height: 100vh;
 
   padding: 72px $default-margin;
 

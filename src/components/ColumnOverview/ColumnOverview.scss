@@ -1,27 +1,7 @@
 @import '../../constants/style';
 
 .column-overview {
-  position: fixed;
-
-  top: 0;
-  left: 0;
-  right: 0;
-
-  box-sizing: border-box;
-  height: 100%;
-  overflow: auto;
-
-  z-index: 1000000;
-}
-
-.column-overview__decorator {
-  box-sizing: border-box;
-  min-height: 100vh;
-
-  background: $color-light-gray;
-  box-shadow: 0 0 0 16px $color-mint inset, 0 0 0 128px $color-mint;
-
-  padding: 64px;
+  justify-content: flex-start;
 }
 
 .column-overview__header {
@@ -30,16 +10,10 @@
   align-items: center;
 }
 
+.column-overview__header .column-name {
+  color: $color-white;
+}
+
 .column-overview__stack {
   margin-top: 32px;
-}
-
-.column-overview__close-button {
-  background: none;
-  border: none;
-  outline: none;
-}
-
-.column-overview__close-button-icon svg * {
-  fill: $color-dark;
 }
