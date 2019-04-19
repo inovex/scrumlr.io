@@ -29,6 +29,6 @@
   font-weight: bold;
 
   color: $color-dark;
-  background: $color-stone-gray;
+  background: lighten($color-stone-gray, 20%);
   border-radius: 16px;
 }
