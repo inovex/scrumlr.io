@@ -2,7 +2,7 @@
 
 exports[`<StartButton /> should match expected structure 1`] = `
 "<div className=\\"start-button\\">
-  <button className=\\"start-button__start\\" onClick={[Function: onClick]}>
+  <button aria-label=\\"Start session\\" className=\\"start-button__start\\" onClick={[Function: onClick]}>
     <h1 className=\\"start-button__start-label\\">
       Start
     </h1>
@@ -12,27 +12,27 @@ exports[`<StartButton /> should match expected structure 1`] = `
   </button>
   <DropdownMenu isOpen={false} close={[Function]} toggle={{...}} align=\\"right\\" closeOnInsideClick={true} className=\\"start-button__dropdown-wrapper\\" inverse={false} animAlign={{...}} textAlign={{...}} menuAlign={{...}} size={{...}} upwards={false} animate={true} enterTimeout={150} leaveTimeout={150} closeOnOutsideClick={true}>
     <li>
-      <button onClick={[Function]}>
+      <button onClick={[Function]} aria-label=\\"Mode: Lean Coffee\\">
         Lean Coffee
       </button>
     </li>
     <li>
-      <button onClick={[Function]}>
+      <button onClick={[Function]} aria-label=\\"Mode: Simple Retro (Delta+)\\">
         Simple Retro (Delta+)
       </button>
     </li>
     <li>
-      <button onClick={[Function]}>
+      <button onClick={[Function]} aria-label=\\"Mode: Start, Stop, Continue\\">
         Start, Stop, Continue
       </button>
     </li>
     <li>
-      <button onClick={[Function]}>
+      <button onClick={[Function]} aria-label=\\"Mode: Mad, Sad, Glad\\">
         Mad, Sad, Glad
       </button>
     </li>
     <li>
-      <button onClick={[Function]}>
+      <button onClick={[Function]} aria-label=\\"Mode: KALM (Keep, Add, Less, More)\\">
         KALM (Keep, Add, Less, More)
       </button>
     </li>
