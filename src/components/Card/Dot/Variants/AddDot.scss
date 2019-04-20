@@ -1,6 +1,6 @@
 @import '../../../../constants/style';
 
-.dot__add {
+.add-dot {
   margin: 0 0 0 .25em;
   padding: 0;
   cursor: pointer;
@@ -8,24 +8,37 @@
   background: none;
   border: none;
   outline: none;
+
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+
+  @include animate(box-shadow);
 }
 
-.dot__add:focus svg g,
-.dot__add:hover svg g {
+.add-dot:focus,
+.add-dot:hover {
+  box-shadow: 0 0 0 4px $color-gray;
+}
+
+.add-dot__plus-circle .add-dot__plus-circle-icon-circle {
   @include animate(fill);
+
+  fill: $color-gray;
+  stroke: $color-gray;
 }
 
-.dot__add:focus svg g,
-.dot__add:hover svg g {
-  fill: $theme-color-primary;
+.add-dot:focus .add-dot__plus-circle-icon-circle,
+.add-dot:hover .add-dot__plus-circle-icon-circle {
+  fill: $color-mint;
 }
 
-.dot__add .dot:focus,
-.dot__add .dot:hover {
-  @include animate(font-size, 0.2s);
+.add-dot__plus-circle .add-dot__plus-circle-icon-plus-line {
+  @include animate(stroke-width);
 }
 
-.dot__add .dot:focus,
-.dot__add .dot:hover {
-  font-size: 1.5em;
+.add-dot:focus .add-dot__plus-circle-icon-plus-line,
+.add-dot:hover .add-dot__plus-circle-icon-plus-line {
+  stroke-width: 2.5;
 }

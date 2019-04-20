@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './AddDot.scss';
-import Icon from '../../../Icon';
+import PlusCircle from '../../../Icon/PlusCircle';
 
 export interface AddDotProps {
   onClick: () => void;
@@ -9,8 +9,12 @@ export interface AddDotProps {
 export class AddDot extends React.Component<AddDotProps, any> {
   render() {
     return (
-      <button onClick={this.props.onClick} className="dot__add">
-        <Icon name="circle-add" />
+      <button onClick={this.props.onClick} className="add-dot">
+        <PlusCircle
+          svgClassName="add-dot__plus-circle"
+          circleClassName="add-dot__plus-circle-icon-circle"
+          plusLineClassName="add-dot__plus-circle-icon-plus-line"
+        />
       </button>
     );
   }

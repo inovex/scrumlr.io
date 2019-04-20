@@ -1,0 +1,18 @@
+@import '../../../constants/style';
+
+.plus-circle {
+  width: 32px;
+  height: 32px;
+}
+
+.plus-circle__circle {
+  fill: transparent;
+  stroke: $color-dark;
+  stroke-width: 2;
+}
+
+.plus-circle__plus-line {
+  fill: transparent;
+  stroke: $color-dark;
+  stroke-width: 2;
+}
