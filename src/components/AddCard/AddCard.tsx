@@ -5,12 +5,12 @@ import './AddCard.scss';
 import { BoardProp } from '../../types';
 import { mapStateToProps } from './AddCard.container';
 import { Column, ColumnType, getTheme } from '../../constants/Retrospective';
-import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { CRYPTO } from '../../util/global';
+import PlusCircle from '../Icon/PlusCircle';
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
@@ -94,9 +94,15 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
           type="button"
           className="add-card__button"
           onClick={() => this.handleAdd()}
+          aria-label={`Submit ${column.name} card`}
           disabled={disabled || text.length === 0}
         >
-          <Icon name="plus" width={null} height={null} aria-hidden="true" />
+          <PlusCircle
+            svgClassName="add-card__plus-circle"
+            circleClassName="add-card__plus-circle-icon-circle"
+            plusLineClassName="add-card__plus-circle-icon-plus-line"
+          />
+          >
         </button>
       </div>
     );

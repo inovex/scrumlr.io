@@ -16,25 +16,14 @@
 
     font-weight: bold;
 
-    border: 2px solid currentColor;
+    border: none;
     color: currentColor;
     border-radius: 50%;
     outline: none;
     background: none;
 
-    transition: background 0.15s ease-in-out;
-
     margin: 0;
     padding: 0;
-}
-
-.add-card__button * {
-    fill: currentColor !important;
-    transition: fill 0.25s ease-in-out;
-}
-
-.add-card__button svg {
-    height: 16px;
 }
 
 .add-card__button > span {
@@ -44,41 +33,45 @@
     line-height: 32px;
 }
 
-.add-card__button:hover,
-.add-card__button:focus,
-.add-card__button:active {
-    background: currentColor;
+.add-card__plus-circle .add-card__plus-circle-icon-circle,
+.add-card__plus-circle .add-card__plus-circle-icon-plus-line {
+    stroke: currentColor;
+    @include animate(stroke);
+    @include animate(fill);
 }
 
-.add-card.add-card--theme-light > .add-card__button:hover *,
-.add-card.add-card--theme-light > .add-card__button:focus *,
-.add-card.add-card--theme-light > .add-card__button:active * {
-    color: $color-white;
+
+.add-card.add-card--theme-light .add-card__button:hover .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-light .add-card__button:focus .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-light .add-card__button:active .add-card__plus-circle-icon-circle {
+    fill: $color-dark-gray;
+    stroke: $color-dark-gray;
 }
 
-.add-card.add-card--theme-dark > .add-card__button:hover *,
-.add-card.add-card--theme-dark > .add-card__button:focus *,
-.add-card.add-card--theme-dark > .add-card__button:active * {
-    color: $color-dark-gray;
+.add-card.add-card--theme-light .add-card__button:hover .add-card__plus-circle-icon-plus-line,
+.add-card.add-card--theme-light .add-card__button:focus .add-card__plus-circle-icon-plus-line,
+.add-card.add-card--theme-light .add-card__button:active .add-card__plus-circle-icon-plus-line {
+    stroke: $color-white;
 }
 
-.add-card.add-card--theme-mint > .add-card__button:hover *,
-.add-card.add-card--theme-mint > .add-card__button:focus *,
-.add-card.add-card--theme-mint > .add-card__button:active * {
-    color: $color-mint;
+.add-card.add-card--theme-dark .add-card__button:hover .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-dark .add-card__button:focus .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-dark .add-card__button:active .add-card__plus-circle-icon-circle {
+    fill: $color-white;
+    stroke: $color-white;
 }
 
-.add-card.add-card--theme-light {
-    color: $color-dark-gray;
-    background: $color-white;
+.add-card.add-card--theme-dark .add-card__button:hover .add-card__plus-circle-icon-plus-line,
+.add-card.add-card--theme-dark .add-card__button:focus .add-card__plus-circle-icon-plus-line,
+.add-card.add-card--theme-dark .add-card__button:active .add-card__plus-circle-icon-plus-line {
+    stroke: $color-dark-gray;
 }
 
-.add-card.add-card--theme-dark {
-    color: $color-white;
-    background: $color-dark-gray;
+.add-card.add-card--theme-mint .add-card__button:hover .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-mint .add-card__button:focus .add-card__plus-circle-icon-circle,
+.add-card.add-card--theme-mint .add-card__button:active .add-card__plus-circle-icon-circle {
+    fill: $color-dark-gray;
+    stroke: $color-white;
 }
 
-.add-card.add-card--theme-mint {
-    color: $color-white;
-    background: $color-mint;
-}
+
