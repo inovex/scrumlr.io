@@ -102,7 +102,6 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
             circleClassName="add-card__plus-circle-icon-circle"
             plusLineClassName="add-card__plus-circle-icon-plus-line"
           />
-          >
         </button>
       </div>
     );
