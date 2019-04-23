@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames = require('classnames');
 import './PlusCircle.scss';
+import Circle from '../Circle';
 
 export interface PlusCircleProps {
   svgClassName?: string;
@@ -13,13 +14,7 @@ export const PlusCircle: React.FunctionComponent<PlusCircleProps> = ({
   circleClassName,
   plusLineClassName
 }) => (
-  <svg viewBox="0 0 32 32" className={classNames('plus-circle', svgClassName)}>
-    <circle
-      className={classNames('plus-circle__circle', circleClassName)}
-      cx="16"
-      cy="16"
-      r="15"
-    />
+  <Circle svgClassName={svgClassName} circleClassName={circleClassName}>
     <line
       className={classNames('plus-circle__plus-line', plusLineClassName)}
       x1="9"
@@ -34,7 +29,7 @@ export const PlusCircle: React.FunctionComponent<PlusCircleProps> = ({
       y1="9"
       y2="23"
     />
-  </svg>
+  </Circle>
 );
 
 export default PlusCircle;

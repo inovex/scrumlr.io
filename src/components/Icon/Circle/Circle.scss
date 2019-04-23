@@ -1,6 +1,11 @@
 @import '../../../constants/style';
 
-.plus-circle__plus-line {
+.circle {
+  width: 32px;
+  height: 32px;
+}
+
+.circle__circle {
   fill: transparent;
   stroke: $color-dark;
   stroke-width: 2;

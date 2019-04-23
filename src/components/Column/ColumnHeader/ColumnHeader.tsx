@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import './ColumnHeader.scss';
 import ColumnName from '../ColumnName';
-import Icon from '../../Icon';
+import OverviewCircle from '../../Icon/OverviewCircle';
 
 export interface ColumnHeaderProps {
   title: string;
@@ -31,11 +31,10 @@ const ColumnHeader: React.FunctionComponent<ColumnHeaderProps> = ({
             className="column-header__overview-button"
             onClick={() => onToggleOverview()}
           >
-            <Icon
-              name="overview"
-              className="column-header__overview-icon"
-              width={36}
-              height={36}
+            <OverviewCircle
+              svgClassName="column-header__overview-icon"
+              circleClassName="column-header__overview-icon-circle"
+              squareClassName="column-header__overview-icon-square"
             />
           </button>
         )}
