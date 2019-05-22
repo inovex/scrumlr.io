@@ -7,6 +7,7 @@
   bottom: 92px;
 
   display: flex;
+  z-index: $base-z-index + $base-z-index-step * 3;
 }
 
 .timer__box {

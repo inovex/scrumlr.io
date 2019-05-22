@@ -38,7 +38,7 @@ export class Timer extends React.Component<TimerProps, TimerState> {
       const timeRemaining = this.getTimeRemaining(this.props.timerExpiration);
       const remainingSeconds =
         timeRemaining.minutes * 60 + timeRemaining.seconds;
-      if (timeRemaining.minutes >= -1 && timeRemaining.seconds > -10) {
+      if (timeRemaining.minutes >= -1 && timeRemaining.seconds > -30) {
         this.setState(
           {
             countdownSeconds: remainingSeconds,
