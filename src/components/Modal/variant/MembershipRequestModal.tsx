@@ -31,7 +31,7 @@ const MembershipRequestModal: React.SFC<MembershipRequestModalProps> = ({
         )}
         <p className="membership-request-modal__prompt">
           <strong>{member.name}</strong> requests access to this session. Do you
-          want to grant him the permission to access this board?
+          want to grant the permission to access this board?
         </p>
       </div>
 
