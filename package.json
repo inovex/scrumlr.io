@@ -18,7 +18,7 @@
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
     "firebase": "^5.2.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.15",
     "prop-types": "^15.6.1",
     "raven-js": "^3.17.0",
     "react": "^16.4.1",

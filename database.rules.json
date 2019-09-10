@@ -42,6 +42,9 @@
           },
           "users": {
             "$uid": {
+              "name": {
+                ".validate": "newData.val().matches(/^[^\\s]+.*$/)"
+              },
               ".write": "$uid === auth.uid && (root.child('boards/'+$boardId+'/public/config/secure').val() === false || root.child('boards/'+$boardId+'/public/accessAuthorized').hasChild(auth.uid))"
             }
           },

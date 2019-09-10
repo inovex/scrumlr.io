@@ -25,6 +25,7 @@ export interface LoginBoardProps extends RouteComponentProps<{}> {
 
 export interface LoginBoardState {
   email: string;
+  error: boolean;
 }
 
 export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
@@ -34,16 +35,18 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
     super(props);
 
     this.defaultName = getRandomName();
-    this.state = { email: this.defaultName };
+    this.state = { email: this.defaultName, error: false };
   }
 
   handleChangeEmail = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const email = (e.target as HTMLInputElement).value;
-    this.setState(state => ({ ...state, email }));
+    this.setState(state => ({ ...state, email, error: /^\s/.test(email) }));
   };
 
   handleClickLogin = () => {
-    this.props.onLogin(this.state.email);
+    if (!this.state.error) {
+      this.props.onLogin(this.state.email);
+    }
   };
 
   render() {
@@ -76,6 +79,11 @@ export class LoginBoard extends Component<LoginBoardProps, LoginBoardState> {
                 placeholder={this.defaultName}
                 focusTheme="mint"
                 description="Choose a name by which you will be recognized"
+                error={
+                  this.state.error
+                    ? 'Your name may not start with a whitespace'
+                    : undefined
+                }
                 className="new-board__input"
                 onChange={this.handleChangeEmail}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {

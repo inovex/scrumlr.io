@@ -217,7 +217,8 @@ describe('<NewBoard />', () => {
         .simulate('change', { target: { value: 'abc' } });
       expect(shallowWrapper.instance().state).toEqual({
         email: 'abc',
-        secure: false
+        secure: false,
+        error: false
       });
     });
   });

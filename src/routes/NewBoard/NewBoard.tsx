@@ -33,6 +33,7 @@ export type NewBoardProps = OwnNewBoardProps & StateNewBoardProps;
 export interface NewBoardState {
   email: string;
   secure: boolean;
+  error: boolean;
 }
 
 export class NewBoard extends Component<NewBoardProps, NewBoardState> {
@@ -42,16 +43,18 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     super(props);
 
     this.defaultName = getRandomName();
-    this.state = { email: this.defaultName, secure: false };
+    this.state = { email: this.defaultName, secure: false, error: false };
   }
 
   handleChangeEmail = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const email = (e.target as HTMLInputElement).value;
-    this.setState(state => ({ ...state, email }));
+    this.setState(state => ({ ...state, email, error: /^\s/.test(email) }));
   };
 
   handleClickLogin = (mode: RetroMode) => {
-    return this.props.onLogin(this.state.email, mode, this.state.secure);
+    if (!this.state.error) {
+      this.props.onLogin(this.state.email, mode, this.state.secure);
+    }
   };
 
   handleChangeMode = (mode: AccessMode) => {
@@ -83,6 +86,11 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 placeholder={this.defaultName}
                 focusTheme="mint"
                 description="Choose a name by which you will be recognized"
+                error={
+                  this.state.error
+                    ? 'Your name may not start with a whitespace'
+                    : undefined
+                }
                 className="new-board__input"
                 onChange={this.handleChangeEmail}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -10,6 +10,7 @@ export interface InputProps {
   id?: string;
   label?: string;
   description?: string;
+  error?: string;
 
   [key: string]: any;
 }
@@ -24,6 +25,7 @@ export class Input extends React.Component<InputProps, {}> {
     const {
       label,
       description,
+      error,
       className,
       showUnderline,
       invertPlaceholder,
@@ -36,6 +38,7 @@ export class Input extends React.Component<InputProps, {}> {
       <div
         className={cx('input__wrapper', className, {
           'input--underlined': showUnderline,
+          'input--error': error,
           [`input__focus-theme-${focusTheme}`]: Boolean(focusTheme)
         })}
       >
@@ -52,8 +55,14 @@ export class Input extends React.Component<InputProps, {}> {
           })}
         />
         <span className={cx('input__underline')} />
-        {description && (
+
+        {description && !error && (
           <span className="input__description">{description}</span>
+        )}
+        {error && (
+          <span className="input__description input__description--error">
+            {error}
+          </span>
         )}
       </div>
     );
