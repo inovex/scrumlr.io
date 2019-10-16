@@ -8,6 +8,10 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+button {
+  margin: 0;
+}
+
 // fix for contentEditable blocks on safari
 [contenteditable] {
   -webkit-user-select: text;
