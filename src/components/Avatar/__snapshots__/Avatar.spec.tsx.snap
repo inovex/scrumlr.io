@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Avatar /> should initialize and match snapshot with image 1`] = `"<img class=\\"avatar\\" src=\\"foo.jpg\\" alt=\\"Hello\\" title=\\"Hello\\"/>"`;
+
+exports[`<Avatar /> should initialize and match snapshot with only username 1`] = `"<div class=\\"avatar avatar--light-blue\\">H</div>"`;
