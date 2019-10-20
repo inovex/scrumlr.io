@@ -44,6 +44,9 @@ export const Avatar: React.FunctionComponent<AvatarProps> = ({
         .split('')
         .map(char => char.charCodeAt(0))
         .reduce((a, b) => a + b, 0) % BACKGROUND_COLORS.length;
+    // string iterator correctly handles emojis but will break with grapheme clusters but still look ok-ish
+    // see https://stackoverflow.com/questions/46157867/how-to-get-the-nth-unicode-character-from-a-string-in-javascript
+    const capitalLetter = ([...user.name][0] || '').toUpperCase();
     return (
       <div
         className={cx(
@@ -53,7 +56,7 @@ export const Avatar: React.FunctionComponent<AvatarProps> = ({
           { 'avatar--faded': faded }
         )}
       >
-        {user.name.charAt(0).toUpperCase()}
+        {capitalLetter}
       </div>
     );
   }
