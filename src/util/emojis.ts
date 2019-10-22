@@ -6,8 +6,7 @@ export const getCapitalLetter = (text?: string | null | undefined) => {
 };
 
 export const getResidualUsername = (username?: string | null | undefined) => {
-  // simple check for unicode special chars like emojis
-  //
+  // simple check for unicode special chars like emojis, not perfect but sufficient for our usecase
   if (getCapitalLetter(username).length > 1) {
     return [...username].slice(1).join('');
   }
