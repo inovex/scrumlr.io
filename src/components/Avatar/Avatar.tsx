@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import './Avatar.scss';
 import * as cx from 'classnames';
+import { getCapitalLetter } from '../../util/emojis';
 
 const BACKGROUND_COLORS = [
   'red',
@@ -46,7 +47,7 @@ export const Avatar: React.FunctionComponent<AvatarProps> = ({
         .reduce((a, b) => a + b, 0) % BACKGROUND_COLORS.length;
     // string iterator correctly handles emojis but will break with grapheme clusters but still look ok-ish
     // see https://stackoverflow.com/questions/46157867/how-to-get-the-nth-unicode-character-from-a-string-in-javascript
-    const capitalLetter = ([...user.name][0] || '').toUpperCase();
+    const capitalLetter = getCapitalLetter(user.name);
     return (
       <div
         className={cx(

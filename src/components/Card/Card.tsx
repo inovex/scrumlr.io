@@ -11,6 +11,7 @@ import { throttle } from 'lodash';
 import { connect } from 'react-redux';
 import Avatar from '../Avatar';
 import Icon from '../Icon';
+import { getResidualUsername } from '../../util/emojis';
 
 export interface OwnCardProps extends BoardProp {
   card: TCard;
@@ -270,7 +271,9 @@ export class Card extends Component<CardProps, CardState> {
                       }}
                       className="card__avatar"
                     />
-                    <span className="card__author">{author.name}</span>
+                    <span className="card__author">
+                      {getResidualUsername(author.name)}
+                    </span>
                   </>
                 )}
               </Footer>
