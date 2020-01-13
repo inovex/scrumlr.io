@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import {observable, action } from 'mobx';
 import { RootStore } from './index';
 import { User } from 'firebase';
 
@@ -12,7 +12,7 @@ class SessionStore {
         this.rootStore = rootStore;
     }
 
-    @action setAuthUser = (authUser: User): void => {
+    @action setAuthUser = (authUser: User | null): void => {
         this.authUser = authUser;
     }
 }
