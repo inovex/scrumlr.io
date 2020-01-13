@@ -6,6 +6,7 @@ import {
     Link
 } from "react-router-dom";
 import App from "../App";
+import MobxTest from "../MobxTest";
 
 export default function Router() {
     return (
@@ -27,7 +28,7 @@ export default function Router() {
                         <App />
                     </Route>
                     <Route path="/">
-                        <p>Home</p>
+                        <MobxTest />
                     </Route>
                 </Switch>
             </div>
