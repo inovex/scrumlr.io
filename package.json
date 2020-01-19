@@ -1,7 +1,17 @@
 {
-  "name": "scrumlrv2",
-  "version": "0.1.0",
+  "name": "scrumlr",
+  "description": "Webapp for collaborative online retrospectives",
+  "homepage": "https://scrumlr.io",
+  "version": "2.0.0-alpha",
+  "license": "MIT",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/masinio/scrumlr.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/masinio/scrumlr.io/issues"
+  },
   "dependencies": {
     "firebase": "^7.6.2",
     "firestorter": "^2.0.1",
