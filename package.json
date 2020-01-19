@@ -47,7 +47,7 @@
   "devDependencies": {
     "@types/base-x": "^1.0.29",
     "@types/blueimp-md5": "^2.7.0",
-    "@types/classnames": "^2.2.0",
+    "@types/classnames": "^2.2.9",
     "@types/enzyme": "^3.1.9",
     "@types/jest": "^23.1.4",
     "@types/lodash": "^4.14.74",
