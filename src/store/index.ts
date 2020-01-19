@@ -1,5 +1,5 @@
-import * as firebase from "firebase";
-import {initFirestorter} from "firestorter";
+import * as firebase from 'firebase';
+import { initFirestorter } from 'firestorter';
 import SessionStore from './sessionStore';
 import DataStore from './dataStore';
 

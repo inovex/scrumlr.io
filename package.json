@@ -15,12 +15,20 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
-    "@types/react-router-dom": "^5.1.3",
     "@types/jest": "^24.0.25",
     "@types/node": "^12.12.24",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
+    "@types/react-router-dom": "^5.1.3",
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-react": "^7.18.0",
+    "husky": "^4.0.10",
     "node-sass": "^4.13.0",
+    "precise-commits": "^1.0.2",
+    "prettier": "^1.19.1",
     "react-scripts": "3.3.0",
     "typescript": "^3.7.4"
   },
@@ -28,10 +36,18 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint --ext .tsx,.ts src/"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "precise-commits"
+    }
   },
   "browserslist": {
     "production": [
