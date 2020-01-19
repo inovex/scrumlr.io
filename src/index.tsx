@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import * as serviceWorker from './serviceWorker';
-import Router from './routing/Router';
-import Session from './auth';
-import store from './store';
+import Router from './pages/routing/Router';
+import Session from './domain/auth/components/Session';
+import store from './domain/rootStore';
 import { Provider } from 'mobx-react';
 
 ReactDOM.render(

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import App from '../App';
-import MobxTest from '../components/MobxTest';
+import TestComponent from '../../view/TestComponent';
 
 export default function Router() {
     return (
@@ -22,7 +22,7 @@ export default function Router() {
                     <Route path="/app">
                         <App />
                     </Route>
-                    <Route path="/" component={() => <MobxTest />} />
+                    <Route path="/" component={() => <TestComponent />} />
                 </Switch>
             </div>
         </BrowserRouter>

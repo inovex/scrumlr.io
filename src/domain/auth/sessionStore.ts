@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { RootStore } from './index';
+import { RootStore } from '../rootStore';
 import { User } from 'firebase';
 
 class SessionStore {

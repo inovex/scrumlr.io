@@ -1,11 +1,11 @@
-import * as React from 'react';
-import * as firebase from 'firebase';
-import useStores from '../store/useStores';
+import React from 'react';
+import useStores from '../../useStores';
+import { auth } from '../../firebase';
 
 const Session: React.FC = ({ children }) => {
     const { sessionStore } = useStores();
     React.useEffect(() => {
-        firebase.auth().onAuthStateChanged((authUser) => {
+        auth.onAuthStateChanged((authUser) => {
             authUser ? sessionStore.setAuthUser(authUser) : sessionStore.setAuthUser(null);
         });
     }, [sessionStore]);

@@ -3,7 +3,7 @@
         "browser": true,
         "es6": true
     },
-    "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/eslint-recommended", "prettier"],
+    "extends": [ "plugin:@typescript-eslint/eslint-recommended", "plugin:react/recommended", "prettier" ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
@@ -19,6 +19,7 @@
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
         "semi": ["error", "always"],
-        "quotes": ["error", "single"]
+        "quotes": ["error", "single"],
+        "react/prop-types": [ 0 ]
     }
 }

@@ -1,14 +1,7 @@
-import * as firebase from 'firebase';
 import { initFirestorter } from 'firestorter';
-import SessionStore from './sessionStore';
-import DataStore from './dataStore';
-
-firebase.initializeApp({
-    apiKey: 'AIzaSyAJj_W-oo-G9k4EU4SImBICuQlMWjRwxOA',
-    authDomain: 'playground-73a29.firebaseapp.com',
-    databaseURL: 'https://playground-73a29.firebaseio.com',
-    projectId: 'playground-73a29'
-});
+import SessionStore from './auth/sessionStore';
+import DataStore from './board/dataStore';
+import { firebase } from './firebase';
 
 initFirestorter({ firebase });
 

@@ -1,5 +1,5 @@
-import { RootStore } from './index';
 import { Collection, Document } from 'firestorter';
+import { RootStore } from '../rootStore';
 
 class DataStore {
     public rootStore: RootStore;
