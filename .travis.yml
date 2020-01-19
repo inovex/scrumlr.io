@@ -10,8 +10,8 @@ install:
 
 script:
     - npm run lint
-    - npm run test --coverage
-    - npm run build
+    - npm run test --collect-coverage
+    #- npm run build
 
 after_success:
     - codecov
