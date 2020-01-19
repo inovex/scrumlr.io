@@ -2,6 +2,7 @@
 [![Build status](https://img.shields.io/travis/masinio/scrumlr.io/v2)](https://codecov.io/gh/masinio/scrumlr.io)
 [![Code coverage](https://img.shields.io/codecov/c/github/masinio/scrumlr.io/v2)](https://codecov.io/gh/masinio/scrumlr.io)
 [![Depdendency status](https://img.shields.io/depfu/masinio/scrumlr.io)](https://depfu.com/github/masinio/scrumlr.io?project_id=10585)
+![License](https://img.shields.io/github/license/masinio/scrumlr.io)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
