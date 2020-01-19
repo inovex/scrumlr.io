@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/masinio/scrumlr.io.svg?branch=v2)](https://travis-ci.org/masinio/scrumlr.io)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
