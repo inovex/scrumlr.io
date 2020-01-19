@@ -1,6 +1,6 @@
-Build status: [![Build Status](https://travis-ci.org/masinio/scrumlr.io.svg?branch=v2)](https://travis-ci.org/masinio/scrumlr.io)
-Code coverage: [![codecov](https://codecov.io/gh/masinio/scrumlr.io/branch/v2/graph/badge.svg)](https://codecov.io/gh/masinio/scrumlr.io)
-Dependency status: [![Depfu](https://badges.depfu.com/badges/8ecd7c6dfbe0097b4f16a1ecae3b5987/overview.svg)](https://depfu.com/github/masinio/scrumlr.io?project_id=10585)
+[![Build status](https://img.shields.io/travis/masinio/scrumlr.io/v2)](https://codecov.io/gh/masinio/scrumlr.io)
+[![Code coverage](https://img.shields.io/codecov/c/github/masinio/scrumlr.io/v2)](https://codecov.io/gh/masinio/scrumlr.io)
+[![Depdendency status](https://img.shields.io/depfu/masinio/scrumlr.io)](https://depfu.com/github/masinio/scrumlr.io?project_id=10585)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
