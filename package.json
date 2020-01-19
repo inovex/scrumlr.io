@@ -13,6 +13,7 @@
     "url": "https://github.com/masinio/scrumlr.io/issues"
   },
   "dependencies": {
+    "@sentry/browser": "^5.11.1",
     "firebase": "^7.6.2",
     "firestorter": "^2.0.1",
     "mobx": "^5.15.2",
