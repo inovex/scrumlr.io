@@ -11,6 +11,7 @@ const Login: React.FC = () => {
         setSigningIn(true);
         auth.signInWithRedirect(authProviders[provider])
             .catch((reason) => {
+                // TODO show error toast
                 errorReporter.reportError(reason, 'Login/signInWithProvider');
             })
             .finally(() => {
@@ -22,6 +23,7 @@ const Login: React.FC = () => {
         setSigningIn(true);
         auth.signInAnonymously()
             .catch((reason) => {
+                // TODO show error toast
                 errorReporter.reportError(reason, 'Login/signInAnonymously');
             })
             .finally(() => {
