@@ -4,8 +4,8 @@ export interface LogoutProps {
     signOut: () => void;
 }
 
-const LogoutButton: React.FC<LogoutProps> = ({ signOut }) => {
+const SignOutButton: React.FC<LogoutProps> = ({ signOut }) => {
     return <button onClick={() => signOut()}>Logout</button>;
 };
 
-export default LogoutButton;
+export default SignOutButton;

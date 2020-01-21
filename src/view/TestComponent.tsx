@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import useStores from '../domain/useStores';
-import Login from '../domain/auth/components/Login';
-import Logout from '../domain/auth/components/Logout';
+import SignIn from '../domain/auth/components/SignIn';
+import SignOut from '../domain/auth/components/SignOut';
 
 const TestComponent: React.FC = observer(() => {
     const { dataStore, sessionStore } = useStores();
@@ -18,8 +18,8 @@ const TestComponent: React.FC = observer(() => {
                 ))}
             </ul>
 
-            <Login />
-            <Logout />
+            <SignIn />
+            <SignOut />
         </>
     );
 });

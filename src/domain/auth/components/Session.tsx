@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useStores from '../../useStores';
 import { auth } from '../../firebase';
-import errorReporter from '../../../util/errorTracking';
+import errorReporter from '../../../util/errorReporter';
 
 const Session: React.FC = ({ children }) => {
     const { sessionStore } = useStores();

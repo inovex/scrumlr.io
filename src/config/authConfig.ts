@@ -1,22 +1,20 @@
-const falsy = /^(?:f(?:alse)?|no?|0+)$/i;
-const getBoolean = (val: any) => {
-    return !falsy.test(val) && !!val;
-};
+import defaultTo from 'lodash/defaultTo';
+import toBoolean from '../util/toBoolean';
 
-export const authConfig = {
+export const authConfig = Object.freeze({
     // Anonymous settings
-    enableAnonymousIdentity: process.env.REACT_APP_ENABLE_ANONYMOUS_IDENTITY === undefined || getBoolean(process.env.REACT_APP_ENABLE_ANONYMOUS_IDENTITY),
-    allowAnonymousBoards: process.env.REACT_APP_ALLOW_ANONYMOUS_BOARDS === undefined || getBoolean(process.env.REACT_APP_ALLOW_ANONYMOUS_BOARDS),
+    enableAnonymousIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_ANONYMOUS_IDENTITY, true)),
 
     // Mainstream auth providers
-    enableGoogleIdentity: process.env.REACT_APP_ENABLE_GOOGLE_IDENTITY === undefined || getBoolean(process.env.REACT_APP_ENABLE_GOOGLE_IDENTITY),
-    enableAppleIdentity: process.env.REACT_APP_ENABLE_APPLE_IDENTITY === undefined || getBoolean(process.env.REACT_APP_ENABLE_APPLE_IDENTITY),
-    enableMicrosoftIdentity: process.env.REACT_APP_ENABLE_MICROSOFT_IDENTITY === undefined || getBoolean(process.env.REACT_APP_ENABLE_MICROSOFT_IDENTITY),
-    enableGithubIdentity: process.env.REACT_APP_ENABLE_GITHUB_IDENTITY === undefined || getBoolean(process.env.REACT_APP_ENABLE_GITHUB_IDENTITY),
+    enableGoogleIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_GOOGLE_IDENTITY, true)),
+    enableAppleIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_APPLE_IDENTITY, true)),
+    enableMicrosoftIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_MICROSOFT_IDENTITY, true)),
+    enableGithubIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_GITHUB_IDENTITY, true)),
 
     // SAML SSO provider for organizations and custom setups
-    enableSamlIdentity: process.env.REACT_APP_ENABLE_SAML_IDENTITY === undefined ? false : getBoolean(process.env.REACT_APP_ENABLE_SAML_IDENTITY),
-    samlProviderId: process.env.REACT_APP_SAML_PROVIDER_ID === undefined ? 'saml.sso' : process.env.REACT_APP_SAML_PROVIDER_ID
-};
+    enableSamlIdentity: toBoolean(defaultTo(process.env.REACT_APP_ENABLE_SAML_IDENTITY, false)),
+    samlProviderId: defaultTo(process.env.REACT_APP_SAML_PROVIDER_ID, 'saml.sso'),
+    samlProviderName: process.env.REACT_APP_SAML_PROVIDER_NAME
+});
 
 export default authConfig;

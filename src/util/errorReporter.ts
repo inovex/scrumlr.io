@@ -1,5 +1,5 @@
 import { init, withScope, captureException } from '@sentry/browser';
-import sentryDSN from '../config/errorReporting';
+import errorReportingConfig from '../config/errorReportingConfig';
 
 export interface ErrorReporter {
     reportError: (error: any, id: string) => void;
@@ -7,7 +7,7 @@ export interface ErrorReporter {
 
 class SentryReporter implements ErrorReporter {
     constructor() {
-        init({ dsn: sentryDSN });
+        init({ dsn: errorReportingConfig.sentryDSN });
     }
 
     reportError(error: any, id: string) {
@@ -24,12 +24,11 @@ class ConsoleReporter implements ErrorReporter {
     }
 }
 
-const initErrorReporter = () => {
-    if (sentryDSN!!) {
-        return new SentryReporter();
+class StubRepoter implements ErrorReporter {
+    reportError(error: any, id: string) {
+        // do nothing
     }
-    return new ConsoleReporter();
-};
+}
 
-export default initErrorReporter();
-
+export const errorReporter = errorReportingConfig.sentryDSN!! ? new SentryReporter() : process.env.NODE_ENV === 'development' ? new ConsoleReporter() : new StubRepoter();
+export default errorReporter;
