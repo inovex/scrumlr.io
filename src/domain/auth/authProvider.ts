@@ -9,13 +9,10 @@ export interface AuthProviderMap {
 }
 export type AuthProvider = keyof AuthProviderMap;
 
-const samlProvider = new firebase.auth.SAMLAuthProvider();
-samlProvider.providerId = 'saml.sso';
-
 export const authProviders: AuthProviderMap = {
     apple: new firebase.auth.OAuthProvider('apple.com'),
     google: new firebase.auth.GoogleAuthProvider(),
     microsoft: new firebase.auth.OAuthProvider('microsoft.com'),
     github: new firebase.auth.GithubAuthProvider(),
-    saml: samlProvider
+    saml: new firebase.auth.SAMLAuthProvider('saml.sso')
 };
