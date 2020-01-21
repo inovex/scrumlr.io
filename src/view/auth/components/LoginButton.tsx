@@ -1,12 +1,12 @@
 import React from 'react';
 
 export interface LoginProps {
-    signInAnonymously: () => void;
+    signIn: () => void;
     loading?: boolean;
 }
 
-const LoginButton: React.FC<LoginProps> = ({ signInAnonymously, loading }) => {
-    return <button onClick={() => signInAnonymously()}>Login {loading ? '(... waiting)' : null}</button>;
+const LoginButton: React.FC<LoginProps> = ({ signIn, loading }) => {
+    return <button onClick={() => signIn()}>Login {loading ? '(... waiting)' : null}</button>;
 };
 
 export default LoginButton;
