@@ -4,6 +4,7 @@ import errorReporter from '../../../util/errorReporter';
 import { auth, firebase } from '../../firebase';
 import authConfig from '../../../config/authConfig';
 import toast from '../../../util/toast';
+import './SignIn.scss';
 
 type AuthProvider = 'apple' | 'google' | 'microsoft' | 'github' | 'saml';
 const enabledAuthProviderMap = new Map<AuthProvider, firebase.auth.AuthProvider>();
@@ -78,14 +79,6 @@ const SignIn: React.FC = () => {
 
     return (
         <ul>
-            {authConfig.enableAnonymousIdentity && (
-                <li key="anonymous">
-                    <ProviderLoginButton signIn={signInAnonymously} loading={state.signingInWith === 'anonymous'} {...genericProps}>
-                        Sign in anonymously
-                    </ProviderLoginButton>
-                </li>
-            )}
-
             {authConfig.enableGoogleIdentity && (
                 <li key="google">
                     <ProviderLoginButton signIn={signInWithProvider('google')} loading={state.signingInWith === 'google'} {...genericProps}>
@@ -122,6 +115,26 @@ const SignIn: React.FC = () => {
                 <li key="saml">
                     <ProviderLoginButton signIn={signInWithProvider('saml')} loading={state.signingInWith === 'saml'} disabled={state.signingInWith !== undefined}>
                         Sign in with {authConfig.samlProviderName}
+                    </ProviderLoginButton>
+                </li>
+            )}
+
+            {authConfig.enableAnonymousIdentity && (
+                <li key="anonymous">
+                    <span>or</span>
+                    <label htmlFor="displayName" className="SignIn__anonymous-login__label">
+                        Sign in with just a name
+                    </label>
+                    <input
+                        id="displayName"
+                        value={state.displayName}
+                        onChange={(e) => {
+                            setState({ ...state, displayName: e.target.value });
+                        }}
+                    />
+
+                    <ProviderLoginButton signIn={signInAnonymously} loading={state.signingInWith === 'anonymous'} {...genericProps}>
+                        Sign in anonymously
                     </ProviderLoginButton>
                 </li>
             )}
