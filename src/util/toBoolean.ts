@@ -1,11 +1,11 @@
 import isBoolean from 'lodash/isBoolean';
 
-const falsy = /^(?:f(?:alse)?|no?|0+)$/i;
+const truthy = /^\s*(true|yes|1|on)\s*$/i;
 export const toBoolean = (val: any) => {
     if (isBoolean(val)) {
         return val;
     }
-    return !falsy.test(val) && !!val;
+    return truthy.test(val) && !!val;
 };
 
 export default toBoolean;
