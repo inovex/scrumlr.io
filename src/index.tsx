@@ -6,12 +6,15 @@ import Router from './pages/routing/Router';
 import Session from './domain/auth/components/Session';
 import store from './domain/rootStore';
 import { Provider } from 'mobx-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
     <Provider {...store}>
         <Session>
             <Router />
         </Session>
+        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
     </Provider>,
     document.getElementById('root')
 );

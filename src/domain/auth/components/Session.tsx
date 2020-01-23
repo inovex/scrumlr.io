@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useStores from '../../useStores';
 import { auth } from '../../firebase';
 import errorReporter from '../../../util/errorReporter';
+import toast from '../../../util/toast';
 
 const Session: React.FC = ({ children }) => {
     const { sessionStore } = useStores();
@@ -10,6 +11,7 @@ const Session: React.FC = ({ children }) => {
     React.useEffect(() => {
         auth.getRedirectResult()
             .catch((reason) => {
+                toast.error('An error occurred during the sign in with this provider.');
                 errorReporter.reportError(reason, 'Session/getRedirectResult');
             })
             .finally(() => {

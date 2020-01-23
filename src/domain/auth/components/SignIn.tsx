@@ -3,6 +3,7 @@ import ProviderLoginButton from '../../../view/auth/components/ProviderLoginButt
 import errorReporter from '../../../util/errorReporter';
 import { auth, firebase } from '../../firebase';
 import authConfig from '../../../config/authConfig';
+import toast from '../../../util/toast';
 
 type AuthProvider = 'apple' | 'google' | 'microsoft' | 'github' | 'saml';
 const enabledAuthProviderMap = new Map<AuthProvider, firebase.auth.AuthProvider>();
@@ -39,7 +40,6 @@ const SignIn: React.FC = () => {
         if (enabledAuthProviderMap.has(provider)) {
             auth.signInWithRedirect(enabledAuthProviderMap.get(provider)!)
                 .catch((reason) => {
-                    // TODO show error toast
                     errorReporter.reportError(reason, 'SignIn/signInWithProvider');
                 })
                 .finally(() => {
@@ -64,7 +64,7 @@ const SignIn: React.FC = () => {
                     });
             })
             .catch((reason) => {
-                // TODO show error toast
+                toast.error('Unable to sign in. Please check your network connection.');
                 errorReporter.reportError(reason, 'SignIn/signInAnonymously');
             })
             .finally(() => {
