@@ -5,7 +5,7 @@ const config = {
     apiKey: 'AIzaSyAJj_W-oo-G9k4EU4SImBICuQlMWjRwxOA',
     authDomain: `${projectId}.firebaseapp.com`,
     databaseURL: `https://${projectId}.firebaseio.com`,
-    projectId: `${projectId}`,
+    projectId: `${projectId}`
 };
 
 if (!firebase.apps.length) {
