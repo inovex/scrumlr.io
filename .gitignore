@@ -25,3 +25,6 @@ yarn-error.log*
 # IntelliJ
 .idea/
 *.iml
+
+# firebase
+/.firebase

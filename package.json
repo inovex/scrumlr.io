@@ -54,7 +54,9 @@
     "eject": "react-scripts eject",
     "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "lint": "eslint --ext .tsx,.ts src/"
+    "lint": "eslint --ext .tsx,.ts src/",
+    "firebase:serve": "firebase serve --only hosting --project playground-73a29",
+    "firebase:deploy": "firebase deploy --project playground-73a29"
   },
   "eslintConfig": {
     "extends": "react-app"

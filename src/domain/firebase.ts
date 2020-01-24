@@ -1,10 +1,11 @@
 import firebase from 'firebase';
 
+const projectId = 'playground-73a29';
 const config = {
     apiKey: 'AIzaSyAJj_W-oo-G9k4EU4SImBICuQlMWjRwxOA',
-    authDomain: 'playground-73a29.firebaseapp.com',
-    databaseURL: 'https://playground-73a29.firebaseio.com',
-    projectId: 'playground-73a29'
+    authDomain: `${projectId}.firebaseapp.com`,
+    databaseURL: `https://${projectId}.firebaseio.com`,
+    projectId: `${projectId}`,
 };
 
 if (!firebase.apps.length) {
