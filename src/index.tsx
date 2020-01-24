@@ -8,14 +8,18 @@ import store from './domain/rootStore';
 import { Provider } from 'mobx-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserConsent from './domain/privacy/components/UserConsent';
 
 ReactDOM.render(
-    <Provider {...store}>
-        <Session>
-            <Router />
-        </Session>
-        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
-    </Provider>,
+    <>
+        <Provider {...store}>
+            <Session>
+                <Router />
+            </Session>
+            <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+        </Provider>
+        <UserConsent />
+    </>,
     document.getElementById('root')
 );
 

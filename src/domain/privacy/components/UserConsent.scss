@@ -1,0 +1,26 @@
+.UserConsent {
+  position: fixed;
+  bottom: 0;
+
+  $margin: 64px;
+  $padding: 32px;
+  margin: $margin;
+  padding: $padding;
+  width: calc(100% - #{($margin + $padding) * 2});
+
+  background: #F6C6CE;
+}
+
+.UserConsent__basic {
+  display: flex;
+}
+
+.UserConsent__advanced {
+  margin-top: 32px;
+}
+
+.UserConsent__actions {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
