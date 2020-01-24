@@ -28,3 +28,9 @@ yarn-error.log*
 
 # firebase
 /.firebase
+firebase-debug.log
+
+# .env files for differnt environments
+.env.development
+.env.staging
+.env.production

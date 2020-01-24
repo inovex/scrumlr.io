@@ -1,8 +1,8 @@
 import firebase from 'firebase';
 
-const projectId = 'playground-73a29';
+const projectId = process.env.REACT_APP_FIREBASE_PROJECT_ID;
 const config = {
-    apiKey: 'AIzaSyAJj_W-oo-G9k4EU4SImBICuQlMWjRwxOA',
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: `${projectId}.firebaseapp.com`,
     databaseURL: `https://${projectId}.firebaseio.com`,
     projectId: `${projectId}`

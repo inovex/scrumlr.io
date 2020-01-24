@@ -37,6 +37,7 @@
     "@types/react-toastify": "^4.1.0",
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
+    "env-cmd": "^10.0.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-react": "^7.18.0",
@@ -55,8 +56,8 @@
     "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\"",
     "lint": "eslint --ext .tsx,.ts src/",
-    "firebase:serve": "firebase serve --only hosting --project playground-73a29",
-    "firebase:deploy": "firebase deploy --project playground-73a29"
+    "firebase-serve": "env-cmd -f .env.development firebase serve --only hosting --project $REACT_APP_FIREBASE_PROJECT_ID",
+    "firebase-deploy": "env-cmd -f .env.development firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID"
   },
   "eslintConfig": {
     "extends": "react-app"
