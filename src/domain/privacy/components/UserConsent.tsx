@@ -4,6 +4,7 @@ import PrivacyPreferencesDialog from './PrivacyPreferencesDialog';
 import Cookies from 'js-cookie';
 import { PRIVACY_PREFERENCES_COOKIE_NAME, setPrivacyPreferences } from '../privacyPreferences';
 import Button from '../../../view/basic/components/Button';
+import { Link, Snackbar } from '@material-ui/core';
 
 export interface UserConsentProps {}
 export interface UserConsentState {
@@ -27,28 +28,35 @@ const UserConsent: React.FC<UserConsentProps> = () => {
         return null;
     }
 
+    const message = (
+        <>
+            We use <Link href="https://analytics.google.com/">Google Analytics</Link> to analyze our traffic and users behaviour and <Link href="https://sentry.io">Sentry</Link>{' '}
+            for application monitoring and error tracking. By clicking "{ACCEPT_BUTTON_TEXT}" or exiting this banner you accept to the use of these services. You can change your
+            preferences anytime in the settings.
+        </>
+    );
+
+    const actions = (
+        <>
+            <Button variant="text" size="small" onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>
+                Advanced configuration
+            </Button>
+            <Button color="primary" onClick={() => setPrivacyPreferences(true, true)} variant="contained">
+                {ACCEPT_BUTTON_TEXT}
+            </Button>
+        </>
+    );
+
     return (
-        <div className="UserConsent">
-            <div className="UserConsent__basic">
-                <div>
-                    We use <a href="https://analytics.google.com/">Google Analytics</a> to analyze our traffic and users behaviour and <a href="https://sentry.io">Sentry</a> for
-                    application monitoring and error tracking. By clicking "{ACCEPT_BUTTON_TEXT}" or exiting this banner you accept to the use of these services. You can change
-                    your preferences anytime in the settings.
-                </div>
-                <div className="UserConsent__actions">
-                    <Button color="primary" onClick={() => setPrivacyPreferences(true, true)} variant="contained">
-                        {ACCEPT_BUTTON_TEXT}
-                    </Button>
-                    <Button onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>Advanced configuration</Button>
-                </div>
-            </div>
+        <>
+            <Snackbar open={true} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} message={message} action={actions} />
             <PrivacyPreferencesDialog
                 open={state.showAdvancedConfiguration}
                 handleClose={() => {
                     setState({ ...state, showAdvancedConfiguration: false });
                 }}
             />
-        </div>
+        </>
     );
 };
 
