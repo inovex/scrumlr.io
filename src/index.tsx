@@ -9,9 +9,11 @@ import { Provider } from 'mobx-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserConsent from './domain/privacy/components/UserConsent';
+import { theme } from './style/theme';
+import { ThemeProvider } from '@material-ui/core';
 
 ReactDOM.render(
-    <>
+    <ThemeProvider theme={theme}>
         <Provider {...store}>
             <Session>
                 <Router />
@@ -19,7 +21,7 @@ ReactDOM.render(
             <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         </Provider>
         <UserConsent />
-    </>,
+    </ThemeProvider>,
     document.getElementById('root')
 );
 

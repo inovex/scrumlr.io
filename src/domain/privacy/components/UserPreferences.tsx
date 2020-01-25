@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './UserConsent.scss';
 import { setPrivacyPreferences } from '../privacyPreferences';
+import Checkbox from '../../../view/basic/components/Checkbox';
+import Button from '../../../view/basic/components/Button';
 
 export interface UserConsentState {
     enableAnalytics: boolean;
@@ -15,7 +17,7 @@ const UserPreferences: React.FC = () => {
     return (
         <div>
             <div>
-                <input id="enable-basic-cookies" type="checkbox" checked disabled />
+                <Checkbox id="enable-basic-cookies" checked disabled />
                 <label htmlFor="enable-basic-cookies">
                     <span>Necessary cookies (Required)</span>
                     <span>
@@ -26,7 +28,7 @@ const UserPreferences: React.FC = () => {
             </div>
 
             <div>
-                <input id="enable-analytics" type="checkbox" checked={state.enableAnalytics} onChange={(e) => setState({ ...state, enableAnalytics: e.target.checked })} />
+                <Checkbox id="enable-analytics" checked={state.enableAnalytics} onChange={(e) => setState({ ...state, enableAnalytics: e.target.checked })} />
                 <label htmlFor="enable-analytics">
                     <span>Enable analtics (Optional)</span>
                     <span>
@@ -37,25 +39,21 @@ const UserPreferences: React.FC = () => {
             </div>
 
             <div>
-                <input
-                    id="enable-error-reporting"
-                    type="checkbox"
-                    checked={state.enableErrorReporting}
-                    onChange={(e) => setState({ ...state, enableErrorReporting: e.target.checked })}
-                />
+                <Checkbox id="enable-error-reporting" checked={state.enableErrorReporting} onChange={(e) => setState({ ...state, enableErrorReporting: e.target.checked })} />
                 <label htmlFor="enable-error-reporting">
                     <span>Enable error reporting (Optional)</span>
                     <span>...</span>
                 </label>
             </div>
 
-            <button
+            <Button
                 onClick={() => {
                     setPrivacyPreferences(state.enableAnalytics, state.enableErrorReporting);
                 }}
+                variant="contained"
             >
                 Update preferences
-            </button>
+            </Button>
         </div>
     );
 };

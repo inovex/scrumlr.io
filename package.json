@@ -13,6 +13,7 @@
     "url": "https://github.com/masinio/scrumlr.io/issues"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.0",
     "@sentry/browser": "^5.11.1",
     "firebase": "^7.7.0",
     "firestorter": "^2.0.1",

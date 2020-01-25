@@ -3,6 +3,7 @@ import './UserConsent.scss';
 import UserPreferences from './UserPreferences';
 import Cookies from 'js-cookie';
 import { PRIVACY_PREFERENCES_COOKIE_NAME, setPrivacyPreferences } from '../privacyPreferences';
+import Button from '../../../view/basic/components/Button';
 
 export interface UserConsentProps {}
 export interface UserConsentState {
@@ -35,8 +36,10 @@ const UserConsent: React.FC<UserConsentProps> = () => {
                     your preferences anytime in the settings.
                 </div>
                 <div className="UserConsent__actions">
-                    <button onClick={() => setPrivacyPreferences(true, true)}>{ACCEPT_BUTTON_TEXT}</button>
-                    <button onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>Advanced configuration</button>
+                    <Button color="primary" onClick={() => setPrivacyPreferences(true, true)} variant="contained">
+                        {ACCEPT_BUTTON_TEXT}
+                    </Button>
+                    <Button onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>Advanced configuration</Button>
                 </div>
             </div>
             {state.showAdvancedConfiguration && (
