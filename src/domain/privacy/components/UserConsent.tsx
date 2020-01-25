@@ -13,7 +13,7 @@ export interface UserConsentState {
     enableErrorReporting: boolean;
 }
 
-const ACCEPT_BUTTON_TEXT = 'Accept services';
+const ACCEPT_BUTTON_TEXT = 'Accept';
 
 const UserConsent: React.FC<UserConsentProps> = () => {
     const [state, setState] = useState<UserConsentState>({
@@ -41,7 +41,14 @@ const UserConsent: React.FC<UserConsentProps> = () => {
             <Button variant="text" size="small" onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>
                 Advanced configuration
             </Button>
-            <Button color="primary" onClick={() => setPrivacyPreferences(true, true)} variant="contained">
+            <Button
+                color="primary"
+                onClick={() => {
+                    setPrivacyPreferences(true, true);
+                    setState({ ...state, showAdvancedConfiguration: false });
+                }}
+                variant="contained"
+            >
                 {ACCEPT_BUTTON_TEXT}
             </Button>
         </>
