@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './UserConsent.scss';
-import UserPreferences from './UserPreferences';
+import PrivacyPreferencesDialog from './PrivacyPreferencesDialog';
 import Cookies from 'js-cookie';
 import { PRIVACY_PREFERENCES_COOKIE_NAME, setPrivacyPreferences } from '../privacyPreferences';
 import Button from '../../../view/basic/components/Button';
@@ -42,11 +42,12 @@ const UserConsent: React.FC<UserConsentProps> = () => {
                     <Button onClick={() => setState({ ...state, showAdvancedConfiguration: !state.showAdvancedConfiguration })}>Advanced configuration</Button>
                 </div>
             </div>
-            {state.showAdvancedConfiguration && (
-                <div className="UserConsent__advanced">
-                    <UserPreferences />
-                </div>
-            )}
+            <PrivacyPreferencesDialog
+                open={state.showAdvancedConfiguration}
+                handleClose={() => {
+                    setState({ ...state, showAdvancedConfiguration: false });
+                }}
+            />
         </div>
     );
 };

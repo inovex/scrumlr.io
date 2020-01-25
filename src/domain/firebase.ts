@@ -14,7 +14,6 @@ const config = {
 
 if (!firebase.apps.length) {
     firebase.initializeApp(config);
-    firebase.analytics();
     firebase.analytics().setAnalyticsCollectionEnabled(false);
 }
 
