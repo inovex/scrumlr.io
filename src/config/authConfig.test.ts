@@ -1,3 +1,4 @@
+// @ts-ignore
 describe('authConfig', () => {
     const OLD_ENV = process.env;
 
