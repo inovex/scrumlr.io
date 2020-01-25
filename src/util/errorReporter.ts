@@ -30,5 +30,31 @@ class StubRepoter implements ErrorReporter {
     }
 }
 
-export const errorReporter = errorReportingConfig.sentryDSN!! ? new SentryReporter() : process.env.NODE_ENV === 'development' ? new ConsoleReporter() : new StubRepoter();
+class ErrorReporterAdapter implements ErrorReporter {
+    private reporter: ErrorReporter;
+    private defaultRepoter: ErrorReporter;
+
+    constructor() {
+        if (process.env.NODE_ENV === 'development') {
+            this.defaultRepoter = new ConsoleReporter();
+        } else {
+            this.defaultRepoter = new StubRepoter();
+        }
+        this.reporter = this.defaultRepoter;
+    }
+
+    reportError(error: any, id: string) {
+        this.reporter.reportError(error, id);
+    }
+
+    enableReportingService(enable: boolean) {
+        if (enable && !!errorReportingConfig.sentryDSN) {
+            this.reporter = new SentryReporter();
+        } else {
+            this.reporter = this.defaultRepoter;
+        }
+    }
+}
+
+export const errorReporter = new ErrorReporterAdapter();
 export default errorReporter;
