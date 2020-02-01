@@ -5,7 +5,7 @@ import { auth } from '../../firebase';
 import authConfig from '../../../config/authConfig';
 import toast from '../../../util/toast';
 import './SignIn.scss';
-import authProviders, {AuthProvider} from "../authProviders";
+import authProviders, { AuthProvider } from '../authProviders';
 
 interface LoginState {
     signingInWith: undefined | AuthProvider | 'anonymous';
@@ -61,13 +61,13 @@ const SignIn: React.FC = () => {
 
     const providerButtons: JSX.Element[] = [];
     authProviders.forEach((config, key) => {
-        providerButtons.push((
+        providerButtons.push(
             <li key={key}>
                 <ProviderLoginButton signIn={signInWithProvider(key)} loading={state.signingInWith === key} {...genericProps}>
                     Sign in with {config.name}
                 </ProviderLoginButton>
             </li>
-        ))
+        );
     });
 
     return (
