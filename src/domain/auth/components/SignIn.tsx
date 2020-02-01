@@ -1,29 +1,11 @@
 import React, { useState } from 'react';
 import ProviderLoginButton from '../../../view/auth/components/ProviderLoginButton';
 import errorReporter from '../../../util/errorReporter';
-import { auth, firebase } from '../../firebase';
+import { auth } from '../../firebase';
 import authConfig from '../../../config/authConfig';
 import toast from '../../../util/toast';
 import './SignIn.scss';
-
-type AuthProvider = 'apple' | 'google' | 'microsoft' | 'github' | 'saml';
-const enabledAuthProviderMap = new Map<AuthProvider, firebase.auth.AuthProvider>();
-
-if (authConfig.enableAppleIdentity) {
-    enabledAuthProviderMap.set('apple', new firebase.auth.OAuthProvider('apple.com'));
-}
-if (authConfig.enableGithubIdentity) {
-    enabledAuthProviderMap.set('github', new firebase.auth.GithubAuthProvider());
-}
-if (authConfig.enableGoogleIdentity) {
-    enabledAuthProviderMap.set('google', new firebase.auth.GoogleAuthProvider());
-}
-if (authConfig.enableMicrosoftIdentity) {
-    enabledAuthProviderMap.set('microsoft', new firebase.auth.OAuthProvider('microsoft.com'));
-}
-if (authConfig.enableSamlIdentity) {
-    enabledAuthProviderMap.set('saml', new firebase.auth.SAMLAuthProvider(authConfig.samlProviderId));
-}
+import authProviders, {AuthProvider} from "../authProviders";
 
 interface LoginState {
     signingInWith: undefined | AuthProvider | 'anonymous';
@@ -38,8 +20,8 @@ const SignIn: React.FC = () => {
 
     const signInWithProvider = (provider: AuthProvider) => () => {
         setState({ ...state, signingInWith: provider });
-        if (enabledAuthProviderMap.has(provider)) {
-            auth.signInWithRedirect(enabledAuthProviderMap.get(provider)!)
+        if (authProviders.has(provider)) {
+            auth.signInWithRedirect(authProviders.get(provider)!.provider)
                 .catch((reason) => {
                     errorReporter.reportError(reason, 'SignIn/signInWithProvider');
                 })
@@ -77,48 +59,20 @@ const SignIn: React.FC = () => {
         disabled: state.signingInWith !== undefined
     };
 
+    const providerButtons: JSX.Element[] = [];
+    authProviders.forEach((config, key) => {
+        providerButtons.push((
+            <li key={key}>
+                <ProviderLoginButton signIn={signInWithProvider(key)} loading={state.signingInWith === key} {...genericProps}>
+                    Sign in with {config.name}
+                </ProviderLoginButton>
+            </li>
+        ))
+    });
+
     return (
         <ul>
-            {authConfig.enableGoogleIdentity && (
-                <li key="google">
-                    <ProviderLoginButton signIn={signInWithProvider('google')} loading={state.signingInWith === 'google'} {...genericProps}>
-                        Sign in with Google
-                    </ProviderLoginButton>
-                </li>
-            )}
-
-            {authConfig.enableMicrosoftIdentity && (
-                <li key="microsoft">
-                    <ProviderLoginButton signIn={signInWithProvider('microsoft')} loading={state.signingInWith === 'microsoft'} {...genericProps}>
-                        Sign in with Microsoft
-                    </ProviderLoginButton>
-                </li>
-            )}
-
-            {authConfig.enableGithubIdentity && (
-                <li key="github">
-                    <ProviderLoginButton signIn={signInWithProvider('github')} loading={state.signingInWith === 'github'} {...genericProps}>
-                        Sign in with GitHub
-                    </ProviderLoginButton>
-                </li>
-            )}
-
-            {authConfig.enableAppleIdentity && (
-                <li key="apple">
-                    <ProviderLoginButton signIn={signInWithProvider('apple')} loading={state.signingInWith === 'apple'} {...genericProps}>
-                        Sign in with Apple
-                    </ProviderLoginButton>
-                </li>
-            )}
-
-            {authConfig.enableSamlIdentity && (
-                <li key="saml">
-                    <ProviderLoginButton signIn={signInWithProvider('saml')} loading={state.signingInWith === 'saml'} disabled={state.signingInWith !== undefined}>
-                        Sign in with {authConfig.samlProviderName}
-                    </ProviderLoginButton>
-                </li>
-            )}
-
+            {providerButtons}
             {authConfig.enableAnonymousIdentity && (
                 <li key="anonymous">
                     <span>or</span>
