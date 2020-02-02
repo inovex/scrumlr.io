@@ -2,6 +2,7 @@ import { observable, action, when } from 'mobx';
 import { RootStore } from '../rootStore';
 import { User } from 'firebase';
 import { Document } from 'firestorter';
+import defaultTo from 'lodash/defaultTo';
 
 export interface UserProfile {
     displayName: string | null | undefined;
@@ -27,11 +28,14 @@ class SessionStore {
         this.userProfile = !authUser ? null : new Document(`users/${authUser.uid}`);
     };
 
-    saveOrUpdateUserProfile = () => {
+    private saveOrUpdateUserProfile = () => {
+        const displayName = defaultTo(this.authUser?.displayName, defaultTo(this.userProfile?.data.displayName, null));
+        const photoURL = defaultTo(this.authUser?.photoURL, defaultTo(this.userProfile?.data.photoURL, null));
+
         this.userProfile?.set(
             {
-                displayName: !this.authUser?.displayName ? this.userProfile.data.displayName : this.authUser?.displayName,
-                photoURL: !this.authUser?.photoURL ? this.userProfile.data.photoURL : this.authUser?.photoURL
+                displayName,
+                photoURL
             },
             { merge: true }
         );
