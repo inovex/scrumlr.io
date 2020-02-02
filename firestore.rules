@@ -27,13 +27,16 @@ service cloud.firestore {
             allow write: if true;
 
             match /applicants/{uid} {
-                allow get: if false
-                allow create: if request.resource.data.accepted == false
+                allow read: if exists(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid))
+                allow create: if request.resource.data.accepted == false && uid == request.auth.uid
+                allow update, delete: if get(/boards/{id}).data.owner == request.auth.uid || get(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid)).data.admin == true
             }
 
             match /members/{uid} {
                 allow get: if exists(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid))
-                allow write: if get(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid)).data.admin == true
+                allow create: if get(/boards/{id}).data.owner == request.auth.uid || get(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid)).data.admin == true
+                allow update: if get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true || request.resource.data.admin == false
+                allow delete: if request.auth.uid == uid || get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true
             }
         }
 
