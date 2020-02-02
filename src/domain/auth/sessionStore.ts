@@ -4,8 +4,8 @@ import { User } from 'firebase';
 import { Document } from 'firestorter';
 
 export interface UserProfile {
-    displayName : string | null | undefined;
-    photoURL : string | null | undefined;
+    displayName: string | null | undefined;
+    photoURL: string | null | undefined;
 }
 
 class SessionStore {
@@ -31,7 +31,7 @@ class SessionStore {
         this.userProfile?.set(
             {
                 displayName: !this.authUser?.displayName ? this.userProfile.data.displayName : this.authUser?.displayName,
-                photoURL: !this.authUser?.photoURL ? this.userProfile.data.photoURL : this.authUser?.photoURL,
+                photoURL: !this.authUser?.photoURL ? this.userProfile.data.photoURL : this.authUser?.photoURL
             },
             { merge: true }
         );
