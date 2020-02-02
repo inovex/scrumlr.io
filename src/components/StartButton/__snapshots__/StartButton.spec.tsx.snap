@@ -36,6 +36,16 @@ exports[`<StartButton /> should match expected structure 1`] = `
         KALM (Keep, Add, Less, More)
       </button>
     </li>
+    <li>
+      <button onClick={[Function]} aria-label=\\"Mode: Plus & Delta\\">
+        Plus &amp; Delta
+      </button>
+    </li>
+    <li>
+      <button onClick={[Function]} aria-label=\\"Mode: 4L (Liked, Learned, Lacked, Longed for)\\">
+        4L (Liked, Learned, Lacked, Longed for)
+      </button>
+    </li>
   </DropdownMenu>
 </div>"
 `;

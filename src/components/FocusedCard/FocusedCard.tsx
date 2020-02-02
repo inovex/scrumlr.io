@@ -65,8 +65,8 @@ export class FocusedCard extends React.Component<
     const stackIcon = isRootCard
       ? 'stack-top'
       : this.state.stackIconHover
-        ? 'stack-hover'
-        : 'stack-mid';
+      ? 'stack-hover'
+      : 'stack-mid';
 
     const content = (
       <div

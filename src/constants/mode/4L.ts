@@ -6,8 +6,8 @@ export default [
     description: 'Create cards, communicate your thoughts & stack common',
     columns: [
       {
-        id: 'keep',
-        name: 'Keep',
+        id: 'liked',
+        name: 'Liked',
         type: 'positive',
         voting: {
           enabled: false,
@@ -15,14 +15,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: 'liked',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'add',
-        name: 'Add',
+        id: 'learned',
+        name: 'Learned',
         type: 'positive',
         voting: {
           enabled: false,
@@ -30,14 +30,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: 'learned',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'less',
-        name: 'Less',
+        id: 'lacked',
+        name: 'Lacked',
         type: 'negative',
         voting: {
           enabled: false,
@@ -45,22 +45,22 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'less',
+          column: 'lacked',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'more',
-        name: 'More',
-        type: 'positive',
+        id: 'longedfor',
+        name: 'Longed for',
+        type: 'negative',
         voting: {
           enabled: false,
           displayed: false
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: 'longedfor',
           align: 'right'
         },
         sorted: false
@@ -77,8 +77,8 @@ export default [
     description: 'Vote on the most important cards for yourself',
     columns: [
       {
-        id: 'keep',
-        name: 'Keep',
+        id: 'liked',
+        name: 'Liked',
         type: 'positive',
         voting: {
           enabled: true,
@@ -86,14 +86,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: 'liked',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'add',
-        name: 'Add',
+        id: 'learned',
+        name: 'Learned',
         type: 'positive',
         voting: {
           enabled: true,
@@ -101,14 +101,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: 'learned',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'less',
-        name: 'Less',
+        id: 'lacked',
+        name: 'Lacked',
         type: 'negative',
         voting: {
           enabled: true,
@@ -116,22 +116,22 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'less',
+          column: 'lacked',
           align: 'right'
         },
         sorted: false
       },
       {
-        id: 'more',
-        name: 'More',
-        type: 'positive',
+        id: 'longedfor',
+        name: 'Longed for',
+        type: 'negative',
         voting: {
           enabled: true,
           displayed: false
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: 'longedfor',
           align: 'right'
         },
         sorted: false
@@ -144,8 +144,8 @@ export default [
     description: 'Discuss top-voted cards',
     columns: [
       {
-        id: 'keep',
-        name: 'Keep',
+        id: 'liked',
+        name: 'Liked',
         type: 'positive',
         voting: {
           enabled: false,
@@ -153,14 +153,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: 'liked',
           align: 'right'
         },
         sorted: true
       },
       {
-        id: 'add',
-        name: 'Add',
+        id: 'learned',
+        name: 'Learned',
         type: 'positive',
         voting: {
           enabled: false,
@@ -168,14 +168,14 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: 'learned',
           align: 'right'
         },
         sorted: true
       },
       {
-        id: 'less',
-        name: 'Less',
+        id: 'lacked',
+        name: 'Lacked',
         type: 'negative',
         voting: {
           enabled: false,
@@ -183,22 +183,22 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'less',
+          column: 'lacked',
           align: 'right'
         },
         sorted: true
       },
       {
-        id: 'more',
-        name: 'More',
-        type: 'positive',
+        id: 'longedfor',
+        name: 'Longed for',
+        type: 'negative',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: 'longedfor',
           align: 'right'
         },
         sorted: true

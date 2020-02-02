@@ -51,10 +51,12 @@ export const mapStateToProps = (
       {}
     );
 
-    getFirebase().ref(`${ownProps.boardUrl}/cards/${cardId}`).update({
-      ...card,
-      parent: parentId
-    });
+    getFirebase()
+      .ref(`${ownProps.boardUrl}/cards/${cardId}`)
+      .update({
+        ...card,
+        parent: parentId
+      });
   };
 
   const setRootCard = (index: number) => {

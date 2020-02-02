@@ -63,11 +63,7 @@ describe('<Dot />', () => {
 
   it('should render its children if no onClick method is passed', () => {
     const children = 'Foobar';
-    wrapper = shallow(
-      <Dot {...props}>
-        {children}
-      </Dot>
-    );
+    wrapper = shallow(<Dot {...props}>{children}</Dot>);
     expect(wrapper.text()).toEqual(children);
   });
 
