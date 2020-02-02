@@ -59,8 +59,12 @@
     "prettier:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"src/**/*.{ts,tsx}\"",
     "lint": "eslint --ext .tsx,.ts src/",
-    "firebase-serve": "env-cmd -f .env.development firebase serve --only hosting --project $REACT_APP_FIREBASE_PROJECT_ID",
-    "firebase-deploy": "env-cmd -f .env.development firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID"
+    "serve": "npm run serve:development",
+    "deploy": "npm run deploy:development",
+    "serve:development": "env-cmd -f .env.development npm run firebase-serve",
+    "deploy:development": "env-cmd -f .env.development npm run firebase-deploy",
+    "firebase-serve": "firebase serve --only hosting --project $REACT_APP_FIREBASE_PROJECT_ID",
+    "firebase-deploy": "firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID"
   },
   "eslintConfig": {
     "extends": "react-app"
