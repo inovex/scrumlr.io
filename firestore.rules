@@ -24,7 +24,8 @@ service cloud.firestore {
         match /boards/{id} {
             allow get: if request.auth.uid != null;
             allow list: if false;
-            allow write: if true;
+            allow create: if request.auth.uid == request.resource.data.owner;
+            allow update, delete: if get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true
 
             match /applicants/{uid} {
                 allow read: if exists(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid))
