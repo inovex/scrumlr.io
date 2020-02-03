@@ -1,8 +1,8 @@
 ![Uptime status](https://img.shields.io/uptimerobot/status/m784173137-600f28cd55b25aff29eff003)
-[![Build status](https://img.shields.io/travis/com/masinio/scrumlr.io/v2)](https://travis-ci.com/masinio/scrumlr.io)
-[![Code coverage](https://img.shields.io/codecov/c/github/masinio/scrumlr.io/v2)](https://codecov.io/gh/masinio/scrumlr.io)
-[![Depdendency status](https://img.shields.io/depfu/masinio/scrumlr.io)](https://depfu.com/github/masinio/scrumlr.io?project_id=10585)
-![License](https://img.shields.io/github/license/masinio/scrumlr.io)
+[![Build status](https://img.shields.io/travis/com/scrumlr/scrumlr.io/v2)](https://travis-ci.com/scrumlr/scrumlr.io)
+[![Code coverage](https://img.shields.io/codecov/c/github/scrumlr/scrumlr.io/v2)](https://codecov.io/gh/scrumlr/scrumlr.io)
+[![Depdendency status](https://img.shields.io/depfu/scrumlr/scrumlr.io)](https://depfu.com/github/scrumlr/scrumlr.io?project_id=10585)
+![License](https://img.shields.io/github/license/scrumlr/scrumlr.io)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
