@@ -7,10 +7,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/masinio/scrumlr.io.git"
+    "url": "https://github.com/scrumlr/scrumlr.io.git"
   },
   "bugs": {
-    "url": "https://github.com/masinio/scrumlr.io/issues"
+    "url": "https://github.com/scrumlr/scrumlr.io/issues"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.0",
