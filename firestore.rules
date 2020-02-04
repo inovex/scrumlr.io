@@ -8,7 +8,7 @@ service cloud.firestore {
         }
 
         match /teams/{id} {
-        		function isMember() {
+            function isMember() {
             	return exists(/databases/$(database)/documents/teams/$(id)/members/$(request.auth.uid))
             }
 
@@ -22,16 +22,8 @@ service cloud.firestore {
             allow update, delete: if isAdmin()
 
             match /members/{uid} {
-            		function isValidToken() {
-                  return request.resource.data.token == get(/databases/$(database)/documents/teams/$(id)).data.token
-                }
-
-                function isNotAdmin() {
-                  return request.resource.data.admin == false
-                }
-
                 allow read: if isMember()
-                allow create: if isAdmin() || (isValidToken() && isNotAdmin())
+                allow create: if isAdmin() || request.resource.data.admin == false
                 allow update: if isAdmin() || isNotAdmin()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
