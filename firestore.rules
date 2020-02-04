@@ -8,12 +8,12 @@ service cloud.firestore {
         }
 
         match /teams/{id} {
-            function isAdmin() {
-            	return get(/databases/$(database)/documents/teams/{id}).data.owner == request.auth.uid || get(/databases/$(database)/documents/teams/{id}/members/$(request.auth.uid)).data.admin == true
+        		function isMember() {
+            	return exists(/databases/$(database)/documents/teams/$(id)/members/$(request.auth.uid))
             }
 
-            function isMember() {
-            	return exists(/databases/$(database)/documents/teams/{id}/members/$(request.auth.uid))
+            function isAdmin() {
+            	return get(/databases/$(database)/documents/teams/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/teams/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
             allow get: if isMember()
@@ -22,9 +22,17 @@ service cloud.firestore {
             allow update, delete: if isAdmin()
 
             match /members/{uid} {
+            		function isValidToken() {
+                  return request.resource.data.token == get(/databases/$(database)/documents/teams/$(id)).data.token
+                }
+
+                function isNotAdmin() {
+                  return request.resource.data.admin == false
+                }
+
                 allow read: if isMember()
-                allow create: if isAdmin()
-                allow update: if isAdmin() || request.resource.data.admin == false || request.resource.data.admin == null
+                allow create: if isAdmin() || (isValidToken() && isNotAdmin())
+                allow update: if isAdmin() || isNotAdmin()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
         }
