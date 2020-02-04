@@ -21,10 +21,17 @@ service cloud.firestore {
             allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.owner
             allow update, delete: if isAdmin()
 
+            match /applicants/{uid} {
+                allow read: if isAdmin()
+                allow create: if isAdmin() || request.auth.uid == uid
+                allow update: if isAdmin()
+                allow delete: if isAdmin() || request.auth.uid == uid
+            }
+
             match /members/{uid} {
                 allow read: if isMember()
-                allow create: if isAdmin() || request.resource.data.admin == false
-                allow update: if isAdmin() || isNotAdmin()
+                allow create: if isAdmin()
+                allow update: if isAdmin()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
         }
