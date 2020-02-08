@@ -7,13 +7,13 @@ service cloud.firestore {
             allow write: if request.auth.uid == uid;
         }
 
-        match /teams/{id} {
+        match /boards/{id} {
             function isMember() {
-            	return exists(/databases/$(database)/documents/teams/$(id)/members/$(request.auth.uid))
+            	return exists(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid))
             }
 
             function isAdmin() {
-            	return get(/databases/$(database)/documents/teams/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/teams/$(id)/members/$(request.auth.uid)).data.admin == true)
+            	return get(/databases/$(database)/documents/boards/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
             allow get: if isMember()
@@ -34,25 +34,22 @@ service cloud.firestore {
                 allow update: if isAdmin()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
-        }
 
-        match /boards/{id} {
-            allow get: if request.auth.uid != null;
-            allow list: if false;
-            allow create: if request.auth.uid == request.resource.data.owner;
-            allow update, delete: if get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true
-
-            match /applicants/{uid} {
-                allow read: if exists(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid))
-                allow create: if request.resource.data.accepted == false && uid == request.auth.uid
-                allow update, delete: if get(/boards/{id}).data.owner == request.auth.uid || get(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid)).data.admin == true
+            match /cards/{uid} {
+                allow read: if isMember()
+                allow create: if isMember() && request.resource.data.author == request.auth.uid
+                allow update: if isAdmin() || resource.data.author == request.auth.uid
+                allow delete: if isAdmin() || resource.data.author == request.auth.uid
             }
 
-            match /members/{uid} {
-                allow get: if exists(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid))
-                allow create: if get(/boards/{id}).data.owner == request.auth.uid || get(/databases/$(database)/documents/boards/{id}/members/$(request.auth.uid)).data.admin == true
-                allow update: if get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true || request.resource.data.admin == false
-                allow delete: if request.auth.uid == uid || get(/boards/{id}).data.owner == request.auth.uid || get(/boards/{id}/members/$(request.auth.uid)).data.admin == true
+            match /settings/{uid} {
+                allow read: if isMember()
+                allow write: if isAdmin()
+            }
+
+            match /columns/{uid} {
+                allow read: if isMember()
+                allow write: if isAdmin()
             }
         }
 
