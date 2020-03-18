@@ -5,6 +5,7 @@
 
 # dependencies
 /node_modules
+/functions/node_modules
 
 # testing
 /coverage
@@ -28,3 +29,4 @@ yarn-error.log*
 
 # Firebase
 .firebase
+firebase-debug.log
