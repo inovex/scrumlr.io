@@ -7,13 +7,14 @@ export interface HeadlinePrefixProps {
   className?: string;
 }
 
-export const HeadlinePrefix: React.SFC<HeadlinePrefixProps> = props =>
+export const HeadlinePrefix: React.SFC<HeadlinePrefixProps> = props => (
   <span className={props.className}>
     <svg width={props.width} height={props.height} viewBox="0 0 50 15">
       <g>
         <rect x="0" y="0" width="50" height="15" fill={props.color} />
       </g>
     </svg>
-  </span>;
+  </span>
+);
 
 export default HeadlinePrefix;

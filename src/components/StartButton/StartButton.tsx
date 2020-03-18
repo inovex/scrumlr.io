@@ -31,6 +31,12 @@ const availableRetroModes = {
   },
   kalm: {
     label: 'KALM (Keep, Add, Less, More)'
+  },
+  plusDelta: {
+    label: 'Plus & Delta'
+  },
+  fourL: {
+    label: '4L (Liked, Learned, Lacked, Longed for)'
   }
 };
 

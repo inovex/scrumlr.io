@@ -91,11 +91,10 @@ export class ColumnView extends React.Component<
     const { columns } = this.props.phase;
 
     const renderedColumns = columns
-      .filter(
-        column =>
-          this.state.showCarousel && this.props.filteredCardType
-            ? column.id === this.props.filteredCardType
-            : true
+      .filter(column =>
+        this.state.showCarousel && this.props.filteredCardType
+          ? column.id === this.props.filteredCardType
+          : true
       )
       .map((column, index, values) => (
         <Column
