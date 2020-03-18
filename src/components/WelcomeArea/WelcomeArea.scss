@@ -69,7 +69,7 @@
   flex: 1 1 33%;
 
   background-color: #fff;
-  padding: $large-padding*2;
+  padding: $large-padding;
 }
 
 .welcome-area__action-area-main {
@@ -115,6 +115,8 @@
   .welcome-area__action-area {
     min-width: 300px;
     max-width: 420px;
+
+    padding: $large-padding*2;
   }
 
   .welcome-area__action-area {
