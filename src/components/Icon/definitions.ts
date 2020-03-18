@@ -41,7 +41,8 @@ export const iconMap: { [key: string]: string } = {
   'phase3-define': 'phase3-02-define',
   'stack-top': 'icon-20-stack-active',
   'stack-mid': 'icon-20-stack-enabled',
-  'stack-hover': 'icon-20-stack-hover'
+  'stack-hover': 'icon-20-stack-hover',
+  inovex: 'inovex'
 };
 
 export const iconNames = Object.keys(iconMap) as IconNames[];

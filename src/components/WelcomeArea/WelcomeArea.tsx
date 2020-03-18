@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './WelcomeArea.scss';
+import { Icon } from '../Icon/Icon';
 
 export const WelcomeArea: React.SFC<{}> = ({ children }) => (
   <div className="welcome-area">
@@ -22,7 +23,27 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
       </div>
     </div>
 
-    <div className="welcome-area__action-area">{children}</div>
+    <div className="welcome-area__action-area">
+      <div className="welcome-area__action-area-main">{children}</div>
+      <div className="welcome-area__action-area-footer">
+        <p>
+          &copy; {new Date().getFullYear()}, Provided by{' '}
+          <Icon
+            name="inovex"
+            width={16}
+            height={16}
+            className="welcome-area__action-area-logo"
+          />{' '}
+          <a href="https://www.inovex.de/" target="_blank">
+            inovex
+          </a>{' '}
+          employees
+        </p>
+        <a href="https://github.com/scrumlr/scrumlr.io" target="_blank">
+          Contribute to this open source project on GitHub
+        </a>
+      </div>
+    </div>
   </div>
 );
 

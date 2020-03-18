@@ -39,4 +39,5 @@ export type IconNames =
   | 'stack-mid'
   | 'stack-hover'
   | 'arrow-left'
-  | 'arrow-right';
+  | 'arrow-right'
+  | 'inovex';

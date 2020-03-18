@@ -72,6 +72,35 @@
   padding: $large-padding*2;
 }
 
+.welcome-area__action-area-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  flex: 1 1 100%;
+}
+
+.welcome-area__action-area-footer {
+  text-align: center;
+
+  font-size: 13.6px;
+  color: $color-stone-gray;
+}
+
+.welcome-area__action-area-footer p {
+  margin-bottom: .25em;
+}
+
+.welcome-area__action-area-footer a {
+  font-weight: bold;
+  color: currentColor;
+}
+
+.welcome-area__action-area-logo {
+  vertical-align: middle;
+}
+
+
 @media #{$tablet} {
   .welcome-area__promotion-text > h2 {
     font-size: 36px;
