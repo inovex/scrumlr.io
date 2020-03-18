@@ -21,7 +21,7 @@ const availableRetroModes = {
     label: 'Lean Coffee'
   },
   positiveNegative: {
-    label: 'Simple Retro (Delta+)'
+    label: 'Simple Retro'
   },
   startStopContinue: {
     label: 'Start, Stop, Continue'
