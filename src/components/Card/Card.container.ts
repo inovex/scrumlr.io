@@ -36,30 +36,30 @@ export const mapStateToProps = (
   );
 
   function onRemoveCard(key: string) {
+    const toUpdate = {};
     Object.keys(cards).forEach(k => {
       if (cards[k].parent === key) {
-        getFirebase()
-          .ref(`${ownProps.boardId}/cards/${k}`)
-          .set({
-            ...cards[k],
-            parent: null
-          })
-          .catch((err: Error) => {
-            Raven.captureMessage('Could change parent of card', {
-              extra: {
-                reason: err.message,
-                uid: user.uid,
-                boardId: ownProps.boardId,
-                cardId: cards[k].id
-              }
-            });
-          });
+        toUpdate[`${k}/parent`] = null;
       }
     });
 
     getFirebase()
+      .ref(`${ownProps.boardId}/cards`)
+      .update(toUpdate)
+      .catch((err: Error) => {
+        Raven.captureMessage('Could change parent of card', {
+          extra: {
+            reason: err.message,
+            uid: user.uid,
+            boardId: ownProps.boardId,
+            cardId: key
+          }
+        });
+      });
+
+    getFirebase()
       .ref(`${ownProps.boardId}/cards/${key}`)
-      .set(null)
+      .remove()
       .catch((err: Error) => {
         Raven.captureMessage('Could not remove card', {
           extra: {
@@ -112,7 +112,6 @@ export const mapStateToProps = (
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
         .update({
-          ...cards[cardSourceId],
           type: columnTargetId
         });
     }
@@ -144,7 +143,6 @@ export const mapStateToProps = (
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardTargetId}`)
         .update({
-          ...cards[cardTargetId],
           parent: cardSourceId
         });
 
@@ -159,7 +157,6 @@ export const mapStateToProps = (
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
         .update({
-          ...cards[cardSourceId],
           userVotes,
           votes
         });

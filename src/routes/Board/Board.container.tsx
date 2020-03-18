@@ -243,17 +243,20 @@ export const mapStateToProps = (
         });
       });
 
+    const updateUsers = {};
     Object.keys(board!!.users).forEach(uid => {
-      firebase
-        .update(`${boardSelector}/users/${uid}`, {
-          ready: false
-        })
-        .catch((err: Error) => {
-          Raven.captureMessage('Could reset ready status for users', {
-            extra: { reason: err.message, uid, boardId: boardSelector }
-          });
-        });
+      updateUsers[`${uid}/ready`] = false;
     });
+
+    console.log(updateUsers);
+    firebase
+      .ref(`${boardSelector}/users`)
+      .update(updateUsers)
+      .catch((err: Error) => {
+        Raven.captureMessage('Could reset ready status for users', {
+          extra: { reason: err.message, boardId: boardSelector }
+        });
+      });
 
     // Always remove card selection if new phase is entered.
     if (boardConfig.focusedCardId) {

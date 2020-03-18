@@ -45,16 +45,9 @@ export const mapStateToProps = (
   cardsInStack.unshift(ownProps.focused);
 
   const setParentOfCard = (cardId: string, parentId: string | null) => {
-    const card: Card = getVal(
-      state.fbState,
-      `data/${ownProps.boardUrl}/cards/${cardId}`,
-      {}
-    );
-
     getFirebase()
       .ref(`${ownProps.boardUrl}/cards/${cardId}`)
       .update({
-        ...card,
         parent: parentId
       });
   };

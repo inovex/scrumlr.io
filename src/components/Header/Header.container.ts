@@ -43,8 +43,7 @@ export const mapStateToProps = (
   function onToggleReadyState() {
     firebase
       .ref(`${boardUrl}/users/${auth.uid}`)
-      .set({
-        ...boardConfig.users[auth.uid],
+      .update({
         ready: !boardConfig.users[auth.uid].ready
       })
       .catch((err: Error) => {
@@ -97,19 +96,20 @@ export const mapStateToProps = (
 
     firebase.ref(`${boardUrl}/config/timerExpiration`).set(null);
 
+    const updateUsers = {};
     Object.keys(boardConfig.users).forEach(uid => {
-      firebase
-        .ref(`${boardUrl}/users/${uid}`)
-        .set({
-          ...boardConfig.users[uid],
-          ready: false
-        })
-        .catch((err: Error) => {
-          Raven.captureMessage('Could reset ready status for users', {
-            extra: { reason: err.message, uid, boardId: boardUrl }
-          });
-        });
+      updateUsers[`${uid}/ready`] = false;
     });
+
+    console.log(updateUsers);
+    firebase
+      .ref(`${boardUrl}/users`)
+      .update(updateUsers)
+      .catch((err: Error) => {
+        Raven.captureMessage('Could reset ready status for users', {
+          extra: { reason: err.message, boardId: boardUrl }
+        });
+      });
 
     const phasesWithSortedResults = [2, 3];
     if (
