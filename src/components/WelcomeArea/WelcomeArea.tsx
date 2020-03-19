@@ -42,6 +42,37 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
         <a href="https://github.com/scrumlr/scrumlr.io" target="_blank">
           Contribute to this open source project on GitHub
         </a>
+        <p className="welcome-area__policies">
+          <ul>
+            <li>
+              <a
+                href="https://www.iubenda.com/privacy-policy/26348404"
+                target="_blank"
+                title="Privacy Policy"
+              >
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.iubenda.com/privacy-policy/26348404/cookie-policy"
+                target="_blank"
+                title="Cookie Policy"
+              >
+                Cookie Policy
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.iubenda.com/terms-and-conditions/26348404"
+                target="_blank"
+                title="Terms and Conditions"
+              >
+                Terms and Conditions
+              </a>
+            </li>
+          </ul>
+        </p>
       </div>
     </div>
   </div>

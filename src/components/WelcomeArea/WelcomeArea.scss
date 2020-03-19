@@ -100,6 +100,24 @@
   vertical-align: middle;
 }
 
+.welcome-area__policies ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.welcome-area__policies ul > li {
+  display: inline;
+  white-space: nowrap;
+}
+
+.welcome-area__policies ul > li:before {
+  content: " | ";
+}
+
+.welcome-area__policies ul > li:first-child:before {
+  content: '';
+}
 
 @media #{$tablet} {
   .welcome-area__promotion-text > h2 {
