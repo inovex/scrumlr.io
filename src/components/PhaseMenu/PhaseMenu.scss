@@ -45,6 +45,16 @@
   display: none;
 }
 
+.phase-menu {
+  display: none;
+}
+
+@media screen and (min-width : 375px) {
+  .phase-menu {
+    display: initial;
+  }
+}
+
 @media #{$tablet} {
   .phase-menu__phase-button {
     display: block;

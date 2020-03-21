@@ -218,43 +218,70 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     const slicedList = Boolean(this.props.userDisplayLimit)
       ? filteredList.slice(0, this.props.userDisplayLimit)
       : filteredList;
-    //const slicedList = filteredList;
+
+    const currentUser = tUser.find(({ id }) => id === currentUserId);
+    if (!currentUser) {
+      return <></>;
+    }
+    const readyText = currentUser.ready ? 'Unmark as done' : 'Mark as done';
 
     return (
-      <ul className={cx('board__user-list', this.props.className)}>
-        {!this.state.showAllUsers &&
-          tUser.length > 1 &&
-          this.renderUserSummary()}
+      <>
+        <ul className={cx('board__user-list', this.props.className)}>
+          {!this.state.showAllUsers &&
+            tUser.length > 1 &&
+            this.renderUserSummary()}
 
-        {this.state.showAllUsers &&
-          slicedList.map(userInfo => (
-            <li key={'ALL' + userInfo.id} aria-label={`User ${userInfo.name}`}>
-              {this.renderUserContent(userInfo, false)}
-            </li>
-          ))}
-
-        {tUser
-          .filter(({ id }) => id === currentUserId)
-          .map(userInfo => (
-            <li key="OWN" aria-label="Yourself">
-              <button
-                type="button"
-                className={cx('board__user-ready-toggle', {
-                  ['board__user-ready-toggle-focused']: this.state.focusedAvatar
-                })}
-                onClick={() => {
-                  onToggleReadyState();
-                  this.setState({ ...this.state, focusedAvatar: true });
-                }}
-                onBlur={() =>
-                  this.setState({ ...this.state, focusedAvatar: false })
-                }
+          {this.state.showAllUsers &&
+            slicedList.map(userInfo => (
+              <li
+                key={'ALL' + userInfo.id}
+                aria-label={`User ${userInfo.name}`}
               >
-                {this.renderUserContent(userInfo, true)}
-              </button>
-            </li>
-          ))}
-      </ul>
+                {this.renderUserContent(userInfo, false)}
+              </li>
+            ))}
+
+          <li key="OWN" aria-label="Yourself">
+            <button
+              type="button"
+              className={cx('board__user-ready-toggle', {
+                ['board__user-ready-toggle-focused']: this.state.focusedAvatar
+              })}
+              onClick={() => {
+                onToggleReadyState();
+                this.setState({ ...this.state, focusedAvatar: true });
+              }}
+              onBlur={() =>
+                this.setState({ ...this.state, focusedAvatar: false })
+              }
+            >
+              {this.renderUserContent(currentUser, true)}
+            </button>
+          </li>
+        </ul>
+        <button
+          className={cx('user-list__ready-toggle', {
+            'user-list__ready-toggle--ready': currentUser.ready
+          })}
+          onClick={() => {
+            onToggleReadyState();
+            this.setState({ ...this.state, focusedAvatar: true });
+          }}
+          title={readyText}
+        >
+          <Icon
+            name="check"
+            aria-hidden="true"
+            width={16}
+            height={16}
+            className="user-list__ready-toggle-icon"
+          />
+          {!currentUser.ready && (
+            <span className="user-list__ready-toggle-text">{readyText}</span>
+          )}
+        </button>
+      </>
     );
   }
 }
