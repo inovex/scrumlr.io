@@ -60,6 +60,15 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     window.removeEventListener('resize', this.updateDimensions);
   }
 
+  componentDidUpdate(prevProps: Readonly<UserListProps>): void {
+    if (
+      Object.keys(prevProps.users).length !=
+      Object.keys(this.props.users).length
+    ) {
+      this.updateDimensions();
+    }
+  }
+
   renderUserContent(
     user: UserInformation & { id: string },
     isCurrentUser: boolean
@@ -117,7 +126,11 @@ export class UserList extends React.Component<UserListProps, UserListState> {
 
     const readyCount = otherUsers.filter(user => user.ready).length;
 
-    const otherUserNames = tUser.map(({ name }) => name).join(', ');
+    let otherUserNames = tUser.map(({ name }) => name).join(', ');
+    if (otherUserNames.length > 64) {
+      otherUserNames = otherUserNames.slice(0, 64);
+      otherUserNames += '...';
+    }
 
     const toggleIcon = (
       <div
