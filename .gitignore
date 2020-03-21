@@ -30,3 +30,7 @@ yarn-error.log*
 # Firebase
 .firebase
 firebase-debug.log
+
+# analytics
+/analytics/*.json
+/analytics/*.csv
