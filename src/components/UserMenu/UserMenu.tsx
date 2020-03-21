@@ -179,11 +179,20 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                 <button
                   className="user-menu__timer__button"
                   onClick={() => {
+                    onSetTimer(3 * 60);
+                    this.setState({ isOpen: false });
+                  }}
+                >
+                  3 min.
+                </button>
+                <button
+                  className="user-menu__timer__button"
+                  onClick={() => {
                     onSetTimer(5 * 60);
                     this.setState({ isOpen: false });
                   }}
                 >
-                  5 min.
+                  5
                 </button>
                 <button
                   className="user-menu__timer__button"
@@ -193,15 +202,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                   }}
                 >
                   10
-                </button>
-                <button
-                  className="user-menu__timer__button"
-                  onClick={() => {
-                    onSetTimer(15 * 60);
-                    this.setState({ isOpen: false });
-                  }}
-                >
-                  15
                 </button>
               </div>
             </li>
