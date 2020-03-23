@@ -15,6 +15,7 @@ export interface UserListProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   userDisplayLimit?: number;
+  isTimerSet: boolean;
   className?: string;
 }
 
@@ -73,7 +74,6 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     user: UserInformation & { id: string },
     isCurrentUser: boolean
   ) {
-    const { onToggleReadyState } = this.props;
     const iconName: IconNames = isCurrentUser
       ? 'circle-selection'
       : 'circle-selection-grey';
@@ -87,7 +87,6 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           height={44}
           data-tip={user.name}
           data-for={'ALL' + user.id}
-          {...isCurrentUser && { onClick: onToggleReadyState }}
         />
         {!isCurrentUser && (
           <ReactTooltip
@@ -203,7 +202,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   };
 
   render() {
-    const { currentUserId, users, onToggleReadyState } = this.props;
+    const { currentUserId, users, onToggleReadyState, isTimerSet } = this.props;
 
     if (!users) {
       return null;
@@ -243,44 +242,36 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             ))}
 
           <li key="OWN" aria-label="Yourself">
+            {this.renderUserContent(currentUser, true)}
+          </li>
+        </ul>
+        {isTimerSet && (
+          <span className="user-list__ready-toggle-wrapper">
             <button
-              type="button"
-              className={cx('board__user-ready-toggle', {
-                ['board__user-ready-toggle-focused']: this.state.focusedAvatar
+              className={cx('user-list__ready-toggle', {
+                'user-list__ready-toggle--ready': currentUser.ready
               })}
               onClick={() => {
                 onToggleReadyState();
                 this.setState({ ...this.state, focusedAvatar: true });
               }}
-              onBlur={() =>
-                this.setState({ ...this.state, focusedAvatar: false })
-              }
+              title={readyText}
             >
-              {this.renderUserContent(currentUser, true)}
+              <Icon
+                name="check"
+                aria-hidden="true"
+                width={16}
+                height={16}
+                className="user-list__ready-toggle-icon"
+              />
+              {!currentUser.ready && (
+                <span className="user-list__ready-toggle-text">
+                  {readyText}
+                </span>
+              )}
             </button>
-          </li>
-        </ul>
-        <button
-          className={cx('user-list__ready-toggle', {
-            'user-list__ready-toggle--ready': currentUser.ready
-          })}
-          onClick={() => {
-            onToggleReadyState();
-            this.setState({ ...this.state, focusedAvatar: true });
-          }}
-          title={readyText}
-        >
-          <Icon
-            name="check"
-            aria-hidden="true"
-            width={16}
-            height={16}
-            className="user-list__ready-toggle-icon"
-          />
-          {!currentUser.ready && (
-            <span className="user-list__ready-toggle-text">{readyText}</span>
-          )}
-        </button>
+          </span>
+        )}
       </>
     );
   }

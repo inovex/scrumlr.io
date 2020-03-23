@@ -11,7 +11,8 @@ describe('<UserList />', () => {
   let props: UserListProps = {
     currentUserId: 'user1',
     users: { user1: mockUser() },
-    onToggleReadyState: jest.fn()
+    onToggleReadyState: jest.fn(),
+    isTimerSet: false
   };
 
   it('should not render anything if no users are passed', () => {
@@ -68,55 +69,6 @@ describe('<UserList />', () => {
       expect(otherUserSelectionIcon.prop('name')).toEqual(
         'circle-selection-grey'
       );
-    });
-
-    /* FIXME add ready / not-ready to alt name
-    it('should mark user as non-ready / ready depending on prop', () => {
-      users = {
-        user1: mockUser({ name: 'User 1', ready: false }),
-        user2: mockUser({ name: 'User 2', ready: true }),
-        user3: mockUser({ name: 'User 3', ready: false })
-      };
-
-      wrapper = shallow(
-        <UserList {...props} users={users} currentUserId="user3" />
-      );
-      allUsers = wrapper.find('.board__user-list > li');
-
-      expect(allUsers.at(0).find({ name: 'check' })).toHaveLength(0);
-      expect(
-        allUsers
-          .at(0)
-          .find('.user-list__avatar')
-          .prop('alt')
-      ).not.toContain('ready');
-
-      expect(allUsers.at(1).find({ name: 'check' })).toHaveLength(1);
-      expect(
-        allUsers
-          .at(1)
-          .find('.user-list__avatar')
-          .prop('alt')
-      ).toContain('ready');
-
-      expect(allUsers.at(2).find({ name: 'check' })).toHaveLength(0);
-      expect(
-        allUsers
-          .at(2)
-          .find('.user-list__avatar')
-          .prop('alt')
-      ).not.toContain('ready');
-    });*/
-
-    it('should only render a button for current user', () => {
-      expect(otherUsers.find('button')).toHaveLength(0);
-      expect(ownUser.find('button')).toHaveLength(1);
-    });
-
-    it('should trigger the onToggleReadyState method when current user is clicked', () => {
-      expect(props.onToggleReadyState).not.toHaveBeenCalled();
-      ownUser.find('button').simulate('click');
-      expect(props.onToggleReadyState).toHaveBeenCalled();
     });
   });
 });

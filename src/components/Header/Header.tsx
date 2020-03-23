@@ -36,6 +36,7 @@ export interface StateHeaderProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   onDeleteBoard: () => void;
+  isTimerSet: boolean;
 }
 
 export type HeaderProps = OwnHeaderProps & StateHeaderProps;
@@ -60,7 +61,8 @@ export class Header extends React.Component<HeaderProps, {}> {
       loggedIn,
       onExport,
       onDeleteBoard,
-      onSignOut
+      onSignOut,
+      isTimerSet
     } = this.props;
 
     const componentClassName = cx('header', className);
@@ -83,6 +85,7 @@ export class Header extends React.Component<HeaderProps, {}> {
               currentUserId={user}
               users={users}
               onToggleReadyState={onToggleReadyState}
+              isTimerSet={isTimerSet}
             />
 
             {loggedIn && (

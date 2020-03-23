@@ -163,6 +163,8 @@ export const mapStateToProps = (
       });
   };
 
+  const isTimerSet = !!boardConfig.config.timerExpiration;
+
   const onPrevPhase = () => {
     onSwitchPhaseIndex(-1);
   };
@@ -189,6 +191,7 @@ export const mapStateToProps = (
     onToggleReadyState,
     onChangeBoardName,
     loggedIn: Boolean(firebase.auth()),
-    onDeleteBoard
+    onDeleteBoard,
+    isTimerSet
   };
 };

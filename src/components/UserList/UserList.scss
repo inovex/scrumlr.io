@@ -103,20 +103,6 @@
   margin-right: 3px;
 }
 
-.board__user-ready-toggle {
-  background: none;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  outline: none;
-  cursor: pointer;
-}
-
-.board__user-ready-toggle:not(.board__user-ready-toggle-focused):focus .board__user-image-border,
-.board__user-ready-toggle:hover .board__user-image-border {
-  animation: spin .75s linear infinite;
-}
-
 .user-list__other-wrapper {
   box-sizing: border-box;
   display: flex !important;
@@ -147,6 +133,10 @@
   fill: #fff;
 }
 
+.user-list__ready-toggle-wrapper {
+  margin-left: $small-margin*2;
+}
+
 .user-list__ready-toggle {
   border: 0;
   background: none;
@@ -162,8 +152,6 @@
   background: $color-orange;
 
   transition: background .2s ease-in-out;
-
-  margin-left: $small-margin*2;
   border-radius: 8px;
 }
 
