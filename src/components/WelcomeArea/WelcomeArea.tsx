@@ -19,6 +19,27 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
             instantly on a collaborative virtual board. Vote on the topics that
             really matter. Learn and grow as a team.
           </p>
+
+          <div className="welcome-area__meetup">
+            <div className="welcome-area__meetup-inner">
+              Join the{' '}
+              <a
+                href="https://www.meetup.com/de-DE/inovex-karlsruhe/events/269598502/"
+                target="_blank"
+              >
+                meetup hosted by{' '}
+                <Icon
+                  name="inovex"
+                  width={16}
+                  height={16}
+                  className="welcome-area__action-area-logo"
+                />{' '}
+                inovex on Monday, 30th March 2020 at 12pm (CET)
+              </a>{' '}
+              to learn more about this tool and get in touch with our
+              development team.
+            </div>
+          </div>
         </div>
       </div>
     </div>
