@@ -278,6 +278,23 @@ export class Card extends Component<CardProps, CardState> {
                 )}
               </Footer>
             )}
+
+            {isAdmin && (
+              <div className="card__focus-button-wrapper">
+                <button
+                  className="card__focus-button"
+                  onClick={() => this.props.onFocus(id)}
+                >
+                  <Icon
+                    name="focus"
+                    height={11}
+                    width={11}
+                    className="card__focus-button-icon"
+                  />
+                  <span>Share</span>
+                </button>
+              </div>
+            )}
           </div>
 
           {this.props.getCardsInTheStack().length > 0 && (

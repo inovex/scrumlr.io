@@ -266,3 +266,58 @@ $icon__width: 24px;
   line-height: 24px;
   font-size: 14px;
 }
+
+.card:hover .card__focus-button-wrapper {
+  opacity: 1;
+}
+
+.card__focus-button-wrapper {
+  position: absolute;
+
+  top: 0;
+  bottom: $small-margin;
+  right: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+
+  transition: opacity .2s ease-in-out;
+}
+
+.card__focus-button-icon {
+  margin-right: $small-margin/2;
+}
+
+.card__focus-button-icon svg * {
+  fill: $color-white;
+}
+
+.card__focus-button {
+  display: flex;
+  align-items: center;
+
+  background: $color-stone-gray;
+
+  cursor: pointer;
+
+  border: none;
+  outline: none;
+  border-radius: 6px 0 0 6px;
+  margin: 0;
+  padding: $small-margin/2 $default-margin/2;
+
+  color: $color-white;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  font-size: 11px;
+
+  transition: background-color .2s ease-in-out;
+}
+
+.card__focus-button:hover,
+.card__focus-button:focus {
+  background: $color-mint;
+}
