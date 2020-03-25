@@ -43,7 +43,10 @@
 .ready-button__icon svg > path {
   stroke: $color-mint;
   stroke-width: 2px;
-  transition: stroke,stroke-wdith .2s ease-in-out;
+
+  transition-property: stroke,stroke-wdith;
+  transition-duration: .2s;
+  transition-timing-function: ease-in-out;
 }
 
 .ready-button__icon svg {
@@ -69,6 +72,9 @@
 
 .ready-button__text {
   display: none;
+  transition-property: padding, width, background-color;
+  transition-duration: .2s;
+  transition-timing-function: ease-in-out;
 }
 
 @media #{$tablet} {
@@ -84,8 +90,6 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: clip;
-
-    transition: padding,width,background-color .2s ease-in-out;
   }
 
   .ready-button.ready-button--ready .ready-button__text {
