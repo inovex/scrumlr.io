@@ -9,11 +9,11 @@ $focus-card-inner-margin: 88px;
   flex: 2;
 
   font-family: Heebo, sans-serif;
-  font-size: 12vw;
+  font-size: calc(16px + 1.5vh + .5vw);
   font-weight: bold;
   color: #27322F;
   letter-spacing: 0;
-  line-height: 16vw;
+  line-height: 1.42em;
 
   position: relative;
   height: 100%;
@@ -23,8 +23,13 @@ $focus-card-inner-margin: 88px;
 
 @media #{$tablet} {
   .focus-card {
-    font-size: 72px;
-    line-height: 96px;
+    font-size: 48px;
+  }
+}
+
+@media #{$desktop} {
+  .focus-card {
+    font-size: 60px;
   }
 }
 
@@ -98,12 +103,19 @@ $focus-card-inner-margin: 88px;
 
 .focus-card__vertical-alignment {
   min-height: 1px; // required by Edge
-  max-height: calc(100% - #{$focus-card-inner-margin * 2});
+  max-height: calc(100% - #{$large-margin * 2});
   overflow: hidden;
   align-self: center;
-  margin: $focus-card-inner-margin;
+  margin: $large-margin;
   text-overflow: ellipsis;
   z-index: 1;
+}
+
+@media #{$tablet} {
+  .focus-card__vertical-alignment {
+    max-height: calc(100% - #{$focus-card-inner-margin * 2});
+    margin: $focus-card-inner-margin;
+  }
 }
 
 @supports (-ms-ime-align:auto) {
