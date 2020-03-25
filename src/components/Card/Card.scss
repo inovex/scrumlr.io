@@ -267,20 +267,16 @@ $icon__width: 24px;
   font-size: 14px;
 }
 
-.card:hover .card__focus-button-wrapper {
+.card:hover .card__focus-button {
   opacity: 1;
 }
 
-.card__focus-button-wrapper {
+.card__focus-button {
   position: absolute;
 
-  top: 0;
-  bottom: $small-margin;
+  top: 40%;
   right: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
   opacity: 0;
 
   transition: opacity .2s ease-in-out;
