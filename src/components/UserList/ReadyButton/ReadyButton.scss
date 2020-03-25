@@ -1,0 +1,96 @@
+@import '../../../constants/style';
+
+.ready-button {
+  display: flex;
+  align-items: center;
+
+  border: 0;
+  background: none;
+  outline: none;
+
+  font-size: $theme-font-size;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  padding: 0;
+  margin: 0 0 0 $small-margin*2;
+  min-width: 36px;
+
+  color: $color-white;
+}
+
+.ready-button__icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  float: left;
+
+  width: 36px;
+  height: 36px;
+  background: $color-white;
+  border-radius: 50%;
+
+  border: 2px solid $color-mint;
+  z-index: 1;
+
+  transition: background .1s ease-in-out;
+}
+
+.ready-button.ready-button--ready .ready-button__icon-wrapper {
+  background: $color-mint;
+}
+
+.ready-button__icon svg > path {
+  stroke: $color-mint;
+  stroke-width: 2px;
+  transition: stroke,stroke-wdith .2s ease-in-out;
+}
+
+.ready-button__icon svg {
+  fill: $color-white;
+  transition: fill .2s ease-in-out;
+}
+
+.ready-button.ready-button--ready svg > path {
+  stroke: $color-white;
+  stroke-width: 0;
+}
+
+.ready-button:focus .ready-button__icon-wrapper,
+.ready-button:hover .ready-button__icon-wrapper {
+  background: $color-darkest-mint;
+}
+
+.ready-button:focus .ready-button__icon-wrapper svg > path,
+.ready-button:hover .ready-button__icon-wrapper svg > path {
+  stroke: $color-white;
+  stroke-width: 0;
+}
+
+.ready-button__text {
+  display: none;
+}
+
+@media #{$tablet} {
+  .ready-button__text {
+    display: initial;
+    padding: $small-margin $default-margin $small-margin $default-margin*1.5;
+    margin-left: -$small-margin*2;
+
+    background: $color-mint;
+    border-radius: 6px;
+
+    width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+
+    transition: padding,width,background-color .2s ease-in-out;
+  }
+
+  .ready-button.ready-button--ready .ready-button__text {
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

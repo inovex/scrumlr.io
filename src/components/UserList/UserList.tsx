@@ -6,6 +6,7 @@ import Icon, { IconNames } from '../Icon';
 import './UserList.scss';
 import * as ReactTooltip from 'react-tooltip';
 import Avatar from '../Avatar';
+import ReadyButton from './ReadyButton';
 
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
@@ -15,7 +16,6 @@ export interface UserListProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   userDisplayLimit?: number;
-  isTimerSet: boolean;
   className?: string;
 }
 
@@ -202,7 +202,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   };
 
   render() {
-    const { currentUserId, users, onToggleReadyState, isTimerSet } = this.props;
+    const { currentUserId, users, onToggleReadyState } = this.props;
 
     if (!users) {
       return null;
@@ -222,7 +222,6 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     if (!currentUser) {
       return <></>;
     }
-    const readyText = currentUser.ready ? 'Unmark as done' : 'Mark as done';
 
     return (
       <>
@@ -245,33 +244,10 @@ export class UserList extends React.Component<UserListProps, UserListState> {
             {this.renderUserContent(currentUser, true)}
           </li>
         </ul>
-        {isTimerSet && (
-          <span className="user-list__ready-toggle-wrapper">
-            <button
-              className={cx('user-list__ready-toggle', {
-                'user-list__ready-toggle--ready': currentUser.ready
-              })}
-              onClick={() => {
-                onToggleReadyState();
-                this.setState({ ...this.state, focusedAvatar: true });
-              }}
-              title={readyText}
-            >
-              <Icon
-                name="check"
-                aria-hidden="true"
-                width={16}
-                height={16}
-                className="user-list__ready-toggle-icon"
-              />
-              {!currentUser.ready && (
-                <span className="user-list__ready-toggle-text">
-                  {readyText}
-                </span>
-              )}
-            </button>
-          </span>
-        )}
+        <ReadyButton
+          onToggleReadyState={onToggleReadyState}
+          ready={currentUser.ready}
+        />
       </>
     );
   }

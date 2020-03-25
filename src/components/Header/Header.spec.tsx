@@ -30,8 +30,7 @@ describe('<Header />', () => {
       users: { user1: mockUser() },
       onToggleReadyState: jest.fn(),
       onOpenModal: jest.fn(),
-      onDeleteBoard: jest.fn(),
-      isTimerSet: false
+      onDeleteBoard: jest.fn()
     };
   });
 

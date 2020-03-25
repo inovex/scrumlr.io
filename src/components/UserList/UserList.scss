@@ -133,57 +133,6 @@
   fill: #fff;
 }
 
-.user-list__ready-toggle-wrapper {
-  margin-left: $small-margin*2;
-}
-
-.user-list__ready-toggle {
-  border: 0;
-  background: none;
-  outline: none;
-
-  font-size: $theme-font-size;
-  font-weight: bold;
-  text-transform: uppercase;
-
-  padding: $small-margin $default-margin;
-
-  color: $color-white;
-  background: $color-orange;
-
-  transition: background .2s ease-in-out;
-  border-radius: 8px;
-}
-
-.user-list__ready-toggle.user-list__ready-toggle--ready {
-  background: $color-mint;
-}
-
-.user-list__ready-toggle:focus,
-.user-list__ready-toggle:hover {
-  background: $color-mint;
-}
-
-.user-list__ready-toggle.user-list__ready-toggle--ready:focus,
-.user-list__ready-toggle.user-list__ready-toggle--ready:hover {
-  background: $color-orange;
-}
-
-.user-list__ready-toggle-icon svg {
-  fill: #fff;
-}
-
-.user-list__ready-toggle-text {
-  display: none;
-}
-
-@media #{$tablet} {
-  .user-list__ready-toggle-text {
-    display: initial;
-    margin-left: $small-margin;
-  }
-}
-
 @keyframes spin {
   from {
     transform: rotate(0deg);
