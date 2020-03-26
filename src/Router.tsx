@@ -12,6 +12,7 @@ import LoginBoard from './routes/LoginBoard';
 import PrintViewBoard from './routes/PrintViewBoard';
 import Icon from './components/Icon/Icon';
 import Board from './routes/Board';
+import withTracker from './util/analytics';
 
 export interface RouterProps {
   firebase?: any;
@@ -31,18 +32,21 @@ const Router = (props: RouterProps) => (
       <HashRouter>
         <Switch>
           <Redirect exact from="/" to="/new" />
-          <Route path="/new" component={NewBoard as any} />
+          <Route path="/new" component={withTracker(NewBoard as any)} />
           <Route
             path="/board/:id"
             render={routeProps => (
-              <BoardGuard {...routeProps} component={Board} />
+              <BoardGuard {...routeProps} component={withTracker(Board)} />
             )}
           />
-          <Route path="/join/:id" component={LoginBoard as any} />
+          <Route path="/join/:id" component={withTracker(LoginBoard as any)} />
           <Route
             path="/print/:id"
             render={routeProps => (
-              <BoardGuard {...routeProps} component={PrintViewBoard} />
+              <BoardGuard
+                {...routeProps}
+                component={withTracker(PrintViewBoard)}
+              />
             )}
           />
         </Switch>

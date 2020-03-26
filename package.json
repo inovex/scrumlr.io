@@ -30,6 +30,7 @@
     "react-dom": "^16.4.1",
     "react-dotdotdot": "^1.2.3",
     "react-focus-lock": "^1.17.6",
+    "react-ga": "^2.7.0",
     "react-redux": "^5.0.4",
     "react-redux-firebase": "^2.1.6",
     "react-router": "^4.3.1",
