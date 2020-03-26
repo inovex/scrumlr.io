@@ -12,12 +12,11 @@ let rawdata = fs.readFileSync(inputFile);
 let data = JSON.parse(rawdata);
 
 let invalidNumer = 0;
+const invalidBoards = [];
 
 let output = "date;users;cards;phase;mode;secure;showAuthor\n";
 Object.keys(data.boards).forEach((key) => {
-
   const board = data.boards[key];
-
 
   if (!!board.private && !!board.private.config && !!board.private.config.created && !!board.private.cards && !!board.public && !!board.public.config) {
     const createdDate = new Date(board.private.config.created);
@@ -33,8 +32,9 @@ Object.keys(data.boards).forEach((key) => {
     output += `${date};${users};${cards};${phase};${mode};${secure};${showAuthor}\n`;
   } else {
     invalidNumer++;
+    invalidBoards.push(key);
   }
 });
 
 fs.writeFileSync('./stats.csv', output);
-console.log(`${invalidNumer} invalid boards detected`);
+console.log(`${invalidNumer} invalid boards detected:\n`, invalidBoards);
