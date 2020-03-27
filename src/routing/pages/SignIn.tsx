@@ -34,14 +34,16 @@ export const SignIn: React.FC = () => {
             .auth()
             .signInAnonymously()
             .then((userCredential) => {
-                userCredential.user?.updateProfile({
-                    displayName: state.displayName || randomName
-                }).then(() => {
-                    const currentUser = getFirebase().auth().currentUser!;
-                    getFirebase().firestore().collection('users').doc(currentUser.uid).update({
-                        displayName: currentUser.displayName
+                userCredential.user
+                    ?.updateProfile({
+                        displayName: state.displayName || randomName
+                    })
+                    .then(() => {
+                        const currentUser = getFirebase().auth().currentUser!;
+                        getFirebase().firestore().collection('users').doc(currentUser.uid).update({
+                            displayName: currentUser.displayName
+                        });
                     });
-                });
             })
             .finally(() => {
                 setState({ ...state, signingIn: false });

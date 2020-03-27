@@ -3,7 +3,15 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getFirebase } from 'react-redux-firebase';
 import { BoardContext } from '../routing/pages/Board';
-import Card from "./Card";
+import Card from './Card';
+
+export interface ColumnContextType {
+    columnId?: string;
+}
+
+export const ColumnContext = React.createContext<ColumnContextType>({
+    columnId: undefined
+});
 
 export interface ColumnProps {
     id: string;
@@ -18,7 +26,7 @@ export interface ColumnState {
 
 export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
     const [state, setState] = useState<ColumnState>({});
-    const { boardId } = useContext(BoardContext);
+    const { boardId, isAdmin } = useContext(BoardContext);
 
     const onAddCard = () => {
         getFirebase()
@@ -37,14 +45,27 @@ export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
     };
 
     return (
-        <div>
-            <p>{name}</p>
-            <TextField label="Add card" value={state.text} onChange={(event) => setState({ ...state, text: event.target.value })} />
-            <Button onClick={onAddCard}>Add card</Button>
-            <ul>
-                {cards.map((card) => <li key={card.id}><Card id={card.id} text={card.text} author={card.author}/></li>)}
-            </ul>
-        </div>
+        <ColumnContext.Provider value={{ columnId: id }}>
+            <div>
+                <p>{name}</p>
+
+                {isAdmin && (
+                    <p>
+                        <Button>Toggle Visibility</Button>
+                    </p>
+                )}
+
+                <TextField label="Add card" value={state.text} onChange={(event) => setState({ ...state, text: event.target.value })} />
+                <Button onClick={onAddCard}>Add card</Button>
+                <ul>
+                    {cards.map((card) => (
+                        <li key={card.id}>
+                            <Card id={card.id} text={card.text} author={card.author} />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </ColumnContext.Provider>
     );
 };
 

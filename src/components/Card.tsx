@@ -1,6 +1,6 @@
 import React from 'react';
-import {useSelector} from "react-redux";
-import {ApplicationState} from "../types/state";
+import { useSelector } from 'react-redux';
+import { ApplicationState } from '../types/state';
 
 export interface CardProps {
     id: string;
@@ -8,7 +8,7 @@ export interface CardProps {
     author: string;
 }
 
-export const Card: React.FC<CardProps> = ({text, author}) => {
+export const Card: React.FC<CardProps> = ({ text, author }) => {
     const users = useSelector((state: ApplicationState) => state.firestore.data.users);
     const user = users[author];
 
@@ -17,7 +17,7 @@ export const Card: React.FC<CardProps> = ({text, author}) => {
             <p>{text}</p>
             <p>{user.displayName}</p>
         </div>
-    )
+    );
 };
 
 export default Card;

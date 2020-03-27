@@ -1,17 +1,19 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { isEmpty, isLoaded, ReduxFirestoreQuerySetting, useFirestoreConnect } from 'react-redux-firebase';
+import { getFirebase, isEmpty, isLoaded, ReduxFirestoreQuerySetting, useFirestoreConnect } from 'react-redux-firebase';
 import { useParams as useRouteParams } from 'react-router-dom';
 import { ApplicationState } from '../../types/state';
 import Column from '../../components/Column';
 
 export interface BoardContextType {
     boardId?: string;
+    isAdmin: boolean;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
-    boardId: undefined
-});
+           boardId: undefined,
+           isAdmin: false
+       });
 
 export const Board: React.FC = () => {
     const { id } = useRouteParams();
@@ -51,14 +53,10 @@ export const Board: React.FC = () => {
     }
 
     if (!isLoaded(data.users)) {
-        return <>Loading ...</>
+        return <>Loading ...</>;
     }
 
-    return (
-        <BoardContext.Provider value={{ boardId: id }}>
-            {columns}
-        </BoardContext.Provider>
-    );
+    return <BoardContext.Provider value={{ boardId: id, isAdmin: data.members[getFirebase().auth().currentUser!.uid].admin }}>{columns}</BoardContext.Provider>;
 };
 
 export default Board;
