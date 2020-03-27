@@ -36,6 +36,11 @@ export const SignIn: React.FC = () => {
             .then((userCredential) => {
                 userCredential.user?.updateProfile({
                     displayName: state.displayName || randomName
+                }).then(() => {
+                    const currentUser = getFirebase().auth().currentUser!;
+                    getFirebase().firestore().collection('users').doc(currentUser.uid).update({
+                        displayName: currentUser.displayName
+                    });
                 });
             })
             .finally(() => {

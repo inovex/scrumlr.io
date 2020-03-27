@@ -42,7 +42,7 @@ export const Board: React.FC = () => {
                 cards = Object.entries(data.cards)
                     .filter(([cardId, card]) => card.column === columnId)
                     .map(([cardId, card]) => ({
-                        id,
+                        id: cardId,
                         ...card
                     }));
             }
@@ -50,9 +50,12 @@ export const Board: React.FC = () => {
         });
     }
 
+    if (!isLoaded(data.users)) {
+        return <>Loading ...</>
+    }
+
     return (
         <BoardContext.Provider value={{ boardId: id }}>
-            <code>{JSON.stringify(data)}</code>
             {columns}
         </BoardContext.Provider>
     );
