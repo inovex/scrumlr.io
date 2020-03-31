@@ -7,7 +7,7 @@ export default [
     columns: [
       {
         id: 'positive',
-        name: 'Fragen',
+        name: 'Questions',
         type: 'positive',
         voting: {
           enabled: false,
@@ -48,7 +48,7 @@ export default [
     columns: [
       {
         id: 'positive',
-        name: 'Fragen',
+        name: 'Questions',
         type: 'positive',
         voting: {
           enabled: true,
@@ -85,7 +85,7 @@ export default [
     columns: [
       {
         id: 'positive',
-        name: 'Fragen',
+        name: 'Questions',
         type: 'positive',
         voting: {
           enabled: false,

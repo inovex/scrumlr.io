@@ -119,18 +119,6 @@
   content: '';
 }
 
-.welcome-area__meetup {
-  width: 100%;
-  background: white;
-  border-radius: $small-margin;
-  box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
-  margin-top: $large-margin;
-}
-
-.welcome-area__meetup-inner {
-  padding: $large-padding;
-}
-
 @media #{$tablet} {
   .welcome-area__promotion-text > h2 {
     font-size: 36px;
