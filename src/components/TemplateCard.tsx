@@ -1,20 +1,21 @@
 import React from 'react';
 import { Template } from '../types/state';
 import Button from '@material-ui/core/Button';
+import WithId from '../util/withId';
 
-export interface TemplateCardProps extends Template {
-    id: string;
-    onStart?: () => void;
+export interface TemplateCardProps {
+    template: WithId<Template>;
+    onSelect?: () => void;
     disabled?: boolean;
 }
 
-export const TemplateCard: React.FC<TemplateCardProps> = ({ id, name, featured, onStart, disabled }) => {
+export const TemplateCard: React.FC<TemplateCardProps> = ({ template, onSelect, disabled }) => {
     return (
         <div>
-            <p>{name}</p>
-            <p>isFeatured: {featured ? 'yes' : 'no'}</p>
-            <Button onClick={onStart} disabled={disabled}>
-                Start board
+            <p>{template.name}</p>
+            <p>isFeatured: {template.featured ? 'yes' : 'no'}</p>
+            <Button onClick={onSelect} disabled={disabled}>
+                Select
             </Button>
         </div>
     );

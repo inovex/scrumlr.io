@@ -1,101 +1,109 @@
 import React, { useState } from 'react';
-import { getFirebase, isLoaded, useFirestoreConnect } from 'react-redux-firebase';
+import { isLoaded, useFirestoreConnect } from 'react-redux-firebase';
 import { useSelector } from 'react-redux';
 import { ApplicationState, Template } from '../../types/state';
 import { TemplateCard } from '../../components/TemplateCard';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { Redirect } from 'react-router-dom';
+import { createBoard } from '../../domain/board';
+import WithId, { mapWithId } from '../../util/withId';
+import { useTranslation } from 'react-i18next';
+import AdvancedBoardSetup from '../../components/AdvancedBoardSetup';
+import { getCurrentUser } from '../../domain/auth';
 
 export interface TemplatesState {
-    creating: boolean;
-    board?: string;
+    creatingBoard: boolean;
+    admissionControl: boolean;
+    encryptedData: boolean;
+    selectedTemplate?: WithId<Template>;
+    createdBoard?: string;
 }
 
 export const Templates: React.FC = () => {
+    const { t } = useTranslation('templates');
     const [state, setState] = useState<TemplatesState>({
-        creating: false
+        creatingBoard: false,
+        admissionControl: false,
+        encryptedData: false
     });
+    useFirestoreConnect(() => [
+        {
+            collection: 'templates',
+            where: ['featured', '==', true],
+            limit: 20,
+            storeAs: 'featuredTemplates'
+        },
+        {
+            collection: 'templates',
+            where: ['featured', '==', false],
+            limit: 20,
+            storeAs: 'allTemplates'
+        },
+        {
+            collection: 'templates',
+            where: ['creator', '==', getCurrentUser()!.uid],
+            storeAs: 'myTemplates'
+        }
+    ]);
+    const { featuredTemplates, allTemplates, myTemplates } = useSelector((state: ApplicationState) => state.firestore.data);
 
-    useFirestoreConnect({
-        collection: 'templates',
-        orderBy: ['featured', 'asc'],
-        limit: 20
-    });
+    if (Boolean(state.createdBoard)) {
+        return <Redirect to={`/boards/${state.createdBoard}`} />;
+    }
 
-    const templates = useSelector((state: ApplicationState) => state.firestore.data.templates);
-    if (!isLoaded(templates)) {
+    if (!isLoaded(featuredTemplates) || !isLoaded(allTemplates) || !isLoaded(myTemplates)) {
         return <>Loading templates ...</>;
     }
 
-    if (Boolean(state.board)) {
-        return <Redirect to={`/boards/${state.board}`} />;
-    }
-
-    const createBoard = (templateId: string, template: Template) => {
-        setState({ ...state, creating: true });
-
-        const firestore = getFirebase().firestore();
-        firestore
-            .collection('boards')
-            .add({
-                secure: false,
-                owner: getFirebase().auth().currentUser!.uid,
-                template: templateId
-            })
-            .then((ref) => {
-                const promises: Promise<any>[] = [];
-
-                promises.push(
-                    ref.collection('members').doc(getFirebase().auth().currentUser!.uid).set({
-                        admin: true,
-                        markedAsDone: false
-                    })
-                );
-
-                template.columns.forEach((column) => {
-                    promises.push(
-                        ref.collection('columns').add({
-                            name: column.name,
-                            visible: column.visible
-                        })
-                    );
-                });
-
-                Promise.all(promises).then(() => {
-                    setState({ ...state, creating: false, board: ref.id });
-                });
-            });
+    const onCreateBoard = (template: WithId<Template>) => {
+        setState({ ...state, creatingBoard: true });
+        createBoard(template, state.admissionControl, state.encryptedData).then((ref) => {
+            setState({ ...state, creatingBoard: false, createdBoard: ref.id });
+        });
     };
 
-    const entries = Object.entries(templates).map(([id, template]) => ({
-        id,
-        template,
-        component: (
-            <li key={id}>
-                <TemplateCard id={id} {...template} onStart={() => createBoard(id, template)} disabled={state.creating} />
-            </li>
-        )
-    }));
+    const templateToComponent = (template: WithId<Template>) => (
+        <li key={template.id}>
+            <TemplateCard template={template} onSelect={() => setState({ ...state, selectedTemplate: template })} disabled={state.creatingBoard} />
+        </li>
+    );
+    const featuredEntries = mapWithId(featuredTemplates).map(templateToComponent);
+    const allEntries = mapWithId(allTemplates).map(templateToComponent);
+    const myEntries = mapWithId(myTemplates).map(templateToComponent);
 
     return (
         <div>
-            <h2>Create new board</h2>
+            <Typography variant="h2">{t('heading')}</Typography>
             <aside>
-                <h3>Advanced configuration</h3>
-                <FormGroup>
-                    <FormControlLabel control={<Switch />} label="Secure" />
-                </FormGroup>
+                <AdvancedBoardSetup
+                    admissionControl={state.admissionControl}
+                    encryptedData={state.encryptedData}
+                    onSetAdmissionControl={(enabled) => setState({ ...state, admissionControl: enabled, encryptedData: !enabled ? false : state.encryptedData })}
+                    onSetEncryptedData={(enabled) => setState({ ...state, encryptedData: enabled })}
+                />
+                <Button disabled={!state.selectedTemplate || state.creatingBoard} onClick={() => onCreateBoard(state.selectedTemplate!)}>
+                    {t('createBoard')}
+                </Button>
             </aside>
 
-            <h3>Featured templates</h3>
-            <ul>{entries.filter((value) => value.template.featured).map((value) => value.component)}</ul>
+            <Typography variant="h3">{t('featuredTemplates')}</Typography>
+            <ul>{featuredEntries}</ul>
 
-            <h3>Other templates</h3>
-            <ul>{entries.filter((value) => !value.template.featured).map((value) => value.component)}</ul>
+            {allEntries.length > 0 && (
+                <>
+                    <Typography variant="h3">{t('otherTemplates')}</Typography>
+                    <ul>{allEntries}</ul>
+                </>
+            )}
 
-            <p>New templates can be exported from existing boards</p>
+            <Typography variant="h3">{t('myTemplates')}</Typography>
+            {myEntries.length == 0 && (
+                <>
+                    <Typography>No custom created templates yet</Typography>
+                    <Button>Create Template</Button>
+                </>
+            )}
         </div>
     );
 };

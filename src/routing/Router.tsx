@@ -37,6 +37,9 @@ export default function Router() {
                         <ProtectedRoute path="/boards/:id">
                             <Board />
                         </ProtectedRoute>
+                        <ProtectedRoute path="/templates/:id">
+                            <Templates />
+                        </ProtectedRoute>
 
                         <Route path="/" component={Homepage} />
                     </Switch>

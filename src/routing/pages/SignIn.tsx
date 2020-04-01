@@ -4,8 +4,9 @@ import Button from '@material-ui/core/Button';
 import getRandomName from '../../util/usernameGenerator';
 import { useSelector } from 'react-redux';
 import { ApplicationState } from '../../types/state';
-import { getFirebase, isEmpty, isLoaded } from 'react-redux-firebase';
+import { isEmpty, isLoaded } from 'react-redux-firebase';
 import firebase from 'firebase';
+import { signInAnonymously, signInWithProvider, signOut } from '../../domain/auth';
 
 export interface SignInState {
     displayName?: string;
@@ -21,43 +22,14 @@ export const SignIn: React.FC = () => {
 
     const authData = useSelector((state: ApplicationState) => state.firebase.auth);
     if (isLoaded(authData) && !isEmpty(authData)) {
-        const signOut = () => {
-            getFirebase().auth().signOut();
-        };
-
         return <Button onClick={signOut}>Sign out</Button>;
     }
 
-    const signInAnonymously = () => {
+    const signIn = <T extends any>(signInMethod: (param: T) => Promise<void>, param: T) => () => {
         setState({ ...state, signingIn: true });
-        getFirebase()
-            .auth()
-            .signInAnonymously()
-            .then((userCredential) => {
-                userCredential.user
-                    ?.updateProfile({
-                        displayName: state.displayName || randomName
-                    })
-                    .then(() => {
-                        const currentUser = getFirebase().auth().currentUser!;
-                        getFirebase().firestore().collection('users').doc(currentUser.uid).update({
-                            displayName: currentUser.displayName
-                        });
-                    });
-            })
-            .finally(() => {
-                setState({ ...state, signingIn: false });
-            });
-    };
-
-    const signInWithGoogle = () => {
-        setState({ ...state, signingIn: true });
-        getFirebase()
-            .auth()
-            .signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-            .finally(() => {
-                setState({ ...state, signingIn: false });
-            });
+        return signInMethod(param).finally(() => {
+            setState({ ...state, signingIn: false });
+        });
     };
 
     return (
@@ -71,12 +43,12 @@ export const SignIn: React.FC = () => {
                         setState({ ...state, displayName: event.target.value });
                     }}
                 />
-                <Button disabled={state.signingIn} onClick={signInAnonymously}>
+                <Button disabled={state.signingIn} onClick={signIn(signInAnonymously, state.displayName || randomName)}>
                     Sign in anonymously
                 </Button>
             </div>
             <div>
-                <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+                <Button onClick={signIn(signInWithProvider, new firebase.auth.GoogleAuthProvider())}>Sign in with Google</Button>
             </div>
         </div>
     );

@@ -2,8 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { getFirebase, isEmpty, isLoaded, ReduxFirestoreQuerySetting, useFirestoreConnect } from 'react-redux-firebase';
 import { useParams as useRouteParams } from 'react-router-dom';
-import { ApplicationState } from '../../types/state';
+import { ApplicationState, Card } from '../../types/state';
 import Column from '../../components/Column';
+import WithId, { mapWithId } from '../../util/withId';
 
 export interface BoardContextType {
     boardId?: string;
@@ -11,9 +12,9 @@ export interface BoardContextType {
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
-           boardId: undefined,
-           isAdmin: false
-       });
+    boardId: undefined,
+    isAdmin: false
+});
 
 export const Board: React.FC = () => {
     const { id } = useRouteParams();
@@ -39,14 +40,9 @@ export const Board: React.FC = () => {
     let columns: React.ReactNode[] = [];
     if (isLoaded(data.columns) && !isEmpty(data.columns) && isLoaded(data.cards)) {
         columns = Object.entries(data.columns).map(([columnId, column]) => {
-            let cards: any[] = [];
+            let cards: WithId<Card>[] = [];
             if (!isEmpty(data.cards)) {
-                cards = Object.entries(data.cards)
-                    .filter(([cardId, card]) => card.column === columnId)
-                    .map(([cardId, card]) => ({
-                        id: cardId,
-                        ...card
-                    }));
+                cards = mapWithId<Card>(data.cards).filter((card) => card.column === columnId);
             }
             return <Column key={columnId} id={columnId} name={column.name} visible={column.visible} cards={cards} />;
         });

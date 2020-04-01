@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { getFirebase } from 'react-redux-firebase';
 import { BoardContext } from '../routing/pages/Board';
-import Card from './Card';
+import CardComponent from './Card';
+import { addCard } from '../domain/board';
+import WithId from '../util/withId';
+import { Card } from '../types/state';
 
 export interface ColumnContextType {
     columnId?: string;
@@ -17,7 +19,7 @@ export interface ColumnProps {
     id: string;
     name: string;
     visible: boolean;
-    cards: any[];
+    cards: WithId<Card>[];
 }
 
 export interface ColumnState {
@@ -29,19 +31,9 @@ export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
     const { boardId, isAdmin } = useContext(BoardContext);
 
     const onAddCard = () => {
-        getFirebase()
-            .firestore()
-            .collection('boards')
-            .doc(boardId!)
-            .collection('cards')
-            .add({
-                author: getFirebase().auth().currentUser!.uid,
-                column: id,
-                text: state.text
-            })
-            .then(() => {
-                setState({ ...state, text: undefined });
-            });
+        addCard(boardId!, id, state.text).then(() => {
+            setState({ ...state, text: undefined });
+        });
     };
 
     return (
@@ -60,7 +52,7 @@ export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
                 <ul>
                     {cards.map((card) => (
                         <li key={card.id}>
-                            <Card id={card.id} text={card.text} author={card.author} />
+                            <CardComponent {...card} />
                         </li>
                     ))}
                 </ul>

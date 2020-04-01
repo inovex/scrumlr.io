@@ -11,7 +11,9 @@ export interface ApplicationState {
             columns: Columns;
             settings: Settings;
             users: Users;
-            templates: Templates;
+            featuredTemplates: Templates;
+            allTemplates: Templates;
+            myTemplates: Templates;
         };
     };
 }
@@ -39,14 +41,24 @@ interface Boards {
 }
 
 export interface Board {
-    secure: boolean;
+    /** Access to members must be acknowledged before they can join a board, when this property is set to `true`. */
+    admissionControl: boolean;
+
+    /** Input data will be encrypted in the database. */
+    encryptedData: boolean;
+
+    /** Reference to a board template id. */
+    template: string;
+
+    /** Reference to the creators user id. */
+    owner: string;
 }
 
 interface Members {
     [key: string]: Member;
 }
 
-interface Member {
+export interface Member {
     admin: boolean;
     markedAsDone?: boolean;
 }
@@ -64,10 +76,10 @@ interface Cards {
     [key: string]: Card;
 }
 
-interface Card {
+export interface Card {
     column: string;
     text: string;
-    author: string; // reference
+    author: string;
 }
 
 interface Settings {
@@ -84,10 +96,10 @@ interface Columns {
     [key: string]: Column;
 }
 
-interface Column {
+export interface Column {
     name: string;
     visible: boolean;
-    index: number;
+    index?: number;
 }
 
 interface Templates {
@@ -96,6 +108,7 @@ interface Templates {
 
 export interface Template {
     name: string;
+    creator: string;
     featured: boolean;
     columns: [
         {

@@ -9,6 +9,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import Router from './routing/Router';
 import { ThemeProvider } from '@material-ui/core';
 import { theme } from './style/theme';
+import initLocale from './locale';
 
 // init firebase
 const projectId = process.env.REACT_APP_FIREBASE_PROJECT_ID;
@@ -46,6 +47,9 @@ const reactReduxFirebaseProps = {
     dispatch: store.dispatch,
     createFirestoreInstance
 };
+
+// init i18n
+initLocale();
 
 ReactDOM.render(
     <React.StrictMode>
