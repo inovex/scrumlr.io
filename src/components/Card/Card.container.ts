@@ -35,7 +35,19 @@ export const mapStateToProps = (
     {}
   );
 
-  function onRemoveCard(key: string) {
+  async function onRemoveCard(key: string) {
+    const { focusedCardId } = getVal(
+      state.fbState,
+      `data/${ownProps.boardId}/config`,
+      {}
+    );
+
+    if (focusedCardId === key) {
+      await getFirebase()
+        .ref(`${ownProps.boardId}/config/focusedCardId`)
+        .remove();
+    }
+
     const toUpdate = {};
     Object.keys(cards).forEach(k => {
       if (cards[k].parent === key) {
@@ -43,7 +55,7 @@ export const mapStateToProps = (
       }
     });
 
-    getFirebase()
+    await getFirebase()
       .ref(`${ownProps.boardId}/cards`)
       .update(toUpdate)
       .catch((err: Error) => {
@@ -57,7 +69,7 @@ export const mapStateToProps = (
         });
       });
 
-    getFirebase()
+    await getFirebase()
       .ref(`${ownProps.boardId}/cards/${key}`)
       .remove()
       .catch((err: Error) => {
