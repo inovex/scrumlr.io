@@ -52,6 +52,9 @@ export interface Board {
 
     /** Reference to the creators user id. */
     owner: string;
+
+    /** ISO string of creation date. */
+    creationDate: string;
 }
 
 interface Members {
@@ -108,7 +111,9 @@ interface Templates {
 
 export interface Template {
     name: string;
+    description?: string | null;
     creator: string;
+    creationDate: string;
     featured: boolean;
     columns: [
         {

@@ -47,7 +47,7 @@ export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
                     </p>
                 )}
 
-                <TextField label="Add card" value={state.text} onChange={(event) => setState({ ...state, text: event.target.value })} />
+                <TextField label="Add card" value={state.text || ''} onChange={(event) => setState({ ...state, text: event.target.value })} />
                 <Button onClick={onAddCard}>Add card</Button>
                 <ul>
                     {cards.map((card) => (

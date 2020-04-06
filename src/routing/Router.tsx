@@ -34,11 +34,11 @@ export default function Router() {
                         <ProtectedRoute path="/templates">
                             <Templates />
                         </ProtectedRoute>
-                        <ProtectedRoute path="/boards/:id">
-                            <Board />
-                        </ProtectedRoute>
                         <ProtectedRoute path="/templates/:id">
                             <Templates />
+                        </ProtectedRoute>
+                        <ProtectedRoute path="/boards/:id">
+                            <Board />
                         </ProtectedRoute>
 
                         <Route path="/" component={Homepage} />

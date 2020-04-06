@@ -98,7 +98,7 @@ export const Templates: React.FC = () => {
             )}
 
             <Typography variant="h3">{t('myTemplates')}</Typography>
-            {myEntries.length == 0 && (
+            {myEntries.length === 0 && (
                 <>
                     <Typography>No custom created templates yet</Typography>
                     <Button>Create Template</Button>

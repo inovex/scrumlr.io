@@ -27,7 +27,8 @@ export const createBoard = async (template: WithId<Template>, admissionControl: 
             admissionControl,
             encryptedData,
             owner: getFirebase().auth().currentUser!.uid,
-            template: template.id
+            template: template.id,
+            creationDate: new Date().toISOString()
         };
         const ref = await firestore.collection('boards').add(boardSettings);
 
@@ -40,6 +41,10 @@ export const createBoard = async (template: WithId<Template>, admissionControl: 
     } catch (error) {
         throw error;
     }
+};
+
+export const addToAdmissionControl = (boardId: string, userUid: string) => {
+    return getFirebase().firestore().collection('boards').doc(boardId).collection('pending').doc(userUid).set({});
 };
 
 export const addMember = (boardId: string, userUid: string, admin: boolean = false) => {
