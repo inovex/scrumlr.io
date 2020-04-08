@@ -1,44 +1,21 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> The code of the online version of [scrumlr.io](https://scrumlr.io) is located
+> [at the v1 branch](https://github.com/scrumlr/scrumlr.io/tree/v1), since we are currently working on a new 
+> implementation of your favorite webapp for collaborative sessions.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+![scrumlr.io Logo](https://raw.githubusercontent.com/scrumlr/scrumlr.io/master/scrumlr.png)
 
-### `npm start`
+<!---
+![Uptime status](https://img.shields.io/uptimerobot/status/m784173137-600f28cd55b25aff29eff003)
+[![Build status](https://img.shields.io/travis/com/scrumlr/scrumlr.io/v2)](https://travis-ci.com/scrumlr/scrumlr.io)
+[![Code coverage](https://img.shields.io/codecov/c/github/scrumlr/scrumlr.io/v2)](https://codecov.io/gh/scrumlr/scrumlr.io)
+[![Depdendency status](https://img.shields.io/depfu/scrumlr/scrumlr.io)](https://depfu.com/github/scrumlr/scrumlr.io?project_id=10585)
+![License](https://img.shields.io/github/license/scrumlr/scrumlr.io)
+-->
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Webapp for collaborative online brainstorming sessions, lean coffees, retrospectives - hosted on [scrumlr.io](https://scrumlr.io).
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Thank you
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Thanks to all our users, contributors & supporters!
