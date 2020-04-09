@@ -57,13 +57,16 @@ export interface Board {
     creationDate: string;
 }
 
-interface Members {
+export interface Members {
     [key: string]: Member;
 }
 
 export interface Member {
     admin: boolean;
     markedAsDone?: boolean;
+    votes?: {
+        [cardId: string]: number;
+    };
 }
 
 interface PendingList {
