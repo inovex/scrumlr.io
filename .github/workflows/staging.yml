@@ -31,6 +31,7 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: true
   deploy_firebase:
+    needs: build
     name: Deploy to Firebase
     strategy:
       matrix:
@@ -40,6 +41,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
       - name: Building produciton version
         run: npm run build
       - name: Deploy to Firebase
@@ -49,6 +52,7 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
   deploy_github:
+    needs: build
     name: Deploy to GitHub Packages
     strategy:
       matrix:
@@ -57,7 +61,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Building production version
+        run: npm run build
       - name: Publish to GitHub Packages
         uses: machine-learning-apps/gpr-docker-publish@master
         id: docker
