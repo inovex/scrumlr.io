@@ -16,10 +16,10 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Upload workspace
-          uses: actions/upload-artifact@v1
-          with:
-            name: dependencies
-            path: .
+        uses: actions/upload-artifact@v1
+        with:
+          name: dependencies
+          path: .
   prettier-check:
     name: Checking the formatting
     needs: [ install ]
