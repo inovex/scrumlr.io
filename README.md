@@ -6,13 +6,12 @@
 
 ![scrumlr.io Logo](https://raw.githubusercontent.com/scrumlr/scrumlr.io/master/scrumlr.png)
 
-<!---
-![Uptime status](https://img.shields.io/uptimerobot/status/m784173137-600f28cd55b25aff29eff003)
-[![Build status](https://img.shields.io/travis/com/scrumlr/scrumlr.io/v2)](https://travis-ci.com/scrumlr/scrumlr.io)
-[![Code coverage](https://img.shields.io/codecov/c/github/scrumlr/scrumlr.io/v2)](https://codecov.io/gh/scrumlr/scrumlr.io)
-[![Depdendency status](https://img.shields.io/depfu/scrumlr/scrumlr.io)](https://depfu.com/github/scrumlr/scrumlr.io?project_id=10585)
-![License](https://img.shields.io/github/license/scrumlr/scrumlr.io)
--->
+![Uptime status](https://badgen.net/uptime-robot/status/m784173137-600f28cd55b25aff29eff003)
+[![Code coverage](https://badgen.net/codecov/c/github/scrumlr/scrumlr.io)](https://codecov.io/gh/scrumlr/scrumlr.io)
+[![Dependency status](https://badges.depfu.com/badges/8ecd7c6dfbe0097b4f16a1ecae3b5987/overview.svg)](https://depfu.com/github/scrumlr/scrumlr.io?project_id=10585)
+![License](https://badgen.net/github/license/scrumlr/scrumlr.io)
+<!--[![Build status](https://img.shields.io/travis/com/scrumlr/scrumlr.io/v2)](https://travis-ci.com/scrumlr/scrumlr.io)-->
+
 
 Webapp for collaborative online brainstorming sessions, lean coffees, retrospectives - hosted on [scrumlr.io](https://scrumlr.io).
 
