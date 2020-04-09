@@ -2,6 +2,8 @@ name: staging-CI
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 jobs:
   build:
     strategy:
@@ -28,8 +30,8 @@ jobs:
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
-  deploy:
-    name: Deploy
+  deploy_firebase:
+    name: Deploy to Firebase
     strategy:
       matrix:
         node: [ 13 ]
@@ -46,3 +48,23 @@ jobs:
           args: deploy --project ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  deploy_github:
+    name: Deploy to GitHub Packages
+    strategy:
+      matrix:
+        node: [ 13 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Publish to GitHub Packages
+      uses: machine-learning-apps/gpr-docker-publish@master
+      id: docker
+      with:
+        IMAGE_NAME: 'scrumlr.io'
+        TAG: 'latest'
+        DOCKERFILE_PATH: 'Dockerfile'
+        BUILD_CONTEXT: '.'
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
