@@ -66,13 +66,9 @@ jobs:
         run: npm install
       - name: Building production version
         run: npm run build
-      - name: Publish to GitHub Packages
-        uses: machine-learning-apps/gpr-docker-publish@master
-        id: docker
-        with:
-          IMAGE_NAME: 'scrumlr.io'
-          TAG: 'latest'
-          DOCKERFILE_PATH: 'Dockerfile'
-          BUILD_CONTEXT: '.'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to GitHub package registry
+        run: docker login docker.pkg.github.com -u theexiile1305 -p $TOKEN
+      - name: Building docker image
+        run: docker build -t docker.pkg.github.com/scrumlr/scrumlr.io/scrumlrlatest .
+      - name: Uploading to GitHub package registry
+        run: docker push docker.pkg.github.com/scrumlr/scrumlr.io/scrumlr:latest
