@@ -59,12 +59,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@master
       - name: Publish to GitHub Packages
-      uses: machine-learning-apps/gpr-docker-publish@master
-      id: docker
-      with:
-        IMAGE_NAME: 'scrumlr.io'
-        TAG: 'latest'
-        DOCKERFILE_PATH: 'Dockerfile'
-        BUILD_CONTEXT: '.'
-      env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        uses: machine-learning-apps/gpr-docker-publish@master
+        id: docker
+        with:
+          IMAGE_NAME: 'scrumlr.io'
+          TAG: 'latest'
+          DOCKERFILE_PATH: 'Dockerfile'
+          BUILD_CONTEXT: '.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
