@@ -1,6 +1,6 @@
-name: dev-CI
+name: staging-CI
 on:
-  pull_request:
+  push:
     branches: [ master ]
 jobs:
   build:
@@ -36,7 +36,10 @@ jobs:
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Building produciton version
+        run: npm run build
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
