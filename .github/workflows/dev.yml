@@ -3,7 +3,8 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  build:
+  install:
+    name: Installing dependencies
     strategy:
       matrix:
         node: [ 13 ]
@@ -14,11 +15,55 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: npm install
+      - name: Upload workspace
+          uses: actions/upload-artifact@v1
+          with:
+            name: dependencies
+            path: .
+  prettier-check:
+    name: Checking the formatting
+    needs: [ install ]
+    strategy:
+      matrix:
+        node: [ 13 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download workspace
+        uses: actions/download-artifact@v1
+        with:
+          name: dependencies
       - name: Checking prettied files
         run: npm run prettier:check
-        # TODO #118: - name: Linting with eslint
+  eslint-check:
+    name: Checking with eslint
+    needs: [ install ]
+    strategy:
+      matrix:
+        node: [ 13 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download workspace
+        uses: actions/download-artifact@v1
+        with:
+          name: dependencies
+        # TODO #118: - name: Checking files with eslint
         # TODO #118: run: npm run lint
-      - name: Testing with coverage
+  test-check:
+    name: Checking with test & coverage
+    needs: [ install ]
+    strategy:
+      matrix:
+        node: [ 13 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Download workspace
+        uses: actions/download-artifact@v1
+        with:
+          name: dependencies
+      - name: Checking with eslint
         run: npm test -- --coverage --watchAll=false
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
