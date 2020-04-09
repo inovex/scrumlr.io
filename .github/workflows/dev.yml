@@ -1,0 +1,30 @@
+name: dev-CI
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    strategy:
+      matrix:
+        node: [ 13 ]
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Checking prettied files
+        run: npm run prettier:check
+      - name: Linting with eslint
+        run: npm run lint
+      - name: Testing with coverage
+        run: npm test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
