@@ -1,5 +1,5 @@
 import { getFirebase } from 'react-redux-firebase';
-import {Board, Column, Member, Template} from '../types/state';
+import { Board, Column, Member, Template } from '../types/state';
 import WithId from '../util/withId';
 
 export const addCard = (boardId: string, columnId: string, text?: string) => {
@@ -62,5 +62,3 @@ export const addColumn = (boardId: string, columnName: string, visible: boolean)
     };
     return getFirebase().firestore().collection('boards').doc(boardId).collection('columns').add(column);
 };
-
-

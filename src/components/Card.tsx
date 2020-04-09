@@ -1,10 +1,10 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { ApplicationState } from '../types/state';
-import {addVote, getVotes, removeVote} from "../domain/votes";
-import Button from "@material-ui/core/Button";
-import {BoardContext} from "../routing/pages/Board";
-import {getCurrentUser} from "../domain/auth";
+import { addVote, getVotes, removeVote } from '../domain/votes';
+import Button from '@material-ui/core/Button';
+import { BoardContext } from '../routing/pages/Board';
+import { getCurrentUser } from '../domain/auth';
 
 export interface CardProps {
     id: string;
