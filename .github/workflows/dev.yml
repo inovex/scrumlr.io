@@ -1,6 +1,6 @@
 name: dev-CI
 on:
-  pull_request:
+  push:
     branches: [ master ]
 jobs:
   build:
@@ -19,12 +19,12 @@ jobs:
       - name: Linting with eslint
         run: npm run lint
       - name: Testing with coverage
-        run: npm test --coverage
+        run: npm test -- --coverage --watchAll=false
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
+          file: ./coverage/clover.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
