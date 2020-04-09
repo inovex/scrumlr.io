@@ -67,7 +67,7 @@ jobs:
       - name: Building production version
         run: npm run build
       - name: Login to GitHub package registry
-        run: docker login docker.pkg.github.com -u theexiile1305 -p $TOKEN
+        run: docker login docker.pkg.github.com -u theexiile1305 -p ${{ secrets.TOKEN }}
       - name: Building docker image
         run: docker build -t docker.pkg.github.com/scrumlr/scrumlr.io/scrumlrlatest .
       - name: Uploading to GitHub package registry
