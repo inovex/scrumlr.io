@@ -3,7 +3,7 @@ on:
   push:
     branches: [ master ]
   pull_request:
-      branches: [ master ]
+    branches: [ master ]
 jobs:
   build:
     strategy:
@@ -42,7 +42,6 @@ jobs:
       - name: Building produciton version
         run: npm run build
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_APP_ID: ${{ secrets.REACT_APP_FIREBASE_APP_ID }}
           REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}
@@ -52,3 +51,5 @@ jobs:
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
