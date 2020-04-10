@@ -25,8 +25,8 @@ jobs:
         run: npm ci
       - name: Checking prettied files
         run: npm run prettier:check
-        # TODO #118: - name: Linting with eslint
-        # TODO #118: run: npm run lint
+      - name: Linting with eslint
+        run: npm run lint
       - name: Testing with coverage
         run: npm test -- --coverage --watchAll=false
       - name: Upload coverage to Codecov
