@@ -2,21 +2,27 @@ import { Members } from '../types/state';
 import { getFirebase } from 'react-redux-firebase';
 
 export const setVoteLimit = (boardId: string, voteLimit: number) => {
-  return getFirebase().firestore().collection('boards').doc(boardId!).update({
-      voteLimit
-  })
+    return getFirebase().firestore().collection('boards').doc(boardId!).update({
+        voteLimit
+    });
 };
 
 export const deleteVoteLimit = (boardId: string) => {
     return getFirebase().firestore().collection('boards').doc(boardId!).update({
         voteLimit: null
-    })
+    });
+};
+
+export const allowMultivote = (boardId: string, enabled: boolean) => {
+    return getFirebase().firestore().collection('boards').doc(boardId!).update({
+        allowMultivote: enabled
+    });
 };
 
 export const getVotes = (cardId: string, members: Members) => {
     return Object.values(members)
         .flatMap((member) => member.votes || [])
-        .map(vote => vote === cardId).length;
+        .map((vote) => vote === cardId).length;
 };
 
 export const addVote = (boardId: string, cardId: string, userId: string) => {

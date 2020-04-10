@@ -16,13 +16,12 @@ service cloud.firestore {
             	return get(/databases/$(database)/documents/boards/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
-
             allow get: if isMember()
             allow list: if false
             allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.owner
             allow update, delete: if isAdmin()
 
-            match /applicants/{uid} {
+            match /pending/{uid} {
                 allow read: if isAdmin()
                 allow create: if isAdmin() || request.auth.uid == uid
                 allow update: if isAdmin()
@@ -30,9 +29,17 @@ service cloud.firestore {
             }
 
             match /members/{uid} {
+                function checkVoteLimit() {
+                    return !request.resource.data.votes || get(/databases/$(database)/documents/boards/$(id)).voteLimit == null || request.resource.data.votes.size() <= get(/databases/$(database)/documents/boards/$(id)).voteLimit
+                }
+
+                function checkMultivote() {
+                    return !get(/databases/$(database)/documents/boards/$(id)).allowMultivote == true || request.resource.data.votes.toSet().size() == request.resource.data.votes.size()
+                }
+
                 allow read: if isMember()
                 allow create: if isAdmin()
-                allow update: if (request.auth.uid == uid || isAdmin()) && (get(/databases/$(database)/documents/boards/$(id)).voteLimit == null || request.resource.data.votes.size() <= get(/databases/$(database)/documents/boards/$(id)).voteLimit)
+                allow update: if (request.auth.uid == uid || isAdmin()) && checkVoteLimit() && checkMultivote()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
 
@@ -52,12 +59,6 @@ service cloud.firestore {
                 allow read: if isMember()
                 allow write: if isAdmin()
             }
-        }
-
-        match /strings/{document=**} {
-            allow read: if true;
-            allow list: if true;
-            allow write: if false;
         }
     }
 }
