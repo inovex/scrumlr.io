@@ -1,4 +1,4 @@
-FROM node:13.2-alpine as builder
+FROM node:13.8-alpine3.11 as builder
 
 # Stage 1 - the build process
 WORKDIR /usr/src/app
