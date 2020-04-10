@@ -14,17 +14,48 @@ export interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ id, text, author }) => {
     const { boardId } = useContext(BoardContext);
-    const { users, members } = useSelector((state: ApplicationState) => state.firestore.data);
+    const { users, members, boards } = useSelector((state: ApplicationState) => state.firestore.data);
     const user = users[author];
+
+    const votingEnabled = boards[boardId!].voting && !boards[boardId!].voting!.completed;
     const votes = getVotes(id, members);
+
+    let allowVote = false;
+    let allowMultivote = false;
+    let voteLimit: number | null = null;
+    if (boards[boardId!].voting) {
+        voteLimit = boards[boardId!].voting!.voteLimit;
+        allowMultivote = boards[boardId!].voting!.allowMultivote;
+    }
+
+    const spendVotesOverall = members[getCurrentUser()!.uid].votes?.length || 0;
+    const spendVotesOnCard = (members[getCurrentUser()!.uid].votes || []).indexOf(id) >= 0;
+    if ((!voteLimit || spendVotesOverall < voteLimit) && ((!allowMultivote && !spendVotesOnCard) || allowMultivote)) {
+        allowVote = true;
+    }
+    const onAdd = () => {
+        if (allowVote) {
+            addVote(boardId!, id, getCurrentUser()!.uid);
+        }
+    };
+
+    const onRemove = () => {
+        if (spendVotesOnCard) {
+            removeVote(boardId!, id, getCurrentUser()!.uid);
+        }
+    };
 
     return (
         <div>
             <p>{text}</p>
             <p>{user.displayName}</p>
             <p>Votes: {votes}</p>
-            <Button onClick={() => removeVote(boardId!, id, getCurrentUser()!.uid)}>Remove Vote</Button>
-            <Button onClick={() => addVote(boardId!, id, getCurrentUser()!.uid)}>Add Vote</Button>
+            <Button onClick={onRemove} disabled={!votingEnabled || !spendVotesOnCard}>
+                Remove Vote
+            </Button>
+            <Button onClick={onAdd} disabled={!votingEnabled || !allowVote}>
+                Add Vote
+            </Button>
         </div>
     );
 };

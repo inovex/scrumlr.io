@@ -9,7 +9,6 @@ export interface ApplicationState {
             pending: PendingList;
             cards: Cards;
             columns: Columns;
-            settings: Settings;
             users: Users;
             featuredTemplates: Templates;
             allTemplates: Templates;
@@ -56,7 +55,7 @@ export interface Board {
     /** ISO string of creation date. */
     creationDate: string;
 
-    voteLimit?: number;
+    voting?: VotingConfiguration;
 }
 
 export interface Members {
@@ -88,14 +87,10 @@ export interface Card {
     author: string;
 }
 
-interface Settings {
-    general: GeneralSettings;
-}
-
-interface GeneralSettings {
-    template: string | undefined; // reference
-    creator: string; // reference
-    name: string;
+export interface VotingConfiguration {
+    completed: boolean;
+    voteLimit: number | null;
+    allowMultivote: boolean;
 }
 
 interface Columns {

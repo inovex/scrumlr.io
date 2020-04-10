@@ -5,6 +5,7 @@ import { Card } from '../../types/state';
 import Column from '../../components/Column';
 import WithId, { mapWithId } from '../../util/withId';
 import { BoardAccessState, useBoardGuard } from '../util/useBoardGuard';
+import { VotingConfiguration } from '../../components/VotingConfiguration';
 
 export interface BoardContextType {
     boardId?: string;
@@ -43,7 +44,12 @@ export const Board: React.FC = () => {
         return <>Loading ...</>;
     }
 
-    return <BoardContext.Provider value={{ boardId: id, isAdmin: guard.isAdmin }}>{columnComponents}</BoardContext.Provider>;
+    return (
+        <BoardContext.Provider value={{ boardId: id, isAdmin: guard.isAdmin }}>
+            <VotingConfiguration />
+            {columnComponents}
+        </BoardContext.Provider>
+    );
 };
 
 export default Board;

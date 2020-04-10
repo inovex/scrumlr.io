@@ -29,7 +29,7 @@ export const useBoardGuard = (id: string) => {
         isAdmin: false,
         boardAccessEvaluationResult: BoardAccessState.PENDING
     });
-    const { boards, members, pending, cards, columns, settings, users } = useSelector((state: ApplicationState) => state.firestore.data);
+    const { boards, members, pending, cards, columns, users } = useSelector((state: ApplicationState) => state.firestore.data);
     useFirestoreConnect(() => {
         let userQueries: ReduxFirestoreQuerySetting[] = [];
         if (isLoaded(members) && !isEmpty(members)) {
@@ -41,7 +41,6 @@ export const useBoardGuard = (id: string) => {
             { collection: 'boards', doc: id, subcollections: [{ collection: 'pending' }], storeAs: 'pending' },
             { collection: 'boards', doc: id, subcollections: [{ collection: 'cards' }], storeAs: 'cards' },
             { collection: 'boards', doc: id, subcollections: [{ collection: 'columns' }], storeAs: 'columns' },
-            { collection: 'boards', doc: id, subcollections: [{ collection: 'settings' }], storeAs: 'settings' },
             ...userQueries,
             ...state.databaseQueries
         ];
@@ -118,7 +117,6 @@ export const useBoardGuard = (id: string) => {
             pending,
             cards,
             columns,
-            settings,
             users
         }
     };
