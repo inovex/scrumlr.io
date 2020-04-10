@@ -16,6 +16,7 @@ service cloud.firestore {
             	return get(/databases/$(database)/documents/boards/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
+
             allow get: if isMember()
             allow list: if false
             allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.owner
@@ -31,7 +32,7 @@ service cloud.firestore {
             match /members/{uid} {
                 allow read: if isMember()
                 allow create: if isAdmin()
-                allow update: if isAdmin()
+                allow update: if (request.auth.uid == uid || isAdmin()) && (get(/databases/$(database)/documents/boards/$(id)).voteLimit == null || request.resource.data.votes.size() <= get(/databases/$(database)/documents/boards/$(id)).voteLimit)
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
 

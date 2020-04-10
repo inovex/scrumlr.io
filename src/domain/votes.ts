@@ -1,22 +1,36 @@
 import { Members } from '../types/state';
 import { getFirebase } from 'react-redux-firebase';
-import firebase from 'firebase';
+
+export const setVoteLimit = (boardId: string, voteLimit: number) => {
+  return getFirebase().firestore().collection('boards').doc(boardId!).update({
+      voteLimit
+  })
+};
+
+export const deleteVoteLimit = (boardId: string) => {
+    return getFirebase().firestore().collection('boards').doc(boardId!).update({
+        voteLimit: null
+    })
+};
 
 export const getVotes = (cardId: string, members: Members) => {
     return Object.values(members)
-        .map((member) => member.votes?.[cardId] || 0)
-        .reduce((a, b) => a + b, 0);
+        .flatMap((member) => member.votes || [])
+        .map(vote => vote === cardId).length;
 };
 
 export const addVote = (boardId: string, cardId: string, userId: string) => {
+    const memberRef = getFirebase().firestore().collection('boards').doc(boardId!).collection('members').doc(userId);
     return getFirebase()
         .firestore()
-        .collection('boards')
-        .doc(boardId!)
-        .collection('members')
-        .doc(userId)
-        .update({
-            [`votes.${cardId}`]: firebase.firestore.FieldValue.increment(1)
+        .runTransaction((transaction) => {
+            return transaction.get(memberRef).then((member) => {
+                const votes = member.data()?.votes || [];
+                votes.push(cardId);
+                transaction.update(memberRef, {
+                    votes
+                });
+            });
         });
 };
 
@@ -26,14 +40,13 @@ export const removeVote = (boardId: string, cardId: string, userId: string) => {
         .firestore()
         .runTransaction((transaction) => {
             return transaction.get(memberRef).then((member) => {
-                if (!member.exists) {
-                    throw new Error(`member ${userId} does not exist`);
+                const votes: string[] = member.data()?.votes || [];
+                const cardIndex = votes.indexOf(cardId);
+                if (cardIndex >= 0) {
+                    transaction.update(memberRef, {
+                        votes: votes.filter((value, index) => index !== cardIndex)
+                    });
                 }
-
-                const currentVotes = member.data()?.votes?.[cardId] || 0;
-                transaction.update(memberRef, {
-                    [`votes.${cardId}`]: currentVotes - 1 > 0 ? currentVotes - 1 : 0
-                });
             });
         });
 };

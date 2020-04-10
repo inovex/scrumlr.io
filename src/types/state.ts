@@ -55,6 +55,8 @@ export interface Board {
 
     /** ISO string of creation date. */
     creationDate: string;
+
+    voteLimit?: number;
 }
 
 export interface Members {
@@ -64,9 +66,7 @@ export interface Members {
 export interface Member {
     admin: boolean;
     markedAsDone?: boolean;
-    votes?: {
-        [cardId: string]: number;
-    };
+    votes?: string[];
 }
 
 interface PendingList {
