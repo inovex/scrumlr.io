@@ -13,7 +13,7 @@
     "url": "https://github.com/scrumlr/scrumlr.io/issues"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.9",
+    "@material-ui/core": "^4.9.10",
     "firebase": "^7.14.0",
     "i18next": "^19.4.1",
     "lodash": "^4.17.15",
