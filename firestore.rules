@@ -40,12 +40,12 @@ service cloud.firestore {
                 }
 
                 function checkMultivote() {
-                    return get(/databases/$(database)/documents/boards/$(id)).data.voting.allowMultivote == true || request.resource.data.votes.toSet().size() == request.resource.data.votes.size()
+                    return request.resource.data.votes == null || get(/databases/$(database)/documents/boards/$(id)).data.voting.allowMultivote == true || request.resource.data.votes.toSet().size() == request.resource.data.votes.size()
                 }
 
                 allow read: if isMember()
                 allow create: if isAdmin()
-                allow update: if isAdmin() || (request.auth.uid == uid && checkVoteLimit() && checkMultivote())
+                allow update: if (isAdmin() || request.auth.uid == uid) && checkVoteLimit() && checkMultivote()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
 

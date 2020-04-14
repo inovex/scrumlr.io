@@ -27,9 +27,26 @@ export const completeVoting = (boardId: string) => {
 };
 
 export const resetVoting = (boardId: string) => {
-    return getFirebase().firestore().collection('boards').doc(boardId!).update({
-        voting: null
-    });
+    return getFirebase()
+        .firestore()
+        .collection('boards')
+        .doc(boardId!)
+        .update({
+            voting: null
+        })
+        .then(() => {
+            getFirebase()
+                .firestore()
+                .collection('boards')
+                .doc(boardId)
+                .collection('members')
+                .get()
+                .then((collection) => {
+                    collection.forEach((member) => {
+                        member.ref.update({ votes: null });
+                    });
+                });
+        });
 };
 
 export const getVotes = (cardId: string, members: Members) => {
