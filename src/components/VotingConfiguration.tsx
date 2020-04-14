@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { ChangeEvent, useContext, useState } from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ export interface VotingConfigurationState {
     enableVoteLimit: boolean;
     voteLimit: number;
     allowMultivote: boolean;
+    showVotes: boolean;
 }
 
 export const VotingConfiguration: React.FC = () => {
@@ -22,30 +23,48 @@ export const VotingConfiguration: React.FC = () => {
     const [state, setState] = useState<VotingConfigurationState>({
         enableVoteLimit: false,
         voteLimit: 5,
-        allowMultivote: true
+        allowMultivote: true,
+        showVotes: false
     });
 
-    if (!boards[boardId!].voting) {
+    const onEnableVoteLimit = (e: ChangeEvent<HTMLInputElement>) => {
+        setState({ ...state, enableVoteLimit: e.target.checked });
+    };
+
+    const onVoteLimit = (e: ChangeEvent<{}>, value: number | number[]) => {
+        setState({ ...state, voteLimit: value as number });
+    };
+
+    const onAllowMultivote = (e: ChangeEvent<HTMLInputElement>) => {
+        setState({ ...state, allowMultivote: e.target.checked });
+    };
+
+    const onShowVotes = (e: ChangeEvent<HTMLInputElement>) => {
+        setState({ ...state, showVotes: e.target.checked });
+    };
+
+    const onStartVoting = () => {
+        startVoting(boardId!, state.enableVoteLimit ? state.voteLimit : null, state.allowMultivote, state.showVotes);
+    };
+
+    const votingPhaseStarted = Boolean(boards[boardId!].voting);
+
+    if (votingPhaseStarted) {
         return (
-            <FormGroup>
-                <FormControlLabel
-                    control={<Checkbox checked={state.enableVoteLimit} onChange={(e) => setState({ ...state, enableVoteLimit: e.target.checked })} />}
-                    label="Vote limit"
-                />
-                <Slider disabled={!state.enableVoteLimit} value={state.voteLimit} onChange={(event, value) => setState({ ...state, voteLimit: value as number })} />
-                <FormControlLabel
-                    control={<Checkbox checked={state.allowMultivote} onChange={(e) => setState({ ...state, allowMultivote: e.target.checked })} />}
-                    label="Allow multivote"
-                />
-                <Button onClick={() => startVoting(boardId!, state.enableVoteLimit ? state.voteLimit : null, state.allowMultivote)}>Start voting</Button>
-            </FormGroup>
+            <>
+                <Button onClick={() => completeVoting(boardId!)}>Complete voting</Button>
+                <Button onClick={() => resetVoting(boardId!)}>Reset voting</Button>
+            </>
         );
     }
 
     return (
-        <>
-            <Button onClick={() => completeVoting(boardId!)}>Complete voting</Button>
-            <Button onClick={() => resetVoting(boardId!)}>Reset voting</Button>
-        </>
+        <FormGroup>
+            <FormControlLabel control={<Checkbox checked={state.enableVoteLimit} onChange={onEnableVoteLimit} />} label="Vote limit" />
+            <Slider disabled={!state.enableVoteLimit} value={state.voteLimit} onChange={onVoteLimit} />
+            <FormControlLabel control={<Checkbox checked={state.allowMultivote} onChange={onAllowMultivote} />} label="Allow multivote" />
+            <FormControlLabel control={<Checkbox checked={state.showVotes} onChange={onShowVotes} />} label="Show votes" />
+            <Button onClick={onStartVoting}>Start voting</Button>
+        </FormGroup>
     );
 };

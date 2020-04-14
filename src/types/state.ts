@@ -91,6 +91,7 @@ export interface VotingConfiguration {
     completed: boolean;
     voteLimit: number | null;
     allowMultivote: boolean;
+    showVotes: boolean;
 }
 
 interface Columns {

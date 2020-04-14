@@ -14,10 +14,11 @@ export interface CardProps {
 
 export const Card: React.FC<CardProps> = ({ id, text, author }) => {
     const { boardId } = useContext(BoardContext);
-    const { users, members, boards } = useSelector((state: ApplicationState) => state.firestore.data);
+    const { boards, members, users } = useSelector((state: ApplicationState) => state.firestore.data);
     const user = users[author];
 
-    const votingEnabled = boards[boardId!].voting && !boards[boardId!].voting!.completed;
+    const votingEnabled = Boolean(boards[boardId!].voting);
+    const votingCompleted = votingEnabled ? boards[boardId!].voting!.completed : false;
     const votes = getVotes(id, members);
 
     let allowVote = false;
@@ -50,10 +51,10 @@ export const Card: React.FC<CardProps> = ({ id, text, author }) => {
             <p>{text}</p>
             <p>{user.displayName}</p>
             <p>Votes: {votes}</p>
-            <Button onClick={onRemove} disabled={!votingEnabled || !spendVotesOnCard}>
+            <Button onClick={onRemove} disabled={!votingEnabled || votingCompleted || !spendVotesOnCard}>
                 Remove Vote
             </Button>
-            <Button onClick={onAdd} disabled={!votingEnabled || !allowVote}>
+            <Button onClick={onAdd} disabled={!votingEnabled || votingCompleted || !allowVote}>
                 Add Vote
             </Button>
         </div>

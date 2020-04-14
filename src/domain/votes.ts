@@ -1,7 +1,7 @@
 import { Members, VotingConfiguration } from '../types/state';
 import { getFirebase } from 'react-redux-firebase';
 
-export const startVoting = (boardId: string, voteLimit: number | null, allowMultivote: boolean) => {
+export const startVoting = (boardId: string, voteLimit: number | null, allowMultivote: boolean, showVotes: boolean) => {
     return getFirebase()
         .firestore()
         .collection('boards')
@@ -10,7 +10,8 @@ export const startVoting = (boardId: string, voteLimit: number | null, allowMult
             voting: {
                 completed: false,
                 voteLimit,
-                allowMultivote
+                allowMultivote,
+                showVotes
             }
         });
 };

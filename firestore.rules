@@ -7,6 +7,12 @@ service cloud.firestore {
             allow write: if request.auth.uid == uid;
         }
 
+        match /templates/{id} {
+            allow read: if true;
+            allow create: if request.auth.uid != null;
+            allow update, delete: if request.auth.uid == get(/databases/$(database)/documents/templates/$(id)).data.creator
+        }
+
         match /boards/{id} {
             function isMember() {
             	return exists(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid))
@@ -16,7 +22,7 @@ service cloud.firestore {
             	return get(/databases/$(database)/documents/boards/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
-            allow get: if isMember()
+            allow get: if isMember() || isAdmin()
             allow list: if false
             allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.owner
             allow update, delete: if isAdmin()
@@ -30,16 +36,16 @@ service cloud.firestore {
 
             match /members/{uid} {
                 function checkVoteLimit() {
-                    return !request.resource.data.votes || get(/databases/$(database)/documents/boards/$(id)).voteLimit == null || request.resource.data.votes.size() <= get(/databases/$(database)/documents/boards/$(id)).voteLimit
+                    return request.resource.data.votes == null || get(/databases/$(database)/documents/boards/$(id)).data.voting.voteLimit == null || (request.resource.data.votes.size() >= 0 && request.resource.data.votes.size() <= get(/databases/$(database)/documents/boards/$(id)).data.voting.voteLimit)
                 }
 
                 function checkMultivote() {
-                    return !get(/databases/$(database)/documents/boards/$(id)).allowMultivote == true || request.resource.data.votes.toSet().size() == request.resource.data.votes.size()
+                    return get(/databases/$(database)/documents/boards/$(id)).data.voting.allowMultivote == true || request.resource.data.votes.toSet().size() == request.resource.data.votes.size()
                 }
 
                 allow read: if isMember()
                 allow create: if isAdmin()
-                allow update: if (request.auth.uid == uid || isAdmin()) && checkVoteLimit() && checkMultivote()
+                allow update: if isAdmin() || (request.auth.uid == uid && checkVoteLimit() && checkMultivote())
                 allow delete: if isAdmin() || request.auth.uid == uid
             }
 
