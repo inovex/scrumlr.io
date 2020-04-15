@@ -40,19 +40,6 @@ export const resetVoting = (boardId: string) => {
         .doc(boardId!)
         .update({
             voting: null
-        })
-        .then(() => {
-            getFirebase()
-                .firestore()
-                .collection('boards')
-                .doc(boardId)
-                .collection('members')
-                .get()
-                .then((collection) => {
-                    collection.forEach((member) => {
-                        member.ref.update({ votes: null });
-                    });
-                });
         });
 };
 
