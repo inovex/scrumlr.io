@@ -22,7 +22,7 @@ service cloud.firestore {
             	return get(/databases/$(database)/documents/boards/$(id)).data.owner == request.auth.uid || (isMember() && get(/databases/$(database)/documents/boards/$(id)/members/$(request.auth.uid)).data.admin == true)
             }
 
-            allow get: if isMember() || isAdmin()
+            allow get: if true
             allow list: if false
             allow create: if request.auth.uid != null && request.auth.uid == request.resource.data.owner
             allow update, delete: if isAdmin()
@@ -44,7 +44,7 @@ service cloud.firestore {
                 }
 
                 allow read: if isMember()
-                allow create: if isAdmin()
+                allow create: if isAdmin() || (request.auth.uid == uid && get(/databases/$(database)/documents/boards/$(id)).data.admissionControl == false)
                 allow update: if (isAdmin() || request.auth.uid == uid) && checkVoteLimit() && checkMultivote()
                 allow delete: if isAdmin() || request.auth.uid == uid
             }

@@ -48,7 +48,7 @@ export const useBoardGuard = (id: string) => {
 
     if (state.boardAccessEvaluationResult === BoardAccessState.PENDING) {
         const currentUserUid = getCurrentUser()!.uid;
-        if (isLoaded(boards)) {
+        if (isLoaded(boards) && !isEmpty(boards)) {
             const boardPublicSettings = boards[id!];
 
             if (!state.isOwnerCheckCompleted) {
