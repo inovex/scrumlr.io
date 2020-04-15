@@ -14,7 +14,7 @@ export interface CardProps {
     author: string;
 }
 
-const cardSelector = createSelector(
+const stateSelector = createSelector(
     (state: ApplicationState) => state.firestore.data.boards,
     (state: ApplicationState) => state.firestore.data.members,
     (state: ApplicationState) => state.firestore.data.users,
@@ -45,7 +45,7 @@ const cardSelector = createSelector(
 
 export const Card: React.FC<CardProps> = ({ id, text, author }) => {
     const { boardId } = useContext(BoardContext);
-    const { votingEnabled, votingCompleted, voteLimit, allowMultivote, allVotes, userVotes, users } = useSelector(cardSelector);
+    const { votingEnabled, votingCompleted, voteLimit, allowMultivote, allVotes, userVotes, users } = useSelector(stateSelector);
     const currentUserUid = getCurrentUser()!.uid;
     const authorProfile = users[author];
 

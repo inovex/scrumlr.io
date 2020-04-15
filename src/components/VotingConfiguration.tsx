@@ -17,7 +17,7 @@ export interface VotingConfigurationState {
     showVotes: boolean;
 }
 
-const votingConfigurationSelector = createSelector(
+const stateSelector = createSelector(
     (state: ApplicationState) => state.firestore.data.boards,
     (boards) => {
         const board = Object.values(boards)[0];
@@ -27,7 +27,7 @@ const votingConfigurationSelector = createSelector(
 
 export const VotingConfiguration: React.FC = () => {
     const { boardId } = useContext(BoardContext);
-    const { votingEnabled, votingCompleted } = useSelector(votingConfigurationSelector);
+    const { votingEnabled, votingCompleted } = useSelector(stateSelector);
 
     const [state, setState] = useState<VotingConfigurationState>({
         enableVoteLimit: false,
