@@ -46,7 +46,7 @@ export const Board: React.FC = () => {
 
     return (
         <BoardContext.Provider value={{ boardId: id!, isAdmin: guard.isAdmin }}>
-            <VotingConfiguration />
+            {guard.isAdmin && <VotingConfiguration />}
             {columnComponents}
         </BoardContext.Provider>
     );
