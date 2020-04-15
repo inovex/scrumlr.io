@@ -9,6 +9,7 @@ import { FormControlLabel } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Slider from '@material-ui/core/Slider';
 import { createSelector } from 'reselect';
+import { useTranslation } from 'react-i18next';
 
 export interface VotingConfigurationState {
     enableVoteLimit: boolean;
@@ -26,6 +27,7 @@ const stateSelector = createSelector(
 );
 
 export const VotingConfiguration: React.FC = () => {
+    const { t } = useTranslation('votingConfiguration');
     const { boardId } = useContext(BoardContext);
     const { votingEnabled, votingCompleted } = useSelector(stateSelector);
 
@@ -60,20 +62,20 @@ export const VotingConfiguration: React.FC = () => {
         return (
             <>
                 <Button disabled={votingCompleted} onClick={() => completeVoting(boardId)}>
-                    Complete voting
+                    {t('controls.stop')}
                 </Button>
-                <Button onClick={() => resetVoting(boardId)}>Reset voting</Button>
+                <Button onClick={() => resetVoting(boardId)}>{t('controls.reset')}</Button>
             </>
         );
     }
 
     return (
         <FormGroup>
-            <FormControlLabel control={<Checkbox checked={state.enableVoteLimit} onChange={onEnableVoteLimit} />} label="Vote limit" />
+            <FormControlLabel control={<Checkbox checked={state.enableVoteLimit} onChange={onEnableVoteLimit} />} label={t('voteLimit')} />
             <Slider disabled={!state.enableVoteLimit} value={state.voteLimit} onChange={onVoteLimit} />
-            <FormControlLabel control={<Checkbox checked={state.allowMultivote} onChange={onAllowMultivote} />} label="Allow multivote" />
-            <FormControlLabel control={<Checkbox checked={state.showVotes} onChange={onShowVotes} />} label="Show votes" />
-            <Button onClick={onStartVoting}>Start voting</Button>
+            <FormControlLabel control={<Checkbox checked={state.allowMultivote} onChange={onAllowMultivote} />} label={t('allowMultivote')} />
+            <FormControlLabel control={<Checkbox checked={state.showVotes} onChange={onShowVotes} />} label={t('showVotes')} />
+            <Button onClick={onStartVoting}>{t('controls.start')}</Button>
         </FormGroup>
     );
 };

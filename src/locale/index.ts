@@ -18,6 +18,16 @@ export const initLocale = () => {
                             helper: 'Encrypt data helper text'
                         }
                     },
+                    votingConfiguration: {
+                        voteLimit: 'Enable vote limit',
+                        allowMultivote: 'Allow multivote',
+                        showVotes: 'Show votes',
+                        controls: {
+                            start: 'Start voting',
+                            stop: 'Complete voting',
+                            reset: 'Reset voting'
+                        }
+                    },
                     templates: {
                         heading: 'Create new board',
                         createBoard: 'Create board',
