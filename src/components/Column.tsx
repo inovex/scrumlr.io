@@ -8,11 +8,11 @@ import WithId from '../util/withId';
 import { Card } from '../types/state';
 
 export interface ColumnContextType {
-    columnId?: string;
+    columnId: string;
 }
 
 export const ColumnContext = React.createContext<ColumnContextType>({
-    columnId: undefined
+    columnId: undefined as any
 });
 
 export interface ColumnProps {
@@ -31,7 +31,7 @@ export const Column: React.FC<ColumnProps> = ({ id, name, visible, cards }) => {
     const { boardId, isAdmin } = useContext(BoardContext);
 
     const onAddCard = () => {
-        addCard(boardId!, id, state.text).then(() => {
+        addCard(boardId, id, state.text).then(() => {
             setState({ ...state, text: undefined });
         });
     };

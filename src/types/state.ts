@@ -35,7 +35,7 @@ interface User {
     email: string | undefined;
 }
 
-interface Boards {
+export interface Boards {
     [key: string]: Board;
 }
 

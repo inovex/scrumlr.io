@@ -3,11 +3,12 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
 import { useSelector } from 'react-redux';
 import { ApplicationState } from '../types/state';
-import { completeVoting, resetVoting, startVoting } from '../domain/votes';
+import { completeVoting, getVotingConfiguration, resetVoting, startVoting } from '../domain/votes';
 import { BoardContext } from '../routing/pages/Board';
 import { FormControlLabel } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
 import Slider from '@material-ui/core/Slider';
+import { createSelector } from 'reselect';
 
 export interface VotingConfigurationState {
     enableVoteLimit: boolean;
@@ -16,9 +17,17 @@ export interface VotingConfigurationState {
     showVotes: boolean;
 }
 
+const votingConfigurationSelector = createSelector(
+    (state: ApplicationState) => state.firestore.data.boards,
+    (boards) => {
+        const board = Object.values(boards)[0];
+        return getVotingConfiguration(board);
+    }
+);
+
 export const VotingConfiguration: React.FC = () => {
     const { boardId } = useContext(BoardContext);
-    const { boards } = useSelector((state: ApplicationState) => state.firestore.data);
+    const { votingEnabled, votingCompleted } = useSelector(votingConfigurationSelector);
 
     const [state, setState] = useState<VotingConfigurationState>({
         enableVoteLimit: false,
@@ -47,12 +56,12 @@ export const VotingConfiguration: React.FC = () => {
         startVoting(boardId!, state.enableVoteLimit ? state.voteLimit : null, state.allowMultivote, state.showVotes);
     };
 
-    const votingPhaseStarted = Boolean(boards[boardId!].voting);
-
-    if (votingPhaseStarted) {
+    if (votingEnabled) {
         return (
             <>
-                <Button onClick={() => completeVoting(boardId!)}>Complete voting</Button>
+                <Button disabled={votingCompleted} onClick={() => completeVoting(boardId!)}>
+                    Complete voting
+                </Button>
                 <Button onClick={() => resetVoting(boardId!)}>Reset voting</Button>
             </>
         );

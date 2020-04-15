@@ -8,12 +8,12 @@ import { BoardAccessState, useBoardGuard } from '../util/useBoardGuard';
 import { VotingConfiguration } from '../../components/VotingConfiguration';
 
 export interface BoardContextType {
-    boardId?: string;
+    boardId: string;
     isAdmin: boolean;
 }
 
 export const BoardContext = React.createContext<BoardContextType>({
-    boardId: undefined,
+    boardId: undefined as any,
     isAdmin: false
 });
 
@@ -45,7 +45,7 @@ export const Board: React.FC = () => {
     }
 
     return (
-        <BoardContext.Provider value={{ boardId: id, isAdmin: guard.isAdmin }}>
+        <BoardContext.Provider value={{ boardId: id!, isAdmin: guard.isAdmin }}>
             <VotingConfiguration />
             {columnComponents}
         </BoardContext.Provider>

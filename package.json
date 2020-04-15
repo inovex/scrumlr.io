@@ -24,7 +24,8 @@
     "react-redux-firebase": "^3.3.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
-    "redux-firestore": "^0.13.0"
+    "redux-firestore": "^0.13.0",
+    "reselect": "^4.0.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.4.0",
