@@ -4,7 +4,6 @@ import { ApplicationState } from '../types/state';
 import { addVote, getVotes, getVotingConfiguration, removeVote } from '../domain/votes';
 import Button from '@material-ui/core/Button';
 import { BoardContext } from '../routing/pages/Board';
-import { getCurrentUser } from '../domain/auth';
 import { createSelector } from 'reselect';
 import { mapWithId } from '../util/withId';
 
@@ -15,11 +14,11 @@ export interface CardProps {
 }
 
 const stateSelector = createSelector(
+    (state: ApplicationState) => state.firebase.auth.uid!,
     (state: ApplicationState) => state.firestore.data.boards,
     (state: ApplicationState) => state.firestore.data.members,
     (state: ApplicationState) => state.firestore.data.users,
-    (boards, members, users) => {
-        const currentUserUid = getCurrentUser()!.uid;
+    (currentUserUid, boards, members, users) => {
         const board = Object.values(boards)[0];
 
         const votingConfiguration = getVotingConfiguration(board);
@@ -37,16 +36,16 @@ const stateSelector = createSelector(
             voteLimit,
             allowMultivote,
             allVotes,
-            userVotes: members[currentUserUid].votes || [],
-            users
+            userVotes: members[currentUserUid!].votes || [],
+            users,
+            currentUserUid
         };
     }
 );
 
 export const Card: React.FC<CardProps> = ({ id, text, author }) => {
     const { boardId } = useContext(BoardContext);
-    const { votingEnabled, votingCompleted, voteLimit, allowMultivote, allVotes, userVotes, users } = useSelector(stateSelector);
-    const currentUserUid = getCurrentUser()!.uid;
+    const { currentUserUid, votingEnabled, votingCompleted, voteLimit, allowMultivote, allVotes, userVotes, users } = useSelector(stateSelector);
     const authorProfile = users[author];
 
     const votes = getVotes(id, allVotes);
