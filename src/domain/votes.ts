@@ -12,7 +12,7 @@ export const startVoting = (boardId: string, voteLimit: number | null, allowMult
     return getFirebase()
         .firestore()
         .collection('boards')
-        .doc(boardId!)
+        .doc(boardId)
         .update({
             voting: {
                 completed: false,
@@ -27,14 +27,14 @@ export const completeVoting = (boardId: string) => {
     return getFirebase()
         .firestore()
         .collection('boards')
-        .doc(boardId!)
+        .doc(boardId)
         .update({
             'voting.completed': true
         } as Partial<VotingConfiguration>);
 };
 
 export const resetVoting = (boardId: string) => {
-    return getFirebase().firestore().collection('boards').doc(boardId!).update({
+    return getFirebase().firestore().collection('boards').doc(boardId).update({
         voting: null
     });
 };
@@ -44,7 +44,7 @@ export const getVotes = (cardId: string, votes: string[]) => {
 };
 
 export const addVote = (boardId: string, cardId: string, userId: string) => {
-    const memberRef = getFirebase().firestore().collection('boards').doc(boardId!).collection('members').doc(userId);
+    const memberRef = getFirebase().firestore().collection('boards').doc(boardId).collection('members').doc(userId);
     return getFirebase()
         .firestore()
         .runTransaction((transaction) => {
@@ -59,7 +59,7 @@ export const addVote = (boardId: string, cardId: string, userId: string) => {
 };
 
 export const removeVote = (boardId: string, cardId: string, userId: string) => {
-    const memberRef = getFirebase().firestore().collection('boards').doc(boardId!).collection('members').doc(userId);
+    const memberRef = getFirebase().firestore().collection('boards').doc(boardId).collection('members').doc(userId);
     return getFirebase()
         .firestore()
         .runTransaction((transaction) => {

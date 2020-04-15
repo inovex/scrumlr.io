@@ -53,16 +53,16 @@ export const VotingConfiguration: React.FC = () => {
     };
 
     const onStartVoting = () => {
-        startVoting(boardId!, state.enableVoteLimit ? state.voteLimit : null, state.allowMultivote, state.showVotes);
+        startVoting(boardId, state.enableVoteLimit ? state.voteLimit : null, state.allowMultivote, state.showVotes);
     };
 
     if (votingEnabled) {
         return (
             <>
-                <Button disabled={votingCompleted} onClick={() => completeVoting(boardId!)}>
+                <Button disabled={votingCompleted} onClick={() => completeVoting(boardId)}>
                     Complete voting
                 </Button>
-                <Button onClick={() => resetVoting(boardId!)}>Reset voting</Button>
+                <Button onClick={() => resetVoting(boardId)}>Reset voting</Button>
             </>
         );
     }

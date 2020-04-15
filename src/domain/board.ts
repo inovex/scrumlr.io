@@ -3,7 +3,7 @@ import { Board, Column, Member, Template } from '../types/state';
 import WithId from '../util/withId';
 
 export const addCard = (boardId: string, columnId: string, text?: string) => {
-    return getFirebase().firestore().collection('boards').doc(boardId!).collection('cards').add({
+    return getFirebase().firestore().collection('boards').doc(boardId).collection('cards').add({
         author: getFirebase().auth().currentUser!.uid,
         column: columnId,
         text
@@ -11,11 +11,11 @@ export const addCard = (boardId: string, columnId: string, text?: string) => {
 };
 
 export const deleteCard = (boardId: string, columnId: string, cardId: string) => {
-    return getFirebase().firestore().collection('boards').doc(boardId!).collection('cards').doc(cardId).delete();
+    return getFirebase().firestore().collection('boards').doc(boardId).collection('cards').doc(cardId).delete();
 };
 
 export const updateCard = (boardId: string, columnId: string, cardId: string, text?: string) => {
-    return getFirebase().firestore().collection('boards').doc(boardId!).collection('cards').doc(cardId).update({
+    return getFirebase().firestore().collection('boards').doc(boardId).collection('cards').doc(cardId).update({
         text
     });
 };
