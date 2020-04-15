@@ -34,13 +34,9 @@ export const completeVoting = (boardId: string) => {
 };
 
 export const resetVoting = (boardId: string) => {
-    return getFirebase()
-        .firestore()
-        .collection('boards')
-        .doc(boardId!)
-        .update({
-            voting: null
-        });
+    return getFirebase().firestore().collection('boards').doc(boardId!).update({
+        voting: null
+    });
 };
 
 export const getVotes = (cardId: string, votes: string[]) => {
