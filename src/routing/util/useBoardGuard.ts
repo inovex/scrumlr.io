@@ -2,22 +2,23 @@ import { isEmpty, isLoaded, ReduxFirestoreQuerySetting, useFirestoreConnect } fr
 import { useSelector } from 'react-redux';
 import { ApplicationState } from '../../types/state';
 import { useState } from 'react';
+import { ApplicationState } from '../../types/state';
 import { getCurrentUser } from '../../domain/auth';
 import { addMember, addToAdmissionControl } from '../../domain/board';
 
 export enum BoardAccessState {
-    DENIED,
-    PENDING,
-    APPROVED
+  DENIED,
+  PENDING,
+  APPROVED,
 }
 
 export interface BoardGuardState {
-    databaseQueries: ReduxFirestoreQuerySetting[];
-    isOwnerCheckCompleted: boolean;
-    isPendingQueryAdded: boolean;
-    isMember: boolean;
-    isAdmin: boolean;
-    boardAccessEvaluationResult: BoardAccessState;
+  databaseQueries: ReduxFirestoreQuerySetting[];
+  isOwnerCheckCompleted: boolean;
+  isPendingQueryAdded: boolean;
+  isMember: boolean;
+  isAdmin: boolean;
+  boardAccessEvaluationResult: BoardAccessState;
 }
 
 export const useBoardGuard = (id: string) => {

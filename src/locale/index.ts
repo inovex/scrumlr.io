@@ -40,10 +40,10 @@ export const initLocale = () => {
             lng: 'en',
             fallbackLng: 'en',
 
-            interpolation: {
-                escapeValue: false
-            }
-        });
+      interpolation: {
+        escapeValue: false,
+      },
+    });
 };
 
 export default initLocale;

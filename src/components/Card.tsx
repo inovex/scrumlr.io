@@ -8,9 +8,9 @@ import { createSelector } from 'reselect';
 import { mapWithId } from '../util/withId';
 
 export interface CardProps {
-    id: string;
-    text: string;
-    author: string;
+  id: string;
+  text: string;
+  author: string;
 }
 
 const stateSelector = createSelector(
