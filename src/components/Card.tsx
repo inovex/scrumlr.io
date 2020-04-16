@@ -77,10 +77,10 @@ export const Card: React.FC<CardProps> = ({ id, text, author }) => {
             Votes:
             {votes}
           </p>
-          <Button onClick={onRemove} disabled={!votingEnabled || votingCompleted || !votedOnCard}>
+          <Button onClick={onRemove} disabled={votingCompleted || !votedOnCard}>
             Remove Vote
           </Button>
-          <Button onClick={onAdd} disabled={!votingEnabled || votingCompleted || !allowVote}>
+          <Button onClick={onAdd} disabled={votingCompleted || !allowVote}>
             Add Vote
           </Button>
         </>
