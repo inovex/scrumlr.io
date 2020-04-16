@@ -2,25 +2,27 @@ import { createMuiTheme } from '@material-ui/core';
 import { blue, lime } from '@material-ui/core/colors';
 
 export const theme = createMuiTheme({
-    palette: {
-        primary: blue,
-        secondary: lime
+  palette: {
+    primary: blue,
+    secondary: lime,
+  },
+  typography: {
+    fontFamily: ['Heebo', '-apple-system', '"Helvetica Neue"', 'sans-serif'].join(','),
+  },
+  overrides: {
+    MuiCheckbox: {
+      // override settings
     },
-    typography: {
-        fontFamily: ['Heebo', '-apple-system', '"Helvetica Neue"', 'sans-serif'].join(',')
+  },
+  props: {
+    MuiButton: {
+      variant: 'outlined',
+      color: 'primary',
     },
-    overrides: {
-        MuiCheckbox: {
-            // override settings
-        }
+    MuiCheckbox: {
+      color: 'primary',
     },
-    props: {
-        MuiButton: {
-            variant: 'outlined',
-            color: 'primary'
-        },
-        MuiCheckbox: {
-            color: 'primary'
-        }
-    }
+  },
 });
+
+export default theme;
