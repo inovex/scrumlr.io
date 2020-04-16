@@ -1,20 +1,20 @@
 export interface ApplicationState {
-    firebase: {
-        auth: FirebaseAuth;
+  firebase: {
+    auth: FirebaseAuth;
+  };
+  firestore: {
+    data: {
+      boards: Boards;
+      members: Members;
+      pending: PendingList;
+      cards: Cards;
+      columns: Columns;
+      users: Users;
+      featuredTemplates: Templates;
+      allTemplates: Templates;
+      myTemplates: Templates;
     };
-    firestore: {
-        data: {
-            boards: Boards;
-            members: Members;
-            pending: PendingList;
-            cards: Cards;
-            columns: Columns;
-            users: Users;
-            featuredTemplates: Templates;
-            allTemplates: Templates;
-            myTemplates: Templates;
-        };
-    };
+  };
 }
 
 interface FirebaseAuth {
@@ -36,7 +36,7 @@ interface User {
 }
 
 export interface Boards {
-    [key: string]: Board;
+  [key: string]: Board;
 }
 
 export interface Board {
@@ -52,20 +52,20 @@ export interface Board {
   /** Reference to the creators user id. */
   owner: string;
 
-    /** ISO string of creation date. */
-    creationDate: string;
+  /** ISO string of creation date. */
+  creationDate: string;
 
-    voting?: VotingConfiguration;
+  voting?: VotingConfiguration;
 }
 
 export interface Members {
-    [key: string]: Member;
+  [key: string]: Member;
 }
 
 export interface Member {
-    admin: boolean;
-    markedAsDone?: boolean;
-    votes?: string[];
+  admin: boolean;
+  markedAsDone?: boolean;
+  votes?: string[];
 }
 
 interface PendingList {
@@ -88,10 +88,10 @@ export interface Card {
 }
 
 export interface VotingConfiguration {
-    completed: boolean;
-    voteLimit: number | null;
-    allowMultivote: boolean;
-    showVotes: boolean;
+  completed: boolean;
+  voteLimit: number | null;
+  allowMultivote: boolean;
+  showVotes: boolean;
 }
 
 interface Columns {

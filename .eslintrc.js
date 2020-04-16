@@ -23,6 +23,7 @@ module.exports = {
         'import/extensions': 0,
         'import/no-named-as-default': 0,
         'import/no-extraneous-dependencies': [2, { devDependencies: ['**/test.tsx', '**/test.ts'] }],
+        'import/order': 0
     },
     env: {
         browser: true,

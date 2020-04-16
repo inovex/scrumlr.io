@@ -8,11 +8,12 @@ import { WithId } from '../util/withId';
 import { Card } from '../types/state';
 
 export interface ColumnContextType {
-    columnId: string;
+  columnId: string;
 }
 
 export const ColumnContext = React.createContext<ColumnContextType>({
-    columnId: undefined as any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columnId: undefined as any,
 });
 
 export interface ColumnProps {
@@ -30,11 +31,11 @@ export const Column: React.FC<ColumnProps> = ({ id, name, cards }) => {
   const [state, setState] = useState<ColumnState>({});
   const { boardId, isAdmin } = useContext(BoardContext);
 
-    const onAddCard = () => {
-        addCard(boardId, id, state.text).then(() => {
-            setState({ ...state, text: undefined });
-        });
-    };
+  const onAddCard = () => {
+    addCard(boardId, id, state.text).then(() => {
+      setState({ ...state, text: undefined });
+    });
+  };
 
   return (
     <ColumnContext.Provider value={{ columnId: id }}>

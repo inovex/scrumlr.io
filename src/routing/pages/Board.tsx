@@ -6,6 +6,7 @@ import { Column } from '../../components/Column';
 import { WithId, mapWithId } from '../../util/withId';
 import { BoardAccessState, useBoardGuard } from '../util/useBoardGuard';
 import { BoardContext } from './BoardContext';
+import { VotingConfiguration } from '../../components/VotingConfiguration';
 
 export const Board: React.FC = () => {
   const { id } = useRouteParams();
@@ -35,12 +36,12 @@ export const Board: React.FC = () => {
     return <>Loading ...</>;
   }
 
-    return (
-        <BoardContext.Provider value={{ boardId: id!, isAdmin: guard.isAdmin }}>
-            {guard.isAdmin && <VotingConfiguration />}
-            {columnComponents}
-        </BoardContext.Provider>
-    );
+  return (
+    <BoardContext.Provider value={{ boardId: id!, isAdmin: guard.isAdmin }}>
+      {guard.isAdmin && <VotingConfiguration />}
+      {columnComponents}
+    </BoardContext.Provider>
+  );
 };
 
 export default Board;
