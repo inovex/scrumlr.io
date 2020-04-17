@@ -1,6 +1,6 @@
 import { getFirebase } from 'react-redux-firebase';
 import { Board, Column, Member, Template } from '../types/state';
-import WithId from '../util/withId';
+import { WithId } from '../util/withId';
 
 export const addCard = (boardId: string, columnId: string, text?: string) => {
   return getFirebase().firestore().collection('boards').doc(boardId!).collection('cards').add({
