@@ -20,7 +20,7 @@ case "$STAGE" in
 
         live)
             export REACT_APP_PROJECT_ID=scrumlr-live
-            export REACT_APP_FIREBASE_API_KEY=AIzaSyBZnbPSmFsKGKd2BzHgB_wXGCcNuUZFtgo
+            export REACT_APP_FIREBASE_API_KEY=AIzaSyBfv2RqZh5hI3ldFb5CWST0As5sbKS_pVY
             export REACT_APP_FIREBASE_AUTH_DOMAIN=scrumlr-live.firebaseapp.com
             export REACT_APP_DATABASE_URL=https://scrumlr-live.firebaseio.com/
             export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-live.appspot.com
