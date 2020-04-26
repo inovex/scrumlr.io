@@ -42,7 +42,7 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
         <a href="https://github.com/scrumlr/scrumlr.io" target="_blank">
           Contribute to this open source project on GitHub
         </a>
-        <p className="welcome-area__policies">
+        <div className="welcome-area__policies">
           <ul>
             <li>
               <a
@@ -72,7 +72,7 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
               </a>
             </li>
           </ul>
-        </p>
+        </div>
       </div>
     </div>
   </div>
