@@ -60,10 +60,9 @@ export class Crypto {
     } else {
       const generatedKeyPair = await window.crypto.subtle.generateKey(
         {
-          name: 'RSA-OAEP',
+          ...ENCRYPTION_ALGORITHM,
           modulusLength: 1024,
-          publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-          hash: { name: 'SHA-256' }
+          publicExponent: new Uint8Array([0x01, 0x00, 0x01])
         },
         true,
         KEY_CAPABILITIES
@@ -112,7 +111,7 @@ export class Crypto {
     );
     return base58ab2str(
       await window.crypto.subtle.encrypt(
-        { name: 'RSA-OAEP' },
+        ENCRYPTION_ALGORITHM,
         importedPublicKey,
         rawSymmetricKey
       )
@@ -121,7 +120,7 @@ export class Crypto {
 
   async importSymmetricKey(symmetricKey: string) {
     const symmtericKeyBuffer = await window.crypto.subtle.decrypt(
-      { name: 'RSA-OAEP' },
+      ENCRYPTION_ALGORITHM,
       this.privateKey,
       base56str2ar(symmetricKey)
     );
