@@ -166,11 +166,15 @@ export const mapStateToProps = (
       const votes =
         (cards[cardSourceId].votes || 0) + (cards[cardTargetId].votes || 0);
 
+      // set new timestamp on source card, so that order will be maintained in the stack
+      const newTimestamp = cards[cardTargetId].timestamp;
+
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
         .update({
           userVotes,
-          votes
+          votes,
+          timestamp: newTimestamp
         });
     }
   }
