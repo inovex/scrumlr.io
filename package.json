@@ -24,7 +24,8 @@
     "react-redux-firebase": "^3.3.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
-    "redux-firestore": "^0.13.0"
+    "redux-firestore": "^0.13.0",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.4.0",
@@ -67,7 +68,9 @@
     "serve:development": "env-cmd -f .env.development npm run firebase-serve",
     "deploy:development": "env-cmd -f .env.development npm run firebase-deploy",
     "firebase-serve": "firebase serve --only hosting --project $REACT_APP_FIREBASE_PROJECT_ID",
-    "firebase-deploy": "firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID"
+    "firebase-deploy": "firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -88,5 +91,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "snyk": true
 }
