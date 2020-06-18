@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { Template } from '../types/state';
-import WithId from '../util/withId';
+import { WithId } from '../util/withId';
 
 export interface TemplateCardProps {
   template: WithId<Template>;

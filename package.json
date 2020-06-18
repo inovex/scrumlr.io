@@ -13,35 +13,36 @@
     "url": "https://github.com/scrumlr/scrumlr.io/issues"
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.10",
-    "firebase": "^7.14.0",
-    "i18next": "^19.4.1",
+    "@material-ui/core": "^4.9.12",
+    "firebase": "^7.14.2",
+    "i18next": "^19.4.4",
     "lodash": "^4.17.15",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-i18next": "^11.3.4",
+    "react-i18next": "^11.4.0",
     "react-redux": "^7.2.0",
-    "react-redux-firebase": "^3.3.0",
+    "react-redux-firebase": "^3.4.0",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-firestore": "^0.13.0",
     "reselect": "^4.0.0"
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.4.0",
-    "@testing-library/react": "^10.0.2",
-    "@testing-library/user-event": "^10.0.1",
+    "@testing-library/react": "^10.0.4",
+    "@testing-library/user-event": "^10.1.0",
     "@types/jest": "^25.2.1",
-    "@types/lodash": "^4.14.149",
-    "@types/node": "^13.11.1",
+    "@types/lodash": "^4.14.150",
+    "@types/node": "^13.13.4",
     "@types/react": "^16.9.32",
-    "@types/react-dom": "^16.9.6",
+    "@types/react-dom": "^16.9.7",
     "@types/react-redux": "^7.1.7",
-    "@types/react-router-dom": "^5.1.4",
+    "@types/react-router-dom": "^5.1.5",
     "env-cmd": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
-    "eslint-config-prettier": "^6.7.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-json": "^2.0.1",
@@ -49,9 +50,9 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-react": "^7.17.0",
     "husky": "^4.2.5",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.0",
     "precise-commits": "^1.0.2",
-    "prettier": "^2.0.4",
+    "prettier": "^2.0.5",
     "react-scripts": "^3.4.1",
     "typescript": "^3.8.3"
   },
@@ -68,7 +69,9 @@
     "serve:development": "env-cmd -f .env.development npm run firebase-serve",
     "deploy:development": "env-cmd -f .env.development npm run firebase-deploy",
     "firebase-serve": "firebase serve --only hosting --project $REACT_APP_FIREBASE_PROJECT_ID",
-    "firebase-deploy": "firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID"
+    "firebase-deploy": "firebase deploy --project $REACT_APP_FIREBASE_PROJECT_ID",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -89,5 +92,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "snyk": true
 }
