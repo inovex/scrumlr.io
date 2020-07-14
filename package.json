@@ -75,7 +75,7 @@
     "husky": "^1.1.2",
     "jsdom": "^13.0.0",
     "lint-staged": "^8.0.4",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.14.1",
     "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
     "react-scripts-ts": "4.0.8",
