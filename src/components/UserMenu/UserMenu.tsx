@@ -174,12 +174,14 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
               </span>
               <button
                 className="user-menu__with-buttons__button"
+                name="Pdf"
                 onClick={onPdfExport}
               >
                 PDF
               </button>
               <button
                 className="user-menu__with-buttons__button"
+                name="Csv"
                 onClick={onCsvExport}
               >
                 CSV
