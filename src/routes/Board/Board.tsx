@@ -93,7 +93,7 @@ export interface JsonExportData {
   cards: JsonExportCard[];
 }
 
-export type ExportFormats = 'print';
+export type ExportFormats = 'print' | 'csv';
 
 function countReadyUsers(boardUsers: BoardUsers) {
   const userKeys = Object.keys(boardUsers);
@@ -166,10 +166,14 @@ export class Board extends React.Component<BoardProps, BoardState> {
     window.location.hash = this.props.boardPrintUrl;
   };
 
+  handleExportCsv = () => {};
+
   handleExport = (format: ExportFormats = 'print') => {
     switch (format) {
       case 'print':
         return this.handleExportPrint();
+      case 'csv':
+        return this.handleExportCsv();
     }
   };
 
@@ -235,7 +239,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
         <Div100vh className="board-page">
           <Header
             boardId={this.props.boardSelector}
-            onExport={() => this.handleExport()}
+            onPdfExport={() => this.handleExport('print')}
+            onCsvExport={() => this.handleExport('csv')}
             onSignOut={this.props.onSignOut}
             onOpenModal={this.handleOpenModal}
           />

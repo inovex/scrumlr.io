@@ -13,7 +13,8 @@ import classNames = require('classnames');
 export interface UserMenuProps {
   onSignOut: () => void;
   onDeleteBoard: () => void;
-  onExport: () => void;
+  onPdfExport: () => void;
+  onCsvExport: () => void;
   onOpenModal: (modal: ModalType) => void;
   onChangeBoardName: (boardName: string) => void;
   onSetTimer: (seconds: number) => void;
@@ -58,7 +59,8 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
     const { isOpen } = this.state;
     const {
       onOpenModal,
-      onExport,
+      onPdfExport,
+      onCsvExport,
       onSignOut,
       onSetTimer,
       boardName,
@@ -172,9 +174,15 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
               </span>
               <button
                 className="user-menu__with-buttons__button"
-                onClick={onExport}
+                onClick={onPdfExport}
               >
                 PDF
+              </button>
+              <button
+                className="user-menu__with-buttons__button"
+                onClick={onCsvExport}
+              >
+                CSV
               </button>
             </div>
           </li>

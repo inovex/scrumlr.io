@@ -15,7 +15,8 @@ describe('<UserMenu />', () => {
       onSignOut: jest.fn(),
       onDeleteBoard: jest.fn(),
       onOpenModal: jest.fn(),
-      onExport: jest.fn(),
+      onPdfExport: jest.fn(),
+      onCsvExport: jest.fn(),
       onChangeBoardName: jest.fn(),
       onSetTimer: jest.fn(),
       admin: true,
@@ -63,12 +64,12 @@ describe('<UserMenu />', () => {
       wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
       const ddMenu = wrapper.find(DropdownMenu);
 
-      expect(props.onExport).not.toHaveBeenCalled();
+      expect(props.onPdfExport).not.toHaveBeenCalled();
       ddMenu
         .find(MenuItem)
         .find({ name: 'Export' })
         .simulate('click');
-      expect(props.onExport).toHaveBeenCalled();
+      expect(props.onPdfExport).toHaveBeenCalled();
     });
   });
 
