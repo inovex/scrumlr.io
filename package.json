@@ -87,7 +87,6 @@
     "typescript": "^3.0.3"
   },
   "scripts": {
-    "precommit": "lint-staged",
     "start": "SASS_PATH='./node_modules' react-scripts-ts start",
     "start:no-browser": "BROWSER=none npm start",
     "build": "SASS_PATH='./node_modules' PUBLIC_URL='/' react-scripts-ts build",
@@ -105,5 +104,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
 }
