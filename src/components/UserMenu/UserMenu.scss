@@ -148,17 +148,17 @@ $icon__height: $icon__width;
   }
 }
 
-.user-menu__timer {
+.user-menu__with-buttons {
   display: flex !important;
 }
 
-.user-menu__timer__text {
+.user-menu__with-buttons__text {
   align-self: center;
   flex: 0 1 !important;
   margin-right: 16px;
 }
 
-.user-menu__timer__button {
+.user-menu__with-buttons__button {
   align-self: center;
   height: 32px;
   min-width: 42px;
@@ -180,11 +180,11 @@ $icon__height: $icon__width;
   outline: none;
 }
 
-.user-menu__timer__button:focus,
-.user-menu__timer__button:hover {
+.user-menu__with-buttons__button:focus,
+.user-menu__with-buttons__button:hover {
   background: $color-green;
 }
 
-.user-menu__timer__button + .user-menu__timer__button {
+.user-menu__with-buttons__button + .user-menu__with-buttons__button {
   margin-left: 8px;
 }
