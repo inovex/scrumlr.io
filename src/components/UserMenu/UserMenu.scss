@@ -57,6 +57,11 @@ $icon__height: $icon__width;
   z-index: $base-z-index + $base-z-index-step * 5;
 }
 
+.dd-menu .dd-menu-items.dd-items-upwards {
+  bottom: 100%;
+  top: auto;
+}
+
 .dd-menu .dd-menu-items li {
   margin: 0;
   display: block;

@@ -10,7 +10,7 @@ exports[`<StartButton /> should match expected structure 1`] = `
       Simple Retro
     </span>
   </button>
-  <DropdownMenu isOpen={false} close={[Function]} toggle={{...}} align=\\"right\\" closeOnInsideClick={true} className=\\"start-button__dropdown-wrapper\\" inverse={false} animAlign={{...}} textAlign={{...}} menuAlign={{...}} size={{...}} upwards={false} animate={true} enterTimeout={150} leaveTimeout={150} closeOnOutsideClick={true}>
+  <DropdownMenu isOpen={false} close={[Function]} toggle={{...}} align=\\"right\\" upwards={true} closeOnInsideClick={true} className=\\"start-button__dropdown-wrapper\\" inverse={false} animAlign={{...}} textAlign={{...}} menuAlign={{...}} size={{...}} animate={true} enterTimeout={150} leaveTimeout={150} closeOnOutsideClick={true}>
     <li>
       <button onClick={[Function]} aria-label=\\"Mode: Lean Coffee\\">
         Lean Coffee
