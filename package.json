@@ -17,6 +17,7 @@
     "base-x": "^3.0.5",
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
+    "export-to-csv": "^0.2.1",
     "firebase": "^7.14.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.6.1",
@@ -75,7 +76,7 @@
     "husky": "^1.1.2",
     "jsdom": "^13.0.0",
     "lint-staged": "^8.0.4",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.14.1",
     "npm-run-all": "^4.0.2",
     "prettier": "^1.5.3",
     "react-scripts-ts": "4.0.8",
@@ -87,7 +88,6 @@
     "typescript": "^3.0.3"
   },
   "scripts": {
-    "precommit": "lint-staged",
     "start": "SASS_PATH='./node_modules' react-scripts-ts start",
     "start:no-browser": "BROWSER=none npm start",
     "build": "SASS_PATH='./node_modules' PUBLIC_URL='/' react-scripts-ts build",
@@ -105,5 +105,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
 }

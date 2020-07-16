@@ -15,7 +15,8 @@ import { RetroMode } from '../../constants/mode';
 export interface OwnHeaderProps {
   boardId: string;
   onSignOut: () => void;
-  onExport: () => void;
+  onPdfExport: () => void;
+  onCsvExport: () => void;
   onOpenModal: (modal: ModalType) => void;
   className?: string;
 }
@@ -58,7 +59,8 @@ export class Header extends React.Component<HeaderProps, {}> {
       onChangeBoardName,
       onOpenModal,
       loggedIn,
-      onExport,
+      onPdfExport,
+      onCsvExport,
       onDeleteBoard,
       onSignOut
     } = this.props;
@@ -90,7 +92,8 @@ export class Header extends React.Component<HeaderProps, {}> {
                 boardName={boardName}
                 admin={admin}
                 onChangeBoardName={onChangeBoardName}
-                onExport={onExport}
+                onPdfExport={onPdfExport}
+                onCsvExport={onCsvExport}
                 onSignOut={onSignOut}
                 onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}

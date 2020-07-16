@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { RouteComponentProps } from 'react-router';
-const Div100vh: any = require('react-div-100vh').default;
-const { toast } = require('react-toastify');
-
 import './Board.scss';
 
 import {
@@ -14,8 +11,8 @@ import {
   mergeProps
 } from './Board.container';
 import {
-  BoardConfig,
   BoardCards,
+  BoardConfig,
   BoardUsers,
   Card,
   ModalType
@@ -29,6 +26,10 @@ import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
 import { getPhaseConfiguration } from '../../constants/Retrospective';
 import Timer from '../../components/Timer';
+import { ExportToCsv } from 'export-to-csv';
+
+const Div100vh: any = require('react-div-100vh').default;
+const { toast } = require('react-toastify');
 
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
@@ -72,28 +73,17 @@ export interface BoardState {
   showModal?: ModalType;
 }
 
-export interface JsonExportCard {
-  authorref: string;
+export interface CsvExportData {
+  id: string;
+  author?: string;
   text: string;
   type: string;
   votes: number;
   timestamp: string;
-  childCards: JsonExportCard[];
+  parent?: string;
 }
 
-export interface JsonExportUser {
-  id: string;
-  name: string;
-}
-
-export interface JsonExportData {
-  title: string;
-  date: string;
-  users: JsonExportUser[];
-  cards: JsonExportCard[];
-}
-
-export type ExportFormats = 'print';
+export type ExportFormats = 'print' | 'csv';
 
 function countReadyUsers(boardUsers: BoardUsers) {
   const userKeys = Object.keys(boardUsers);
@@ -166,10 +156,46 @@ export class Board extends React.Component<BoardProps, BoardState> {
     window.location.hash = this.props.boardPrintUrl;
   };
 
+  handleExportCsv = () => {
+    const options = {
+      fieldSeparator: ';',
+      quoteStrings: '"',
+      decimalSeparator: '.',
+      showLabels: true,
+      showTitle: false,
+      filename: this.props.boardConfig.name
+        ? this.props.boardConfig.name
+        : 'scrumlr_board',
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true
+      // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
+    };
+
+    const csvExporter = new ExportToCsv(options);
+
+    const cardsArrayCsv = Object.keys(this.props.cards).map(key => {
+      const card = this.props.cards[key];
+      return {
+        id: key,
+        author: card.author || '-',
+        text: card.text,
+        type: card.type,
+        votes: card.votes,
+        timestamp: card.timestamp,
+        parent: card.parent || '-'
+      } as CsvExportData;
+    });
+
+    csvExporter.generateCsv(cardsArrayCsv);
+  };
+
   handleExport = (format: ExportFormats = 'print') => {
     switch (format) {
       case 'print':
         return this.handleExportPrint();
+      case 'csv':
+        return this.handleExportCsv();
     }
   };
 
@@ -235,7 +261,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
         <Div100vh className="board-page">
           <Header
             boardId={this.props.boardSelector}
-            onExport={() => this.handleExport()}
+            onPdfExport={() => this.handleExport('print')}
+            onCsvExport={() => this.handleExport('csv')}
             onSignOut={this.props.onSignOut}
             onOpenModal={this.handleOpenModal}
           />

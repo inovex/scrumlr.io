@@ -1,18 +1,20 @@
 import * as React from 'react';
-const reactDDMenu = require('react-dd-menu');
-const DropdownMenu = reactDDMenu.DropdownMenu;
-
 import './UserMenu.scss';
 import Icon from '../Icon/Icon';
 import Input from '../Input/Input';
 import MenuItem from './MenuItem';
 import { ModalType } from '../../types';
+
+const reactDDMenu = require('react-dd-menu');
+const DropdownMenu = reactDDMenu.DropdownMenu;
+
 import classNames = require('classnames');
 
 export interface UserMenuProps {
   onSignOut: () => void;
   onDeleteBoard: () => void;
-  onExport: () => void;
+  onPdfExport: () => void;
+  onCsvExport: () => void;
   onOpenModal: (modal: ModalType) => void;
   onChangeBoardName: (boardName: string) => void;
   onSetTimer: (seconds: number) => void;
@@ -57,7 +59,8 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
     const { isOpen } = this.state;
     const {
       onOpenModal,
-      onExport,
+      onPdfExport,
+      onCsvExport,
       onSignOut,
       onSetTimer,
       boardName,
@@ -159,25 +162,49 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
 
         {isLastPhase && (
           <li key="user-menu__export" className="user_menu__li--hidden-mobile">
-            <MenuItem name="Export" icon="download" onClick={onExport} />
+            <div className="user-menu__with-buttons">
+              <Icon className="menu-item__button-icon" name="download" />
+              <span
+                className={classNames(
+                  'menu-item__button-text',
+                  'user-menu__with-buttons__text'
+                )}
+              >
+                Export
+              </span>
+              <button
+                className="user-menu__with-buttons__button"
+                name="Pdf"
+                onClick={onPdfExport}
+              >
+                PDF
+              </button>
+              <button
+                className="user-menu__with-buttons__button"
+                name="Csv"
+                onClick={onCsvExport}
+              >
+                CSV
+              </button>
+            </div>
           </li>
         )}
 
         {admin && (
           <>
             <li key="user-menu__timer" className="user_menu__li-hidden-mobile">
-              <div className="user-menu__timer">
+              <div className="user-menu__with-buttons">
                 <Icon className="menu-item__button-icon" name="timer" />
                 <span
                   className={classNames(
                     'menu-item__button-text',
-                    'user-menu__timer__text'
+                    'user-menu__with-buttons__text'
                   )}
                 >
                   Timer
                 </span>
                 <button
-                  className="user-menu__timer__button"
+                  className="user-menu__with-buttons__button"
                   onClick={() => {
                     onSetTimer(3 * 60);
                     this.setState({ isOpen: false });
@@ -186,7 +213,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                   3 min.
                 </button>
                 <button
-                  className="user-menu__timer__button"
+                  className="user-menu__with-buttons__button"
                   onClick={() => {
                     onSetTimer(5 * 60);
                     this.setState({ isOpen: false });
@@ -195,7 +222,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                   5
                 </button>
                 <button
-                  className="user-menu__timer__button"
+                  className="user-menu__with-buttons__button"
                   onClick={() => {
                     onSetTimer(10 * 60);
                     this.setState({ isOpen: false });

@@ -23,7 +23,8 @@ describe('<Header />', () => {
       onNextPhase: jest.fn(),
       onSetTimer: jest.fn(),
       loggedIn: false,
-      onExport: jest.fn(),
+      onPdfExport: jest.fn(),
+      onCsvExport: jest.fn(),
       onSignOut: jest.fn(),
       onChangeBoardName: jest.fn(),
       user: 'user1',
@@ -81,7 +82,8 @@ describe('<Header />', () => {
     it('should pass arguments correctly', () => {
       wrapper = shallow(<Header {...props} loggedIn={true} />);
       const userMenu = wrapper.find(UserMenu);
-      expect(userMenu.prop('onExport')).toEqual(props.onExport);
+      expect(userMenu.prop('onPdfExport')).toEqual(props.onPdfExport);
+      expect(userMenu.prop('onCsvExport')).toEqual(props.onCsvExport);
       expect(userMenu.prop('onSignOut')).toEqual(props.onSignOut);
     });
   });
