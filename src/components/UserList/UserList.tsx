@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 
-import { BoardUsers, UserInformation } from '../../types';
+import { BoardUsers, ModalType, UserInformation } from '../../types';
 import Icon, { IconNames } from '../Icon';
 import './UserList.scss';
 import * as ReactTooltip from 'react-tooltip';
@@ -15,6 +15,7 @@ export interface UserListProps {
   currentUserId: string;
   users: BoardUsers;
   onToggleReadyState: () => void;
+  onOpenModal: (modal: ModalType) => void;
   userDisplayLimit?: number;
   className?: string;
 }
@@ -202,7 +203,12 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   };
 
   render() {
-    const { currentUserId, users, onToggleReadyState } = this.props;
+    const {
+      currentUserId,
+      users,
+      onToggleReadyState,
+      onOpenModal
+    } = this.props;
 
     if (!users) {
       return null;
@@ -226,6 +232,10 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     return (
       <>
         <ul className={cx('board__user-list', this.props.className)}>
+          <button onClick={() => onOpenModal('settings')}>
+            <Icon name="more" className="card-navigation__icon" />
+          </button>
+
           {!this.state.showAllUsers &&
             tUser.length > 1 &&
             this.renderUserSummary()}

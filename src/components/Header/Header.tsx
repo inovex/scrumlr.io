@@ -85,6 +85,7 @@ export class Header extends React.Component<HeaderProps, {}> {
               currentUserId={user}
               users={users}
               onToggleReadyState={onToggleReadyState}
+              onOpenModal={onOpenModal}
             />
 
             {loggedIn && (

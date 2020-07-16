@@ -11,7 +11,8 @@ describe('<UserList />', () => {
   let props: UserListProps = {
     currentUserId: 'user1',
     users: { user1: mockUser() },
-    onToggleReadyState: jest.fn()
+    onToggleReadyState: jest.fn(),
+    onOpenModal: jest.fn()
   };
 
   it('should not render anything if no users are passed', () => {
