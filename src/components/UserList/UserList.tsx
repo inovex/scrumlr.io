@@ -22,7 +22,7 @@ export interface UserListProps {
 
 export interface UserListState {
   showAllUsers: boolean;
-  displayUserListDropdown: boolean;
+  displayUserInformationDropdown: boolean;
   focusedAvatar: boolean;
 }
 
@@ -33,7 +33,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     const showAllUsers = this.showAllUsers();
     this.state = {
       showAllUsers,
-      displayUserListDropdown: false,
+      displayUserInformationDropdown: false,
       focusedAvatar: false
     };
   }
@@ -79,8 +79,17 @@ export class UserList extends React.Component<UserListProps, UserListState> {
       ? 'circle-selection'
       : 'circle-selection-grey';
 
-    return (
-      <div className="board__user-image-wrapper">
+    const toggleIcon = (
+      <div
+        className="user-list__other-cursor"
+        onClick={() => {
+          this.setState({
+            ...this.state,
+            displayUserInformationDropdown: !this.state
+              .displayUserInformationDropdown
+          });
+        }}
+      >
         <Icon
           className="board__user-image-border"
           name={iconName}
@@ -89,7 +98,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           data-tip={user.name}
           data-for={'ALL' + user.id}
         />
-        {!isCurrentUser && (
+        {!isCurrentUser && !this.state.displayUserInformationDropdown && (
           <ReactTooltip
             id={'ALL' + user.id}
             place="bottom"
@@ -111,9 +120,55 @@ export class UserList extends React.Component<UserListProps, UserListState> {
         )}
       </div>
     );
+
+    const ddMenuProps = {
+      isOpen: this.state.displayUserInformationDropdown,
+      close: () => {
+        this.setState({ ...this.state, displayUserInformationDropdown: false });
+      },
+      toggle: toggleIcon,
+      align: 'right',
+      closeOnInsideClick: false
+    };
+
+    const userPopup = (
+      <div className="user-list__other-wrapper">
+        <span className="user-list__other-list-name">{user.name}</span>
+        <div className="board__user-image-wrapper">
+          <Icon
+            className="board__user-image-border"
+            name={iconName}
+            width={44}
+            height={44}
+            data-tip={user.name}
+            data-for={'ALL' + user.id}
+          />
+          <Avatar user={user} className="user-list__avatar" />
+          {user.ready && (
+            <span className="user-list__ready-state-wrapper">
+              <Icon
+                name="check"
+                aria-hidden="true"
+                width={14}
+                height={14}
+                className="user-list__ready-check-icon"
+              />
+            </span>
+          )}
+        </div>
+      </div>
+    );
+
+    return (
+      <div className="board__user-image-wrapper">
+        <DropdownMenu {...ddMenuProps}>{userPopup}</DropdownMenu>
+      </div>
+    );
   }
 
   renderUserSummary = () => {
+    const onOpenModal = this.props.onOpenModal;
+
     const tUser = Object.keys(this.props.users).map(key => ({
       ...this.props.users[key],
       id: key
@@ -132,83 +187,46 @@ export class UserList extends React.Component<UserListProps, UserListState> {
       otherUserNames += '...';
     }
 
-    const toggleIcon = (
+    return (
       <div
-        className="user-list__other-cursor"
-        onClick={() => {
-          this.setState({
-            ...this.state,
-            displayUserListDropdown: !this.state.displayUserListDropdown
-          });
-        }}
+        className="board__user-image-wrapper"
+        data-tip={otherUserNames}
+        data-for="user-list-summary-icon"
       >
-        <Icon
-          className="board__user-image-border"
-          name="circle-selection-grey"
-          width={44}
-          height={44}
-        />
-        {!this.state.displayUserListDropdown && (
+        <div
+          className="user-list__other-cursor"
+          onClick={() => onOpenModal('settings')}
+        >
+          <Icon
+            className="board__user-image-border"
+            name="circle-selection-grey"
+            width={44}
+            height={44}
+          />
           <ReactTooltip
             id="user-list-summary-icon"
             place="bottom"
             effect="solid"
           />
-        )}
-        <Avatar user={otherUser} className="user-list__avatar" faded />
-        <span className="board__user-count">{otherUsers.length}</span>
-        <span className="user-list__ready-state-wrapper">
-          <span className="board__user-ready-count">{readyCount}</span>
-          <Icon
-            name="check"
-            aria-hidden="true"
-            width={14}
-            height={14}
-            className="user-list__ready-check-icon"
-          />
-        </span>
+          <Avatar user={otherUser} className="user-list__avatar" faded />
+          <span className="board__user-count">{otherUsers.length}</span>
+          <span className="user-list__ready-state-wrapper">
+            <span className="board__user-ready-count">{readyCount}</span>
+            <Icon
+              name="check"
+              aria-hidden="true"
+              width={14}
+              height={14}
+              className="user-list__ready-check-icon"
+            />
+          </span>
+        </div>
       </div>
-    );
-
-    const ddMenuProps = {
-      isOpen: this.state.displayUserListDropdown,
-      close: () => {
-        this.setState({ ...this.state, displayUserListDropdown: false });
-      },
-      toggle: toggleIcon,
-      align: 'right',
-      closeOnInsideClick: false
-    };
-
-    const userList = otherUsers.map(user => (
-      <li key={user.id + 'otherList'}>
-        <div className="user-list__other-wrapper">
-          <span className="user-list__other-list-name">{user.name}</span>
-          {this.renderUserContent(user, false)}
-        </div>
-      </li>
-    ));
-
-    return (
-      <li key="user-summary">
-        <div
-          className="board__user-image-wrapper"
-          data-tip={otherUserNames}
-          data-for="user-list-summary-icon"
-        >
-          <DropdownMenu {...ddMenuProps}>{userList}</DropdownMenu>
-        </div>
-      </li>
     );
   };
 
   render() {
-    const {
-      currentUserId,
-      users,
-      onToggleReadyState,
-      onOpenModal
-    } = this.props;
+    const { currentUserId, users, onToggleReadyState } = this.props;
 
     if (!users) {
       return null;
@@ -232,10 +250,6 @@ export class UserList extends React.Component<UserListProps, UserListState> {
     return (
       <>
         <ul className={cx('board__user-list', this.props.className)}>
-          <button onClick={() => onOpenModal('settings')}>
-            <Icon name="more" className="card-navigation__icon" />
-          </button>
-
           {!this.state.showAllUsers &&
             tUser.length > 1 &&
             this.renderUserSummary()}
