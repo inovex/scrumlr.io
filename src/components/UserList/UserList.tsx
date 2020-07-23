@@ -90,16 +90,16 @@ export class UserList extends React.Component<UserListProps, UserListState> {
 
     return (
       <div
-        className="board__user-image-wrapper"
+        className="user-icon__user-image-wrapper"
         data-tip={otherUserNames}
         data-for="user-list-summary-icon"
       >
         <div
-          className="user-list__other-cursor"
+          className="user-icon__other-cursor"
           onClick={() => onOpenModal('settings')}
         >
           <Icon
-            className="board__user-image-border"
+            className="user-icon__user-image-border"
             name="circle-selection-grey"
             width={44}
             height={44}
@@ -111,14 +111,14 @@ export class UserList extends React.Component<UserListProps, UserListState> {
           />
           <Avatar user={otherUser} className="user-list__avatar" faded />
           <span className="board__user-count">{otherUsers.length}</span>
-          <span className="user-list__ready-state-wrapper">
+          <span className="user-icon__ready-state-wrapper">
             <span className="board__user-ready-count">{readyCount}</span>
             <Icon
               name="check"
               aria-hidden="true"
               width={14}
               height={14}
-              className="user-list__ready-check-icon"
+              className="user-icon__ready-check-icon"
             />
           </span>
         </div>

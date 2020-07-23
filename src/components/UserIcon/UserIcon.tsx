@@ -5,6 +5,7 @@ import Icon, { IconNames } from '../Icon';
 import * as ReactTooltip from 'react-tooltip';
 import Avatar from '../Avatar';
 import { UserInformation } from '../../types';
+import Checkbox from '../Checkbox';
 
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
@@ -38,7 +39,7 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
 
     const toggleIcon = (
       <div
-        className="user-list__other-cursor"
+        className="user-icon__other-cursor"
         onClick={() => {
           this.setState({
             ...this.state,
@@ -48,7 +49,7 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
         }}
       >
         <Icon
-          className="board__user-image-border"
+          className="user-icon__user-image-border"
           name={iconName}
           width={44}
           height={44}
@@ -65,13 +66,13 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
         )}
         <Avatar user={user} className="user-list__avatar" />
         {user.ready && (
-          <span className="user-list__ready-state-wrapper">
+          <span className="user-icon__ready-state-wrapper">
             <Icon
               name="check"
               aria-hidden="true"
               width={14}
               height={14}
-              className="user-list__ready-check-icon"
+              className="user-icon__ready-check-icon"
             />
           </span>
         )}
@@ -88,36 +89,51 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
       closeOnInsideClick: false
     };
 
+    var checked = false;
+
     const userPopup = (
-      <div className="user-list__other-wrapper">
-        <span className="user-list__other-list-name">{user.name}</span>
-        <div className="board__user-image-wrapper">
-          <Icon
-            className="board__user-image-border"
-            name={iconName}
-            width={44}
-            height={44}
-            data-tip={user.name}
-            data-for={'ALL' + user.id}
-          />
-          <Avatar user={user} className="user-list__avatar" />
-          {user.ready && (
-            <span className="user-list__ready-state-wrapper">
-              <Icon
-                name="check"
-                aria-hidden="true"
-                width={14}
-                height={14}
-                className="user-list__ready-check-icon"
-              />
-            </span>
-          )}
+      <li key="user-summary">
+        <div className="user-icon__other-wrapper">
+          <span className="user-icon__user-name">{user.name}</span>
+          <div className="user-icon__user-image-wrapper">
+            <Icon
+              className="user-icon__user-image-border"
+              name={iconName}
+              width={44}
+              height={44}
+              data-tip={user.name}
+              data-for={'ALL' + user.id}
+            />
+            <Avatar user={user} className="user-list__avatar" />
+            {user.ready && (
+              <span className="user-icon__ready-state-wrapper">
+                <Icon
+                  name="check"
+                  aria-hidden="true"
+                  width={14}
+                  height={14}
+                  className="user-icon__ready-check-icon"
+                />
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+        <div className="user-admin__admin-state-wrapper">
+          <Checkbox
+            onChange={() => {
+              checked = !checked;
+            }}
+            checked={checked}
+            className="user-admin__admin-checkbox"
+          >
+            Admin Rights
+          </Checkbox>
+        </div>
+      </li>
     );
 
     return (
-      <div className="board__user-image-wrapper">
+      <div className="user-icon__user-image-wrapper">
         <DropdownMenu {...ddMenuProps}>{userPopup}</DropdownMenu>
       </div>
     );
