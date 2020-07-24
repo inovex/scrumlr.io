@@ -14,6 +14,7 @@ const Dotdotdot: React.ComponentClass<any> = require('react-dotdotdot');
 
 export interface OwnFocusedCardProps {
   boardUrl: string;
+  isAdmin: boolean;
   card: TCard;
 
   isRootCard: boolean;
@@ -24,7 +25,6 @@ export interface OwnFocusedCardProps {
 
 export interface StateFocusedCardProps {
   onClose: () => void;
-  isAdmin: boolean;
 }
 
 export type FocusedCardProps = OwnFocusedCardProps & StateFocusedCardProps;

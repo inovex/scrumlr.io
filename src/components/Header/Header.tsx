@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { RetroMode } from '../../constants/mode';
 
 export interface OwnHeaderProps {
+  isAdmin: boolean;
   boardId: string;
   onSignOut: () => void;
   onPdfExport: () => void;
@@ -22,7 +23,6 @@ export interface OwnHeaderProps {
 }
 
 export interface StateHeaderProps {
-  admin: boolean;
   mode: RetroMode;
   phase: number;
   isLastPhase: boolean;
@@ -44,7 +44,7 @@ export type HeaderProps = OwnHeaderProps & StateHeaderProps;
 export class Header extends React.Component<HeaderProps, {}> {
   render() {
     const {
-      admin,
+      isAdmin,
       className,
       boardName,
       boardId,
@@ -74,7 +74,7 @@ export class Header extends React.Component<HeaderProps, {}> {
           <Logo className="header__control-logo" />
 
           <PhaseMenu
-            admin={admin}
+            admin={isAdmin}
             mode={mode}
             guidedPhase={guidedPhase}
             onPrevPhase={onPrevPhase}
@@ -93,7 +93,7 @@ export class Header extends React.Component<HeaderProps, {}> {
             {loggedIn && (
               <UserMenu
                 boardName={boardName}
-                admin={admin}
+                admin={isAdmin}
                 onChangeBoardName={onChangeBoardName}
                 onPdfExport={onPdfExport}
                 onCsvExport={onCsvExport}

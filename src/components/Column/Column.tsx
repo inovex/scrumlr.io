@@ -18,6 +18,7 @@ import { ColumnOverview } from '../ColumnOverview';
 
 export interface OwnColumnProps {
   boardUrl: string;
+  isAdmin: boolean;
 
   /** The unique column type. */
   column: ColumnConfiguration;
@@ -59,6 +60,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
 
   render() {
     const {
+      isAdmin,
       isActive,
       isHidden,
       isExtended,
@@ -138,6 +140,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
           >
             {focused && column.focus.align === 'left' && (
               <FocusedCardComponent
+                isAdmin={isAdmin}
                 key={focused.id}
                 boardUrl={boardUrl}
                 focused={focused}
@@ -162,6 +165,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
 
             {focused && column.focus.align === 'right' && (
               <FocusedCardComponent
+                isAdmin={isAdmin}
                 key={focused.id}
                 boardUrl={boardUrl}
                 focused={focused}

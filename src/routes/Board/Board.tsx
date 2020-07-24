@@ -260,6 +260,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
         {waitingUser}
         <Div100vh className="board-page">
           <Header
+            isAdmin={this.props.isBoardAdmin}
             boardId={this.props.boardSelector}
             onPdfExport={() => this.handleExport('print')}
             onCsvExport={() => this.handleExport('csv')}
@@ -268,6 +269,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           />
 
           <ColumnView
+            isAdmin={this.props.isBoardAdmin}
             boardUrl={this.props.boardSelector}
             className="board-page__column-view"
           />

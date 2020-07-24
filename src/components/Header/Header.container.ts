@@ -35,11 +35,6 @@ export const mapStateToProps = (
       return acc;
     }, {});
 
-  const isBoardAdmin =
-    auth && isLoaded(boardConfig)
-      ? auth.uid === boardConfig.config.creatorUid
-      : false;
-
   function onToggleReadyState() {
     firebase
       .ref(`${boardUrl}/users/${auth.uid}`)
@@ -175,7 +170,6 @@ export const mapStateToProps = (
     getPhasesCount(boardConfig.config.mode) - 1;
 
   return {
-    admin: isBoardAdmin,
     boardName: boardConfig.config.name,
     mode: boardConfig.config.mode,
     phase: boardConfig.config.guidedPhase,
