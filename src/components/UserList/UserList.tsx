@@ -10,6 +10,7 @@ import ReadyButton from './ReadyButton';
 import UserIcon from '../UserIcon';
 
 export interface UserListProps {
+  boardUrl: string;
   currentUserId: string;
   users: BoardUsers;
   onToggleReadyState: () => void;
@@ -161,12 +162,20 @@ export class UserList extends React.Component<UserListProps, UserListState> {
                 key={'ALL' + userInfo.id}
                 aria-label={`User ${userInfo.name}`}
               >
-                <UserIcon user={userInfo} isCurrentUser={false} />
+                <UserIcon
+                  boardUrl={this.props.boardUrl}
+                  user={userInfo}
+                  isCurrentUser={false}
+                />
               </li>
             ))}
 
           <li key="OWN" aria-label="Yourself">
-            <UserIcon user={currentUser} isCurrentUser={true} />
+            <UserIcon
+              boardUrl={this.props.boardUrl}
+              user={currentUser}
+              isCurrentUser={true}
+            />
           </li>
         </ul>
         <ReadyButton

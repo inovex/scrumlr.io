@@ -1,37 +1,47 @@
 import * as React from 'react';
-import { Component } from 'react';
 import './UserIcon.scss';
 import Icon, { IconNames } from '../Icon';
 import * as ReactTooltip from 'react-tooltip';
 import Avatar from '../Avatar';
 import { UserInformation } from '../../types';
 import Checkbox from '../Checkbox';
+import { connect } from 'react-redux';
+import { mapStateToProps } from './UserIcon.container';
 
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
-export interface UserIconProps {
+export interface OwnUserIconProps {
+  boardUrl: string;
   user: UserInformation & { id: string };
   isCurrentUser: boolean;
 }
+
+export interface StateUserIconProps {
+  adminToggleIsVisible: boolean;
+  isAdmin: boolean;
+  onToggleAdmin: () => void;
+}
+
+export type UserIconProps = OwnUserIconProps & StateUserIconProps;
 
 export interface UserIconState {
   displayUserInformationDropdown: boolean;
 }
 
-export class UserIcon extends Component<UserIconProps, UserIconState> {
+export class UserIcon extends React.Component<UserIconProps, UserIconState> {
   state: UserIconState = {
     displayUserInformationDropdown: false
   };
 
-  componentDidMount() {
-    this.setState({
-      ...this.state
-    });
-  }
-
   render() {
-    const { user, isCurrentUser } = this.props;
+    const {
+      user,
+      isCurrentUser,
+      adminToggleIsVisible,
+      isAdmin,
+      onToggleAdmin
+    } = this.props;
 
     const iconName: IconNames = isCurrentUser
       ? 'circle-selection'
@@ -89,8 +99,6 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
       closeOnInsideClick: false
     };
 
-    var checked = false;
-
     const userPopup = (
       <li key="user-summary">
         <div className="user-icon__other-wrapper">
@@ -118,17 +126,17 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
             )}
           </div>
         </div>
-        <div className="user-admin__admin-state-wrapper">
-          <Checkbox
-            onChange={() => {
-              checked = !checked;
-            }}
-            checked={checked}
-            className="user-admin__admin-checkbox"
-          >
-            Admin Rights
-          </Checkbox>
-        </div>
+        {adminToggleIsVisible && (
+          <div className="user-admin__admin-state-wrapper">
+            <Checkbox
+              onChange={onToggleAdmin}
+              checked={isAdmin}
+              className="user-admin__admin-checkbox"
+            >
+              Admin Rights
+            </Checkbox>
+          </div>
+        )}
       </li>
     );
 
@@ -140,4 +148,6 @@ export class UserIcon extends Component<UserIconProps, UserIconState> {
   }
 }
 
-export default UserIcon;
+export default connect<StateUserIconProps, null, OwnUserIconProps>(
+  mapStateToProps
+)(UserIcon);

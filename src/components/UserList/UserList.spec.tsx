@@ -9,6 +9,7 @@ import { BoardUsers } from '../../types';
 describe('<UserList />', () => {
   let wrapper: ShallowWrapper<UserListProps, {}>;
   let props: UserListProps = {
+    boardUrl: 'mockUrl',
     currentUserId: 'user1',
     users: { user1: mockUser() },
     onToggleReadyState: jest.fn(),

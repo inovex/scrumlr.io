@@ -47,6 +47,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       admin,
       className,
       boardName,
+      boardId,
       mode,
       phase: guidedPhase,
       isLastPhase,
@@ -82,6 +83,7 @@ export class Header extends React.Component<HeaderProps, {}> {
 
           <div className="header__control-users">
             <UserList
+              boardUrl={boardId}
               currentUserId={user}
               users={users}
               onToggleReadyState={onToggleReadyState}
