@@ -83,6 +83,7 @@ export class Header extends React.Component<HeaderProps, {}> {
 
           <div className="header__control-users">
             <UserList
+              admin={isAdmin}
               boardUrl={boardId}
               currentUserId={user}
               users={users}

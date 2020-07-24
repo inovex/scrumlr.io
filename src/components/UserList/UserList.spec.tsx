@@ -10,6 +10,7 @@ describe('<UserList />', () => {
   let wrapper: ShallowWrapper<UserListProps, {}>;
   let props: UserListProps = {
     boardUrl: 'mockUrl',
+    admin: false,
     currentUserId: 'user1',
     users: { user1: mockUser() },
     onToggleReadyState: jest.fn(),

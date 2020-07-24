@@ -11,6 +11,7 @@ import UserIcon from '../UserIcon';
 
 export interface UserListProps {
   boardUrl: string;
+  admin: boolean;
   currentUserId: string;
   users: BoardUsers;
   onToggleReadyState: () => void;
@@ -97,7 +98,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
       >
         <div
           className="user-icon__other-cursor"
-          onClick={() => onOpenModal('settings')}
+          onClick={() => onOpenModal('users')}
         >
           <Icon
             className="user-icon__user-image-border"
@@ -128,7 +129,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
   };
 
   render() {
-    const { currentUserId, users, onToggleReadyState } = this.props;
+    const { currentUserId, users, onToggleReadyState, admin } = this.props;
 
     if (!users) {
       return null;
@@ -163,6 +164,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
                 aria-label={`User ${userInfo.name}`}
               >
                 <UserIcon
+                  adminToggleIsVisible={admin}
                   boardUrl={this.props.boardUrl}
                   user={userInfo}
                   isCurrentUser={false}
@@ -172,6 +174,7 @@ export class UserList extends React.Component<UserListProps, UserListState> {
 
           <li key="OWN" aria-label="Yourself">
             <UserIcon
+              adminToggleIsVisible={admin}
               boardUrl={this.props.boardUrl}
               user={currentUser}
               isCurrentUser={true}

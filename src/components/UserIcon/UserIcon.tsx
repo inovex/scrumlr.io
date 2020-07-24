@@ -13,12 +13,12 @@ const DropdownMenu = reactDDMenu.DropdownMenu;
 
 export interface OwnUserIconProps {
   boardUrl: string;
+  adminToggleIsVisible: boolean;
   user: UserInformation & { id: string };
   isCurrentUser: boolean;
 }
 
 export interface StateUserIconProps {
-  adminToggleIsVisible: boolean;
   isAdmin: boolean;
   onToggleAdmin: () => void;
 }
