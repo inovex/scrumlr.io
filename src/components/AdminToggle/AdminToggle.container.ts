@@ -1,12 +1,12 @@
 import { StoreState } from '../../types';
 import { getVal, getFirebase } from 'react-redux-firebase';
 import Raven = require('raven-js');
-import { OwnUserIconProps, StateUserIconProps } from './UserIcon';
+import { OwnAdminToggleProps, StateAdminToggleProps } from './AdminToggle';
 
 export const mapStateToProps = (
   state: StoreState,
-  ownProps: OwnUserIconProps
-): StateUserIconProps => {
+  ownProps: OwnAdminToggleProps
+): StateAdminToggleProps => {
   const currentUser = getVal(state.fbState, 'auth', undefined);
 
   const admins: { [key: string]: boolean } = getVal(

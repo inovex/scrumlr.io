@@ -4,26 +4,17 @@ import Icon, { IconNames } from '../Icon';
 import * as ReactTooltip from 'react-tooltip';
 import Avatar from '../Avatar';
 import { UserInformation } from '../../types';
-import Checkbox from '../Checkbox';
-import { connect } from 'react-redux';
-import { mapStateToProps } from './UserIcon.container';
+import AdminToggle from '../AdminToggle';
 
 const reactDDMenu = require('react-dd-menu');
 const DropdownMenu = reactDDMenu.DropdownMenu;
 
-export interface OwnUserIconProps {
+export interface UserIconProps {
   boardUrl: string;
   adminToggleIsVisible: boolean;
   user: UserInformation & { id: string };
   isCurrentUser: boolean;
 }
-
-export interface StateUserIconProps {
-  isAdmin: boolean;
-  onToggleAdmin: () => void;
-}
-
-export type UserIconProps = OwnUserIconProps & StateUserIconProps;
 
 export interface UserIconState {
   displayUserInformationDropdown: boolean;
@@ -35,19 +26,13 @@ export class UserIcon extends React.Component<UserIconProps, UserIconState> {
   };
 
   render() {
-    const {
-      user,
-      isCurrentUser,
-      adminToggleIsVisible,
-      isAdmin,
-      onToggleAdmin
-    } = this.props;
+    const { user, isCurrentUser, adminToggleIsVisible } = this.props;
 
     const iconName: IconNames = isCurrentUser
       ? 'circle-selection'
       : 'circle-selection-grey';
 
-    const toggleIcon = (
+    const dropdownIcon = (
       <div
         className="user-icon__other-cursor"
         onClick={() => {
@@ -94,7 +79,7 @@ export class UserIcon extends React.Component<UserIconProps, UserIconState> {
       close: () => {
         this.setState({ ...this.state, displayUserInformationDropdown: false });
       },
-      toggle: toggleIcon,
+      toggle: dropdownIcon,
       align: 'right',
       closeOnInsideClick: false
     };
@@ -127,15 +112,11 @@ export class UserIcon extends React.Component<UserIconProps, UserIconState> {
           </div>
         </div>
         {adminToggleIsVisible && (
-          <div className="user-admin__admin-state-wrapper">
-            <Checkbox
-              onChange={onToggleAdmin}
-              checked={isAdmin}
-              className="user-admin__admin-checkbox"
-            >
-              Admin Rights
-            </Checkbox>
-          </div>
+          <AdminToggle
+            adminToggleIsVisible={adminToggleIsVisible}
+            boardUrl={this.props.boardUrl}
+            user={user}
+          />
         )}
       </li>
     );
@@ -148,6 +129,4 @@ export class UserIcon extends React.Component<UserIconProps, UserIconState> {
   }
 }
 
-export default connect<StateUserIconProps, null, OwnUserIconProps>(
-  mapStateToProps
-)(UserIcon);
+export default UserIcon;
