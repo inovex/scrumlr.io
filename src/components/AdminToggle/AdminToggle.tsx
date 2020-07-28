@@ -26,10 +26,10 @@ export class AdminToggle extends React.Component<AdminToggleProps, {}> {
       <div className="user-admin__admin-state-wrapper">
         <Checkbox
           onChange={onToggleAdmin}
-          checked={isAdmin}
+          checked={Boolean(isAdmin)}
           className="user-admin__admin-checkbox"
         >
-          Admin Rights
+          Admin
         </Checkbox>
       </div>
     );
