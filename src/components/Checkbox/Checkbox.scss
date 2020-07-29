@@ -49,6 +49,10 @@ $checkbox__height: 100px*$checkbox__scale-factor;
   background: $color-mint;
 }
 
+.checkbox__input:disabled + .checkbox__label-wrapper > .checkbox__control {
+  background: $color-darkest-mint;
+}
+
 .checkbox__input:checked + .checkbox__label-wrapper > .checkbox__control:after {
   left: calc(100% - #{$checkbox__margin*3});
   transform: translateX(-100%);

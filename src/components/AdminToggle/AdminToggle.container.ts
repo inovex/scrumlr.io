@@ -27,12 +27,11 @@ export const mapStateToProps = (
 
   const isAdmin = isUserAdmin(ownProps.user.id);
 
+  const disabled =
+    ownProps.user.id == creatorId || ownProps.user.id == currentUserId;
+
   function onToggleAdmin() {
-    if (
-      ownProps.adminToggleIsVisible &&
-      ownProps.user.id !== creatorId &&
-      ownProps.user.id !== currentUserId
-    ) {
+    if (ownProps.adminToggleIsVisible && !disabled) {
       getFirebase()
         .ref(`${ownProps.boardUrl}/config/adminUsers/${ownProps.user.id}`)
         .set(!isAdmin)
@@ -50,6 +49,7 @@ export const mapStateToProps = (
 
   return {
     isAdmin,
-    onToggleAdmin
+    onToggleAdmin,
+    disabled
   };
 };
