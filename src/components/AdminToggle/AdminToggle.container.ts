@@ -7,7 +7,7 @@ export const mapStateToProps = (
   state: StoreState,
   ownProps: OwnAdminToggleProps
 ): StateAdminToggleProps => {
-  const currentUser = getVal(state.fbState, 'auth', undefined);
+  const currentUserId = getVal(state.fbState, 'auth', undefined).uid;
 
   const admins: { [key: string]: boolean } = getVal(
     state.fbState,
@@ -15,14 +15,14 @@ export const mapStateToProps = (
     {}
   );
 
-  const creator = getVal(
+  const creatorId = getVal(
     state.fbState,
     `data/${ownProps.boardUrl}/config/creatorUid`,
     undefined
   );
 
   const isUserAdmin = (userId: string) => {
-    return creator === userId || admins[userId];
+    return creatorId === userId || admins[userId];
   };
 
   const isAdmin = isUserAdmin(ownProps.user.id);
@@ -30,8 +30,8 @@ export const mapStateToProps = (
   function onToggleAdmin() {
     if (
       ownProps.adminToggleIsVisible &&
-      ownProps.user.id !== creator &&
-      ownProps.user.id !== currentUser
+      ownProps.user.id !== creatorId &&
+      ownProps.user.id !== currentUserId
     ) {
       getFirebase()
         .ref(`${ownProps.boardUrl}/config/adminUsers/${ownProps.user.id}`)
