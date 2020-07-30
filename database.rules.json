@@ -4,8 +4,8 @@
     ".write": false,
     "boards": {
       "$boardId": {
-        ".read": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid",
-        ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid",
+        ".read": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid || data.child('private/config/adminUsers').child(auth.uid).val() === true",
+        ".write": "!root.child('boards').hasChild($boardId) || data.child('private/config/creatorUid').val() === auth.uid || data.child('private/config/adminUsers').child(auth.uid).val() === true",
 
         "public": {
           ".read": "root.child('boards/'+$boardId+'/private/users').hasChild(auth.uid)",

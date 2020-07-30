@@ -27,6 +27,7 @@ import MembershipRequestModal from '../../components/Modal/variant/MembershipReq
 import { getPhaseConfiguration } from '../../constants/Retrospective';
 import Timer from '../../components/Timer';
 import { ExportToCsv } from 'export-to-csv';
+import UsersModal from '../../components/Modal/variant/UsersModal';
 
 const Div100vh: any = require('react-div-100vh').default;
 const { toast } = require('react-toastify');
@@ -223,7 +224,9 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const {
       isBoardAdmin,
       boardConfig,
+      boardSelector,
       setupCompleted,
+      users,
       waitingUsers,
       timerExpiration,
       onDeleteTimer,
@@ -253,6 +256,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const showSettings = !waitingUser && this.state.showModal === 'settings';
     const showFeedback = !waitingUser && this.state.showModal === 'feedback';
     const showShareDialog = !waitingUser && this.state.showModal === 'share';
+    const showUsers = !waitingUser && this.state.showModal === 'users';
     const onDeleteTimerAuthorized = isBoardAdmin ? onDeleteTimer : undefined;
 
     return (
@@ -260,7 +264,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
         {waitingUser}
         <Div100vh className="board-page">
           <Header
-            boardId={this.props.boardSelector}
+            isAdmin={isBoardAdmin}
+            boardId={boardSelector}
             onPdfExport={() => this.handleExport('print')}
             onCsvExport={() => this.handleExport('csv')}
             onSignOut={this.props.onSignOut}
@@ -268,7 +273,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
           />
 
           <ColumnView
-            boardUrl={this.props.boardSelector}
+            isAdmin={isBoardAdmin}
+            boardUrl={boardSelector}
             className="board-page__column-view"
           />
 
@@ -279,7 +285,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
           {showSettings && (
             <SettingsModal
-              isAdmin={this.props.isBoardAdmin}
+              isAdmin={isBoardAdmin}
               boardName={boardConfig.name}
               username={this.props.username}
               email={this.props.email}
@@ -295,6 +301,15 @@ export class Board extends React.Component<BoardProps, BoardState> {
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
           {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+
+          {showUsers && (
+            <UsersModal
+              onClose={this.handleCloseModal}
+              boardUrl={boardSelector}
+              boardUsers={users}
+              isAdmin={isBoardAdmin}
+            />
+          )}
         </Div100vh>
       </>
     );

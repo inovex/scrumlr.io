@@ -43,8 +43,12 @@ export const mapStateToProps = (
   const boardConfig: BoardConfig = board.config;
 
   const users = isLoaded(board) ? board.users : {};
+
+  const adminUsers = boardConfig.adminUsers || {};
+
+  //There should be only one board admin check - here!
   const isBoardAdmin = isLoaded(board)
-    ? auth.uid === boardConfig.creatorUid
+    ? auth.uid === boardConfig.creatorUid || adminUsers[auth.uid]
     : false;
 
   let focusedCard: Optional<Card> = undefined;

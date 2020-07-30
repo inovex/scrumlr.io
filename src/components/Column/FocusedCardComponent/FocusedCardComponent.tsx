@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 export interface OwnFocusedCardComponentProps {
   boardUrl: string;
+  isAdmin: boolean;
   focused: CardModel;
   className?: string;
   showVotes: boolean;
@@ -63,6 +64,7 @@ class FocusedCardComponent extends React.Component<
       <Component className={this.props.className}>
         <FocusedCard
           boardUrl={this.props.boardUrl}
+          isAdmin={this.props.isAdmin}
           card={this.props.cards[this.state.currentCardIndex]}
           isRootCard={this.state.currentCardIndex === 0}
           setAsRoot={() => {

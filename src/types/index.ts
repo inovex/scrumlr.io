@@ -50,6 +50,9 @@ export interface Card {
 export interface BoardConfig {
   sorted: boolean;
   creatorUid: string | null;
+  adminUsers?: {
+    [key: string]: boolean;
+  };
   guided: boolean;
   guidedPhase: number;
   timerExpiration: string | null;
@@ -125,6 +128,6 @@ export interface DragAndDropProps {
   canDrop?: any;
 }
 
-export type ModalType = 'settings' | 'feedback' | 'share';
+export type ModalType = 'settings' | 'feedback' | 'share' | 'users';
 
 export type Optional<T> = T | undefined;

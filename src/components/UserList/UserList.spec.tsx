@@ -9,9 +9,12 @@ import { BoardUsers } from '../../types';
 describe('<UserList />', () => {
   let wrapper: ShallowWrapper<UserListProps, {}>;
   let props: UserListProps = {
+    boardUrl: 'mockUrl',
+    admin: false,
     currentUserId: 'user1',
     users: { user1: mockUser() },
-    onToggleReadyState: jest.fn()
+    onToggleReadyState: jest.fn(),
+    onOpenModal: jest.fn()
   };
 
   it('should not render anything if no users are passed', () => {

@@ -14,7 +14,7 @@ describe('<Header />', () => {
   beforeEach(() => {
     props = {
       boardId: 'test',
-      admin: false,
+      isAdmin: false,
       mode: 'positiveNegative',
       phase: 0,
       isLastPhase: false,
@@ -44,7 +44,7 @@ describe('<Header />', () => {
     it('should pass arguments correctly', () => {
       wrapper = shallow(<Header {...props} />);
       const phaseMenu = wrapper.find(PhaseMenu);
-      expect(phaseMenu.prop('admin')).toEqual(props.admin);
+      expect(phaseMenu.prop('admin')).toEqual(props.isAdmin);
       expect(phaseMenu.prop('guidedPhase')).toEqual(props.phase);
       expect(phaseMenu.prop('onPrevPhase')).toEqual(props.onPrevPhase);
       expect(phaseMenu.prop('onNextPhase')).toEqual(props.onNextPhase);

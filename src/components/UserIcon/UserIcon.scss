@@ -1,0 +1,68 @@
+@import '../../constants/style';
+
+.user-icon__other-cursor {
+  cursor: pointer;
+}
+
+.user-icon__ready-state-wrapper {
+  color: $color-lightest-gray;
+  background-color: $theme-color-primary;
+
+  box-sizing: content-box;
+
+  border-radius: 22px;
+  font-size: 15px;
+
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  min-width: 20px;
+  height: 20px;
+
+  text-align: center;
+}
+
+.user-icon__ready-check-icon {
+  margin-top: 2px;
+}
+
+.user-icon__ready-check-icon svg {
+  fill: #fff;
+}
+
+.user-icon__other-wrapper {
+  box-sizing: border-box;
+  display: flex !important;
+}
+
+.user-icon__user-name {
+  align-self: center;
+  margin-right: $theme-font-size;
+  flex: 1;
+
+  text-align: left;
+
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-icon__user-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-icon__user-image-border {
+  position: absolute;
+  width: 43px;
+  height: 43px;
+
+  top: -6px;
+  left: -6px;
+}
+
+.user-icon__user-image-border svg {
+  width: 44px;
+  height: 44px;
+}

@@ -10,30 +10,10 @@
 
 .board__user-list li {
   display: inline;
-  margin-left: 1em;
 }
 
 .board__user-list li:first-child {
   margin-left: 0;
-}
-
-.board__user-image-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.board__user-image-border {
-  position: absolute;
-  width: 43px;
-  height: 43px;
-
-  top: -6px;
-  left: -6px;
-}
-
-.board__user-image-border svg {
-  width: 44px;
-  height: 44px;
 }
 
 .board__user-image {
@@ -76,24 +56,6 @@
   margin-left: 6px;
 }
 
-.user-list__ready-state-wrapper {
-  color: $color-lightest-gray;
-  background-color: $theme-color-primary;
-
-  box-sizing: content-box;
-
-  border-radius: 22px;
-  font-size: 15px;
-
-  position: absolute;
-  top: -9px;
-  right: -11px;
-  min-width: 20px;
-  height: 20px;
-
-  text-align: center;
-}
-
 .board__user--ready {
   font-size: 14px;
   line-height: 20px;
@@ -101,36 +63,6 @@
 
   margin-left: 3px;
   margin-right: 3px;
-}
-
-.user-list__other-wrapper {
-  box-sizing: border-box;
-  display: flex !important;
-}
-
-.user-list__other-list-name {
-  align-self: center;
-  margin-right: $theme-font-size;
-  flex: 1;
-
-  text-align: left;
-
-  max-width: 12em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.user-list__other-cursor {
-  cursor: pointer;
-}
-
-.user-list__ready-check-icon {
-  margin-top: 2px;
-}
-
-.user-list__ready-check-icon svg {
-  fill: #fff;
 }
 
 @keyframes spin {

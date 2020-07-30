@@ -9,6 +9,7 @@ import { mapStateToProps } from './ColumnView.container';
 import { connect } from 'react-redux';
 
 export interface OwnColumnViewProps {
+  isAdmin: boolean;
   boardUrl: string;
   children?: any;
   className?: string;
@@ -98,6 +99,7 @@ export class ColumnView extends React.Component<
       )
       .map((column, index, values) => (
         <Column
+          isAdmin={this.props.isAdmin}
           column={column}
           key={column.id}
           boardUrl={this.props.boardUrl}

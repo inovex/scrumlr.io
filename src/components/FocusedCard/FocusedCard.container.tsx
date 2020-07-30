@@ -1,6 +1,5 @@
-import { BoardConfig, StoreState } from '../../types/index';
-import { getVal, getFirebase, helpers } from 'react-redux-firebase';
-import isLoaded = helpers.isLoaded;
+import { StoreState } from '../../types/index';
+import { getVal, getFirebase } from 'react-redux-firebase';
 import { FocusedCardProps, OwnFocusedCardProps } from './FocusedCard';
 import Raven = require('raven-js');
 
@@ -10,16 +9,7 @@ export const mapStateToProps = (
 ): FocusedCardProps => {
   const { fbState } = state;
 
-  const boardUrl = ownProps.boardUrl;
   const auth = getVal(fbState, 'auth', {});
-  const boardConfig: BoardConfig = getVal(
-    fbState,
-    `data/${boardUrl}/config`,
-    {}
-  );
-
-  const isBoardAdmin =
-    auth && isLoaded(boardConfig) ? auth.uid === boardConfig.creatorUid : false;
 
   function onClose() {
     getFirebase()
@@ -37,7 +27,6 @@ export const mapStateToProps = (
   }
 
   return {
-    isAdmin: isBoardAdmin,
     onClose,
     ...ownProps
   };
