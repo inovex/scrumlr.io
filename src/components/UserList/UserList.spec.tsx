@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import Icon from '../Icon';
 import { mockUser } from '../../builder';
 import { UserList, UserListProps } from './UserList';
 import { BoardUsers } from '../../types';
@@ -62,15 +61,6 @@ describe('<UserList />', () => {
       expect(otherUsers).toHaveLength(2);
       expect(ownUser).toHaveLength(1);
       expect(allUsers.at(2)).toEqual(ownUser);
-    });
-
-    it('should render other users and own user with different selection images', () => {
-      const currentUserSelectionIcon = ownUser.find(Icon);
-      const otherUserSelectionIcon = otherUsers.at(0).find(Icon);
-      expect(currentUserSelectionIcon.prop('name')).toEqual('circle-selection');
-      expect(otherUserSelectionIcon.prop('name')).toEqual(
-        'circle-selection-grey'
-      );
     });
   });
 });

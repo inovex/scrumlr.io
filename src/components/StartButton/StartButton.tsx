@@ -37,9 +37,6 @@ const availableRetroModes = {
   },
   fourL: {
     label: '4L (Liked, Learned, Lacked, Longed for)'
-  },
-  meetup: {
-    label: 'scrumlr.io Meetup'
   }
 };
 

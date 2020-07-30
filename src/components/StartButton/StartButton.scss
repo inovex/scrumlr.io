@@ -86,3 +86,12 @@
   flex: 0 0 auto;
   align-self: stretch !important;
 }
+
+.dd-menu.start-button__dropdown-wrapper li {
+  transition: background 0.15s ease-in-out;
+}
+
+.dd-menu.start-button__dropdown-wrapper li:focus,
+.dd-menu.start-button__dropdown-wrapper li:hover {
+  background: $color-gray !important;
+}
