@@ -1,4 +1,4 @@
-import { getVal, getFirebase } from 'react-redux-firebase';
+import { getFirebase, getVal } from 'react-redux-firebase';
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
@@ -35,6 +35,28 @@ export const mapStateToProps = (
     {}
   );
 
+  const votes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.votes;
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack.map(card => card.votes).reduce((a, b) => a + b);
+  };
+
+  const ownVotes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.userVotes[user.uid];
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack
+      .map(card => card.userVotes[user.uid])
+      .reduce((a, b) => a + b);
+  };
+
   async function onRemoveCard(key: string) {
     const { focusedCardId } = getVal(
       state.fbState,
@@ -48,12 +70,16 @@ export const mapStateToProps = (
         .remove();
     }
 
+    let newParent = Object.keys(cards).find(k => cards[k].parent === key);
+
     const toUpdate = {};
     Object.keys(cards).forEach(k => {
       if (cards[k].parent === key) {
-        toUpdate[`${k}/parent`] = null;
+        toUpdate[`${k}/parent`] = newParent;
       }
     });
+
+    toUpdate[`${newParent}/parent`] = null;
 
     await getFirebase()
       .ref(`${ownProps.boardId}/cards`)
@@ -157,23 +183,12 @@ export const mapStateToProps = (
         .update({
           parent: cardSourceId
         });
-
-      const userVotes = cards[cardSourceId].userVotes;
-      Object.keys(cards[cardTargetId].userVotes).forEach(userId => {
-        userVotes[userId] =
-          (userVotes[userId] || 0) + cards[cardTargetId].userVotes[userId];
-      });
-      const votes =
-        (cards[cardSourceId].votes || 0) + (cards[cardTargetId].votes || 0);
-
       // set new timestamp on source card, so that order will be maintained in the stack
       const newTimestamp = cards[cardTargetId].timestamp;
 
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
         .update({
-          userVotes,
-          votes,
           timestamp: newTimestamp
         });
     }
@@ -272,8 +287,8 @@ export const mapStateToProps = (
     isFocused: focusedCardId == ownProps.card.id,
     owner: user.uid === ownProps.card.authorUid,
     stacked: Boolean(ownProps.card.parent),
-    ownVotes: ownProps.card.userVotes[user.uid],
-    votes: ownProps.card.votes,
+    ownVotes: ownVotes(),
+    votes: votes(),
 
     getCardsInTheStack: getCardsInTheStack(ownProps.card.id || ''),
     onRemove: onRemoveCard,
