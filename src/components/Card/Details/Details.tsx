@@ -30,6 +30,7 @@ export class Details extends React.Component<DetailsProps, {}> {
       onRemove,
       onDownvote,
       onUpvote,
+      onCardUnstack,
       votable,
       ownVotes,
       votes,
@@ -172,6 +173,23 @@ export class Details extends React.Component<DetailsProps, {}> {
                           </IconButton>
                         </li>
                       )}
+                      <li key="unstack" className="card-details__option">
+                        <IconButton
+                          icon={
+                            <Icon
+                              name="trash"
+                              aria-hidden="true"
+                              className="card-details__delete-icon"
+                            />
+                          }
+                          aria-label="Unstack this card"
+                          onClick={(e: React.FormEvent<HTMLLIElement>) =>
+                            card.id && onCardUnstack(card.id)
+                          }
+                        >
+                          Unstack
+                        </IconButton>
+                      </li>
                     </ul>
                   </aside>
                 </div>

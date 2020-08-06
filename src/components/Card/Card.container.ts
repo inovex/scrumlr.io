@@ -35,6 +35,30 @@ export const mapStateToProps = (
     {}
   );
 
+  const unstackCard = (oldParentKey: string) => {
+    // Choose a new parent for the card's children
+    let newParentKey = Object.keys(cards).find(
+      k => cards[k].parent === oldParentKey
+    );
+
+    const toUpdate = {};
+    if (newParentKey) {
+      // Reattach all children to new parent, if it exists
+      Object.keys(cards).forEach(k => {
+        if (cards[k].parent === oldParentKey) {
+          toUpdate[`${k}/parent`] = newParentKey;
+        }
+      });
+
+      // Attach new parent back to the "binary tree" and remove old card from it
+      toUpdate[`${newParentKey}/parent`] = cards[oldParentKey].parent;
+    }
+
+    toUpdate[`${oldParentKey}/parent`] = null;
+
+    return toUpdate;
+  };
+
   const votes = () => {
     let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
 
@@ -70,20 +94,9 @@ export const mapStateToProps = (
         .remove();
     }
 
-    let newParent = Object.keys(cards).find(k => cards[k].parent === key);
-
-    const toUpdate = {};
-    Object.keys(cards).forEach(k => {
-      if (cards[k].parent === key) {
-        toUpdate[`${k}/parent`] = newParent;
-      }
-    });
-
-    toUpdate[`${newParent}/parent`] = null;
-
     await getFirebase()
       .ref(`${ownProps.boardId}/cards`)
-      .update(toUpdate)
+      .update(unstackCard(key))
       .catch((err: Error) => {
         Raven.captureMessage('Could change parent of card', {
           extra: {
@@ -194,6 +207,22 @@ export const mapStateToProps = (
     }
   }
 
+  function onUnstackCard(key: string) {
+    getFirebase()
+      .ref(`${ownProps.boardId}/cards`)
+      .update(unstackCard(key))
+      .catch((err: Error) => {
+        Raven.captureMessage('Could change parent of card', {
+          extra: {
+            reason: err.message,
+            uid: user.uid,
+            boardId: ownProps.boardId,
+            cardId: key
+          }
+        });
+      });
+  }
+
   function onFocusCard(cardId: string) {
     const { focusedCardId } = getVal(
       state.fbState,
@@ -298,6 +327,7 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
+    onCardUnstack: onUnstackCard,
     onFocus: onFocusCard,
     isShowAuthor
   };

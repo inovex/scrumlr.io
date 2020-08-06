@@ -38,6 +38,7 @@ export interface StateCardProps {
   onShowVotes: (id: string) => void;
   onFocus: (id: string) => void;
   onCardStack: (cardSourceId: string, cardTargetId: string) => void;
+  onCardUnstack: (key: string) => void;
   onColumnStack: (cardSourceId: string, columnTargetId: string) => void;
   stacked: boolean;
   getCardsInTheStack: () => TCard[];

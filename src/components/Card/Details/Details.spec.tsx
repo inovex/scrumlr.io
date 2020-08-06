@@ -37,6 +37,7 @@ describe('<Details />', () => {
       onShowVotes: jest.fn(),
       onFocus: jest.fn(),
       onCardStack: jest.fn(),
+      onCardUnstack: jest.fn(),
       onColumnStack: jest.fn(),
       onClose: jest.fn(),
       stacked: false,
