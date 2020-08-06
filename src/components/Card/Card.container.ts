@@ -45,13 +45,13 @@ export const mapStateToProps = (
     if (newParentKey) {
       // Reattach all children to new parent, if it exists
       Object.keys(cards).forEach(k => {
-        if (cards[k].parent === oldParentKey) {
+        if (cards[k].parent === oldParentKey && k !== newParentKey) {
           toUpdate[`${k}/parent`] = newParentKey;
         }
       });
 
       // Attach new parent back to the "binary tree" and remove old card from it
-      toUpdate[`${newParentKey}/parent`] = cards[oldParentKey].parent;
+      toUpdate[`${newParentKey}/parent`] = cards[oldParentKey].parent || null;
     }
 
     toUpdate[`${oldParentKey}/parent`] = null;

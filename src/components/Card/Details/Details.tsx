@@ -31,6 +31,7 @@ export class Details extends React.Component<DetailsProps, {}> {
       onDownvote,
       onUpvote,
       onCardUnstack,
+      onClose,
       votable,
       ownVotes,
       votes,
@@ -41,11 +42,54 @@ export class Details extends React.Component<DetailsProps, {}> {
     const cardsInStack = this.props.getCardsInTheStack();
     const isActionCard = this.props.card.type === 'actions';
 
+    const deleteIcon = (id: string) => {
+      return (
+        <li key="delete" className="card-details__option">
+          <IconButton
+            icon={
+              <Icon
+                name="trash"
+                aria-hidden="true"
+                className="card-details__options-icon"
+              />
+            }
+            aria-label="Delete this card"
+            onClick={(e: React.FormEvent<HTMLLIElement>) => {
+              onRemove(id);
+              onClose();
+            }}
+          >
+            Delete
+          </IconButton>
+        </li>
+      );
+    };
+
+    const unstackIcon = (id: string) => {
+      return (
+        <li key="unstack" className="card-details__option">
+          <IconButton
+            icon={
+              <Icon
+                name="stack-mid"
+                aria-hidden="true"
+                className="card-details__options-icon"
+              />
+            }
+            aria-label="Unstack this card"
+            onClick={(e: React.FormEvent<HTMLLIElement>) => {
+              onCardUnstack(id);
+              onClose();
+            }}
+          >
+            Unstack
+          </IconButton>
+        </li>
+      );
+    };
+
     return (
-      <Portal
-        onClose={() => this.props.onClose()}
-        verticallyAlignContent="start"
-      >
+      <Portal onClose={() => onClose()} verticallyAlignContent="start">
         <div className="card_details__card">
           <blockquote
             className="card-details__card-text"
@@ -86,12 +130,12 @@ export class Details extends React.Component<DetailsProps, {}> {
                       <Icon
                         name="focus"
                         aria-hidden="true"
-                        className="card-details__delete-icon"
+                        className="card-details__options-icon"
                       />
                     }
                     aria-label="Share this card for all"
                     onClick={() => {
-                      this.props.onClose();
+                      onClose();
                       this.props.onFocus(this.props.id);
                     }}
                   >
@@ -99,25 +143,8 @@ export class Details extends React.Component<DetailsProps, {}> {
                   </IconButton>
                 </li>
               )}
-              {deletable && (
-                <li key="delete" className="card-details__option">
-                  <IconButton
-                    icon={
-                      <Icon
-                        name="trash"
-                        aria-hidden="true"
-                        className="card-details__delete-icon"
-                      />
-                    }
-                    aria-label="Delete this card"
-                    onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                      onRemove(id)
-                    }
-                  >
-                    Delete
-                  </IconButton>
-                </li>
-              )}
+              {deletable && deleteIcon(id)}
+              {deletable && cardsInStack.length > 0 && unstackIcon(id)}
             </ul>
           </aside>
         </div>
@@ -154,42 +181,8 @@ export class Details extends React.Component<DetailsProps, {}> {
 
                   <aside>
                     <ul className="card-details__options">
-                      {deletable && (
-                        <li key="delete" className="card-details__option">
-                          <IconButton
-                            icon={
-                              <Icon
-                                name="trash"
-                                aria-hidden="true"
-                                className="card-details__delete-icon"
-                              />
-                            }
-                            aria-label="Delete this card"
-                            onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                              card.id && onRemove(card.id)
-                            }
-                          >
-                            Delete
-                          </IconButton>
-                        </li>
-                      )}
-                      <li key="unstack" className="card-details__option">
-                        <IconButton
-                          icon={
-                            <Icon
-                              name="trash"
-                              aria-hidden="true"
-                              className="card-details__delete-icon"
-                            />
-                          }
-                          aria-label="Unstack this card"
-                          onClick={(e: React.FormEvent<HTMLLIElement>) =>
-                            card.id && onCardUnstack(card.id)
-                          }
-                        >
-                          Unstack
-                        </IconButton>
-                      </li>
+                      {deletable && card.id && deleteIcon(card.id)}
+                      {deletable && card.id && unstackIcon(card.id)}
                     </ul>
                   </aside>
                 </div>
