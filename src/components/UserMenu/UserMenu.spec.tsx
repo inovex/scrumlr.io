@@ -14,6 +14,7 @@ describe('<UserMenu />', () => {
     props = {
       onSignOut: jest.fn(),
       onDeleteBoard: jest.fn(),
+      onDeleteUser: jest.fn(),
       onOpenModal: jest.fn(),
       onPdfExport: jest.fn(),
       onCsvExport: jest.fn(),

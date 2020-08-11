@@ -1,10 +1,11 @@
-import { StoreState, BoardUsers, PrivateBoardData } from '../../types';
-import { getVal, getFirebase, helpers } from 'react-redux-firebase';
+import { BoardUsers, PrivateBoardData, StoreState } from '../../types';
+import { getFirebase, getVal, helpers } from 'react-redux-firebase';
 import { OwnHeaderProps, StateHeaderProps } from './Header';
-import isLoaded = helpers.isLoaded;
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
 import { getPhasesCount } from '../../constants/Retrospective';
+import isLoaded = helpers.isLoaded;
+import HttpsCallableResult = firebase.functions.HttpsCallableResult;
 
 export const mapStateToProps = (
   state: StoreState,
@@ -83,14 +84,30 @@ export const mapStateToProps = (
     var user = firebase.auth().currentUser;
 
     user
-      .delete()
+      .reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(() => {
-        // User deleted.
-      })
-      .catch((err: Error) => {
-        Raven.captureMessage('Could not delete user', {
-          extra: { reason: err.message, uid: auth.uid, boardId: boardUrl }
-        });
+        user
+          .delete()
+          .then(() => {
+            let deleteUserId = firebase
+              .functions()
+              .httpsCallable('deleteUserId');
+            deleteUserId().then((result: HttpsCallableResult) => {
+              if (result.data === 1) {
+                Raven.captureMessage(
+                  'Could not delete userId from all boards',
+                  {
+                    extra: { uid: auth.uid, boardId: boardUrl }
+                  }
+                );
+              }
+            });
+          })
+          .catch((err: Error) => {
+            Raven.captureMessage('Could not delete user', {
+              extra: { reason: err.message, uid: auth.uid, boardId: boardUrl }
+            });
+          });
       });
   }
   function onSwitchPhaseIndex(delta: number) {

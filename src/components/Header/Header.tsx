@@ -37,6 +37,7 @@ export interface StateHeaderProps {
   users: BoardUsers;
   onToggleReadyState: () => void;
   onDeleteBoard: () => void;
+  onDeleteUser: () => void;
 }
 
 export type HeaderProps = OwnHeaderProps & StateHeaderProps;
@@ -63,6 +64,7 @@ export class Header extends React.Component<HeaderProps, {}> {
       onPdfExport,
       onCsvExport,
       onDeleteBoard,
+      onDeleteUser,
       onSignOut
     } = this.props;
 
@@ -101,6 +103,7 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onSignOut={onSignOut}
                 onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}
+                onDeleteUser={onDeleteUser}
                 isLastPhase={isLastPhase}
                 onSetTimer={onSetTimer}
               />
