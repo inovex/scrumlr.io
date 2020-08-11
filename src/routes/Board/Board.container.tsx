@@ -156,10 +156,10 @@ export const mapStateToProps = (
       });
   }
 
-  function onToggleShowContent() {
+  function onToggleShowCards() {
     firebase
       .update(`${boardSelector}/config`, {
-        showContent: !boardConfig.showContent
+        showCards: !boardConfig.showCards
       })
       .catch((err: Error) => {
         Raven.captureMessage('Could not toggle show content state', {
@@ -298,13 +298,13 @@ export const mapStateToProps = (
     onFocusCard,
     onSwitchPhaseIndex,
     isShowAuthor: Boolean(boardConfig.showAuthor),
-    isShowContent: Boolean(boardConfig.showContent),
+    isShowCards: Boolean(boardConfig.showCards),
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
     onDeleteTimer,
     onToggleShowAuthor,
-    onToggleShowContent,
+    onToggleShowCards,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
     waitingUsers,
     acceptUser,

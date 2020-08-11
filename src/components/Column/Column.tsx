@@ -19,6 +19,7 @@ import { ColumnOverview } from '../ColumnOverview';
 export interface OwnColumnProps {
   boardUrl: string;
   isAdmin: boolean;
+  isShowCards: boolean;
 
   /** The unique column type. */
   column: ColumnConfiguration;

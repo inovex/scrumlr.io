@@ -61,7 +61,7 @@ export interface BoardConfig {
   name?: string;
   mode: RetroMode;
   showAuthor?: boolean;
-  showContent?: boolean;
+  showCards?: boolean;
 }
 
 export interface UserInformation {
