@@ -89,7 +89,7 @@ export class Details extends React.Component<DetailsProps, {}> {
     };
 
     return (
-      <Portal onClose={() => onClose()} verticallyAlignContent="start">
+      <Portal verticallyAlignContent="start" onClose={onClose}>
         <div className="card_details__card">
           <blockquote
             className="card-details__card-text"
@@ -144,7 +144,6 @@ export class Details extends React.Component<DetailsProps, {}> {
                 </li>
               )}
               {deletable && deleteIcon(id)}
-              {deletable && cardsInStack.length > 0 && unstackIcon(id)}
             </ul>
           </aside>
         </div>

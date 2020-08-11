@@ -89,7 +89,7 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
 }
 
 .card-details__option + .card-details__option {
-  margin-top: 0;
+  margin-top: $small-margin;
 }
 
 .card-details__stack {
