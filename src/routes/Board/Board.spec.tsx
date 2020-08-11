@@ -43,7 +43,9 @@ describe('<Board />', () => {
       boardPrintUrl: '/print',
       onChangeUsername: jest.fn(),
       onToggleShowAuthor: jest.fn(),
+      onToggleShowContent: jest.fn(),
       isShowAuthor: false,
+      isShowContent: false,
       isAnonymous: false,
       acceptUser: jest.fn(),
       waitingUsers: []
