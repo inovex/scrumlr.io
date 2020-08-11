@@ -28,6 +28,38 @@ const cleanupDatabase = (exitFunction) => {
     });
 };
 
+const deleteUserId = (userId, exitFuntion) => {
+  const toDelete = [];
+
+  const app = admin.initializeApp();
+  const query = admin.database().ref('/boards');
+  return query.once("value")
+      .then((snapshot) => {
+        snapshot.forEach((childSnapshot) => {
+          const childData = childSnapshot.val();
+          if (Object.keys(childData.private.users).includes(userId)) {
+            toDelete.push(childSnapshot.child('private/users/' + userId).ref.remove())
+          }
+        })
+      }).then(() => {
+        Promise.all(toDelete).then((values) => {
+          console.log(`deleted ${values.length} entries`);
+          app.delete().catch((error) => {
+            console.error('unable to stop app', error);
+          });
+        }).then(() => exitFunction());
+      });
+};
+
+exports.deleteUserId = functions.https.onCall((data, context) => {
+  deleteUserId(context.auth.uid, () => {
+    return 0;
+  }).catch((error) => {
+    console.log('unable to delete user id', error);
+    return 1
+  });
+});
+
 exports.cleanupDatabase = functions.https.onRequest((request, response) => {
   cleanupDatabase(() => {
     response.send("OK");
