@@ -16,6 +16,7 @@ import StartButton from '../../components/StartButton';
 import AccessModeSelection, {
   AccessMode
 } from '../../components/AccessModeSelection';
+import AccountTransferModal from '../../components/Modal/variant/AccountTransferModal';
 
 export type OwnNewBoardProps = RouteComponentProps<{}>;
 
@@ -34,6 +35,7 @@ export interface NewBoardState {
   email: string;
   secure: boolean;
   error: boolean;
+  showAccountTransferModal: boolean;
 }
 
 export class NewBoard extends Component<NewBoardProps, NewBoardState> {
@@ -43,7 +45,12 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
     super(props);
 
     this.defaultName = getRandomName();
-    this.state = { email: this.defaultName, secure: false, error: false };
+    this.state = {
+      email: this.defaultName,
+      secure: false,
+      error: false,
+      showAccountTransferModal: false
+    };
   }
 
   handleChangeEmail = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -59,6 +66,19 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
 
   handleChangeMode = (mode: AccessMode) => {
     this.setState({ secure: mode === 'private' });
+  };
+
+  handleCloseModal = () => {
+    this.setState({
+      showAccountTransferModal: false
+    });
+  };
+
+  //TODO: modify for multiple modals if needed
+  handleOpenModal = () => {
+    this.setState({
+      showAccountTransferModal: true
+    });
   };
 
   render() {
@@ -130,7 +150,16 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
             >
               Log out
             </button>
+            <button
+              className="new-board__logout-btn"
+              onClick={this.handleOpenModal}
+            >
+              Transfer account to another device
+            </button>
           </div>
+        )}
+        {this.state.showAccountTransferModal && (
+          <AccountTransferModal onClose={this.handleCloseModal} />
         )}
       </WelcomeArea>
     );
