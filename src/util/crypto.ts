@@ -4,6 +4,8 @@ import { TextDecoder, TextEncoder } from 'text-encoding-utf-8';
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 const bs58 = baseX(BASE58);
 
+const SALT_BUFFER = str2ab('e85c53e7f119d41fd7895cdc9d7bb9dd');
+
 const KEY_CAPABILITIES = ['encrypt', 'decrypt'];
 
 const ENCRYPTION_ALGORITHM: RsaHashedImportParams = {
@@ -179,6 +181,51 @@ export class Crypto {
       );
     }
     return message;
+  }
+
+  async encryptCredentials(tan: string, iv: string) {
+    const localPublicKey = localStorage.getItem(LOCAL_STORAGE_PUBLIC_KEY) || '';
+    const localPrivateKey =
+      localStorage.getItem(LOCAL_STORAGE_PRIVATE_KEY) || '';
+
+    // derive secure key from user's TAN: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b
+    // First, import TAN as a CryptoKey material
+    return await window.crypto.subtle
+      .importKey(
+        'raw',
+        str2ab(tan),
+        { name: 'AES-CBC', length: 256 },
+        true,
+        ['deriveBits', 'deriveKey']
+        // Derive a secure key from the key material
+      )
+      .then(keyMaterial =>
+        window.crypto.subtle.deriveKey(
+          {
+            name: 'PBKDF2',
+            salt: SALT_BUFFER,
+            iterations: 100,
+            hash: 'SHA-256'
+          },
+          keyMaterial,
+          { name: 'AES-CBC', length: 256 },
+          true,
+          KEY_CAPABILITIES
+          // Encrypt local public and private keys with the secure symmetric key protected by the TAN
+        )
+      )
+      .then(key =>
+        window.crypto.subtle.encrypt(
+          {
+            name: 'AES-CBC',
+            iv: base56str2ar(iv)
+          },
+          key,
+          base56str2ar(localPublicKey + '_' + localPrivateKey)
+          // Add the IV to the resulting string to decrypt the message
+        )
+      )
+      .then(encryptedKeys => ab2str(encryptedKeys) + '_' + iv);
   }
 
   async generateInitializationVector() {
