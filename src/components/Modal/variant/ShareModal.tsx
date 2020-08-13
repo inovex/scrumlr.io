@@ -44,13 +44,13 @@ export class ShareModal extends React.Component<
             />
           </a>
           <CopyToClipboard text={link} onCopy={this.displayCopyMessage}>
-            <button type="button" className="share-modal__invite-button">
+            <button type="button" className="copy-button">
               Copy invite URL
             </button>
           </CopyToClipboard>
           <span
-            className={cx('share-modal__copy-text', {
-              'share-modal__copy-text--hidden': !this.state.showCopyInfo
+            className={cx('copy-text', {
+              'copy-text--hidden': !this.state.showCopyInfo
             })}
           >
             URL copied to clipboard

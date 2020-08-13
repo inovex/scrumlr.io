@@ -183,49 +183,47 @@ export class Crypto {
     return message;
   }
 
-  async encryptCredentials(tan: string, iv: string) {
-    const localPublicKey = localStorage.getItem(LOCAL_STORAGE_PUBLIC_KEY) || '';
-    const localPrivateKey =
-      localStorage.getItem(LOCAL_STORAGE_PRIVATE_KEY) || '';
+  async encryptCredentials(password: string, iv: string) {
+    this.initKeypair();
 
     // derive secure key from user's TAN: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b
     // First, import TAN as a CryptoKey material
     return await window.crypto.subtle
       .importKey(
         'raw',
-        str2ab(tan),
-        { name: 'AES-CBC', length: 256 },
-        true,
+        new TextEncoder().encode(password),
+        { name: 'PBKDF2', hash: 'SHA-256' },
+        false,
         ['deriveBits', 'deriveKey']
-        // Derive a secure key from the key material
       )
       .then(keyMaterial =>
         window.crypto.subtle.deriveKey(
           {
             name: 'PBKDF2',
             salt: SALT_BUFFER,
-            iterations: 100,
-            hash: 'SHA-256'
+            iterations: 1000,
+            hash: { name: 'SHA-256' } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
           },
-          keyMaterial,
-          { name: 'AES-CBC', length: 256 },
-          true,
-          KEY_CAPABILITIES
-          // Encrypt local public and private keys with the secure symmetric key protected by the TAN
-        )
-      )
-      .then(key =>
-        window.crypto.subtle.encrypt(
+          keyMaterial, //your key from generateKey or importKey
           {
             name: 'AES-CBC',
-            iv: base56str2ar(iv)
+            length: 256 //can be  128, 192, or 256
           },
-          key,
-          base56str2ar(localPublicKey + '_' + localPrivateKey)
-          // Add the IV to the resulting string to decrypt the message
+          false, //whether the derived key is extractable (i.e. can be used in exportKey)
+          ['wrapKey', 'unwrapKey'] //limited to the options in that algorithm's importKey
         )
       )
-      .then(encryptedKeys => ab2str(encryptedKeys) + '_' + iv);
+      // Encrypt local public and private keys with the secure symmetric key protected by the TAN
+      .then(key =>
+        window.crypto.subtle.wrapKey('pkcs8', this.privateKey, key, {
+          name: 'AES-CBC',
+          iv: base56str2ar(iv)
+        } as AesCbcParams)
+      )
+      .then(
+        encryptedKey =>
+          this.getPublicKey() + '_' + base58ab2str(encryptedKey) + '_' + iv
+      );
   }
 
   async generateInitializationVector() {

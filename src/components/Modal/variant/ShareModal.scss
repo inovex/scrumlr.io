@@ -18,7 +18,7 @@
   max-height: 60vh;
 }
 
-.share-modal__invite-button {
+.copy-button {
   border: 0;
   background: none;
   outline: none;
@@ -38,17 +38,21 @@
   transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 }
 
-.share-modal__invite-button:focus,
-.share-modal__invite-button:hover {
+.copy-button:not(:disabled):focus,
+.copy-button:not(:disabled):hover {
   background: darken($color-mint, 15%);
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
 }
 
-.share-modal__copy-text {
+.copy-button:disabled {
+  background: $color-alternative-gray !important;
+}
+
+.copy-text {
   font-size: $theme-font-size - $base-unit / 2;
   color: $color-alternative-gray;
 }
 
-.share-modal__copy-text--hidden {
+.copy-text--hidden {
   visibility: hidden;
 }
