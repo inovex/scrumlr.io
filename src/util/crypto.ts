@@ -28,7 +28,7 @@ function base58ab2str(buf: ArrayBuffer) {
   return bs58.encode(new Buffer(buf));
 }
 
-function base56str2ar(str: string) {
+function base58str2ar(str: string) {
   return new Uint8Array(bs58.decode(str));
 }
 
@@ -53,14 +53,14 @@ export class Crypto {
     if (localPublicKey && localPrivateKey) {
       this.publicKey = await window.crypto.subtle.importKey(
         'spki',
-        base56str2ar(localPublicKey),
+        base58str2ar(localPublicKey),
         ENCRYPTION_ALGORITHM,
         true,
         ['encrypt']
       );
       this.privateKey = await window.crypto.subtle.importKey(
         'pkcs8',
-        base56str2ar(localPrivateKey),
+        base58str2ar(localPrivateKey),
         ENCRYPTION_ALGORITHM,
         true,
         ['decrypt']
@@ -108,7 +108,7 @@ export class Crypto {
   async exportSymmetricKey(publicKey: string) {
     const importedPublicKey = await window.crypto.subtle.importKey(
       'spki',
-      base56str2ar(publicKey),
+      base58str2ar(publicKey),
       ENCRYPTION_ALGORITHM,
       true,
       ['encrypt']
@@ -130,7 +130,7 @@ export class Crypto {
     const symmtericKeyBuffer = await window.crypto.subtle.decrypt(
       ENCRYPTION_ALGORITHM,
       this.privateKey,
-      base56str2ar(symmetricKey)
+      base58str2ar(symmetricKey)
     );
     this.symmetricKey = await window.crypto.subtle.importKey(
       'raw',
@@ -156,7 +156,7 @@ export class Crypto {
           await window.crypto.subtle.encrypt(
             {
               name: 'AES-CBC',
-              iv: base56str2ar(iv)
+              iv: base58str2ar(iv)
             },
             this.symmetricKey,
             str2ab(message)
@@ -173,58 +173,106 @@ export class Crypto {
         await window.crypto.subtle.decrypt(
           {
             name: 'AES-CBC',
-            iv: base56str2ar(iv)
+            iv: base58str2ar(iv)
           },
           this.symmetricKey,
-          base56str2ar(message)
+          base58str2ar(message)
         )
       );
     }
     return message;
   }
 
+  // Returns string 'publicKey_encryptedPrivateKey_iv'
   async encryptCredentials(password: string, iv: string) {
     this.initKeypair();
 
-    // derive secure key from user's TAN: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b
-    // First, import TAN as a CryptoKey material
-    return await window.crypto.subtle
-      .importKey(
-        'raw',
-        new TextEncoder().encode(password),
-        { name: 'PBKDF2', hash: 'SHA-256' },
-        false,
-        ['deriveBits', 'deriveKey']
-      )
-      .then(keyMaterial =>
-        window.crypto.subtle.deriveKey(
-          {
-            name: 'PBKDF2',
-            salt: SALT_BUFFER,
-            iterations: 1000,
-            hash: { name: 'SHA-256' } //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
-          },
-          keyMaterial, //your key from generateKey or importKey
-          {
-            name: 'AES-CBC',
-            length: 256 //can be  128, 192, or 256
-          },
-          false, //whether the derived key is extractable (i.e. can be used in exportKey)
-          ['wrapKey', 'unwrapKey'] //limited to the options in that algorithm's importKey
-        )
-      )
-      // Encrypt local public and private keys with the secure symmetric key protected by the TAN
-      .then(key =>
-        window.crypto.subtle.wrapKey('pkcs8', this.privateKey, key, {
-          name: 'AES-CBC',
-          iv: base56str2ar(iv)
-        } as AesCbcParams)
-      )
+    const key = await this.createKey(password);
+
+    // Wrap local private key with the secure symmetric key protected by the password
+    return window.crypto.subtle
+      .wrapKey('pkcs8', this.privateKey, key, {
+        name: 'AES-CBC',
+        iv: base58str2ar(iv)
+      } as AesCbcParams)
       .then(
         encryptedKey =>
           this.getPublicKey() + '_' + base58ab2str(encryptedKey) + '_' + iv
       );
   }
+
+  // Credentials have following format: 'publicKey_encryptedPrivateKey_iv'
+  async decryptCredentials(password: string, credentials: string) {
+    const [publicKey, privateKeyEnc, iv] = credentials.split('_');
+
+    const key = await this.createKey(password);
+
+    this.privateKey = await window.crypto.subtle.unwrapKey(
+      'pkcs8',
+      base58str2ar(privateKeyEnc),
+      key,
+      {
+        name: 'AES-CBC',
+        iv: base58str2ar(iv)
+      } as AesCbcParams,
+      ENCRYPTION_ALGORITHM,
+      true,
+      ['decrypt']
+    );
+
+    this.publicKey = await window.crypto.subtle.importKey(
+      'spki',
+      base58str2ar(publicKey),
+      ENCRYPTION_ALGORITHM,
+      true,
+      ['encrypt']
+    );
+
+    // Save new keys in local storage
+    localStorage.setItem(
+      LOCAL_STORAGE_PUBLIC_KEY,
+      base58ab2str(await window.crypto.subtle.exportKey('spki', this.publicKey))
+    );
+    localStorage.setItem(
+      LOCAL_STORAGE_PRIVATE_KEY,
+      base58ab2str(
+        await window.crypto.subtle.exportKey('pkcs8', this.privateKey)
+      )
+    );
+  }
+
+  // derive secure key from an alphanumeric string: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b
+  createKey = (from: string) => {
+    // First, import password as a CryptoKey material
+    return (
+      window.crypto.subtle
+        .importKey(
+          'raw',
+          new TextEncoder().encode(from),
+          { name: 'PBKDF2', hash: 'SHA-256' },
+          false,
+          ['deriveBits', 'deriveKey']
+        )
+        //Second, derive a secure key from key material
+        .then(keyMaterial =>
+          window.crypto.subtle.deriveKey(
+            {
+              name: 'PBKDF2',
+              salt: SALT_BUFFER,
+              iterations: 1000,
+              hash: { name: 'SHA-256' }
+            },
+            keyMaterial,
+            {
+              name: 'AES-CBC',
+              length: 256 //can be  128, 192, or 256
+            },
+            false,
+            ['wrapKey', 'unwrapKey']
+          )
+        )
+    );
+  };
 
   async generateInitializationVector() {
     return base58ab2str(
