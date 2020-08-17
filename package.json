@@ -16,7 +16,7 @@
     "@material-ui/core": "^4.11.0",
     "firebase": "^7.17.1",
     "i18next": "^19.6.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.7.0",
