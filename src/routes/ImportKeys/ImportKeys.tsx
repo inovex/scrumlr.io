@@ -1,14 +1,18 @@
 import { RouteComponentProps } from 'react-router';
 import * as React from 'react';
 import { Component } from 'react';
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { mapStateToProps } from '../LoginBoard/LoginBoard.container';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import PasswordModal from '../../components/Modal/variant/PasswordModal';
+import { AuthProvider } from '../../constants/Auth';
+import { mapStateToProps } from './ImportKeys.container';
+import { compose } from 'redux';
 
 export interface ImportKeysProps
-  extends RouteComponentProps<{ credentials: string }> {}
+  extends RouteComponentProps<{ credentials: string }> {
+  uid: string | null;
+  onProviderLogin: (provider: AuthProvider) => () => void;
+}
 
 export interface ImportKeysState {
   showPasswordModal: boolean;
@@ -25,6 +29,7 @@ export class ImportKeys extends Component<ImportKeysProps, ImportKeysState> {
     this.setState({
       showPasswordModal: false
     });
+    window.location.hash = '/';
   };
 
   render() {
@@ -34,8 +39,11 @@ export class ImportKeys extends Component<ImportKeysProps, ImportKeysState> {
 
         {this.state.showPasswordModal && (
           <PasswordModal
-            credentials={this.props.match.params.credentials}
+            // Remove the first ':' from the credentials
+            credentials={this.props.match.params.credentials.slice(1)}
             onClose={this.handleCloseModal}
+            onProviderLogin={this.props.onProviderLogin}
+            uid={this.props.uid}
           />
         )}
       </>
