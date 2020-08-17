@@ -205,12 +205,12 @@ export class Crypto {
   async decryptCredentials(password: string, credentials: string) {
     const [publicKey, privateKeyEnc, iv] = credentials.split('_');
 
-    const key = await this.createKey(password);
+    const unwrapKey = await this.createKey(password);
 
     this.privateKey = await window.crypto.subtle.unwrapKey(
       'pkcs8',
       base58str2ar(privateKeyEnc),
-      key,
+      unwrapKey,
       {
         name: 'AES-CBC',
         iv: base58str2ar(iv)
@@ -239,6 +239,8 @@ export class Crypto {
         await window.crypto.subtle.exportKey('pkcs8', this.privateKey)
       )
     );
+
+    return;
   }
 
   // derive secure key from an alphanumeric string: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b

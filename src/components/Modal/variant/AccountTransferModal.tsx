@@ -30,7 +30,7 @@ export class AccountTransferModal extends React.Component<
       .then(encryptedCredentials => {
         {
           const link =
-            window.location.href.replace('new', 'transfer/') +
+            window.location.href.replace('new', 'transfer/:') +
             encryptedCredentials;
 
           copyToClipboard(link);

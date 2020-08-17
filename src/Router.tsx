@@ -13,6 +13,7 @@ import PrintViewBoard from './routes/PrintViewBoard';
 import Icon from './components/Icon/Icon';
 import Board from './routes/Board';
 import withTracker from './util/analytics';
+import { ImportKeys } from './routes/ImportKeys/ImportKeys';
 
 export interface RouterProps {
   firebase?: any;
@@ -48,6 +49,10 @@ const Router = (props: RouterProps) => (
                 component={withTracker(PrintViewBoard)}
               />
             )}
+          />
+          <Route
+            path="/transfer/:credentials"
+            component={withTracker(ImportKeys as any)}
           />
         </Switch>
       </HashRouter>
