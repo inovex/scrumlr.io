@@ -240,8 +240,6 @@ export class Crypto {
         await window.crypto.subtle.exportKey('pkcs8', this.privateKey)
       )
     );
-
-    return;
   }
 
   // derive secure key from an alphanumeric string: https://dev.to/halan/4-ways-of-symmetric-cryptography-and-javascript-how-to-aes-with-javascript-3o1b

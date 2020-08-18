@@ -29,22 +29,22 @@ export class PasswordModal extends React.Component<
   };
 
   onClick = () =>
-    CRYPTO.decryptCredentials(this.state.password, this.props.credentials);
-
-  /*//Show copy info text
-                    this.setState({
-                        ...this.state,
-                        showCopyInfo: true
-                    });*/
+    CRYPTO.decryptCredentials(this.state.password, this.props.credentials)
+      .then(() => {
+        this.props.onClose();
+      })
+      .catch(e => {
+        this.setState({ ...this.state, error: true });
+      });
 
   setPassword = (e: any) => {
-    this.setState({ ...this.state, password: e.target.value });
+    this.setState({ ...this.state, password: e.target.value, error: false });
   };
 
   render() {
-    const { onClose, uid } = this.props;
+    const { uid } = this.props;
     return (
-      <Modal onClose={onClose}>
+      <Modal>
         <>
           <h2 className="modal__headline">Import board access</h2>
           <p className={'account-transfer-modal_info'}>
@@ -64,12 +64,12 @@ export class PasswordModal extends React.Component<
                 focusTheme="mint"
                 showUnderline={true}
                 placeholder={`Password`}
+                error={this.state.error ? 'Password incorrect' : undefined}
                 onChange={this.setPassword}
                 className="password-modal__input"
                 onKeyPress={(event: any) => {
                   if (event.key === 'Enter') {
                     this.onClick();
-                    onClose();
                   }
                 }}
               />
@@ -78,7 +78,6 @@ export class PasswordModal extends React.Component<
                 className="copy-button"
                 onClick={() => {
                   this.onClick();
-                  this.props.onClose();
                 }}
                 disabled={this.state.password === ''}
               >
