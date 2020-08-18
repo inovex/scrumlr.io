@@ -1,5 +1,6 @@
 import * as baseX from 'base-x';
 import { TextDecoder, TextEncoder } from 'text-encoding-utf-8';
+import * as crypto from 'crypto';
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 const bs58 = baseX(BASE58);
@@ -275,6 +276,12 @@ export class Crypto {
         )
     );
   };
+
+  md5hash = (contents: string) =>
+    crypto
+      .createHash('md5')
+      .update(contents)
+      .digest('hex');
 
   async generateInitializationVector() {
     return base58ab2str(

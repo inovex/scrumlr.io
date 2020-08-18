@@ -46,6 +46,12 @@ export class PasswordModal extends React.Component<
     return (
       <Modal onClose={onClose}>
         <>
+          <h2 className="modal__headline">Import board access</h2>
+          <p className={'account-transfer-modal_info'}>
+            WARNING: you will lose access and admin rights to previously
+            accessed boards in this browser. To proceed, enter your
+            authentication data.
+          </p>
           {uid && (
             <div>
               <Input

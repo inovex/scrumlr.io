@@ -29,9 +29,12 @@ export class AccountTransferModal extends React.Component<
       .then(iv => CRYPTO.encryptCredentials(this.state.password, iv))
       .then(encryptedCredentials => {
         {
+          // Add a md5 checksum at the end of the link to ensure integrity
           const link =
             window.location.href.replace('new', 'transfer/:') +
-            encryptedCredentials;
+            encryptedCredentials +
+            '_' +
+            CRYPTO.md5hash(encryptedCredentials);
 
           copyToClipboard(link);
 
@@ -52,6 +55,7 @@ export class AccountTransferModal extends React.Component<
     const { onClose } = this.props;
     return (
       <Modal onClose={onClose} onSubmit={onClose}>
+        <h2 className="modal__headline">Transfer access to another device</h2>
         <>
           <Input
             id="modal__board-name-input"
@@ -86,6 +90,11 @@ export class AccountTransferModal extends React.Component<
           >
             URL copied to clipboard!
           </span>
+          <p className={'account-transfer-modal_info'}>
+            Don't share this link with anyone - it will only work with your
+            Scrumlr account. Just open it in a new browser and follow the
+            instructions!
+          </p>
         </>
       </Modal>
     );
