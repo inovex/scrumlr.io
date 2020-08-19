@@ -12,7 +12,9 @@ import { CRYPTO } from '../../util/global';
 export interface ImportKeysProps
   extends RouteComponentProps<{ credentials: string }> {
   uid: string | null;
+  user: { name: string; image: string | undefined };
   onProviderLogin: (provider: AuthProvider) => () => void;
+  onLogout: () => void;
 }
 
 export interface ImportKeysState {
@@ -69,6 +71,8 @@ export class ImportKeys extends Component<ImportKeysProps, ImportKeysState> {
             onClose={this.handleCloseModal}
             onProviderLogin={this.props.onProviderLogin}
             uid={this.props.uid}
+            user={this.props.user}
+            onLogout={this.props.onLogout}
           />
         )}
       </>

@@ -1,17 +1,20 @@
 import * as React from 'react';
 
-import './AccountTransferModal.scss';
+import './PasswordModal.scss';
 import Modal from '../Modal';
 import Input from '../../Input';
 import { CRYPTO } from '../../../util/global';
 import { AuthProvider } from '../../../constants/Auth';
+import Avatar from '../../Avatar';
 import ProviderLogin from '../../ProviderLogin/ProviderLogin';
 
 export interface PasswordModalProps {
   credentials: string;
   onClose: () => void;
   uid: string | null;
+  user: { name: string; image: string | undefined };
   onProviderLogin: (provider: AuthProvider) => () => void;
+  onLogout: () => void;
 }
 
 export interface PasswordModalState {
@@ -29,7 +32,10 @@ export class PasswordModal extends React.Component<
   };
 
   onClick = () =>
-    CRYPTO.decryptCredentials(this.state.password, this.props.credentials)
+    CRYPTO.decryptCredentials(
+      this.state.password + this.props.uid,
+      this.props.credentials
+    )
       .then(() => {
         this.props.onClose();
       })
@@ -42,7 +48,7 @@ export class PasswordModal extends React.Component<
   };
 
   render() {
-    const { uid } = this.props;
+    const { uid, user } = this.props;
     return (
       <Modal>
         <>
@@ -54,6 +60,16 @@ export class PasswordModal extends React.Component<
           </p>
           {uid && (
             <div>
+              <div className={'password-modal__login-data'}>
+                <span className={'password-modal__username'}>{user.name}</span>
+                <Avatar user={user} className={'password-modal__avatar'} />
+                <button
+                  className="password-modal__logout-btn"
+                  onClick={this.props.onLogout}
+                >
+                  Log out
+                </button>
+              </div>
               <Input
                 id="modal__board-name-input"
                 label="Password"
@@ -64,7 +80,11 @@ export class PasswordModal extends React.Component<
                 focusTheme="mint"
                 showUnderline={true}
                 placeholder={`Password`}
-                error={this.state.error ? 'Password incorrect' : undefined}
+                error={
+                  this.state.error
+                    ? 'Incorrect password or wrong account'
+                    : undefined
+                }
                 onChange={this.setPassword}
                 className="password-modal__input"
                 onKeyPress={(event: any) => {
@@ -75,7 +95,7 @@ export class PasswordModal extends React.Component<
               />
               <button
                 type="button"
-                className="copy-button"
+                className="password-modal__transfer-button"
                 onClick={() => {
                   this.onClick();
                 }}
@@ -85,7 +105,9 @@ export class PasswordModal extends React.Component<
               </button>
             </div>
           )}
-          <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
+          {!uid && (
+            <ProviderLogin onProviderLogin={this.props.onProviderLogin} />
+          )}
         </>
       </Modal>
     );

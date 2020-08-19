@@ -158,8 +158,8 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
             </button>
           </div>
         )}
-        {this.state.showAccountTransferModal && (
-          <AccountTransferModal onClose={this.handleCloseModal} />
+        {uid && this.state.showAccountTransferModal && (
+          <AccountTransferModal onClose={this.handleCloseModal} uid={uid} />
         )}
       </WelcomeArea>
     );

@@ -8,6 +8,7 @@ import * as cx from 'classnames';
 
 export interface AccountTransferModalProps {
   onClose: () => void;
+  uid: string;
 }
 
 export interface AccountTransferModalState {
@@ -26,7 +27,10 @@ export class AccountTransferModal extends React.Component<
 
   onClick = () => {
     CRYPTO.generateInitializationVector()
-      .then(iv => CRYPTO.encryptCredentials(this.state.password, iv))
+      // Encrypt credentials with user input and provider login id
+      .then(iv =>
+        CRYPTO.encryptCredentials(this.state.password + this.props.uid, iv)
+      )
       .then(encryptedCredentials => {
         {
           // Add a md5 checksum at the end of the link to ensure integrity
@@ -56,6 +60,11 @@ export class AccountTransferModal extends React.Component<
     return (
       <Modal onClose={onClose} onSubmit={onClose}>
         <h2 className="modal__headline">Transfer access to another device</h2>
+        <p className={'account-transfer-modal_info'}>
+          Don't share this link with anyone - it will only work with your
+          Scrumlr account. Just open it in a new browser and follow the
+          instructions!
+        </p>
         <>
           <Input
             id="modal__board-name-input"
@@ -90,11 +99,6 @@ export class AccountTransferModal extends React.Component<
           >
             URL copied to clipboard!
           </span>
-          <p className={'account-transfer-modal_info'}>
-            Don't share this link with anyone - it will only work with your
-            Scrumlr account. Just open it in a new browser and follow the
-            instructions!
-          </p>
         </>
       </Modal>
     );
