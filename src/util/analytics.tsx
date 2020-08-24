@@ -1,15 +1,25 @@
 import * as React from 'react';
 import * as GoogleAnalytics from 'react-ga';
+import { hash } from './crypto';
 
 GoogleAnalytics.initialize('UA-110551933-1');
 
 const withTracker = (WrappedComponent: any, options = {}) => {
-  const trackPage = (page: string) => {
+  const trackPage = async (page: string) => {
+    const path = page.split('/');
+    if (
+      path.length === 3 &&
+      (path[1] === 'board' || path[1] === 'print' || path[1] === 'join')
+    ) {
+      path[2] = await hash(path[2]);
+    }
+    const hashedPath = path.join('/');
+
     GoogleAnalytics.set({
-      page,
+      newPage: hashedPath,
       ...options
     });
-    GoogleAnalytics.pageview(page);
+    GoogleAnalytics.pageview(hashedPath);
   };
 
   // eslint-disable-next-line
