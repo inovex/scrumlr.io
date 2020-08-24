@@ -19,8 +19,7 @@ describe('<UserMenu />', () => {
       onCsvExport: jest.fn(),
       onChangeBoardName: jest.fn(),
       onSetTimer: jest.fn(),
-      admin: true,
-      isLastPhase: false
+      admin: true
     };
   });
 
@@ -61,7 +60,7 @@ describe('<UserMenu />', () => {
     });
 
     it('should pass correct method to export PDF button', () => {
-      wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
+      wrapper = shallow(<UserMenu {...props} />);
       const ddMenu = wrapper.find(DropdownMenu);
 
       expect(props.onPdfExport).not.toHaveBeenCalled();
@@ -70,7 +69,7 @@ describe('<UserMenu />', () => {
     });
 
     it('should pass correct method to export CSS button', () => {
-      wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
+      wrapper = shallow(<UserMenu {...props} />);
       const ddMenu = wrapper.find(DropdownMenu);
 
       expect(props.onCsvExport).not.toHaveBeenCalled();

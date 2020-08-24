@@ -17,7 +17,6 @@ describe('<Header />', () => {
       isAdmin: false,
       mode: 'positiveNegative',
       phase: 0,
-      isLastPhase: false,
       sorted: false,
       onPrevPhase: jest.fn(),
       onNextPhase: jest.fn(),

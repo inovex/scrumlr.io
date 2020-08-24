@@ -25,7 +25,6 @@ export interface OwnHeaderProps {
 export interface StateHeaderProps {
   mode: RetroMode;
   phase: number;
-  isLastPhase: boolean;
   sorted: boolean;
   boardName?: string;
   onPrevPhase: () => void;
@@ -50,7 +49,6 @@ export class Header extends React.Component<HeaderProps, {}> {
       boardId,
       mode,
       phase: guidedPhase,
-      isLastPhase,
       onPrevPhase,
       onNextPhase,
       onSetTimer,
@@ -101,7 +99,6 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onSignOut={onSignOut}
                 onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}
-                isLastPhase={isLastPhase}
                 onSetTimer={onSetTimer}
               />
             )}

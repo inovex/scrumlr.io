@@ -20,7 +20,6 @@ export interface UserMenuProps {
   onSetTimer: (seconds: number) => void;
   boardName?: string;
   admin: boolean;
-  isLastPhase: boolean;
 }
 
 export interface UserMenuState {
@@ -64,8 +63,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onSignOut,
       onSetTimer,
       boardName,
-      admin,
-      isLastPhase
+      admin
     } = this.props;
 
     const toggleIcon = (
@@ -160,35 +158,33 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           />
         </li>
 
-        {isLastPhase && (
-          <li key="user-menu__export" className="user_menu__li--hidden-mobile">
-            <div className="user-menu__with-buttons">
-              <Icon className="menu-item__button-icon" name="download" />
-              <span
-                className={classNames(
-                  'menu-item__button-text',
-                  'user-menu__with-buttons__text'
-                )}
-              >
-                Export
-              </span>
-              <button
-                className="user-menu__with-buttons__button"
-                name="Pdf"
-                onClick={onPdfExport}
-              >
-                PDF
-              </button>
-              <button
-                className="user-menu__with-buttons__button"
-                name="Csv"
-                onClick={onCsvExport}
-              >
-                CSV
-              </button>
-            </div>
-          </li>
-        )}
+        <li key="user-menu__export" className="user_menu__li--hidden-mobile">
+          <div className="user-menu__with-buttons">
+            <Icon className="menu-item__button-icon" name="download" />
+            <span
+              className={classNames(
+                'menu-item__button-text',
+                'user-menu__with-buttons__text'
+              )}
+            >
+              Export
+            </span>
+            <button
+              className="user-menu__with-buttons__button"
+              name="Pdf"
+              onClick={onPdfExport}
+            >
+              PDF
+            </button>
+            <button
+              className="user-menu__with-buttons__button"
+              name="Csv"
+              onClick={onCsvExport}
+            >
+              CSV
+            </button>
+          </div>
+        </li>
 
         {admin && (
           <>
