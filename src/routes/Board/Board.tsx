@@ -51,6 +51,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
+  onSignOut: () => void;
 
   // Added by mergeProps
   onRegisterCurrentUser: () => void;
