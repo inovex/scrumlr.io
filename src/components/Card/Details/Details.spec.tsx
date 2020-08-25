@@ -221,7 +221,7 @@ describe('<Details />', () => {
 
       const stack = wrapper.find('.card-details__stack');
       const stackCardsOpts = stack.find('.card-details__option');
-      expect(stackCardsOpts).toHaveLength(cards.length);
+      expect(stackCardsOpts).toHaveLength(cards.length * 2);
     });
 
     it('should call onRemove with child card id if card is deleted', () => {
