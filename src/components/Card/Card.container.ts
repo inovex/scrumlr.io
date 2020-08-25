@@ -59,6 +59,28 @@ export const mapStateToProps = (
     return toUpdate;
   };
 
+  const votes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.votes;
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack.map(card => card.votes).reduce((a, b) => a + b);
+  };
+
+  const ownVotes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.userVotes[user.uid];
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack
+      .map(card => card.userVotes[user.uid] || 0)
+      .reduce((a, b) => a + b);
+  };
+
   async function onRemoveCard(key: string) {
     const { focusedCardId } = getVal(
       state.fbState,
@@ -280,6 +302,8 @@ export const mapStateToProps = (
     undefined
   );
 
+  const toggle = false;
+
   return {
     id: ownProps.card.id || '',
     author: {
@@ -294,8 +318,8 @@ export const mapStateToProps = (
     isFocused: focusedCardId == ownProps.card.id,
     owner: user.uid === ownProps.card.authorUid,
     stacked: Boolean(ownProps.card.parent),
-    ownVotes: ownProps.card.userVotes[user.uid],
-    votes: ownProps.card.votes,
+    ownVotes: toggle ? ownProps.card.userVotes[user.uid] : ownVotes(),
+    votes: toggle ? ownProps.card.votes : votes(),
 
     getCardsInTheStack: getCardsInTheStack(ownProps.card.id || ''),
     onRemove: onRemoveCard,
