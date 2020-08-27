@@ -6,9 +6,8 @@
 }
 
 .account-transfer-modal__link {
-  display: inline-flex;
-  width: 100%;
-  justify-content: space-between;
+  display: flex;
+  max-width: 375px;
   margin-top: $default-margin;
 }
 
@@ -16,17 +15,12 @@
   overflow: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* Internet Explorer 10+ */
-  width: 300px;
   cursor: text;
-  margin: 0;
-  align-self: center;
-  white-space: nowrap;
+  margin: 5px 5px 5px 2px;
 
-  padding: 0;
-  outline: solid 2px $color-alternative-gray;
-}
+  color: $color-dark-gray;
+  font-size: 20px;
 
-.account-transfer-modal__link-text:focus {
   outline: solid 2px $color-alternative-gray;
 }
 
@@ -38,23 +32,20 @@
 .account-transfer-modal__copy-button {
   border: 0;
   background: none;
-  outline: none;
-
-  width: 40px;
-  height: 40px;
+  height: 33px;
   align-self: center;
 
-  color: $color-white;
   background: $color-mint;
-
-  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 }
 
-.account-transfer-modal__edit-icon {
-  width: $theme-icon-width;
-  height: $theme-icon-height;
-  align-self: center;
+.account-transfer-modal__copy-button:not(:disabled):focus,
+.account-transfer-modal__copy-button:not(:disabled):hover {
+  background: darken($color-mint, 15%);
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
+}
 
-  color: $color-white;
+.account-transfer-modal__copy-button .account-transfer-modal__edit-icon * {
+  margin-top: 2px;
+  height: 25px;
   fill: $color-white;
 }

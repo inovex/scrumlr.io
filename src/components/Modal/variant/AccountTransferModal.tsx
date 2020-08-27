@@ -15,6 +15,7 @@ export interface AccountTransferModalProps {
 
 export interface AccountTransferModalState {
   password: string;
+  showLink: boolean;
   showCopyInfo: boolean;
   link: string;
 }
@@ -25,6 +26,7 @@ export class AccountTransferModal extends React.Component<
 > {
   state: AccountTransferModalState = {
     password: '',
+    showLink: false,
     showCopyInfo: false,
     link: ''
   };
@@ -44,12 +46,10 @@ export class AccountTransferModal extends React.Component<
             '_' +
             CRYPTO.md5hash(encryptedCredentials);
 
-          copyToClipboard(link);
-
-          //Show copy info text
+          //Show generated link
           this.setState({
             ...this.state,
-            showCopyInfo: true,
+            showLink: true,
             link: link
           });
         }
@@ -62,6 +62,7 @@ export class AccountTransferModal extends React.Component<
 
   render() {
     const { onClose } = this.props;
+
     return (
       <Modal onClose={onClose} onSubmit={onClose}>
         <h2 className="modal__headline">Transfer access to another device</h2>
@@ -97,14 +98,8 @@ export class AccountTransferModal extends React.Component<
           >
             Generate link!
           </button>
-          <span
-            className={cx('copy-text', {
-              'copy-text--hidden': !this.state.showCopyInfo
-            })}
-          >
-            URL created and copied to clipboard!
-          </span>
-          {this.state.showCopyInfo && (
+
+          {this.state.showLink && (
             <div className="account-transfer-modal__link">
               <blockquote
                 className="account-transfer-modal__link-text"
@@ -114,13 +109,18 @@ export class AccountTransferModal extends React.Component<
                 {this.state.link}
               </blockquote>
 
-              <CopyToClipboard text={this.state.link}>
+              <CopyToClipboard
+                text={this.state.link}
+                onCopy={() =>
+                  this.setState({ ...this.state, showCopyInfo: true })
+                }
+              >
                 <button
                   type="button"
                   className="account-transfer-modal__copy-button"
                 >
                   <Icon
-                    name="edit"
+                    name="share"
                     aria-hidden="true"
                     className="account-transfer-modal__edit-icon"
                     width={28}
@@ -130,21 +130,19 @@ export class AccountTransferModal extends React.Component<
               </CopyToClipboard>
             </div>
           )}
+          <div>
+            <span
+              className={cx('copy-text', {
+                'copy-text--hidden': !this.state.showCopyInfo
+              })}
+            >
+              URL copied to clipboard!
+            </span>
+          </div>
         </>
       </Modal>
     );
   }
-}
-
-// Workaround for copying to clipboard asynchronously
-function copyToClipboard(item: string) {
-  const create_copy = (e: ClipboardEvent) => {
-    e.clipboardData.setData('text/plain', item);
-    e.preventDefault();
-  };
-  document.addEventListener('copy', create_copy);
-  document.execCommand('copy');
-  document.removeEventListener('copy', create_copy);
 }
 
 export default AccountTransferModal;
