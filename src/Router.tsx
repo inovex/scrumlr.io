@@ -50,10 +50,7 @@ const Router = (props: RouterProps) => (
               />
             )}
           />
-          <Route
-            path="/transfer/:credentials"
-            component={withTracker(ImportKeys as any)}
-          />
+          <Route path="/transfer/:credentials" component={ImportKeys as any} />
         </Switch>
       </HashRouter>
       <ToastContainer

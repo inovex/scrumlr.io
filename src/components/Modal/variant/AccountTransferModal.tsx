@@ -5,6 +5,8 @@ import Modal from '../Modal';
 import Input from '../../Input';
 import { CRYPTO } from '../../../util/global';
 import * as cx from 'classnames';
+import Icon from '../../Icon';
+import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 export interface AccountTransferModalProps {
   onClose: () => void;
@@ -14,6 +16,7 @@ export interface AccountTransferModalProps {
 export interface AccountTransferModalState {
   password: string;
   showCopyInfo: boolean;
+  link: string;
 }
 
 export class AccountTransferModal extends React.Component<
@@ -22,7 +25,8 @@ export class AccountTransferModal extends React.Component<
 > {
   state: AccountTransferModalState = {
     password: '',
-    showCopyInfo: false
+    showCopyInfo: false,
+    link: ''
   };
 
   onClick = () => {
@@ -45,7 +49,8 @@ export class AccountTransferModal extends React.Component<
           //Show copy info text
           this.setState({
             ...this.state,
-            showCopyInfo: true
+            showCopyInfo: true,
+            link: link
           });
         }
       });
@@ -97,8 +102,34 @@ export class AccountTransferModal extends React.Component<
               'copy-text--hidden': !this.state.showCopyInfo
             })}
           >
-            URL copied to clipboard!
+            URL created and copied to clipboard!
           </span>
+          {this.state.showCopyInfo && (
+            <div className="account-transfer-modal__link">
+              <blockquote
+                className="account-transfer-modal__link-text"
+                contentEditable={false}
+                suppressContentEditableWarning={true}
+              >
+                {this.state.link}
+              </blockquote>
+
+              <CopyToClipboard text={this.state.link}>
+                <button
+                  type="button"
+                  className="account-transfer-modal__copy-button"
+                >
+                  <Icon
+                    name="edit"
+                    aria-hidden="true"
+                    className="account-transfer-modal__edit-icon"
+                    width={28}
+                    height={28}
+                  />
+                </button>
+              </CopyToClipboard>
+            </div>
+          )}
         </>
       </Modal>
     );

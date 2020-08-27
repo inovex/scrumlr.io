@@ -2,5 +2,59 @@
 
 .account-transfer-modal_info {
   word-wrap: break-word;
-  width: 400px;
+  width: 375px;
+}
+
+.account-transfer-modal__link {
+  display: inline-flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: $default-margin;
+}
+
+.account-transfer-modal__link-text {
+  overflow: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  width: 300px;
+  cursor: text;
+  margin: 0;
+  align-self: center;
+  white-space: nowrap;
+
+  padding: 0;
+  outline: solid 2px $color-alternative-gray;
+}
+
+.account-transfer-modal__link-text:focus {
+  outline: solid 2px $color-alternative-gray;
+}
+
+.account-transfer-modal__link-text::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
+
+.account-transfer-modal__copy-button {
+  border: 0;
+  background: none;
+  outline: none;
+
+  width: 40px;
+  height: 40px;
+  align-self: center;
+
+  color: $color-white;
+  background: $color-mint;
+
+  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.account-transfer-modal__edit-icon {
+  width: $theme-icon-width;
+  height: $theme-icon-height;
+  align-self: center;
+
+  color: $color-white;
+  fill: $color-white;
 }
