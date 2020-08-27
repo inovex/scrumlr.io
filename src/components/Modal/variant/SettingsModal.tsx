@@ -59,7 +59,7 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
               checked={Boolean(this.props.isShowCards)}
               className="settings-modal__show-author-checkbox"
             >
-              Show cards during Write phase
+              Show everyone's cards during Write phase
             </Checkbox>
           </>
         )}

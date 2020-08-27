@@ -32,7 +32,7 @@ function initialBoardConfig(
             timerExpiration: null,
             created: new Date().toISOString(),
             showAuthor: true,
-            showCards: true,
+            showCards: false,
             mode
           },
           cards: {},
