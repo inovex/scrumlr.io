@@ -1,33 +1,65 @@
+@import '../../constants/style';
+
 .access-mode-selection {
   display: flex;
   padding-top: 16px;
   padding-bottom: 16px;
   max-width: 420px;
-  box-shadow: 0 4px 8px 0 rgba(39,50,47,.15);
   min-height: 110px;
 }
 
 .access-mode-selection__radio {
   display: flex;
   flex: 1 1 100%;
-  padding-left: 24px;
-  padding-right: 24px;
 }
 
 .access-mode-selection__radio + .access-mode-selection__radio {
-  border-left: 1px solid #eaeaea;
+  margin-left: $default-margin;
 }
 
-.access-mode-selection__label {
-  margin-left: 16px;
+#access-mode-selection__private, #access-mode-selection__public {
+  display: none;
 }
+  
+.access-mode-selection__label {
+  box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
+  padding: $default-padding;
+  transform: scale(0.9);
+  color: $color-middle-gray;
+  display: grid;
+}
+
+.access-mode-selection__label:hover {
+  cursor: pointer;
+  transform: scale(1.0);
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
+}
+
+#access-mode-selection__public:checked + .access-mode-selection__label, #access-mode-selection__private:checked + .access-mode-selection__label {
+  background-color: $color-green;
+  transform: scale(1.05);
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
+  color: $color-white;
+
+  .access-mode-selection__icon {
+    fill: $color-white;
+  }  
+}
+
+.access-mode-selection__icon {
+  fill: $color-middle-gray;
+  margin: auto;
+  margin-top: $default-margin;
+}  
 
 .access-mode-selection__title {
-  margin-top: 0;
+  margin-bottom: 0;
   font-size: 16px;
+  text-align: center;
 }
 
 .access-mode-selection__description {
   font-size: 14px;
   margin-bottom: 0;
+  text-align: center;
 }

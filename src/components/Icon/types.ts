@@ -40,4 +40,6 @@ export type IconNames =
   | 'stack-hover'
   | 'arrow-left'
   | 'arrow-right'
-  | 'inovex';
+  | 'inovex'
+  | 'locked'
+  | 'unlocked';
