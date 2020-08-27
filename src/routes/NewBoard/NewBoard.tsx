@@ -22,6 +22,7 @@ export type OwnNewBoardProps = RouteComponentProps<{}>;
 
 export interface StateNewBoardProps {
   uid: string | null;
+  isAnonymous: boolean;
   boards: Boards;
   onLogin: (name: string, mode: RetroMode, secure: boolean) => void;
   onProviderLogin: (provider: AuthProvider) => () => void;
@@ -65,11 +66,12 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
   };
 
   handleChangeMode = (mode: AccessMode) => {
-    this.setState({ secure: mode === 'private' });
+    this.setState({ ...this.state, secure: mode === 'private' });
   };
 
   handleCloseModal = () => {
     this.setState({
+      ...this.state,
       showAccountTransferModal: false
     });
   };
@@ -77,12 +79,13 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
   //TODO: modify for multiple modals if needed
   handleOpenModal = () => {
     this.setState({
+      ...this.state,
       showAccountTransferModal: true
     });
   };
 
   render() {
-    const { uid } = this.props;
+    const { uid, isAnonymous } = this.props;
 
     const SecureBoardCheckbox = (
       <AccessModeSelection
@@ -144,17 +147,19 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
                 this.props.onCreateNewBoard(mode, this.state.secure)
               }
             />
+            {!isAnonymous && (
+              <button
+                className="new-board__logout-btn"
+                onClick={this.handleOpenModal}
+              >
+                Transfer account to another device
+              </button>
+            )}
             <button
               className="new-board__logout-btn"
               onClick={this.props.onLogout}
             >
               Log out
-            </button>
-            <button
-              className="new-board__logout-btn"
-              onClick={this.handleOpenModal}
-            >
-              Transfer account to another device
             </button>
           </div>
         )}

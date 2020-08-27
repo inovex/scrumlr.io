@@ -139,6 +139,7 @@ describe('<NewBoard />', () => {
     beforeEach(() => {
       props = {
         uid: null,
+        isAnonymous: false,
         boards: {},
         onLogin: jest.fn(),
         onProviderLogin: jest.fn(),
