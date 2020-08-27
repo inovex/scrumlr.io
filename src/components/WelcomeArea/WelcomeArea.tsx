@@ -27,7 +27,7 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
       <div className="welcome-area__action-area-main">{children}</div>
       <div className="welcome-area__action-area-footer">
         <p>
-          &copy; {new Date().getFullYear()}, Provided by{' '}
+          &copy; {new Date().getFullYear()}, Powered by{' '}
           <Icon
             name="inovex"
             width={16}
@@ -36,10 +36,9 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
           />{' '}
           <a href="https://www.inovex.de/" target="_blank">
             inovex
-          </a>{' '}
-          employees
+          </a>
         </p>
-        <a href="https://github.com/scrumlr/scrumlr.io" target="_blank">
+        <a href="https://github.com/inovex/scrumlr.io" target="_blank">
           Contribute to this open source project on GitHub
         </a>
         <div className="welcome-area__policies">
