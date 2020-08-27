@@ -302,8 +302,6 @@ export const mapStateToProps = (
     undefined
   );
 
-  const toggle = false;
-
   return {
     id: ownProps.card.id || '',
     author: {
@@ -318,8 +316,8 @@ export const mapStateToProps = (
     isFocused: focusedCardId == ownProps.card.id,
     owner: user.uid === ownProps.card.authorUid,
     stacked: Boolean(ownProps.card.parent),
-    ownVotes: toggle ? ownProps.card.userVotes[user.uid] : ownVotes(),
-    votes: toggle ? ownProps.card.votes : votes(),
+    ownVotes: ownVotes(),
+    votes: votes(),
 
     getCardsInTheStack: getCardsInTheStack(ownProps.card.id || ''),
     onRemove: onRemoveCard,
