@@ -141,7 +141,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
         </li>
         <li key="user-menu__feedback" className="user_menu__li--hidden-mobile">
           <MenuItem
-            name="Feedback"
+            name="About &amp; Feedback"
             icon="feedback"
             onClick={() => {
               onOpenModal('feedback');
