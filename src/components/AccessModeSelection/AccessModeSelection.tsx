@@ -63,7 +63,7 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
         value="public"
         mode={mode}
         onChange={onChange}
-        image="unlocked"
+        image="public"
         name="Public"
         description="All users who know the board URL have access"
       />
@@ -72,7 +72,7 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
         value="private"
         mode={mode}
         onChange={onChange}
-        image="locked"
+        image="private"
         name="Private"
         description="Restricted access to the boards and encrypted sensitive information"
       />

@@ -43,8 +43,8 @@ export const iconMap: { [key: string]: string } = {
   'stack-mid': 'icon-20-stack-enabled',
   'stack-hover': 'icon-20-stack-hover',
   inovex: 'inovex',
-  locked: 'lock-closed',
-  unlocked: 'lock-open'
+  private: 'icon-private',
+  public: 'icon-public'
 };
 
 export const iconNames = Object.keys(iconMap) as IconNames[];

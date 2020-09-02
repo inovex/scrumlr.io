@@ -41,5 +41,5 @@ export type IconNames =
   | 'arrow-left'
   | 'arrow-right'
   | 'inovex'
-  | 'locked'
-  | 'unlocked';
+  | 'private'
+  | 'public';
