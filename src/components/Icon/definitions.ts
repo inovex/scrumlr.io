@@ -17,7 +17,7 @@ export const iconMap: { [key: string]: string } = {
   share: 'icon-20-share',
   pencil: 'icon-20-edit',
   focus: 'icon-20-fix',
-  feedback: 'icon-20-feedback',
+  about: 'icon-20-about',
   trash: 'icon-20-trash',
   timer: 'icon-20-timer',
   close: 'icon-32-close',

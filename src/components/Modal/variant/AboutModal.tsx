@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './FeedbackModal.scss';
+import './AboutModal.scss';
 import Input from '../../Input';
 import Modal from '../Modal';
 import Textarea from '../../Textarea';
@@ -16,7 +16,7 @@ export interface FeedbackModalState {
   messageBody: string;
 }
 
-export class FeedbackModal extends React.Component<
+export class AboutModal extends React.Component<
   FeedbackModalProps,
   FeedbackModalState
 > {
@@ -109,4 +109,4 @@ export class FeedbackModal extends React.Component<
   }
 }
 
-export default FeedbackModal;
+export default AboutModal;

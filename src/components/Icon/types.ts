@@ -24,7 +24,7 @@ export type IconNames =
   | 'close'
   | 'close20'
   | 'close-circle'
-  | 'feedback'
+  | 'about'
   | 'overview'
   | 'key-up'
   | 'key-down'
