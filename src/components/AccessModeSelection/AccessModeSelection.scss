@@ -41,15 +41,19 @@
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
   color: $color-white;
 
-  .access-mode-selection__icon {
-    fill: $color-white;
+  .access-mode-selection__icon * {
+    stroke: $color-white;
   }  
 }
 
 .access-mode-selection__icon {
-  fill: $color-middle-gray;
   margin: auto;
   margin-top: $default-margin;
+}
+
+.access-mode-selection__icon * {
+  stroke: $color-middle-gray;
+
 }  
 
 .access-mode-selection__title {
