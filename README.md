@@ -1,44 +1,35 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> The code of the online version of [scrumlr.io](https://scrumlr.io) is located
+> [at the v1 branch](https://github.com/scrumlr/scrumlr.io/tree/v1), since we are currently working on a new 
+> implementation of your favorite webapp for collaborative sessions.
 
-## Available Scripts
+<div align="center" markdown="1" style="margin-bottom: 2.5em">
+  <p>
+    <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
+  </p>
+  <p>
+    <a href="https://travis-ci.org/masinio/scrumlr.io" target="_blank">
+        <img src="https://travis-ci.org/masinio/scrumlr.io.svg?branch=main" alt="Build status" />
+    </a>
+    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io?ref=badge_shield" alt="FOSSA Status" target="_blank">
+        <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io.svg?type=shield"/>
+    </a>
+  </p>
+</div>
 
-In the project directory, you can run:
+Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://scrumlr.io).
 
-### `yarn start`
+This project is written in React and its data is stored in Firestore.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Contributing
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+You're very welcome to be part of this project. You can contribute by opening an issue, by
+fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
+`npm run test` and `npm run lint` are passing and that every change is covered by unit tests.
 
-### `yarn test`
+## Thank you
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Thanks to all our users, contributors & supporters!
 
-### `yarn build`
+## License
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Scrumlr is [MIT licensed](https://github.com/masinio/scrumlr.io/blob/tech/doc/LICENSE).
