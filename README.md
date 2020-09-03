@@ -30,10 +30,6 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 
 Thanks to all our users, contributors & supporters!
 
-### Browserstack
-
-We are grateful to [BrowserStack](https://www.browserstack.com) for our open source account to the end-to-end test infrastructure.
-
 ## License
 
 Scrumlr is [MIT licensed](https://github.com/masinio/scrumlr.io/blob/tech/doc/LICENSE).
