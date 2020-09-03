@@ -1,6 +1,10 @@
+> The code of the online version of [scrumlr.io](https://scrumlr.io) is located
+> [at the v1 branch](https://github.com/scrumlr/scrumlr.io/tree/v1), since we are currently working on a new 
+> implementation of your favorite webapp for collaborative sessions.
+
 <div align="center" markdown="1" style="margin-bottom: 2.5em">
   <p>
-    <img src="https://raw.githubusercontent.com/masinio/scrumlr.io/main/scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
+    <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
   <p>
     <a href="https://travis-ci.org/masinio/scrumlr.io" target="_blank">
