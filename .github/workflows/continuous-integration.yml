@@ -33,4 +33,4 @@ jobs:
         run: yarn build
 
       - name: Test with coverage
-        run: yarn test --coverage --watchAll=false
+        run: yarn test --coverage --watchAll=false --passWithNoTests
