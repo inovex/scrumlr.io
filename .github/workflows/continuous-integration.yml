@@ -27,16 +27,10 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install # will run `yarn install` command
+        run: yarn install
 
       - name: Build
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: build # will run `yarn build` command
+        run: yarn build
 
-      - name: Test with coverage
-        uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: test --coverage # will run `yarn test --coverage` command
+      - name: Test
+        run: yarn test
