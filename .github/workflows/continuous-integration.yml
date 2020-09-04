@@ -8,9 +8,11 @@ on:
 
 jobs:
   build:
+    name: Build and Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
       
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -24,14 +26,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: install # will run `yarn install` command
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: Build
+        uses: borales/actions-yarn@v2.0.0
         with:
           cmd: build # will run `yarn build` command
 
-      - uses: borales/actions-yarn@v2.0.0
+      - name: Test with coverage
+        uses: borales/actions-yarn@v2.0.0
         with:
-          cmd: test # will run `yarn test` command
+          cmd: test --coverage # will run `yarn test --coverage` command
