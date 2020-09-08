@@ -1,10 +1,10 @@
 import { BoardCards, Card, StoreState } from '../../types';
-import { getVal, getFirebase } from 'react-redux-firebase';
+import { getFirebase, getVal } from 'react-redux-firebase';
 import { OwnColumnProps, StateColumnProps } from './Column';
 import { getTheme } from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
-import Raven = require('raven-js');
 import { get } from 'lodash';
+import Raven = require('raven-js');
 
 function sortCards(cards: Card[], sortByVotes: boolean): Card[] {
   const compareTimestamps = (a: Card, b: Card) => {
@@ -93,6 +93,12 @@ export const mapStateToProps = (
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
+    .filter(
+      card =>
+        ownProps.phase.index !== 0 ||
+        ownProps.isShowCards ||
+        card.authorUid === user.uid
+    )
     .filter(card => card.type === ownProps.column.id)
     .filter(card => !Boolean(card.parent));
   cards = sortCards(cards, ownProps.column.sorted);
