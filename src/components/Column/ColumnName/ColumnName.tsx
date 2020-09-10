@@ -40,7 +40,8 @@ const ColumnName: React.FunctionComponent<ColumnNameProps> = ({
             }
           }}
           onBlur={onBlur}
-          showUnderline={true}
+          showUnderline={false}
+          maxLength={'32'}
           focusTheme="mint"
           invertPlaceholder={true}
         />
