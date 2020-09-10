@@ -90,7 +90,7 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
         {this.props.isAdmin && (
           <button
             className="settings-modal__delete-button"
-            aria-label="Delete the scrumlr board"
+            aria-label="Delete this board"
             onClick={this.handleDeleteBoard}
           >
             <Icon
@@ -100,7 +100,7 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
               width={16}
               height={16}
             />
-            Delete Board
+            Delete this board
           </button>
         )}
       </Modal>

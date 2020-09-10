@@ -39,7 +39,6 @@
 
 .settings-modal__delete-button {
   border: 0;
-  background: none;
   outline: none;
   width: 100%;
 
@@ -51,7 +50,7 @@
 
   margin-top: $large-margin;
   color: $color-white;
-  background: $color-mint;
+  background: $color-stone-gray;
 
   transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
 
@@ -63,6 +62,7 @@
 
 .settings-modal__delete-button:focus,
 .settings-modal__delete-button:hover {
-  background: darken($color-mint, 15%);
+  cursor: pointer;
+  background: $color-orange;
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
 }
