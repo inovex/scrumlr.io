@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+    
+        match /boards/{board} { 
+            allow read: if isParticipant();
+            allow create: if isAuthenticated();
+            allow update: if isAdmin();
+            allow delete: if isAdmin();
+
+            // Checks if the board is in private mode
+            function isPrivate() {
+                return get(/databases/$(database)/documents/boards/$(board)).data.config.get('private', false);
+            }
+
+            // Checks if the requesting user is authenticated
+            function isAuthenticated() {
+                return request.auth != null;
+            }
+
+            // Checks if the requesting user is entered as participant or admin
+            function isParticipant() {
+                return isAuthenticated() && exists(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid));
+            }
+            
+            // Checks if the requesting user is entered as admin
+            function isAdmin() {
+                return isAuthenticated() && get(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid)).data.get('admin', false);
+            }
+
+            match /lobby/{user} {
+                allow read: if isAdmin();
+                allow create: if isAuthenticated() && request.auth.id == resource.id;
+                allow update: if request.auth.uid == resource.id;
+                allow delete: if request.auth.uid == resource.id;
+            }
+
+            match /participants/{user} {
+                allow read: if isParticipant();
+                // Authenticated users can participate if session is not private else admins can add user to participate
+                allow create: if isAdmin() || (isAuthenticated() && isPrivate() == false); 
+                // User can change their name, admins can change admin permission
+                allow update: if onUserUpdate();
+                allow delete: if isAdmin() || request.auth.uid == resource.id;
+
+                function onUserUpdate() {
+                    return (isAdmin() || request.auth.id == resource.id)
+                        && checkPermissionChange()
+                        && checkVoteChange();
+                }
+
+                // Only admins are allowed to change the permissions of a participant
+                function checkPermissionChange() {
+                    return (request.resource.data.diff(resource.data).changedKeys().hasAny(['admin']) ||
+                            request.resource.data.diff(resource.data).addedKeys().hasAny(['admin'])) ? isAdmin() : true;
+                }
+
+                function checkVoteChange() {
+                    let boardPath = /databases/$(database)/documents/boards/$(board);
+                	let voteLimit = get(boardPath).data.config.get('voteLimit', -1);
+                	let multiVote = get(boardPath).data.config.get('multiVote', true);
+
+                    return (voteLimit > -1 ? request.resource.data.votes.size() <= voteLimit : true) 
+                        && (multiVote ? true : request.resource.data.votes.size() == request.resource.data.votes.toSet().size());
+                }
+            }
+            
+            match /cards/{card} {
+                allow read: if isParticipant();
+                // Every participant can create cards with himself as author 
+                // (It should not be possible to create cards for other participants)
+                allow create: if isParticipant() && isAuthor();
+                allow update: if isAdmin() || isAuthor();
+                allow delete: if isAdmin() || isAuthor();
+
+                function isAuthor() {
+                    return request.auth.uid == resource.data.author;
+                }
+            }
+        }
+    }
+}
+
