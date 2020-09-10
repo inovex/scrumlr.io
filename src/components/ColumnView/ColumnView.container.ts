@@ -1,7 +1,6 @@
 import { BoardCards, BoardConfig, StoreState } from '../../types';
 import { OwnColumnViewProps, StateColumnViewProps } from './ColumnView';
 import { getVal } from 'react-redux-firebase';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -27,7 +26,7 @@ export const mapStateToProps = (
   }
 
   return {
-    phase: getPhaseConfiguration(boardConfig.mode, boardConfig.guidedPhase),
-    filteredCardType
+    filteredCardType,
+    guidedPhase: boardConfig.guidedPhase
   };
 };

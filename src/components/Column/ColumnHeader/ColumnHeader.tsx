@@ -8,8 +8,10 @@ import OverviewCircle from '../../Icon/OverviewCircle';
 export interface ColumnHeaderProps {
   title: string;
   count: number;
+  isAdmin: boolean;
 
   onToggleOverview?: () => void;
+  onUpdateColumnName: (newName: string) => void;
 
   className?: string;
 }
@@ -17,14 +19,21 @@ export interface ColumnHeaderProps {
 const ColumnHeader: React.FunctionComponent<ColumnHeaderProps> = ({
   title,
   onToggleOverview,
+  onUpdateColumnName,
   count,
-  className
+  className,
+  isAdmin
 }) => {
   return (
     <header className={cx('column-header', className)}>
       <hr className="column-header__hr" />
       <div className="column-header__title-wrapper">
-        <ColumnName title={title} count={count} />
+        <ColumnName
+          title={title}
+          count={count}
+          isAdmin={isAdmin}
+          onUpdateColumnName={onUpdateColumnName}
+        />
         {onToggleOverview && (
           <button
             aria-label="Open overview"

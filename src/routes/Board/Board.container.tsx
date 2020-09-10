@@ -1,22 +1,24 @@
 import { AnyAction, Dispatch } from 'redux';
-import { isLoaded, getVal } from 'react-redux-firebase';
+import { getVal, isLoaded } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 import { debounce, difference } from 'lodash';
 
 import { SETUP_COMPLETED } from '../../actions';
 import { BoardProps } from './Board';
 import {
-  BoardConfig,
-  FirebaseProp,
-  StoreState,
   BoardCards,
+  BoardConfig,
   Card,
+  FirebaseProp,
   Optional,
   PrivateBoardData,
-  PublicBoardData
+  PublicBoardData,
+  StoreState
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { Crypto } from '../../util/crypto';
+import { PhaseConfiguration } from '../../constants/Retrospective';
+import retroModes from '../../constants/mode';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -41,6 +43,11 @@ export const mapStateToProps = (
 
   const cards: BoardCards = board.cards || {};
   const boardConfig: BoardConfig = board.config;
+  const phasesConfig: {
+    [key: string]: PhaseConfiguration;
+  } = boardConfig.phasesConfig
+    ? boardConfig.phasesConfig
+    : retroModes[boardConfig.mode];
 
   const users = isLoaded(board) ? board.users : {};
 
@@ -280,11 +287,35 @@ export const mapStateToProps = (
     }
   }
 
+  function onUpdateColumnName(columnId: string, newName: string) {
+    let newConfig = phasesConfig;
+
+    // Change name of column with columnId in every phase
+    Object.keys(newConfig).forEach(key => {
+      if (newConfig[key].columns[columnId]) {
+        newConfig[key].columns[columnId].name = newName;
+      }
+    });
+
+    firebase
+      .set(`${boardSelector}/config/phasesConfig`, newConfig)
+      .catch((err: any) => {
+        Raven.captureMessage('unable to update phase configurations', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardSelector
+          }
+        });
+      });
+  }
+
   return {
     ...ownProps,
     cards,
     boardSelector,
     boardConfig,
+    phasesConfig,
     boardPrintUrl,
     users,
     focusedCard,
@@ -305,6 +336,7 @@ export const mapStateToProps = (
     onDeleteTimer,
     onToggleShowAuthor,
     onToggleShowCards,
+    onUpdateColumnName,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
     waitingUsers,
     acceptUser,

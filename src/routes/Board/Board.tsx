@@ -24,7 +24,7 @@ import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
+import { PhaseConfiguration } from '../../constants/Retrospective';
 import Timer from '../../components/Timer';
 import { ExportToCsv } from 'export-to-csv';
 import UsersModal from '../../components/Modal/variant/UsersModal';
@@ -35,6 +35,7 @@ const { toast } = require('react-toastify');
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
   boardConfig: BoardConfig;
+  phasesConfig: { [key: string]: PhaseConfiguration };
   users: BoardUsers;
   boardSelector: string;
   boardPrintUrl: string;
@@ -52,7 +53,9 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onDeleteTimer: () => void;
   onToggleShowAuthor: () => void;
   onToggleShowCards: () => void;
+  onUpdateColumnName: (columnId: string, newName: string) => void;
   onSwitchPhaseIndex: (delta: number) => void;
+  onSignOut: () => void;
 
   // Added by mergeProps
   onRegisterCurrentUser: () => void;
@@ -80,7 +83,7 @@ export interface CsvExportData {
   id: string;
   author?: string;
   text: string;
-  type: string;
+  column: string;
   votes: number;
   timestamp: string;
   parent?: string;
@@ -117,12 +120,11 @@ export class Board extends React.Component<BoardProps, BoardState> {
         prevProps.boardConfig.guidedPhase > 0 ||
         this.props.boardConfig.guidedPhase > 0
       ) {
-        const phase = getPhaseConfiguration(
-          this.props.boardConfig.mode,
+        const phase = this.props.phasesConfig[
           this.props.boardConfig.guidedPhase
-        );
+        ];
         toast(
-          `Switched to Phase ${phase.index + 1} ${
+          `Switched to Phase ${this.props.boardConfig.guidedPhase + 1} ${
             phase.name
           } - ${phase.activities.map(a => a.description).join(', ')}`
         );
@@ -183,7 +185,9 @@ export class Board extends React.Component<BoardProps, BoardState> {
         id: key,
         author: card.author || '-',
         text: card.text,
-        type: card.type,
+        // Get name of currently active column
+        column: this.props.phasesConfig[this.props.boardConfig.guidedPhase]
+          .columns[card.type].name,
         votes: card.votes,
         timestamp: card.timestamp,
         parent: card.parent || '-'
@@ -226,12 +230,14 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const {
       isBoardAdmin,
       boardConfig,
+      phasesConfig,
       boardSelector,
       setupCompleted,
       users,
       waitingUsers,
       timerExpiration,
       onDeleteTimer,
+      onUpdateColumnName,
       acceptUser
     } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -268,6 +274,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           <Header
             isAdmin={isBoardAdmin}
             boardId={boardSelector}
+            phasesConfig={phasesConfig}
             onPdfExport={() => this.handleExport('print')}
             onCsvExport={() => this.handleExport('csv')}
             onSignOut={this.props.onSignOut}
@@ -275,6 +282,8 @@ export class Board extends React.Component<BoardProps, BoardState> {
           />
 
           <ColumnView
+            phasesConfig={phasesConfig}
+            onUpdateColumnName={onUpdateColumnName}
             isAdmin={isBoardAdmin}
             boardUrl={boardSelector}
             isShowCards={this.props.isShowCards}

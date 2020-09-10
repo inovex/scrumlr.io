@@ -166,7 +166,6 @@ export const mapStateToProps = (
 
   return {
     boardName: boardConfig.config.name,
-    mode: boardConfig.config.mode,
     phase: boardConfig.config.guidedPhase,
     sorted: boardConfig.config.sorted,
     onPrevPhase,

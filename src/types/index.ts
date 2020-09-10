@@ -1,5 +1,5 @@
 import { AppState } from '../reducers';
-import { ColumnType } from '../constants/Retrospective';
+import { ColumnType, PhaseConfiguration } from '../constants/Retrospective';
 import { RetroMode } from '../constants/mode';
 
 export type FirebaseProp = firebase.auth.Auth &
@@ -62,6 +62,9 @@ export interface BoardConfig {
   mode: RetroMode;
   showAuthor?: boolean;
   showCards?: boolean;
+  phasesConfig?: {
+    [key: string]: PhaseConfiguration;
+  };
 }
 
 export interface UserInformation {

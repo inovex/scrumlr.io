@@ -2,10 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 import { PhaseMenu, PhaseMenuProps } from './PhaseMenu';
-import {
-  getPhaseConfiguration,
-  getPhasesCount
-} from '../../constants/Retrospective';
+import retroModes from '../../constants/mode';
 
 describe('<PhaseMenu />', () => {
   let wrapper: ShallowWrapper<PhaseMenuProps, {}>;
@@ -14,7 +11,7 @@ describe('<PhaseMenu />', () => {
   beforeEach(() => {
     props = {
       admin: false,
-      mode: 'positiveNegative',
+      phasesConfig: retroModes['positiveNegative'],
       guidedPhase: 0,
       onPrevPhase: jest.fn(),
       onNextPhase: jest.fn()
@@ -43,7 +40,7 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu
         {...props}
         admin={true}
-        guidedPhase={getPhasesCount('positiveNegative')}
+        guidedPhase={Object.keys(props.phasesConfig).length}
       />
     );
     const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
@@ -56,7 +53,7 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu
         {...props}
         admin={true}
-        guidedPhase={getPhasesCount('positiveNegative') - 1}
+        guidedPhase={Object.keys(props.phasesConfig).length - 1}
       />
     );
     const prevBtn = wrapper.find('[aria-label="Go to previous phase"]');
@@ -73,8 +70,6 @@ describe('<PhaseMenu />', () => {
       <PhaseMenu {...props} admin={true} guidedPhase={phaseIndex} />
     );
     expect(wrapper.text()).toContain(`Phase ${phaseIndex + 1}`);
-    expect(wrapper.text()).toContain(
-      getPhaseConfiguration('positiveNegative', phaseIndex).name
-    );
+    expect(wrapper.text()).toContain(props.phasesConfig[phaseIndex].name);
   });
 });

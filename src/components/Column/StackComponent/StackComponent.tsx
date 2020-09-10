@@ -13,6 +13,7 @@ import './StackComponent.scss';
 export interface StackComponentProps {
   boardUrl: string;
   cards: CardModel[];
+  columnId: string;
   column: Column;
   isVotingAllowed: boolean;
   isVoteSummaryShown: boolean;
@@ -25,6 +26,7 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
     const {
       className,
       boardUrl,
+      columnId,
       column,
       cards,
       isVotingAllowed,
@@ -50,7 +52,12 @@ class StackComponent extends React.Component<StackComponentProps, {}> {
           className="stack-component__stack"
         />
         <Action theme={theme}>
-          <AddCard boardId={boardUrl} column={column} disabled={!isActive} />
+          <AddCard
+            boardId={boardUrl}
+            columnId={columnId}
+            column={column}
+            disabled={!isActive}
+          />
         </Action>
       </Component>
     );

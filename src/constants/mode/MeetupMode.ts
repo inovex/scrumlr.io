@@ -1,12 +1,11 @@
 import { PhaseConfiguration } from '../Retrospective';
 
-export default [
-  {
+export default {
+  0: {
     name: 'Write',
     description: 'Create cards, communicate your thoughts & stack common',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Questions',
         type: 'positive',
         voting: {
@@ -20,8 +19,7 @@ export default [
         },
         sorted: false
       },
-      {
-        id: 'negative',
+      1: {
         name: 'Feedback',
         type: 'negative',
         voting: {
@@ -35,19 +33,18 @@ export default [
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase1-create', description: 'Create cards' },
       { icon: 'phase1-communicate', description: 'Communicate meaning' },
       { icon: 'phase1-combine', description: 'Combine to stack' }
     ]
   },
-  {
+  1: {
     name: 'Vote',
     description: 'Vote on the most important cards for yourself',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Questions',
         type: 'positive',
         voting: {
@@ -61,8 +58,7 @@ export default [
         },
         sorted: false
       },
-      {
-        id: 'negative',
+      1: {
         name: 'Feedback',
         type: 'negative',
         voting: {
@@ -76,15 +72,14 @@ export default [
         },
         sorted: false
       }
-    ],
+    },
     activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
   },
-  {
+  2: {
     name: 'Discuss',
     description: 'Discuss top-voted cards and define actions',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Questions',
         type: 'positive',
         voting: {
@@ -98,8 +93,7 @@ export default [
         },
         sorted: true
       },
-      {
-        id: 'negative',
+      1: {
         name: 'Feedback',
         type: 'negative',
         voting: {
@@ -113,7 +107,7 @@ export default [
         },
         sorted: true
       },
-      {
+      actions: {
         id: 'actions',
         name: 'Actions',
         type: 'actions',
@@ -128,10 +122,10 @@ export default [
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase3-discuss', description: 'Discuss top-voted' },
       { icon: 'phase3-define', description: 'Define actions' }
     ]
   }
-] as PhaseConfiguration[];
+} as { [key: string]: PhaseConfiguration };

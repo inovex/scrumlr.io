@@ -14,7 +14,9 @@ export interface ColumnOverviewProps {
   cards: any;
   isVotingEnabled: boolean;
   isVoteSummaryShown: boolean;
+  isAdmin: boolean;
   toggleOverview: () => void;
+  onUpdateColumnName: (newName: string) => void;
 }
 
 export const ColumnOverview: React.FunctionComponent<ColumnOverviewProps> = ({
@@ -24,7 +26,9 @@ export const ColumnOverview: React.FunctionComponent<ColumnOverviewProps> = ({
   cards,
   isVotingEnabled,
   isVoteSummaryShown,
-  toggleOverview
+  isAdmin,
+  toggleOverview,
+  onUpdateColumnName
 }) => {
   // mount backdrop into separate located DOM node 'portal'
   const portal: HTMLElement = document.getElementById('portal')!;
@@ -40,7 +44,12 @@ export const ColumnOverview: React.FunctionComponent<ColumnOverviewProps> = ({
       onClose={() => toggleOverview()}
     >
       <div className="column-overview__header">
-        <ColumnName title={column} count={cardsCount} />
+        <ColumnName
+          title={column}
+          count={cardsCount}
+          isAdmin={isAdmin}
+          onUpdateColumnName={onUpdateColumnName}
+        />
       </div>
       <div className="column-overview__stack">
         <Stack

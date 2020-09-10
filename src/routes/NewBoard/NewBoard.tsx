@@ -58,7 +58,7 @@ export class NewBoard extends Component<NewBoardProps, NewBoardState> {
   };
 
   handleChangeMode = (mode: AccessMode) => {
-    this.setState({ secure: mode === 'private' });
+    this.setState(state => ({ ...state, secure: mode === 'private' }));
   };
 
   render() {

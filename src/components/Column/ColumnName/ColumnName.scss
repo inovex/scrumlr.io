@@ -1,20 +1,26 @@
 @import '../../../constants/style';
 
-
-.column-name {
-  flex: 1;
+.column-name__header {
   margin: 0;
+  line-height: 54px;
+  display: inline-flex;
+  overflow-x: hidden;
+}
+
+.column-name .input, .column-name {
 
   font-family: Heebo, sans-serif;
   font-weight: bold;
   font-size: calc(24px + .4vw);
   color: $color-dark-gray;
   letter-spacing: 1px;
-  line-height: 54px;
+  padding-right: 0px;
+  min-width: 0px;
 }
 
 .column-name__count {
   margin-left: $default-margin;
+  margin-right: $default-margin;
 
   display: inline-block;
   width: 32px;
@@ -22,6 +28,7 @@
   line-height: 32px;
   vertical-align: middle;
   text-align: center;
+  align-self: center;
 
 
   font-family: Heebo, sans-serif;
