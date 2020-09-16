@@ -6,6 +6,7 @@ import Modal from '../Modal';
 import Textarea from '../../Textarea';
 import Raven = require('raven-js');
 import { slack } from '../../../config';
+import Icon from 'components/Icon';
 
 export type TabType = 'about' | 'feedback' | 'privacy' | 'changelog';
 
@@ -118,8 +119,20 @@ export class AboutModal extends React.Component<
               <h2 className="about-modal__headline">About</h2>
 
               <p>
-                © 2020, Powered by inovex Thanks to all our users, contributors
-                & supporters!
+                Scrumlr is an open source project powered by
+                <Icon
+                  name="inovex"
+                  width={16}
+                  height={16}
+                  className="about-modal__inovex-logo"
+                />
+                <a href="https://www.inovex.de/de/" target="_blank">
+                  inovex
+                </a>
+                .
+                <br />
+                <br />
+                Thanks to all our users, contributors & supporters!
               </p>
             </div>
 
@@ -130,9 +143,7 @@ export class AboutModal extends React.Component<
                 <br />
                 You're very welcome to be part of this project. You can
                 contribute by opening an issue, by fixing a bug or by adding a
-                feature and open a pull request. Just make sure that the jobs
-                npm run test and npm run lint are passing and that every change
-                is covered by unit tests.
+                feature and open a pull request.
                 <br />
                 <br />
                 <a href="https://github.com/inovex/scrumlr.io" target="_blank">
