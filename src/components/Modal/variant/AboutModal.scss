@@ -1,26 +1,45 @@
 @import '../../../constants/style';
 
+.about-modal__tabs {
+  margin-bottom: $large-margin;
+}
 
-.feedback-modal__content {
+.about-modal__tab-button {
+  border: 1px solid $color-white;
+
+  font-size: $theme-font-size;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  padding: $default-padding $large-padding;
+  color: $color-white;
+  background: $color-mint;
+  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+}
+
+.about-modal__tab-button:focus,
+.about-modal__tab-button:hover {
+  cursor: pointer;
+  background: $color-dark-mint;
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
+}
+
+.about-modal__content {
   min-width: 200px;
   min-height: 100px;
   display: flex;
 }
 
-.feedback-modal__intro-panel {
+.about-modal__panel {
   flex: 1 1 100%;
 }
 
-.feedback-modal__message-panel {
-  flex: 1 1 100%;
-}
-
-.feedback-modal__headline {
+.about-modal__headline {
   align-self: flex-start;
   margin-top: $default-margin;
 }
 
-.feedback-modal__textarea {
+.about-modal__right-area {
   box-sizing: border-box;
   padding-top: 60px;
   padding-left: $default-padding;
