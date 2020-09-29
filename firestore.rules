@@ -1,19 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
     match /databases/{database}/documents {
-    
-        match /boards/{board} { 
-            allow read: if isParticipant();
-            allow create: if isAuthenticated();
-            allow update: if isAdmin();
-            allow delete: if isAdmin();
 
-            // Checks if the board is in private mode
-            function isPrivate() {
-                return get(/databases/$(database)/documents/boards/$(board)).data.config.get('private', false);
-            }
-
-            // Checks if the requesting user is authenticated
+        // Checks if the requesting user is authenticated
             function isAuthenticated() {
                 return request.auth != null;
             }
@@ -26,6 +15,17 @@ service cloud.firestore {
             // Checks if the requesting user is entered as admin
             function isAdmin() {
                 return isAuthenticated() && get(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid)).data.get('admin', false);
+            }
+    
+        match /boards/{board} { 
+            allow read: if isParticipant();
+            allow create: if isAuthenticated();
+            allow update: if isAdmin();
+            allow delete: if isAdmin();
+
+            // Checks if the board is in private mode
+            function isPrivate() {
+                return get(/databases/$(database)/documents/boards/$(board)).data.config.get('private', false);
             }
 
             match /lobby/{user} {
@@ -78,6 +78,13 @@ service cloud.firestore {
                 }
             }
         }
+    }
+
+    match /templates/{template} {
+        allow read: if True;
+        allow create: if isAuthenticated();
+        allow update: if isAuthor();
+        allow delete: if isAuthor();
     }
 }
 
