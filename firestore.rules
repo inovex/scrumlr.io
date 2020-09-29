@@ -3,19 +3,24 @@ service cloud.firestore {
     match /databases/{database}/documents {
 
         // Checks if the requesting user is authenticated
-            function isAuthenticated() {
-                return request.auth != null;
-            }
+        function isAuthenticated() {
+            return request.auth != null;
+        }
 
-            // Checks if the requesting user is entered as participant or admin
-            function isParticipant() {
-                return isAuthenticated() && exists(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid));
-            }
+        // Checks if the requesting user is entered as participant or admin
+        function isParticipant() {
+            return isAuthenticated() && exists(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid));
+        }
             
-            // Checks if the requesting user is entered as admin
-            function isAdmin() {
-                return isAuthenticated() && get(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid)).data.get('admin', false);
-            }
+        // Checks if the requesting user is entered as admin
+        function isAdmin() {
+            return isAuthenticated() && get(/databases/$(database)/documents/boards/$(board)/participants/$(request.auth.uid)).data.get('admin', false);
+        }
+
+        // Checks if the requesting user is also the author of the resource
+        function isAuthor() {
+            return request.auth.uid == resource.data.author;
+        }
     
         match /boards/{board} { 
             allow read: if isParticipant();
@@ -72,10 +77,6 @@ service cloud.firestore {
                 allow create: if isParticipant() && isAuthor();
                 allow update: if isAdmin() || isAuthor();
                 allow delete: if isAdmin() || isAuthor();
-
-                function isAuthor() {
-                    return request.auth.uid == resource.data.author;
-                }
             }
         }
     }
