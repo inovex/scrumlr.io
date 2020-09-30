@@ -10,16 +10,12 @@ import { createFirestoreInstance } from 'redux-firestore';
 import firebase from './firebase';
 import store from './store/store';
 
-
-// react-redux-firebase config
-const rrfConfig = {
-  userProfile: 'users',
-  useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
-};
-
 const rrfProps = {
   firebase,
-  config: rrfConfig,
+  config: {
+    userProfile: 'users',
+    useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+  },
   dispatch: store.dispatch,
   createFirestoreInstance
 };
