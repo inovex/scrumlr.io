@@ -4,11 +4,11 @@ import './index.scss';
 
 import { Provider } from 'react-redux';
 
-import { createStore, combineReducers} from 'redux';
-import {ReactReduxFirebaseProvider, firebaseReducer} from 'react-redux-firebase';
-import { createFirestoreInstance, firestoreReducer } from 'redux-firestore';
+import {ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance } from 'redux-firestore';
 
 import firebase from './firebase';
+import store from './store/store';
 
 
 // react-redux-firebase config
@@ -16,17 +16,6 @@ const rrfConfig = {
   userProfile: 'users',
   useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
 };
-
-
-// Add firebase to reducers
-const rootReducer = combineReducers({
-  firebase: firebaseReducer,
-  firestore: firestoreReducer
-});
-
-// Create store with reducers and initial state
-const initialState = {};
-const store = createStore(rootReducer, initialState);
 
 const rrfProps = {
   firebase,
