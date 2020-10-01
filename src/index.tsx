@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-
 import { Provider } from 'react-redux';
-
 import {ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import { createFirestoreInstance } from 'redux-firestore';
-
 import firebase from './firebase';
 import store from './store/store';
+import './index.scss';
 
 const rrfProps = {
   firebase,
