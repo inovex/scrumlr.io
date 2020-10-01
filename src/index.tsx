@@ -12,10 +12,7 @@ import store from './store/store';
 
 const rrfProps = {
   firebase,
-  config: {
-    userProfile: 'users',
-    useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
-  },
+  config: {},
   dispatch: store.dispatch,
   createFirestoreInstance
 };
