@@ -37,3 +37,19 @@ jobs:
         env:
           CI: true
         run: npm test
+
+  docker:
+    name: Build Docker image to GitHub Packages
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/v1'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build and Publish latest Docker image
+        uses: VaultVulp/gp-docker-action@1.1.7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: scrumlr
