@@ -50,6 +50,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
   onDeleteTimer: () => void;
+  onDeleteBoard: () => void;
   onToggleShowAuthor: () => void;
   onToggleShowCards: () => void;
   onSwitchPhaseIndex: (delta: number) => void;
@@ -295,6 +296,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
               isAnonymous={this.props.isAnonymous}
               onChangeBoardName={this.props.onChangeBoardName}
               onChangeUsername={this.props.onChangeUsername}
+              onDeleteBoard={this.props.onDeleteBoard}
               onClose={this.handleCloseModal}
               onToggleShowAuthor={this.props.onToggleShowAuthor}
               isShowAuthor={this.props.isShowAuthor}

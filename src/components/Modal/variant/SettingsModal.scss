@@ -36,3 +36,33 @@
   display: block;
   margin: 1.5em 0;
 }
+
+.settings-modal__delete-button {
+  border: 0;
+  outline: none;
+  width: 100%;
+
+  font-size: $theme-font-size;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  padding: $default-padding $large-padding;
+
+  margin-top: $large-margin;
+  color: $color-white;
+  background: $color-stone-gray;
+
+  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+
+  .delete-button__icon {
+    fill: white;
+    margin-right: $small-margin;
+  } 
+}
+
+.settings-modal__delete-button:focus,
+.settings-modal__delete-button:hover {
+  cursor: pointer;
+  background: $color-orange;
+  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
+}
