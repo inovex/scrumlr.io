@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import './AccessModeSelection.scss';
-import Icon from 'components/Icon';
+import Icon from '../Icon';
 
 export type AccessMode = 'private' | 'public';
 
