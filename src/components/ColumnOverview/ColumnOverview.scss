@@ -1,16 +1,12 @@
 @import '../../constants/style';
 
-.column-overview {
-  justify-content: flex-start;
-}
-
 .column-overview__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.column-overview__header .column-name {
+.column-overview__header .column-name .input, .column-overview__header .column-name {
   color: $color-white;
 }
 

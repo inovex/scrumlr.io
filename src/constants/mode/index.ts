@@ -5,18 +5,16 @@ import simpleRetroModeConfiguration from './PositiveNegativeMode';
 import startStopContinueRetroModeConfiguration from './StartStopContinueMode';
 import plusDeltaConfiguration from './PlusDeltaMode';
 import fourLconfiguration from './4L';
-import meetupConfiguration from './MeetupMode';
 import { PhaseConfiguration } from '../Retrospective';
 
 interface RetroModeConfiguration {
-  lean: PhaseConfiguration[];
-  positiveNegative: PhaseConfiguration[];
-  startStopContinue: PhaseConfiguration[];
-  madSadGlad: PhaseConfiguration[];
-  kalm: PhaseConfiguration[];
-  plusDelta: PhaseConfiguration[];
-  fourL: PhaseConfiguration[];
-  meetup: PhaseConfiguration[];
+  lean: { [key: string]: PhaseConfiguration };
+  positiveNegative: { [key: string]: PhaseConfiguration };
+  startStopContinue: { [key: string]: PhaseConfiguration };
+  madSadGlad: { [key: string]: PhaseConfiguration };
+  kalm: { [key: string]: PhaseConfiguration };
+  plusDelta: { [key: string]: PhaseConfiguration };
+  fourL: { [key: string]: PhaseConfiguration };
 }
 
 export const retroModes: RetroModeConfiguration = {
@@ -26,8 +24,7 @@ export const retroModes: RetroModeConfiguration = {
   startStopContinue: startStopContinueRetroModeConfiguration,
   kalm: kalmConfiguration,
   plusDelta: plusDeltaConfiguration,
-  fourL: fourLconfiguration,
-  meetup: meetupConfiguration
+  fourL: fourLconfiguration
 };
 
 export type RetroMode = keyof RetroModeConfiguration;

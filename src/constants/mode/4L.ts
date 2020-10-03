@@ -1,12 +1,11 @@
 import { PhaseConfiguration } from '../Retrospective';
 
-export default [
-  {
+export default {
+  0: {
     name: 'Write',
     description: 'Create cards, communicate your thoughts & stack common',
-    columns: [
-      {
-        id: 'liked',
+    columns: {
+      0: {
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -15,13 +14,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '0',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'learned',
+      1: {
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -30,13 +28,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '1',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'lacked',
+      2: {
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -45,13 +42,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
-      {
-        id: 'longedfor',
+      3: {
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -60,24 +56,23 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '3',
+          align: 'left'
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase1-create', description: 'Create cards' },
       { icon: 'phase1-communicate', description: 'Communicate meaning' },
       { icon: 'phase1-combine', description: 'Combine to stack' }
     ]
   },
-  {
+  1: {
     name: 'Vote',
     description: 'Vote on the most important cards for yourself',
-    columns: [
-      {
-        id: 'liked',
+    columns: {
+      0: {
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -86,13 +81,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '0',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'learned',
+      1: {
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -101,13 +95,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '1',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'lacked',
+      2: {
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -116,13 +109,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
-      {
-        id: 'longedfor',
+      3: {
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -131,20 +123,19 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '3',
+          align: 'left'
         },
         sorted: false
       }
-    ],
+    },
     activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
   },
-  {
+  2: {
     name: 'Discuss',
     description: 'Discuss top-voted cards',
-    columns: [
-      {
-        id: 'liked',
+    columns: {
+      0: {
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -153,13 +144,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '4',
           align: 'right'
         },
         sorted: true
       },
-      {
-        id: 'learned',
+      1: {
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -168,13 +158,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '4',
           align: 'right'
         },
         sorted: true
       },
-      {
-        id: 'lacked',
+      2: {
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -183,13 +172,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '4',
+          align: 'left'
         },
         sorted: true
       },
-      {
-        id: 'longedfor',
+      3: {
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -198,27 +186,26 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '4',
+          align: 'left'
         },
         sorted: true
       },
-      {
-        id: 'actions',
+      4: {
         name: 'Actions',
-        type: 'actions',
+        type: 'positive',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: false,
-          column: 'actions',
+          column: '4',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [{ icon: 'phase3-discuss', description: 'Discuss top-voted' }]
   }
-] as PhaseConfiguration[];
+} as { [key: string]: PhaseConfiguration };

@@ -65,14 +65,11 @@ export function mapStateToProps(
   const { fbState } = state;
   const firebase = getFirebase();
 
-  let uid: string | null = null;
-  const auth = onSignIn ? {} : firebase.auth();
+  const auth: firebase.User | any = onSignIn
+    ? {}
+    : firebase.auth().currentUser || {};
 
   const boards: Boards = getVal(fbState, 'data/boards', undefined);
-
-  if (auth.currentUser) {
-    uid = auth.currentUser.uid;
-  }
 
   function onCreateNewBoard(mode: RetroMode, secure: boolean) {
     const auth = getFirebase().auth();
@@ -120,7 +117,7 @@ export function mapStateToProps(
 
   return {
     boards,
-    uid,
+    uid: auth.uid,
     onCreateNewBoard,
     onLogin,
     onProviderLogin,

@@ -24,8 +24,8 @@ describe('<AddCard />', () => {
     beforeEach(() => {
       props = {
         boardId: 'boardId',
+        columnId: 'negative',
         column: {
-          id: 'negative',
           type: 'negative',
           name: 'Negative'
         },
@@ -218,8 +218,8 @@ describe('<AddCard />', () => {
       firebaseMock.__setState(state.fbState);
       ownProps = {
         boardId: 'boardId',
+        columnId: 'positive',
         column: {
-          id: 'positive',
           type: 'positive',
           name: 'Positive'
         }
@@ -239,7 +239,7 @@ describe('<AddCard />', () => {
       const timestamp = '2017-01-01T00:00:00.000Z';
 
       props.onAdd(
-        ownProps.column.id,
+        ownProps.columnId,
         ownProps.column.type,
         text,
         timestamp,

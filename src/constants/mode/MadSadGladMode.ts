@@ -1,12 +1,11 @@
 import { PhaseConfiguration } from '../Retrospective';
 
-export default [
-  {
+export default {
+  0: {
     name: 'Write',
     description: 'Create cards, communicate your thoughts & stack common',
-    columns: [
-      {
-        id: 'mad',
+    columns: {
+      0: {
         name: 'Mad',
         type: 'positive',
         voting: {
@@ -15,13 +14,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'mad',
+          column: '0',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'sad',
+      1: {
         name: 'Sad',
         type: 'negative',
         voting: {
@@ -30,13 +28,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'sad',
+          column: '1',
           align: 'left'
         },
         sorted: false
       },
-      {
-        id: 'glad',
+      2: {
         name: 'Glad',
         type: 'positive',
         voting: {
@@ -45,24 +42,23 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'glad',
+          column: '2',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase1-create', description: 'Create cards' },
       { icon: 'phase1-communicate', description: 'Communicate meaning' },
       { icon: 'phase1-combine', description: 'Combine to stack' }
     ]
   },
-  {
+  1: {
     name: 'Vote',
     description: 'Vote on the most important cards for yourself',
-    columns: [
-      {
-        id: 'mad',
+    columns: {
+      0: {
         name: 'Mad',
         type: 'positive',
         voting: {
@@ -71,13 +67,12 @@ export default [
         },
         focus: {
           enabled: false,
-          column: 'mad',
+          column: '0',
           align: 'right'
         },
         sorted: false
       },
-      {
-        id: 'sad',
+      1: {
         name: 'Sad',
         type: 'negative',
         voting: {
@@ -86,13 +81,12 @@ export default [
         },
         focus: {
           enabled: false,
-          column: 'sad',
+          column: '1',
           align: 'left'
         },
         sorted: false
       },
-      {
-        id: 'glad',
+      2: {
         name: 'Glad',
         type: 'positive',
         voting: {
@@ -101,20 +95,19 @@ export default [
         },
         focus: {
           enabled: false,
-          column: 'glad',
+          column: '2',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
   },
-  {
+  2: {
     name: 'Discuss',
     description: 'Discuss top-voted cards and define actions',
-    columns: [
-      {
-        id: 'mad',
+    columns: {
+      0: {
         name: 'Mad',
         type: 'positive',
         voting: {
@@ -123,13 +116,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
       },
-      {
-        id: 'sad',
+      1: {
         name: 'Sad',
         type: 'negative',
         voting: {
@@ -138,13 +130,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
       },
-      {
-        id: 'glad',
+      2: {
         name: 'Glad',
         type: 'positive',
         voting: {
@@ -153,30 +144,29 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
       },
-      {
-        id: 'actions',
+      3: {
         name: 'Actions',
-        type: 'actions',
+        type: 'positive',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: false,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase3-discuss', description: 'Discuss top-voted' },
       { icon: 'phase3-define', description: 'Define actions' }
     ]
   }
-] as PhaseConfiguration[];
+} as { [key: string]: PhaseConfiguration };

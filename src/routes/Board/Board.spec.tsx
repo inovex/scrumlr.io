@@ -17,6 +17,7 @@ describe('<Board />', () => {
     mockProps = {
       cards,
       boardConfig,
+      phasesConfig: {},
       users,
       isBoardAdmin: false,
       uid: '',
@@ -27,6 +28,7 @@ describe('<Board />', () => {
       onRegisterCurrentUser: jest.fn(),
       onToggleReadyState: jest.fn(),
       onFocusCard: jest.fn(),
+      onUpdateColumnName: jest.fn(),
       onSwitchPhaseIndex: jest.fn(),
       onSignOut: jest.fn(),
       onChangeBoardName: jest.fn(),

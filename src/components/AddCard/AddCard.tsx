@@ -14,6 +14,7 @@ import PlusCircle from '../Icon/PlusCircle';
 export type AddCardTheme = 'light' | 'dark' | 'mint';
 
 export interface OwnAddCardProps extends BoardProp {
+  columnId: string;
   column: Column;
   disabled?: boolean;
 }
@@ -61,13 +62,13 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
   };
 
   handleAdd = async () => {
-    const { column, onAdd } = this.props;
+    const { columnId, column, onAdd } = this.props;
     const { text } = this.state;
 
     if (text.length > 0) {
       const iv = await CRYPTO.generateInitializationVector();
       const encryptedText = await CRYPTO.encrypt(text, iv);
-      onAdd(column.id, column.type, encryptedText, iv);
+      onAdd(columnId, column.type, encryptedText, iv);
       this.setState(() => ({ text: '' }));
     }
   };

@@ -1,12 +1,11 @@
 import { PhaseConfiguration } from '../Retrospective';
 
-export default [
-  {
+export default {
+  0: {
     name: 'Lean Coffee',
     description: 'Create cards, communicate your thoughts & stack common',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
@@ -15,24 +14,23 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [
       { icon: 'phase1-create', description: 'Create cards' },
       { icon: 'phase1-communicate', description: 'Communicate meaning' },
       { icon: 'phase1-combine', description: 'Combine to stack' }
     ]
   },
-  {
+  1: {
     name: 'Vote',
     description: 'Vote on the most important cards for yourself',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
@@ -41,20 +39,19 @@ export default [
         },
         focus: {
           enabled: false,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: false
       }
-    ],
+    },
     activities: [{ icon: 'phase2-vote', description: 'Vote wisely' }]
   },
-  {
+  2: {
     name: 'Discuss',
     description: 'Discuss top-voted cards',
-    columns: [
-      {
-        id: 'positive',
+    columns: {
+      0: {
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
@@ -63,12 +60,12 @@ export default [
         },
         focus: {
           enabled: true,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: true
       }
-    ],
+    },
     activities: [{ icon: 'phase3-discuss', description: 'Discuss top-voted' }]
   }
-] as PhaseConfiguration[];
+} as { [key: string]: PhaseConfiguration };

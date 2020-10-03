@@ -3,10 +3,7 @@ import * as React from 'react';
 
 import './Column.scss';
 import { Card as CardModel } from '../../types';
-import {
-  ColumnConfiguration,
-  IndexedPhaseConfiguration
-} from '../../constants/Retrospective';
+import { PhaseConfiguration } from '../../constants/Retrospective';
 import { mapStateToProps } from './Column.container';
 import FocusedCardComponent from './FocusedCardComponent';
 import StackComponent from './StackComponent';
@@ -21,9 +18,9 @@ export interface OwnColumnProps {
   isAdmin: boolean;
   isShowCards: boolean;
 
-  /** The unique column type. */
-  column: ColumnConfiguration;
-  phase: IndexedPhaseConfiguration;
+  /** The unique column id. */
+  id: string;
+  phase: {guidedPhase: number, config: PhaseConfiguration};
 
   isActive: boolean;
 
@@ -31,6 +28,7 @@ export interface OwnColumnProps {
   hasPreviousColumn?: boolean;
   onGoToNextColumn?: () => void;
   onGoToPrevColumn?: () => void;
+  onUpdateColumnName: (columnId: string, newName: string) => void;
   isCompactView: boolean;
 
   className?: string;
@@ -59,6 +57,10 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
     this.setState({ showOverview: !this.state.showOverview });
   };
 
+  onUpdateColumnName = (name: string) => {
+    this.props.onUpdateColumnName(this.props.id, name);
+  };
+
   render() {
     const {
       isAdmin,
@@ -67,7 +69,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
       isExtended,
       className,
       focused,
-      column,
+      id,
       phase,
       theme,
       boardUrl,
@@ -76,27 +78,32 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
     } = this.props;
 
     const cardsCount = cards.filter(c => !c.parent).length;
+    const column = phase.config.columns[id];
 
     return (
       <>
         {this.state.showOverview && (
           <ColumnOverview
+            onUpdateColumnName={this.onUpdateColumnName}
             boardUrl={boardUrl}
             column={column.name}
             cardsCount={cardsCount}
             cards={cards}
             isVotingEnabled={column.voting.enabled}
             isVoteSummaryShown={column.voting.displayed}
+            isAdmin={isAdmin}
             toggleOverview={this.toggleOverview}
           />
         )}
         <div
           className={classNames('column', `column--theme-${theme}`, className, {
             ['column--inactive']:
-              !isActive && (focused ? focused.type !== column.id : true),
+              !isActive && (focused ? focused.type !== id : true),
             ['column--hidden']: isHidden
           })}
-          style={{ flex: isExtended ? phase.columns.length - 1 : 1 }}
+          style={{
+            flex: isExtended ? Object.keys(phase.config.columns).length - 1 : 1
+          }}
         >
           {!focused && this.props.hasPreviousColumn && (
             <button
@@ -127,8 +134,10 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
           )}
 
           <ColumnHeader
+            onUpdateColumnName={this.onUpdateColumnName}
             title={column.name}
             count={cardsCount}
+            isAdmin={isAdmin}
             onToggleOverview={this.toggleOverview}
           />
 
@@ -142,7 +151,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
             {focused && column.focus.align === 'left' && (
               <FocusedCardComponent
                 isAdmin={isAdmin}
-                key={focused.id}
+                key={focused!!.id}
                 boardUrl={boardUrl}
                 focused={focused}
                 className="component--large"
@@ -156,6 +165,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
                 cards={cards}
                 isVotingAllowed={column.voting.enabled}
                 isVoteSummaryShown={column.voting.displayed}
+                columnId={id}
                 column={column}
                 isActive={isActive || !isCompactView}
                 className={classNames('column__stack-component', {
@@ -167,7 +177,7 @@ export class Column extends React.Component<ColumnProps, ColumnState> {
             {focused && column.focus.align === 'right' && (
               <FocusedCardComponent
                 isAdmin={isAdmin}
-                key={focused.id}
+                key={focused!!.id}
                 boardUrl={boardUrl}
                 focused={focused}
                 className="component--large"
