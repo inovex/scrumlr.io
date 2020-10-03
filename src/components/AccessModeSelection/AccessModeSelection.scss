@@ -25,6 +25,7 @@
   box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
   padding: $default-padding;
   transform: scale(0.9);
+  transition: transform 0.2s ease-in-out;
   color: $color-middle-gray;
   display: grid;
 }
@@ -39,16 +40,17 @@
   background-color: $color-green;
   transform: scale(1.05);
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
-  color: $color-white;
+  color: $color-dark;
+  transition: color 0.2s ease-in-out;
 
   .access-mode-selection__icon * {
-    stroke: $color-white;
+    stroke: $color-dark;
+    transition: stroke 0.2s ease-in-out;
   }  
 }
 
 .access-mode-selection__icon {
-  margin: auto;
-  margin-top: $default-margin;
+  margin: $default-margin auto auto;
 }
 
 .access-mode-selection__icon * {
