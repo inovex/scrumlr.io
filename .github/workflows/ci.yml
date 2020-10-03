@@ -42,7 +42,7 @@ jobs:
     name: Build Docker image to GitHub Packages
     needs: build
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/v1'
+    if: github.ref == 'refs/heads/v1'
 
     steps:
       - name: Checkout repository
@@ -52,4 +52,4 @@ jobs:
         uses: VaultVulp/gp-docker-action@1.1.7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          image-name: my-cool-service
+          image-name: scrumlr
