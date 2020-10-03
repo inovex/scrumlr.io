@@ -5,7 +5,7 @@ import Input from '../../Input';
 import Modal from '../Modal';
 import getRandomName from '../../../constants/Name';
 import Checkbox from '../../Checkbox';
-import Icon from 'components/Icon';
+import Icon from '../../Icon';
 
 export interface SettingsModalProps {
   isAdmin: boolean;
