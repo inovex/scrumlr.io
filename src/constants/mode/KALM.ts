@@ -14,7 +14,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -28,7 +28,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: '1',
           align: 'right'
         },
         sorted: false
@@ -42,8 +42,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'less',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
@@ -56,7 +56,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: '3',
           align: 'right'
         },
         sorted: false
@@ -81,7 +81,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -95,7 +95,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: '1',
           align: 'right'
         },
         sorted: false
@@ -109,8 +109,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'less',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
@@ -123,7 +123,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: '3',
           align: 'right'
         },
         sorted: false
@@ -144,7 +144,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'keep',
+          column: '4',
           align: 'right'
         },
         sorted: true
@@ -158,7 +158,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'add',
+          column: '4',
           align: 'right'
         },
         sorted: true
@@ -172,8 +172,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'less',
-          align: 'right'
+          column: '4',
+          align: 'left'
         },
         sorted: true
       },
@@ -186,21 +186,21 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'more',
+          column: '4',
           align: 'right'
         },
         sorted: true
       },
-      actions: {
+      4: {
         name: 'Actions',
-        type: 'actions',
+        type: 'positive',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: false,
-          column: 'actions',
+          column: '4',
           align: 'right'
         },
         sorted: false

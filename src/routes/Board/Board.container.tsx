@@ -285,7 +285,6 @@ export const mapStateToProps = (
       updateUsers[`${uid}/ready`] = false;
     });
 
-    console.log(updateUsers);
     firebase
       .ref(`${boardSelector}/users`)
       .update(updateUsers)

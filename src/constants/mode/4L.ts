@@ -14,7 +14,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -28,7 +28,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '1',
           align: 'right'
         },
         sorted: false
@@ -42,8 +42,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
@@ -56,8 +56,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '3',
+          align: 'left'
         },
         sorted: false
       }
@@ -81,7 +81,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -95,7 +95,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '1',
           align: 'right'
         },
         sorted: false
@@ -109,8 +109,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '2',
+          align: 'left'
         },
         sorted: false
       },
@@ -123,8 +123,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '3',
+          align: 'left'
         },
         sorted: false
       }
@@ -144,7 +144,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'liked',
+          column: '4',
           align: 'right'
         },
         sorted: true
@@ -158,7 +158,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'learned',
+          column: '4',
           align: 'right'
         },
         sorted: true
@@ -172,8 +172,8 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'lacked',
-          align: 'right'
+          column: '4',
+          align: 'left'
         },
         sorted: true
       },
@@ -186,21 +186,21 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'longedfor',
-          align: 'right'
+          column: '4',
+          align: 'left'
         },
         sorted: true
       },
-      actions: {
+      4: {
         name: 'Actions',
-        type: 'actions',
+        type: 'positive',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: false,
-          column: 'actions',
+          column: '4',
           align: 'right'
         },
         sorted: false

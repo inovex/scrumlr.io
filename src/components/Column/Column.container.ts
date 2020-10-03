@@ -66,18 +66,23 @@ export const mapStateToProps = (
 
   const focusedCard = boardCards[focusedCardId];
   let focused: Card | undefined = undefined;
+
   if (focusedCard) {
     if (focusedCard.type === ownProps.id) {
       focused = focusedCard;
       focused.id = focusedCardId;
     }
-    focusTarget = get(ownProps.phase.config.columns[focusedCard.type], 'focus.column');
+    focusTarget = get(
+      ownProps.phase.config.columns[focusedCard.type],
+      'focus.column'
+    );
   }
 
   const showAsFocusTarget = focusedCard ? ownProps.id === focusTarget : false;
   const isFocusOrigin = focusedCard ? focusedCard.type === ownProps.id : false;
 
   const isHidden = focusedCard ? !isFocusOrigin && !showAsFocusTarget : false;
+
   const isExtended = focusedCard
     ? isFocusOrigin && ownProps.id !== focusTarget
     : false;

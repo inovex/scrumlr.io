@@ -14,7 +14,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'start',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -28,7 +28,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'stop',
+          column: '1',
           align: 'left'
         },
         sorted: false
@@ -42,7 +42,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'continue',
+          column: '2',
           align: 'right'
         },
         sorted: false
@@ -67,7 +67,7 @@ export default {
         },
         focus: {
           enabled: false,
-          column: 'start',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -81,7 +81,7 @@ export default {
         },
         focus: {
           enabled: false,
-          column: 'stop',
+          column: '1',
           align: 'left'
         },
         sorted: false
@@ -95,7 +95,7 @@ export default {
         },
         focus: {
           enabled: false,
-          column: 'continue',
+          column: '2',
           align: 'right'
         },
         sorted: false
@@ -116,7 +116,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
@@ -130,7 +130,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
@@ -144,21 +144,21 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: true
       },
-      actions: {
+      3: {
         name: 'Actions',
-        type: 'actions',
+        type: 'positive',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: false,
-          column: 'actions',
+          column: '3',
           align: 'right'
         },
         sorted: false

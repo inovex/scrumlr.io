@@ -14,7 +14,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -39,7 +39,7 @@ export default {
         },
         focus: {
           enabled: false,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: false
@@ -60,7 +60,7 @@ export default {
         },
         focus: {
           enabled: true,
-          column: 'positive',
+          column: '0',
           align: 'right'
         },
         sorted: true
