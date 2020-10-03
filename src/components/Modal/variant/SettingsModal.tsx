@@ -16,7 +16,9 @@ export interface SettingsModalProps {
   onChangeBoardName: (name: string) => void;
   onChangeUsername: (name: string) => void;
   onToggleShowAuthor: () => void;
+  onToggleShowCards: () => void;
   isShowAuthor: boolean;
+  isShowCards: boolean;
 }
 
 export class SettingsModal extends React.Component<SettingsModalProps, {}> {
@@ -51,6 +53,13 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
               className="settings-modal__show-author-checkbox"
             >
               Show author of cards
+            </Checkbox>
+            <Checkbox
+              onChange={this.props.onToggleShowCards}
+              checked={Boolean(this.props.isShowCards)}
+              className="settings-modal__show-author-checkbox"
+            >
+              Show everyone's cards during Write phase
             </Checkbox>
           </>
         )}
