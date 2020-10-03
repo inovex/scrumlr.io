@@ -8,14 +8,13 @@
 }
 
 .column-name .input, .column-name {
-
   font-family: Heebo, sans-serif;
   font-weight: bold;
   font-size: calc(24px + .4vw);
   color: $color-dark-gray;
   letter-spacing: 1px;
-  padding-right: 0px;
-  min-width: 0px;
+  padding-right: 0;
+  min-width: 0;
 }
 
 .column-name__count {
@@ -38,4 +37,9 @@
   color: $color-dark;
   background: lighten($color-stone-gray, 20%);
   border-radius: 16px;
+}
+
+.column-name .input::placeholder {
+  text-transform: initial;
+  color: $color-alternative-gray;
 }
