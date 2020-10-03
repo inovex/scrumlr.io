@@ -32,6 +32,7 @@ describe('<Board />', () => {
       onSwitchPhaseIndex: jest.fn(),
       onSignOut: jest.fn(),
       onChangeBoardName: jest.fn(),
+      onDeleteBoard: jest.fn(),
 
       match: {
         params: { id: '-foobar' },
