@@ -40,6 +40,7 @@ jobs:
 
   docker:
     name: Build Docker image to GitHub Packages
+    needs: build
     runs-on: ubuntu-latest
     #if: github.ref == 'refs/heads/v1'
 
