@@ -35,19 +35,6 @@ describe('<PhaseMenu />', () => {
     expect(props.onPrevPhase).toHaveBeenCalled();
   });
 
-  it('should not allow to jump to next phase if guided phase index equal to or larger than RETRO_PHASES_MAX_INDEX', () => {
-    wrapper = shallow(
-      <PhaseMenu
-        {...props}
-        admin={true}
-        guidedPhase={Object.keys(props.phasesConfig).length}
-      />
-    );
-    const prevBtn = wrapper.find('[aria-label="Go to next phase"]');
-    expect(prevBtn).toHaveLength(1);
-    expect(prevBtn.prop('disabled')).toEqual(true);
-  });
-
   it('should allow to jump to previous phase if guided phase index is greater than 0', () => {
     wrapper = shallow(
       <PhaseMenu
