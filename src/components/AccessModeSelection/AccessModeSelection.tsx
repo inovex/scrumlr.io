@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import './AccessModeSelection.scss';
+import Icon from '../Icon';
 
 export type AccessMode = 'private' | 'public';
 
@@ -17,6 +18,7 @@ const AccessModeSelectRadio: React.SFC<any> = ({
   value,
   mode,
   onChange,
+  image,
   name,
   description
 }) => (
@@ -32,6 +34,12 @@ const AccessModeSelectRadio: React.SFC<any> = ({
       }}
     />
     <label htmlFor={id} className="access-mode-selection__label">
+      <Icon
+        name={image}
+        height={40}
+        width={40}
+        className="access-mode-selection__icon"
+      />
       <h3 className="access-mode-selection__title">{name}</h3>
       <p className="access-mode-selection__description">{description}</p>
     </label>
@@ -55,6 +63,7 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
         value="public"
         mode={mode}
         onChange={onChange}
+        image="public"
         name="Public"
         description="All users who know the board URL have access"
       />
@@ -63,6 +72,7 @@ export const AccessModeSelection: React.SFC<AccessModeSelectionProps> = ({
         value="private"
         mode={mode}
         onChange={onChange}
+        image="private"
         name="Private"
         description="Restricted access to the boards and encrypted sensitive information"
       />
