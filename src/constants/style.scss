@@ -1,0 +1,38 @@
+// base constants 
+$base-unit: 4px;
+
+// base colors
+$color-white: #FFFFFF;
+$color-light-gray: #EDEFF2;
+$color-middle-gray: #A3A6AA; 
+$color-dark-gray: #859093;
+$color-darkest-gray: #232323;
+$color-black: #111111;
+$color-dark-mode: #272F41;
+
+// theme colors
+$color-blue: #056CF2;
+$color-purple: #5005F2;
+$color-violet: #AB05F2;
+$color-pink: #F20574;
+
+// font options
+$theme-font-family: 'Heebo', sans-serif;
+$theme-font-size: $base-unit * 4;
+$theme-line-height: $base-unit * 6;
+
+// margins & paddings
+$small-margin: $base-unit * 2;
+$default-margin: $base-unit * 4;
+$large-margin: 2*$default-margin;
+$default-padding: $default-margin;
+$large-padding: $large-margin;
+
+// z-index
+$card-z-index: 100; // TODO: System für z-index überlegen
+$base-z-index: 100;
+$base-z-index-step: 10;
+
+// responsive
+$tablet: "screen and (min-width : 768px)";
+$desktop: "screen and (min-width : 1280px)";
