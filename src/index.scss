@@ -1,3 +1,10 @@
+@import './constants/style';
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -11,3 +18,201 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.color-blue {--accent-color: #056CF2;}
+.color-purple {--accent-color: #5005F2;}
+.color-violet {--accent-color: #AB05F2;}
+.color-pink {--accent-color: #F20574;}
+
+.column-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+.column {
+  flex-grow: 1;
+  width: 25%;
+  background-color: var(--accent-color);
+  box-sizing: border-box;
+  position: relative;
+  overflow:hidden;
+}
+
+.header {
+  width: auto;
+  height: 75px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  position: fixed;
+  z-index: 100;
+  display: flex;
+}
+
+.column-content {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0px;
+  right: 0px;
+  padding: 100px 20px 20px 20px;
+  overflow: hidden;
+  background-color: transparentize($color-white, .04);
+}
+
+.column-content--first {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 0px;
+}
+.column-content--last {
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0px;
+  right: 10px;
+}
+
+
+
+// Column header ////////////////////////////
+.column-header {
+  display: flex;
+}
+
+.column-header__text {
+  font-size: 24px;
+  width: auto;
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin-right: 10px;
+  // font-family: Raleway;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 32px;
+}
+
+.column-header__card-number {
+  font-size: 20px;
+  color: $color-middle-gray;
+  // font-family: Raleway;
+  font-weight: 600;
+  letter-spacing: 0.63px;
+  line-height: 32px;
+}
+/////////////////////////////////////////////
+
+
+
+// Add Card /////////////////////////////////
+.add-card {
+  display: flex;
+  background-color: $color-white;
+  margin-top: $default-margin;
+  margin-bottom: $large-margin;
+  padding: 10px 20px 10px 20px;
+  justify-content: space-between;
+  border-radius: 20px;
+  box-shadow: 0 6px 9px 0 rgba(0,87,255,0.16);
+}
+
+.add-card:hover {
+  cursor: pointer;
+}
+
+.add-card__text {
+  margin: 0;
+  font-size: 14px;
+  color: $color-black;
+  // font-family: Raleway;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  line-height: 24px;
+}
+
+.add-card__icon {
+  width: 14px;
+  height: 14px;
+  fill: blue;
+  align-self: center;
+  // fill: var(--accent-color);
+}
+/////////////////////////////////////////////
+
+
+
+// Cards ////////////////////////////////////
+.cards-wrapper {
+  height: 600px;
+  width: auto;
+  overflow: auto;
+}
+
+.card {
+  width: auto;
+  height: auto;
+  box-sizing: border-box;
+  padding: 16px 20px;
+  margin: 15px 0px 15px 0px;
+
+
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  z-index: $card-z-index;
+  border-radius: 16px;
+  background-color: $color-white;
+  // box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
+  box-shadow: 0 6px 9px 0 rgba(0,87,255,0.16);
+}
+
+.card:hover {
+  transform: scale(1.02);
+  // box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
+}
+
+.card__stack {
+  height: 15.52px;
+  width: 260px;
+  border-radius: 0 0 8px 8px;
+  background-color: $color-white;
+  box-shadow: 0 2px 3px 0 rgba(0,87,255,0.16);
+}
+
+.card__text {
+  color: $color-dark-gray;
+  margin: 0;
+  height: 54px;
+  width: 236px;
+  color: $color-black;
+  // font-family: Raleway;
+  font-size: 13px;
+  letter-spacing: 0.35px;
+  line-height: 18px;
+}
+
+.card__author {
+  display: flex;
+  align-items: center;
+}
+
+.card__author-image {
+  height: 26px;
+  width: 26px;
+  border-radius: 100px;
+}
+
+.card__author-name {
+  margin-left: 10px;
+  height: 16px;
+  width: 118px;
+  color: $color-dark-gray;
+  // font-family: Raleway;
+  font-size: 12px;
+  letter-spacing: 0.25px;
+  line-height: 16px;
+}
+/////////////////////////////////////////////
