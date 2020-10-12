@@ -13,7 +13,7 @@
     "@types/react": "^16.9.52",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.9",
-    "firebase": "^7.21.1",
+    "firebase": "^7.23.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
