@@ -3,8 +3,8 @@ import { RouteComponentProps } from 'react-router';
 import { useFirestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase';
 import { ApplicationState } from 'store/ApplicationState';
 import { useSelector } from 'react-redux';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from "firebaseSetup";
+import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 
 
 
@@ -46,7 +46,7 @@ function Board(props: BoardProps) {
             </div>;
         }
     }
-    return <CircularProgress/>;
+    return <LoadingScreen/>;
 }
 
 export default Board;

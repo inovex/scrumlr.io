@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
-import LoginBoard from './routes/LoginBoard/LoginBoard';
-import NewBoard from './routes/NewBoard/NewBoard';
-import Board from './routes/Board/Board';
-import PrivateRoute from './routes/PrivateRoute';
+import LoginBoard from './LoginBoard/LoginBoard';
+import NewBoard from './NewBoard/NewBoard';
+import Board from './Board/Board';
+import PrivateRoute from './PrivateRoute';
 
 const Router = () => (
     <HashRouter>

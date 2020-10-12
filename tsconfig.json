@@ -28,7 +28,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
+    "downlevelIteration": true
   },
   "include": [
     "src"

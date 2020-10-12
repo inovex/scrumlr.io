@@ -6,7 +6,7 @@ import { createFirestoreInstance } from 'redux-firestore';
 import './index.scss';
 import firebase from './firebaseSetup';
 import store from './store/store';
-import Router from './Router';
+import Router from './routes/Router';
 
 const rrfProps = {
   firebase,

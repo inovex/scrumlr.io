@@ -3,7 +3,7 @@ import {Redirect, Route} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { isLoaded, isEmpty } from 'react-redux-firebase';
 import {ApplicationState} from '../store/ApplicationState';
-import CircularProgress from '@material-ui/core/CircularProgress'; 
+import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
 
 function PrivateRoute(props: any) {
   const auth = useSelector((state: ApplicationState) => state.firebase.auth);
@@ -14,7 +14,7 @@ function PrivateRoute(props: any) {
        return <Route {...props} />;
      }
   }
-  return <CircularProgress />;
-};
+  return <LoadingScreen/>;
+}
 
 export default PrivateRoute;
