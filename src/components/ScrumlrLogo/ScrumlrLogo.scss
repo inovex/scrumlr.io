@@ -1,0 +1,24 @@
+// TODO these classes are just examples and can be removed in the future
+.accent-color--red {
+  --accent-color: red;
+}
+
+.accent-color--blue {
+  --accent-color: blue;
+}
+
+.scrumlr-logo {
+  fill: blue;
+  stop-color: blue;
+}
+
+@media (prefers-color-scheme: dark) {
+  .scrumlr-logo {
+    fill: white;
+    stop-color: white;
+  }
+}
+
+.scrumlr-logo__stop-color {
+   stop-color: var(--accent-color);
+}
