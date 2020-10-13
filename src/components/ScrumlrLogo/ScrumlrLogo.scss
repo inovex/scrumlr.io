@@ -11,17 +11,16 @@
   fill: blue;
 }
 
-@media (prefers-color-scheme: dark) {
-  .scrumlr-logo {
-    fill: white;
-  }
-}
 .scrumlr-logo__stop {
   stop-color: blue;
   stop-color: var(--accent-color);
 }
 
 @media (prefers-color-scheme: dark) {
+  .scrumlr-logo {
+    fill: white;
+  }
+
   .scrumlr-logo__stop {
     stop-color: white;
     stop-color: var(--accent-color);
