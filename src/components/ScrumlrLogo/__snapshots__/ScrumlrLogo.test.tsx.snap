@@ -15,7 +15,7 @@ exports[`render default logo 1`] = `
       y2="0"
     >
       <stop
-        class="scrumlr-logo"
+        class="scrumlr-logo__stop"
       />
     </lineargradient>
   </defs>
@@ -48,7 +48,11 @@ exports[`render logo with empty accent color array 1`] = `
       x2="1"
       y1="0"
       y2="0"
-    />
+    >
+      <stop
+        class="scrumlr-logo__stop"
+      />
+    </lineargradient>
   </defs>
   <g
     class="scrumlr-logo"
@@ -81,27 +85,27 @@ exports[`render logo with three accent colors 1`] = `
       y2="0"
     >
       <stop
-        class="red scrumlr-logo__stop-color"
+        class="red scrumlr-logo__stop"
         offset="0"
       />
       <stop
-        class="red scrumlr-logo__stop-color"
+        class="red scrumlr-logo__stop"
         offset="0.33"
       />
       <stop
-        class="blue scrumlr-logo__stop-color"
+        class="blue scrumlr-logo__stop"
         offset="0.33"
       />
       <stop
-        class="blue scrumlr-logo__stop-color"
+        class="blue scrumlr-logo__stop"
         offset="0.66"
       />
       <stop
-        class="green scrumlr-logo__stop-color"
+        class="green scrumlr-logo__stop"
         offset="0.66"
       />
       <stop
-        class="green scrumlr-logo__stop-color"
+        class="green scrumlr-logo__stop"
         offset="0.99"
       />
     </lineargradient>
@@ -137,19 +141,19 @@ exports[`render logo with two accent colors 1`] = `
       y2="0"
     >
       <stop
-        class="red scrumlr-logo__stop-color"
+        class="red scrumlr-logo__stop"
         offset="0"
       />
       <stop
-        class="red scrumlr-logo__stop-color"
+        class="red scrumlr-logo__stop"
         offset="0.5"
       />
       <stop
-        class="blue scrumlr-logo__stop-color"
+        class="blue scrumlr-logo__stop"
         offset="0.5"
       />
       <stop
-        class="blue scrumlr-logo__stop-color"
+        class="blue scrumlr-logo__stop"
         offset="1"
       />
     </lineargradient>

@@ -6,9 +6,9 @@ interface ScrumlrLogoProps {
 }
 
 function ScrumlrLogo({ accentColorClassNames }: ScrumlrLogoProps) {
-    const gradientStops = [(<stop key="gradient-default-stop" className="scrumlr-logo" />)];
+    const gradientStops = [(<stop key="gradient-default-stop" className="scrumlr-logo__stop" />)];
 
-    if (accentColorClassNames) {
+    if (accentColorClassNames && accentColorClassNames.length > 0) {
         // remove default gradient stop
         gradientStops.pop();
 
@@ -18,7 +18,7 @@ function ScrumlrLogo({ accentColorClassNames }: ScrumlrLogoProps) {
                 <stop
                     key={`gradient-stop${i}-start`}
                     offset={stopInterval * i}
-                    className={`${accentColorClassNames[i]} scrumlr-logo__stop-color`}
+                    className={`${accentColorClassNames[i]} scrumlr-logo__stop`}
                 />
             );
 
@@ -26,7 +26,7 @@ function ScrumlrLogo({ accentColorClassNames }: ScrumlrLogoProps) {
                 <stop
                     key={`gradient-stop${i}-end`}
                     offset={stopInterval === accentColorClassNames.length - 1 ? 1 : stopInterval * (i + 1)}
-                    className={`${accentColorClassNames[i]} scrumlr-logo__stop-color`}
+                    className={`${accentColorClassNames[i]} scrumlr-logo__stop`}
                 />
             );
         }
