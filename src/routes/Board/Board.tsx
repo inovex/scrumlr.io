@@ -6,8 +6,6 @@ import { useSelector } from 'react-redux';
 import firebase from "firebaseSetup";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 
-
-
 interface BoardProps extends RouteComponentProps<{id: string}> {
 
 }

@@ -25,7 +25,7 @@ function NewBoard(props: NewBoardProps) {
 
     function handleLogin() {
         AuthenticationManager.signInAnonymously(name).then(_ => {
-            auth = firebase.auth().currentUser;
+            auth?.reload();
             createBoard();
         });
     }
@@ -49,16 +49,16 @@ function NewBoard(props: NewBoardProps) {
                 name: auth!.displayName,
                 admin: true
             });
-            props.history.push('/board/' + success.id);
+            props.history.push(`/board/${success.id}`);
         });
     }
 
     return (
         <div className='new-board'>
             <Input
+                className='new-board__input'
                 defaultValue={name}
                 type='text'
-                className='new-board__input'
                 onChange={handleChangeName}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                     if (e.key === 'Enter') {

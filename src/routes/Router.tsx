@@ -11,7 +11,7 @@ const Router = () => (
         <Switch>
             <Redirect exact from="/" to="/new" /> 
             <Route path="/new" component={NewBoard as any} />
-            <Route path="/join/:id" component={LoginBoard as any} />
+            <Route path="/login" component={LoginBoard as any} />
             <PrivateRoute path="/board/:id" component={Board as any}/>
         </Switch>
     </HashRouter>
