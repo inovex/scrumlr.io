@@ -25,7 +25,7 @@ function NewBoard(props: NewBoardProps) {
 
     function handleLogin() {
         AuthenticationManager.signInAnonymously(name).then(_ => {
-            auth?.reload();
+            auth = firebase.auth().currentUser;
             createBoard();
         });
     }
