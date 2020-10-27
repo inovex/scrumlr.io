@@ -7,7 +7,7 @@ export default {
     columns: {
       0: {
         name: 'Lean Coffee',
-        type: 'positive',
+        type: 'negative',
         voting: {
           enabled: false,
           displayed: false
@@ -32,7 +32,7 @@ export default {
     columns: {
       0: {
         name: 'Lean Coffee',
-        type: 'positive',
+        type: 'negative',
         voting: {
           enabled: true,
           displayed: false
@@ -53,17 +53,31 @@ export default {
     columns: {
       0: {
         name: 'Lean Coffee',
-        type: 'positive',
+        type: 'negative',
         voting: {
           enabled: false,
           displayed: true
         },
         focus: {
           enabled: true,
-          column: '0',
+          column: '1',
           align: 'right'
         },
         sorted: true
+      },
+      1: {
+        name: 'Actions',
+        type: 'positive',
+        voting: {
+          enabled: false,
+          displayed: true
+        },
+        focus: {
+          enabled: false,
+          column: '1',
+          align: 'right'
+        },
+        sorted: false
       }
     },
     activities: [{ icon: 'phase3-discuss', description: 'Discuss top-voted' }]

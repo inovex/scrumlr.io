@@ -1,4 +1,5 @@
 import leanCoffeeModeConfiguration from './LeanCoffeeMode';
+import leanCoffeeWithActionsModeConfiguration from './LeanCoffeeActionsMode';
 import madSadGladConfiguration from './MadSadGladMode';
 import kalmConfiguration from './KALM';
 import simpleRetroModeConfiguration from './PositiveNegativeMode';
@@ -9,6 +10,7 @@ import { PhaseConfiguration } from '../Retrospective';
 
 interface RetroModeConfiguration {
   lean: { [key: string]: PhaseConfiguration };
+  leanActions: { [key: string]: PhaseConfiguration };
   positiveNegative: { [key: string]: PhaseConfiguration };
   startStopContinue: { [key: string]: PhaseConfiguration };
   madSadGlad: { [key: string]: PhaseConfiguration };
@@ -19,6 +21,7 @@ interface RetroModeConfiguration {
 
 export const retroModes: RetroModeConfiguration = {
   lean: leanCoffeeModeConfiguration,
+  leanActions: leanCoffeeWithActionsModeConfiguration,
   madSadGlad: madSadGladConfiguration,
   positiveNegative: simpleRetroModeConfiguration,
   startStopContinue: startStopContinueRetroModeConfiguration,
