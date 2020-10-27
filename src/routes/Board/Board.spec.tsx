@@ -23,6 +23,7 @@ describe('<Board />', () => {
       uid: '',
       registered: false,
       setupCompleted: false,
+      isSecure: false,
 
       onDeleteTimer: jest.fn(),
       onRegisterCurrentUser: jest.fn(),

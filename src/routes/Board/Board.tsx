@@ -28,6 +28,7 @@ import { PhaseConfiguration } from '../../constants/Retrospective';
 import Timer from '../../components/Timer';
 import { ExportToCsv } from 'export-to-csv';
 import UsersModal from '../../components/Modal/variant/UsersModal';
+import { CRYPTO } from '../../util/global';
 
 const Div100vh: any = require('react-div-100vh').default;
 const { toast } = require('react-toastify');
@@ -45,6 +46,7 @@ export interface BoardProps extends RouteComponentProps<{ id: string }> {
   uid: string; // ID of the current user
   setupCompleted: boolean;
   focusedCard?: Card;
+  isSecure: boolean;
 
   onToggleReadyState: () => void;
   onFocusCard: (cardId: string) => void;
@@ -166,7 +168,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     }
   };
 
-  handleExportCsv = () => {
+  handleExportCsv = async () => {
     if (!this.props.cards || Object.keys(this.props.cards).length === 0) {
       toast('Unable to export empty board, sorry!');
       return;
@@ -189,12 +191,14 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
     const csvExporter = new ExportToCsv(options);
 
-    const cardsArrayCsv = Object.keys(this.props.cards).map(key => {
+    const cardsArrayCsv = Object.keys(this.props.cards).map(async key => {
       const card = this.props.cards[key];
       return {
         id: key,
         author: card.author || '-',
-        text: card.text,
+        text: this.props.isSecure
+          ? await CRYPTO.decrypt(card.text, card.iv)
+          : card.text,
         // Get name of currently active column
         column: this.props.phasesConfig[this.props.boardConfig.guidedPhase]
           .columns[card.type].name,
@@ -204,7 +208,13 @@ export class Board extends React.Component<BoardProps, BoardState> {
       } as CsvExportData;
     });
 
-    csvExporter.generateCsv(cardsArrayCsv);
+    if (this.props.isSecure) {
+      Promise.all(cardsArrayCsv).then(awaitedCardsArrayCsv => {
+        csvExporter.generateCsv(awaitedCardsArrayCsv);
+      });
+    } else {
+      csvExporter.generateCsv(cardsArrayCsv);
+    }
   };
 
   handleExport = (format: ExportFormats = 'print') => {

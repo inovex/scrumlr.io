@@ -75,6 +75,8 @@ export const mapStateToProps = (
     undefined
   );
 
+  let isSecure = false;
+
   let waitingUsers: {
     uid: string;
     name: string;
@@ -104,6 +106,8 @@ export const mapStateToProps = (
           return 0;
         });
     }
+
+    isSecure = publicBoard.config.secure;
   }
 
   function acceptUser(uid: string, accept: boolean) {
@@ -337,6 +341,7 @@ export const mapStateToProps = (
     email,
     timerExpiration,
     isAnonymous,
+    isSecure,
     uid: auth.uid,
     onToggleReadyState,
     onFocusCard,
