@@ -28,6 +28,7 @@
   transition: transform 0.2s ease-in-out;
   color: $color-middle-gray;
   display: grid;
+  border-radius: 4px;
 }
 
 .access-mode-selection__label:hover {
@@ -37,14 +38,14 @@
 }
 
 #access-mode-selection__public:checked + .access-mode-selection__label, #access-mode-selection__private:checked + .access-mode-selection__label {
-  background-color: $color-green;
+  background-color: $color-darkest-mint;
   transform: scale(1.05);
   box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark-gray, .85);
-  color: $color-dark;
+  color: $color-white;
   transition: color 0.2s ease-in-out;
 
   .access-mode-selection__icon * {
-    stroke: $color-dark;
+    stroke: $color-white;
     transition: stroke 0.2s ease-in-out;
   }  
 }
