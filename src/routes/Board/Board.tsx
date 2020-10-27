@@ -159,10 +159,19 @@ export class Board extends React.Component<BoardProps, BoardState> {
   };
 
   handleExportPrint = () => {
-    window.location.hash = this.props.boardPrintUrl;
+    if (this.props.cards && Object.keys(this.props.cards).length > 0) {
+      window.location.hash = this.props.boardPrintUrl;
+    } else {
+      toast('Unable to export empty board, sorry!');
+    }
   };
 
   handleExportCsv = () => {
+    if (!this.props.cards || Object.keys(this.props.cards).length === 0) {
+      toast('Unable to export empty board, sorry!');
+      return;
+    }
+
     const options = {
       fieldSeparator: ';',
       quoteStrings: '"',
