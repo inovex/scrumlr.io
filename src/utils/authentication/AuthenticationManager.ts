@@ -9,10 +9,13 @@ function updateProfile(displayName?: string, photoURL?: string) {
         displayName,
         photoURL
     });
+
+    //TODO: Add Toast to display Success/Error Messages
 }
 
-function signInAnonymously(displayName?: string, photoURL?: string) {
-    return firebase.auth().signInAnonymously().then(_ => {
-        updateProfile(displayName, photoURL);
-    }).catch(error => console.log(error));
+async function signInAnonymously(displayName?: string, photoURL?: string) {
+    await firebase.auth().signInAnonymously();
+    updateProfile(displayName, photoURL);
+
+    //TODO: Add Toast to display Success/Error Messages
 }

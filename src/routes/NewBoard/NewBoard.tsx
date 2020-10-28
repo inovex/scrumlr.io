@@ -5,11 +5,10 @@ import Button from '@material-ui/core/Button';
 import {AuthenticationManager} from 'utils/authentication/AuthenticationManager';
 import BoardData from "types/BoardData";
 import firebase from 'firebaseSetup';
-
 import getRandomName from 'constants/Name';
 import {RouteComponentProps} from "react-router";
 
-interface NewBoardProps extends RouteComponentProps {}
+export interface NewBoardProps extends RouteComponentProps {}
 
 function NewBoard(props: NewBoardProps) {
 
@@ -23,11 +22,11 @@ function NewBoard(props: NewBoardProps) {
         setName(name);
     }
 
-    function handleLogin() {
-        AuthenticationManager.signInAnonymously(name).then(_ => {
-            auth = firebase.auth().currentUser;
-            createBoard();
-        });
+    async function handleLogin() {
+        await AuthenticationManager.signInAnonymously(name);
+        await firebase.auth().currentUser?.reload();
+        auth = firebase.auth().currentUser;
+        createBoard();
     }
 
     function createBoard() {

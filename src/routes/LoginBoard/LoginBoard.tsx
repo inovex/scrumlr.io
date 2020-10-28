@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {RouteComponentProps} from "react-router";
-import getRandomName from "../../constants/Name";
-import {AuthenticationManager} from "../../utils/authentication/AuthenticationManager";
+import getRandomName from "constants/Name";
+import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
 import firebase from 'firebaseSetup';
