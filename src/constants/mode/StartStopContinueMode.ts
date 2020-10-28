@@ -6,6 +6,7 @@ export default {
     description: 'Create cards, communicate your thoughts & stack common',
     columns: {
       0: {
+        id: 'start',
         name: 'Start',
         type: 'positive',
         voting: {
@@ -20,6 +21,7 @@ export default {
         sorted: false
       },
       1: {
+        id: 'stop',
         name: 'Stop',
         type: 'negative',
         voting: {
@@ -34,6 +36,7 @@ export default {
         sorted: false
       },
       2: {
+        id: 'continue',
         name: 'Continue',
         type: 'positive',
         voting: {
@@ -59,6 +62,7 @@ export default {
     description: 'Vote on the most important cards for yourself',
     columns: {
       0: {
+        id: 'start',
         name: 'Start',
         type: 'positive',
         voting: {
@@ -73,6 +77,7 @@ export default {
         sorted: false
       },
       1: {
+        id: 'stop',
         name: 'Stop',
         type: 'negative',
         voting: {
@@ -87,6 +92,7 @@ export default {
         sorted: false
       },
       2: {
+        id: 'continue',
         name: 'Continue',
         type: 'positive',
         voting: {
@@ -108,6 +114,7 @@ export default {
     description: 'Discuss top-voted cards and define actions',
     columns: {
       0: {
+        id: 'start',
         name: 'Start',
         type: 'positive',
         voting: {
@@ -122,6 +129,7 @@ export default {
         sorted: true
       },
       1: {
+        id: 'stop',
         name: 'Stop',
         type: 'negative',
         voting: {
@@ -136,6 +144,7 @@ export default {
         sorted: true
       },
       2: {
+        id: 'continue',
         name: 'Continue',
         type: 'positive',
         voting: {
@@ -150,8 +159,9 @@ export default {
         sorted: true
       },
       3: {
+        id: 'actions',
         name: 'Actions',
-        type: 'positive',
+        type: 'actions',
         voting: {
           enabled: false,
           displayed: true

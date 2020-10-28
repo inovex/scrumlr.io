@@ -191,30 +191,35 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
     const csvExporter = new ExportToCsv(options);
 
-    const cardsArrayCsv = Object.keys(this.props.cards).map(async key => {
-      const card = this.props.cards[key];
-      return {
-        id: key,
-        author: card.author || '-',
-        text: this.props.isSecure
-          ? await CRYPTO.decrypt(card.text, card.iv)
-          : card.text,
-        // Get name of currently active column
-        column: this.props.phasesConfig[this.props.boardConfig.guidedPhase]
-          .columns[card.type].name,
-        votes: card.votes,
-        timestamp: card.timestamp,
-        parent: card.parent || '-'
-      } as CsvExportData;
-    });
-
-    if (this.props.isSecure) {
-      Promise.all(cardsArrayCsv).then(awaitedCardsArrayCsv => {
-        csvExporter.generateCsv(awaitedCardsArrayCsv);
+    const cardsArrayCsv = Object.keys(this.props.cards)
+      .filter(
+        key =>
+          !isNaN(this.props.cards[key].type as any) &&
+          this.props.phasesConfig[this.props.boardConfig.guidedPhase].columns[
+            this.props.cards[key].type
+          ]
+      )
+      .map(async key => {
+        const card = this.props.cards[key];
+        return {
+          id: key,
+          author: card.author || '-',
+          text: this.props.isSecure
+            ? await CRYPTO.decrypt(card.text, card.iv)
+            : card.text,
+          // Get name of currently active column
+          column: this.props.phasesConfig[this.props.boardConfig.guidedPhase]
+            .columns[card.type].name,
+          votes: card.votes,
+          timestamp: card.timestamp,
+          parent: card.parent || '-'
+        } as CsvExportData;
       });
-    } else {
-      csvExporter.generateCsv(cardsArrayCsv);
-    }
+
+    Promise.all(cardsArrayCsv).then(awaitedCardsArrayCsv => {
+      console.log(cardsArrayCsv);
+      csvExporter.generateCsv(awaitedCardsArrayCsv);
+    });
   };
 
   handleExport = (format: ExportFormats = 'print') => {

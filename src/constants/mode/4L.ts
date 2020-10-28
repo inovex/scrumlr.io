@@ -6,6 +6,7 @@ export default {
     description: 'Create cards, communicate your thoughts & stack common',
     columns: {
       0: {
+        id: 'liked',
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -20,6 +21,7 @@ export default {
         sorted: false
       },
       1: {
+        id: 'learned',
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -34,6 +36,7 @@ export default {
         sorted: false
       },
       2: {
+        id: 'lacked',
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -48,6 +51,7 @@ export default {
         sorted: false
       },
       3: {
+        id: 'longedfor',
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -73,6 +77,7 @@ export default {
     description: 'Vote on the most important cards for yourself',
     columns: {
       0: {
+        id: 'liked',
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -87,6 +92,7 @@ export default {
         sorted: false
       },
       1: {
+        id: 'learned',
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -101,6 +107,7 @@ export default {
         sorted: false
       },
       2: {
+        id: 'lacked',
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -115,6 +122,7 @@ export default {
         sorted: false
       },
       3: {
+        id: 'longedfor',
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -136,6 +144,7 @@ export default {
     description: 'Discuss top-voted cards',
     columns: {
       0: {
+        id: 'liked',
         name: 'Liked',
         type: 'positive',
         voting: {
@@ -150,6 +159,7 @@ export default {
         sorted: true
       },
       1: {
+        id: 'learned',
         name: 'Learned',
         type: 'positive',
         voting: {
@@ -164,6 +174,7 @@ export default {
         sorted: true
       },
       2: {
+        id: 'lacked',
         name: 'Lacked',
         type: 'negative',
         voting: {
@@ -178,6 +189,7 @@ export default {
         sorted: true
       },
       3: {
+        id: 'longedfor',
         name: 'Longed for',
         type: 'negative',
         voting: {
@@ -192,8 +204,9 @@ export default {
         sorted: true
       },
       4: {
+        id: 'actions',
         name: 'Actions',
-        type: 'positive',
+        type: 'actions',
         voting: {
           enabled: false,
           displayed: true

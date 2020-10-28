@@ -327,6 +327,11 @@ export const mapStateToProps = (
       });
   }
 
+  const isShowCards =
+    typeof boardConfig.showCards === 'undefined'
+      ? true
+      : Boolean(boardConfig.showCards);
+
   return {
     ...ownProps,
     cards,
@@ -347,7 +352,7 @@ export const mapStateToProps = (
     onFocusCard,
     onSwitchPhaseIndex,
     isShowAuthor: Boolean(boardConfig.showAuthor),
-    isShowCards: Boolean(boardConfig.showCards),
+    isShowCards,
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,

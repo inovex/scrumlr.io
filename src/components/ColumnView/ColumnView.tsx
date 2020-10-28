@@ -99,7 +99,10 @@ export class ColumnView extends React.Component<
   render() {
     const columns = this.props.phasesConfig[this.props.guidedPhase].columns;
 
-    const phase = {guidedPhase: this.props.guidedPhase, config: this.props.phasesConfig[this.props.guidedPhase]};
+    const phase = {
+      guidedPhase: this.props.guidedPhase,
+      config: this.props.phasesConfig[this.props.guidedPhase]
+    };
     const renderedColumns = Object.keys(columns)
       .filter(key =>
         this.state.showCarousel && this.props.filteredCardType
@@ -108,6 +111,7 @@ export class ColumnView extends React.Component<
       )
       // Actions should always be on the right-hand side of the board
       .sort((a, b) => {
+        // FIXME
         if (columns[a].type === ('actions' as ColumnType)) return 1;
         if (columns[b].type === ('actions' as ColumnType)) return -1;
         return 0;

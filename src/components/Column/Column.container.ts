@@ -1,7 +1,11 @@
 import { BoardCards, Card, StoreState } from '../../types';
 import { getFirebase, getVal } from 'react-redux-firebase';
 import { OwnColumnProps, StateColumnProps } from './Column';
-import { getTheme } from '../../constants/Retrospective';
+import {
+  ColumnType,
+  getTheme,
+  PhaseConfiguration
+} from '../../constants/Retrospective';
 import { Key } from 'ts-keycode-enum';
 import { get } from 'lodash';
 import Raven = require('raven-js');
@@ -33,6 +37,49 @@ function sortCards(cards: Card[], sortByVotes: boolean): Card[] {
     return cards.sort(compareTimestamps).reverse();
   }
 }
+
+const getColumnType = (a: string, config: PhaseConfiguration): ColumnType => {
+  if (typeof a === 'undefined') {
+    return 'positive';
+  }
+
+  if (isNaN(a as any)) {
+    return a as ColumnType;
+  }
+  return config.columns[parseInt(a)].type;
+};
+
+const isEqualColumnType = (
+  a: string,
+  b: string,
+  config: PhaseConfiguration
+) => {
+  if (typeof a === 'undefined' || typeof b === 'undefined') {
+    return false;
+  }
+
+  let aMapped = a;
+  if (isNaN(a as any)) {
+    const columns = Object.keys(config.columns)
+      .filter(key => config.columns[key].id === a)
+      .map(key => key);
+    if (columns.length === 1) {
+      aMapped = columns[0];
+    }
+  }
+
+  let bMapped = b;
+  if (isNaN(b as any)) {
+    const columns = Object.keys(config.columns)
+      .filter(key => config.columns[key].id === b)
+      .map(key => key);
+    if (columns.length === 1) {
+      bMapped = columns[0];
+    }
+  }
+
+  return aMapped === bMapped;
+};
 
 export const mapStateToProps = (
   state: StoreState,
@@ -68,7 +115,9 @@ export const mapStateToProps = (
   let focused: Card | undefined = undefined;
 
   if (focusedCard) {
-    if (focusedCard.type === ownProps.id) {
+    if (
+      isEqualColumnType(focusedCard.type, ownProps.id, ownProps.phase.config)
+    ) {
       focused = focusedCard;
       focused.id = focusedCardId;
     }
@@ -79,7 +128,9 @@ export const mapStateToProps = (
   }
 
   const showAsFocusTarget = focusedCard ? ownProps.id === focusTarget : false;
-  const isFocusOrigin = focusedCard ? focusedCard.type === ownProps.id : false;
+  const isFocusOrigin = focusedCard
+    ? isEqualColumnType(focusedCard.type, ownProps.id, ownProps.phase.config)
+    : false;
 
   const isHidden = focusedCard ? !isFocusOrigin && !showAsFocusTarget : false;
 
@@ -97,15 +148,20 @@ export const mapStateToProps = (
         ownProps.isShowCards ||
         card.authorUid === user.uid
     )
-    .filter(card => card.type === ownProps.id)
+    .filter(card =>
+      isEqualColumnType(card.type, ownProps.id, ownProps.phase.config)
+    )
     .filter(card => !Boolean(card.parent));
+
   cards = sortCards(cards, ownProps.phase.config.columns[ownProps.id].sorted);
 
   let cardsWithFocused: Card[] = Object.keys(boardCards)
     .map(key => {
       return { id: key, ...boardCards[key] };
     })
-    .filter(card => card.type === ownProps.id)
+    .filter(card =>
+      isEqualColumnType(card.type, ownProps.id, ownProps.phase.config)
+    )
     .filter(
       card =>
         !Boolean(card.parent) || (focused && card.id === (focused as Card).id)
@@ -131,7 +187,10 @@ export const mapStateToProps = (
       });
   }
 
-  if (focused && focused.type === ownProps.id) {
+  if (
+    focused &&
+    isEqualColumnType(focused.type, ownProps.id, ownProps.phase.config)
+  ) {
     const isFocusedStacked = cards.length !== cardsWithFocused.length;
     const stackToSearch = isFocusedStacked ? cardsWithFocused : cards;
 
@@ -173,7 +232,12 @@ export const mapStateToProps = (
     }
   }
 
-  const theme = getTheme(ownProps.phase.config.columns[ownProps.id].type);
+  const theme = getTheme(
+    getColumnType(
+      ownProps.phase.config.columns[ownProps.id].type,
+      ownProps.phase.config
+    )
+  );
 
   return {
     theme,

@@ -15,6 +15,7 @@ export interface Column {
 }
 
 export interface ColumnConfiguration extends Column {
+  id: string;
   voting: {
     enabled: boolean;
     displayed: boolean;

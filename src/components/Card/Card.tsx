@@ -280,7 +280,7 @@ export class Card extends Component<CardProps, CardState> {
               </Footer>
             )}
 
-            {isAdmin && (
+            {isAdmin && card.theme !== 'actions' && (
               <button
                 className="card__focus-button"
                 onClick={() => this.props.onFocus(id)}

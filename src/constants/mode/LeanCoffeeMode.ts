@@ -6,6 +6,7 @@ export default {
     description: 'Create cards, communicate your thoughts & stack common',
     columns: {
       0: {
+        id: 'positive',
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
@@ -31,6 +32,7 @@ export default {
     description: 'Vote on the most important cards for yourself',
     columns: {
       0: {
+        id: 'positive',
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
@@ -52,6 +54,7 @@ export default {
     description: 'Discuss top-voted cards',
     columns: {
       0: {
+        id: 'positive',
         name: 'Lean Coffee',
         type: 'positive',
         voting: {
