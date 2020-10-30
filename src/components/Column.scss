@@ -1,0 +1,19 @@
+@import "common";
+
+.column {
+  display: flex;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+}
+
+.column:nth-child(odd) { background: red; }
+.column:nth-child(even) { background: green; }
+
+.column__content {
+  flex: 1 0 $min-column-width;
+  min-width: 320px;
+  max-width: 1440px;
+}

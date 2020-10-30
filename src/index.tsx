@@ -6,7 +6,9 @@ import { createFirestoreInstance } from 'redux-firestore';
 import './index.scss';
 import firebase from './firebaseSetup';
 import store from './store/store';
-import Router from './routes/Router';
+//import Router from './routes/Router';
+import Board from "./components/Board";
+import Column from "./components/Column";
 
 const rrfProps = {
   firebase,
@@ -22,7 +24,17 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <Router/>
+        <Board>
+          <Column>A</Column>
+          <Column>B</Column>
+          <Column>C</Column>
+          <Column>D</Column>
+          <Column>E</Column>
+          <Column>F</Column>
+          <Column>G</Column>
+          <Column>H</Column>
+          <Column>I</Column>
+        </Board>
       </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,

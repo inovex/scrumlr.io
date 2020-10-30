@@ -1,0 +1,21 @@
+@import "common";
+
+.board {
+  --n: 1;
+
+  display:grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(100%/min(var(--real-columns), var(--n)));
+  overflow-x:auto;
+  scroll-snap-type: x mandatory;
+
+  height: 100vh;
+}
+
+@for $i from 1 through 12 {
+  @media screen and (min-width: $i*$min-column-width) {
+    .board {
+      --n: #{$i};
+    }
+  }
+}
