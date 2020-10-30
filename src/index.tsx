@@ -24,15 +24,15 @@ ReactDOM.render(
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <Board>
-          <Column>A</Column>
-          <Column>B</Column>
-          <Column>C</Column>
-          <Column>D</Column>
-          <Column>E</Column>
-          <Column>F</Column>
-          <Column>G</Column>
-          <Column>H</Column>
-          <Column>I</Column>
+          <Column className="color-blue">A</Column>
+          <Column className="color-purple">B</Column>
+          <Column className="color-violet">C</Column>
+          <Column className="color-pink">D</Column>
+          <Column className="color-blue">E</Column>
+          <Column className="color-purple">F</Column>
+          <Column className="color-violet">G</Column>
+          <Column className="color-pink">H</Column>
+          <Column className="color-blue">I</Column>
         </Board>
       </ReactReduxFirebaseProvider>
     </Provider>
