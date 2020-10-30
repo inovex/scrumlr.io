@@ -1,5 +1,12 @@
 @import "../constants/style";
 
+$border__size: 8px;
+
+$border__left: inset #{2*$border__size} 0 0 #{-$border__size} var(--accent-color);
+$border__right: inset #{-2*$border__size} 0 0 #{-$border__size} var(--accent-color);
+$border__top: inset 0 #{2*$border__size} 0 #{-$border__size} var(--accent-color);
+$border__bottom: inset 0 #{-2*$border__size} 0 #{-$border__size} var(--accent-color);
+
 .column {
   display: flex;
   justify-content: center;
@@ -7,11 +14,19 @@
   width: 100%;
   height: 100%;
   scroll-snap-align: start;
-  background-color: var(--accent-color);
+
+  box-shadow: $border__top, $border__bottom;
 }
 
-// .column:nth-child(odd) { background: red; }
-// .column:nth-child(even) { background: green; }
+.column:only-of-type {
+  box-shadow: $border__top, $border__bottom, $border__left, $border__right;
+}
+.column:not(:only-of-type):first-of-type {
+  box-shadow: $border__top, $border__bottom, $border__left;
+}
+.column:not(:only-of-type):last-of-type {
+  box-shadow: $border__top, $border__bottom, $border__right;
+}
 
 .column__content {
   flex: 1 0 $min-column-width;
