@@ -6,7 +6,6 @@ import { createFirestoreInstance } from 'redux-firestore';
 import './index.scss';
 import firebase from './firebaseSetup';
 import store from './store/store';
-//import Router from './routes/Router';
 import Board from "./components/Board";
 import Column from "./components/Column";
 
