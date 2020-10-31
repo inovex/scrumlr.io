@@ -1,35 +1,15 @@
 @import "../constants/style";
 
-$border__size: 8px;
-
-$border__left: inset #{2*$border__size} 0 0 #{-$border__size} var(--accent-color);
-$border__right: inset #{-2*$border__size} 0 0 #{-$border__size} var(--accent-color);
-$border__top: inset 0 #{2*$border__size} 0 #{-$border__size} var(--accent-color);
-$border__bottom: inset 0 #{-2*$border__size} 0 #{-$border__size} var(--accent-color);
-
 .column {
-  display: flex;
-  justify-content: center;
-
+  min-width: $column__min-width;
   width: 100%;
+  max-width: $column__max-width;
+
   height: 100%;
-  scroll-snap-align: start;
 
-  box-shadow: $border__top, $border__bottom;
-}
-
-.column:only-of-type {
-  box-shadow: $border__top, $border__bottom, $border__left, $border__right;
-}
-.column:not(:only-of-type):first-of-type {
-  box-shadow: $border__top, $border__bottom, $border__left;
-}
-.column:not(:only-of-type):last-of-type {
-  box-shadow: $border__top, $border__bottom, $border__right;
+  @include inset-border($top: true, $bottom: true);
 }
 
 .column__content {
-  flex: 1 0 $min-column-width;
-  min-width: 320px;
-  max-width: 1440px;
+  padding: 32px;
 }

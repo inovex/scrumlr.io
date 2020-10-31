@@ -1,13 +1,19 @@
 import React from 'react';
 import './Column.scss';
+import {Color, getColorClassName} from "../constants/colors";
 
-const Column = (props:any, { children }: any) => {
+export interface ColumnProps {
+    color: Color;
+    children?: React.ReactNode;
+}
+
+const Column = ({ children, color } : ColumnProps) => {
     return (
-    <div className={`column ${props.className}`}>
-        <div className="column__content">
-            {children}
+        <div className={`column ${getColorClassName(color)}`}>
+            <div className="column__content">
+                {children}
+            </div>
         </div>
-    </div>
     );
 };
 export default Column;

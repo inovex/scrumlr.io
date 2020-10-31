@@ -1,16 +1,22 @@
 import React from 'react';
 import './Board.scss';
+import {getColorClassName} from "../constants/colors";
 
 const Board = ({ children }: any) => {
-    console.log();
+    const colors = React.Children.map(children, (child) => child.props.color);
 
     return (
-        <div className="board">
+        <>
             <style>
-                {`.board { --real-columns: ${React.Children.count(children)} }`}
+                {`.board { --board__columns: ${React.Children.count(children)} }`}
             </style>
-            {children}
-        </div>
-    );
+            <div className="board">
+                <div className={`board__spacer-left ${getColorClassName(colors[0])}`} />
+                    {children}
+                <div className={`board__spacer-right ${getColorClassName(colors[colors.length - 1])}`} />
+            </div>
+        </>
+    )
 };
+
 export default Board;

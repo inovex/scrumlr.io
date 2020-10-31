@@ -6,16 +6,42 @@
 
   display:grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100%/min(var(--real-columns), var(--n))) - #{$border__size});
-  overflow-x:auto;
-  scroll-snap-type: x mandatory;
-  scroll-padding: $border__size;
+  grid-template-columns:
+          minmax($board__side-panel-width, 1fr)
+          repeat(
+            var(--board__columns),
+            Min(calc((100% - #{$board__side-panel-width*2})/min(var(--board__columns), var(--n))), #{$column__max-width})
+          )
+          minmax($board__side-panel-width, 1fr);
 
+  scroll-snap-type: x mandatory;
+  scroll-snap-stop: always;
+  scroll-padding: $column__border-width;
+  overflow-x: auto;
+
+  width: 100vw;
   height: 100vh;
 }
 
-@for $i from 1 through 12 {
-  @media screen and (min-width: $i*$min-column-width) {
+.board > * {
+  scroll-snap-align: start;
+}
+
+.board__spacer-left {
+  @include inset-border($top: true, $left: true, $bottom: true);
+}
+.board__spacer-right {
+  @include inset-border($top: true, $right: true, $bottom: true);
+}
+
+@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
+  .board {
+    grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width*2})) $column__border-width;
+  }
+}
+
+@for $i from 1 through 16 {
+  @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
     .board {
       --n: #{$i};
     }
