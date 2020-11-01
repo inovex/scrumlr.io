@@ -1,9 +1,17 @@
 import React from 'react';
 import './Board.scss';
 import {getColorClassName} from "../constants/colors";
+import {ColumnProps} from "./Column";
 
-const Board = ({ children }: any) => {
+export interface BoardProps {
+    children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+}
+
+const Board = ({ children }: BoardProps) => {
     const colors = React.Children.map(children, (child) => child.props.color);
+    if (colors.length === 0) {
+        return <div>Empty board</div>;
+    }
 
     return (
         <>
