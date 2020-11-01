@@ -1,5 +1,5 @@
-@import "../constants/style";
-@import "./Column";
+@import "../../constants/style";
+@import "../Column/Column";
 
 .board {
   --n: 1;
@@ -32,6 +32,28 @@
 }
 .board__spacer-right {
   @include inset-border($top: true, $right: true, $bottom: true);
+}
+
+.board__spacer-left:nth-child(odd),
+.board__spacer-right:nth-child(odd) {
+  background-color: #f9fafb;
+}
+
+.board__spacer-left:nth-child(even),
+.board__spacer-right:nth-child(even) {
+  background-color: #f6f5fb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .board__spacer-left:nth-child(odd),
+  .board__spacer-right:nth-child(odd) {
+    background-color: #242c3d;
+  }
+
+  .board__spacer-left:nth-child(even),
+  .board__spacer-right:nth-child(even) {
+    background-color: #272f41;
+  }
 }
 
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {

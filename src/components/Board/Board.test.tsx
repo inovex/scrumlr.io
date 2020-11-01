@@ -1,7 +1,7 @@
 import React from 'react'
 import {render} from "@testing-library/react";
 import Board from "./Board";
-import Column from "./Column";
+import Column from "../Column/Column";
 
 test('show empty board', () => {
     const { container } = render(

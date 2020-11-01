@@ -1,6 +1,6 @@
 import React from 'react';
 import './Column.scss';
-import {Color, getColorClassName} from "../constants/colors";
+import {Color, getColorClassName} from "../../constants/colors";
 
 export interface ColumnProps {
     color: Color;

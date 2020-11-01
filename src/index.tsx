@@ -6,8 +6,8 @@ import { createFirestoreInstance } from 'redux-firestore';
 import './index.scss';
 import firebase from './firebaseSetup';
 import store from './store/store';
-import Board from "./components/Board";
-import Column from "./components/Column";
+import Board from "./components/Board/Board";
+import Column from "./components/Column/Column";
 
 const rrfProps = {
   firebase,

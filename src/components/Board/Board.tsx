@@ -1,7 +1,7 @@
 import React from 'react';
 import './Board.scss';
-import {getColorClassName} from "../constants/colors";
-import {ColumnProps} from "./Column";
+import {getColorClassName} from "../../constants/colors";
+import {ColumnProps} from "../Column/Column";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
