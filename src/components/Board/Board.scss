@@ -16,7 +16,7 @@
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
-  scroll-padding: $column__border-width;
+  scroll-padding: $board__side-panel-width;
   overflow-x: auto;
 
   width: 100vw;
@@ -59,6 +59,7 @@
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
   .board {
     grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width*2})) $column__border-width;
+    scroll-padding: $column__border-width;
   }
 }
 
