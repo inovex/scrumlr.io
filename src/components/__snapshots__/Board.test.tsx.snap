@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot of board 1`] = `
+<div>
+  <style>
+    .board { --board__columns: 4 }
+  </style>
+  <div
+    class="board"
+  >
+    <div
+      class="board__spacer-left accent-color__purple"
+    />
+    <div
+      class="column accent-color__purple"
+    >
+      <div
+        class="column__content"
+      />
+    </div>
+    <div
+      class="column accent-color__blue"
+    >
+      <div
+        class="column__content"
+      />
+    </div>
+    <div
+      class="column accent-color__violet"
+    >
+      <div
+        class="column__content"
+      />
+    </div>
+    <div
+      class="column accent-color__pink"
+    >
+      <div
+        class="column__content"
+      />
+    </div>
+    <div
+      class="board__spacer-right accent-color__pink"
+    />
+  </div>
+</div>
+`;

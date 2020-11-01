@@ -8,10 +8,10 @@ export interface BoardProps {
 }
 
 const Board = ({ children }: BoardProps) => {
-    const colors = React.Children.map(children, (child) => child.props.color);
-    if (colors.length === 0) {
-        return <div>Empty board</div>;
+    if (!children || React.Children.count(children) === 0) {
+        return <div className="board--empty">Empty board</div>;
     }
+    const colors = React.Children.map(children, (child) => child.props.color);
 
     return (
         <>
