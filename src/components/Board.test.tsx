@@ -22,21 +22,8 @@ test('correct number of columns is set in inner styles', () => {
         </Board>
     );
 
-    expect(container.querySelector('style').textContent).toMatchInlineSnapshot('".board { --board__columns: 4 }"');
+    expect(container.querySelector('style')).toHaveTextContent('.board { --board__columns: 4 }');
 });
-
-test('snapshot of board', () => {
-    const { container } = render(
-        <Board>
-            <Column color="purple" />
-            <Column color="blue" />
-            <Column color="violet" />
-            <Column color="pink" />
-        </Board>
-    );
-
-    expect(container).toMatchSnapshot();
-})
 
 describe('side-panels', () => {
     test('left side-panel is present', () => {

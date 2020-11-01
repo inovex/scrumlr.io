@@ -7,7 +7,7 @@ export interface ColumnProps {
     children?: React.ReactNode;
 }
 
-const Column = ({ children, color } : ColumnProps) => {
+const Column = ({ color, children } : ColumnProps) => {
     return (
         <div className={`column ${getColorClassName(color)}`}>
             <div className="column__content">
