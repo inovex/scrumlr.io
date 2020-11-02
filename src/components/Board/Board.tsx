@@ -55,14 +55,13 @@ const Board = ({ children }: BoardProps) => {
         }
     }, [ children ]);
 
-    const columnColors = React.Children.map(children, (child) => child.props.color);
-
-    if (!children || React.Children.count(children) === 0) {
+    const columnsCount = React.Children.count(children);
+    if (!children || columnsCount === 0) {
         return <div className="board--empty">Empty board</div>;
     }
 
     const { firstVisibleColumnIndex, lastVisibleColumnIndex } = state;
-    const columnsCount = React.Children.count(children);
+    const columnColors = React.Children.map(children, (child) => child.props.color);
     const showNavigation = firstVisibleColumnIndex > 0 || lastVisibleColumnIndex < columnsCount - 1;
     const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
     const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
