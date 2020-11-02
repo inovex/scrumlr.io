@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef} from 'react';
 import './Board.scss';
 import {getColorClassName} from "../../constants/colors";
 import {ColumnProps} from "../Column/Column";
@@ -8,13 +8,13 @@ export interface BoardProps {
 }
 
 const Board = ({ children }: BoardProps) => {
-    const [columns, setColumns] = useState<boolean[]>([]);
+    let columns: boolean[] = [];
+
     useEffect(() => {
         const board: HTMLDivElement = boardRef.current!;
 
-        const columnsState: boolean[] = new Array(board.childElementCount - 2);
-        columnsState.fill(false);
-        setColumns(columnsState);
+        columns = new Array(board.childElementCount - 2);
+        columns.fill(false);
 
         const observerOptions = {
             root: boardRef.current,
@@ -25,9 +25,8 @@ const Board = ({ children }: BoardProps) => {
         const observerCallback: IntersectionObserverCallback = (entries) => {
             entries.forEach((entry) => {
                 const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
-                columnsState[index] = entry.isIntersecting;
+                columns[index] = entry.isIntersecting;
             })
-            setColumns([...columnsState]);
         }
 
         const observer = new IntersectionObserver(observerCallback, observerOptions);
