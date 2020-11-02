@@ -7,80 +7,86 @@ export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
 }
 
+export interface BoardState {
+    firstVisibleColumnIndex: number;
+    lastVisibleColumnIndex: number;
+}
+
 const Board = ({ children }: BoardProps) => {
-    const [ showNavigation, setShowNavigation ] = useState<boolean>(false);
+    const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
     const boardRef = useRef<HTMLDivElement>(null);
     const columnVisibilityStatesRef = useRef<boolean[]>([]);
 
     useEffect(() => {
         const board: HTMLDivElement = boardRef.current!;
 
-        columnVisibilityStatesRef.current = new Array(board.childElementCount - 2);
+        // initialize column visibility states
+        columnVisibilityStatesRef.current = new Array(React.Children.count(children));
         const columnVisibilityStates = columnVisibilityStatesRef.current;
         columnVisibilityStates.fill(false);
 
+        // initialize intersection observer
         const observerOptions = {
-            root: boardRef.current,
+            root: board,
             rootMargin: '0px',
             threshold: 1.0
         }
-
         const observerCallback: IntersectionObserverCallback = (entries) => {
             entries.forEach((entry) => {
                 const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
                 columnVisibilityStates[index] = entry.isIntersecting;
             });
-            setShowNavigation(columnVisibilityStates.filter(value => !value).length > 0);
+            setState({
+                firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
+                lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true)
+            });
         }
-
         const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-        const children = board.children;
-        for (let i = 1; i < children.length - 1; i++) {
-            observer.observe(children[i]);
+        // observe children
+        const domChildren = board.children;
+        for (let i = 1; i < domChildren.length - 1; i++) {
+            observer.observe(domChildren[i]);
         }
 
+        // return callback handler that will disconnect the observer on unmount
         return () => {
             observer.disconnect();
         }
-    }, []);
+    }, [ children ]);
 
-    const colors = React.Children.map(children, (child) => child.props.color);
+    const columnColors = React.Children.map(children, (child) => child.props.color);
 
     if (!children || React.Children.count(children) === 0) {
         return <div className="board--empty">Empty board</div>;
     }
 
-    const columnVisibilityStates = columnVisibilityStatesRef.current;
+    const { firstVisibleColumnIndex, lastVisibleColumnIndex } = state;
+    const columnsCount = React.Children.count(children);
+    const showNavigation = firstVisibleColumnIndex > 0 || lastVisibleColumnIndex < columnsCount - 1;
+    const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
+    const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
     const handlePreviousClick = () => {
-        const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
-        const scrollToIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex : colors.length;
-        boardRef.current!.children[scrollToIndex].scrollIntoView({ inline: 'start', behavior: 'smooth' });
+        boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
     }
 
     const handleNextClick = () => {
-        if (columnVisibilityStates[columnVisibilityStates.length - 1]) {
-            boardRef.current!.children[1].scrollIntoView({ inline: 'start', behavior: 'smooth'});
-        } else {
-            const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
-            const scrollToIndex = firstVisibleColumnIndex <= colors.length - 1 ? firstVisibleColumnIndex + 2 : 1;
-            boardRef.current!.children[scrollToIndex].scrollIntoView({ inline: 'start', behavior: 'smooth' });
-        }
+        boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth'});
     }
 
     return (
         <>
             <style>
-                {`.board { --board__columns: ${React.Children.count(children)} }`}
+                {`.board { --board__columns: ${columnsCount} }`}
             </style>
-            {showNavigation && <button className="board__navigation-left" onClick={handlePreviousClick}>Previous</button>}
+            {showNavigation && <button className={`board__navigation board__navigation-left ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick}>Previous</button>}
             <div className="board" ref={boardRef}>
-                <div className={`board__spacer-left ${getColorClassName(colors[0])}`} />
+                <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
-                <div className={`board__spacer-right ${getColorClassName(colors[colors.length - 1])}`} />
+                <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
             </div>
-            {showNavigation && <button className="board__navigation-right" onClick={handleNextClick}>Next</button>}
+            {showNavigation && <button className={`board__navigation board__navigation-right ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick}>Next</button>}
         </>
     )
 };

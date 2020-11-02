@@ -56,6 +56,10 @@
   }
 }
 
+.board__navigation {
+  background-color: var(--accent-color);
+}
+
 .board__navigation-left {
   position: fixed;
   top: 0;
