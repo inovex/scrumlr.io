@@ -56,6 +56,18 @@
   }
 }
 
+.board__navigation-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.board__navigation-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
   .board {
     grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width*2})) $column__border-width;
