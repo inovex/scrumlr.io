@@ -18,41 +18,43 @@ const Board = ({ children }: BoardProps) => {
     const columnVisibilityStatesRef = useRef<boolean[]>([]);
 
     useEffect(() => {
-        const board: HTMLDivElement = boardRef.current!;
+        const board = boardRef.current;
+        if (board) {
+            // initialize column visibility states
+            columnVisibilityStatesRef.current = new Array(React.Children.count(children));
+            const columnVisibilityStates = columnVisibilityStatesRef.current;
+            columnVisibilityStates.fill(false);
 
-        // initialize column visibility states
-        columnVisibilityStatesRef.current = new Array(React.Children.count(children));
-        const columnVisibilityStates = columnVisibilityStatesRef.current;
-        columnVisibilityStates.fill(false);
+            // initialize intersection observer
+            const observerOptions = {
+                root: board,
+                rootMargin: '0px',
+                threshold: 1.0
+            }
+            const observerCallback: IntersectionObserverCallback = (entries) => {
+                entries.forEach((entry) => {
+                    const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
+                    columnVisibilityStates[index] = entry.isIntersecting;
+                });
+                setState({
+                    firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
+                    lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true)
+                });
+            }
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-        // initialize intersection observer
-        const observerOptions = {
-            root: board,
-            rootMargin: '0px',
-            threshold: 1.0
-        }
-        const observerCallback: IntersectionObserverCallback = (entries) => {
-            entries.forEach((entry) => {
-                const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
-                columnVisibilityStates[index] = entry.isIntersecting;
-            });
-            setState({
-                firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
-                lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true)
-            });
-        }
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
+            // observe children
+            const domChildren = board.children;
+            for (let i = 1; i < domChildren.length - 1; i++) {
+                observer.observe(domChildren[i]);
+            }
 
-        // observe children
-        const domChildren = board.children;
-        for (let i = 1; i < domChildren.length - 1; i++) {
-            observer.observe(domChildren[i]);
+            // return callback handler that will disconnect the observer on unmount
+            return () => {
+                observer.disconnect();
+            }
         }
-
-        // return callback handler that will disconnect the observer on unmount
-        return () => {
-            observer.disconnect();
-        }
+        return;
     }, [ children ]);
 
     const columnsCount = React.Children.count(children);
@@ -79,13 +81,13 @@ const Board = ({ children }: BoardProps) => {
             <style>
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
-            {showNavigation && <button className={`board__navigation board__navigation-left ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick}>Previous</button>}
+            {showNavigation && <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick}>Previous</button>}
             <div className="board" ref={boardRef}>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
             </div>
-            {showNavigation && <button className={`board__navigation board__navigation-right ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick}>Next</button>}
+            {showNavigation && <button className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick}>Next</button>}
         </>
     )
 };
