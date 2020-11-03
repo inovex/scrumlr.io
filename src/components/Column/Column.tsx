@@ -9,11 +9,11 @@ export interface ColumnProps {
 
 const Column = ({ color, children } : ColumnProps) => {
     return (
-        <div className={`column ${getColorClassName(color)}`}>
+        <section className={`column ${getColorClassName(color)}`}>
             <div className="column__content">
                 {children}
             </div>
-        </div>
+        </section>
     );
 };
 export default Column;

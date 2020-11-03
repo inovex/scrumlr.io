@@ -81,13 +81,13 @@ const Board = ({ children }: BoardProps) => {
             <style>
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
-            {showNavigation && <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick}>Previous</button>}
-            <div className="board" ref={boardRef}>
+            {showNavigation && <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden={true}>Previous</button>}
+            <main className="board" ref={boardRef}>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
-            </div>
-            {showNavigation && <button className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick}>Next</button>}
+            </main>
+            {showNavigation && <button className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick} aria-hidden={true}>Next</button>}
         </>
     )
 };
