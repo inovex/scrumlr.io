@@ -96,6 +96,18 @@ describe('navigation', () => {
         expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(1);
     });
 
+    test('intersection observer is re-initialized on change of children', () => {
+        const { rerender } = render(createBoardWithColumns('pink'));
+
+        expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
+        expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(0);
+
+        rerender(createBoardWithColumns('pink', 'blue'));
+
+        expect(window.IntersectionObserver).toHaveBeenCalledTimes(2);
+        expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(1);
+    });
+
     describe('buttons visibility and functionality', () => {
 
         let container: HTMLElement;
@@ -149,7 +161,8 @@ describe('navigation', () => {
             expect(scrollIntoView).toHaveBeenCalled();
         });
 
-        test('infinite loop from end-to-start', () => {
+        // Infinite loop was removed to enhance usability
+        /*test('infinite loop from end-to-start', () => {
             const columns = showColumns(false, false, true);
 
             const scrollIntoView = jest.fn();
@@ -167,7 +180,7 @@ describe('navigation', () => {
             fireEvent.click(container.querySelector(".board__navigation-prev") as any);
 
             expect(scrollIntoView).toHaveBeenCalled();
-        });
+        });*/
 
         test('previous button has color of previous column', () => {
             showColumns(false, true, false);
