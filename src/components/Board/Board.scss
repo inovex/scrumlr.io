@@ -58,17 +58,18 @@
 
 .board__navigation {
   background-color: var(--accent-color);
+  opacity: 50%;
+  top: 50%;
+  border: none;
 }
 
 .board__navigation-prev {
   position: fixed;
-  top: 0;
   left: 0;
 }
 
 .board__navigation-next {
-  position: fixed;
-  top: 0;
+  position: fixed; 
   right: 0;
 }
 
