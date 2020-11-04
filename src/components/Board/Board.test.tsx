@@ -107,7 +107,10 @@ describe('navigation', () => {
         const showColumns = (first: boolean, second: boolean, third: boolean) => {
             const columns = container.querySelectorAll('.column');
             act(() => {
-                const intersectionObserverCallback = (window.IntersectionObserver as any).mock.calls[0][0];
+                const firstMethodCall = 0;
+                const firstMethodParameter = 0;
+
+                const intersectionObserverCallback = (window.IntersectionObserver as any).mock.calls[firstMethodCall][firstMethodParameter];
                 intersectionObserverCallback([
                     { isIntersecting: first, target: columns[0] },
                     { isIntersecting: second, target: columns[1] },
