@@ -2,6 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import './Board.scss';
 import {getColorClassName} from "../../constants/colors";
 import {ColumnProps} from "../Column/Column";
+import {ReactComponent as Next} from "../../assets/icon-arrow-next.svg";
+import {ReactComponent as Previous} from "../../assets/icon-arrow-previous.svg";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -81,13 +83,13 @@ const Board = ({ children }: BoardProps) => {
             <style>
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
-            {showNavigation && <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden={true}>Previous</button>}
+    {showNavigation && <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden={true}><Previous className="board__navigation-arrow board__navigation-arrow-prev"/></button>}
             <main className="board" ref={boardRef}>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
             </main>
-            {showNavigation && <button className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick} aria-hidden={true}>Next</button>}
+            {showNavigation && <button className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`} onClick={handleNextClick} aria-hidden={true}><Next className=" board__navigation-arrow board__navigation-arrow-next"/></button>}
         </>
     )
 };

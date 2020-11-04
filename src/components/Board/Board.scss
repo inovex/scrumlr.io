@@ -57,20 +57,36 @@
 }
 
 .board__navigation {
+  position: fixed;
   background-color: var(--accent-color);
   opacity: 50%;
   top: 50%;
+  width: 100px;
+  height: 100px;
   border: none;
+  border-radius: 100%;
+}
+.board__navigation:focus {
+  outline: none;
 }
 
 .board__navigation-prev {
-  position: fixed;
-  left: 0;
+  left: -50px;
+}
+.board__navigation-next { 
+  right: -50px;
 }
 
-.board__navigation-next {
-  position: fixed; 
-  right: 0;
+.board__navigation-arrow {
+  height: 50px;
+  width: 50px;
+  fill: $color-white;
+}
+.board__navigation-arrow-prev {
+  float: right;
+}
+.board__navigation-arrow-next {
+  float: left;
 }
 
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
