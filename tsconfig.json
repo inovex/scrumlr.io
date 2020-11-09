@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
     "baseUrl": "src/",
     "target": "es5",
     "lib": [
