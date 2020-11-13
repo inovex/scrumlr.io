@@ -4,7 +4,6 @@ import getRandomName from "constants/Name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
-import firebase from 'firebaseSetup';
 
 function LoginBoard(props: RouteComponentProps) {
 
@@ -16,10 +15,7 @@ function LoginBoard(props: RouteComponentProps) {
 
     function handleLogin() {
         AuthenticationManager.signInAnonymously(name).then(_ => {
-            //TODO: Workaround because react-redux-firebase issue 972
-            firebase.auth().currentUser?.reload().then(_ => {
-                props.history.push((props.history.location.state as {from: {pathname: string}}).from.pathname);
-            });
+            props.history.push((props.history.location.state as {from: {pathname: string}}).from.pathname);
         });
     }
 
