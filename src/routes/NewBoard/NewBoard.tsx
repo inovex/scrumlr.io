@@ -14,7 +14,7 @@ function NewBoard(props: NewBoardProps) {
 
     const firestore = useFirestore();
 
-    let auth = firebase.auth().currentUser;
+    let auth: firebase.User | null | undefined = firebase.auth().currentUser;
 
     const [name, setName] = React.useState(getRandomName());
     function handleChangeName(e: any) {
@@ -23,9 +23,8 @@ function NewBoard(props: NewBoardProps) {
     }
 
     async function handleLogin() {
-        await AuthenticationManager.signInAnonymously(name);
-        await firebase.auth().currentUser?.reload();
-        auth = firebase.auth().currentUser;
+        const firebaseAuthUserCredentials = await AuthenticationManager.signInAnonymously(name);
+        auth = firebaseAuthUserCredentials?.user;
         createBoard();
     }
 

@@ -31,7 +31,8 @@ async function updateProfile(displayName?: string, photoURL?: string) {
 async function signInAnonymously(displayName?: string, photoURL?: string) {
     try {
         const firebaseAuthUserCredentials  = await firebase.auth().signInAnonymously();
-        updateProfile(displayName, photoURL);
+        await updateProfile(displayName, photoURL);
+        firebase.auth().currentUser?.reload();
         Toast.success("Successfully signed in");
         return firebaseAuthUserCredentials;
     } catch(err) {
