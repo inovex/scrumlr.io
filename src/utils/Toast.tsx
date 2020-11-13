@@ -14,10 +14,20 @@ const toastConfig: ToastOptions = {
     closeOnClick: true
 };
 
+/**
+ * Display success message via toast.
+ * 
+ * @param text Success message.
+ */
 function success(text: string) {
     toast.success(text, toastConfig);
 }
 
+/**
+ * Display error message via toast.
+ * 
+ * @param text Error message.
+ */
 function error(text: string) {
     toast.error(text, toastConfig);
 }
