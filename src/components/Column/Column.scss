@@ -29,3 +29,34 @@
 .column__content {
   padding: 32px;
 }
+
+.column__header {
+  display: flex;
+}
+
+.column__header-text {
+  font-size: 24px;
+  width: auto;
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin-right: 10px;
+  // font-family: Raleway;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column__header-text {
+    color: $color-white;
+  }
+}
+
+.column__header-card-number {
+  font-size: 20px;
+  color: $color-middle-gray;
+  // font-family: Raleway;
+  font-weight: 600;
+  letter-spacing: 0.63px;
+  line-height: 32px;
+}

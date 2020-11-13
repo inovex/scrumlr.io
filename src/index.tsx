@@ -24,15 +24,15 @@ ReactDOM.render(
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <Board>
-          <Column color="blue">A</Column>
-          <Column color="purple">B</Column>
-          <Column color="violet">C</Column>
-          <Column color="pink">D</Column>
-          <Column color="blue">E</Column>
-          <Column color="purple">F</Column>
-          <Column color="violet">G</Column>
-          <Column color="pink">H</Column>
-          <Column color="blue">I</Column>
+          <Column color="blue">Affe</Column>
+          <Column color="purple">Bär</Column>
+          <Column color="violet">Chamäleon</Column>
+          <Column color="pink">Delfin</Column>
+          <Column color="blue">Elefant</Column>
+          <Column color="purple">Fuchs</Column>
+          <Column color="violet">Giraffe</Column>
+          <Column color="pink">Hund</Column>
+          <Column color="blue">Igel</Column>
         </Board>
       </ReactReduxFirebaseProvider>
     </Provider>
