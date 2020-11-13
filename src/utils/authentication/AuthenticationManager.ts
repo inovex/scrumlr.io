@@ -5,6 +5,12 @@ export const AuthenticationManager = {
     signInAnonymously,
 };
 
+/**
+ * Update a user's profile.
+ * 
+ * @param displayName Display name of the firebase auth user.
+ * @param photoURL Profile photo URL of the firebase auth user.
+ */
 async function updateProfile(displayName?: string, photoURL?: string) {
     try {
         await firebase.auth().currentUser?.updateProfile({displayName,photoURL});
@@ -14,12 +20,22 @@ async function updateProfile(displayName?: string, photoURL?: string) {
     }    
 }
 
+/**
+ * Sign in anonymously.
+ * 
+ * @param displayName Display name of the firebase auth user.
+ * @param photoURL Profile photo URL of the firebase auth user.
+ * 
+ * @returns Promise with user credentials on successful sign in, null otherwise.
+ */
 async function signInAnonymously(displayName?: string, photoURL?: string) {
     try {
-        await firebase.auth().signInAnonymously();
+        const firebaseAuthUserCredentials  = await firebase.auth().signInAnonymously();
         updateProfile(displayName, photoURL);
         Toast.success("Successfully signed in");
+        return firebaseAuthUserCredentials;
     } catch(err) {
         Toast.error("There occured a problem while signing in");
+        return null;
     }   
 }
