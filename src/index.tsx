@@ -7,6 +7,8 @@ import './index.scss';
 import firebase from './firebaseSetup';
 import store from './store/store';
 import Router from './routes/Router';
+import { ToastContainer } from 'react-toastify';
+
 
 const rrfProps = {
   firebase,
@@ -22,7 +24,8 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
-        <Router/>
+          <Router/>
+          <ToastContainer/>
       </ReactReduxFirebaseProvider>
     </Provider>
   </React.StrictMode>,

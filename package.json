@@ -22,6 +22,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "react-toastify": "^6.1.0",
     "redux-firestore": "^0.14.0",
     "redux-thunk": "^2.3.0",
     "typescript": "~4.0.5"
