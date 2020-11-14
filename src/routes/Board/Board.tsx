@@ -20,7 +20,7 @@ import {
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
-import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
+import AboutModal from '../../components/Modal/variant/AboutModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
@@ -287,7 +287,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     }
 
     const showSettings = !waitingUser && this.state.showModal === 'settings';
-    const showFeedback = !waitingUser && this.state.showModal === 'feedback';
+    const showAbout = !waitingUser && this.state.showModal === 'about';
     const showShareDialog = !waitingUser && this.state.showModal === 'share';
     const showUsers = !waitingUser && this.state.showModal === 'users';
     const onDeleteTimerAuthorized = isBoardAdmin ? onDeleteTimer : undefined;
@@ -340,7 +340,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
-          {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+          {showAbout && <AboutModal onClose={this.handleCloseModal} />}
 
           {showUsers && (
             <UsersModal
