@@ -21,7 +21,6 @@ export interface UserMenuProps {
   onSetTimer: (seconds: number) => void;
   boardName?: string;
   admin: boolean;
-  isLastPhase: boolean;
 }
 
 export interface UserMenuState {
@@ -48,14 +47,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
     this.props.onChangeBoardName(e.target.value);
   };
 
-  handleDeleteBoard = () => {
-    const warning =
-      'Are you sure you want to delete the board? This action cannot be undone.';
-    if (window.confirm(warning)) {
-      this.props.onDeleteBoard();
-    }
-  };
-
   handleDeleteUser = () => {
     const warning =
       'Are you sure you want to delete your user data? This action cannot be undone.';
@@ -73,8 +64,7 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
       onSignOut,
       onSetTimer,
       boardName,
-      admin,
-      isLastPhase
+      admin
     } = this.props;
 
     const toggleIcon = (
@@ -150,15 +140,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             }}
           />
         </li>
-        <li key="user-menu__feedback" className="user_menu__li--hidden-mobile">
-          <MenuItem
-            name="Feedback"
-            icon="feedback"
-            onClick={() => {
-              onOpenModal('feedback');
-            }}
-          />
-        </li>
         <li key="user-menu__share" className="user_menu__li--hidden-mobile">
           <MenuItem
             name="Share"
@@ -169,35 +150,33 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
           />
         </li>
 
-        {isLastPhase && (
-          <li key="user-menu__export" className="user_menu__li--hidden-mobile">
-            <div className="user-menu__with-buttons">
-              <Icon className="menu-item__button-icon" name="download" />
-              <span
-                className={classNames(
-                  'menu-item__button-text',
-                  'user-menu__with-buttons__text'
-                )}
-              >
-                Export
-              </span>
-              <button
-                className="user-menu__with-buttons__button"
-                name="Pdf"
-                onClick={onPdfExport}
-              >
-                PDF
-              </button>
-              <button
-                className="user-menu__with-buttons__button"
-                name="Csv"
-                onClick={onCsvExport}
-              >
-                CSV
-              </button>
-            </div>
-          </li>
-        )}
+        <li key="user-menu__export" className="user_menu__li--hidden-mobile">
+          <div className="user-menu__with-buttons">
+            <Icon className="menu-item__button-icon" name="download" />
+            <span
+              className={classNames(
+                'menu-item__button-text',
+                'user-menu__with-buttons__text'
+              )}
+            >
+              Export
+            </span>
+            <button
+              className="user-menu__with-buttons__button"
+              name="Pdf"
+              onClick={onPdfExport}
+            >
+              PDF
+            </button>
+            <button
+              className="user-menu__with-buttons__button"
+              name="Csv"
+              onClick={onCsvExport}
+            >
+              CSV
+            </button>
+          </div>
+        </li>
 
         {admin && (
           <>
@@ -241,16 +220,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
                 </button>
               </div>
             </li>
-            <li
-              key="user-menu__delete"
-              className="user_menu__li--hidden-mobile"
-            >
-              <MenuItem
-                name="Delete board"
-                icon="trash"
-                onClick={this.handleDeleteBoard}
-              />
-            </li>
           </>
         )}
         <li key="user-menu__delete" className="user_menu__li--hidden-mobile">
@@ -258,6 +227,15 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             name="Delete user data"
             icon="trash"
             onClick={this.handleDeleteUser}
+          />
+        </li>
+        <li key="user-menu__about" className="user_menu__li--hidden-mobile">
+          <MenuItem
+            name="About"
+            icon="about"
+            onClick={() => {
+              onOpenModal('about');
+            }}
           />
         </li>
         <li key="user-menu__logout" className="user-menu__logout">

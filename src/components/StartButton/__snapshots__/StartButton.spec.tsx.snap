@@ -17,6 +17,11 @@ exports[`<StartButton /> should match expected structure 1`] = `
       </button>
     </li>
     <li>
+      <button onClick={[Function]} aria-label=\\"Mode: Lean Coffee (with Actions)\\">
+        Lean Coffee (with Actions)
+      </button>
+    </li>
+    <li>
       <button onClick={[Function]} aria-label=\\"Mode: Simple Retro\\">
         Simple Retro
       </button>

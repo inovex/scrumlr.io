@@ -20,8 +20,7 @@ describe('<UserMenu />', () => {
       onCsvExport: jest.fn(),
       onChangeBoardName: jest.fn(),
       onSetTimer: jest.fn(),
-      admin: true,
-      isLastPhase: false
+      admin: true
     };
   });
 
@@ -62,7 +61,7 @@ describe('<UserMenu />', () => {
     });
 
     it('should pass correct method to export PDF button', () => {
-      wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
+      wrapper = shallow(<UserMenu {...props} />);
       const ddMenu = wrapper.find(DropdownMenu);
 
       expect(props.onPdfExport).not.toHaveBeenCalled();
@@ -71,7 +70,7 @@ describe('<UserMenu />', () => {
     });
 
     it('should pass correct method to export CSS button', () => {
-      wrapper = shallow(<UserMenu {...props} isLastPhase={true} />);
+      wrapper = shallow(<UserMenu {...props} />);
       const ddMenu = wrapper.find(DropdownMenu);
 
       expect(props.onCsvExport).not.toHaveBeenCalled();
@@ -86,31 +85,6 @@ describe('<UserMenu />', () => {
     expect(ddMenu.find(MenuItem).find({ name: 'Delete board' })).toHaveLength(
       0
     );
-  });
-
-  describe('delete board', () => {
-    let _confirm: (message?: string) => boolean;
-
-    beforeAll(() => {
-      _confirm = ((global as any) as Window).confirm;
-      ((global as any) as Window).confirm = () => true;
-    });
-
-    afterAll(() => {
-      ((global as any) as Window).confirm = _confirm;
-    });
-
-    it('should pass correct method to delete board button', () => {
-      wrapper = shallow(<UserMenu {...props} />);
-      const ddMenu = wrapper.find(DropdownMenu);
-
-      expect(props.onDeleteBoard).not.toHaveBeenCalled();
-      ddMenu
-        .find(MenuItem)
-        .find({ name: 'Delete board' })
-        .simulate('click');
-      expect(props.onDeleteBoard).toHaveBeenCalled();
-    });
   });
 
   it('should pass correct method to sign out button', () => {

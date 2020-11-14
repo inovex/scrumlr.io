@@ -102,14 +102,14 @@ $card-details-z-index: $card-z-index + $base-z-index-step;
   margin-top: 1em;
 }
 
-.card-details__delete-icon {
+.card-details__options-icon {
   width: 32px;
   height: 32px;
   display: flex;
   justify-content: center;
 }
 
-.card-details__delete-icon svg {
+.card-details__options-icon svg {
   fill: #fff;
   width: 20px;
   height: 20px;

@@ -10,11 +10,12 @@ import Logo from './subcomponents/Logo';
 import './Header.scss';
 import { mapStateToProps } from './Header.container';
 import { connect } from 'react-redux';
-import { RetroMode } from '../../constants/mode';
+import { PhaseConfiguration } from '../../constants/Retrospective';
 
 export interface OwnHeaderProps {
   isAdmin: boolean;
   boardId: string;
+  phasesConfig: { [key: string]: PhaseConfiguration };
   onSignOut: () => void;
   onPdfExport: () => void;
   onCsvExport: () => void;
@@ -23,9 +24,7 @@ export interface OwnHeaderProps {
 }
 
 export interface StateHeaderProps {
-  mode: RetroMode;
   phase: number;
-  isLastPhase: boolean;
   sorted: boolean;
   boardName?: string;
   onPrevPhase: () => void;
@@ -49,9 +48,8 @@ export class Header extends React.Component<HeaderProps, {}> {
       className,
       boardName,
       boardId,
-      mode,
+      phasesConfig,
       phase: guidedPhase,
-      isLastPhase,
       onPrevPhase,
       onNextPhase,
       onSetTimer,
@@ -77,7 +75,7 @@ export class Header extends React.Component<HeaderProps, {}> {
 
           <PhaseMenu
             admin={isAdmin}
-            mode={mode}
+            phasesConfig={phasesConfig}
             guidedPhase={guidedPhase}
             onPrevPhase={onPrevPhase}
             onNextPhase={onNextPhase}
@@ -104,7 +102,6 @@ export class Header extends React.Component<HeaderProps, {}> {
                 onOpenModal={onOpenModal}
                 onDeleteBoard={onDeleteBoard}
                 onDeleteUser={onDeleteUser}
-                isLastPhase={isLastPhase}
                 onSetTimer={onSetTimer}
               />
             )}

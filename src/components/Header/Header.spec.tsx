@@ -15,9 +15,8 @@ describe('<Header />', () => {
     props = {
       boardId: 'test',
       isAdmin: false,
-      mode: 'positiveNegative',
+      phasesConfig: {},
       phase: 0,
-      isLastPhase: false,
       sorted: false,
       onPrevPhase: jest.fn(),
       onNextPhase: jest.fn(),

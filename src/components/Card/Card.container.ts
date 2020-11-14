@@ -1,4 +1,4 @@
-import { getVal, getFirebase } from 'react-redux-firebase';
+import { getFirebase, getVal } from 'react-redux-firebase';
 import { sortBy } from 'lodash';
 import * as Raven from 'raven-js';
 
@@ -35,6 +35,52 @@ export const mapStateToProps = (
     {}
   );
 
+  const unstackCard = (oldParentKey: string) => {
+    // Choose a new parent for the card's children
+    let newParentKey = Object.keys(cards).find(
+      k => cards[k].parent === oldParentKey
+    );
+
+    const toUpdate = {};
+    if (newParentKey) {
+      // Reattach all children to new parent, if it exists
+      Object.keys(cards).forEach(k => {
+        if (cards[k].parent === oldParentKey && k !== newParentKey) {
+          toUpdate[`${k}/parent`] = newParentKey;
+        }
+      });
+
+      // Attach new parent back to the "binary tree" and remove old card from it
+      toUpdate[`${newParentKey}/parent`] = cards[oldParentKey].parent || null;
+    }
+
+    toUpdate[`${oldParentKey}/parent`] = null;
+
+    return toUpdate;
+  };
+
+  const votes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.votes;
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack.map(card => card.votes).reduce((a, b) => a + b);
+  };
+
+  const ownVotes = () => {
+    let cardsInStack = getCardsInTheStack(ownProps.card.id || '')();
+
+    if (cardsInStack.length === 0) return ownProps.card.userVotes[user.uid];
+
+    cardsInStack.push(ownProps.card);
+
+    return cardsInStack
+      .map(card => card.userVotes[user.uid] || 0)
+      .reduce((a, b) => a + b);
+  };
+
   async function onRemoveCard(key: string) {
     const { focusedCardId } = getVal(
       state.fbState,
@@ -48,16 +94,9 @@ export const mapStateToProps = (
         .remove();
     }
 
-    const toUpdate = {};
-    Object.keys(cards).forEach(k => {
-      if (cards[k].parent === key) {
-        toUpdate[`${k}/parent`] = null;
-      }
-    });
-
     await getFirebase()
       .ref(`${ownProps.boardId}/cards`)
-      .update(toUpdate)
+      .update(unstackCard(key))
       .catch((err: Error) => {
         Raven.captureMessage('Could change parent of card', {
           extra: {
@@ -157,26 +196,31 @@ export const mapStateToProps = (
         .update({
           parent: cardSourceId
         });
-
-      const userVotes = cards[cardSourceId].userVotes;
-      Object.keys(cards[cardTargetId].userVotes).forEach(userId => {
-        userVotes[userId] =
-          (userVotes[userId] || 0) + cards[cardTargetId].userVotes[userId];
-      });
-      const votes =
-        (cards[cardSourceId].votes || 0) + (cards[cardTargetId].votes || 0);
-
       // set new timestamp on source card, so that order will be maintained in the stack
       const newTimestamp = cards[cardTargetId].timestamp;
 
       getFirebase()
         .ref(`${ownProps.boardId}/cards/${cardSourceId}`)
         .update({
-          userVotes,
-          votes,
           timestamp: newTimestamp
         });
     }
+  }
+
+  function onUnstackCard(key: string) {
+    getFirebase()
+      .ref(`${ownProps.boardId}/cards`)
+      .update(unstackCard(key))
+      .catch((err: Error) => {
+        Raven.captureMessage('Could change parent of card', {
+          extra: {
+            reason: err.message,
+            uid: user.uid,
+            boardId: ownProps.boardId,
+            cardId: key
+          }
+        });
+      });
   }
 
   function onFocusCard(cardId: string) {
@@ -272,8 +316,8 @@ export const mapStateToProps = (
     isFocused: focusedCardId == ownProps.card.id,
     owner: user.uid === ownProps.card.authorUid,
     stacked: Boolean(ownProps.card.parent),
-    ownVotes: ownProps.card.userVotes[user.uid],
-    votes: ownProps.card.votes,
+    ownVotes: ownVotes(),
+    votes: votes(),
 
     getCardsInTheStack: getCardsInTheStack(ownProps.card.id || ''),
     onRemove: onRemoveCard,
@@ -283,6 +327,7 @@ export const mapStateToProps = (
     onUpdateText: onUpdateCardText,
     onShowVotes: () => {},
     onCardStack: onStackCards,
+    onCardUnstack: onUnstackCard,
     onFocus: onFocusCard,
     isShowAuthor
   };

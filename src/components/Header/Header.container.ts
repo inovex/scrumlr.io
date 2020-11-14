@@ -3,7 +3,6 @@ import { getFirebase, getVal, helpers } from 'react-redux-firebase';
 import { OwnHeaderProps, StateHeaderProps } from './Header';
 import * as Raven from 'raven-js';
 import { debounce } from 'lodash';
-import { getPhasesCount } from '../../constants/Retrospective';
 import isLoaded = helpers.isLoaded;
 import HttpsCallableResult = firebase.functions.HttpsCallableResult;
 
@@ -127,7 +126,6 @@ export const mapStateToProps = (
       updateUsers[`${uid}/ready`] = false;
     });
 
-    console.log(updateUsers);
     firebase
       .ref(`${boardUrl}/users`)
       .update(updateUsers)
@@ -196,15 +194,9 @@ export const mapStateToProps = (
     onSwitchPhaseIndex(1);
   };
 
-  const isLastPhase =
-    boardConfig.config.guidedPhase ===
-    getPhasesCount(boardConfig.config.mode) - 1;
-
   return {
     boardName: boardConfig.config.name,
-    mode: boardConfig.config.mode,
     phase: boardConfig.config.guidedPhase,
-    isLastPhase,
     sorted: boardConfig.config.sorted,
     onPrevPhase,
     onNextPhase,

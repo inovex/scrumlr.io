@@ -30,6 +30,12 @@ function base56str2ar(str: string) {
   return new Uint8Array(bs58.decode(str));
 }
 
+export const hash = async (text: string) => {
+  return bs58.encode(
+    new Buffer(await window.crypto.subtle.digest('SHA-256', str2ab(text)))
+  );
+};
+
 export class Crypto {
   publicKey: CryptoKey;
   privateKey: CryptoKey;

@@ -20,6 +20,9 @@ const availableRetroModes = {
   lean: {
     label: 'Lean Coffee'
   },
+  leanActions: {
+    label: 'Lean Coffee (with Actions)'
+  },
   positiveNegative: {
     label: 'Simple Retro'
   },

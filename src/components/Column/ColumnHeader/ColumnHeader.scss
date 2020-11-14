@@ -23,7 +23,9 @@
 }
 
 .column-header__title-wrapper {
-  display: flex;
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .column-header__overview-button {

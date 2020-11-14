@@ -3,21 +3,24 @@ import * as React from 'react';
 import './ColumnView.scss';
 import * as ReactSwipe from 'react-swipe';
 
-import { IndexedPhaseConfiguration } from '../../constants/Retrospective';
+import { ColumnType, PhaseConfiguration } from '../../constants/Retrospective';
 import Column from '../Column';
 import { mapStateToProps } from './ColumnView.container';
 import { connect } from 'react-redux';
 
 export interface OwnColumnViewProps {
   isAdmin: boolean;
+  isShowCards: boolean;
   boardUrl: string;
   children?: any;
   className?: string;
+  phasesConfig: { [key: string]: PhaseConfiguration };
+  onUpdateColumnName: (columnId: string, newName: string) => void;
 }
 
 export interface StateColumnViewProps {
-  phase: IndexedPhaseConfiguration;
   filteredCardType?: string;
+  guidedPhase: number;
 }
 
 export type ColumnViewProps = OwnColumnViewProps & StateColumnViewProps;
@@ -70,7 +73,12 @@ export class ColumnView extends React.Component<
   };
 
   gotoNextColumn = () => {
-    if (this.state.activeColumn < this.props.phase.columns.length - 1) {
+    if (
+      this.state.activeColumn <
+      Object.keys(this.props.phasesConfig[this.props.guidedPhase].columns)
+        .length -
+        1
+    ) {
       this.setState({
         ...this.state,
         activeColumn: this.state.activeColumn + 1
@@ -89,26 +97,39 @@ export class ColumnView extends React.Component<
   }
 
   render() {
-    const { columns } = this.props.phase;
+    const columns = this.props.phasesConfig[this.props.guidedPhase].columns;
 
-    const renderedColumns = columns
-      .filter(column =>
+    const phase = {
+      guidedPhase: this.props.guidedPhase,
+      config: this.props.phasesConfig[this.props.guidedPhase]
+    };
+    const renderedColumns = Object.keys(columns)
+      .filter(key =>
         this.state.showCarousel && this.props.filteredCardType
-          ? column.id === this.props.filteredCardType
+          ? key === this.props.filteredCardType
           : true
       )
-      .map((column, index, values) => (
+      // Actions should always be on the right-hand side of the board
+      .sort((a, b) => {
+        // FIXME
+        if (columns[a].type === ('actions' as ColumnType)) return 1;
+        if (columns[b].type === ('actions' as ColumnType)) return -1;
+        return 0;
+      })
+      .map((key, index, values) => (
         <Column
           isAdmin={this.props.isAdmin}
-          column={column}
-          key={column.id}
+          isShowCards={this.props.isShowCards}
+          key={key}
+          id={key}
           boardUrl={this.props.boardUrl}
-          phase={this.props.phase}
+          phase={phase}
           isActive={this.state.activeColumn === index}
           hasPreviousColumn={index > 0}
           hasNextColumn={index < values.length - 1}
           onGoToPrevColumn={this.gotoPreviousColumn}
           onGoToNextColumn={this.gotoNextColumn}
+          onUpdateColumnName={this.props.onUpdateColumnName}
           className="board__column"
           isCompactView={this.state.showCarousel}
         />

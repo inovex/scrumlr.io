@@ -20,14 +20,15 @@ import {
 import Header from '../../components/Header';
 import ColumnView from '../../components/ColumnView';
 import SettingsModal from '../../components/Modal/variant/SettingsModal';
-import FeedbackModal from '../../components/Modal/variant/FeedbackModal';
+import AboutModal from '../../components/Modal/variant/AboutModal';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import ShareModal from '../../components/Modal/variant/ShareModal';
 import MembershipRequestModal from '../../components/Modal/variant/MembershipRequestModal';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
+import { PhaseConfiguration } from '../../constants/Retrospective';
 import Timer from '../../components/Timer';
 import { ExportToCsv } from 'export-to-csv';
 import UsersModal from '../../components/Modal/variant/UsersModal';
+import { CRYPTO } from '../../util/global';
 
 const Div100vh: any = require('react-div-100vh').default;
 const { toast } = require('react-toastify');
@@ -35,22 +36,29 @@ const { toast } = require('react-toastify');
 export interface BoardProps extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
   boardConfig: BoardConfig;
+  phasesConfig: { [key: string]: PhaseConfiguration };
   users: BoardUsers;
   boardSelector: string;
   boardPrintUrl: string;
   isBoardAdmin: boolean;
   isShowAuthor: boolean;
+  isShowCards: boolean;
   uid: string; // ID of the current user
   setupCompleted: boolean;
   focusedCard?: Card;
+  isSecure: boolean;
 
   onToggleReadyState: () => void;
   onFocusCard: (cardId: string) => void;
   onChangeBoardName: (boardName: string) => void;
   onChangeUsername: (usernaame: string) => void;
   onDeleteTimer: () => void;
+  onDeleteBoard: () => void;
   onToggleShowAuthor: () => void;
+  onToggleShowCards: () => void;
+  onUpdateColumnName: (columnId: string, newName: string) => void;
   onSwitchPhaseIndex: (delta: number) => void;
+  onSignOut: () => void;
 
   // Added by mergeProps
   onRegisterCurrentUser: () => void;
@@ -78,7 +86,7 @@ export interface CsvExportData {
   id: string;
   author?: string;
   text: string;
-  type: string;
+  column: string;
   votes: number;
   timestamp: string;
   parent?: string;
@@ -115,12 +123,11 @@ export class Board extends React.Component<BoardProps, BoardState> {
         prevProps.boardConfig.guidedPhase > 0 ||
         this.props.boardConfig.guidedPhase > 0
       ) {
-        const phase = getPhaseConfiguration(
-          this.props.boardConfig.mode,
+        const phase = this.props.phasesConfig[
           this.props.boardConfig.guidedPhase
-        );
+        ];
         toast(
-          `Switched to Phase ${phase.index + 1} ${
+          `Switched to Phase ${this.props.boardConfig.guidedPhase + 1} ${
             phase.name
           } - ${phase.activities.map(a => a.description).join(', ')}`
         );
@@ -154,10 +161,19 @@ export class Board extends React.Component<BoardProps, BoardState> {
   };
 
   handleExportPrint = () => {
-    window.location.hash = this.props.boardPrintUrl;
+    if (this.props.cards && Object.keys(this.props.cards).length > 0) {
+      window.location.hash = this.props.boardPrintUrl;
+    } else {
+      toast('Unable to export empty board, sorry!');
+    }
   };
 
-  handleExportCsv = () => {
+  handleExportCsv = async () => {
+    if (!this.props.cards || Object.keys(this.props.cards).length === 0) {
+      toast('Unable to export empty board, sorry!');
+      return;
+    }
+
     const options = {
       fieldSeparator: ';',
       quoteStrings: '"',
@@ -175,20 +191,35 @@ export class Board extends React.Component<BoardProps, BoardState> {
 
     const csvExporter = new ExportToCsv(options);
 
-    const cardsArrayCsv = Object.keys(this.props.cards).map(key => {
-      const card = this.props.cards[key];
-      return {
-        id: key,
-        author: card.author || '-',
-        text: card.text,
-        type: card.type,
-        votes: card.votes,
-        timestamp: card.timestamp,
-        parent: card.parent || '-'
-      } as CsvExportData;
-    });
+    const cardsArrayCsv = Object.keys(this.props.cards)
+      .filter(
+        key =>
+          !isNaN(this.props.cards[key].type as any) &&
+          this.props.phasesConfig[this.props.boardConfig.guidedPhase].columns[
+            this.props.cards[key].type
+          ]
+      )
+      .map(async key => {
+        const card = this.props.cards[key];
+        return {
+          id: key,
+          author: card.author || '-',
+          text: this.props.isSecure
+            ? await CRYPTO.decrypt(card.text, card.iv)
+            : card.text,
+          // Get name of currently active column
+          column: this.props.phasesConfig[this.props.boardConfig.guidedPhase]
+            .columns[card.type].name,
+          votes: card.votes,
+          timestamp: card.timestamp,
+          parent: card.parent || '-'
+        } as CsvExportData;
+      });
 
-    csvExporter.generateCsv(cardsArrayCsv);
+    Promise.all(cardsArrayCsv).then(awaitedCardsArrayCsv => {
+      console.log(cardsArrayCsv);
+      csvExporter.generateCsv(awaitedCardsArrayCsv);
+    });
   };
 
   handleExport = (format: ExportFormats = 'print') => {
@@ -224,12 +255,14 @@ export class Board extends React.Component<BoardProps, BoardState> {
     const {
       isBoardAdmin,
       boardConfig,
+      phasesConfig,
       boardSelector,
       setupCompleted,
       users,
       waitingUsers,
       timerExpiration,
       onDeleteTimer,
+      onUpdateColumnName,
       acceptUser
     } = this.props;
     const configLoaded = boardConfig && Object.keys(boardConfig).length > 0;
@@ -254,7 +287,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
     }
 
     const showSettings = !waitingUser && this.state.showModal === 'settings';
-    const showFeedback = !waitingUser && this.state.showModal === 'feedback';
+    const showAbout = !waitingUser && this.state.showModal === 'about';
     const showShareDialog = !waitingUser && this.state.showModal === 'share';
     const showUsers = !waitingUser && this.state.showModal === 'users';
     const onDeleteTimerAuthorized = isBoardAdmin ? onDeleteTimer : undefined;
@@ -266,6 +299,7 @@ export class Board extends React.Component<BoardProps, BoardState> {
           <Header
             isAdmin={isBoardAdmin}
             boardId={boardSelector}
+            phasesConfig={phasesConfig}
             onPdfExport={() => this.handleExport('print')}
             onCsvExport={() => this.handleExport('csv')}
             onSignOut={this.props.onSignOut}
@@ -273,8 +307,11 @@ export class Board extends React.Component<BoardProps, BoardState> {
           />
 
           <ColumnView
+            phasesConfig={phasesConfig}
+            onUpdateColumnName={onUpdateColumnName}
             isAdmin={isBoardAdmin}
             boardUrl={boardSelector}
+            isShowCards={this.props.isShowCards}
             className="board-page__column-view"
           />
 
@@ -292,15 +329,18 @@ export class Board extends React.Component<BoardProps, BoardState> {
               isAnonymous={this.props.isAnonymous}
               onChangeBoardName={this.props.onChangeBoardName}
               onChangeUsername={this.props.onChangeUsername}
+              onDeleteBoard={this.props.onDeleteBoard}
               onClose={this.handleCloseModal}
               onToggleShowAuthor={this.props.onToggleShowAuthor}
               isShowAuthor={this.props.isShowAuthor}
+              onToggleShowCards={this.props.onToggleShowCards}
+              isShowCards={this.props.isShowCards}
             />
           )}
 
           {showShareDialog && <ShareModal onClose={this.handleCloseModal} />}
 
-          {showFeedback && <FeedbackModal onClose={this.handleCloseModal} />}
+          {showAbout && <AboutModal onClose={this.handleCloseModal} />}
 
           {showUsers && (
             <UsersModal

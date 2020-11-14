@@ -25,7 +25,7 @@ yarn-error.log*
 *.iml
 
 # Styles
-*.css
+src/**/*.css
 
 # Firebase
 .firebase

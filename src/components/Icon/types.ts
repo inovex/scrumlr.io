@@ -24,7 +24,7 @@ export type IconNames =
   | 'close'
   | 'close20'
   | 'close-circle'
-  | 'feedback'
+  | 'about'
   | 'overview'
   | 'key-up'
   | 'key-down'
@@ -40,4 +40,6 @@ export type IconNames =
   | 'stack-hover'
   | 'arrow-left'
   | 'arrow-right'
-  | 'inovex';
+  | 'inovex'
+  | 'private'
+  | 'public';

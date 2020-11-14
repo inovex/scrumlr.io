@@ -5,6 +5,7 @@ import Input from '../../Input';
 import Modal from '../Modal';
 import getRandomName from '../../../constants/Name';
 import Checkbox from '../../Checkbox';
+import Icon from '../../Icon';
 
 export interface SettingsModalProps {
   isAdmin: boolean;
@@ -16,10 +17,21 @@ export interface SettingsModalProps {
   onChangeBoardName: (name: string) => void;
   onChangeUsername: (name: string) => void;
   onToggleShowAuthor: () => void;
+  onToggleShowCards: () => void;
+  onDeleteBoard: () => void;
   isShowAuthor: boolean;
+  isShowCards: boolean;
 }
 
 export class SettingsModal extends React.Component<SettingsModalProps, {}> {
+  handleDeleteBoard = () => {
+    const warning =
+      'Are you sure you want to delete the board? This action cannot be undone.';
+    if (window.confirm(warning)) {
+      this.props.onDeleteBoard();
+    }
+  };
+
   render() {
     const now = new Date();
     const formattedDate = `${now.getFullYear()}/${now.getMonth() +
@@ -52,6 +64,13 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
             >
               Show author of cards
             </Checkbox>
+            <Checkbox
+              onChange={this.props.onToggleShowCards}
+              checked={Boolean(this.props.isShowCards)}
+              className="settings-modal__show-author-checkbox"
+            >
+              Show everyone's cards during Write phase
+            </Checkbox>
           </>
         )}
 
@@ -67,6 +86,23 @@ export class SettingsModal extends React.Component<SettingsModalProps, {}> {
           defaultValue={this.props.username}
           className="settings-modal__input"
         />
+
+        {this.props.isAdmin && (
+          <button
+            className="settings-modal__delete-button"
+            aria-label="Delete this board"
+            onClick={this.handleDeleteBoard}
+          >
+            <Icon
+              name="trash"
+              className="delete-button__icon"
+              aria-hidden="true"
+              width={16}
+              height={16}
+            />
+            Delete this board
+          </button>
+        )}
       </Modal>
     );
   }
