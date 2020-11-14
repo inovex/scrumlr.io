@@ -2,6 +2,8 @@ import * as cx from 'classnames';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
+const QRCode = require('react-qr-code').default;
+
 import './ShareModal.scss';
 import Modal from '../Modal';
 
@@ -30,7 +32,6 @@ export class ShareModal extends React.Component<
     const { onClose } = this.props;
 
     const link = window.location.href.replace('board', 'join');
-    const encoded = encodeURI(link).replace('#', '%23');
 
     return (
       <Modal onClose={onClose} onSubmit={onClose}>
@@ -38,10 +39,7 @@ export class ShareModal extends React.Component<
           <h2 className="share-modal__headline">Invite</h2>
 
           <a href={link} className="share-modal__qr">
-            <img
-              src={`https://chart.googleapis.com/chart?cht=qr&chs=400x400&chld=L|0&chl=${encoded}`}
-              className="share-modal__qr-image"
-            />
+            <QRCode value={link} size={400} className="share-modal__qr-image" />
           </a>
           <CopyToClipboard text={link} onCopy={this.displayCopyMessage}>
             <button type="button" className="share-modal__invite-button">

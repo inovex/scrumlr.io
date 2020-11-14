@@ -159,6 +159,10 @@ export class AboutModal extends React.Component<
               <h3>2020/11/14</h3>
               <ul>
                 <li>Added "About" section, including an added changelog</li>
+                <li>
+                  Replaced QR-Code generator library within Share modal with
+                  improved load time
+                </li>
               </ul>
             </div>
           </div>
