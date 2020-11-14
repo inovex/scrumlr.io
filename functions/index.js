@@ -28,7 +28,7 @@ const cleanupDatabase = (exitFunction) => {
     });
 };
 
-const deleteUserId = (userId, exitFuntion) => {
+const deleteUserId = (userId, exitFunction) => {
   const toDelete = [];
 
   const app = admin.initializeApp();
