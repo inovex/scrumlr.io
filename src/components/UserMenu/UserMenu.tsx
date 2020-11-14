@@ -131,15 +131,6 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             }}
           />
         </li>
-        <li key="user-menu__about" className="user_menu__li--hidden-mobile">
-          <MenuItem
-            name="About &amp; Feedback"
-            icon="about"
-            onClick={() => {
-              onOpenModal('about');
-            }}
-          />
-        </li>
         <li key="user-menu__share" className="user_menu__li--hidden-mobile">
           <MenuItem
             name="Share"
@@ -222,6 +213,15 @@ export class UserMenu extends React.Component<UserMenuProps, UserMenuState> {
             </li>
           </>
         )}
+        <li key="user-menu__about" className="user_menu__li--hidden-mobile">
+          <MenuItem
+            name="About"
+            icon="about"
+            onClick={() => {
+              onOpenModal('about');
+            }}
+          />
+        </li>
         <li key="user-menu__logout" className="user-menu__logout">
           <MenuItem name="Sign Out" icon="logout" onClick={onSignOut} />
         </li>

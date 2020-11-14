@@ -1,14 +1,13 @@
 import * as React from 'react';
 
 import './AboutModal.scss';
-import Input from '../../Input';
 import Modal from '../Modal';
-import Textarea from '../../Textarea';
 import Raven = require('raven-js');
 import { slack } from '../../../config';
 import Icon from 'components/Icon';
+import classNames = require('classnames');
 
-export type TabType = 'about' | 'feedback' | 'privacy' | 'changelog';
+export type TabType = 'about' | 'changelog';
 
 export interface AboutModalProps {
   onClose: () => void;
@@ -80,33 +79,23 @@ export class AboutModal extends React.Component<
 
   render() {
     const showAbout = this.state.showTab === 'about';
-    const showFeedback = this.state.showTab === 'feedback';
-    const showPrivacy = this.state.showTab === 'privacy';
     const showChangelog = this.state.showTab === 'changelog';
 
     return (
       <Modal onClose={this.props.onClose} onSubmit={this.sendEmailOnClose}>
         <div className="about-modal__tabs">
           <button
-            className="about-modal__tab-button"
+            className={classNames('about-modal__tab-button', {
+              'about-modal__tab-button--active': showAbout
+            })}
             onClick={e => this.setTab('about')}
           >
             About
           </button>
           <button
-            className="about-modal__tab-button"
-            onClick={e => this.setTab('feedback')}
-          >
-            Feedback
-          </button>
-          <button
-            className="about-modal__tab-button"
-            onClick={e => this.setTab('privacy')}
-          >
-            Privacy
-          </button>
-          <button
-            className="about-modal__tab-button"
+            className={classNames('about-modal__tab-button', {
+              'about-modal__tab-button--active': showChangelog
+            })}
             onClick={e => this.setTab('changelog')}
           >
             Changelog
@@ -130,10 +119,18 @@ export class AboutModal extends React.Component<
                   inovex
                 </a>
                 .
-                <br />
-                <br />
-                Thanks to all our users, contributors & supporters!
               </p>
+              <p>
+                Read more about our{' '}
+                <a
+                  href="https://www.iubenda.com/privacy-policy/26348404"
+                  target="_blank"
+                >
+                  Privacy Policy
+                </a>
+                , by clicking on the highlighted link.
+              </p>
+              <p>Thanks to all our users, contributors & supporters!</p>
             </div>
 
             <div className="about-modal__panel">
@@ -154,100 +151,15 @@ export class AboutModal extends React.Component<
           </div>
         )}
 
-        {showFeedback && (
-          <div className="about-modal__content">
-            <div className="about-modal__panel">
-              <h2 className="about-modal__headline">Feedback</h2>
-
-              <p>
-                Thank you for using and supporting Scrumlr. Like retrospectives
-                help to grow and learn as a team and focus on creating great
-                solutions, your feedback means the same to us.
-              </p>
-
-              <Input
-                id="feedback-modal__email-input"
-                label="E-Mail"
-                description="(optional) Help us to get in touch with you"
-                invertPlaceholder={false}
-                focusTheme="mint"
-                showUnderline={true}
-                placeholder="yourmail@scrumlr.io"
-                onChange={this.setEmail}
-              />
-            </div>
-
-            <div className="about-modal__panel">
-              <Textarea
-                id="feedback-modal__message"
-                label="Your message"
-                onChange={this.setMessageBody}
-                invertPlaceholder={false}
-                focusTheme="mint"
-                placeholder="Hello friend&#10;&#10;here is some space for your feedback and your thoughts.&#10;&#10;Thank you for your support!"
-                showUnderline={true}
-                description="Your message"
-                className="about-modal__right-area"
-              />
-            </div>
-          </div>
-        )}
-
-        {showPrivacy && (
-          <div className="about-modal__content">
-            <div className="about-modal__panel">
-              <h2 className="about-modal__headline">
-                Privacy policy of scrumlr.io
-              </h2>
-
-              <p>
-                Scrumlr.io collects some Personal Data from its Users. Personal
-                Data collected for the following purposes and using the
-                following services:
-                <br />
-                <br />
-                <b>Hosting and backend infrastructure</b>
-                <br />
-                Firebase Realtime Database and Firebase Cloud Functions Personal
-                Data: Usage Data; various types of Data as specified in the
-                privacy policy of the service Firebase Hosting Personal Data:
-                various types of Data as specified in the privacy policy of the
-                service
-                <br />
-                <br />
-                <b>Registration and authentication</b>
-                <br />
-                Firebase Authentication Personal Data: email address; first
-                name; last name; profile picture; username
-              </p>
-            </div>
-
-            <div className="about-modal__panel">
-              <p className="about-modal__right-area">
-                <b>Contact information</b>
-                <br />
-                Owner and Data Controller
-                <br />
-                inovex GmbH <br />
-                Karlsruher Straße 71 <br />
-                75179 Pforzheim <br />
-                Germany
-                <br />
-                Owner contact email: info@inovex.de
-              </p>
-            </div>
-          </div>
-        )}
-
         {showChangelog && (
           <div className="about-modal__content">
             <div className="about-modal__panel">
               <h2 className="about-modal__headline">Changelog</h2>
 
-              <p>
-                Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum
-                Lorem ipsum Lorem ipsum Lorem ipsum
-              </p>
+              <h3>2020/11/14</h3>
+              <ul>
+                <li>Added "About" section, including an added changelog</li>
+              </ul>
             </div>
           </div>
         )}

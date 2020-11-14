@@ -5,33 +5,43 @@
 }
 
 .about-modal__tab-button {
-  border: 1px solid $color-white;
+  border: none;
+  outline: none;
+  background: none;
 
-  font-size: $theme-font-size;
+  font-size: $theme-font-size - 2px;
   font-weight: bold;
   text-transform: uppercase;
 
-  padding: $default-padding $large-padding;
-  color: $color-white;
-  background: $color-mint;
-  transition: background .2s ease-in-out, box-shadow .2s ease-in-out;
+  padding: 0 10px 8px;
+  color: $color-dark;
 }
 
-.about-modal__tab-button:focus,
-.about-modal__tab-button:hover {
+.about-modal__tab-button:focus:not(.about-modal__tab-button--active),
+.about-modal__tab-button:hover:not(.about-modal__tab-button--active) {
   cursor: pointer;
-  background: $color-dark-mint;
-  box-shadow: 0 $base-unit*2 $base-unit*4 0 transparentize($color-dark, .85);
+  border-bottom: 2px solid $color-light-gray;
+}
+
+.about-modal__tab-button--active {
+  cursor: pointer;
+  border-bottom: 2px solid $color-mint;
 }
 
 .about-modal__content {
   min-width: 200px;
   min-height: 100px;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .about-modal__panel {
-  flex: 1 1 100%;
+  flex: 1 1 50%;
+  min-width: 220px;
+}
+
+.about-modal__panel ul {
+  padding-left: 20px;
 }
 
 .about-modal__headline {
@@ -41,12 +51,18 @@
 
 .about-modal__right-area {
   box-sizing: border-box;
-  padding-top: 60px;
-  padding-left: $default-padding;
+  padding-top: 24px;
+}
+
+@media screen and (min-width : 937px) {
+  .about-modal__right-area {
+    padding-top: 60px;
+    padding-left: $default-padding;
+  }
 }
 
 .about-modal__inovex-logo {
-  padding: 0px 5px 0px 5px;
+  padding: 0 5px 0 5px;
 }
 
 .about-modal__content a {
