@@ -4,7 +4,7 @@ import './AboutModal.scss';
 import Modal from '../Modal';
 import Raven = require('raven-js');
 import { slack } from '../../../config';
-import Icon from 'components/Icon';
+import Icon from '../../Icon';
 import classNames = require('classnames');
 
 export type TabType = 'about' | 'changelog';
