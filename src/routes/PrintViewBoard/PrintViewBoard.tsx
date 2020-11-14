@@ -9,12 +9,17 @@ import { isEmpty } from 'lodash';
 import HeadlinePrefix from './subcomponents/HeadlinePrefix';
 import { StoreState, BoardCards, BoardConfig, Card } from '../../types';
 import './PrintViewBoard.scss';
-import { getPhaseConfiguration } from '../../constants/Retrospective';
+import {
+  ColumnConfiguration,
+  PhaseConfiguration
+} from '../../constants/Retrospective';
 import Deferred from '../../components/Deferred';
+import retroModes from '../../constants/mode';
 
 export interface PrintViewBoardProps
   extends RouteComponentProps<{ id: string }> {
   cards: BoardCards;
+  columns: { [key: string]: ColumnConfiguration };
   boardConfig: BoardConfig;
   boardUrl: string;
 }
@@ -140,6 +145,11 @@ export class PrintViewBoard extends React.Component<
       );
     }
 
+    let phaseConfig: PhaseConfiguration = boardConfig.phasesConfig
+      ? boardConfig.phasesConfig[boardConfig.guidedPhase]
+      : retroModes[boardConfig.mode][boardConfig.guidedPhase];
+    let columns = phaseConfig.columns;
+
     return (
       <div className="print-view-board">
         <div className="buttonbar">
@@ -150,14 +160,11 @@ export class PrintViewBoard extends React.Component<
 
         {title}
 
-        {getPhaseConfiguration(
-          boardConfig.mode,
-          boardConfig.guidedPhase
-        ).columns.map(column =>
+        {Object.keys(columns).map(key =>
           this.renderCardSection(
-            column.name,
-            column.type,
-            cardsSorted[column.id]
+            columns[key].name,
+            columns[key].type,
+            cardsSorted[key]
           )
         )}
       </div>

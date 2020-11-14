@@ -17,19 +17,23 @@ describe('<Board />', () => {
     mockProps = {
       cards,
       boardConfig,
+      phasesConfig: {},
       users,
       isBoardAdmin: false,
       uid: '',
       registered: false,
       setupCompleted: false,
+      isSecure: false,
 
       onDeleteTimer: jest.fn(),
       onRegisterCurrentUser: jest.fn(),
       onToggleReadyState: jest.fn(),
       onFocusCard: jest.fn(),
+      onUpdateColumnName: jest.fn(),
       onSwitchPhaseIndex: jest.fn(),
       onSignOut: jest.fn(),
       onChangeBoardName: jest.fn(),
+      onDeleteBoard: jest.fn(),
 
       match: {
         params: { id: '-foobar' },
@@ -43,7 +47,9 @@ describe('<Board />', () => {
       boardPrintUrl: '/print',
       onChangeUsername: jest.fn(),
       onToggleShowAuthor: jest.fn(),
+      onToggleShowCards: jest.fn(),
       isShowAuthor: false,
+      isShowCards: false,
       isAnonymous: false,
       acceptUser: jest.fn(),
       waitingUsers: []

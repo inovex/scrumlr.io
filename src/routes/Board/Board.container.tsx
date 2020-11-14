@@ -1,22 +1,24 @@
 import { AnyAction, Dispatch } from 'redux';
-import { isLoaded, getVal } from 'react-redux-firebase';
+import { getVal, isLoaded } from 'react-redux-firebase';
 import * as Raven from 'raven-js';
 import { debounce, difference } from 'lodash';
 
 import { SETUP_COMPLETED } from '../../actions';
 import { BoardProps } from './Board';
 import {
-  BoardConfig,
-  FirebaseProp,
-  StoreState,
   BoardCards,
+  BoardConfig,
   Card,
+  FirebaseProp,
   Optional,
   PrivateBoardData,
-  PublicBoardData
+  PublicBoardData,
+  StoreState
 } from '../../types';
 import { authController } from '../../controller/auth';
 import { Crypto } from '../../util/crypto';
+import { PhaseConfiguration } from '../../constants/Retrospective';
+import retroModes from '../../constants/mode';
 
 export const mapStateToProps = (
   state: StoreState,
@@ -41,6 +43,11 @@ export const mapStateToProps = (
 
   const cards: BoardCards = board.cards || {};
   const boardConfig: BoardConfig = board.config;
+  const phasesConfig: {
+    [key: string]: PhaseConfiguration;
+  } = boardConfig.phasesConfig
+    ? boardConfig.phasesConfig
+    : retroModes[boardConfig.mode];
 
   const users = isLoaded(board) ? board.users : {};
 
@@ -67,6 +74,8 @@ export const mapStateToProps = (
     `data/${publicBoardSelector}`,
     undefined
   );
+
+  let isSecure = false;
 
   let waitingUsers: {
     uid: string;
@@ -97,6 +106,8 @@ export const mapStateToProps = (
           return 0;
         });
     }
+
+    isSecure = publicBoard.config.secure;
   }
 
   function acceptUser(uid: string, accept: boolean) {
@@ -151,6 +162,18 @@ export const mapStateToProps = (
       })
       .catch((err: Error) => {
         Raven.captureMessage('Could not toggle show author state', {
+          extra: { reason: err.message, uid: auth.uid, boardId: boardSelector }
+        });
+      });
+  }
+
+  function onToggleShowCards() {
+    firebase
+      .update(`${boardSelector}/config`, {
+        showCards: !boardConfig.showCards
+      })
+      .catch((err: Error) => {
+        Raven.captureMessage('Could not toggle show content state', {
           extra: { reason: err.message, uid: auth.uid, boardId: boardSelector }
         });
       });
@@ -237,6 +260,20 @@ export const mapStateToProps = (
       });
   };
 
+  function onDeleteBoard() {
+    firebase
+      .ref(`${boardSelector}`)
+      .remove()
+      .then(() => {
+        location.hash = '/';
+      })
+      .catch((err: Error) => {
+        Raven.captureMessage('Could not delete board', {
+          extra: { reason: err.message, uid: auth.uid, boardId: boardSelector }
+        });
+      });
+  }
+
   function onSwitchPhaseIndex(delta: number) {
     firebase
       .ref(`${boardSelector}/config/guidedPhase`)
@@ -252,7 +289,6 @@ export const mapStateToProps = (
       updateUsers[`${uid}/ready`] = false;
     });
 
-    console.log(updateUsers);
     firebase
       .ref(`${boardSelector}/users`)
       .update(updateUsers)
@@ -268,11 +304,40 @@ export const mapStateToProps = (
     }
   }
 
+  function onUpdateColumnName(columnId: string, newName: string) {
+    let newConfig = phasesConfig;
+
+    // Change name of column with columnId in every phase
+    Object.keys(newConfig).forEach(key => {
+      if (newConfig[key].columns[columnId]) {
+        newConfig[key].columns[columnId].name = newName;
+      }
+    });
+
+    firebase
+      .set(`${boardSelector}/config/phasesConfig`, newConfig)
+      .catch((err: any) => {
+        Raven.captureMessage('unable to update phase configurations', {
+          extra: {
+            reason: err.message,
+            uid: auth.uid,
+            boardId: boardSelector
+          }
+        });
+      });
+  }
+
+  const isShowCards =
+    typeof boardConfig.showCards === 'undefined'
+      ? true
+      : Boolean(boardConfig.showCards);
+
   return {
     ...ownProps,
     cards,
     boardSelector,
     boardConfig,
+    phasesConfig,
     boardPrintUrl,
     users,
     focusedCard,
@@ -281,16 +346,21 @@ export const mapStateToProps = (
     email,
     timerExpiration,
     isAnonymous,
+    isSecure,
     uid: auth.uid,
     onToggleReadyState,
     onFocusCard,
     onSwitchPhaseIndex,
     isShowAuthor: Boolean(boardConfig.showAuthor),
+    isShowCards,
     onSignOut: authController(firebase).signOut,
     onChangeBoardName,
     onChangeUsername,
     onDeleteTimer,
+    onDeleteBoard,
     onToggleShowAuthor,
+    onToggleShowCards,
+    onUpdateColumnName,
     onRegisterCurrentUser: () => null, // will be filled in mergeProps
     waitingUsers,
     acceptUser,

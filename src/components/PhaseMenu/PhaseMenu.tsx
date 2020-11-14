@@ -3,16 +3,12 @@ import * as cx from 'classnames';
 
 import './PhaseMenu.scss';
 import Icon from '../Icon';
-import {
-  getPhaseConfiguration,
-  getPhasesCount
-} from '../../constants/Retrospective';
 import ReactTooltip = require('react-tooltip');
-import { RetroMode } from '../../constants/mode';
+import { PhaseConfiguration } from '../../constants/Retrospective';
 
 export interface PhaseMenuProps {
   admin: boolean;
-  mode: RetroMode;
+  phasesConfig: { [key: string]: PhaseConfiguration };
   guidedPhase: number;
   onPrevPhase: () => void;
   onNextPhase: () => void;
@@ -20,19 +16,22 @@ export interface PhaseMenuProps {
 
 export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
   render() {
-    const { admin, mode, guidedPhase, onPrevPhase, onNextPhase } = this.props;
+    const {
+      admin,
+      phasesConfig,
+      guidedPhase,
+      onPrevPhase,
+      onNextPhase
+    } = this.props;
 
     const prevPhaseName =
-      guidedPhase > 0
-        ? getPhaseConfiguration(mode, guidedPhase - 1).name
-        : undefined;
+      guidedPhase > 0 ? phasesConfig[guidedPhase - 1].name : undefined;
     const nextPhaseName =
-      guidedPhase < getPhasesCount(mode) - 1
-        ? getPhaseConfiguration(mode, guidedPhase + 1).name
+      guidedPhase < Object.keys(phasesConfig).length - 1
+        ? phasesConfig[guidedPhase + 1].name
         : undefined;
 
-    const phaseDescription = getPhaseConfiguration(mode, guidedPhase)
-      .description;
+    const phaseDescription = phasesConfig[guidedPhase].description;
 
     return (
       <div className={cx('phase-menu')}>
@@ -72,7 +71,7 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
             <button
               className="phase-menu__phase-button"
               aria-label="Go to next phase"
-              disabled={guidedPhase >= getPhasesCount(mode) - 1}
+              disabled={guidedPhase >= Object.keys(phasesConfig).length - 1}
               onClick={onNextPhase}
               data-tip={
                 nextPhaseName
@@ -114,7 +113,7 @@ export class PhaseMenu extends React.Component<PhaseMenuProps, {}> {
             data-tip={phaseDescription}
             data-for="phase-name-description"
           >
-            {getPhaseConfiguration(mode, guidedPhase).name}
+            {phasesConfig[guidedPhase].name}
           </span>
           <ReactTooltip
             id="phase-name-description"
