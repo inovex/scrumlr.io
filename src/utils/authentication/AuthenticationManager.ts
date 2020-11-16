@@ -32,11 +32,12 @@ async function signInAnonymously(displayName?: string, photoURL?: string) {
     try {
         const firebaseAuthUserCredentials  = await firebase.auth().signInAnonymously();
         await updateProfile(displayName, photoURL);
+        // Active user needs to be reloaded to get the display name
         firebase.auth().currentUser?.reload();
         Toast.success("Successfully signed in");
         return firebaseAuthUserCredentials;
     } catch(err) {
-        Toast.error("There occured a problem while signing in");
+        Toast.error("There occured a problem while signing you in");
         return null;
     }   
 }
