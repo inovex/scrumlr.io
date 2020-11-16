@@ -62,7 +62,10 @@ function NewBoard(props: NewBoardProps) {
                     if (e.key === 'Enter') {
                       handleLogin();
                     }
-                  }}
+                }}
+                inputProps={{
+                    maxLength: 20
+                }}
             />
             <Button onClick={handleLogin}>Login</Button>
         </div>

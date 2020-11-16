@@ -31,6 +31,9 @@ function LoginBoard(props: RouteComponentProps) {
                         handleLogin();
                     }
                 }}
+                inputProps={{
+                    maxLength: 20
+                }}
             />
             <Button onClick={handleLogin}>Login</Button>
         </div>
