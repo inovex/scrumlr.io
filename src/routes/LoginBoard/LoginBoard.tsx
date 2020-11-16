@@ -4,6 +4,7 @@ import getRandomName from "constants/Name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
+import { Toast } from 'utils/Toast';
 
 function LoginBoard(props: RouteComponentProps) {
 
@@ -13,10 +14,13 @@ function LoginBoard(props: RouteComponentProps) {
         setName(name);
     }
 
-    function handleLogin() {
-        AuthenticationManager.signInAnonymously(name).then(_ => {
+    async function handleLogin() {
+        await AuthenticationManager.signInAnonymously(name);
+        try {
             props.history.push((props.history.location.state as {from: {pathname: string}}).from.pathname);
-        });
+        } catch(err) {
+            Toast.error("An error occured while redirecting you");
+        }
     }
 
     return (
