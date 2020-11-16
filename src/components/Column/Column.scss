@@ -1,0 +1,108 @@
+@import "../../constants/style";
+
+.column {
+  min-width: $column__min-width;
+  width: 100%;
+  max-width: $column__max-width;
+
+  height: 100%;
+
+  @include inset-border($top: true, $bottom: true);
+}
+
+.column:nth-child(even) {
+  background-color: #f9fafb;
+}
+.column:nth-child(odd) {
+  background-color: #f6f5fb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column:nth-child(even) {
+    background-color: #242c3d;
+  }
+  .column:nth-child(odd) {
+    background-color: #272f41;
+  }
+}
+
+.column__content {
+  padding: 32px;
+}
+
+.column__header {
+  display: flex;
+}
+
+.column__header-text {
+  font-size: 24px;
+  width: auto;
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin-right: 10px;
+  // font-family: Raleway;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column__header-text {
+    color: $color-white;
+  }
+}
+
+.column__header-card-number {
+  font-size: 20px;
+  color: $color-middle-gray;
+  // font-family: Raleway;
+  font-weight: 600;
+  letter-spacing: 0.63px;
+  line-height: 32px;
+}
+
+.column__add-card {
+  display: flex;
+  background-color: $color-white;
+  margin-top: 16px;
+  margin-bottom: 32px;
+  padding: 10px 20px 10px 20px;
+  justify-content: space-between;
+  border-radius: 20px;
+  box-shadow: 0 6px 9px 0 #313949;
+  // box-shadow: 0 6px 9px 0 rgba(0,87,255,0.16);
+  // aus inVision: box shadow: background-color: #313949;
+  // height: 40px;
+  // width: 275px;
+}
+@media (prefers-color-scheme: dark) {
+  .column__add-card {
+    background-color: #4C5566;
+  }
+}
+
+.column__add-card:hover {
+  cursor: pointer;
+}
+
+.column__add-card__text {
+  margin: 0;
+  font-size: 14px;
+  color: $color-black;
+  // font-family: Raleway;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  line-height: 24px;
+}
+@media (prefers-color-scheme: dark) {
+  .column__add-card__text {
+    color: $color-white;
+  }
+}
+
+.column__add-card__icon {
+  width: 14px;
+  height: 14px;
+  fill: var(--accent-color);
+  align-self: center;
+}

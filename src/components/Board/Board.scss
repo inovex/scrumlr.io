@@ -1,0 +1,136 @@
+@import "../../constants/style";
+@import "../Column/Column";
+
+.board {
+  --n: 1;
+
+  display:grid;
+  grid-auto-flow: column;
+  grid-template-columns:
+          minmax($board__side-panel-width, 1fr)
+          repeat(
+            var(--board__columns),
+            Min(calc((100% - #{$board__side-panel-width*2})/min(var(--board__columns), var(--n))), #{$column__max-width})
+          )
+          minmax($board__side-panel-width, 1fr);
+
+  scroll-snap-type: x mandatory;
+  scroll-snap-stop: always;
+  scroll-padding: $board__side-panel-width;
+  overflow-x: auto;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.board > * {
+  scroll-snap-align: start;
+}
+
+.board__spacer-left {
+  @include inset-border($top: true, $left: true, $bottom: true);
+}
+.board__spacer-right {
+  @include inset-border($top: true, $right: true, $bottom: true);
+}
+
+.board__spacer-left:nth-child(odd),
+.board__spacer-right:nth-child(odd) {
+  background-color: #f9fafb;
+}
+
+.board__spacer-left:nth-child(even),
+.board__spacer-right:nth-child(even) {
+  background-color: #f6f5fb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .board__spacer-left:nth-child(odd),
+  .board__spacer-right:nth-child(odd) {
+    background-color: #242c3d;
+  }
+
+  .board__spacer-left:nth-child(even),
+  .board__spacer-right:nth-child(even) {
+    background-color: #272f41;
+  }
+}
+
+$board__navigation-button-dimension: 74px;
+$board__navigation-button-icon-dimension: 24px;
+
+.board__navigation {
+  position: fixed;
+  top: calc(50% - #{$board__navigation-button-dimension/2});
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: $board__navigation-button-dimension/2;
+  height: $board__navigation-button-dimension;
+
+  background-color: var(--accent-color);
+  opacity: 50%;
+  transition: opacity 0.15s ease-in-out;
+
+  border: none;
+
+  margin: 0;
+  padding: 0;
+}
+
+.board__navigation:focus {
+  outline: none;
+}
+
+.board__navigation:hover {
+  opacity: 100%;
+}
+
+.board__navigation-prev {
+  left: 0;
+
+  // border-radius enables half circle
+  border-radius: 0 74px 74px 0;
+}
+.board__navigation-next {
+  right: 0;
+
+  // border-radius enables half circle
+  border-radius: 74px 0 0 74px;
+}
+
+.board__navigation-arrow {
+  height: $board__navigation-button-icon-dimension;
+  width: $board__navigation-button-icon-dimension;
+  fill: $color-white;
+}
+
+.board__navigation-arrow-prev {
+  align-self: flex-start;
+
+  // visually center svg by margin
+  margin-left: 3px;
+}
+.board__navigation-arrow-next {
+  align-self: flex-end;
+
+  // visually center svg by margin
+  margin-right: 3px;
+}
+
+@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
+  .board {
+    grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width*2})) $column__border-width;
+    scroll-padding: $column__border-width;
+  }
+}
+
+@for $i from 1 through 16 {
+  @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
+    .board {
+      --n: #{$i};
+    }
+  }
+}
