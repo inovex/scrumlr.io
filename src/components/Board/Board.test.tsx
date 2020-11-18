@@ -1,8 +1,8 @@
 import React from 'react'
 import {act, render, fireEvent} from "@testing-library/react";
 import Board from "./Board";
-import Column from "../Column/Column";
-import {Color} from "../../constants/colors";
+import Column from "components/Column/Column";
+import {Color} from "constants/colors";
 
 const createBoardWithColumns = (...colors: Color[]) => {
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Column.scss';
-import {Color, getColorClassName} from "../../constants/colors";
-import {ReactComponent as PlusIcon} from "../../assets/icon-add.svg";
+import {Color, getColorClassName} from "constants/colors";
+import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 
 export interface ColumnProps {
     color: Color;

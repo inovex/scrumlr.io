@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './Board.scss';
-import {getColorClassName} from "../../constants/colors";
-import {ColumnProps} from "../Column/Column";
-import {ReactComponent as RightArrowIcon} from "../../assets/icon-arrow-next.svg";
-import {ReactComponent as LeftArrowIcon} from "../../assets/icon-arrow-previous.svg";
+import {getColorClassName} from "constants/colors";
+import {ColumnProps} from "components/Column/Column";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
