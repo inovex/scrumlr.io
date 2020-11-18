@@ -23,7 +23,7 @@ const Board = ({ children }: BoardProps) => {
     useEffect(() => {
         const board = boardRef.current;
 
-        // disconnect the former observer, if there is one  
+        // disconnect the previous observer, if there is one  
         if (intersectionObserverRef.current !== null) {
             intersectionObserverRef.current.disconnect();
         }
