@@ -161,22 +161,6 @@ describe('navigation', () => {
             expect(scrollIntoView).toHaveBeenCalled();
         });
 
-        // Infinite loop was removed to enhance usability
-        /*test('infinite loop from end-to-start', () => {
-            const columns = showColumns(false, false, true);
-            const scrollIntoView = jest.fn();
-            columns[0].scrollIntoView = scrollIntoView;
-            fireEvent.click(container.querySelector(".board__navigation-next") as any);
-            expect(scrollIntoView).toHaveBeenCalled();
-        });
-        test('infinite loop from start-to-end', () => {
-            const columns = showColumns(true, false, false);
-            const scrollIntoView = jest.fn();
-            columns[2].scrollIntoView = scrollIntoView;
-            fireEvent.click(container.querySelector(".board__navigation-prev") as any);
-            expect(scrollIntoView).toHaveBeenCalled();
-        });*/
-
         test('previous button has color of previous column', () => {
             showColumns(false, true, false);
             expect(container.querySelector('.board__navigation-prev')).toHaveClass('accent-color__pink');
@@ -187,5 +171,4 @@ describe('navigation', () => {
             expect(container.querySelector('.board__navigation-next')).toHaveClass('accent-color__purple');
         });
     })
-
 });
