@@ -1,36 +1,50 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useFirestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase';
-import { ApplicationState } from 'store/ApplicationState';
 import { useSelector } from 'react-redux';
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
-import BoardData from "../../types/BoardData";
+import {useEffect} from "react";
+import {joinBoard} from "../../api/board";
+import {ApplicationState} from "../../types/store";
+import {addCard, deleteCard} from "../../api/card";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
 function Board(props: BoardProps) {
+    useEffect( () => {
+        const boardId = props.match.params.id;
+        joinBoard(boardId);
+    }, []);
 
-    const boardId = props.match.params.id;
+    const state: any = useSelector((state: ApplicationState) => ({
+        board: state.board,
+        cards: state.cards
+    }));
 
-    useFirestoreConnect([
-        {collection: 'boards', doc: boardId}
-    ]);
+    const onAddCard = () => {
+        addCard(props.match.params.id, 'Test');
+    }
 
-    const board: BoardData = useSelector((state: ApplicationState) => state.firestore.data.boards && state.firestore.data.boards[boardId]);
+    const onDeleteCard = (id: string) => {
+        deleteCard(props.match.params.id, id);
+    }
 
-    if (isLoaded(board)) {
-        if (isEmpty(board)) {
-            // PLACEHOLDER: BOARD NON EXISTENT
-            return <div> Board non existent</div>;
-        } else {
-            // PLACEHOLDER: INSERT BOARD
-            return <div>
-                <h1>{board.topic} ({boardId})</h1>
-                <span>Owner: {board.owner}</span>
-                <br/>
-                <span>Date: {board.date.toDate().toString()}</span>
-            </div>;
-        }
+    if (state.board.status === 'pending') {
+        return <LoadingScreen/>;
+    } else if (state.board.status === 'ready') {
+        return (
+            <ul>
+                <li>{ JSON.stringify(state.board.data) }</li>
+                <li>
+                    <ul>
+                        {state.cards.map((card: any) => <li key={card.id}>
+                            {JSON.stringify(card)}
+                            <button onClick={() => { onDeleteCard(card.id) }}>Delete Card</button>
+                        </li>)}
+                    </ul>
+                </li>
+
+                <button onClick={onAddCard}>Add Card</button>
+            </ul>);
     } else {
         return <LoadingScreen/>;
     }
