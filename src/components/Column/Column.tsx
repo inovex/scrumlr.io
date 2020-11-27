@@ -14,7 +14,7 @@ const Column = ({ color, children } : ColumnProps) => {
             <div className="column__content">
                 <div className="column__header">
                     <h1 className="column__header-text">{children}</h1>
-                    <h1 className="column__header-card-number">5</h1>
+                    <p className="column__header-card-number">5</p>
                 </div>
                 <div className="column__add-card">
                     <p className="column__add-card__text">Add your note...</p>
