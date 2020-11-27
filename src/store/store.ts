@@ -5,6 +5,7 @@ import Parse from 'parse';
 import {mapBoardServerToClientModel} from "../types/board";
 import {ApplicationState} from "../types/store";
 import {CardClientModel, mapCardServerToClientModel} from "../types/card";
+import {mapUserServerToClientModel, UserClientModel} from "../types/user";
 
 
 const parseMiddleware = () => (dispatch: Dispatch) => (action: AnyAction) => {
@@ -78,6 +79,50 @@ const parseMiddleware = () => (dispatch: Dispatch) => (action: AnyAction) => {
             });
         });
 
+        const adminsQuery = new Parse.Query(Parse.Role);
+        adminsQuery.equalTo('name', `admin_of_${action.board}`);
+        const memberQuery = new Parse.Query(Parse.Role);
+        memberQuery.equalTo('name', `member_of_${action.board}`);
+
+        const usersQuery = Parse.Query.or(adminsQuery, memberQuery);
+        usersQuery.subscribe().then((subscription) => {
+            const updateUsers = (role: Parse.Role) => {
+                if (role.getName() === `member_of_${action.board}`) {
+                    role.getUsers().query().find().then((users) => {
+                        dispatch({
+                            type: '@@SCRUMLR/setUsers',
+                            payload: {
+                                users: users.map((user) => mapUserServerToClientModel(user.toJSON() as any, false)),
+                                admin: false
+                            }
+                        });
+                    });
+                }
+                if (role.getName() === `admin_of_${action.board}`) {
+                    role.getUsers().query().find().then((users) => {
+                        dispatch({
+                            type: '@@SCRUMLR/setUsers',
+                            payload: {
+                                users: users.map((user) => mapUserServerToClientModel(user.toJSON() as any, true)),
+                                admin: true
+                            }
+                        });
+                    });
+                }
+            }
+
+            subscription.on('update', (object) => {
+                updateUsers(object as Parse.Role);
+            });
+            subscription.on('open', () => {
+                usersQuery.find().then((results) => {
+                    for (const result of results) {
+                        updateUsers(result as Parse.Role);
+                    }
+                });
+            });
+        });
+
         /*const votesQuery = new Parse.Query(' Vote');
         votesQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.board));
         votesQuery.subscribe().then((subscription) => {
@@ -122,6 +167,33 @@ const rootReducer = combineReducers<ApplicationState>({
             case '@@SCRUMLR/deleteCard': {
                 const cardId = action.payload.card.id;
                 return state.filter((card) => card.id !== cardId);
+            }
+        }
+        return state;
+    },
+    users: (state: { admins: UserClientModel[], basic: UserClientModel[], all: UserClientModel[] }  = { admins: [], basic: [], all: [] }, action) => {
+        switch (action.type) {
+            case '@@SCRUMLR/setUsers': {
+                const newState = {
+                    admins: state.admins,
+                    basic: state.basic,
+                    all: [] as UserClientModel[]
+                }
+
+                if (action.payload.admin) {
+                    newState.admins = action.payload.users;
+                } else {
+                    newState.basic = action.payload.users;
+                }
+
+                newState.all = [ ...newState.admins ];
+                newState.basic.forEach((member) => {
+                   if (!newState.admins.find((admin) => admin.id === member.id)) {
+                       newState.all.push(member);
+                   }
+                });
+
+                return newState;
             }
         }
         return state;

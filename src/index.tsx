@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import Parse from 'parse';
 
 Parse.initialize('Scrumlr');
-Parse.serverURL = 'http://localhost:1337/api';
+Parse.serverURL = 'http://localhost:4000/api';
 
 ReactDOM.render(
   <React.StrictMode>

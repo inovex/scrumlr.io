@@ -120,8 +120,6 @@ export const initializeBoardFunctions = () => {
     });
 
     api<JoinBoardRequest, JoinBoardResponse>('joinBoard', async (user, request) => {
-        await requireValidBoardMember(user, request.board);
-
         const boardQuery = new Parse.Query<Parse.Object>('Board');
         const board = await boardQuery.get(request.board, { useMasterKey: true });
 

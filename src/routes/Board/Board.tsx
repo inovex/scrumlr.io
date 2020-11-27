@@ -13,11 +13,12 @@ function Board(props: BoardProps) {
     useEffect( () => {
         const boardId = props.match.params.id;
         joinBoard(boardId);
-    }, []);
+    }, [ props.match.params.id ]);
 
     const state: any = useSelector((state: ApplicationState) => ({
         board: state.board,
-        cards: state.cards
+        cards: state.cards,
+        users: state.users.all
     }));
 
     const onAddCard = () => {
@@ -42,7 +43,7 @@ function Board(props: BoardProps) {
                         </li>)}
                     </ul>
                 </li>
-
+                <li>{ JSON.stringify(state.users) }</li>
                 <button onClick={onAddCard}>Add Card</button>
             </ul>);
     } else {

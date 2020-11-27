@@ -6,7 +6,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import path from 'path';
 
 const HOST = process.env.SCRUMLR_API_HOST || 'localhost';
-const PORT = process.env.SCRUMLR_API_PORT || 1337;
+const PORT = process.env.SCRUMLR_API_PORT || 4000;
 const MASTER_KEY = process.env.SCRUMLR_API_MASTER_KEY || 'masterKey';
 const DATABASE_URI = process.env.SCRUMLR_DATABASE_URI || 'mongodb://localhost:27017/dev';
 const SERVE_PRODUCTION_WEBAPP = process.env.SCRUMLR_SERVE_PRODUCTION_WEBAPP || false;
