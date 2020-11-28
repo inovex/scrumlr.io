@@ -63,24 +63,18 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
                 const updateUsers = (role: Parse.Role) => {
                     if (role.getName() === `member_of_${action.boardId}`) {
                         role.getUsers().query().find().then((users) => {
-                            dispatch({
-                                type: '@@SCRUMLR/setUsers',
-                                payload: {
-                                    users: users.map((user) => mapUserServerToClientModel(user.toJSON() as any, false)),
-                                    admin: false
-                                }
-                            });
+                            dispatch(ActionFactory.setUsers(
+                                users.map((user) => mapUserServerToClientModel(user.toJSON() as any, false)),
+                                false
+                            ));
                         });
                     }
                     if (role.getName() === `admin_of_${action.boardId}`) {
                         role.getUsers().query().find().then((users) => {
-                            dispatch({
-                                type: '@@SCRUMLR/setUsers',
-                                payload: {
-                                    users: users.map((user) => mapUserServerToClientModel(user.toJSON() as any, true)),
-                                    admin: true
-                                }
-                            });
+                            dispatch(ActionFactory.setUsers(
+                                users.map((user) => mapUserServerToClientModel(user.toJSON() as any, true)),
+                                true
+                            ));
                         });
                     }
                 }

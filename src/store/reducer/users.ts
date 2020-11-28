@@ -1,20 +1,20 @@
-import {AnyAction} from 'redux';
 import {UsersState} from "../../types/store";
 import {UserClientModel} from "../../types/user";
+import {ActionType, ReduxAction} from "../action";
 
-export const usersReducer = (state: UsersState  = { admins: [], basic: [], all: [] }, action: AnyAction): UsersState => {
+export const usersReducer = (state: UsersState  = { admins: [], basic: [], all: [] }, action: ReduxAction): UsersState => {
     switch (action.type) {
-        case '@@SCRUMLR/setUsers': {
+        case ActionType.SetUsers: {
             const newState = {
                 admins: state.admins,
                 basic: state.basic,
                 all: [] as UserClientModel[]
             }
 
-            if (action.payload.admin) {
-                newState.admins = action.payload.users;
+            if (action.admin) {
+                newState.admins = action.users;
             } else {
-                newState.basic = action.payload.users;
+                newState.basic = action.users;
             }
 
             newState.all = [ ...newState.admins ];
