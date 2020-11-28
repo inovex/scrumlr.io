@@ -24,6 +24,9 @@
 * Add sorting options of cards & stacks
 * Sync time between server & client, so that a timer will display correct
   values on the client
+* Add template schema on server
+    * Add (optional) template reference to boards
+    * Add editable columns to board model
 * Document code (TSdoc)
 * Add unit tests
 
