@@ -4,7 +4,8 @@ import Button from '@material-ui/core/Button';
 import {AuthenticationManager} from 'utils/authentication/AuthenticationManager';
 import getRandomName from '../../constants/Name';
 import {RouteComponentProps} from "react-router";
-import {newBoard} from "../../api/board";
+import Parse from "parse";
+import {API} from "../../api";
 
 export interface NewBoardProps extends RouteComponentProps {}
 
@@ -22,8 +23,11 @@ function NewBoard(props: NewBoardProps) {
     }
 
     async function onCreateBoard() {
-        const board = await newBoard();
-        props.history.push(`/board/${board}`);
+        if (Parse.User.current()) {
+            const boardId = await API.createBoard();
+            props.history.push(`/board/${boardId}`);
+        }
+        // TODO report error
     }
 
     return (

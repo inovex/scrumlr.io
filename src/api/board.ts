@@ -1,9 +1,10 @@
-import Parse from 'parse';
-import {Api} from "./api";
+import {callAPI} from "./index";
 
-export const newBoard = async () => {
-    if (Parse.User.current()) {
-        return await Api.createBoard();
+export const BoardAPI = {
+    createBoard: () => {
+        return callAPI<{}, string>('createBoard', {});
+    },
+    joinBoard: (boardId: string) => {
+        return callAPI<{ boardId : string }, { status: 'accepted' | 'rejected' | 'pending', joinRequestReference?: string }>('joinBoard', { boardId});
     }
-    throw new Error('Not authorized');
 }

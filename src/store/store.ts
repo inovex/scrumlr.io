@@ -10,7 +10,7 @@ import {ActionType, ActionFactory, ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {usersReducer} from "./reducer/users";
-import {Api} from "../api/api";
+import {API} from "../api";
 
 let closeSubscriptions: Function[] = [];
 
@@ -26,7 +26,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Api.addNote(boardId, action.text);
+            API.addNote(boardId, action.text);
         }
     }
 
@@ -36,7 +36,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Api.deleteNote(boardId, action.noteId);
+            API.deleteNote(boardId, action.noteId);
         }
     }
 
@@ -46,7 +46,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Api.editNote(boardId, action.noteId, action.text);
+            API.editNote(boardId, action.noteId, action.text);
         }
     }
 
@@ -54,7 +54,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         try {
             return dispatch(action);
         } finally {
-            Api.joinBoard(action.boardId).then((response) => {
+            API.joinBoard(action.boardId).then((response) => {
                 // explicit 'store.dispatch' is required here or otherwise this middleware wont be called again
                 if (response.status === 'accepted') {
                     store.dispatch(ActionFactory.permittedBoardAccess(action.boardId));
