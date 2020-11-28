@@ -27,6 +27,7 @@
 * Add template schema on server
     * Add (optional) template reference to boards
     * Add editable columns to board model
+* Add option to promote users to admins or revoke their access
 * Document code (TSdoc)
 * Add unit tests
 
