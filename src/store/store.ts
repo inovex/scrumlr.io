@@ -7,37 +7,28 @@ import {ApplicationState} from "../types/store";
 import {CardClientModel, CardServerModel, mapCardServerToClientModel} from "../types/card";
 import {mapUserServerToClientModel, UserClientModel} from "../types/user";
 import {
-    Actions,
-    ADD_CARD,
-    AddCardAction,
-    CREATED_CARD,
-    CreatedCardAction,
-    DELETE_CARD, DeleteCardAction,
-    JOIN_BOARD,
-    LEAVE_BOARD
+    Actions, ActionTypes, ReduxAction
 } from "./actions";
 
 let closeSubscriptions: Function[] = [];
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: AnyAction) => {
-    if (action.type === LEAVE_BOARD) {
+    if (action.type === ActionTypes.LeaveBoard) {
         closeSubscriptions.forEach((closeCallback) => closeCallback());
         closeSubscriptions = [];
     }
 
-    if (action.type === ADD_CARD) {
-        const addCardAction = action as AddCardAction;
+    if (action.type === ActionTypes.AddCard) {
         const boardId = stateAPI.getState().board.data!.id;
-        Parse.Cloud.run('addCard', { board: boardId, text: addCardAction.text });
+        Parse.Cloud.run('addCard', { board: boardId, text: action.text });
     }
 
-    if (action.type === DELETE_CARD) {
-        const deleteCardAction = action as DeleteCardAction;
+    if (action.type === ActionTypes.DeleteCard) {
         const boardId = stateAPI.getState().board.data!.id;
-        Parse.Cloud.run('deleteCard', { board: boardId, card: deleteCardAction.cardId });
+        Parse.Cloud.run('deleteCard', { board: boardId, card: action.cardId });
     }
 
-    if (action.type === JOIN_BOARD) {
+    if (action.type === ActionTypes.JoinBoard) {
         const createUsersSubscription = () => {
             const adminsQuery = new Parse.Query(Parse.Role);
             adminsQuery.equalTo('name', `admin_of_${action.boardId}`);
@@ -95,12 +86,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
                     dispatch(Actions.createdCard(mapCardServerToClientModel(object as CardServerModel)))
                 });
                 subscription.on('update', (object) => {
-                    dispatch({
-                        type: '@@SCRUMLR/updateCard',
-                        payload: {
-                            card: object
-                        }
-                    });
+                    dispatch(Actions.updateCard(mapCardServerToClientModel(object as CardServerModel)));
                 });
                 subscription.on('delete', (object) => {
                     dispatch(Actions.deleteCard(object.id));
@@ -108,13 +94,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
                 subscription.on('open', () => {
                     createUsersSubscription();
                     cardQuery.find().then((results) => {
-                        dispatch({
-                            type: '@@SCRUMLR/initCards',
-                            payload: {
-                                cards: results,
-                                closeSubscription: () => { subscription.unsubscribe() }
-                            }
-                        })
+                        dispatch(Actions.initializeCards((results as any[]).map(mapCardServerToClientModel)));
                     });
                 });
             });
@@ -186,38 +166,34 @@ const rootReducer = combineReducers<ApplicationState>({
         }
         return state;
     },
-    cards: (state: CardClientModel[] = [], action) => {
+    cards: (state: CardClientModel[] = [], action: ReduxAction) => {
         switch (action.type) {
-            case ADD_CARD: {
-                const addCardAction = action as AddCardAction;
+            case ActionTypes.AddCard: {
                 const localCard: CardClientModel = {
-                    text: addCardAction.text,
+                    text: action.text,
                     author: Parse.User.current()!.id
                 }
                 return [ ...state, localCard ];
             }
-            case CREATED_CARD: {
+            case ActionTypes.CreatedCard: {
                 const newState = [ ...state ];
-                const createdCardAction = action as CreatedCardAction;
-                const foundExistingCardIndex = newState.findIndex((card) => (!card.id && card.text === createdCardAction.card.text));
+                const foundExistingCardIndex = newState.findIndex((card) => (!card.id && card.text === action.card.text));
                 if (foundExistingCardIndex >= 0) {
-                    newState.splice(foundExistingCardIndex, 1, createdCardAction.card);
+                    newState.splice(foundExistingCardIndex, 1, action.card);
                 } else {
-                    newState.push(createdCardAction.card);
+                    newState.push(action.card);
                 }
                 return newState;
             }
-            case DELETE_CARD: {
-                const deleteCardAction = action as DeleteCardAction;
-                return state.filter((card) => card.id !== deleteCardAction.cardId);
+            case ActionTypes.DeleteCard: {
+                return state.filter((card) => card.id !== action.cardId);
             }
-            case '@@SCRUMLR/initCards': {
-                return [ ...action.payload.cards.map(mapCardServerToClientModel) ];
+            case ActionTypes.UpdateCard: {
+                const cardIndex = state.findIndex((card) => card.id === action.card.id);
+                return state.splice(cardIndex, 1, action.card);
             }
-            case '@@SCRUMLR/updateCard': {
-                const cardId = action.payload.card.id;
-                const cardIndex = state.findIndex((card) => card.id === cardId);
-                return state.splice(cardIndex, 1, mapCardServerToClientModel(action.payload.card));
+            case ActionTypes.InitializeCards: {
+                return [ ...action.cards ];
             }
         }
         return state;

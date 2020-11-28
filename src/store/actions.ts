@@ -1,47 +1,53 @@
-import { Action } from 'redux';
 import {CardClientModel} from "../types/card";
 
-export const LEAVE_BOARD = '@@SCRUMLR/leaveBoard';
-export type LeaveBoardAction = Action<typeof LEAVE_BOARD>;
-
-export const JOIN_BOARD = '@@SCRUMLR/joinBoard';
-export interface JoinBoardAction extends Action<typeof JOIN_BOARD> {
-    boardId: string;
-}
-
-export const ADD_CARD = '@@SCRUMLR/addCard';
-export interface AddCardAction extends Action<typeof ADD_CARD> {
-    text: string;
-}
-
-export const CREATED_CARD = '@@SCRUMLR/createCard';
-export interface CreatedCardAction extends Action<typeof CREATED_CARD> {
-    card: CardClientModel;
-}
-
-export const DELETE_CARD = '@@SCRUMLR/deleteCard';
-export interface DeleteCardAction extends Action<typeof DELETE_CARD> {
-    cardId: string;
+export const ActionTypes = {
+    LeaveBoard: '@@SCRUMLR/leaveBoard' as '@@SCRUMLR/leaveBoard',
+    JoinBoard: '@@SCRUMLR/joinBoard' as '@@SCRUMLR/joinBoard',
+    AddCard: '@@SCRUMLR/addCard' as '@@SCRUMLR/addCard',
+    CreatedCard: '@@SCRUMLR/createCard' as '@@SCRUMLR/createCard',
+    DeleteCard: '@@SCRUMLR/deleteCard' as '@@SCRUMLR/deleteCard',
+    UpdateCard: '@@SCRUMLR/updateCard' as '@@SCRUMLR/updateCard',
+    InitializeCards: '@@SCRUMLR/initCards' as '@@SCRUMLR/initCards'
 }
 
 export const Actions = {
-    leaveBoard: (): LeaveBoardAction => ({
-        type: LEAVE_BOARD
+    leaveBoard: () => ({
+        type: ActionTypes.LeaveBoard
     }),
-    joinBoard: (board: string): JoinBoardAction => ({
-        type: JOIN_BOARD,
+    joinBoard: (board: string) => ({
+        type: ActionTypes.JoinBoard,
         boardId: board
     }),
-    addCard: (boardId: string, text: string): AddCardAction => ({
-        type: ADD_CARD,
+    addCard: (boardId: string, text: string) => ({
+        type: ActionTypes.AddCard,
         text
     }),
-    createdCard: (card: CardClientModel): CreatedCardAction => ({
-        type: CREATED_CARD,
+    createdCard: (card: CardClientModel) => ({
+        type: ActionTypes.CreatedCard,
         card
     }),
-    deleteCard: (cardId: string): DeleteCardAction => ({
-        type: DELETE_CARD,
+    deleteCard: (cardId: string) => ({
+        type: ActionTypes.DeleteCard,
         cardId
+    }),
+    updateCard: (card: CardClientModel) => ({
+        type: ActionTypes.UpdateCard,
+        card
+    }),
+    initializeCards: (cards: CardClientModel[]) => ({
+        type: ActionTypes.InitializeCards,
+        cards
     })
 }
+
+export type ReduxAction =
+    | ReturnType<typeof Actions.leaveBoard>
+    | ReturnType<typeof Actions.joinBoard>
+    | ReturnType<typeof Actions.addCard>
+    | ReturnType<typeof Actions.createdCard>
+    | ReturnType<typeof Actions.deleteCard>
+    | ReturnType<typeof Actions.initializeCards>
+    | ReturnType<typeof Actions.updateCard>
+
+
+
