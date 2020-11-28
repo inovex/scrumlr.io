@@ -121,27 +121,15 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
             boardQuery.subscribe().then((subscription) => {
                 closeSubscriptions.push(() => { subscription.unsubscribe() });
                 subscription.on('update', (object) => {
-                    dispatch({
-                        type: '@@SCRUMLR/updateBoard',
-                        payload: {
-                            board: mapBoardServerToClientModel(object.toJSON() as any)
-                        }
-                    });
+                    dispatch(ActionFactory.updateBoard(mapBoardServerToClientModel(object.toJSON() as any)));
                 });
                 subscription.on('delete', (object) => {
-                    dispatch({
-                        type: '@@SCRUMLR/deleteBoard'
-                    });
+                    dispatch(ActionFactory.deleteBoard());
                 });
                 subscription.on('open', () => {
                     createCardsSubscription();
                     boardQuery.first().then((board) => {
-                        dispatch({
-                            type: '@@SCRUMLR/initBoard',
-                            payload: {
-                                board: mapBoardServerToClientModel(board?.toJSON() as any),
-                            }
-                        });
+                        dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
                     });
                 });
             });

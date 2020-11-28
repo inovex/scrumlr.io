@@ -1,5 +1,6 @@
 import Parse from 'parse';
 import store from "../store/store";
+import {ActionFactory} from "../store/action";
 
 export const newBoard = async () => {
     if (Parse.User.current()) {
@@ -11,10 +12,7 @@ export const newBoard = async () => {
 export const joinBoard = async (boardId: string) => {
     const joinBoardResponse = await Parse.Cloud.run('joinBoard', { board: boardId })
     if (joinBoardResponse.status === 'accepted') {
-        store.dispatch({
-            type: '@@SCRUMLR/joinBoard',
-            board: boardId
-        });
+        store.dispatch(ActionFactory.joinBoard(boardId));
     }
     return joinBoardResponse;
 }

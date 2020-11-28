@@ -1,23 +1,18 @@
-import {AnyAction} from "redux";
 import {BoardState} from "../../types/store";
+import {ActionType, ReduxAction} from "../action";
 
-export const boardReducer = (state: BoardState = { status: 'pending' }, action: AnyAction): BoardState => {
+export const boardReducer = (state: BoardState = { status: 'pending' }, action: ReduxAction): BoardState => {
     switch (action.type) {
-        case '@@SCRUMLR/updateBoard':
-        case '@@SCRUMLR/initBoard': {
+        case ActionType.UpdateBoard:
+        case ActionType.InitializeBoard: {
             return {
                 status: 'ready',
-                data: action.payload.board
+                data: action.board
             };
         }
-        case '@@SCRUMLR/joinBoard': {
+        case ActionType.JoinBoard: {
             return {
                 status: 'pending'
-            }
-        }
-        case '@@SCRUMLR/initCards': {
-            return {
-                ...state
             }
         }
     }

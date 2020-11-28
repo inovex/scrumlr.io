@@ -1,6 +1,6 @@
 # Todo List
 
-* Refactor board actions (add correct typings)
+~~* Refactor board actions (add correct typings)~~
 * Rename card to note (due to Chrome behaviour that tries to fill input fields with the placeholder '...card...' with
   credit card information)
 * Integrate joining board confirmation process
