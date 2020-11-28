@@ -10,6 +10,7 @@ import {ActionType, ActionFactory, ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {usersReducer} from "./reducer/users";
+import {Api} from "../api/api";
 
 let closeSubscriptions: Function[] = [];
 
@@ -25,7 +26,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('addNote', { board: boardId, text: action.text });
+            Api.addNote(boardId, action.text);
         }
     }
 
@@ -35,7 +36,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('deleteNote', { board: boardId, note: action.noteId });
+            Api.deleteNote(boardId, action.noteId);
         }
     }
 
@@ -45,11 +46,60 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('editNote', { board: boardId, note: action.noteId, text: action.text });
+            Api.editNote(boardId, action.noteId, action.text);
         }
     }
 
     if (action.type === ActionType.JoinBoard) {
+        try {
+            return dispatch(action);
+        } finally {
+            Api.joinBoard(action.boardId).then((response) => {
+                // explicit 'store.dispatch' is required here or otherwise this middleware wont be called again
+                if (response.status === 'accepted') {
+                    store.dispatch(ActionFactory.permittedBoardAccess(action.boardId));
+                } else if (response.status === 'rejected') {
+                    store.dispatch(ActionFactory.rejectedBoardAccess());
+                } else if (response.status === 'pending') {
+                    store.dispatch(ActionFactory.pendingBoardAccessConfirmation(response.joinRequestReference!));
+                }
+            });
+        }
+    }
+
+    if (action.type === ActionType.PendingBoardAccessConfirmation) {
+        const joinRequestQuery = new Parse.Query('JoinRequest');
+        joinRequestQuery.equalTo('objectId', action.requestReference);
+        joinRequestQuery.subscribe().then((subscription) => {
+            const checkRequestStatus = (request: Parse.Object) => {
+                switch (request.get('status')) {
+                    case 'accepted': {
+                        dispatch(ActionFactory.permittedBoardAccess(request.get('board').id));
+                        subscription.unsubscribe();
+                        break;
+                    }
+                    case 'rejected': {
+                        dispatch(ActionFactory.rejectedBoardAccess());
+                        subscription.unsubscribe();
+                        break;
+                    }
+                }
+            }
+            subscription.on('update', (request) => {
+                checkRequestStatus(request);
+            });
+
+            subscription.on('open', () => {
+                joinRequestQuery.first().then((request) => {
+                    if (request) {
+                        checkRequestStatus(request);
+                    }
+                });
+            });
+        });
+    }
+
+    if (action.type === ActionType.PermittedBoardAccess) {
         const createUsersSubscription = () => {
             const adminsQuery = new Parse.Query(Parse.Role);
             adminsQuery.equalTo('name', `admin_of_${action.boardId}`);

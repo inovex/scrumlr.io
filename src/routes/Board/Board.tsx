@@ -3,7 +3,6 @@ import { RouteComponentProps } from 'react-router';
 import { useSelector } from 'react-redux';
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {useEffect} from "react";
-import {joinBoard} from "../../api/board";
 import {ApplicationState} from "../../types/store";
 import store from "../../store/store";
 import {ActionFactory} from "../../store/action";
@@ -14,7 +13,7 @@ export interface BoardProps extends RouteComponentProps<{id: string}> {}
 function Board(props: BoardProps) {
     useEffect( () => {
         const boardId = props.match.params.id;
-        joinBoard(boardId);
+        store.dispatch(ActionFactory.joinBoard(boardId));
 
         return () => {
             store.dispatch(ActionFactory.leaveBoard());

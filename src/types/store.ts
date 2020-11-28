@@ -3,7 +3,7 @@ import {NoteClientModel} from "./note";
 import {UserClientModel} from "./user";
 
 export interface BoardState {
-    status: 'pending' | 'ready';
+    status: 'unknown' | 'pending' | 'ready' | 'rejected' | 'accepted';
     data?: BoardClientModel;
 }
 

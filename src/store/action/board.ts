@@ -11,7 +11,10 @@ export const BoardActionType = {
     JoinBoard: '@@SCRUMLR/joinBoard' as '@@SCRUMLR/joinBoard',
     InitializeBoard: '@@SCRUMLR/initBoard' as '@@SCRUMLR/initBoard',
     UpdateBoard: '@@SCRUMLR/updateBoard' as '@@SCRUMLR/updateBoard',
-    DeleteBoard: '@@SCRUMLR/deleteBoard' as '@@SCRUMLR/deleteBoard'
+    DeleteBoard: '@@SCRUMLR/deleteBoard' as '@@SCRUMLR/deleteBoard',
+    PermittedBoardAccess: '@@SCRUMLR/permittedBoardAccess' as '@@SCRUMLR/permittedBoardAccess',
+    RejectedBoardAccess: '@@SCRUMLR/rejectedBoardAccess' as '@@SCRUMLR/rejectedBoardAccess',
+    PendingBoardAccessConfirmation: '@@SCRUMLR/pendingBoardAccessConfirmation' as '@@SCRUMLR/pendingBoardAccessConfirmation'
 }
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -38,6 +41,17 @@ export const BoardActionFactory = {
     }),
     deleteBoard: () => ({
         type: BoardActionType.DeleteBoard
+    }),
+    permittedBoardAccess: (boardId: string) => ({
+        type: BoardActionType.PermittedBoardAccess,
+        boardId
+    }),
+    rejectedBoardAccess: () => ({
+        type: BoardActionType.RejectedBoardAccess
+    }),
+    pendingBoardAccessConfirmation: (requestReference: string) => ({
+        type: BoardActionType.PendingBoardAccessConfirmation,
+        requestReference
     })
 }
 
@@ -47,6 +61,9 @@ export type BoardReduxAction =
     | ReturnType<typeof BoardActionFactory.initializeBoard>
     | ReturnType<typeof BoardActionFactory.updateBoard>
     | ReturnType<typeof BoardActionFactory.deleteBoard>
+    | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
+    | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>
+    | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
 
 
 

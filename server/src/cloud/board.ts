@@ -8,7 +8,7 @@ import {api} from "./util";
 
 interface JoinBoardResponse {
     status: 'accepted' | 'rejected' | 'pending';
-    reference?: string;
+    joinRequestReference?: string;
 }
 
 interface RequestResponse {
@@ -76,7 +76,7 @@ export interface JoinRequestResponse {
 }
 
 export interface JoinBoardRequest {
-    board: string;
+    boardId: string;
 }
 
 export const initializeBoardFunctions = () => {
@@ -121,15 +121,15 @@ export const initializeBoardFunctions = () => {
 
     api<JoinBoardRequest, JoinBoardResponse>('joinBoard', async (user, request) => {
         const boardQuery = new Parse.Query<Parse.Object>('Board');
-        const board = await boardQuery.get(request.board, { useMasterKey: true });
+        const board = await boardQuery.get(request.boardId, { useMasterKey: true });
 
         if (!board) {
-            throw new Error(`Board '${request.board}' not found`);
+            throw new Error(`Board '${request.boardId}' not found`);
         }
 
         if (board.get('joinConfirmationRequired')) {
             const BoardClass = Parse.Object.extend("Board");
-            const boardReference = BoardClass.createWithoutData(request.board);
+            const boardReference = BoardClass.createWithoutData(request.boardId);
 
             const joinRequestQuery = new Parse.Query('JoinRequest');
             joinRequestQuery.equalTo('board', boardReference);
@@ -138,17 +138,17 @@ export const initializeBoardFunctions = () => {
 
             if (joinRequestQueryResult) {
                 if (joinRequestQueryResult.get('status') === 'accepted') {
-                    await addAsMember(user, request.board);
+                    await addAsMember(user, request.boardId);
                     return {
                         status: 'accepted',
-                        reference: joinRequestQueryResult.id,
+                        joinRequestReference: joinRequestQueryResult.id,
                         accessKey: joinRequestQueryResult.get('accessKey')
                     };
                 }
 
                 return {
                     status: joinRequestQueryResult.get('status'),
-                    reference: joinRequestQueryResult.id,
+                    joinRequestReference: joinRequestQueryResult.id,
                     accessKey: joinRequestQueryResult.get('accessKey')
                 }
             } else {
@@ -158,18 +158,18 @@ export const initializeBoardFunctions = () => {
 
                 const joinRequestACL = new Parse.ACL();
                 joinRequestACL.setReadAccess(user.id, true);
-                joinRequestACL.setRoleReadAccess(getAdminRoleName(request.board), true);
-                joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.board), true);
+                joinRequestACL.setRoleReadAccess(getAdminRoleName(request.boardId), true);
+                joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.boardId), true);
                 joinRequest.setACL(joinRequestACL);
 
                 const savedJoinRequest = await joinRequest.save(null, {useMasterKey: true});
                 return {
                     status: 'pending',
-                    reference: savedJoinRequest.id
+                    joinRequestReference: savedJoinRequest.id
                 }
             }
         } else {
-            await addAsMember(user, request.board);
+            await addAsMember(user, request.boardId);
             return { status: 'accepted' };
         }
     })

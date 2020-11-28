@@ -4,9 +4,9 @@
 ~~* Rename card to note (due to Chrome behaviour that tries to fill input fields with the placeholder '...card...' with
   credit card information)~~
 * Integrate joining board confirmation process
-    * Join directly (public board)
-    * Join with passphrase
+    ~~* Join directly (public board)~~
     * Join with required confirmation
+    * Join with passphrase
     * (Join encrypted board) upon implementation of encryption/decryption
 * Add template schema on server
     * Add (optional) template reference to boards
