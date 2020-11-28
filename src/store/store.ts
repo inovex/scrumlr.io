@@ -3,10 +3,13 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import Parse from 'parse';
 import {mapBoardServerToClientModel} from "../types/board";
-import {ApplicationState, UsersState} from "../types/store";
-import {CardClientModel, CardServerModel, mapCardServerToClientModel} from "../types/card";
-import {mapUserServerToClientModel, UserClientModel} from "../types/user";
+import {ApplicationState} from "../types/store";
+import {CardServerModel, mapCardServerToClientModel} from "../types/card";
+import {mapUserServerToClientModel} from "../types/user";
 import {ActionType, ActionFactory, ReduxAction} from "./action";
+import {boardReducer} from "./reducer/board";
+import {cardReducer} from "./reducer/card";
+import {usersReducer} from "./reducer/users";
 
 let closeSubscriptions: Function[] = [];
 
@@ -162,99 +165,9 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
 }
 
 const rootReducer = combineReducers<ApplicationState>({
-    board: (state = { status: 'pending' }, action) => {
-        switch (action.type) {
-            case '@@SCRUMLR/updateBoard':
-            case '@@SCRUMLR/initBoard': {
-                return {
-                    status: 'ready',
-                    data: action.payload.board
-                };
-            }
-            case '@@SCRUMLR/joinBoard': {
-                return {
-                    status: 'pending'
-                }
-            }
-            case '@@SCRUMLR/initCards': {
-                return {
-                    ...state
-                }
-            }
-        }
-        return state;
-    },
-    cards: (state: CardClientModel[] = [], action: ReduxAction) => {
-        switch (action.type) {
-            case ActionType.AddCard: {
-                const localCard: CardClientModel = {
-                    text: action.text,
-                    author: Parse.User.current()!.id,
-                    dirty: true
-                }
-                return [ ...state, localCard ];
-            }
-            case ActionType.CreatedCard: {
-                const newState = [ ...state ];
-                const foundExistingCardIndex = newState.findIndex((card) => (!card.id && card.text === action.card.text));
-                if (foundExistingCardIndex >= 0) {
-                    newState.splice(foundExistingCardIndex, 1, action.card);
-                } else {
-                    newState.push(action.card);
-                }
-                return newState;
-            }
-            case ActionType.DeleteCard: {
-                return state.filter((card) => card.id !== action.cardId);
-            }
-            case ActionType.EditCard: {
-                const cardIndex = state.findIndex((card) => card.id === action.cardId);
-                return state.splice(cardIndex, 1, {
-                    ...state[cardIndex],
-                    text: action.text,
-                    dirty: true
-                });
-            }
-            case ActionType.UpdatedCard: {
-                const cardIndex = state.findIndex((card) => card.id === action.card.id && card.text === action.card.text);
-                if (cardIndex >= 0) {
-                    return state.splice(cardIndex, 1, action.card);
-                }
-                return state;
-            }
-            case ActionType.InitializeCards: {
-                return [ ...action.cards ];
-            }
-        }
-        return state;
-    },
-    users: (state: UsersState  = { admins: [], basic: [], all: [] }, action) => {
-        switch (action.type) {
-            case '@@SCRUMLR/setUsers': {
-                const newState = {
-                    admins: state.admins,
-                    basic: state.basic,
-                    all: [] as UserClientModel[]
-                }
-
-                if (action.payload.admin) {
-                    newState.admins = action.payload.users;
-                } else {
-                    newState.basic = action.payload.users;
-                }
-
-                newState.all = [ ...newState.admins ];
-                newState.basic.forEach((member) => {
-                   if (!newState.admins.find((admin) => admin.id === member.id)) {
-                       newState.all.push(member);
-                   }
-                });
-
-                return newState;
-            }
-        }
-        return state;
-    }
+    board: boardReducer,
+    cards: cardReducer,
+    users: usersReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(
