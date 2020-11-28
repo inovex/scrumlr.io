@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware, combineReducers, Dispatch, AnyAction, MiddlewareAPI} from 'redux';
+import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI} from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import Parse from 'parse';
@@ -6,29 +6,48 @@ import {mapBoardServerToClientModel} from "../types/board";
 import {ApplicationState} from "../types/store";
 import {CardClientModel, CardServerModel, mapCardServerToClientModel} from "../types/card";
 import {mapUserServerToClientModel, UserClientModel} from "../types/user";
-import {
-    Actions, ActionTypes, ReduxAction
-} from "./actions";
+import {ActionType, ActionFactory, ReduxAction} from "./action";
+
 
 let closeSubscriptions: Function[] = [];
 
-const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: AnyAction) => {
-    if (action.type === ActionTypes.LeaveBoard) {
+const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+    if (action.type === ActionType.LeaveBoard) {
         closeSubscriptions.forEach((closeCallback) => closeCallback());
         closeSubscriptions = [];
     }
 
-    if (action.type === ActionTypes.AddCard) {
-        const boardId = stateAPI.getState().board.data!.id;
-        Parse.Cloud.run('addCard', { board: boardId, text: action.text });
+    if (action.type === ActionType.AddCard) {
+        try {
+            return dispatch(action);
+        } finally {
+            const boardId = stateAPI.getState().board.data!.id;
+            // TODO retry mechanism
+            Parse.Cloud.run('addCard', { board: boardId, text: action.text });
+        }
     }
 
-    if (action.type === ActionTypes.DeleteCard) {
-        const boardId = stateAPI.getState().board.data!.id;
-        Parse.Cloud.run('deleteCard', { board: boardId, card: action.cardId });
+    if (action.type === ActionType.DeleteCard) {
+        try {
+            return dispatch(action);
+        } finally {
+            const boardId = stateAPI.getState().board.data!.id;
+            // TODO retry mechanism
+            Parse.Cloud.run('deleteCard', { board: boardId, card: action.cardId });
+        }
     }
 
-    if (action.type === ActionTypes.JoinBoard) {
+    if (action.type === ActionType.EditCard) {
+        try {
+            return dispatch(action);
+        } finally {
+            const boardId = stateAPI.getState().board.data!.id;
+            // TODO retry mechanism
+            Parse.Cloud.run('editCard', { board: boardId, card: action.cardId, text: action.text });
+        }
+    }
+
+    if (action.type === ActionType.JoinBoard) {
         const createUsersSubscription = () => {
             const adminsQuery = new Parse.Query(Parse.Role);
             adminsQuery.equalTo('name', `admin_of_${action.boardId}`);
@@ -79,22 +98,22 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
 
         const createCardsSubscription = () => {
             const cardQuery = new Parse.Query('Card');
-            cardQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.board));
+            cardQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
             cardQuery.subscribe().then((subscription) => {
                 closeSubscriptions.push(() => { subscription.unsubscribe() });
                 subscription.on('create', (object) => {
-                    dispatch(Actions.createdCard(mapCardServerToClientModel(object as CardServerModel)))
+                    dispatch(ActionFactory.createdCard(mapCardServerToClientModel(object as CardServerModel)))
                 });
                 subscription.on('update', (object) => {
-                    dispatch(Actions.updateCard(mapCardServerToClientModel(object as CardServerModel)));
+                    dispatch(ActionFactory.updatedCard(mapCardServerToClientModel(object as CardServerModel)));
                 });
                 subscription.on('delete', (object) => {
-                    dispatch(Actions.deleteCard(object.id));
+                    dispatch(ActionFactory.deleteCard(object.id));
                 });
                 subscription.on('open', () => {
                     createUsersSubscription();
                     cardQuery.find().then((results) => {
-                        dispatch(Actions.initializeCards((results as any[]).map(mapCardServerToClientModel)));
+                        dispatch(ActionFactory.initializeCards((results as any[]).map(mapCardServerToClientModel)));
                     });
                 });
             });
@@ -102,7 +121,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
 
         const createBoardSubscription = () => {
             const boardQuery = new Parse.Query('Board');
-            boardQuery.equalTo('objectId', action.board);
+            boardQuery.equalTo('objectId', action.boardId);
             boardQuery.subscribe().then((subscription) => {
                 closeSubscriptions.push(() => { subscription.unsubscribe() });
                 subscription.on('update', (object) => {
@@ -168,14 +187,15 @@ const rootReducer = combineReducers<ApplicationState>({
     },
     cards: (state: CardClientModel[] = [], action: ReduxAction) => {
         switch (action.type) {
-            case ActionTypes.AddCard: {
+            case ActionType.AddCard: {
                 const localCard: CardClientModel = {
                     text: action.text,
-                    author: Parse.User.current()!.id
+                    author: Parse.User.current()!.id,
+                    dirty: true
                 }
                 return [ ...state, localCard ];
             }
-            case ActionTypes.CreatedCard: {
+            case ActionType.CreatedCard: {
                 const newState = [ ...state ];
                 const foundExistingCardIndex = newState.findIndex((card) => (!card.id && card.text === action.card.text));
                 if (foundExistingCardIndex >= 0) {
@@ -185,14 +205,25 @@ const rootReducer = combineReducers<ApplicationState>({
                 }
                 return newState;
             }
-            case ActionTypes.DeleteCard: {
+            case ActionType.DeleteCard: {
                 return state.filter((card) => card.id !== action.cardId);
             }
-            case ActionTypes.UpdateCard: {
-                const cardIndex = state.findIndex((card) => card.id === action.card.id);
-                return state.splice(cardIndex, 1, action.card);
+            case ActionType.EditCard: {
+                const cardIndex = state.findIndex((card) => card.id === action.cardId);
+                return state.splice(cardIndex, 1, {
+                    ...state[cardIndex],
+                    text: action.text,
+                    dirty: true
+                });
             }
-            case ActionTypes.InitializeCards: {
+            case ActionType.UpdatedCard: {
+                const cardIndex = state.findIndex((card) => card.id === action.card.id && card.text === action.card.text);
+                if (cardIndex >= 0) {
+                    return state.splice(cardIndex, 1, action.card);
+                }
+                return state;
+            }
+            case ActionType.InitializeCards: {
                 return [ ...action.cards ];
             }
         }

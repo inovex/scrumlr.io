@@ -6,7 +6,8 @@ import {useEffect} from "react";
 import {joinBoard} from "../../api/board";
 import {ApplicationState} from "../../types/store";
 import store from "../../store/store";
-import {Actions} from "../../store/actions";
+import {ActionFactory} from "../../store/action";
+
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
@@ -16,7 +17,7 @@ function Board(props: BoardProps) {
         joinBoard(boardId);
 
         return () => {
-            store.dispatch(Actions.leaveBoard());
+            store.dispatch(ActionFactory.leaveBoard());
         }
     }, [ props.match.params.id ]);
 
@@ -27,11 +28,11 @@ function Board(props: BoardProps) {
     }));
 
     const onAddCard = () => {
-        store.dispatch(Actions.addCard(props.match.params.id, 'Test'));
+        store.dispatch(ActionFactory.addCard(props.match.params.id, 'Test'));
     }
 
     const onDeleteCard = (id: string) => {
-        store.dispatch(Actions.deleteCard(id));
+        store.dispatch(ActionFactory.deleteCard(id));
     }
 
     if (state.board.status === 'pending') {
