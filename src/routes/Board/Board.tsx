@@ -5,7 +5,8 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {useEffect} from "react";
 import {joinBoard} from "../../api/board";
 import {ApplicationState} from "../../types/store";
-import {addCard, deleteCard} from "../../api/card";
+import store from "../../store/store";
+import {Actions} from "../../store/actions";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
@@ -13,6 +14,10 @@ function Board(props: BoardProps) {
     useEffect( () => {
         const boardId = props.match.params.id;
         joinBoard(boardId);
+
+        return () => {
+            store.dispatch(Actions.leaveBoard());
+        }
     }, [ props.match.params.id ]);
 
     const state: any = useSelector((state: ApplicationState) => ({
@@ -22,11 +27,11 @@ function Board(props: BoardProps) {
     }));
 
     const onAddCard = () => {
-        addCard(props.match.params.id, 'Test');
+        store.dispatch(Actions.addCard(props.match.params.id, 'Test'));
     }
 
     const onDeleteCard = (id: string) => {
-        deleteCard(props.match.params.id, id);
+        store.dispatch(Actions.deleteCard(id));
     }
 
     if (state.board.status === 'pending') {
@@ -37,7 +42,7 @@ function Board(props: BoardProps) {
                 <li>{ JSON.stringify(state.board.data) }</li>
                 <li>
                     <ul>
-                        {state.cards.map((card: any) => <li key={card.id}>
+                        {state.cards.map((card: any, index: number) => <li key={index}>
                             {JSON.stringify(card)}
                             <button onClick={() => { onDeleteCard(card.id) }}>Delete Card</button>
                         </li>)}

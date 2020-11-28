@@ -12,5 +12,5 @@ export interface ApplicationState {
         admins: UserClientModel[];
         basic: UserClientModel[];
         all: UserClientModel[];
-    }
+    },
 }
