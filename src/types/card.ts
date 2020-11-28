@@ -35,6 +35,8 @@ export interface CardClientModel {
      * It is set to `true` if some fields aren't persisted yet and `false` otherwise.
      */
     dirty: boolean;
+
+    // TODO add editable & stackable attributes (if id ist not undefined and card is persisted)
 }
 
 export const mapCardServerToClientModel = (card: CardServerModel): CardClientModel => ({

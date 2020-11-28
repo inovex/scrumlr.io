@@ -3,11 +3,10 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import Parse from 'parse';
 import {mapBoardServerToClientModel} from "../types/board";
-import {ApplicationState} from "../types/store";
+import {ApplicationState, UsersState} from "../types/store";
 import {CardClientModel, CardServerModel, mapCardServerToClientModel} from "../types/card";
 import {mapUserServerToClientModel, UserClientModel} from "../types/user";
 import {ActionType, ActionFactory, ReduxAction} from "./action";
-
 
 let closeSubscriptions: Function[] = [];
 
@@ -229,7 +228,7 @@ const rootReducer = combineReducers<ApplicationState>({
         }
         return state;
     },
-    users: (state: { admins: UserClientModel[], basic: UserClientModel[], all: UserClientModel[] }  = { admins: [], basic: [], all: [] }, action) => {
+    users: (state: UsersState  = { admins: [], basic: [], all: [] }, action) => {
         switch (action.type) {
             case '@@SCRUMLR/setUsers': {
                 const newState = {
