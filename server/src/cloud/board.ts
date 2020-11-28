@@ -198,13 +198,13 @@ export const initializeBoardFunctions = () => {
 
         const votesQuery = new Parse.Query(Parse.Object.extend('Vote'));
         votesQuery.equalTo('board', boardReference);
-        const cardsQuery = new Parse.Query(Parse.Object.extend("Card"));
-        cardsQuery.equalTo('board', boardReference);
+        const notesQuery = new Parse.Query(Parse.Object.extend("Note"));
+        notesQuery.equalTo('board', boardReference);
         const boardQuery = new Parse.Query(BoardClass);
         boardQuery.equalTo('objectId', request.board);
 
         await Parse.Object.destroyAll(
-            await Parse.Query.or(votesQuery, cardsQuery, boardQuery).find({ useMasterKey: true }),
+            await Parse.Query.or(votesQuery, notesQuery, boardQuery).find({ useMasterKey: true }),
             { useMasterKey: true}
         );
         return true;

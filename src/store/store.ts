@@ -4,11 +4,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import Parse from 'parse';
 import {mapBoardServerToClientModel} from "../types/board";
 import {ApplicationState} from "../types/store";
-import {CardServerModel, mapCardServerToClientModel} from "../types/card";
+import {NoteServerModel, mapNoteServerToClientModel} from "../types/note";
 import {mapUserServerToClientModel} from "../types/user";
 import {ActionType, ActionFactory, ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
-import {cardReducer} from "./reducer/card";
+import {noteReducer} from "./reducer/note";
 import {usersReducer} from "./reducer/users";
 
 let closeSubscriptions: Function[] = [];
@@ -19,33 +19,33 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         closeSubscriptions = [];
     }
 
-    if (action.type === ActionType.AddCard) {
+    if (action.type === ActionType.AddNote) {
         try {
             return dispatch(action);
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('addCard', { board: boardId, text: action.text });
+            Parse.Cloud.run('addNote', { board: boardId, text: action.text });
         }
     }
 
-    if (action.type === ActionType.DeleteCard) {
+    if (action.type === ActionType.DeleteNote) {
         try {
             return dispatch(action);
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('deleteCard', { board: boardId, card: action.cardId });
+            Parse.Cloud.run('deleteNote', { board: boardId, note: action.noteId });
         }
     }
 
-    if (action.type === ActionType.EditCard) {
+    if (action.type === ActionType.EditNote) {
         try {
             return dispatch(action);
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            Parse.Cloud.run('editCard', { board: boardId, card: action.cardId, text: action.text });
+            Parse.Cloud.run('editNote', { board: boardId, note: action.noteId, text: action.text });
         }
     }
 
@@ -92,24 +92,24 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
             });
         }
 
-        const createCardsSubscription = () => {
-            const cardQuery = new Parse.Query('Card');
-            cardQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
-            cardQuery.subscribe().then((subscription) => {
+        const createNoteSubscription = () => {
+            const noteQuery = new Parse.Query('Note');
+            noteQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
+            noteQuery.subscribe().then((subscription) => {
                 closeSubscriptions.push(() => { subscription.unsubscribe() });
                 subscription.on('create', (object) => {
-                    dispatch(ActionFactory.createdCard(mapCardServerToClientModel(object as CardServerModel)))
+                    dispatch(ActionFactory.createdNote(mapNoteServerToClientModel(object as NoteServerModel)))
                 });
                 subscription.on('update', (object) => {
-                    dispatch(ActionFactory.updatedCard(mapCardServerToClientModel(object as CardServerModel)));
+                    dispatch(ActionFactory.updatedNote(mapNoteServerToClientModel(object as NoteServerModel)));
                 });
                 subscription.on('delete', (object) => {
-                    dispatch(ActionFactory.deleteCard(object.id));
+                    dispatch(ActionFactory.deleteNote(object.id));
                 });
                 subscription.on('open', () => {
                     createUsersSubscription();
-                    cardQuery.find().then((results) => {
-                        dispatch(ActionFactory.initializeCards((results as any[]).map(mapCardServerToClientModel)));
+                    noteQuery.find().then((results) => {
+                        dispatch(ActionFactory.initializeNotes((results as any[]).map(mapNoteServerToClientModel)));
                     });
                 });
             });
@@ -127,7 +127,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
                     dispatch(ActionFactory.deleteBoard());
                 });
                 subscription.on('open', () => {
-                    createCardsSubscription();
+                    createNoteSubscription();
                     boardQuery.first().then((board) => {
                         dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
                     });
@@ -148,7 +148,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
 
 const rootReducer = combineReducers<ApplicationState>({
     board: boardReducer,
-    cards: cardReducer,
+    notes: noteReducer,
     users: usersReducer
 });
 

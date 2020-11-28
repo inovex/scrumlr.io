@@ -3,7 +3,7 @@ import {api, newObject} from "./util";
 
 export interface VoteRequest {
     board: string;
-    card: string;
+    note: string;
 }
 
 export const initializeVoteFunctions = () => {
@@ -11,18 +11,18 @@ export const initializeVoteFunctions = () => {
         await requireValidBoardMember(user, request.board);
 
         const board = Parse.Object.extend('Board').createWithoutData(request.board);
-        const card = Parse.Object.extend('Card').createWithoutData(request.card);
-        const vote = newObject('Vote', { board, card, user }, { readRoles: [ getMemberRoleName(board) ]});
+        const note = Parse.Object.extend('Note').createWithoutData(request.note);
+        const vote = newObject('Vote', { board, note, user }, { readRoles: [ getMemberRoleName(board) ]});
 
         await vote.save(null, { useMasterKey: true });
         return true;
     });
 
     api<VoteRequest, boolean>('removeVote', async (user, request) => {
-        const card = Parse.Object.extend('Card').createWithoutData(request.card);
+        const note = Parse.Object.extend('Note').createWithoutData(request.note);
 
         const voteQuery = new Parse.Query('Vote');
-        voteQuery.equalTo('card', card);
+        voteQuery.equalTo('note', note);
         voteQuery.equalTo('user', user);
         const vote = await voteQuery.limit(1).first({ useMasterKey: true });
         if (vote) {
@@ -30,6 +30,6 @@ export const initializeVoteFunctions = () => {
             return true;
         }
 
-        throw new Error(`No votes for user '${user.id}' exist on card '${request.card}'`);
+        throw new Error(`No votes for user '${user.id}' exist on note '${request.note}'`);
     });
 }

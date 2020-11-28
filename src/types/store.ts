@@ -1,5 +1,5 @@
 import {BoardClientModel} from "./board";
-import {CardClientModel} from "./card";
+import {NoteClientModel} from "./note";
 import {UserClientModel} from "./user";
 
 export interface BoardState {
@@ -15,6 +15,6 @@ export interface UsersState {
 
 export interface ApplicationState {
     board: BoardState;
-    cards: CardClientModel[];
+    notes: NoteClientModel[];
     users: UsersState
 }

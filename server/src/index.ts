@@ -19,7 +19,7 @@ const api = new ParseServer({
     serverURL: `http://${HOST}:${PORT}/api`,
     //jsonLogs: true,
     liveQuery: {
-        classNames: [ 'Board', 'Card', 'JoinRequest', '_Role' ]
+        classNames: [ 'Board', 'Note', 'JoinRequest', '_Role' ]
     },
     auth: {
         anonymous: {},

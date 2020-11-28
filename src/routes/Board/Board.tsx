@@ -23,16 +23,16 @@ function Board(props: BoardProps) {
 
     const state: any = useSelector((state: ApplicationState) => ({
         board: state.board,
-        cards: state.cards,
+        notes: state.notes,
         users: state.users.all
     }));
 
-    const onAddCard = () => {
-        store.dispatch(ActionFactory.addCard(props.match.params.id, 'Test'));
+    const onAddNote = () => {
+        store.dispatch(ActionFactory.addNote(props.match.params.id, 'Test'));
     }
 
-    const onDeleteCard = (id: string) => {
-        store.dispatch(ActionFactory.deleteCard(id));
+    const onDeleteNote = (id: string) => {
+        store.dispatch(ActionFactory.deleteNote(id));
     }
 
     if (state.board.status === 'pending') {
@@ -43,14 +43,14 @@ function Board(props: BoardProps) {
                 <li>{ JSON.stringify(state.board.data) }</li>
                 <li>
                     <ul>
-                        {state.cards.map((card: any, index: number) => <li key={index}>
-                            {JSON.stringify(card)}
-                            <button onClick={() => { onDeleteCard(card.id) }}>Delete Card</button>
+                        {state.notes.map((note: any, index: number) => <li key={index}>
+                            {JSON.stringify(note)}
+                            <button onClick={() => { onDeleteNote(note.id) }}>Delete Note</button>
                         </li>)}
                     </ul>
                 </li>
                 <li>{ JSON.stringify(state.users) }</li>
-                <button onClick={onAddCard}>Add Card</button>
+                <button onClick={onAddNote}>Add Note</button>
             </ul>);
     } else {
         return <LoadingScreen/>;
