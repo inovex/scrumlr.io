@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {useEffect} from "react";
 import {ApplicationState} from "../../types/store";
-import store from "../../store/store";
+import store from "../../store";
 import {ActionFactory} from "../../store/action";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}

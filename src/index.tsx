@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.scss';
-import store from './store/store';
+import store from './store';
 import Router from './routes/Router';
 import { ToastContainer } from 'react-toastify';
 import Parse from 'parse';
