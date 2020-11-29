@@ -79,32 +79,23 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
             });
         }
 
-        const createBoardSubscription = () => {
-            const boardQuery = new Parse.Query('Board');
-            boardQuery.equalTo('objectId', action.boardId);
-            boardQuery.subscribe().then((subscription) => {
-                closeSubscriptions.push(() => { subscription.unsubscribe() });
-                subscription.on('update', (object) => {
-                    dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
-                });
-                subscription.on('delete', (object) => {
-                    dispatch(ActionFactory.deleteBoard());
-                });
-                subscription.on('open', () => {
-                    createNoteSubscription();
-                    createUsersSubscription();
-                    boardQuery.first().then((board) => {
-                        dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
-                    });
+        const boardQuery = new Parse.Query('Board');
+        boardQuery.equalTo('objectId', action.boardId);
+        boardQuery.subscribe().then((subscription) => {
+            closeSubscriptions.push(() => { subscription.unsubscribe() });
+            subscription.on('update', (object) => {
+                dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
+            });
+            subscription.on('delete', (object) => {
+                dispatch(ActionFactory.deleteBoard());
+            });
+            subscription.on('open', () => {
+                createNoteSubscription();
+                createUsersSubscription();
+                boardQuery.first().then((board) => {
+                    dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
                 });
             });
-        }
-
-        createBoardSubscription();
-        /*const votesQuery = new Parse.Query(' Vote');
-        votesQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.board));
-        votesQuery.subscribe().then((subscription) => {
-
-        });*/
+        });
     }
 }
