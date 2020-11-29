@@ -85,7 +85,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
             boardQuery.subscribe().then((subscription) => {
                 closeSubscriptions.push(() => { subscription.unsubscribe() });
                 subscription.on('update', (object) => {
-                    dispatch(ActionFactory.updateBoard(mapBoardServerToClientModel(object.toJSON() as any)));
+                    dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
                 });
                 subscription.on('delete', (object) => {
                     dispatch(ActionFactory.deleteBoard());

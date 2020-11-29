@@ -1,5 +1,5 @@
 /** This object lists board object specific internal Redux Action types. */
-import {BoardClientModel} from "../../types/board";
+import {BoardClientModel, EditableBoardClientModel} from "../../types/board";
 
 export const BoardActionType = {
     /*
@@ -10,7 +10,8 @@ export const BoardActionType = {
     LeaveBoard: '@@SCRUMLR/leaveBoard' as '@@SCRUMLR/leaveBoard',
     JoinBoard: '@@SCRUMLR/joinBoard' as '@@SCRUMLR/joinBoard',
     InitializeBoard: '@@SCRUMLR/initBoard' as '@@SCRUMLR/initBoard',
-    UpdateBoard: '@@SCRUMLR/updateBoard' as '@@SCRUMLR/updateBoard',
+    EditBoard: '@@SCRUMLR/editBoard' as '@@SCRUMLR/editBoard',
+    UpdatedBoard: '@@SCRUMLR/updatedBoard' as '@@SCRUMLR/updatedBoard',
     DeleteBoard: '@@SCRUMLR/deleteBoard' as '@@SCRUMLR/deleteBoard',
     PermittedBoardAccess: '@@SCRUMLR/permittedBoardAccess' as '@@SCRUMLR/permittedBoardAccess',
     RejectedBoardAccess: '@@SCRUMLR/rejectedBoardAccess' as '@@SCRUMLR/rejectedBoardAccess',
@@ -32,11 +33,15 @@ export const BoardActionFactory = {
         boardId: boardId
     }),
     initializeBoard: (board: BoardClientModel) => ({
-        type:  BoardActionType.InitializeBoard,
+        type: BoardActionType.InitializeBoard,
         board
     }),
-    updateBoard: (board: BoardClientModel) => ({
-        type: BoardActionType.UpdateBoard,
+    editBoard: (board: Partial<EditableBoardClientModel>) => ({
+        type: BoardActionType.EditBoard,
+        board
+    }),
+    updatedBoard: (board: BoardClientModel) => ({
+        type: BoardActionType.UpdatedBoard,
         board
     }),
     deleteBoard: () => ({
@@ -59,7 +64,8 @@ export type BoardReduxAction =
     | ReturnType<typeof BoardActionFactory.leaveBoard>
     | ReturnType<typeof BoardActionFactory.joinBoard>
     | ReturnType<typeof BoardActionFactory.initializeBoard>
-    | ReturnType<typeof BoardActionFactory.updateBoard>
+    | ReturnType<typeof BoardActionFactory.editBoard>
+    | ReturnType<typeof BoardActionFactory.updatedBoard>
     | ReturnType<typeof BoardActionFactory.deleteBoard>
     | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
     | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>

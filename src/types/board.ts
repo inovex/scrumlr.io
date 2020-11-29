@@ -20,14 +20,8 @@ export interface BoardServerModel {
     updatedAt: Date;
 }
 
-export interface BoardClientModel {
-    id: string;
+export interface EditableBoardClientModel {
     name: string;
-    columns: {
-        id: string;
-        name: string;
-        hidden: boolean;
-    }[];
     joinConfirmationRequired: boolean;
     encryptedContent: boolean;
     showContentOfOtherUsers: boolean;
@@ -37,8 +31,18 @@ export interface BoardClientModel {
     voting: string;
     showVotesOfOtherUsers: boolean;
     voteLimit: number;
+}
+
+export interface BoardClientModel extends EditableBoardClientModel {
+    id: string;
+    columns: {
+        id?: string;
+        name: string;
+        hidden: boolean;
+    }[];
     createdAt: Date;
     updatedAt: Date;
+    dirty: boolean;
 }
 
 export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
@@ -60,4 +64,5 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
     voteLimit: board.voteLimit,
     createdAt: board.createdAt,
     updatedAt: board.updatedAt,
+    dirty: false
 });

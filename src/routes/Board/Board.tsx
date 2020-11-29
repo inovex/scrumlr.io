@@ -6,8 +6,6 @@ import {useEffect} from "react";
 import {ApplicationState} from "../../types/store";
 import store from "../../store/store";
 import {ActionFactory} from "../../store/action";
-import {API} from "../../api";
-
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
@@ -36,15 +34,15 @@ function Board(props: BoardProps) {
     }
 
     const onAddColumn = () => {
-        API.addColumn(props.match.params.id, 'New Column');
+        store.dispatch(ActionFactory.addColumn('New Column'));
     }
 
     const onEditColumn = () => {
-        API.editColumn(props.match.params.id, state.board.data.columns[0].id, 'Changed Name')
+        store.dispatch(ActionFactory.editColumn(state.board.data.columns[0].id, 'Changed Name'));
     }
 
     const onDeleteColumn = () => {
-        API.deleteColumn(props.match.params.id, state.board.data.columns[0].id)
+        store.dispatch(ActionFactory.deleteColumn(state.board.data.columns[0].id));
     }
 
     if (state.board.status === 'pending') {

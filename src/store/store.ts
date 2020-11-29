@@ -9,6 +9,7 @@ import {usersReducer} from "./reducer/users";
 import {passNoteMiddleware} from "./middleware/note";
 import {passBoardMiddleware} from "./middleware/board";
 import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
+import {passColumnMiddleware} from "./middleware/column";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
     try {
@@ -16,6 +17,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
     } finally {
         passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
         passBoardMiddleware(stateAPI, dispatch, action);
+        passColumnMiddleware(stateAPI, dispatch, action);
         passNoteMiddleware(stateAPI, dispatch, action);
     }
 }

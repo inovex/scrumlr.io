@@ -4,10 +4,12 @@
 * ~~Rename card to note (due to Chrome behaviour that tries to fill input fields with the placeholder '...card...' with
   credit card information)~~
 * ~~Add editable columns to board model~~
-* Async update of board & column names (dirty states, compare to notes)
-* Delete notes & votes when column gets deleted
-* Replace id generator (https://github.com/parse-community/parse-server/blob/master/src/cryptoUtils.js)  
+* ~~Async update of board & column names (dirty states, compare to notes)~~
+* Check impact of newObjectId in https://github.com/parse-community/parse-server/blob/master/src/cryptoUtils.js
+    * Replace ID generating mechanism
 * Add local mockup data in redux store to proceed with development
+* Delete notes & votes when column gets deleted
+* Create board with options
 * Integrate joining board confirmation process
     * ~~Join directly (public board)~~
     * Join with required confirmation

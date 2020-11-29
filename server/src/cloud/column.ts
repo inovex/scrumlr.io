@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 export interface AddColumnRequest {
     boardId: string;
     name: string;
+    hidden: boolean;
 }
 
 export interface DeleteColumnRequest {
@@ -15,7 +16,8 @@ export interface DeleteColumnRequest {
 export interface EditColumnRequest {
     boardId: string;
     columnId: string;
-    name: string;
+    name?: string;
+    hidden?: boolean;
 }
 
 // TODO remove id generator of parse
@@ -45,7 +47,7 @@ export const initializeColumnFunctions = () => {
             const columns = board.get('columns');
             columns[newObjectId()] = {
                 name: request.name,
-                hidden: false
+                hidden: request.hidden
             }
             await board.save({ columns }, { useMasterKey: true });
             return true;
@@ -76,7 +78,14 @@ export const initializeColumnFunctions = () => {
         const board = await new Parse.Query('Board').get(request.boardId, { useMasterKey: true });
         if (board) {
             const columns = board.get('columns');
-            columns[request.columnId].name = request.name;
+            if (request.name) {
+                columns[request.columnId].name = request.name;
+            }
+
+            if (request.hidden !== undefined) {
+                columns[request.columnId].hidden = request.hidden;
+            }
+
             await board.save({ columns }, { useMasterKey: true });
             return true;
         }

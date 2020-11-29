@@ -7,7 +7,7 @@ export const NoteAPI = {
     deleteNote: (noteId: string) => {
         return callAPI<{ noteId: string}, boolean>('deleteNote', { noteId });
     },
-    editNote: (noteId: string, text: string) => {
-        return callAPI<{noteId: string, text: string}, boolean>('editNote', { noteId, text });
+    editNote: (noteId: string, text?: string, hidden?: boolean) => {
+        return callAPI<{noteId: string, text?: string, hidden?: boolean}, boolean>('editNote', { noteId, text, hidden });
     }
 }
