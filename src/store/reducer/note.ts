@@ -6,6 +6,7 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
     switch (action.type) {
         case ActionType.AddNote: {
             const localNote: NoteClientModel = {
+                columnId: action.columnId,
                 text: action.text,
                 author: Parse.User.current()!.id,
                 dirty: true

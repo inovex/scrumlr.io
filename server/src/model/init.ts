@@ -3,6 +3,8 @@ import Parse from 'parse/node';
 const addInitialBoardSchema = async () => {
     const schema = new Parse.Schema('Board');
     schema.addString('name');
+    schema.addPointer('template', 'Template');
+    schema.addObject('columns', { defaultValue: {} });
     schema.addBoolean('joinConfirmationRequired', { defaultValue: false });
     schema.addBoolean('encryptedContent', { defaultValue: false });
     schema.addString('accessCode');
@@ -10,17 +12,28 @@ const addInitialBoardSchema = async () => {
     schema.addBoolean('showAuthors', { defaultValue: true });
     schema.addDate('timerUTCEndTime');
     schema.addDate('expirationUTCTime');
-    schema.addObject('voting');
-    // TODO add template reference / columns
+    schema.addString('voting', { defaultValue: 'disabled' });
+    schema.addBoolean('showVotesOfOtherUsers', { defaultValue: false })
+    schema.addNumber('voteLimit', { defaultValue: 0 });
     schema.addNumber('schemaVersion', { required: true, defaultValue: 1 });
     return schema.save();
 }
 
 const addInitialNoteSchema = async () => {
     const schema = new Parse.Schema('Note');
-    schema.addString('text', { required: true });
-    schema.addPointer('author', '_User', { required: true });
     schema.addPointer('board', 'Board', { required: true });
+    schema.addString('columnId',{ required: true });
+    schema.addPointer('author', '_User', { required: true });
+    schema.addString('text', { required: true });
+    schema.addNumber('schemaVersion', { required: true, defaultValue: 1 });
+    return schema.save();
+}
+
+const addInitialVote = async () => {
+    const schema = new Parse.Schema('BoardSession');
+    schema.addPointer('board', 'Board', { required: true });
+    schema.addPointer('note', 'Note', { required: true });
+    schema.addPointer('user', '_User', { required: true });
     schema.addNumber('schemaVersion', { required: true, defaultValue: 1 });
     return schema.save();
 }
@@ -31,15 +44,6 @@ const addInitialJoinRequestSchema = async () => {
     schema.addPointer('board', 'Board', { required: true });
     schema.addString('status', { required: true, defaultValue: 'pending'});
     schema.addString('accessKey');
-    schema.addNumber('schemaVersion', { required: true, defaultValue: 1 });
-    return schema.save();
-}
-
-const addInitialVote = async () => {
-    const schema = new Parse.Schema('BoardSession');
-    schema.addPointer('board', 'Board', { required: true });
-    schema.addPointer('note', 'Note', { required: true });
-    schema.addPointer('user', '_User', { required: true });
     schema.addNumber('schemaVersion', { required: true, defaultValue: 1 });
     return schema.save();
 }

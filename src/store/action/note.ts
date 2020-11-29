@@ -22,8 +22,9 @@ export const NoteActionFactory = {
      * Each action creator should be also listed in the type `NoteReduxAction`, because
      * the type inference won't work otherwise (e.g. in reducers).
      */
-    addNote: (boardId: string, text: string) => ({
+    addNote: (columnId: string, text: string) => ({
         type: NoteActionType.AddNote,
+        columnId,
         text
     }),
     editNote: (noteId: string, text: string) => ({

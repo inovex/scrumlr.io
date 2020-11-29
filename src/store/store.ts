@@ -26,7 +26,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         } finally {
             const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            API.addNote(boardId, action.text);
+            API.addNote(boardId, action.columnId, action.text);
         }
     }
 
@@ -34,9 +34,8 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         try {
             return dispatch(action);
         } finally {
-            const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            API.deleteNote(boardId, action.noteId);
+            API.deleteNote(action.noteId);
         }
     }
 
@@ -44,9 +43,8 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         try {
             return dispatch(action);
         } finally {
-            const boardId = stateAPI.getState().board.data!.id;
             // TODO retry mechanism
-            API.editNote(boardId, action.noteId, action.text);
+            API.editNote(action.noteId, action.text);
         }
     }
 

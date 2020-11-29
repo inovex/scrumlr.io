@@ -3,17 +3,16 @@ import {api, newObject} from "./util";
 
 interface AddNoteRequest {
     boardId: string;
+    columnId: string;
     text: string;
 }
 
 interface EditNoteRequest {
-    boardId: string;
     noteId: string;
     text: string;
 }
 
 interface DeleteNoteRequest {
-    boardId: string;
     noteId: string;
 }
 
@@ -24,7 +23,8 @@ export const initializeNoteFunctions = () => {
             {
                 text: request.text,
                 author: user,
-                board: Parse.Object.extend("Board").createWithoutData(request.boardId)
+                board: Parse.Object.extend("Board").createWithoutData(request.boardId),
+                columnId: request.columnId
             },
             {
                 readRoles: [ getMemberRoleName(request.boardId), getAdminRoleName(request.boardId) ],
@@ -36,12 +36,10 @@ export const initializeNoteFunctions = () => {
     });
 
     api<EditNoteRequest, boolean>('editNote', async (user, request) => {
-        const board = Parse.Object.extend("Board").createWithoutData(request.boardId);
-
         const query = new Parse.Query(Parse.Object.extend('Note'));
         const note = await query.get(request.noteId, { useMasterKey: true });
 
-        if (await isAdmin(user, request.boardId) || user.id === note.get('author').id) {
+        if (await isAdmin(user, note.get('board').id) || user.id === note.get('author').id) {
             note.set('text', request.text);
             await note.save(null, { useMasterKey: true });
             return true;
@@ -51,15 +49,12 @@ export const initializeNoteFunctions = () => {
     })
 
     api<DeleteNoteRequest, boolean>('deleteNote', async (user, request) => {
-        const board = Parse.Object.extend("Board").createWithoutData(request.boardId);
-
         const query = new Parse.Query(Parse.Object.extend('Note'));
         const note = await query.get(request.noteId, { useMasterKey: true });
 
-        if (await isAdmin(user, request.boardId) || user.id === note.get('author').id) {
+        if (await isAdmin(user, note.get('board').id) || user.id === note.get('author').id) {
             const voteQuery = await new Parse.Query('Vote');
             voteQuery.equalTo('note', note);
-            voteQuery.equalTo('board', board);
             await Parse.Object.destroyAll([note, ...await voteQuery.find({ useMasterKey: true })], { useMasterKey: true });
             return true;
         }

@@ -4,6 +4,7 @@ import Parse from 'parse';
  * The representation of a note on the server.
  */
 export interface NoteServerModel extends Parse.Object {
+    columnId: string;
     text: string;
     author: Parse.Object;
     createdAt: Date;
@@ -17,6 +18,9 @@ export interface NoteClientModel {
 
     /** The id of the note or `undefined` if yet to be persisted. */
     id?: string;
+
+    /** The column id of the column in which this note should be displayed. */
+    columnId: string;
 
     /** The text of the note. */
     text: string;
@@ -41,6 +45,7 @@ export interface NoteClientModel {
 
 export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientModel => ({
     id: note.id,
+    columnId: note.get('columnId'),
     text: note.get('text'),
     author: note.get('author').id,
     createdAt: note.get('createdAt'),

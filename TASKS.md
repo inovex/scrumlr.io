@@ -3,16 +3,19 @@
 * ~~Refactor board actions (add correct typings)~~
 * ~~Rename card to note (due to Chrome behaviour that tries to fill input fields with the placeholder '...card...' with
   credit card information)~~
+* ~~Add editable columns to board model~~
+* Async update of board & column names (dirty states, compare to notes)
+* Delete notes & votes when column gets deleted
+* Replace id generator (https://github.com/parse-community/parse-server/blob/master/src/cryptoUtils.js)  
+* Add local mockup data in redux store to proceed with development
 * Integrate joining board confirmation process
     * ~~Join directly (public board)~~
     * Join with required confirmation
     * Join with passphrase
     * (Join encrypted board) upon implementation of encryption/decryption
 * Add template schema on server
-    * Add (optional) template reference to boards
-    * Add editable columns to board model
-* Async update of board & column names (dirty states, compare to notes)
-* Add local mockup data in redux store to proceed with development
+    * Add (optional?) template reference to boards
+    * Copy structure of template into board
 * Implement retry mechanism on server calls (e.g. add or update note)
 * Add editable / stackable options to Note model (active while not persisted)
 * Display/hide options to edit/delete entities based on users permissions

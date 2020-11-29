@@ -6,6 +6,7 @@ import {useEffect} from "react";
 import {ApplicationState} from "../../types/store";
 import store from "../../store/store";
 import {ActionFactory} from "../../store/action";
+import {API} from "../../api";
 
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
@@ -27,11 +28,23 @@ function Board(props: BoardProps) {
     }));
 
     const onAddNote = () => {
-        store.dispatch(ActionFactory.addNote(props.match.params.id, 'Test'));
+        store.dispatch(ActionFactory.addNote(state.board.data.columns[0].id, 'Test'));
     }
 
     const onDeleteNote = (id: string) => {
         store.dispatch(ActionFactory.deleteNote(id));
+    }
+
+    const onAddColumn = () => {
+        API.addColumn(props.match.params.id, 'New Column');
+    }
+
+    const onEditColumn = () => {
+        API.editColumn(props.match.params.id, state.board.data.columns[0].id, 'Changed Name')
+    }
+
+    const onDeleteColumn = () => {
+        API.deleteColumn(props.match.params.id, state.board.data.columns[0].id)
     }
 
     if (state.board.status === 'pending') {
@@ -50,6 +63,11 @@ function Board(props: BoardProps) {
                 </li>
                 <li>{ JSON.stringify(state.users) }</li>
                 <button onClick={onAddNote}>Add Note</button>
+                <p>
+                    <button onClick={onAddColumn}>Add Column</button>
+                    <button onClick={onEditColumn}>Edit Column</button>
+                    <button onClick={onDeleteColumn}>Delete Column</button>
+                </p>
             </ul>);
     } else {
         return <LoadingScreen/>;

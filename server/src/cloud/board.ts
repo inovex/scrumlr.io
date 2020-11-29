@@ -58,10 +58,6 @@ export interface CreateBoardRequest {
     showAuthors?: boolean;
     timerUTCEndTime?: Date;
     expirationUTCTime?: Date;
-    voting?: {
-        status: 'start' | 'complete';
-        voteLimit?: number;
-    }
 }
 export interface EditBoardRequest extends CreateBoardRequest  {
     board: string;
@@ -247,9 +243,6 @@ export const initializeBoardFunctions = () => {
         }
         if (request.expirationUTCTime) {
             board.set('expirationUTCTime', request.expirationUTCTime);
-        }
-        if (request.voting) {
-            board.set('voting', request.voting);
         }
 
         await board.save();

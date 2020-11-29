@@ -1,13 +1,13 @@
 import {callAPI} from "./index";
 
 export const NoteAPI = {
-    addNote: (boardId: string, text: string) => {
-        return callAPI<{ boardId: string, text: string }, boolean>('addNote', { boardId, text });
+    addNote: (boardId: string, columnId: string, text: string) => {
+        return callAPI<{ boardId: string, columnId: string, text: string }, boolean>('addNote', { boardId, columnId, text });
     },
-    deleteNote: (boardId: string, noteId: string) => {
-        return callAPI<{ boardId: string, noteId: string}, boolean>('deleteNote', { boardId, noteId });
+    deleteNote: (noteId: string) => {
+        return callAPI<{ noteId: string}, boolean>('deleteNote', { noteId });
     },
-    editNote: (boardId: string, noteId: string, text: string) => {
-        return callAPI<{ boardId: string, noteId: string, text: string}, boolean>('editNote', { boardId, noteId, text });
+    editNote: (noteId: string, text: string) => {
+        return callAPI<{noteId: string, text: string}, boolean>('editNote', { noteId, text });
     }
 }
