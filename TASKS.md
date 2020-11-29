@@ -5,12 +5,12 @@
   credit card information)~~
 * ~~Add editable columns to board model~~
 * ~~Async update of board & column names (dirty states, compare to notes)~~
+* ~~Create board with options~~
 * Check impact of newObjectId in https://github.com/parse-community/parse-server/blob/master/src/cryptoUtils.js
     * Replace ID generating mechanism in Column server cloud functions
     * ... replace id generating mechanism in Parse?
 * Add local mockup data in redux store to proceed with development
 * Delete notes & votes when column gets deleted
-* Create board with options
 * Integrate joining board confirmation process
     * ~~Join directly (public board)~~
     * Join with required confirmation

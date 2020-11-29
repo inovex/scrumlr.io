@@ -5,6 +5,7 @@ import {
     requireValidBoardMember
 } from "./permission";
 import {api} from "./util";
+import {newObjectId} from "./column";
 
 interface JoinBoardResponse {
     status: 'accepted' | 'rejected' | 'pending';
@@ -50,18 +51,24 @@ const respondToJoinRequest = async (currentUser: Parse.User, user: string, board
 
 
 export interface CreateBoardRequest {
+    columns: {
+       name: string,
+       hidden: boolean
+    }[],
     name?: string;
     joinConfirmationRequired?: boolean;
     encryptedContent?: boolean;
     accessCode?: string;
+}
+
+export interface EditBoardRequest {
+    board: string;
     showContentOfOtherUsers?: boolean;
     showAuthors?: boolean;
     timerUTCEndTime?: Date;
     expirationUTCTime?: Date;
 }
-export interface EditBoardRequest extends CreateBoardRequest  {
-    board: string;
-}
+
 export interface DeleteBoardRequest {
     board: string;
 }
@@ -78,7 +85,14 @@ export interface JoinBoardRequest {
 export const initializeBoardFunctions = () => {
     api<CreateBoardRequest, string >('createBoard', async (user, request) => {
         const board = new Parse.Object('Board');
-        const savedBoard = await board.save(request, { useMasterKey: true });
+        const columns = request.columns.reduce((acc, current) => {
+            acc[newObjectId()] = {
+                name: current.name,
+                hidden: current.hidden
+            }
+            return acc;
+        }, {});
+        const savedBoard = await board.save({ ...request, columns }, { useMasterKey: true });
 
         const adminRoleACL = new Parse.ACL();
         adminRoleACL.setPublicReadAccess(false);
@@ -216,21 +230,6 @@ export const initializeBoardFunctions = () => {
         const board = await boardQuery.get(request.board, { useMasterKey: true });
         if (!board) {
             throw new Error(`Board ${request.board} not found`);
-        }
-
-        // FIXME decrypt/encrypt on toggle or disable this option
-        if (request.joinConfirmationRequired) {
-            board.set('joinConfirmationRequired', request.joinConfirmationRequired);
-        }
-        if (request.encryptedContent) {
-            board.set('encryptedContent', request.encryptedContent);
-        }
-
-        if (request.name) {
-            board.set('name', request.name);
-        }
-        if (request.accessCode) {
-            board.set('accessCode', request.accessCode);
         }
         if (request.showContentOfOtherUsers) {
             board.set('showContentOfOtherUsers', request.showContentOfOtherUsers);

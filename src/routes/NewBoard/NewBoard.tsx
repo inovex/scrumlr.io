@@ -24,7 +24,11 @@ function NewBoard(props: NewBoardProps) {
 
     async function onCreateBoard() {
         if (Parse.User.current()) {
-            const boardId = await API.createBoard();
+            const boardId = await API.createBoard([
+                { name: 'Positive', hidden: false },
+                { name: 'Negative', hidden: false },
+                { name: 'Actions', hidden: true }
+            ]);
             props.history.push(`/board/${boardId}`);
         }
         // TODO report error
