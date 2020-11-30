@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-This will open the server on `localhost:1337`.
+This will open the server on `localhost:4000`.
 
 ### Running everything via Docker
 
