@@ -24,7 +24,7 @@
 
 Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://scrumlr.io).
 
-This project is written in React and its data is stored in Firestore.
+This project is written in React on top of the [Parse Platform](https://parseplatform.org/).
 
 ## Contributing
 
