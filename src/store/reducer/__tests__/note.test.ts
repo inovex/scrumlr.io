@@ -16,7 +16,6 @@ jest.mock('parse', () => {
     }
 });
 
-
 const createServerNote = (id: string, text: string = NOTE_TEXT): NoteClientModel => ({
     id,
     columnId: COLUMN_ID,
