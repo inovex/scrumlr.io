@@ -16,6 +16,7 @@
     * ... replace id generating mechanism in Parse?
 * Add local mockup data in redux store to proceed with development
 * Delete notes & votes when column gets deleted
+    * .. or forbid deleting columns during vote phase
 * Evaluate 100 object limit in Parse queries and use pagination
 * Integrate joining board confirmation process
     * ~~Join directly (public board)~~
