@@ -10,6 +10,7 @@
   won't work and we have to open a pull request on parse)
 * Check live queries with different parse servers (e.g. horizontal scaling option)
     * Direct operations on database don't trigger live query updates  
+    * see https://github.com/parse-community/parse-server/issues/3858
 * Check impact of newObjectId in https://github.com/parse-community/parse-server/blob/master/src/cryptoUtils.js
     * Replace ID generating mechanism in Column server cloud functions
     * ... replace id generating mechanism in Parse?
