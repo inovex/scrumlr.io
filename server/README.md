@@ -15,7 +15,7 @@ host, port, database URI and so on. These variables are listed in
 
 ## Run
 
-### Running node applcation
+### Running node application
 
 ```
 npm install
