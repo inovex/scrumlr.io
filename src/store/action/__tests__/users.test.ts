@@ -1,7 +1,7 @@
 import {UsersActionFactory, UsersActionType, UsersReduxAction} from "../users";
 import {ReduxAction} from "../index";
 import {UserClientModel} from "../../../types/user";
-import {AssertTypeEqual} from "../../../setupTests";
+import {AssertTypeEqual} from "../../../testUtils";
 
 describe('users actions', () => {
     test('equal number of action types and factory functions', () => {
@@ -9,16 +9,6 @@ describe('users actions', () => {
     });
 
     describe('set users', () => {
-        test('action type definition', () => {
-            // testing type equality here will not report an error at runtime but cause problems with typescript
-            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, {
-                type: '@@SCRUMLR/setUsers',
-                users: UserClientModel[],
-                admin: boolean
-            }> = true;
-            expect(assertion).toBe(true);
-        });
-
         test('type is listed in users redux actions', () => {
             // testing type equality here will not report an error at runtime but cause problems with typescript
             const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, UsersReduxAction> = true;
@@ -32,27 +22,18 @@ describe('users actions', () => {
         });
 
         test('created action', () => {
-            const action = UsersActionFactory.setUsers([
-                {
-                    id: 'id',
-                    displayName: 'John Doe',
-                    admin: true,
-                    updatedAt: new Date('2020-11-30'),
-                    createdAt: new Date('2020-11-30')
-                }
-            ], true);
+            const user: UserClientModel = {
+                id: 'id',
+                displayName: 'John Doe',
+                admin: true,
+                updatedAt: new Date('2020-11-30'),
+                createdAt: new Date('2020-11-30')
+            };
+            const action = UsersActionFactory.setUsers([ user ], true);
 
             expect(action).toEqual({
                 type: '@@SCRUMLR/setUsers',
-                users: [
-                    {
-                        id: 'id',
-                        displayName: 'John Doe',
-                        admin: true,
-                        updatedAt: new Date('2020-11-30'),
-                        createdAt: new Date('2020-11-30')
-                    }
-                ],
+                users: [ user ],
                 admin: true
             })
         });

@@ -4,7 +4,4 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
 
-export type AssertTypeEqual<T, Expected> =
-    T extends Expected
-        ? (Expected extends T ? true : never)
-        : never;
+
