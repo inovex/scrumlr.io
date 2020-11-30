@@ -35,6 +35,12 @@
                   ".write": "$uid === auth.uid"
                 }
               },
+              "parent": {
+                ".write": "root.child('boards/'+$boardId+'/private/users').hasChild(auth.uid)"
+              },
+              "timestamp": {
+                ".write": "root.child('boards/'+$boardId+'/private/users').hasChild(auth.uid)"
+              },
               "votes": {
                 ".write": "null !== auth.uid"
               }

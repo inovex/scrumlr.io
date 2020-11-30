@@ -156,6 +156,11 @@ export class AboutModal extends React.Component<
             <div className="about-modal__panel">
               <h2 className="about-modal__headline">Changelog</h2>
 
+              <h3>2020/11/30</h3>
+              <ul>
+                <li>Enabled card stacking for every user</li>
+              </ul>
+
               <h3>2020/11/14</h3>
               <ul>
                 <li>Added "About" section, including an added changelog</li>

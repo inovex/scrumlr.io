@@ -69,26 +69,21 @@ const cardTarget = {
 
 const cardSource: any = {
   beginDrag(props: CardProps) {
-    if (props.isAdmin) {
-      return {
-        id: props.id,
-        column: props.column
-      };
-    }
-    return null;
+    return {
+      id: props.id,
+      column: props.column
+    };
   },
 
   endDrag(props: CardProps, monitor: any) {
-    if (props.isAdmin) {
-      const item = monitor.getItem();
-      const dropResult = monitor.getDropResult();
+    const item = monitor.getItem();
+    const dropResult = monitor.getDropResult();
 
-      if (dropResult) {
-        if ('focus' === dropResult.type) {
-          props.onCardStack(dropResult.id, item.id);
-        } else if ('card' === dropResult.type) {
-          props.onCardStack(item.id, dropResult.id);
-        }
+    if (dropResult) {
+      if ('focus' === dropResult.type) {
+        props.onCardStack(dropResult.id, item.id);
+      } else if ('card' === dropResult.type) {
+        props.onCardStack(item.id, dropResult.id);
       }
     }
   }
