@@ -28,16 +28,21 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
         }
         case ActionType.EditNote: {
             const noteIndex = state.findIndex((note) => note.id === action.noteId);
-            return state.splice(noteIndex, 1, {
+
+            const newState = [ ...state ];
+            newState.splice(noteIndex, 1, {
                 ...state[noteIndex],
                 text: action.text,
                 dirty: true
             });
+            return newState;
         }
         case ActionType.UpdatedNote: {
             const noteIndex = state.findIndex((note) => note.id === action.note.id && note.text === action.note.text);
             if (noteIndex >= 0) {
-                return state.splice(noteIndex, 1, action.note);
+                const newState = [ ...state ];
+                newState.splice(noteIndex, 1, action.note);
+                return newState;
             }
             return state;
         }
