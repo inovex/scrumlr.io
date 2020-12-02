@@ -19,7 +19,5 @@ export const ActionFactory = {
     ...UsersActionFactory
 }
 
+/** The types of all application internal redux actions. */
 export type ReduxAction = BoardReduxAction | ColumnReduxAction | NoteReduxAction | UsersReduxAction;
-
-
-
