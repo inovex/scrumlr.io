@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {ToastOptions} from 'react-toastify/dist/types/index';
+import {ToastOptions} from 'react-toastify';
 
 export const Toast = {
     success,
