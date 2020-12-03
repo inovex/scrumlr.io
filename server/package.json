@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
+    "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts"
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^0.19.3",
@@ -12,6 +14,7 @@
     "typescript": "^4.0.5"
   },
   "dependencies": {
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.6",
     "parse": "^2.18.0",
