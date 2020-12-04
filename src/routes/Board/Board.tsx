@@ -1,44 +1,43 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useFirestoreConnect, isLoaded, isEmpty } from 'react-redux-firebase';
-import { ApplicationState } from 'store/ApplicationState';
 import { useSelector } from 'react-redux';
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
-import BoardData from "../../types/BoardData";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
+import {useEffect} from "react";
+import {ApplicationState} from "../../types/store";
+import store from "../../store";
+import {ActionFactory} from "../../store/action";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
 function Board(props: BoardProps) {
+    useEffect( () => {
+        const boardId = props.match.params.id;
+        store.dispatch(ActionFactory.joinBoard(boardId));
 
-    const boardId = props.match.params.id;
-
-    useFirestoreConnect([
-        {collection: 'boards', doc: boardId}
-    ]);
-
-    const board: BoardData = useSelector((state: ApplicationState) => state.firestore.data.boards && state.firestore.data.boards[boardId]);
-
-    if (isLoaded(board)) {
-        if (isEmpty(board)) {
-            // PLACEHOLDER: BOARD NON EXISTENT
-            return <div> Board non existent</div>;
-        } else {
-            // PLACEHOLDER: INSERT BOARD
-            return <BoardComponent>
-                <Column color="blue">{board.topic} ({boardId})</Column>
-                <Column color="purple">Owner: {board.owner}</Column>
-                <Column color="violet">Date: {board.date.toDate().toString()}</Column>
-                <Column color="pink">Delfin</Column>
-                <Column color="blue">Elefant</Column>
-                <Column color="purple">Fuchs</Column>
-                <Column color="violet">Giraffe</Column>
-                <Column color="pink">Hund</Column>
-                <Column color="blue">Igel</Column>
-            </BoardComponent>;
-
+        return () => {
+            store.dispatch(ActionFactory.leaveBoard());
+            
         }
+    }, [ props.match.params.id ]);
+
+    const state = useSelector((state: ApplicationState) => ({
+        board: state.board,
+        notes: state.notes,
+        users: state.users.all
+    }));
+
+    if (state.board.status === 'pending') {
+        return <LoadingScreen/>;
+    } else if (state.board.status === 'ready') {
+        return (
+            <BoardComponent>
+                {
+                    state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
+                }
+            </BoardComponent>);
+        
     } else {
         return <LoadingScreen/>;
     }
