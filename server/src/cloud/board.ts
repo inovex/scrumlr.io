@@ -1,6 +1,6 @@
 import {
     getAdminRoleName,
-    getMemberRoleName,
+    getMemberRoleName, isMember,
     requireValidBoardAdmin,
     requireValidBoardMember
 } from "./permission";
@@ -135,6 +135,12 @@ export const initializeBoardFunctions = () => {
 
         if (!board) {
             throw new Error(`Board '${request.boardId}' not found`);
+        }
+
+        if (await isMember(user, request.boardId)) {
+            return {
+                status: 'accepted'
+            };
         }
 
         if (board.get('joinConfirmationRequired')) {
