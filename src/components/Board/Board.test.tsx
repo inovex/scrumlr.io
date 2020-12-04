@@ -14,7 +14,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
 describe('basic', () => {
 
-    beforeAll(() => {
+    beforeEach(() => {
         window.IntersectionObserver = jest.fn(() => ({
             observe: jest.fn(),
             disconnect: jest.fn()
@@ -74,6 +74,13 @@ describe('basic', () => {
 });
 
 describe('navigation', () => {
+
+    beforeEach(() => {
+        window.IntersectionObserver = jest.fn(() => ({
+            observe: jest.fn(),
+            disconnect: jest.fn()
+        }) as any);
+    });
 
     let intersectionObserver: any;
 

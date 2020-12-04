@@ -10,6 +10,13 @@ jest.mock('react-redux');
 
 describe('Board', () => {
 
+    beforeEach(() => {
+        window.IntersectionObserver = jest.fn(() => ({
+            observe: jest.fn(),
+            disconnect: jest.fn()
+        }) as any);
+    });
+
     const mockProps: BoardProps = {
         match: {
             params: {id: '-foobar'},
@@ -64,7 +71,4 @@ describe('Board', () => {
         render(<Board {...mockProps}/>);
         expect(useFirestoreConnectMock).toBeCalledWith(mockQueriesConfig);
     });
-
-
-
 });

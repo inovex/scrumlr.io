@@ -27,23 +27,9 @@ exports[`Board should render correctly on isLoaded == false 1`] = `
 `;
 
 exports[`Board should render correctly on isLoaded == true and isEmpty == false 1`] = `
-<div>
-  <h1>
-    Hello World
-     (
-    -foobar
-    )
-  </h1>
-  <span>
-    Owner: 
-    Admin
-  </span>
-  <br />
-  <span>
-    Date: 
-    date xyz
-  </span>
-</div>
+<style>
+  .board { --board__columns: 9 }
+</style>
 `;
 
 exports[`Board should render correctly on isLoaded == true and isEmpty == true 1`] = `
