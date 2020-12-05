@@ -1,25 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {ReactReduxFirebaseProvider } from 'react-redux-firebase';
-import { createFirestoreInstance } from 'redux-firestore';
-import firebase from './firebase';
-import store from './store/store';
 import './index.scss';
+import store from './store';
+import Router from './routes/Router';
+import { ToastContainer } from 'react-toastify';
+import Parse from 'parse';
 
-const rrfProps = {
-  firebase,
-  config: {},
-  dispatch: store.dispatch,
-  createFirestoreInstance
-};
-
+Parse.initialize('Scrumlr');
+Parse.serverURL = 'http://localhost:4000/api';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ReactReduxFirebaseProvider {...rrfProps}>
-      </ReactReduxFirebaseProvider>
+      <Router/>
+      <ToastContainer/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

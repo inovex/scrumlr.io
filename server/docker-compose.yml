@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  database:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  server:
+    build: .
+    ports:
+      - 4000:4000
+    depends_on:
+      - database
+    links:
+      - 'database'
+    environment:
+      SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
+      SCRUMLR_API_HOST: 'localhost'
+      SCRUMLR_API_PORT: '4000'
+      SCRUMLR_API_MASTER_KEY: 'masterKey'
+      SCRUMLR_SERVE_PRODUCTION_WEBAPP: 'false'
+
+  dashboard:
+    image: parseplatform/parse-dashboard
+    command: --dev --appId Scrumlr --masterKey masterKey --serverURL http://localhost:4000/api
+    ports:
+      - 4040:4040
+    depends_on:
+      - server
+      - database
