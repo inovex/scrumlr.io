@@ -5,6 +5,7 @@ import Parse from "parse";
 import {mapUserServerToClientModel} from "../../types/user";
 import {mapNoteServerToClientModel, NoteServerModel} from "../../types/note";
 import {mapBoardServerToClientModel} from "../../types/board";
+import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "../../types/joinRequest";
 
 let closeSubscriptions: Function[] = [];
 
@@ -15,6 +16,30 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
     }
 
     if (action.type === ActionType.PermittedBoardAccess) {
+
+        const createJoinRequestSubscription = () => {
+            const joinRequestQuery = new Parse.Query('JoinRequest');
+            joinRequestQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
+
+            joinRequestQuery.subscribe().then((subscription) => {
+                closeSubscriptions.push(() => {subscription.unsubscribe()});
+
+                subscription.on('open', (object) => {
+                    joinRequestQuery.find().then((results) => {
+                        dispatch(ActionFactory.initializeJoinRequests((results as any[]).map(mapJoinRequestServerToClientModel)));
+                    })
+                });
+
+                subscription.on('create', (object) => {
+                    dispatch(ActionFactory.createJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
+                });
+
+                subscription.on('update', (object) => {
+                    dispatch(ActionFactory.updateJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
+                });
+            });
+        }
+
         const createUsersSubscription = () => {
             const adminsQuery = new Parse.Query(Parse.Role);
             adminsQuery.equalTo('name', `admin_of_${action.boardId}`);
@@ -90,6 +115,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
                 dispatch(ActionFactory.deleteBoard());
             });
             subscription.on('open', () => {
+                createJoinRequestSubscription();
                 createNoteSubscription();
                 createUsersSubscription();
                 boardQuery.first().then((board) => {

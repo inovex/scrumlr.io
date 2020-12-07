@@ -5,19 +5,16 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {ApplicationState} from "../../types/store";
 import store from "../../store";
 import {ActionFactory} from "../../store/action";
-import {useState} from "react";
-import {callAPI} from "../../api";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
 function Board(props: BoardProps) {
 
-    const [user, setUser] = useState('');
-
     const state: any = useSelector((state: ApplicationState) => ({
         board: state.board,
         notes: state.notes,
-        users: state.users.all
+        users: state.users.all,
+        joinRequests: state.joinRequests
     }));
 
     const onAddNote = () => {
@@ -40,7 +37,6 @@ function Board(props: BoardProps) {
         store.dispatch(ActionFactory.deleteColumn(state.board.data.columns[0].id));
     }
 
-
     if (state.board.status === 'ready') {
         return (
             <ul>
@@ -54,18 +50,20 @@ function Board(props: BoardProps) {
                     </ul>
                 </li>
                 <li>{ JSON.stringify(state.users) }</li>
+                <li>
+                    <ul>
+                        {state.joinRequests.map((joinRequest: any, index: number) => <li key={index}>
+                            {JSON.stringify(joinRequest)}
+                            <button onClick={() => {store.dispatch(ActionFactory.acceptJoinRequest(joinRequest.id, joinRequest.boardId, joinRequest.userId))}}>Accept</button>
+                            <button onClick={() => {store.dispatch(ActionFactory.rejectJoinRequest(joinRequest.id, joinRequest.boardId, joinRequest.userId))}}>Reject</button>
+                        </li>)}
+                    </ul>
+                </li>
                 <button onClick={onAddNote}>Add Note</button>
                 <p>
                     <button onClick={onAddColumn}>Add Column</button>
                     <button onClick={onEditColumn}>Edit Column</button>
                     <button onClick={onDeleteColumn}>Delete Column</button>
-                </p>
-                <p>
-                    <input onChange={e => setUser(e.target.value)} value={user}/>
-                    <button onClick={_ => callAPI('acceptUser', {
-                        board: props.match.params.id,
-                        user: user
-                    })}>Accept User</button>
                 </p>
             </ul>);
     } else {

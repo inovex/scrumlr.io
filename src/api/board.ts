@@ -6,5 +6,11 @@ export const BoardAPI = {
     },
     joinBoard: (boardId: string) => {
         return callAPI<{ boardId : string }, { status: 'accepted' | 'rejected' | 'pending', joinRequestReference?: string }>('joinBoard', { boardId});
+    },
+    acceptJoinRequest: (boardId: string, userId: string) => {
+        return callAPI<{board: string, user: string}, boolean>('acceptUser', {board: boardId, user: userId});
+    },
+    rejectJoinRequest: (boardId: string, userId: string) => {
+        return callAPI<{board: string, user: string}, boolean>('rejectUser', {board: boardId, user: userId});
     }
 }

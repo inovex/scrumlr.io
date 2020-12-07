@@ -200,7 +200,7 @@ export const initializeBoardFunctions = () => {
 
 
     api<JoinRequestResponse, boolean>('rejectUser', async (user, request) => {
-        await respondToJoinRequest(user, request.board, request.user, (object) => {
+        await respondToJoinRequest(user, request.user, request.board, (object) => {
             object.set('status', 'rejected');
         });
         return true;
