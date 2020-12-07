@@ -191,7 +191,7 @@ export const initializeBoardFunctions = () => {
     })
 
     api<JoinRequestResponse, boolean>('acceptUser', async (user, request) => {
-        await respondToJoinRequest(user, request.board, request.user, (object) => {
+        await respondToJoinRequest(user, request.user, request.board, (object) => {
             object.set('status', 'accepted');
             // object.set('accessKey', params.accessKey);
         });
