@@ -5,10 +5,14 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {ApplicationState} from "../../types/store";
 import store from "../../store";
 import {ActionFactory} from "../../store/action";
+import {useState} from "react";
+import {callAPI} from "../../api";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
 function Board(props: BoardProps) {
+
+    const [user, setUser] = useState('');
 
     const state: any = useSelector((state: ApplicationState) => ({
         board: state.board,
@@ -36,9 +40,8 @@ function Board(props: BoardProps) {
         store.dispatch(ActionFactory.deleteColumn(state.board.data.columns[0].id));
     }
 
-    if (state.board.status === 'pending') {
-        return <LoadingScreen/>;
-    } else if (state.board.status === 'ready') {
+
+    if (state.board.status === 'ready') {
         return (
             <ul>
                 <li>{ JSON.stringify(state.board.data) }</li>
@@ -56,6 +59,13 @@ function Board(props: BoardProps) {
                     <button onClick={onAddColumn}>Add Column</button>
                     <button onClick={onEditColumn}>Edit Column</button>
                     <button onClick={onDeleteColumn}>Delete Column</button>
+                </p>
+                <p>
+                    <input onChange={e => setUser(e.target.value)} value={user}/>
+                    <button onClick={_ => callAPI('acceptUser', {
+                        board: props.match.params.id,
+                        user: user
+                    })}>Accept User</button>
                 </p>
             </ul>);
     } else {

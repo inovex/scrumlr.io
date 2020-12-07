@@ -1,7 +1,11 @@
 .loading-screen {
     height: 100%;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+}
+
+.loading-screen__info {
+    font-size: 20px;
 }
