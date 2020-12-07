@@ -25,12 +25,12 @@ export const passBoardJoinConfirmationMiddleware = (stateAPI: MiddlewareAPI<any,
             const checkRequestStatus = (request: Parse.Object) => {
                 switch (request.get('status')) {
                     case 'accepted': {
-                        dispatch(ActionFactory.permittedBoardAccess(request.get('board').id));
+                        stateAPI.dispatch(ActionFactory.joinBoard(request.get('board').id));
                         subscription.unsubscribe();
                         break;
                     }
                     case 'rejected': {
-                        dispatch(ActionFactory.rejectedBoardAccess());
+                        stateAPI.dispatch(ActionFactory.rejectedBoardAccess());
                         subscription.unsubscribe();
                         break;
                     }
