@@ -29,10 +29,9 @@ const BoardGuard = (props: BoardGuardProps) => {
     if (boardStatus === 'accepted' || boardStatus === 'ready') {
         return (<Board {...props}/>);
     } else if (boardStatus === 'rejected') {
-        return 'You have been rejected';
+        return (<LoadingScreen info='You have been rejected.'/>);
     } else {
-        //TODO Add msg prop to LoadingScreen to display a message underneath loading spinner
-        return (<LoadingScreen/>);
+        return (<LoadingScreen info='Waiting for approval.'/>);
     }
 }
 
