@@ -1,23 +1,18 @@
 import {
     getAdminRoleName,
     getMemberRoleName,
-    requireValidBoardAdmin,
-    requireValidBoardMember
+    requireValidBoardAdmin
 } from "./permission";
 import {api} from "./util";
-import {newObjectId} from "./column";
+import { newObjectId } from 'parse-server/lib/cryptoUtils';
+import {serverConfig} from "../index";
 
 interface JoinBoardResponse {
     status: 'accepted' | 'rejected' | 'pending';
     joinRequestReference?: string;
 }
 
-interface RequestResponse {
-    board: string;
-    user: string;
-    status: 'accepted' | 'rejected';
-    accessKey?: string;
-}
+
 
 const addAsMember = async (user: Parse.User, board: string) => {
     const memberRoleQuery = new Parse.Query(Parse.Role);
@@ -48,7 +43,6 @@ const respondToJoinRequest = async (currentUser: Parse.User, user: string, board
         throw new Error(`Join request not found for user '${[user]}' on board '${board}'`);
     }
 }
-
 
 export interface CreateBoardRequest {
     columns: {
@@ -86,7 +80,7 @@ export const initializeBoardFunctions = () => {
     api<CreateBoardRequest, string >('createBoard', async (user, request) => {
         const board = new Parse.Object('Board');
         const columns = request.columns.reduce((acc, current) => {
-            acc[newObjectId()] = {
+            acc[newObjectId(serverConfig.objectIdSize)] = {
                 name: current.name,
                 hidden: current.hidden
             }
