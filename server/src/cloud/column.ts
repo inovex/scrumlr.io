@@ -1,6 +1,7 @@
 import {requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
-import { randomBytes } from "crypto";
+import { newObjectId } from 'parse-server/lib/cryptoUtils';
+import {serverConfig} from "../index";
 
 export interface AddColumnRequest {
     boardId: string;
@@ -20,24 +21,6 @@ export interface EditColumnRequest {
     hidden?: boolean;
 }
 
-// TODO remove id generator of parse
-export function randomString(size: number): string {
-    if (size === 0) {
-        throw new Error('Zero-length randomString is useless.');
-    }
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz' + '0123456789';
-    let objectId = '';
-    const bytes = randomBytes(size);
-    for (let i = 0; i < bytes.length; ++i) {
-        objectId += chars[bytes.readUInt8(i) % chars.length];
-    }
-    return objectId;
-}
-
-export function newObjectId(size: number = 10): string {
-    return randomString(size);
-}
-
 export const initializeColumnFunctions = () => {
     api<AddColumnRequest, boolean>('addColumn', async (user, request) => {
         await requireValidBoardAdmin(user, request.boardId);
@@ -45,7 +28,7 @@ export const initializeColumnFunctions = () => {
         const board = await new Parse.Query('Board').get(request.boardId, { useMasterKey: true });
         if (board) {
             const columns = board.get('columns');
-            columns[newObjectId()] = {
+            columns[newObjectId(serverConfig.objectIdSize)] = {
                 name: request.name,
                 hidden: request.hidden
             }
