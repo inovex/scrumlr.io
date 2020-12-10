@@ -22,15 +22,15 @@ exports[`Column should have correct style show column with correct style 1`] = `
       </p>
     </div>
     <div
-      class="column__add-card"
+      class="note-input"
     >
       <p
-        class="column__add-card__text"
+        class="note-input__text"
       >
         Add your note...
       </p>
       <svg
-        class="column__add-card__icon"
+        class="note-input__icon"
       >
         icon-add.svg
       </svg>
