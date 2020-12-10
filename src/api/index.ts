@@ -8,6 +8,8 @@ import {ColumnAPI} from "./column";
  *
  * @param endpoint the name of the endpoint
  * @param request the request parameters
+ *
+ * @returns the asynchronous server response wrapped in a `Promise`
  */
 export const callAPI = <RequestType, ResponseType>(endpoint: string, request: RequestType) => {
     return Parse.Cloud.run(endpoint, request) as Promise<ResponseType>;

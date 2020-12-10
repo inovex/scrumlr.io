@@ -6,6 +6,8 @@ export const BoardAPI = {
      *
      * @param columns the definition of the columns
      * @param name the board name
+     *
+     * @returns the board id of the created board
      */
     createBoard: (columns: { name: string, hidden: boolean }[], name?: string) => {
         return callAPI<{ columns: { name: string, hidden: boolean }[], name?: string }, string>('createBoard', { columns, name });
@@ -17,9 +19,9 @@ export const BoardAPI = {
      * request of the user was rejected by an admin) or `pending`. If the state is pending the response will include
      * the reference on the join request state in the attribute `joinRequestReference`.
      *
-     * Returns `true` if the operation succeeded or throws an Error otherwise.
-     *
      * @param boardId the board id
+     *
+     * @returns `true` if the operation succeeded or throws an Error otherwise
      */
     joinBoard: (boardId: string) => {
         return callAPI<{ boardId : string }, { status: 'accepted' | 'rejected' | 'pending', joinRequestReference?: string }>('joinBoard', { boardId});
