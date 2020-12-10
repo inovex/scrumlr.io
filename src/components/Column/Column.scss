@@ -4,9 +4,6 @@
   min-width: $column__min-width;
   width: 100%;
   max-width: $column__max-width;
-
-  height: 100%;
-
   @include inset-border($top: true, $bottom: true);
 }
 
@@ -36,7 +33,6 @@
 
 .column__header-text {
   font-size: 24px;
-  width: auto;
   color: $color-black;
   border-bottom: solid 3px var(--accent-color);
   margin-right: 10px;
@@ -59,7 +55,7 @@
   line-height: 32px;
 }
 
-.column__add-card {
+.note-input {
   display: flex;
   background-color: $color-white;
   margin-top: 16px;
@@ -70,16 +66,16 @@
   box-shadow: 0 6px 9px 0 #313949;
 }
 @media (prefers-color-scheme: dark) {
-  .column__add-card {
+  .note-input {
     background-color: #4C5566;
   }
 }
 
-.column__add-card:hover {
+.note-input:hover {
   cursor: pointer;
 }
 
-.column__add-card__text {
+.note-input__text {
   margin: 0;
   font-size: 14px;
   color: $color-black;
@@ -88,12 +84,12 @@
   line-height: 24px;
 }
 @media (prefers-color-scheme: dark) {
-  .column__add-card__text {
+  .note-input__text {
     color: $color-white;
   }
 }
 
-.column__add-card__icon {
+.note-input__icon {
   width: 14px;
   height: 14px;
   fill: var(--accent-color);

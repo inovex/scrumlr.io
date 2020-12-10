@@ -16,9 +16,9 @@ const Column = ({ color, children } : ColumnProps) => {
                     <h1 className="column__header-text">{children}</h1>
                     <p className="column__header-card-number">5</p>
                 </div>
-                <div className="column__add-card">
-                    <p className="column__add-card__text">Add your note...</p>
-                    <PlusIcon className="column__add-card__icon"/>
+                <div className="note-input">
+                    <p className="note-input__text">Add your note...</p>
+                    <PlusIcon className="note-input__icon"/>
                 </div>
             </div>
         </section>
