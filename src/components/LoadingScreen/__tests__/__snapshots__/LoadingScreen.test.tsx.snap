@@ -25,3 +25,60 @@ exports[`render loading screen 1`] = `
   </div>
 </div>
 `;
+
+exports[`render loading screen with info text 1`] = `
+<div
+  class="loading-screen"
+>
+  <div
+    class="MuiCircularProgress-root MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="MuiCircularProgress-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+  <p
+    class="loading-screen__info"
+  >
+    Test
+  </p>
+</div>
+`;
+
+exports[`render loading screen without info text 1`] = `
+<div
+  class="loading-screen"
+>
+  <div
+    class="MuiCircularProgress-root MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+    role="progressbar"
+    style="width: 40px; height: 40px;"
+  >
+    <svg
+      class="MuiCircularProgress-svg"
+      viewBox="22 22 44 44"
+    >
+      <circle
+        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+        cx="44"
+        cy="44"
+        fill="none"
+        r="20.2"
+        stroke-width="3.6"
+      />
+    </svg>
+  </div>
+</div>
+`;
