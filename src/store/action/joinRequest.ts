@@ -1,4 +1,4 @@
-import {JoinRequestClientModel} from "../../types/joinRequest";
+import {JoinRequestClientModel} from "types/joinRequest";
 
 export const JoinRequestActionType = {
     AcceptJoinRequest: '@@scrumlr/acceptJoinRequest' as '@@scrumlr/acceptJoinRequest',
