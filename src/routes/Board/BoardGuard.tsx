@@ -27,7 +27,7 @@ const BoardGuard = (props: BoardGuardProps) => {
     }, [ props.match.params.id ]);
 
     if (boardStatus === 'accepted' || boardStatus === 'ready') {
-        return (<Board {...props}/>);
+        return (<Board/>);
     } else if (boardStatus === 'rejected') {
         return (<LoadingScreen info='You have been rejected.'/>);
     } else {
