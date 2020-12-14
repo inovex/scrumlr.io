@@ -11,7 +11,7 @@ const MASTER_KEY = process.env.SCRUMLR_API_MASTER_KEY || 'masterKey';
 const DATABASE_URI = process.env.SCRUMLR_DATABASE_URI || 'mongodb://localhost:27017/dev';
 const SERVE_PRODUCTION_WEBAPP = process.env.SCRUMLR_SERVE_PRODUCTION_WEBAPP || false;
 
-const api = new ParseServer({
+export const serverConfig = {
     databaseURI: DATABASE_URI,
     appId: 'Scrumlr',
     cloud: __dirname + '/cloud.ts',
@@ -21,6 +21,7 @@ const api = new ParseServer({
     liveQuery: {
         classNames: [ 'Board', 'Note', 'JoinRequest', '_Role' ]
     },
+    objectIdSize: 32,
     auth: {
         anonymous: {},
         github: {
@@ -28,7 +29,9 @@ const api = new ParseServer({
             access_token: "an authorized Github access token for the user"
         }
     }
-});
+}
+
+const api = new ParseServer(serverConfig);
 
 const application = express();
 application.use("/api", api);
