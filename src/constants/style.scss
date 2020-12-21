@@ -1,0 +1,45 @@
+// @use "sass:list";
+
+// base colors
+$color-white: #FFFFFF;
+$color-light-gray: #EDEFF2;
+$color-middle-gray: #A3A6AA; 
+$color-dark-gray: #859093;
+$color-darkest-gray: #232323;
+$color-black: #111111;
+$color-dark-mode: #272F41;
+
+
+// theme colors
+$color-blue: #056CF2;
+$color-purple: #5005F2;
+$color-violet: #AB05F2;
+$color-pink: #F20574;
+
+.accent-color__blue {--accent-color: #056CF2;}
+.accent-color__purple {--accent-color: #5005F2;}
+.accent-color__violet {--accent-color: #AB05F2;}
+.accent-color__pink {--accent-color: #F20574;}
+
+
+// board & column constants
+$board__side-panel-width: 64px;
+
+$column__min-width: 320px;
+$column__max-width: 960px;
+$column__border-width: 12px;
+
+
+// helper functions
+@function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
+  $props: ();
+  $props: append($props, if($left, inset #{2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($right, inset #{-2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($top, inset 0 #{2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($bottom, inset 0 #{-2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  @return $props;
+}
+
+@mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
+  box-shadow: inset-border($left, $right, $top, $bottom, $color);
+}

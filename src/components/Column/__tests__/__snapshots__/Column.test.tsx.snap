@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Column should have correct style show column with correct style 1`] = `
+<section
+  class="column accent-color__pink"
+>
+  <div
+    class="column__content"
+  >
+    <div
+      class="column__header"
+    >
+      <h1
+        class="column__header-text"
+      >
+        Testheader
+      </h1>
+      <p
+        class="column__header-card-number"
+      >
+        5
+      </p>
+    </div>
+    <div
+      class="note-input"
+    >
+      <p
+        class="note-input__text"
+      >
+        Add your note...
+      </p>
+      <svg
+        class="note-input__icon"
+      >
+        icon-add.svg
+      </svg>
+    </div>
+  </div>
+</section>
+`;

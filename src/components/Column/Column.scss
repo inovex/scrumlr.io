@@ -1,0 +1,56 @@
+@import "constants/style";
+
+.column {
+  min-width: $column__min-width;
+  width: 100%;
+  max-width: $column__max-width;
+  @include inset-border($top: true, $bottom: true);
+}
+
+.column:nth-child(even) {
+  background-color: #f9fafb;
+}
+.column:nth-child(odd) {
+  background-color: #f6f5fb;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column:nth-child(even) {
+    background-color: #242c3d;
+  }
+  .column:nth-child(odd) {
+    background-color: #272f41;
+  }
+}
+
+.column__content {
+  padding: 32px;
+}
+
+.column__header {
+  display: flex;
+}
+
+.column__header-text {
+  font-size: 24px;
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin-right: 10px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 32px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column__header-text {
+    color: $color-white;
+  }
+}
+
+.column__header-card-number {
+  font-size: 20px;
+  color: $color-middle-gray;
+  font-weight: 600;
+  letter-spacing: 0.63px;
+  line-height: 32px;
+}
