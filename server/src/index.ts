@@ -20,6 +20,7 @@ let serverConfig: any = {
     appId: 'Scrumlr',
     masterKey: MASTER_KEY,
     serverURL: `http://${HOST}:${PORT}/api`,
+    objectIdSize: 32,
     databaseURI: DATABASE_URI
 }
 
