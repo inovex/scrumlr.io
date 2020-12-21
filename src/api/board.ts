@@ -21,7 +21,7 @@ export const BoardAPI = {
      *
      * @param boardId the board id
      *
-     * @returns `true` if the operation succeeded or throws an Error otherwise
+     * @returns `true` if the operation succeeded or throws an error otherwise
      */
     joinBoard: (boardId: string) => {
         return callAPI<{ boardId : string }, { status: 'accepted' | 'rejected' | 'pending', joinRequestReference?: string }>('joinBoard', { boardId});

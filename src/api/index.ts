@@ -4,7 +4,7 @@ import {NoteAPI} from "./note";
 import {ColumnAPI} from "./column";
 
 /**
- * Helper function for calls on the Cloud functions of the Parse server backend.
+ * Helper function for calls on the cloud functions of the Parse server backend.
  *
  * @param endpoint the name of the endpoint
  * @param request the request parameters
