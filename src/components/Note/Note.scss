@@ -1,0 +1,79 @@
+@import "constants/style";
+  
+.note {
+    box-sizing: border-box;
+    padding: 16px 20px;
+    margin: 15px 0px 15px 0px;
+    position: relative;
+    overflow: hidden;
+    z-index: $card-z-index;
+    border-radius: 16px;
+    background-color: $color-white;
+    // box-shadow: 0 $base-unit $base-unit*2 0 transparentize($color-dark-gray, .85);
+    box-shadow: 0 6px 9px 0 rgba(0,87,255,0.16);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+@media (prefers-color-scheme: dark) {
+    .note {
+        background-color: #313949;
+        box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+    }
+}
+  
+.note:hover {
+    transform: scale(1.02);
+}
+  
+.note__stack {
+    height: 15.52px;
+    width: 260px;
+    border-radius: 0 0 8px 8px;
+    background-color: $color-white;
+    box-shadow: 0 2px 3px 0 rgba(0,87,255,0.16);
+}
+
+.note__indicator {
+    position: absolute;
+    left: 0;
+    width: 3px;
+    height: 34px;
+    border-radius: 0 3px 3px 0;
+    background: #00e7c2;
+}
+
+  
+.note__text {
+    color: $color-dark-gray;
+    margin: 0;
+    height: 54px;
+    color: $color-black;
+    font-family: Raleway;
+    font-size: 13px;
+    letter-spacing: 0.35px;
+    line-height: 18px;
+}
+@media (prefers-color-scheme: dark) {
+    .note__text {
+        color: $color-white;
+    }
+}
+  
+.note__author {
+    display: flex;
+    align-items: center;
+}
+  
+.note__author-image {
+    height: 26px;
+    width: 26px;
+    border-radius: 100px;
+}
+  
+.note__author-name {
+    margin-left: 10px;
+    color: $color-dark-gray;
+    font-family: Raleway;
+    font-size: 12px;
+    letter-spacing: 0.25px;
+    line-height: 16px;
+}

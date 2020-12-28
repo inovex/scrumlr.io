@@ -30,6 +30,14 @@ $column__max-width: 960px;
 $column__border-width: 12px;
 
 
+// TODO z-indexe definieren
+// z-index
+$base-z-index: 100;
+$base-z-index-step: 10;
+$card-z-index: $base-z-index + (2 * $base-z-index-step);
+$menue-z-index: $base-z-index + (3 * $base-z-index-step);
+
+
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   $props: ();

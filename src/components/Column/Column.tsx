@@ -2,6 +2,7 @@ import React from 'react';
 import './Column.scss';
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
+import Note from "components/Note/Note";
 
 export interface ColumnProps {
     color: Color;
@@ -17,6 +18,8 @@ const Column = ({ color, children } : ColumnProps) => {
                     <p className="column__header-card-number">5</p>
                 </div>
                 <NoteInput/>
+                <Note>Test</Note>
+                <Note>Test 2</Note>
             </div>
         </section>
     );
