@@ -1,5 +1,5 @@
 import {ActionType, ReduxAction} from "../action";
-import {JoinRequestClientModel} from "../../types/joinRequest";
+import {JoinRequestClientModel} from "types/joinRequest";
 
 export const joinRequestReducer = (state: JoinRequestClientModel[] = [], action: ReduxAction): JoinRequestClientModel[] => {
     switch (action.type) {

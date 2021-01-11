@@ -1,5 +1,5 @@
 import {Dispatch, MiddlewareAPI} from "redux";
-import {ApplicationState} from "../../types/store";
+import {ApplicationState} from "types/store";
 import {ActionFactory, ActionType, ReduxAction} from "../action";
 import Parse from "parse";
 import {mapUserServerToClientModel} from "types/user";
