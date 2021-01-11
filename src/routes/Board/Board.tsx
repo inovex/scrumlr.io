@@ -4,8 +4,9 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
 import {ApplicationState} from "types/store";
-import store from "../../store";
-import {ActionFactory} from "../../store/action";
+import store from "store";
+import {ActionFactory} from "store/action";
+import Parse from 'parse';
 
 
 function Board() {
@@ -17,7 +18,7 @@ function Board() {
     }));
 
     let waitingUser;
-    if (true) {
+    if (state.users.admins.find(user => user.id === Parse.User.current()!.id) !== undefined) {
         const pendingJoinRequests = state.joinRequests.filter(joinRequest => joinRequest.status === 'pending');
         if (pendingJoinRequests && pendingJoinRequests.length > 0) {
             waitingUser = (<div>

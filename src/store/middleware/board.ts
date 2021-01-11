@@ -2,10 +2,10 @@ import {Dispatch, MiddlewareAPI} from "redux";
 import {ApplicationState} from "../../types/store";
 import {ActionFactory, ActionType, ReduxAction} from "../action";
 import Parse from "parse";
-import {mapUserServerToClientModel} from "../../types/user";
-import {mapNoteServerToClientModel, NoteServerModel} from "../../types/note";
-import {mapBoardServerToClientModel} from "../../types/board";
-import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "../../types/joinRequest";
+import {mapUserServerToClientModel} from "types/user";
+import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
+import {mapBoardServerToClientModel} from "types/board";
+import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 
 let closeSubscriptions: Function[] = [];
 
