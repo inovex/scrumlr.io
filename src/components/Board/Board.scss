@@ -134,3 +134,39 @@ $board__navigation-button-icon-dimension: 24px;
     }
   }
 }
+
+
+.board__admin-menu {
+  position: fixed;
+  height: 268px;
+  width: 64px;
+  border-radius: 34.5px;
+  background-color: #FF0069;
+  right: 8px;
+  top: 50%;
+  margin-top: -134px;
+  box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+}
+
+.admin-menu__items {
+  height: 212px;
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-menu__item {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.admin-menu__item-icon {
+  fill: white;
+  width: 100%;
+  height: 100%;
+}

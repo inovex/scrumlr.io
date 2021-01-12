@@ -4,6 +4,7 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import AdminMenu from "components/Menu/AdminMenu/AdminMenu";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -93,6 +94,8 @@ const Board = ({ children }: BoardProps) => {
             <style>
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
+
+            <AdminMenu/>
 
             {showPreviousButton && (
                 <button
