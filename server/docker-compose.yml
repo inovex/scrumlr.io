@@ -5,20 +5,56 @@ services:
     ports:
       - 27017:27017
 
+  cache:
+    image: redis
+    ports:
+      - 6379:6379
+
   server:
     build: .
-    ports:
-      - 4000:4000
     depends_on:
       - database
+      - cache
     links:
       - 'database'
+      - 'cache'
     environment:
+      SCRUMLR_OPERATION_MODE: 'server'
       SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
       SCRUMLR_API_HOST: 'localhost'
       SCRUMLR_API_PORT: '4000'
       SCRUMLR_API_MASTER_KEY: 'masterKey'
       SCRUMLR_SERVE_PRODUCTION_WEBAPP: 'false'
+      SCRUMLR_CACHE_URL: 'redis://cache:6379'
+
+  livequery:
+    build: .
+    depends_on:
+      - cache
+    links:
+      - 'cache'
+    environment:
+      SCRUMLR_OPERATION_MODE: 'livequery'
+      SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
+      SCRUMLR_API_HOST: 'localhost'
+      SCRUMLR_API_PORT: '4000'
+      SCRUMLR_API_MASTER_KEY: 'masterKey'
+      SCRUMLR_CACHE_URL: 'redis://cache:6379'
+
+  proxy:
+    image: haproxy
+    volumes:
+      - type: bind
+        source: ./haproxy.cfg
+        target: /usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - 4000:4000
+    depends_on:
+      - server
+      - livequery
+    links:
+      - 'server'
+      - 'livequery'
 
   dashboard:
     image: parseplatform/parse-dashboard
