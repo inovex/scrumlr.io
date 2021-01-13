@@ -16,7 +16,7 @@ const DATABASE_URI = process.env.SCRUMLR_DATABASE_URI || 'mongodb://localhost:27
 const CACHE_URI = process.env.SCRUMLR_CACHE_URL;
 const SERVE_PRODUCTION_WEBAPP = process.env.SCRUMLR_SERVE_PRODUCTION_WEBAPP || false;
 
-let serverConfig: any = {
+export let serverConfig: any = {
     appId: 'Scrumlr',
     masterKey: MASTER_KEY,
     serverURL: `http://${HOST}:${PORT}/api`,
@@ -76,4 +76,3 @@ if (OPERATION_MODE === 'livequery') {
 } else {
     ParseServer.createLiveQueryServer(httpServer);
 }
-
