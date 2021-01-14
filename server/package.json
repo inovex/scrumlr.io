@@ -5,7 +5,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
-    "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts"
+    "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^0.19.3",
