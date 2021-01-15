@@ -39,9 +39,8 @@ function Board() {
                     {
                         state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
                     }
-                </BoardComponent>);
-
-                </>
+                </BoardComponent>
+            </>
         )
     } else {
         return <LoadingScreen/>;
