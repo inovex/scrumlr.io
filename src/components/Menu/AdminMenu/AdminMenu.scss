@@ -9,3 +9,25 @@
   margin-top: -134px;
   box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
 }
+
+.admin-menu__items {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 28px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-menu__item {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.admin-menu__item-icon {
+  width: 100%;
+}
