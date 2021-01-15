@@ -2,6 +2,7 @@ import React from 'react';
 import './Column.scss';
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
+// <link href="https://static.inovex.de/css/raleway.css" rel="stylesheet"></link>
 
 export interface ColumnProps {
     color: Color;
