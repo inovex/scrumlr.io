@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
+    "outDir": "build",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -11,6 +12,7 @@
     "esModuleInterop": true,
     "lib": [
       "esnext", "dom"
-    ]
+    ],
+    "skipLibCheck": true
   }
 }
