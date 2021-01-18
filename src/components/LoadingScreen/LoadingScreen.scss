@@ -6,6 +6,8 @@
     flex-direction: column;
 }
 
-.loading-screen__info {
-    font-size: 20px;
+@media (prefers-color-scheme: dark) {
+    .loading-screen {
+        background-color: #242c3d;
+    }
 }

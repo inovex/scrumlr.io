@@ -1,0 +1,35 @@
+.board-guard {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.board-guard__info {
+  font-size: 20px;
+}
+
+.board-guard__denied-link {
+  text-decoration: none;
+  cursor: pointer;
+  padding: 8px 2em;
+  border-radius: 12px;
+  color: black;
+  border: 1px solid black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-guard {
+    background-color: #242c3d;
+  }
+
+  .board-guard__info {
+    color: white;
+  }
+
+  .board-guard__denied-link {
+    color: white;
+    border-color: white;
+  }
+}

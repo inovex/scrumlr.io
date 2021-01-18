@@ -3,13 +3,10 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {RouteComponentProps} from "react-router";
 import Board from "./Board";
-
-// Redux Stuff
 import {ApplicationState} from "types/store";
 import {useSelector} from "react-redux";
-
-//Additional components
-import LoadingScreen from "components/LoadingScreen/LoadingScreen";
+import LoadingIndicator from "components/LoadingIndicator/LoadingIndicator";
+import "./BoardGuard.scss";
 
 export interface BoardGuardProps extends RouteComponentProps<{id: string}> {}
 
@@ -29,9 +26,15 @@ const BoardGuard = (props: BoardGuardProps) => {
     if (boardStatus === 'accepted' || boardStatus === 'ready') {
         return (<Board/>);
     } else if (boardStatus === 'rejected') {
-        return (<LoadingScreen info='You have been rejected.'/>);
+        return (<div className='board-guard'>
+            <p className='board-guard__info'>You have been rejected.</p>
+            <a href='/' className='board-guard__denied-link'>Return to homepage</a>
+        </div>);
     } else {
-        return (<LoadingScreen info='Waiting for approval.'/>);
+        return (<div className='board-guard'>
+            <LoadingIndicator/>
+            <p className='board-guard__info'>Waiting for approval.</p>
+        </div>);
     }
 }
 

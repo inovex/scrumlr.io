@@ -1,17 +1,12 @@
 import * as React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import './LoadingScreen.scss';
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
-export interface LoadingScreenProps {
-    info?: string;
-}
-
-function LoadingScreen(props: LoadingScreenProps) {
+function LoadingScreen() {
 
     return (
         <div className='loading-screen'>
-            <CircularProgress/>
-            {props.info ? <p className='loading-screen__info'>{props.info}</p> : <></>}
+            <LoadingIndicator/>
         </div>
     );
 }
