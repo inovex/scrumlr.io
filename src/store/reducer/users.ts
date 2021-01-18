@@ -1,5 +1,5 @@
-import {UsersState} from "../../types/store";
-import {UserClientModel} from "../../types/user";
+import {UsersState} from "types/store";
+import {UserClientModel} from "types/user";
 import {ActionType, ReduxAction} from "../action";
 
 export const usersReducer = (state: UsersState  = { admins: [], basic: [], all: [] }, action: ReduxAction): UsersState => {
