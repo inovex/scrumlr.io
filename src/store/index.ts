@@ -10,6 +10,8 @@ import {passNoteMiddleware} from "./middleware/note";
 import {passBoardMiddleware} from "./middleware/board";
 import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
 import {passColumnMiddleware} from "./middleware/column";
+import {passJoinRequestMiddleware} from "./middleware/joinRequest";
+import {joinRequestReducer} from "./reducer/joinRequest";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
     try {
@@ -19,13 +21,15 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dis
         passBoardMiddleware(stateAPI, dispatch, action);
         passColumnMiddleware(stateAPI, dispatch, action);
         passNoteMiddleware(stateAPI, dispatch, action);
+        passJoinRequestMiddleware(stateAPI, dispatch, action);
     }
 }
 
 const rootReducer = combineReducers<ApplicationState>({
     board: boardReducer,
     notes: noteReducer,
-    users: usersReducer
+    users: usersReducer,
+    joinRequests: joinRequestReducer
 });
 
 const store = createStore(rootReducer, composeWithDevTools(

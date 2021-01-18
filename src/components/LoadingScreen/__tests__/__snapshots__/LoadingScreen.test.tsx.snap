@@ -5,23 +5,17 @@ exports[`render loading screen 1`] = `
   class="loading-screen"
 >
   <div
-    class="MuiCircularProgress-root MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-    role="progressbar"
-    style="width: 40px; height: 40px;"
+    class="loading-indicator"
   >
-    <svg
-      class="MuiCircularProgress-svg"
-      viewBox="22 22 44 44"
-    >
-      <circle
-        class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-        cx="44"
-        cy="44"
-        fill="none"
-        r="20.2"
-        stroke-width="3.6"
-      />
-    </svg>
+    <div
+      class="bounce1"
+    />
+    <div
+      class="bounce2"
+    />
+    <div
+      class="bounce3"
+    />
   </div>
 </div>
 `;

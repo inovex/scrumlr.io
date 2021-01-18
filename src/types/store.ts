@@ -1,6 +1,7 @@
 import {BoardClientModel} from "./board";
 import {NoteClientModel} from "./note";
 import {UserClientModel} from "./user";
+import {JoinRequestClientModel} from "./joinRequest";
 
 export interface BoardState {
     status: 'unknown' | 'pending' | 'ready' | 'rejected' | 'accepted';
@@ -16,5 +17,6 @@ export interface UsersState {
 export interface ApplicationState {
     board: BoardState;
     notes: NoteClientModel[];
-    users: UsersState
+    users: UsersState;
+    joinRequests: JoinRequestClientModel[];
 }
