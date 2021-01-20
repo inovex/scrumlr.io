@@ -1,0 +1,15 @@
+.user {
+    box-sizing: border-box;
+    height: 40px;
+    width: 40px;
+    border: 2px solid #272F41;
+    border-radius: 100px;
+    display: inline-block;
+}
+
+.user__initials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+}

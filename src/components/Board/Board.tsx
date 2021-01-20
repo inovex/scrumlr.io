@@ -4,7 +4,7 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
-
+import BoardUsers from '../BoardUsers/BoardUsers';
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
 }
@@ -105,6 +105,7 @@ const Board = ({ children }: BoardProps) => {
             )}
 
             <main className="board" ref={boardRef}>
+                <BoardUsers />
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
