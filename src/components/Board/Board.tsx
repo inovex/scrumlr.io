@@ -4,9 +4,11 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import BoardHeader from "components/BoardHeader/BoardHeader";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+    name: String;
 }
 
 export interface BoardState {
@@ -14,7 +16,7 @@ export interface BoardState {
     lastVisibleColumnIndex: number;
 }
 
-const Board = ({ children }: BoardProps) => {
+const Board = ({ children, name }: BoardProps) => {
     const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
     const boardRef = useRef<HTMLDivElement>(null);
     const columnVisibilityStatesRef = useRef<boolean[]>([]);
@@ -105,6 +107,7 @@ const Board = ({ children }: BoardProps) => {
             )}
 
             <main className="board" ref={boardRef}>
+                <BoardHeader name={name} boardstatus="Private Session"/>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />

@@ -32,7 +32,7 @@ function Board(props: BoardProps) {
         return <LoadingScreen/>;
     } else if (state.board.status === 'ready') {
         return (
-            <BoardComponent>
+            <BoardComponent name="Test">
                 {
                     state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
                 }
