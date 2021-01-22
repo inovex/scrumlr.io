@@ -1,7 +1,7 @@
 import React from 'react';
 import './HeaderLogo.scss';
 import logoLight from "assets/logo-scrumlr-on-light.svg";
-import logoLightSmall from "assets/logo-scrumlr-on-light.svg";
+import logoLightSmall from "assets/logo-scrumlr-on-light-small.svg";
 import logoDark from 'assets/logo-scrumlr-on-dark.svg';
 import logoDarkSmall from 'assets/logo-scrumlr-on-dark-small.svg';
 
