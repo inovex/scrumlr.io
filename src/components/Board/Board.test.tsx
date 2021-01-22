@@ -31,12 +31,18 @@ describe('basic', () => {
         expect(container.querySelector('style')).toHaveTextContent('.board { --board__columns: 4 }');
     });
 
+    test('board-header is present', () => {
+        const { container } = render(createBoardWithColumns('violet', 'pink', 'blue', 'purple'));
+        // @ts-ignore
+        expect(container.querySelector(".board").firstChild).toHaveClass("board-header");
+    });
+
     describe('side-panels', () => {
 
         test('left side-panel is present', () => {
             const { container } = render(createBoardWithColumns('blue', 'pink'));
             // @ts-ignore
-            expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+            expect(container.querySelector(".board").secondChild).toHaveClass("board__spacer-left");
         });
 
         test('right side-panel is present', () => {
