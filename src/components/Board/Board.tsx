@@ -105,7 +105,7 @@ const Board = ({ children }: BoardProps) => {
             )}
 
             <main className="board" ref={boardRef}>
-                <BoardUsers />
+                <BoardUsers numOfUsersToShow={4}/>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
