@@ -42,7 +42,7 @@ describe('basic', () => {
         test('left side-panel is present', () => {
             const { container } = render(createBoardWithColumns('blue', 'pink'));
             // @ts-ignore
-            expect(container.querySelector(".board").secondChild).toHaveClass("board__spacer-left");
+            expect(container.querySelector(".board").childNodes[1]).toHaveClass("board__spacer-left");
         });
 
         test('right side-panel is present', () => {
@@ -54,7 +54,7 @@ describe('basic', () => {
         test('left side-panel has correct accent color', () => {
             const { container } = render(createBoardWithColumns('blue', 'pink'));
             // @ts-ignore
-            expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__blue");
+            expect(container.querySelector(".board").childNodes[1]).toHaveClass("accent-color__blue");
         });
 
         test('right side-panel has correct accent color', () => {
@@ -72,7 +72,7 @@ describe('basic', () => {
             const { container } = render(createBoardWithColumns('violet'));
             const board = container.querySelector(".board");
             // @ts-ignore
-            expect(board.firstChild).toHaveClass("accent-color__violet");
+            expect(board.childNodes[1]).toHaveClass("accent-color__violet");
             // @ts-ignore
             expect(board.lastChild).toHaveClass("accent-color__violet");
         });
