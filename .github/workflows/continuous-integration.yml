@@ -26,11 +26,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Install dependencies
-        run: yarn install
+      - name: Build server
+        working-directory: ./server
+        run: |
+          yarn install
+          yarn build
 
-      - name: Build
-        run: yarn build
+      - name: Build client
+        run: |
+          yarn install
+          yarn build
 
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests

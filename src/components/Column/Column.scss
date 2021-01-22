@@ -33,6 +33,7 @@
 }
 
 .column__header-text {
+  font-family: Raleway;
   font-size: 24px;
   color: $color-black;
   border-bottom: solid 3px var(--accent-color);
@@ -49,6 +50,7 @@
 }
 
 .column__header-card-number {
+  font-family: Raleway;
   font-size: 20px;
   color: $color-middle-gray;
   font-weight: 600;

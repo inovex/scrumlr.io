@@ -26,6 +26,24 @@ Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://sc
 
 This project is written in React on top of the [Parse Platform](https://parseplatform.org/).
 
+## Run
+
+1. run the server (backend) with docker
+
+    ```
+    cd server
+    docker-compose up -d
+    ```
+
+    *If server code has been changed make sure to run it with the **--build** option:* `docker-compose up -d --build`
+
+2. run the client (frontend)
+
+    ```
+    yarn install
+    yarn start
+    ```
+
 ## Contributing
 
 You're very welcome to be part of this project. You can contribute by opening an issue, by
