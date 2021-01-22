@@ -30,6 +30,12 @@ $column__max-width: 960px;
 $column__border-width: 12px;
 
 
+// responsive
+$smartphone: "screen and (max-width: $column__min-width+2*$board__side-panel-width)";
+$tablet: "screen and (min-width : 768px)";
+$desktop: "screen and (min-width : 1280px)";
+
+
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   $props: ();
