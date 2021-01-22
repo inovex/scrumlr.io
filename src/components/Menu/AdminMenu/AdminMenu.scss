@@ -1,13 +1,16 @@
+@import "constants/style";
+@import "components/Column/Column";
+
 .admin-menu {
   position: fixed;
   height: 268px;
   width: 64px;
   border-radius: 34.5px;
-  background-color: #FF0069;
   right: 8px;
   top: 50%;
   margin-top: -134px;
-  box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+  background-color: #FFFFFF;
+  box-shadow: 0 16px 32px 0 rgba(0,87,255,0.24);
 }
 
 .admin-menu__items {
@@ -30,4 +33,24 @@
 
 .admin-menu__item-icon {
   width: 100%;
+  fill: #FF0069;
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-menu {
+    background-color: #FF0069;
+    box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+  }
+
+  .admin-menu__item-icon {
+    fill: white;
+  }
+}
+
+@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
+  .admin-menu__item {
+    height: 64px;
+    width: 268px;
+    border-radius: 34.5px;
+  }
 }
