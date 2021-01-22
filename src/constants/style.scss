@@ -31,7 +31,7 @@ $column__border-width: 12px;
 
 
 // responsive
-$smartphone: "screen and (max-width: $column__min-width+2*$board__side-panel-width)";
+$smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 

@@ -13,14 +13,6 @@
   float: left;
 }
 
-.board-header__left {
-  width: 25%;
-}
-
-.board-header__logo {
-  margin-left: 60px;
-  height: 50px;
-}
 
 .board-header__infos {
   width: 50%;
@@ -62,10 +54,11 @@
   height: 24px;
   align-self: center;
   margin-right: 10px;
+  display: none;
 }
-@media #{smartphone} {
+@media #{$tablet} {
   .board-header__status-image {
-    display: none;
+    display: block;
   }
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import './BoardHeader.scss';
-import logo from 'assets/logo-scrumlr-on-dark.svg';
 import lock from 'assets/icon-lock.svg';
+import HeaderLogo from './HeaderLogo/HeaderLogo';
 
 export interface BoardHeaderProps {
     boardstatus: String;
@@ -11,9 +11,7 @@ export interface BoardHeaderProps {
 const BoardHeader = ({ name, boardstatus } : BoardHeaderProps) => {
     return (
         <div className="board-header">
-            <div className="board-header__left">
-                <img className="board-header__logo" src={logo} alt="Logo"/>
-            </div>
+            <HeaderLogo></HeaderLogo>
             <div className="board-header__infos">
                 <p className="board-header__status">{boardstatus}</p>
                 <div className="board-header__title-block">
