@@ -1,0 +1,69 @@
+@import "constants/style";
+
+.board-header {
+  position: fixed;
+  display: flex;
+  height: $header__height;
+  width: 100vw;
+  margin-top: 10px;
+}
+
+.board-header > * {
+  align-self: center;
+  float: left;
+}
+
+.board-header__left {
+  width: 25%;
+}
+
+.board-header__logo {
+  margin-left: 60px;
+  height: 50px;
+}
+
+.board-header__infos {
+  width: 50%;
+}
+
+.board-header__status {
+  color: $color-middle-gray;
+  font-family: Raleway;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  line-height: 16px;
+  margin: auto;
+  text-align: center;
+}
+
+.board-header__title-block {
+  display: flex;
+  justify-content: center;
+}
+
+.board-header__title {
+  color: $color-black;
+  font-family: Raleway;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  line-height: 40px;
+  margin: 0px;
+}
+@media (prefers-color-scheme: dark) {
+    .board-header__title  {
+      color: $color-white;
+    }
+  }
+
+.board-header__status-image {
+  width: 20px;
+  height: 20px;
+  align-self: center;
+  margin-right: 10px;
+}
+
+.board-header__users {
+  width: 25%;
+}

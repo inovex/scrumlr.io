@@ -11,11 +11,15 @@ export interface BoardHeaderProps {
 const BoardHeader = ({ name, boardstatus } : BoardHeaderProps) => {
     return (
         <div className="board-header">
-            <img className="board-header__logo" src={logo} alt="Logo"/>
+            <div className="board-header__left">
+                <img className="board-header__logo" src={logo} alt="Logo"/>
+            </div>
             <div className="board-header__infos">
                 <p className="board-header__status">{boardstatus}</p>
-                <img className="board-header__status-image" src={lock} alt="Closed"/>
-                <h1 className="board-header__title">{name}</h1>
+                <div className="board-header__title-block">
+                    <img className="board-header__status-image" src={lock} alt="Private Session"/>
+                    <h1 className="board-header__title">{name}</h1>
+                </div>
             </div>
             <div className="board-header__users">Placeholder User</div>
         </div>
