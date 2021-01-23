@@ -31,12 +31,14 @@ services:
     build: .
     depends_on:
       - cache
+      - server
     links:
       - 'cache'
+      - 'server'
     environment:
       SCRUMLR_OPERATION_MODE: 'livequery'
       SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
-      SCRUMLR_API_HOST: 'localhost'
+      SCRUMLR_API_HOST: 'server'
       SCRUMLR_API_PORT: '4000'
       SCRUMLR_API_MASTER_KEY: 'masterKey'
       SCRUMLR_CACHE_URL: 'redis://cache:6379'
