@@ -3,12 +3,12 @@
 
 .admin-menu {
   position: fixed;
-  height: 268px;
-  width: 64px;
+  height: 64px;
+  width: 268px;
   border-radius: 34.5px;
-  right: 8px;
-  top: 50%;
-  margin-top: -134px;
+  left: 50%;
+  margin-left: -134px;
+  bottom: 8px;
   background-color: #FFFFFF;
   box-shadow: 0 16px 32px 0 rgba(0,87,255,0.24);
 }
@@ -16,9 +16,9 @@
 .admin-menu__items {
   box-sizing: border-box;
   height: 100%;
-  padding: 28px 0;
+  padding: 0 28px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
 }
@@ -31,9 +31,22 @@
   padding: 0;
 }
 
-.admin-menu__item-icon {
-  width: 100%;
-  fill: #FF0069;
+@media #{$desktop} {
+  .admin-menu {
+    height: 268px;
+    width: 64px;
+    border-radius: 34.5px;
+    right: 8px;
+    top: 50%;
+    left: auto;
+    margin-top: -134px;
+  }
+
+  .admin-menu__items {
+    padding: 28px 0;
+    flex-direction: column;
+  }
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -44,13 +57,5 @@
 
   .admin-menu__item-icon {
     fill: white;
-  }
-}
-
-@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
-  .admin-menu__item {
-    height: 64px;
-    width: 268px;
-    border-radius: 34.5px;
   }
 }
