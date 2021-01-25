@@ -1,6 +1,10 @@
 @import "constants/style";
 @import "components/Column/Column";
 
+/**
+    POSITIONING & SIZING
+*/
+
 .admin-menu {
   position: fixed;
   height: 64px;
@@ -9,8 +13,6 @@
   left: 50%;
   margin-left: -134px;
   bottom: 8px;
-  background-color: #FFFFFF;
-  box-shadow: 0 16px 32px 0 rgba(0,87,255,0.24);
 }
 
 .admin-menu__items {
@@ -49,13 +51,28 @@
 
 }
 
+/**
+    COLORING
+*/
+
+@media (prefers-color-scheme: light) {
+  .admin-menu {
+    background-color: #FFFFFF;
+    box-shadow: 0 16px 32px 0 rgba(0,87,255,0.24);
+  }
+
+  .admin-menu__item-icon--white {
+    display: none;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .admin-menu {
     background-color: #FF0069;
     box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
   }
 
-  .admin-menu__item-icon {
-    fill: white;
+  .admin-menu__item-icon--red {
+    display: none;
   }
 }
