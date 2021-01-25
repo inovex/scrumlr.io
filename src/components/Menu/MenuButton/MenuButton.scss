@@ -1,0 +1,95 @@
+/**
+    POSITIONING & SIZING
+*/
+.menu-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 18px;
+  height: 36px;
+  padding: 0;
+  position: relative;
+  width: 36px;
+}
+
+.menu-button__tooltip {
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  box-sizing: border-box;
+  color: #FF0069;
+  direction: rtl;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Raleway', serif;
+  font-size: 14px;
+  font-weight: bold;
+  height: 36px;
+  width: 0;
+  right: 0;
+  letter-spacing: 1px;
+  line-height: 16px;
+  padding-right: 56px;
+  padding-left: 20px;
+  position: absolute;
+  text-align: center;
+  top: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  z-index: -1;
+}
+
+.menu-button__icon {
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 3;
+}
+
+/**
+    TRANSITIONS
+*/
+.menu-button:hover {
+  transition-duration: .5s;
+
+  .menu-button__tooltip {
+    transition-duration: .5s;
+    visibility: visible;
+    width: auto;
+  }
+}
+
+.menu-button:focus {
+  outline: none;
+}
+
+/**
+    COLORING
+*/
+@media (prefers-color-scheme: light) {
+  .menu-button__icon--white {
+    display: none;
+  }
+
+  .menu-button__tooltip {
+    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+  }
+
+  .menu-button:hover {
+    background-color: #FF0069;
+
+    .menu-button__icon--red {
+      display: none;
+    }
+
+    .menu-button__icon--white {
+      display: inline;
+    }
+  }
+  
+}
+
+@media (prefers-color-scheme: dark) {
+  .menu-button__icon--red {
+    display: none;
+  }
+}
