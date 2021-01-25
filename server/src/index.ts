@@ -71,6 +71,9 @@ httpServer.listen(PORT, () => {
 
 if (OPERATION_MODE === 'livequery') {
     ParseServer.createLiveQueryServer(httpServer, {
+        appId: 'Scrumlr',
+        masterKey: MASTER_KEY,
+        serverURL: `http://${HOST}:${PORT}/api`,
         redisURL: CACHE_URI
     });
 } else {
