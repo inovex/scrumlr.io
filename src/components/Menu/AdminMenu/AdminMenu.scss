@@ -1,54 +1,52 @@
 @import "constants/style";
-@import "components/Column/Column";
 
 /**
     POSITIONING & SIZING
 */
 
 .admin-menu {
-  position: fixed;
-  height: 64px;
-  width: 268px;
   border-radius: 34.5px;
+  bottom: 8px;
+  height: 64px;
   left: 50%;
   margin-left: -134px;
-  bottom: 8px;
+  position: fixed;
+  width: 268px;
 }
 
 .admin-menu__items {
+  align-items: center;
   box-sizing: border-box;
-  height: 100%;
-  padding: 0 28px;
   display: flex;
   flex-direction: row;
+  height: 100%;
   justify-content: space-between;
-  align-items: center;
+  padding: 0 28px;
 }
 
 .admin-menu__item {
-  width: 36px;
-  height: 36px;
   background: transparent;
   border: 0;
+  height: 36px;
   padding: 0;
+  width: 36px;
 }
 
 @media #{$desktop} {
   .admin-menu {
-    height: 268px;
-    width: 64px;
     border-radius: 34.5px;
-    right: 8px;
-    top: 50%;
+    height: 268px;
     left: auto;
     margin-top: -134px;
+    right: 8px;
+    top: 50%;
+    width: 64px;
   }
 
   .admin-menu__items {
-    padding: 28px 0;
     flex-direction: column;
+    padding: 28px 0;
   }
-
 }
 
 /**
@@ -58,7 +56,7 @@
 @media (prefers-color-scheme: light) {
   .admin-menu {
     background-color: #FFFFFF;
-    box-shadow: 0 16px 32px 0 rgba(0,87,255,0.24);
+    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   }
 
   .admin-menu__item-icon--white {
@@ -69,7 +67,7 @@
 @media (prefers-color-scheme: dark) {
   .admin-menu {
     background-color: #FF0069;
-    box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   }
 
   .admin-menu__item-icon--red {
