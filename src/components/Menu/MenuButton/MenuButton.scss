@@ -45,6 +45,10 @@
   z-index: 3;
 }
 
+.menu-button__icon--close {
+  display: none;
+}
+
 /**
     TRANSITIONS
 */
@@ -74,7 +78,20 @@
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   }
 
-  .menu-button:hover {
+  .menu-button--active:hover {
+    background-color: #FF0069;
+
+    .menu-button__icon--close {
+      display: inline;
+    }
+
+    .menu-button__icon--white {
+      display: none;
+    }
+
+  }
+
+  .menu-button--disabled:hover {
     background-color: #FF0069;
 
     .menu-button__icon--red {

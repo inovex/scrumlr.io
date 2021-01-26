@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import './MenuButton.scss';
+import {ReactComponent as CloseIcon} from "assets/icon-close-white.svg";
 
 type MenuButtonProps = {
     toggle: boolean; // Button functions as toggle
@@ -15,9 +16,10 @@ function MenuButton(props: MenuButtonProps) {
 
     const [active, changeStatus] = useState(false);
 
-    return (<button className={'menu-button'} onClick={_ => changeStatus(!active)}>
+    return (<button className={`menu-button ${active ? 'menu-button--active':'menu-button--disabled'}`} onClick={_ => changeStatus(!active)}>
         <span className='menu-button__tooltip'>{active ? props.toggleEndLabel : props.toggleStartLabel}</span>
-        {!active ? props.children : 'X'}
+        {props.children}
+        <CloseIcon className='menu-button__icon menu-button__icon--close'/>
     </button>);
 }
 
