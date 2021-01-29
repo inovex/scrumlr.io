@@ -1,23 +1,29 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './MenuButton.scss';
 import {ReactComponent as CloseIcon} from "assets/icon-close-white.svg";
 
 type MenuButtonProps = {
     toggle: boolean; // Button functions as toggle
-    onToggle: (toggle: boolean) => void; // What should happen onToggle / onClick
+    onToggle: (active: boolean) => void; // What should happen onToggle / onClick
 
     toggleStartLabel: string;
-    toggleEndLabel: string;
+    toggleStopLabel: string;
+
+    direction: 'left' | 'right';
 
     children?: React.ReactNode;
 }
 
 function MenuButton(props: MenuButtonProps) {
 
-    const [active, changeStatus] = useState(false);
+    const [status, setStatus] = useState(false);
 
-    return (<button className={`menu-button ${active ? 'menu-button--active':'menu-button--disabled'}`} onClick={_ => changeStatus(!active)}>
-        <span className='menu-button__tooltip'>{active ? props.toggleEndLabel : props.toggleStartLabel}</span>
+    useEffect(() => {
+        props.onToggle(status);
+    }, [status])
+
+    return (<button className={`menu-button ${status ? 'menu-button--active':'menu-button--disabled'} menu-button--${props.direction}`} onClick={_ => setStatus(currStatus => !currStatus)}>
+        <span className='menu-button__tooltip'>{!status ? props.toggleStartLabel : props.toggleStopLabel}</span>
         {props.children}
         <CloseIcon className='menu-button__icon menu-button__icon--close'/>
     </button>);

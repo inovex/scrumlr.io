@@ -12,10 +12,8 @@
 }
 
 .menu-button__tooltip {
-  background-color: #FFFFFF;
   border-radius: 16px;
   box-sizing: border-box;
-  color: #FF0069;
   direction: rtl;
   display: inline-flex;
   align-items: center;
@@ -53,10 +51,8 @@
     TRANSITIONS
 */
 .menu-button:hover {
-  transition-duration: .5s;
 
   .menu-button__tooltip {
-    transition-duration: .5s;
     visibility: visible;
     width: auto;
   }
@@ -76,6 +72,8 @@
 
   .menu-button__tooltip {
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    background-color: #FFFFFF;
+    color: #FF0069;
   }
 
   .menu-button--active:hover {
@@ -108,5 +106,36 @@
 @media (prefers-color-scheme: dark) {
   .menu-button__icon--red {
     display: none;
+  }
+
+  .menu-button:hover {
+    background-color: #7C123E;
+  }
+
+  .menu-button--active:hover {
+    .menu-button__icon--close {
+      display: inline;
+    }
+
+    .menu-button__icon--white {
+      display: none;
+    }
+  }
+
+  .menu-button--disabled:hover {
+    .menu-button__icon--red {
+      display: none;
+    }
+
+    .menu-button__icon--white {
+      display: inline;
+    }
+  }
+
+  .menu-button__tooltip {
+    box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+    background-color: #FF0069;
+    color: #FFFFFF;
+
   }
 }

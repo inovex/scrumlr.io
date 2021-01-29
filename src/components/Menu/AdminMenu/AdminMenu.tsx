@@ -20,7 +20,9 @@ function AdminMenu() {
                 <TimerIconWhite className='admin-menu__item-icon--white'/>
                 <TimerIconRed className='admin-menu__item-icon--red'/>
             </button>
-            <MenuButton toggle={true} onToggle={(toggle: boolean) => undefined} toggleStartLabel={"START TIMER"} toggleEndLabel={"END TIMER"}>
+            <MenuButton direction='left' toggle={true} onToggle={(active: boolean) => {
+                active ? console.log('Timer started') : console.log('Timer ended')
+            }} toggleStartLabel={"START TIMER"} toggleStopLabel={"END TIMER"}>
                 <TimerIconWhite className='menu-button__icon menu-button__icon--white'/>
                 <TimerIconRed className='menu-button__icon menu-button__icon--red'/>
             </MenuButton>
