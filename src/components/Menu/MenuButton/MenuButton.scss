@@ -14,7 +14,6 @@
 .menu-button__tooltip {
   border-radius: 16px;
   box-sizing: border-box;
-  direction: rtl;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22,18 +21,34 @@
   font-size: 14px;
   font-weight: bold;
   height: 36px;
-  width: 0;
-  right: 0;
+  width: auto;
   letter-spacing: 1px;
   line-height: 16px;
-  padding-right: 56px;
-  padding-left: 20px;
   position: absolute;
   text-align: center;
-  top: 0;
   visibility: hidden;
   white-space: nowrap;
   z-index: -1;
+}
+
+.menu-button--left {
+  .menu-button__tooltip {
+    direction: rtl;
+    padding-right: 56px;
+    padding-left: 20px;
+    right: 0;
+    top: 0;
+  }
+}
+
+.menu-button--right {
+  .menu-button__tooltip {
+    direction: ltr;
+    left: 0;
+    padding-right: 20px;
+    padding-left: 56px;
+    top: 0
+  }
 }
 
 .menu-button__icon {
@@ -54,7 +69,6 @@
 
   .menu-button__tooltip {
     visibility: visible;
-    width: auto;
   }
 }
 
