@@ -1,6 +1,9 @@
+@import "constants/style";
+
 /**
     POSITIONING & SIZING
 */
+
 .menu-button {
   background-color: transparent;
   border: none;
@@ -29,26 +32,7 @@
   visibility: hidden;
   white-space: nowrap;
   z-index: -1;
-}
 
-.menu-button--left {
-  .menu-button__tooltip {
-    direction: rtl;
-    padding-right: 56px;
-    padding-left: 20px;
-    right: 0;
-    top: 0;
-  }
-}
-
-.menu-button--right {
-  .menu-button__tooltip {
-    direction: ltr;
-    left: 0;
-    padding-right: 20px;
-    padding-left: 56px;
-    top: 0
-  }
 }
 
 .menu-button__icon {
@@ -60,6 +44,28 @@
 
 .menu-button__icon--close {
   display: none;
+}
+
+@media #{$desktop} {
+  .menu-button--left {
+    .menu-button__tooltip {
+      direction: rtl;
+      padding-right: 56px;
+      padding-left: 20px;
+      right: 0;
+      top: 0;
+    }
+  }
+
+  .menu-button--right {
+    .menu-button__tooltip {
+      direction: ltr;
+      left: 0;
+      padding-right: 20px;
+      padding-left: 56px;
+      top: 0
+    }
+  }
 }
 
 /**

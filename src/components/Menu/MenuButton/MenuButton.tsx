@@ -11,7 +11,7 @@ type MenuButtonProps = {
 
     direction: 'left' | 'right';
 
-    children?: React.ReactNode;
+    children: React.ReactNode;
 }
 
 function MenuButton(props: MenuButtonProps) {
