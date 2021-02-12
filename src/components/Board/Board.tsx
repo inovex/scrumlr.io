@@ -96,6 +96,8 @@ const Board = ({ children, name }: BoardProps) => {
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
 
+            <BoardHeader name={name} boardstatus="Private Session"/>
+            
             {showPreviousButton && (
                 <button
                     className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
@@ -107,7 +109,6 @@ const Board = ({ children, name }: BoardProps) => {
             )}
 
             <main className="board" ref={boardRef}>
-                <BoardHeader name={name} boardstatus="Private Session"/>
                 <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
                     {children}
                 <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />

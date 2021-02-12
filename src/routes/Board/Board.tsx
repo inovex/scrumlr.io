@@ -37,7 +37,7 @@ function Board() {
                 {waitingUser}
                 <BoardComponent name={state.board.data!.name}>
                     {
-                        state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
+                        state.board.data!.columns.map((column) => (<Column key={column.id} color="pink">{column.name}</Column>))
                     }
                 </BoardComponent>
             </>
