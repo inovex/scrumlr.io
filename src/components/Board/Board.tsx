@@ -9,6 +9,7 @@ import BoardHeader from "components/BoardHeader/BoardHeader";
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
     name: String;
+    boardstatus: String;
 }
 
 export interface BoardState {
@@ -16,7 +17,7 @@ export interface BoardState {
     lastVisibleColumnIndex: number;
 }
 
-const Board = ({ children, name }: BoardProps) => {
+const Board = ({ children, name, boardstatus }: BoardProps) => {
     const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
     const boardRef = useRef<HTMLDivElement>(null);
     const columnVisibilityStatesRef = useRef<boolean[]>([]);
@@ -96,7 +97,7 @@ const Board = ({ children, name }: BoardProps) => {
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
 
-            <BoardHeader name={name} boardstatus="Private Session"/>
+            <BoardHeader name={name} boardstatus={boardstatus}/>
             
             {showPreviousButton && (
                 <button
