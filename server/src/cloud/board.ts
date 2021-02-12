@@ -1,7 +1,8 @@
 import {
     getAdminRoleName,
-    getMemberRoleName,
-    requireValidBoardAdmin
+    getMemberRoleName, isMember,
+    requireValidBoardAdmin,
+    requireValidBoardMember
 } from "./permission";
 import {api} from "./util";
 import { newObjectId } from 'parse-server/lib/cryptoUtils';
@@ -131,6 +132,12 @@ export const initializeBoardFunctions = () => {
             throw new Error(`Board '${request.boardId}' not found`);
         }
 
+        if (await isMember(user, request.boardId)) {
+            return {
+                status: 'accepted'
+            };
+        }
+
         if (board.get('joinConfirmationRequired')) {
             const BoardClass = Parse.Object.extend("Board");
             const boardReference = BoardClass.createWithoutData(request.boardId);
@@ -179,7 +186,7 @@ export const initializeBoardFunctions = () => {
     })
 
     api<JoinRequestResponse, boolean>('acceptUser', async (user, request) => {
-        await respondToJoinRequest(user, request.board, request.user, (object) => {
+        await respondToJoinRequest(user, request.user, request.board, (object) => {
             object.set('status', 'accepted');
             // object.set('accessKey', params.accessKey);
         });
@@ -188,7 +195,7 @@ export const initializeBoardFunctions = () => {
 
 
     api<JoinRequestResponse, boolean>('rejectUser', async (user, request) => {
-        await respondToJoinRequest(user, request.board, request.user, (object) => {
+        await respondToJoinRequest(user, request.user, request.board, (object) => {
             object.set('status', 'rejected');
         });
         return true;

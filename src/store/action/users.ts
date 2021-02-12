@@ -1,4 +1,5 @@
-import {UserClientModel} from "../../types/user";
+/** This object lists board users object specific internal Redux Action types. */
+import {UserClientModel} from "types/user";
 
 /** This object lists board users object specific internal Redux Action types. */
 export const UsersActionType = {
