@@ -22,6 +22,7 @@ export const ActionFactory = {
     ...JoinRequestActionFactory
 }
 
+/** The types of all application internal redux actions. */
 export type ReduxAction = BoardReduxAction | ColumnReduxAction | NoteReduxAction | UsersReduxAction | JoinRequestReduxAction;
 
 
