@@ -35,8 +35,7 @@ describe('users actions', () => {
                 type: '@@SCRUMLR/setUsers',
                 users: [ user ],
                 admin: true
-            })
+            });
         });
     });
-
 });
