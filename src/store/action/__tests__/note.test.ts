@@ -1,4 +1,4 @@
-import {AssertTypeEqual} from "../../../testUtils";
+import {AssertTypeEqual} from "testUtils";
 import {ReduxAction} from "../index";
 import {NoteActionFactory, NoteActionType, NoteReduxAction} from "../note";
 

@@ -1,4 +1,4 @@
-import {AssertTypeEqual} from "../../../testUtils";
+import {AssertTypeEqual} from "testUtils";
 import {BoardActionFactory, BoardActionType, BoardReduxAction} from "../board";
 import {ReduxAction} from "../index";
 

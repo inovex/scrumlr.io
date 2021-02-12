@@ -1,4 +1,4 @@
-import {BoardClientModel, EditableBoardClientModel} from "../../types/board";
+import {BoardClientModel, EditableBoardClientModel} from "types/board";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardActionType = {
