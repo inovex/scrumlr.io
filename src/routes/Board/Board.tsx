@@ -59,42 +59,35 @@ function Board(props: BoardProps) {
             <>        
                 <BoardComponent>
                     {
-                        <>
+                    <>
                         <NoteInput></NoteInput>
                         <div className='add-note'>
-                        <Input
-                            className='add-note__input'
-                            defaultValue=""
-                            type='text'
-                            onChange={handleChangeNotetext}
-                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                if (e.key === 'Enter') {
-                                onAddNote();
-                                }
-                            }}
-                            inputProps={{
-                                maxLength: 20
-                            }}
-                        />
-                        <Button onClick={onAddNote}>Add Note</Button>
-                        </div>                        
-                                <ul>
-                                    {state.notes.map((note: any, index: number) => 
-                                    <li key={index}>
-                                        {JSON.stringify(note)}
-                                        <p>Text: {note.text}</p>
-                                        <p>Author: {note.author}</p>
-                                        <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
-                                    </li>)}
-                                </ul>
-                                {state.notes.map((note:any, index:number) =>
-                                    <div>
-                                        {JSON.stringify(state.users.data)}
-                                        <Note text={note.text} author={note.author}></Note>
-                                        <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
-                                    </div>
-                                )}
-                        </>
+                            <Input
+                                className='add-note__input'
+                                defaultValue=""
+                                type='text'
+                                onChange={handleChangeNotetext}
+                                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                    if (e.key === 'Enter') {
+                                    onAddNote();
+                                    }
+                                }}
+                                inputProps={{
+                                    maxLength: 20
+                                }}
+                            />
+                            <Button onClick={onAddNote}>Add Note</Button>
+                        </div>      
+                        {state.users.map((user:any, index:number) => 
+                                <p>{user.objectId}: {user.displayName}</p>
+                        )}        
+                        {state.notes.map((note:any, index:number) =>
+                            <div>  
+                                <Note text={note.text} author={note.author}></Note>
+                                <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
+                            </div>
+                        )}
+                    </>
                         // state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
                     }
                 </BoardComponent>);
