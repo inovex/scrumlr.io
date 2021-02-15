@@ -10,6 +10,8 @@ import store from "../../store";
 import {ActionFactory} from "../../store/action";
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import Note from "components/Note/Note";
+import NoteInput from "components/NoteInput/NoteInput";
 
 export interface BoardProps extends RouteComponentProps<{id: string}> {}
 
@@ -31,19 +33,24 @@ function Board(props: BoardProps) {
         users: state.users.all
     }));
 
-    function handleChangeName(e: any) {
-
+    let noteText = "";
+    function handleChangeNotetext(e: any) {
+        const newText = (e.target as HTMLInputElement).value;
+        noteText = newText;
     }
 
     const onAddNote = () => {
-        store.dispatch(ActionFactory.addNote(state.board.data.columns[0].id, 'Test'));
-    }
-    const onAddNoteWithText = (text: string) => {
-        store.dispatch(ActionFactory.addNote(state.board.data.columns[0].id, text));
+        store.dispatch(ActionFactory.addNote(state.board.data.columns[0].id, noteText));
     }
     const onDeleteNote = (id: string) => {
         store.dispatch(ActionFactory.deleteNote(id));
     }
+
+    /*async function isUserActive() {
+        if (Parse.User.current()) {
+
+        }
+    }*/
 
     if (state.board.status === 'pending') {
         return <LoadingScreen/>;
@@ -53,15 +60,16 @@ function Board(props: BoardProps) {
                 <BoardComponent>
                     {
                         <>
-                        <div className='new-board'>
+                        <NoteInput></NoteInput>
+                        <div className='add-note'>
                         <Input
-                            className='new-board__input'
-                            defaultValue="Test2"
+                            className='add-note__input'
+                            defaultValue=""
                             type='text'
-                            onChange={handleChangeName}
+                            onChange={handleChangeNotetext}
                             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                 if (e.key === 'Enter') {
-                                onAddNoteWithText("Test2");
+                                onAddNote();
                                 }
                             }}
                             inputProps={{
@@ -70,23 +78,22 @@ function Board(props: BoardProps) {
                         />
                         <Button onClick={onAddNote}>Add Note</Button>
                         </div>                        
-
                                 <ul>
-                                    <li>{ JSON.stringify(state.board.data) }</li>
-                                    <li>
-                                        <ul>
-                                            {state.notes.map((note: any, index: number) => 
-                                            <li key={index}>
-                                                {JSON.stringify(note)}
-                                                <p>Text: {note.text}</p>
-                                                <p>Author: {note.author}</p>
-                                                <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
-                                            </li>)}
-                                        </ul>
-                                    </li>
+                                    {state.notes.map((note: any, index: number) => 
+                                    <li key={index}>
+                                        {JSON.stringify(note)}
+                                        <p>Text: {note.text}</p>
+                                        <p>Author: {note.author}</p>
+                                        <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
+                                    </li>)}
                                 </ul>
-                        
-
+                                {state.notes.map((note:any, index:number) =>
+                                    <div>
+                                        {JSON.stringify(state.users.data)}
+                                        <Note text={note.text} author={note.author}></Note>
+                                        <Button onClick={() => { onDeleteNote(note.id)}}>Delete Note</Button>
+                                    </div>
+                                )}
                         </>
                         // state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
                     }

@@ -18,8 +18,9 @@ const Column = ({ color, children } : ColumnProps) => {
                     <p className="column__header-card-number">5</p>
                 </div>
                 <NoteInput/>
-                <Note>Test</Note>
-                <Note>Test 2</Note>
+                <Note text="Lorem ipsum dolor sit amet, consetetur sadipscing elitr." author="Jana Becker"></Note>
+                <Note text="Far far away, behind the word mountains, far from the countries Vokalia and Consonantia." author="Johann Böhler"></Note>
+                <Note text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem." author="Nils Schacht"></Note>
             </div>
         </section>
     );
