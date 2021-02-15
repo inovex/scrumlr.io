@@ -89,11 +89,11 @@ export const initializeBoardFunctions = () => {
   Parse.Cloud["onLiveQueryEvent"]((data) => {
     const { event, sessionToken } = data;
 
-    if (event === "subscribe" || event === "ws_disconnect") {
+    if (event === "connect" || event === "ws_disconnect") {
       const query = new Parse.Query<Parse.Object>("_Session");
       query.equalTo("sessionToken", sessionToken);
-      query.find({ useMasterKey: true }).then((session) => {
-        const user = session[0].get('user');
+      query.first({ useMasterKey: true }).then((session) => {
+        const user = session.get('user');
         console.log(user.id);
 
         if(event === "ws_disconnect"){
