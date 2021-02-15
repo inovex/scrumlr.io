@@ -86,15 +86,12 @@ export interface JoinBoardRequest {
 }
 
 export const initializeBoardFunctions = () => {
-  Parse.Cloud["onLiveQueryEvent"]((data) => {
-    const { event, sessionToken } = data;
-
+  Parse.Cloud["onLiveQueryEvent"](({event, sessionToken, ...other}) => {
     if (event === "connect" || event === "ws_disconnect") {
       const query = new Parse.Query<Parse.Object>("_Session");
       query.equalTo("sessionToken", sessionToken);
       query.first({ useMasterKey: true }).then((session) => {
         const user = session.get('user');
-        console.log(user.id);
 
         if(event === "ws_disconnect"){
           user.set('online', false)
