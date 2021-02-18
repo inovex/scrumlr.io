@@ -1,127 +1,220 @@
-import {Dispatch, MiddlewareAPI} from "redux";
-import {ApplicationState} from "types/store";
-import {ActionFactory, ActionType, ReduxAction} from "../action";
+import { Dispatch, MiddlewareAPI } from "redux";
+import { ApplicationState } from "types/store";
+import { ActionFactory, ActionType, ReduxAction } from "../action";
 import Parse from "parse";
-import {mapUserServerToClientModel} from "types/user";
-import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
-import {mapBoardServerToClientModel} from "types/board";
-import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
+import { mapUserServerToClientModel } from "types/user";
+import { mapNoteServerToClientModel, NoteServerModel } from "types/note";
+import { mapBoardServerToClientModel } from "types/board";
+import {
+  JoinRequestServerModel,
+  mapJoinRequestServerToClientModel,
+} from "types/joinRequest";
 
 let closeSubscriptions: Function[] = [];
 
-export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-    if (action.type === ActionType.LeaveBoard) {
-        closeSubscriptions.forEach((closeCallback) => closeCallback());
-        closeSubscriptions = [];
-    }
+export const passBoardMiddleware = (
+  stateAPI: MiddlewareAPI<any, ApplicationState>,
+  dispatch: Dispatch,
+  action: ReduxAction
+) => {
+  if (action.type === ActionType.LeaveBoard) {
+    closeSubscriptions.forEach((closeCallback) => closeCallback());
+    closeSubscriptions = [];
+  }
 
-    if (action.type === ActionType.PermittedBoardAccess) {
+  if (action.type === ActionType.PermittedBoardAccess) {
+    const createJoinRequestSubscription = () => {
+      const joinRequestQuery = new Parse.Query("JoinRequest");
+      joinRequestQuery.equalTo(
+        "board",
+        Parse.Object.extend("Board").createWithoutData(action.boardId)
+      );
 
-        const createJoinRequestSubscription = () => {
-            const joinRequestQuery = new Parse.Query('JoinRequest');
-            joinRequestQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
-
-            joinRequestQuery.subscribe().then((subscription) => {
-                closeSubscriptions.push(() => {subscription.unsubscribe()});
-
-                subscription.on('open', (object) => {
-                    joinRequestQuery.find().then((results) => {
-                        dispatch(ActionFactory.initializeJoinRequests((results as any[]).map(mapJoinRequestServerToClientModel)));
-                    })
-                });
-
-                subscription.on('create', (object) => {
-                    dispatch(ActionFactory.createJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
-                });
-
-                subscription.on('update', (object) => {
-                    dispatch(ActionFactory.updateJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
-                });
-            });
-        }
-
-        const createUsersSubscription = () => {
-            const adminsQuery = new Parse.Query(Parse.Role);
-            adminsQuery.equalTo('name', `admin_of_${action.boardId}`);
-            const memberQuery = new Parse.Query(Parse.Role);
-            memberQuery.equalTo('name', `member_of_${action.boardId}`);
-
-            const usersQuery = Parse.Query.or(adminsQuery, memberQuery);
-            usersQuery.subscribe().then((subscription) => {
-                closeSubscriptions.push(() => { subscription.unsubscribe() });
-
-                const updateUsers = (role: Parse.Role) => {
-                    if (role.getName() === `member_of_${action.boardId}`) {
-                        role.getUsers().query().find().then((users) => {
-                            dispatch(ActionFactory.setUsers(
-                                users.map((user) => mapUserServerToClientModel(user.toJSON() as any, false)),
-                                false
-                            ));
-                        });
-                    }
-                    if (role.getName() === `admin_of_${action.boardId}`) {
-                        role.getUsers().query().find().then((users) => {
-                            dispatch(ActionFactory.setUsers(
-                                users.map((user) => mapUserServerToClientModel(user.toJSON() as any, true)),
-                                true
-                            ));
-                        });
-                    }
-                }
-
-                subscription.on('update', (object) => {
-                    updateUsers(object as Parse.Role);
-                });
-                subscription.on('open', () => {
-                    usersQuery.find().then((results) => {
-                        for (const result of results) {
-                            updateUsers(result as Parse.Role);
-                        }
-                    });
-                });
-            });
-        }
-
-        const createNoteSubscription = () => {
-            const noteQuery = new Parse.Query('Note');
-            noteQuery.equalTo('board', Parse.Object.extend('Board').createWithoutData(action.boardId));
-            noteQuery.subscribe().then((subscription) => {
-                closeSubscriptions.push(() => { subscription.unsubscribe() });
-                subscription.on('create', (object) => {
-                    dispatch(ActionFactory.createdNote(mapNoteServerToClientModel(object as NoteServerModel)))
-                });
-                subscription.on('update', (object) => {
-                    dispatch(ActionFactory.updatedNote(mapNoteServerToClientModel(object as NoteServerModel)));
-                });
-                subscription.on('delete', (object) => {
-                    dispatch(ActionFactory.deleteNote(object.id));
-                });
-                subscription.on('open', () => {
-                    noteQuery.find().then((results) => {
-                        dispatch(ActionFactory.initializeNotes((results as any[]).map(mapNoteServerToClientModel)));
-                    });
-                });
-            });
-        }
-
-        const boardQuery = new Parse.Query('Board');
-        boardQuery.equalTo('objectId', action.boardId);
-        boardQuery.subscribe().then((subscription) => {
-            closeSubscriptions.push(() => { subscription.unsubscribe() });
-            subscription.on('update', (object) => {
-                dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
-            });
-            subscription.on('delete', (object) => {
-                dispatch(ActionFactory.deleteBoard());
-            });
-            subscription.on('open', () => {
-                createJoinRequestSubscription();
-                createNoteSubscription();
-                createUsersSubscription();
-                boardQuery.first().then((board) => {
-                    dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
-                });
-            });
+      joinRequestQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
         });
-    }
-}
+
+        subscription.on("open", (object) => {
+          joinRequestQuery.find().then((results) => {
+            dispatch(
+              ActionFactory.initializeJoinRequests(
+                (results as any[]).map(mapJoinRequestServerToClientModel)
+              )
+            );
+          });
+        });
+
+        subscription.on("create", (object) => {
+          dispatch(
+            ActionFactory.createJoinRequest(
+              mapJoinRequestServerToClientModel(
+                object as JoinRequestServerModel
+              )
+            )
+          );
+        });
+
+        subscription.on("update", (object) => {
+          dispatch(
+            ActionFactory.updateJoinRequest(
+              mapJoinRequestServerToClientModel(
+                object as JoinRequestServerModel
+              )
+            )
+          );
+        });
+      });
+    };
+
+    const createUsersSubscription = () => {
+      const adminsQuery = new Parse.Query(Parse.Role);
+      adminsQuery.equalTo("name", `admin_of_${action.boardId}`);
+      const memberQuery = new Parse.Query(Parse.Role);
+      memberQuery.equalTo("name", `member_of_${action.boardId}`);
+
+      const usersQuery = Parse.Query.or(adminsQuery, memberQuery);
+      usersQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+
+        const updateUsers = (role: Parse.Role) => {
+          if (role.getName() === `member_of_${action.boardId}`) {
+            role
+              .getUsers()
+              .query()
+              .find()
+              .then((users) => {
+                dispatch(
+                  ActionFactory.setUsers(
+                    users.map((user) =>
+                      mapUserServerToClientModel(user.toJSON() as any, false)
+                    ),
+                    false
+                  )
+                );
+              });
+          }
+          if (role.getName() === `admin_of_${action.boardId}`) {
+            role
+              .getUsers()
+              .query()
+              .find()
+              .then((users) => {
+                dispatch(
+                  ActionFactory.setUsers(
+                    users.map((user) =>
+                      mapUserServerToClientModel(user.toJSON() as any, true)
+                    ),
+                    true
+                  )
+                );
+              });
+          }
+        };
+
+        subscription.on("update", (object) => {
+          updateUsers(object as Parse.Role);
+        });
+
+        subscription.on("open", () => {
+          usersQuery.find().then((results) => {
+            for (const result of results) {
+              updateUsers(result as Parse.Role);
+            }
+          });
+        });
+      });
+
+      const userQuery = new Parse.Query(Parse.User);
+      userQuery.equalTo("online", true);
+      userQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+
+        subscription.on("enter", (object) => {
+          dispatch(
+            ActionFactory.setUserStatus(object.id, true)
+          );
+        });
+
+        subscription.on("leave", (object) => {
+          dispatch(
+            ActionFactory.setUserStatus(object.id, false)
+          );
+        });
+      });
+    };
+
+    const createNoteSubscription = () => {
+      const noteQuery = new Parse.Query("Note");
+      noteQuery.equalTo(
+        "board",
+        Parse.Object.extend("Board").createWithoutData(action.boardId)
+      );
+      noteQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("create", (object) => {
+          dispatch(
+            ActionFactory.createdNote(
+              mapNoteServerToClientModel(object as NoteServerModel)
+            )
+          );
+        });
+        subscription.on("update", (object) => {
+          dispatch(
+            ActionFactory.updatedNote(
+              mapNoteServerToClientModel(object as NoteServerModel)
+            )
+          );
+        });
+        subscription.on("delete", (object) => {
+          dispatch(ActionFactory.deleteNote(object.id));
+        });
+        subscription.on("open", () => {
+          noteQuery.find().then((results) => {
+            dispatch(
+              ActionFactory.initializeNotes(
+                (results as any[]).map(mapNoteServerToClientModel)
+              )
+            );
+          });
+        });
+      });
+    };
+
+    const boardQuery = new Parse.Query("Board");
+    boardQuery.equalTo("objectId", action.boardId);
+    boardQuery.subscribe().then((subscription) => {
+      closeSubscriptions.push(() => {
+        subscription.unsubscribe();
+      });
+      subscription.on("update", (object) => {
+        dispatch(
+          ActionFactory.updatedBoard(
+            mapBoardServerToClientModel(object.toJSON() as any)
+          )
+        );
+      });
+      subscription.on("delete", (object) => {
+        dispatch(ActionFactory.deleteBoard());
+      });
+      subscription.on("open", () => {
+        createJoinRequestSubscription();
+        createNoteSubscription();
+        createUsersSubscription();
+        boardQuery.first().then((board) => {
+          dispatch(
+            ActionFactory.initializeBoard(
+              mapBoardServerToClientModel(board?.toJSON() as any)
+            )
+          );
+        });
+      });
+    });
+  }
+};

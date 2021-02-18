@@ -14,7 +14,7 @@ const BoardUsers = ({numOfUsersToShow}:any) => {
     const currentUser = Parse.User.current();
 
     const me = state.users.find(user => user.id === currentUser!.id);
-    const connectedUsers = state.users.filter(user => { console.log(user);  return user.online;});
+    const connectedUsers = state.users.filter(user => user.online);
     const them = connectedUsers.filter(user => user.id !== currentUser!.id);
     const usersToShow = them.splice(0, (them.length > numOfUsersToShow ? numOfUsersToShow - 1: numOfUsersToShow));
 
