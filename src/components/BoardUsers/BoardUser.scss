@@ -2,7 +2,8 @@
     box-sizing: border-box;
     height: 40px;
     width: 40px;
-    border: 1px solid white;
+    border: 1px solid;
+    border-color: var(--accent-color);
     border-radius: 100px;
     display: inline-block;
 }
@@ -12,5 +13,5 @@
     justify-content: center;
     align-items: center;
     height: 95%;
-    color: white;
+    color: var(--accent-color);
 }
