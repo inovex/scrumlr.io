@@ -85,6 +85,8 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
           invertPlaceholder={theme === 'mint'}
           showUnderline={false}
           placeholder={`Add ${column.name} note`}
+          autocomplete="off"
+          type="text"
           value={text}
           onChange={(e: any) => this.handleChange(e)}
           onKeyDown={(e: any) => this.handleKeyDown(e)}
