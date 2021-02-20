@@ -84,7 +84,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
         <Input
           invertPlaceholder={theme === 'mint'}
           showUnderline={false}
-          placeholder={`Add ${column.name} card`}
+          placeholder={`Add ${column.name} note`}
           value={text}
           onChange={(e: any) => this.handleChange(e)}
           onKeyDown={(e: any) => this.handleKeyDown(e)}

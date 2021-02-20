@@ -9,11 +9,17 @@ import Raven = require('raven-js');
 const getRootCard = (
   cardId: string,
   cards: BoardCards,
+  visited: string[] = [],
   hasParent: boolean = false
 ): string | undefined => {
+  if (visited.indexOf(cardId) >= 0) {
+    return undefined;
+  }
+
   if (cards[cardId].parent) {
+    visited.push(cardId);
     if (cardId !== cards[cardId].parent) {
-      return getRootCard(cards[cardId].parent as string, cards, true);
+      return getRootCard(cards[cardId].parent as string, cards, visited, true);
     }
   }
   if (hasParent) {

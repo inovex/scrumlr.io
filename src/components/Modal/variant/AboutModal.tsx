@@ -156,6 +156,19 @@ export class AboutModal extends React.Component<
             <div className="about-modal__panel">
               <h2 className="about-modal__headline">Changelog</h2>
 
+              <h3>2021/02/20</h3>
+              <ul>
+                <li>
+                  Fixed bug where stacking of cards could result in a cycle and
+                  lead to a fatal error
+                </li>
+                <li>
+                  Renamed add card inputfield placeholder to 'add note', so that
+                  Chrome won't suggest an auto-completion of ones credit card
+                  information
+                </li>
+              </ul>
+
               <h3>2020/11/30</h3>
               <ul>
                 <li>Enabled card stacking for every user</li>

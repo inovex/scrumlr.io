@@ -51,7 +51,6 @@ exports.detectStackCycle = functions.database.ref('/boards/{boardId}/private/car
 
         if (newValue.parent === oldValue.parent) {
             // proceed with the storage
-            return true;
         } else if (!!newValue.parent) {
             const query = admin.database().ref(`/boards/${context.params.boardId}/private/cards`);
 
@@ -78,6 +77,8 @@ exports.detectStackCycle = functions.database.ref('/boards/{boardId}/private/car
                     }
                 });
         }
+
+        return true;
     });
 
 

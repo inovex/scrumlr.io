@@ -270,11 +270,17 @@ export const mapStateToProps = (
 
   const getRootCard = (
     cardId: string,
+    visited: string[] = [],
     hasParent: boolean = false
   ): string | undefined => {
+    if (visited.indexOf(cardId) >= 0) {
+      return undefined;
+    }
+
     if (cards[cardId].parent) {
+      visited.push(cardId);
       if (cardId !== cards[cardId].parent) {
-        return getRootCard(cards[cardId].parent as string, true);
+        return getRootCard(cards[cardId].parent as string, visited, true);
       }
     }
     if (hasParent) {
