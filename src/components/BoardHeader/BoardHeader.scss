@@ -10,7 +10,6 @@
 
 .board-header > * {
   align-self: center;
-  float: left;
 }
 
 
@@ -64,4 +63,5 @@
 
 .board-header__users {
   width: 25%;
+  margin-right: 12px;
 }
