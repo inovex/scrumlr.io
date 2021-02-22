@@ -1,5 +1,5 @@
 > The code of the online version of [scrumlr.io](https://scrumlr.io) is located
-> [at the v1 branch](https://github.com/scrumlr/scrumlr.io/tree/v1), since we are currently working on a new 
+> [at the v1 branch](https://github.com/inovex/scrumlr.io/tree/v1), since we are currently working on a new 
 > implementation of your favorite webapp for collaborative sessions.
 
 <div align="center" markdown="1" style="margin-bottom: 2.5em">
@@ -7,9 +7,6 @@
     <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
   <p>
-    <a href="https://app.fossa.io/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io?ref=badge_shield" alt="FOSSA Status" target="_blank">
-        <img src="https://app.fossa.io/api/projects/git%2Bgithub.com%2Fmasinio%2Fscrumlr.io.svg?type=shield"/>
-    </a>
     <a href="https://depfu.com" alt="Dependency Status">
       <img src="https://badges.depfu.com/badges/e64e883c9b747da1bb9ea8e24759a2aa/status.svg"/>
     </a>
@@ -56,4 +53,4 @@ Thanks to all our users, contributors & supporters!
 
 ## License
 
-Scrumlr is [MIT licensed](https://github.com/masinio/scrumlr.io/blob/tech/doc/LICENSE).
+Scrumlr is [MIT licensed](https://github.com/inovex/scrumlr.io/blob/main/LICENSE).
