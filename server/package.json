@@ -20,5 +20,8 @@
     "http-proxy-middleware": "^1.0.6",
     "parse": "^2.18.0",
     "parse-server": "^4.5.0"
+  },
+  "resolutions": {
+    "**/**/axios": "^0.21.1"
   }
 }

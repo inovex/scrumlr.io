@@ -15,3 +15,13 @@
     height: 95%;
     color: var(--accent-color);
 }
+
+@media (prefers-color-scheme: dark) {
+  .user{
+    border-color: white;
+  }
+
+  .user__initials{
+    color: white;
+  }
+}
