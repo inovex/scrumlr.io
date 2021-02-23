@@ -8,8 +8,8 @@ export interface RestUsersCounterProps {
 const RestUsersCounter = ({ count }: RestUsersCounterProps) => {
   return (
     <li>
-      <div className="user">
-        <div className="user__initials" >+{count}</div>
+      <div className="rest-users">
+        <div className="rest-users__count" >{count}</div>
       </div>
     </li>
   );
