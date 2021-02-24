@@ -532,7 +532,7 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.54.tgz#a737488631aca3ec7bd9f6229d77f1079e444793"
   integrity sha512-c8Lm7+hXdSPmWH4B9z/P/xIXhFK3mCQin4yCYMd2p1qpMG5AfgyJuYZ+3q2dT7qLiMMMGMd5dnkFpdqJARlvtQ==
 
-"@types/parse@^2.12.7":
+"@types/parse@^2.18.3":
   version "2.18.3"
   resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.3.tgz#2f6b1a2fb97d82cba3579e90b3f11ba23dc44f10"
   integrity sha512-HsQQxlsfBPblottxCN7Cu9iZqpVdXomyhblDNlY8vEWdYv+brIdIx9hSILRshUZZoZKHwgnuTL8YHXeRQ4R13A==
@@ -1927,6 +1927,11 @@ iconv-lite@0.4.24:
   dependencies:
     safer-buffer ">= 2.1.2 < 3"
 
+idb-keyval@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-5.0.2.tgz#243cf2b7db1bee2a8a41b78c14a18a85db0e1646"
+  integrity sha512-1DYjY/nX2U9pkTkwFoAmKcK1ZWmkNgO32Oon9tp/9+HURizxUQ4fZRxMJZs093SldP7q6dotVj03kIkiqOILyA==
+
 ieee754@1.1.13:
   version "1.1.13"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
@@ -2690,7 +2695,7 @@ parse@2.17.0:
   optionalDependencies:
     crypto-js "4.0.0"
 
-parse@2.19.0, parse@^2.18.0:
+parse@2.19.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/parse/-/parse-2.19.0.tgz#23f40869e50502a11c1f6aa8661d35bded8fc991"
   integrity sha512-twxq/Kzyd0c9exxK0jMEPISwDpFzukmexSa+VAFL4a6K+lqGeJ9TuysYhfR9Bkcd0mHGcMFM5gn4uycu1xykvA==
@@ -2700,6 +2705,21 @@ parse@2.19.0, parse@^2.18.0:
     react-native-crypto-js "1.0.0"
     uuid "3.4.0"
     ws "7.4.0"
+    xmlhttprequest "1.8.0"
+  optionalDependencies:
+    crypto-js "4.0.0"
+
+parse@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/parse/-/parse-3.1.0.tgz#dee77294b08f63a1c8247a08a6dff8340d83d179"
+  integrity sha512-oUDTiH2F9sRX1a+jvLTb/sJMBea6wIv3dUK/mTDJHw1lOA+r008B6ybjYCfqPu4/2CrSt1Hfe4mJNoa4Ic4dyg==
+  dependencies:
+    "@babel/runtime" "7.12.5"
+    "@babel/runtime-corejs3" "7.12.5"
+    idb-keyval "5.0.2"
+    react-native-crypto-js "1.0.0"
+    uuid "3.4.0"
+    ws "7.4.3"
     xmlhttprequest "1.8.0"
   optionalDependencies:
     crypto-js "4.0.0"
@@ -3654,6 +3674,11 @@ ws@7.4.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.0.tgz#a5dd76a24197940d4a8bb9e0e152bb4503764da7"
   integrity sha512-kyFwXuV/5ymf+IXhS6f0+eAFvydbaBW3zjpT6hUdAh/hbVjTIB5EHBGi0bPoCLSK2wcuz3BrEkB9LrYv1Nm4NQ==
+
+ws@7.4.3:
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.3.tgz#1f9643de34a543b8edb124bdcbc457ae55a6e5cd"
+  integrity sha512-hr6vCR76GsossIRsr8OLR9acVVm1jyfEWvhbNjtgPOrfvAlKzvyeg/P6r8RuDjRyrcQoPQT7K0DGEPc7Ae6jzA==
 
 ws@^5.2.0:
   version "5.2.2"

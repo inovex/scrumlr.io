@@ -26,7 +26,7 @@ export const boardReducer = (state: BoardState = { status: 'unknown' }, action: 
                 data: {
                     ...state.data!,
                     columns: [
-                        ...state.data?.columns,
+                        ...state.data!.columns,
                         {
                             name: action.name,
                             hidden: action.hidden
@@ -55,7 +55,7 @@ export const boardReducer = (state: BoardState = { status: 'unknown' }, action: 
             };
         }
         case ActionType.DeleteColumn: {
-            const newColumns = [ ...state.data?.columns ];
+            const newColumns = [ ...state.data!.columns ];
             const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
             newColumns.splice(columnIndex, 1);
             return {
