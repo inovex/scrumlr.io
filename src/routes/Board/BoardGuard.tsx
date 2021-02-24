@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import store from "store";
 import {ActionFactory} from "store/action";
 import {RouteComponentProps} from "react-router";
