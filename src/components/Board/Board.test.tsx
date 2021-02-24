@@ -1,23 +1,29 @@
 import React from 'react'
-import { act, render, fireEvent } from "@testing-library/react";
+import { act, render, fireEvent, within } from "@testing-library/react";
 import Board from "./Board";
 import Column from "components/Column/Column";
 import { Color } from "constants/colors";
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import BoardUsers from 'components/BoardUsers/BoardUsers';
+import Parse from 'parse';
+import { resolve } from 'path';
 
-const initialState = {
-  users: {
-    admins: [],
-    basic: [],
-    all: []
-  }
-}
+jest.mock('Parse');
 
 const mockStore = configureStore()
-const store = mockStore(initialState)
 
 const createBoardWithColumns = (...colors: Color[]) => {
+
+  const initialState = {
+    users: {
+      admins: [],
+      basic: [],
+      all: []
+    }
+  }
+  const store = mockStore(initialState)
+
   return (
     <Provider store={store}>
       <Board>
@@ -188,4 +194,85 @@ describe('navigation', () => {
       expect(container.querySelector('.board__navigation-next')).toHaveClass('accent-color__purple');
     });
   })
+});
+
+
+describe('users', () => {
+
+  const currentUser = {
+    id: '@_online',
+    displayName: 'Max Mustermann',
+    admin: true,
+    online: true
+  }
+
+  beforeEach(() => {
+    const mockCurrentUser = jest.fn(() => currentUser);
+    Parse.User.current = mockCurrentUser;
+  });
+
+  const NUM_OF_ONLINE_USERS = 10;
+  const NUM_OF_OFFLINE_USERS = 10;
+  const NUM_OF_DISPLAYED_USERS = 4;
+
+  const bunchOfOnlineUsers = [...new Array(NUM_OF_ONLINE_USERS - 1)].map((_, i) => ({
+    id: `${i}_online`,
+    displayName: 'Max Mustermann',
+    admin: (i%2===0)?true:false,
+    online: true
+  }));
+
+  const bunchOfOfflineUsers = [...new Array(NUM_OF_OFFLINE_USERS)].map((_, i) => ({
+    id: `${i}_offline`,
+    displayName: 'Erika Musterfrau',
+    admin: (i%2===0)?false:true,
+    online: false
+  }));
+
+  const initialState = {
+    users: {
+      all: [
+        currentUser,
+        ...bunchOfOnlineUsers,
+        ...bunchOfOfflineUsers
+      ]
+    }
+  }
+
+
+  test('only online users are shown', () => {
+    const store = mockStore(initialState)
+  
+    const { container } = render(
+      <Provider store={store}>
+        <BoardUsers numOfUsersToShow={NUM_OF_DISPLAYED_USERS} />
+      </Provider>
+    );
+    const utils = within(container);
+    expect(utils.getAllByText('MM').length).toEqual(NUM_OF_DISPLAYED_USERS);
+  });
+
+  test('correct number of online users is shown', () => {
+    const store = mockStore(initialState)
+  
+    const { container } = render(
+      <Provider store={store}>
+        <BoardUsers numOfUsersToShow={NUM_OF_DISPLAYED_USERS} />
+      </Provider>
+    );
+    expect(container.querySelectorAll('.user-list li')).toHaveLength((NUM_OF_ONLINE_USERS <= NUM_OF_DISPLAYED_USERS + 1)?NUM_OF_ONLINE_USERS:NUM_OF_DISPLAYED_USERS + 1);
+  });
+
+  test('correct count of rest users is shown', () => {
+    const store = mockStore(initialState)
+  
+    const { container } = render(
+      <Provider store={store}>
+        <BoardUsers numOfUsersToShow={NUM_OF_DISPLAYED_USERS} />
+      </Provider>
+    );
+
+    expect(container.querySelector('.rest-users__count')).toHaveTextContent(`${NUM_OF_ONLINE_USERS - NUM_OF_DISPLAYED_USERS}`);
+  });
+
 });

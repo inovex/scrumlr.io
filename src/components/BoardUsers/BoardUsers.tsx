@@ -1,6 +1,4 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
-// import { ApplicationState } from 'types/store';
 import BoardUser from './BoardUser';
 import RestUserCounter from './RestUsersCounter';
 import './BoardUsers.scss';
