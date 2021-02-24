@@ -1,4 +1,3 @@
-import * as React from "react";
 import './LoadingIndicator.scss';
 
 function LoadingIndicator() {
