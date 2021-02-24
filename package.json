@@ -30,8 +30,8 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "node-sass": "^5.0.0",
-    "redux-devtools-extension": "^2.13.8",
     "react-scripts": "^4.0.3",
+    "redux-devtools-extension": "^2.13.8",
     "typescript": "^4.2.2"
   },
   "scripts": {
