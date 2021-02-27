@@ -32,6 +32,13 @@ export const UsersActionFactory = {
     admin,
   }),
 
+  /**
+   * Creates an action that should be dispatched when the server notifies about a changed status (online/offline) of
+   * a user
+   * 
+   * @param userId the user identifier 
+   * @param status flag which indeicates whether the user is online or went offline
+   */
   setUserStatus: (userId: string, status: boolean) => ({
     type: UsersActionType.SetUserStatus,
     userId,
