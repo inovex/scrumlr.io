@@ -6,8 +6,6 @@ import BoardUsers from 'components/BoardUsers/BoardUsers';
 import Parse from 'parse';
 import {getRandomName} from '../../constants/Name'
 
-jest.mock('Parse');
-
 const mockStore = configureStore()
 
 const createBoardUsers = (state, numOfUsersToShow: number) => {
