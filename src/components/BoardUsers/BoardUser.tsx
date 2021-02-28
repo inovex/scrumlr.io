@@ -1,4 +1,3 @@
-import React from 'react';
 import './BoardUser.scss';
 import {getInitials} from 'constants/Name'
 export interface BoardUserProps {

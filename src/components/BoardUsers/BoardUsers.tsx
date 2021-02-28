@@ -1,4 +1,3 @@
-import React from 'react';
 import BoardUser from './BoardUser';
 import RestUserCounter from './RestUsersCounter';
 import './BoardUsers.scss';

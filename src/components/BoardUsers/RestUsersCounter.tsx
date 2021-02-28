@@ -1,4 +1,3 @@
-import React from 'react';
 import './BoardUser.scss';
 
 export interface RestUsersCounterProps {
