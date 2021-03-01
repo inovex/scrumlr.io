@@ -1,18 +1,15 @@
-.users {
-    position: absolute;
-    right: 90px;
-    top: 40px;
+.board-users {
+  position: absolute;
+  right: 90px;
+  top: 40px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: row-reverse;
 }
 
-.user-list {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    align-self: center;
-    display: flex;
-    flex-direction: row-reverse;
-}
-
-.user-list li {
-    display: inline;
+.board-users li {
+  display: inline;
 }

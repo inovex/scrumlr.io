@@ -6,7 +6,6 @@ import { ReactComponent as RightArrowIcon } from "assets/icon-arrow-next.svg";
 import { ReactComponent as LeftArrowIcon } from "assets/icon-arrow-previous.svg";
 import BoardUsers from 'components/BoardUsers/BoardUsers';
 
-const NUM_OF_DISPLAYED_USERS = 4;
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
 }
@@ -106,7 +105,7 @@ const Board = ({ children }: BoardProps) => {
         </button>
       )}
 
-      <BoardUsers numOfUsersToShow={NUM_OF_DISPLAYED_USERS} />
+      <BoardUsers />
 
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />

@@ -1,4 +1,4 @@
-.user,
+.user-avatar,
 .rest-users {
     box-sizing: border-box;
     height: 40px;
@@ -25,7 +25,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .user,
+  .user-avatar,
   .rest-users{
     border-color: white;
     background-color: black;

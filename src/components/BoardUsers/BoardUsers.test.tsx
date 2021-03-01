@@ -8,12 +8,12 @@ import {getRandomName} from '../../constants/Name'
 
 const mockStore = configureStore()
 
-const createBoardUsers = (state, numOfUsersToShow: number) => {
+const createBoardUsers = (state) => {
   const store = mockStore(state)
 
   return (
     <Provider store={store}>
-      <BoardUsers numOfUsersToShow={numOfUsersToShow} />
+      <BoardUsers />
     </Provider>
   );
 };
@@ -59,7 +59,7 @@ describe('users', () => {
       }
     }
    
-    const { container } = render(createBoardUsers(state, 4));
+    const { container } = render(createBoardUsers(state));
 
     const renderdUsersnames = Array.from(container.querySelectorAll('.user__initials')).map(ui=>ui.getAttribute('title')).join(':');
     const onlineUsernames = [...(otherOnlineUsers.slice(0, 3)), currentUser].map(u=>u.displayName).join(':');
@@ -78,7 +78,7 @@ describe('users', () => {
       }
     }
 
-    const boardUsers = render(createBoardUsers(state, 4));
+    const boardUsers = render(createBoardUsers(state));
     expect(boardUsers.container.querySelectorAll('.user__initials')).toHaveLength(4);
 
     // 5 online users -> display 5
@@ -90,7 +90,7 @@ describe('users', () => {
         ]
       }
     }
-    const newBoardUsers1 = render(createBoardUsers(newState1, 4));
+    const newBoardUsers1 = render(createBoardUsers(newState1));
     expect(newBoardUsers1.container.querySelectorAll('.user__initials')).toHaveLength(5);
 
     // 6 online users -> display 4 & rest user count of 2
@@ -102,7 +102,7 @@ describe('users', () => {
         ]
       }
     }
-    const newBoardUsers2 = render(createBoardUsers(newState2, 4));
+    const newBoardUsers2 = render(createBoardUsers(newState2));
     expect(newBoardUsers2.container.querySelectorAll('.user__initials')).toHaveLength(4);
     expect(newBoardUsers2.container.querySelector('.rest-users__count')).toHaveTextContent('2');
   });
