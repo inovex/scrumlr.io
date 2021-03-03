@@ -9,18 +9,6 @@
     justify-content: space-between;
     border-radius: 20px;
     box-shadow: 0 6px 9px 0 #313949;
-  }
-  @media (prefers-color-scheme: dark) {
-    .note-input {
-      background-color: #4C5566;
-    }
-  }
-  
-  .note-input:hover {
-    cursor: pointer;
-  }
-  
-  .note-input__text {
     margin: 0;
     font-size: 14px;
     color: $color-black;
@@ -29,9 +17,14 @@
     line-height: 24px;
   }
   @media (prefers-color-scheme: dark) {
-    .note-input__text {
+    .note-input {
+      background-color: #4C5566;
       color: $color-white;
     }
+  }
+  
+  .note-input:hover {
+    cursor: pointer;
   }
   
   .note-input__icon {

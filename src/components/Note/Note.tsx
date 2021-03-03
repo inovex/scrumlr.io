@@ -3,6 +3,8 @@ import './Note.scss';
 import avatar from 'assets/avatar.png';
 import { useSelector } from 'react-redux';
 import {ApplicationState} from "../../types/store";
+import classNames from 'classnames';
+import Parse from 'parse';
 
 export interface NoteProps {
     text: String;
@@ -18,14 +20,15 @@ const Note = ({text, authorId } : NoteProps) => {
     }));
 
     return (
-        <div className="note">
-            <div className="note__indicator"></div>
+        <li className={classNames('note', { 'note--own-card': Parse.User.current()?.id === authorId })}>      
             <p className="note__text">{text}</p>
-            <div className="note__author">
-                <img className="note__author-image" src={avatar} alt="User"/>
-                <p className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0].displayName}</p>
-            </div>
-        </div>
+            <footer>
+                <figure className="note__author">
+                    <img className="note__author-image" src={avatar} alt="User"/>
+                    <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
+                </figure>
+            </footer>
+        </li>
     );
 };
 export default Note;
