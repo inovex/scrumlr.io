@@ -37,8 +37,8 @@
   border-bottom: solid 3px var(--accent-color);
   margin-right: 10px;
   font-weight: bold;
-  letter-spacing: 0.75px;
-  line-height: 32px;
+  letter-spacing: $large-letter-spacing;
+  line-height: $large-line-height;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,8 +51,8 @@
   font-size: 20px;
   color: $color-middle-gray;
   font-weight: 600;
-  letter-spacing: 0.63px;
-  line-height: 32px;
+  letter-spacing: $large-letter-spacing;
+  line-height: $large-line-height;
 }
 
 .column__note-list {

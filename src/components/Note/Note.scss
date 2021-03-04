@@ -1,19 +1,31 @@
 @import "constants/style";
-$note__text-line-height: 18px;
-  
+
+$note__border-radius: 16px;
+$note__text-margin-bottom: 9px;
+$note__box-shadow-color: rgba(0,87,255,0.16);
+$note__box-shadow-color-dark-mode: rgba(0,0,0,0.2);
+
+$note__indicator-height: 34px;
+$note__indicator-width: 3px; 
+
+$note__author-name-size: 12px;
+$note__author-image-size: 26px;
+$note__author-margin-left: 10px;
+
+
 .note {
-    padding: 16px 20px;
+    padding: $small-padding $medium-padding;
     position: relative;
-    border-radius: 16px;
+    border-radius: $note__border-radius;
     background-color: $color-white;
-    box-shadow: 0 6px 9px 0 rgba(0,87,255,0.16);
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     list-style-type: none;
 }
 @media (prefers-color-scheme: dark) {
     .note {
-        background-color: #313949;
-        box-shadow: 0 6px 9px 0 rgba(0,0,0,0.2);
+        background-color: $color-dark-mode-note;
+        box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
     }
 } 
 .note:hover {
@@ -25,25 +37,25 @@ $note__text-line-height: 18px;
 	display: block;
     position: absolute;
     left: 0;
-    width: 3px;
-    height: 34px;
-    border-radius: 0 3px 3px 0;
+    width: $note__indicator-width;
+    height: $note__indicator-height;
+    border-radius: 0 $note__indicator-width $note__indicator-width 0;
     background: var(--accent-color);
 }
   
 .note__text {
     margin: 0;
-    min-height: 3 * $note__text-line-height;
+    min-height: 3 * $medium-line-height;
     color: $color-black;
-    font-size: 13px;
-    letter-spacing: 0.35px;
-    line-height: $note__text-line-height;
+    font-size: $text-size;
+    letter-spacing: $medium-letter-spacing;
+    line-height: $medium-line-height;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    margin-bottom: 9px;
+    margin-bottom: $note__text-margin-bottom;
 }
 @media (prefers-color-scheme: dark) {
     .note__text {
@@ -64,15 +76,15 @@ $note__text-line-height: 18px;
 }
   
 .note__author-image {
-    height: 26px;
-    width: 26px;
+    height: $note__author-image-size;
+    width: $note__author-image-size;
     border-radius: 100%;
 }
   
 .note__author-name {
-    margin-left: 10px;
+    margin-left: $note__author-margin-left;
     color: $color-dark-gray;
-    font-size: 12px;
-    letter-spacing: 0.25px;
-    line-height: 16px;
+    font-size: $note__author-name-size;
+    letter-spacing: $small-letter-spacing;
+    line-height: $small-line-height;
 }
