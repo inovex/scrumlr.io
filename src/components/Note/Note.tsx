@@ -23,7 +23,7 @@ const Note = ({text, authorId } : NoteProps) => {
         <li className={classNames('note', { 'note--own-card': Parse.User.current()?.id === authorId })}>      
             <p className="note__text">{text}</p>
             <footer>
-                <figure className="note__author">
+                <figure className="note__author" aria-roledescription="author">
                     <img className="note__author-image" src={avatar} alt="User"/>
                     <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
                 </figure>

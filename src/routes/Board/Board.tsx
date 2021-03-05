@@ -22,7 +22,7 @@ function Board(props: BoardProps) {
         }
     }, [ props.match.params.id ]);
 
-    const state:any = useSelector((state: ApplicationState) => ({
+    const state = useSelector((state: ApplicationState) => ({
         board: state.board,
         notes: state.notes,
         users: state.users.all
