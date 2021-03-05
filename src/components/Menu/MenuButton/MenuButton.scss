@@ -3,108 +3,153 @@
 /**
     POSITIONING & SIZING
 */
-$menu-button__first-position-left: 28px;
 
-.menu-button {
-  background-color: transparent;
-  border: none;
-  border-radius: 18px;
-  height: 36px;
-  padding: 0;
-  position: absolute;
-  width: 36px;
+@media screen and (max-width: 1279px) {
+  $menu-button__first-position-left: 28px;
 
-  transition: background-color 0.25s ease-in-out, left 2s;
-
-  // TODO cleanup
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 64px;
-}
-
-@for $i from 1 through 5 {
-  .menu-button.menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
-}
-
-.menu-button:hover {
-  left: 28px;
-
-  .menu-button__icon {
-    animation: spin 1.75s linear forwards;
-  }
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-90deg);
-  }
-  50% {
-    transform: rotate(-180deg);
-  }
-  75% {
-    transform: rotate(-270deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-
-}
-
-.menu-button__tooltip {
-  border-radius: 16px;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  font-family: 'Raleway', serif;
-  font-size: 14px;
-  font-weight: bold;
-  height: 36px;
-  letter-spacing: 1px;
-  line-height: 16px;
-  padding: 0;
-  text-align: right;
-  white-space: nowrap;
-  width: 0;
-  z-index: -1;
-  overflow: hidden;
-
-  // TODO cleanup
-  border-radius: 32px;
-}
-
-.tooltip-text {
-  margin-left: 72px;
-  transition: margin-right 0.5s ease-in-out;
-}
-
-.menu-button__icon {
-  left: 0;
-  position: absolute;
-  top: 14px;
-}
-
-.menu-button__icon--close {
-  display: none;
-}
-
-@media #{$desktop} {
   .menu-button {
-    position: relative;
+    background-color: transparent;
+    border: none;
+    border-radius: 18px;
+    padding: 0;
+    position: absolute;
+    width: 36px;
+
+    transition: background-color 0.25s ease-in-out, left 2s;
+
+    // TODO cleanup
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 64px;
+  }
+
+  @for $i from 1 through 5 {
+    .menu-button.menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
+  }
+
+  .menu-button:hover {
+    left: 28px;
+
+    .menu-button__icon {
+      animation: spin 1.75s linear forwards;
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-90deg);
+    }
+    50% {
+      transform: rotate(-180deg);
+    }
+    75% {
+      transform: rotate(-270deg);
+    }
+    100% {
+      transform: rotate(-360deg);
+    }
+
+  }
+
+  .menu-button__tooltip {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Raleway', serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 36px;
+    letter-spacing: 1px;
+    line-height: 16px;
+    padding: 0;
+    text-align: right;
+    white-space: nowrap;
+    width: 0;
+    z-index: -1;
+    overflow: hidden;
+
+    // TODO cleanup
+    border-radius: 32px;
+  }
+
+  .tooltip-text {
+    margin-left: 72px;
+    transition: margin-right 0.5s ease-in-out;
   }
 
   .menu-button__icon {
+    left: 0;
+    position: absolute;
+    top: 14px;
+  }
+
+  .menu-button__icon--close {
+    display: none;
+  }
+
+  .menu-button:hover {
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+
+    .menu-button__tooltip {
+      height: 100%;
+      width: 100%;
+      background-color: blue;
+    }
+
+    .menu-button__icon {
+      left: $menu-button__first-position-left;
+    }
+
+    .tooltip-text {
+      margin-right: 48px;
+    }
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .menu-button {
+    border: none;
+    border-radius: 18px;
+    padding: 0;
+    background-color: transparent;
+    height: 36px;
+    width: 36px;
+    position: relative;
+    transition: background-color 0.25s ease-in-out, left 2s;
+  }
+  .menu-button:hover > .menu-button__tooltip {
+    width: 220px;
+  }
+  .menu-button:hover > .menu-button__icon {
+    animation: none;
+  }
+  .menu-button:hover > .menu-button__tooltip > .tooltip-text {
+    margin-right: 48px;
+  }
+
+  .menu-button__icon {
+    top: 0;
+    left: 0;
     z-index: 3;
+  }
+  .menu-button__icon--close {
+    display: none;
   }
 
   .menu-button__tooltip {
     position: absolute;
     animation: none;
-
     border-radius: 16px;
     box-sizing: border-box;
     display: inline-flex;
@@ -124,35 +169,10 @@ $menu-button__first-position-left: 28px;
 
     right: 0;
     transition: width 0.25s ease-in-out;
-    overflow: hidden;
   }
-
   .tooltip-text {
     margin-right: 36px;
-  }
-
-  .menu-button:hover {
-    left: auto;
-
-    .menu-button__icon {
-      animation: none;
-    }
-  }
-
-  .menu-button1 {
-    left: auto;
-  }
-
-  .menu-button2 {
-    left: auto;
-  }
-
-  .menu-button3 {
-    left: auto;
-  }
-
-  .menu-button4 {
-    left: auto;
+    transition: margin-right 0.5s ease-in-out;
   }
 
   .menu-button--left {
@@ -163,7 +183,6 @@ $menu-button__first-position-left: 28px;
       top: 0;
     }
   }
-
   .menu-button--right {
     .menu-button__tooltip {
       direction: ltr;
@@ -251,37 +270,6 @@ $menu-button__first-position-left: 28px;
 /**
     TRANSITIONS
 */
-
-.menu-button:active {
-  .menu-button__tooltip {
-    visibility: visible;
-    width: 200px;
-  }
-}
-
-.menu-button:hover {
-
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-
-  .menu-button__tooltip {
-    height: 100%;
-    width: 100%;
-    background-color: blue;
-  }
-
-  .menu-button__icon {
-    left: $menu-button__first-position-left;
-  }
-
-  .tooltip-text {
-    margin-right: 48px;
-  }
-}
 
 .menu-button:focus {
   outline: none;
