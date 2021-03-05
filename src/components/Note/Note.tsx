@@ -1,4 +1,3 @@
-import React from 'react';
 import './Note.scss';
 import avatar from 'assets/avatar.png';
 import { useSelector } from 'react-redux';

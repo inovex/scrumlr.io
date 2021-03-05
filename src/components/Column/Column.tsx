@@ -1,4 +1,3 @@
-import React from 'react';
 import './Column.scss';
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";

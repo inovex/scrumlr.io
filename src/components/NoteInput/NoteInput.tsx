@@ -9,7 +9,7 @@ export interface NoteInputProps {
     columnId : string;
 }
 
-const BootstrapInput = withStyles((theme: Theme) =>
+const CustomInput = withStyles((theme: Theme) => 
     createStyles({
         root: {
             borderRadius: 20,
@@ -18,20 +18,13 @@ const BootstrapInput = withStyles((theme: Theme) =>
             backgroundColor: '#EDEFF2',
             marginTop: 16,
             marginBottom: 32, 
-            '& .MuiFilledInput-underline:before': {
-                borderBottomColor: 'green',
-                borderBottom: 0,
-                position: 'relative',
-                left: 20,
+            '&.MuiFilledInput-underline::before , &.MuiFilledInput-underline::after': {
+                display: 'none',
             },
-            '&:hover': {
+            '&:hover , &.Mui-focused': {
                 backgroundColor: 'white',
                 boxShadow: '0 6px 9px 0 rgba(0,87,255,0.16)',
             },        
-            '&.Mui-focused': {
-                backgroundColor: 'white',
-                boxShadow: '0 6px 9px 0 rgba(0,87,255,0.16)',
-              },
         },
         input: {
             color: 'black',
@@ -40,20 +33,30 @@ const BootstrapInput = withStyles((theme: Theme) =>
             lineHeight: 24, 
             letterSpacing: 0.25, 
             padding: '10px 20px 10px 20px',
-
             // Use the system font instead of the default Roboto font.
             fontFamily: [
                 'Raleway',
                 'sans-serif',
-            ].join(','), // Ändert sich Schrift? Wie einstellen?
-            disableUnderline: true, // does nothing
+            ].join(','),
             '& .MuiFilledInput-underline:before': {
                 borderBottomColor: 'green',
                 borderBottom: 0,
                 position: 'relative',
                 left: 20,
             },
-        }
+        },
+        '@media (prefers-color-scheme: dark)': {
+            root: {
+                backgroundColor: '#4C5566',
+                '&:hover , &.Mui-focused': {
+                    backgroundColor: '#4C5566',
+                    boxShadow: '0 6px 9px 0 #232323',
+                },  
+            },
+            input: {
+                color: 'white',
+            },
+        },
     }),
 )(FilledInput);
 
@@ -72,7 +75,7 @@ const NoteInput = ({columnId} : NoteInputProps) => {
     }
 
     return (
-        <BootstrapInput
+        <CustomInput
             placeholder="Add your note..."
             type='text'
             value={value}
