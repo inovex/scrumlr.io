@@ -12,6 +12,8 @@
   padding: 0;
   position: relative;
   width: 36px;
+
+  transition: background-color 0.25s ease-in-out;
 }
 
 .menu-button__tooltip {
@@ -19,20 +21,28 @@
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   font-family: 'Raleway', serif;
   font-size: 14px;
   font-weight: bold;
   height: 36px;
-  width: auto;
   letter-spacing: 1px;
   line-height: 16px;
-  position: absolute;
-  text-align: center;
-  visibility: hidden;
+  padding: 0;
+  text-align: right;
   white-space: nowrap;
+  width: 0;
   z-index: -1;
 
+  position: absolute;
+  right: 0;
+  transition: width 0.25s ease-in-out;
+  overflow: hidden;
+
+}
+
+.tooltip-text {
+  margin-right: 36px;
+  transition: margin-right 0.5s ease-in-out;
 }
 
 .menu-button__icon {
@@ -47,11 +57,15 @@
 }
 
 @media #{$desktop} {
+  .menu-button__tooltip {
+    position: absolute;
+    animation: none;
+  }
+
   .menu-button--left {
     .menu-button__tooltip {
       direction: rtl;
-      padding-right: 56px;
-      padding-left: 20px;
+
       right: 0;
       top: 0;
     }
@@ -61,8 +75,7 @@
     .menu-button__tooltip {
       direction: ltr;
       left: 0;
-      padding-right: 20px;
-      padding-left: 56px;
+
       top: 0
     }
   }
@@ -71,10 +84,22 @@
 /**
     TRANSITIONS
 */
+
+.menu-button:active {
+  .menu-button__tooltip {
+    visibility: visible;
+    width: 200px;
+  }
+}
+
 .menu-button:hover {
 
   .menu-button__tooltip {
-    visibility: visible;
+    width: 220px;
+  }
+
+  .tooltip-text {
+    margin-right: 48px;
   }
 }
 
@@ -97,7 +122,6 @@
   }
 
   .menu-button--active:hover {
-    background-color: #FF0069;
 
     .menu-button__icon--close {
       display: inline;

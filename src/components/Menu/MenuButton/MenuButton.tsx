@@ -20,13 +20,25 @@ function MenuButton(props: MenuButtonProps) {
 
     useEffect(() => {
         props.onToggle(status);
-    }, [status])
+    }, [status]);
+
 
     return (<button className={`menu-button ${status ? 'menu-button--active':'menu-button--disabled'} menu-button--${props.direction}`} onClick={_ => setStatus(currStatus => !currStatus)}>
-        <span className='menu-button__tooltip'>{!status ? props.toggleStartLabel : props.toggleStopLabel}</span>
+        <div className='menu-button__tooltip'><span className='tooltip-text'>{!status ? props.toggleStartLabel : props.toggleStopLabel}</span></div>
         {props.children}
         <CloseIcon className='menu-button__icon menu-button__icon--close'/>
     </button>);
 }
 
 export default MenuButton;
+
+/**
+ * TODOLIST
+ *
+ * TODO: Create additional MenuToggle component (button: onClick, toggle: onToggle with curr State)
+ * TODO: Create mobile / responsive touch events
+ * TODO: Add styling for mobile / responsive
+ * TODO: Testing
+ * TODO: Add README for button and toggle component
+ *
+ */
