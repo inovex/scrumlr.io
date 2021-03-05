@@ -3,6 +3,8 @@ import './MenuButton.scss';
 import {ReactComponent as CloseIcon} from "assets/icon-close-white.svg";
 
 type MenuButtonProps = {
+    index: number;
+
     toggle: boolean; // Button functions as toggle
     onToggle: (active: boolean) => void; // What should happen onToggle / onClick
 
@@ -23,7 +25,7 @@ function MenuButton(props: MenuButtonProps) {
     }, [status]);
 
 
-    return (<button className={`menu-button ${status ? 'menu-button--active':'menu-button--disabled'} menu-button--${props.direction}`} onClick={_ => setStatus(currStatus => !currStatus)}>
+    return (<button className={`menu-button ${status ? 'menu-button--active':'menu-button--disabled'} menu-button--${props.direction} menu-button${props.index}`} onClick={_ => setStatus(currStatus => !currStatus)}>
         <div className='menu-button__tooltip'><span className='tooltip-text'>{!status ? props.toggleStartLabel : props.toggleStopLabel}</span></div>
         {props.children}
         <CloseIcon className='menu-button__icon menu-button__icon--close'/>

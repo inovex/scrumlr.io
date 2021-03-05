@@ -10,10 +10,53 @@
   border-radius: 18px;
   height: 36px;
   padding: 0;
-  position: relative;
+  position: absolute;
   width: 36px;
 
-  transition: background-color 0.25s ease-in-out;
+  transition: background-color 0.25s ease-in-out, left 2s;
+}
+
+.menu-button1 {
+  left: 28px;
+}
+
+.menu-button2 {
+  left: 86px;
+}
+
+.menu-button3 {
+  left: 145px;
+}
+
+.menu-button4 {
+  left: 203px;
+}
+
+.menu-button:hover {
+  left: 28px;
+
+  .menu-button__icon {
+    animation: spin 1.75s linear forwards;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-90deg);
+  }
+  50% {
+    transform: rotate(-180deg);
+  }
+  75% {
+    transform: rotate(-270deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+
 }
 
 .menu-button__tooltip {
@@ -32,16 +75,12 @@
   white-space: nowrap;
   width: 0;
   z-index: -1;
-
-  position: absolute;
-  right: 0;
-  transition: width 0.25s ease-in-out;
   overflow: hidden;
 
 }
 
 .tooltip-text {
-  margin-right: 36px;
+  margin-left: 36px;
   transition: margin-right 0.5s ease-in-out;
 }
 
@@ -49,7 +88,6 @@
   left: 0;
   position: absolute;
   top: 0;
-  z-index: 3;
 }
 
 .menu-button__icon--close {
@@ -57,9 +95,68 @@
 }
 
 @media #{$desktop} {
+
+
+  .menu-button {
+    position: relative;
+  }
+
+  .menu-button__icon {
+    z-index: 3;
+  }
+
   .menu-button__tooltip {
     position: absolute;
     animation: none;
+
+    border-radius: 16px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Raleway', serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 36px;
+    letter-spacing: 1px;
+    line-height: 16px;
+    padding: 0;
+    text-align: right;
+    white-space: nowrap;
+    width: 0;
+    z-index: -1;
+    overflow: hidden;
+
+    right: 0;
+    transition: width 0.25s ease-in-out;
+    overflow: hidden;
+  }
+
+  .tooltip-text {
+    margin-right: 36px;
+  }
+
+  .menu-button:hover {
+    left: auto;
+
+    .menu-button__icon {
+      animation: none;
+    }
+  }
+
+  .menu-button1 {
+    left: auto;
+  }
+
+  .menu-button2 {
+    left: auto;
+  }
+
+  .menu-button3 {
+    left: auto;
+  }
+
+  .menu-button4 {
+    left: auto;
   }
 
   .menu-button--left {
@@ -79,6 +176,83 @@
       top: 0
     }
   }
+
+
+
+  @media (prefers-color-scheme: light) {
+    .menu-button__icon--white {
+      display: none;
+    }
+
+    .menu-button__tooltip {
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+      background-color: #FFFFFF;
+      color: #FF0069;
+    }
+
+    .menu-button--active:hover {
+
+      .menu-button__icon--close {
+        display: inline;
+      }
+
+      .menu-button__icon--white {
+        display: none;
+      }
+
+    }
+
+    .menu-button--disabled:hover {
+      background-color: #FF0069;
+
+      .menu-button__icon--red {
+        display: none;
+      }
+
+      .menu-button__icon--white {
+        display: inline;
+      }
+    }
+
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .menu-button__icon--red {
+      display: none;
+    }
+
+    .menu-button:hover {
+      background-color: #7C123E;
+    }
+
+    .menu-button--active:hover {
+      .menu-button__icon--close {
+        display: inline;
+      }
+
+      .menu-button__icon--white {
+        display: none;
+      }
+    }
+
+    .menu-button--disabled:hover {
+      .menu-button__icon--red {
+        display: none;
+      }
+
+      .menu-button__icon--white {
+        display: inline;
+      }
+    }
+
+    .menu-button__tooltip {
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+      background-color: #FF0069;
+      color: #FFFFFF;
+
+    }
+  }
+
 }
 
 /**
@@ -116,7 +290,6 @@
   }
 
   .menu-button__tooltip {
-    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
     background-color: #FFFFFF;
     color: #FF0069;
   }
@@ -177,7 +350,6 @@
   }
 
   .menu-button__tooltip {
-    box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
     background-color: #FF0069;
     color: #FFFFFF;
 

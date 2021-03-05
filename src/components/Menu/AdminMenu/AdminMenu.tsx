@@ -8,19 +8,25 @@ function AdminMenu() {
 
     return (<div className='admin-menu'>
         <div className='admin-menu__items'>
-            <button className='admin-menu__item'>
-                <TimerIconWhite className='admin-menu__item-icon--white'/>
-                <TimerIconRed className='admin-menu__item-icon--red'/>
-            </button>
-            <button className='admin-menu__item'>
-                <TimerIconWhite className='admin-menu__item-icon--white'/>
-                <TimerIconRed className='admin-menu__item-icon--red'/>
-            </button>
-            <button className='admin-menu__item'>
-                <TimerIconWhite className='admin-menu__item-icon--white'/>
-                <TimerIconRed className='admin-menu__item-icon--red'/>
-            </button>
-            <MenuButton direction='left' toggle={true} onToggle={(active: boolean) => {
+            <MenuButton index={1} direction='left' toggle={true} onToggle={(active: boolean) => {
+                active ? console.log('Timer started') : console.log('Timer ended')
+            }} toggleStartLabel={"START TIMER"} toggleStopLabel={"END TIMER"}>
+                <TimerIconWhite className='menu-button__icon menu-button__icon--white'/>
+                <TimerIconRed className='menu-button__icon menu-button__icon--red'/>
+            </MenuButton>
+            <MenuButton index={2} direction='left' toggle={true} onToggle={(active: boolean) => {
+                active ? console.log('Timer started') : console.log('Timer ended')
+            }} toggleStartLabel={"START TIMER"} toggleStopLabel={"END TIMER"}>
+                <TimerIconWhite className='menu-button__icon menu-button__icon--white'/>
+                <TimerIconRed className='menu-button__icon menu-button__icon--red'/>
+            </MenuButton>
+            <MenuButton index={3} direction='left' toggle={true} onToggle={(active: boolean) => {
+                active ? console.log('Timer started') : console.log('Timer ended')
+            }} toggleStartLabel={"START TIMER"} toggleStopLabel={"END TIMER"}>
+                <TimerIconWhite className='menu-button__icon menu-button__icon--white'/>
+                <TimerIconRed className='menu-button__icon menu-button__icon--red'/>
+            </MenuButton>
+            <MenuButton index={4} direction='left' toggle={true} onToggle={(active: boolean) => {
                 active ? console.log('Timer started') : console.log('Timer ended')
             }} toggleStartLabel={"START TIMER"} toggleStopLabel={"END TIMER"}>
                 <TimerIconWhite className='menu-button__icon menu-button__icon--white'/>
