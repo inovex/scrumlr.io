@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useSelector } from 'react-redux';
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
@@ -7,7 +6,6 @@ import {ApplicationState} from "types/store";
 import store from "store";
 import {ActionFactory} from "store/action";
 import Parse from 'parse';
-
 
 function Board() {
 
