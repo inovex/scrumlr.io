@@ -3,6 +3,7 @@
 /**
     POSITIONING & SIZING
 */
+$menu-button__first-position-left: 28px;
 
 .menu-button {
   background-color: transparent;
@@ -14,22 +15,17 @@
   width: 36px;
 
   transition: background-color 0.25s ease-in-out, left 2s;
+
+  // TODO cleanup
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
 }
 
-.menu-button1 {
-  left: 28px;
-}
-
-.menu-button2 {
-  left: 86px;
-}
-
-.menu-button3 {
-  left: 145px;
-}
-
-.menu-button4 {
-  left: 203px;
+@for $i from 1 through 5 {
+  .menu-button.menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
 }
 
 .menu-button:hover {
@@ -77,17 +73,19 @@
   z-index: -1;
   overflow: hidden;
 
+  // TODO cleanup
+  border-radius: 32px;
 }
 
 .tooltip-text {
-  margin-left: 36px;
+  margin-left: 72px;
   transition: margin-right 0.5s ease-in-out;
 }
 
 .menu-button__icon {
   left: 0;
   position: absolute;
-  top: 0;
+  top: 14px;
 }
 
 .menu-button__icon--close {
@@ -95,8 +93,6 @@
 }
 
 @media #{$desktop} {
-
-
   .menu-button {
     position: relative;
   }
@@ -177,8 +173,6 @@
     }
   }
 
-
-
   @media (prefers-color-scheme: light) {
     .menu-button__icon--white {
       display: none;
@@ -249,7 +243,6 @@
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       background-color: #FF0069;
       color: #FFFFFF;
-
     }
   }
 
@@ -268,8 +261,21 @@
 
 .menu-button:hover {
 
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+
   .menu-button__tooltip {
-    width: 220px;
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+  }
+
+  .menu-button__icon {
+    left: $menu-button__first-position-left;
   }
 
   .tooltip-text {
