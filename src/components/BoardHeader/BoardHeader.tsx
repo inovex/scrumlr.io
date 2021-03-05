@@ -1,4 +1,3 @@
-import React from 'react';
 import './BoardHeader.scss';
 import lock from 'assets/icon-lock.svg';
 import HeaderLogo from './HeaderLogo/HeaderLogo';
