@@ -24,8 +24,10 @@ const Column = ({ color, columnId } : ColumnProps) => {
         <section className={`column ${getColorClassName(color)}`}>
             <div className="column__content">
                 <header className="column__header">
-                    <h2 className="column__header-text">{state.board.data?.columns.filter((column) => column.id === columnId)[0].name}</h2>
-                    <span className="column__header-card-number">{notesInColumn.length}</span>
+                    <div className="column__header-title">
+                        <h2 className="column__header-text">{state.board.data?.columns.filter((column) => column.id === columnId)[0].name}</h2>
+                        <span className="column__header-card-number">{notesInColumn.length}</span>
+                    </div>
                     <NoteInput columnId={columnId}/>
                 </header>
                 <ul className="column__note-list">

@@ -3,7 +3,7 @@ import './NoteInput.scss';
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "../../store";
 import {ActionFactory} from "../../store/action";
-import { InputAdornment, createStyles, withStyles, Theme, FilledInput, fade } from '@material-ui/core';
+import { InputAdornment, createStyles, withStyles, Theme, FilledInput} from '@material-ui/core';
 
 export interface NoteInputProps {
     columnId : string;
@@ -12,39 +12,50 @@ export interface NoteInputProps {
 const BootstrapInput = withStyles((theme: Theme) =>
     createStyles({
         root: {
-            'label + &': {
-                marginTop: theme.spacing(3),
+            borderRadius: 20,
+            height: 40,
+            width: '100%',
+            backgroundColor: '#EDEFF2',
+            marginTop: 16,
+            marginBottom: 32, 
+            '& .MuiFilledInput-underline:before': {
+                borderBottomColor: 'green',
+                borderBottom: 0,
+                position: 'relative',
+                left: 20,
             },
+            '&:hover': {
+                backgroundColor: 'white',
+                boxShadow: '0 6px 9px 0 rgba(0,87,255,0.16)',
+            },        
+            '&.Mui-focused': {
+                backgroundColor: 'white',
+                boxShadow: '0 6px 9px 0 rgba(0,87,255,0.16)',
+              },
         },
         input: {
-            borderRadius: 4,
-            position: 'relative',
-            backgroundColor: theme.palette.common.white,
-            border: '1px solid #ced4da',
-            fontSize: 16,
-            width: 'auto',
-            padding: '10px 12px',
-            transition: theme.transitions.create(['border-color', 'box-shadow']),
+            color: 'black',
+            fontSize: 14,
+            fontWeight: 'bold', 
+            lineHeight: 24, 
+            letterSpacing: 0.25, 
+            padding: '10px 20px 10px 20px',
+
             // Use the system font instead of the default Roboto font.
             fontFamily: [
-                '-apple-system',
-                'BlinkMacSystemFont',
-                '"Segoe UI"',
-                'Roboto',
-                '"Helvetica Neue"',
-                'Arial',
+                'Raleway',
                 'sans-serif',
-                '"Apple Color Emoji"',
-                '"Segoe UI Emoji"',
-                '"Segoe UI Symbol"',
-            ].join(','),
-            '&:focus': {
-                boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-                borderColor: theme.palette.primary.main,
+            ].join(','), // Ändert sich Schrift? Wie einstellen?
+            disableUnderline: true, // does nothing
+            '& .MuiFilledInput-underline:before': {
+                borderBottomColor: 'green',
+                borderBottom: 0,
+                position: 'relative',
+                left: 20,
             },
-        }, 
+        }
     }),
-    )(FilledInput);
+)(FilledInput);
 
 const NoteInput = ({columnId} : NoteInputProps) => {
     const [value, setValue] = React.useState<string>();
