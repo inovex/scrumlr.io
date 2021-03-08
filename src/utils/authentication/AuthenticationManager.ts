@@ -8,8 +8,8 @@ export const AuthenticationManager = {
 /**
  * Sign in anonymously.
  * 
- * @param displayName Display name of the firebase auth user.
- * @param photoURL Profile photo URL of the firebase auth user.
+ * @param displayName Display name of the parse auth user.
+ * @param photoURL Profile photo URL of the parse auth user.
  * 
  * @returns Promise with user credentials on successful sign in, null otherwise.
  */

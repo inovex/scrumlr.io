@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { HashRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import LoginBoard from './LoginBoard/LoginBoard';

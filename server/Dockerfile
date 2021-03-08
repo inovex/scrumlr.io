@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 COPY . .
-RUN npm install
+RUN yarn install
 
 ENV SCRUMLR_API_HOST=localhost
 ENV SCRUMLR_API_PORT=4000
@@ -10,4 +10,4 @@ ENV SCRUMLR_DATABASE_URI=mongodb://localhost:27017/dev
 ENV SCRUMLR_SERVE_PRODUCTION_WEBAPP=false
 EXPOSE 4000
 
-ENTRYPOINT npm start
+ENTRYPOINT yarn start
