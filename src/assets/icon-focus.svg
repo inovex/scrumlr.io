@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
   <g fill="none" fill-rule="evenodd">
-    <g stroke="#FFF" transform="translate(7 11)">
+    <g stroke="currentColor" transform="translate(7 11)">
       <line x1="16" x2="11" y1="4.011" y2="9" stroke-linejoin="round" stroke-width="1.5"/>
       <polyline stroke-linecap="square" stroke-width="1.5" points="13 4 15.989 4 16 4.011 16 7"/>
       <g stroke-linejoin="round">
@@ -8,6 +8,6 @@
         <line x1="3.5" x2="17.348" y1="13" y2="12.773" stroke-linecap="round" stroke-width="1.5" opacity=".7"/>
       </g>
     </g>
-    <path stroke="#FFF" stroke-width="1.5" d="M24.5253296,7.53387451 L24.0437012,7.53387451 L25.4566238,7.53387451 C27.703708,7.53387451 30.5253296,10.2851856 30.5253296,12.4455374 L30.5253296,13.5338745 L30.5253296,13.9608154" opacity=".7"/>
+    <path stroke="currentColor" stroke-width="1.5" d="M24.5253296,7.53387451 L24.0437012,7.53387451 L25.4566238,7.53387451 C27.703708,7.53387451 30.5253296,10.2851856 30.5253296,12.4455374 L30.5253296,13.5338745 L30.5253296,13.9608154" opacity=".7"/>
   </g>
 </svg>

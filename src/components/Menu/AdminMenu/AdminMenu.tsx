@@ -1,9 +1,9 @@
-import './AdminMenu.scss';
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
+import MenuToggle from "components/Menu/MenuToggle/MenuToggle";
 import {ReactComponent as ColumnIcon} from 'assets/icon-column.svg';
 import {ReactComponent as FocusIcon} from 'assets/icon-focus.svg';
+import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as VoteIcon} from 'assets/icon-vote.svg';
-import MenuToggle from "../MenuToggle/MenuToggle";
+import './AdminMenu.scss';
 
 function AdminMenu() {
     return (<div className='admin-menu'>

@@ -4,8 +4,9 @@ import './MenuToggle.scss';
 
 type MenuToggleProps = {
     children: React.ReactNode;
-    index: number;
     direction: 'left' | 'right';
+    index: number;
+    onToggle?: (active: boolean) => void;
     toggleStartLabel: string;
     toggleStopLabel: string;
 }
