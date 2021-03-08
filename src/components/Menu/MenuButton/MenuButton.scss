@@ -5,7 +5,7 @@
 @media screen and (max-width: 1279px) {
   $menu-button__first-position-left: 28px;
 
-  @for $i from 1 through 5 {
+  @for $i from 1 through 6 {
     .menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
   }
 
@@ -146,13 +146,13 @@
     @media (prefers-color-scheme: light) {
       .menu-button__icon {
         color: #FFFFFF;
-        background-color: #FF0069;
+        background-color: var(--primaryColor);
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-button__icon {
         color: #FFFFFF;
-        background-color: #7C123E;
+        background-color: var(--secondaryColor);
       }
     }
   }
@@ -162,8 +162,11 @@
   .menu-button:hover > .menu-button__icon {
     animation: none;
   }
-  .menu-button:hover > .menu-button__tooltip > .tooltip__text {
+  .menu-button--left:hover > .menu-button__tooltip > .tooltip__text {
     margin-right: 48px;
+  }
+  .menu-button--right:hover > .menu-button__tooltip > .tooltip__text {
+    margin-left: 48px;
   }
 
   .menu-button__icon {
@@ -173,14 +176,14 @@
   }
   @media (prefers-color-scheme: light) {
     .menu-button__icon {
-      color: #FF0069;
+      color: var(--primaryColor);
       background: #FFFFFF;
     }
   }
   @media (prefers-color-scheme: dark) {
     .menu-button__icon {
       color: #FFFFFF;
-      background: #FF0069;
+      background: var(--primaryColor);
     }
   }
 
@@ -210,25 +213,29 @@
     .menu-button__tooltip {
       box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       background-color: #FFFFFF;
-      color: #FF0069;
+      color: var(--primaryColor);
     }
 
   }
   @media (prefers-color-scheme: dark) {
     .menu-button__tooltip {
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: #FF0069;
+      background-color: var(--primaryColor);
       color: #FFFFFF;
     }
   }
 
-  .tooltip__text {
+  .menu-button--right > .menu-button__tooltip > .tooltip__text {
+    margin-left: 36px;
+    transition: margin-left 0.5s ease-in-out;
+  }
+  .menu-button--left > .menu-button__tooltip > .tooltip__text {
     margin-right: 36px;
     transition: margin-right 0.5s ease-in-out;
   }
   @media (prefers-color-scheme: light) {
     .tooltip__text {
-      color: #FF0069;
+      color: var(--primaryColor);
     }
   }
   @media (prefers-color-scheme: dark) {

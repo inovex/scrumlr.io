@@ -1,9 +1,12 @@
-@import "constants/style";
+.admin-menu {
+  --primaryColor: #FF0069;
+  --secondaryColor: #7C123E;
+}
 
 @media screen and (max-width: 1279px) {
   .admin-menu {
     border-radius: 34.5px;
-    bottom: 8px;
+    bottom: 80px;
     height: 64px;
     left: 50%;
     margin-left: -134px;

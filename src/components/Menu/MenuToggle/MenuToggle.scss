@@ -8,7 +8,7 @@
 @media screen and (max-width: 1279px) {
   $menu-toggle__first-position-left: 28px;
 
-  @for $i from 1 through 5 {
+  @for $i from 1 through 6 {
     .menu-toggle#{$i} { left: $menu-toggle__first-position-left + (($i - 1) * 58px); }
   }
 
@@ -161,13 +161,13 @@
     @media (prefers-color-scheme: light) {
       .menu-toggle__icon {
         color: #FFFFFF;
-        background-color: #FF0069;
+        background-color: var(--primaryColor);
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-toggle__icon {
         color: #FFFFFF;
-        background-color: #7C123E;
+        background-color: var(--secondaryColor);
       }
     }
   }
@@ -177,8 +177,11 @@
   .menu-toggle:hover > .menu-toggle__icon {
     animation: none;
   }
-  .menu-toggle:hover > .menu-toggle__tooltip > .tooltip__text {
+  .menu-toggle--left:hover > .menu-toggle__tooltip > .tooltip__text {
     margin-right: 48px;
+  }
+  .menu-toggle--right:hover > .menu-toggle__tooltip > .tooltip__text {
+    margin-left: 48px;
   }
   .menu-toggle--active:hover > .menu-toggle__icon--end {
     display: inline;
@@ -194,14 +197,14 @@
   }
   @media (prefers-color-scheme: light) {
     .menu-toggle__icon {
-      color: #FF0069;
+      color: var(--primaryColor);
       background: #FFFFFF;
     }
   }
   @media (prefers-color-scheme: dark) {
     .menu-toggle__icon {
       color: #FFFFFF;
-      background: #FF0069;
+      background: var(--primaryColor);
     }
   }
   
@@ -235,25 +238,29 @@
     .menu-toggle__tooltip {
       box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       background-color: #FFFFFF;
-      color: #FF0069;
+      color: var(--primaryColor);
     }
 
   }
   @media (prefers-color-scheme: dark) {
     .menu-toggle__tooltip {
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: #FF0069;
+      background-color: var(--primaryColor);
       color: #FFFFFF;
     }
   }
 
-  .tooltip__text {
+  .menu-toggle--right > .menu-toggle__tooltip > .tooltip__text {
+    margin-left: 36px;
+    transition: margin-left 0.5s ease-in-out;
+  }
+  .menu-toggle--left > .menu-toggle__tooltip > .tooltip__text {
     margin-right: 36px;
     transition: margin-right 0.5s ease-in-out;
   }
   @media (prefers-color-scheme: light) {
     .tooltip__text {
-      color: #FF0069;
+      color: var(--primaryColor);
     }
   }
   @media (prefers-color-scheme: dark) {
