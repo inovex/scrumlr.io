@@ -1,8 +1,13 @@
-@import "constants/style";
+.menu-button:focus {
+  outline: none;
+}
 
-// MOBILE
 @media screen and (max-width: 1279px) {
   $menu-button__first-position-left: 28px;
+
+  @for $i from 1 through 5 {
+    .menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
+  }
 
   .menu-button {
     background-color: transparent;
@@ -11,45 +16,33 @@
     padding: 0;
     position: absolute;
     width: 36px;
-
     transition: background-color 0.25s ease-in-out, left 2s;
-
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
     height: 64px;
   }
-
-  @for $i from 1 through 5 {
-    .menu-button.menu-button#{$i} { left: $menu-button__first-position-left + (($i - 1) * 58px); }
-  }
-
   .menu-button:hover {
-
-
-    .menu-button__icon {
-      animation: spin 1.75s linear forwards;
-    }
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
   }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    25% {
-      transform: rotate(-90deg);
-    }
-    50% {
-      transform: rotate(-180deg);
-    }
-    75% {
-      transform: rotate(-270deg);
-    }
-    100% {
-      transform: rotate(-360deg);
-    }
-
+  .menu-button:hover > .menu-button__icon {
+    animation: spinning-icon 1.75s linear forwards;
+  }
+  .menu-button:hover > .menu-button__tooltip {
+    height: 100%;
+    width: 100%;
+  }
+  .menu-button:hover > .menu-button__icon {
+    left: $menu-button__first-position-left;
+  }
+  .menu-button:hover > .tooltip__text {
+    margin-right: 48px;
   }
 
   .menu-button__tooltip {
@@ -66,53 +59,78 @@
     text-align: right;
     white-space: nowrap;
     width: 0;
-    z-index: -1;
     overflow: hidden;
-
-    // TODO cleanup
     border-radius: 32px;
+    background-color: white;
+    transition: background-color 0.25s;
+  }
+  @media (prefers-color-scheme: light) {
+    .menu-button__tooltip {
+      background-color: #FF0069;
+    }
+
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-button__tooltip {
+      background-color: #FFFFFF;
+    }
   }
 
-  .tooltip-text {
+  .tooltip__text {
     margin-left: 72px;
     transition: margin-right 0.5s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  @media (prefers-color-scheme: light) {
+    .tooltip__text {
+      color: #FFFFFF;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .tooltip__text {
+      color: #FF0069;
+    }
   }
 
   .menu-button__icon {
     left: 0;
     position: absolute;
     top: 14px;
+    border-radius: 100%;
   }
-
-  .menu-button__icon--close {
-    display: none;
-  }
-
-  .menu-button:hover {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    width: 100%;
-
-    .menu-button__tooltip {
-      height: 100%;
-      width: 100%;
-      background-color: blue;
-    }
-
+  @media (prefers-color-scheme: light) {
     .menu-button__icon {
-      left: $menu-button__first-position-left;
+      color: #FF0069;
+      background: #FFFFFF;
     }
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-button__icon {
+      color: #FFFFFF;
+      background: #FF0069;
+    }
+  }
 
-    .tooltip-text {
-      margin-right: 48px;
+  @keyframes spinning-icon {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(-90deg);
+    }
+    50% {
+      transform: rotate(-180deg);
+    }
+    75% {
+      transform: rotate(-270deg);
+    }
+    100% {
+      transform: rotate(-360deg);
     }
   }
 }
 
-// DESKTOP
 @media screen and (min-width: 1280px) {
   .menu-button {
     border: none;
@@ -124,23 +142,46 @@
     position: relative;
     transition: background-color 0.25s ease-in-out, left 2s;
   }
+  .menu-button:hover {
+    @media (prefers-color-scheme: light) {
+      .menu-button__icon {
+        color: #FFFFFF;
+        background-color: #FF0069;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      .menu-button__icon {
+        color: #FFFFFF;
+        background-color: #7C123E;
+      }
+    }
+  }
   .menu-button:hover > .menu-button__tooltip {
-    width: 220px;
+    width: 230px;
   }
   .menu-button:hover > .menu-button__icon {
     animation: none;
   }
-  .menu-button:hover > .menu-button__tooltip > .tooltip-text {
+  .menu-button:hover > .menu-button__tooltip > .tooltip__text {
     margin-right: 48px;
   }
 
   .menu-button__icon {
     top: 0;
     left: 0;
-    z-index: 3;
+    border-radius: 100%;
   }
-  .menu-button__icon--close {
-    display: none;
+  @media (prefers-color-scheme: light) {
+    .menu-button__icon {
+      color: #FF0069;
+      background: #FFFFFF;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-button__icon {
+      color: #FFFFFF;
+      background: #FF0069;
+    }
   }
 
   .menu-button__tooltip {
@@ -162,19 +203,43 @@
     width: 0;
     z-index: -1;
     overflow: hidden;
-
     right: 0;
     transition: width 0.25s ease-in-out;
   }
-  .tooltip-text {
+  @media (prefers-color-scheme: light) {
+    .menu-button__tooltip {
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+      background-color: #FFFFFF;
+      color: #FF0069;
+    }
+
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-button__tooltip {
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+      background-color: #FF0069;
+      color: #FFFFFF;
+    }
+  }
+
+  .tooltip__text {
     margin-right: 36px;
     transition: margin-right 0.5s ease-in-out;
+  }
+  @media (prefers-color-scheme: light) {
+    .tooltip__text {
+      color: #FF0069;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .tooltip__text {
+      color: #FFFFFF;
+    }
   }
 
   .menu-button--left {
     .menu-button__tooltip {
       direction: rtl;
-
       right: 0;
       top: 0;
     }
@@ -183,162 +248,7 @@
     .menu-button__tooltip {
       direction: ltr;
       left: 0;
-
       top: 0
     }
   }
-
-  @media (prefers-color-scheme: light) {
-    .menu-button__icon--white {
-      display: none;
-    }
-
-    .menu-button__tooltip {
-      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      background-color: #FFFFFF;
-      color: #FF0069;
-    }
-
-    .menu-button--active:hover {
-
-      .menu-button__icon--close {
-        display: inline;
-      }
-
-      .menu-button__icon--white {
-        display: none;
-      }
-
-    }
-
-    .menu-button--disabled:hover {
-      background-color: #FF0069;
-
-      .menu-button__icon--red {
-        display: none;
-      }
-
-      .menu-button__icon--white {
-        display: inline;
-      }
-    }
-
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .menu-button__icon--red {
-      display: none;
-    }
-
-    .menu-button:hover {
-      background-color: #7C123E;
-    }
-
-    .menu-button--active:hover {
-      .menu-button__icon--close {
-        display: inline;
-      }
-
-      .menu-button__icon--white {
-        display: none;
-      }
-    }
-
-    .menu-button--disabled:hover {
-      .menu-button__icon--red {
-        display: none;
-      }
-
-      .menu-button__icon--white {
-        display: inline;
-      }
-    }
-
-    .menu-button__tooltip {
-      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: #FF0069;
-      color: #FFFFFF;
-    }
-  }
-
 }
-
-
-.menu-button:focus {
-  outline: none;
-}
-
-/**
-    COLORING
-*/
-@media (prefers-color-scheme: light) {
-  .menu-button__icon--white {
-    display: none;
-  }
-
-  .menu-button__tooltip {
-    background-color: #FFFFFF;
-    color: #FF0069;
-  }
-
-  .menu-button--active:hover {
-
-    .menu-button__icon--close {
-      display: inline;
-    }
-
-    .menu-button__icon--white {
-      display: none;
-    }
-
-  }
-
-  .menu-button--disabled:hover {
-    background-color: #FF0069;
-
-    .menu-button__icon--red {
-      display: none;
-    }
-
-    .menu-button__icon--white {
-      display: inline;
-    }
-  }
-  
-}
-
-@media (prefers-color-scheme: dark) {
-  .menu-button__icon--red {
-    display: none;
-  }
-
-  .menu-button:hover {
-    background-color: #7C123E;
-  }
-
-  .menu-button--active:hover {
-    .menu-button__icon--close {
-      display: inline;
-    }
-
-    .menu-button__icon--white {
-      display: none;
-    }
-  }
-
-  .menu-button--disabled:hover {
-    .menu-button__icon--red {
-      display: none;
-    }
-
-    .menu-button__icon--white {
-      display: inline;
-    }
-  }
-
-  .menu-button__tooltip {
-    background-color: #FF0069;
-    color: #FFFFFF;
-
-  }
-} 

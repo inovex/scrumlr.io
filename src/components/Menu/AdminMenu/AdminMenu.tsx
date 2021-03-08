@@ -1,7 +1,7 @@
-import MenuToggle from "components/Menu/MenuToggle/MenuToggle";
+import MenuToggle from 'components/Menu/MenuToggle/MenuToggle';
 import {ReactComponent as ColumnIcon} from 'assets/icon-column.svg';
 import {ReactComponent as FocusIcon} from 'assets/icon-focus.svg';
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
+import {ReactComponent as TimerIcon} from 'assets/icon-timer.svg';
 import {ReactComponent as VoteIcon} from 'assets/icon-vote.svg';
 import './AdminMenu.scss';
 
