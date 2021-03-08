@@ -1,36 +1,30 @@
 @import "constants/style";
 
-.admin-menu {
-  border-radius: 34.5px;
-  bottom: 8px;
-  height: 64px;
-  left: 50%;
-  margin-left: -134px;
-  position: fixed;
-  width: 268px;
-  overflow: hidden;
-}
-
-@media #{$desktop} {
+@media screen and (max-width: 1279px) {
   .admin-menu {
-    overflow: visible;
+    border-radius: 34.5px;
+    bottom: 8px;
+    height: 64px;
+    left: 50%;
+    margin-left: -134px;
+    overflow: hidden;
+    position: fixed;
+    width: 268px;
+  }
+
+  .admin-menu__items {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: relative;
   }
 }
 
-.admin-menu__items {
-  align-items: center;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  justify-content: space-between;
-  padding: 0 28px;
-
-  position: relative;
-}
-
-
-@media #{$desktop} {
+@media screen and (min-width: 1280px) {
   .admin-menu {
     border-radius: 34.5px;
     height: 268px;
@@ -39,14 +33,21 @@
     right: 8px;
     top: 50%;
     width: 64px;
+    overflow: visible;
+    position: fixed;
   }
 
   .admin-menu__items {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
     flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
     padding: 28px 0;
+    position: relative;
   }
 }
-
 
 @media (prefers-color-scheme: light) {
   .admin-menu {
