@@ -15,7 +15,7 @@ function MenuToggle(props: MenuToggleProps) {
     const [status, setStatus] = useState(false);
 
     return (<button 
-                className={`menu-toggle menu-toggle${props.index} menu-toggle${status ? '--active' : '--disabled'}`}
+                className={`menu-toggle menu-toggle${props.index} menu-toggle${status ? '--active' : '--disabled'} menu-toggle--${props.direction}`}
                 onClick={_ => setStatus(prevValue => !prevValue)}
             >
         <div className='menu-toggle__tooltip'>

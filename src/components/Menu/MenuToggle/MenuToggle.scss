@@ -32,6 +32,7 @@
     bottom: 0;
     height: 100%;
     width: 100%;
+    z-index: 20;
   }
   .menu-toggle:hover > .menu-toggle__icon {
     animation: spinning-icon 1.75s linear forwards;
@@ -69,6 +70,8 @@
     width: 0;
     overflow: hidden;
     border-radius: 32px;
+    background-color: white;
+    transition: background-color 0.25s;
   }
   @media (prefers-color-scheme: light) {
     .menu-toggle__tooltip {
@@ -81,6 +84,7 @@
       background-color: #FFFFFF;
     }
   }
+  
 
   .tooltip__text {
     margin-left: 72px;
@@ -106,24 +110,14 @@
     border-radius: 100%;
   }
   @media (prefers-color-scheme: light) {
-    .menu-toggle__icon path {
-      stroke: #FF0069;
-    }
-    .menu-toggle__icon line {
-      stroke: #FF0069;
-    }
     .menu-toggle__icon {
+      color: #FF0069;
       background: #FFFFFF;
     }
   }
   @media (prefers-color-scheme: dark) {
-    .menu-toggle__icon path {
-      stroke: #FFFFFF;
-    }
-    .menu-toggle__icon line {
-      stroke: #FFFFFF;
-    }
     .menu-toggle__icon {
+      color: #FFFFFF;
       background: #FF0069;
     }
   }
@@ -154,6 +148,134 @@
 
 // DESKTOP
 @media screen and (min-width: 1280px) {
+  .menu-toggle {
+    border: none;
+    border-radius: 18px;
+    padding: 0;
+    background-color: transparent;
+    height: 36px;
+    width: 36px;
+    position: relative;
+    transition: background-color 0.25s ease-in-out, left 2s;
+  }
+  .menu-toggle:hover {
+    @media (prefers-color-scheme: light) {
+      .menu-toggle__icon {
+        color: #FFFFFF;
+        background-color: #FF0069;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      .menu-toggle__icon {
+        color: #FFFFFF;
+        background-color: #7C123E;
+      }
+    }
+  }
+  .menu-toggle:hover > .menu-toggle__tooltip {
+    width: 220px;
+  }
+  .menu-toggle:hover > .menu-toggle__icon {
+    animation: none;
+  }
+  .menu-toggle:hover > .menu-toggle__tooltip > .tooltip__text {
+    margin-right: 48px;
+  }
+  .menu-toggle--active:hover > .menu-toggle__icon--end {
+    display: inline;
+  }
+  .menu-toggle--active:hover > .menu-toggle__icon--start {
+    display: none;
+  }
+
+  .menu-toggle__icon {
+    top: 0;
+    left: 0;
+    border-radius: 100%;
+  }
+  @media (prefers-color-scheme: light) {
+    .menu-toggle__icon {
+      color: #FF0069;
+      background: #FFFFFF;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-toggle__icon {
+      color: #FFFFFF;
+      background: #FF0069;
+    }
+  }
+  .menu-toggle__icon--end {
+    display: none;
+  }
+
+  .menu-toggle__tooltip {
+    position: absolute;
+    animation: none;
+    border-radius: 16px;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Raleway', serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 36px;
+    letter-spacing: 1px;
+    line-height: 16px;
+    padding: 0;
+    text-align: right;
+    white-space: nowrap;
+    width: 0;
+    z-index: -1;
+    overflow: hidden;
+    right: 0;
+    transition: width 0.25s ease-in-out;
+  }
+  @media (prefers-color-scheme: light) {
+    .menu-toggle__tooltip {
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+      background-color: #FFFFFF;
+      color: #FF0069;
+    }
+
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-toggle__tooltip {
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+      background-color: #FF0069;
+      color: #FFFFFF;
+    }
+  }
+
+  .tooltip__text {
+    margin-right: 36px;
+    transition: margin-right 0.5s ease-in-out;
+  }
+  @media (prefers-color-scheme: light) {
+    .tooltip__text {
+      color: #FF0069;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .tooltip__text {
+      color: #FFFFFF;
+    }
+  }
+
+  .menu-toggle--left {
+    .menu-toggle__tooltip {
+      direction: rtl;
+      right: 0;
+      top: 0;
+    }
+  }
+  .menu-toggle--right {
+    .menu-toggle__tooltip {
+      direction: ltr;
+      left: 0;
+      top: 0
+    }
+  }
 
 }
 
