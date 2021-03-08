@@ -1,9 +1,6 @@
 @import "constants/style";
 
-/**
-    POSITIONING & SIZING
-*/
-
+// MOBILE
 @media screen and (max-width: 1279px) {
   $menu-button__first-position-left: 28px;
 
@@ -17,7 +14,6 @@
 
     transition: background-color 0.25s ease-in-out, left 2s;
 
-    // TODO cleanup
     top: 0;
     left: 0;
     right: 0;
@@ -30,7 +26,7 @@
   }
 
   .menu-button:hover {
-    left: 28px;
+
 
     .menu-button__icon {
       animation: spin 1.75s linear forwards;
@@ -93,7 +89,6 @@
   }
 
   .menu-button:hover {
-
     top: 0;
     left: 0;
     right: 0;
@@ -117,6 +112,7 @@
   }
 }
 
+// DESKTOP
 @media screen and (min-width: 1280px) {
   .menu-button {
     border: none;
@@ -267,9 +263,6 @@
 
 }
 
-/**
-    TRANSITIONS
-*/
 
 .menu-button:focus {
   outline: none;
@@ -348,4 +341,4 @@
     color: #FFFFFF;
 
   }
-}
+} 
