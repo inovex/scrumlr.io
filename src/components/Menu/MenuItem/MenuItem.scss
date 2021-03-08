@@ -1,18 +1,16 @@
-@import "constants/style";
-
-.menu-toggle:focus {
+.menu-item:focus {
   outline: none;
 }
 
 // MOBILE
 @media screen and (max-width: 1279px) {
-  $menu-toggle__first-position-left: 28px;
+  $menu-item__first-position-left: 28px;
 
   @for $i from 1 through 6 {
-    .menu-toggle#{$i} { left: $menu-toggle__first-position-left + (($i - 1) * 58px); }
+    .menu-item#{$i} { left: $menu-item__first-position-left + (($i - 1) * 58px); }
   }
 
-  .menu-toggle {
+  .menu-item {
     background-color: transparent;
     border: none;
     border-radius: 18px;
@@ -25,7 +23,7 @@
     bottom: 0;
     height: 64px;
   }
-  .menu-toggle:hover {
+  .menu-item:hover {
     left: 0;
     top: 0;
     right: 0;
@@ -34,27 +32,27 @@
     width: 100%;
     z-index: 20;
   }
-  .menu-toggle:hover > .menu-toggle__icon {
+  .menu-item:hover > .menu-item__icon {
     animation: spinning-icon 1.75s linear forwards;
   }
-  .menu-toggle:hover > .menu-toggle__tooltip {
+  .menu-item:hover > .menu-item__tooltip {
     height: 100%;
     width: 100%;
   }
-  .menu-toggle:hover > .menu-toggle__icon {
-    left: $menu-toggle__first-position-left;
+  .menu-item:hover > .menu-item__icon {
+    left: $menu-item__first-position-left;
   }
-  .menu-toggle:hover > .tooltip__text {
+  .menu-item:hover > .tooltip__text {
     margin-right: 48px;
   }
-  .menu-toggle--active:hover > .menu-toggle__icon--end {
+  .menu-item--active:hover > .menu-item__icon--end {
     display: inline;
   }
-  .menu-toggle--active:hover > .menu-toggle__icon--start {
+  .menu-item--active:hover > .menu-item__icon--start {
     display: none;
   }
 
-  .menu-toggle__tooltip {
+  .menu-item__tooltip {
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -74,13 +72,13 @@
     transition: background-color 0.25s;
   }
   @media (prefers-color-scheme: light) {
-    .menu-toggle__tooltip {
-      background-color: #FF0069;
+    .menu-item__tooltip {
+      background-color: var(--primaryColor);
     }
 
   }
   @media (prefers-color-scheme: dark) {
-    .menu-toggle__tooltip {
+    .menu-item__tooltip {
       background-color: #FFFFFF;
     }
   }
@@ -99,31 +97,27 @@
   }
   @media (prefers-color-scheme: dark) {
     .tooltip__text {
-      color: #FF0069;
+      color: var(--primaryColor);
     }
   }
 
-  .menu-toggle__icon {
+  .menu-item__icon {
     left: 0;
     position: absolute;
     top: 14px;
     border-radius: 100%;
   }
   @media (prefers-color-scheme: light) {
-    .menu-toggle__icon {
-      color: #FF0069;
+    .menu-item__icon {
+      color: var(--primaryColor);
       background: #FFFFFF;
     }
   }
   @media (prefers-color-scheme: dark) {
-    .menu-toggle__icon {
+    .menu-item__icon {
       color: #FFFFFF;
-      background: #FF0069;
+      background: var(--primaryColor);
     }
-  }
-
-  .menu-toggle__icon--close {
-    display: none;
   }
 
   @keyframes spinning-icon {
@@ -147,7 +141,7 @@
 
 // DESKTOP
 @media screen and (min-width: 1280px) {
-  .menu-toggle {
+  .menu-item {
     border: none;
     border-radius: 18px;
     padding: 0;
@@ -157,62 +151,62 @@
     position: relative;
     transition: background-color 0.25s ease-in-out, left 2s;
   }
-  .menu-toggle:hover {
+  .menu-item:hover {
     @media (prefers-color-scheme: light) {
-      .menu-toggle__icon {
+      .menu-item__icon {
         color: #FFFFFF;
         background-color: var(--primaryColor);
       }
     }
     @media (prefers-color-scheme: dark) {
-      .menu-toggle__icon {
+      .menu-item__icon {
         color: #FFFFFF;
         background-color: var(--secondaryColor);
       }
     }
   }
-  .menu-toggle:hover > .menu-toggle__tooltip {
+  .menu-item:hover > .menu-item__tooltip {
     width: 230px;
   }
-  .menu-toggle:hover > .menu-toggle__icon {
+  .menu-item:hover > .menu-item__icon {
     animation: none;
   }
-  .menu-toggle--left:hover > .menu-toggle__tooltip > .tooltip__text {
+  .menu-item--left:hover > .menu-item__tooltip > .tooltip__text {
     margin-right: 48px;
   }
-  .menu-toggle--right:hover > .menu-toggle__tooltip > .tooltip__text {
+  .menu-item--right:hover > .menu-item__tooltip > .tooltip__text {
     margin-left: 48px;
   }
-  .menu-toggle--active:hover > .menu-toggle__icon--end {
+  .menu-item--active:hover > .menu-item__icon--end {
     display: inline;
   }
-  .menu-toggle--active:hover > .menu-toggle__icon--start {
+  .menu-item--active:hover > .menu-item__icon--start {
     display: none;
   }
 
-  .menu-toggle__icon {
+  .menu-item__icon {
     top: 0;
     left: 0;
     border-radius: 100%;
   }
   @media (prefers-color-scheme: light) {
-    .menu-toggle__icon {
+    .menu-item__icon {
       color: var(--primaryColor);
       background: #FFFFFF;
     }
   }
   @media (prefers-color-scheme: dark) {
-    .menu-toggle__icon {
+    .menu-item__icon {
       color: #FFFFFF;
       background: var(--primaryColor);
     }
   }
   
-  .menu-toggle__icon--end {
+  .menu-item__icon--end {
     display: none;
   }
 
-  .menu-toggle__tooltip {
+  .menu-item__tooltip {
     position: absolute;
     animation: none;
     border-radius: 16px;
@@ -235,7 +229,7 @@
     transition: width 0.25s ease-in-out;
   }
   @media (prefers-color-scheme: light) {
-    .menu-toggle__tooltip {
+    .menu-item__tooltip {
       box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       background-color: #FFFFFF;
       color: var(--primaryColor);
@@ -243,18 +237,18 @@
 
   }
   @media (prefers-color-scheme: dark) {
-    .menu-toggle__tooltip {
+    .menu-item__tooltip {
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       background-color: var(--primaryColor);
       color: #FFFFFF;
     }
   }
 
-  .menu-toggle--right > .menu-toggle__tooltip > .tooltip__text {
+  .menu-item--right > .menu-item__tooltip > .tooltip__text {
     margin-left: 36px;
     transition: margin-left 0.5s ease-in-out;
   }
-  .menu-toggle--left > .menu-toggle__tooltip > .tooltip__text {
+  .menu-item--left > .menu-item__tooltip > .tooltip__text {
     margin-right: 36px;
     transition: margin-right 0.5s ease-in-out;
   }
@@ -269,20 +263,18 @@
     }
   }
 
-  .menu-toggle--left {
-    .menu-toggle__tooltip {
+  .menu-item--left {
+    .menu-item__tooltip {
       direction: rtl;
       right: 0;
       top: 0;
     }
   }
-  .menu-toggle--right {
-    .menu-toggle__tooltip {
+  .menu-item--right {
+    .menu-item__tooltip {
       direction: ltr;
       left: 0;
       top: 0
     }
   }
 }
-
-

@@ -1,5 +1,5 @@
 import React from 'react';
-import './MenuButton.scss';
+import './MenuItem.scss';
 
 type MenuButtonProps = {
     children: React.ReactNode;
@@ -12,10 +12,10 @@ type MenuButtonProps = {
 function MenuButton(props: MenuButtonProps) {
 
     return (<button 
-                className={`menu-button menu-button${props.index} menu-button--${props.direction}`}
+                className={`menu-item menu-item${props.index} menu-item--${props.direction}`}
                 onClick={props.onClick}
             >
-        <div className='menu-button__tooltip'>
+        <div className='menu-item__tooltip'>
             <span className='tooltip__text'>
                 {props.label}
             </span>

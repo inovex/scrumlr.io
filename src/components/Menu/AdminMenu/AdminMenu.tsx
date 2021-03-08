@@ -1,4 +1,4 @@
-import MenuToggle from 'components/Menu/MenuToggle/MenuToggle';
+import MenuToggle from 'components/Menu/MenuItem/MenuToggle';
 import {ReactComponent as ColumnIcon} from 'assets/icon-column.svg';
 import {ReactComponent as FocusIcon} from 'assets/icon-focus.svg';
 import {ReactComponent as TimerIcon} from 'assets/icon-timer.svg';
@@ -9,16 +9,16 @@ function AdminMenu() {
     return (<div className='admin-menu'>
         <div className='admin-menu__items'>
             <MenuToggle index={1} direction='left' toggleStartLabel='START COLUMN MODE' toggleStopLabel='END COLUMN MODE'>
-                <ColumnIcon className='menu-toggle__icon menu-toggle__icon--start'/>
+                <ColumnIcon className='menu-item__icon menu-item__icon--start'/>
             </MenuToggle>
             <MenuToggle index={2} direction='left' toggleStartLabel='START TIMER' toggleStopLabel='STOP TIMER'>
-                <TimerIcon className='menu-toggle__icon menu-toggle__icon--start'/>
+                <TimerIcon className='menu-item__icon menu-item__icon--start'/>
             </MenuToggle>
             <MenuToggle index={3} direction='left' toggleStartLabel='START VOTING PHASE' toggleStopLabel='END VOTING PHASE'>
-                <VoteIcon className='menu-toggle__icon menu-toggle__icon--start'/>
+                <VoteIcon className='menu-item__icon menu-item__icon--start'/>
             </MenuToggle>
             <MenuToggle index={4} direction='left' toggleStartLabel='START FOCUSED MODE' toggleStopLabel='END FOCUSED MODE'>
-                <FocusIcon className='menu-toggle__icon menu-toggle__icon--start'/>
+                <FocusIcon className='menu-item__icon menu-item__icon--start'/>
             </MenuToggle>
         </div>
     </div>);

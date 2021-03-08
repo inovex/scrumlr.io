@@ -1,6 +1,11 @@
-import MenuButton from 'components/Menu/MenuButton/MenuButton';
-import MenuToggle from 'components/Menu/MenuToggle/MenuToggle';
-import {ReactComponent as TimerIcon} from 'assets/icon-timer.svg';
+import MenuButton from 'components/Menu/MenuItem/MenuButton';
+import MenuToggle from 'components/Menu/MenuItem/MenuToggle';
+import {ReactComponent as AddCardIcon} from 'assets/icon-addcard.svg';
+import {ReactComponent as AddDrawingIcon} from 'assets/icon-adddrawing.svg';
+import {ReactComponent as AddImageIcon} from 'assets/icon-addimage.svg';
+import {ReactComponent as AddStickerIcon} from 'assets/icon-addsticker.svg';
+import {ReactComponent as CheckIcon} from 'assets/icon-check.svg';
+import {ReactComponent as SettingsIcon} from 'assets/icon-settings.svg';
 import './UserMenu.scss';
 
 function UserMenu() {
@@ -9,22 +14,22 @@ function UserMenu() {
         <div className='user-menu'>
             <div className='user-menu__items'>
                 <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
-                    <TimerIcon className='menu-toggle__icon menu-toggle__icon--start'/>
+                    <CheckIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuToggle>
                 <MenuButton index={2} direction='right' label='WRITE & ADD CARD'>
-                    <TimerIcon className='menu-button__icon menu-button__icon--start'/>
+                    <AddCardIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
                 <MenuButton index={3} direction='right' label='ADD IMAGE OR GIPHY'>
-                    <TimerIcon className='menu-button__icon menu-button__icon--start'/>
+                    <AddImageIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
                 <MenuButton index={4} direction='right' label='ADD DRAWING'>
-                    <TimerIcon className='menu-button__icon menu-button__icon--start'/>
+                    <AddDrawingIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
                 <MenuButton index={5} direction='right' label='ADD STICKER'>
-                    <TimerIcon className='menu-button__icon menu-button__icon--start'/>
+                    <AddStickerIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
                 <MenuButton index={6} direction='right' label='SETTINGS'>
-                    <TimerIcon className='menu-button__icon menu-button__icon--start'/>
+                    <SettingsIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
             </div>
         </div>
