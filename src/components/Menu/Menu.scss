@@ -5,8 +5,15 @@
 @media screen and (max-width: 1279px) {
 
     .menu-bars {
+        width: 100%;
         display: flex;
         flex-direction: row;
+        bottom: 8px;
+        justify-content: space-evenly;
+    }
+
+    .menu-bars__switch:focus {
+      outline: none;
     }
     
     .menu-bars__switch {
