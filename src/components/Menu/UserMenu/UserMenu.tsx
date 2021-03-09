@@ -1,7 +1,5 @@
 import MenuButton from 'components/Menu/MenuItem/MenuButton';
 import MenuToggle from 'components/Menu/MenuItem/MenuToggle';
-import {ReactComponent as AddCardIcon} from 'assets/icon-addcard.svg';
-import {ReactComponent as AddDrawingIcon} from 'assets/icon-adddrawing.svg';
 import {ReactComponent as AddImageIcon} from 'assets/icon-addimage.svg';
 import {ReactComponent as AddStickerIcon} from 'assets/icon-addsticker.svg';
 import {ReactComponent as CheckIcon} from 'assets/icon-check.svg';
@@ -16,19 +14,13 @@ function UserMenu() {
                 <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
                     <CheckIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuToggle>
-                <MenuButton index={2} direction='right' label='WRITE & ADD CARD'>
-                    <AddCardIcon className='menu-item__icon menu-item__icon--start'/>
-                </MenuButton>
-                <MenuButton index={3} direction='right' label='ADD IMAGE OR GIPHY'>
+                <MenuButton index={2} direction='right' label='ADD IMAGE OR GIPHY'>
                     <AddImageIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
-                <MenuButton index={4} direction='right' label='ADD DRAWING'>
-                    <AddDrawingIcon className='menu-item__icon menu-item__icon--start'/>
-                </MenuButton>
-                <MenuButton index={5} direction='right' label='ADD STICKER'>
+                <MenuButton index={3} direction='right' label='ADD STICKER'>
                     <AddStickerIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
-                <MenuButton index={6} direction='right' label='SETTINGS'>
+                <MenuButton index={4} direction='right' label='SETTINGS'>
                     <SettingsIcon className='menu-item__icon menu-item__icon--start'/>
                 </MenuButton>
             </div>
