@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {ReactComponent as CloseIcon} from "assets/icon-close-white.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import './MenuItem.scss';
 
 type MenuToggleProps = {
