@@ -17,8 +17,8 @@ function Menu() {
 
     return (
         <div className={`menu-bars menu-bars--${showAdminMenu ? 'admin' : 'user'}`}>
-            <div className='user-menu'>
-                <div className='user-menu__items'>
+            <div className='menu user-menu'>
+                <div className='menu__items'>
                     <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
                         <CheckIcon className='menu-item__icon menu-it em__icon--start' />
                     </MenuToggle>
@@ -33,8 +33,8 @@ function Menu() {
                     </MenuButton>
                 </div>
             </div>
-            <div className='admin-menu'>
-                <div className='admin-menu__items'>
+            <div className='menu admin-menu'>
+                <div className='menu__items'>
                     <MenuToggle index={1} direction='left' toggleStartLabel='START COLUMN MODE' toggleStopLabel='END COLUMN MODE'>
                         <ColumnIcon className='menu-item__icon menu-item__icon--start' />
                     </MenuToggle>
