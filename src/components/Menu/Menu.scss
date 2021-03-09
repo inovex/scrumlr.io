@@ -1,16 +1,33 @@
 .menu-bars {
-    height: 100%;
     position: fixed;
 }
 
 @media screen and (max-width: 1279px) {
+
+    .menu-bars {
+        display: flex;
+        flex-direction: row;
+    }
+    
     .menu-bars__switch {
         height: 64px;
         width: 64px;
         padding: 0;
         border: 0;
         border-radius: 100%;
+    }
+
+    .menu-bars--user > .menu-bars__switch {
+        background-color: #FF0069;
+    }
+    .menu-bars--user > .user-menu {
+        display: inline;
+    }
+    .menu-bars--admin > .menu-bars__switch {
         background-color: #0057FF;
+    }
+    .menu-bars--admin > .admin-menu {
+        display: inline;
     }
     
     .switch__icon {
@@ -34,13 +51,10 @@
 @media screen and (max-width: 1279px) {
     .user-menu {
       border-radius: 34.5px;
-      bottom: 8px;
       height: 64px;
-      left: 50%;
-      margin-left: -134px;
       overflow: hidden;
-      position: fixed;
       width: 268px;
+      display: none;
     }
   
     .user-menu__items {
@@ -102,13 +116,10 @@
 @media screen and (max-width: 1279px) {
   .admin-menu {
     border-radius: 34.5px;
-    bottom: 80px;
     height: 64px;
-    left: 50%;
-    margin-left: -134px;
     overflow: hidden;
-    position: fixed;
     width: 268px;
+    display: none;
   }
 
   .admin-menu__items {

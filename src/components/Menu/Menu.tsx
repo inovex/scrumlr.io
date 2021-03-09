@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import MenuButton from 'components/Menu/MenuItem/MenuButton';
 import MenuToggle from 'components/Menu/MenuItem/MenuToggle';
 import { ReactComponent as AddImageIcon } from 'assets/icon-addimage.svg';
@@ -12,8 +13,10 @@ import './Menu.scss';
 
 function Menu() {
 
+    const [showAdminMenu, toggleMenus] = useState(false); 
+
     return (
-        <div className='menu-bars'>
+        <div className={`menu-bars menu-bars--${showAdminMenu ? 'admin' : 'user'}`}>
             <div className='user-menu'>
                 <div className='user-menu__items'>
                     <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
@@ -46,7 +49,7 @@ function Menu() {
                     </MenuToggle>
                 </div>
             </div>
-            <button className='menu-bars__switch'>
+            <button className='menu-bars__switch' onClick={_ => toggleMenus(prevState => !prevState)}>
                 <VoteIcon className='switch__icon'/>
             </button>
         </div>
