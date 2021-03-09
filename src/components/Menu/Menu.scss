@@ -24,8 +24,23 @@
     margin-left: 268px;
   }
 
-  .menu-bars--user > .menu-bars__switch {
-    background-color: #ff0069;
+  .menu-bars--user {
+    @media (prefers-color-scheme: light) {
+      .menu-bars__switch {
+        background-color: #FFFFFF;
+      }
+      .menu-bars__switch > .switch__icon {
+        color: #ff0069;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      .menu-bars__switch {
+        background-color: #ff0069;
+      }
+      .menu-bars__switch > .switch__icon {
+        color: #FFFFFF;
+      }
+    }
   }
   .menu-bars--user > .user-menu {
     visibility: visible;
@@ -37,8 +52,23 @@
     opacity: 0;
     bottom: 72px;
   }
-  .menu-bars--admin > .menu-bars__switch {
-    background-color: #0057ff;
+  .menu-bars--admin {
+    @media (prefers-color-scheme: light) {
+      .menu-bars__switch {
+        background-color: #FFFFFF;
+      }
+      .menu-bars__switch > .switch__icon {
+        color: #0057ff;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      .menu-bars__switch {
+        background-color: #0057ff;
+      }
+      .menu-bars__switch > .switch__icon {
+        color: #FFFFFF;
+      }
+    }
   }
   .menu-bars--admin > .admin-menu {
     visibility: visible;
@@ -54,7 +84,6 @@
   .switch__icon {
     top: 0;
     left: 0;
-    color: white;
   }
 }
 

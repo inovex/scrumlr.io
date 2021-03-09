@@ -54,16 +54,16 @@
   }
   .menu-item:active > .menu-item__icon {
     left: $menu-item__first-position-left;
-    transition: left 2s 0.5s;
+    transition: left 2s 0.5s, visibility 0s 0.5s;
   }
   .menu-item:active > .tooltip__text {
     margin-right: 48px;
   }
   .menu-item--active:active > .menu-item__icon--end {
-    display: inline;
+    visibility: visible;
   }
   .menu-item--active:active > .menu-item__icon--start {
-    display: none;
+    visibility: hidden;
   }
 
   .menu-item__tooltip {
@@ -119,6 +119,10 @@
       color: #FFFFFF;
       background: var(--primaryColor);
     }
+  }
+
+  .menu-item__icon--end {
+    visibility: hidden;
   }
 
   @keyframes spinning-icon {

@@ -20,7 +20,7 @@ function Menu() {
             <div className='menu user-menu'>
                 <div className='menu__items'>
                     <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
-                        <CheckIcon className='menu-item__icon menu-it em__icon--start' />
+                        <CheckIcon className='menu-item__icon menu-item__icon--start' />
                     </MenuToggle>
                     <MenuButton index={2} direction='right' label='ADD IMAGE OR GIPHY'>
                         <AddImageIcon className='menu-item__icon menu-item__icon--start' />
