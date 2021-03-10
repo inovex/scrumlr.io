@@ -2,7 +2,7 @@ import './Column.scss';
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
 import Note from "components/Note/Note";
-import {ApplicationState} from "../../types/store";
+import {ApplicationState} from "types/store";
 import { useSelector } from 'react-redux';
 
 export interface ColumnProps {

@@ -1,7 +1,7 @@
 import './Note.scss';
 import avatar from 'assets/avatar.png';
 import { useSelector } from 'react-redux';
-import {ApplicationState} from "../../types/store";
+import {ApplicationState} from "types/store";
 import classNames from 'classnames';
 import Parse from 'parse';
 

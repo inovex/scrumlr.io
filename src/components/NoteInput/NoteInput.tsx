@@ -1,8 +1,8 @@
 import React from 'react';
 import './NoteInput.scss';
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
-import store from "../../store";
-import {ActionFactory} from "../../store/action";
+import store from "store";
+import {ActionFactory} from "store/action";
 import { InputAdornment, createStyles, withStyles, Theme, FilledInput} from '@material-ui/core';
 
 export interface NoteInputProps {
@@ -61,15 +61,14 @@ const CustomInput = withStyles((theme: Theme) =>
 )(FilledInput);
 
 const NoteInput = ({columnId} : NoteInputProps) => {
-    const [value, setValue] = React.useState<string>();
-    // Parameter = Startwert, wenn parameter gegeben ist type reference nicht nötig
+    const [value, setValue] = React.useState("");
 
     function handleChangeNotetext(e: React.ChangeEvent <HTMLInputElement>) {
         setValue(e.target.value);
     }
     const onAddNote = () => {
         if (value) {
-            store.dispatch(ActionFactory.addNote(columnId!, value!));
+            store.dispatch(ActionFactory.addNote(columnId!, value));
             setValue("");
         } 
     }
