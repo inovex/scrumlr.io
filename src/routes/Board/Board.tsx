@@ -37,7 +37,7 @@ function Board() {
                         {state.board.data!.columns.map((column:any) => (
                             <Column color="pink" key={column.id} columnId={column.id}/>
                         ))}
-                </BoardComponent>);
+                </BoardComponent>
             </>
         )
     } else {
