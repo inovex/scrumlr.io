@@ -7,6 +7,7 @@ export interface BoardServerModel {
             hidden: boolean;
         }
     };
+    accessCode: string;
     joinConfirmationRequired: boolean;
     encryptedContent: boolean;
     showContentOfOtherUsers: boolean;
@@ -22,6 +23,7 @@ export interface BoardServerModel {
 
 export interface EditableBoardClientModel {
     name: string;
+    accessCode : string;
     joinConfirmationRequired: boolean;
     encryptedContent: boolean;
     showContentOfOtherUsers: boolean;
@@ -53,6 +55,7 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
         name: board.columns[columnId].name,
         hidden: board.columns[columnId].hidden
     })),
+    accessCode: board.accessCode,
     joinConfirmationRequired: board.joinConfirmationRequired,
     encryptedContent: board.encryptedContent,
     showContentOfOtherUsers: board.showContentOfOtherUsers,
