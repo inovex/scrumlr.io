@@ -4,9 +4,12 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import BoardHeader from "components/BoardHeader/BoardHeader";
 
 export interface BoardProps {
     children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+    name: String;
+    boardstatus: String;
 }
 
 export interface BoardState {
@@ -14,7 +17,7 @@ export interface BoardState {
     lastVisibleColumnIndex: number;
 }
 
-const Board = ({ children }: BoardProps) => {
+const Board = ({ children, name, boardstatus }: BoardProps) => {
     const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
     const boardRef = useRef<HTMLDivElement>(null);
     const columnVisibilityStatesRef = useRef<boolean[]>([]);
@@ -94,6 +97,8 @@ const Board = ({ children }: BoardProps) => {
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
 
+            <BoardHeader name={name} boardstatus={boardstatus}/>
+            
             {showPreviousButton && (
                 <button
                     className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}

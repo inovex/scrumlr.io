@@ -66,7 +66,7 @@ describe('basic', () => {
             const { container } = render(createBoardWithColumns('violet'));
             const board = container.querySelector(".board");
             // @ts-ignore
-            expect(board.firstChild).toHaveClass("accent-color__violet");
+            expect(board.childNodes[1]).toHaveClass("accent-color__violet");
             // @ts-ignore
             expect(board.lastChild).toHaveClass("accent-color__violet");
         });
