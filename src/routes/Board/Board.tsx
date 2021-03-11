@@ -26,6 +26,12 @@ function Board() {
             </div>);
         }
     }
+    var boardstatus = "Public Session"
+    var joinConfirmationRequired = state.board.data?.joinConfirmationRequired;
+    var accessCode = state.board.data?.accessCode;
+    if (joinConfirmationRequired === true || (accessCode !== undefined && accessCode !== "") ) {
+        boardstatus = "Private Session"
+    } 
 
     if (state.board.status === 'pending') {
         return <LoadingScreen/>;
@@ -33,7 +39,7 @@ function Board() {
         return (
             <>    
                 {waitingUser}
-                <BoardComponent>
+                <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
                         {state.board.data!.columns.map((column:any) => (
                             <Column color="pink" key={column.id} columnId={column.id}/>
                         ))}

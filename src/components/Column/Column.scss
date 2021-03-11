@@ -5,6 +5,7 @@
   width: 100%;
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
+  padding-top: $header__height;
 }
 
 .column:nth-child(even) {
