@@ -21,7 +21,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
       basic: [],
       all: [],
     },
-};
+  };
   const store = mockStore(initialState);
 
   return (
@@ -46,7 +46,7 @@ describe("basic", () => {
     );
   });
 
-  test("show empty board", () => {
+  test("show empty board", () => { 
     const { container } = render(createBoardWithColumns());
     expect(container.firstChild).toHaveClass("board--empty");
   });
@@ -87,10 +87,7 @@ describe("basic", () => {
 
     test("right side-panel has correct accent color", () => {
       const { container } = render(
-        <Board>
-          <Column color="blue" />
-          <Column color="pink" />
-        </Board>
+        createBoardWithColumns("blue", "pink")
       );
       // @ts-ignore
       expect(container.querySelector(".board").lastChild).toHaveClass(
@@ -119,12 +116,7 @@ describe("basic", () => {
         });
 
         test('right side-panel has correct accent color', () => {
-            const { container } = render(
-                <Board>
-                    <Column color="blue" />
-                    <Column color="pink" />
-                </Board>
-            );
+            const { container } = render(createBoardWithColumns("blue", "pink"));
             // @ts-ignore
             expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__pink");
         });

@@ -10,7 +10,7 @@ const createColumn = () => {
     const initialState = {
         board: {
             data: {
-                columns: [{"id":"GG0fWzyCwd","name":"Positive","hidden":false},{"id":"RN1VQn6StI","name":"Negative","hidden":false},{"id":"YwPiaNxejW","name":"Actions","hidden":true}],
+                columns: [{"id":"TestID","name":"Testheader","hidden":false}],
             },
         },
         notes: [],
@@ -23,7 +23,7 @@ const createColumn = () => {
     const store = mockStore(initialState);
     return (
         <Provider store={store}>
-            <Column color= 'pink' columnId='GG0fWzyCwd'/>
+            <Column color= 'pink' columnId='TestID'/>
         </Provider>
     )
 };
@@ -38,7 +38,7 @@ describe('Column', () => {
 
         test('show header', () => {
             const { container } = render(createColumn());
-            expect(container.firstChild).toHaveTextContent('Positive');
+            expect(container.firstChild).toHaveTextContent('Testheader');
         });
     });
 

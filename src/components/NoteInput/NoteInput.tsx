@@ -3,13 +3,13 @@ import './NoteInput.scss';
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "store";
 import {ActionFactory} from "store/action";
-import { InputAdornment, createStyles, withStyles, Theme, FilledInput} from '@material-ui/core';
+import { InputAdornment, createStyles, withStyles, FilledInput} from '@material-ui/core';
 
 export interface NoteInputProps {
     columnId : string;
 }
 
-const CustomInput = withStyles((theme: Theme) => 
+const CustomInput = withStyles(() => 
     createStyles({
         root: {
             borderRadius: 20,
@@ -57,7 +57,7 @@ const CustomInput = withStyles((theme: Theme) =>
                 color: 'white',
             },
         },
-    }),
+    }), { name: 'NoteInput' }
 )(FilledInput);
 
 const NoteInput = ({columnId} : NoteInputProps) => {
@@ -72,7 +72,6 @@ const NoteInput = ({columnId} : NoteInputProps) => {
             setValue("");
         } 
     }
-
     return (
         <CustomInput
             placeholder="Add your note..."
