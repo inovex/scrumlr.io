@@ -12,7 +12,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   const initialState = {
     board: {
       data: {
-        columns: {"uXCArsZlqv":{"name":"Positive","hidden":false},"LxREesCEY6":{"name":"Negative","hidden":false},"RJFNKy5ZBD":{"name":"Actions","hidden":true}},
+        columns: [{"id":"GG0fWzyCwd","name":"Positive","hidden":false},{"id":"RN1VQn6StI","name":"Negative","hidden":false},{"id":"YwPiaNxejW","name":"Actions","hidden":true}],
       },
     },
     notes: [],
@@ -28,7 +28,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
     <Provider store={store}>
       <Board>
         {colors.map((color, index) => (
-          <Column key={index} color={color} />
+          <Column key={index} color={color} columnId='GG0fWzyCwd'/>
         ))}
       </Board>
     </Provider>

@@ -9,9 +9,9 @@ const mockStore = configureStore();
 const createColumn = () => {
     const initialState = {
         board: {
-          data: {
-            columns: {"uXCArsZlqv":{"name":"Positive","hidden":false},"LxREesCEY6":{"name":"Negative","hidden":false},"RJFNKy5ZBD":{"name":"Actions","hidden":true}},
-          },
+            data: {
+                columns: [{"id":"GG0fWzyCwd","name":"Positive","hidden":false},{"id":"RN1VQn6StI","name":"Negative","hidden":false},{"id":"YwPiaNxejW","name":"Actions","hidden":true}],
+            },
         },
         notes: [],
         users: {
@@ -23,7 +23,7 @@ const createColumn = () => {
     const store = mockStore(initialState);
     return (
         <Provider store={store}>
-            <Column color= 'pink' columnId='uXCArsZlqv'/>
+            <Column color= 'pink' columnId='GG0fWzyCwd'/>
         </Provider>
     )
 };
