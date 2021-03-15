@@ -31,7 +31,7 @@ const Column = ({ color, columnId } : ColumnProps) => {
                 </header>
                 <ul className="column__note-list">
                     {notesInColumn.map((note:any, index:number) =>
-                        <Note key={note.id} text={note.text} authorId={note.author}/>
+                        <Note key={note.id} text={note.text} authorId={note.author} noteId={note.id}/>
                     )}
                 </ul>
             </div>

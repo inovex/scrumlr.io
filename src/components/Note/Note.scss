@@ -88,3 +88,11 @@ $note__author-margin-left: 10px;
     letter-spacing: $letter-spacing--small;
     line-height: $line-height--small;
 }
+
+.note__delete-button {
+    display: none;
+}
+
+.note__delete-button--visible {
+    display: block;
+}
