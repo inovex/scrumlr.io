@@ -1,22 +1,39 @@
-import React from 'react';
 import './Column.scss';
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
+import Note from "components/Note/Note";
+import {ApplicationState} from "types/store";
+import { useSelector } from 'react-redux';
 
 export interface ColumnProps {
     color: Color;
-    children?: React.ReactNode;
+    columnId: string;
 }
 
-const Column = ({ color, children } : ColumnProps) => {
+const Column = ({ color, columnId } : ColumnProps) => {
+    const state = useSelector((state: ApplicationState) => ({
+        board : state.board,
+        notes: state.notes,
+        users: state.users 
+    }));
+
+    const notesInColumn = state.notes.filter((note) => note.columnId === columnId); 
+
     return (
         <section className={`column ${getColorClassName(color)}`}>
             <div className="column__content">
-                <div className="column__header">
-                    <h1 className="column__header-text">{children}</h1>
-                    <p className="column__header-card-number">5</p>
-                </div>
-                <NoteInput/>
+                <header className="column__header">
+                    <div className="column__header-title">
+                        <h2 className="column__header-text">{state.board.data?.columns.filter((column) => column.id === columnId)[0].name}</h2>
+                        <span className="column__header-card-number">{notesInColumn.length}</span>
+                    </div>
+                    <NoteInput columnId={columnId}/>
+                </header>
+                <ul className="column__note-list">
+                    {notesInColumn.map((note:any, index:number) =>
+                        <Note key={note.id} text={note.text} authorId={note.author}/>
+                    )}
+                </ul>
             </div>
         </section>
     );
