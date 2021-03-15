@@ -7,34 +7,46 @@ exports[`Column should have correct style show column with correct style 1`] = `
   <div
     class="column__content"
   >
-    <div
+    <header
       class="column__header"
     >
-      <h1
-        class="column__header-text"
+      <div
+        class="column__header-title"
       >
-        Testheader
-      </h1>
-      <p
-        class="column__header-card-number"
+        <h2
+          class="column__header-text"
+        >
+          Testheader
+        </h2>
+        <span
+          class="column__header-card-number"
+        >
+          0
+        </span>
+      </div>
+      <div
+        class="MuiInputBase-root MuiFilledInput-root NoteInput-root-15 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
       >
-        5
-      </p>
-    </div>
-    <div
-      class="note-input"
-    >
-      <p
-        class="note-input__text"
-      >
-        Add your note...
-      </p>
-      <svg
-        class="note-input__icon"
-      >
-        icon-add.svg
-      </svg>
-    </div>
+        <input
+          class="MuiInputBase-input MuiFilledInput-input NoteInput-input-16 MuiInputBase-inputAdornedEnd MuiFilledInput-inputAdornedEnd"
+          placeholder="Add your note..."
+          type="text"
+          value=""
+        />
+        <div
+          class="MuiInputAdornment-root MuiInputAdornment-positionEnd"
+        >
+          <svg
+            class="note-input__icon"
+          >
+            icon-add.svg
+          </svg>
+        </div>
+      </div>
+    </header>
+    <ul
+      class="column__note-list"
+    />
   </div>
 </section>
 `;
