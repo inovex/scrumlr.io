@@ -8,7 +8,7 @@ const createBoardHeader = (name, boardstatus) => {
     )
 };
 
-describe('basic', () => {
+describe('Board Header', () => {
 
     beforeEach(() => {
         window.IntersectionObserver = jest.fn(() => ({

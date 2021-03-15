@@ -37,12 +37,12 @@ function Board() {
         return <LoadingScreen/>;
     } else if (state.board.status === 'ready') {
         return (
-            <>
+            <>    
                 {waitingUser}
                 <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
-                    {
-                        state.board.data!.columns.map((column) => (<Column key={column.id} color="pink">{column.name}</Column>))
-                    }
+                        {state.board.data!.columns.map((column:any) => (
+                            <Column color="pink" key={column.id} columnId={column.id}/>
+                        ))}
                 </BoardComponent>
             </>
         )
@@ -50,5 +50,4 @@ function Board() {
         return <LoadingScreen/>;
     }
 }
-
 export default Board;
