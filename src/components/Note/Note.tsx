@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Parse from 'parse';
 import store from "store";
 import {ActionFactory} from "store/action";
+import edit from 'assets/icon-edit.svg';
 
 export interface NoteProps {
     text: string;
@@ -28,8 +29,11 @@ const Note = ({text, authorId, noteId } : NoteProps) => {
     }
 
     return (
-        <li className={classNames('note', { 'note--own-card': Parse.User.current()?.id === authorId })}>      
-            <p className="note__text">{text}</p>
+        <li className={classNames('note', { 'note--own-card': Parse.User.current()?.id === authorId })}>    
+            <div className="note__content">
+                <p className="note__text">{text}</p>
+                <img className="note__edit" src={edit} alt="Edit note"/>
+            </div>  
             <footer className="note__footer">
                 <figure className="note__author" aria-roledescription="author">
                     <img className="note__author-image" src={avatar} alt="User"/>
