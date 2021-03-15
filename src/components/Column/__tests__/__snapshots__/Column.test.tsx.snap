@@ -25,10 +25,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </span>
       </div>
       <div
-        class="MuiInputBase-root MuiFilledInput-root NoteInput-root-5 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
+        class="MuiInputBase-root MuiFilledInput-root NoteInput-root-15 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
       >
         <input
-          class="MuiInputBase-input MuiFilledInput-input NoteInput-input-6 MuiInputBase-inputAdornedEnd MuiFilledInput-inputAdornedEnd"
+          class="MuiInputBase-input MuiFilledInput-input NoteInput-input-16 MuiInputBase-inputAdornedEnd MuiFilledInput-inputAdornedEnd"
           placeholder="Add your note..."
           type="text"
           value=""
