@@ -32,7 +32,7 @@ const Note = ({text, authorId, noteId } : NoteProps) => {
         <li className={classNames('note', { 'note--own-card': Parse.User.current()?.id === authorId })}>    
             <div className="note__content">
                 <p className="note__text">{text}</p>
-                <img className="note__edit" src={edit} alt="Edit note"/>
+                <img className={classNames('note__edit', { 'note__edit--own-card': Parse.User.current()?.id === authorId })} src={edit} alt="Edit note"/>
             </div>  
             <footer className="note__footer">
                 <figure className="note__author" aria-roledescription="author">

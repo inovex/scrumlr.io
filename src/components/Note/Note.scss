@@ -50,6 +50,7 @@ $note__author-margin-left: 10px;
   
 .note__text {
     margin: 0;
+    margin-right: 5px;
     min-height: 3 * $line-height--medium;
     width: 100%;
     color: $color-black;
@@ -75,6 +76,7 @@ $note__author-margin-left: 10px;
     align-self: end;
     opacity: 0;
     transition: opacity 500ms ease-out;
+    display: none;
 }
 @media screen and (max-width: 1279px) {
     .note__edit {
@@ -83,6 +85,10 @@ $note__author-margin-left: 10px;
 }
 .note:hover > .note__content > .note__edit {
     opacity: 100%;
+}
+
+.note__edit--own-card {
+    display: block;
 }
 
 .note__author {
