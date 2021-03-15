@@ -29,11 +29,13 @@ const Column = ({ color, columnId } : ColumnProps) => {
                     </div>
                     <NoteInput columnId={columnId}/>
                 </header>
-                <ul className="column__note-list">
-                    {notesInColumn.map((note:any, index:number) =>
-                        <Note key={note.id} text={note.text} authorId={note.author}/>
-                    )}
-                </ul>
+                <div className={"column__notes-wrapper"}>
+                    <ul className="column__note-list">
+                        {notesInColumn.map((note:any, index:number) =>
+                            <Note key={note.id} text={note.text} authorId={note.author}/>
+                        )}
+                    </ul>
+                </div>
             </div>
         </section>
     );
