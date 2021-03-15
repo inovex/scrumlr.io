@@ -44,9 +44,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </div>
       </div>
     </header>
-    <ul
-      class="column__note-list"
-    />
+    <div
+      class="column__notes-wrapper"
+    >
+      <ul
+        class="column__note-list"
+      />
+    </div>
   </div>
 </section>
 `;

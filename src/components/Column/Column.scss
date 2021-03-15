@@ -6,15 +6,14 @@
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
+  height: 100vh;
 }
-
 .column:nth-child(even) {
   background-color: #f9fafb;
 }
 .column:nth-child(odd) {
   background-color: #f6f5fb;
 }
-
 @media (prefers-color-scheme: dark) {
   .column:nth-child(even) {
     background-color: #242c3d;
@@ -25,7 +24,10 @@
 }
 
 .column__content {
+  max-height: 100%;
   padding: 32px;
+  display: flex;
+  flex-direction: column;
 }
 
 .column__header-title {
@@ -42,7 +44,6 @@
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
 }
-
 @media (prefers-color-scheme: dark) {
   .column__header-text {
     color: $color-white;
@@ -60,12 +61,11 @@
 
 .column__notes-wrapper {
   overflow: auto;
-  height: 400px; // TODO: Höhe anpassen
 }
 
 .column__note-list {
   margin: 0;
-  padding: 16px 16px;
+  padding: $padding--default $padding--default;
   display: grid;
     grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
     grid-auto-flow: row;
