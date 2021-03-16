@@ -2,7 +2,7 @@
   position: fixed;
 }
 
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 1343px) {
   .menu-bars {
     position: fixed;
     left: 50%;
@@ -87,7 +87,7 @@
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1344px) {
   .menu-bars__switch {
     display: none;
   }
@@ -103,7 +103,7 @@
   --secondaryColor: #7c123e;
 }
 
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 1343px) {
   .menu {
     border-radius: 34.5px;
     height: 64px;
@@ -136,7 +136,7 @@
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1344px) {
   .user-menu {
     left: 8px;
   }

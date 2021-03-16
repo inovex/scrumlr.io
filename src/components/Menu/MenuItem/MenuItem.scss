@@ -3,7 +3,7 @@
 }
 
 // MOBILE
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 1343px) {
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through 6 {
@@ -124,28 +124,10 @@
   .menu-item__icon--end {
     visibility: hidden;
   }
-
-  @keyframes spinning-icon {
-    0% {
-      transform: rotate(0deg);
-    }
-    25% {
-      transform: rotate(-90deg);
-    }
-    50% {
-      transform: rotate(-180deg);
-    }
-    75% {
-      transform: rotate(-270deg);
-    }
-    100% {
-      transform: rotate(-360deg);
-    }
-  }
 }
 
 // DESKTOP
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 1344px) {
   .menu-item {
     border: none;
     border-radius: 18px;
