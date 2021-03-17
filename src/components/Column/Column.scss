@@ -25,9 +25,13 @@
 
 .column__content {
   max-height: 100%;
-  padding: 32px;
+  padding: $padding--large 0;
   display: flex;
   flex-direction: column;
+}
+
+.column__header {
+  padding: 0 $padding--large;
 }
 
 .column__header-title {
@@ -65,7 +69,7 @@
 
 .column__note-list {
   margin: 0;
-  padding: $padding--default $padding--default;
+  padding: 0 $padding--large;
   display: grid;
     grid-template-columns: repeat(auto-fill);
     grid-auto-flow: row;
