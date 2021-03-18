@@ -1,18 +1,6 @@
-.menu-bars {
-  position: fixed;
-}
-
-@keyframes spin-animation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
-}
-
 @media screen and (max-width: 1343px) {
   .menu-bars {
+    position: fixed;
     left: calc(50% - 168px);
     bottom: 8px;
   }
