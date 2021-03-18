@@ -1,4 +1,7 @@
 import {useState} from 'react';
+import Parse from 'parse';
+import { useSelector } from 'react-redux';
+import { ApplicationState } from 'types/store';
 import MenuButton from 'components/Menu/MenuItem/MenuButton';
 import MenuToggle from 'components/Menu/MenuItem/MenuToggle';
 import { ReactComponent as AddImageIcon } from 'assets/icon-addimage.svg';
@@ -17,8 +20,13 @@ function Menu() {
 
     const [showAdminMenu, toggleMenus] = useState(false); 
 
+    const currentUser = Parse.User.current();
+    const admins = useSelector((state: ApplicationState) => state.users.admins);
+
+    const isAdmin = admins.map(admin => admin.id).indexOf(currentUser!.id) !== -1;
+
     return (
-        <div className={`menu-bars menu-bars--${showAdminMenu ? 'admin' : 'user'}`}>
+        <div className={`menu-bars menu-bars--${showAdminMenu ? 'admin' : 'user'} ${isAdmin && 'menu-bars--isAdmin'}`}>
             <div className='menu user-menu'>
                 <div className='menu__items'>
                     <MenuToggle index={1} direction='right' toggleStartLabel='MARK ME AS DONE' toggleStopLabel='UNMARK ME AS DONE'>
@@ -35,7 +43,7 @@ function Menu() {
                     </MenuButton>
                 </div>
             </div>
-            <div className='menu admin-menu'>
+            {isAdmin && <div className='menu admin-menu'>
                 <div className='menu__items'>
                     <MenuToggle index={1} direction='left' toggleStartLabel='START COLUMN MODE' toggleStopLabel='END COLUMN MODE'>
                         <ColumnIcon className='menu-item__icon menu-item__icon--start' />
@@ -50,11 +58,11 @@ function Menu() {
                         <FocusIcon className='menu-item__icon menu-item__icon--start' />
                     </MenuToggle>
                 </div>
-            </div>
-            <button className='menu-bars__switch' onClick={_ => toggleMenus(prevState => !prevState)}>
+            </div>}
+            {isAdmin && <button className='menu-bars__switch' onClick={_ => toggleMenus(prevState => !prevState)}>
                 <ToggleAddMenuIcon className='switch__icon switch__icon--add'/>
                 <ToggleSettingsMenuIcon className='switch__icon switch__icon--settings'/>
-            </button>
+            </button>}
         </div>
     );
 }

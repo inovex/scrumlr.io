@@ -1,8 +1,11 @@
 @media screen and (max-width: 1343px) {
   .menu-bars {
     position: fixed;
-    left: calc(50% - 168px);
+    left: calc(50% - 134px);
     bottom: 8px;
+  }
+  .menu-bars--isAdmin {
+    left: calc(50% - 168px);
   }
   .menu-bars--user {
     @media (prefers-color-scheme: light) {
