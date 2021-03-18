@@ -2,32 +2,25 @@
   position: fixed;
 }
 
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
 @media screen and (max-width: 1343px) {
   .menu-bars {
-    position: fixed;
-    left: 50%;
-    margin-left: -168px;
+    left: calc(50% - 168px);
     bottom: 8px;
   }
-
-  .menu-bars__switch:focus {
-    outline: none;
-  }
-
-  .menu-bars__switch {
-    height: 64px;
-    width: 64px;
-    padding: 0;
-    border: 0;
-    border-radius: 100%;
-    transition: background-color 0.25s ease-in-out;
-    margin-left: 268px;
-  }
-
   .menu-bars--user {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
         background-color: #FFFFFF;
+        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
         color: #ff0069;
@@ -36,6 +29,7 @@
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
         background-color: #ff0069;
+        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
         color: #FFFFFF;
@@ -52,10 +46,17 @@
     opacity: 0;
     bottom: 72px;
   }
+  .menu-bars--user > .menu-bars__switch > .switch__icon--add {
+    visibility: hidden;
+    opacity: 0;
+    transform: rotate(360deg);
+  }
+  
   .menu-bars--admin {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
         background-color: #FFFFFF;
+        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
         color: #0057ff;
@@ -64,6 +65,7 @@
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
         background-color: #0057ff;
+        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
         color: #FFFFFF;
@@ -80,10 +82,31 @@
     opacity: 0;
     bottom: -56px;
   }
-
+  .menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
+    visibility: hidden;
+    opacity: 0;
+    transform: rotate(-360deg);
+  }
+  .menu-bars__switch {
+    height: 64px;
+    width: 64px;
+    padding: 0;
+    border: 0;
+    border-radius: 100%;
+    transition: background-color 0.25s ease-in-out;
+    margin-left: 272px;
+    position: relative;
+  }
+  .menu-bars__switch:focus {
+    outline: none;
+  }
+  
   .switch__icon {
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: calc(50% - 18px);
+    left: calc(50% - 18px);
+    transform: rotate(0deg);
+    transition: opacity 0.5s, visibility 0.5s, transform 1s;
   }
 }
 
@@ -148,8 +171,7 @@
   .menu {
     border-radius: 34.5px;
     height: 268px;
-    margin-top: -134px;
-    top: 50%;
+    top: calc(50% - 134px);
     width: 64px;
     overflow: visible;
     position: fixed;

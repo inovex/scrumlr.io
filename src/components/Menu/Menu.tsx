@@ -9,6 +9,8 @@ import { ReactComponent as ColumnIcon } from 'assets/icon-column.svg';
 import { ReactComponent as FocusIcon } from 'assets/icon-focus.svg';
 import { ReactComponent as TimerIcon } from 'assets/icon-timer.svg';
 import { ReactComponent as VoteIcon } from 'assets/icon-vote.svg';
+import { ReactComponent as ToggleSettingsMenuIcon } from 'assets/icon-toggle-settings-menu.svg';
+import { ReactComponent as ToggleAddMenuIcon } from 'assets/icon-toggle-add-menu.svg';
 import './Menu.scss';
 
 function Menu() {
@@ -50,7 +52,8 @@ function Menu() {
                 </div>
             </div>
             <button className='menu-bars__switch' onClick={_ => toggleMenus(prevState => !prevState)}>
-                <VoteIcon className='switch__icon'/>
+                <ToggleAddMenuIcon className='switch__icon switch__icon--add'/>
+                <ToggleSettingsMenuIcon className='switch__icon switch__icon--settings'/>
             </button>
         </div>
     );
