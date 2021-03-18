@@ -26,17 +26,23 @@ function Board() {
             </div>);
         }
     }
+    var boardstatus = "Public Session"
+    var joinConfirmationRequired = state.board.data?.joinConfirmationRequired;
+    var accessCode = state.board.data?.accessCode;
+    if (joinConfirmationRequired === true || (accessCode !== undefined && accessCode !== "") ) {
+        boardstatus = "Private Session"
+    } 
 
     if (state.board.status === 'pending') {
         return <LoadingScreen/>;
     } else if (state.board.status === 'ready') {
         return (
-            <>
+            <>    
                 {waitingUser}
-                <BoardComponent>
-                    {
-                        state.board.data!.columns.map((column) => (<Column color="pink">{column.name}</Column>))
-                    }
+                <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
+                        {state.board.data!.columns.map((column:any) => (
+                            <Column color="pink" key={column.id} columnId={column.id}/>
+                        ))}
                 </BoardComponent>
             </>
         )
@@ -44,5 +50,4 @@ function Board() {
         return <LoadingScreen/>;
     }
 }
-
 export default Board;
