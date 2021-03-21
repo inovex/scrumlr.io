@@ -3,7 +3,6 @@ import {
   getMemberRoleName,
   isMember,
   requireValidBoardAdmin,
-  requireValidBoardMember,
 } from "./permission";
 import { api } from "./util";
 import { newObjectId } from "parse-server/lib/cryptoUtils";
@@ -14,17 +13,22 @@ interface JoinBoardResponse {
   joinRequestReference?: string;
 }
 
-const addAsMember = async (user: Parse.User, board: string) => {
+const addAsMember = async (user: Parse.User, boardId: string) => {
   const memberRoleQuery = new Parse.Query(Parse.Role);
-  memberRoleQuery.equalTo("name", getMemberRoleName(board));
+  memberRoleQuery.equalTo("name", getMemberRoleName(boardId));
 
   const memberRole = await memberRoleQuery.first({ useMasterKey: true });
   if (memberRole) {
+    // a user can be online only on one board at a given time
+    user.set("boardId", boardId)
+    user.save(null, { useMasterKey: true })
+
+    // (s)he can belong to many boards though
     memberRole.getUsers().add(user);
     return memberRole.save(null, { useMasterKey: true });
   }
 
-  throw new Error(`No roles for board '${board}' found`);
+  throw new Error(`No roles for board '${boardId}' found`);
 };
 
 const respondToJoinRequest = async (
