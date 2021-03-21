@@ -19,11 +19,6 @@ const addAsMember = async (user: Parse.User, boardId: string) => {
 
   const memberRole = await memberRoleQuery.first({ useMasterKey: true });
   if (memberRole) {
-    // a user can be online only on one board at a given time
-    user.set("boardId", boardId)
-    user.save(null, { useMasterKey: true })
-
-    // (s)he can belong to many boards though
     memberRole.getUsers().add(user);
     return memberRole.save(null, { useMasterKey: true });
   }
@@ -94,16 +89,23 @@ export const initializeBoardFunctions = () => {
     if (event === "connect" || event === "ws_disconnect") {
       const query = new Parse.Query<Parse.Object>("_Session");
       query.equalTo("sessionToken", sessionToken);
+
       query.first({ useMasterKey: true }).then((session) => {
         const user = session.get('user');
 
-        if(event === "ws_disconnect"){
-          user.set('online', false)
-        }else{
-          user.set('online', true)
-        }
+        const rolesQuery = new Parse.Query(Parse.Role);
+        rolesQuery.equalTo("users", user);
 
-        user.save(null, { useMasterKey: true });
+        if(event === "ws_disconnect"){
+          rolesQuery.find({ useMasterKey: true }).then((roles) => {
+            roles.forEach(role => {
+              role.getUsers().remove(user)
+              role.save(null, { useMasterKey: true })
+            });
+          });          
+        }else{
+          //TODO: how to get the user online again? We don't know anymore on which board (s)he was a member
+        }
       });
     }
   });

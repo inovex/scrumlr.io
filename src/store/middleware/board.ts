@@ -126,26 +126,6 @@ export const passBoardMiddleware = (
           });
         });
       });
-
-      const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("boardId", action.boardId).equalTo("online", true);
-      userQuery.subscribe().then((subscription) => {
-        closeSubscriptions.push(() => {
-          subscription.unsubscribe();
-        });
-
-        subscription.on("enter", (object) => {
-          dispatch(
-            ActionFactory.setUserStatus(object.id, true)
-          );
-        });
-
-        subscription.on("leave", (object) => {
-          dispatch(
-            ActionFactory.setUserStatus(object.id, false)
-          );
-        });
-      });
     };
 
     const createNoteSubscription = () => {

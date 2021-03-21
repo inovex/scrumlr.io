@@ -29,20 +29,6 @@ export const usersReducer = (
 
       return newState;
     }
-    case ActionType.SetUserStatus: {
-      const newState = {
-        admins: state.admins,
-        basic: state.basic,
-        all: state.all
-      };
-
-      const user = newState.all.find((member) => member.id === action.userId);
-      if(user){
-        user.online = action.status;
-      }
-
-      return newState;
-    }
   }
   return state;
 };

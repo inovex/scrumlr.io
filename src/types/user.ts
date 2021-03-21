@@ -3,7 +3,6 @@ export interface UserServerModel {
   displayName: string;
   createdAt: Date;
   updatedAt: Date;
-  online: boolean;
 }
 
 export interface UserClientModel {
@@ -12,7 +11,6 @@ export interface UserClientModel {
   admin: boolean;
   createdAt: Date;
   updatedAt: Date;
-  online: boolean;
 }
 
 export const mapUserServerToClientModel = (
@@ -24,5 +22,4 @@ export const mapUserServerToClientModel = (
   admin,
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
-  online: user.online,
 });

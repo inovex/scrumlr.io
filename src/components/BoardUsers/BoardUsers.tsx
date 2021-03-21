@@ -12,7 +12,7 @@ const BoardUsers = () => {
   const currentUser = Parse.User.current();
 
   const me = users.find(user => user.id === currentUser!.id);
-  const them = users.filter(user => user.id !== currentUser!.id && user.online);
+  const them = users.filter(user => user.id !== currentUser!.id);
 
   const usersToShow = them.splice(0, (them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS));
 
