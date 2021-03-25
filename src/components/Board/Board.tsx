@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './Board.scss';
-import { getColorClassName } from "constants/colors";
-import { ColumnProps } from "components/Column/Column";
-import { ReactComponent as RightArrowIcon } from "assets/icon-arrow-next.svg";
-import { ReactComponent as LeftArrowIcon } from "assets/icon-arrow-previous.svg";
-import BoardUsers from 'components/BoardUsers/BoardUsers';
+import {getColorClassName} from "constants/colors";
+import {ColumnProps} from "components/Column/Column";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import BoardHeader from "components/BoardHeader/BoardHeader";
 
 export interface BoardProps {
-  children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+    children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+    name: String;
+    boardstatus: String;
 }
 
 export interface BoardState {
@@ -15,11 +17,11 @@ export interface BoardState {
   lastVisibleColumnIndex: number;
 }
 
-const Board = ({ children }: BoardProps) => {
-  const [state, setState] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children) });
-  const boardRef = useRef<HTMLDivElement>(null);
-  const columnVisibilityStatesRef = useRef<boolean[]>([]);
-  const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
+const Board = ({ children, name, boardstatus }: BoardProps) => {
+    const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
+    const boardRef = useRef<HTMLDivElement>(null);
+    const columnVisibilityStatesRef = useRef<boolean[]>([]);
+    const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const board = boardRef.current;
@@ -89,11 +91,17 @@ const Board = ({ children }: BoardProps) => {
     boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
   }
 
-  return (
-    <>
-      <style>
-        {`.board { --board__columns: ${columnsCount} }`}
-      </style>
+            <BoardHeader name={name} boardstatus={boardstatus}/>
+            
+            {showPreviousButton && (
+                <button
+                    className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
+                    onClick={handlePreviousClick}
+                    aria-hidden={true}
+                >
+                    <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev"/>
+                </button>
+            )}
 
       {showPreviousButton && (
         <button

@@ -32,6 +32,6 @@
     "downlevelIteration": true
   },
   "include": [
-    "src"
+    "src/**/*"
   ]
 }

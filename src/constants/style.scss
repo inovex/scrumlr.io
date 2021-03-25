@@ -8,14 +8,13 @@ $color-dark-gray: #859093;
 $color-darkest-gray: #232323;
 $color-black: #111111;
 $color-dark-mode: #272F41;
-
+$color-dark-mode-note: #313949;
 
 // theme colors
 $color-blue: #056CF2;
 $color-purple: #5005F2;
 $color-violet: #AB05F2;
 $color-pink: #F20574;
-
 .accent-color__blue {--accent-color: #056CF2;}
 .accent-color__purple {--accent-color: #5005F2;}
 .accent-color__violet {--accent-color: #AB05F2;}
@@ -24,10 +23,38 @@ $color-pink: #F20574;
 
 // board & column constants
 $board__side-panel-width: 64px;
-
+$header__height: 100px;
 $column__min-width: 320px;
 $column__max-width: 960px;
 $column__border-width: 12px;
+
+
+// margin and padding
+$padding--small: 16px;
+$padding--medium: 20px; 
+
+
+// font
+$letter-spacing--small: 0.25px;
+$letter-spacing--medium: 0.35px;
+$letter-spacing--large: 0.75px;
+$text-size: 13px;
+$line-height--small: 16px;
+$line-height--medium: 18px;
+$line-height--large: 32px;
+
+
+// TODO z-indexe definieren
+// z-index
+$base-z-index: 100;
+$base-z-index-step: 10;
+$card-z-index: $base-z-index + (2 * $base-z-index-step);
+$menue-z-index: $base-z-index + (3 * $base-z-index-step);
+
+// responsive
+$smartphone: "screen and (max-width: 767px)";
+$tablet: "screen and (min-width : 768px)";
+$desktop: "screen and (min-width : 1280px)";
 
 
 // helper functions
