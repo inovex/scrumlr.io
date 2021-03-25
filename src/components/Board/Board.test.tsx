@@ -1,4 +1,3 @@
-import React from "react";
 import { act, render, fireEvent } from "@testing-library/react";
 import Board from "./Board";
 import Column from "components/Column/Column";

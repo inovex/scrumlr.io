@@ -2,6 +2,7 @@ import {
   getAdminRoleName,
   getMemberRoleName,
   isMember,
+  isOnline,
   requireValidBoardAdmin,
 } from "./permission";
 import { api } from "./util";
@@ -19,17 +20,23 @@ const addAsMember = async (user: Parse.User, boardId: string) => {
 
   const memberRole = await memberRoleQuery.first({ useMasterKey: true });
   if (memberRole) {
-    // maintain a list (Array) of board ids for each user
-    user.add("boards", boardId)
-    user.save(null, { useMasterKey: true })
-
-    // (s)he can belong to many boards though
+    goOnline(user, boardId);
     memberRole.getUsers().add(user);
     return memberRole.save(null, { useMasterKey: true });
   }
 
   throw new Error(`No roles for board '${boardId}' found`);
 };
+
+const goOnline = (user: Parse.User, boardId: string) => {
+  user.add("boards", boardId);
+  user.save(null, { useMasterKey: true });
+}
+
+const goOffline = (user: Parse.User) => {
+  user.unset("boards");
+  user.save(null, { useMasterKey: true });
+}
 
 const respondToJoinRequest = async (
   currentUser: Parse.User,
@@ -93,17 +100,14 @@ export const initializeBoardFunctions = () => {
   Parse.Cloud["onLiveQueryEvent"](({event, sessionToken, ...other}) => {
     if (event === "connect" || event === "ws_disconnect") {
       const query = new Parse.Query<Parse.Object>("_Session");
+
       query.equalTo("sessionToken", sessionToken);
       query.first({ useMasterKey: true }).then((session) => {
         const user = session.get('user');
 
         if(event === "ws_disconnect"){
-          user.set('online', false);
-        }else{
-          user.set('online', true);
+          goOffline(user)
         }
-
-        user.save(null, { useMasterKey: true });
       });
     }
   });
@@ -173,6 +177,11 @@ export const initializeBoardFunctions = () => {
       }
 
       if (await isMember(user, request.boardId)) {
+        // handle browser refresh
+        if(!isOnline(user, request.boardId)){
+          goOnline(user, request.boardId);
+        }
+
         return {
           status: "accepted",
         };

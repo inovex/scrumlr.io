@@ -23,6 +23,17 @@ export const passBoardMiddleware = (
   }
 
   if (action.type === ActionType.PermittedBoardAccess) {
+    const currentUser = Parse.User.current()!;
+
+    const isOnline = (user: Parse.User, boardId: string) => {
+      return (user.get("boards") as string[])?.indexOf(boardId) >= 0;
+    };
+
+    const goOnline = (boardId: string) => {
+      currentUser.add("boards", boardId);
+      currentUser.save();
+    };
+
     const createJoinRequestSubscription = () => {
       const joinRequestQuery = new Parse.Query("JoinRequest");
       joinRequestQuery.equalTo(
@@ -89,7 +100,10 @@ export const passBoardMiddleware = (
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel(user.toJSON() as any, false)
+                      mapUserServerToClientModel(user.toJSON() as any, {
+                        admin: false,
+                        online: isOnline(user, action.boardId),
+                      })
                     ),
                     false
                   )
@@ -105,7 +119,10 @@ export const passBoardMiddleware = (
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel(user.toJSON() as any, true)
+                      mapUserServerToClientModel(user.toJSON() as any, {
+                        admin: true,
+                        online: isOnline(user, action.boardId),
+                      })
                     ),
                     true
                   )
@@ -128,22 +145,18 @@ export const passBoardMiddleware = (
       });
 
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("boards", action.boardId).equalTo("online", true);
+      userQuery.equalTo("boards", action.boardId);
       userQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
         });
 
         subscription.on("enter", (object) => {
-          dispatch(
-            ActionFactory.setUserStatus(object.id, true)
-          );
+          dispatch(ActionFactory.setUserStatus(object.id, true));
         });
 
         subscription.on("leave", (object) => {
-          dispatch(
-            ActionFactory.setUserStatus(object.id, false)
-          );
+          dispatch(ActionFactory.setUserStatus(object.id, false));
         });
       });
     };
@@ -193,6 +206,7 @@ export const passBoardMiddleware = (
       closeSubscriptions.push(() => {
         subscription.unsubscribe();
       });
+
       subscription.on("update", (object) => {
         dispatch(
           ActionFactory.updatedBoard(
@@ -200,20 +214,36 @@ export const passBoardMiddleware = (
           )
         );
       });
+
       subscription.on("delete", (object) => {
         dispatch(ActionFactory.deleteBoard());
       });
-      subscription.on("open", () => {
-        createJoinRequestSubscription();
-        createNoteSubscription();
-        createUsersSubscription();
-        boardQuery.first().then((board) => {
-          dispatch(
-            ActionFactory.initializeBoard(
-              mapBoardServerToClientModel(board?.toJSON() as any)
-            )
-          );
-        });
+
+      let connectionsCount = 0;
+      subscription.on("open", (object) => {
+        connectionsCount++;
+
+        if (connectionsCount === 1) {
+          // first connect to the board
+          createJoinRequestSubscription();
+          createNoteSubscription();
+          createUsersSubscription();
+
+          boardQuery.first().then((board) => {
+            dispatch(
+              ActionFactory.initializeBoard(
+                mapBoardServerToClientModel(board?.toJSON() as any)
+              )
+            );
+          });
+        } else {
+          // reconnect
+          boardQuery.first().then((board) => {
+            if (!isOnline(currentUser, board!.id)) {
+              goOnline(board!.id);
+            }
+          });
+        }
       });
     });
   }
