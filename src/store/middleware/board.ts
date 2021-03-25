@@ -128,7 +128,7 @@ export const passBoardMiddleware = (
       });
 
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("boardId", action.boardId).equalTo("online", true);
+      userQuery.equalTo("boards", action.boardId).equalTo("online", true);
       userQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
