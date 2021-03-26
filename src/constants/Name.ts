@@ -178,5 +178,11 @@ export const ANIMAL_NAMES: Name = {
   
     return `${randomAdjective} ${randomAnimal}`;
   };
+
+  export const getInitials = (name: string): string => {
+    return name.split(' ')
+      .map(n => n[0])
+      .join('');
+  }
   
   export default getRandomName;
