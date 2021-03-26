@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import Parse from 'parse';
-import Menu from './Menu';
+import MenuBars from './MenuBars';
 
 const mockStore = configureStore();
 
@@ -11,7 +11,7 @@ const createMenuBars = (state) => {
 
     return (
         <Provider store={store}>
-            <Menu />
+            <MenuBars />
         </Provider>
     );
 };

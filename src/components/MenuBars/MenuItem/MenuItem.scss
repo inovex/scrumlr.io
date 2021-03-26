@@ -1,3 +1,5 @@
+@import 'constants/style.scss';
+
 .menu-item:focus {
   outline: none;
 }
@@ -7,7 +9,7 @@
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through 6 {
-    .menu-item#{$i} { left: $menu-item__first-position-left + (($i - 1) * 58px); }
+    .menu-item:nth-child(#{$i}) { left: $menu-item__first-position-left + (($i - 1) * 58px); }
   }
 
   .menu-item {
@@ -17,7 +19,6 @@
     padding: 0;
     position: absolute;
     width: 36px;
-    transition: left 0s;
     top: 0;
     right: 0;
     bottom: 0;
@@ -40,13 +41,11 @@
     }
     @media (prefers-color-scheme: dark) {
       .menu-item__tooltip {
-        background-color: #FFFFFF;
+        background-color: $color-white;
       }
     }
   }
-  // .menu-item:hover > .menu-item__icon {
-  //   animation: spinning-icon 1.75s linear forwards;
-  // }
+
   .menu-item:active > .menu-item__tooltip {
     height: 100%;
     width: 100%;
@@ -70,7 +69,6 @@
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    font-family: 'Raleway', serif;
     font-size: 14px;
     font-weight: bold;
     height: 36px;
@@ -88,11 +86,12 @@
   .tooltip__text {
     margin-left: 72px;
     user-select: none;
+    text-transform: uppercase;
     -webkit-user-select: none;
   }
   @media (prefers-color-scheme: light) {
     .tooltip__text {
-      color: #FFFFFF;
+      color: $color-white;
     }
   }
   @media (prefers-color-scheme: dark) {
@@ -111,12 +110,12 @@
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
       color: var(--primaryColor);
-      background: #FFFFFF;
+      background: $color-white;
     }
   }
   @media (prefers-color-scheme: dark) {
     .menu-item__icon {
-      color: #FFFFFF;
+      color: $color-white;
       background: var(--primaryColor);
     }
   }
@@ -141,13 +140,13 @@
   .menu-item:hover {
     @media (prefers-color-scheme: light) {
       .menu-item__icon {
-        color: #FFFFFF;
+        color: $color-white;
         background-color: var(--primaryColor);
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-item__icon {
-        color: #FFFFFF;
+        color: $color-white;
         background-color: var(--secondaryColor);
       }
     }
@@ -179,12 +178,12 @@
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
       color: var(--primaryColor);
-      background: #FFFFFF;
+      background: $color-white;
     }
   }
   @media (prefers-color-scheme: dark) {
     .menu-item__icon {
-      color: #FFFFFF;
+      color: $color-white;
       background: var(--primaryColor);
     }
   }
@@ -200,7 +199,6 @@
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    font-family: 'Raleway', serif;
     font-size: 14px;
     font-weight: bold;
     height: 36px;
@@ -218,7 +216,7 @@
   @media (prefers-color-scheme: light) {
     .menu-item__tooltip {
       box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      background-color: #FFFFFF;
+      background-color: $color-white;
       color: var(--primaryColor);
     }
 
@@ -227,8 +225,12 @@
     .menu-item__tooltip {
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       background-color: var(--primaryColor);
-      color: #FFFFFF;
+      color: $color-white;
     }
+  }
+
+  .tooltip__text {
+    text-transform: uppercase;
   }
 
   .menu-item--right > .menu-item__tooltip > .tooltip__text {
@@ -246,7 +248,7 @@
   }
   @media (prefers-color-scheme: dark) {
     .tooltip__text {
-      color: #FFFFFF;
+      color: $color-white;
     }
   }
 

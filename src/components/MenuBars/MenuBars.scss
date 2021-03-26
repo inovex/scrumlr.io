@@ -1,3 +1,5 @@
+@import 'constants/style.scss';
+
 @media screen and (max-width: 1343px) {
   .menu-bars {
     position: fixed;
@@ -10,20 +12,20 @@
   .menu-bars--user {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
-        background-color: #FFFFFF;
+        background-color: $color-white;
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
-        color: #ff0069;
+        color: $menu-color-pink--primary;
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
-        background-color: #ff0069;
+        background-color: $menu-color-pink--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
-        color: #FFFFFF;
+        color: $color-white;
       }
     }
   }
@@ -46,16 +48,16 @@
   .menu-bars--admin {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
-        background-color: #FFFFFF;
+        background-color: $color-white;
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
-        color: #0057ff;
+        color: $menu-color-blue--primary;
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
-        background-color: #0057ff;
+        background-color: $menu-color-blue--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
@@ -119,7 +121,7 @@
 
 @media screen and (max-width: 1343px) {
   .menu {
-    border-radius: 34.5px;
+    border-radius: 35px;
     height: 64px;
     overflow: hidden;
     width: 268px;
@@ -160,7 +162,7 @@
   }
 
   .menu {
-    border-radius: 34.5px;
+    border-radius: 35px;
     height: 268px;
     top: calc(50% - 134px);
     width: 64px;
@@ -182,7 +184,7 @@
 
 @media (prefers-color-scheme: light) {
   .menu {
-    background-color: #ffffff;
+    background-color: $color-white;
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   }
 }
@@ -193,10 +195,10 @@
   }
 
   .user-menu {
-    background-color: #0057ff;
+    background-color: $menu-color-blue--primary;
   }
 
   .admin-menu {
-    background-color: #ff0069;
+    background-color: $menu-color-pink--primary;
   }
 }

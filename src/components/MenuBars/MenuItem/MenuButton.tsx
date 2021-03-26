@@ -2,17 +2,18 @@ import React from 'react';
 import './MenuItem.scss';
 
 type MenuButtonProps = {
-    children: React.ReactNode;
     direction: 'left' | 'right';
-    index: number;
     onClick?: () => void;
     label: string;
+    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 function MenuButton(props: MenuButtonProps) {
 
+    const Icon = props.icon;
+
     return (<button 
-                className={`menu-item menu-item${props.index} menu-item--${props.direction}`}
+                className={`menu-item menu-item--${props.direction}`}
                 onClick={props.onClick}
             >
         <div className='menu-item__tooltip'>
@@ -20,7 +21,7 @@ function MenuButton(props: MenuButtonProps) {
                 {props.label}
             </span>
         </div>
-        {props.children}
+        <Icon className='menu-item__icon menu-item__icon--start'/>
     </button>);
 }
 

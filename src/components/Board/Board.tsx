@@ -3,7 +3,7 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
-import Menu from 'components/Menu/Menu';
+import MenuBars from 'components/MenuBars/MenuBars';
 import BoardHeader from "components/BoardHeader/BoardHeader";
 import './Board.scss';
 
@@ -98,7 +98,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
                 {`.board { --board__columns: ${columnsCount} }`}
             </style>
             <BoardHeader name={name} boardstatus={boardstatus}/>
-            <Menu/>
+            <MenuBars/>
 
             {showPreviousButton && (
                 <button
