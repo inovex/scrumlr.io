@@ -1,6 +1,6 @@
 @import 'constants/style.scss';
 
-@media screen and (max-width: 1343px) {
+@media #{$menu-mobile} {
   .menu-bars {
     position: fixed;
     left: calc(50% - 134px);
@@ -119,7 +119,7 @@
   --secondaryColor: #7c123e;
 }
 
-@media screen and (max-width: 1343px) {
+@media #{$menu-desktop} {
   .menu {
     border-radius: 35px;
     height: 64px;

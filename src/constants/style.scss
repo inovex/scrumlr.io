@@ -61,6 +61,8 @@ $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 
+$menu-mobile: "screen and (max-width: 1343px)";
+$menu-desktop: "screen and (min-width: 1344px)";
 
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {

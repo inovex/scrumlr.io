@@ -5,7 +5,7 @@
 }
 
 // MOBILE
-@media screen and (max-width: 1343px) {
+@media #{$menu-mobile} {
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through 6 {
@@ -126,7 +126,7 @@
 }
 
 // DESKTOP
-@media screen and (min-width: 1344px) {
+@media #{$menu-desktop} {
   .menu-item {
     border: none;
     border-radius: 18px;
