@@ -213,6 +213,14 @@
     right: 0;
     transition: width 0.25s ease-in-out;
   }
+  .menu-item--left > .menu-item__tooltip {
+    right: 0;
+    top: 0;
+  }
+  .menu-item--right > .menu-item__tooltip {
+    left: 0;
+    top: 0;
+  }
   @media (prefers-color-scheme: light) {
     .menu-item__tooltip {
       box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
@@ -231,15 +239,17 @@
 
   .tooltip__text {
     text-transform: uppercase;
+    position: absolute;
   }
-
   .menu-item--right > .menu-item__tooltip > .tooltip__text {
     margin-left: 36px;
     transition: margin-left 0.5s ease-in-out;
+    left: 0;
   }
   .menu-item--left > .menu-item__tooltip > .tooltip__text {
     margin-right: 36px;
     transition: margin-right 0.5s ease-in-out;
+    right: 0;
   }
   @media (prefers-color-scheme: light) {
     .tooltip__text {
@@ -249,21 +259,6 @@
   @media (prefers-color-scheme: dark) {
     .tooltip__text {
       color: $color-white;
-    }
-  }
-
-  .menu-item--left {
-    .menu-item__tooltip {
-      direction: rtl;
-      right: 0;
-      top: 0;
-    }
-  }
-  .menu-item--right {
-    .menu-item__tooltip {
-      direction: ltr;
-      left: 0;
-      top: 0
     }
   }
 }
