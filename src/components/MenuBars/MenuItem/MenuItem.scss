@@ -23,7 +23,6 @@
     right: 0;
     bottom: 0;
     height: 64px;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
   .menu-item:active {
     left: 0;
@@ -31,7 +30,6 @@
     width: 100%;
     z-index: 20;
     transition: left 2s 0.25s;
-
 
     @media (prefers-color-scheme: light) {
       .menu-item__tooltip {
@@ -85,9 +83,7 @@
 
   .tooltip__text {
     margin-left: 72px;
-    user-select: none;
     text-transform: uppercase;
-    -webkit-user-select: none;
   }
   @media (prefers-color-scheme: light) {
     .tooltip__text {

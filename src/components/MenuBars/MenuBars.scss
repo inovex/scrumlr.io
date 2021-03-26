@@ -5,6 +5,7 @@
     position: fixed;
     left: calc(50% - 134px);
     bottom: 8px;
+    -webkit-touch-callout: none;
   }
   .menu-bars--isAdmin {
     left: calc(50% - 168px);

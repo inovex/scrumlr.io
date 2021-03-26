@@ -32,7 +32,7 @@ function MenuBars() {
                 <div className='menu__items'>
                     <MenuToggle direction='right' toggleStartLabel='Mark me as done' toggleStopLabel='Unmark me as done' icon={CheckIcon} onToggle={(isActive: boolean) => null}/>
                     <MenuButton direction='right' label='Add image or giphy' icon={AddImageIcon}/>
-                    <MenuButton direction='right' label='Add sticker'  icon={AddStickerIcon}/>
+                    <MenuButton direction='right' label='Add sticker' icon={AddStickerIcon}/>
                     <MenuButton direction='right' label='Settings' icon={SettingsIcon}/>
                 </div>
             </div>
