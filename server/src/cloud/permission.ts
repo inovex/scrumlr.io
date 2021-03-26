@@ -14,6 +14,10 @@ export const isAdmin = async (user: Parse.User, boardId: string) => {
     return Boolean(await adminRoleQuery.first({ useMasterKey: true }));
 }
 
+export const isOnline = (user: Parse.User, boardId: string) => {
+  return (user.get('boards') as string[])?.indexOf(boardId) >= 0;
+}
+
 export const isMember = async (user: Parse.User, boardId: string) => {
     const adminRoleQuery = new Parse.Query(Parse.Role);
     adminRoleQuery.equalTo('name', getAdminRoleName(boardId));
