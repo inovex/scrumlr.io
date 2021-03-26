@@ -38,4 +38,35 @@ describe('users actions', () => {
             });
         });
     });
+
+    describe('set user status', () => {
+        test('type is listed in users redux actions', () => {
+            // testing type equality here will not report an error at runtime but cause problems with typescript
+            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, UsersReduxAction> = true;
+            expect(assertion).toBe(true);
+        });
+
+        test('type is listed in general redux actions', () => {
+            // testing type equality here will not report an error at runtime but cause problems with typescript
+            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, ReduxAction> = true;
+            expect(assertion).toBe(true);
+        });
+
+        test('created action', () => {
+            const user: UserClientModel = {
+                id: 'id',
+                displayName: 'John Doe',
+                admin: true,
+                updatedAt: new Date('2020-11-30'),
+                createdAt: new Date('2020-11-30')
+            };
+            const action = UsersActionFactory.setUserStatus(user.id, true);
+
+            expect(action).toEqual({
+                type: '@@SCRUMLR/setUserStatus',
+                userId: user.id,
+                status: true
+            });
+        });
+    });
 });
