@@ -8,7 +8,8 @@ const createUser = (id: string, name: string, admin: boolean): UserClientModel =
     displayName: name,
     admin,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
+    online: true
 })
 
 describe('users reducer', () => {
@@ -53,4 +54,17 @@ describe('users reducer', () => {
         expect(state2.all).toContain(admin);
         expect(state2.all).toContain(user);
     });
+
+    test('set user status correctly offline/online', () => {
+      const user = createUser('1', 'Jane Doe', false);
+
+      const state1 = usersReducer(initialState, ActionFactory.setUsers([ user ], false));
+      expect(state1.all.find(u=>u.id === user.id)?.online).toBe(true);
+
+      const state2 = usersReducer(state1, ActionFactory.setUserStatus(user.id, false));
+      expect(state2.all.find(u=>u.id === user.id)?.online).toBe(false);
+
+      const state3 = usersReducer(state2, ActionFactory.setUserStatus(user.id, true));
+      expect(state3.all.find(u=>u.id === user.id)?.online).toBe(true);
+  });
 });
