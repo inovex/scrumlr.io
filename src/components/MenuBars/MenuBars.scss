@@ -1,6 +1,6 @@
 @import 'constants/style.scss';
 
-@media #{$menu-mobile} {
+@media screen and (max-width: 1343px){
   .menu-bars {
     position: fixed;
     left: calc(50% - 134px);

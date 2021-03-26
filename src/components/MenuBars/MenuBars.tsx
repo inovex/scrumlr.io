@@ -30,7 +30,7 @@ function MenuBars() {
         <div className={classNames('menu-bars', {'menu-bars--admin': showAdminMenu, 'menu-bars--user': !showAdminMenu}, {'menu-bars--isAdmin': isAdmin})}>
             <div className='menu user-menu'>
                 <div className='menu__items'>
-                    <MenuToggle direction='right' toggleStartLabel='Mark me as done' toggleStopLabel='Unmark me as done' icon={CheckIcon}/>
+                    <MenuToggle direction='right' toggleStartLabel='Mark me as done' toggleStopLabel='Unmark me as done' icon={CheckIcon} onToggle={(isActive: boolean) => null}/>
                     <MenuButton direction='right' label='Add image or giphy' icon={AddImageIcon}/>
                     <MenuButton direction='right' label='Add sticker'  icon={AddStickerIcon}/>
                     <MenuButton direction='right' label='Settings' icon={SettingsIcon}/>
@@ -38,10 +38,10 @@ function MenuBars() {
             </div>
             {isAdmin && <div className='menu admin-menu'>
                 <div className='menu__items'>
-                    <MenuToggle direction='left' toggleStartLabel='Start column mode' toggleStopLabel='End column mode' icon={ColumnIcon}/>
-                    <MenuToggle direction='left' toggleStartLabel='Start timer' toggleStopLabel='Stop timer' icon={TimerIcon}/>
-                    <MenuToggle direction='left' toggleStartLabel='Start voting phase' toggleStopLabel='End voting phase' icon={VoteIcon}/>
-                    <MenuToggle direction='left' toggleStartLabel='Start focused mode' toggleStopLabel='End focused mode' icon={FocusIcon}/>
+                    <MenuToggle direction='left' toggleStartLabel='Start column mode' toggleStopLabel='End column mode' icon={ColumnIcon} onToggle={(isActive: boolean) => null}/>
+                    <MenuToggle direction='left' toggleStartLabel='Start timer' toggleStopLabel='Stop timer' icon={TimerIcon} onToggle={(isActive: boolean) => null}/>
+                    <MenuToggle direction='left' toggleStartLabel='Start voting phase' toggleStopLabel='End voting phase' icon={VoteIcon} onToggle={(isActive: boolean) => null}/>
+                    <MenuToggle direction='left' toggleStartLabel='Start focused mode' toggleStopLabel='End focused mode' icon={FocusIcon} onToggle={(isActive: boolean) => null}/>
                 </div>
             </div>}
             {isAdmin && <button className='menu-bars__switch' onClick={_ => toggleMenus(prevState => !prevState)}>
