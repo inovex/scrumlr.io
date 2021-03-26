@@ -1,4 +1,3 @@
-import React from "react";
 import { act, render, fireEvent } from "@testing-library/react";
 import Board from "./Board";
 import Column from "components/Column/Column";
@@ -26,7 +25,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
   return (
     <Provider store={store}>
-      <Board>
+      <Board name="" boardstatus="">
         {colors.map((color, index) => (
           <Column key={index} color={color} columnId='GG0fWzyCwd'/>
         ))}
@@ -97,23 +96,23 @@ describe("basic", () => {
 
     describe('side-panels', () => {
 
-        test('left side-panel is present', () => {
-            const { container } = render(createBoardWithColumns('blue', 'pink'));
-            // @ts-ignore
-            expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
-        });
+    test('left side-panel is present', () => {
+      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      // @ts-ignore
+      expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+    });
 
-        test('right side-panel is present', () => {
-            const { container } = render(createBoardWithColumns('blue', 'pink'));
-            // @ts-ignore
-            expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
-        });
+    test('right side-panel is present', () => {
+      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      // @ts-ignore
+      expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
+    });
 
-        test('left side-panel has correct accent color', () => {
-            const { container } = render(createBoardWithColumns('blue', 'pink'));
-            // @ts-ignore
-            expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__blue");
-        });
+    test('left side-panel has correct accent color', () => {
+      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      // @ts-ignore
+      expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__blue");
+    });
 
         test('right side-panel has correct accent color', () => {
             const { container } = render(createBoardWithColumns("blue", "pink"));

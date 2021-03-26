@@ -1,0 +1,38 @@
+.user-avatar,
+.rest-users {
+    box-sizing: border-box;
+    height: 40px;
+    width: 40px;
+    border: 1px solid;
+    border-color: var(--accent-color);
+    border-radius: 100px;
+    display: inline-block;
+    margin-left: -5px;
+    background-color: white;
+}
+
+.user__initials,
+.rest-users__count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+    color: var(--accent-color);
+}
+
+.rest-users__count::before{
+  content: '+';
+}
+
+@media (prefers-color-scheme: dark) {
+  .user-avatar,
+  .rest-users{
+    border-color: white;
+    background-color: black;
+  }
+
+  .user__initials,
+  .rest-users__count{
+    color: white;
+  }
+}
