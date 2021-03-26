@@ -25,7 +25,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
   return (
     <Provider store={store}>
-      <Board>
+      <Board name="" boardstatus="">
         {colors.map((color, index) => (
           <Column key={index} color={color} columnId='GG0fWzyCwd'/>
         ))}

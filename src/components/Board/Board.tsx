@@ -93,6 +93,10 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
 
   return (
     <>
+      <style>
+        {`.board { --board__columns: ${columnsCount} }`}
+      </style>
+
       <BoardHeader name={name} boardstatus={boardstatus} />
 
       {showPreviousButton && (
@@ -114,7 +118,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
           <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
         </button>
       )}
-
+      
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
         {children}
