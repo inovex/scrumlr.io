@@ -1,0 +1,15 @@
+.board-users {
+  position: absolute;
+  right: 90px;
+  top: 40px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.board-users li {
+  display: inline;
+}
