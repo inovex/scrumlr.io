@@ -2,7 +2,7 @@
 
 exports[`Menu should only render add-menu for participants 1`] = `
 <div
-  class="menu-bars menu-bars--user false"
+  class="menu-bars menu-bars--user"
 >
   <div
     class="menu user-menu"
@@ -11,7 +11,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
       class="menu__items"
     >
       <button
-        class="menu-item menu-item1 menu-item--disabled menu-item--right"
+        class="menu-item menu-item--disabled menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -19,22 +19,22 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            MARK ME AS DONE
+            Mark me as done
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-check.svg
         </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
       </button>
       <button
-        class="menu-item menu-item2 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -42,7 +42,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            ADD IMAGE OR GIPHY
+            Add image or giphy
           </span>
         </div>
         <svg
@@ -52,7 +52,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item3 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -60,7 +60,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            ADD STICKER
+            Add sticker
           </span>
         </div>
         <svg
@@ -70,7 +70,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item4 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -78,7 +78,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            SETTINGS
+            Settings
           </span>
         </div>
         <svg
@@ -103,7 +103,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       class="menu__items"
     >
       <button
-        class="menu-item menu-item1 menu-item--disabled menu-item--right"
+        class="menu-item menu-item--disabled menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -111,22 +111,22 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MARK ME AS DONE
+            Mark me as done
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-check.svg
         </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
       </button>
       <button
-        class="menu-item menu-item2 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -134,7 +134,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            ADD IMAGE OR GIPHY
+            Add image or giphy
           </span>
         </div>
         <svg
@@ -144,7 +144,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item3 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -152,7 +152,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            ADD STICKER
+            Add sticker
           </span>
         </div>
         <svg
@@ -162,7 +162,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item4 menu-item--right"
+        class="menu-item menu-item--right"
       >
         <div
           class="menu-item__tooltip"
@@ -170,7 +170,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            SETTINGS
+            Settings
           </span>
         </div>
         <svg
@@ -188,7 +188,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       class="menu__items"
     >
       <button
-        class="menu-item menu-item1 menu-item--disabled menu-item--left"
+        class="menu-item menu-item--disabled menu-item--left"
       >
         <div
           class="menu-item__tooltip"
@@ -196,22 +196,22 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            START COLUMN MODE
+            Start column mode
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-column.svg
         </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
       </button>
       <button
-        class="menu-item menu-item2 menu-item--disabled menu-item--left"
+        class="menu-item menu-item--disabled menu-item--left"
       >
         <div
           class="menu-item__tooltip"
@@ -219,22 +219,22 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            START TIMER
+            Start timer
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-timer.svg
         </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
       </button>
       <button
-        class="menu-item menu-item3 menu-item--disabled menu-item--left"
+        class="menu-item menu-item--disabled menu-item--left"
       >
         <div
           class="menu-item__tooltip"
@@ -242,22 +242,22 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            START VOTING PHASE
+            Start voting phase
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-vote.svg
         </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
       </button>
       <button
-        class="menu-item menu-item4 menu-item--disabled menu-item--left"
+        class="menu-item menu-item--disabled menu-item--left"
       >
         <div
           class="menu-item__tooltip"
@@ -265,18 +265,18 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            START FOCUSED MODE
+            Start focused mode
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-focus.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
         </svg>
       </button>
     </div>
