@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './Board.scss';
-import { getColorClassName } from "constants/colors";
-import { ColumnProps } from "components/Column/Column";
-import { ReactComponent as RightArrowIcon } from "assets/icon-arrow-next.svg";
-import { ReactComponent as LeftArrowIcon } from "assets/icon-arrow-previous.svg";
+import React, {useEffect, useRef, useState} from 'react';
+import {getColorClassName} from "constants/colors";
+import {ColumnProps} from "components/Column/Column";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import MenuBars from 'components/MenuBars/MenuBars';
 import BoardHeader from "components/BoardHeader/BoardHeader";
+import './Board.scss';
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -98,6 +99,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
       </style>
 
       <BoardHeader name={name} boardstatus={boardstatus} />
+      <MenuBars/>
 
       {showPreviousButton && (
         <button
