@@ -4,6 +4,7 @@ import Column from "components/Column/Column";
 import { Color } from "constants/colors";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
+import Parse from 'parse';
 
 const mockStore = configureStore();
 
@@ -36,6 +37,8 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
 describe("basic", () => {
   beforeEach(() => {
+    const mockCurrentUser = jest.fn(() => ({id: 'testId'}));
+    Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
         ({
@@ -134,6 +137,8 @@ describe("basic", () => {
 
 describe("navigation", () => {
   beforeEach(() => {
+    const mockCurrentUser = jest.fn(() => ({id: 'testId'}));
+    Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
         ({
