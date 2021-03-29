@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import classNames from 'classnames';
 import './MenuItem.scss';
@@ -14,23 +14,12 @@ type MenuToggleProps = {
 function MenuToggle(props: MenuToggleProps) {
 
     const [isActive, setStatus] = useState(false);
-    const isFirstRender = useRef(true);
-
-    useEffect(() => {
-        if (!isFirstRender.current) {
-            props.onToggle(isActive);
-        }
-    }, [isActive]);
-
-    useEffect(() => {
-        isFirstRender.current = false;
-    })
 
     const Icon = props.icon;
 
     return (<button 
                 className={classNames('menu-item', {'menu-item--active': isActive, 'menu-item--disabled': !isActive}, `menu-item--${props.direction}`)}
-                onClick={() => setStatus(prevValue => !prevValue)}
+                onClick={() => {props.onToggle(!isActive); setStatus(prevValue => !prevValue);}}
             >
         <div className='menu-item__tooltip'>
             <span className='tooltip__text'>
