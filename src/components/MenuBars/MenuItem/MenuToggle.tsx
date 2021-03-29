@@ -20,7 +20,7 @@ function MenuToggle(props: MenuToggleProps) {
         if (!isFirstRender.current) {
             props.onToggle(isActive);
         }
-    }, [isActive]);
+    }, [isActive, props.onToggle]);
 
     useEffect(() => {
         isFirstRender.current = false;
