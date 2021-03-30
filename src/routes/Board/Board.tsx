@@ -41,7 +41,7 @@ function Board() {
                 {waitingUser}
                 <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
                         {state.board.data!.columns.map((column:any) => (
-                            <Column color="pink" key={column.id} columnId={column.id}/>
+                            <Column key={column.id} columnId={column.id}/>
                         ))}
                 </BoardComponent>
             </>

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {getColorClassName} from "constants/colors";
+import {getColorClassName, getColorForIndex} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
@@ -76,12 +76,11 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
   }
 
   const { firstVisibleColumnIndex, lastVisibleColumnIndex } = state;
-  const columnColors = React.Children.map(children, (child) => child.props.color);
 
   const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
   const showPreviousButton = firstVisibleColumnIndex > 0;
 
-  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
+  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
   const handlePreviousClick = () => {
@@ -92,6 +91,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
     boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
   }
 
+  // FIXME delete getColorForIndex and replace by real data from server
   return (
     <>
       <style>
@@ -103,17 +103,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
 
       {showPreviousButton && (
         <button
-          className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
-          onClick={handlePreviousClick}
-          aria-hidden={true}
-        >
-          <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
-        </button>
-      )}
-
-      {showPreviousButton && (
-        <button
-          className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
+          className={`board__navigation board__navigation-prev ${getColorClassName(getColorForIndex(previousColumnIndex))}`}
           onClick={handlePreviousClick}
           aria-hidden={true}
         >
@@ -122,14 +112,14 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
       )}
       
       <main className="board" ref={boardRef}>
-        <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
+        <div className={`board__spacer-left ${getColorClassName(getColorForIndex(0))}`} />
         {children}
-        <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
+        <div className={`board__spacer-right ${getColorClassName(getColorForIndex(columnsCount - 1))}`} />
       </main>
 
       {showNextButton && (
         <button
-          className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`}
+          className={`board__navigation board__navigation-next ${getColorClassName(getColorForIndex((lastVisibleColumnIndex + 1) % columnsCount))}`}
           onClick={handleNextClick}
           aria-hidden={true}>
           <RightArrowIcon className="board__navigation-arrow board__navigation-arrow-next" />

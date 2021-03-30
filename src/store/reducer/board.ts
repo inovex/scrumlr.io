@@ -29,6 +29,8 @@ export const boardReducer = (state: BoardState = { status: 'unknown' }, action: 
                         ...state.data!.columns,
                         {
                             name: action.name,
+                            // FIXME add color here
+                            color: 'planning-pink',
                             hidden: action.hidden
                         }
                     ],

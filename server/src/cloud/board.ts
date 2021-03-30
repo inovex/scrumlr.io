@@ -67,6 +67,7 @@ const respondToJoinRequest = async (
 export interface CreateBoardRequest {
   columns: {
     name: string;
+    color: string;
     hidden: boolean;
   }[];
   name?: string;
@@ -117,6 +118,7 @@ export const initializeBoardFunctions = () => {
     const columns = request.columns.reduce((acc, current) => {
       acc[newObjectId(serverConfig.objectIdSize)] = {
         name: current.name,
+        color: current.color,
         hidden: current.hidden,
       };
       return acc;

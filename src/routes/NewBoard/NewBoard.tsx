@@ -2,10 +2,11 @@ import * as React from 'react';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import {AuthenticationManager} from 'utils/authentication/AuthenticationManager';
-import getRandomName from '../../constants/Name';
+import getRandomName from 'constants/Name';
 import {RouteComponentProps} from "react-router";
 import Parse from "parse";
 import {API} from "../../api";
+import {getColorForIndex} from "constants/colors";
 
 export interface NewBoardProps extends RouteComponentProps {}
 
@@ -25,9 +26,9 @@ function NewBoard(props: NewBoardProps) {
     async function onCreateBoard() {
         if (Parse.User.current()) {
             const boardId = await API.createBoard([
-                { name: 'Positive', hidden: false },
-                { name: 'Negative', hidden: false },
-                { name: 'Actions', hidden: true }
+                { name: 'Positive', hidden: false, color: getColorForIndex(0) },
+                { name: 'Negative', hidden: false, color: getColorForIndex(1) },
+                { name: 'Actions', hidden: true, color: getColorForIndex(2) }
             ]);
             props.history.push(`/board/${boardId}`);
         }
