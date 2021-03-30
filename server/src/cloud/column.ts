@@ -6,6 +6,7 @@ import {serverConfig} from "../index";
 export interface AddColumnRequest {
     boardId: string;
     name: string;
+    color: string;
     hidden: boolean;
 }
 
@@ -18,6 +19,7 @@ export interface EditColumnRequest {
     boardId: string;
     columnId: string;
     name?: string;
+    color?: string;
     hidden?: boolean;
 }
 
@@ -30,6 +32,7 @@ export const initializeColumnFunctions = () => {
             const columns = board.get('columns');
             columns[newObjectId(serverConfig.objectIdSize)] = {
                 name: request.name,
+                color: request.color,
                 hidden: request.hidden
             }
             await board.save({ columns }, { useMasterKey: true });
@@ -63,6 +66,10 @@ export const initializeColumnFunctions = () => {
             const columns = board.get('columns');
             if (request.name) {
                 columns[request.columnId].name = request.name;
+            }
+
+            if (request.color) {
+                columns[request.columnId].color = request.color;
             }
 
             if (request.hidden !== undefined) {
