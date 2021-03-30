@@ -6,11 +6,13 @@ import {ApplicationState} from "types/store";
 import store from "store";
 import {ActionFactory} from "store/action";
 import Parse from 'parse';
+import Note from "../../components/Note/Note";
 
 function Board() {
 
     const state = useSelector((state: ApplicationState) => ({
         board: state.board,
+        notes: state.notes,
         joinRequests: state.joinRequests,
         users: state.users
     }));
@@ -26,9 +28,9 @@ function Board() {
             </div>);
         }
     }
-    var boardstatus = "Public Session"
-    var joinConfirmationRequired = state.board.data?.joinConfirmationRequired;
-    var accessCode = state.board.data?.accessCode;
+    let boardstatus = "Public Session"
+    const joinConfirmationRequired = state.board.data?.joinConfirmationRequired;
+    const accessCode = state.board.data?.accessCode;
     if (joinConfirmationRequired === true || (accessCode !== undefined && accessCode !== "") ) {
         boardstatus = "Private Session"
     } 
@@ -40,8 +42,12 @@ function Board() {
             <>    
                 {waitingUser}
                 <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
-                        {state.board.data!.columns.map((column:any) => (
-                            <Column key={column.id} columnId={column.id}/>
+                        {state.board.data!.columns.map((column) => (
+                            <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
+                                {state.notes.filter((note) => note.columnId === column.id).map((note) =>
+                                    <Note key={note.id} text={note.text} authorId={note.author}/>
+                                )}
+                            </Column>
                         ))}
                 </BoardComponent>
             </>

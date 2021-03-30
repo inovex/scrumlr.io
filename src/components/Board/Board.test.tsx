@@ -28,7 +28,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
     <Provider store={store}>
       <Board name="" boardstatus="">
         {colors.map((color, index) => (
-          <Column key={index} columnId='GG0fWzyCwd'/>
+          <Column key={index} id='GG0fWzyCwd' color={colors[index]} name="Positive"/>
         ))}
       </Board>
     </Provider>
@@ -55,7 +55,7 @@ describe("basic", () => {
 
   test("correct number of columns is set in inner styles", () => {
     const { container } = render(
-      createBoardWithColumns("violet", "pink", "blue", "purple")
+      createBoardWithColumns("lean-lilac", "planning-pink", "backlog-blue", "poker-purple")
     );
     expect(container.querySelector("style")).toHaveTextContent(
       ".board { --board__columns: 4 }"
@@ -64,7 +64,7 @@ describe("basic", () => {
 
   describe("side-panels", () => {
     test("left side-panel is present", () => {
-      const { container } = render(createBoardWithColumns("blue", "pink"));
+      const { container } = render(createBoardWithColumns("backlog-blue", "planning-pink"));
       // @ts-ignore
       expect(container.querySelector(".board").firstChild).toHaveClass(
         "board__spacer-left"
@@ -72,7 +72,7 @@ describe("basic", () => {
     });
 
     test("right side-panel is present", () => {
-      const { container } = render(createBoardWithColumns("blue", "pink"));
+      const { container } = render(createBoardWithColumns("backlog-blue", "planning-pink"));
       // @ts-ignore
       expect(container.querySelector(".board").lastChild).toHaveClass(
         "board__spacer-right"
@@ -80,56 +80,56 @@ describe("basic", () => {
     });
 
     test("left side-panel has correct accent color", () => {
-      const { container } = render(createBoardWithColumns("blue", "pink"));
+      const { container } = render(createBoardWithColumns("backlog-blue", "planning-pink"));
       // @ts-ignore
       expect(container.querySelector(".board").firstChild).toHaveClass(
-        "accent-color__blue"
+        "accent-color__backlog-blue"
       );
     });
 
     test("right side-panel has correct accent color", () => {
       const { container } = render(
-        createBoardWithColumns("blue", "pink")
+        createBoardWithColumns("backlog-blue", "planning-pink")
       );
       // @ts-ignore
       expect(container.querySelector(".board").lastChild).toHaveClass(
-        "accent-color__pink"
+        "accent-color__planning-pink"
       );
     });
 
     describe('side-panels', () => {
 
     test('left side-panel is present', () => {
-      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      const { container } = render(createBoardWithColumns('backlog-blue', 'planning-pink'));
       // @ts-ignore
       expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
     });
 
     test('right side-panel is present', () => {
-      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      const { container } = render(createBoardWithColumns('backlog-blue', 'planning-pink'));
       // @ts-ignore
       expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
     });
 
     test('left side-panel has correct accent color', () => {
-      const { container } = render(createBoardWithColumns('blue', 'pink'));
+      const { container } = render(createBoardWithColumns('backlog-blue', 'planning-pink'));
       // @ts-ignore
-      expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__blue");
+      expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__backlog-blue");
     });
 
         test('right side-panel has correct accent color', () => {
-            const { container } = render(createBoardWithColumns("blue", "pink"));
+            const { container } = render(createBoardWithColumns("backlog-blue", "planning-pink"));
             // @ts-ignore
-            expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__pink");
+            expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__planning-pink");
         });
 
         test('side-panels have correct accent color with single column', () => {
-            const { container } = render(createBoardWithColumns('violet'));
+            const { container } = render(createBoardWithColumns('lean-lilac'));
             const board = container.querySelector(".board");
             // @ts-ignore
-            expect(board.childNodes[1]).toHaveClass("accent-color__violet");
+            expect(board.childNodes[1]).toHaveClass("accent-color__lean-lilac");
             // @ts-ignore
-            expect(board.lastChild).toHaveClass("accent-color__violet");
+            expect(board.lastChild).toHaveClass("accent-color__lean-lilac");
         });
     });
   });
@@ -159,23 +159,23 @@ describe("navigation", () => {
   });
 
   test("intersection observer is registered on mount", () => {
-    render(createBoardWithColumns("violet", "blue"));
+    render(createBoardWithColumns("lean-lilac", "backlog-blue"));
     expect(window.IntersectionObserver).toHaveBeenCalled();
     expect(intersectionObserver.observe).toHaveBeenCalledTimes(2);
   });
 
   test("intersection observer is disconnected on unmount", () => {
-    render(createBoardWithColumns("pink")).unmount();
+    render(createBoardWithColumns("planning-pink")).unmount();
     expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(1);
   });
 
   test("intersection observer is re-initialized on change of children", () => {
-    const { rerender } = render(createBoardWithColumns("pink"));
+    const { rerender } = render(createBoardWithColumns("planning-pink"));
 
     expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
     expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(0);
 
-    rerender(createBoardWithColumns("pink", "blue"));
+    rerender(createBoardWithColumns("planning-pink", "backlog-blue"));
 
     expect(window.IntersectionObserver).toHaveBeenCalledTimes(2);
     expect(intersectionObserver.disconnect).toHaveBeenCalledTimes(1);
@@ -185,7 +185,7 @@ describe("navigation", () => {
     let container: HTMLElement;
 
     beforeEach(() => {
-      container = render(createBoardWithColumns("pink", "blue", "purple"))
+      container = render(createBoardWithColumns("planning-pink", "backlog-blue", "poker-purple"))
         .container;
     });
 
@@ -244,14 +244,14 @@ describe("navigation", () => {
     test("previous button has color of previous column", () => {
       showColumns(false, true, false);
       expect(container.querySelector(".board__navigation-prev")).toHaveClass(
-        "accent-color__pink"
+        "accent-color__planning-pink"
       );
     });
 
     test("next button has color of next column", () => {
       showColumns(false, true, false);
       expect(container.querySelector(".board__navigation-next")).toHaveClass(
-        "accent-color__purple"
+        "accent-color__poker-purple"
       );
     });
   });

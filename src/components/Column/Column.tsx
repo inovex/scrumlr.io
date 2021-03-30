@@ -1,38 +1,28 @@
 import './Column.scss';
-import {getColorClassName} from "constants/colors";
+import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
-import Note from "components/Note/Note";
-import {ApplicationState} from "types/store";
-import { useSelector } from 'react-redux';
+import React from "react";
 
 export interface ColumnProps {
-    columnId: string;
+    id: string;
+    name: string;
+    color: Color;
+    children?: React.ReactNode;
 }
 
-const Column = ({ columnId } : ColumnProps) => {
-    const state = useSelector((state: ApplicationState) => ({
-        board : state.board,
-        notes: state.notes,
-        users: state.users 
-    }));
-
-    const column = state.board.data?.columns.filter((column) => column.id === columnId)[0]!;
-    const notesInColumn = state.notes.filter((note) => note.columnId === columnId); 
-
+const Column = ({ id, name, color, children } : ColumnProps) => {
     return (
-        <section className={`column ${getColorClassName(column.color)}`}>
+        <section className={`column ${getColorClassName(color)}`}>
             <div className="column__content">
                 <header className="column__header">
                     <div className="column__header-title">
-                        <h2 className="column__header-text">{column.name}</h2>
-                        <span className="column__header-card-number">{notesInColumn.length}</span>
+                        <h2 className="column__header-text">{name}</h2>
+                        <span className="column__header-card-number">{React.Children.count(children)}</span>
                     </div>
-                    <NoteInput columnId={columnId}/>
+                    <NoteInput columnId={id}/>
                 </header>
                 <ul className="column__note-list">
-                    {notesInColumn.map((note:any, index:number) =>
-                        <Note key={note.id} text={note.text} authorId={note.author}/>
-                    )}
+                    {children}
                 </ul>
             </div>
         </section>

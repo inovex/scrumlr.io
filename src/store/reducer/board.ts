@@ -29,8 +29,7 @@ export const boardReducer = (state: BoardState = { status: 'unknown' }, action: 
                         ...state.data!.columns,
                         {
                             name: action.name,
-                            // FIXME add color here
-                            color: 'planning-pink',
+                            color: action.color,
                             hidden: action.hidden
                         }
                     ],
@@ -45,6 +44,7 @@ export const boardReducer = (state: BoardState = { status: 'unknown' }, action: 
             newColumns.splice(columnIndex, 1, {
                 ...column,
                 name: action.name || column.name,
+                color: action.color || column.color,
                 hidden: action.hidden === undefined ? column.hidden : action.hidden
             });
             return {

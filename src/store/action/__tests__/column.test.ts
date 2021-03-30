@@ -21,10 +21,11 @@ describe('column actions', () => {
         });
 
         test('created action', () => {
-            const action = ColumnActionFactory.addColumn('Name');
+            const action = ColumnActionFactory.addColumn('Name', 'planning-pink');
             expect(action).toEqual({
                 type: '@@SCRUMLR/addColumn',
                 name: 'Name',
+                color: 'planning-pink',
                 hidden: false
             });
         });
@@ -48,6 +49,7 @@ describe('column actions', () => {
             expect(action).toEqual({
                 type: '@@SCRUMLR/editColumn',
                 columnId: 'columnId',
+                color: undefined,
                 name: 'New name'
             });
         });
