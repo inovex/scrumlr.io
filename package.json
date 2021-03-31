@@ -64,7 +64,7 @@
     "lint": "tsc --noEmit && eslint .",
     "lint:fix": "tsc --noEmit && eslint . --fix",
     "format": "prettier --write src/**/*.{ts,tsx,json,css,scss,md}",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "husky": {
     "hooks": {
