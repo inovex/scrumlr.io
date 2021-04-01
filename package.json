@@ -73,7 +73,8 @@
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
-    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
+    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write",
+    "**/*.ts?(x)": "prettier --write"
   },
   "browserslist": {
     "production": [
