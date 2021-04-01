@@ -2,4 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 lint-staged
-server/lint-staged
+
+cd server/
+lint-staged
