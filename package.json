@@ -64,18 +64,11 @@
     "lint": "tsc --noEmit && eslint .",
     "lint:fix": "tsc --noEmit && eslint . --fix",
     "format": "prettier --write src/**/*.{ts,tsx,json,css,scss,md}",
-    "postinstall": "husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
-    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write",
-    "**/*.ts?(x)": "prettier --write",
-    "*": "foobar"
+    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
   },
   "browserslist": {
     "production": [

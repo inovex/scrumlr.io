@@ -25,5 +25,3 @@ server/logs
 /.idea
 debug.log
 ui-debug.log
-
-.husky
