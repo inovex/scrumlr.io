@@ -45,7 +45,7 @@ This project is written in React on top of the [Parse Platform](https://parsepla
 
 You're very welcome to be part of this project. You can contribute by opening an issue, by
 fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
-`npm run test` and `npm run lint` are passing and that every change is covered by unit tests.
+`yarn test` and `yarn lint` are passing and that every change is covered by unit tests.
 
 ## Thank you
 
