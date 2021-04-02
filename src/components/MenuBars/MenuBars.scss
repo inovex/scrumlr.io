@@ -1,5 +1,9 @@
 @import 'constants/style.scss';
 
+.menu {
+  z-index: $menu-z-index;
+}
+
 @media screen and (max-width: 1343px){
   .menu-bars {
     position: fixed;
