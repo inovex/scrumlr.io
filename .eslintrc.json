@@ -14,7 +14,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "jest", "only-warn"],
+  "plugins": ["only-warn", "react", "react-hooks", "@typescript-eslint", "jest"],
   "rules": {
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
