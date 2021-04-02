@@ -1,7 +1,9 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+echo "... about to format staged files for client"
 lint-staged
 
+echo "... about to format staged files for server"
 cd server/
 lint-staged
