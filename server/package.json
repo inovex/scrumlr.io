@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "serve": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/index.ts\"",
     "start": "ts-node src/index.ts",
     "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
     "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
@@ -11,6 +12,7 @@
   "devDependencies": {
     "@types/http-proxy-middleware": "^0.19.3",
     "@types/parse": "^2.18.3",
+    "nodemon": "^2.0.7",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
   },
