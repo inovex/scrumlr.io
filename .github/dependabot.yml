@@ -1,0 +1,33 @@
+version: 2
+updates:
+  # Client
+  - package-ecosystem: npm
+    allow:
+      - dependency-type: "direct"
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - dependencies
+    versioning-strategy: increase
+    commit-message:
+      prefix: "yarn"
+      include: "scope"
+
+  # Server
+  - package-ecosystem: "npm"
+    allow:
+      - dependency-type: "direct"
+    directory: "/server"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - dependencies
+    versioning-strategy: increase
+    commit-message:
+      prefix: "yarn"
+      include: "scope"
