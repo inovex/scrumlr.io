@@ -39,8 +39,7 @@
     "max-len": ["warn", {"code": 180}],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
-    "prettier/prettier": "warn"
+    "react/react-in-jsx-scope": "off"
   },
   "settings": {
     "import/resolver": {
