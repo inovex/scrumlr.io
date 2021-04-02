@@ -1,5 +1,8 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+SCRIPT=`realpath $0`
+SCRIPT_DIRECTORY=`dirname $SCRIPT`
+PATH="$PATH:$SCRIPT_DIRECTORY/../node_modules/.bin"
+. "$SCRIPT_DIRECTORY/_/husky.sh"
 
 echo "... about to format staged files for client"
 lint-staged
