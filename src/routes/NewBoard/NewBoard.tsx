@@ -17,9 +17,14 @@ function NewBoard(props: NewBoardProps) {
         setName(name);
     }
 
-    async function onLogin() {
+    async function onAnonymousLogin() {
         await AuthenticationManager.signInAnonymously(name);
         await onCreateBoard();
+    }
+
+    async function onGoogleSignIn() {
+        const redirectURI = await API.signInWithGoogle(window.location.href);
+        window.location.href = redirectURI;
     }
 
     async function onCreateBoard() {
@@ -43,14 +48,15 @@ function NewBoard(props: NewBoardProps) {
                 onChange={handleChangeName}
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                     if (e.key === 'Enter') {
-                      onLogin();
+                      onAnonymousLogin();
                     }
                 }}
                 inputProps={{
                     maxLength: 20
                 }}
             />
-            <Button onClick={onLogin}>Login</Button>
+            <Button onClick={onAnonymousLogin}>Login</Button>
+            <Button onClick={onGoogleSignIn}>Sign in with Google</Button>
         </div>
     );
 }

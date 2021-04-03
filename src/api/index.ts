@@ -2,6 +2,7 @@ import Parse from "parse";
 import {BoardAPI} from "./board";
 import {NoteAPI} from "./note";
 import {ColumnAPI} from "./column";
+import {AuthAPI} from "./auth";
 
 /**
  * Helper function for calls on the cloud functions of the Parse server backend.
@@ -19,5 +20,6 @@ export const callAPI = <RequestType, ResponseType>(endpoint: string, request: Re
 export const API = {
     ...BoardAPI,
     ...ColumnAPI,
-    ...NoteAPI
+    ...NoteAPI,
+    ...AuthAPI
 }
