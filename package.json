@@ -6,7 +6,7 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@types/classnames": "^2.2.11",
-    "classnames": "^2.2.6",
+    "classnames": "^2.3.1",
     "lodash": "^4.17.20",
     "parse": "^3.1.0",
     "react": "^17.0.2",
@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.10",
-    "@testing-library/react": "^11.2.5",
+    "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
