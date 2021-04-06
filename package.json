@@ -2,6 +2,7 @@
   "name": "scrumlr.io",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT with Commons Clause",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
