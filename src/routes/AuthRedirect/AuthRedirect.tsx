@@ -1,10 +1,12 @@
 import queryString from "query-string";
 import {useEffect, useState} from "react";
 import Parse from "parse";
-import {API} from "../../api";
+import {API} from "api";
+import LoadingScreen from "components/LoadingScreen/LoadingScreen";
+import {RouteComponentProps} from "react-router";
 
-function AuthRedirect() {
-  const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
+function AuthRedirect(props: RouteComponentProps) {
+  const [status, setStatus] = useState<{error?: string}>({});
 
   useEffect(() => {
     const url = location.search;
@@ -12,9 +14,7 @@ function AuthRedirect() {
 
     if (params.error) {
       setStatus({...status, error: params.error as string});
-    }
-
-    if (params.code) {
+    } else if (params.code && params.state) {
       API.verifyGoogleSignIn(params.code as string).then((res) => {
         const user = new Parse.User();
         const authData = {
@@ -30,6 +30,8 @@ function AuthRedirect() {
           });
         });
       });
+    } else {
+      setStatus({error: "Not a valid redirect"});
     }
   }, [status]);
 
@@ -37,7 +39,7 @@ function AuthRedirect() {
     return <span>Error: {status.error}</span>;
   }
 
-  return <div>Waiting for auth...</div>;
+  return <LoadingScreen />;
 }
 
 export default AuthRedirect;

@@ -8,9 +8,7 @@ import Parse from "parse";
 import {API} from "api";
 import {getColorForIndex} from "constants/colors";
 
-export type NewBoardProps = RouteComponentProps;
-
-function NewBoard(props: NewBoardProps) {
+function NewBoard(props: RouteComponentProps) {
   const [name, setName] = React.useState(getRandomName());
   function handleChangeName(e: any) {
     const name = (e.target as HTMLInputElement).value;
@@ -20,6 +18,11 @@ function NewBoard(props: NewBoardProps) {
   async function onAnonymousLogin() {
     await AuthenticationManager.signInAnonymously(name);
     await onCreateBoard();
+  }
+
+  async function onLogout() {
+    await Parse.User.logOut();
+    props.history.push("/");
   }
 
   async function onGoogleSignIn() {
@@ -43,7 +46,7 @@ function NewBoard(props: NewBoardProps) {
     return (
       <div>
         <Button onClick={onCreateBoard}>Create Board</Button>
-        <Button onClick={() => Parse.User.logOut()}>Logout</Button>
+        <Button onClick={onLogout}>Logout</Button>
       </div>
     );
   }
