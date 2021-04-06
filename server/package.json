@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^0.19.3",
-    "@types/parse": "^2.18.3",
+    "@types/parse": "^2.18.4",
     "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
   },
