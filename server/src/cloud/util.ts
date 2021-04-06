@@ -32,8 +32,8 @@ export const newObject = (className: string, data: ParseObjectParams, acl: ACL):
   const objectACL = new Parse.ACL();
   objectACL.setPublicReadAccess(false);
   objectACL.setPublicWriteAccess(false);
-  // acl.readRoles?.forEach((role) => objectACL.setRoleReadAccess(role, true));
-  // acl.writeRoles?.forEach((role) => objectACL.setRoleWriteAccess(role, true));
+  acl.readRoles.forEach((role) => objectACL.setRoleReadAccess(role, true));
+  acl.writeRoles.forEach((role) => objectACL.setRoleWriteAccess(role, true));
   object.setACL(objectACL);
   return object;
 };
