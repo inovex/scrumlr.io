@@ -2,7 +2,7 @@ import {newObjectId} from "parse-server/lib/cryptoUtils";
 import {requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
-import Color from "../util/Color";
+import Color, {isOfTypeColor} from "../util/Color";
 
 export interface AddColumnRequest {
   boardId: string;
@@ -31,6 +31,10 @@ export const initializeColumnFunctions = () => {
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
     if (board) {
       const columns = board.get("columns");
+      if (!isOfTypeColor(request.color)) {
+        throw new Error(`color ${request.color} is not allowed for columns`);
+      }
+
       columns[newObjectId(serverConfig.objectIdSize)] = {
         name: request.name,
         color: request.color,
@@ -70,7 +74,11 @@ export const initializeColumnFunctions = () => {
       }
 
       if (request.color) {
-        columns[request.columnId].color = request.color;
+        if (isOfTypeColor(request.color)) {
+          columns[request.columnId].color = request.color;
+        } else {
+          throw new Error(`specified column color '${request.color}' is not allowed`);
+        }
       }
 
       if (request.hidden !== undefined) {

@@ -2,7 +2,7 @@ import {newObjectId} from "parse-server/lib/cryptoUtils";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
-import Color from "../util/Color";
+import Color, {isOfTypeColor} from "../util/Color";
 
 interface JoinBoardResponse {
   status: "accepted" | "rejected" | "pending";
@@ -104,6 +104,10 @@ export const initializeBoardFunctions = () => {
   api<CreateBoardRequest, string>("createBoard", async (user, request) => {
     const board = new Parse.Object("Board");
     const columns = request.columns.reduce((acc, current) => {
+      if (!isOfTypeColor(current.color)) {
+        throw new Error(`color ${current.color} is not allowed for columns`);
+      }
+
       acc[newObjectId(serverConfig.objectIdSize)] = {
         name: current.name,
         color: current.color,
@@ -195,29 +199,27 @@ export const initializeBoardFunctions = () => {
           joinRequestReference: joinRequestQueryResult.id,
           accessKey: joinRequestQueryResult.get("accessKey"),
         };
-      } 
-        const joinRequest = new Parse.Object("JoinRequest");
-        joinRequest.set("user", user);
-        joinRequest.set("board", boardReference);
+      }
+      const joinRequest = new Parse.Object("JoinRequest");
+      joinRequest.set("user", user);
+      joinRequest.set("board", boardReference);
 
-        const joinRequestACL = new Parse.ACL();
-        joinRequestACL.setReadAccess(user.id, true);
-        joinRequestACL.setRoleReadAccess(getAdminRoleName(request.boardId), true);
-        joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.boardId), true);
-        joinRequest.setACL(joinRequestACL);
+      const joinRequestACL = new Parse.ACL();
+      joinRequestACL.setReadAccess(user.id, true);
+      joinRequestACL.setRoleReadAccess(getAdminRoleName(request.boardId), true);
+      joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.boardId), true);
+      joinRequest.setACL(joinRequestACL);
 
-        const savedJoinRequest = await joinRequest.save(null, {
-          useMasterKey: true,
-        });
-        return {
-          status: "pending",
-          joinRequestReference: savedJoinRequest.id,
-        };
-      
-    } 
-      await addAsMember(user, request.boardId);
-      return {status: "accepted"};
-    
+      const savedJoinRequest = await joinRequest.save(null, {
+        useMasterKey: true,
+      });
+      return {
+        status: "pending",
+        joinRequestReference: savedJoinRequest.id,
+      };
+    }
+    await addAsMember(user, request.boardId);
+    return {status: "accepted"};
   });
 
   api<JoinRequestResponse, boolean>("acceptUser", async (user, request) => {
