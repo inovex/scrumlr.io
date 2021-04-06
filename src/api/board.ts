@@ -1,4 +1,5 @@
 import {callAPI} from "./index";
+import {Color} from "constants/colors";
 
 export const BoardAPI = {
     /**
@@ -9,7 +10,7 @@ export const BoardAPI = {
      *
      * @returns the board id of the created board
      */
-    createBoard: (columns: { name: string, hidden: boolean }[], name?: string) => {
+    createBoard: (columns: { name: string, hidden: boolean, color: Color }[], name?: string) => {
         return callAPI<{ columns: { name: string, hidden: boolean }[], name?: string }, string>('createBoard', { columns, name });
     },
 

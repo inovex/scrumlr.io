@@ -81,7 +81,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
   const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
   const showPreviousButton = firstVisibleColumnIndex > 0;
 
-  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
+  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
   const handlePreviousClick = () => {
@@ -100,16 +100,6 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
 
       <BoardHeader name={name} boardstatus={boardstatus} />
       <MenuBars/>
-
-      {showPreviousButton && (
-        <button
-          className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
-          onClick={handlePreviousClick}
-          aria-hidden={true}
-        >
-          <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
-        </button>
-      )}
 
       {showPreviousButton && (
         <button

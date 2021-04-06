@@ -1,79 +1,94 @@
+import {newObjectId} from "parse-server/lib/cryptoUtils";
 import {requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
-import { newObjectId } from 'parse-server/lib/cryptoUtils';
 import {serverConfig} from "../index";
+import Color, {isOfTypeColor} from "../util/Color";
 
 export interface AddColumnRequest {
-    boardId: string;
-    name: string;
-    hidden: boolean;
+  boardId: string;
+  name: string;
+  color: Color;
+  hidden: boolean;
 }
 
 export interface DeleteColumnRequest {
-    boardId: string;
-    columnId: string;
+  boardId: string;
+  columnId: string;
 }
 
 export interface EditColumnRequest {
-    boardId: string;
-    columnId: string;
-    name?: string;
-    hidden?: boolean;
+  boardId: string;
+  columnId: string;
+  name?: string;
+  color?: Color;
+  hidden?: boolean;
 }
 
 export const initializeColumnFunctions = () => {
-    api<AddColumnRequest, boolean>('addColumn', async (user, request) => {
-        await requireValidBoardAdmin(user, request.boardId);
+  api<AddColumnRequest, boolean>("addColumn", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
 
-        const board = await new Parse.Query('Board').get(request.boardId, { useMasterKey: true });
-        if (board) {
-            const columns = board.get('columns');
-            columns[newObjectId(serverConfig.objectIdSize)] = {
-                name: request.name,
-                hidden: request.hidden
-            }
-            await board.save({ columns }, { useMasterKey: true });
-            return true;
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (board) {
+      const columns = board.get("columns");
+      if (!isOfTypeColor(request.color)) {
+        throw new Error(`color ${request.color} is not allowed for columns`);
+      }
+
+      columns[newObjectId(serverConfig.objectIdSize)] = {
+        name: request.name,
+        color: request.color,
+        hidden: request.hidden,
+      };
+      await board.save({columns}, {useMasterKey: true});
+      return true;
+    }
+
+    throw new Error(`Board '${request.boardId}' not found`);
+  });
+
+  api<DeleteColumnRequest, boolean>("deleteColumn", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    // TODO delete notes & votes
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (board) {
+      const columns = board.get("columns");
+      delete columns[request.columnId];
+      await board.save({columns}, {useMasterKey: true});
+      return true;
+    }
+
+    return true;
+  });
+
+  api<EditColumnRequest, boolean>("editColumn", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (board) {
+      const columns = board.get("columns");
+      if (request.name) {
+        columns[request.columnId].name = request.name;
+      }
+
+      if (request.color) {
+        if (isOfTypeColor(request.color)) {
+          columns[request.columnId].color = request.color;
+        } else {
+          throw new Error(`specified column color '${request.color}' is not allowed`);
         }
+      }
 
-        throw new Error(`Board '${request.boardId}' not found`);
-    });
+      if (request.hidden !== undefined) {
+        columns[request.columnId].hidden = request.hidden;
+      }
 
-    api<DeleteColumnRequest, boolean>('deleteColumn', async (user, request) => {
-        await requireValidBoardAdmin(user, request.boardId);
+      await board.save({columns}, {useMasterKey: true});
+      return true;
+    }
 
-        // TODO delete notes & votes
-
-        const board = await new Parse.Query('Board').get(request.boardId, { useMasterKey: true });
-        if (board) {
-            const columns = board.get('columns');
-            delete columns[request.columnId]
-            await board.save({ columns }, { useMasterKey: true });
-            return true;
-        }
-
-        return true;
-    });
-
-    api<EditColumnRequest, boolean>('editColumn', async (user, request) => {
-        await requireValidBoardAdmin(user, request.boardId);
-
-        const board = await new Parse.Query('Board').get(request.boardId, { useMasterKey: true });
-        if (board) {
-            const columns = board.get('columns');
-            if (request.name) {
-                columns[request.columnId].name = request.name;
-            }
-
-            if (request.hidden !== undefined) {
-                columns[request.columnId].hidden = request.hidden;
-            }
-
-            await board.save({ columns }, { useMasterKey: true });
-            return true;
-        }
-
-        throw new Error(`Column '${request.columnId}' on board '${request.boardId}' not found`)
-    });
-
-}
+    throw new Error(`Column '${request.columnId}' on board '${request.boardId}' not found`);
+  });
+};

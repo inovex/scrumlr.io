@@ -1,5 +1,5 @@
 #!/bin/sh
-SCRIPT_DIRECTORY=`dirname $0`
+SCRIPT_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 PATH="$PATH:$SCRIPT_DIRECTORY/../node_modules/.bin"
 . "$SCRIPT_DIRECTORY/_/husky.sh"
 
