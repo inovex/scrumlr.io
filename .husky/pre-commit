@@ -1,6 +1,5 @@
 #!/bin/sh
-SCRIPT=`realpath $0`
-SCRIPT_DIRECTORY=`dirname $SCRIPT`
+SCRIPT_DIRECTORY=`dirname $0`
 PATH="$PATH:$SCRIPT_DIRECTORY/../node_modules/.bin"
 . "$SCRIPT_DIRECTORY/_/husky.sh"
 

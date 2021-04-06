@@ -2,40 +2,25 @@
   "name": "scrumlr.io-server",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT with Commons Clause",
   "scripts": {
+    "serve": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/index.ts\"",
     "start": "ts-node src/index.ts",
     "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
     "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "lint": "tsc --noEmit && eslint .",
-    "lint:fix": "tsc --noEmit && eslint . --fix",
-    "format": "prettier --write src/**/*.{ts,tsx,json,css,scss,md}"
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": "eslint --fix",
-    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
+    "build": "tsc -p tsconfig.json"
   },
   "devDependencies": {
-    "@types/http-proxy-middleware": "^0.19.3",
-    "@types/parse": "^2.18.3",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
-    "@typescript-eslint/parser": "^4.20.0",
-    "eslint": "^7.23.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
+    "@types/http-proxy-middleware": "^1.0.0",
+    "@types/parse": "^2.18.4",
+    "nodemon": "^2.0.7",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.2.3"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^1.0.6",
+    "http-proxy-middleware": "^1.1.0",
     "parse": "^3.1.0",
     "parse-server": "^4.5.0"
   },
