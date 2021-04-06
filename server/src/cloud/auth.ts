@@ -1,4 +1,4 @@
-import {api} from "./util";
+import {api, publicApi} from "./util";
 import {google} from 'googleapis';
 
 const getGoogleOAuth2Client = () => {
@@ -26,19 +26,18 @@ export interface UserInformation {
 
 export const initializeAuthFunctions = () => {
     // https://github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
-    Parse.Cloud.define('GoogleSignIn', async (req) => {
-    //api<{ origin: string }, string>('GoogleSignIn', async (user, request: {  origin: string }) => {
+    publicApi<{ origin: string }, string>('GoogleSignIn', async (request: {  origin: string }) => {
         const oauth2Client = getGoogleOAuth2Client();
 
         // returns the login link
         return oauth2Client.generateAuthUrl({
             access_type: "offline",
-            scope: ["email", "openid", "profile"],
-            state: encodeURI(req.params.origin)
+            scope: ["openid", "profile"],
+            state: encodeURI(origin)
         });
     });
 
-    api<TokenRequest, UserInformation>('GoogleToken', async (user, request) => {
+    publicApi<TokenRequest, UserInformation>('GoogleToken', async (request) => {
         const oauth2Client = getGoogleOAuth2Client();
 
         if (request.error) {

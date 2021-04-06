@@ -11,6 +11,12 @@ export const api = <RequestData extends ParseObjectParams = ParseObjectParams, R
     });
 }
 
+export const publicApi = <RequestData extends ParseObjectParams = ParseObjectParams, ResponseType = void>(name: string, call: (request: RequestData) => ResponseType | Promise<ResponseType>) => {
+    Parse.Cloud.define<(params: RequestData) => ResponseType | Promise<ResponseType>>(name, (request) => {
+        return call(request.params);
+    });
+}
+
 export interface ACL {
     readRoles?: string[],
     writeRoles?: string[],
