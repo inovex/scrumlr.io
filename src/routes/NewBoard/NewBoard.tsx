@@ -39,6 +39,15 @@ function NewBoard(props: NewBoardProps) {
     // TODO report error
   }
 
+  if (Parse.User.current()) {
+    return (
+      <div>
+        <Button onClick={onCreateBoard}>Create Board</Button>
+        <Button onClick={() => Parse.User.logOut()}>Logout</Button>
+      </div>
+    );
+  }
+
   return (
     <div className="new-board">
       <Input

@@ -1,6 +1,5 @@
 import queryString from "query-string";
 import {useEffect, useState} from "react";
-import {Redirect} from "react-router-dom";
 import Parse from "parse";
 import {API} from "../../api";
 
@@ -25,9 +24,9 @@ function AuthRedirect() {
         };
 
         user.linkWith("google", {authData}).then(() => {
-          user.set("username", res.name);
+          user.set("displayName", res.name);
           user.save().then(() => {
-            setStatus({...status, redirect: decodeURI(params.state as string)});
+            window.location.href = decodeURI(params.state as string);
           });
         });
       });
@@ -36,10 +35,6 @@ function AuthRedirect() {
 
   if (status.error) {
     return <span>Error: {status.error}</span>;
-  }
-
-  if (status.redirect) {
-    return <Redirect to={status.redirect} />;
   }
 
   return <div>Waiting for auth...</div>;

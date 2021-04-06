@@ -6,11 +6,6 @@ const getGoogleOAuth2Client = () => {
   return new OAuth2(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, process.env.GOOGLE_REDIRECT_URI);
 };
 
-export interface TokenRequest {
-  error?: string;
-  code?: string;
-}
-
 export interface UserInformation {
   id: string;
   name: string;
