@@ -24,11 +24,13 @@
     bottom: 0;
     height: 64px;
   }
+
+  .menu-item:hover,
   .menu-item:active {
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 20;
+    z-index: $menu-item-z-index;
     transition: left 2s 0.25s;
 
     @media (prefers-color-scheme: light) {
@@ -44,21 +46,30 @@
     }
   }
 
+  .menu-item:hover > .menu-item__tooltip,
   .menu-item:active > .menu-item__tooltip {
     height: 100%;
     width: 100%;
     transition: background-color 0.5s 0.25s ease, width 0.5s 0.25s ease, height 0.5s 0.25s ease;
   }
+
+  .menu-item:hover > .menu-item__icon,
   .menu-item:active > .menu-item__icon {
     left: $menu-item__first-position-left;
     transition: left 2s 0.5s, visibility 0s 0.5s;
   }
+
+  .menu-item:hover > .tooltip__text,
   .menu-item:active > .tooltip__text {
     margin-right: 48px;
   }
+
+  .menu-item--active:hover > .menu-item__icon--end,
   .menu-item--active:active > .menu-item__icon--end {
     visibility: visible;
   }
+
+  .menu-item--active:hover > .menu-item__icon--start,
   .menu-item--active:active > .menu-item__icon--start {
     visibility: hidden;
   }
