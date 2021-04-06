@@ -1,4 +1,5 @@
 import {callAPI} from "./index";
+import {Color} from "constants/colors";
 
 export const ColumnAPI = {
     /**
@@ -6,11 +7,12 @@ export const ColumnAPI = {
      *
      * @param boardId the board id
      * @param name the column name
+     * @param color the column color
      * @param hidden flag whether the column should be displayed to all users or hidden from basic users
      *
      * @returns `true` if the operation succeeded or throws an error otherwise
      */
-    addColumn: (boardId: string, name: string, hidden: boolean = false) => {
+    addColumn: (boardId: string, name: string, color: Color, hidden: boolean = false) => {
         return callAPI<{ boardId: string, name: string, hidden: boolean }, boolean>('addColumn', { boardId, name, hidden });
     },
     /**
@@ -30,11 +32,12 @@ export const ColumnAPI = {
      * @param boardId the board id
      * @param columnId the column id
      * @param name new name to set (optional)
+     * @param color new column color to set (optional)
      * @param hidden flag to set whether this columns should be visible to all basic users (optional)
      *
      * @returns `true` if the operation succeeded or throws an error otherwise
      */
-    editColumn: (boardId: string, columnId: string, name?: string, hidden?: boolean) => {
+    editColumn: (boardId: string, columnId: string, name?: string, color?: Color, hidden?: boolean) => {
         return callAPI<{ boardId: string, columnId: string, name?: string, hidden?: boolean }, boolean>('editColumn', { boardId, columnId, name, hidden });
     }
 }
