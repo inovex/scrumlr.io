@@ -9,12 +9,11 @@ import ErrorPage from "../../components/ErrorPage/ErrorPage";
 function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string}>({});
   const location = useLocation();
+  const params = queryString.parse(location.search);
 
   useEffect(() => {
-    const params = queryString.parse(location.search);
-
     if (params.error) {
-      setStatus({...status, error: params.error as string});
+      setStatus({error: params.error as string});
     } else if (params.code && params.state) {
       API.verifyGoogleSignIn(params.code as string).then((res) => {
         const user = new Parse.User();
@@ -32,9 +31,9 @@ function AuthRedirect() {
         });
       });
     } else {
-      setStatus({error: `Not a valid redirect with params: ${location.search}`});
+      setStatus({error: `Not a valid redirect with params: ${params}`});
     }
-  }, [location.search, status]);
+  }, [params]);
 
   if (status.error) {
     return <ErrorPage errorMessage="Oops! Unable to sign in." />;
