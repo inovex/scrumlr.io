@@ -11,28 +11,41 @@ $color-dark-mode: #272f41;
 $color-dark-mode-note: #313949;
 
 // theme colors
-$color-blue: #056cf2;
-$color-purple: #5005f2;
-$color-violet: #ab05f2;
-$color-pink: #f20574;
-.accent-color__blue {
-  --accent-color: #056cf2;
+$color-backlog-blue: #0057ff;
+$color-grooming-green: #17c072;
+$color-lean-lilac: #c000ff;
+$color-online-orange: #ff3c19;
+$color-planning-pink: #ff0069;
+$color-poker-purple: #5e00ff;
+$color-retro-red: #df1313;
+
+.accent-color__backlog-blue {
+  --accent-color: #{$color-backlog-blue};
 }
-.accent-color__purple {
-  --accent-color: #5005f2;
+.accent-color__grooming-green {
+  --accent-color: #{$color-grooming-green};
 }
-.accent-color__violet {
-  --accent-color: #ab05f2;
+.accent-color__lean-lilac {
+  --accent-color: #{$color-lean-lilac};
 }
-.accent-color__pink {
-  --accent-color: #f20574;
+.accent-color__online-orange {
+  --accent-color: #{$color-online-orange};
+}
+.accent-color__planning-pink {
+  --accent-color: #{$color-planning-pink};
+}
+.accent-color__poker-purple {
+  --accent-color: #{$color-poker-purple};
+}
+.accent-color__retro-red {
+  --accent-color: #{$color-retro-red};
 }
 
 // menu colors
-$menu-color-blue--primary: #0057ff;
-$menu-color-blue--secondary: #253f71;
-$menu-color-pink--primary: #ff0069;
-$menu-color-pink--secondary: #7c123e;
+$menu-color-regular--primary: $color-backlog-blue;
+$menu-color-regular--secondary: #253f71;
+$menu-color-admin--primary: $color-planning-pink;
+$menu-color-admin--secondary: #7c123e;
 
 // board & column constants
 $board__side-panel-width: 64px;

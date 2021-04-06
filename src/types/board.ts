@@ -1,9 +1,12 @@
+import {Color} from "constants/colors";
+
 export interface BoardServerModel {
     objectId: string;
     name: string;
     columns: {
         [columnId: string]: {
             name: string;
+            color: string;
             hidden: boolean;
         }
     };
@@ -40,6 +43,7 @@ export interface BoardClientModel extends EditableBoardClientModel {
     columns: {
         id?: string;
         name: string;
+        color: Color;
         hidden: boolean;
     }[];
     createdAt: Date;
@@ -53,6 +57,7 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
     columns: Object.keys(board.columns).map((columnId) => ({
         id: columnId,
         name: board.columns[columnId].name,
+        color: board.columns[columnId].color as Color,
         hidden: board.columns[columnId].hidden
     })),
     accessCode: board.accessCode,

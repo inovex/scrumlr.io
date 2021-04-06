@@ -2,7 +2,7 @@
   "root": true,
   "env": {
     "browser": true,
-    "es2021": true
+    "es2020": true
   },
   "extends": [
     "airbnb-base",
@@ -19,6 +19,13 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never"
+      }
+    ]
   },
   "settings": {
     "import/resolver": {
