@@ -6,7 +6,7 @@ It is based on the [Parse Platform](https://parseplatform.org/).
 ## Prerequisites
 
 You'll need a local Mongo database running on port `:27017` if you want
-to start this server by `npm start` if you intend to use it without further
+to start this server by `yarn start` if you intend to use it without further
 configuration steps.
 
 Otherwise you can setup quite a few environment variables to change the
@@ -15,14 +15,26 @@ host, port, database URI and so on. These variables are listed in
 
 ## Run
 
-### Running node application
+### Running node application with reload on change
+
+First of you'll need to start the database and optionally the Parse dashboard:
 
 ```
-npm install
-npm start
+docker-compose up -d database dashboard
 ```
 
-This will open the server on `localhost:4000`.
+You'll be able to access those services on following ports and URLs:
+
+* Mongo database: `mongodb://localhost:27017` (use [Mongo Compass](https://www.mongodb.com/products/compass) to explore the data)
+* Parse dashboard: `http://localhost:4040`
+
+Next you can start serving the application by executing:
+```
+yarn install
+yarn serve
+```
+
+This will open the server on `localhost:4000` and reload the application on every change.
 
 ### Running everything via Docker
 
