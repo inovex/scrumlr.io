@@ -54,7 +54,8 @@ $line-height--large: 32px;
 $base-z-index: 100;
 $base-z-index-step: 10;
 $card-z-index: $base-z-index + (2 * $base-z-index-step);
-$menue-z-index: $base-z-index + (3 * $base-z-index-step);
+$menu-z-index: $base-z-index + (3 * $base-z-index-step);
+$menu-item-z-index: $menu-z-index + $base-z-index-step;
 
 // responsive
 $smartphone: "screen and (max-width: 767px)";
