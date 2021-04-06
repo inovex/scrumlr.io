@@ -1,30 +1,51 @@
 // @use "sass:list";
 
 // base colors
-$color-white: #FFFFFF;
-$color-light-gray: #EDEFF2;
-$color-middle-gray: #A3A6AA; 
+$color-white: #ffffff;
+$color-light-gray: #edeff2;
+$color-middle-gray: #a3a6aa;
 $color-dark-gray: #859093;
 $color-darkest-gray: #232323;
 $color-black: #111111;
-$color-dark-mode: #272F41;
+$color-dark-mode: #272f41;
 $color-dark-mode-note: #313949;
 
 // theme colors
-$color-blue: #056CF2;
-$color-purple: #5005F2;
-$color-violet: #AB05F2;
-$color-pink: #F20574;
-.accent-color__blue {--accent-color: #056CF2;}
-.accent-color__purple {--accent-color: #5005F2;}
-.accent-color__violet {--accent-color: #AB05F2;}
-.accent-color__pink {--accent-color: #F20574;}
+$color-backlog-blue: #0057ff;
+$color-grooming-green: #17c072;
+$color-lean-lilac: #c000ff;
+$color-online-orange: #ff3c19;
+$color-planning-pink: #ff0069;
+$color-poker-purple: #5e00ff;
+$color-retro-red: #df1313;
+
+.accent-color__backlog-blue {
+  --accent-color: #{$color-backlog-blue};
+}
+.accent-color__grooming-green {
+  --accent-color: #{$color-grooming-green};
+}
+.accent-color__lean-lilac {
+  --accent-color: #{$color-lean-lilac};
+}
+.accent-color__online-orange {
+  --accent-color: #{$color-online-orange};
+}
+.accent-color__planning-pink {
+  --accent-color: #{$color-planning-pink};
+}
+.accent-color__poker-purple {
+  --accent-color: #{$color-poker-purple};
+}
+.accent-color__retro-red {
+  --accent-color: #{$color-retro-red};
+}
 
 // menu colors
-$menu-color-blue--primary: #0057ff;
-$menu-color-blue--secondary: #253f71;
-$menu-color-pink--primary: #ff0069;
-$menu-color-pink--secondary: #7c123e;
+$menu-color-regular--primary: $color-backlog-blue;
+$menu-color-regular--secondary: #253f71;
+$menu-color-admin--primary: $color-planning-pink;
+$menu-color-admin--secondary: #7c123e;
 
 // board & column constants
 $board__side-panel-width: 64px;
@@ -33,11 +54,9 @@ $column__min-width: 320px;
 $column__max-width: 960px;
 $column__border-width: 12px;
 
-
 // margin and padding
 $padding--small: 16px;
-$padding--medium: 20px; 
-
+$padding--medium: 20px;
 
 // font
 $letter-spacing--small: 0.25px;
@@ -48,13 +67,13 @@ $line-height--small: 16px;
 $line-height--medium: 18px;
 $line-height--large: 32px;
 
-
 // TODO z-indexe definieren
 // z-index
 $base-z-index: 100;
 $base-z-index-step: 10;
 $card-z-index: $base-z-index + (2 * $base-z-index-step);
-$menue-z-index: $base-z-index + (3 * $base-z-index-step);
+$menu-z-index: $base-z-index + (3 * $base-z-index-step);
+$menu-item-z-index: $menu-z-index + $base-z-index-step;
 
 // responsive
 $smartphone: "screen and (max-width: 767px)";
@@ -67,10 +86,10 @@ $menu-desktop: "screen and (min-width: 1344px)";
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   $props: ();
-  $props: append($props, if($left, inset #{2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($right, inset #{-2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($top, inset 0 #{2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($bottom, inset 0 #{-2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($left, inset #{2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($right, inset #{-2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($top, inset 0 #{2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($bottom, inset 0 #{-2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
   @return $props;
 }
 

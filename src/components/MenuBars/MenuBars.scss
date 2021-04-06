@@ -1,6 +1,10 @@
-@import 'constants/style.scss';
+@import "constants/style.scss";
 
-@media screen and (max-width: 1343px){
+.menu {
+  z-index: $menu-z-index;
+}
+
+@media screen and (max-width: 1343px) {
   .menu-bars {
     position: fixed;
     left: calc(50% - 134px);
@@ -17,12 +21,12 @@
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
-        color: $menu-color-pink--primary;
+        color: $menu-color-admin--primary;
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
-        background-color: $menu-color-pink--primary;
+        background-color: $menu-color-admin--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
@@ -45,7 +49,7 @@
     opacity: 0;
     transform: rotate(360deg);
   }
-  
+
   .menu-bars--admin {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
@@ -53,16 +57,16 @@
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
       }
       .menu-bars__switch > .switch__icon {
-        color: $menu-color-blue--primary;
+        color: $menu-color-regular--primary;
       }
     }
     @media (prefers-color-scheme: dark) {
       .menu-bars__switch {
-        background-color: $menu-color-blue--primary;
+        background-color: $menu-color-regular--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       }
       .menu-bars__switch > .switch__icon {
-        color: #FFFFFF;
+        color: #ffffff;
       }
     }
   }
@@ -94,7 +98,7 @@
   .menu-bars__switch:focus {
     outline: none;
   }
-  
+
   .switch__icon {
     position: absolute;
     top: calc(50% - 18px);
@@ -196,10 +200,10 @@
   }
 
   .user-menu {
-    background-color: $menu-color-blue--primary;
+    background-color: $menu-color-regular--primary;
   }
 
   .admin-menu {
-    background-color: $menu-color-pink--primary;
+    background-color: $menu-color-admin--primary;
   }
 }

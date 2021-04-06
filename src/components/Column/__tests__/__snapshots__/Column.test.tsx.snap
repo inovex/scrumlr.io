@@ -2,7 +2,7 @@
 
 exports[`Column should have correct style show column with correct style 1`] = `
 <section
-  class="column accent-color__pink"
+  class="column accent-color__planning-pink"
 >
   <div
     class="column__content"
