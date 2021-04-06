@@ -86,7 +86,7 @@ export interface JoinBoardRequest {
 }
 
 export const initializeBoardFunctions = () => {
-  Parse.Cloud.onLiveQueryEvent(({event, sessionToken, ...other}) => {
+  (Parse.Cloud as any).onLiveQueryEvent(({event, sessionToken}) => {
     if (event === "connect" || event === "ws_disconnect") {
       const query = new Parse.Query<Parse.Object>("_Session");
 
