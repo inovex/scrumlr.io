@@ -2,6 +2,7 @@
   "name": "scrumlr.io-server",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT with Commons Clause",
   "scripts": {
     "start": "ts-node src/index.ts",
     "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
