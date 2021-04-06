@@ -9,8 +9,7 @@ function AuthRedirect(props: RouteComponentProps) {
   const [status, setStatus] = useState<{error?: string}>({});
 
   useEffect(() => {
-    const url = location.search;
-    const params = queryString.parse(url);
+    const params = queryString.parse(props.location.search);
 
     if (params.error) {
       setStatus({...status, error: params.error as string});
@@ -33,7 +32,7 @@ function AuthRedirect(props: RouteComponentProps) {
     } else {
       setStatus({error: "Not a valid redirect"});
     }
-  }, [status]);
+  }, [props.location.search, status]);
 
   if (status.error) {
     return <span>Error: {status.error}</span>;
