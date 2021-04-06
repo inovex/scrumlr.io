@@ -4,11 +4,11 @@
   "private": true,
   "license": "MIT with Commons Clause",
   "scripts": {
-    "serve": "env-cmd nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/index.ts\"",
-    "start": "env-cmd ts-node src/index.ts",
-    "start:server": "env-cmd cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
-    "start:livequery": "env-cmd cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
-    "build": "env-cmd tsc -p tsconfig.json"
+    "serve": "env-cmd --silent nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/index.ts\"",
+    "start": "env-cmd --silent ts-node src/index.ts",
+    "start:server": "env-cmd --silent cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
+    "start:livequery": "env-cmd --silent cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
+    "build": "env-cmd --silent tsc -p tsconfig.json"
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
