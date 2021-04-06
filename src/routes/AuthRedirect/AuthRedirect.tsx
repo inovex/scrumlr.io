@@ -31,9 +31,9 @@ function AuthRedirect() {
         });
       });
     } else {
-      setStatus({error: `Not a valid redirect with params: ${params}`});
+      setStatus({error: "Not a valid entrypoint"});
     }
-  }, [params]);
+  }, [params.code, params.error, params.state]);
 
   if (status.error) {
     return <ErrorPage errorMessage="Oops! Unable to sign in." />;
