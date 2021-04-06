@@ -1,0 +1,11 @@
+#!/bin/sh
+SCRIPT_DIRECTORY=`dirname $0`
+PATH="$PATH:$SCRIPT_DIRECTORY/../node_modules/.bin"
+. "$SCRIPT_DIRECTORY/_/husky.sh"
+
+echo "... about to format staged files for client"
+lint-staged
+
+echo "... about to format staged files for server"
+cd server/
+lint-staged

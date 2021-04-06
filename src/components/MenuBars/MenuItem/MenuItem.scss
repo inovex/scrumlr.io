@@ -1,4 +1,4 @@
-@import 'constants/style.scss';
+@import "constants/style.scss";
 
 .menu-item:focus {
   outline: none;
@@ -9,7 +9,9 @@
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through 6 {
-    .menu-item:nth-child(#{$i}) { left: $menu-item__first-position-left + (($i - 1) * 58px); }
+    .menu-item:nth-child(#{$i}) {
+      left: $menu-item__first-position-left + (($i - 1) * 58px);
+    }
   }
 
   .menu-item {
@@ -37,7 +39,6 @@
       .menu-item__tooltip {
         background-color: var(--primaryColor);
       }
-  
     }
     @media (prefers-color-scheme: dark) {
       .menu-item__tooltip {
@@ -194,7 +195,7 @@
       background: var(--primaryColor);
     }
   }
-  
+
   .menu-item__icon--end {
     display: none;
   }
@@ -234,7 +235,6 @@
       background-color: $color-white;
       color: var(--primaryColor);
     }
-
   }
   @media (prefers-color-scheme: dark) {
     .menu-item__tooltip {
