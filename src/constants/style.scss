@@ -1,24 +1,32 @@
 // @use "sass:list";
 
 // base colors
-$color-white: #FFFFFF;
-$color-light-gray: #EDEFF2;
-$color-middle-gray: #A3A6AA; 
+$color-white: #ffffff;
+$color-light-gray: #edeff2;
+$color-middle-gray: #a3a6aa;
 $color-dark-gray: #859093;
 $color-darkest-gray: #232323;
 $color-black: #111111;
-$color-dark-mode: #272F41;
+$color-dark-mode: #272f41;
 $color-dark-mode-note: #313949;
 
 // theme colors
-$color-blue: #056CF2;
-$color-purple: #5005F2;
-$color-violet: #AB05F2;
-$color-pink: #F20574;
-.accent-color__blue {--accent-color: #056CF2;}
-.accent-color__purple {--accent-color: #5005F2;}
-.accent-color__violet {--accent-color: #AB05F2;}
-.accent-color__pink {--accent-color: #F20574;}
+$color-blue: #056cf2;
+$color-purple: #5005f2;
+$color-violet: #ab05f2;
+$color-pink: #f20574;
+.accent-color__blue {
+  --accent-color: #056cf2;
+}
+.accent-color__purple {
+  --accent-color: #5005f2;
+}
+.accent-color__violet {
+  --accent-color: #ab05f2;
+}
+.accent-color__pink {
+  --accent-color: #f20574;
+}
 
 // menu colors
 $menu-color-blue--primary: #0057ff;
@@ -33,11 +41,9 @@ $column__min-width: 320px;
 $column__max-width: 960px;
 $column__border-width: 12px;
 
-
 // margin and padding
 $padding--small: 16px;
-$padding--medium: 20px; 
-
+$padding--medium: 20px;
 
 // font
 $letter-spacing--small: 0.25px;
@@ -47,7 +53,6 @@ $text-size: 13px;
 $line-height--small: 16px;
 $line-height--medium: 18px;
 $line-height--large: 32px;
-
 
 // TODO z-indexe definieren
 // z-index
@@ -68,10 +73,10 @@ $menu-desktop: "screen and (min-width: 1344px)";
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   $props: ();
-  $props: append($props, if($left, inset #{2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($right, inset #{-2*$column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($top, inset 0 #{2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
-  $props: append($props, if($bottom, inset 0 #{-2*$column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($left, inset #{2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($right, inset #{-2 * $column__border-width} 0 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($top, inset 0 #{2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
+  $props: append($props, if($bottom, inset 0 #{-2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
   @return $props;
 }
 
