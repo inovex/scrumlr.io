@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthRedirect should show error page if page was called with invalid params 1`] = `
+<div>
+  <div
+    class="error-page"
+  >
+    <span>
+      Oops! Unable to sign in.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`AuthRedirect should show error page if redirect result contains an error 1`] = `
+<div>
+  <div
+    class="error-page"
+  >
+    <span>
+      Oops! Unable to sign in.
+    </span>
+  </div>
+</div>
+`;

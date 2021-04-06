@@ -3,14 +3,15 @@ import {useEffect, useState} from "react";
 import Parse from "parse";
 import {API} from "api";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
-import {RouteComponentProps} from "react-router";
+import {useLocation} from "react-router";
 import ErrorPage from "../../components/ErrorPage/ErrorPage";
 
-function AuthRedirect(props: RouteComponentProps) {
+function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string}>({});
+  const location = useLocation();
 
   useEffect(() => {
-    const params = queryString.parse(props.location.search);
+    const params = queryString.parse(location.search);
 
     if (params.error) {
       setStatus({...status, error: params.error as string});
@@ -31,12 +32,11 @@ function AuthRedirect(props: RouteComponentProps) {
         });
       });
     } else {
-      setStatus({error: `Not a valid redirect with params: ${params}`});
+      setStatus({error: `Not a valid redirect with params: ${location.search}`});
     }
-  }, [props.location.search, status]);
+  }, [location, status]);
 
   if (status.error) {
-    console.error("Unable to sign in with provider", status.error);
     return <ErrorPage errorMessage="Oops! Unable to sign in." />;
   }
 
