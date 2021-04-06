@@ -6,6 +6,6 @@ export const AuthAPI = {
   },
 
   verifyGoogleSignIn: (code: string) => {
-    return callAPI<{code: string}, {}>("GoogleToken", {code: string});
+    return callAPI<{code: string}, {id: string; name: string; accessToken: string}>("GoogleToken", {code});
   },
 };

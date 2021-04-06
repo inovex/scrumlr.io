@@ -33,27 +33,22 @@ export const initializeAuthFunctions = (): void => {
     });
   });
 
-  publicApi<TokenRequest, UserInformation>("GoogleToken", async (request) => {
+  publicApi<{code: string}, UserInformation>("GoogleToken", async ({code}) => {
     const oauth2Client = getGoogleOAuth2Client();
-
-    if (request.error) {
-      throw new Error(request.error);
-    } else {
-      const {tokens} = await oauth2Client.getToken(request.code);
-      oauth2Client.setCredentials(tokens);
-      const oauth2 = google.oauth2({
-        auth: oauth2Client,
-        version: "v2",
-      });
-      const user = await oauth2.userinfo.get();
-      return {
-        id: user.data.id,
-        name: user.data.name,
-        email: user.data.email,
-        idToken: tokens.id_token,
-        accessToken: tokens.access_token,
-        picture: user.data.picture,
-      };
-    }
+    const {tokens} = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+    const oauth2 = google.oauth2({
+      auth: oauth2Client,
+      version: "v2",
+    });
+    const user = await oauth2.userinfo.get();
+    return {
+      id: user.data.id,
+      name: user.data.name,
+      email: user.data.email,
+      idToken: tokens.id_token,
+      accessToken: tokens.access_token,
+      picture: user.data.picture,
+    };
   });
 };
