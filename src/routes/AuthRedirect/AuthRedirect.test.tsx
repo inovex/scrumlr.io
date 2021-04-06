@@ -19,7 +19,7 @@ beforeEach(() => {
 
 describe("AuthRedirect", () => {
   test("should render loading screen while waiting for server", () => {
-    (API.verifyGoogleSignIn as jest.Mock).mockReturnValue(new Promise(() => {}));
+    (API.verifyGoogleSignIn as jest.Mock).mockReturnValue({then: () => {}});
 
     const history = createMemoryHistory({initialEntries: ["/test?code=1&state=1"], initialIndex: 0});
     render(

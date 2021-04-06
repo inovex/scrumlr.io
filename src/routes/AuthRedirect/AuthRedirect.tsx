@@ -34,7 +34,7 @@ function AuthRedirect() {
     } else {
       setStatus({error: `Not a valid redirect with params: ${location.search}`});
     }
-  }, [location, status]);
+  }, [location.search, status]);
 
   if (status.error) {
     return <ErrorPage errorMessage="Oops! Unable to sign in." />;
