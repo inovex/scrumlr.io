@@ -33,7 +33,6 @@ export const initializeAuthFunctions = (): void => {
       });
     });
 
-    console.log("FOOBAR");
     publicApi<{code: string}, UserInformation>("GoogleVerifySignIn", async ({code}) => {
       const oauth2Client = getGoogleOAuth2Client();
       const {tokens} = await oauth2Client.getToken(code);
