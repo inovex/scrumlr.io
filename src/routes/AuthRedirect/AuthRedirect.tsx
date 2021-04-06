@@ -1,14 +1,18 @@
 import queryString from "query-string";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {Redirect} from "react-router-dom";
+import Parse from "parse";
 import {API} from "../../api";
 
 function AuthRedirect() {
+  const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
+
   useEffect(() => {
     const url = location.search;
     const params = queryString.parse(url);
 
     if (params.error) {
-      // TODO show error
+      setStatus({...status, error: params.error as string});
     }
 
     if (params.code) {
@@ -16,18 +20,29 @@ function AuthRedirect() {
         const user = new Parse.User();
         const authData = {
           id: res.id,
+          id_token: res.idToken,
           access_token: res.accessToken,
         };
 
         user.linkWith("google", {authData}).then(() => {
           user.set("username", res.name);
-          user.save();
+          user.save().then(() => {
+            setStatus({...status, redirect: decodeURI(params.state as string)});
+          });
         });
       });
     }
-  }, []);
+  }, [status]);
 
-  return <div>Test</div>;
+  if (status.error) {
+    return <span>Error: {status.error}</span>;
+  }
+
+  if (status.redirect) {
+    return <Redirect to={status.redirect} />;
+  }
+
+  return <div>Waiting for auth...</div>;
 }
 
 export default AuthRedirect;
