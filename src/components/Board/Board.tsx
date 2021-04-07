@@ -67,6 +67,7 @@ const Board = ({children, name, boardstatus}: BoardProps) => {
         observer.disconnect();
       };
     }
+    return undefined;
   }, [children]);
 
   const columnsCount = React.Children.count(children);
