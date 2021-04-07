@@ -21,23 +21,25 @@ describe("AuthRedirect", () => {
     (API.verifyGoogleSignIn as jest.Mock).mockReturnValue({then: () => {}});
 
     const history = createMemoryHistory({initialEntries: ["/test?code=1&state=1"], initialIndex: 0});
-    render(
+    const result = render(
       <Router history={history}>
         <AuthRedirect />
       </Router>
-    );
+    ).container;
     expect(API.verifyGoogleSignIn).toHaveBeenCalled();
+    expect(result.querySelector(".loading-screen")).toBeInTheDocument();
   });
 
   test("should show error page if redirect result contains an error", () => {
     const history = createMemoryHistory({initialEntries: ["/error=1"], initialIndex: 0});
-    expect(
-      render(
-        <Router history={history}>
-          <AuthRedirect />
-        </Router>
-      ).container
-    ).toMatchSnapshot();
+
+    const result = render(
+      <Router history={history}>
+        <AuthRedirect />
+      </Router>
+    ).container;
+
+    expect(result.querySelector(".error-page")).toBeInTheDocument();
   });
 
   test("should show error page if page was called with invalid params", () => {
@@ -47,7 +49,8 @@ describe("AuthRedirect", () => {
       <Router history={history}>
         <AuthRedirect />
       </Router>
-    );
-    expect(result.container).toMatchSnapshot();
+    ).container;
+
+    expect(result.querySelector(".error-page")).toBeInTheDocument();
   });
 });
