@@ -7,7 +7,7 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationSta
     if (action.type === ActionType.AddColumn) {
         const boardId = stateAPI.getState().board.data!.id;
         // TODO retry mechanism
-        API.addColumn(boardId, action.name, action.hidden);
+        API.addColumn(boardId, action.name, action.color, action.hidden);
     }
 
     if (action.type === ActionType.DeleteColumn) {
@@ -19,6 +19,6 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationSta
     if (action.type === ActionType.EditColumn) {
         const boardId = stateAPI.getState().board.data!.id;
         // TODO retry mechanism
-        API.editColumn(boardId, action.columnId, action.name, action.hidden);
+        API.editColumn(boardId, action.columnId, action.name, action.color, action.hidden);
     }
 }

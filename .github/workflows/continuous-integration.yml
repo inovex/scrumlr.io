@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -35,7 +35,7 @@ jobs:
       - name: Build client
         run: |
           yarn install
-          yarn build
+          CI=false yarn build
 
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
