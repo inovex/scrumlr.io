@@ -1,8 +1,8 @@
-import {passColumnMiddleware} from "../column";
-import {ActionFactory} from "../../action";
-import {API} from "../../../api";
+import {passColumnMiddleware} from "store/middleware/column";
+import {ActionFactory} from "store/action";
+import {API} from "api";
 
-jest.mock("../../../api", () => {
+jest.mock("api", () => {
   return {
     API: {
       addColumn: jest.fn(),
