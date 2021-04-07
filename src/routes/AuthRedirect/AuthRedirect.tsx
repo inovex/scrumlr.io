@@ -4,7 +4,7 @@ import Parse from "parse";
 import {API} from "api";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {useLocation} from "react-router";
-import ErrorPage from "../../components/ErrorPage/ErrorPage";
+import ErrorPage from "components/ErrorPage/ErrorPage";
 
 function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string}>({});
