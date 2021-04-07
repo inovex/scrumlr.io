@@ -24,7 +24,6 @@ const Board = ({children, name, boardstatus}: BoardProps) => {
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
-  // @ts-ignore
   useEffect(() => {
     const board = boardRef.current;
 
