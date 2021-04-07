@@ -42,6 +42,7 @@
     "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
   },
   "resolutions": {
-    "**/**/axios": "^0.21.1"
+    "**/**/axios": "^0.21.1",
+    "**/**/netmask": "^2.0.1"
   }
 }
