@@ -16,6 +16,7 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
+    "only-warn",
     "@typescript-eslint"
   ],
   "rules": {
