@@ -4,7 +4,7 @@ export const AuthAPI = {
   /**
    * Sign in with Google.
    *
-   * @param origin the URL origin of the color, usually defined by `window.location.href`
+   * @param origin the URL origin of the user, usually defined by `window.location.href`
    *
    * @returns the redirection URL
    */
