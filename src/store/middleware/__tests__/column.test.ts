@@ -30,13 +30,13 @@ const stateAPI = {
 
 describe('column middleware', () => {
     test('add column', () => {
-        passColumnMiddleware(stateAPI as any, jest.fn(), ActionFactory.addColumn('Column'));
-        expect(API.addColumn).toHaveBeenCalledWith('boardId', 'Column', false);
+        passColumnMiddleware(stateAPI as any, jest.fn(), ActionFactory.addColumn('Column', 'planning-pink'));
+        expect(API.addColumn).toHaveBeenCalledWith('boardId', 'Column', 'planning-pink', false);
     });
 
     test('edit column', () => {
-        passColumnMiddleware(stateAPI as any, jest.fn(), ActionFactory.editColumn('columnId', 'New name', true));
-        expect(API.editColumn).toHaveBeenCalledWith('boardId', 'columnId', 'New name', true);
+        passColumnMiddleware(stateAPI as any, jest.fn(), ActionFactory.editColumn('columnId', 'New name', 'planning-pink', true));
+        expect(API.editColumn).toHaveBeenCalledWith('boardId', 'columnId', 'New name', 'planning-pink', true);
     });
 
     test('delete column', () => {

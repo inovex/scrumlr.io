@@ -1,3 +1,5 @@
+import {Color} from "constants/colors";
+
 /** This object lists column object specific internal Redux Action types. */
 export const ColumnActionType = {
     /*
@@ -21,11 +23,13 @@ export const ColumnActionFactory = {
      * Creates an action which should be dispatched when the user wants to add a column to the current board.
      *
      * @param name the column name
+     * @param color the color of the column
      * @param hidden the flag which indicates whether this column should be visible to all basic users
      */
-    addColumn: (name: string, hidden: boolean = false) => ({
+    addColumn: (name: string, color: Color, hidden: boolean = false) => ({
         type: ColumnActionType.AddColumn,
         name,
+        color,
         hidden
     }),
     /**
@@ -33,12 +37,14 @@ export const ColumnActionFactory = {
      *
      * @param columnId the edited column id
      * @param name the new name
+     * @param color the new color of the column
      * @param hidden the new hidden state
      */
-    editColumn: (columnId: string, name?: string, hidden?: boolean) => ({
+    editColumn: (columnId: string, name?: string, color?: Color, hidden?: boolean) => ({
         type: ColumnActionType.EditColumn,
         columnId,
         name,
+        color,
         hidden
     }),
     /**

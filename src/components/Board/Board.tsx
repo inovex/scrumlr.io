@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import './Board.scss';
-import { getColorClassName } from "constants/colors";
-import { ColumnProps } from "components/Column/Column";
-import { ReactComponent as RightArrowIcon } from "assets/icon-arrow-next.svg";
-import { ReactComponent as LeftArrowIcon } from "assets/icon-arrow-previous.svg";
+import React, {useEffect, useRef, useState} from 'react';
+import {getColorClassName} from "constants/colors";
+import {ColumnProps} from "components/Column/Column";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import MenuBars from 'components/MenuBars/MenuBars';
 import BoardHeader from "components/BoardHeader/BoardHeader";
+import './Board.scss';
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -80,7 +81,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
   const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
   const showPreviousButton = firstVisibleColumnIndex > 0;
 
-  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
+  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
   const handlePreviousClick = () => {
@@ -98,16 +99,7 @@ const Board = ({ children, name, boardstatus }: BoardProps) => {
       </style>
 
       <BoardHeader name={name} boardstatus={boardstatus} />
-
-      {showPreviousButton && (
-        <button
-          className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
-          onClick={handlePreviousClick}
-          aria-hidden={true}
-        >
-          <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
-        </button>
-      )}
+      <MenuBars/>
 
       {showPreviousButton && (
         <button
