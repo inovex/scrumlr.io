@@ -1,5 +1,5 @@
 > The code of the online version of [scrumlr.io](https://scrumlr.io) is located
-> [at the v1 branch](https://github.com/inovex/scrumlr.io/tree/v1), since we are currently working on a new 
+> [at the v1 branch](https://github.com/inovex/scrumlr.io/tree/v1), since we are currently working on a new
 > implementation of your favorite webapp for collaborative sessions.
 
 <div align="center" markdown="1" style="margin-bottom: 2.5em">
@@ -7,15 +7,7 @@
     <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
   <p>
-    <a href="https://depfu.com" alt="Dependency Status">
-      <img src="https://badges.depfu.com/badges/e64e883c9b747da1bb9ea8e24759a2aa/status.svg"/>
-    </a>
-    <a href="https://depfu.com/github/inovex/scrumlr.io?project_id=17033" alt="Dependency Status">
-      <img src="https://badges.depfu.com/badges/e64e883c9b747da1bb9ea8e24759a2aa/overview.svg"/>
-    </a>
-    <a href="https://depfu.com/github/inovex/scrumlr.io?project_id=17033" alt="Dependency Status">
-      <img src="https://badges.depfu.com/badges/e64e883c9b747da1bb9ea8e24759a2aa/count.svg"/>
-    </a>
+    <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg"/>
   </p>
 </div>
 
