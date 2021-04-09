@@ -20,7 +20,9 @@ const Column = ({id, name, color, children}: ColumnProps) => (
           </div>
           <NoteInput columnId={id} />
         </header>
-        <ul className="column__note-list">{children}</ul>
+        <div className="column__notes-wrapper">
+          <ul className="column__note-list">{children}</ul>
+        </div>
       </div>
     </section>
   );
