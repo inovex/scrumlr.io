@@ -1,11 +1,12 @@
 import {google} from "googleapis";
+import axios from "axios";
 import {publicApi} from "./util";
 
-const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI} = process.env;
+const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, AUTH_REDIRECT_URI} = process.env;
 
 const getGoogleOAuth2Client = () => {
   const {OAuth2} = google.auth;
-  return new OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI);
+  return new OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_REDIRECT_URI);
 };
 
 export interface UserInformation {
@@ -17,7 +18,7 @@ export interface UserInformation {
 }
 
 export const initializeAuthFunctions = (): void => {
-  if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REDIRECT_URI) {
+  if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && AUTH_REDIRECT_URI) {
     console.log("Initializing auth API for provider Google");
 
     // https://github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
@@ -47,6 +48,38 @@ export const initializeAuthFunctions = (): void => {
         idToken: tokens.id_token,
         accessToken: tokens.access_token,
         photoURL: user.data.picture,
+      };
+    });
+  }
+
+  if (GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET && AUTH_REDIRECT_URI) {
+    console.log("Initializing auth API for provider GitHub");
+
+    publicApi<{state: string}, string>("GithubSignIn", async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`);
+
+    publicApi<{code: string}, UserInformation>("VerifyGithubSignIn", async ({code}) => {
+      axios
+        .post(
+          "https://github.com/login/oauth/access_token",
+          {
+            client_id: GITHUB_CLIENT_ID,
+            client_secret: GITHUB_CLIENT_SECRET,
+            code,
+          },
+          {headers: {Accept: "application/json"}}
+        )
+        .then((res) => {
+          const accessToken = res.data.access_token;
+          axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}}).then((user) => {
+            console.log("User", user);
+          });
+        });
+      return {
+        id: "A",
+        name: "A",
+        idToken: "A",
+        accessToken: "A",
+        photoURL: "A",
       };
     });
   }
