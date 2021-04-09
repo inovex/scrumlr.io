@@ -53,7 +53,7 @@ function Board() {
               {state.notes
                 .filter((note) => note.columnId === column.id)
                 .map((note) => (
-                  <Note key={note.id} text={note.text} authorId={note.author} />
+                  <Note key={note.id} noteId={note.id} text={note.text} authorId={note.author} />
                 ))}
             </Column>
           ))}
