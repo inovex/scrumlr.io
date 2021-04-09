@@ -14,7 +14,7 @@ export interface UserInformation {
   email: string;
   idToken: string;
   accessToken: string;
-  picture: string;
+  photoURL: string;
 }
 
 export const initializeAuthFunctions = (): void => {
@@ -48,7 +48,7 @@ export const initializeAuthFunctions = (): void => {
         email: user.data.email,
         idToken: tokens.id_token,
         accessToken: tokens.access_token,
-        picture: user.data.picture,
+        photoURL: user.data.picture,
       };
     });
   }
