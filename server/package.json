@@ -2,26 +2,45 @@
   "name": "scrumlr.io-server",
   "version": "1.0.0",
   "private": true,
+  "license": "MIT with Commons Clause",
   "scripts": {
+    "serve": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node src/index.ts\"",
     "start": "ts-node src/index.ts",
     "start:server": "cross-env SCRUMLR_OPERATION_MODE=server ts-node src/index.ts",
     "start:livequery": "cross-env SCRUMLR_OPERATION_MODE=livequery ts-node src/index.ts",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "devDependencies": {
-    "@types/http-proxy-middleware": "^0.19.3",
-    "@types/parse": "^2.18.3",
+    "@types/http-proxy-middleware": "^1.0.0",
+    "@types/parse": "^2.18.4",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-only-warn": "^1.0.2",
+    "lint-staged": "^10.5.4",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.2.4"
   },
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^1.0.6",
+    "http-proxy-middleware": "^1.1.0",
     "parse": "^3.1.0",
     "parse-server": "^4.5.0"
   },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": "eslint --fix",
+    "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
+  },
   "resolutions": {
-    "**/**/axios": "^0.21.1"
+    "**/**/axios": "^0.21.1",
+    "**/**/netmask": "^2.0.1"
   }
 }

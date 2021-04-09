@@ -1,130 +1,132 @@
 import React, {useEffect, useRef, useState} from 'react';
-import './Board.scss';
 import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import MenuBars from 'components/MenuBars/MenuBars';
 import BoardHeader from "components/BoardHeader/BoardHeader";
+import './Board.scss';
 
 export interface BoardProps {
-    children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
-    name: String;
-    boardstatus: String;
+  children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
+  name: String;
+  boardstatus: String;
 }
 
 export interface BoardState {
-    firstVisibleColumnIndex: number;
-    lastVisibleColumnIndex: number;
+  firstVisibleColumnIndex: number;
+  lastVisibleColumnIndex: number;
 }
 
 const Board = ({ children, name, boardstatus }: BoardProps) => {
-    const [ state, setState ] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)} );
-    const boardRef = useRef<HTMLDivElement>(null);
-    const columnVisibilityStatesRef = useRef<boolean[]>([]);
-    const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
+  const [state, setState] = useState<BoardState>({ firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children) });
+  const boardRef = useRef<HTMLDivElement>(null);
+  const columnVisibilityStatesRef = useRef<boolean[]>([]);
+  const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
-    useEffect(() => {
-        const board = boardRef.current;
+  useEffect(() => {
+    const board = boardRef.current;
 
-        // disconnect the previous observer, if there is one  
-        if (intersectionObserverRef.current !== null) {
-            intersectionObserverRef.current.disconnect();
-        }
-
-        if (board) {
-            // initialize column visibility states
-            columnVisibilityStatesRef.current = new Array(React.Children.count(children));
-            const columnVisibilityStates = columnVisibilityStatesRef.current;
-            columnVisibilityStates.fill(false);
-
-            // initialize intersection observer
-            const observerOptions = {
-                root: board,
-                rootMargin: '0px',
-                threshold: 1.0
-            }
-            const observerCallback: IntersectionObserverCallback = (entries) => {
-                entries.forEach((entry) => {
-                    const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
-                    columnVisibilityStates[index] = entry.isIntersecting;
-                });
-                setState({
-                    firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
-                    lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true)
-                });
-            }
-            const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-            // observe children
-            const domChildren = board.children;
-            for (let i = 1; i < domChildren.length - 1; i++) {
-                observer.observe(domChildren[i]);
-            }
-
-            // return callback handler that will disconnect the observer on unmount
-            return () => {
-                observer.disconnect();
-            }
-        }
-        return;
-    }, [ children ]);
-
-    const columnsCount = React.Children.count(children);
-    if (!children || columnsCount === 0) {
-        return <div className="board--empty">Empty board</div>;
+    // disconnect the previous observer, if there is one  
+    if (intersectionObserverRef.current !== null) {
+      intersectionObserverRef.current.disconnect();
     }
 
-    const { firstVisibleColumnIndex, lastVisibleColumnIndex } = state;
-    const columnColors = React.Children.map(children, (child) => child.props.color);
+    if (board) {
+      // initialize column visibility states
+      columnVisibilityStatesRef.current = new Array(React.Children.count(children));
+      const columnVisibilityStates = columnVisibilityStatesRef.current;
+      columnVisibilityStates.fill(false);
 
-    const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
-    const showPreviousButton = firstVisibleColumnIndex > 0;
+      // initialize intersection observer
+      const observerOptions = {
+        root: board,
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+      const observerCallback: IntersectionObserverCallback = (entries) => {
+        entries.forEach((entry) => {
+          const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
+          columnVisibilityStates[index] = entry.isIntersecting;
+        });
+        setState({
+          firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
+          lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true)
+        });
+      }
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnColors.length - 1;
-    const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
+      // observe children
+      const domChildren = board.children;
+      for (let i = 1; i < domChildren.length - 1; i++) {
+        observer.observe(domChildren[i]);
+      }
 
-    const handlePreviousClick = () => {
-        boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
+      // return callback handler that will disconnect the observer on unmount
+      return () => {
+        observer.disconnect();
+      }
     }
+    return;
+  }, [children]);
 
-    const handleNextClick = () => {
-        boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth'});
-    }
+  const columnsCount = React.Children.count(children);
+  if (!children || columnsCount === 0) {
+    return <div className="board--empty">Empty board</div>;
+  }
 
-    return (
-        <>
-            <style>
-                {`.board { --board__columns: ${columnsCount} }`}
-            </style>
+  const { firstVisibleColumnIndex, lastVisibleColumnIndex } = state;
+  const columnColors = React.Children.map(children, (child) => child.props.color);
 
-            <BoardHeader name={name} boardstatus={boardstatus}/>
-            
-            {showPreviousButton && (
-                <button
-                    className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
-                    onClick={handlePreviousClick}
-                    aria-hidden={true}
-                >
-                    <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev"/>
-                </button>
-            )}
+  const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
+  const showPreviousButton = firstVisibleColumnIndex > 0;
 
-            <main className="board" ref={boardRef}>
-                <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
-                    {children}
-                <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
-            </main>
+  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
+  const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
-            {showNextButton && (
-                <button
-                    className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`}
-                    onClick={handleNextClick}
-                    aria-hidden={true}>
-                    <RightArrowIcon className="board__navigation-arrow board__navigation-arrow-next"/>
-                </button>
-            )}
-        </>
-    )
+  const handlePreviousClick = () => {
+    boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
+  }
+
+  const handleNextClick = () => {
+    boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({ inline: 'start', behavior: 'smooth' });
+  }
+
+  return (
+    <>
+      <style>
+        {`.board { --board__columns: ${columnsCount} }`}
+      </style>
+
+      <BoardHeader name={name} boardstatus={boardstatus} />
+      <MenuBars/>
+
+      {showPreviousButton && (
+        <button
+          className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`}
+          onClick={handlePreviousClick}
+          aria-hidden={true}
+        >
+          <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
+        </button>
+      )}
+      
+      <main className="board" ref={boardRef}>
+        <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
+        {children}
+        <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
+      </main>
+
+      {showNextButton && (
+        <button
+          className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`}
+          onClick={handleNextClick}
+          aria-hidden={true}>
+          <RightArrowIcon className="board__navigation-arrow board__navigation-arrow-next" />
+        </button>
+      )}
+    </>
+  )
 };
 
 export default Board;

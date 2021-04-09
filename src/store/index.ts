@@ -37,4 +37,5 @@ const store = createStore(rootReducer, composeWithDevTools(
     applyMiddleware(parseMiddleware)
 ));
 
+
 export default store;
