@@ -30,6 +30,11 @@ function NewBoard(props: RouteComponentProps) {
     window.location.href = redirectURI;
   }
 
+  async function onGithubSignIn() {
+    const redirectURI = await API.signInWithGithub();
+    window.location.href = redirectURI;
+  }
+
   async function onCreateBoard() {
     if (Parse.User.current()) {
       const boardId = await API.createBoard([
@@ -69,6 +74,7 @@ function NewBoard(props: RouteComponentProps) {
       />
       <Button onClick={onAnonymousLogin}>Login</Button>
       <Button onClick={onGoogleSignIn}>Sign in with Google</Button>
+      <Button onClick={onGithubSignIn}>Sign in with Github</Button>
     </div>
   );
 }

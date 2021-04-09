@@ -15,25 +15,48 @@ function AuthRedirect() {
     if (params.error) {
       setStatus({error: params.error as string});
     } else if (params.code && params.state) {
-      API.verifyGoogleSignIn(params.code as string, params.state as string)
-        .then((res) => {
-          const user = new Parse.User();
-          const authData = {
-            id: res.user.id,
-            id_token: res.user.idToken,
-            access_token: res.user.accessToken,
-          };
+      if ((params.state as string).startsWith("google")) {
+        API.verifyGoogleSignIn(params.code as string, params.state as string)
+          .then((res) => {
+            const user = new Parse.User();
+            const authData = {
+              id: res.user.id,
+              id_token: res.user.idToken,
+              access_token: res.user.accessToken,
+            };
 
-          user.linkWith("google", {authData}).then(() => {
-            user.set("displayName", res.user.name);
-            user.save().then(() => {
-              window.location.href = res.redirectURL;
+            user.linkWith("google", {authData}).then(() => {
+              user.set("displayName", res.user.name);
+              user.save().then(() => {
+                window.location.href = res.redirectURL;
+              });
             });
+          })
+          .catch(() => {
+            setStatus({error: "State does not match"});
           });
-        })
-        .catch(() => {
-          setStatus({error: "State does not match"});
-        });
+      }
+
+      if ((params.state as string).startsWith("github")) {
+        API.verifyGithubSignIn(params.code as string, params.state as string)
+          .then((res) => {
+            const user = new Parse.User();
+            const authData = {
+              id: res.user.id,
+              access_token: res.user.accessToken,
+            };
+
+            user.linkWith("github", {authData}).then(() => {
+              user.set("displayName", res.user.name);
+              user.save().then(() => {
+                window.location.href = res.redirectURL;
+              });
+            });
+          })
+          .catch(() => {
+            setStatus({error: "State does not match"});
+          });
+      }
     } else {
       setStatus({error: "Not a valid entrypoint"});
     }

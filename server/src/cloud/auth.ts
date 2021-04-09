@@ -60,7 +60,7 @@ export const initializeAuthFunctions = (): void => {
       async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`
     );
 
-    publicApi<{code: string}, UserInformation>("VerifyGithubSignIn", async ({code}) => {
+    publicApi<{code: string}, UserInformation>("GithubVerifySignIn", async ({code}) => {
       const accessTokenRequest = await axios.post(
         "https://github.com/login/oauth/access_token",
         {
@@ -74,10 +74,10 @@ export const initializeAuthFunctions = (): void => {
       const user: any = await axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}});
 
       return {
-        id: user.id,
-        name: user.name,
+        id: user.data.id,
+        name: user.data.name,
         accessToken,
-        photoURL: user.avatar_url,
+        photoURL: user.data.avatar_url,
       };
     });
   }
