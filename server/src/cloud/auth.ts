@@ -11,7 +11,6 @@ const getGoogleOAuth2Client = () => {
 export interface UserInformation {
   id: string;
   name: string;
-  email: string;
   idToken: string;
   accessToken: string;
   photoURL: string;
@@ -45,7 +44,6 @@ export const initializeAuthFunctions = (): void => {
       return {
         id: user.data.id,
         name: user.data.name,
-        email: user.data.email,
         idToken: tokens.id_token,
         accessToken: tokens.access_token,
         photoURL: user.data.picture,
