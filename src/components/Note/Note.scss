@@ -2,89 +2,89 @@
 
 $note__border-radius: 16px;
 $note__text-margin-bottom: 9px;
-$note__box-shadow-color: rgba(0,87,255,0.16);
-$note__box-shadow-color-dark-mode: rgba(0,0,0,0.2);
+$note__box-shadow-color: rgba(0, 87, 255, 0.16);
+$note__box-shadow-color-dark-mode: rgba(0, 0, 0, 0.2);
 
 $note__indicator-height: 34px;
-$note__indicator-width: 3px; 
+$note__indicator-width: 3px;
 
 $note__author-name-size: 12px;
 $note__author-image-size: 26px;
 $note__author-margin-left: 10px;
 
-
 .note {
-    padding: $padding--default $padding--medium;
-    position: relative;
-    border-radius: $note__border-radius;
-    background-color: $color-white;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    list-style-type: none;
+  padding: $padding--default $padding--medium;
+  position: relative;
+  border-radius: $note__border-radius;
+  background-color: $color-white;
+  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  list-style-type: none;
+  z-index: $note-z-index;
 }
 @media (prefers-color-scheme: dark) {
-    .note {
-        background-color: $color-dark-mode-note;
-        box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-    }
-} 
+  .note {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+}
 .note:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
 .note--own-card::before {
-	content: '';
-	display: block;
-    position: absolute;
-    left: 0;
-    width: $note__indicator-width;
-    height: $note__indicator-height;
-    border-radius: 0 $note__indicator-width $note__indicator-width 0;
-    background: var(--accent-color);
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  width: $note__indicator-width;
+  height: $note__indicator-height;
+  border-radius: 0 $note__indicator-width $note__indicator-width 0;
+  background: var(--accent-color);
 }
-  
+
 .note__text {
-    margin: 0;
-    min-height: 3 * $line-height--medium;
-    color: $color-black;
-    font-size: $text-size;
-    letter-spacing: $letter-spacing--medium;
-    line-height: $line-height--medium;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    margin-bottom: $note__text-margin-bottom;
+  margin: 0;
+  min-height: 3 * $line-height--medium;
+  color: $color-black;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
+  line-height: $line-height--medium;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  margin-bottom: $note__text-margin-bottom;
 }
 @media (prefers-color-scheme: dark) {
-    .note__text {
-        color: $color-white;
-    }
+  .note__text {
+    color: $color-white;
+  }
 }
-  
+
 .note__author {
-    display: flex;
-    align-items: center;
-    // reset css from figure-element:
-    margin: 0; 
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
+  display: flex;
+  align-items: center;
+  // reset css from figure-element:
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
-  
+
 .note__author-image {
-    height: $note__author-image-size;
-    width: $note__author-image-size;
-    border-radius: 100%;
+  height: $note__author-image-size;
+  width: $note__author-image-size;
+  border-radius: 100%;
 }
-  
+
 .note__author-name {
-    margin-left: $note__author-margin-left;
-    color: $color-dark-gray;
-    font-size: $note__author-name-size;
-    letter-spacing: $letter-spacing--small;
-    line-height: $line-height--small;
+  margin-left: $note__author-margin-left;
+  color: $color-dark-gray;
+  font-size: $note__author-name-size;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--small;
 }

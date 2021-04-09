@@ -59,7 +59,7 @@ $margin--default: 16px;
 $margin--large: 32px;
 $padding--small: 16px;
 $padding--default: 16px;
-$padding--medium: 20px; 
+$padding--medium: 20px;
 $padding--large: 32px;
 
 // font
@@ -71,11 +71,10 @@ $line-height--small: 16px;
 $line-height--medium: 18px;
 $line-height--large: 32px;
 
-// TODO z-indexe definieren
 // z-index
 $base-z-index: 100;
 $base-z-index-step: 10;
-$card-z-index: $base-z-index + (2 * $base-z-index-step);
+$note-z-index: $base-z-index + (2 * $base-z-index-step);
 $menu-z-index: $base-z-index + (3 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 
@@ -83,7 +82,6 @@ $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
-
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
 
