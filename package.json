@@ -7,6 +7,7 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@types/classnames": "^2.2.11",
+    "base62": "^2.0.1",
     "classnames": "^2.3.1",
     "lodash": "^4.17.20",
     "parse": "^3.1.0",

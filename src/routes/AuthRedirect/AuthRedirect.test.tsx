@@ -4,13 +4,11 @@ import {createMemoryHistory} from "history";
 import {Router} from "react-router";
 import AuthRedirect from "./AuthRedirect";
 
-jest.mock("api", () => {
-  return {
+jest.mock("api", () => ({
     API: {
       verifyGoogleSignIn: jest.fn(),
     },
-  };
-});
+  }));
 
 beforeEach(() => {
   (API.verifyGoogleSignIn as jest.Mock).mockClear();
@@ -18,7 +16,7 @@ beforeEach(() => {
 
 describe("AuthRedirect", () => {
   test("should render loading screen while waiting for server", () => {
-    (API.verifyGoogleSignIn as jest.Mock).mockReturnValue({then: () => {}});
+    (API.verifyGoogleSignIn as jest.Mock).mockReturnValue({then: () => ({catch: jest.fn()})});
 
     const history = createMemoryHistory({initialEntries: ["/test?code=1&state=1"], initialIndex: 0});
     const result = render(

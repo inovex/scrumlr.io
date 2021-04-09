@@ -26,7 +26,7 @@ function NewBoard(props: RouteComponentProps) {
   }
 
   async function onGoogleSignIn() {
-    const redirectURI = await API.signInWithGoogle(window.location.href);
+    const redirectURI = await API.signInWithGoogle();
     window.location.href = redirectURI;
   }
 

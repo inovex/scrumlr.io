@@ -22,14 +22,14 @@ export const initializeAuthFunctions = (): void => {
     console.log("Initializing auth API for provider Google");
 
     // https://github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
-    publicApi<{origin: string}, string>("GoogleSignIn", async ({origin}) => {
+    publicApi<{state: string}, string>("GoogleSignIn", async ({state}) => {
       const oauth2Client = getGoogleOAuth2Client();
 
       // returns the login link
       return oauth2Client.generateAuthUrl({
         access_type: "offline",
         scope: ["openid", "profile"],
-        state: encodeURI(origin),
+        state,
       });
     });
 
