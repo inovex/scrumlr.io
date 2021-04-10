@@ -1,5 +1,5 @@
-export interface JWK {
-  jwk: JsonWebKey[];
+export interface JsonWebKeySet {
+  keys: JsonWebKey[];
 }
 
 const ENCRYPTION_ALGORITHM: RsaHashedImportParams = {
@@ -36,7 +36,8 @@ const onStore = (fn_: (store: IDBObjectStore) => void) => {
  *
  * @return the generated crypto keypair
  */
-const generateKeypair = async (extractable = false) => window.crypto.subtle.generateKey(
+const generateKeypair = async (extractable = false) =>
+  window.crypto.subtle.generateKey(
     {
       ...ENCRYPTION_ALGORITHM,
       modulusLength: 2048, // can be 1024, 2048, or 4096
@@ -47,31 +48,31 @@ const generateKeypair = async (extractable = false) => window.crypto.subtle.gene
   );
 
 /**
- * Exports the specified keypair in the JWK format.
+ * Exports the specified keypair in the JWKS format.
  *
  * @param keypair the keypair to export
  *
- * @return the keypair in  JWK format
+ * @return the keypair in JWKS format
  */
-const exportKeypair = async (keypair: CryptoKeyPair): Promise<JWK> => {
+const exportKeypair = async (keypair: CryptoKeyPair): Promise<JsonWebKeySet> => {
   const publicKey = await window.crypto.subtle.exportKey("jwk", keypair.publicKey);
   const privateKey = await window.crypto.subtle.exportKey("jwk", keypair.privateKey);
 
   return {
-    jwk: [publicKey, privateKey],
+    keys: [publicKey, privateKey],
   };
 };
 
 /**
  * Returns the crypto key by the specified json web key and key operation.
  *
- * @param jwk the JWK config
+ * @param jwks the JWKS
  * @param keyOperation the key operation that identifies the crypto key to extract
  *
  * @return the crypto key instance for the specified parameters
  */
-const importKey = async ({jwk}: JWK, keyOperation: "decrypt" | "encrypt") => {
-  const keyData = jwk.find((key) => key.key_ops && key.key_ops.indexOf(keyOperation) >= 0);
+const importKey = async ({keys}: JsonWebKeySet, keyOperation: "decrypt" | "encrypt") => {
+  const keyData = keys.find((key) => key.key_ops && key.key_ops.indexOf(keyOperation) >= 0);
   if (keyData) {
     return await window.crypto.subtle.importKey("jwk", keyData, ENCRYPTION_ALGORITHM, false, [keyOperation]);
   }
@@ -81,25 +82,25 @@ const importKey = async ({jwk}: JWK, keyOperation: "decrypt" | "encrypt") => {
 /**
  * Returns the private key from the specified JWK.
  *
- * @param jwk the JWK to import
+ * @param jwks the JWKS to import
  *
  * @return the private crypto key
  */
-const importPrivateKey = async (jwk: JWK) => importKey(jwk, "decrypt");
+const importPrivateKey = async (jwks: JsonWebKeySet) => importKey(jwks, "decrypt");
 
 /**
  * Returns the public key from the specified JWK.
  *
- * @param jwk the JWK to import
+ * @param jwks the JWKS to import
  *
  * @return the public crypto key
  */
-const importPublicKey = async (jwk: JWK) => importKey(jwk, "encrypt");
+const importPublicKey = async (jwks: JsonWebKeySet) => importKey(jwks, "encrypt");
 
 let publicKey: CryptoKey | null = null;
 let privateKey: CryptoKey | null = null;
 
-const importKeypair = async (jwk: JWK) => {
+const importKeypair = async (jwk: JsonWebKeySet) => {
   publicKey = await importPublicKey(jwk);
   privateKey = await importPrivateKey(jwk);
 
