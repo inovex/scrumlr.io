@@ -1,14 +1,15 @@
 import {useEffect, useState} from "react";
 import {importKeypair, initializeNewKeypair, JsonWebKeySet, loadKeypair} from "../../utils/crypto";
 import PublicKeyCrypto from "../../utils/crypto/publicKeyCrypto";
+import {initializeSymmetricKey, newInitVector, SymmetricKeyCrypto} from "../../utils/crypto/symmetricKeyCrypto";
 
 function Crypto() {
-  const [state, setState] = useState<{jwks?: JsonWebKeySet; publicKeyCrypto?: PublicKeyCrypto}>({});
+  const [state, setState] = useState<{jwks?: JsonWebKeySet; publicKeyCrypto?: PublicKeyCrypto; symmetricKeyCrypto?: SymmetricKeyCrypto; inputValue?: string; iv?: string}>({});
 
   useEffect(() => {
     loadKeypair().then((publicKeyCrypto) => {
       if (publicKeyCrypto) {
-        setState({publicKeyCrypto});
+        setState({...state, jwks: undefined, publicKeyCrypto});
       }
     });
   }, []);
@@ -29,14 +30,35 @@ function Crypto() {
     reader.onload = async (evt) => {
       const jwks = JSON.parse(evt.target!.result as any);
       const publicKeyCrypto = await importKeypair(jwks);
-      setState({jwks, publicKeyCrypto});
+      setState({...state, jwks, publicKeyCrypto});
     };
     reader.readAsBinaryString(file);
   };
 
+  const generateSymmetricKey = async () => {
+    const key = await initializeSymmetricKey();
+    setState({...state, symmetricKeyCrypto: new SymmetricKeyCrypto(key)});
+  };
+
   const generateNewKeypair = async () => {
     const {jwks, publicKeyCrypto} = await initializeNewKeypair();
-    setState({jwks, publicKeyCrypto});
+    setState({...state, jwks, publicKeyCrypto});
+  };
+
+  const generateIv = async () => {
+    setState({...state, iv: await newInitVector()});
+  };
+
+  const onInputChange = (event: any) => {
+    setState({...state, inputValue: event.target.value});
+  };
+
+  const encrypt = async () => {
+    setState({...state, inputValue: await state.symmetricKeyCrypto?.encrypt(state.inputValue!, state.iv!)});
+  };
+
+  const decrypt = async () => {
+    setState({...state, inputValue: await state.symmetricKeyCrypto?.decrypt(state.inputValue!, state.iv!)});
   };
 
   let id = null;
@@ -46,14 +68,11 @@ function Crypto() {
 
   return (
     <>
-      <main>
-        Loaded: <b>{Boolean(state.publicKeyCrypto).toString()}</b>
+      <section>
+        Loaded Public-Key: <b>{Boolean(state.publicKeyCrypto).toString()}</b>
         <br />
         Key-ID: <b>{id}</b>...
-      </main>
-      <section>
         <h1>Public-Key Crypto</h1>
-
         <button onClick={generateNewKeypair}>Generate new keypair</button>
         <button onClick={downloadKeypair} disabled={!state.jwks}>
           Download keypair
@@ -61,8 +80,18 @@ function Crypto() {
         <input type="file" name="myFile" onChange={uploadKeypair} />
       </section>
 
+      <hr />
+
       <section>
+        Loaded Symmetric-Key: <b>{Boolean(state.symmetricKeyCrypto).toString()}</b>
+        <br />
+        IV: {state.iv}
         <h1>Symmetric Key</h1>
+        <button onClick={generateSymmetricKey}>Generate new symmetric key</button>
+        <button onClick={generateIv}>Generate new IV</button>
+        <input value={state.inputValue} onChange={onInputChange} />
+        <button onClick={encrypt}>Encrypt</button>
+        <button onClick={decrypt}>Decrypt</button>
       </section>
     </>
   );

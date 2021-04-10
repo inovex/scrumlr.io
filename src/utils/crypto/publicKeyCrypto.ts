@@ -1,14 +1,15 @@
 export class PublicKeyCrypto {
-  publicKey: CryptoKey;
+  readonly publicKey: CryptoKey;
 
-  privateKey: CryptoKey;
+  readonly privateKey: CryptoKey;
 
   constructor(publicKey: CryptoKey, privateKey: CryptoKey) {
     this.publicKey = publicKey;
     this.privateKey = privateKey;
   }
 
-  encrypt = async (data: any) => window.crypto.subtle.encrypt(
+  encrypt = async (data: any) =>
+    window.crypto.subtle.encrypt(
       {
         name: "RSA-OAEP",
       },
@@ -16,7 +17,8 @@ export class PublicKeyCrypto {
       data
     );
 
-  decrypt = async (data: any) => window.crypto.subtle.decrypt(
+  decrypt = async (data: any) =>
+    window.crypto.subtle.decrypt(
       {
         name: "RSA-OAEP",
       },
