@@ -76,7 +76,7 @@ const exportKeypair = async (keypair: CryptoKeyPair): Promise<JsonWebKeySet> => 
 const importKey = async ({keys}: JsonWebKeySet, keyOperation: "decrypt" | "encrypt") => {
   const keyData = keys.find((key) => key.key_ops && key.key_ops.indexOf(keyOperation) >= 0);
   if (keyData) {
-    return await window.crypto.subtle.importKey("jwk", keyData, ENCRYPTION_ALGORITHM, false, [keyOperation]);
+    return await window.crypto.subtle.importKey("jwk", keyData, ENCRYPTION_ALGORITHM, keyOperation === "encrypt", [keyOperation]);
   }
   throw new Error("JWK does not contain private key");
 };
@@ -99,22 +99,22 @@ const importPrivateKey = async (jwks: JsonWebKeySet) => importKey(jwks, "decrypt
  */
 const importPublicKey = async (jwks: JsonWebKeySet) => importKey(jwks, "encrypt");
 
-const importKeypair = async (jwk: JsonWebKeySet) => {
-  const publicKey = await importPublicKey(jwk);
-  const privateKey = await importPrivateKey(jwk);
+export const importKeypair = async (jwks: JsonWebKeySet) => {
+  const publicKey = await importPublicKey(jwks);
+  const privateKey = await importPrivateKey(jwks);
 
   onStore((store) => {
     store.put({id: 1, publicKey, privateKey});
   });
 
-  return {publicKey, privateKey};
+  return new PublicKeyCrypto(publicKey, privateKey);
 };
 
 export const initializeNewKeypair = async () => {
   const extractableKeypair = await generateKeypair(true);
-  const jwk = await exportKeypair(extractableKeypair);
-  const keypair = await importKeypair(jwk);
-  return new PublicKeyCrypto(keypair.publicKey, keypair.privateKey);
+  const jwks = await exportKeypair(extractableKeypair);
+  const keypair = await importKeypair(jwks);
+  return {jwks, publicKeyCrypto: new PublicKeyCrypto(keypair.publicKey, keypair.privateKey)};
 };
 
 export const keypairExists = async () => Boolean(await loadKeypair());
