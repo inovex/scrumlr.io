@@ -120,7 +120,7 @@ export const initializeNewKeypair = async () => {
 export const keypairExists = async () => Boolean(await loadKeypair());
 
 export const loadKeypair = async () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
     onStore((store) => {
       const keyData = store.get(1);
       keyData.onsuccess = () => {
