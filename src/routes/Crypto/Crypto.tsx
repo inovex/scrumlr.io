@@ -24,7 +24,6 @@ function Crypto() {
 
   const uploadKeypair = async (event: any) => {
     const file = event.target.files[0];
-    console.log(file);
 
     const reader = new FileReader();
     reader.onload = async (evt) => {
@@ -53,15 +52,15 @@ function Crypto() {
         Key-ID: <b>{id}</b>...
       </main>
       <section>
-        <h1>Keygen</h1>
+        <h1>Public-Key Crypto</h1>
 
         <button onClick={generateNewKeypair}>Generate new keypair</button>
-
         <button onClick={downloadKeypair} disabled={!state.jwks}>
           Download keypair
         </button>
         <input type="file" name="myFile" onChange={uploadKeypair} />
       </section>
+
       <section>
         <h1>Symmetric Key</h1>
       </section>
