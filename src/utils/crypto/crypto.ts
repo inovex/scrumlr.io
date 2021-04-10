@@ -29,8 +29,14 @@ const onStore = (fn_: (store: IDBObjectStore) => void) => {
   };
 };
 
-const generateKeypair = async (extractable = false) => {
-  const keyPair = await window.crypto.subtle.generateKey(
+/**
+ * Generates a new Crypto keypair.
+ *
+ * @param extractable flag which indicates whether the keypair is extractable
+ *
+ * @return the generated crypto keypair
+ */
+const generateKeypair = async (extractable = false) => window.crypto.subtle.generateKey(
     {
       ...ENCRYPTION_ALGORITHM,
       modulusLength: 2048, // can be 1024, 2048, or 4096
@@ -39,9 +45,14 @@ const generateKeypair = async (extractable = false) => {
     extractable,
     ["encrypt", "decrypt"]
   );
-  return keyPair;
-};
 
+/**
+ * Exports the specified keypair in the JWK format.
+ *
+ * @param keypair the keypair to export
+ *
+ * @return the keypair in  JWK format
+ */
 const exportKeypair = async (keypair: CryptoKeyPair): Promise<JWK> => {
   const publicKey = await window.crypto.subtle.exportKey("jwk", keypair.publicKey);
   const privateKey = await window.crypto.subtle.exportKey("jwk", keypair.privateKey);
@@ -51,6 +62,14 @@ const exportKeypair = async (keypair: CryptoKeyPair): Promise<JWK> => {
   };
 };
 
+/**
+ * Returns the crypto key by the specified json web key and key operation.
+ *
+ * @param jwk the JWK config
+ * @param keyOperation the key operation that identifies the crypto key to extract
+ *
+ * @return the crypto key instance for the specified parameters
+ */
 const importKey = async ({jwk}: JWK, keyOperation: "decrypt" | "encrypt") => {
   const keyData = jwk.find((key) => key.key_ops && key.key_ops.indexOf(keyOperation) >= 0);
   if (keyData) {
@@ -58,7 +77,23 @@ const importKey = async ({jwk}: JWK, keyOperation: "decrypt" | "encrypt") => {
   }
   throw new Error("JWK does not contain private key");
 };
+
+/**
+ * Returns the private key from the specified JWK.
+ *
+ * @param jwk the JWK to import
+ *
+ * @return the private crypto key
+ */
 const importPrivateKey = async (jwk: JWK) => importKey(jwk, "decrypt");
+
+/**
+ * Returns the public key from the specified JWK.
+ *
+ * @param jwk the JWK to import
+ *
+ * @return the public crypto key
+ */
 const importPublicKey = async (jwk: JWK) => importKey(jwk, "encrypt");
 
 let publicKey: CryptoKey | null = null;
@@ -79,7 +114,8 @@ export const initializeNewKeypair = async () => {
   await importKeypair(jwk);
 };
 
-export const loadKeypair = async () => new Promise((resolve, reject) => {
+export const loadKeypair = async () =>
+  new Promise((resolve, reject) => {
     if (!publicKey && !privateKey) {
       onStore((store) => {
         const keyData = store.get(1);
