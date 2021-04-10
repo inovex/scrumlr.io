@@ -1,3 +1,5 @@
+import {base58arrayBufferToString, base58stringToArrayBuffer} from "./encodingUtils";
+
 export class PublicKeyCrypto {
   readonly publicKey: CryptoKey;
 
@@ -8,23 +10,15 @@ export class PublicKeyCrypto {
     this.privateKey = privateKey;
   }
 
-  encrypt = async (data: any) =>
-    window.crypto.subtle.encrypt(
-      {
-        name: "RSA-OAEP",
-      },
-      this.publicKey,
-      data
-    );
-
-  decrypt = async (data: any) =>
-    window.crypto.subtle.decrypt(
+  decrypt = async (message: string) => window.crypto.subtle.decrypt(
       {
         name: "RSA-OAEP",
       },
       this.privateKey,
-      data
+      base58stringToArrayBuffer(message)
     );
+
+  getPublicKey = async () => base58arrayBufferToString(await window.crypto.subtle.exportKey("spki", this.publicKey));
 }
 
 export default PublicKeyCrypto;

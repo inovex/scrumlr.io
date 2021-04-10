@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {importKeypair, initializeNewKeypair, JsonWebKeySet, loadKeypair} from "../../utils/crypto";
 import PublicKeyCrypto from "../../utils/crypto/publicKeyCrypto";
-import {initializeSymmetricKey, newInitVector, SymmetricKeyCrypto} from "../../utils/crypto/symmetricKeyCrypto";
+import {initializeNewSymmetricKey, newInitVector, SymmetricKeyCrypto} from "../../utils/crypto/symmetricKeyCrypto";
 
 function Crypto() {
   const [state, setState] = useState<{jwks?: JsonWebKeySet; publicKeyCrypto?: PublicKeyCrypto; symmetricKeyCrypto?: SymmetricKeyCrypto; inputValue?: string; iv?: string}>({});
@@ -36,7 +36,7 @@ function Crypto() {
   };
 
   const generateSymmetricKey = async () => {
-    const key = await initializeSymmetricKey();
+    const key = await initializeNewSymmetricKey();
     setState({...state, symmetricKeyCrypto: new SymmetricKeyCrypto(key)});
   };
 
