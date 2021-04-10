@@ -6,7 +6,7 @@ function Crypto() {
   const [state, setState] = useState<{jwks?: JsonWebKeySet; publicKeyCrypto?: PublicKeyCrypto}>({});
 
   useEffect(() => {
-    loadKeypair().then((publicKeyCrypto: any) => {
+    loadKeypair().then((publicKeyCrypto) => {
       if (publicKeyCrypto) {
         setState({publicKeyCrypto});
       }
