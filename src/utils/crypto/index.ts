@@ -1,3 +1,5 @@
+import PublicKeyCrypto from "./publicKeyCrypto";
+
 export interface JsonWebKeySet {
   keys: JsonWebKey[];
 }
@@ -97,76 +99,39 @@ const importPrivateKey = async (jwks: JsonWebKeySet) => importKey(jwks, "decrypt
  */
 const importPublicKey = async (jwks: JsonWebKeySet) => importKey(jwks, "encrypt");
 
-let publicKey: CryptoKey | null = null;
-let privateKey: CryptoKey | null = null;
-
 const importKeypair = async (jwk: JsonWebKeySet) => {
-  publicKey = await importPublicKey(jwk);
-  privateKey = await importPrivateKey(jwk);
+  const publicKey = await importPublicKey(jwk);
+  const privateKey = await importPrivateKey(jwk);
 
   onStore((store) => {
     store.put({id: 1, publicKey, privateKey});
   });
+
+  return {publicKey, privateKey};
 };
 
 export const initializeNewKeypair = async () => {
-  const keypair = await generateKeypair(true);
-  const jwk = await exportKeypair(keypair);
-  await importKeypair(jwk);
+  const extractableKeypair = await generateKeypair(true);
+  const jwk = await exportKeypair(extractableKeypair);
+  const keypair = await importKeypair(jwk);
+  return new PublicKeyCrypto(keypair.publicKey, keypair.privateKey);
 };
+
+export const keypairExists = async () => Boolean(await loadKeypair());
 
 export const loadKeypair = async () =>
   new Promise((resolve, reject) => {
-    if (!publicKey && !privateKey) {
-      onStore((store) => {
-        const keyData = store.get(1);
-        keyData.onsuccess = () => {
-          publicKey = keyData.result.publicKey;
-          privateKey = keyData.result.privateKey;
-          resolve(true);
-        };
-        keyData.onerror = () => {
-          reject(false);
-        };
-      });
-    }
-    resolve(true);
+    onStore((store) => {
+      const keyData = store.get(1);
+      keyData.onsuccess = () => {
+        const {publicKey} = keyData.result;
+        const {privateKey} = keyData.result;
+        resolve(new PublicKeyCrypto(publicKey, privateKey));
+      };
+      keyData.onerror = () => {
+        resolve(undefined);
+      };
+    });
   });
 
-const encrypt = async (data: any) => {
-  if (!publicKey) {
-    throw new Error("Keypair not loaded yet");
-  }
-  return window.crypto.subtle.encrypt(
-    {
-      name: "RSA-OAEP",
-    },
-    publicKey,
-    data
-  );
-};
-
-const decrypt = async (data: any) => {
-  if (!privateKey) {
-    throw new Error("Keypair not loaded yet");
-  }
-  return window.crypto.subtle.decrypt(
-    {
-      name: "RSA-OAEP",
-    },
-    privateKey,
-    data
-  );
-};
-
-const test = async () => {
-  await initializeNewKeypair();
-  await loadKeypair();
-
-  const encrypted = encrypt("test");
-  const decrypted = decrypt(encrypted);
-
-  return decrypted;
-};
-
-export default test;
+export default {};
