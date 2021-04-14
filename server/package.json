@@ -32,7 +32,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.1.1",
-    "parse": "^3.1.0",
+    "parse": "^3.2.0",
     "parse-server": "^4.5.0"
   },
   "lint-staged": {
