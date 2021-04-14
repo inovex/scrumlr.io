@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/parse": "^2.18.4",
+    "@types/parse": "^2.18.5",
     "eslint": "^7.23.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
