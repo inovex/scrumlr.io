@@ -4,15 +4,12 @@
 .board {
   --n: 1;
 
-  display:grid;
+  display: grid;
   grid-auto-flow: column;
   grid-template-columns:
-          minmax($board__side-panel-width, 1fr)
-          repeat(
-            var(--board__columns),
-            Min(calc((100% - #{$board__side-panel-width*2})/min(var(--board__columns), var(--n))), #{$column__max-width})
-          )
-          minmax($board__side-panel-width, 1fr);
+    minmax($board__side-panel-width, 1fr)
+    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--n))), #{$column__max-width}))
+    minmax($board__side-panel-width, 1fr);
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
@@ -78,6 +75,8 @@ $board__navigation-button-icon-dimension: 24px;
 
   margin: 0;
   padding: 0;
+
+  z-index: $board__navigation-button-z-index;
 }
 
 .board__navigation:focus {
@@ -122,7 +121,7 @@ $board__navigation-button-icon-dimension: 24px;
 
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
   .board {
-    grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width*2})) $column__border-width;
+    grid-template-columns: $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width * 2})) $column__border-width;
     scroll-padding: $column__border-width;
   }
 }
