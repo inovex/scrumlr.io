@@ -15,11 +15,11 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/parse": "^2.18.4",
-    "eslint": "^7.23.0",
+    "@types/parse": "^2.18.5",
+    "eslint": "^7.24.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.2.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-only-warn": "^1.0.2",
     "lint-staged": "^10.5.4",
@@ -31,8 +31,8 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "http-proxy-middleware": "^1.1.0",
-    "parse": "^3.1.0",
+    "http-proxy-middleware": "^1.1.1",
+    "parse": "^3.2.0",
     "parse-server": "^4.5.0"
   },
   "lint-staged": {
