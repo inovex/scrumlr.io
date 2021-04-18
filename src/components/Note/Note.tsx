@@ -116,6 +116,22 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
           <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
         </figure>
       </footer>
+      <NoteDialog onClose={handleShowDialog} show={showDialog} text={text} />
+    </li>
+  );
+};
+export default Note;
+
+/*
+<button type="button" onClick={handleShowModal}>
+Show Modal
+</button>
+<Modal onClose={handleShowModal} show={showModal}>
+Message in Modal
+</Modal>
+*/
+
+/*
       <button className={classNames("note__delete-button", {"note__delete-button--visible": Parse.User.current()?.id === authorId})} onClick={onDeleteNote}>
         Delete Note
       </button>
@@ -133,18 +149,4 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
           }
         }}
       />
-
-      <NoteDialog onClose={handleShowDialog} show={showDialog} text={text} />
-    </li>
-  );
-};
-export default Note;
-
-/*
-<button type="button" onClick={handleShowModal}>
-Show Modal
-</button>
-<Modal onClose={handleShowModal} show={showModal}>
-Message in Modal
-</Modal>
-*/
+      */
