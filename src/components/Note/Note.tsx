@@ -4,11 +4,11 @@ import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import classNames from "classnames";
 import Parse from "parse";
-import store from "store";
-import {ActionFactory} from "store/action";
+// import store from "store";
+// import {ActionFactory} from "store/action";
 import edit from "assets/icon-edit.svg";
 import React from "react";
-import {createStyles, withStyles, FilledInput} from "@material-ui/core";
+// import {createStyles, withStyles, FilledInput} from "@material-ui/core";
 // import Modal from "components/Modal/Modal";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 
@@ -17,7 +17,7 @@ export interface NoteProps {
   authorId: string;
   noteId?: string;
 }
-
+/*
 const CustomInput = withStyles(
   () =>
     createStyles({
@@ -67,6 +67,7 @@ const CustomInput = withStyles(
     }),
   {name: "NoteInput"}
 )(FilledInput);
+*/
 
 const Note = ({text, authorId, noteId}: NoteProps) => {
   const state = useSelector((state: ApplicationState) => ({
@@ -87,6 +88,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
     setShowDialog(!showDialog);
   };
 
+  /*
   const [noteText, setNoteText] = React.useState("");
   function handleChangeNotetext(e: React.ChangeEvent<HTMLInputElement>) {
     setNoteText(e.target.value);
@@ -103,6 +105,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
       store.dispatch(ActionFactory.deleteNote(noteId!));
     }
   };
+  */
 
   return (
     <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})}>
