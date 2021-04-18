@@ -9,6 +9,8 @@ import {ActionFactory} from "store/action";
 import edit from "assets/icon-edit.svg";
 import React from "react";
 import {createStyles, withStyles, FilledInput} from "@material-ui/core";
+// import Modal from "components/Modal/Modal";
+import NoteDialog from "components/NoteDialog/NoteDialog";
 
 export interface NoteProps {
   text: string;
@@ -73,14 +75,26 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
     users: state.users,
   }));
 
-  const [value, setValue] = React.useState("");
+  /*
+  const [showModal, setShowModal] = React.useState(false);
+  const handleShowModal = () => {
+      setShowModal(!showModal);
+  }
+*/
+
+  const [showDialog, setShowDialog] = React.useState(false);
+  const handleShowDialog = () => {
+    setShowDialog(!showDialog);
+  };
+
+  const [noteText, setNoteText] = React.useState("");
   function handleChangeNotetext(e: React.ChangeEvent<HTMLInputElement>) {
-    setValue(e.target.value);
+    setNoteText(e.target.value);
   }
   const onEditNote = () => {
     if (Parse.User.current()?.id === authorId) {
-      store.dispatch(ActionFactory.editNote(noteId!, value));
-      setValue("");
+      store.dispatch(ActionFactory.editNote(noteId!, noteText));
+      setNoteText("");
     }
   };
 
@@ -92,7 +106,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
 
   return (
     <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})}>
-      <div className="note__content">
+      <div className="note__content" onClick={handleShowDialog}>
         <p className="note__text">{text}</p>
         <img className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} src={edit} alt="Edit note" />
       </div>
@@ -111,7 +125,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
       <CustomInput
         placeholder="Edit note..."
         type="text"
-        value={value}
+        value={noteText}
         onChange={handleChangeNotetext}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
@@ -119,7 +133,18 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
           }
         }}
       />
+
+      <NoteDialog onClose={handleShowDialog} show={showDialog} text={text} />
     </li>
   );
 };
 export default Note;
+
+/*
+<button type="button" onClick={handleShowModal}>
+Show Modal
+</button>
+<Modal onClose={handleShowModal} show={showModal}>
+Message in Modal
+</Modal>
+*/
