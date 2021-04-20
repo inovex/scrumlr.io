@@ -7,6 +7,7 @@ type JoinRequestProps = {
   id: string;
   boardId: string;
   userId: string;
+  displayName: string;
 };
 
 function JoinRequest(props: JoinRequestProps) {
@@ -26,7 +27,7 @@ function JoinRequest(props: JoinRequestProps) {
       <main className="join-request__content">
         <figure className="join-request__content-user">
           <img className="join-request__content-user-image" src={avatar} alt="User" />
-          <figcaption className="join-request__content-user-name">Placeholder TODO</figcaption>
+          <figcaption className="join-request__content-user-name">{props.displayName}</figcaption>
         </figure>
         <button className="join-request__footer-button join-request__footer-button--reject">Ablehnen</button>
         <button className="join-request__footer-button join-request__footer-button--accept">Annehmen</button>

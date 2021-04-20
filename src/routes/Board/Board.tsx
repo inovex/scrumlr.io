@@ -19,7 +19,14 @@ function Board() {
   if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
     if (pendingJoinRequests && pendingJoinRequests.length > 0) {
-      waitingUser = <JoinRequest id={pendingJoinRequests[0].id} userId={pendingJoinRequests[0].userId} boardId={pendingJoinRequests[0].boardId} />;
+      waitingUser = (
+        <JoinRequest
+          id={pendingJoinRequests[0].id}
+          userId={pendingJoinRequests[0].userId}
+          boardId={pendingJoinRequests[0].boardId}
+          displayName={pendingJoinRequests[0].displayName}
+        />
+      );
     }
   }
   let boardstatus = "Public Session";
