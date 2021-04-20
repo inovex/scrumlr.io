@@ -3,10 +3,9 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
 import {ApplicationState} from "types/store";
-import store from "store";
-import {ActionFactory} from "store/action";
 import Parse from "parse";
 import Note from "components/Note/Note";
+import JoinRequest from "components/JoinRequest/JoinRequest";
 
 function Board() {
   const state = useSelector((state: ApplicationState) => ({
@@ -20,17 +19,7 @@ function Board() {
   if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
     if (pendingJoinRequests && pendingJoinRequests.length > 0) {
-      waitingUser = (
-        <div>
-          {JSON.stringify(pendingJoinRequests[0])}
-          <button onClick={(_) => store.dispatch(ActionFactory.acceptJoinRequest(pendingJoinRequests[0].id, pendingJoinRequests[0].boardId, pendingJoinRequests[0].userId))}>
-            Accept
-          </button>
-          <button onClick={(_) => store.dispatch(ActionFactory.rejectJoinRequest(pendingJoinRequests[0].id, pendingJoinRequests[0].boardId, pendingJoinRequests[0].userId))}>
-            Reject
-          </button>
-        </div>
-      );
+      waitingUser = <JoinRequest id={pendingJoinRequests[0].id} userId={pendingJoinRequests[0].userId} boardId={pendingJoinRequests[0].boardId} />;
     }
   }
   let boardstatus = "Public Session";

@@ -1,19 +1,38 @@
+// import store from "store";
+// import { ActionFactory } from "store/action";
+import avatar from "assets/avatar.png";
 import "./JoinRequest.scss";
 
 type JoinRequestProps = {
-    id: string;
-    userId: string;
-    boardId: string;
-}
+  id: string;
+  boardId: string;
+  userId: string;
+};
 
 function JoinRequest(props: JoinRequestProps) {
-    return (<section className="join-request">
-        <span className="join-request__text">{props.userId}</span>
-        <div className="join-request__buttons">
-            <button className='join-request__button'>Annehmen</button>
-            <button className='join-request__button'>Ablehen</button>
-        </div>
-    </section>);
+  // function handleAccept() {
+  //     store.dispatch(ActionFactory.acceptJoinRequest(props.id, props.boardId, props.userId));
+  // }
+
+  // function handleDecline() {
+  //     store.dispatch(ActionFactory.rejectJoinRequest(props.id, props.boardId, props.userId));
+  // }
+
+  return (
+    <div className="join-request">
+      <header className="join-request__header">
+        <span className="join-request__header-text">Jemand möchte dem Board beitreten</span>
+      </header>
+      <main className="join-request__content">
+        <figure className="join-request__content-user">
+          <img className="join-request__content-user-image" src={avatar} alt="User" />
+          <figcaption className="join-request__content-user-name">Placeholder TODO</figcaption>
+        </figure>
+        <button className="join-request__footer-button join-request__footer-button--reject">Ablehnen</button>
+        <button className="join-request__footer-button join-request__footer-button--accept">Annehmen</button>
+      </main>
+    </div>
+  );
 }
 
 export default JoinRequest;
