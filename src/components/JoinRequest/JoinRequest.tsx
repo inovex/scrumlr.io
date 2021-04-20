@@ -1,17 +1,17 @@
-// import store from "store";
-// import { ActionFactory } from "store/action";
+import store from "store";
+import {ActionFactory} from "store/action";
 import avatar from "assets/avatar.png";
 import {JoinRequestClientModel} from "types/joinRequest";
 import "./JoinRequest.scss";
 
 function JoinRequest(joinRequest: JoinRequestClientModel) {
-  // function handleAccept() {
-  //     store.dispatch(ActionFactory.acceptJoinRequest(props.id, props.boardId, props.userId));
-  // }
+  function handleAccept() {
+    store.dispatch(ActionFactory.acceptJoinRequest(joinRequest.id, joinRequest.boardId, joinRequest.userId));
+  }
 
-  // function handleDecline() {
-  //     store.dispatch(ActionFactory.rejectJoinRequest(props.id, props.boardId, props.userId));
-  // }
+  function handleReject() {
+    store.dispatch(ActionFactory.rejectJoinRequest(joinRequest.id, joinRequest.boardId, joinRequest.userId));
+  }
 
   return (
     <div className="join-request">
@@ -23,8 +23,12 @@ function JoinRequest(joinRequest: JoinRequestClientModel) {
           <img className="join-request__content-user-image" src={avatar} alt="User" />
           <figcaption className="join-request__content-user-name">{joinRequest.displayName}</figcaption>
         </figure>
-        <button className="join-request__footer-button join-request__footer-button--reject">Ablehnen</button>
-        <button className="join-request__footer-button join-request__footer-button--accept">Annehmen</button>
+        <button onClick={handleReject} className="join-request__footer-button join-request__footer-button--reject">
+          Ablehnen
+        </button>
+        <button onClick={handleAccept} className="join-request__footer-button join-request__footer-button--accept">
+          Annehmen
+        </button>
       </main>
     </div>
   );
