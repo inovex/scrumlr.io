@@ -1,16 +1,31 @@
 @import "constants/style";
+@import "components/Note/Note.scss";
 
 $note__border-radius: 16px;
 $note__text-margin-bottom: 9px;
 $note__box-shadow-color: rgba(0, 87, 255, 0.16);
 $note__box-shadow-color-dark-mode: rgba(0, 0, 0, 0.2);
-
 $note__indicator-height: 34px;
 $note__indicator-width: 3px;
-
 $note__author-name-size: 12px;
 $note__author-image-size: 26px;
 $note__author-margin-left: 10px;
+
+.note-dialog__header {
+  font-family: Raleway;
+  font-size: 24px;
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin-right: 10px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--large;
+}
+@media (prefers-color-scheme: dark) {
+  .note-dialog__header {
+    color: $color-white;
+  }
+}
 
 .note-dialog__note {
   padding: $padding--default $padding--medium;
@@ -80,4 +95,40 @@ $note__author-margin-left: 10px;
   font-size: $note__author-name-size;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
+}
+
+//Options
+.note-dialog__options {
+  list-style-type: none;
+  position: absolute;
+  margin: 0;
+  top: 0;
+  right: -80px - $margin--default;
+}
+
+.note-dialog__option {
+  box-sizing: border-box;
+  display: block;
+}
+
+.note-dialog__option + .note-dialog__option {
+  margin-top: $margin--small;
+}
+
+.note-dialog__option-button {
+  height: 32px;
+}
+
+.note-dialog__options-icon {
+  display: flex;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.note-dialog__options-icon svg {
+  fill: #fff;
+  width: 20px;
+  height: 20px;
+  align-self: center;
 }

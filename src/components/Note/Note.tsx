@@ -4,8 +4,8 @@ import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import classNames from "classnames";
 import Parse from "parse";
-// import store from "store";
-// import {ActionFactory} from "store/action";
+import store from "store";
+import {ActionFactory} from "store/action";
 import edit from "assets/icon-edit.svg";
 import React from "react";
 // import {createStyles, withStyles, FilledInput} from "@material-ui/core";
@@ -99,13 +99,13 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
       setNoteText("");
     }
   };
+  */
 
   const onDeleteNote = () => {
     if (Parse.User.current()?.id === authorId) {
       store.dispatch(ActionFactory.deleteNote(noteId!));
     }
   };
-  */
 
   return (
     <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})}>
@@ -119,7 +119,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
           <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
         </figure>
       </footer>
-      <NoteDialog onClose={handleShowDialog} show={showDialog} text={text} />
+      <NoteDialog onClose={handleShowDialog} onDelete={onDeleteNote} show={showDialog} text={text} />
     </li>
   );
 };
