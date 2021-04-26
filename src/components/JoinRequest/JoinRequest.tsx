@@ -13,6 +13,8 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
     store.dispatch(ActionFactory.rejectJoinRequest(id, boardId, userId));
   }
 
+  // TODO: Methods to accept/reject all users at once
+
   if (joinRequests.length === 1) {
     const joinRequest = joinRequests[0];
     return (
@@ -42,10 +44,20 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </footer>
       </div>
     );
-  } 
-    // TODO: JoinRequest Modal for multiple users
-    return null;
-  
+  }
+  // TODO: JoinRequest Modal for multiple users
+  return (
+    <div className="join-request">
+      <header className="join-request__header">
+        <span className="join-request__header-text">Mehrere Personen möchten dem Board beitreten</span>
+      </header>
+      <main className="join-request__content" />
+      <footer className="join-request__footer">
+        <button className="join-request__footer-button join-request__footer-button--reject">Alle Ablehnen</button>
+        <button className="join-request__footer-button join-request__footer-button--accept">Alle Annehmen</button>
+      </footer>
+    </div>
+  );
 }
 
 export default JoinRequest;
