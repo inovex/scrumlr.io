@@ -27,8 +27,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
 
     const createJoinRequestSubscription = () => {
       const joinRequestQuery = new Parse.Query("JoinRequest");
+      joinRequestQuery.include("user.displayName");
       joinRequestQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
-      joinRequestQuery.include("user");
 
       joinRequestQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
@@ -37,16 +37,19 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
 
         subscription.on("open", (object) => {
           joinRequestQuery.find().then((results) => {
-            console.log(results);
             dispatch(ActionFactory.initializeJoinRequests((results as any[]).map(mapJoinRequestServerToClientModel)));
           });
         });
 
-        subscription.on("create", (object) => {
+        subscription.on("create", async (object) => {
+          // Since LiveQueries do not support .include(..), we have to fetch the user data manually
+          await (object.get("user") as Parse.User).fetch();
           dispatch(ActionFactory.createJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
         });
 
-        subscription.on("update", (object) => {
+        subscription.on("update", async (object) => {
+          // Since LiveQueries do not support .include(..), we have to fetch the user data manually
+          await (object.get("user") as Parse.User).fetch();
           dispatch(ActionFactory.updateJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
         });
       });
