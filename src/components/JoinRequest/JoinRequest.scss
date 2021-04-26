@@ -9,6 +9,20 @@
   right: 92px;
   z-index: 5;
   overflow: hidden;
+  animation: fly-in 0.5s ease-out;
+}
+
+@keyframes fly-in {
+  0% {
+    right: -500px;
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    right: 92px;
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 .join-request__header {
