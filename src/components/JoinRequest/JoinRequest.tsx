@@ -23,13 +23,15 @@ function JoinRequest(joinRequest: JoinRequestClientModel) {
           <img className="join-request__content-user-image" src={avatar} alt="User" />
           <figcaption className="join-request__content-user-name">{joinRequest.displayName}</figcaption>
         </figure>
+      </main>
+      <footer className="join-request__footer">
         <button onClick={handleReject} className="join-request__footer-button join-request__footer-button--reject">
           Ablehnen
         </button>
         <button onClick={handleAccept} className="join-request__footer-button join-request__footer-button--accept">
           Annehmen
         </button>
-      </main>
+      </footer>
     </div>
   );
 }
