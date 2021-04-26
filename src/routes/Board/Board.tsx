@@ -15,11 +15,11 @@ function Board() {
     users: state.users,
   }));
 
-  let waitingUser;
+  let joinRequestComponent;
   if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
     if (pendingJoinRequests && pendingJoinRequests.length > 0) {
-      waitingUser = <JoinRequest {...pendingJoinRequests[0]} />;
+      joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
     }
   }
   let boardstatus = "Public Session";
@@ -35,7 +35,7 @@ function Board() {
   if (state.board.status === "ready") {
     return (
       <>
-        {waitingUser}
+        {joinRequestComponent}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
           {state.board.data!.columns.map((column) => (
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
