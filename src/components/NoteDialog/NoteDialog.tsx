@@ -1,17 +1,15 @@
 import "./NoteDialog.scss";
 import avatar from "assets/avatar.png";
-import Backdrop from "components/Backdrop/Backdrop";
+import Portal from "components/Portal/Portal";
 import deleteicon from "assets/icon-delete.svg";
 import classNames from "classnames";
 import Parse from "parse";
+import {NoteProps} from "components/Note/Note";
 
-export interface NoteDialogProps {
+export interface NoteDialogProps extends NoteProps {
   show: boolean;
-  text: string;
   onClose?: () => void;
   onDelete: () => void;
-  authorId: string;
-  noteId?: string;
 }
 
 const NoteDialog = ({show, onClose, text, onDelete, authorId, noteId}: NoteDialogProps) => {
@@ -20,7 +18,7 @@ const NoteDialog = ({show, onClose, text, onDelete, authorId, noteId}: NoteDialo
   }
 
   return (
-    <Backdrop onClose={onClose}>
+    <Portal onClose={onClose}>
       <div className="note-dialog">
         <h2 className="note-dialog__header">Negative</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
@@ -49,13 +47,9 @@ const NoteDialog = ({show, onClose, text, onDelete, authorId, noteId}: NoteDialo
               </li>
             </ul>
           </aside>
-
-          <div>
-            <button onClick={onClose}>Close</button>
-          </div>
         </div>
       </div>
-    </Backdrop>
+    </Portal>
   );
 };
 export default NoteDialog;

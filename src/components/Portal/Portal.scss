@@ -2,7 +2,6 @@
 
 #portal {
   position: fixed;
-  width: 100vw;
   height: 0;
   top: 0;
   left: 0;
@@ -10,7 +9,7 @@
   right: 0;
 }
 
-.backdrop {
+.portal {
   position: fixed;
   width: calc(100vw - 24px);
   height: calc(100vh - 24px);
@@ -22,11 +21,11 @@
   left: 12px;
 }
 
-.backdrop__content {
+.portal__content {
   position: fixed;
-  width: 100vw;
-  height: 100vh;
-  padding: $header__height $margin--default;
+  width: calc(100vw - 24px);
+  height: calc(100vh - 24px);
+  padding-top: $header__height;
 
   // enable scroll of content
   overflow: auto;
@@ -34,4 +33,10 @@
   // horizontal centering of content
   display: flex;
   justify-content: center;
+}
+
+@media #{$tablet} {
+  .portal__content {
+    padding: 128px 128px;
+  }
 }
