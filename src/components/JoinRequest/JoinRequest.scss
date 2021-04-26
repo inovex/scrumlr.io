@@ -128,3 +128,45 @@
 .join-request__footer-button--reject {
   right: 118px;
 }
+
+.join-request__content {
+  overflow: scroll;
+}
+
+.join-request__content-user-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #111111;
+  border-bottom: 1px solid #111111;
+
+  figure {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    margin-left: 24px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  img {
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    margin-right: 16px;
+  }
+
+  figcaption {
+    height: 18px;
+    color: #111111;
+    font-size: 13px;
+    letter-spacing: 0.15px;
+    line-height: 18px;
+    width: 160px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

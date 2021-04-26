@@ -51,11 +51,24 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
       <header className="join-request__header">
         <span className="join-request__header-text">Mehrere Personen möchten dem Board beitreten</span>
       </header>
-      <main className="join-request__content" />
-      <footer className="join-request__footer">
+      <main className="join-request__content">
+        <ul className="join-request__content-user-list">
+          {joinRequests.map((joinRequest) => (
+            <li>
+              <figure>
+                <img src={avatar} />
+                <figcaption>{joinRequest.displayName}</figcaption>
+                <button onClick={(_) => handleReject(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>Ablehnen</button>
+                <button onClick={(_) => handleAccept(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>Annehmen</button>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </main>
+      {/* <footer className="join-request__footer">
         <button className="join-request__footer-button join-request__footer-button--reject">Alle Ablehnen</button>
         <button className="join-request__footer-button join-request__footer-button--accept">Alle Annehmen</button>
-      </footer>
+      </footer> */}
     </div>
   );
 }
