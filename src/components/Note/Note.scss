@@ -20,7 +20,6 @@ $note__author-margin-left: 10px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
-  z-index: $note-z-index;
 }
 @media (prefers-color-scheme: dark) {
   .note {
@@ -44,25 +43,25 @@ $note__author-margin-left: 10px;
 }
 
 .note__content {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
-  
+
 .note__text {
-    margin: 0;
-    margin-right: 5px;
-    min-height: 3 * $line-height--medium;
-    width: 100%;
-    color: $color-black;
-    font-size: $text-size;
-    letter-spacing: $letter-spacing--medium;
-    line-height: $line-height--medium;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    margin-bottom: $note__text-margin-bottom;
+  margin: 0;
+  margin-right: 5px;
+  min-height: 3 * $line-height--medium;
+  width: 100%;
+  color: $color-black;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
+  line-height: $line-height--medium;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  margin-bottom: $note__text-margin-bottom;
 }
 @media (prefers-color-scheme: dark) {
   .note__text {
@@ -71,26 +70,26 @@ $note__author-margin-left: 10px;
 }
 
 .note__edit {
-    height: 20px;
-    width: 20px;
-    align-self: end;
-    opacity: 0;
-    transition: opacity 500ms ease-out;
-    display: none;
+  height: 20px;
+  width: 20px;
+  align-self: end;
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+  display: none;
 }
 @media screen and (max-width: 1279px) {
-    .note__edit {
-        opacity: 100%;
-    }
+  .note__edit {
+    opacity: 100%;
+  }
 }
 .note:hover > .note__content > .note__edit {
-    opacity: 100%;
+  opacity: 100%;
 }
 
 .note__edit--own-card {
-    display: block;
+  display: block;
 }
- 
+
 .note__author {
   display: flex;
   align-items: center;
@@ -110,17 +109,17 @@ $note__author-margin-left: 10px;
 }
 
 .note__author-name {
-    margin-left: $note__author-margin-left;
-    color: $color-dark-gray;
-    font-size: $note__author-name-size;
-    letter-spacing: $letter-spacing--small;
-    line-height: $line-height--small;
+  margin-left: $note__author-margin-left;
+  color: $color-dark-gray;
+  font-size: $note__author-name-size;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--small;
 }
 
 .note__delete-button {
-    display: none;
+  display: none;
 }
 
 .note__delete-button--visible {
-    display: block;
+  display: block;
 }

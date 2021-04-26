@@ -2,15 +2,19 @@ import "./NoteDialog.scss";
 import avatar from "assets/avatar.png";
 import Backdrop from "components/Backdrop/Backdrop";
 import deleteicon from "assets/icon-delete.svg";
+import classNames from "classnames";
+import Parse from "parse";
 
 export interface NoteDialogProps {
   show: boolean;
   text: string;
   onClose?: () => void;
   onDelete: () => void;
+  authorId: string;
+  noteId?: string;
 }
 
-const NoteDialog = ({show, onClose, text, onDelete}: NoteDialogProps) => {
+const NoteDialog = ({show, onClose, text, onDelete, authorId, noteId}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
@@ -18,15 +22,16 @@ const NoteDialog = ({show, onClose, text, onDelete}: NoteDialogProps) => {
   return (
     <Backdrop onClose={onClose}>
       <div className="note-dialog">
-        <h2 className="note-dialog__header">Column Header</h2>
-        <div className="note-dialog__note">
+        <h2 className="note-dialog__header">Negative</h2>
+        <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
           <div className="note-dialog__content">
             <p className="note-dialog__text">{text}</p>
           </div>
+
           <footer className="note-dialog__footer">
             <figure className="note-dialog__author">
               <img className="note-dialog__author-image" src={avatar} alt="User" />
-              <figcaption className="note-dialog__author-name" />
+              <figcaption className="note-dialog__author-name">{authorId}</figcaption>
             </figure>
           </footer>
 

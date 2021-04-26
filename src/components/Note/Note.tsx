@@ -99,7 +99,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
       setNoteText("");
     }
   };
-  */
+*/
 
   const onDeleteNote = () => {
     if (Parse.User.current()?.id === authorId) {
@@ -119,7 +119,7 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
           <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
         </figure>
       </footer>
-      <NoteDialog onClose={handleShowDialog} onDelete={onDeleteNote} show={showDialog} text={text} />
+      <NoteDialog onClose={handleShowDialog} onDelete={onDeleteNote} show={showDialog} text={text} authorId={authorId} noteId={noteId} />
     </li>
   );
 };

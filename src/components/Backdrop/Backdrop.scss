@@ -3,20 +3,23 @@
 #portal {
   position: fixed;
   width: 100vw;
-  height: 100vh;
+  height: 0;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
-  z-index: 0;
 }
 
 .backdrop {
   position: fixed;
-  width: 100vw;
-  height: 100vh;
+  width: calc(100vw - 24px);
+  height: calc(100vh - 24px);
+  // TODO
+  // background: var(--accent-color);
   background: rgba(0, 0, 0, 0.8);
   z-index: $backdrop-z-index;
+  top: 12px;
+  left: 12px;
 }
 
 .backdrop__content {

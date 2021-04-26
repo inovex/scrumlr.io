@@ -73,7 +73,6 @@ const NoteInput = ({columnId}: NoteInputProps) => {
   };
   return (
     <CustomInput
-      className="note-input"
       placeholder="Add your note..."
       type="text"
       value={value}
