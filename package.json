@@ -6,7 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-    "@types/classnames": "^2.2.11",
+    "@types/classnames": "^2.3.1",
     "classnames": "^2.3.1",
     "lodash": "^4.17.20",
     "parse": "^3.2.0",
@@ -21,12 +21,12 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^13.1.2",
+    "@testing-library/user-event": "^13.1.3",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.168",
-    "@types/node": "^14.14.37",
+    "@types/node": "^14.14.41",
     "@types/parse": "^2.18.5",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
