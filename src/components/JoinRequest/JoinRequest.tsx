@@ -51,7 +51,6 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
       </div>
     );
   }
-  // TODO: JoinRequest Modal for multiple users
   return (
     <div className="join-request join-request--multiple">
       <header className="join-request__header">
@@ -95,3 +94,6 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
 }
 
 export default JoinRequest;
+
+// TODO: CSS aufraeumen & Animations
+// TODO: Testing
