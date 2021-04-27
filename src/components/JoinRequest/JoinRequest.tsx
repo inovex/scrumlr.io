@@ -24,7 +24,7 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
   if (joinRequests.length === 1) {
     const joinRequest = joinRequests[0];
     return (
-      <div className="join-request">
+      <div className="join-request join-request--single">
         <header className="join-request__header">
           <span className="join-request__header-text">Jemand möchte dem Board beitreten</span>
         </header>

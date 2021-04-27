@@ -4,7 +4,6 @@
   position: fixed;
   min-width: 280px;
   max-width: 400px;
-  height: 132px;
   border-radius: 8px;
   top: 60px;
   left: 10px;
@@ -12,6 +11,11 @@
   z-index: 5;
   overflow: hidden;
   animation: fly-in-top 0.5s ease-out;
+  background-color: #0057ff;
+  box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+}
+.join-request--single {
+  height: 132px;
 }
 @media screen and (min-width: 420px) {
   .join-request {
@@ -26,19 +30,12 @@
     animation: fly-in-right 0.5s ease-out;
   }
 }
-@media (prefers-color-scheme: light) {
-  .join-request {
-    background-color: #0057ff;
-    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-  }
-}
 @media (prefers-color-scheme: dark) {
   .join-request {
     background-color: #ff0069;
     box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   }
 }
-
 @keyframes fly-in-top {
   0% {
     top: -200px;
@@ -176,8 +173,8 @@
   list-style-type: none;
   margin: 0;
   padding: 10px 0;
-  border-top: 1px solid #d4d9dd;
-  border-bottom: 1px solid #d4d9dd;
+  border-top: 1px solid rgba(212, 217, 221, 0.2);
+  border-bottom: 1px solid rgba(212, 217, 221, 0.2);
 
   figure {
     display: flex;
@@ -287,10 +284,6 @@
     border-color: white;
     color: white;
   }
-}
-
-.join-request--multiple {
-  height: auto;
 }
 
 .join-request--multiple .join-request__footer {
