@@ -233,7 +233,8 @@
 
 .join-request__content-users-rest {
   height: 39px;
-  width: 39px;
+  min-width: 39px;
+  max-width: 39px;
   outline: 2px solid white;
   border: 1px solid #111111;
   border-radius: 100%;

@@ -243,13 +243,15 @@ export const initializeBoardFunctions = () => {
     const joinRequestQuery = new Parse.Query("JoinRequest");
     joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
     joinRequestQuery.equalTo("status", "pending");
-    joinRequestQuery.each(
-      async (object) => {
-        object.set("status", "accepted");
-        await object.save(null, {useMasterKey: true});
-      },
-      {useMasterKey: true}
-    );
+    await joinRequestQuery.find({useMasterKey: true}).then(async (pendingJoinRequests) => {
+      pendingJoinRequests.forEach(
+        (joinRequest) => {
+          joinRequest.set("status", "accepted");
+        },
+        {useMasterKey: true}
+      );
+      await Parse.Object.saveAll(pendingJoinRequests, {useMasterKey: true});
+    });
     return true;
   });
 
@@ -259,13 +261,15 @@ export const initializeBoardFunctions = () => {
     const joinRequestQuery = new Parse.Query("JoinRequest");
     joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
     joinRequestQuery.equalTo("status", "pending");
-    joinRequestQuery.each(
-      async (object) => {
-        object.set("status", "rejected");
-        await object.save(null, {useMasterKey: true});
-      },
-      {useMasterKey: true}
-    );
+    await joinRequestQuery.find({useMasterKey: true}).then(async (pendingJoinRequests) => {
+      pendingJoinRequests.forEach(
+        (joinRequest) => {
+          joinRequest.set("status", "rejected");
+        },
+        {useMasterKey: true}
+      );
+      await Parse.Object.saveAll(pendingJoinRequests, {useMasterKey: true});
+    });
     return true;
   });
 
