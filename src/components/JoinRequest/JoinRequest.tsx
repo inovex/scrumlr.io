@@ -58,8 +58,12 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
               <figure>
                 <img src={avatar} />
                 <figcaption>{joinRequest.displayName}</figcaption>
-                <button onClick={(_) => handleReject(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>Ablehnen</button>
-                <button onClick={(_) => handleAccept(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>Annehmen</button>
+                <button className="join-request__footer-button" onClick={(_) => handleReject(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>
+                  Ablehnen
+                </button>
+                <button className="join-request__footer-button" onClick={(_) => handleAccept(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>
+                  Annehmen
+                </button>
               </figure>
             </li>
           ))}
