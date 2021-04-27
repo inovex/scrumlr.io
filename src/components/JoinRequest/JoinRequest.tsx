@@ -13,7 +13,13 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
     store.dispatch(ActionFactory.rejectJoinRequest(id, boardId, userId));
   }
 
-  // TODO: Methods to accept/reject all users at once
+  function handleAcceptAll(boardId: string) {
+    store.dispatch(ActionFactory.acceptAllPendingJoinRequests(boardId));
+  }
+
+  function handleRejectAll(boardId: string) {
+    store.dispatch(ActionFactory.rejectAllPendingJoinRequests(boardId));
+  }
 
   if (joinRequests.length === 1) {
     const joinRequest = joinRequests[0];
@@ -77,8 +83,12 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </ul>
       </main>
       <footer className="join-request__footer">
-        <button className="join-request__footer-button join-request__footer-button--reject">Alle Ablehnen</button>
-        <button className="join-request__footer-button join-request__footer-button--accept">Alle Annehmen</button>
+        <button className="join-request__footer-button join-request__footer-button--reject" onClick={(_) => handleRejectAll(joinRequests[0].boardId)}>
+          Alle Ablehnen
+        </button>
+        <button className="join-request__footer-button join-request__footer-button--accept" onClick={(_) => handleAcceptAll(joinRequests[0].boardId)}>
+          Alle Annehmen
+        </button>
       </footer>
     </div>
   );

@@ -237,6 +237,38 @@ export const initializeBoardFunctions = () => {
     return true;
   });
 
+  api<{board: string}, boolean>("acceptAllPendingJoinRequests", async (user, request) => {
+    await requireValidBoardAdmin(user, request.board);
+    const BoardClass = Parse.Object.extend("Board");
+    const joinRequestQuery = new Parse.Query("JoinRequest");
+    joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
+    joinRequestQuery.equalTo("status", "pending");
+    joinRequestQuery.each(
+      async (object) => {
+        object.set("status", "accepted");
+        await object.save(null, {useMasterKey: true});
+      },
+      {useMasterKey: true}
+    );
+    return true;
+  });
+
+  api<{board: string}, boolean>("rejectAllPendingJoinRequests", async (user, request) => {
+    await requireValidBoardAdmin(user, request.board);
+    const BoardClass = Parse.Object.extend("Board");
+    const joinRequestQuery = new Parse.Query("JoinRequest");
+    joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
+    joinRequestQuery.equalTo("status", "pending");
+    joinRequestQuery.each(
+      async (object) => {
+        object.set("status", "rejected");
+        await object.save(null, {useMasterKey: true});
+      },
+      {useMasterKey: true}
+    );
+    return true;
+  });
+
   api<DeleteBoardRequest, boolean>("deleteBoard", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
 
