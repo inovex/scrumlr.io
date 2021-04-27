@@ -47,11 +47,18 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
   }
   // TODO: JoinRequest Modal for multiple users
   return (
-    <div className="join-request">
+    <div className="join-request join-request--multiple">
       <header className="join-request__header">
         <span className="join-request__header-text">Mehrere Personen möchten dem Board beitreten</span>
       </header>
       <main className="join-request__content">
+        <div className="join-request__content-users">
+          <img src={avatar} alt="User" className="join-request__content-users-image" />
+          <img src={avatar} alt="User" className="join-request__content-users-image" />
+          {joinRequests.length > 2 && <div className="join-request__content-users-rest">+{joinRequests.length - 2}</div>}
+          <span className="join-request__content-users-names">{joinRequests.map((joinRequest) => joinRequest.displayName).join(", ")}</span>
+        </div>
+
         <ul className="join-request__content-user-list">
           {joinRequests.map((joinRequest) => (
             <li>
@@ -69,10 +76,10 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
           ))}
         </ul>
       </main>
-      {/* <footer className="join-request__footer">
+      <footer className="join-request__footer">
         <button className="join-request__footer-button join-request__footer-button--reject">Alle Ablehnen</button>
         <button className="join-request__footer-button join-request__footer-button--accept">Alle Annehmen</button>
-      </footer> */}
+      </footer>
     </div>
   );
 }
