@@ -1,22 +1,15 @@
-import { Dispatch, MiddlewareAPI } from "redux";
-import { ApplicationState } from "types/store";
-import { ActionFactory, ActionType, ReduxAction } from "../action";
+import {Dispatch, MiddlewareAPI} from "redux";
+import {ApplicationState} from "types/store";
 import Parse from "parse";
-import { mapUserServerToClientModel } from "types/user";
-import { mapNoteServerToClientModel, NoteServerModel } from "types/note";
-import { mapBoardServerToClientModel } from "types/board";
-import {
-  JoinRequestServerModel,
-  mapJoinRequestServerToClientModel,
-} from "types/joinRequest";
+import {mapUserServerToClientModel} from "types/user";
+import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
+import {mapBoardServerToClientModel} from "types/board";
+import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
+import {ActionFactory, ActionType, ReduxAction} from "../action";
 
 let closeSubscriptions: Function[] = [];
 
-export const passBoardMiddleware = (
-  stateAPI: MiddlewareAPI<any, ApplicationState>,
-  dispatch: Dispatch,
-  action: ReduxAction
-) => {
+export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
     closeSubscriptions.forEach((closeCallback) => closeCallback());
     closeSubscriptions = [];
@@ -25,9 +18,7 @@ export const passBoardMiddleware = (
   if (action.type === ActionType.PermittedBoardAccess) {
     const currentUser = Parse.User.current()!;
 
-    const isOnline = (user: Parse.User, boardId: string) => {
-      return (user.get("boards") as string[])?.indexOf(boardId) >= 0;
-    };
+    const isOnline = (user: Parse.User, boardId: string) => (user.get("boards") as string[])?.indexOf(boardId) >= 0;
 
     const goOnline = (boardId: string) => {
       currentUser.add("boards", boardId);
@@ -36,10 +27,8 @@ export const passBoardMiddleware = (
 
     const createJoinRequestSubscription = () => {
       const joinRequestQuery = new Parse.Query("JoinRequest");
-      joinRequestQuery.equalTo(
-        "board",
-        Parse.Object.extend("Board").createWithoutData(action.boardId)
-      );
+      joinRequestQuery.include("user.displayName");
+      joinRequestQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
 
       joinRequestQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
@@ -48,32 +37,20 @@ export const passBoardMiddleware = (
 
         subscription.on("open", (object) => {
           joinRequestQuery.find().then((results) => {
-            dispatch(
-              ActionFactory.initializeJoinRequests(
-                (results as any[]).map(mapJoinRequestServerToClientModel)
-              )
-            );
+            dispatch(ActionFactory.initializeJoinRequests((results as any[]).map(mapJoinRequestServerToClientModel)));
           });
         });
 
-        subscription.on("create", (object) => {
-          dispatch(
-            ActionFactory.createJoinRequest(
-              mapJoinRequestServerToClientModel(
-                object as JoinRequestServerModel
-              )
-            )
-          );
+        subscription.on("create", async (object) => {
+          // Since LiveQueries do not support .include(..), we have to fetch the user data manually
+          await (object.get("user") as Parse.User).fetch();
+          dispatch(ActionFactory.createJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
         });
 
-        subscription.on("update", (object) => {
-          dispatch(
-            ActionFactory.updateJoinRequest(
-              mapJoinRequestServerToClientModel(
-                object as JoinRequestServerModel
-              )
-            )
-          );
+        subscription.on("update", async (object) => {
+          // Since LiveQueries do not support .include(..), we have to fetch the user data manually
+          await (object.get("user") as Parse.User).fetch();
+          dispatch(ActionFactory.updateJoinRequest(mapJoinRequestServerToClientModel(object as JoinRequestServerModel)));
         });
       });
     };
@@ -163,38 +140,23 @@ export const passBoardMiddleware = (
 
     const createNoteSubscription = () => {
       const noteQuery = new Parse.Query("Note");
-      noteQuery.equalTo(
-        "board",
-        Parse.Object.extend("Board").createWithoutData(action.boardId)
-      );
+      noteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
       noteQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
         });
         subscription.on("create", (object) => {
-          dispatch(
-            ActionFactory.createdNote(
-              mapNoteServerToClientModel(object as NoteServerModel)
-            )
-          );
+          dispatch(ActionFactory.createdNote(mapNoteServerToClientModel(object as NoteServerModel)));
         });
         subscription.on("update", (object) => {
-          dispatch(
-            ActionFactory.updatedNote(
-              mapNoteServerToClientModel(object as NoteServerModel)
-            )
-          );
+          dispatch(ActionFactory.updatedNote(mapNoteServerToClientModel(object as NoteServerModel)));
         });
         subscription.on("delete", (object) => {
           dispatch(ActionFactory.deleteNote(object.id));
         });
         subscription.on("open", () => {
           noteQuery.find().then((results) => {
-            dispatch(
-              ActionFactory.initializeNotes(
-                (results as any[]).map(mapNoteServerToClientModel)
-              )
-            );
+            dispatch(ActionFactory.initializeNotes((results as any[]).map(mapNoteServerToClientModel)));
           });
         });
       });
@@ -208,11 +170,7 @@ export const passBoardMiddleware = (
       });
 
       subscription.on("update", (object) => {
-        dispatch(
-          ActionFactory.updatedBoard(
-            mapBoardServerToClientModel(object.toJSON() as any)
-          )
-        );
+        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
       });
 
       subscription.on("delete", (object) => {
@@ -230,11 +188,7 @@ export const passBoardMiddleware = (
           createUsersSubscription();
 
           boardQuery.first().then((board) => {
-            dispatch(
-              ActionFactory.initializeBoard(
-                mapBoardServerToClientModel(board?.toJSON() as any)
-              )
-            );
+            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
           });
         } else {
           // reconnect
