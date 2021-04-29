@@ -1,0 +1,8 @@
+.github
+.git
+.DS_Store
+server
+node_modules
+build
+Dockerfile
+.dockerignore

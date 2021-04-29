@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrumlr-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrumlr
+  template:
+    metadata:
+      labels: 
+        app: scrumlr
+    spec:
+      containers:
+        - name: scrumlr-frontend
+          image: scrumlr
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: scrumlr-nginx
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      nodePort: 30100
+  selector:
+    app: scrumlr
