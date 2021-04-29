@@ -66,7 +66,7 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
 
         <ul className="join-request__requests">
           {joinRequests.map((joinRequest) => (
-            <li>
+            <li key={joinRequest.id}>
               <figure className="join-request__requests-figure">
                 <img src={avatar} className="join-request__requests-avatar" />
                 <figcaption className="join-request__requests-displayname">{joinRequest.displayName}</figcaption>
@@ -94,6 +94,3 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
 }
 
 export default JoinRequest;
-
-// TODO: CSS aufraeumen & Animations
-// TODO: Testing
