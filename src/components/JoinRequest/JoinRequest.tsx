@@ -5,20 +5,12 @@ import {JoinRequestClientModel} from "types/joinRequest";
 import "./JoinRequest.scss";
 
 function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
-  function handleAccept(id: string, boardId: string, userId: string) {
-    store.dispatch(ActionFactory.acceptJoinRequest(id, boardId, userId));
+  function handleAccept(boardId: string, userIds: string[]) {
+    store.dispatch(ActionFactory.acceptJoinRequests(boardId, userIds));
   }
 
-  function handleReject(id: string, boardId: string, userId: string) {
-    store.dispatch(ActionFactory.rejectJoinRequest(id, boardId, userId));
-  }
-
-  function handleAcceptAll(boardId: string) {
-    store.dispatch(ActionFactory.acceptAllPendingJoinRequests(boardId));
-  }
-
-  function handleRejectAll(boardId: string) {
-    store.dispatch(ActionFactory.rejectAllPendingJoinRequests(boardId));
+  function handleReject(boardId: string, userIds: string[]) {
+    store.dispatch(ActionFactory.rejectJoinRequests(boardId, userIds));
   }
 
   if (joinRequests.length === 1) {
@@ -36,13 +28,13 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </main>
         <footer className="join-request__footer">
           <button
-            onClick={(_) => handleReject(joinRequest.id, joinRequest.boardId, joinRequest.userId)}
+            onClick={(_) => handleReject(joinRequest.boardId, [joinRequest.userId])}
             className="join-request__button join-request__footer-button join-request--single__footer-button"
           >
             Ablehnen
           </button>
           <button
-            onClick={(_) => handleAccept(joinRequest.id, joinRequest.boardId, joinRequest.userId)}
+            onClick={(_) => handleAccept(joinRequest.boardId, [joinRequest.userId])}
             className="join-request__button join-request__footer-button join-request--single__footer-button"
           >
             Annehmen
@@ -70,10 +62,10 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
               <figure className="join-request__requests-figure">
                 <img src={avatar} className="join-request__requests-avatar" />
                 <figcaption className="join-request__requests-displayname">{joinRequest.displayName}</figcaption>
-                <button className="join-request__button join-request__requests-button" onClick={(_) => handleReject(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>
+                <button className="join-request__button join-request__requests-button" onClick={(_) => handleReject(joinRequest.boardId, [joinRequest.userId])}>
                   Ablehnen
                 </button>
-                <button className="join-request__button join-request__requests-button" onClick={(_) => handleAccept(joinRequest.id, joinRequest.boardId, joinRequest.userId)}>
+                <button className="join-request__button join-request__requests-button" onClick={(_) => handleAccept(joinRequest.boardId, [joinRequest.userId])}>
                   Annehmen
                 </button>
               </figure>
@@ -82,10 +74,26 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </ul>
       </main>
       <footer className="join-request__footer join-request--multiple__footer">
-        <button className="join-request__button join-request__footer-button join-request--multiple__footer-button" onClick={(_) => handleRejectAll(joinRequests[0].boardId)}>
+        <button
+          className="join-request__button join-request__footer-button join-request--multiple__footer-button"
+          onClick={(_) =>
+            handleReject(
+              joinRequests[0].boardId,
+              joinRequests.map((joinRequest) => joinRequest.userId)
+            )
+          }
+        >
           Alle Ablehnen
         </button>
-        <button className="join-request__button join-request__footer-button join-request--multiple__footer-button" onClick={(_) => handleAcceptAll(joinRequests[0].boardId)}>
+        <button
+          className="join-request__button join-request__footer-button join-request--multiple__footer-button"
+          onClick={(_) =>
+            handleAccept(
+              joinRequests[0].boardId,
+              joinRequests.map((joinRequest) => joinRequest.userId)
+            )
+          }
+        >
           Alle Annehmen
         </button>
       </footer>

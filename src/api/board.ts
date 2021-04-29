@@ -10,7 +10,8 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: (columns: {name: string; hidden: boolean; color: Color}[], name?: string) => callAPI<{columns: {name: string; hidden: boolean}[]; name?: string}, string>("createBoard", {columns, name}),
+  createBoard: (columns: {name: string; hidden: boolean; color: Color}[], name?: string) =>
+    callAPI<{columns: {name: string; hidden: boolean}[]; name?: string}, string>("createBoard", {columns, name}),
 
   /**
    * Create join request for a board session.
@@ -23,8 +24,6 @@ export const BoardAPI = {
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
   joinBoard: (boardId: string) => callAPI<{boardId: string}, {status: "accepted" | "rejected" | "pending"; joinRequestReference?: string}>("joinBoard", {boardId}),
-  acceptJoinRequest: (boardId: string, userId: string) => callAPI<{board: string; user: string}, boolean>("acceptUser", {board: boardId, user: userId}),
-  rejectJoinRequest: (boardId: string, userId: string) => callAPI<{board: string; user: string}, boolean>("rejectUser", {board: boardId, user: userId}),
-  acceptAllPendingJoinRequests: (boardId: string) => callAPI<{board: string}, boolean>("acceptAllPendingJoinRequests", {board: boardId}),
-  rejectAllPendingJoinRequests: (boardId: string) => callAPI<{board: string}, boolean>("rejectAllPendingJoinRequests", {board: boardId}),
+  acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
+  rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
 };

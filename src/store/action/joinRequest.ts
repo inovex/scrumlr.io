@@ -1,35 +1,23 @@
 import {JoinRequestClientModel} from "types/joinRequest";
 
 export const JoinRequestActionType = {
-  AcceptJoinRequest: "@@scrumlr/acceptJoinRequest" as const,
-  RejectJoinRequest: "@@scrumlr/rejectJoinRequest" as const,
-  AcceptAllPendingJoinRequests: "@@scrumlr/acceptAllPendingJoinRequests" as const,
-  RejectAllPendingJoinRequests: "@@scrumlr/rejectAllPendingJoinRequests" as const,
+  AcceptJoinRequests: "@@scrumlr/acceptJoinRequests" as const,
+  RejectJoinRequests: "@@scrumlr/rejectJoinRequests" as const,
   InitializeJoinRequests: "@@scrumlr/initializeJoinRequests" as const,
   CreateJoinRequest: "@@scrumlr/createJoinRequest" as const,
   UpdateJoinRequest: "@@scrumlr/updateJoinRequest" as const,
 };
 
 export const JoinRequestActionFactory = {
-  acceptJoinRequest: (id: string, boardId: string, userId: string) => ({
-    type: JoinRequestActionType.AcceptJoinRequest,
-    id,
+  acceptJoinRequests: (boardId: string, userIds: string[]) => ({
+    type: JoinRequestActionType.AcceptJoinRequests,
     boardId,
-    userId,
+    userIds,
   }),
-  rejectJoinRequest: (id: string, boardId: string, userId: string) => ({
-    type: JoinRequestActionType.RejectJoinRequest,
-    id,
+  rejectJoinRequests: (boardId: string, userIds: string[]) => ({
+    type: JoinRequestActionType.RejectJoinRequests,
     boardId,
-    userId,
-  }),
-  acceptAllPendingJoinRequests: (boardId: string) => ({
-    type: JoinRequestActionType.AcceptAllPendingJoinRequests,
-    boardId,
-  }),
-  rejectAllPendingJoinRequests: (boardId: string) => ({
-    type: JoinRequestActionType.RejectAllPendingJoinRequests,
-    boardId,
+    userIds,
   }),
   initializeJoinRequests: (joinRequests: JoinRequestClientModel[]) => ({
     type: JoinRequestActionType.InitializeJoinRequests,
@@ -46,10 +34,8 @@ export const JoinRequestActionFactory = {
 };
 
 export type JoinRequestReduxAction =
-  | ReturnType<typeof JoinRequestActionFactory.acceptJoinRequest>
-  | ReturnType<typeof JoinRequestActionFactory.rejectJoinRequest>
-  | ReturnType<typeof JoinRequestActionFactory.acceptAllPendingJoinRequests>
-  | ReturnType<typeof JoinRequestActionFactory.rejectAllPendingJoinRequests>
+  | ReturnType<typeof JoinRequestActionFactory.acceptJoinRequests>
+  | ReturnType<typeof JoinRequestActionFactory.rejectJoinRequests>
   | ReturnType<typeof JoinRequestActionFactory.initializeJoinRequests>
   | ReturnType<typeof JoinRequestActionFactory.createJoinRequest>
   | ReturnType<typeof JoinRequestActionFactory.updateJoinRequest>;

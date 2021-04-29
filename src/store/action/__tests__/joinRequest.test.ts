@@ -7,97 +7,57 @@ describe("joinRequest actions", () => {
   const id = "joinRequestId";
   const boardId = "boardId";
   const userId = "userId";
+  const userIds = ["userId1", "userId2"];
   const joinRequest: JoinRequestClientModel = {
     id,
     boardId,
     userId,
     status: "accepted",
+    displayName: "displayName",
   };
 
   test("equal number of action types and factory functions", () => {
     expect(Object.keys(JoinRequestActionType).length).toEqual(Object.keys(JoinRequestActionFactory).length);
   });
 
-  describe("acceptJoinRequest", () => {
+  describe("acceptJoinRequests", () => {
     test("type is listed in joinRequest redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptJoinRequest>, JoinRequestReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptJoinRequests>, JoinRequestReduxAction> = true;
       expect(assertion).toBeTruthy();
     });
 
     test("type is listed in general redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptJoinRequest>, ReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptJoinRequests>, ReduxAction> = true;
       expect(assertion).toBeTruthy();
     });
 
     test("should dispatch correct action object", () => {
-      const action = JoinRequestActionFactory.acceptJoinRequest(id, boardId, userId);
+      const action = JoinRequestActionFactory.acceptJoinRequests(boardId, userIds);
       expect(action).toEqual({
-        type: JoinRequestActionType.AcceptJoinRequest,
-        id,
+        type: JoinRequestActionType.AcceptJoinRequests,
         boardId,
-        userId,
+        userIds,
       });
     });
   });
 
-  describe("rejectJoinRequest", () => {
+  describe("rejectJoinRequests", () => {
     test("type is listed in joinRequest redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectJoinRequest>, JoinRequestReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectJoinRequests>, JoinRequestReduxAction> = true;
       expect(assertion).toBeTruthy();
     });
 
     test("type is listed in general redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectJoinRequest>, ReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectJoinRequests>, ReduxAction> = true;
       expect(assertion).toBeTruthy();
     });
 
     test("should dispatch correct action object", () => {
-      const action = JoinRequestActionFactory.rejectJoinRequest(id, boardId, userId);
+      const action = JoinRequestActionFactory.rejectJoinRequests(boardId, userIds);
       expect(action).toEqual({
-        type: JoinRequestActionType.RejectJoinRequest,
-        id,
+        type: JoinRequestActionType.RejectJoinRequests,
         boardId,
-        userId,
-      });
-    });
-  });
-
-  describe("acceptAllPendingJoinRequests", () => {
-    test("type is listed in joinRequest redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptAllPendingJoinRequests>, JoinRequestReduxAction> = true;
-      expect(assertion).toBeTruthy();
-    });
-
-    test("type is listed in general redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.acceptAllPendingJoinRequests>, ReduxAction> = true;
-      expect(assertion).toBeTruthy();
-    });
-
-    test("should dispatch correct action object", () => {
-      const action = JoinRequestActionFactory.acceptAllPendingJoinRequests(boardId);
-      expect(action).toEqual({
-        type: JoinRequestActionType.AcceptAllPendingJoinRequests,
-        boardId,
-      });
-    });
-  });
-
-  describe("rejectAllPendingJoinRequests", () => {
-    test("type is listed in joinRequest redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectAllPendingJoinRequests>, JoinRequestReduxAction> = true;
-      expect(assertion).toBeTruthy();
-    });
-
-    test("type is listed in general redux actions", () => {
-      const assertion: AssertTypeEqual<ReturnType<typeof JoinRequestActionFactory.rejectAllPendingJoinRequests>, ReduxAction> = true;
-      expect(assertion).toBeTruthy();
-    });
-
-    test("should dispatch correct action object", () => {
-      const action = JoinRequestActionFactory.rejectAllPendingJoinRequests(boardId);
-      expect(action).toEqual({
-        type: JoinRequestActionType.RejectAllPendingJoinRequests,
-        boardId,
+        userIds,
       });
     });
   });

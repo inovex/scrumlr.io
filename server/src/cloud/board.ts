@@ -33,25 +33,27 @@ const addAsMember = async (user: Parse.User, boardId: string) => {
   throw new Error(`No roles for board '${boardId}' found`);
 };
 
-const respondToJoinRequest = async (currentUser: Parse.User, user: string, board: string, manipulate: (object: Parse.Object) => void) => {
+const respondToJoinRequest = async (currentUser: Parse.User, users: string[], board: string, manipulate: (object: Parse.Object) => void) => {
   await requireValidBoardAdmin(currentUser, board);
 
   const BoardClass = Parse.Object.extend("Board");
   const joinRequestQuery = new Parse.Query("JoinRequest");
   joinRequestQuery.equalTo("board", BoardClass.createWithoutData(board));
-  joinRequestQuery.equalTo("user", Parse.User.createWithoutData(user));
-  const joinRequestQueryResult = await joinRequestQuery.first({
-    useMasterKey: true,
+  joinRequestQuery.containedIn(
+    "user",
+    users.map((userId) => Parse.User.createWithoutData(userId))
+  );
+
+  joinRequestQuery.find({useMasterKey: true}).then(async (pendingJoinRequests) => {
+    pendingJoinRequests.forEach(
+      (joinRequest) => {
+        manipulate(joinRequest);
+      },
+      {useMasterKey: true}
+    );
+    await Parse.Object.saveAll(pendingJoinRequests, {useMasterKey: true});
   });
-
-  if (joinRequestQueryResult) {
-    manipulate(joinRequestQueryResult);
-    await joinRequestQueryResult.save(null, {useMasterKey: true});
-  } else {
-    throw new Error(`Join request not found for user '${[user]}' on board '${board}'`);
-  }
 };
-
 export interface CreateBoardRequest {
   columns: {
     name: string;
@@ -78,7 +80,7 @@ export interface DeleteBoardRequest {
 
 export interface JoinRequestResponse {
   board: string;
-  user: string;
+  users: string[];
 }
 
 export interface JoinBoardRequest {
@@ -222,76 +224,18 @@ export const initializeBoardFunctions = () => {
     return {status: "accepted"};
   });
 
-  api<JoinRequestResponse, boolean>("acceptUser", async (user, request) => {
-    await respondToJoinRequest(user, request.user, request.board, (object) => {
+  api<JoinRequestResponse, boolean>("acceptUsers", async (user, request) => {
+    await respondToJoinRequest(user, request.users, request.board, (object) => {
       object.set("status", "accepted");
       // object.set('accessKey', params.accessKey);
     });
     return true;
   });
 
-  api<JoinRequestResponse, boolean>("rejectUser", async (user, request) => {
-    await respondToJoinRequest(user, request.user, request.board, (object) => {
+  api<JoinRequestResponse, boolean>("rejectUsers", async (user, request) => {
+    await respondToJoinRequest(user, request.users, request.board, (object) => {
       object.set("status", "rejected");
     });
-    return true;
-  });
-
-  api<{board: string}, boolean>("acceptAllPendingJoinRequests", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const BoardClass = Parse.Object.extend("Board");
-    const joinRequestQuery = new Parse.Query("JoinRequest");
-    joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
-    joinRequestQuery.equalTo("status", "pending");
-    await joinRequestQuery.find({useMasterKey: true}).then(async (pendingJoinRequests) => {
-      pendingJoinRequests.forEach(
-        (joinRequest) => {
-          joinRequest.set("status", "accepted");
-        },
-        {useMasterKey: true}
-      );
-      await Parse.Object.saveAll(pendingJoinRequests, {useMasterKey: true});
-    });
-    return true;
-  });
-
-  api<{board: string}, boolean>("rejectAllPendingJoinRequests", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const BoardClass = Parse.Object.extend("Board");
-    const joinRequestQuery = new Parse.Query("JoinRequest");
-    joinRequestQuery.equalTo("board", BoardClass.createWithoutData(request.board));
-    joinRequestQuery.equalTo("status", "pending");
-    await joinRequestQuery.find({useMasterKey: true}).then(async (pendingJoinRequests) => {
-      pendingJoinRequests.forEach(
-        (joinRequest) => {
-          joinRequest.set("status", "rejected");
-        },
-        {useMasterKey: true}
-      );
-      await Parse.Object.saveAll(pendingJoinRequests, {useMasterKey: true});
-    });
-    return true;
-  });
-
-  api<DeleteBoardRequest, boolean>("deleteBoard", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-
-    const BoardClass = Parse.Object.extend("Board");
-    const boardReference = BoardClass.createWithoutData(request.board);
-
-    const votesQuery = new Parse.Query(Parse.Object.extend("Vote"));
-    votesQuery.equalTo("board", boardReference);
-    const notesQuery = new Parse.Query(Parse.Object.extend("Note"));
-    notesQuery.equalTo("board", boardReference);
-    const boardQuery = new Parse.Query(BoardClass);
-    boardQuery.equalTo("objectId", request.board);
-
-    await Parse.Object.destroyAll(
-      await Parse.Query.or(votesQuery, notesQuery, boardQuery).find({
-        useMasterKey: true,
-      }),
-      {useMasterKey: true}
-    );
     return true;
   });
 

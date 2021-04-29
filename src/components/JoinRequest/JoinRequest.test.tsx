@@ -16,7 +16,7 @@ describe("JoinRequest", () => {
         userId: `userId-${i}`,
         displayName: `displayName-${i}`,
         boardId: `boardId-${i}`,
-        status: "pending",
+        status: "pending" as const,
       });
     }
     return <JoinRequest joinRequests={joinRequests} />;
@@ -38,42 +38,42 @@ describe("JoinRequest", () => {
     test("single join request should call rejectJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(container.querySelector(".join-request__footer").firstChild);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequest("id-0", "boardId-0", "userId-0"));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0"]));
     });
 
     test("single join request should call acceptJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(container.querySelector(".join-request__footer").lastChild);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequest("id-0", "boardId-0", "userId-0"));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0"]));
     });
 
-    test("multiple join request should call rejectAllPendingJoinRequests correctly", () => {
+    test("multiple join request should call rejectJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(container.querySelector(".join-request__footer").firstChild);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectAllPendingJoinRequests("boardId-0"));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
-    test("multiple join request should call acceptAllPendingJoinRequests correctly", () => {
+    test("multiple join request should call acceptJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(container.querySelector(".join-request__footer").lastChild);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptAllPendingJoinRequests("boardId-0"));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
-    test("multiple join request should call acceptJoinRequest in requests list item correctly", () => {
+    test("multiple join request should call acceptJoinRequests in requests list item correctly", () => {
       const {container} = render(createJoinRequest(3));
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; ++i) {
         fireEvent.click(figures[i].children[2]);
-        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequest(`id-${i}`, `boardId-${i}`, `userId-${i}`));
+        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }
     });
 
-    test("multiple join request should call acceptJoinRequest in requests list item correctly", () => {
+    test("multiple join request should call acceptJoinRequests in requests list item correctly", () => {
       const {container} = render(createJoinRequest(3));
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; ++i) {
         fireEvent.click(figures[i].children[3]);
-        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequest(`id-${i}`, `boardId-${i}`, `userId-${i}`));
+        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }
     });
   });

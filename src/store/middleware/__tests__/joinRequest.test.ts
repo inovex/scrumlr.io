@@ -3,39 +3,25 @@ import {passJoinRequestMiddleware} from "../joinRequest";
 import {ActionFactory} from "../../action";
 
 jest.mock("api", () => ({
-    API: {
-      acceptJoinRequest: jest.fn(),
-      rejectJoinRequest: jest.fn(),
-      acceptAllPendingJoinRequests: jest.fn(),
-      rejectAllPendingJoinRequests: jest.fn(),
-    },
-  }));
+  API: {
+    acceptJoinRequests: jest.fn(),
+    rejectJoinRequests: jest.fn(),
+  },
+}));
 
 beforeEach(() => {
-  (API.acceptJoinRequest as jest.Mock).mockClear();
-  (API.rejectJoinRequest as jest.Mock).mockClear();
-  (API.acceptAllPendingJoinRequests as jest.Mock).mockClear();
-  (API.rejectAllPendingJoinRequests as jest.Mock).mockClear();
+  (API.acceptJoinRequests as jest.Mock).mockClear();
+  (API.rejectJoinRequests as jest.Mock).mockClear();
 });
 
 describe("joinRequest middleware", () => {
   test("acceptJoinRequest", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.acceptJoinRequest("id", "boardId", "userId"));
-    expect(API.acceptJoinRequest).toHaveBeenCalledWith("boardId", "userId");
+    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.acceptJoinRequests("boardId", ["userId"]));
+    expect(API.acceptJoinRequests).toHaveBeenCalledWith("boardId", ["userId"]);
   });
 
   test("rejectJoinRequest", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.rejectJoinRequest("id", "boardId", "userId"));
-    expect(API.rejectJoinRequest).toHaveBeenCalledWith("boardId", "userId");
-  });
-
-  test("acceptAllPendingJoinRequests", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.acceptAllPendingJoinRequests("boardId"));
-    expect(API.acceptAllPendingJoinRequests).toHaveBeenCalledWith("boardId");
-  });
-
-  test("rejectAllPendingJoinRequests", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.rejectAllPendingJoinRequests("boardId"));
-    expect(API.rejectAllPendingJoinRequests).toHaveBeenCalledWith("boardId");
+    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.rejectJoinRequests("boardId", ["userId"]));
+    expect(API.rejectJoinRequests).toHaveBeenCalledWith("boardId", ["userId"]);
   });
 });
