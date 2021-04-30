@@ -16,7 +16,6 @@ const Portal = ({onClose, children}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   // Key-Listener to "Escape"
-  // TODO: Is this correct?
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown);
   }, []);
@@ -27,9 +26,6 @@ const Portal = ({onClose, children}: PortalProps) => {
       event.preventDefault();
     }
   };
-
-  // TODO: Warum gibt es im v1-scrumlr einen portal__close-button?
-  // TODDO: Wenn auf die Note selbst geklickt wird, soll diese nicht geschlossen werden!
 
   // mount backdrop into separate located DOM node 'portal'
   const portal: HTMLElement = document.getElementById("portal")!;
@@ -47,8 +43,10 @@ const Portal = ({onClose, children}: PortalProps) => {
       }}
     >
       <FocusLock>
-        <div className="portal__content" onClick={(e) => e.stopPropagation}>
-          {children}
+        <div className="portal__frame">
+          <div className="portal__content" onClick={(e) => e.stopPropagation()}>
+            {children}
+          </div>
         </div>
       </FocusLock>
     </div>,

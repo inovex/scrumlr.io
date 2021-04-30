@@ -21,7 +21,7 @@
   left: 12px;
 }
 
-.portal__content {
+.portal__frame {
   position: absolute;
   width: calc(100vw - 24px);
   height: calc(100vh - 24px);
@@ -36,7 +36,12 @@
 }
 
 @media #{$tablet} {
-  .portal__content {
+  .portal__frame {
     padding: 128px 128px;
   }
+}
+
+.portal__content {
+  height: fit-content;
+  width: fit-content;
 }
