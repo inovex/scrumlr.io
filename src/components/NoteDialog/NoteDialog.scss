@@ -110,6 +110,10 @@
   display: block;
 }
 
+.note-dialog__option--not-editable {
+  display: none;
+}
+
 .note-dialog__option + .note-dialog__option {
   margin-top: $margin--small;
 }

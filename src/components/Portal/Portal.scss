@@ -22,7 +22,7 @@
 }
 
 .portal__content {
-  position: fixed;
+  position: absolute;
   width: calc(100vw - 24px);
   height: calc(100vh - 24px);
   padding-top: $header__height;
