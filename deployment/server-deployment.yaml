@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrumlr-nginx
+  name: scrumlr-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrumlr
+      app: scrumlr-server
   template:
     metadata:
       labels: 
-        app: scrumlr
+        app: scrumlr-server
     spec:
       containers:
-        - name: scrumlr-frontend
-          image: scrumlr
+        - name: scrumlr-server
+          image: scrumlr-server
           imagePullPolicy: Never
           ports:
-            - containerPort: 80
+            - containerPort: 4000
       restartPolicy: Always
 
 ---
@@ -25,13 +25,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: scrumlr-nginx
+  name: scrumlr-server
 spec:
   type: NodePort
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 4000
+      targetPort: 4000
       protocol: TCP
-      nodePort: 30100
   selector:
-    app: scrumlr
+    app: scrumlr-server
