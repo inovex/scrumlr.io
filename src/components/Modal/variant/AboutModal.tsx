@@ -1,13 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 
-import './AboutModal.scss';
-import Modal from '../Modal';
-import Raven = require('raven-js');
-import { slack } from '../../../config';
-import Icon from '../../Icon';
-import classNames = require('classnames');
+import "./AboutModal.scss";
+import Modal from "../Modal";
+import Raven = require("raven-js");
+import { slack } from "../../../config";
+import Icon from "../../Icon";
+import classNames = require("classnames");
 
-export type TabType = 'about' | 'changelog';
+export type TabType = "about" | "changelog";
 
 export interface AboutModalProps {
   onClose: () => void;
@@ -25,7 +25,7 @@ export class AboutModal extends React.Component<
 > {
   constructor(props: AboutModalProps) {
     super(props);
-    this.state = { showTab: 'about', email: '', messageBody: '' };
+    this.state = { showTab: "about", email: "", messageBody: "" };
   }
 
   setTab = (tab: TabType) => {
@@ -45,14 +45,14 @@ export class AboutModal extends React.Component<
       const text =
         (this.state.email
           ? `_${this.state.email}_ wrote:\n> `
-          : 'Someone wrote:\n> ') + this.state.messageBody;
+          : "Someone wrote:\n> ") + this.state.messageBody;
 
       if (Boolean(slack.feedbackHook)) {
         fetch(slack.feedbackHook as string, {
-          method: 'POST',
-          mode: 'no-cors',
+          method: "POST",
+          mode: "no-cors",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({
             text
@@ -62,7 +62,7 @@ export class AboutModal extends React.Component<
             this.props.onClose();
           })
           .catch((error: any) => {
-            Raven.captureMessage('Unable to send email', {
+            Raven.captureMessage("Unable to send email", {
               extra: {
                 reason: error
               }
@@ -78,25 +78,25 @@ export class AboutModal extends React.Component<
   };
 
   render() {
-    const showAbout = this.state.showTab === 'about';
-    const showChangelog = this.state.showTab === 'changelog';
+    const showAbout = this.state.showTab === "about";
+    const showChangelog = this.state.showTab === "changelog";
 
     return (
       <Modal onClose={this.props.onClose} onSubmit={this.sendEmailOnClose}>
         <div className="about-modal__tabs">
           <button
-            className={classNames('about-modal__tab-button', {
-              'about-modal__tab-button--active': showAbout
+            className={classNames("about-modal__tab-button", {
+              "about-modal__tab-button--active": showAbout
             })}
-            onClick={e => this.setTab('about')}
+            onClick={e => this.setTab("about")}
           >
             About
           </button>
           <button
-            className={classNames('about-modal__tab-button', {
-              'about-modal__tab-button--active': showChangelog
+            className={classNames("about-modal__tab-button", {
+              "about-modal__tab-button--active": showChangelog
             })}
-            onClick={e => this.setTab('changelog')}
+            onClick={e => this.setTab("changelog")}
           >
             Changelog
           </button>
@@ -121,7 +121,7 @@ export class AboutModal extends React.Component<
                 .
               </p>
               <p>
-                Read more about our{' '}
+                Read more about our{" "}
                 <a
                   href="https://www.iubenda.com/privacy-policy/26348404"
                   target="_blank"
@@ -155,6 +155,12 @@ export class AboutModal extends React.Component<
           <div className="about-modal__content">
             <div className="about-modal__panel">
               <h2 className="about-modal__headline">Changelog</h2>
+
+              <h3>2021/05/08</h3>
+              <ul>
+                <li>Fixed crash when note text is empty</li>
+                <li>Disabled auto-complete for note input</li>
+              </ul>
 
               <h3>2021/02/20</h3>
               <ul>

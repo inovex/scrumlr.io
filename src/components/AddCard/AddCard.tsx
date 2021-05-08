@@ -1,17 +1,17 @@
-import * as cx from 'classnames';
-import * as React from 'react';
-import { Component } from 'react';
-import './AddCard.scss';
-import { BoardProp } from '../../types';
-import { mapStateToProps } from './AddCard.container';
-import { Column, ColumnType, getTheme } from '../../constants/Retrospective';
-import Input from '../Input/Input';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firebaseConnect } from 'react-redux-firebase';
-import { CRYPTO } from '../../util/global';
-import PlusCircle from '../Icon/PlusCircle';
-export type AddCardTheme = 'light' | 'dark' | 'mint';
+import * as cx from "classnames";
+import * as React from "react";
+import { Component } from "react";
+import "./AddCard.scss";
+import { BoardProp } from "../../types";
+import { mapStateToProps } from "./AddCard.container";
+import { Column, ColumnType, getTheme } from "../../constants/Retrospective";
+import Input from "../Input/Input";
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { firebaseConnect } from "react-redux-firebase";
+import { CRYPTO } from "../../util/global";
+import PlusCircle from "../Icon/PlusCircle";
+export type AddCardTheme = "light" | "dark" | "mint";
 
 export interface OwnAddCardProps extends BoardProp {
   columnId: string;
@@ -44,7 +44,7 @@ export interface AddCardState {
 }
 
 const initialState: AddCardState = {
-  text: ''
+  text: ""
 };
 
 export class AddCard extends Component<AddCardProps, AddCardState> {
@@ -69,7 +69,7 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
       const iv = await CRYPTO.generateInitializationVector();
       const encryptedText = await CRYPTO.encrypt(text, iv);
       onAdd(columnId, column.type, encryptedText, iv);
-      this.setState(() => ({ text: '' }));
+      this.setState(() => ({ text: "" }));
     }
   };
 
@@ -80,12 +80,12 @@ export class AddCard extends Component<AddCardProps, AddCardState> {
     const theme = getTheme(column.type);
 
     return (
-      <div className={cx('add-card', `add-card--theme-${theme}`)}>
+      <div className={cx("add-card", `add-card--theme-${theme}`)}>
         <Input
-          invertPlaceholder={theme === 'mint'}
+          invertPlaceholder={theme === "mint"}
           showUnderline={false}
           placeholder={`Add ${column.name} note`}
-          autocomplete="off"
+          autoComplete="off"
           type="text"
           value={text}
           onChange={(e: any) => this.handleChange(e)}

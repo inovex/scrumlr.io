@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { CRYPTO } from '../../util/global';
-import LoadingIndicator from '../LoadingIndicator';
-import './Deferred.scss';
+import * as React from "react";
+import { CRYPTO } from "../../util/global";
+import LoadingIndicator from "../LoadingIndicator";
+import "./Deferred.scss";
 
 export interface DeferredProps {
   value: string;
@@ -21,9 +21,13 @@ export class Deferred extends React.PureComponent<
   };
 
   resolveValue = () => {
-    CRYPTO.decrypt(this.props.value, this.props.iv).then((value: any) => {
-      this.setState({ value });
-    });
+    if (this.props.value) {
+      CRYPTO.decrypt(this.props.value, this.props.iv).then((value: any) => {
+        this.setState({ value });
+      });
+    } else {
+      this.setState({ value: "" });
+    }
   };
 
   componentDidMount() {
@@ -37,7 +41,7 @@ export class Deferred extends React.PureComponent<
   render() {
     return (
       <>
-        {this.state.value ? (
+        {this.state.value !== undefined ? (
           this.state.value
         ) : (
           <LoadingIndicator className="deferred__loading-indicator" />
