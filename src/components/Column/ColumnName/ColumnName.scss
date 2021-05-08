@@ -10,11 +10,17 @@
 .column-name .input, .column-name {
   font-family: Heebo, sans-serif;
   font-weight: bold;
-  font-size: calc(24px + .4vw);
+  font-size: calc(18px + .4vw);
   color: $color-dark-gray;
   letter-spacing: 1px;
   padding-right: 0;
   min-width: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  width: 450px;
 }
 
 .column-name__count {
@@ -23,6 +29,7 @@
 
   display: inline-block;
   width: 32px;
+  min-width: 32px;
   height: 32px;
   line-height: 32px;
   vertical-align: middle;

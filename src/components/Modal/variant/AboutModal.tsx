@@ -158,8 +158,12 @@ export class AboutModal extends React.Component<
 
               <h3>2021/05/08</h3>
               <ul>
-                <li>Fixed crash when note text is empty</li>
                 <li>Disabled auto-complete for note input</li>
+                <li>Fixed crash when note text is empty</li>
+                <li>
+                  Several enhancements on column title (increased width,
+                  prevented linebreak, added tooltip title)
+                </li>
               </ul>
 
               <h3>2021/02/20</h3>

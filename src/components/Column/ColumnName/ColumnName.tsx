@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 
-import './ColumnName.scss';
-import Input from '../../Input';
+import "./ColumnName.scss";
+import Input from "../../Input";
 
 export interface ColumnNameProps {
   title: string;
@@ -41,12 +41,17 @@ const ColumnName: React.FunctionComponent<ColumnNameProps> = ({
           }}
           onBlur={onBlur}
           showUnderline={false}
-          maxLength={'32'}
+          maxLength={"32"}
           focusTheme="mint"
           invertPlaceholder={true}
+          title={title}
         />
       )}
-      {!isAdmin && <span className="column-name">{title}</span>}
+      {!isAdmin && (
+        <span className="column-name" title={title}>
+          {title}
+        </span>
+      )}
 
       <span className="column-name__count">{count}</span>
     </h1>
