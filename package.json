@@ -18,7 +18,7 @@
     "blueimp-md5": "^2.7.0",
     "classnames": "^2.2.5",
     "export-to-csv": "^0.2.1",
-    "firebase": "^7.14.1",
+    "firebase": "^7.24.0",
     "lodash": "^4.17.15",
     "prop-types": "^15.6.1",
     "raven-js": "^3.17.0",

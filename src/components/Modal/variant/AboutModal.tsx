@@ -156,6 +156,11 @@ export class AboutModal extends React.Component<
             <div className="about-modal__panel">
               <h2 className="about-modal__headline">Changelog</h2>
 
+              <h3>2021/05/11</h3>
+              <ul>
+                <li>Migrated database & functions to region EU (Belgium)</li>
+              </ul>
+
               <h3>2021/05/08</h3>
               <ul>
                 <li>Disabled auto-complete for note input</li>
@@ -176,20 +181,6 @@ export class AboutModal extends React.Component<
                   Renamed add card inputfield placeholder to 'add note', so that
                   Chrome won't suggest an auto-completion of ones credit card
                   information
-                </li>
-              </ul>
-
-              <h3>2020/11/30</h3>
-              <ul>
-                <li>Enabled card stacking for every user</li>
-              </ul>
-
-              <h3>2020/11/14</h3>
-              <ul>
-                <li>Added "About" section, including an added changelog</li>
-                <li>
-                  Replaced QR-Code generator library within Share modal with
-                  improved load time
                 </li>
               </ul>
             </div>

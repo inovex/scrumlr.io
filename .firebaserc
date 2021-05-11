@@ -3,5 +3,14 @@
     "default": "scrumlr-staging",
     "staging": "scrumlr-staging",
     "live": "scrumlr-live"
+  },
+  "targets": {
+    "scrumlr-live": {
+      "database": {
+        "live": [
+          "scrumlr-live-eu"
+        ]
+      }
+    }
   }
 }

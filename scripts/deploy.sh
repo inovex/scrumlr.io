@@ -22,7 +22,7 @@ case "$STAGE" in
             export REACT_APP_PROJECT_ID=scrumlr-live
             export REACT_APP_FIREBASE_API_KEY=AIzaSyBfv2RqZh5hI3ldFb5CWST0As5sbKS_pVY
             export REACT_APP_FIREBASE_AUTH_DOMAIN=scrumlr-live.firebaseapp.com
-            export REACT_APP_DATABASE_URL=https://scrumlr-live.firebaseio.com/
+            export REACT_APP_DATABASE_URL=https://scrumlr-live-eu.europe-west1.firebasedatabase.app
             export REACT_APP_FIREBASE_STORAGE_BUCKET=scrumlr-live.appspot.com
             export REACT_APP_FIREBASE_MESSAGING_SENDER_ID=1021745671120
             export REACT_APP_SENTRY_DSN=https://d3f0283a37e34b08a72fcdd38981ce69@sentry.io/206110
