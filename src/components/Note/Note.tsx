@@ -28,12 +28,6 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
     setShowDialog(!showDialog);
   };
 
-  // const [noteText, setNoteText] = React.useState("");
-  /*
-  function handleChangeNotetext(e: React.ChangeEvent<HTMLInputElement>) {
-    setNoteText(e.target.value);
-  }
-  */
   const onEditNote = (noteText: string) => {
     if (Parse.User.current()?.id === authorId) {
       store.dispatch(ActionFactory.editNote(noteId!, noteText));

@@ -23,6 +23,9 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;
+  min-width: calc(240px + 10vw);
+  width: calc(100vw - 36px);
+  max-width: 380px;
 }
 @media (prefers-color-scheme: dark) {
   .note-dialog__note {
@@ -30,6 +33,13 @@
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
   }
 }
+@media #{$menu-desktop} {
+  .note-dialog__note {
+    max-width: 440px;
+    width: calc(100vw - 32px);
+  }
+}
+
 .note-dialog__note--own-card::before {
   content: "";
   display: block;
@@ -49,8 +59,8 @@
 }
 
 .note-dialog__text {
+  background: none;
   margin: 0;
-  margin-right: 5px;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
@@ -64,9 +74,16 @@
   display: -webkit-box;
   margin-bottom: $note__text-margin-bottom;
 }
+.note-dialog__text:focus {
+  outline: 1px solid $color-dark-gray;
+  outline-offset: 6px;
+}
 @media (prefers-color-scheme: dark) {
   .note-dialog__text {
     color: $color-white;
+  }
+  .note-dialog__text:focus {
+    outline: 1px solid $color-white;
   }
 }
 
@@ -101,8 +118,15 @@
   list-style-type: none;
   position: absolute;
   margin: 0;
-  top: 0;
-  right: -80px - $margin--default;
+  bottom: 10px;
+  right: 25px;
+}
+
+@media #{$menu-desktop} {
+  .note-dialog__options {
+    top: 0;
+    right: -80px - $margin--default;
+  }
 }
 
 .note-dialog__option {
