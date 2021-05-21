@@ -1,5 +1,5 @@
 # Docker Image 
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine
 
 # Directory within the virtualizied Docker environment
 WORKDIR /usr/src/app
@@ -15,10 +15,11 @@ COPY . .
 
 ENV REACT_APP_SERVER_API_URL=http://scrumlr-server:4000/api
 
-RUN yarn build
-
-FROM nginx:alpine
-
-COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+ENTRYPOINT [ "yarn", "start" ]
 
 
+# yarn build
+
+# FROM nginx:alpine
+
+# COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
