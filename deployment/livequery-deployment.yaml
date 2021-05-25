@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrumlr-livequery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrumlr-livequery
+  template:
+    metadata:
+      labels: 
+        app: scrumlr-livequery
+    spec:
+      containers:
+        - name: scrumlr-livequery
+          image: scrumlr-livequery
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 4000
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: scrumlr-livequery
+spec:
+  type: NodePort
+  ports:
+    - port: 4000
+      targetPort: 4000
+      protocol: TCP
+  selector:
+    app: scrumlr-livequery
