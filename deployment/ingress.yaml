@@ -1,8 +1,0 @@
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: web-ingress
-  namespace: default
-  annotations:
-    haproxy.org/cors-enable: "true"
-    haproxy.org/cors-allow-origin: "*"
