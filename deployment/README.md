@@ -4,16 +4,10 @@
 
 First of all, we need to create a Docker image for every component we want do deploy. 
 
-### Parse Server
+### Parse Server & LiveQuery
 
 Go into the server directory of our project and run the following command: <br>
-``` docker build -f ../deployment/server.Dockerfile -t scrumlr-server . ```
-
-### Parse LiveQuery
-
-Go into the server directory of our project and run the following command: <br>
-``` docker build -f ../deployment/liveQuery.Dockerfile -t scrumlr-livequery . ```
-
+``` docker build -f ../deployment/server.Dockerfile -t parse . ```
 ### HAProxy
 
 Go into the server directory of our project and run the following command: <br>
@@ -31,8 +25,8 @@ Resources can be removed using following command: <br>
 
 | Name | File | Description | Docker Image | 
 | --- | --- | --- | --- |
-| `scrumlr-server` | `server-deployment.yaml` | File to create the deployment & service of the parse server | `scrumlr-server` |
-| `scrumlr-livequery` | `livequery-deployment.yaml` | File to create the deployment & service of the parse livequery server | `scrumlr-livequery` |
+| `scrumlr-server` | `server-deployment.yaml` | File to create the deployment & service of the parse server | `parse` |
+| `scrumlr-livequery` | `livequery-deployment.yaml` | File to create the deployment & service of the parse livequery server | `parse` |
 | `scrumlr-database` | `database-deployment.yaml` | File to create the deployment & service of the mongodb database | `mongo` |
 | `scrumlr-proxy` | `haproxy-deployment.yaml` | File to create the deployment & service of the HAProxy | `scrumlr-proxy` |
 | `scrumlr-cache` | `redis-deployment.yaml` | File to create the deployment & service of the Redis cache | `redis` |
