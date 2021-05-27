@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: scrumlr-server
-          image: parse
+          image: scrumlr-parse
           imagePullPolicy: Never
           ports:
             - containerPort: 4000
