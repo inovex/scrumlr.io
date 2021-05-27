@@ -14,10 +14,46 @@ spec:
     spec:
       containers:
         - name: scrumlr-livequery
-          image: scrumlr-livequery
+          image: parse
           imagePullPolicy: Never
           ports:
             - containerPort: 4000
+          env:
+            - name: SCRUMLR_OPERATION_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_operation_mode
+            - name: SCRUMLR_DATABASE_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_database_uri
+            - name: SCRUMLR_API_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_api_host
+            - name: SCRUMLR_API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_api_port
+            - name: SCRUMLR_API_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: scrumlr-secrets
+                  key: scrumlr_api_master_key
+            - name: SCRUMLR_SERVE_PRODUCTION_WEBAPP
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_serve_production_webapp
+            - name: SCRUMLR_CACHE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: livequery-config
+                  key: scrumlr_cache_url
       restartPolicy: Always
 
 ---
