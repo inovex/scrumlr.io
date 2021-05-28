@@ -27,7 +27,6 @@ kind: Service
 metadata:
   name: scrumlr-proxy
 spec:
-  type: NodePort
   ports:
     - port: 4000
       targetPort: 4000

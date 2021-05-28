@@ -15,7 +15,7 @@ spec:
       containers:
         - name: scrumlr-dashboard
           image: parseplatform/parse-dashboard
-          args: ["--dev", "--appId", "Scrumlr", "--masterKey", "masterKey", "--serverURL", "http://localhost:30912/api"]
+          args: ["--dev", "--appId", "Scrumlr", "--masterKey", "masterKey", "--serverURL", "http://localhost:4000/api"]
           imagePullPolicy: Never
           ports:
             - containerPort: 4040
@@ -33,6 +33,6 @@ spec:
     - port: 4040
       targetPort: 4040
       protocol: TCP
-      nodePort: 30144
+      nodePort: 30040
   selector:
     app: scrumlr-dashboard

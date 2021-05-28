@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: scrumlr-livequery
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: scrumlr-livequery
@@ -63,7 +63,6 @@ kind: Service
 metadata:
   name: scrumlr-livequery
 spec:
-  type: NodePort
   ports:
     - port: 4000
       targetPort: 4000

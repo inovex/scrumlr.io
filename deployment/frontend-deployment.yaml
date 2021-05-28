@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrumlr-database
+  name: scrumlr-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrumlr-database
+      app: scrumlr-frontend
   template:
     metadata:
       labels: 
-        app: scrumlr-database
+        app: scrumlr-frontend
     spec:
       containers:
-        - name: scrumlr-database
-          image: mongo
+        - name: scrumlr-frontend
+          image: scrumlr-frontend
           imagePullPolicy: Never
           ports:
-            - containerPort: 27017
+            - containerPort: 80
       restartPolicy: Always
 
 ---
@@ -25,11 +25,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: scrumlr-database
+  name: scrumlr-frontend
 spec:
+  type: NodePort
   ports:
-    - port: 27017
-      targetPort: 27017
+    - port: 80
+      targetPort: 80
       protocol: TCP
+      nodePort: 30080
   selector:
-    app: scrumlr-database
+    app: scrumlr-frontend

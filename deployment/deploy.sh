@@ -11,3 +11,5 @@ kubectl apply -f redis-deployment.yaml
 kubectl apply -f server-deployment.yaml
 kubectl apply -f livequery-deployment.yaml
 kubectl apply -f haproxy-deployment.yaml
+kubectl apply -f dashboard-deployment.yaml
+kubectl apply -f frontend-deployment.yaml

@@ -13,7 +13,7 @@ RUN yarn install
 # Copies everything over to the Docker environment
 COPY . .
 
-ENV REACT_APP_SERVER_API_URL=http://scrumlr-server:4000/api
+ENV REACT_APP_SERVER_API_URL=http://localhost:4000/api
 ENV SKIP_PREFLIGHT_CHECK=true
 
 RUN yarn build
