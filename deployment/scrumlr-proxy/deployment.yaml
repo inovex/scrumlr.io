@@ -19,17 +19,3 @@ spec:
           ports:
             - containerPort: 4000
       restartPolicy: Always
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: scrumlr-proxy
-spec:
-  ports:
-    - port: 4000
-      targetPort: 4000
-      protocol: TCP
-  selector:
-    app: scrumlr-proxy

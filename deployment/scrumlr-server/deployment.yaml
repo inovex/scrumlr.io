@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrumlr-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: scrumlr-server
+  template:
+    metadata:
+      labels: 
+        app: scrumlr-server
+    spec:
+      containers:
+        - name: scrumlr-server
+          image: scrumlr-parse
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: scrumlr-server-configmap
+            - secretRef:
+                name: scrumlr-server-secrets
+      restartPolicy: Always

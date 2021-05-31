@@ -19,17 +19,3 @@ spec:
           ports:
             - containerPort: 27017
       restartPolicy: Always
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: scrumlr-database
-spec:
-  ports:
-    - port: 27017
-      targetPort: 27017
-      protocol: TCP
-  selector:
-    app: scrumlr-database

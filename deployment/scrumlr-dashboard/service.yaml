@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scrumlr-dashboard
+spec:
+  type: NodePort
+  ports:
+    - port: 4040
+      targetPort: 4040
+      protocol: TCP
+      nodePort: 30040
+  selector:
+    app: scrumlr-dashboard
