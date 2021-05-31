@@ -5,10 +5,8 @@
   font-size: 48px;
   color: $color-white;
   width: fit-content;
-  border-bottom: solid 3px violet;
+  border-bottom: solid 3px var(--accent-color);
   padding-bottom: $padding--default;
-  // TODO
-  // border-bottom: solid 3px var(--accent-color);
   margin: $margin--default 0 $margin--large 0;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -48,9 +46,7 @@
   width: $note__indicator-width;
   height: $note__indicator-height;
   border-radius: 0 $note__indicator-width $note__indicator-width 0;
-  background: violet;
-  // TODO
-  // background: var(--accent-color);
+  background: var(--accent-color);
 }
 
 .note-dialog__content {

@@ -7,6 +7,7 @@ import {NoteProps} from "components/Note/Note";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
 import React from "react";
+import {Color, getColorClassName} from "constants/colors";
 
 export interface NoteDialogProps extends NoteProps {
   show: boolean;
@@ -15,9 +16,11 @@ export interface NoteDialogProps extends NoteProps {
   onClose?: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
+  columnName: string;
+  columnColor: string;
 }
 
-const NoteDialog = ({show, text, authorId, editable, authorName, onClose, onDelete, onEdit}: NoteDialogProps) => {
+const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
@@ -41,8 +44,8 @@ const NoteDialog = ({show, text, authorId, editable, authorName, onClose, onDele
 
   return (
     <Portal onClose={onClose}>
-      <div className="note-dialog">
-        <h2 className="note-dialog__header">Negative</h2>
+      <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
+        <h2 className="note-dialog__header">{columnName}</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
           <div className="note-dialog__content">
             <blockquote className="note-dialog__text" contentEditable={editable} suppressContentEditableWarning onBlur={handleChangeNotetext}>

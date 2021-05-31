@@ -14,9 +14,11 @@ export interface NoteProps {
   text: string;
   authorId: string;
   noteId?: string;
+  columnName: string;
+  columnColor: string;
 }
 
-const Note = ({text, authorId, noteId}: NoteProps) => {
+const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
   const state = useSelector((state: ApplicationState) => ({
     board: state.board,
     notes: state.notes,
@@ -61,6 +63,8 @@ const Note = ({text, authorId, noteId}: NoteProps) => {
         text={text}
         authorId={authorId}
         authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
+        columnName={columnName}
+        columnColor={columnColor}
       />
     </li>
   );
