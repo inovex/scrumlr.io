@@ -35,36 +35,36 @@ fi
 echo "\n[2] Create Kubernetes resources (e.g. deployments, services, configmaps, secrets)\n"
 
 # scrumlr-database
-kubectl create -f scrumlr-database/service.yaml
-kubectl create -f scrumlr-database/deployment.yaml
+kubectl apply -f scrumlr-database/service.yaml
+kubectl apply -f scrumlr-database/deployment.yaml
 
 # scrumlr-cache
-kubectl create -f scrumlr-cache/service.yaml
-kubectl create -f scrumlr-cache/deployment.yaml
+kubectl apply -f scrumlr-cache/service.yaml
+kubectl apply -f scrumlr-cache/deployment.yaml
 
 # scrumlr-server
-kubectl create -f scrumlr-server/configmap.yaml
-kubectl create -f scrumlr-server/secrets.yaml
-kubectl create -f scrumlr-server/service.yaml
-kubectl create -f scrumlr-server/deployment.yaml
+kubectl apply -f scrumlr-server/configmap.yaml
+kubectl apply -f scrumlr-server/secrets.yaml
+kubectl apply -f scrumlr-server/service.yaml
+kubectl apply -f scrumlr-server/deployment.yaml
 
 # scrumlr-livequery
-kubectl create -f scrumlr-livequery/configmap.yaml
-kubectl create -f scrumlr-livequery/secrets.yaml
-kubectl create -f scrumlr-livequery/service.yaml
-kubectl create -f scrumlr-livequery/deployment.yaml
+kubectl apply -f scrumlr-livequery/configmap.yaml
+kubectl apply -f scrumlr-livequery/secrets.yaml
+kubectl apply -f scrumlr-livequery/service.yaml
+kubectl apply -f scrumlr-livequery/deployment.yaml
 
 # scrumlr-proxy
-kubectl create -f scrumlr-proxy/service.yaml
-kubectl create -f scrumlr-proxy/deployment.yaml
+kubectl apply -f scrumlr-proxy/service.yaml
+kubectl apply -f scrumlr-proxy/deployment.yaml
 
 # scrumlr-dashboard
-kubectl create -f scrumlr-dashboard/service.yaml
-kubectl create -f scrumlr-dashboard/deployment.yaml
+kubectl apply -f scrumlr-dashboard/service.yaml
+kubectl apply -f scrumlr-dashboard/deployment.yaml
 
 #scrumlr-frontend
-kubectl create -f scrumlr-frontend/service.yaml
-kubectl create -f scrumlr-frontend/deployment.yaml
+kubectl apply -f scrumlr-frontend/service.yaml
+kubectl apply -f scrumlr-frontend/deployment.yaml
 
 # Wait until all deployments are available
 echo "\n[3] Wait until all deployments are available\n"
