@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: scrumlr-cache
-          image: redis
-          imagePullPolicy: Never
+          image: redis:6.2.4-alpine
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6379
       restartPolicy: Always
