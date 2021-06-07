@@ -1,7 +1,12 @@
-FROM node:lts-alpine
+FROM node:16.3-alpine
+
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
 
 COPY . .
-RUN yarn install
 
 # Run Node.js as non-root
 USER node

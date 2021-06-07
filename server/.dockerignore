@@ -1,2 +1,10 @@
 ./logs/
 ./node_modules/
+.eslintignore
+.eslintrc.json
+.prettierrc
+docker-compose.yml
+Dockerfile
+.dockerignore
+haproxy.cfg
+README.md
