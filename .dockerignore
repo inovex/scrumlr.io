@@ -14,7 +14,6 @@ Dockerfile
 .eslintrc.json
 .gitignore
 .prettierrc
-Dockerfile
 LICENSE
 README.md 
 scrumlr.png

@@ -1,18 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: scrumlr-websocket-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: scrumlr-frontend-ingress
 spec:
   rules:
   - host: kubernetes.docker.internal
     http:
       paths:
-      - path: /ws
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: scrumlr-livequery
+            name: scrumlr-frontend
             port:
-              number: 4000
+              number: 80
