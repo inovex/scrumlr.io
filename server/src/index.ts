@@ -1,5 +1,4 @@
 import {ParseServer} from "parse-server";
-import ParseDashboard from "parse-dashboard";
 import express from "express";
 import http from "http";
 import {createProxyMiddleware} from "http-proxy-middleware";
@@ -49,33 +48,7 @@ const api = new ParseServer(serverConfig);
 
 const application = express();
 if (OPERATION_MODE === "bundled" || OPERATION_MODE === "server") {
-  const dashboard = new ParseDashboard(
-    {
-      apps: [
-        {
-          serverURL: "http://kubernetes.docker.internal/api",
-          appId: "Scrumlr",
-          masterKey: MASTER_KEY,
-          appName: "Scrumlr Parse Server",
-        },
-      ],
-      users: [
-        {
-          user: "admin",
-          pass: "password",
-        },
-      ],
-      useEncryptedPasswords: false,
-      trustProxy: 1,
-    },
-    {
-      allowInsecureHTTP: true,
-      cookieSessionSecret: "cookieSessionSecret",
-    }
-  );
-
   application.use("/api", api);
-  application.use("/dashboard", dashboard);
 
   if (SERVE_PRODUCTION_WEBAPP) {
     console.log("Serving production webapp from local directory");
