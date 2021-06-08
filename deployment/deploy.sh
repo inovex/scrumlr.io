@@ -22,16 +22,6 @@ else
     echo "Image scrumlr-parse: found";
 fi
 
-if [[ "$(docker images -q scrumlr-proxy)" == "" ]]; 
-then
-    echo "Image scrumlr-proxy: missing";
-    cd scrumlr-proxy
-    docker build -f Dockerfile -t scrumlr-proxy .
-    cd ..
-else
-    echo "Image scrumlr-proxy: found";
-fi
-
 echo "\n[2] Create Kubernetes resources (e.g. deployments, services, configmaps, secrets)\n"
 
 # scrumlr-database
