@@ -1,5 +1,5 @@
 # Docker Image 
-FROM node:lts-alpine as build-stage 
+FROM node:16.3-alpine as build-stage 
 
 # Directory within the virtualizied Docker environment
 WORKDIR /usr/src/app
