@@ -14,3 +14,10 @@ spec:
             name: scrumlr-server
             port:
               number: 4000
+      - path: /dashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: scrumlr-server
+            port:
+              number: 4000
