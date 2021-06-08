@@ -28,7 +28,7 @@ export let serverConfig: any = {
 if (OPERATION_MODE !== "livequery") {
   serverConfig = {
     ...serverConfig,
-    cloud: `${__dirname  }/cloud.ts`,
+    cloud: `${__dirname}/cloud.ts`,
     liveQuery: {
       classNames: ["Board", "Note", "JoinRequest", "_Role", "_User"],
     },
@@ -72,11 +72,8 @@ httpServer.listen(PORT, () => {
 
 if (OPERATION_MODE === "livequery") {
   ParseServer.createLiveQueryServer(httpServer, {
-    appId: "Scrumlr",
-    masterKey: MASTER_KEY,
-    serverURL: `http://${HOST}:${PORT}/api`,
     redisURL: CACHE_URI,
   });
-} else {
+} else if (OPERATION_MODE === "bundled") {
   ParseServer.createLiveQueryServer(httpServer);
 }
