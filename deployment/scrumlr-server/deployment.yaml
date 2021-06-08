@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: scrumlr-server
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: scrumlr-server
