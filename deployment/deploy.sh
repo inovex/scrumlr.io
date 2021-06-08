@@ -54,10 +54,6 @@ kubectl apply -f scrumlr-livequery/secrets.yaml
 kubectl apply -f scrumlr-livequery/service.yaml
 kubectl apply -f scrumlr-livequery/deployment.yaml
 
-# scrumlr-proxy
-kubectl apply -f scrumlr-proxy/service.yaml
-kubectl apply -f scrumlr-proxy/deployment.yaml
-
 # scrumlr-dashboard
 kubectl apply -f scrumlr-dashboard/service.yaml
 kubectl apply -f scrumlr-dashboard/deployment.yaml
@@ -71,8 +67,9 @@ echo "\n[3] Wait until all deployments are available\n"
 kubectl wait --for=condition=available --timeout=60s --all deployments
 
 # Port-forwarding to service/scrumlr-proxy
-echo "\n[4] Port-forward from localhost:4000 to proxy\n"
-kubectl port-forward service/scrumlr-proxy 4000:4000
+echo "\n[4] Create Ingress\n"
+kubectl apply -f ingress.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
 
 # Shut down resources
 # for d in ./*/ ; do (cd "$d" && kubectl delete -f . ); done
