@@ -1,81 +1,51 @@
-# Scrumlr K8S-Deployment
 
-## Docker Images
+# Scrumlr K8s
 
-First of all, we need to create a Docker image for every component we want do deploy. 
+Running our Parse server, LiveQuery server, database, cache, frontend and dashboard as Kubernetes resources. 
+## Run Locally
 
-### Parse Server & LiveQuery
+### Minikube
 
-Since both Parse server and LiveQuery server are basically the same but only started in a
-different operation mode, we can use the same docker image for both. 
+1. **Install [minikube](https://minikube.sigs.k8s.io/docs/start/), [docker](https://docs.docker.com/get-docker/)**
 
-Go into the server directory of our project and run the following command: <br>
-``` docker build -f ../deployment/server.Dockerfile -t scrumlr-parse . ```
-### HAProxy
+2. **Clone our project and head to the `/deployment` directory**
 
-Go into the server directory of our project and run the following command: <br>
-``` docker build -f ../deployment/proxy.Dockerfile -t scrumlr-proxy . ```
+3. **Use the Docker daemon for minikube**
+```bash
+eval $(minikube docker-env)
+```
+Important note: You have to run eval $(minikube docker-env) on each terminal you want to use, since it only sets the environment variables for the current shell session.
 
-### Frontend React Application
+4. **Start your cluster**
 
-Go into the root directory of our project and run the following command: <br>
-``` docker build -f Dockerfile -t scrumlr-frontend . ```
+```bash
+minikube start
+```
 
----
+5. **Create Nginx Ingress Controller**
 
-## Kubernetes
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+```
 
-Kubernetes resources, e.g. deployments and services, can be created using the following command: <br>
-``` kubectl create -f <*.yaml> ```
+6. **Run our deployment script**
 
-Kubernetes resources can be updated using the following command: <br>
-``` kubectl apply -f <*.yaml> ```
+The deployment script will automatically search for all needed docker images, build them if they're missing and 
+deploy all kubernetes resources afterwards.
+```bash
+sh deploy.sh
+```
 
-Resources can be removed using following command: <br>
-``` kubectl delete -f <*.yaml> ```
+7. **Update /etc/hosts**
+Update our `/etc/hosts` file to route requests from `scrumlr.local` to our minikube cluster.
 
-| Name | File | Description | Docker Image | 
-| --- | --- | --- | --- |
-| `scrumlr-server` | `server-deployment.yaml` | File to create the deployment & service of the parse server | `scrumlr-parse` |
-| `scrumlr-livequery` | `livequery-deployment.yaml` | File to create the deployment & service of the parse livequery server | `scrumlr-parse` |
-| `scrumlr-database` | `database-deployment.yaml` | File to create the deployment & service of the mongodb database | `mongo` |
-| `scrumlr-proxy` | `haproxy-deployment.yaml` | File to create the deployment & service of the HAProxy | `scrumlr-proxy` |
-| `scrumlr-cache` | `redis-deployment.yaml` | File to create the deployment & service of the Redis cache | `redis` |
-| `scrumlr-frontend` | `frontend-deployment.yaml` | File to create the deployment & service of the frontend react application | `scrumlr-frontend` |
-| `scrumlr-dashboard` | `dashboard-deployment.yaml` | File to create the deployment & service of the parse dashboard | `parseplatform/parse-dashboard` |
+```bash
+echo "127.0.0.1 scrumlr.local" | sudo tee -a /etc/hosts
+```
 
-### ConfigMaps & Secrets
+8. **Create a minikube tunnel**
 
-ConfigMaps & Secrets are used to store certain key-value-pairs to use them in our server & livequery deployment as environment variables. 
-
-- `secrets.yaml`: Used to store our Parse masterKey base64 encoded
-- `server-configmap.yaml`: Used to store our environment variables for the parse server
-- `livequery-configmap.yaml`: Used to store our environment variables for the liveuquery server
-
-
---- 
-
-## Deployment
-
-To deploy our Kubernetes cluster, you can run our `deploy.sh` script located in the deployment directory. 
-
-Afterwards, every ConfigMap, Secret, Deployment, Service, ReplicaSet, Pod should have been created. 
-
-To reach our server on `localhost:4000` you can start a port-forward in the terminal via `kubectl port-forward service/scrumlr-proxy 4000:4000`
-
-Now our Webapplication should be served on `localhost:30080` and the Parse Dashboard should be served on `localhost:30040`. 
-
-
-To shut down our Cluster, go into the deployment directory and run the following command:
-``` kubectl delete -f . ```
-
----
-
-## Basic Docker & Kubernetes commands
-
-- List all deployments: `kubectl get deployments`
-- List all services: `kubectl get services` 
-- List all pods: `kubectl get pods` 
-- Show log of pod: `kubectl log <pod>`
-- Show deployments, pods and services combined: `kubectl get deploy,po,svc`
-- Describe resource: `kubectl describe <deploy/po/svc> <name>`
+The minikube tunnel is needed so that our Ingress can be reached on `127.0.0.1`.
+```bash
+minikube tunnel
+```

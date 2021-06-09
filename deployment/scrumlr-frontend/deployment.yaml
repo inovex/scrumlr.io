@@ -15,7 +15,7 @@ spec:
       containers:
         - name: scrumlr-frontend
           image: scrumlr-frontend
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
       restartPolicy: Always 

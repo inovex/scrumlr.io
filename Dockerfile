@@ -13,8 +13,8 @@ RUN yarn install
 # Copies everything over to the Docker environment
 COPY . .
 
-ENV REACT_APP_SERVER_API_URL=http://kubernetes.docker.internal/api
-ENV REACT_APP_LIVEQUERY_URL=ws://kubernetes.docker.internal/ws
+ENV REACT_APP_SERVER_API_URL=http://scrumlr.local/api
+ENV REACT_APP_LIVEQUERY_URL=ws://scrumlr.local/ws
 ENV SKIP_PREFLIGHT_CHECK=true
 
 RUN yarn build

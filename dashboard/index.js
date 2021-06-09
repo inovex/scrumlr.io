@@ -5,7 +5,7 @@ import http from "http";
 const dashboard = new ParseDashboard({
     apps: [
         {
-            serverURL: "http://kubernetes.docker.internal/api",
+            serverURL: "http://scrumlr.local/api",
             appId: "Scrumlr",
             masterKey: "masterKey",
             appName: "Scrumlr"
