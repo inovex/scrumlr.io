@@ -33,14 +33,8 @@ do
     kubectl apply -f $d;
 done
 
-# Wait until all deployments are available
-echo "\n[3] Wait until all deployments are available\n"
+# Wait until all deployments are running
+echo "\n[3] Wait until all deployments are running\n"
 kubectl wait --for=condition=available --timeout=60s --all deployments
 
-# Port-forwarding to service/scrumlr-proxy
-#echo "\n[4] Create Ingress controller\n"
-#kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-
-# Shut down resources
-# for d in ./*/ ; do (cd "$d" && kubectl delete -f . ); done
 
