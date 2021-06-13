@@ -109,7 +109,7 @@ On MacOS and Windows machines you could also use the Docker Desktop application 
     - The Parse Server health can be checked on http://scrumlr.local/api/health
 - WebSocket requests should go to ws://scrumlr.local/ws
 
-## kubectl cheetsheat 
+## kubectl cheatsheet 
 
 - Apply a configuration to an object by filename or stdin. Overrides the existing configuration: `kubectl apply -f <*.yaml>`
 - Apply configuration of all manifest files in a directory: `kubectl apply -f <./dir>` 
