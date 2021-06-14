@@ -17,5 +17,24 @@ spec:
           image: scrumlr-frontend
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - name: frontend-http
+              containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /
+              port: frontend-http
+            initialDelaySeconds: 240
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1 
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: frontend-http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1 
+            failureThreshold: 5
       restartPolicy: Always 
