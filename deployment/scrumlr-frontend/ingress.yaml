@@ -4,8 +4,7 @@ metadata:
   name: scrumlr-frontend-ingress
 spec:
   rules:
-  - host: scrumlr.local
-    http:
+  - http:
       paths:
       - path: /
         pathType: Prefix

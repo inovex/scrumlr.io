@@ -4,8 +4,7 @@ metadata:
   name: scrumlr-dashboard-ingress
 spec:
   rules:
-  - host: scrumlr.local
-    http:
+  - http:
       paths:
       - path: /dashboard
         pathType: Prefix

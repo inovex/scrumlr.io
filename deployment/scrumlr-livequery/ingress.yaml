@@ -6,8 +6,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: scrumlr.local
-    http:
+  - http:
       paths:
       - path: /ws
         pathType: Prefix

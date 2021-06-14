@@ -48,15 +48,7 @@ Running our Parse Server, Parse LiveQuery, MongoDB, Redis Cache, React Frontend 
     $ sh deploy.sh
     ```
 
-5. **Update /etc/hosts**
-
-    Update our `/etc/hosts` file to route requests from `scrumlr.local` to our minikube cluster.
-
-    ```bash
-    $ echo "127.0.0.1 scrumlr.local" | sudo tee -a /etc/hosts
-    ```
-
-6. **Create a minikube tunnel**
+5. **Create a minikube tunnel**
 
     The minikube tunnel is needed so that our Ingress can be reached on `127.0.0.1`.
     ```bash
@@ -91,14 +83,6 @@ On MacOS and Windows machines you could also use the Docker Desktop application 
     The deployment script will automatically search for all needed docker images, build them if they're missing and deploy all kubernetes resources afterwards.
     ```bash
     $ sh deploy.sh
-    ```
-
-5. **Update /etc/hosts**
-
-    Update our `/etc/hosts` file to route requests from `scrumlr.local` to our minikube cluster.
-
-    ```bash
-    $ echo "127.0.0.1 scrumlr.local" | sudo tee -a /etc/hosts
     ```
 
 ### Access our running application
