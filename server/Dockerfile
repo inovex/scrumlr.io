@@ -1,13 +1,14 @@
-FROM node:lts-alpine
+FROM node:16.3-alpine
 
-COPY . .
+WORKDIR /usr/src/app
+
+COPY package.json yarn.lock ./
+
 RUN yarn install
 
-ENV SCRUMLR_API_HOST=localhost
-ENV SCRUMLR_API_PORT=4000
-ENV SCRUMLR_API_MASTER_KEY=masterKey
-ENV SCRUMLR_DATABASE_URI=mongodb://scrumlr-database:27017/dev
-ENV SCRUMLR_SERVE_PRODUCTION_WEBAPP=false
-ENV SCRUMLR_MIDDLEWARE_TARGET=http://scrumlr-frontend:3000
+COPY . .
+
+# Run Node.js as non-root
+USER node
 
 ENTRYPOINT yarn start
