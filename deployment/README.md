@@ -43,8 +43,9 @@ Running our Parse Server, Parse LiveQuery, MongoDB, Redis Cache, React Frontend 
 
 4. **Run our deployment script**
 
-    The deployment script will automatically search for all needed docker images, build them if they're missing and deploy all kubernetes resources afterwards.
+    The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
     ```bash
+    $ sh build.sh
     $ sh deploy.sh
     ```
 
@@ -78,20 +79,21 @@ On MacOS and Windows machines you could also use the Docker Desktop application 
     $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
     ```
 
-4. **Run our deployment script**
+4. **Run our build & deployment script**
 
-    The deployment script will automatically search for all needed docker images, build them if they're missing and deploy all kubernetes resources afterwards.
+    The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
     ```bash
+    $ sh build.sh
     $ sh deploy.sh
     ```
 
 ### Access our running application
 
-- Our React application is served on http://scrumlr.local/
-- The Parse Dashboard is served on http://scrumlr.local/dashboard
-- API requests should go to http://scrumlr.local/api
-    - The Parse Server health can be checked on http://scrumlr.local/api/health
-- WebSocket requests should go to ws://scrumlr.local/ws
+- Our React application is served on http://localhost/
+- The Parse Dashboard is served on http://localhost/dashboard
+- API requests should go to http://localhost/api
+    - The Parse Server health can be checked on http://localhost/api/health
+- WebSocket requests should go to ws://localhost/ws
 
 ## kubectl cheatsheet 
 
