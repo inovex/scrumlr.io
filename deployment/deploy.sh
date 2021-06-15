@@ -1,40 +1,42 @@
 #!/bin/bash
 
-echo "\n[1] Searching for required docker images\n"
+echo "\n[1] Create Kubernetes resources (e.g. deployments, services, configmaps, secrets)\n"
 
-if [[ "$(docker images -q scrumlr-dashboard)" == "" ]]; 
-then
-    echo "Image scrumlr-dashboard: missing";
-    docker build -f ../dashboard/Dockerfile -t scrumlr-dashboard ../dashboard
-else
-    echo "Image scrumlr-dashboard: found";
-fi
+# scrumlr-cache
+kubectl apply -f ./scrumlr-cache/deployment.yaml
+kubectl apply -f ./scrumlr-cache/service.yaml
 
-if [[ "$(docker images -q scrumlr-frontend)" == "" ]]; 
-then
-    echo "Image scrumlr-frontend: missing";
-    docker build -f ../Dockerfile -t scrumlr-frontend ..
-else
-    echo "Image scrumlr-frontend: found";
-fi
+# scrumlr-dashboard
+kubectl apply -f ./scrumlr-dashboard/deployment.yaml
+kubectl apply -f ./scrumlr-dashboard/ingress.yaml
+kubectl apply -f ./scrumlr-dashboard/service.yaml
 
-if [[ "$(docker images -q scrumlr-parse)" == "" ]]; 
-then
-    echo "Image scrumlr-parse: missing";
-    docker build -f scrumlr-server/Dockerfile -t scrumlr-parse ../server
-else
-    echo "Image scrumlr-parse: found";
-fi
+# scrumlr-database
+kubectl apply -f ./scrumlr-database/deployment.yaml
+kubectl apply -f ./scrumlr-database/service.yaml
+kubectl apply -f ./scrumlr-frontend/deployment.yaml
 
-echo "\n[2] Create Kubernetes resources (e.g. deployments, services, configmaps, secrets)\n"
+# scrumlr-frontend
+kubectl apply -f ./scrumlr-frontend/ingress.yaml
+kubectl apply -f ./scrumlr-frontend/service.yaml
 
-for d in ./*/ ;
-do
-    kubectl apply -f $d;
-done
+# scrumlr-livequery
+kubectl apply -f ./scrumlr-livequery/configmap.yaml
+kubectl apply -f ./scrumlr-livequery/deployment.yaml
+kubectl apply -f ./scrumlr-livequery/ingress.yaml
+kubectl apply -f ./scrumlr-livequery/secrets.yaml
+kubectl apply -f ./scrumlr-livequery/service.yaml
+
+# scrumlr-server
+kubectl apply -f ./scrumlr-server/configmap.yaml
+kubectl apply -f ./scrumlr-server/deployment.yaml
+kubectl apply -f ./scrumlr-server/ingress.yaml
+kubectl apply -f ./scrumlr-server/secrets.yaml
+kubectl apply -f ./scrumlr-server/service.yaml
+
 
 # Wait until all deployments are running
-echo "\n[3] Wait until all deployments are running\n"
+echo "\n[2] Wait until all deployments are running\n"
 kubectl wait --for=condition=available --timeout=60s --all deployments
 
 
