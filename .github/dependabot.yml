@@ -10,7 +10,7 @@ updates:
     open-pull-requests-limit: 10
     target-branch: "main"
     labels:
-      - dependencies
+      - "Type: Dependencies"
     versioning-strategy: increase
     commit-message:
       prefix: "yarn"
@@ -26,7 +26,7 @@ updates:
     open-pull-requests-limit: 10
     target-branch: "main"
     labels:
-      - dependencies
+      - "Type: Dependencies"
     versioning-strategy: increase
     commit-message:
       prefix: "yarn"
