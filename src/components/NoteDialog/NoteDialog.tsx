@@ -13,7 +13,7 @@ export interface NoteDialogProps extends NoteProps {
   show: boolean;
   editable?: boolean;
   authorName: string;
-  onClose?: () => void;
+  onClose: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
   columnName: string;
@@ -27,8 +27,8 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
 
   const [noteText, setNoteText] = React.useState(text);
 
-  const handleChangeNotetext = (e: React.FormEvent<any>) => {
-    const {textContent} = e.target as any;
+  const handleChangeNotetext = (e: React.FocusEvent<HTMLElement>) => {
+    const textContent = e.target.textContent as string;
     if (editable) {
       onEdit(textContent);
       setNoteText(textContent);
@@ -38,7 +38,7 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
   const handleDelete = () => {
     if (editable) {
       onDelete();
-      onClose!();
+      onClose();
     }
   };
 
