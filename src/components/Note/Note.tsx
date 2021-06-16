@@ -6,9 +6,9 @@ import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
-import edit from "assets/icon-edit.svg";
 import React from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
+import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 
 export interface NoteProps {
   text: string;
@@ -43,10 +43,10 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
   };
 
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})}>
-      <div className="note__content" onClick={handleShowDialog}>
+    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})} onClick={handleShowDialog}>
+      <div className="note__content">
         <p className="note__text">{text}</p>
-        <img className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} src={edit} alt="Edit note" />
+        <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
       </div>
       <footer className="note__footer">
         <figure className="note__author" aria-roledescription="author">

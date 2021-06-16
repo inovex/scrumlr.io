@@ -4,7 +4,7 @@
 .note-dialog__header {
   font-size: 48px;
   color: $color-white;
-  width: fit-content;
+  width: max-content;
   border-bottom: solid 3px var(--accent-color);
   padding-bottom: $padding--default;
   margin: $margin--default 0 $margin--large 0;
@@ -90,7 +90,6 @@
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font: inherit;
   vertical-align: baseline;
 }

@@ -13,8 +13,6 @@
   position: fixed;
   width: calc(100vw - 24px);
   height: calc(100vh - 24px);
-  // TODO
-  // background: var(--accent-color);
   background: rgba(0, 0, 0, 0.8);
   z-index: $backdrop-z-index;
   top: 12px;

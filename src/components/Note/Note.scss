@@ -13,6 +13,7 @@ $note__author-image-size: 26px;
 $note__author-margin-left: 10px;
 
 .note {
+  cursor: pointer;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
@@ -76,6 +77,12 @@ $note__author-margin-left: 10px;
   opacity: 0;
   transition: opacity 500ms ease-out;
   display: none;
+  color: $color-dark-gray;
+}
+@media (prefers-color-scheme: dark) {
+  .note__edit {
+    color: $color-white;
+  }
 }
 @media screen and (max-width: 1279px) {
   .note__edit {

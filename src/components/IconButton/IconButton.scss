@@ -2,6 +2,7 @@
 
 // Button
 .icon-button {
+  cursor: pointer;
   position: relative;
   height: 36px;
   width: 36px;
@@ -12,21 +13,37 @@
   transition: background-color 0.25s ease-in-out, left 2s;
 }
 .icon-button:hover {
-  background-color: $color-white;
+  background-color: var(--accent-color);
 }
+@media (prefers-color-scheme: dark) {
+  .icon-button:hover {
+    background-color: $color-white;
+  }
+}
+
 .icon-button:focus {
   outline: none;
 }
 
 // Icon
 .icon-button__icon {
-  color: $color-white;
+  color: var(--accent-color);
+}
+@media (prefers-color-scheme: dark) {
+  .icon-button__icon {
+    color: $color-white;
+  }
 }
 .icon-button:hover > .icon-button__icon {
   animation: none;
-  color: violet;
-  // TODO: color: var(--accent-color);
+  color: $color-white;
 }
+@media (prefers-color-scheme: dark) {
+  .icon-button:hover > .icon-button__icon {
+    color: var(--accent-color);
+  }
+}
+
 .icon-button__icon--end {
   display: none;
 }
@@ -49,9 +66,6 @@
   width: 36px;
   padding: 0;
   white-space: nowrap;
-  top: 0;
-  left: 0;
-  right: 0;
 
   font-size: 14px;
   font-weight: bold;
@@ -68,20 +82,26 @@
   box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   transition: width 0.25s ease-in-out;
 }
+@media screen and (max-width: 600px) {
+  .icon-button__tooltip {
+    display: none;
+  }
+}
+
 .icon-button--left > .icon-button__tooltip {
-  right: 0;
-  top: 0;
+  right: -1px;
+  top: -1px;
 }
 .icon-button--right > .icon-button__tooltip {
-  left: 0;
-  top: 0;
+  left: -1px;
+  top: -1px;
 }
 
 .icon-button__text {
   text-transform: uppercase;
   position: absolute;
 }
-.tooltip__text {
+.icon-button__tooltip > .tooltip__text {
   color: $color-white;
 }
 .icon-button--right > .icon-button__tooltip > .tooltip__text {
