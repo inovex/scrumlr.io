@@ -10,6 +10,8 @@ kubectl apply -f ./scrumlr-cache/service.yaml
 kubectl apply -f ./scrumlr-dashboard/deployment.yaml
 kubectl apply -f ./scrumlr-dashboard/ingress.yaml
 kubectl apply -f ./scrumlr-dashboard/service.yaml
+kubectl apply -f ./scrumlr-dashboard/configmap.yaml
+kubectl apply -f ./scrumlr-dashboard/secrets.yaml
 
 # scrumlr-database
 kubectl apply -f ./scrumlr-database/deployment.yaml

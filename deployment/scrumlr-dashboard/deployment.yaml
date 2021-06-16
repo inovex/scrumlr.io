@@ -18,4 +18,9 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4040
+          envFrom:
+            - configMapRef:
+                name: scrumlr-dashboard-configmap
+            - secretRef:
+                name: scrumlr-dashboard-secrets
       restartPolicy: Always 
