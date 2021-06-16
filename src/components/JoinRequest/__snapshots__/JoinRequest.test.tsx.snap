@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JoinRequest should render correctly on multiple join requests 1`] = `
+<div
+  class="join-request join-request--multiple"
+>
+  <header
+    class="join-request__header"
+  >
+    <span
+      class="join-request__header-text"
+    >
+      Mehrere Personen möchten dem Board beitreten
+    </span>
+  </header>
+  <main
+    class="join-request__main"
+  >
+    <div
+      class="join-request__requests-preview"
+    >
+      <img
+        alt="User"
+        class="join-request__preview-image"
+        src="avatar.png"
+      />
+      <img
+        alt="User"
+        class="join-request__preview-image"
+        src="avatar.png"
+      />
+      <div
+        class="join-request__preview-rest"
+      >
+        +
+        1
+      </div>
+      <span
+        class="join-request__preview-names"
+      >
+        displayName-0, displayName-1, displayName-2
+      </span>
+    </div>
+    <ul
+      class="join-request__requests"
+    >
+      <li>
+        <figure
+          class="join-request__requests-figure"
+        >
+          <img
+            class="join-request__requests-avatar"
+            src="avatar.png"
+          />
+          <figcaption
+            class="join-request__requests-displayname"
+          >
+            displayName-0
+          </figcaption>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Ablehnen
+          </button>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Annehmen
+          </button>
+        </figure>
+      </li>
+      <li>
+        <figure
+          class="join-request__requests-figure"
+        >
+          <img
+            class="join-request__requests-avatar"
+            src="avatar.png"
+          />
+          <figcaption
+            class="join-request__requests-displayname"
+          >
+            displayName-1
+          </figcaption>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Ablehnen
+          </button>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Annehmen
+          </button>
+        </figure>
+      </li>
+      <li>
+        <figure
+          class="join-request__requests-figure"
+        >
+          <img
+            class="join-request__requests-avatar"
+            src="avatar.png"
+          />
+          <figcaption
+            class="join-request__requests-displayname"
+          >
+            displayName-2
+          </figcaption>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Ablehnen
+          </button>
+          <button
+            class="join-request__button join-request__requests-button"
+          >
+            Annehmen
+          </button>
+        </figure>
+      </li>
+    </ul>
+  </main>
+  <footer
+    class="join-request__footer join-request--multiple__footer"
+  >
+    <button
+      class="join-request__button join-request__footer-button join-request--multiple__footer-button"
+    >
+      Alle Ablehnen
+    </button>
+    <button
+      class="join-request__button join-request__footer-button join-request--multiple__footer-button"
+    >
+      Alle Annehmen
+    </button>
+  </footer>
+</div>
+`;
+
+exports[`JoinRequest should render correctly on single join request 1`] = `
+<div
+  class="join-request join-request--single"
+>
+  <header
+    class="join-request__header"
+  >
+    <span
+      class="join-request__header-text"
+    >
+      Jemand möchte dem Board beitreten
+    </span>
+  </header>
+  <main
+    class="join-request__main"
+  >
+    <figure
+      class="join-request__request-figure"
+    >
+      <img
+        alt="User"
+        class="join-request__request-image"
+        src="avatar.png"
+      />
+      <figcaption
+        class="join-request__request-name"
+      >
+        displayName-0
+      </figcaption>
+    </figure>
+  </main>
+  <footer
+    class="join-request__footer"
+  >
+    <button
+      class="join-request__button join-request__footer-button join-request--single__footer-button"
+    >
+      Ablehnen
+    </button>
+    <button
+      class="join-request__button join-request__footer-button join-request--single__footer-button"
+    >
+      Annehmen
+    </button>
+  </footer>
+</div>
+`;
