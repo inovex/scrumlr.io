@@ -1,6 +1,8 @@
+import {useState,useEffect} from "react";
 import {default as FocusLock} from "react-focus-lock";
 import ReactDOM from "react-dom";
-import {useEffect} from "react";
+
+import classNames from "classnames";
 
 import "./Portal.scss";
 
@@ -14,6 +16,18 @@ export interface PortalProps {
  */
 const Portal = ({onClose, children}: PortalProps) => {
   const closeable = Boolean(onClose);
+
+  const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
+  const [hasPrev, setHasPrev] = useState(document.getElementsByClassName("board__navigation-prev").length !== 0);
+
+  const rootElement = document.getElementById("root");
+
+  const observer = new MutationObserver((mutations, observer) => {
+    setHasPrev(document.getElementsByClassName("board__navigation-prev").length !== 0);
+    setHasNext(document.getElementsByClassName("board__navigation-next").length !== 0);
+  });
+
+  if (rootElement) observer.observe(rootElement, {childList: true});
 
   // Key-Listener to "Escape"
   useEffect(() => {
@@ -35,7 +49,7 @@ const Portal = ({onClose, children}: PortalProps) => {
 
   return ReactDOM.createPortal(
     <div
-      className="portal"
+      className={classNames("portal", {"portal--hasPrev": hasPrev}, {"portal--hasNext": hasNext})}
       onClick={() => {
         if (closeable) {
           onClose!();

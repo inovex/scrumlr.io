@@ -19,6 +19,20 @@
   left: 12px;
 }
 
+.portal--hasNext {
+  width: calc(100vw - 12px);
+}
+
+.portal--hasPrev {
+  width: calc(100vw - 12px);
+  left: 0;
+}
+
+.portal--hasNext.portal--hasPrev {
+  left: 0;
+  width: 100vw;
+}
+
 .portal__frame {
   position: absolute;
   width: calc(100vw - 24px);

@@ -13,7 +13,7 @@
   transition: background-color 0.25s ease-in-out, left 2s;
 }
 .icon-button:hover {
-  background-color: var(--accent-color);
+  background-color: $color-white;
 }
 @media (prefers-color-scheme: dark) {
   .icon-button:hover {
@@ -34,9 +34,16 @@
     color: $color-white;
   }
 }
+
+@media #{$menu-desktop} {
+  .icon-button__icon {
+    color: $color-white;
+  }
+}
+
 .icon-button:hover > .icon-button__icon {
   animation: none;
-  color: $color-white;
+  color: var(--accent-color);
 }
 @media (prefers-color-scheme: dark) {
   .icon-button:hover > .icon-button__icon {
@@ -78,7 +85,7 @@
 
   z-index: -1;
   overflow: hidden;
-  color: $color-white;
+  color: var(--accent-color);
   box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   transition: width 0.25s ease-in-out;
 }
