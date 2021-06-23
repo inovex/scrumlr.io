@@ -39,7 +39,6 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
     }
     case ActionType.UpdatedNote: {
       const noteIndex = state.findIndex((note) => note.id === action.note.id);
-      console.log(noteIndex);
       if (noteIndex >= 0) {
         const newState = [...state];
         newState.splice(noteIndex, 1, action.note);

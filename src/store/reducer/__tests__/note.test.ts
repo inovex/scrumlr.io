@@ -7,12 +7,12 @@ const AUTHOR_ID = "John Doe";
 const NOTE_TEXT = "Hello world";
 
 jest.mock("parse", () => ({
-    User: {
-      current: () => ({
-        id: AUTHOR_ID,
-      }),
-    },
-  }));
+  User: {
+    current: () => ({
+      id: AUTHOR_ID,
+    }),
+  },
+}));
 
 const createServerNote = (id: string, text: string = NOTE_TEXT): NoteClientModel => ({
   id,
