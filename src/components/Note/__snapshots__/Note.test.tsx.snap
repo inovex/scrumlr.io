@@ -12,11 +12,11 @@ exports[`Note should have correct style show note with correct style 1`] = `
     >
       Test Text
     </p>
-    <img
-      alt="Edit note"
+    <svg
       class="note__edit"
-      src="icon-edit.svg"
-    />
+    >
+      icon-edit.svg
+    </svg>
   </div>
   <footer
     class="note__footer"
