@@ -52,7 +52,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "node-sass": "^5.0.0",
-    "prettier": "^2.3.1",
+    "prettier": "^2.3.2",
     "react-scripts": "^4.0.3",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
