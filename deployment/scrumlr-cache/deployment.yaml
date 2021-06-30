@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scrumlr-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrumlr-cache
+  template:
+    metadata:
+      labels: 
+        app: scrumlr-cache
+    spec:
+      containers:
+        - name: scrumlr-cache
+          image: redis:6.2.4-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+      restartPolicy: Always

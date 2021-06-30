@@ -15,9 +15,6 @@ services:
     depends_on:
       - database
       - cache
-    links:
-      - 'database'
-      - 'cache'
     environment:
       SCRUMLR_OPERATION_MODE: 'server'
       SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
@@ -32,9 +29,6 @@ services:
     depends_on:
       - cache
       - server
-    links:
-      - 'cache'
-      - 'server'
     environment:
       SCRUMLR_OPERATION_MODE: 'livequery'
       SCRUMLR_DATABASE_URI: 'mongodb://database:27017/dev'
@@ -54,9 +48,6 @@ services:
     depends_on:
       - server
       - livequery
-    links:
-      - 'server'
-      - 'livequery'
 
   dashboard:
     image: parseplatform/parse-dashboard
