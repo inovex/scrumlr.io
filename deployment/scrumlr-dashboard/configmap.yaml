@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrumlr-dashboard-configmap
+data:
+  SERVER_URL: "http://localhost/api"
+  APP_ID: "Scrumlr"
+  APP_NAME: "Scrumlr" 
+  DASHBOARD_DEFAULT_USER: "scrumlr" 

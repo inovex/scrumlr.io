@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrumlr-livequery-configmap
+data:
+  SCRUMLR_OPERATION_MODE: "livequery"
+  SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
+  SCRUMLR_API_HOST: "scrumlr-server"
+  SCRUMLR_API_PORT: "4000"
+  SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
+  SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"
