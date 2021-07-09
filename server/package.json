@@ -23,7 +23,7 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-only-warn": "^1.0.2",
     "lint-staged": "^11.0.0",
-    "nodemon": "^2.0.9",
+    "nodemon": "^2.0.10",
     "prettier": "^2.3.2",
     "ts-node": "^9.0.0",
     "typescript": "^4.3.5"
