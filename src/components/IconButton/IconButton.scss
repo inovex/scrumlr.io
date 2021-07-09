@@ -11,6 +11,7 @@
   border: 1px solid $color-white;
   border-radius: 18px;
   transition: background-color 0.25s ease-in-out, left 2s;
+  box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
 }
 .icon-button:hover {
   background-color: $color-white;
@@ -86,8 +87,19 @@
   z-index: -1;
   overflow: hidden;
   color: var(--accent-color);
+  background-color: white;
   box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   transition: width 0.25s ease-in-out;
+}
+@media (prefers-color-scheme: dark) {
+  .icon-button__tooltip {
+    background-color: transparent;
+  }
+}
+@media #{$menu-desktop} {
+  .icon-button__tooltip {
+    background-color: transparent;
+  }
 }
 @media screen and (max-width: 600px) {
   .icon-button__tooltip {
@@ -109,7 +121,17 @@
   position: absolute;
 }
 .icon-button__tooltip > .tooltip__text {
-  color: $color-white;
+  color: var(--accent-color);
+}
+@media (prefers-color-scheme: dark) {
+  .icon-button__tooltip > .tooltip__text {
+    color: $color-white;
+  }
+}
+@media #{$menu-desktop} {
+  .icon-button__tooltip > .tooltip__text {
+    color: $color-white;
+  }
 }
 .icon-button--right > .icon-button__tooltip > .tooltip__text {
   margin-left: 36px;
