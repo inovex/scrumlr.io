@@ -6,7 +6,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install
 
-COPY . .
+COPY index.js .
 
 # Run Node.js as non-root
 USER node

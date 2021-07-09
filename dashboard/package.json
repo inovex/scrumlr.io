@@ -1,0 +1,19 @@
+{
+  "name": "scrumlr.io-parse-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard for our parse server",
+  "main": "index.js",
+  "repository": "https://github.com/inovex/scrumlr.io",
+  "author": "inovex GmbH",
+  "license": "MIT with Commons Clause",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "^0.0.1-security",
+    "parse-dashboard": "^2.1.0"
+  }
+}
