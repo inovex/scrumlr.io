@@ -40,8 +40,16 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "import/no-relative-parent-imports": "error",
-    "import/newline-after-import": ["error", { "count": 1 }]
+    //"import/no-relative-parent-imports": "error",
+    "import/newline-after-import": ["error", { "count": 1 }],
+    "import/prefer-default-export": "off",
+
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    // Allow props spreading (e.g. {...props})
+    "react/jsx-props-no-spreading": "off",
+    "react/destructuring-assignment": "off",
+    "react/button-has-type": "off"
   },
   "settings": {
     "import/resolver": {

@@ -1,15 +1,15 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI, AnyAction} from "redux";
 import {ApplicationState} from "types/store";
 import Parse from "parse";
-import {mapUserServerToClientModel} from "types/user";
+import {mapUserServerToClientModel, UserServerModel} from "types/user";
 import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
-import {mapBoardServerToClientModel} from "types/board";
+import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
-import {ActionFactory, ActionType, ReduxAction} from "../action";
+import {ActionFactory, ActionType, ReduxAction} from "store/action";
 
-let closeSubscriptions: Function[] = [];
+let closeSubscriptions: (() => void)[] = [];
 
-export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
+export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
     closeSubscriptions.forEach((closeCallback) => closeCallback());
     closeSubscriptions = [];
@@ -35,9 +35,9 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
           subscription.unsubscribe();
         });
 
-        subscription.on("open", (object) => {
+        subscription.on("open", () => {
           joinRequestQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeJoinRequests((results as any[]).map(mapJoinRequestServerToClientModel)));
+            dispatch(ActionFactory.initializeJoinRequests((results as JoinRequestServerModel[]).map(mapJoinRequestServerToClientModel)));
           });
         });
 
@@ -77,7 +77,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel(user.toJSON() as any, {
+                      mapUserServerToClientModel((user.toJSON() as unknown) as UserServerModel, {
                         admin: false,
                         online: isOnline(user, action.boardId),
                       })
@@ -96,7 +96,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel(user.toJSON() as any, {
+                      mapUserServerToClientModel((user.toJSON() as unknown) as UserServerModel, {
                         admin: true,
                         online: isOnline(user, action.boardId),
                       })
@@ -114,8 +114,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
 
         subscription.on("open", () => {
           usersQuery.find().then((results) => {
-            for (const result of results) {
-              updateUsers(result as Parse.Role);
+            for (let i = 0; i < results.length; i += 1) {
+              updateUsers(results[i] as Parse.Role);
             }
           });
         });
@@ -156,7 +156,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
         });
         subscription.on("open", () => {
           noteQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeNotes((results as any[]).map(mapNoteServerToClientModel)));
+            dispatch(ActionFactory.initializeNotes(((results as unknown) as NoteServerModel[]).map(mapNoteServerToClientModel)));
           });
         });
       });
@@ -170,16 +170,16 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
       });
 
       subscription.on("update", (object) => {
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as any)));
+        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel((object.toJSON() as unknown) as BoardServerModel)));
       });
 
-      subscription.on("delete", (object) => {
+      subscription.on("delete", () => {
         dispatch(ActionFactory.deleteBoard());
       });
 
       let connectionsCount = 0;
-      subscription.on("open", (object) => {
-        connectionsCount++;
+      subscription.on("open", () => {
+        connectionsCount += 1;
 
         if (connectionsCount === 1) {
           // first connect to the board
@@ -188,7 +188,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationStat
           createUsersSubscription();
 
           boardQuery.first().then((board) => {
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as any)));
+            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel((board?.toJSON() as unknown) as BoardServerModel)));
           });
         } else {
           // reconnect
