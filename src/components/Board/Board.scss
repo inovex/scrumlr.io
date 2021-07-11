@@ -18,9 +18,16 @@
 
   width: 100vw;
   height: 100vh;
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.board > * {
+.board::-webkit-scrollbar {
+  display: none;
+}
+
+.board .board > * {
   scroll-snap-align: start;
 }
 
