@@ -35,7 +35,6 @@ export const passBoardJoinConfirmationMiddleware = (stateAPI: MiddlewareAPI<Disp
             break;
           }
           default: {
-            subscription.unsubscribe();
             break;
           }
         }
