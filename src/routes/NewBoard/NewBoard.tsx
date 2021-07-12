@@ -15,17 +15,23 @@ function NewBoard(props: NewBoardProps) {
     "Positive/Negative/Actions": [
       {name: "Positive", hidden: false, color: "backlog-blue"},
       {name: "Negative", hidden: false, color: "lean-lilac"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Actions", hidden: false, color: "planning-pink"},
     ],
     "Mad/Sad/Glad": [
       {name: "Mad", hidden: false, color: "online-orange"},
       {name: "Sad", hidden: false, color: "retro-red"},
-      {name: "Glad", hidden: true, color: "poker-purple"},
+      {name: "Glad", hidden: false, color: "poker-purple"},
     ],
     "Start/Stop/Continue": [
       {name: "Start", hidden: false, color: "grooming-green"},
       {name: "Stop", hidden: false, color: "retro-red"},
-      {name: "Continue", hidden: true, color: "backlog-blue"},
+      {name: "Continue", hidden: false, color: "backlog-blue"},
+    ],
+    "KALM (Keep/Add/Less/More": [
+      {name: "Keep", hidden: false, color: "grooming-green"},
+      {name: "Add", hidden: false, color: "retro-red"},
+      {name: "Less", hidden: false, color: "backlog-blue"},
+      {name: "More", hidden: false, color: "poker-purple"},
     ],
   };
 
@@ -67,9 +73,9 @@ function NewBoard(props: NewBoardProps) {
       <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} name="JoinConfirmationRequired" />
       <label htmlFor="JoinConfirmationRequired">JoinConfirmationRequired</label>
       <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
-        <option value="Positive/Negative/Actions">Positive/Negative/Actions</option>
-        <option value="Mad/Sad/Glad">Mad/Sad/Glad</option>
-        <option value="Start/Stop/Continue">Start/Stop/Continue</option>
+        {Object.keys(columnTemplates).map((key) => (
+          <option value={key}>{key}</option>
+        ))}
       </select>
 
       <button
