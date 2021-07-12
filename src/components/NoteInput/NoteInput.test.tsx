@@ -2,16 +2,16 @@ import React from "react";
 import {render} from "@testing-library/react";
 import NoteInput from "components/NoteInput/NoteInput";
 
-const createNoteInput = (columnId) => <NoteInput columnId={columnId} />;
+const createNoteInput = (columnId: string) => <NoteInput columnId={columnId} />;
 
 describe("Note Input", () => {
   beforeEach(() => {
     window.IntersectionObserver = jest.fn(
       () =>
-        ({
+        (({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as any)
+        } as unknown) as IntersectionObserver)
     );
   });
 

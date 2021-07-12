@@ -32,10 +32,10 @@ describe("Board Header", () => {
   beforeEach(() => {
     window.IntersectionObserver = jest.fn(
       () =>
-        ({
+        (({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as any)
+        } as unknown) as IntersectionObserver)
     );
   });
 

@@ -45,10 +45,10 @@ describe("basic", () => {
     Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
-        ({
+        (({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as any)
+        } as unknown) as IntersectionObserver)
     );
   });
 
@@ -120,20 +120,20 @@ describe("navigation", () => {
     Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
-        ({
+        (({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as any)
+        } as unknown) as IntersectionObserver)
     );
   });
 
-  let intersectionObserver: any;
+  let intersectionObserver: IntersectionObserver;
 
   beforeEach(() => {
-    intersectionObserver = {
+    intersectionObserver = ({
       observe: jest.fn(),
       disconnect: jest.fn(),
-    };
+    } as unknown) as IntersectionObserver;
     window.IntersectionObserver = jest.fn(() => intersectionObserver);
   });
 
@@ -173,7 +173,7 @@ describe("navigation", () => {
         const firstMethodCall = 0;
         const firstMethodParameter = 0;
 
-        const intersectionObserverCallback = (window.IntersectionObserver as any).mock.calls[firstMethodCall][firstMethodParameter];
+        const intersectionObserverCallback = ((window.IntersectionObserver as unknown) as IntersectionObserver).mock.calls[firstMethodCall][firstMethodParameter];
         intersectionObserverCallback([
           {isIntersecting: first, target: columns[0]},
           {isIntersecting: second, target: columns[1]},
@@ -197,7 +197,7 @@ describe("navigation", () => {
       const columns = showColumns(false, true, false);
       const scrollIntoView = jest.fn();
       columns[0].scrollIntoView = scrollIntoView;
-      fireEvent.click(container.querySelector(".board__navigation-prev") as any);
+      fireEvent.click(container.querySelector(".board__navigation-prev") as HTMLElement);
 
       expect(scrollIntoView).toHaveBeenCalled();
     });
@@ -207,7 +207,7 @@ describe("navigation", () => {
 
       const scrollIntoView = jest.fn();
       columns[2].scrollIntoView = scrollIntoView;
-      fireEvent.click(container.querySelector(".board__navigation-next") as any);
+      fireEvent.click(container.querySelector(".board__navigation-next") as HTMLElement);
 
       expect(scrollIntoView).toHaveBeenCalled();
     });

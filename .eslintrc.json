@@ -45,7 +45,6 @@
     "import/prefer-default-export": "off",
 
     "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-explicit-any": "off",
     // Allow props spreading (e.g. {...props})
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
