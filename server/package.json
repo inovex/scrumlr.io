@@ -15,15 +15,15 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/parse": "^2.18.7",
+    "@types/parse": "^2.18.8",
     "eslint": "^7.30.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-only-warn": "^1.0.2",
-    "lint-staged": "^11.0.0",
-    "nodemon": "^2.0.11",
+    "lint-staged": "^11.0.1",
+    "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "ts-node": "^9.0.0",
     "typescript": "^4.3.5"
@@ -32,7 +32,7 @@
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.1",
-    "parse": "^3.2.0",
+    "parse": "^3.3.0",
     "parse-server": "^4.5.0"
   },
   "lint-staged": {
