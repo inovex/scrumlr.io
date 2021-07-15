@@ -113,7 +113,8 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomAnimal}`;
 };
 
-export const getInitials = (name: string): string => name
+export const getInitials = (name: string): string =>
+  name
     .split(" ")
     .map((n) => n[0])
     .join("");
