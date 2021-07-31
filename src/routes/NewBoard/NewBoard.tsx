@@ -1,56 +1,91 @@
 import * as React from "react";
-import Input from "@material-ui/core/Input";
-import Button from "@material-ui/core/Button";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
-import getRandomName from "constants/Name";
+import {getRandomName} from "constants/Name";
 import {RouteComponentProps} from "react-router";
 import Parse from "parse";
 import {API} from "api";
-import {getColorForIndex} from "constants/colors";
+import {Color} from "constants/colors";
+import "routes/NewBoard/NewBoard.scss";
+import {Toast} from "utils/Toast";
 
 export type NewBoardProps = RouteComponentProps;
 
 function NewBoard(props: NewBoardProps) {
-  const [name, setName] = React.useState(getRandomName());
-  function handleChangeName(e: any) {
-    const name = (e.target as HTMLInputElement).value;
-    setName(name);
-  }
+  const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
+    "Positive/Negative/Actions": [
+      {name: "Positive", hidden: false, color: "backlog-blue"},
+      {name: "Negative", hidden: false, color: "lean-lilac"},
+      {name: "Actions", hidden: false, color: "planning-pink"},
+    ],
+    "Mad/Sad/Glad": [
+      {name: "Mad", hidden: false, color: "online-orange"},
+      {name: "Sad", hidden: false, color: "retro-red"},
+      {name: "Glad", hidden: false, color: "poker-purple"},
+    ],
+    "Start/Stop/Continue": [
+      {name: "Start", hidden: false, color: "grooming-green"},
+      {name: "Stop", hidden: false, color: "retro-red"},
+      {name: "Continue", hidden: false, color: "backlog-blue"},
+    ],
+    "KALM (Keep/Add/Less/More": [
+      {name: "Keep", hidden: false, color: "grooming-green"},
+      {name: "Add", hidden: false, color: "retro-red"},
+      {name: "Less", hidden: false, color: "backlog-blue"},
+      {name: "More", hidden: false, color: "poker-purple"},
+    ],
+  };
 
-  async function onLogin() {
-    await AuthenticationManager.signInAnonymously(name);
-    await onCreateBoard();
-  }
+  const [displayName, setDisplayName] = React.useState(getRandomName());
+  const [boardName, setBoardName] = React.useState("BoardName");
+  const [columnTemplate, setColumnTemplate] = React.useState("Positive/Negative/Actions");
+  const [joinConfirmationRequired, setJoinConfirmationRequired] = React.useState(false);
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
-      const boardId = await API.createBoard([
-        {name: "Positive", hidden: false, color: getColorForIndex(0)},
-        {name: "Negative", hidden: false, color: getColorForIndex(1)},
-        {name: "Actions", hidden: true, color: getColorForIndex(2)},
-      ]);
+      const boardId = await API.createBoard(boardName, joinConfirmationRequired, columnTemplates[columnTemplate]);
       props.history.push(`/board/${boardId}`);
+    } else {
+      Toast.error("You must be logged in to create a board. Reload the page and try again");
     }
-    // TODO report error
+  }
+
+  async function onLogin() {
+    await AuthenticationManager.signInAnonymously(displayName);
   }
 
   return (
     <div className="new-board">
-      <Input
-        className="new-board__input"
-        defaultValue={name}
-        type="text"
-        onChange={handleChangeName}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            onLogin();
-          }
+      {!Parse.User.current() && (
+        <input
+          className="new-board__input"
+          defaultValue={displayName}
+          type="text"
+          onChange={(e) => setDisplayName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              onLogin();
+            }
+          }}
+          maxLength={20}
+        />
+      )}
+      <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
+      <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} name="JoinConfirmationRequired" />
+      <label htmlFor="JoinConfirmationRequired">JoinConfirmationRequired</label>
+      <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
+        {Object.keys(columnTemplates).map((key) => (
+          <option value={key}>{key}</option>
+        ))}
+      </select>
+
+      <button
+        onClick={async () => {
+          if (!Parse.User.current()) await onLogin();
+          onCreateBoard();
         }}
-        inputProps={{
-          maxLength: 20,
-        }}
-      />
-      <Button onClick={onLogin}>Login</Button>
+      >
+        Create new Board
+      </button>
     </div>
   );
 }
