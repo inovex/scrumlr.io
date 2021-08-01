@@ -10,8 +10,8 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: (columns: {name: string; hidden: boolean; color: Color}[], name?: string) =>
-    callAPI<{columns: {name: string; hidden: boolean}[]; name?: string}, string>("createBoard", {columns, name}),
+  createBoard: (name: string, joinConfirmationRequired: boolean, columns: {name: string; hidden: boolean; color: Color}[]) =>
+    callAPI<{columns: {name: string; hidden: boolean}[]; name: string; joinConfirmationRequired: boolean}, string>("createBoard", {columns, name, joinConfirmationRequired}),
 
   /**
    * Create join request for a board session.
