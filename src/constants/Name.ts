@@ -56,6 +56,7 @@ export const ANIMAL_NAMES: Name = {
   Z: ["Zebra"],
 };
 
+/* maybe for future use, but not used right now.
 export const MYTHICAL_CREATURES: Name = {
   A: ["Alien", "Angel"],
   B: ["Banshee", "Basilisk", "Bigfoot", "Bogeyman", "Boggart", "Bookworm"],
@@ -84,6 +85,7 @@ export const MYTHICAL_CREATURES: Name = {
   Y: ["Yeti"],
   Z: ["Zombie"],
 };
+ */
 
 export const ADJECTIVES: Name = {
   A: ["Adorable", "Adventurous", "Acrobatic", "Afraid", "Aggressive", "Agile", "Amazing", "Angry", "Anxious", "Ashamed", "Awesome", "Awful", "Awkward"],
@@ -132,7 +134,6 @@ export const ADJECTIVES: Name = {
   Z: ["Zany", "Zealous", "Zigzag", "Zazzy", "Zappy", "Zestful", "Zen", "Zingy", "Zippy"],
 };
 
-/* random animal names
 export const getRandomName = () => {
   const keys = Object.keys(ANIMAL_NAMES);
   const randomKey = keys[(keys.length * Math.random()) << 0];
@@ -142,9 +143,8 @@ export const getRandomName = () => {
 
   return `${randomAdjective} ${randomAnimal}`;
 };
-*/
 
-// random mythical creature names
+/* random mythical creature names. Maybe for future use, but not used right now.
 export const getRandomName = () => {
   const keys = Object.keys(MYTHICAL_CREATURES);
   const randomKey = keys[(keys.length * Math.random()) << 0];
@@ -154,6 +154,8 @@ export const getRandomName = () => {
 
   return `${randomAdjective} ${randomAnimal}`;
 };
+*/
+
 export const getInitials = (name: string): string =>
   name
     .split(" ")
