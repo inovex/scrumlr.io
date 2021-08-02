@@ -29,12 +29,12 @@ export interface Name {
 
 export const ANIMAL_NAMES: Name = {
   A: ["Alligator", "Alpaca", "Antelope", "Ape"],
-  B: ["Bat", "Bear", "Beaver", "Bee", "Bird", "Butterfly", "Bookworm"],
+  B: ["Bat", "Bear", "Beaver", "Bee", "Bird", "Butterfly"],
   C: ["Camel", "Cat", "Chicken", "Coyote", "Crow", "Clam", "Crocodile"],
-  D: ["Deer", "Dinosaur", "Dog", "Dolphin", "Donkey", "Duck", "Dragon"],
+  D: ["Deer", "Dinosaur", "Dog", "Dolphin", "Donkey", "Duck"],
   E: ["Eagle", "Elephant", "Emu", "Elk", "Eel"],
   F: ["Falcon", "Fish", "Flamingo", "Fly", "Frog"],
-  G: ["Giraffe", "Goat", "Goose", "Gorilla", "Grasshopper", "Griffin", "Gargoyle"],
+  G: ["Giraffe", "Goat", "Goose", "Gorilla", "Grasshopper"],
   H: ["Hamster", "Hedgehog", "Hornet", "Horse"],
   I: ["Ibis", "Impala", "Iguana"],
   J: ["Jaguar", "Jackal", "Jackrabbit", "Jellyfish"],
@@ -56,7 +56,6 @@ export const ANIMAL_NAMES: Name = {
   Z: ["Zebra"],
 };
 
-/* maybe for future use, but not used right now.
 export const MYTHICAL_CREATURES: Name = {
   A: ["Alien", "Angel"],
   B: ["Banshee", "Basilisk", "Bigfoot", "Bogeyman", "Boggart", "Bookworm"],
@@ -85,7 +84,6 @@ export const MYTHICAL_CREATURES: Name = {
   Y: ["Yeti"],
   Z: ["Zombie"],
 };
- */
 
 export const ADJECTIVES: Name = {
   A: ["Adorable", "Adventurous", "Acrobatic", "Afraid", "Aggressive", "Agile", "Amazing", "Angry", "Anxious", "Ashamed", "Awesome", "Awful", "Awkward"],
@@ -135,26 +133,22 @@ export const ADJECTIVES: Name = {
 };
 
 export const getRandomName = () => {
+  const oneOrZero = Math.random() > 0.5 ? 1 : 0;
+  let randomCreature;
+  let randomAdjective;
   const keys = Object.keys(ANIMAL_NAMES);
   const randomKey = keys[(keys.length * Math.random()) << 0];
 
-  const randomAnimal = ANIMAL_NAMES[randomKey][(ANIMAL_NAMES[randomKey].length * Math.random()) << 0];
-  const randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
+  if (oneOrZero === 1) {
+    randomCreature = ANIMAL_NAMES[randomKey][(ANIMAL_NAMES[randomKey].length * Math.random()) << 0];
+    randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
+  } else {
+    randomCreature = MYTHICAL_CREATURES[randomKey][(MYTHICAL_CREATURES[randomKey].length * Math.random()) << 0];
+    randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
+  }
 
-  return `${randomAdjective} ${randomAnimal}`;
+  return `${randomAdjective} ${randomCreature}`;
 };
-
-/* random mythical creature names. Maybe for future use, but not used right now.
-export const getRandomName = () => {
-  const keys = Object.keys(MYTHICAL_CREATURES);
-  const randomKey = keys[(keys.length * Math.random()) << 0];
-
-  const randomAnimal = MYTHICAL_CREATURES[randomKey][(MYTHICAL_CREATURES[randomKey].length * Math.random()) << 0];
-  const randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
-
-  return `${randomAdjective} ${randomAnimal}`;
-};
-*/
 
 export const getInitials = (name: string): string =>
   name
