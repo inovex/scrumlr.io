@@ -69,17 +69,18 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   margin-bottom: $note__text-margin-bottom;
+  padding: 5px;
 }
 .note-dialog__text:focus {
-  outline: 1px solid $color-dark-gray;
+  outline: none;
+  border: 1px dashed #adadad;
+  border-radius: 5px;
+  padding: 5px;
   outline-offset: 6px;
 }
 @media (prefers-color-scheme: dark) {
   .note-dialog__text {
     color: $color-white;
-  }
-  .note-dialog__text:focus {
-    outline: 1px solid $color-white;
   }
 }
 
