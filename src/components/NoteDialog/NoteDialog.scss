@@ -70,13 +70,15 @@
   display: -webkit-box;
   margin-bottom: $note__text-margin-bottom;
   padding: 5px;
-}
-.note-dialog__text:focus {
-  outline: none;
-  border: 1px dashed #adadad;
+  border: 1px dashed transparent;
   border-radius: 5px;
-  padding: 5px;
-  outline-offset: 6px;
+  transition: border-color 0.5s ease-in-out;
+  outline: none;
+}
+
+.note-dialog__text:hover,
+.note-dialog__text:focus {
+  border-color: #adadad;
 }
 @media (prefers-color-scheme: dark) {
   .note-dialog__text {
