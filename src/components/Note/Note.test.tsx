@@ -1,12 +1,12 @@
 import React from "react";
-import {act, render, fireEvent} from "@testing-library/react";
+import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import Note from "./Note";
 
 const mockStore = configureStore();
 
-const createNote = (text, authorId) => {
+const createNote = (text: string, authorId: string) => {
   const initialState = {
     board: {
       data: {
@@ -35,7 +35,7 @@ describe("Note", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as any)
+        } as unknown as IntersectionObserver)
     );
   });
 

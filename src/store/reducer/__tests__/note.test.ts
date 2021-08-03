@@ -1,6 +1,6 @@
-import {NoteClientModel} from "../../../types/note";
-import {noteReducer} from "../note";
-import {ActionFactory} from "../../action";
+import {NoteClientModel} from "types/note";
+import {noteReducer} from "store/reducer/note";
+import {ActionFactory} from "store/action";
 
 const COLUMN_ID = "column";
 const AUTHOR_ID = "John Doe";
@@ -34,11 +34,11 @@ describe("note reducer", () => {
     const newState = noteReducer(initialState, ActionFactory.addNote(COLUMN_ID, NOTE_TEXT));
     expect(newState.length).toEqual(3);
 
-    const newNote = newState.find((note) => note.id === undefined)!;
-    expect(newNote.columnId).toEqual(COLUMN_ID);
-    expect(newNote.author).toEqual(AUTHOR_ID);
-    expect(newNote.text).toEqual(NOTE_TEXT);
-    expect(newNote.dirty).toBe(true);
+    const newNote = newState.find((note) => note.id === undefined);
+    expect(newNote?.columnId).toEqual(COLUMN_ID);
+    expect(newNote?.author).toEqual(AUTHOR_ID);
+    expect(newNote?.text).toEqual(NOTE_TEXT);
+    expect(newNote?.dirty).toBe(true);
   });
 
   test("created note from server", () => {
@@ -79,16 +79,8 @@ describe("note reducer", () => {
     test("edited note synced locally", () => {
       const editedState = noteReducer(initialState, ActionFactory.editNote("1", "New text"));
       const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", "New text")));
-      const note = newState.find((note) => note.id === "1")!;
-      expect(note.dirty).toBe(false);
-    });
-
-    test("edited note does not match local modifications on note", () => {
-      const editedState = noteReducer(initialState, ActionFactory.editNote("1", "New text"));
-      const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", "New text")));
-      const note = newState.find((note) => note.id === "1")!;
-      expect(note.dirty).toBe(false);
-      expect(note.text).toEqual("New text");
+      const note = newState.find((n) => n.id === "1");
+      expect(note?.dirty).toBe(false);
     });
   });
 

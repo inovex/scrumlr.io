@@ -10,7 +10,7 @@ jest.mock("store", () => ({
 describe("JoinRequest", () => {
   const createJoinRequest = (numRequests: number) => {
     const joinRequests = [];
-    for (let i = 0; i < numRequests; ++i) {
+    for (let i = 0; i < numRequests; i += 1) {
       joinRequests.push({
         id: `id-${i}`,
         userId: `userId-${i}`,
@@ -59,10 +59,10 @@ describe("JoinRequest", () => {
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
-    test("multiple join request should call acceptJoinRequests in requests list item correctly", () => {
+    test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
       const {container} = render(createJoinRequest(3));
       const figures = container.querySelectorAll(".join-request__requests-figure");
-      for (let i = 0; i < figures.length; ++i) {
+      for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[2]);
         expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }
@@ -71,7 +71,7 @@ describe("JoinRequest", () => {
     test("multiple join request should call acceptJoinRequests in requests list item correctly", () => {
       const {container} = render(createJoinRequest(3));
       const figures = container.querySelectorAll(".join-request__requests-figure");
-      for (let i = 0; i < figures.length; ++i) {
+      for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[3]);
         expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }

@@ -1,15 +1,16 @@
-import React from 'react'
-import {render } from "@testing-library/react";
-import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
-import BoardUsers from 'components/BoardUsers/BoardUsers';
-import Parse from 'parse';
-import {getRandomName} from '../../constants/Name'
+import React from "react";
+import {render} from "@testing-library/react";
+import configureStore from "redux-mock-store";
+import {Provider} from "react-redux";
+import BoardUsers from "components/BoardUsers/BoardUsers";
+import Parse from "parse";
+import {getRandomName} from "constants/Name";
+import {ApplicationState} from "types/store";
 
-const mockStore = configureStore()
+const mockStore = configureStore();
 
-const createBoardUsers = (state) => {
-  const store = mockStore(state)
+const createBoardUsers = (state: ApplicationState) => {
+  const store = mockStore(state);
 
   return (
     <Provider store={store}>
@@ -18,25 +19,24 @@ const createBoardUsers = (state) => {
   );
 };
 
-describe('users', () => {
-
+describe("users", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: '@_online'}));
+    const mockCurrentUser = jest.fn(() => ({id: "@_online"}));
     Parse.User.current = mockCurrentUser;
   });
 
   const currentUser = {
-    id: '@_online',
-    displayName: 'Admin Mustermann',
+    id: "@_online",
+    displayName: "Admin Mustermann",
     admin: true,
-    online: true
-  }
+    online: true,
+  };
 
   const otherOnlineUsers = [...new Array(9)].map((_, i) => ({
     id: `${i}_online`,
-    displayName: getRandomName(), 
-    admin: (i%2===0)?true:false,
-    online: true
+    displayName: getRandomName(),
+    admin: i % 2 === 0,
+    online: true,
   }));
 
   const adminWithOtherOnlineUsers = [currentUser, ...otherOnlineUsers];
@@ -44,66 +44,60 @@ describe('users', () => {
   const offlineUsers = [...new Array(10)].map((_, i) => ({
     id: `${i}_offline`,
     displayName: getRandomName(),
-    admin: (i%2===0)?false:true,
-    online: false
+    admin: i % 2 !== 0,
+    online: false,
   }));
-  
-  test('only online users are shown & their names are used as tooltips', () => { 
 
+  test("only online users are shown & their names are used as tooltips", () => {
     const state = {
       users: {
-        all: [
-          ...offlineUsers,
-          ...adminWithOtherOnlineUsers,
-        ]
-      }
-    }
-   
-    const { container } = render(createBoardUsers(state));
+        all: [...offlineUsers, ...adminWithOtherOnlineUsers],
+      },
+    };
 
-    const renderdUsersnames = Array.from(container.querySelectorAll('.user__initials')).map(ui=>ui.getAttribute('title')).join(':');
-    const onlineUsernames = [...(otherOnlineUsers.slice(0, 3)), currentUser].map(u=>u.displayName).join(':');
+    const {container} = render(createBoardUsers(state));
+
+    const renderdUsersnames = Array.from(container.querySelectorAll(".user__initials"))
+      .map((ui) => ui.getAttribute("title"))
+      .join(":");
+    const onlineUsernames = [...otherOnlineUsers.slice(0, 3), currentUser].map((u) => u.displayName).join(":");
     expect(renderdUsersnames).toBe(onlineUsernames);
   });
 
-  test('correct number of online users & count of rest users', () => {
-   
+  test("correct number of online users & count of rest users", () => {
     // 4 online users -> display 4
     const state = {
       users: {
-        all: [
-          ...offlineUsers,
-          ...(adminWithOtherOnlineUsers.slice(0, 4)),
-        ]
-      }
-    }
+        all: [...offlineUsers, ...adminWithOtherOnlineUsers.slice(0, 4)],
+      },
+    };
 
     const boardUsers = render(createBoardUsers(state));
-    expect(boardUsers.container.querySelectorAll('.user__initials')).toHaveLength(4);
+    expect(boardUsers.container.querySelectorAll(".user__initials")).toHaveLength(4);
 
     // 5 online users -> display 5
     const newState1 = {
       users: {
         all: [
           ...offlineUsers,
-          ...(adminWithOtherOnlineUsers.slice(0, 5)), // +1 additional online user
-        ]
-      }
-    }
+          ...adminWithOtherOnlineUsers.slice(0, 5), // +1 additional online user
+        ],
+      },
+    };
     const newBoardUsers1 = render(createBoardUsers(newState1));
-    expect(newBoardUsers1.container.querySelectorAll('.user__initials')).toHaveLength(5);
+    expect(newBoardUsers1.container.querySelectorAll(".user__initials")).toHaveLength(5);
 
     // 6 online users -> display 4 & rest user count of 2
     const newState2 = {
       users: {
         all: [
           ...offlineUsers,
-          ...(adminWithOtherOnlineUsers.slice(0, 6)), // +1 additional online user
-        ]
-      }
-    }
+          ...adminWithOtherOnlineUsers.slice(0, 6), // +1 additional online user
+        ],
+      },
+    };
     const newBoardUsers2 = render(createBoardUsers(newState2));
-    expect(newBoardUsers2.container.querySelectorAll('.user__initials')).toHaveLength(4);
-    expect(newBoardUsers2.container.querySelector('.rest-users__count')).toHaveTextContent('2');
+    expect(newBoardUsers2.container.querySelectorAll(".user__initials")).toHaveLength(4);
+    expect(newBoardUsers2.container.querySelector(".rest-users__count")).toHaveTextContent("2");
   });
 });

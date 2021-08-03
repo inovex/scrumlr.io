@@ -1,6 +1,6 @@
 import Parse from "parse";
-import {NoteClientModel} from "../../types/note";
-import {ActionType, ReduxAction} from "../action";
+import {NoteClientModel} from "types/note";
+import {ActionType, ReduxAction} from "store/action";
 
 export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction): NoteClientModel[] => {
   switch (action.type) {
@@ -8,6 +8,7 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       const localNote: NoteClientModel = {
         columnId: action.columnId,
         text: action.text,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         author: Parse.User.current()!.id,
         dirty: true,
       };
@@ -49,6 +50,8 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
     case ActionType.InitializeNotes: {
       return [...action.notes];
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 };
