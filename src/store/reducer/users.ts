@@ -1,11 +1,8 @@
-import { UsersState } from "types/store";
-import { UserClientModel } from "types/user";
-import { ActionType, ReduxAction } from "../action";
+import {UsersState} from "types/store";
+import {UserClientModel} from "types/user";
+import {ActionType, ReduxAction} from "../action";
 
-export const usersReducer = (
-  state: UsersState = { admins: [], basic: [], all: [] },
-  action: ReduxAction
-): UsersState => {
+export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
     case ActionType.SetUsers: {
       const newState = {
@@ -33,16 +30,18 @@ export const usersReducer = (
       const newState = {
         admins: state.admins,
         basic: state.basic,
-        all: state.all
+        all: state.all,
       };
 
       const user = newState.all.find((member) => member.id === action.userId);
-      if(user){
+      if (user) {
         user.online = action.status;
       }
 
       return newState;
     }
+    default: {
+      return state;
+    }
   }
-  return state;
 };

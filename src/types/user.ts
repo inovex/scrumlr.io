@@ -14,14 +14,11 @@ export interface UserClientModel {
   online: boolean;
 }
 
-export const mapUserServerToClientModel = (user: UserServerModel,
-  {admin, online }: {  admin: boolean; online: boolean; }): UserClientModel => { 
-    return {
-      id: user.objectId,
-      displayName: user.displayName,
-      admin,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      online
-    }
-  };
+export const mapUserServerToClientModel = (user: UserServerModel, {admin, online}: {admin: boolean; online: boolean}): UserClientModel => ({
+  id: user.objectId,
+  displayName: user.displayName,
+  admin,
+  createdAt: user.createdAt,
+  updatedAt: user.updatedAt,
+  online,
+});

@@ -1,6 +1,6 @@
-import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI} from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI, AnyAction} from "redux";
+import thunk from "redux-thunk";
+import {composeWithDevTools} from "redux-devtools-extension";
 import {ApplicationState} from "../types/store";
 import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
@@ -13,29 +13,25 @@ import {passColumnMiddleware} from "./middleware/column";
 import {passJoinRequestMiddleware} from "./middleware/joinRequest";
 import {joinRequestReducer} from "./reducer/joinRequest";
 
-const parseMiddleware = (stateAPI: MiddlewareAPI<any, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
-    try {
-        return dispatch(action);
-    } finally {
-        passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
-        passBoardMiddleware(stateAPI, dispatch, action);
-        passColumnMiddleware(stateAPI, dispatch, action);
-        passNoteMiddleware(stateAPI, dispatch, action);
-        passJoinRequestMiddleware(stateAPI, dispatch, action);
-    }
-}
+const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+  try {
+    return dispatch(action);
+  } finally {
+    passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
+    passBoardMiddleware(stateAPI, dispatch, action);
+    passColumnMiddleware(stateAPI, dispatch, action);
+    passNoteMiddleware(stateAPI, dispatch, action);
+    passJoinRequestMiddleware(stateAPI, dispatch, action);
+  }
+};
 
 const rootReducer = combineReducers<ApplicationState>({
-    board: boardReducer,
-    notes: noteReducer,
-    users: usersReducer,
-    joinRequests: joinRequestReducer
+  board: boardReducer,
+  notes: noteReducer,
+  users: usersReducer,
+  joinRequests: joinRequestReducer,
 });
 
-const store = createStore(rootReducer, composeWithDevTools(
-    applyMiddleware(thunk),
-    applyMiddleware(parseMiddleware)
-));
-
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));
 
 export default store;

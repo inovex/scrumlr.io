@@ -55,23 +55,12 @@ function NewBoard(props: NewBoardProps) {
 
   return (
     <div className="new-board">
-      {!Parse.User.current() && (
-        <input
-          className="new-board__input"
-          defaultValue={displayName}
-          type="text"
-          onChange={(e) => setDisplayName(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              onLogin();
-            }
-          }}
-          maxLength={20}
-        />
-      )}
+      {!Parse.User.current() && <input className="new-board__input" defaultValue={displayName} type="text" onChange={(e) => setDisplayName(e.target.value)} maxLength={20} />}
       <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-      <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} name="JoinConfirmationRequired" />
-      <label htmlFor="JoinConfirmationRequired">JoinConfirmationRequired</label>
+      <label>
+        <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
+        JoinConfirmationRequired
+      </label>
       <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
         {Object.keys(columnTemplates).map((key) => (
           <option value={key}>{key}</option>
