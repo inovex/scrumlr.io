@@ -129,14 +129,14 @@ export const getRandomName = () => {
   let randomCreature;
   let randomAdjective;
   const keys = Object.keys(ANIMAL_NAMES);
-  const randomKey = keys[(keys.length * Math.random()) << 0];
+  const randomKey = keys[Math.round(keys.length * Math.random())];
 
   if (oneOrZero === 1) {
-    randomCreature = ANIMAL_NAMES[randomKey][(ANIMAL_NAMES[randomKey].length * Math.random()) << 0];
-    randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
+    randomCreature = ANIMAL_NAMES[randomKey][Math.round(ANIMAL_NAMES[randomKey].length * Math.random())];
+    randomAdjective = ADJECTIVES[randomKey][Math.round(ADJECTIVES[randomKey].length * Math.random())];
   } else {
-    randomCreature = MYTHICAL_CREATURES[randomKey][(MYTHICAL_CREATURES[randomKey].length * Math.random()) << 0];
-    randomAdjective = ADJECTIVES[randomKey][(ADJECTIVES[randomKey].length * Math.random()) << 0];
+    randomCreature = MYTHICAL_CREATURES[randomKey][Math.round(MYTHICAL_CREATURES[randomKey].length * Math.random())];
+    randomAdjective = ADJECTIVES[randomKey][Math.round(ADJECTIVES[randomKey].length * Math.random())];
   }
 
   return `${randomAdjective} ${randomCreature}`;
@@ -147,6 +147,5 @@ export const getInitials = (name: string): string =>
     .split(" ")
     .map((n) => n[0])
     .join("");
-
 
 export default getRandomName;
