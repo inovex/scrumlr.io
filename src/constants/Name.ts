@@ -15,14 +15,12 @@ export interface Name {
   N: string[];
   O: string[];
   P: string[];
-  // Q: string[];
   R: string[];
   S: string[];
   T: string[];
   U: string[];
   V: string[];
   W: string[];
-  // X: string[];
   Y: string[];
   Z: string[];
 }
@@ -44,14 +42,12 @@ export const ANIMAL_NAMES: Name = {
   N: ["Nandu", "Newt", "Narwhal", "Nighthawk"],
   O: ["Opossum", "Owl", "Octopus", "Orca", "Ostrich", "Otter", "Orangutan", "Okapi", "Ocelot", "Ox", "Oyster"],
   P: ["Panda", "Parrot", "Penguin", "Pig", "Pigeon"],
-  // Q: ["Quail", "Quokka"],
   R: ["Rabbit", "Raccoon", "Rat", "Raven", "Reindeer"],
   S: ["Seal", "Seastar", "Shark", "Sheep", "Skunk", "Snake", "Spider", "Squirrel", "Swan"],
   T: ["Termite", "Tiger", "Turkey", "Turtle"],
   U: ["Unicorn", "Urchin"],
   V: ["Vulture", "Volvox"],
   W: ["Walrus", "Wasp", "Weasel", "Whale", "Wolf", "Wombat"],
-  // X: ["Xenops", "Xerus", "Xenopus"],
   Y: ["Yak"],
   Z: ["Zebra"],
 };
@@ -73,14 +69,12 @@ export const MYTHICAL_CREATURES: Name = {
   N: ["Naga", "Nessy", "Nymph"],
   O: ["Ogre", "Orc", "Ouroboros"],
   P: ["Pegasus", "Phoenix", "Pixie", "Poltergeist"],
-  // Q: [],
   R: ["Redcap", "Revenant", "Roc", "Rusalka"],
   S: ["Santa", "Sasquatch", "Satan", "Satyr", "Siren", "Skinwalker", "Sorcerer", "Sorceress", "Sphinx", "Sprite", "Succubus"],
   T: ["Thunderbird", "Troll"],
   U: ["Undead", "Unicorn"],
   V: ["Valkyrie", "Vampire", "Veela"],
   W: ["Warlock", "Wendigo", "Werewolf", "Witch", "Witcher", "Wizard", "Wraith", "Wyvern"],
-  // X: [],
   Y: ["Yeti"],
   Z: ["Zombie"],
 };
@@ -120,14 +114,12 @@ export const ADJECTIVES: Name = {
   N: ["Naive", "Naked", "Nameless", "Narcissistic", "Nerdy", "Noble", "Nutty", "Nosy"],
   O: ["Oily", "Odd", "Old", "Optimistic", "Ordinary", "Outstanding"],
   P: ["Pale", "Peaceful", "Perfect", "Phony", "Pink", "Polite", "Poor", "Positive", "Pretty", "Proud"],
-  // Q: ["Quaint", "Quirky", "Quixotic", "Qabalistic", "Qualified", "Quarantined", "Quarrelsome", "Queasy", "Queer", "Querulous", "Quick", "Quiet", "Quotable", "Quizzical"],
   R: ["Rare", "Raw", "Reckless", "Remote", "Rich", "Rough", "Royal", "Rude"],
   S: ["Sad", "Sarcastic", "Scared", "Scary", "Secret", "Sexy", "Shiny", "Silly", "Sour", "Spicy", "Strong", "Stylish", "Super", "Suspicious"],
   T: ["Tasty", "Tempting", "Terrible", "Thin", "Tiny", "Tough", "Twin"],
   U: ["Unstoppable", "Unbearable", "Unmovable", "Unbreakable", "Uber", "Unique", "Upbeat", "Ultra", "Ultrasonic", "Underrated", "Understanding", "Urban"],
   V: ["Vagabond", "Valiant", "Vehement", "Velvety", "Verbose", "Versatile", "Vindictive", "Violent", "Vulnerable"],
   W: ["Wealthy", "Weak", "Weird", "Wet", "White", "Wicked", "Wild", "Wise", "Worst"],
-  // X: ["Xanthic", "Xenial"],
   Y: ["Yappy", "Yodeling", "Youthful", "Yummy", "Yearling", "Yelping", "Young", "Yucky"],
   Z: ["Zany", "Zealous", "Zigzag", "Zazzy", "Zappy", "Zestful", "Zen", "Zingy", "Zippy"],
 };
@@ -155,5 +147,6 @@ export const getInitials = (name: string): string =>
     .split(" ")
     .map((n) => n[0])
     .join("");
+
 
 export default getRandomName;

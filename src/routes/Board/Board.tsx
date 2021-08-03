@@ -8,11 +8,11 @@ import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
 
 function Board() {
-  const state = useSelector((state: ApplicationState) => ({
-    board: state.board,
-    notes: state.notes,
-    joinRequests: state.joinRequests,
-    users: state.users,
+  const state = useSelector((applicationState: ApplicationState) => ({
+    board: applicationState.board,
+    notes: applicationState.notes,
+    joinRequests: applicationState.joinRequests,
+    users: applicationState.users,
   }));
 
   let joinRequestComponent;

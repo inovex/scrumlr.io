@@ -1,6 +1,7 @@
 import {API} from "api";
-import {passJoinRequestMiddleware} from "../joinRequest";
-import {ActionFactory} from "../../action";
+import {passJoinRequestMiddleware} from "store/middleware/joinRequest";
+import {ActionFactory} from "store/action";
+import {MiddlewareAPI} from "redux";
 
 jest.mock("api", () => ({
   API: {
@@ -16,12 +17,12 @@ beforeEach(() => {
 
 describe("joinRequest middleware", () => {
   test("acceptJoinRequest", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.acceptJoinRequests("boardId", ["userId"]));
+    passJoinRequestMiddleware({} as MiddlewareAPI, jest.fn(), ActionFactory.acceptJoinRequests("boardId", ["userId"]));
     expect(API.acceptJoinRequests).toHaveBeenCalledWith("boardId", ["userId"]);
   });
 
   test("rejectJoinRequest", () => {
-    passJoinRequestMiddleware(undefined as any, jest.fn(), ActionFactory.rejectJoinRequests("boardId", ["userId"]));
+    passJoinRequestMiddleware({} as MiddlewareAPI, jest.fn(), ActionFactory.rejectJoinRequests("boardId", ["userId"]));
     expect(API.rejectJoinRequests).toHaveBeenCalledWith("boardId", ["userId"]);
   });
 });

@@ -49,6 +49,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           class="join-request__requests-figure"
         >
           <img
+            alt="Avatar"
             class="join-request__requests-avatar"
             src="avatar.png"
           />
@@ -74,6 +75,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           class="join-request__requests-figure"
         >
           <img
+            alt="Avatar"
             class="join-request__requests-avatar"
             src="avatar.png"
           />
@@ -99,6 +101,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           class="join-request__requests-figure"
         >
           <img
+            alt="Avatar"
             class="join-request__requests-avatar"
             src="avatar.png"
           />
