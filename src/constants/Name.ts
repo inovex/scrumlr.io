@@ -129,14 +129,14 @@ export const getRandomName = () => {
   let randomCreature;
   let randomAdjective;
   const keys = Object.keys(ANIMAL_NAMES);
-  const randomKey = keys[Math.round(keys.length * Math.random())];
+  const randomKey = keys[Math.floor(keys.length * Math.random())];
 
   if (oneOrZero === 1) {
-    randomCreature = ANIMAL_NAMES[randomKey][Math.round(ANIMAL_NAMES[randomKey].length * Math.random())];
-    randomAdjective = ADJECTIVES[randomKey][Math.round(ADJECTIVES[randomKey].length * Math.random())];
+    randomCreature = ANIMAL_NAMES[randomKey][Math.floor(ANIMAL_NAMES[randomKey].length * Math.random())];
+    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * Math.random())];
   } else {
-    randomCreature = MYTHICAL_CREATURES[randomKey][Math.round(MYTHICAL_CREATURES[randomKey].length * Math.random())];
-    randomAdjective = ADJECTIVES[randomKey][Math.round(ADJECTIVES[randomKey].length * Math.random())];
+    randomCreature = MYTHICAL_CREATURES[randomKey][Math.floor(MYTHICAL_CREATURES[randomKey].length * Math.random())];
+    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * Math.random())];
   }
 
   return `${randomAdjective} ${randomCreature}`;
