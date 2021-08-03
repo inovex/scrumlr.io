@@ -1,5 +1,5 @@
-import {useState,useEffect} from "react";
-import {default as FocusLock} from "react-focus-lock";
+import {useState, useEffect} from "react";
+import FocusLock from "react-focus-lock";
 import ReactDOM from "react-dom";
 
 import classNames from "classnames";
@@ -7,7 +7,7 @@ import classNames from "classnames";
 import "./Portal.scss";
 
 export interface PortalProps {
-  children: any;
+  children: React.ReactNode;
   onClose?: () => void;
 }
 
@@ -22,7 +22,7 @@ const Portal = ({onClose, children}: PortalProps) => {
 
   const rootElement = document.getElementById("root");
 
-  const observer = new MutationObserver((mutations, observer) => {
+  const observer = new MutationObserver(() => {
     setHasPrev(document.getElementsByClassName("board__navigation-prev").length !== 0);
     setHasNext(document.getElementsByClassName("board__navigation-next").length !== 0);
   });
@@ -31,15 +31,14 @@ const Portal = ({onClose, children}: PortalProps) => {
 
   // Key-Listener to "Escape"
   useEffect(() => {
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (closeable && event.key === "Escape") {
+        onClose!();
+        event.preventDefault();
+      }
+    };
     window.addEventListener("keydown", handleKeydown);
-  }, []);
-
-  const handleKeydown = (event: KeyboardEvent) => {
-    if (closeable && event.key === "Escape") {
-      onClose!();
-      event.preventDefault();
-    }
-  };
+  }, [closeable, onClose]);
 
   // mount backdrop into separate located DOM node 'portal'
   const portal: HTMLElement = document.getElementById("portal")!;
@@ -55,10 +54,11 @@ const Portal = ({onClose, children}: PortalProps) => {
           onClose!();
         }
       }}
+      role="dialog"
     >
       <FocusLock>
         <div className="portal__frame">
-          <div className="portal__content" onClick={(e) => e.stopPropagation()}>
+          <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
             {children}
           </div>
         </div>

@@ -10,19 +10,19 @@ import React from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 
-export interface NoteProps {
+interface NoteProps {
   text: string;
   authorId: string;
-  noteId?: string;
+  noteId: string | undefined;
   columnName: string;
   columnColor: string;
 }
 
 const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
-  const state = useSelector((state: ApplicationState) => ({
-    board: state.board,
-    notes: state.notes,
-    users: state.users,
+  const state = useSelector((applicationState: ApplicationState) => ({
+    board: applicationState.board,
+    notes: applicationState.notes,
+    users: applicationState.users,
   }));
 
   const [showDialog, setShowDialog] = React.useState(false);

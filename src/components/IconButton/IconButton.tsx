@@ -3,7 +3,7 @@ import "./IconButton.scss";
 
 type IconButtonProps = {
   direction: "left" | "right";
-  onClick?: () => void;
+  onClick: () => void;
   label: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };

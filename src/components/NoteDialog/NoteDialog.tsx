@@ -3,29 +3,30 @@ import avatar from "assets/avatar.png";
 import Portal from "components/Portal/Portal";
 import classNames from "classnames";
 import Parse from "parse";
-import {NoteProps} from "components/Note/Note";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
 import React from "react";
 import {Color, getColorClassName} from "constants/colors";
 
-export interface NoteDialogProps extends NoteProps {
+interface NoteDialogProps {
+  text: string;
+  authorId: string;
+  columnName: string;
+  columnColor: string;
   show: boolean;
-  editable?: boolean;
+  editable: boolean;
   authorName: string;
   onClose: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
-  columnName: string;
-  columnColor: string;
 }
 
 const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit}: NoteDialogProps) => {
+  const [noteText, setNoteText] = React.useState(text);
+
   if (!show) {
     return null;
   }
-
-  const [noteText, setNoteText] = React.useState(text);
 
   const handleChangeNotetext = (e: React.FocusEvent<HTMLElement>) => {
     const textContent = e.target.textContent as string;
