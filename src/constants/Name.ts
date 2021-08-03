@@ -65,8 +65,8 @@ export const getRandomName = () => {
   const keys = Object.keys(ANIMAL_NAMES);
   const randomKey = keys[Math.round(keys.length * Math.random())];
 
-  const randomAnimal = ANIMAL_NAMES[randomKey][Math.round(ANIMAL_NAMES[randomKey].length * Math.random())];
-  const randomAdjective = ADJECTIVES[randomKey][Math.round(ADJECTIVES[randomKey].length * Math.random())];
+  const randomAnimal = ANIMAL_NAMES[randomKey][Math.round((ANIMAL_NAMES[randomKey] as []).length * Math.random())];
+  const randomAdjective = ADJECTIVES[randomKey][Math.round((ADJECTIVES[randomKey] as []).length * Math.random())];
 
   return `${randomAdjective} ${randomAnimal}`;
 };
