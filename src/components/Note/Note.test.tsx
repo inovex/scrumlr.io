@@ -32,10 +32,10 @@ describe("Note", () => {
   beforeEach(() => {
     window.IntersectionObserver = jest.fn(
       () =>
-        (({
+        ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown) as IntersectionObserver)
+        } as unknown as IntersectionObserver)
     );
   });
 
@@ -45,9 +45,14 @@ describe("Note", () => {
       expect(container.firstChild).toHaveClass("note");
     });
 
+    test("note content is present", () => {
+      const {container} = render(createNote("Test Text", "Test Author"));
+      expect(container.querySelector(".note").firstChild).toHaveClass("note__content");
+    });
+
     test("note text is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note").firstChild).toHaveClass("note__text");
+      expect(container.querySelector(".note__content").firstChild).toHaveClass("note__text");
     });
 
     test("note text has correct text", () => {

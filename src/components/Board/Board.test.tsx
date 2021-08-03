@@ -45,10 +45,10 @@ describe("basic", () => {
     Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
-        (({
+        ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown) as IntersectionObserver)
+        } as unknown as IntersectionObserver)
     );
   });
 
@@ -120,20 +120,20 @@ describe("navigation", () => {
     Parse.User.current = mockCurrentUser;
     window.IntersectionObserver = jest.fn(
       () =>
-        (({
+        ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown) as IntersectionObserver)
+        } as unknown as IntersectionObserver)
     );
   });
 
   let intersectionObserver: IntersectionObserver;
 
   beforeEach(() => {
-    intersectionObserver = ({
+    intersectionObserver = {
       observe: jest.fn(),
       disconnect: jest.fn(),
-    } as unknown) as IntersectionObserver;
+    } as unknown as IntersectionObserver;
     window.IntersectionObserver = jest.fn(() => intersectionObserver);
   });
 
@@ -173,7 +173,7 @@ describe("navigation", () => {
         const firstMethodCall = 0;
         const firstMethodParameter = 0;
 
-        const intersectionObserverCallback = ((window.IntersectionObserver as unknown) as IntersectionObserver).mock.calls[firstMethodCall][firstMethodParameter];
+        const intersectionObserverCallback = (window.IntersectionObserver as unknown as IntersectionObserver).mock.calls[firstMethodCall][firstMethodParameter];
         intersectionObserverCallback([
           {isIntersecting: first, target: columns[0]},
           {isIntersecting: second, target: columns[1]},

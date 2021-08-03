@@ -13,6 +13,7 @@ $note__author-image-size: 26px;
 $note__author-margin-left: 10px;
 
 .note {
+  cursor: pointer;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
@@ -20,7 +21,6 @@ $note__author-margin-left: 10px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
-  z-index: $note-z-index;
 }
 @media (prefers-color-scheme: dark) {
   .note {
@@ -43,9 +43,16 @@ $note__author-margin-left: 10px;
   background: var(--accent-color);
 }
 
+.note__content {
+  display: flex;
+  width: 100%;
+}
+
 .note__text {
   margin: 0;
+  margin-right: 5px;
   min-height: 3 * $line-height--medium;
+  width: 100%;
   color: $color-black;
   font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
@@ -61,6 +68,33 @@ $note__author-margin-left: 10px;
   .note__text {
     color: $color-white;
   }
+}
+
+.note__edit {
+  height: 20px;
+  width: 20px;
+  align-self: end;
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+  display: none;
+  color: $color-dark-gray;
+}
+@media (prefers-color-scheme: dark) {
+  .note__edit {
+    color: $color-white;
+  }
+}
+@media screen and (max-width: 1279px) {
+  .note__edit {
+    opacity: 100%;
+  }
+}
+.note:hover > .note__content > .note__edit {
+  opacity: 100%;
+}
+
+.note__edit--own-card {
+  display: block;
 }
 
 .note__author {
@@ -87,4 +121,12 @@ $note__author-margin-left: 10px;
   font-size: $note__author-name-size;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
+}
+
+.note__delete-button {
+  display: none;
+}
+
+.note__delete-button--visible {
+  display: block;
 }
