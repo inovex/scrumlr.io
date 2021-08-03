@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {callAPI} from "./index";
+import {callAPI} from "./callApi";
 
 export const BoardAPI = {
   /**

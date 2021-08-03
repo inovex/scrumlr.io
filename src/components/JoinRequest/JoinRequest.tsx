@@ -28,13 +28,13 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </main>
         <footer className="join-request__footer">
           <button
-            onClick={(_) => handleReject(joinRequest.boardId, [joinRequest.userId])}
+            onClick={() => handleReject(joinRequest.boardId, [joinRequest.userId])}
             className="join-request__button join-request__footer-button join-request--single__footer-button"
           >
             Ablehnen
           </button>
           <button
-            onClick={(_) => handleAccept(joinRequest.boardId, [joinRequest.userId])}
+            onClick={() => handleAccept(joinRequest.boardId, [joinRequest.userId])}
             className="join-request__button join-request__footer-button join-request--single__footer-button"
           >
             Annehmen
@@ -60,12 +60,12 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
           {joinRequests.map((joinRequest) => (
             <li key={joinRequest.id}>
               <figure className="join-request__requests-figure">
-                <img src={avatar} className="join-request__requests-avatar" />
+                <img src={avatar} className="join-request__requests-avatar" alt="Avatar" />
                 <figcaption className="join-request__requests-displayname">{joinRequest.displayName}</figcaption>
-                <button className="join-request__button join-request__requests-button" onClick={(_) => handleReject(joinRequest.boardId, [joinRequest.userId])}>
+                <button className="join-request__button join-request__requests-button" onClick={() => handleReject(joinRequest.boardId, [joinRequest.userId])}>
                   Ablehnen
                 </button>
-                <button className="join-request__button join-request__requests-button" onClick={(_) => handleAccept(joinRequest.boardId, [joinRequest.userId])}>
+                <button className="join-request__button join-request__requests-button" onClick={() => handleAccept(joinRequest.boardId, [joinRequest.userId])}>
                   Annehmen
                 </button>
               </figure>
@@ -76,7 +76,7 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
       <footer className="join-request__footer join-request--multiple__footer">
         <button
           className="join-request__button join-request__footer-button join-request--multiple__footer-button"
-          onClick={(_) =>
+          onClick={() =>
             handleReject(
               joinRequests[0].boardId,
               joinRequests.map((joinRequest) => joinRequest.userId)
@@ -87,7 +87,7 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
         </button>
         <button
           className="join-request__button join-request__footer-button join-request--multiple__footer-button"
-          onClick={(_) =>
+          onClick={() =>
             handleAccept(
               joinRequests[0].boardId,
               joinRequests.map((joinRequest) => joinRequest.userId)
