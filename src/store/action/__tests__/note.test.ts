@@ -68,7 +68,7 @@ describe("note actions", () => {
     });
 
     test("created action", () => {
-      const action = NoteActionFactory.createdNote(({test: true} as unknown) as NoteClientModeld);
+      const action = NoteActionFactory.createdNote({test: true} as unknown as NoteClientModeld);
       expect(action).toEqual({
         type: "@@SCRUMLR/createdNote",
         note: {test: true},
@@ -90,7 +90,7 @@ describe("note actions", () => {
     });
 
     test("created action", () => {
-      const action = NoteActionFactory.updatedNote(({test: true} as unknown) as NoteClientModel);
+      const action = NoteActionFactory.updatedNote({test: true} as unknown as NoteClientModel);
       expect(action).toEqual({
         type: "@@SCRUMLR/updatedNote",
         note: {test: true},
@@ -134,7 +134,7 @@ describe("note actions", () => {
     });
 
     test("created action", () => {
-      const action = NoteActionFactory.initializeNotes(([{test: true}] as unknown) as NoteClientModel[]);
+      const action = NoteActionFactory.initializeNotes([{test: true}] as unknown as NoteClientModel[]);
       expect(action).toEqual({
         type: "@@SCRUMLR/initNotes",
         notes: [{test: true}],

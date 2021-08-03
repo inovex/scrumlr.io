@@ -82,14 +82,6 @@ describe("note reducer", () => {
       const note = newState.find((n) => n.id === "1");
       expect(note?.dirty).toBe(false);
     });
-
-    test("edited note does not match local modifications on note", () => {
-      const editedState = noteReducer(initialState, ActionFactory.editNote("1", "New text"));
-      const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", "New te")));
-      const note = newState.find((n) => n.id === "1");
-      expect(note?.dirty).toBe(true);
-      expect(note?.text).toEqual("New text");
-    });
   });
 
   test("initialize note", () => {

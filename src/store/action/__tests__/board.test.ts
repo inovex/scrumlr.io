@@ -63,7 +63,7 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.initializeBoard(({test: true} as unknown) as BoardClientModel);
+      const action = BoardActionFactory.initializeBoard({test: true} as unknown as BoardClientModel);
       expect(action).toEqual({
         type: "@@SCRUMLR/initBoard",
         board: {test: true},
@@ -110,7 +110,7 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.updatedBoard(({test: true} as unknown) as BoardClientModel);
+      const action = BoardActionFactory.updatedBoard({test: true} as unknown as BoardClientModel);
       expect(action).toEqual({
         type: "@@SCRUMLR/updatedBoard",
         board: {test: true},

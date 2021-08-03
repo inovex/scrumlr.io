@@ -55,6 +55,7 @@ $column__max-width: 960px;
 $column__border-width: 12px;
 
 // margin and padding
+$margin--small: 8px;
 $margin--default: 16px;
 $margin--large: 32px;
 $padding--small: 16px;
@@ -75,9 +76,11 @@ $line-height--large: 32px;
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
-$menu-z-index: $base-z-index + (3 * $base-z-index-step);
+$menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
-$board__navigation-button-z-index: $menu-z-index;
+$board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
+$backdrop-z-index: $base-z-index + (7 * $base-z-index-step);
+$note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 
 // responsive
 $smartphone: "screen and (max-width: 767px)";

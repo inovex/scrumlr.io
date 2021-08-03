@@ -1,0 +1,59 @@
+@import "constants/style";
+
+#portal {
+  position: fixed;
+  height: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: $backdrop-z-index;
+}
+
+.portal {
+  position: fixed;
+  width: calc(100vw - 24px);
+  height: calc(100vh - 24px);
+  background: rgba(0, 0, 0, 0.8);
+  top: 12px;
+  left: 12px;
+}
+
+.portal--hasNext {
+  width: calc(100vw - 12px);
+}
+
+.portal--hasPrev {
+  width: calc(100vw - 12px);
+  left: 0;
+}
+
+.portal--hasNext.portal--hasPrev {
+  left: 0;
+  width: 100vw;
+}
+
+.portal__frame {
+  position: absolute;
+  width: calc(100vw - 24px);
+  height: calc(100vh - 24px);
+  padding-top: $header__height;
+
+  // enable scroll of content
+  overflow: auto;
+
+  // horizontal centering of content
+  display: flex;
+  justify-content: center;
+}
+
+@media #{$tablet} {
+  .portal__frame {
+    padding: 128px 128px;
+  }
+}
+
+.portal__content {
+  height: fit-content;
+  width: fit-content;
+}

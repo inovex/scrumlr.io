@@ -77,7 +77,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel((user.toJSON() as unknown) as UserServerModel, {
+                      mapUserServerToClientModel(user.toJSON() as unknown as UserServerModel, {
                         admin: false,
                         online: isOnline(user, action.boardId),
                       })
@@ -96,7 +96,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
                 dispatch(
                   ActionFactory.setUsers(
                     users.map((user) =>
-                      mapUserServerToClientModel((user.toJSON() as unknown) as UserServerModel, {
+                      mapUserServerToClientModel(user.toJSON() as unknown as UserServerModel, {
                         admin: true,
                         online: isOnline(user, action.boardId),
                       })
@@ -156,7 +156,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         });
         subscription.on("open", () => {
           noteQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeNotes(((results as unknown) as NoteServerModel[]).map(mapNoteServerToClientModel)));
+            dispatch(ActionFactory.initializeNotes((results as unknown as NoteServerModel[]).map(mapNoteServerToClientModel)));
           });
         });
       });
@@ -170,7 +170,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
       });
 
       subscription.on("update", (object) => {
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel((object.toJSON() as unknown) as BoardServerModel)));
+        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
       subscription.on("delete", () => {
@@ -188,7 +188,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
           createUsersSubscription();
 
           boardQuery.first().then((board) => {
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel((board?.toJSON() as unknown) as BoardServerModel)));
+            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
           });
         } else {
           // reconnect
