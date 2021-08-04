@@ -14,9 +14,11 @@
   position: fixed;
   width: calc(100vw - 24px);
   height: calc(100vh - 24px);
-  background: rgba(0, 0, 0, 0.8);
   top: 12px;
   left: 12px;
+}
+.portal--dark {
+  background: rgba(0, 0, 0, 0.8);
 }
 
 .portal--hasNext {

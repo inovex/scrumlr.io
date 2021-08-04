@@ -1,10 +1,21 @@
 import "./HeaderMenu.scss";
-import classnames from "classnames";
+import Portal from "components/Portal/Portal";
 
 type HeaderMenuProps = {
   open: boolean;
+  onClose: () => void;
 };
 
-const HeaderMenu = (props: HeaderMenuProps) => <div className={classnames("header-menu", {"header-menu--active": props.open})} />;
+const HeaderMenu = (props: HeaderMenuProps) => {
+  if (!props.open) {
+    return null;
+  }
+
+  return (
+    <Portal onClose={props.onClose}>
+      <div className="header-menu" />
+    </Portal>
+  );
+};
 
 export {HeaderMenu};

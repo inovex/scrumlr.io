@@ -44,7 +44,7 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
   };
 
   return (
-    <Portal onClose={onClose}>
+    <Portal onClose={onClose} dark>
       <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
         <h2 className="note-dialog__header">{columnName}</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
