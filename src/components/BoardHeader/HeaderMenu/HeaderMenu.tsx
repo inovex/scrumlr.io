@@ -28,7 +28,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         <li className="header-menu__item">
           <button className="menu__item-button" onClick={() => setShowAuthorNames(!showAuthorNames)}>
             <div className="item-button__toggle-container">
-              <div className={classNames("item-button__toggle", {"item-button__toggle--left": !showAuthorNames}, {"item-button__toggle--right": showAuthorNames})} />
+              <div className={classNames("item-button__toggle", {"item-button__toggle--left": showAuthorNames}, {"item-button__toggle--right": !showAuthorNames})} />
             </div>
             <label className="item-button__label">{showAuthorNames ? "Hide" : "Show"} authors of card</label>
           </button>
