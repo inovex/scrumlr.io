@@ -2,6 +2,7 @@ import "./BoardHeader.scss";
 import lock from "assets/icon-lock.svg";
 import BoardUsers from "components/BoardUsers/BoardUsers";
 import HeaderLogo from "./HeaderLogo/HeaderLogo";
+import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
 
 export interface BoardHeaderProps {
   boardstatus: string;
