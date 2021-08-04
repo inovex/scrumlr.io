@@ -13,9 +13,135 @@
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
 
   z-index: 150;
+  overflow: hidden;
+
+  list-style-type: none;
+  padding: 0;
 }
 @media (prefers-color-scheme: dark) {
   .header-menu {
     background-color: $color-planning-pink;
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }
+}
+
+.header-menu__info {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 86px;
+}
+.info__board-name {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  height: 18px;
+  width: 144px;
+  color: #ffffff;
+  font-family: Raleway;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.25px;
+  line-height: 18px;
+}
+.info__access-mode {
+  position: absolute;
+  top: 44px;
+  left: 20px;
+  height: 18px;
+  width: 174px;
+  opacity: 0.8;
+  color: #ffffff;
+  font-family: Raleway;
+  font-size: 13px;
+  letter-spacing: 0.27px;
+  line-height: 18px;
+}
+
+.header-menu__item {
+  height: 48px;
+  width: 100%;
+  background-color: $color-white;
+  transition: background-color 0.15s ease-in-out;
+}
+.header-menu__item:hover {
+  background-color: rgb(243, 243, 243);
+}
+
+.menu__item-button {
+  background-color: transparent;
+  border: none;
+  padding: none;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+}
+.menu__item-button:focus,
+.menu__item-button:hover {
+  outline: none;
+}
+.item-button__icon {
+  width: 79px;
+  height: 24px;
+  color: #a3a6aa;
+  vertical-align: middle;
+}
+
+.item-button__label {
+  height: 24px;
+  width: 180px;
+  color: #111111;
+  font-family: Raleway;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  vertical-align: middle;
+}
+
+.item-button__toggle-container {
+  width: 79px;
+  height: 48px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+.item-button__toggle {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: inline-block;
+}
+.item-button__toggle::after {
+  content: "";
+  height: 12px;
+  width: 12px;
+  background-color: $color-backlog-blue;
+  position: absolute;
+  border-radius: 100%;
+  top: calc(50% - 6px);
+  transition: left 0.25s ease-in-out;
+}
+@media (prefers-color-scheme: dark) {
+  .item-button__toggle::after {
+    background-color: $color-planning-pink;
+  }
+}
+
+.item-button__toggle::before {
+  content: "";
+  height: 3px;
+  width: 24px;
+  background-color: rgb(200, 200, 200);
+  position: absolute;
+  border-radius: 3px;
+  top: calc(50% - 1.5px);
+}
+
+.item-button__toggle--left::after {
+  left: 0;
+}
+
+.item-button__toggle--right::after {
+  left: 12px;
 }
