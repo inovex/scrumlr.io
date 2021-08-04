@@ -11,9 +11,15 @@
 
   background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+
+  visibility: hidden;
+  z-index: 150;
 }
 @media (prefers-color-scheme: dark) {
   .header-menu {
     background-color: $color-planning-pink;
   }
+}
+.header-menu--active {
+  visibility: visible;
 }
