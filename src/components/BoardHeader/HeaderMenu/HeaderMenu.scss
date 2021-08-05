@@ -61,6 +61,18 @@
   line-height: 18px;
   cursor: default;
 }
+.info__edit-button {
+  position: absolute;
+  height: 24px;
+  width: 50px;
+  border: 1.5px solid #f9fafb;
+  border-radius: 32px;
+  background-color: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  top: 20px;
+  left: 212px;
+}
 
 .header-menu__item {
   height: 48px;
