@@ -43,6 +43,9 @@
   font-weight: bold;
   letter-spacing: 0.25px;
   line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .info__access-mode {
   position: absolute;
@@ -56,6 +59,7 @@
   font-size: 13px;
   letter-spacing: 0.27px;
   line-height: 18px;
+  cursor: default;
 }
 
 .header-menu__item {
@@ -83,6 +87,7 @@
   height: 100%;
   width: 100%;
   text-align: left;
+  cursor: pointer;
 }
 .menu__item-button:focus,
 .menu__item-button:hover {
@@ -104,6 +109,7 @@
   letter-spacing: 0.5px;
   line-height: 24px;
   vertical-align: middle;
+  cursor: pointer;
 }
 @media (prefers-color-scheme: dark) {
   .item-button__label {
