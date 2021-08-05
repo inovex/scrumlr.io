@@ -36,17 +36,27 @@
   top: 20px;
   left: 20px;
   height: 18px;
-  width: 144px;
+  width: 180px;
   color: #ffffff;
   font-family: Raleway;
   font-size: 18px;
   font-weight: bold;
   letter-spacing: 0.25px;
-  line-height: 18px;
+  line-height: 17px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #ffffff;
+  padding: 0 0 5px 0;
+  outline: 0;
+  transition: border-color 0.1s linear;
 }
+.info__board-name:disabled {
+  border-color: transparent;
+}
+
 .info__access-mode {
   position: absolute;
   top: 44px;
@@ -70,7 +80,7 @@
   background-color: transparent;
   color: #ffffff;
   cursor: pointer;
-  top: 20px;
+  top: 18px;
   left: 212px;
   transition: scale 0.1s ease-in-out;
 }

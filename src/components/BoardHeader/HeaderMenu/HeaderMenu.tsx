@@ -13,6 +13,7 @@ type HeaderMenuProps = {
 };
 
 const HeaderMenu = (props: HeaderMenuProps) => {
+  const [boardName, setBoardName] = useState(props.boardName);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [showAuthorNames, setShowAuthorNames] = useState(false);
   if (!props.open) {
@@ -20,12 +21,41 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   }
 
   return (
-    <Portal onClose={props.onClose} dark={false}>
+    <Portal
+      onClose={() => {
+        setActiveEditMode(false);
+        props.onClose();
+      }}
+      dark={false}
+    >
       <ul className="header-menu">
         <li className="header-menu__info">
-          <span className="info__board-name">{props.boardName}</span>
+          <input
+            className="info__board-name"
+            value={boardName}
+            disabled={!activeEditMode}
+            onChange={(e) => {
+              setBoardName(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setActiveEditMode(false);
+              }
+            }}
+            ref={(input) => {
+              if (!input?.disabled) {
+                input?.focus();
+              }
+            }}
+            onFocus={(e) => e.target.select()}
+          />
           <span className="info__access-mode">{props.accessMode}</span>
-          <button className="info__edit-button" onClick={() => setActiveEditMode(!activeEditMode)}>
+          <button
+            className="info__edit-button"
+            onClick={() => {
+              setActiveEditMode(!activeEditMode);
+            }}
+          >
             edit
           </button>
         </li>
