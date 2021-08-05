@@ -67,6 +67,14 @@
 .header-menu__item:hover {
   background-color: rgb(243, 243, 243);
 }
+@media (prefers-color-scheme: dark) {
+  .header-menu__item {
+    background-color: $color-dark-mode-note;
+  }
+  .header-menu__item:hover {
+    background-color: rgb(61, 69, 85);
+  }
+}
 
 .menu__item-button {
   background-color: transparent;
@@ -96,6 +104,11 @@
   letter-spacing: 0.5px;
   line-height: 24px;
   vertical-align: middle;
+}
+@media (prefers-color-scheme: dark) {
+  .item-button__label {
+    color: $color-white;
+  }
 }
 
 .item-button__toggle-container {
