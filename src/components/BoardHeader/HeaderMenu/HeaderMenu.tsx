@@ -16,6 +16,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [boardName, setBoardName] = useState(props.boardName);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [showAuthorNames, setShowAuthorNames] = useState(false);
+  const [publicAccessMode, setPublicAccessMode] = useState(props.accessMode === "Public Session");
   if (!props.open) {
     return null;
   }
@@ -49,14 +50,17 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             }}
             onFocus={(e) => e.target.select()}
           />
-          <span className="info__access-mode">{props.accessMode}</span>
+          <button className="info__access-mode" disabled={!activeEditMode} onClick={() => setPublicAccessMode(!publicAccessMode)}>
+            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": publicAccessMode})} />
+            {publicAccessMode ? "Public Session" : "Private Session"}
+          </button>
           <button
             className="info__edit-button"
             onClick={() => {
               setActiveEditMode(!activeEditMode);
             }}
           >
-            edit
+            {activeEditMode ? "save" : "edit"}
           </button>
         </li>
         <li className="header-menu__item">
