@@ -116,16 +116,10 @@
   content: "";
   height: 12px;
   width: 12px;
-  background-color: $color-backlog-blue;
   position: absolute;
   border-radius: 100%;
   top: calc(50% - 6px);
-  transition: left 0.25s ease-in-out;
-}
-@media (prefers-color-scheme: dark) {
-  .item-button__toggle::after {
-    background-color: $color-planning-pink;
-  }
+  transition: all 0.25s ease-in-out;
 }
 
 .item-button__toggle::before {
@@ -140,8 +134,10 @@
 
 .item-button__toggle--left::after {
   left: 0;
+  background-color: $color-backlog-blue;
 }
 
 .item-button__toggle--right::after {
   left: 12px;
+  background-color: $color-planning-pink;
 }
