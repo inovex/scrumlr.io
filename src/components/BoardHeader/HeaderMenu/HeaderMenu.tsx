@@ -13,6 +13,7 @@ type HeaderMenuProps = {
 };
 
 const HeaderMenu = (props: HeaderMenuProps) => {
+  const [activeEditMode, setActiveEditMode] = useState(false);
   const [showAuthorNames, setShowAuthorNames] = useState(false);
   if (!props.open) {
     return null;
@@ -24,7 +25,9 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         <li className="header-menu__info">
           <span className="info__board-name">{props.boardName}</span>
           <span className="info__access-mode">{props.accessMode}</span>
-          <button className="info__edit-button">edit</button>
+          <button className="info__edit-button" onClick={() => setActiveEditMode(!activeEditMode)}>
+            edit
+          </button>
         </li>
         <li className="header-menu__item">
           <button className="menu__item-button" onClick={() => setShowAuthorNames(!showAuthorNames)}>

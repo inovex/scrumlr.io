@@ -72,6 +72,10 @@
   cursor: pointer;
   top: 20px;
   left: 212px;
+  transition: scale 0.1s ease-in-out;
+}
+.info__edit-button:active {
+  scale: 0.95;
 }
 
 .header-menu__item {
