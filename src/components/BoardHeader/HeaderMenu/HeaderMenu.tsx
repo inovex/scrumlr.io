@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./HeaderMenu.scss";
 import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
 
 type HeaderMenuProps = {
@@ -35,7 +35,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         </li>
         <li className="header-menu__item">
           <button className="menu__item-button">
-            <CheckIcon className="item-button__icon" />
+            <ShareIcon className="item-button__icon" />
             <label className="item-button__label">Share board</label>
           </button>
         </li>
