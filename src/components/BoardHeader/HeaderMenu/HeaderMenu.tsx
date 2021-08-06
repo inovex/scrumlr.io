@@ -10,8 +10,6 @@ import {ApplicationState} from "types/store";
 import {useSelector} from "react-redux";
 
 type HeaderMenuProps = {
-  boardName: string;
-  accessMode: string;
   open: boolean;
   onClose: () => void;
 };
@@ -20,7 +18,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board,
   }));
-  const [boardName, setBoardName] = useState(props.boardName);
+  const [boardName, setBoardName] = useState(state.board.data!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   if (!props.open) {
     return null;
@@ -30,7 +28,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setBoardName(props.boardName);
+        setBoardName(state.board.data!.name);
         props.onClose();
       }}
       dark={false}

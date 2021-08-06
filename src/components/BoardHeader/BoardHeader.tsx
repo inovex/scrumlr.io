@@ -28,7 +28,7 @@ const BoardHeader = ({name, boardstatus}: BoardHeaderProps) => {
       <div className="board-header__users">
         <BoardUsers />
       </div>
-      <HeaderMenu boardName={name} accessMode={boardstatus} open={showMenu} onClose={() => setShowMenu(false)} />
+      <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />
     </div>
   );
 };
