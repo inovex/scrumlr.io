@@ -31,7 +31,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setBoardName(state.board.data!.name);
         props.onClose();
       }}
-      dark={false}
+      darkBackground={false}
     >
       <ul className="header-menu">
         <li className="header-menu__info">
