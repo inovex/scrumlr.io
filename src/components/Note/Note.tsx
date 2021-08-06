@@ -16,9 +16,10 @@ interface NoteProps {
   noteId: string | undefined;
   columnName: string;
   columnColor: string;
+  showAuthors: boolean;
 }
 
-const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
+const Note = ({text, authorId, noteId, columnName, columnColor, showAuthors}: NoteProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
@@ -49,10 +50,12 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
         <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
       </div>
       <footer className="note__footer">
-        <figure className="note__author" aria-roledescription="author">
-          <img className="note__author-image" src={avatar} alt="User" />
-          <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
-        </figure>
+        {(showAuthors || Parse.User.current()?.id === authorId) && (
+          <figure className="note__author" aria-roledescription="author">
+            <img className="note__author-image" src={avatar} alt="User" />
+            <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
+          </figure>
+        )}
       </footer>
       <NoteDialog
         editable={Parse.User.current()?.id === authorId}
