@@ -251,11 +251,10 @@ export const initializeBoardFunctions = () => {
     if (!board) {
       throw new Error(`Board ${request.board.id} not found`);
     }
-    if (request.board.showContentOfOtherUsers) {
+    if (request.board.showContentOfOtherUsers !== undefined) {
       board.set("showContentOfOtherUsers", request.board.showContentOfOtherUsers);
     }
-    if (request.board.showAuthors) {
-      console.log("board set showAuthors");
+    if (request.board.showAuthors !== undefined) {
       board.set("showAuthors", request.board.showAuthors);
     }
     if (request.board.timerUTCEndTime) {
@@ -267,7 +266,7 @@ export const initializeBoardFunctions = () => {
     if (request.board.name) {
       board.set("name", request.board.name);
     }
-    if (request.board.joinConfirmationRequired) {
+    if (request.board.joinConfirmationRequired !== undefined) {
       board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
     }
 
