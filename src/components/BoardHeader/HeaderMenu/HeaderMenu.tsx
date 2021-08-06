@@ -20,6 +20,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   }));
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
+  const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
   if (!props.open) {
     return null;
   }
@@ -29,6 +30,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       onClose={() => {
         setActiveEditMode(false);
         setBoardName(state.board!.name);
+        setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
       }}
       darkBackground={false}
@@ -45,7 +47,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 setActiveEditMode(false);
-                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
+                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
               }
             }}
             ref={(input) => {
@@ -55,19 +57,17 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             }}
             onFocus={(e) => e.target.select()}
           />
-          <button
-            className="info__access-mode"
-            disabled={!activeEditMode}
-            onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board!.id, joinConfirmationRequired: !state.board!.joinConfirmationRequired}))}
-          >
-            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !state.board!.joinConfirmationRequired})} />
-            {state.board!.joinConfirmationRequired ? "Private Session" : "Public Session"}
+          <button className="info__access-mode" disabled={!activeEditMode} onClick={() => setJoinConfirmationRequired(!joinConfirmationRequired)}>
+            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !joinConfirmationRequired})} />
+            {joinConfirmationRequired ? "Private Session" : "Public Session"}
           </button>
           <button
             className="info__edit-button"
             onClick={() => {
+              if (activeEditMode && (state.board!.joinConfirmationRequired !== joinConfirmationRequired || state.board!.name !== boardName)) {
+                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
+              }
               setActiveEditMode(!activeEditMode);
-              store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
             }}
           >
             {activeEditMode ? "save" : "edit"}
