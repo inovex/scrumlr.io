@@ -22,7 +22,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-only-warn": "^1.0.3",
-    "lint-staged": "^11.1.1",
+    "lint-staged": "^11.1.2",
     "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "ts-node": "^9.0.0",
