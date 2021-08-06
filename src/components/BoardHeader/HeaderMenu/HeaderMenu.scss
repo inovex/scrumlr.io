@@ -62,10 +62,9 @@
   top: 44px;
   left: 20px;
   height: 18px;
-  width: 174px;
+  width: max-content;
   border: none;
   background-color: transparent;
-  padding: 0;
   text-align: left;
   color: #fff;
   opacity: 0.8;
@@ -74,9 +73,13 @@
   letter-spacing: 0.27px;
   line-height: 18px;
   cursor: pointer;
+  border-bottom: 1px dashed #ffffff;
+  padding: 0 0 5px 0;
+  transition: border-color 0.1s linear;
 }
 .info__access-mode:disabled {
   cursor: default;
+  border-color: transparent;
 }
 .info__access-mode-lock {
   display: inline-block;
