@@ -16,9 +16,9 @@ type HeaderMenuProps = {
 
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board,
+    board: applicationState.board.data,
   }));
-  const [boardName, setBoardName] = useState(state.board.data!.name);
+  const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   if (!props.open) {
     return null;
@@ -28,7 +28,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setBoardName(state.board.data!.name);
+        setBoardName(state.board!.name);
         props.onClose();
       }}
       darkBackground={false}
@@ -45,7 +45,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 setActiveEditMode(false);
-                store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, name: boardName}));
+                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
               }
             }}
             ref={(input) => {
@@ -58,16 +58,16 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="info__access-mode"
             disabled={!activeEditMode}
-            onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, joinConfirmationRequired: !state.board.data!.joinConfirmationRequired}))}
+            onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board!.id, joinConfirmationRequired: !state.board!.joinConfirmationRequired}))}
           >
-            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !state.board.data!.joinConfirmationRequired})} />
-            {state.board.data!.joinConfirmationRequired ? "Private Session" : "Public Session"}
+            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !state.board!.joinConfirmationRequired})} />
+            {state.board!.joinConfirmationRequired ? "Private Session" : "Public Session"}
           </button>
           <button
             className="info__edit-button"
             onClick={() => {
               setActiveEditMode(!activeEditMode);
-              store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, name: boardName}));
+              store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
             }}
           >
             {activeEditMode ? "save" : "edit"}
@@ -77,19 +77,15 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="menu__item-button"
             onClick={() => {
-              store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, showAuthors: !state.board.data!.showAuthors}));
+              store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
             }}
           >
             <div className="item-button__toggle-container">
               <div
-                className={classNames(
-                  "item-button__toggle",
-                  {"item-button__toggle--left": state.board.data!.showAuthors},
-                  {"item-button__toggle--right": !state.board.data!.showAuthors}
-                )}
+                className={classNames("item-button__toggle", {"item-button__toggle--left": state.board!.showAuthors}, {"item-button__toggle--right": !state.board!.showAuthors})}
               />
             </div>
-            <label className="item-button__label">{state.board.data!.showAuthors ? "Hide" : "Show"} authors of card</label>
+            <label className="item-button__label">{state.board!.showAuthors ? "Hide" : "Show"} authors of card</label>
           </button>
         </li>
         <li className="header-menu__item">
