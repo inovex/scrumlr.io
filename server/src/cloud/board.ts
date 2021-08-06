@@ -248,7 +248,6 @@ export const initializeBoardFunctions = () => {
 
     const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
     const board = await boardQuery.get(request.board.id, {useMasterKey: true});
-    console.log(board);
     if (!board) {
       throw new Error(`Board ${request.board.id} not found`);
     }
@@ -272,9 +271,7 @@ export const initializeBoardFunctions = () => {
       board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
     }
 
-    console.log("board save");
     await board.save(null, {useMasterKey: true});
-    console.log("board saved");
     return true;
   });
 };
