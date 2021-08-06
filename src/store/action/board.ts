@@ -53,7 +53,7 @@ export const BoardActionFactory = {
    *
    * @param board the partial board model with the fields to update
    */
-  editBoard: (board: Partial<EditableBoardClientModel>) => ({
+  editBoard: (board: Partial<EditableBoardClientModel> & {id: string}) => ({
     type: BoardActionType.EditBoard,
     board,
   }),

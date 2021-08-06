@@ -86,18 +86,16 @@
   border: 2px solid #fff;
   background-color: #fff;
   opacity: 0.8;
-  border-radius: 2px;
+  border-radius: 3px;
   margin-right: 5px;
 }
 .info__access-mode-lock::before {
   content: "";
   position: absolute;
-  height: 5px;
-  width: 5px;
+  height: 6px;
+  width: 6px;
   background-color: $color-backlog-blue;
-  border-radius: 2.5px;
-  top: 0.5px;
-  left: 0.5px;
+  border-radius: 3px;
 }
 @media (prefers-color-scheme: dark) {
   .info__access-mode-lock::before {
@@ -107,14 +105,14 @@
 .info__access-mode-lock::after {
   position: absolute;
   content: "";
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border: 1px solid #fff;
   border-bottom: 0;
-  top: -6px;
-  left: 0.5px;
+  top: -7px;
+  left: 0px;
   transition: transform 0.3s linear;
 }
 .info__access-mode-lock--unlocked::after {
@@ -133,6 +131,9 @@
   top: 18px;
   left: 212px;
   transition: scale 0.1s ease-in-out;
+}
+.info__edit-button:focus {
+  outline: 0;
 }
 .info__edit-button:active {
   scale: 0.95;
@@ -214,7 +215,7 @@
   position: absolute;
   border-radius: 100%;
   top: calc(50% - 6px);
-  transition: all 0.25s ease-in-out;
+  transition: all 0.25s linear;
 }
 
 .item-button__toggle::before {

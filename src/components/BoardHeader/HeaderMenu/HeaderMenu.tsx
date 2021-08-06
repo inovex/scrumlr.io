@@ -1,9 +1,13 @@
 import {useState} from "react";
+import store from "store";
+import {ActionFactory} from "store/action";
 import "./HeaderMenu.scss";
 import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
+import {ApplicationState} from "types/store";
+import {useSelector} from "react-redux";
 
 type HeaderMenuProps = {
   boardName: string;
@@ -13,10 +17,11 @@ type HeaderMenuProps = {
 };
 
 const HeaderMenu = (props: HeaderMenuProps) => {
+  const state = useSelector((applicationState: ApplicationState) => ({
+    board: applicationState.board,
+  }));
   const [boardName, setBoardName] = useState(props.boardName);
   const [activeEditMode, setActiveEditMode] = useState(false);
-  const [showAuthorNames, setShowAuthorNames] = useState(false);
-  const [publicAccessMode, setPublicAccessMode] = useState(props.accessMode === "Public Session");
   if (!props.open) {
     return null;
   }
@@ -25,6 +30,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     <Portal
       onClose={() => {
         setActiveEditMode(false);
+        setBoardName(props.boardName);
         props.onClose();
       }}
       dark={false}
@@ -41,6 +47,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 setActiveEditMode(false);
+                store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, name: boardName}));
               }
             }}
             ref={(input) => {
@@ -50,25 +57,41 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             }}
             onFocus={(e) => e.target.select()}
           />
-          <button className="info__access-mode" disabled={!activeEditMode} onClick={() => setPublicAccessMode(!publicAccessMode)}>
-            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": publicAccessMode})} />
-            {publicAccessMode ? "Public Session" : "Private Session"}
+          <button
+            className="info__access-mode"
+            disabled={!activeEditMode}
+            onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, joinConfirmationRequired: !state.board.data!.joinConfirmationRequired}))}
+          >
+            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !state.board.data!.joinConfirmationRequired})} />
+            {state.board.data!.joinConfirmationRequired ? "Private Session" : "Public Session"}
           </button>
           <button
             className="info__edit-button"
             onClick={() => {
               setActiveEditMode(!activeEditMode);
+              store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, name: boardName}));
             }}
           >
             {activeEditMode ? "save" : "edit"}
           </button>
         </li>
         <li className="header-menu__item">
-          <button className="menu__item-button" onClick={() => setShowAuthorNames(!showAuthorNames)}>
+          <button
+            className="menu__item-button"
+            onClick={() => {
+              store.dispatch(ActionFactory.editBoard({id: state.board.data!.id, showAuthors: !state.board.data!.showAuthors}));
+            }}
+          >
             <div className="item-button__toggle-container">
-              <div className={classNames("item-button__toggle", {"item-button__toggle--left": showAuthorNames}, {"item-button__toggle--right": !showAuthorNames})} />
+              <div
+                className={classNames(
+                  "item-button__toggle",
+                  {"item-button__toggle--left": state.board.data!.showAuthors},
+                  {"item-button__toggle--right": !state.board.data!.showAuthors}
+                )}
+              />
             </div>
-            <label className="item-button__label">{showAuthorNames ? "Hide" : "Show"} authors of card</label>
+            <label className="item-button__label">{state.board.data!.showAuthors ? "Hide" : "Show"} authors of card</label>
           </button>
         </li>
         <li className="header-menu__item">
