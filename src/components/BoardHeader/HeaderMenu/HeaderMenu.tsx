@@ -21,6 +21,14 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
+
+  const onSubmit = () => {
+    if (activeEditMode && (state.board!.joinConfirmationRequired !== joinConfirmationRequired || state.board!.name !== boardName)) {
+      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
+    }
+    setActiveEditMode(!activeEditMode);
+  };
+
   if (!props.open) {
     return null;
   }
@@ -37,41 +45,35 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     >
       <ul className="header-menu">
         <li className="header-menu__info">
-          <input
-            className="info__board-name"
-            value={boardName}
-            disabled={!activeEditMode}
-            onChange={(e) => {
-              setBoardName(e.target.value);
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmit();
             }}
             onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                setActiveEditMode(false);
-                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
-              }
-            }}
-            ref={(input) => {
-              if (!input?.disabled) {
-                input?.focus();
-              }
-            }}
-            onFocus={(e) => e.target.select()}
-          />
-          <button className="info__access-mode" disabled={!activeEditMode} onClick={() => setJoinConfirmationRequired(!joinConfirmationRequired)}>
-            <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !joinConfirmationRequired})} />
-            {joinConfirmationRequired ? "Private Session" : "Public Session"}
-          </button>
-          <button
-            className="info__edit-button"
-            onClick={() => {
-              if (activeEditMode && (state.board!.joinConfirmationRequired !== joinConfirmationRequired || state.board!.name !== boardName)) {
-                store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
-              }
-              setActiveEditMode(!activeEditMode);
+              if (e.key === "Enter") onSubmit();
             }}
           >
-            {activeEditMode ? "save" : "edit"}
-          </button>
+            <input
+              className="info__board-name"
+              value={boardName}
+              disabled={!activeEditMode}
+              onChange={(e) => setBoardName(e.target.value)}
+              ref={(input) => {
+                if (!input?.disabled) {
+                  input?.focus();
+                }
+              }}
+              onFocus={(e) => e.target.select()}
+            />
+            <button type="button" className="info__access-mode" disabled={!activeEditMode} onClick={() => setJoinConfirmationRequired(!joinConfirmationRequired)}>
+              <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !joinConfirmationRequired})} />
+              {joinConfirmationRequired ? "Private Session" : "Public Session"}
+            </button>
+            <button type="submit" className="info__edit-button">
+              {activeEditMode ? "save" : "edit"}
+            </button>
+          </form>
         </li>
         <li className="header-menu__item">
           <button
