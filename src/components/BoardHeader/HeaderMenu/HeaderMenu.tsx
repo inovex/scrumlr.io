@@ -1,13 +1,13 @@
 import {useState} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
-import "./HeaderMenu.scss";
+import {ApplicationState} from "types/store";
+import {useSelector} from "react-redux";
 import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
-import {ApplicationState} from "types/store";
-import {useSelector} from "react-redux";
+import "./HeaderMenu.scss";
 
 type HeaderMenuProps = {
   open: boolean;
@@ -60,9 +60,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
               disabled={!activeEditMode}
               onChange={(e) => setBoardName(e.target.value)}
               ref={(input) => {
-                if (!input?.disabled) {
-                  input?.focus();
-                }
+                if (!input?.disabled) input?.focus();
               }}
               onFocus={(e) => e.target.select()}
             />

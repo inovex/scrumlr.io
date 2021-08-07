@@ -19,13 +19,13 @@ describe("HeaderMenu", () => {
     test("on open", () => {
       const portal = global.document.createElement("div");
       portal.setAttribute("id", "portal");
-      global.document.querySelector("body").appendChild(portal);
+      global.document.querySelector("body")!.appendChild(portal);
 
       const {container} = render(
         <Provider store={store}>
           <HeaderMenu open onClose={() => undefined} />
         </Provider>,
-        {container: global.document.querySelector("#portal")}
+        {container: global.document.querySelector("#portal")!}
       );
       expect(container).toMatchSnapshot();
     });
@@ -35,7 +35,7 @@ describe("HeaderMenu", () => {
         <Provider store={store}>
           <HeaderMenu open={false} onClose={() => undefined} />
         </Provider>,
-        {container: global.document.querySelector("#portal")}
+        {container: global.document.querySelector("#portal")!}
       );
       expect(container).toMatchSnapshot();
     });
