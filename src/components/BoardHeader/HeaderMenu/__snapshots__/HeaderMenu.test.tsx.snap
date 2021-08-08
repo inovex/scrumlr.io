@@ -100,6 +100,16 @@ exports[`HeaderMenu should render correctly on open 1`] = `
               </button>
             </li>
             <li
+              class="header-menu__qrcode-container"
+            >
+              <canvas
+                class="qrcode-container__qrcode"
+                height="260"
+                style="height: 260px; width: 260px;"
+                width="260"
+              />
+            </li>
+            <li
               class="header-menu__item"
             >
               <button
