@@ -3,6 +3,7 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {ApplicationState} from "types/store";
 import {useSelector} from "react-redux";
+import QRCode from "qrcode.react";
 import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
@@ -21,6 +22,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
+  const [showQrCode, setShowQrCode] = useState(false);
 
   if (!props.open) {
     return null;
@@ -37,6 +39,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     <Portal
       onClose={() => {
         setActiveEditMode(false);
+        setShowQrCode(false);
         setBoardName(state.board!.name);
         setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
@@ -89,10 +92,13 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           </button>
         </li>
         <li className="header-menu__item">
-          <button className="menu__item-button">
+          <button className="menu__item-button" onClick={() => setShowQrCode(!showQrCode)}>
             <ShareIcon className="item-button__icon" />
             <label className="item-button__label">Share board</label>
           </button>
+        </li>
+        <li className={classNames("header-menu__qrcode-container", {"header-menu__qrcode-container--visible": showQrCode})}>
+          <QRCode value={document.location.href} size={260} className="qrcode-container__qrcode" />
         </li>
         <li className="header-menu__item">
           <button className="menu__item-button">

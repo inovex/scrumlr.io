@@ -1,7 +1,6 @@
 @import "constants/style";
 
 .header-menu {
-  height: 230px;
   width: 288px;
   border-radius: 16px;
   position: fixed;
@@ -143,6 +142,10 @@
   background-color: $color-white;
   transition: background-color 0.15s ease-in-out;
 }
+.header-menu__item:not(:last-child) {
+  box-sizing: border-box;
+  border-bottom: 1px solid #efefef;
+}
 .header-menu__item:hover {
   background-color: rgb(243, 243, 243);
 }
@@ -234,4 +237,23 @@
 .item-button__toggle--right::after {
   left: 12px;
   background-color: $color-planning-pink;
+}
+
+.header-menu__qrcode-container {
+  height: 0px;
+  width: 100%;
+  background-color: $color-white;
+  transition: height 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+.header-menu__qrcode-container--visible {
+  box-sizing: border-box;
+  height: 288px;
+  border-bottom: 1px solid #efefef;
+}
+.qrcode-container__qrcode {
+  position: absolute;
+  top: 13px;
+  left: 13px;
 }
