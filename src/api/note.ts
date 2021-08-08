@@ -1,3 +1,4 @@
+import {EditableNoteClientModel} from "types/note";
 import {callAPI} from "./callApi";
 
 export const NoteAPI = {
@@ -22,10 +23,8 @@ export const NoteAPI = {
   /**
    * Edit a note with the specified id.
    *
-   * @param noteId the note id
-   * @param text the new text to set (optional)
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editNote: (noteId: string, text?: string) => callAPI<{noteId: string; text?: string}, boolean>("editNote", {noteId, text}),
+  editNote: (note: {id: string} & Partial<EditableNoteClientModel>) => callAPI("editNote", {note}),
 };

@@ -2,6 +2,7 @@ import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
 import React from "react";
+import {useDrop} from "react-dnd";
 
 export interface ColumnProps {
   id: string;
@@ -10,8 +11,17 @@ export interface ColumnProps {
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, children}: ColumnProps) => (
-    <section className={`column ${getColorClassName(color)}`}>
+const Column = ({id, name, color, children}: ColumnProps) => {
+  const [, drop] = useDrop(() => ({
+    accept: "NOTE",
+    drop: () => ({columnId: id}),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
+  return (
+    <section className={`column ${getColorClassName(color)}`} ref={drop}>
       <div className="column__content">
         <header className="column__header">
           <div className="column__header-title">
@@ -26,4 +36,5 @@ const Column = ({id, name, color, children}: ColumnProps) => (
       </div>
     </section>
   );
+};
 export default Column;
