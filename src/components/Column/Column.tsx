@@ -3,6 +3,7 @@ import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
 import React from "react";
 import {useDrop} from "react-dnd";
+import classNames from "classnames";
 
 export interface ColumnProps {
   id: string;
@@ -12,7 +13,7 @@ export interface ColumnProps {
 }
 
 const Column = ({id, name, color, children}: ColumnProps) => {
-  const [, drop] = useDrop(() => ({
+  const [{isOver}, drop] = useDrop(() => ({
     accept: "NOTE",
     drop: () => ({columnId: id}),
     collect: (monitor) => ({
@@ -30,7 +31,7 @@ const Column = ({id, name, color, children}: ColumnProps) => {
           </div>
           <NoteInput columnId={id} />
         </header>
-        <div className="column__notes-wrapper">
+        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>
