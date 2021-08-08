@@ -22,16 +22,16 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
 
+  if (!props.open) {
+    return null;
+  }
+
   const onSubmit = () => {
     if (activeEditMode && (state.board!.joinConfirmationRequired !== joinConfirmationRequired || state.board!.name !== boardName)) {
       store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName, joinConfirmationRequired}));
     }
     setActiveEditMode(!activeEditMode);
   };
-
-  if (!props.open) {
-    return null;
-  }
 
   return (
     <Portal
