@@ -7,6 +7,7 @@
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
   height: 100vh;
+  display: flex;
 }
 .column:nth-child(even) {
   background-color: #f9fafb;
@@ -28,6 +29,7 @@
   padding: $padding--large 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .column__header {
@@ -68,6 +70,7 @@
   border-radius: 16px;
   border: 2px solid transparent;
   transition: border-color 0.25s ease-in-out;
+  flex: 1;
 }
 
 .column__notes-wrapper--isOver {

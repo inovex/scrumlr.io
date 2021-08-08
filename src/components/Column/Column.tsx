@@ -22,7 +22,7 @@ const Column = ({id, name, color, children}: ColumnProps) => {
   }));
 
   return (
-    <section className={`column ${getColorClassName(color)}`} ref={drop}>
+    <section className={`column ${getColorClassName(color)}`}>
       <div className="column__content">
         <header className="column__header">
           <div className="column__header-title">
@@ -31,7 +31,7 @@ const Column = ({id, name, color, children}: ColumnProps) => {
           </div>
           <NoteInput columnId={id} />
         </header>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})}>
+        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>
