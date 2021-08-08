@@ -22,14 +22,16 @@
   width: max-content;
   padding: 5px 20px;
   border-radius: 16px;
-  cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
-.info-block:hover {
+.info-block--hoverable {
+  cursor: pointer;
+}
+.info-block--hoverable:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 @media (prefers-color-scheme: dark) {
-  .info-block:hover {
+  .info-block--hoverable:hover {
     background-color: rgba(255, 0, 105, 0.08); // Ask designer for correct color
   }
 }
