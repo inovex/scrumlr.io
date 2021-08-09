@@ -108,6 +108,11 @@ exports[`HeaderMenu should render correctly on open 1`] = `
                 style="height: 260px; width: 260px;"
                 width="260"
               />
+              <button
+                class="qrcode-container__copy-to-clipboard"
+              >
+                Copy to clipboard
+              </button>
             </li>
             <li
               class="header-menu__item"
