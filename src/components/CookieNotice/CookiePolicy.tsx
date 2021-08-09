@@ -32,7 +32,7 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction}: CookiePolicyProps) =>
 
   return (
     <div className="cookie-policy">
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button className="cookie-policy__info" variant="outlined" color="primary" onClick={handleClickOpen}>
         Learn more about our Cookie Policy
       </Button>
       <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
@@ -106,11 +106,11 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction}: CookiePolicyProps) =>
         </DialogContent>
 
         <DialogActions>
-          <Button className="cookie-policy__back-button" variant="outlined" color="primary" onClick={handleClose}>
+          <Button className="cookie-policy__back-button" variant="contained" onClick={handleClose}>
             Back
           </Button>
 
-          <Button className="cookie-policy__accept-button" variant="outlined" color="primary" onClick={handleAccept}>
+          <Button className="cookie-policy__accept-button" variant="contained" color="primary" onClick={handleAccept}>
             Accept
           </Button>
         </DialogActions>

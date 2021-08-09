@@ -5,6 +5,7 @@ $cookie-consent-top: 100%;
 $cookie-consent-position: sticky;
 $cookie-consent-decline-button: #dadada;
 $cookie-consent-decline-text: #4d4d4d;
+$cookie-consent-button-text-size: 18px;
 
 .cookie-consent--show {
   background: $color-light-gray;
@@ -17,24 +18,22 @@ $cookie-consent-decline-text: #4d4d4d;
 }
 
 .cookie-consent--hidden {
-  background: $color-light-gray;
-  color: $color-black;
-  position: $cookie-consent-position;
-  top: $cookie-consent-top;
-  width: $cookie-consent-width;
-  padding: $padding--small;
   display: none;
+}
+
+.cookie-consent__buttons {
+  display: flex;
 }
 
 .cookie-consent__consent-button-accept {
   background: $color-backlog-blue;
   color: $color-white;
-  margin: $margin--default $margin--default $margin--default 0;
+  margin: 0 $margin--default $margin--default 0;
   border: none;
   padding: 5px 15px;
   border-radius: 5px;
   font-family: inherit;
-  font-size: $text-size;
+  font-size: $cookie-consent-button-text-size;
 }
 .cookie-consent__consent-button-accept:hover {
   opacity: 0.5;
@@ -43,12 +42,12 @@ $cookie-consent-decline-text: #4d4d4d;
 .cookie-consent__consent-button-decline {
   background: $cookie-consent-decline-button;
   color: $cookie-consent-decline-text;
-  margin: $margin--default $margin--default $margin--default 0;
+  margin: 0 $margin--default $margin--default 0;
   border: none;
-  padding: 5px 15px;
+  padding: 8px 15px;
   border-radius: 5px;
   font-family: inherit;
-  font-size: $text-size;
+  font-size: $cookie-consent-button-text-size;
 }
 .cookie-consent__consent-button-decline:hover {
   opacity: 0.5;

@@ -93,7 +93,7 @@ const CookieNotice = () => {
       />
 
       <div className="cookie-consent__heading">
-        <h4>Notice</h4>
+        <h3>Cookies</h3>
       </div>
 
       <div className="cookie-consent__body">
@@ -102,16 +102,17 @@ const CookieNotice = () => {
           scrolling this page, by interacting with any link or button outside of this notice or by continuing to browse otherwise.
         </p>
       </div>
+      <div className="cookie-consent__buttons">
+        <button className="cookie-consent__consent-button-accept" type="button" color="primary" onClick={acceptFunction}>
+          Accept
+        </button>
 
-      <button className="cookie-consent__consent-button-accept" type="button" onClick={acceptFunction}>
-        Accept
-      </button>
+        <button className="cookie-consent__consent-button-decline" type="button" onClick={declineFunction}>
+          Decline
+        </button>
 
-      <button className="cookie-consent__consent-button-decline" type="button" onClick={declineFunction}>
-        Decline
-      </button>
-
-      <CookiePolicy scrumlrCookieName={scrumlrCookieName} acceptFunction={acceptFunction} />
+        <CookiePolicy scrumlrCookieName={scrumlrCookieName} acceptFunction={acceptFunction} />
+      </div>
     </div>
   );
 };
