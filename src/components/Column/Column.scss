@@ -68,13 +68,14 @@
 .column__notes-wrapper {
   overflow: auto;
   border-radius: 16px;
-  border: 2px solid transparent;
+  border: 2px dashed transparent;
   transition: border-color 0.25s ease-in-out;
   flex: 1;
+  margin-bottom: 10px;
 }
 
 .column__notes-wrapper--isOver {
-  border-color: green;
+  border-color: #17c072;
 }
 
 .column__notes-wrapper::-webkit-scrollbar {
