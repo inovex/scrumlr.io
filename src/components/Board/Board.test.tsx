@@ -1,4 +1,5 @@
 import {act, render, fireEvent} from "@testing-library/react";
+import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Column from "components/Column/Column";
 import {Color} from "constants/colors";
 import configureStore from "redux-mock-store";
@@ -27,14 +28,15 @@ const createBoardWithColumns = (...colors: Color[]) => {
     },
   };
   const store = mockStore(initialState);
+  const [BoardContext] = wrapWithTestBackend(Board);
 
   return (
     <Provider store={store}>
-      <Board name="" boardstatus="">
+      <BoardContext name="" boardstatus="">
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" />
         ))}
-      </Board>
+      </BoardContext>
     </Provider>
   );
 };

@@ -1,7 +1,9 @@
 import {render} from "@testing-library/react";
+import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Column from "../Column";
 
-const createColumn = () => <Column id="TestID" name="Testheader" color="planning-pink" />;
+const [ColumnContext] = wrapWithTestBackend(Column);
+const createColumn = () => <ColumnContext id="TestID" name="Testheader" color="planning-pink" />;
 
 describe("Column", () => {
   describe("should render correctly", () => {
