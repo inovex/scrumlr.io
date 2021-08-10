@@ -1,7 +1,7 @@
 import {CookieClientModel} from "types/cookie";
 import {ActionType, ReduxAction} from "store/action";
 
-export const cookieReducer = (state: CookieClientModel = {name: "", value: false}, action: ReduxAction): CookieClientModel => {
+export const cookieReducer = (state: CookieClientModel = {name: null, value: null}, action: ReduxAction): CookieClientModel => {
   switch (action.type) {
     case ActionType.InitializeCookies: {
       return {

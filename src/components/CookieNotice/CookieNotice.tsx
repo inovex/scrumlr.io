@@ -11,7 +11,7 @@ import {ApplicationState} from "../../types/store";
  * Converts string value to boolean value.
  * @param input string that needs conversion to boolean value.
  */
-const stringToBoolean = (input: string) => {
+const stringToBoolean = (input: string): boolean => {
   switch (input.toLowerCase().trim()) {
     case "true":
     case "yes":
@@ -23,7 +23,7 @@ const stringToBoolean = (input: string) => {
     case null:
       return false;
     default:
-      return Boolean(input);
+      return false;
   }
 };
 
@@ -99,7 +99,7 @@ const CookieNotice = () => {
       <div className="cookie-consent__body">
         <p>
           We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice, by
-          scrolling this page, by interacting with any link or button outside of this notice or by continuing to browse otherwise.
+          interacting with any link or button outside of this notice or by continuing to browse otherwise.
         </p>
       </div>
       <div className="cookie-consent__buttons">
