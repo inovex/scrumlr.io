@@ -33,8 +33,11 @@ spec:
             timeoutSeconds: 5
           readinessProbe: 
             httpGet:
-              path: /api/health
+              path: /api/users
               port: serverport
+              httpHeaders:
+                - name: X-Parse-Application-Id
+                  value: Scrumlr
             initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 5

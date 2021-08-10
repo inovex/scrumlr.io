@@ -30,9 +30,10 @@ spec:
           readinessProbe:
             exec:
               command:
-                - mongo
-                - --eval
-                - db.adminCommand('ping') 
+                - bash 
+                - -ec
+                - | 
+                  mongo --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 10
