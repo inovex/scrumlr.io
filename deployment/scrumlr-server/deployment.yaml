@@ -17,10 +17,25 @@ spec:
           image: scrumlr-parse
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 4000
+            - name: serverport
+              containerPort: 4000
           envFrom:
             - configMapRef:
                 name: scrumlr-server-configmap
             - secretRef:
                 name: scrumlr-server-secrets
+          livenessProbe: 
+            httpGet:
+              path: /api/health
+              port: serverport
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe: 
+            httpGet:
+              path: /api/health
+              port: serverport
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 5
       restartPolicy: Always
