@@ -6,9 +6,9 @@ $header-menu-width: 288px;
 $header-menu__item-height: 48px;
 
 .header-menu {
+  position: fixed;
   width: 288px;
   border-radius: 16px;
-  position: fixed;
   left: calc(50% - 144px);
   top: 92px;
   background-color: $header-menu-color--light;
@@ -26,10 +26,9 @@ $header-menu__item-height: 48px;
 
 .header-menu__info {
   position: relative;
-  top: 0;
-  left: 0;
   height: 86px;
 }
+
 .info__board-name {
   position: absolute;
   top: 20px;
@@ -37,7 +36,6 @@ $header-menu__item-height: 48px;
   height: 19px;
   width: 180px;
   color: $color-white;
-  font-family: Raleway;
   font-size: 18px;
   font-weight: bold;
   letter-spacing: 0.25px;
@@ -143,11 +141,8 @@ $header-menu__item-height: 48px;
 
 .header-menu__item {
   height: $header-menu__item-height;
-  width: 100%;
   background-color: $color-white;
   transition: background-color 0.15s ease-in-out;
-}
-.header-menu__item {
   box-sizing: border-box;
   border-bottom: 1px solid #efefef;
 }
@@ -223,7 +218,6 @@ $header-menu__item-height: 48px;
   top: calc(50% - 6px);
   transition: all 0.25s linear;
 }
-
 .item-button__toggle::before {
   content: "";
   height: 3px;
@@ -233,12 +227,10 @@ $header-menu__item-height: 48px;
   border-radius: 3px;
   top: calc(50% - 1.5px);
 }
-
 .item-button__toggle--left::after {
   left: 0;
   background-color: $color-backlog-blue;
 }
-
 .item-button__toggle--right::after {
   left: 12px;
   background-color: $color-planning-pink;
