@@ -34,4 +34,5 @@ export const BoardAPI = {
   joinBoard: (boardId: string) => callAPI<{boardId: string}, {status: "accepted" | "rejected" | "pending"; joinRequestReference?: string}>("joinBoard", {boardId}),
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
+  deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
 };

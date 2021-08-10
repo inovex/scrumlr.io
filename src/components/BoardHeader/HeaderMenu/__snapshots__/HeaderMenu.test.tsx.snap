@@ -132,6 +132,27 @@ exports[`HeaderMenu should render correctly on open 1`] = `
                 </label>
               </button>
             </li>
+            <li
+              class="header-menu__delete-container"
+            >
+              <label
+                class="delete-container__warning-label"
+              >
+                <b>
+                  Are you absolutely sure that you want to delete the board?
+                </b>
+                 This action 
+                <b>
+                  cannot
+                </b>
+                 be undone.
+              </label>
+              <button
+                class="delete-container__delete-board"
+              >
+                Delete board
+              </button>
+            </li>
           </ul>
         </div>
       </div>

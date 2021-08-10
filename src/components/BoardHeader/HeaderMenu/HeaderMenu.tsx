@@ -23,6 +23,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
 
   if (!props.open) {
     return null;
@@ -40,6 +41,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       onClose={() => {
         setActiveEditMode(false);
         setShowQrCode(false);
+        setShowDelete(false);
         setBoardName(state.board!.name);
         setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
@@ -92,7 +94,13 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           </button>
         </li>
         <li className="header-menu__item">
-          <button className="menu__item-button" onClick={() => setShowQrCode(!showQrCode)}>
+          <button
+            className="menu__item-button"
+            onClick={() => {
+              setShowDelete(false);
+              setShowQrCode(!showQrCode);
+            }}
+          >
             <ShareIcon className="item-button__icon" />
             <label className="item-button__label">Share board</label>
           </button>
@@ -104,9 +112,23 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           </button>
         </li>
         <li className="header-menu__item">
-          <button className="menu__item-button">
+          <button
+            className="menu__item-button"
+            onClick={() => {
+              setShowQrCode(false);
+              setShowDelete(!showDelete);
+            }}
+          >
             <DeleteIcon className="item-button__icon" />
             <label className="item-button__label">Delete board</label>
+          </button>
+        </li>
+        <li className={classNames("header-menu__delete-container", {"header-menu__delete-container--visible": showDelete})}>
+          <label className="delete-container__warning-label">
+            <b>Are you absolutely sure that you want to delete the board?</b> This action <b>cannot</b> be undone.
+          </label>
+          <button className="delete-container__delete-board" onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}>
+            Delete board
           </button>
         </li>
       </ul>

@@ -76,7 +76,7 @@ export interface EditBoardRequest {
 }
 
 export interface DeleteBoardRequest {
-  board: string;
+  boardId: string;
 }
 
 export interface JoinRequestResponse {
@@ -271,6 +271,36 @@ export const initializeBoardFunctions = () => {
     }
 
     await board.save(null, {useMasterKey: true});
+    return true;
+  });
+
+  api<DeleteBoardRequest, boolean>("deleteBoard", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
+    const board = await boardQuery.get(request.boardId, {useMasterKey: true});
+
+    const noteQuery = new Parse.Query(Parse.Object.extend("Note"));
+    noteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.boardId));
+    const notes = await noteQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(notes, {useMasterKey: true});
+
+    const joinRequestQuery = new Parse.Query("JoinRequest");
+    joinRequestQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.boardId));
+    const joinRequests = await joinRequestQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
+
+    const adminRoleQuery = new Parse.Query(Parse.Role);
+    adminRoleQuery.equalTo("name", `admin_of_${request.boardId}`);
+    const adminRoles = await adminRoleQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(adminRoles, {useMasterKey: true});
+
+    const memberRoleQuery = new Parse.Query(Parse.Role);
+    memberRoleQuery.equalTo("name", `member_of_${request.boardId}`);
+    const memberRoles = await memberRoleQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(memberRoles, {useMasterKey: true});
+
+    await board.destroy({useMasterKey: true});
+
     return true;
   });
 };
