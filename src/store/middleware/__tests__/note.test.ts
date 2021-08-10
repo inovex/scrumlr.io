@@ -34,8 +34,9 @@ describe("note middleware", () => {
   });
 
   test("edit note", () => {
-    passNoteMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.editNote("noteId", "Changed text"));
-    expect(API.editNote).toHaveBeenCalledWith("noteId", "Changed text");
+    const note = {id: "noteId", text: "Changed text", columnId: "Changed column id"};
+    passNoteMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.editNote(note));
+    expect(API.editNote).toHaveBeenCalledWith(note);
   });
 
   test("delete note", () => {
