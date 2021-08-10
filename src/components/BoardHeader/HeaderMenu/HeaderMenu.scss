@@ -291,6 +291,11 @@ $header-menu__item-height: 48px;
   overflow: hidden;
   color: $color-retro-red;
 }
+@media (prefers-color-scheme: dark) {
+  .header-menu__delete-container {
+    background-color: $color-dark-mode-note;
+  }
+}
 .header-menu__delete-container--visible {
   box-sizing: border-box;
   height: 120px;
