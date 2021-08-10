@@ -84,11 +84,6 @@ $note__author-margin-left: 10px;
     color: $color-white;
   }
 }
-@media screen and (max-width: 1279px) {
-  .note__edit {
-    opacity: 100%;
-  }
-}
 .note:hover > .note__content > .note__edit {
   opacity: 100%;
 }
