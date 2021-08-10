@@ -72,10 +72,11 @@
   transition: border-color 0.25s ease-in-out;
   flex: 1;
   margin-bottom: 10px;
+  padding: 10px 0;
 }
 
 .column__notes-wrapper--isOver {
-  border-color: #17c072;
+  border-color: var(--accent-color);
 }
 
 .column__notes-wrapper::-webkit-scrollbar {
