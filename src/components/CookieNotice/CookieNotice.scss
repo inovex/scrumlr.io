@@ -7,7 +7,7 @@ $cookie-consent-decline-button: #dadada;
 $cookie-consent-decline-text: #4d4d4d;
 $cookie-consent-button-text-size: 18px;
 
-.cookie-consent--show {
+.cookie-notice--show {
   background: $color-light-gray;
   color: $color-black;
   position: $cookie-consent-position;
@@ -17,15 +17,15 @@ $cookie-consent-button-text-size: 18px;
   display: block;
 }
 
-.cookie-consent--hidden {
+.cookie-notice--hidden {
   display: none;
 }
 
-.cookie-consent__buttons {
+.cookie-notice__buttons {
   display: flex;
 }
 
-.cookie-consent__consent-button-accept {
+.cookie-notice__button-accept {
   background: $color-backlog-blue;
   color: $color-white;
   margin: 0 $margin--default $margin--default 0;
@@ -35,11 +35,11 @@ $cookie-consent-button-text-size: 18px;
   font-family: inherit;
   font-size: $cookie-consent-button-text-size;
 }
-.cookie-consent__consent-button-accept:hover {
+.cookie-notice__button-accept:hover {
   opacity: 0.5;
 }
 
-.cookie-consent__consent-button-decline {
+.cookie-notice__button-decline {
   background: $cookie-consent-decline-button;
   color: $cookie-consent-decline-text;
   margin: 0 $margin--default $margin--default 0;
@@ -49,6 +49,6 @@ $cookie-consent-button-text-size: 18px;
   font-family: inherit;
   font-size: $cookie-consent-button-text-size;
 }
-.cookie-consent__consent-button-decline:hover {
+.cookie-notice__button-decline:hover {
   opacity: 0.5;
 }
