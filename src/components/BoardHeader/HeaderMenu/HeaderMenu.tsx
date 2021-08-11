@@ -108,7 +108,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         <li className={classNames("header-menu__qrcode-container", {"header-menu__qrcode-container--visible": showQrCode})}>
           <QRCode value={document.location.href} size={260} className="qrcode-container__qrcode" />
           <button className="qrcode-container__copy-to-clipboard" onClick={() => navigator.clipboard.writeText(document.location.href)}>
-            Copy to clipboard
+            Copy Invite URL
           </button>
         </li>
         <li className="header-menu__item">

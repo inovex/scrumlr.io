@@ -281,7 +281,6 @@ $header-menu__item-height: 48px;
   background-color: $color-white;
   position: relative;
   overflow: hidden;
-  color: $color-retro-red;
 }
 @media (prefers-color-scheme: dark) {
   .header-menu__delete-container {
@@ -296,6 +295,7 @@ $header-menu__item-height: 48px;
   position: absolute;
   top: 13px;
   left: 13px;
+  color: #e5534b;
 }
 .delete-container__delete-board {
   position: absolute;
@@ -303,10 +303,10 @@ $header-menu__item-height: 48px;
   left: 72px;
   height: 24px;
   width: 144px;
-  border: 1px solid $color-retro-red;
+  border: 1px solid #e5534b;
   border-radius: 32px;
   background-color: transparent;
-  color: $color-retro-red;
+  color: #e5534b;
   cursor: pointer;
 }
 .delete-container__delete-board :focus {
