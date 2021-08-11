@@ -111,7 +111,7 @@ exports[`HeaderMenu should render correctly on open 1`] = `
               <button
                 class="qrcode-container__copy-to-clipboard"
               >
-                Copy to clipboard
+                Copy Invite URL
               </button>
             </li>
             <li
