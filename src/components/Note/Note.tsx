@@ -25,12 +25,12 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
     users: applicationState.users,
   }));
 
-  const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
-
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
     setShowDialog(!showDialog);
   };
+
+  const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
 
   const onEditNote = (noteText: string) => {
     if (Parse.User.current()?.id === authorId || isAdmin) {
