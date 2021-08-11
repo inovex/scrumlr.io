@@ -25,19 +25,21 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
     users: applicationState.users,
   }));
 
+  const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
+
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
     setShowDialog(!showDialog);
   };
 
   const onEditNote = (noteText: string) => {
-    if (Parse.User.current()?.id === authorId) {
+    if (Parse.User.current()?.id === authorId || isAdmin) {
       store.dispatch(ActionFactory.editNote(noteId!, noteText));
     }
   };
 
   const onDeleteNote = () => {
-    if (Parse.User.current()?.id === authorId) {
+    if (Parse.User.current()?.id === authorId || isAdmin) {
       store.dispatch(ActionFactory.deleteNote(noteId!));
     }
   };
@@ -55,7 +57,7 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
         </figure>
       </footer>
       <NoteDialog
-        editable={Parse.User.current()?.id === authorId}
+        editable={Parse.User.current()?.id === authorId || isAdmin}
         onClose={handleShowDialog}
         onDelete={onDeleteNote}
         onEdit={onEditNote}
