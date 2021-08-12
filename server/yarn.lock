@@ -641,10 +641,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/parse@^2.18.8":
-  version "2.18.8"
-  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.8.tgz#cae452a385555d6c64c1145c47bb7f8de69a7599"
-  integrity sha512-rGenpqggJMTxfgb920l16B0nOdIkXjZuiGCXCJxriZTITRfsUVVeG2Stbmy1MJwfK+VsQsKjykwdjN6qdGE2NQ==
+"@types/parse@^2.18.9":
+  version "2.18.9"
+  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.9.tgz#b3e0a1b6d1ea507faeee7ea97fed6a2f8fe1ca55"
+  integrity sha512-+2xbvQ2VV6I1JQdu64wFLjqsdEvbPyz0RoK89tgkPVKMMsczQwkzLImrk4i3LcmAJHjINRPTm4AJgiccjgyCZA==
   dependencies:
     "@types/node" "*"
 
