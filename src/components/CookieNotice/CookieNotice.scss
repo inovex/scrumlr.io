@@ -28,7 +28,7 @@ $cookie-consent-button-text-size: 18px;
 .cookie-notice__button-accept {
   background: $color-backlog-blue;
   color: $color-white;
-  margin: 0 $margin--default $margin--default 0;
+  margin: 0 0 $margin--default $margin--default;
   border: none;
   padding: 5px 15px;
   border-radius: 5px;
@@ -42,7 +42,7 @@ $cookie-consent-button-text-size: 18px;
 .cookie-notice__button-decline {
   background: $cookie-consent-decline-button;
   color: $cookie-consent-decline-text;
-  margin: 0 $margin--default $margin--default 0;
+  margin: 0 0 $margin--default $margin--default;
   border: none;
   padding: 8px 15px;
   border-radius: 5px;
@@ -50,5 +50,19 @@ $cookie-consent-button-text-size: 18px;
   font-size: $cookie-consent-button-text-size;
 }
 .cookie-notice__button-decline:hover {
+  opacity: 0.5;
+}
+
+.cookie-notice__button-cookie-policy {
+  background: $cookie-consent-decline-button;
+  color: $cookie-consent-decline-text;
+  margin: 0 auto $margin--default 0;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: $cookie-consent-button-text-size;
+}
+.cookie-notice__button-cookie-policy:hover {
   opacity: 0.5;
 }

@@ -1,3 +1,33 @@
+@import "constants/style.scss";
+
+$cookie-consent-button-text-size: 18px;
+
 .cookie-policy {
-  margin-left: auto;
+}
+
+.cookie-policy__title {
+  display: block;
+  color: $color-black;
+  background-color: $color-light-gray;
+  padding: $padding--default;
+}
+
+.cookie-policy__body {
+  display: block;
+  color: $color-black;
+  background-color: $color-light-gray;
+  padding: $padding--default;
+}
+
+.cookie-policy__button-accept {
+  background: $color-backlog-blue;
+  color: $color-white;
+  margin: $margin--default 0 0 auto;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: $cookie-consent-button-text-size;
+  justify-content: flex-end;
+  display: flex;
 }
