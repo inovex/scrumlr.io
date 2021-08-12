@@ -50,30 +50,28 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction, onClose, show}: Cookie
             Service.
           </p>
           <h4>How to manage preferences and provide or withdraw consent</h4>
+          <p>There are various ways to manage Tracker related preferences and to provide and withdraw consent, where relevant:</p>
+          <p>Users can manage preferences related to Trackers from directly within their own device settings, for example, by preventing the use or storage of Trackers.</p>
           <p>
-            <p>There are various ways to manage Tracker related preferences and to provide and withdraw consent, where relevant:</p>
-            <p>Users can manage preferences related to Trackers from directly within their own device settings, for example, by preventing the use or storage of Trackers.</p>
-            <p>
-              Additionally, whenever the use of Trackers is based on consent, Users can provide or withdraw such consent by setting their preferences within the cookie notice or by
-              updating such preferences accordingly via the relevant consent-preferences widget, if available.
-            </p>
-            <p>
-              It is also possible, via relevant browser or device features, to delete previously stored Trackers, including those used to remember the User’s initial consent. Other
-              Trackers in the browser’s local memory may be cleared by deleting the browsing history.
-            </p>
+            Additionally, whenever the use of Trackers is based on consent, Users can provide or withdraw such consent by setting their preferences within the cookie notice or by
+            updating such preferences accordingly via the relevant consent-preferences widget, if available.
+          </p>
+          <p>
+            It is also possible, via relevant browser or device features, to delete previously stored Trackers, including those used to remember the User’s initial consent. Other
+            Trackers in the browser’s local memory may be cleared by deleting the browsing history.
           </p>
           <h5>Locating Tracker Settings</h5>
+          <p>Users can, for example, find information about how to manage Cookies in the most commonly used browsers at the following addresses:</p>
+          <ul>
+            <li>Google Chrome</li>
+            <li>Mozilla Firefox</li>
+            <li>Apple Safari</li>
+            <li>Microsoft Internet Explorer</li>
+            <li>Microsoft Edge</li>
+            <li>Brave</li>
+            <li>Opera</li>
+          </ul>
           <p>
-            Users can, for example, find information about how to manage Cookies in the most commonly used browsers at the following addresses:
-            <ul>
-              <li>Google Chrome</li>
-              <li>Mozilla Firefox</li>
-              <li>Apple Safari</li>
-              <li>Microsoft Internet Explorer</li>
-              <li>Microsoft Edge</li>
-              <li>Brave</li>
-              <li>Opera</li>
-            </ul>
             Users may also manage certain categories of Trackers used on mobile apps by opting out through relevant device settings, such as the device advertising settings for
             mobile devices, or tracking settings in general (Users may open the device settings, view and look for the relevant setting).
           </p>
