@@ -17,10 +17,21 @@ spec:
           image: scrumlr-parse
           imagePullPolicy: Never
           ports:
-            - containerPort: 4000
+            - name: livequeryport
+              containerPort: 4000
           envFrom:
             - configMapRef: 
                 name: scrumlr-livequery-configmap
             - secretRef:
                 name: scrumlr-livequery-secrets
+          livenessProbe:
+            tcpSocket:
+              port: livequeryport
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          livenessProbe:
+            tcpSocket:
+              port: livequeryport
+            initialDelaySeconds: 30
+            periodSeconds: 10
       restartPolicy: Always

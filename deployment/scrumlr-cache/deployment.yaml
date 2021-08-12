@@ -17,5 +17,18 @@ spec:
           image: redis:6.2.4-alpine
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 6379
+            - name: redis
+              containerPort: 6379
+          livenessProbe:
+            tcpSocket:
+              port: redis
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 10
       restartPolicy: Always
