@@ -2,27 +2,45 @@
 
 $cookie-consent-button-text-size: 18px;
 
+.portal {
+  border-radius: 5px;
+}
+
 .cookie-policy {
+  margin: $margin--small;
 }
 
 .cookie-policy__title {
   display: block;
   color: $color-black;
   background-color: $color-light-gray;
-  padding: $padding--default;
+  padding: 5px $padding--default 5px $padding--default;
+  border-radius: 5px;
 }
+
+//position sticky , feste höhe, breite, abgerundete Ecken, scrollable, margin zum rand
 
 .cookie-policy__body {
   display: block;
   color: $color-black;
   background-color: $color-light-gray;
   padding: $padding--default;
+  border-radius: 5px;
+  height: 375px;
+  overflow: scroll;
+}
+
+.cookie-policy__footer {
+  display: block;
+  background-color: $color-light-gray;
+  padding: $padding--default;
+  border-radius: 5px;
 }
 
 .cookie-policy__button-accept {
   background: $color-backlog-blue;
   color: $color-white;
-  margin: $margin--default 0 0 auto;
+  margin: 0 0 0 auto;
   border: none;
   padding: 5px 15px;
   border-radius: 5px;
@@ -30,4 +48,5 @@ $cookie-consent-button-text-size: 18px;
   font-size: $cookie-consent-button-text-size;
   justify-content: flex-end;
   display: flex;
+  position: sticky;
 }

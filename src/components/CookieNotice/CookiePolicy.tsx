@@ -87,6 +87,8 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction, onClose, show}: Cookie
             Given the objective complexity surrounding tracking technologies, Users are encouraged to contact the Owner should they wish to receive any further information on the
             use of such technologies by scrumlr.io.
           </p>
+        </div>
+        <div className="cookie-policy__footer">
           <button className="cookie-policy__button-accept" type="button" onClick={handleAccept}>
             Accept
           </button>
