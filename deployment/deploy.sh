@@ -14,11 +14,11 @@ kubectl apply -f ./scrumlr-dashboard/configmap.yaml
 kubectl apply -f ./scrumlr-dashboard/secrets.yaml
 
 # scrumlr-database
-kubectl apply -f ./scrumlr-database/deployment.yaml
-kubectl apply -f ./scrumlr-database/service.yaml
-kubectl apply -f ./scrumlr-frontend/deployment.yaml
+
+kubectl apply -f ./scrumlr-database/
 
 # scrumlr-frontend
+kubectl apply -f ./scrumlr-frontend/deployment.yaml
 kubectl apply -f ./scrumlr-frontend/ingress.yaml
 kubectl apply -f ./scrumlr-frontend/service.yaml
 
