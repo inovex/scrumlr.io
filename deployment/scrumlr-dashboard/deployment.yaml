@@ -23,4 +23,11 @@ spec:
                 name: scrumlr-dashboard-configmap
             - secretRef:
                 name: scrumlr-dashboard-secrets
+          livenessProbe: 
+            httpGet:
+              path: /dashboard
+              port: 4040
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
       restartPolicy: Always 

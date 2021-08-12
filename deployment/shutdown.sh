@@ -9,7 +9,6 @@ kubectl delete -f ./scrumlr-dashboard/deployment.yaml
 kubectl delete -f ./scrumlr-dashboard/ingress.yaml
 kubectl delete -f ./scrumlr-dashboard/service.yaml
 kubectl delete -f ./scrumlr-dashboard/configmap.yaml
-kubectl delete -f ./scrumlr-dashboard/ingress.yaml
 
 # scrumlr-database
 kubectl delete -f ./scrumlr-database/deployment.yaml

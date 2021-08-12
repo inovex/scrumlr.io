@@ -18,4 +18,23 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 27017
+          livenessProbe:
+            exec:
+              command:
+                - mongo
+                - --eval
+                - db.adminCommand('ping') 
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - bash 
+                - -ec
+                - | 
+                  mongo --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
       restartPolicy: Always
