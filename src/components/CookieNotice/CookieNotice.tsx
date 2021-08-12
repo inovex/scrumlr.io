@@ -3,9 +3,9 @@ import React from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import store from "store";
 import {useSelector} from "react-redux";
+import {ApplicationState} from "types/store";
+import {ActionFactory} from "store/action";
 import CookiePolicy from "./CookiePolicy";
-import {CookieActionFactory} from "../../store/action/cookie";
-import {ApplicationState} from "../../types/store";
 
 /**
  * Converts string value to boolean value.
@@ -62,7 +62,7 @@ const CookieNotice = () => {
     if (shouldShowCookieNotice()) {
       saveToStorage(scrumlrCookieName, "true");
       setShowCookieNotice(!showCookieNotice);
-      store.dispatch(CookieActionFactory.addCookie(scrumlrCookieName, true));
+      store.dispatch(ActionFactory.addCookie(scrumlrCookieName, true));
     }
   };
 
@@ -73,7 +73,7 @@ const CookieNotice = () => {
     if (shouldShowCookieNotice()) {
       saveToStorage(scrumlrCookieName, "false");
       setShowCookieNotice(!showCookieNotice);
-      store.dispatch(CookieActionFactory.addCookie(scrumlrCookieName, false));
+      store.dispatch(ActionFactory.addCookie(scrumlrCookieName, false));
     }
   };
 

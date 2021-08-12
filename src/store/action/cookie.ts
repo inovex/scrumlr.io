@@ -1,4 +1,4 @@
-import {CookieClientModel} from "../../types/cookie";
+import {CookieClientModel} from "types/cookie";
 
 /** This object lists cookie object specific internal Redux Action types. */
 export const CookieActionType = {

@@ -5,8 +5,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
-import store from "../../store";
-import {CookieActionFactory} from "../../store/action/cookie";
+import store from "store";
+import {ActionFactory} from "store/action";
 
 interface CookiePolicyProps {
   scrumlrCookieName: string;
@@ -27,7 +27,7 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction}: CookiePolicyProps) =>
   const handleAccept = () => {
     setOpen(false);
     acceptFunction();
-    store.dispatch(CookieActionFactory.addCookie(scrumlrCookieName, true));
+    store.dispatch(ActionFactory.addCookie(scrumlrCookieName, true));
   };
 
   return (
