@@ -3,7 +3,6 @@
 exports[`Note should have correct style show note with correct style 1`] = `
 <li
   class="note"
-  style="opacity: 1;"
 >
   <div
     class="note__content"
