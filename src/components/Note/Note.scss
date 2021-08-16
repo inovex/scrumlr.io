@@ -31,7 +31,9 @@ $note__author-margin-left: 10px;
 .note:hover {
   transform: scale(1.02);
 }
-
+.note--isDragging {
+  opacity: 0.5;
+}
 .note--own-card::before {
   content: "";
   display: block;

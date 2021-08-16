@@ -31,14 +31,16 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
     setShowDialog(!showDialog);
   };
 
+  const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
+
   const onEditNote = (noteText: string) => {
-    if (Parse.User.current()?.id === authorId) {
+    if (Parse.User.current()?.id === authorId || isAdmin) {
       store.dispatch(ActionFactory.editNote({id: noteId!, text: noteText}));
     }
   };
 
   const onDeleteNote = () => {
-    if (Parse.User.current()?.id === authorId) {
+    if (Parse.User.current()?.id === authorId || isAdmin) {
       store.dispatch(ActionFactory.deleteNote(noteId!));
     }
   };
@@ -55,7 +57,7 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
   });
 
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})} onClick={handleShowDialog} ref={drag} style={{opacity: isDragging ? 0.5 : 1}}>
+    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
       <div className="note__content">
         <p className="note__text">{text}</p>
         <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
@@ -67,7 +69,7 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
         </figure>
       </footer>
       <NoteDialog
-        editable={Parse.User.current()?.id === authorId}
+        editable={Parse.User.current()?.id === authorId || isAdmin}
         onClose={handleShowDialog}
         onDelete={onDeleteNote}
         onEdit={onEditNote}

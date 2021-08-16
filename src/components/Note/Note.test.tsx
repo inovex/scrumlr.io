@@ -1,4 +1,3 @@
-import React from "react";
 import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
@@ -16,7 +15,16 @@ const createNote = (text: string, authorId: string) => {
     },
     notes: [],
     users: {
-      admins: [],
+      admins: [
+        {
+          id: "jkKqOUgt3hEDvl7CWcBokVOGs6AzINon",
+          displayName: "Kinetic Kobold",
+          admin: true,
+          createdAt: "2021-08-11T10:45:41.640Z",
+          updatedAt: "2021-08-11T10:52:21.558Z",
+          online: true,
+        },
+      ],
       basic: [],
       all: [],
     },
@@ -25,7 +33,7 @@ const createNote = (text: string, authorId: string) => {
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={store}>
-      <NoteContext text={text} authorId={authorId} />
+      <NoteContext key="" noteId="" text={text} authorId={authorId} columnName="" columnColor="" />
     </Provider>
   );
 };
@@ -49,12 +57,12 @@ describe("Note", () => {
 
     test("note content is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note").firstChild).toHaveClass("note__content");
+      expect(container.querySelector(".note")!.firstChild).toHaveClass("note__content");
     });
 
     test("note text is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note__content").firstChild).toHaveClass("note__text");
+      expect(container.querySelector(".note__content")!.firstChild).toHaveClass("note__text");
     });
 
     test("note text has correct text", () => {
@@ -64,22 +72,22 @@ describe("Note", () => {
 
     test("note footer is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note").lastChild).toHaveClass("note__footer");
+      expect(container.querySelector(".note")!.lastChild).toHaveClass("note__footer");
     });
 
     test("note author is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note__footer").firstChild).toHaveClass("note__author");
+      expect(container.querySelector(".note__footer")!.firstChild).toHaveClass("note__author");
     });
 
     test("note author image is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note__author").firstChild).toHaveClass("note__author-image");
+      expect(container.querySelector(".note__author")!.firstChild).toHaveClass("note__author-image");
     });
 
     test("note author name is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.querySelector(".note__author").lastChild).toHaveClass("note__author-name");
+      expect(container.querySelector(".note__author")!.lastChild).toHaveClass("note__author-name");
     });
   });
 
