@@ -1,7 +1,9 @@
 import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
 import NoteInput from "components/NoteInput/NoteInput";
-import React from "react";
+import React, {useRef} from "react";
+import {useDrop} from "react-dnd";
+import classNames from "classnames";
 
 export interface ColumnProps {
   id: string;
@@ -10,8 +12,25 @@ export interface ColumnProps {
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, children}: ColumnProps) => (
-    <section className={`column ${getColorClassName(color)}`}>
+const Column = ({id, name, color, children}: ColumnProps) => {
+  const columnRef = useRef<HTMLDivElement>(null);
+  const [{isOver}, drop] = useDrop(() => ({
+    accept: "NOTE",
+    drop: () => ({columnId: id}),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
+  if (columnRef.current && isOver) {
+    const rect = columnRef.current.getBoundingClientRect();
+    if (rect.left <= 0 || rect.right >= document.documentElement.clientWidth) {
+      columnRef.current.scrollIntoView({inline: "start", behavior: "smooth"});
+    }
+  }
+
+  return (
+    <section className={`column ${getColorClassName(color)}`} ref={columnRef}>
       <div className="column__content">
         <header className="column__header">
           <div className="column__header-title">
@@ -20,10 +39,11 @@ const Column = ({id, name, color, children}: ColumnProps) => (
           </div>
           <NoteInput columnId={id} />
         </header>
-        <div className="column__notes-wrapper">
+        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>
     </section>
   );
+};
 export default Column;

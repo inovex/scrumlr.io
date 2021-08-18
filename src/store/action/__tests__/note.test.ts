@@ -45,11 +45,10 @@ describe("note actions", () => {
     });
 
     test("created action", () => {
-      const action = NoteActionFactory.editNote("noteId", "New text");
+      const action = NoteActionFactory.editNote({id: "noteId", text: "New text"});
       expect(action).toEqual({
         type: "@@SCRUMLR/editNote",
-        noteId: "noteId",
-        text: "New text",
+        note: {id: "noteId", text: "New text"},
       });
     });
   });

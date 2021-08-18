@@ -70,14 +70,14 @@ describe("note reducer", () => {
   });
 
   test("edit note", () => {
-    const newState = noteReducer(initialState, ActionFactory.editNote("1", "New text"));
+    const newState = noteReducer(initialState, ActionFactory.editNote({id: "1", text: "New text"}));
     expect(newState.length).toEqual(2);
     expect(newState.find((note) => note.text === "New text")).toBeDefined();
   });
 
   describe("sync server note with edited local note", () => {
     test("edited note synced locally", () => {
-      const editedState = noteReducer(initialState, ActionFactory.editNote("1", "New text"));
+      const editedState = noteReducer(initialState, ActionFactory.editNote({id: "1", text: "New text"}));
       const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", "New text")));
       const note = newState.find((n) => n.id === "1");
       expect(note?.dirty).toBe(false);
