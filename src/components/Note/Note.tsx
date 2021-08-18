@@ -9,6 +9,7 @@ import {ActionFactory} from "store/action";
 import React from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
+import {useDrag} from "react-dnd";
 
 interface NoteProps {
   text: string;
@@ -35,7 +36,7 @@ const Note = ({text, authorId, noteId, columnName, columnColor, showAuthors}: No
 
   const onEditNote = (noteText: string) => {
     if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.editNote(noteId!, noteText));
+      store.dispatch(ActionFactory.editNote({id: noteId!, text: noteText}));
     }
   };
 
@@ -45,8 +46,19 @@ const Note = ({text, authorId, noteId, columnName, columnColor, showAuthors}: No
     }
   };
 
+  const [{isDragging}, drag] = useDrag({
+    type: "NOTE",
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
+      store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
+    },
+  });
+
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId})} onClick={handleShowDialog}>
+    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
       <div className="note__content">
         <p className="note__text">{text}</p>
         <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />

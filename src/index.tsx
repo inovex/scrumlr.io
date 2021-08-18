@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
 import "./index.scss";
 import {ToastContainer} from "react-toastify";
 import Parse from "parse";
@@ -14,8 +16,10 @@ Parse.liveQueryServerURL = process.env.REACT_APP_LIVEQUERY_URL || "ws://localhos
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router />
-      <ToastContainer />
+      <DndProvider backend={HTML5Backend}>
+        <Router />
+        <ToastContainer />
+      </DndProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

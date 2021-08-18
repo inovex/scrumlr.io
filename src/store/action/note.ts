@@ -1,4 +1,4 @@
-import {NoteClientModel} from "../../types/note";
+import {EditableNoteClientModel, NoteClientModel} from "../../types/note";
 
 /** This object lists note object specific internal Redux Action types. */
 export const NoteActionType = {
@@ -40,10 +40,9 @@ export const NoteActionFactory = {
    * @param noteId the note id
    * @param text the edited text of the note
    */
-  editNote: (noteId: string, text: string) => ({
+  editNote: (note: {id: string} & Partial<EditableNoteClientModel>) => ({
     type: NoteActionType.EditNote,
-    noteId,
-    text,
+    note,
   }),
   /**
    * Creates an action which should be dispatched when a new note was created on the server.

@@ -7,6 +7,7 @@
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
   height: 100vh;
+  display: flex;
 }
 .column:nth-child(even) {
   background-color: #f9fafb;
@@ -28,6 +29,7 @@
   padding: $padding--large 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .column__header {
@@ -65,29 +67,36 @@
 
 .column__notes-wrapper {
   overflow: auto;
+  border-radius: 16px;
+  border: 2px dashed transparent;
+  transition: all 0.25s ease-in-out;
+  flex: 1;
+  padding: 10px 0;
+}
+
+.column__notes-wrapper--isOver {
+  border-color: var(--accent-color);
+  background-color: rgba(var(--accent-color-rgb), 0.2);
 }
 
 .column__notes-wrapper::-webkit-scrollbar {
-  width: 12px;
+  width: 10px;
 }
 
 .column__notes-wrapper::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px $color-light-gray;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .column__notes-wrapper::-webkit-scrollbar-thumb {
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: $color-middle-gray;
 }
 
 @media (prefers-color-scheme: dark) {
   .column__notes-wrapper::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px $color-dark-mode;
     background-color: $color-dark-mode-note;
   }
   .column__notes-wrapper::-webkit-scrollbar-thumb {
-    border-radius: 10px;
     background-color: $color-darkest-gray;
   }
 }

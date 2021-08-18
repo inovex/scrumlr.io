@@ -1,6 +1,7 @@
 import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
+import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Note from "./Note";
 
 const mockStore = configureStore();
@@ -29,9 +30,10 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
     },
   };
   const store = mockStore(initialState);
+  const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={store}>
-      <Note key="" noteId="" text={text} authorId={authorId} showAuthors={showAuthors} columnName="" columnColor="" />
+      <NoteContext key="" noteId="" text={text} authorId={authorId} showAuthors={showAuthors} columnName="" columnColor="" />
     </Provider>
   );
 };
