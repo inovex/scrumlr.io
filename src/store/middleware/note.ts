@@ -17,6 +17,6 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, 
 
   if (action.type === ActionType.EditNote) {
     // TODO retry mechanism
-    API.editNote(action.noteId, action.text);
+    API.editNote(action.note);
   }
 };

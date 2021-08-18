@@ -31,7 +31,9 @@ $note__author-margin-left: 10px;
 .note:hover {
   transform: scale(1.02);
 }
-
+.note--isDragging {
+  opacity: 0.5;
+}
 .note--own-card::before {
   content: "";
   display: block;
@@ -82,11 +84,6 @@ $note__author-margin-left: 10px;
 @media (prefers-color-scheme: dark) {
   .note__edit {
     color: $color-white;
-  }
-}
-@media screen and (max-width: 1279px) {
-  .note__edit {
-    opacity: 100%;
   }
 }
 .note:hover > .note__content > .note__edit {
