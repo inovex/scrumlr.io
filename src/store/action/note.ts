@@ -1,4 +1,4 @@
-import {EditableNoteClientModel, NoteClientModel} from "../../types/note";
+import {EditableNoteClientModel, NoteClientModel} from "types/note";
 
 /** This object lists note object specific internal Redux Action types. */
 export const NoteActionType = {

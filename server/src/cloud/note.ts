@@ -10,6 +10,7 @@ interface AddNoteRequest {
 interface EditNoteRequest {
   columnId: string;
   text: string;
+  parentId: string;
 }
 
 interface DeleteNoteRequest {
@@ -47,6 +48,10 @@ export const initializeNoteFunctions = () => {
 
       if (request.note.columnId) {
         note.set("columnId", request.note.columnId);
+      }
+
+      if (request.note.parentId) {
+        note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
       }
 
       await note.save(null, {useMasterKey: true});

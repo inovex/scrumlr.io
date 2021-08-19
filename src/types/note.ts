@@ -7,6 +7,7 @@ export interface NoteServerModel extends Parse.Object {
   columnId: string;
   text: string;
   author: Parse.Object;
+  parent?: Parse.Object;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +28,9 @@ export interface NoteClientModel {
   /** The user author of this note. */
   author: string;
 
+  /** The parent of this note (if stacked). */
+  parent?: string;
+
   /** The creation date of this object. */
   createdAt?: Date;
 
@@ -44,6 +48,7 @@ export interface NoteClientModel {
 
 export interface EditableNoteClientModel {
   columnId: string;
+  parentId: string;
   text: string;
 }
 
@@ -52,6 +57,7 @@ export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientMod
   columnId: note.get("columnId"),
   text: note.get("text"),
   author: note.get("author").id,
+  parent: note.get("parent")?.id,
   createdAt: note.get("createdAt"),
   updatedAt: note.get("updatedAt"),
   dirty: false,
