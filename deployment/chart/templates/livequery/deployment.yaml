@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "scrumlr-fullname" .Values.livequery }}
+  labels: 
+    {{- include "selectorLabels" .Values.livequery | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "selectorLabels" .Values.livequery | nindent 6 }}
+  template:
+    metadata:
+      labels: 
+        {{- include "selectorLabels" .Values.livequery | nindent 8 }}  
+    spec:
+      containers:
+        - name: {{ include "scrumlr-fullname" .Values.livequery }}
+          image: {{ .Values.livequery.image }}
+          imagePullPolicy: Never
+          envFrom:
+            - configMapRef: 
+                name: {{ include "scrumlr-fullname" .Values.livequery }}
+            - secretRef:
+                name: {{ include "scrumlr-fullname" .Values.livequery }}
+          ports:
+            - name: {{ .Values.livequery.portName }}
+              containerPort: {{.Values.livequery.hostPort }}
+          {{- if .Values.livequery.livenessProbe }}
+          livenessProbe:
+          {{- toYaml .Values.livequery.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.livequery.readinessProbe }}
+          readinessProbe: 
+          {{- toYaml .Values.livequery.readinessProbe | nindent 12 }}
+          {{- end }}
+      restartPolicy: Always

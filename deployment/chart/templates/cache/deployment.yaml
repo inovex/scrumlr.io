@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "scrumlr-fullname" .Values.cache }}
+  labels: 
+        {{- include "selectorLabels" .Values.cache | nindent 6}}
+        {{- include "labels" . | nindent 6}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "selectorLabels" .Values.cache  | nindent 6 }}
+  template:
+    metadata:
+      labels: 
+        {{- include "selectorLabels" .Values.cache | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "scrumlr-fullname" .Values.cache }} 
+          image: {{ .Values.cache.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: {{ .Values.cache.portName }}
+              containerPort: {{ .Values.cache.hostPort }}
+          {{- if .Values.cache.livenessProbe }}
+          livenessProbe:
+          {{- toYaml .Values.cache.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cache.readinessProbe }}
+          readinessProbe:
+             {{- toYaml .Values.cache.readinessProbe | nindent 12 }}
+          {{- end }}
+      restartPolicy: Always
