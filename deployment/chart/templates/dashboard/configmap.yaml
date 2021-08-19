@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ include "scrumlr-fullname" .Values.dashboard }}
   labels:
-    {{- include "selectorLabels" .Values.dashboard | nindent 6}}
-    {{- include "labels" . | nindent 6}}
+    {{- include "selectorLabels" .Values.dashboard | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
 {{- if .Values.dashboard.config }}
 data:
 {{ toYaml .Values.dashboard.config | indent 2 }}
-{{- end}}
+{{- end }}

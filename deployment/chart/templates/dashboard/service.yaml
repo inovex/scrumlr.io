@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: {{ include "scrumlr-fullname" .Values.dashboard }}
   labels:
-    {{- include "selectorLabels" .Values.dashboard | nindent 6}}
-    {{- include "labels" . | nindent 6}}
+    {{- include "selectorLabels" .Values.dashboard | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
 spec:
   ports:
     - port: {{ .Values.dashboard.port }}
       targetPort: {{ .Values.dashboard.hostPort }}
       protocol: TCP
   selector:
-    {{- include "selectorLabels" .Values.dashboard | nindent 6}}
+    {{- include "selectorLabels" .Values.dashboard | nindent 6 }}

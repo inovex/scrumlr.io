@@ -3,8 +3,8 @@ kind: Deployment
 metadata:
   name: {{ include "scrumlr-fullname" .Values.cache }}
   labels: 
-        {{- include "selectorLabels" .Values.cache | nindent 6}}
-        {{- include "labels" . | nindent 6}}
+        {{- include "selectorLabels" .Values.cache | nindent 6 }}
+        {{- include "labels" . | nindent 6 }}
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.cache }} 
           image: {{ .Values.cache.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.cache.imagePullPolicy }}
           ports:
             - name: {{ .Values.cache.portName }}
               containerPort: {{ .Values.cache.hostPort }}
@@ -30,4 +30,4 @@ spec:
           readinessProbe:
              {{- toYaml .Values.cache.readinessProbe | nindent 12 }}
           {{- end }}
-      restartPolicy: Always
+      restartPolicy: {{ .Values.cache.restartPolicy }}

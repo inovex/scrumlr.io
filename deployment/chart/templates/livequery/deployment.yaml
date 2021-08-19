@@ -18,7 +18,7 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.livequery }}
           image: {{ .Values.livequery.image }}
-          imagePullPolicy: Never
+          imagePullPolicy:  {{ .Values.livequery.imagePullPolicy }}
           envFrom:
             - configMapRef: 
                 name: {{ include "scrumlr-fullname" .Values.livequery }}
@@ -35,4 +35,4 @@ spec:
           readinessProbe: 
           {{- toYaml .Values.livequery.readinessProbe | nindent 12 }}
           {{- end }}
-      restartPolicy: Always
+      restartPolicy:  {{ .Values.livequery.restartPolicy }}

@@ -11,7 +11,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /ws
+      - path:  {{ .Values.livequery.path }}
         pathType: Prefix
         backend:
           service:

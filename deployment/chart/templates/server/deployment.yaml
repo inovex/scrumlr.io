@@ -18,7 +18,7 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.server }}
           image: {{ .Values.server.image }}
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy:  {{ .Values.server.imagePullPolicy }}
           ports:
             - name: {{ .Values.server.portName }}
               containerPort: {{ .Values.server.port }}
@@ -35,4 +35,4 @@ spec:
           readinessProbe: 
           {{- toYaml .Values.server.readinessProbe | nindent 12 }}  
           {{- end }}
-      restartPolicy: Always
+      restartPolicy:  {{ .Values.server.restartPolicy }}

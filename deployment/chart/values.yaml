@@ -3,6 +3,8 @@ cache:
   hostPort: 6379
   portName: redis
   image: redis:6.2.4-alpine
+  imagePullPolicy: IfNotPresent
+  restartPolicy: Always
   port: 6379
   livenessProbe:
     tcpSocket:
@@ -19,9 +21,12 @@ cache:
 dashboard:
   name: dashboard
   image: scrumlr-dashboard
+  imagePullPolicy: IfNotPresent
+  restartPolicy: Always
   hostPort: 4040
   portName: dashboard
   port: 4040
+  path: /dashboard
   livenessProbe:
     httpGet:
       path: /dashboard
@@ -44,6 +49,9 @@ frontend:
   hostPort: 80
   portName: frontendport
   port: 80
+  path: /
+  imagePullPolicy: IfNotPresent
+  restartPolicy: Always
   livenessProbe:
     httpGet:
       path: /
@@ -59,9 +67,12 @@ frontend:
 livequery:
   name: livequery
   image: scrumlr-parse
+  imagePullPolicy: Never
+  restartPolicy: Always
   hostPort: 4000
   portName: livequeryport
   port: 4000
+  path: /ws
   livenessProbe:
     tcpSocket:
       port: livequeryport
@@ -84,9 +95,12 @@ livequery:
 server:
   name: server
   image: scrumlr-parse
+  imagePullPolicy: Never
+  restartPolicy: Always
   hostPort: 4000
   portName: serverport
   port: 4000
+  path: /api
   config:
     SCRUMLR_OPERATION_MODE: "server"
     SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
