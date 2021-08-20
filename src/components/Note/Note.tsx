@@ -57,8 +57,10 @@ const Note = ({text, authorId, noteId, columnId, columnName, columnColor}: NoteP
 
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: "NOTE",
-    drop: (item: {id: string}) => {
-      store.dispatch(ActionFactory.editNote({id: item.id, parentId: noteId}));
+    drop: (item: {id: string}, monitor) => {
+      if (!monitor.didDrop()) {
+        store.dispatch(ActionFactory.editNote({id: item.id, parentId: noteId, columnId}));
+      }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
     canDrop: (item: {id: string; columnId: string}) => item.id !== noteId,

@@ -18,8 +18,8 @@ const Column = ({id, name, color, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: "NOTE",
-    drop: (item: {id: string; columnId: string}) => {
-      if (item.columnId !== id) {
+    drop: (item: {id: string; columnId: string}, monitor) => {
+      if (item.columnId !== id && !monitor.didDrop()) {
         store.dispatch(ActionFactory.editNote({id: item.id, columnId: id}));
       }
     },
