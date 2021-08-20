@@ -34,6 +34,9 @@ $note__author-margin-left: 10px;
 .note--isDragging {
   opacity: 0.5;
 }
+.note--isOver {
+  border: 2px solid var(--accent-color);
+}
 .note--own-card::before {
   content: "";
   display: block;

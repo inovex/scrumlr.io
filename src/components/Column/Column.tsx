@@ -4,6 +4,8 @@ import NoteInput from "components/NoteInput/NoteInput";
 import React, {useRef} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
+import store from "store";
+import {ActionFactory} from "store/action";
 
 export interface ColumnProps {
   id: string;
@@ -16,7 +18,11 @@ const Column = ({id, name, color, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: "NOTE",
-    drop: () => ({type: "COLUMN", id}),
+    drop: (item: {id: string; columnId: string}) => {
+      if (item.columnId !== id) {
+        store.dispatch(ActionFactory.editNote({id: item.id, columnId: id}));
+      }
+    },
     collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
     canDrop: (item: {id: string; columnId: string}) => item.columnId !== id,
   }));

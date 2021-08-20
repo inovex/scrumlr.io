@@ -6,10 +6,10 @@ import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
-import React from "react";
+import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {useDrag} from "react-dnd";
+import {useDrag, useDrop} from "react-dnd";
 
 interface NoteProps {
   text: string;
@@ -21,6 +21,7 @@ interface NoteProps {
 }
 
 const Note = ({text, authorId, noteId, columnId, columnName, columnColor}: NoteProps) => {
+  const noteRef = useRef<HTMLLIElement>(null);
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
@@ -50,17 +51,28 @@ const Note = ({text, authorId, noteId, columnId, columnName, columnColor}: NoteP
     type: "NOTE",
     item: {id: noteId, columnId},
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      console.log(monitor.getDropResult());
-      // const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
-      // store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
-    },
   });
 
+  const [{isOver, canDrop}, drop] = useDrop(() => ({
+    accept: "NOTE",
+    drop: (item: {id: string}) => {
+      store.dispatch(ActionFactory.editNote({id: item.id, parentId: noteId}));
+    },
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
+    canDrop: (item: {id: string; columnId: string}) => item.id !== noteId,
+  }));
+
+  drag(noteRef);
+  drop(noteRef);
+
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
+    <li
+      className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}
+      onClick={handleShowDialog}
+      ref={noteRef}
+    >
       <div className="note__content">
         <p className="note__text">{text}</p>
         <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
