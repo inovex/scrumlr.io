@@ -29,7 +29,7 @@ export interface NoteClientModel {
   author: string;
 
   /** The parent of this note (if stacked). */
-  parent?: string;
+  parentId?: string;
 
   /** The creation date of this object. */
   createdAt?: Date;
@@ -57,7 +57,7 @@ export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientMod
   columnId: note.get("columnId"),
   text: note.get("text"),
   author: note.get("author").id,
-  parent: note.get("parent")?.id,
+  parentId: note.get("parent")?.id,
   createdAt: note.get("createdAt"),
   updatedAt: note.get("updatedAt"),
   dirty: false,

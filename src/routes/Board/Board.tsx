@@ -43,6 +43,7 @@ function Board() {
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
                 .filter((note) => note.columnId === column.id)
+                .filter((note) => note.parentId == null)
                 .map((note) => (
                   <Note
                     isAdmin={isAdmin}
