@@ -15,11 +15,12 @@ interface NoteProps {
   text: string;
   authorId: string;
   noteId: string | undefined;
+  columnId: string;
   columnName: string;
   columnColor: string;
 }
 
-const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
+const Note = ({text, authorId, noteId, columnId, columnName, columnColor}: NoteProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
@@ -47,12 +48,14 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
 
   const [{isDragging}, drag] = useDrag({
     type: "NOTE",
+    item: {id: noteId, columnId},
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
     end: (item, monitor) => {
-      const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
-      store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
+      console.log(monitor.getDropResult());
+      // const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
+      // store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
     },
   });
 

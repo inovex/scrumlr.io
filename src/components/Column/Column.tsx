@@ -14,12 +14,11 @@ export interface ColumnProps {
 
 const Column = ({id, name, color, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
-  const [{isOver}, drop] = useDrop(() => ({
+  const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: "NOTE",
-    drop: () => ({columnId: id}),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
+    drop: () => ({type: "COLUMN", id}),
+    collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
+    canDrop: (item: {id: string; columnId: string}) => item.columnId !== id,
   }));
 
   if (columnRef.current && isOver) {
@@ -39,7 +38,7 @@ const Column = ({id, name, color, children}: ColumnProps) => {
           </div>
           <NoteInput columnId={id} />
         </header>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})} ref={drop}>
+        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>
