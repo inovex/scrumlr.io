@@ -54,6 +54,7 @@ $note__author-margin-left: 10px;
   opacity: 0.5;
 }
 .note--isOver {
+  padding: 14px 18px;
   border: 2px solid var(--accent-color);
 }
 .note--own-card::before {
