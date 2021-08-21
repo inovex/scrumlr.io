@@ -54,7 +54,7 @@ function Board() {
                     columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
-                    childrenNotes={state.notes.filter((n) => note.id === n.parentId)}
+                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
                   />
                 ))}
             </Column>
