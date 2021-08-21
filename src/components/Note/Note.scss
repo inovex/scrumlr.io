@@ -40,6 +40,12 @@ $note__author-margin-left: 10px;
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
 }
+@media (prefers-color-scheme: dark) {
+  .note__in-stack {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+}
 
 @media (prefers-color-scheme: dark) {
   .note {
