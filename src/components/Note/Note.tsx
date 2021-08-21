@@ -9,6 +9,8 @@ import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
+import {useSelector} from "react-redux";
+import {ApplicationState} from "types/store";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -23,6 +25,10 @@ interface NoteProps {
 
 const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColor, childrenNotes}: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
+
+  const state = useSelector((applicationState: ApplicationState) => ({
+    users: applicationState.users,
+  }));
 
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
@@ -73,7 +79,7 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
         <footer className="note__footer">
           <figure className="note__author" aria-roledescription="author">
             <img className="note__author-image" src={avatar} alt="User" />
-            <figcaption className="note__author-name">{Parse.User.current()?.get("displayName")}</figcaption>
+            <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
           </figure>
         </footer>
         <NoteDialog
@@ -84,7 +90,7 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
           show={showDialog}
           text={text}
           authorId={authorId}
-          authorName={Parse.User.current()?.get("displayName")}
+          authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
           columnName={columnName}
           columnColor={columnColor}
           childrenNotes={childrenNotes}
