@@ -8,6 +8,7 @@ import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag, useDrop} from "react-dnd";
+import {NoteClientModel} from "types/note";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -17,9 +18,10 @@ interface NoteProps {
   columnId: string;
   columnName: string;
   columnColor: string;
+  childrenNotes: Array<NoteClientModel>;
 }
 
-const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColor}: NoteProps) => {
+const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColor, childrenNotes}: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
   const [showDialog, setShowDialog] = React.useState(false);
@@ -40,7 +42,7 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
   };
 
   const [{isDragging}, drag] = useDrag({
-    type: "NOTE",
+    type: childrenNotes.length > 0 ? "STACK" : "NOTE",
     item: {id: noteId, columnId},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -62,33 +64,33 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
   drop(noteRef);
 
   return (
-    <li
-      className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}
-      onClick={handleShowDialog}
-      ref={noteRef}
-    >
-      <div className="note__content">
-        <p className="note__text">{text}</p>
-        <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+    <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
+      <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
+        <div className="note__content">
+          <p className="note__text">{text}</p>
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+        </div>
+        <footer className="note__footer">
+          <figure className="note__author" aria-roledescription="author">
+            <img className="note__author-image" src={avatar} alt="User" />
+            <figcaption className="note__author-name">{Parse.User.current()?.get("displayName")}</figcaption>
+          </figure>
+        </footer>
+        <NoteDialog
+          editable={Parse.User.current()?.id === authorId || isAdmin}
+          onClose={handleShowDialog}
+          onDelete={onDeleteNote}
+          onEdit={onEditNote}
+          show={showDialog}
+          text={text}
+          authorId={authorId}
+          authorName={Parse.User.current()?.get("displayName")}
+          columnName={columnName}
+          columnColor={columnColor}
+          childrenNotes={childrenNotes}
+        />
       </div>
-      <footer className="note__footer">
-        <figure className="note__author" aria-roledescription="author">
-          <img className="note__author-image" src={avatar} alt="User" />
-          <figcaption className="note__author-name">{Parse.User.current()?.get("displayName")}</figcaption>
-        </figure>
-      </footer>
-      <NoteDialog
-        editable={Parse.User.current()?.id === authorId || isAdmin}
-        onClose={handleShowDialog}
-        onDelete={onDeleteNote}
-        onEdit={onEditNote}
-        show={showDialog}
-        text={text}
-        authorId={authorId}
-        authorName={Parse.User.current()?.get("displayName")}
-        columnName={columnName}
-        columnColor={columnColor}
-      />
+      {childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
 };

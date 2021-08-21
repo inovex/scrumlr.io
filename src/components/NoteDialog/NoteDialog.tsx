@@ -7,6 +7,7 @@ import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
 import React from "react";
 import {Color, getColorClassName} from "constants/colors";
+import {NoteClientModel} from "types/note";
 
 interface NoteDialogProps {
   text: string;
@@ -19,9 +20,10 @@ interface NoteDialogProps {
   onClose: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
+  childrenNotes: Array<NoteClientModel>;
 }
 
-const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit}: NoteDialogProps) => {
+const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit, childrenNotes}: NoteDialogProps) => {
   const [noteText, setNoteText] = React.useState(text);
 
   if (!show) {
@@ -69,6 +71,30 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
             </ul>
           </aside>
         </div>
+        {childrenNotes.map((note) => (
+          <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
+            <div className="note-dialog__content">
+              <blockquote className="note-dialog__text" contentEditable={editable} suppressContentEditableWarning onBlur={handleChangeNotetext}>
+                {note.text}
+              </blockquote>
+            </div>
+
+            <footer className="note-dialog__footer">
+              <figure className="note-dialog__author">
+                <img className="note-dialog__author-image" src={avatar} alt="User" />
+                <figcaption className="note-dialog__author-name">{note.author}</figcaption>
+              </figure>
+            </footer>
+
+            <aside>
+              <ul className="note-dialog__options">
+                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable})}>
+                  <IconButton onClick={handleDelete} direction="right" label="Delete" icon={deleteIcon} />
+                </li>
+              </ul>
+            </aside>
+          </div>
+        ))}
       </div>
     </Portal>
   );
