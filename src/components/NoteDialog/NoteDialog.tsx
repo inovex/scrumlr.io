@@ -20,7 +20,7 @@ interface NoteDialogProps {
   onClose: () => void;
   onDelete: () => void;
   onEdit: (text: string) => void;
-  childrenNotes: Array<NoteClientModel>;
+  childrenNotes: Array<NoteClientModel & {authorName: string}>;
 }
 
 const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit, childrenNotes}: NoteDialogProps) => {
@@ -82,7 +82,7 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
             <footer className="note-dialog__footer">
               <figure className="note-dialog__author">
                 <img className="note-dialog__author-image" src={avatar} alt="User" />
-                <figcaption className="note-dialog__author-name">{note.author}</figcaption>
+                <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
               </figure>
             </footer>
 

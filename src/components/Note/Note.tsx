@@ -93,7 +93,7 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
           authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
           columnName={columnName}
           columnColor={columnColor}
-          childrenNotes={childrenNotes.map((note) => ({...note, author: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
+          childrenNotes={childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
         />
       </div>
       {childrenNotes.length > 0 && <div className="note__in-stack" />}
