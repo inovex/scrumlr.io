@@ -17,7 +17,7 @@ export interface ColumnProps {
 const Column = ({id, name, color, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
-    accept: "NOTE",
+    accept: ["NOTE", "STACK"],
     drop: (item: {id: string; columnId: string}, monitor) => {
       if (item.columnId !== id && !monitor.didDrop()) {
         store.dispatch(ActionFactory.editNote({id: item.id, columnId: id}));
