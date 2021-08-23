@@ -5,43 +5,41 @@ import classNames from "classnames";
 import Parse from "parse";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
-import React from "react";
+// import React from "react";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
+import store from "store";
+import {ActionFactory} from "store/action";
 
 interface NoteDialogProps {
+  noteId?: string;
+  isAdmin: boolean;
   text: string;
   authorId: string;
   columnName: string;
   columnColor: string;
   show: boolean;
-  editable: boolean;
   authorName: string;
   onClose: () => void;
-  onDelete: () => void;
-  onEdit: (text: string) => void;
   childrenNotes: Array<NoteClientModel & {authorName: string}>;
 }
 
-const NoteDialog = ({show, text, authorId, editable, authorName, columnName, columnColor, onClose, onDelete, onEdit, childrenNotes}: NoteDialogProps) => {
-  const [noteText, setNoteText] = React.useState(text);
-
+const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, columnName, columnColor, onClose, childrenNotes}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
 
-  const handleChangeNotetext = (e: React.FocusEvent<HTMLElement>) => {
-    const textContent = e.target.textContent as string;
-    if (editable) {
-      onEdit(textContent);
-      setNoteText(textContent);
+  const editable = (authorId: string) => Parse.User.current()?.id === authorId || isAdmin;
+
+  const onEdit = (id: string, authorId: string, text: string) => {
+    if (editable(authorId)) {
+      store.dispatch(ActionFactory.editNote({id, text}));
     }
   };
 
-  const handleDelete = () => {
-    if (editable) {
-      onDelete();
-      onClose();
+  const onDelete = (id: string, authorId: string) => {
+    if (editable(authorId)) {
+      store.dispatch(ActionFactory.deleteNote(id));
     }
   };
 
@@ -51,8 +49,15 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
         <h2 className="note-dialog__header">{columnName}</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
           <div className="note-dialog__content">
-            <blockquote className="note-dialog__text" contentEditable={editable} suppressContentEditableWarning onBlur={handleChangeNotetext}>
-              {noteText}
+            <blockquote
+              className="note-dialog__text"
+              contentEditable={editable(authorId)}
+              suppressContentEditableWarning
+              onBlur={(e: React.FocusEvent<HTMLElement>) => {
+                onEdit(noteId!, authorId, e.target.textContent as string);
+              }}
+            >
+              {text}
             </blockquote>
           </div>
 
@@ -65,8 +70,16 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
 
           <aside>
             <ul className="note-dialog__options">
-              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable})}>
-                <IconButton onClick={handleDelete} direction="right" label="Delete" icon={deleteIcon} />
+              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(authorId)})}>
+                <IconButton
+                  onClick={() => {
+                    onDelete(noteId!, authorId);
+                    onClose();
+                  }}
+                  direction="right"
+                  label="Delete"
+                  icon={deleteIcon}
+                />
               </li>
             </ul>
           </aside>
@@ -74,7 +87,14 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
         {childrenNotes.map((note) => (
           <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
             <div className="note-dialog__content">
-              <blockquote className="note-dialog__text" contentEditable={editable} suppressContentEditableWarning onBlur={handleChangeNotetext}>
+              <blockquote
+                className="note-dialog__text"
+                contentEditable={editable(note.author)}
+                suppressContentEditableWarning
+                onBlur={(e: React.FocusEvent<HTMLElement>) => {
+                  onEdit(note.id!, note.author, e.target.textContent as string);
+                }}
+              >
                 {note.text}
               </blockquote>
             </div>
@@ -88,8 +108,8 @@ const NoteDialog = ({show, text, authorId, editable, authorName, columnName, col
 
             <aside>
               <ul className="note-dialog__options">
-                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable})}>
-                  <IconButton onClick={handleDelete} direction="right" label="Delete" icon={deleteIcon} />
+                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
+                  <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
                 </li>
               </ul>
             </aside>

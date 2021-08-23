@@ -63,7 +63,7 @@ export const initializeNoteFunctions = () => {
 
     if (request.note.text && ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id)) {
       note.set("text", request.note.text);
-    } else {
+    } else if (request.note.text) {
       throw new Error(`Not authorized to edit note '${request.note.id}'`);
     }
 

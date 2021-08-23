@@ -35,18 +35,6 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
     setShowDialog(!showDialog);
   };
 
-  const onEditNote = (noteText: string) => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.editNote({id: noteId!, text: noteText}));
-    }
-  };
-
-  const onDeleteNote = () => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.deleteNote(noteId!));
-    }
-  };
-
   const [{isDragging}, drag] = useDrag({
     type: childrenNotes.length > 0 ? "STACK" : "NOTE",
     item: {id: noteId, columnId},
@@ -83,10 +71,9 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
           </figure>
         </footer>
         <NoteDialog
-          editable={Parse.User.current()?.id === authorId || isAdmin}
+          isAdmin={isAdmin}
+          noteId={noteId}
           onClose={handleShowDialog}
-          onDelete={onDeleteNote}
-          onEdit={onEditNote}
           show={showDialog}
           text={text}
           authorId={authorId}
