@@ -10,6 +10,7 @@ import React from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag} from "react-dnd";
+import {Votes} from "components/Votes/Votes";
 
 interface NoteProps {
   text: string;
@@ -17,9 +18,10 @@ interface NoteProps {
   noteId: string | undefined;
   columnName: string;
   columnColor: string;
+  numberOfVotes: number;
 }
 
-const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
+const Note = (props: NoteProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
@@ -34,14 +36,14 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
   const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
 
   const onEditNote = (noteText: string) => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.editNote({id: noteId!, text: noteText}));
+    if (Parse.User.current()?.id === props.authorId || isAdmin) {
+      store.dispatch(ActionFactory.editNote({id: props.noteId!, text: noteText}));
     }
   };
 
   const onDeleteNote = () => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.deleteNote(noteId!));
+    if (Parse.User.current()?.id === props.authorId || isAdmin) {
+      store.dispatch(ActionFactory.deleteNote(props.noteId!));
     }
   };
 
@@ -52,33 +54,34 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
     }),
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
-      store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
+      store.dispatch(ActionFactory.editNote({id: props.noteId!, columnId: dropResult.columnId}));
     },
   });
 
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
+    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
       <div className="note__content">
-        <p className="note__text">{text}</p>
-        <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+        <p className="note__text">{props.text}</p>
+        <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
       </div>
       <footer className="note__footer">
         <figure className="note__author" aria-roledescription="author">
           <img className="note__author-image" src={avatar} alt="User" />
-          <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
+          <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
         </figure>
+        <Votes noteId={props.noteId!} numberOfVotes={props.numberOfVotes} />
       </footer>
       <NoteDialog
-        editable={Parse.User.current()?.id === authorId || isAdmin}
+        editable={Parse.User.current()?.id === props.authorId || isAdmin}
         onClose={handleShowDialog}
         onDelete={onDeleteNote}
         onEdit={onEditNote}
         show={showDialog}
-        text={text}
-        authorId={authorId}
-        authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
-        columnName={columnName}
-        columnColor={columnColor}
+        text={props.text}
+        authorId={props.authorId}
+        authorName={state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}
+        columnName={props.columnName}
+        columnColor={props.columnColor}
       />
     </li>
   );
