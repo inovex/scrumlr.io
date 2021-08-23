@@ -13,6 +13,7 @@ function Board() {
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
+    votes: applicationState.votes,
   }));
 
   let joinRequestComponent;
@@ -42,7 +43,15 @@ function Board() {
               {state.notes
                 .filter((note) => note.columnId === column.id)
                 .map((note) => (
-                  <Note key={note.id} noteId={note.id} text={note.text} authorId={note.author} columnName={column.name} columnColor={column.color} numberOfVotes={10} />
+                  <Note
+                    key={note.id}
+                    noteId={note.id}
+                    text={note.text}
+                    authorId={note.author}
+                    columnName={column.name}
+                    columnColor={column.color}
+                    numberOfVotes={state.votes.filter((vote) => vote.note === note.id).length}
+                  />
                 ))}
             </Column>
           ))}
