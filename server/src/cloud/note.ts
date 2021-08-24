@@ -48,7 +48,7 @@ export const initializeNoteFunctions = () => {
     if (request.note.columnId) {
       note.set("columnId", request.note.columnId);
 
-      const childNotesQuery = new Parse.Query(Parse.Object.extend("Note"));
+      const childNotesQuery = new Parse.Query("Note");
       childNotesQuery.equalTo("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
       await childNotesQuery.find({useMasterKey: true}).then(async (childNotes) => {
         childNotes.forEach(
