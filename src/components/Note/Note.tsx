@@ -19,6 +19,7 @@ interface NoteProps {
   columnName: string;
   columnColor: string;
   numberOfVotes: number;
+  activeVoting: boolean;
 }
 
 const Note = (props: NoteProps) => {
@@ -69,7 +70,7 @@ const Note = (props: NoteProps) => {
           <img className="note__author-image" src={avatar} alt="User" />
           <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
         </figure>
-        <Votes noteId={props.noteId!} numberOfVotes={props.numberOfVotes} />
+        <Votes noteId={props.noteId!} numberOfVotes={props.numberOfVotes} activeVoting={props.activeVoting} />
       </footer>
       <NoteDialog
         editable={Parse.User.current()?.id === props.authorId || isAdmin}
