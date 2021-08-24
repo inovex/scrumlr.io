@@ -34,6 +34,18 @@ exports[`Note should have correct style show note with correct style 1`] = `
         class="note__author-name"
       />
     </figure>
+    <div
+      class="votes"
+    >
+      <button
+        class="votes__add"
+      >
+        +
+      </button>
+      <button
+        class="votes__delete"
+      />
+    </div>
   </footer>
 </li>
 `;
