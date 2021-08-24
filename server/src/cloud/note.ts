@@ -1,4 +1,4 @@
-import {getAdminRoleName, getMemberRoleName, isAdmin, isMember, requireValidBoardMember} from "./permission";
+import {getAdminRoleName, getMemberRoleName, isAdmin, requireValidBoardMember} from "./permission";
 import {api, newObject} from "./util";
 
 interface AddNoteRequest {
@@ -7,11 +7,13 @@ interface AddNoteRequest {
   text: string;
 }
 
-interface EditNoteRequest {
+type EditableNoteAttributes = {
   columnId: string;
-  text: string;
   parentId: string;
-}
+  text: string;
+};
+
+type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
 interface DeleteNoteRequest {
   noteId: string;
@@ -37,7 +39,7 @@ export const initializeNoteFunctions = () => {
     return true;
   });
 
-  api<{note: Partial<EditNoteRequest> & {id: string}}, boolean>("editNote", async (user, request) => {
+  api<{note: EditNoteRequest}, boolean>("editNote", async (user, request) => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.note.id, {useMasterKey: true});
 

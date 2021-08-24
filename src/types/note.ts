@@ -46,11 +46,13 @@ export interface NoteClientModel {
   // TODO add editable & stackable attributes (if id ist not undefined and note is persisted)
 }
 
-export interface EditableNoteClientModel {
+type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
-}
+};
+
+export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
 export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientModel => ({
   id: note.id,
