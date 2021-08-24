@@ -61,10 +61,12 @@ export const initializeNoteFunctions = () => {
       });
     }
 
-    if (request.note.text && ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id)) {
-      note.set("text", request.note.text);
-    } else if (request.note.text) {
-      throw new Error(`Not authorized to edit note '${request.note.id}'`);
+    if (request.note.text) {
+      if ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id) {
+        note.set("text", request.note.text);
+      } else {
+        throw new Error(`Not authorized to edit note '${request.note.id}'`);
+      }
     }
 
     await note.save(null, {useMasterKey: true});
