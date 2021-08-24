@@ -1,4 +1,4 @@
-import {BoardClientModel, EditableBoardClientModel} from "types/board";
+import {BoardClientModel, EditBoardRequest} from "types/board";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardActionType = {
@@ -53,7 +53,7 @@ export const BoardActionFactory = {
    *
    * @param board the partial board model with the fields to update
    */
-  editBoard: (board: Partial<EditableBoardClientModel> & {id: string}) => ({
+  editBoard: (board: EditBoardRequest) => ({
     type: BoardActionType.EditBoard,
     board,
   }),

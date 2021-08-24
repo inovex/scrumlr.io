@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {EditableBoardClientModel} from "types/board";
+import {EditBoardRequest} from "types/board";
 import {callAPI} from "./callApi";
 
 export const BoardAPI = {
@@ -20,7 +20,7 @@ export const BoardAPI = {
    *
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
-  editBoard: (board: Partial<EditableBoardClientModel> & {id: string}) => callAPI("editBoard", {board}),
+  editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
   /**
    * Create join request for a board session.
    * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join
@@ -34,5 +34,5 @@ export const BoardAPI = {
   joinBoard: (boardId: string) => callAPI<{boardId: string}, {status: "accepted" | "rejected" | "pending"; joinRequestReference?: string}>("joinBoard", {boardId}),
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
-  deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
+  deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
 };
