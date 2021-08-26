@@ -23,11 +23,7 @@ export const Votes = (props: VotesProps) => {
 
   return (
     <div className={classNames("votes", props.className)}>
-      {props.numberOfVotes > 0 && (
-        <DotButton className="test" onClick={deleteVote}>
-          {props.numberOfVotes.toString()}
-        </DotButton>
-      )}
+      {props.numberOfVotes > 0 && <DotButton onClick={deleteVote}>{props.numberOfVotes.toString()}</DotButton>}
       {props.activeVoting && <DotButton onClick={addVote}>+</DotButton>}
     </div>
   );
