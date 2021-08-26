@@ -3,8 +3,10 @@ import {ActionFactory} from "store/action";
 import {DotButton} from "components/DotButton";
 // import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import "./Votes.scss";
+import classNames from "classnames";
 
 export type VotesProps = {
+  className?: string;
   noteId: string;
   numberOfVotes: number;
   activeVoting: boolean;
@@ -20,7 +22,7 @@ export const Votes = (props: VotesProps) => {
   };
 
   return (
-    <div className="votes">
+    <div className={classNames("votes", props.className)}>
       {props.numberOfVotes > 0 && (
         <DotButton className="test" onClick={deleteVote}>
           {props.numberOfVotes.toString()}

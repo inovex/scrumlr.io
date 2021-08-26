@@ -94,8 +94,11 @@ $note__author-margin-left: 10px;
   display: block;
 }
 
+.note__footer {
+  position: relative;
+}
 .note__author {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   // reset css from figure-element:
   margin: 0;
@@ -104,6 +107,10 @@ $note__author-margin-left: 10px;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+}
+.note__votes {
+  position: absolute;
+  right: 0;
 }
 
 .note__author-image {
