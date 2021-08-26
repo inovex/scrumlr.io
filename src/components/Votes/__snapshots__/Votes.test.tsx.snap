@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Votes should render correctly with additional classname 1`] = `
+<div>
+  <div
+    class="votes test-classname"
+  />
+</div>
+`;
+
+exports[`Votes should render correctly with no votes and active voting 1`] = `
+<div>
+  <div
+    class="votes"
+  >
+    <button
+      class="dot-button"
+    >
+      +
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Votes should render correctly with no votes and disabled voting 1`] = `
+<div>
+  <div
+    class="votes"
+  />
+</div>
+`;
+
+exports[`Votes should render correctly with votes and active voting 1`] = `
+<div>
+  <div
+    class="votes"
+  >
+    <button
+      class="dot-button test"
+    >
+      10
+    </button>
+    <button
+      class="dot-button"
+    >
+      +
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Votes should render correctly with votes and disabled voting 1`] = `
+<div>
+  <div
+    class="votes"
+  >
+    <button
+      class="dot-button test"
+    >
+      10
+    </button>
+  </div>
+</div>
+`;
