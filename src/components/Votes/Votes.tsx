@@ -1,7 +1,8 @@
 import store from "store";
 import {ActionFactory} from "store/action";
-import {AddVote} from "components/Votes/AddVote";
-import {DeleteVote} from "components/Votes/DeleteVote";
+import {DotButton} from "components/DotButton";
+// import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
+import "./Votes.scss";
 
 export type VotesProps = {
   noteId: string;
@@ -20,8 +21,12 @@ export const Votes = (props: VotesProps) => {
 
   return (
     <div className="votes">
-      {props.numberOfVotes > 0 && <DeleteVote deleteVote={deleteVote} numberOfVotes={props.numberOfVotes} />}
-      {props.activeVoting && <AddVote addVote={addVote} />}
+      {props.numberOfVotes > 0 && (
+        <DotButton className="test" onClick={deleteVote}>
+          {props.numberOfVotes.toString()}
+        </DotButton>
+      )}
+      {props.activeVoting && <DotButton onClick={addVote}>+</DotButton>}
     </div>
   );
 };

@@ -1,0 +1,16 @@
+.dot-button {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+  background-color: #eaeaea;
+  border: none;
+  transition: background-color 0.25s ease-in-out;
+  text-align: center;
+  font-size: 14px;
+}
+.dot-button:hover {
+  background-color: var(--accent-color);
+}
+.dot-button:active {
+  transform: scale(0.9);
+}
