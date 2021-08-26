@@ -6,7 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@testing-library/dom": "^8.1.0",
+    "@testing-library/dom": "^8.2.0",
     "@types/classnames": "^2.3.1",
     "@types/react-dnd": "^3.0.2",
     "@types/react-dnd-html5-backend": "^3.0.2",
