@@ -10,7 +10,7 @@ import React from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag} from "react-dnd";
-import {Votes} from "components/Votes/Votes";
+import {Votes} from "components/Votes";
 
 interface NoteProps {
   text: string;
