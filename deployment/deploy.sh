@@ -14,8 +14,9 @@ kubectl apply -f ./scrumlr-dashboard/configmap.yaml
 kubectl apply -f ./scrumlr-dashboard/secrets.yaml
 
 # scrumlr-database
-
-kubectl apply -f ./scrumlr-database/
+kubectl apply -f ./scrumlr-database/pvc.yaml
+kubectl apply -f ./scrumlr-database/deployment.yaml
+kubectl apply -f ./scrumlr-database/service.yaml
 
 # scrumlr-frontend
 kubectl apply -f ./scrumlr-frontend/deployment.yaml
