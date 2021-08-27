@@ -5,7 +5,7 @@ import {DotButton} from "components/DotButton";
 import "./Votes.scss";
 import classNames from "classnames";
 
-export type VotesProps = {
+type VotesProps = {
   className?: string;
   noteId: string;
   numberOfVotes: number;
