@@ -1,15 +1,21 @@
+@import "constants/style";
+
+$dot-button-radius: $base-unit * 7;
+$dot-button-color: #eaeaea;
+
 .dot-button {
-  height: 28px;
-  width: 28px;
+  height: $dot-button-radius;
+  width: $dot-button-radius;
   border-radius: 100%;
-  background-color: #eaeaea;
+  background-color: $dot-button-color;
   border: none;
-  transition: background-color 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
   text-align: center;
-  font-size: 14px;
+  font-size: $text-size;
 }
 .dot-button:hover {
   background-color: var(--accent-color);
+  box-shadow: 0 0 0 4px $dot-button-color;
 }
 .dot-button:active {
   transform: scale(0.9);
