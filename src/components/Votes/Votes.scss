@@ -5,7 +5,11 @@
   justify-content: space-between;
 }
 
-.dot-button__plus-icon {
-  height: 16px;
-  width: 16px;
+.dot-button__add {
+  position: absolute;
+  right: 0;
+}
+.dot-button__delete {
+  position: absolute;
+  left: 0;
 }
