@@ -12,7 +12,7 @@ describe("DotButton", () => {
     expect(dotButton.container).toMatchSnapshot();
   });
 
-  test("should class 'onClick' if given", () => {
+  test("should call 'onClick' if given", () => {
     const mockOnClick = jest.fn();
     const dotButton = render(<DotButton onClick={mockOnClick} />);
     fireEvent.click(dotButton.container.getElementsByTagName("button")[0]);
