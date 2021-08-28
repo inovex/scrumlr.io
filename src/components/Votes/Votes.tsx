@@ -4,11 +4,13 @@ import {DotButton} from "components/DotButton";
 // import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import "./Votes.scss";
 import classNames from "classnames";
+import {VoteClientModel} from "types/vote";
+import Parse from "parse";
 
 type VotesProps = {
   className?: string;
   noteId: string;
-  numberOfVotes: number;
+  votes: VoteClientModel[];
   activeVoting: boolean;
 };
 
@@ -23,9 +25,12 @@ export const Votes = (props: VotesProps) => {
 
   return (
     <div className={classNames("votes", props.className)}>
-      {props.numberOfVotes > 0 && (
-        <DotButton className="dot-button__delete" onClick={deleteVote}>
-          {props.numberOfVotes.toString()}
+      {props.votes.length > 0 && (
+        <DotButton
+          className={classNames("dot-button__delete", {"dot-button--own-vote": props.votes.findIndex((vote) => vote.user === Parse.User.current()?.id) !== -1})}
+          onClick={deleteVote}
+        >
+          {props.votes.length.toString()}
         </DotButton>
       )}
       {props.activeVoting && (

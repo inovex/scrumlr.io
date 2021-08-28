@@ -5,6 +5,11 @@
   justify-content: space-between;
 }
 
+.dot-button--own-vote {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
 .dot-button__add {
   position: absolute;
   right: 0;

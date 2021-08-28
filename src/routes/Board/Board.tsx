@@ -50,7 +50,7 @@ function Board() {
                     authorId={note.author}
                     columnName={column.name}
                     columnColor={column.color}
-                    numberOfVotes={state.votes.filter((vote) => vote.note === note.id).length}
+                    votes={state.votes.filter((vote) => vote.note === note.id)}
                     activeVoting={state.board.data?.voting === "active"}
                   />
                 ))}

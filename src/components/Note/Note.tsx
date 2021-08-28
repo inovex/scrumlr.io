@@ -11,6 +11,7 @@ import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag} from "react-dnd";
 import {Votes} from "components/Votes";
+import {VoteClientModel} from "types/vote";
 
 interface NoteProps {
   text: string;
@@ -18,7 +19,7 @@ interface NoteProps {
   noteId: string | undefined;
   columnName: string;
   columnColor: string;
-  numberOfVotes: number;
+  votes: VoteClientModel[];
   activeVoting: boolean;
 }
 
@@ -70,7 +71,7 @@ const Note = (props: NoteProps) => {
           <img className="note__author-image" src={avatar} alt="User" />
           <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
         </figure>
-        <Votes className="note__votes" noteId={props.noteId!} numberOfVotes={props.numberOfVotes} activeVoting={props.activeVoting} />
+        <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
       </footer>
       <NoteDialog
         editable={Parse.User.current()?.id === props.authorId || isAdmin}
