@@ -33,7 +33,23 @@ const createNote = (text: string, authorId: string) => {
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={store}>
-      <NoteContext key="" noteId="" text={text} authorId={authorId} columnName="" columnColor="" />
+      <NoteContext
+        key=""
+        noteId=""
+        text={text}
+        authorId={authorId}
+        columnName=""
+        columnColor=""
+        activeVoting
+        votes={[
+          {
+            id: "test-id",
+            board: "test-board",
+            note: "test-note",
+            user: "test-user",
+          },
+        ]}
+      />
     </Provider>
   );
 };
