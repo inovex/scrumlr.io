@@ -43,15 +43,19 @@ function Board() {
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
                 .filter((note) => note.columnId === column.id)
+                .filter((note) => note.parentId == null)
                 .map((note) => (
                   <Note
                     showAuthors={state.board.data!.showAuthors}
+                    isAdmin={currentUserIsModerator}
                     key={note.id}
                     noteId={note.id}
                     text={note.text}
                     authorId={note.author}
+                    columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
+                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
                   />
                 ))}
             </Column>

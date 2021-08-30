@@ -1,4 +1,4 @@
-import {EditableNoteClientModel} from "types/note";
+import {EditNoteRequest} from "types/note";
 import {callAPI} from "./callApi";
 
 export const NoteAPI = {
@@ -26,5 +26,5 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editNote: (note: {id: string} & Partial<EditableNoteClientModel>) => callAPI("editNote", {note}),
+  editNote: (note: EditNoteRequest) => callAPI("editNote", {note}),
 };
