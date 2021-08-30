@@ -1,28 +1,32 @@
 import "./Note.scss";
 import avatar from "assets/avatar.png";
-import {useSelector} from "react-redux";
-import {ApplicationState} from "types/store";
 import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
-import React from "react";
+import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {useDrag} from "react-dnd";
+import {useDrag, useDrop} from "react-dnd";
+import {NoteClientModel} from "types/note";
+import {useSelector} from "react-redux";
+import {ApplicationState} from "types/store";
 
 interface NoteProps {
+  isAdmin: boolean;
   text: string;
   authorId: string;
   noteId: string | undefined;
+  columnId: string;
   columnName: string;
   columnColor: string;
+  childrenNotes: Array<NoteClientModel>;
 }
 
-const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
+const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColor, childrenNotes}: NoteProps) => {
+  const noteRef = useRef<HTMLLIElement>(null);
+
   const state = useSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board,
-    notes: applicationState.notes,
     users: applicationState.users,
   }));
 
@@ -31,55 +35,55 @@ const Note = ({text, authorId, noteId, columnName, columnColor}: NoteProps) => {
     setShowDialog(!showDialog);
   };
 
-  const isAdmin: boolean = Parse.User.current()?.id === state.users.admins[0].id;
-
-  const onEditNote = (noteText: string) => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.editNote({id: noteId!, text: noteText}));
-    }
-  };
-
-  const onDeleteNote = () => {
-    if (Parse.User.current()?.id === authorId || isAdmin) {
-      store.dispatch(ActionFactory.deleteNote(noteId!));
-    }
-  };
-
   const [{isDragging}, drag] = useDrag({
-    type: "NOTE",
+    type: childrenNotes.length > 0 ? "STACK" : "NOTE",
+    item: {id: noteId, columnId},
     collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
+      isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      const dropResult = monitor.getDropResult() as {dropEffect: string; columnId: string};
-      store.dispatch(ActionFactory.editNote({id: noteId!, columnId: dropResult.columnId}));
-    },
   });
 
+  const [{isOver, canDrop}, drop] = useDrop(() => ({
+    accept: "NOTE",
+    drop: (item: {id: string}, monitor) => {
+      if (!monitor.didDrop()) {
+        store.dispatch(ActionFactory.editNote({id: item.id, parentId: noteId, columnId}));
+      }
+    },
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
+    canDrop: (item: {id: string; columnId: string}) => item.id !== noteId,
+  }));
+
+  drag(noteRef);
+  drop(noteRef);
+
   return (
-    <li className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging})} onClick={handleShowDialog} ref={drag}>
-      <div className="note__content">
-        <p className="note__text">{text}</p>
-        <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+    <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
+      <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
+        <div className="note__content">
+          <p className="note__text">{text}</p>
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+        </div>
+        <footer className="note__footer">
+          <figure className="note__author" aria-roledescription="author">
+            <img className="note__author-image" src={avatar} alt="User" />
+            <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
+          </figure>
+        </footer>
+        <NoteDialog
+          isAdmin={isAdmin}
+          noteId={noteId}
+          onClose={handleShowDialog}
+          show={showDialog}
+          text={text}
+          authorId={authorId}
+          authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
+          columnName={columnName}
+          columnColor={columnColor}
+          childrenNotes={childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
+        />
       </div>
-      <footer className="note__footer">
-        <figure className="note__author" aria-roledescription="author">
-          <img className="note__author-image" src={avatar} alt="User" />
-          <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
-        </figure>
-      </footer>
-      <NoteDialog
-        editable={Parse.User.current()?.id === authorId || isAdmin}
-        onClose={handleShowDialog}
-        onDelete={onDeleteNote}
-        onEdit={onEditNote}
-        show={showDialog}
-        text={text}
-        authorId={authorId}
-        authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
-        columnName={columnName}
-        columnColor={columnColor}
-      />
+      {childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
 };

@@ -1,4 +1,4 @@
-import {getAdminRoleName, getMemberRoleName, isAdmin, isMember, requireValidBoardMember} from "./permission";
+import {getAdminRoleName, getMemberRoleName, isAdmin, requireValidBoardMember} from "./permission";
 import {api, newObject} from "./util";
 
 interface AddNoteRequest {
@@ -7,10 +7,13 @@ interface AddNoteRequest {
   text: string;
 }
 
-interface EditNoteRequest {
+type EditableNoteAttributes = {
   columnId: string;
+  parentId: string;
   text: string;
-}
+};
+
+type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
 interface DeleteNoteRequest {
   noteId: string;
@@ -36,24 +39,40 @@ export const initializeNoteFunctions = () => {
     return true;
   });
 
-  api<{note: Partial<EditNoteRequest> & {id: string}}, boolean>("editNote", async (user, request) => {
+  api<{note: EditNoteRequest}, boolean>("editNote", async (user, request) => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.note.id, {useMasterKey: true});
 
-    if ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id) {
-      if (request.note.text) {
-        note.set("text", request.note.text);
-      }
-
-      if (request.note.columnId) {
-        note.set("columnId", request.note.columnId);
-      }
-
-      await note.save(null, {useMasterKey: true});
-      return true;
+    if (request.note.parentId) {
+      note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
     }
 
-    throw new Error(`Not authorized to edit note '${request.note.id}'`);
+    if (request.note.columnId) {
+      note.set("columnId", request.note.columnId);
+
+      const childNotesQuery = new Parse.Query("Note");
+      childNotesQuery.equalTo("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+      await childNotesQuery.find({useMasterKey: true}).then(async (childNotes) => {
+        childNotes.forEach(
+          (childNote) => {
+            childNote.set("columnId", request.note.columnId);
+          },
+          {useMasterKey: true}
+        );
+        await Parse.Object.saveAll(childNotes, {useMasterKey: true});
+      });
+    }
+
+    if (request.note.text) {
+      if ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id) {
+        note.set("text", request.note.text);
+      } else {
+        throw new Error(`Not authorized to edit note '${request.note.id}'`);
+      }
+    }
+
+    await note.save(null, {useMasterKey: true});
+    return true;
   });
 
   api<DeleteNoteRequest, boolean>("deleteNote", async (user, request) => {
@@ -61,7 +80,20 @@ export const initializeNoteFunctions = () => {
     const note = await query.get(request.noteId, {useMasterKey: true});
 
     if ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id) {
-      const voteQuery = await new Parse.Query("Vote");
+      // Find any note which has this note as stack parent and unset that
+      const childNotesQuery = new Parse.Query(Parse.Object.extend("Note"));
+      childNotesQuery.equalTo("parent", note);
+      childNotesQuery.find({useMasterKey: true}).then(async (childNotes) => {
+        childNotes.forEach(
+          (childNote) => {
+            childNote.unset("parent");
+          },
+          {useMasterKey: true}
+        );
+        await Parse.Object.saveAll(childNotes, {useMasterKey: true});
+      });
+      // Find and delete all votes of this note including the note itself
+      const voteQuery = new Parse.Query("Vote");
       voteQuery.equalTo("note", note);
       await Parse.Object.destroyAll([note, ...(await voteQuery.find({useMasterKey: true}))], {useMasterKey: true});
       return true;

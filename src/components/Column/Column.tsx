@@ -4,6 +4,8 @@ import NoteInput from "components/NoteInput/NoteInput";
 import React, {useRef} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
+import store from "store";
+import {ActionFactory} from "store/action";
 
 export interface ColumnProps {
   id: string;
@@ -14,12 +16,15 @@ export interface ColumnProps {
 
 const Column = ({id, name, color, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
-  const [{isOver}, drop] = useDrop(() => ({
-    accept: "NOTE",
-    drop: () => ({columnId: id}),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
+  const [{isOver, canDrop}, drop] = useDrop(() => ({
+    accept: ["NOTE", "STACK"],
+    drop: (item: {id: string; columnId: string}, monitor) => {
+      if (item.columnId !== id && !monitor.didDrop()) {
+        store.dispatch(ActionFactory.editNote({id: item.id, columnId: id}));
+      }
+    },
+    collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
+    canDrop: (item: {id: string; columnId: string}) => item.columnId !== id,
   }));
 
   if (columnRef.current && isOver) {
@@ -39,7 +44,7 @@ const Column = ({id, name, color, children}: ColumnProps) => {
           </div>
           <NoteInput columnId={id} />
         </header>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver})} ref={drop}>
+        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>
