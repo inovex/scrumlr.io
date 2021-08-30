@@ -42,7 +42,11 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
     <button
       class="dot-button dot-button__delete"
     >
-      1
+      <label
+        class="dot-button__delete-text"
+      >
+        1
+      </label>
     </button>
     <button
       class="dot-button dot-button__add"
@@ -65,7 +69,11 @@ exports[`Votes should render correctly with votes and disabled voting 1`] = `
     <button
       class="dot-button dot-button__delete"
     >
-      1
+      <label
+        class="dot-button__delete-text"
+      >
+        1
+      </label>
     </button>
   </div>
 </div>
