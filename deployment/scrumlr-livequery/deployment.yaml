@@ -29,7 +29,7 @@ spec:
               port: livequeryport
             initialDelaySeconds: 30
             periodSeconds: 20
-          livenessProbe:
+          readinessProbe:
             tcpSocket:
               port: livequeryport
             initialDelaySeconds: 30
