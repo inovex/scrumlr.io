@@ -57,7 +57,7 @@
   }
 }
 .dot-button:not(disabled) {
-  & :hover .dot-button__folded-corner {
+  &:hover .dot-button__folded-corner {
     border-width: 12px 0 0 12px;
   }
 }
