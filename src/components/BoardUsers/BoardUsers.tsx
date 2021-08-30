@@ -1,14 +1,13 @@
 import UserAvatar from "components/BoardUsers/UserAvatar";
 import "./BoardUsers.scss";
 import Parse from "parse";
-import {useSelector} from "react-redux";
-import {ApplicationState} from "types/store";
+import {useAppSelector} from "store";
 
 // it might be a good idead to set this number dynamically (e.g., according to the device: desktop vs. mobile)
 const NUM_OF_DISPLAYED_USERS = 4;
 
 const BoardUsers = () => {
-  const users = useSelector((state: ApplicationState) => state.users.all);
+  const users = useAppSelector((state) => state.users.all);
   const currentUser = Parse.User.current();
 
   const me = users.find((user) => user.id === currentUser!.id);
