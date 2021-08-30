@@ -25,6 +25,7 @@
   left: 5px;
   height: 18px;
   width: 18px;
+  fill: var(--accent-color);
 }
 .dot-button:hover > .dot-button__add-icon {
   fill: white;

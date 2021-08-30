@@ -40,11 +40,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
       <button
         class="dot-button dot-button__delete"
       >
-        <label
-          class="dot-button__delete-text"
-        >
-          1
-        </label>
+        1
       </button>
       <button
         class="dot-button dot-button__add"
