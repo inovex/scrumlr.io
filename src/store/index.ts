@@ -1,4 +1,5 @@
 import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI, AnyAction} from "redux";
+import {TypedUseSelectorHook, useSelector} from "react-redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {ApplicationState} from "../types/store";
@@ -39,3 +40,6 @@ const rootReducer = combineReducers<ApplicationState>({
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));
 
 export default store;
+
+type RootState = ReturnType<typeof store.getState>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

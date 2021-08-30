@@ -1,8 +1,6 @@
 import {useState} from "react";
 import Parse from "parse";
 import classNames from "classnames";
-import {useSelector} from "react-redux";
-import {ApplicationState} from "types/store";
 import MenuButton from "components/MenuBars/MenuItem/MenuButton";
 import MenuToggle from "components/MenuBars/MenuItem/MenuToggle";
 import {ReactComponent as AddImageIcon} from "assets/icon-addimage.svg";
@@ -16,12 +14,13 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import "./MenuBars.scss";
+import {useAppSelector} from "store";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
 
   const currentUser = Parse.User.current();
-  const admins = useSelector((state: ApplicationState) => state.users.admins);
+  const admins = useAppSelector((state) => state.users.admins);
 
   const isAdmin = admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
 
