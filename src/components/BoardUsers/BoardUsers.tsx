@@ -3,7 +3,7 @@ import "./BoardUsers.scss";
 import Parse from "parse";
 import {useAppSelector} from "store";
 
-// it might be a good idead to set this number dynamically (e.g., according to the device: desktop vs. mobile)
+// it might be a good idea to set this number dynamically (e.g., according to the device: desktop vs. mobile)
 const NUM_OF_DISPLAYED_USERS = 4;
 
 const BoardUsers = () => {

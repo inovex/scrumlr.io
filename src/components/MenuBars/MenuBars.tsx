@@ -14,7 +14,7 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import "./MenuBars.scss";
-import {useAppSelector} from "../../store";
+import {useAppSelector} from "store";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
