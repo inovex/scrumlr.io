@@ -2,15 +2,13 @@ import "./Note.scss";
 import avatar from "assets/avatar.png";
 import classNames from "classnames";
 import Parse from "parse";
-import store from "store";
+import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
-import {useSelector} from "react-redux";
-import {ApplicationState} from "types/store";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -27,7 +25,7 @@ interface NoteProps {
 const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
-  const state = useSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     users: applicationState.users,
   }));
 
