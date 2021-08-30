@@ -11,11 +11,13 @@ kubectl delete -f ./scrumlr-dashboard/service.yaml
 kubectl delete -f ./scrumlr-dashboard/configmap.yaml
 
 # scrumlr-database
+
 kubectl delete -f ./scrumlr-database/deployment.yaml
+kubectl delete -f ./scrumlr-database/pvc.yaml
 kubectl delete -f ./scrumlr-database/service.yaml
-kubectl delete -f ./scrumlr-frontend/deployment.yaml
 
 # scrumlr-frontend
+kubectl delete -f ./scrumlr-frontend/deployment.yaml
 kubectl delete -f ./scrumlr-frontend/ingress.yaml
 kubectl delete -f ./scrumlr-frontend/service.yaml
 
