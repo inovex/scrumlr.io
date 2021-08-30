@@ -29,3 +29,13 @@
 .dot-button:hover > .dot-button__add-icon {
   fill: white;
 }
+.dot-button:hover > .dot-button__delete-text {
+  color: white;
+}
+
+.dot-button__delete-text {
+  display: inline-block;
+  width: 28px;
+  font-size: 14px;
+  font-weight: 600;
+}

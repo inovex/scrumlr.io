@@ -10,8 +10,7 @@ $dot-button-color: #eaeaea;
   background-color: $dot-button-color;
   border: none;
   transition: all 0.25s ease-in-out;
-  text-align: center;
-  font-size: $text-size;
+  padding: 0;
 }
 .dot-button:hover {
   background-color: var(--accent-color);
