@@ -13,6 +13,7 @@
 }
 
 .note-dialog__note {
+  margin-bottom: 25px;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
@@ -76,8 +77,8 @@
   outline: none;
 }
 
-.note-dialog__text:hover,
-.note-dialog__text:focus {
+.note-dialog__note--own-card .note-dialog__text:hover,
+.note-dialog__note--own-card .note-dialog__text:focus {
   border-color: #adadad;
 }
 @media (prefers-color-scheme: dark) {

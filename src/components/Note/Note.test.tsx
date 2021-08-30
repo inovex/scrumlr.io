@@ -33,7 +33,7 @@ const createNote = (text: string, authorId: string) => {
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={store}>
-      <NoteContext key="" noteId="" text={text} authorId={authorId} columnName="" columnColor="" />
+      <NoteContext key="" noteId="" text={text} authorId={authorId} columnName="" columnColor="" childrenNotes={[]} />
     </Provider>
   );
 };
@@ -50,9 +50,14 @@ describe("Note", () => {
   });
 
   describe("should render correctly", () => {
+    test("note__root is present", () => {
+      const {container} = render(createNote("Test Text", "Test Author"));
+      expect(container.firstChild).toHaveClass("note__root");
+    });
+
     test("note is present", () => {
       const {container} = render(createNote("Test Text", "Test Author"));
-      expect(container.firstChild).toHaveClass("note");
+      expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note");
     });
 
     test("note content is present", () => {

@@ -1,19 +1,20 @@
-import {useSelector} from "react-redux";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
-import {ApplicationState} from "types/store";
 import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
+import {useAppSelector} from "store";
 
 function Board() {
-  const state = useSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
   }));
+
+  const isAdmin = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
   let joinRequestComponent;
   if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
@@ -41,8 +42,19 @@ function Board() {
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
                 .filter((note) => note.columnId === column.id)
+                .filter((note) => note.parentId == null)
                 .map((note) => (
-                  <Note key={note.id} noteId={note.id} text={note.text} authorId={note.author} columnName={column.name} columnColor={column.color} />
+                  <Note
+                    isAdmin={isAdmin}
+                    key={note.id}
+                    noteId={note.id}
+                    text={note.text}
+                    authorId={note.author}
+                    columnId={column.id!}
+                    columnName={column.name}
+                    columnColor={column.color}
+                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
+                  />
                 ))}
             </Column>
           ))}
