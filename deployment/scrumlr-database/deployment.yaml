@@ -38,3 +38,7 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 10
       restartPolicy: Always
+      volumes:
+      - name: database-persistent-storage
+        persistentVolumeClaim:
+          claimName: database-pv-claim
