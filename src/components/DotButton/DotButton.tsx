@@ -6,7 +6,7 @@ type DotButtonProps = {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
-  children?: ReactElement | string;
+  children?: ReactElement | ReactElement[];
 };
 
 export const DotButton = (props: DotButtonProps) => (

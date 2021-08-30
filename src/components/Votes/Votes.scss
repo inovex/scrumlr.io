@@ -56,6 +56,8 @@
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
   }
 }
-.dot-button:hover .dot-button__folded-corner {
-  border-width: 12px 0 0 12px;
+.dot-button:not(disabled) {
+  & :hover .dot-button__folded-corner {
+    border-width: 12px 0 0 12px;
+  }
 }

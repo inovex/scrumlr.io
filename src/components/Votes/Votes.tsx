@@ -32,8 +32,8 @@ export const Votes = (props: VotesProps) => {
           disabled={!props.activeVoting}
           onClick={deleteVote}
         >
-          {props.activeVoting && <span className="dot-button__folded-corner" />}
-          {props.votes.length.toString()}
+          <span className="dot-button__folded-corner" />
+          <span>{props.votes.length.toString()}</span>
         </DotButton>
       )}
       {props.activeVoting && (

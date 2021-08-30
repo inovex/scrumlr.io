@@ -46,7 +46,9 @@ exports[`Note should have correct style show note with correct style 1`] = `
           <span
             class="dot-button__folded-corner"
           />
-          1
+          <span>
+            1
+          </span>
         </button>
         <button
           class="dot-button dot-button__add"
