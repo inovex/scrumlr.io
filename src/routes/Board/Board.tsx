@@ -1,14 +1,13 @@
-import {useSelector} from "react-redux";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
-import {ApplicationState} from "types/store";
 import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
+import {useAppSelector} from "store";
 
 function Board() {
-  const state = useSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
