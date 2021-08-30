@@ -38,8 +38,10 @@ const createNote = (text: string, authorId: string) => {
         noteId=""
         text={text}
         authorId={authorId}
+        columnId=""
         columnName=""
         columnColor=""
+        isAdmin
         activeVoting
         votes={[
           {
@@ -49,7 +51,6 @@ const createNote = (text: string, authorId: string) => {
             user: "test-user",
           },
         ]}
-        columnColor=""
         childrenNotes={[]}
       />
     </Provider>

@@ -29,8 +29,10 @@ export const Votes = (props: VotesProps) => {
       {props.votes.length > 0 && (
         <DotButton
           className={classNames("dot-button__delete", {"dot-button--own-vote": props.votes.findIndex((vote) => vote.user === Parse.User.current()?.id) !== -1})}
+          disabled={!props.activeVoting}
           onClick={deleteVote}
         >
+          {props.activeVoting && <span className="dot-button__folded-corner" />}
           {props.votes.length.toString()}
         </DotButton>
       )}

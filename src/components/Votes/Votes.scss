@@ -1,7 +1,9 @@
+@import "constants/style";
+
 .votes {
   display: inline-flex;
   height: 28px;
-  width: 64px;
+  width: 60px;
   justify-content: space-between;
 }
 
@@ -32,4 +34,28 @@
 }
 .dot-button:hover {
   color: white;
+}
+
+.dot-button__folded-corner {
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0;
+  border-style: solid;
+  background: rgba(234, 234, 234, 0.5);
+  box-shadow: 2px -2px 0px $color-white, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 0 16px;
+  border-color: $color-white $color-white transparent transparent;
+  transition: border-width 0.3s ease-in-out;
+}
+@media (prefers-color-scheme: dark) {
+  .dot-button__folded-corner {
+    box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
+    border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
+  }
+}
+.dot-button:hover .dot-button__folded-corner {
+  border-width: 12px 0 0 12px;
 }

@@ -1,11 +1,8 @@
 @import "constants/style";
 
-$dot-button-radius: $base-unit * 7;
-$dot-button-color: #eaeaea;
-
 .dot-button {
-  height: $dot-button-radius;
-  width: $dot-button-radius;
+  height: 28px;
+  width: 28px;
   border-radius: 100%;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   border: none;
@@ -15,10 +12,17 @@ $dot-button-color: #eaeaea;
   line-height: 28px;
   font-weight: 600;
   color: var(--accent-color);
+  cursor: pointer;
+}
+.dot-button:disabled {
+  cursor: default;
+
+  &:active {
+    transform: none;
+  }
 }
 .dot-button:hover {
   background-color: var(--accent-color);
-  box-shadow: 0 0 0 4px $dot-button-color;
 }
 .dot-button:active {
   transform: scale(0.9);
