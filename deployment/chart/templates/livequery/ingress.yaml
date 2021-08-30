@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "scrumlr-fullname" .Values.livequery }}
+  labels: 
+    {{- include "selectorLabels" .Values.livequery | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path:  {{ .Values.livequery.path }}
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "scrumlr-fullname" .Values.livequery }}
+            port:
+              number: {{ .Values.livequery.port }}

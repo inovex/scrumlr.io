@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "scrumlr-fullname" .Values.server }}
+  labels: 
+    {{- include "selectorLabels" .Values.server | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
+{{- if .Values.server.config }}
+data:
+{{ toYaml .Values.server.config | indent 2 }}
+{{- end }}
