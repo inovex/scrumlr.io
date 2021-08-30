@@ -1,9 +1,7 @@
 import {useEffect} from "react";
-import store from "store";
+import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {RouteComponentProps} from "react-router";
-import {ApplicationState} from "types/store";
-import {useSelector} from "react-redux";
 import LoadingIndicator from "components/LoadingIndicator/LoadingIndicator";
 import Board from "./Board";
 import "./BoardGuard.scss";
@@ -11,7 +9,7 @@ import "./BoardGuard.scss";
 export type BoardGuardProps = RouteComponentProps<{id: string}>;
 
 const BoardGuard = (props: BoardGuardProps) => {
-  const boardStatus = useSelector((state: ApplicationState) => state.board.status);
+  const boardStatus = useAppSelector((state) => state.board.status);
 
   useEffect(() => {
     const boardId = props.match.params.id;
