@@ -18,3 +18,14 @@
   position: absolute;
   left: 0;
 }
+
+.dot-button__add-icon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  height: 18px;
+  width: 18px;
+}
+.dot-button:hover > .dot-button__add-icon {
+  fill: white;
+}

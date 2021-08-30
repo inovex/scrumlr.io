@@ -6,6 +6,7 @@ import "./Votes.scss";
 import classNames from "classnames";
 import {VoteClientModel} from "types/vote";
 import Parse from "parse";
+import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 
 type VotesProps = {
   className?: string;
@@ -35,7 +36,7 @@ export const Votes = (props: VotesProps) => {
       )}
       {props.activeVoting && (
         <DotButton className="dot-button__add" onClick={addVote}>
-          +
+          <PlusIcon className="dot-button__add-icon" />
         </DotButton>
       )}
     </div>

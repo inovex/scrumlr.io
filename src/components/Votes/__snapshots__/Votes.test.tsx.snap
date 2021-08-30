@@ -16,7 +16,11 @@ exports[`Votes should render correctly with no votes and active voting 1`] = `
     <button
       class="dot-button dot-button__add"
     >
-      +
+      <svg
+        class="dot-button__add-icon"
+      >
+        icon-add.svg
+      </svg>
     </button>
   </div>
 </div>
@@ -43,7 +47,11 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
     <button
       class="dot-button dot-button__add"
     >
-      +
+      <svg
+        class="dot-button__add-icon"
+      >
+        icon-add.svg
+      </svg>
     </button>
   </div>
 </div>
