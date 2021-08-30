@@ -12,6 +12,11 @@ $note__author-name-size: 12px;
 $note__author-image-size: 26px;
 $note__author-margin-left: 10px;
 
+.note__root {
+  list-style-type: none;
+  position: relative;
+}
+
 .note {
   cursor: pointer;
   padding: $padding--default $padding--medium;
@@ -20,8 +25,28 @@ $note__author-margin-left: 10px;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  list-style-type: none;
+  z-index: $note-z-index;
 }
+
+.note__in-stack {
+  position: absolute;
+  width: calc(100% - 16px);
+  height: 100%;
+  top: 8px;
+  left: 8px;
+  opacity: 0.95;
+  border-radius: $note__border-radius;
+  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  background-color: $color-white;
+  z-index: $note-z-index - $base-z-index-step;
+}
+@media (prefers-color-scheme: dark) {
+  .note__in-stack {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .note {
     background-color: $color-dark-mode-note;
@@ -33,6 +58,10 @@ $note__author-margin-left: 10px;
 }
 .note--isDragging {
   opacity: 0.5;
+}
+.note--isOver {
+  padding: 14px 18px;
+  border: 2px solid var(--accent-color);
 }
 .note--own-card::before {
   content: "";

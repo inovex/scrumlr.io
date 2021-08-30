@@ -7,6 +7,7 @@ export interface NoteServerModel extends Parse.Object {
   columnId: string;
   text: string;
   author: Parse.Object;
+  parent?: Parse.Object;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -27,6 +28,9 @@ export interface NoteClientModel {
   /** The user author of this note. */
   author: string;
 
+  /** The parent of this note (if stacked). */
+  parentId?: string;
+
   /** The creation date of this object. */
   createdAt?: Date;
 
@@ -42,16 +46,20 @@ export interface NoteClientModel {
   // TODO add editable & stackable attributes (if id ist not undefined and note is persisted)
 }
 
-export interface EditableNoteClientModel {
+type EditableNoteAttributes = {
   columnId: string;
+  parentId: string;
   text: string;
-}
+};
+
+export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
 export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientModel => ({
   id: note.id,
   columnId: note.get("columnId"),
   text: note.get("text"),
   author: note.get("author").id,
+  parentId: note.get("parent")?.id,
   createdAt: note.get("createdAt"),
   updatedAt: note.get("updatedAt"),
   dirty: false,

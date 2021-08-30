@@ -22,6 +22,7 @@ const addInitialBoardSchema = async () => {
 const addInitialNoteSchema = async () => {
   const schema = new Parse.Schema("Note");
   schema.addPointer("board", "Board", {required: true});
+  schema.addPointer("parent", "Note", {required: false});
   schema.addString("columnId", {required: true});
   schema.addPointer("author", "_User", {required: true});
   schema.addString("text", {required: true});
@@ -29,18 +30,10 @@ const addInitialNoteSchema = async () => {
   return schema.save();
 };
 
-const addInitialVote = async () => {
+const addInitialVoteSchema = async () => {
   const schema = new Parse.Schema("Vote");
   schema.addPointer("board", "Board", {required: true});
   schema.addPointer("note", "Note", {required: true});
-  schema.addPointer("user", "_User", {required: true});
-  schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
-  return schema.save();
-};
-
-const addIntialBoardSession = async () => {
-  const schema = new Parse.Schema("BoardSession");
-  schema.addPointer("board", "Board", {required: true});
   schema.addPointer("user", "_User", {required: true});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
@@ -67,7 +60,7 @@ export const initServer = async (appId: string, serverUrl: string, masterKey: st
     await addInitialBoardSchema();
     await addInitialNoteSchema();
     await addInitialJoinRequestSchema();
-    await addInitialVote();
+    await addInitialVoteSchema();
     console.log("Initialized schema");
 
     await Parse.Config.save({

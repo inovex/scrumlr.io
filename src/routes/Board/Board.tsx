@@ -16,6 +16,8 @@ function Board() {
     votes: applicationState.votes,
   }));
 
+  const isAdmin = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
+
   let joinRequestComponent;
   if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
@@ -42,14 +44,18 @@ function Board() {
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
                 .filter((note) => note.columnId === column.id)
+                .filter((note) => note.parentId == null)
                 .map((note) => (
                   <Note
+                    isAdmin={isAdmin}
                     key={note.id}
                     noteId={note.id}
                     text={note.text}
                     authorId={note.author}
+                    columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
+                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
                     activeVoting={state.board.data?.voting === "active"}
                   />
