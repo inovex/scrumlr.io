@@ -11,6 +11,9 @@ $dot-button-color: #eaeaea;
   border: none;
   transition: all 0.25s ease-in-out;
   padding: 0;
+  font-size: 14px;
+  line-height: 28px;
+  font-weight: 600;
 }
 .dot-button:hover {
   background-color: var(--accent-color);

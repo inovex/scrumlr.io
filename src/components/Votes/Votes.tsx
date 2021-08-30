@@ -31,7 +31,7 @@ export const Votes = (props: VotesProps) => {
           className={classNames("dot-button__delete", {"dot-button--own-vote": props.votes.findIndex((vote) => vote.user === Parse.User.current()?.id) !== -1})}
           onClick={deleteVote}
         >
-          <label className="dot-button__delete-text">{props.votes.length.toString()}</label>
+          {props.votes.length.toString()}
         </DotButton>
       )}
       {props.activeVoting && (
