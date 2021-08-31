@@ -5,7 +5,7 @@ import classNames from "classnames";
 import Parse from "parse";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
-// import React from "react";
+import React from "react";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
 import store from "store";
@@ -20,11 +20,12 @@ interface NoteDialogProps {
   columnColor: string;
   show: boolean;
   authorName: string;
+  showAuthors: boolean;
   onClose: () => void;
   childrenNotes: Array<NoteClientModel & {authorName: string}>;
 }
 
-const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, columnName, columnColor, onClose, childrenNotes}: NoteDialogProps) => {
+const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuthors, columnName, columnColor, onClose, childrenNotes}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
@@ -44,7 +45,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, columnNa
   };
 
   return (
-    <Portal onClose={onClose}>
+    <Portal onClose={onClose} darkBackground>
       <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
         <h2 className="note-dialog__header">{columnName}</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
@@ -62,10 +63,12 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, columnNa
           </div>
 
           <footer className="note-dialog__footer">
-            <figure className="note-dialog__author">
-              <img className="note-dialog__author-image" src={avatar} alt="User" />
-              <figcaption className="note-dialog__author-name">{authorName}</figcaption>
-            </figure>
+            {(showAuthors || Parse.User.current()?.id === authorId) && (
+              <figure className="note-dialog__author">
+                <img className="note-dialog__author-image" src={avatar} alt="User" />
+                <figcaption className="note-dialog__author-name">{authorName}</figcaption>
+              </figure>
+            )}
           </footer>
 
           <aside>
@@ -100,10 +103,12 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, columnNa
             </div>
 
             <footer className="note-dialog__footer">
-              <figure className="note-dialog__author">
-                <img className="note-dialog__author-image" src={avatar} alt="User" />
-                <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
-              </figure>
+              {(showAuthors || Parse.User.current()?.id === note.author) && (
+                <figure className="note-dialog__author">
+                  <img className="note-dialog__author-image" src={avatar} alt="User" />
+                  <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
+                </figure>
+              )}
             </footer>
 
             <aside>

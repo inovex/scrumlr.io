@@ -66,17 +66,18 @@ export interface CreateBoardRequest {
   accessCode?: string;
 }
 
-export interface EditBoardRequest {
-  board: string;
+export type EditableBoardAttributes = {
+  name: string;
   showContentOfOtherUsers?: boolean;
   showAuthors?: boolean;
   timerUTCEndTime?: Date;
   expirationUTCTime?: Date;
-}
+  joinConfirmationRequired?: boolean;
+};
 
-export interface DeleteBoardRequest {
-  board: string;
-}
+export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
+
+export type DeleteBoardRequest = {id: string};
 
 export interface JoinRequestResponse {
   board: string;
@@ -239,31 +240,67 @@ export const initializeBoardFunctions = () => {
     return true;
   });
 
-  api<EditBoardRequest, boolean>("editBoard", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    if (Object.keys(request).length <= 1) {
-      throw new Error(`No fields to edit defined in edit request of board '${request.board}'`);
+  api<{board: EditBoardRequest}, boolean>("editBoard", async (user, request) => {
+    await requireValidBoardAdmin(user, request.board.id);
+    if (Object.keys(request.board).length <= 1) {
+      throw new Error(`No fields to edit defined in edit request of board '${request.board.id}'`);
     }
 
     const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
-    const board = await boardQuery.get(request.board, {useMasterKey: true});
+    const board = await boardQuery.get(request.board.id, {useMasterKey: true});
     if (!board) {
-      throw new Error(`Board ${request.board} not found`);
+      throw new Error(`Board ${request.board.id} not found`);
     }
-    if (request.showContentOfOtherUsers) {
-      board.set("showContentOfOtherUsers", request.showContentOfOtherUsers);
+    if (request.board.showContentOfOtherUsers != null) {
+      board.set("showContentOfOtherUsers", request.board.showContentOfOtherUsers);
     }
-    if (request.showAuthors) {
-      board.set("showAuthors", request.showAuthors);
+    if (request.board.showAuthors != null) {
+      board.set("showAuthors", request.board.showAuthors);
     }
-    if (request.timerUTCEndTime) {
-      board.set("timerUTCEndTime", request.timerUTCEndTime);
+    if (request.board.timerUTCEndTime) {
+      board.set("timerUTCEndTime", request.board.timerUTCEndTime);
     }
-    if (request.expirationUTCTime) {
-      board.set("expirationUTCTime", request.expirationUTCTime);
+    if (request.board.expirationUTCTime) {
+      board.set("expirationUTCTime", request.board.expirationUTCTime);
+    }
+    if (request.board.name) {
+      board.set("name", request.board.name);
+    }
+    if (request.board.joinConfirmationRequired != null) {
+      board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
     }
 
-    await board.save();
+    await board.save(null, {useMasterKey: true});
+    return true;
+  });
+
+  api<DeleteBoardRequest, boolean>("deleteBoard", async (user, request) => {
+    await requireValidBoardAdmin(user, request.id);
+    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
+    const board = await boardQuery.get(request.id, {useMasterKey: true});
+
+    const noteQuery = new Parse.Query(Parse.Object.extend("Note"));
+    noteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.id));
+    const notes = await noteQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(notes, {useMasterKey: true});
+
+    const joinRequestQuery = new Parse.Query("JoinRequest");
+    joinRequestQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.id));
+    const joinRequests = await joinRequestQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
+
+    const adminRoleQuery = new Parse.Query(Parse.Role);
+    adminRoleQuery.equalTo("name", `admin_of_${request.id}`);
+    const adminRoles = await adminRoleQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(adminRoles, {useMasterKey: true});
+
+    const memberRoleQuery = new Parse.Query(Parse.Role);
+    memberRoleQuery.equalTo("name", `member_of_${request.id}`);
+    const memberRoles = await memberRoleQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(memberRoles, {useMasterKey: true});
+
+    await board.destroy({useMasterKey: true});
+
     return true;
   });
 };
