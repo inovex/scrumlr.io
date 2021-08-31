@@ -55,7 +55,10 @@ function Board() {
                     columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
-                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
+                    childrenNotes={state.notes
+                      .filter((n) => note.id && note.id === n.parentId)
+                      .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
+                      .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
                     activeVoting={state.board.data?.voting === "active"}
                   />

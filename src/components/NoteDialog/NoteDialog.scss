@@ -87,8 +87,11 @@
   }
 }
 
+.note-dialog__footer {
+  position: relative;
+}
 .note-dialog__author {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   // reset css from figure-element:
   margin: 0;

@@ -10,6 +10,8 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {VoteClientModel} from "types/vote";
+import {Votes} from "../Votes";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -22,10 +24,12 @@ interface NoteDialogProps {
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
-  childrenNotes: Array<NoteClientModel & {authorName: string}>;
+  childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
+  votes: VoteClientModel[];
+  activeVoting: boolean;
 }
 
-const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuthors, columnName, columnColor, onClose, childrenNotes}: NoteDialogProps) => {
+const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuthors, columnName, columnColor, onClose, childrenNotes, votes, activeVoting}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
@@ -61,7 +65,6 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
               {text}
             </blockquote>
           </div>
-
           <footer className="note-dialog__footer">
             {(showAuthors || Parse.User.current()?.id === authorId) && (
               <figure className="note-dialog__author">
@@ -69,6 +72,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <figcaption className="note-dialog__author-name">{authorName}</figcaption>
               </figure>
             )}
+            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
           </footer>
 
           <aside>
@@ -109,6 +113,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
+              <Votes className="note__votes" noteId={note.id!} votes={note.votes} activeVoting={activeVoting} />
             </footer>
 
             <aside>

@@ -21,7 +21,7 @@ interface NoteProps {
   columnName: string;
   columnColor: string;
   showAuthors: boolean;
-  childrenNotes: Array<NoteClientModel>;
+  childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
 }
@@ -74,7 +74,7 @@ const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
             </figure>
           )}
-          <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
+          <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </footer>
         <NoteDialog
           isAdmin={props.isAdmin}
@@ -87,7 +87,9 @@ const Note = (props: NoteProps) => {
           showAuthors={props.showAuthors}
           columnName={props.columnName}
           columnColor={props.columnColor}
-          childrenNotes={props.childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
+          childrenNotes={props.childrenNotes}
+          votes={props.votes}
+          activeVoting={props.activeVoting}
         />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
