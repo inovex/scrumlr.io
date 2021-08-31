@@ -56,7 +56,7 @@
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
   }
 }
-.dot-button:hover:not(:disabled) {
+.dot-button--own-vote:hover:not(:disabled) {
   .dot-button__folded-corner {
     border-width: 12px 0 0 12px;
   }
