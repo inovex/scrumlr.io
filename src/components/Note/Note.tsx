@@ -18,10 +18,11 @@ interface NoteProps {
   columnId: string;
   columnName: string;
   columnColor: string;
+  showAuthors: boolean;
   childrenNotes: Array<NoteClientModel>;
 }
 
-const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColor, childrenNotes}: NoteProps) => {
+const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
   const state = useAppSelector((applicationState) => ({
@@ -34,8 +35,8 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
   };
 
   const [{isDragging}, drag] = useDrag({
-    type: childrenNotes.length > 0 ? "STACK" : "NOTE",
-    item: {id: noteId, columnId},
+    type: props.childrenNotes.length > 0 ? "STACK" : "NOTE",
+    item: {id: props.noteId, columnId: props.columnId},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -45,11 +46,11 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
     accept: "NOTE",
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        store.dispatch(ActionFactory.editNote({id: item.id, parentId: noteId, columnId}));
+        store.dispatch(ActionFactory.editNote({id: item.id, parentId: props.noteId, columnId: props.columnId}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
-    canDrop: (item: {id: string; columnId: string}) => item.id !== noteId,
+    canDrop: (item: {id: string; columnId: string}) => item.id !== props.noteId,
   }));
 
   drag(noteRef);
@@ -57,31 +58,34 @@ const Note = ({isAdmin, text, authorId, noteId, columnId, columnName, columnColo
 
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
-      <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
+      <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
         <div className="note__content">
-          <p className="note__text">{text}</p>
-          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === authorId})} />
+          <p className="note__text">{props.text}</p>
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
         </div>
         <footer className="note__footer">
-          <figure className="note__author" aria-roledescription="author">
-            <img className="note__author-image" src={avatar} alt="User" />
-            <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === authorId)[0]?.displayName}</figcaption>
-          </figure>
+          {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
+            <figure className="note__author" aria-roledescription="author">
+              <img className="note__author-image" src={avatar} alt="User" />
+              <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
+            </figure>
+          )}
         </footer>
         <NoteDialog
-          isAdmin={isAdmin}
-          noteId={noteId}
+          isAdmin={props.isAdmin}
+          noteId={props.noteId}
           onClose={handleShowDialog}
           show={showDialog}
-          text={text}
-          authorId={authorId}
-          authorName={state.users.all.filter((user) => user.id === authorId)[0]?.displayName}
-          columnName={columnName}
-          columnColor={columnColor}
-          childrenNotes={childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
+          text={props.text}
+          authorId={props.authorId}
+          authorName={state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}
+          showAuthors={props.showAuthors}
+          columnName={props.columnName}
+          columnColor={props.columnColor}
+          childrenNotes={props.childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}
         />
       </div>
-      {childrenNotes.length > 0 && <div className="note__in-stack" />}
+      {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
 };

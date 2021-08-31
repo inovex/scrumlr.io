@@ -11,6 +11,7 @@ export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   name: string;
   boardstatus: string;
+  currentUserIsModerator: boolean;
 }
 
 export interface BoardState {
@@ -18,7 +19,7 @@ export interface BoardState {
   lastVisibleColumnIndex: number;
 }
 
-const Board = ({children, name, boardstatus}: BoardProps) => {
+const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState>({firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)});
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
@@ -96,7 +97,7 @@ const Board = ({children, name, boardstatus}: BoardProps) => {
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
 
-      <BoardHeader name={name} boardstatus={boardstatus} />
+      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
 
       {showPreviousButton && (

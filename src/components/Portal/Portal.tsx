@@ -9,12 +9,13 @@ import "./Portal.scss";
 export interface PortalProps {
   children: React.ReactNode;
   onClose?: () => void;
+  darkBackground: boolean;
 }
 
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-const Portal = ({onClose, children}: PortalProps) => {
+const Portal = ({onClose, children, darkBackground}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
@@ -48,7 +49,7 @@ const Portal = ({onClose, children}: PortalProps) => {
 
   return ReactDOM.createPortal(
     <div
-      className={classNames("portal", {"portal--hasPrev": hasPrev}, {"portal--hasNext": hasNext})}
+      className={classNames("portal", {"portal--darkBackground": darkBackground}, {"portal--hasPrev": hasPrev}, {"portal--hasNext": hasNext})}
       onClick={() => {
         if (closeable) {
           onClose!();
