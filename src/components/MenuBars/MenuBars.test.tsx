@@ -6,7 +6,7 @@ import MenuBars from "./MenuBars";
 
 const mockStore = configureStore();
 
-const createMenuBars = (state) => {
+const createMenuBars = (state: {}) => {
   const store = mockStore(state);
 
   return (
@@ -19,6 +19,7 @@ const createMenuBars = (state) => {
 describe("Menu", () => {
   beforeEach(() => {
     const mockCurrentUser = jest.fn(() => ({id: "testId"}));
+    // @ts-ignore
     Parse.User.current = mockCurrentUser;
   });
 
