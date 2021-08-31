@@ -24,7 +24,7 @@
     "react-redux-firebase": "^3.10.0",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
-    "react-toastify": "^8.0.1",
+    "react-toastify": "^8.0.2",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0"
   },
@@ -43,7 +43,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/redux-mock-store": "^1.0.3",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
