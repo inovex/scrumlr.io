@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import isEqual from "lodash/isEqual";
-import {Toast} from "utils/Toast";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 
@@ -76,12 +75,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.UpdatedBoard: {
-      if (action.board?.voting === "active") {
-        Toast.success("Voting has been started");
-      } else if (action.board?.voting === "disabled") {
-        Toast.error("Voting has been ended");
-      }
-
       if (!state.data?.dirty) {
         return {
           status: state.status,
