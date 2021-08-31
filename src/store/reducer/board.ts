@@ -22,6 +22,10 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         },
       };
     }
+    case ActionType.DeleteBoard: {
+      document.location.hash = "#/new";
+      return state;
+    }
     case ActionType.AddColumn: {
       return {
         status: state.status,

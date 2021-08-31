@@ -20,6 +20,7 @@ interface NoteProps {
   columnId: string;
   columnName: string;
   columnColor: string;
+  showAuthors: boolean;
   childrenNotes: Array<NoteClientModel>;
   votes: VoteClientModel[];
   activeVoting: boolean;
@@ -67,10 +68,12 @@ const Note = (props: NoteProps) => {
           <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
         </div>
         <footer className="note__footer">
-          <figure className="note__author" aria-roledescription="author">
-            <img className="note__author-image" src={avatar} alt="User" />
-            <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
-          </figure>
+          {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
+            <figure className="note__author" aria-roledescription="author">
+              <img className="note__author-image" src={avatar} alt="User" />
+              <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
+            </figure>
+          )}
           <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
         </footer>
         <NoteDialog
@@ -81,6 +84,7 @@ const Note = (props: NoteProps) => {
           text={props.text}
           authorId={props.authorId}
           authorName={state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}
+          showAuthors={props.showAuthors}
           columnName={props.columnName}
           columnColor={props.columnColor}
           childrenNotes={props.childrenNotes.map((note) => ({...note, authorName: state.users.all.filter((user) => user.id === note.author)[0]?.displayName}))}

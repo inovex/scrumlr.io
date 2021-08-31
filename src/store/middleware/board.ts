@@ -197,8 +197,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
-      subscription.on("delete", () => {
-        dispatch(ActionFactory.deleteBoard());
+      subscription.on("delete", (object) => {
+        dispatch(ActionFactory.deleteBoard(object.id));
       });
 
       let connectionsCount = 0;
@@ -228,5 +228,9 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
   }
   if (action.type === ActionType.EditBoard) {
     API.editBoard(action.board);
+  }
+
+  if (action.type === ActionType.DeleteBoard) {
+    API.deleteBoard(action.boardId);
   }
 };

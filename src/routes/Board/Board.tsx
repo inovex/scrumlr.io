@@ -15,10 +15,10 @@ function Board() {
     votes: applicationState.votes,
   }));
 
-  const isAdmin = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
+  const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
   let joinRequestComponent;
-  if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
+  if (currentUserIsModerator) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
     if (pendingJoinRequests && pendingJoinRequests.length > 0) {
       joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
@@ -38,7 +38,7 @@ function Board() {
     return (
       <>
         {joinRequestComponent}
-        <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
+        <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board.data!.columns.map((column) => (
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
@@ -46,7 +46,8 @@ function Board() {
                 .filter((note) => note.parentId == null)
                 .map((note) => (
                   <Note
-                    isAdmin={isAdmin}
+                    showAuthors={state.board.data!.showAuthors}
+                    isAdmin={currentUserIsModerator}
                     key={note.id}
                     noteId={note.id}
                     text={note.text}

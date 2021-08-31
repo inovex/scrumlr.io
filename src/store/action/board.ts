@@ -67,8 +67,9 @@ export const BoardActionFactory = {
     board,
   }),
   /** Creates an action which should be dispatched when the user wants to delete the current board. */
-  deleteBoard: () => ({
+  deleteBoard: (boardId: string) => ({
     type: BoardActionType.DeleteBoard,
+    boardId,
   }),
   /**
    * Creates an action which should be dispatched when the user was permitted to access the board with
