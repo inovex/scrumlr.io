@@ -7,6 +7,7 @@ import {mapVoteServerToClientModel, VoteServerModel} from "types/vote";
 import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
+import {API} from "api";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -224,5 +225,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         }
       });
     });
+  }
+  if (action.type === ActionType.EditBoard) {
+    API.editBoard(action.board);
   }
 };

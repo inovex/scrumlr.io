@@ -1,4 +1,5 @@
 import {Color} from "constants/colors";
+import {EditBoardRequest} from "types/board";
 import {callAPI} from "./callApi";
 
 export const BoardAPI = {
@@ -12,7 +13,14 @@ export const BoardAPI = {
    */
   createBoard: (name: string, joinConfirmationRequired: boolean, columns: {name: string; hidden: boolean; color: Color}[]) =>
     callAPI<{columns: {name: string; hidden: boolean}[]; name: string; joinConfirmationRequired: boolean}, string>("createBoard", {columns, name, joinConfirmationRequired}),
-
+  /**
+   * Edits the board with the specified parameters.
+   *
+   * @params board object with the board attributes that have to be changed
+   *
+   * @returns 'true' if the operation succeeded or throws an error otherwise
+   */
+  editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
   /**
    * Create join request for a board session.
    * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join

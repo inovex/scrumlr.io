@@ -24,7 +24,7 @@ export interface BoardServerModel {
   updatedAt: Date;
 }
 
-export interface EditableBoardClientModel {
+export type EditableBoardAttributes = {
   name: string;
   accessCode: string;
   joinConfirmationRequired: boolean;
@@ -36,9 +36,11 @@ export interface EditableBoardClientModel {
   voting: "active" | "disabled";
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
-}
+};
 
-export interface BoardClientModel extends EditableBoardClientModel {
+export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
+
+export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
   columns: {
     id?: string;
