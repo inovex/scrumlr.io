@@ -2,7 +2,7 @@ import "./Note.scss";
 import avatar from "assets/avatar.png";
 import classNames from "classnames";
 import Parse from "parse";
-import store, {useAppSelector} from "store";
+import store from "store";
 import {ActionFactory} from "store/action";
 import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
@@ -16,6 +16,7 @@ interface NoteProps {
   isAdmin: boolean;
   text: string;
   authorId: string;
+  authorName: string;
   noteId: string | undefined;
   columnId: string;
   columnName: string;
@@ -28,10 +29,6 @@ interface NoteProps {
 
 const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-
-  const state = useAppSelector((applicationState) => ({
-    users: applicationState.users,
-  }));
 
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
@@ -71,26 +68,12 @@ const Note = (props: NoteProps) => {
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
               <img className="note__author-image" src={avatar} alt="User" />
-              <figcaption className="note__author-name">{state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}</figcaption>
+              <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
           <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </footer>
-        <NoteDialog
-          isAdmin={props.isAdmin}
-          noteId={props.noteId}
-          onClose={handleShowDialog}
-          show={showDialog}
-          text={props.text}
-          authorId={props.authorId}
-          authorName={state.users.all.filter((user) => user.id === props.authorId)[0]?.displayName}
-          showAuthors={props.showAuthors}
-          columnName={props.columnName}
-          columnColor={props.columnColor}
-          childrenNotes={props.childrenNotes}
-          votes={props.votes}
-          activeVoting={props.activeVoting}
-        />
+        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>

@@ -52,6 +52,7 @@ function Board() {
                     noteId={note.id}
                     text={note.text}
                     authorId={note.author}
+                    authorName={state.users.all.filter((user) => user.id === note.author)[0]?.displayName}
                     columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
