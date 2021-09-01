@@ -75,6 +75,7 @@ $note__author-margin-left: 10px;
 }
 
 .note__content {
+  position: relative;
   display: flex;
   width: 100%;
 }
@@ -83,7 +84,7 @@ $note__author-margin-left: 10px;
   margin: 0;
   margin-right: 5px;
   min-height: 3 * $line-height--medium;
-  width: 100%;
+  width: calc(100% - 20px);
   color: $color-black;
   font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
@@ -94,6 +95,7 @@ $note__author-margin-left: 10px;
   text-overflow: ellipsis;
   display: -webkit-box;
   margin-bottom: $note__text-margin-bottom;
+  word-break: break-all;
 }
 @media (prefers-color-scheme: dark) {
   .note__text {
@@ -102,12 +104,15 @@ $note__author-margin-left: 10px;
 }
 
 .note__edit {
+  position: absolute;
+  top: 0;
+  right: 0;
   height: 20px;
   width: 20px;
   align-self: end;
   opacity: 0;
   transition: opacity 500ms ease-out;
-  display: none;
+  display: inline;
   color: $color-dark-gray;
 }
 @media (prefers-color-scheme: dark) {
@@ -119,9 +124,9 @@ $note__author-margin-left: 10px;
   opacity: 100%;
 }
 
-.note__edit--own-card {
-  display: block;
-}
+//.note__edit--own-card {
+//  display: block;
+//}
 
 .note__footer {
   position: relative;
