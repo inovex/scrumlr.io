@@ -1,34 +1,38 @@
-import { useState } from 'react';
+import {useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import classNames from 'classnames';
-import './MenuItem.scss';
+import classNames from "classnames";
+import "./MenuItem.scss";
 
 type MenuToggleProps = {
-    direction: 'left' | 'right';
-    onToggle: (active: boolean) => void;
-    toggleStartLabel: string;
-    toggleStopLabel: string;
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-}
+  direction: "left" | "right";
+  onToggle: (active: boolean) => void;
+  toggleStartLabel: string;
+  toggleStopLabel: string;
+  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  disabled?: boolean;
+};
 
 function MenuToggle(props: MenuToggleProps) {
+  const [isActive, setStatus] = useState(false);
 
-    const [isActive, setStatus] = useState(false);
+  const Icon = props.icon;
 
-    const Icon = props.icon;
-
-    return (<button 
-                className={classNames('menu-item', {'menu-item--active': isActive, 'menu-item--disabled': !isActive}, `menu-item--${props.direction}`)}
-                onClick={() => {props.onToggle(!isActive); setStatus(prevValue => !prevValue);}}
-            >
-        <div className='menu-item__tooltip'>
-            <span className='tooltip__text'>
-                {isActive ? props.toggleStopLabel : props.toggleStartLabel}
-            </span>
-        </div>
-        <Icon className='menu-item__icon menu-item__icon--start'/>
-        <CloseIcon className='menu-item__icon menu-item__icon--end'/>
-    </button>);
+  return (
+    <button
+      disabled={props.disabled}
+      className={classNames("menu-item", {"menu-item--active": isActive, "menu-item--disabled": !isActive}, `menu-item--${props.direction}`)}
+      onClick={() => {
+        props.onToggle(!isActive);
+        setStatus((prevValue) => !prevValue);
+      }}
+    >
+      <div className="menu-item__tooltip">
+        <span className="tooltip__text">{isActive ? props.toggleStopLabel : props.toggleStartLabel}</span>
+      </div>
+      <Icon className="menu-item__icon menu-item__icon--start" />
+      <CloseIcon className="menu-item__icon menu-item__icon--end" />
+    </button>
+  );
 }
 
 export default MenuToggle;

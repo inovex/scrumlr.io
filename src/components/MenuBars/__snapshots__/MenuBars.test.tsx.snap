@@ -12,6 +12,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
     >
       <button
         class="menu-item menu-item--disabled menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -35,6 +36,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -53,6 +55,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -71,6 +74,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -104,6 +108,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
     >
       <button
         class="menu-item menu-item--disabled menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -127,6 +132,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -145,6 +151,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -163,6 +170,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -189,6 +197,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
     >
       <button
         class="menu-item menu-item--disabled menu-item--left"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -212,6 +221,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -235,6 +245,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
@@ -258,6 +269,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"
+        disabled=""
       >
         <div
           class="menu-item__tooltip"
