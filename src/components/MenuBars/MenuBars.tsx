@@ -15,7 +15,7 @@ import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-setti
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import "./MenuBars.scss";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "../../store/action";
+import {ActionFactory} from "store/action";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
