@@ -33,7 +33,7 @@
     "express": "^4.17.1",
     "http-proxy-middleware": "^2.0.1",
     "parse": "^3.3.0",
-    "parse-server": "^4.10.2"
+    "parse-server": "^4.10.3"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
