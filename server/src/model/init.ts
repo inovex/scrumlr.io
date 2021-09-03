@@ -30,8 +30,8 @@ const addInitialNoteSchema = async () => {
   return schema.save();
 };
 
-const addInitialVote = async () => {
-  const schema = new Parse.Schema("BoardSession");
+const addInitialVoteSchema = async () => {
+  const schema = new Parse.Schema("Vote");
   schema.addPointer("board", "Board", {required: true});
   schema.addPointer("note", "Note", {required: true});
   schema.addPointer("user", "_User", {required: true});
@@ -60,7 +60,7 @@ export const initServer = async (appId: string, serverUrl: string, masterKey: st
     await addInitialBoardSchema();
     await addInitialNoteSchema();
     await addInitialJoinRequestSchema();
-    await addInitialVote();
+    await addInitialVoteSchema();
     console.log("Initialized schema");
 
     await Parse.Config.save({

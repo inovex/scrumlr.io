@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DotButton should render correctly 1`] = `
+<div>
+  <button
+    class="dot-button"
+  >
+    test-text
+  </button>
+</div>
+`;
+
+exports[`DotButton should render correctly with additional classname 1`] = `
+<div>
+  <button
+    class="dot-button test-classname"
+  >
+    test-text
+  </button>
+</div>
+`;

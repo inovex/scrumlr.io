@@ -12,6 +12,7 @@ function Board() {
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
+    votes: applicationState.votes,
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
@@ -51,10 +52,16 @@ function Board() {
                     noteId={note.id}
                     text={note.text}
                     authorId={note.author}
+                    authorName={state.users.all.filter((user) => user.id === note.author)[0]?.displayName}
                     columnId={column.id!}
                     columnName={column.name}
                     columnColor={column.color}
-                    childrenNotes={state.notes.filter((n) => note.id && note.id === n.parentId)}
+                    childrenNotes={state.notes
+                      .filter((n) => note.id && note.id === n.parentId)
+                      .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
+                      .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
+                    votes={state.votes.filter((vote) => vote.note === note.id)}
+                    activeVoting={state.board.data?.voting === "active"}
                   />
                 ))}
             </Column>
