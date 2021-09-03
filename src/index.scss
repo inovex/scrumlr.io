@@ -1,21 +1,25 @@
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
 }
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
+  font-variant-numeric: lining-nums;
 }
 
 body {
   margin: 0;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

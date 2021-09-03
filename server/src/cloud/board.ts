@@ -73,6 +73,7 @@ export type EditableBoardAttributes = {
   timerUTCEndTime?: Date;
   expirationUTCTime?: Date;
   joinConfirmationRequired?: boolean;
+  voting?: "active" | "disabled";
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -118,7 +119,7 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns}, {useMasterKey: true});
+    const savedBoard = await board.save({...request, columns, voteLimit: 10}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -269,6 +270,9 @@ export const initializeBoardFunctions = () => {
     if (request.board.joinConfirmationRequired != null) {
       board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
     }
+    if (request.board.voting) {
+      board.set("voting", request.board.voting);
+    }
 
     await board.save(null, {useMasterKey: true});
     return true;
@@ -280,12 +284,17 @@ export const initializeBoardFunctions = () => {
     const board = await boardQuery.get(request.id, {useMasterKey: true});
 
     const noteQuery = new Parse.Query(Parse.Object.extend("Note"));
-    noteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.id));
+    noteQuery.equalTo("board", board);
     const notes = await noteQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(notes, {useMasterKey: true});
 
+    const voteQuery = new Parse.Query("Vote");
+    voteQuery.equalTo("board", board);
+    const votes = await voteQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(votes, {useMasterKey: true});
+
     const joinRequestQuery = new Parse.Query("JoinRequest");
-    joinRequestQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(request.id));
+    joinRequestQuery.equalTo("board", board);
     const joinRequests = await joinRequestQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
 
@@ -300,7 +309,6 @@ export const initializeBoardFunctions = () => {
     await Parse.Object.destroyAll(memberRoles, {useMasterKey: true});
 
     await board.destroy({useMasterKey: true});
-
     return true;
   });
 };
