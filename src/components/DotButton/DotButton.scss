@@ -16,14 +16,7 @@
 }
 .dot-button:disabled {
   cursor: default;
-
-  &:active {
-    transform: none;
-  }
 }
-.dot-button:hover {
-  background-color: var(--accent-color);
-}
-.dot-button:active {
+.dot-button:not([disabled]):active {
   transform: scale(0.9);
 }

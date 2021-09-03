@@ -29,11 +29,21 @@
   width: 18px;
   fill: var(--accent-color);
 }
-.dot-button:hover > .dot-button__add-icon {
-  fill: white;
+.dot-button__add:not([disabled]):hover {
+  background-color: var(--accent-color);
+
+  .dot-button__add-icon {
+    fill: white;
+  }
 }
-.dot-button:hover {
-  color: white;
+.dot-button__delete.dot-button--own-vote:not([disabled]):hover > .dot-button__folded-corner {
+  border-width: 12px 0 0 12px;
+}
+.dot-button__delete:not(.dot-button--own-vote):not([disabled]):active {
+  transform: none;
+}
+.dot-button__delete:not(.dot-button--own-vote) {
+  cursor: default;
 }
 
 .dot-button__folded-corner {
@@ -54,10 +64,5 @@
   .dot-button__folded-corner {
     box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
-  }
-}
-.dot-button--own-vote:hover:not(:disabled) {
-  .dot-button__folded-corner {
-    border-width: 12px 0 0 12px;
   }
 }
