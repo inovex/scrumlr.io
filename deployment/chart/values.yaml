@@ -7,8 +7,6 @@ cache:
   restartPolicy: Always
   port: 6379
   livenessProbe:
-    tcpSocket:
-      port: 6379
     initialDelaySeconds: 10
     periodSeconds: 20
   readinessProbe:
@@ -52,6 +50,11 @@ frontend:
   path: /
   imagePullPolicy: IfNotPresent
   restartPolicy: Always
+  frontend:
+  config:
+    REACT_APP_SERVER_API_URL: http://localhost/api
+    REACT_APP_LIVEQUERY_URL: ws://localhost/ws
+    SKIP_PREFLIGHT_CHECK: "true"
   livenessProbe:
     httpGet:
       path: /

@@ -24,6 +24,8 @@ spec:
               containerPort: {{ .Values.cache.hostPort }}
           {{- if .Values.cache.livenessProbe }}
           livenessProbe:
+            tcpSocket:
+              port: 6379
           {{- toYaml .Values.cache.livenessProbe | nindent 12 }}
           {{- end }}
           {{- if .Values.cache.readinessProbe }}
