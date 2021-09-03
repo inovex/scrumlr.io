@@ -3902,10 +3902,10 @@ parse-json@^5.0.0:
     json-parse-even-better-errors "^2.3.0"
     lines-and-columns "^1.1.6"
 
-parse-server@^4.10.2:
-  version "4.10.2"
-  resolved "https://registry.yarnpkg.com/parse-server/-/parse-server-4.10.2.tgz#94d5c3cf1b0d8d53699656b295deb1fc87e43248"
-  integrity sha512-pfPZF2bcHYfebJ2X7zWlqKlivdhR6sqg47Ousu1IAOSOBa847FmleueaefRXy79VkAWeYrmp3HK8INeCaReK+Q==
+parse-server@^4.10.3:
+  version "4.10.3"
+  resolved "https://registry.yarnpkg.com/parse-server/-/parse-server-4.10.3.tgz#6160ca189894bb453e41dfd26fe5e1d7ae69cec0"
+  integrity sha512-vg4ViF+mRGGUOJV43aaTIO6BIoKoV6bR1+/qCNal56cqd4YDW63s6vY/2cuXSy1V5rJHfVJsg6LWN7IVPXirKg==
   dependencies:
     "@apollographql/graphql-playground-html" "1.6.26"
     "@graphql-tools/links" "6.2.5"
