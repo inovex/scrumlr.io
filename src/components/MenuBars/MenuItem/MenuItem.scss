@@ -24,11 +24,11 @@
     top: 0;
     right: 0;
     bottom: 0;
-    height: 64px;
+    height: 36px;
   }
 
-  .menu-item:hover,
-  .menu-item:active {
+  .menu-item:not(:disabled):hover,
+  .menu-item:not(:disabled):active {
     left: 0;
     height: 100%;
     width: 100%;
@@ -47,21 +47,21 @@
     }
   }
 
-  .menu-item:hover > .menu-item__tooltip,
-  .menu-item:active > .menu-item__tooltip {
+  .menu-item:not(:disabled):hover > .menu-item__tooltip,
+  .menu-item:not(:disabled):active > .menu-item__tooltip {
     height: 100%;
     width: 100%;
     transition: background-color 0.5s 0.25s ease, width 0.5s 0.25s ease, height 0.5s 0.25s ease;
   }
 
-  .menu-item:hover > .menu-item__icon,
-  .menu-item:active > .menu-item__icon {
+  .menu-item:not(:disabled):hover > .menu-item__icon,
+  .menu-item:not(:disabled):active > .menu-item__icon {
     left: $menu-item__first-position-left;
     transition: left 2s 0.5s, visibility 0s 0.5s;
   }
 
-  .menu-item:hover > .tooltip__text,
-  .menu-item:active > .tooltip__text {
+  .menu-item:not(:disabled):hover > .tooltip__text,
+  .menu-item:not(:disabled):active > .tooltip__text {
     margin-right: 48px;
   }
 
@@ -145,7 +145,7 @@
     position: relative;
     transition: background-color 0.25s ease-in-out, left 2s;
   }
-  .menu-item:hover {
+  .menu-item:not(:disabled):hover {
     @media (prefers-color-scheme: light) {
       .menu-item__icon {
         color: $color-white;
@@ -159,22 +159,22 @@
       }
     }
   }
-  .menu-item:hover > .menu-item__tooltip {
+  .menu-item:not(:disabled):hover > .menu-item__tooltip {
     width: 230px;
   }
-  .menu-item:hover > .menu-item__icon {
+  .menu-item:not(:disabled):hover > .menu-item__icon {
     animation: none;
   }
-  .menu-item--left:hover > .menu-item__tooltip > .tooltip__text {
+  .menu-item--left:not(:disabled):hover > .menu-item__tooltip > .tooltip__text {
     margin-right: 48px;
   }
-  .menu-item--right:hover > .menu-item__tooltip > .tooltip__text {
+  .menu-item--right:not(:disabled):hover > .menu-item__tooltip > .tooltip__text {
     margin-left: 48px;
   }
-  .menu-item--active:hover > .menu-item__icon--end {
+  .menu-item--active:not(:disabled):hover > .menu-item__icon--end {
     display: inline;
   }
-  .menu-item--active:hover > .menu-item__icon--start {
+  .menu-item--active:not(:disabled):hover > .menu-item__icon--start {
     display: none;
   }
 
@@ -268,4 +268,13 @@
       color: $color-white;
     }
   }
+}
+
+// DISABLED
+.menu-item:disabled {
+  cursor: not-allowed;
+}
+.menu-item:disabled .menu-item__icon {
+  color: #adadad;
+  background: transparent;
 }

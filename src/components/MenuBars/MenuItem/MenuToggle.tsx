@@ -9,6 +9,7 @@ type MenuToggleProps = {
   toggleStartLabel: string;
   toggleStopLabel: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  disabled?: boolean;
 };
 
 function MenuToggle(props: MenuToggleProps) {
@@ -18,6 +19,7 @@ function MenuToggle(props: MenuToggleProps) {
 
   return (
     <button
+      disabled={props.disabled}
       className={classNames("menu-item", {"menu-item--active": isActive, "menu-item--disabled": !isActive}, `menu-item--${props.direction}`)}
       onClick={() => {
         props.onToggle(!isActive);
