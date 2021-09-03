@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import classNames from "classnames";
 import "./MenuItem.scss";

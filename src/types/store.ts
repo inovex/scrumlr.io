@@ -1,5 +1,6 @@
 import {BoardClientModel} from "./board";
 import {NoteClientModel} from "./note";
+import {VoteClientModel} from "./vote";
 import {UserClientModel} from "./user";
 import {JoinRequestClientModel} from "./joinRequest";
 
@@ -19,4 +20,5 @@ export interface ApplicationState {
   notes: NoteClientModel[];
   users: UsersState;
   joinRequests: JoinRequestClientModel[];
+  votes: VoteClientModel[];
 }

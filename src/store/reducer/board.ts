@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import isEqual from "lodash/isEqual";
-import {BoardState} from "../../types/store";
-import {ActionType, ReduxAction} from "../action";
+import {BoardState} from "types/store";
+import {ActionType, ReduxAction} from "store/action";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -104,7 +104,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           data: action.board,
         };
       }
-
       return state;
     }
     case ActionType.PendingBoardAccessConfirmation:
