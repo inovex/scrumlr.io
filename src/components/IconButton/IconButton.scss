@@ -28,28 +28,12 @@
 
 // Icon
 .icon-button__icon {
-  color: var(--accent-color);
-}
-@media (prefers-color-scheme: dark) {
-  .icon-button__icon {
-    color: $color-white;
-  }
-}
-
-@media #{$menu-desktop} {
-  .icon-button__icon {
-    color: $color-white;
-  }
+  color: $color-white;
 }
 
 .icon-button:hover > .icon-button__icon {
   animation: none;
   color: var(--accent-color);
-}
-@media (prefers-color-scheme: dark) {
-  .icon-button:hover > .icon-button__icon {
-    color: var(--accent-color);
-  }
 }
 
 .icon-button__icon--end {
@@ -86,25 +70,9 @@
 
   z-index: -1;
   overflow: hidden;
-  color: var(--accent-color);
-  background-color: white;
+  background-color: transparent;
   box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   transition: width 0.25s ease-in-out;
-}
-@media (prefers-color-scheme: dark) {
-  .icon-button__tooltip {
-    background-color: transparent;
-  }
-}
-@media #{$menu-desktop} {
-  .icon-button__tooltip {
-    background-color: transparent;
-  }
-}
-@media screen and (max-width: 600px) {
-  .icon-button__tooltip {
-    display: none;
-  }
 }
 
 .icon-button--left > .icon-button__tooltip {
@@ -121,17 +89,7 @@
   position: absolute;
 }
 .icon-button__tooltip > .tooltip__text {
-  color: var(--accent-color);
-}
-@media (prefers-color-scheme: dark) {
-  .icon-button__tooltip > .tooltip__text {
-    color: $color-white;
-  }
-}
-@media #{$menu-desktop} {
-  .icon-button__tooltip > .tooltip__text {
-    color: $color-white;
-  }
+  color: $color-white;
 }
 .icon-button--right > .icon-button__tooltip > .tooltip__text {
   margin-left: 36px;

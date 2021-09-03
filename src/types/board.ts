@@ -17,7 +17,7 @@ export interface BoardServerModel {
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
-  voting: string;
+  voting: "active" | "disabled";
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
   createdAt: Date;
@@ -33,7 +33,7 @@ export type EditableBoardAttributes = {
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
-  voting: string;
+  voting: "active" | "disabled";
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
 };
