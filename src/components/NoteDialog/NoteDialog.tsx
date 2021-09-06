@@ -5,6 +5,7 @@ import classNames from "classnames";
 import Parse from "parse";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
+import {ReactComponent as unstackIcon} from "assets/icon-unstack.svg";
 import React from "react";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
@@ -135,7 +136,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                     }}
                     direction="right"
                     label="Unstack"
-                    icon={deleteIcon}
+                    icon={unstackIcon}
                   />
                 </li>
               </ul>
