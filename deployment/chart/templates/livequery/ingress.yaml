@@ -7,6 +7,8 @@ metadata:
     {{- include "labels" . | nindent 6 }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - http:
