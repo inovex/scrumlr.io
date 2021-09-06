@@ -12,7 +12,7 @@ function Board() {
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
-    votes: applicationState.votes,
+    votes: applicationState.votes.filter((vote) => applicationState.board.data?.voting === "disabled" || vote.user === Parse.User.current()?.id),
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
