@@ -48,6 +48,12 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
     }
   };
 
+  const onUnstack = (id: string, authorId: string) => {
+    if (editable(authorId)) {
+      store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
+    }
+  };
+
   return (
     <Portal onClose={onClose} darkBackground>
       <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
@@ -120,6 +126,17 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
               <ul className="note-dialog__options">
                 <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
                   <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
+                </li>
+                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
+                  <IconButton
+                    onClick={() => {
+                      onUnstack(note.id!, note.author);
+                      onClose();
+                    }}
+                    direction="right"
+                    label="Unstack"
+                    icon={deleteIcon}
+                  />
                 </li>
               </ul>
             </aside>
