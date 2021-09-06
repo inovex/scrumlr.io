@@ -44,7 +44,7 @@ export const initializeNoteFunctions = () => {
     const note = await query.get(request.note.id, {useMasterKey: true});
 
     if (request.note.parentId) {
-      if (request.note.parentId == "unstack") note.unset("parent");
+      if (request.note.parentId === "unstack") note.unset("parent");
       else note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
     }
 
