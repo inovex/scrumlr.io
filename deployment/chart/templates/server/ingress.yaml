@@ -5,6 +5,8 @@ metadata:
   labels: 
     {{- include "selectorLabels" .Values.server | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - http:

@@ -22,7 +22,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.DeleteBoard: {
-      document.location.hash = "#/new";
+      document.location.pathname = "/new";
       return state;
     }
     case ActionType.AddColumn: {
