@@ -98,6 +98,16 @@ describe("NoteDialog", () => {
       expect(container.querySelector(".note-dialog").children.item(1)).toHaveClass("note-dialog__note");
     });
 
+    test("note-dialog__options note two are present", () => {
+      const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
+      expect(container.querySelector(".note-dialog").children.item(2).children.item(2).children.item(0)).toHaveClass("note-dialog__options");
+    });
+
+    test("note-dialog__options note three are present", () => {
+      const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
+      expect(container.querySelector(".note-dialog").children.item(3).children.item(2).children.item(0)).toHaveClass("note-dialog__options");
+    });
+
     test("note-dialog__note two is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
       expect(container.querySelector(".note-dialog").children.item(2)).toHaveClass("note-dialog__note");
