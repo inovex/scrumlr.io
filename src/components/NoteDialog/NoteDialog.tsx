@@ -77,7 +77,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <figcaption className="note-dialog__author-name">{authorName}</figcaption>
               </figure>
             )}
-            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
+            <Votes className="note__votes" noteId={noteId!} votes={!activeVoting ? votes : votes.filter((n) => n.user === Parse.User.current()?.id)} activeVoting={activeVoting} />
           </footer>
 
           <aside>
