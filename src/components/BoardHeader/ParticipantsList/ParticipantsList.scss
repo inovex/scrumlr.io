@@ -1,0 +1,106 @@
+.participants {
+  position: absolute;
+  top: 92px;
+  right: 12px;
+  width: 300px;
+  border-radius: 16px;
+  background-color: white;
+  box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+  overflow: hidden;
+}
+
+.participants__header {
+  background-color: #0057ff;
+  color: white;
+  height: 86px;
+  padding-left: 20px;
+  position: relative;
+  box-shadow: 0 0 8px 0 rgba(0, 87, 255, 0.25);
+}
+
+.participants__header > h1 {
+  margin: 0;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 18px;
+  letter-spacing: 0.25px;
+  position: absolute;
+  top: 20px;
+}
+
+.participants__header > input {
+  background-color: transparent;
+  color: white;
+  border: none;
+  position: absolute;
+  top: 44px;
+}
+.participants__header > input:focus {
+  outline: none;
+  border-bottom: 1px solid white;
+}
+
+.participants__list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 240px;
+  overflow: scroll;
+}
+
+.participants__list > li {
+  position: relative;
+  height: 48px;
+  padding: 6px 20px;
+}
+
+.participants__list > li:hover {
+  background-color: #f3f3f3;
+}
+
+.participants__list > li:not(:last-child)::after {
+  content: "";
+  height: 1px;
+  width: 300px;
+  background: linear-gradient(
+    to right,
+    rgba(173, 173, 173, 0) 0%,
+    rgba(173, 173, 173, 0) 5%,
+    rgba(173, 173, 173, 0.5) 25%,
+    rgba(173, 173, 173, 0.5) 75%,
+    rgba(173, 173, 173, 0) 95%,
+    rgba(173, 173, 173, 0) 100%
+  );
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+figure {
+  display: inline-flex;
+  align-items: center;
+  align-items: center;
+  height: 28px;
+  vertical-align: baseline;
+  margin: 0;
+}
+
+figcaption {
+  display: inline-block;
+  line-height: 28px;
+  margin-left: 10px;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  font-weight: 300;
+  width: 222px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #111111;
+}
+
+img {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+}
