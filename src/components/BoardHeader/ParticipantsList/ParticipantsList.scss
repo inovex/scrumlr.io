@@ -1,7 +1,7 @@
 .participants {
   position: absolute;
   top: 92px;
-  right: 12px;
+  right: 40px;
   width: 300px;
   border-radius: 16px;
   background-color: white;
@@ -76,7 +76,7 @@
   left: 0;
 }
 
-figure {
+.participants__list > figure {
   display: inline-flex;
   align-items: center;
   align-items: center;
@@ -85,7 +85,7 @@ figure {
   margin: 0;
 }
 
-figcaption {
+.participants__list > figcaption {
   display: inline-block;
   line-height: 28px;
   margin-left: 10px;
@@ -99,7 +99,7 @@ figcaption {
   color: #111111;
 }
 
-img {
+.participants__list > img {
   height: 28px;
   width: 28px;
   border-radius: 100%;

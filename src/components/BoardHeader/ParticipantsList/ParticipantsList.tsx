@@ -1,6 +1,7 @@
 import Portal from "components/Portal/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
+import avatar from "assets/avatar.png";
 import "./ParticipantsList.scss";
 
 type ParticipantsListProps = {
@@ -30,7 +31,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .map((participant) => (
               <li>
                 <figure>
-                  <img src="https://openclipart.org/image/800px/215813" />
+                  <img src={avatar} />
                   <figcaption>{participant.displayName}</figcaption>
                 </figure>
               </li>

@@ -1,13 +1,18 @@
 .board-users {
-  position: absolute;
-  right: 90px;
-  top: 40px;
+  margin-right: 40px;
   list-style-type: none;
-  margin: 0;
   padding: 0;
   align-self: center;
   display: flex;
   flex-direction: row-reverse;
+  width: max-content;
+  padding: 10px 20px;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.board-users:hover {
+  background-color: rgba(0, 87, 255, 0.06);
 }
 
 .board-users li {
