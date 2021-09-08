@@ -25,3 +25,6 @@ server/logs
 /.idea
 debug.log
 ui-debug.log
+
+# vscode
+/.vscode
