@@ -18,3 +18,9 @@
 .board-users li {
   display: inline;
 }
+
+@media screen and (max-width: 768px) {
+  .board-users li:not(:last-child) {
+    display: none;
+  }
+}
