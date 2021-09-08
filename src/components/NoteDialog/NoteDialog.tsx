@@ -12,7 +12,7 @@ import {NoteClientModel} from "types/note";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {VoteClientModel} from "types/vote";
-import {Votes} from "../Votes";
+import {filterVotes, Votes} from "../Votes";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -53,8 +53,6 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
-  const filterVotes = (votes: VoteClientModel[]) => !activeVoting ? votes : votes.filter((n) => n.user === Parse.User.current()?.id);
-
   return (
     <Portal onClose={onClose} darkBackground>
       <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
@@ -79,7 +77,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <figcaption className="note-dialog__author-name">{authorName}</figcaption>
               </figure>
             )}
-            <Votes className="note__votes" noteId={noteId!} votes={filterVotes(votes)} activeVoting={activeVoting} />
+            <Votes className="note__votes" noteId={noteId!} votes={filterVotes(votes, activeVoting)} activeVoting={activeVoting} />
           </footer>
 
           <aside>
@@ -120,7 +118,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
-              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes)} activeVoting={activeVoting} />
+              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, activeVoting)} activeVoting={activeVoting} />
             </footer>
 
             <aside>
