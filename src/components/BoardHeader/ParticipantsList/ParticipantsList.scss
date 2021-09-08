@@ -1,21 +1,28 @@
+@import "constants/style";
+
 .participants {
   position: absolute;
   top: 92px;
   right: 40px;
   width: 300px;
   border-radius: 16px;
-  background-color: white;
+  background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
 }
 
 .participants__header {
-  background-color: #0057ff;
   color: white;
   height: 86px;
   padding-left: 20px;
   position: relative;
-  box-shadow: 0 0 8px 0 rgba(0, 87, 255, 0.25);
+  // box-shadow: 0 0 8px 0 rgba(0, 87, 255, 0.25);
+}
+@media (prefers-color-scheme: dark) {
+  .participants {
+    background-color: $color-planning-pink;
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
 }
 
 .participants__header > h1 {
@@ -30,7 +37,10 @@
 
 .participants__header > input {
   background-color: transparent;
-  color: white;
+  color: $color-white;
+  opacity: 0.8;
+  font-size: 13px;
+  letter-spacing: 0.27px;
   border: none;
   position: absolute;
   top: 44px;
@@ -49,6 +59,7 @@
 }
 
 .participants__list > li {
+  background-color: white;
   position: relative;
   height: 48px;
   padding: 6px 20px;
@@ -56,6 +67,16 @@
 
 .participants__list > li:hover {
   background-color: #f3f3f3;
+}
+
+@media (prefers-color-scheme: dark) {
+  .participants__list > li {
+    background-color: $color-dark-mode-note;
+  }
+
+  .participants__list > li:hover {
+    background-color: #3d4555;
+  }
 }
 
 .participants__list > li:not(:last-child)::after {
@@ -97,6 +118,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #111111;
+}
+@media (prefers-color-scheme: dark) {
+  .participants__list figcaption {
+    color: white;
+  }
 }
 
 .participants__list img {
