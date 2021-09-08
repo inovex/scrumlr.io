@@ -10,7 +10,7 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
   const initialState = {
     board: {
       data: {
-        columns: [{id: "TestID", name: "Testheader", hidden: false}],
+        columns: [{id: "test_column", name: "test_header", hidden: false}],
       },
     },
     notes: [],
@@ -35,7 +35,7 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
     <Provider store={store}>
       <NoteContext
         key=""
-        noteId=""
+        noteId="0"
         text={text}
         authorId={authorId}
         columnId=""
@@ -48,11 +48,15 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
           {
             id: "test-id",
             board: "test-board",
-            note: "test-note",
+            note: "0",
             user: "test-user",
           },
         ]}
-        childrenNotes={[]}
+        childrenNotes={[
+          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
+          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
+        ]}
+        authorName=""
       />
     </Provider>
   );
@@ -125,6 +129,13 @@ describe("Note", () => {
     test("show note with correct style", () => {
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  describe("should have note in stack", () => {
+    test("check div with class name note__in-stack", () => {
+      const {container} = render(createNote("Test Text", "Test Author", true));
+      expect(container.querySelector(".note__root")!.lastChild).toHaveClass("note__in-stack");
     });
   });
 });
