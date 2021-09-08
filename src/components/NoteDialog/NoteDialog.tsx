@@ -50,9 +50,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
   };
 
   const onUnstack = (id: string, authorId: string) => {
-    if (editable(authorId)) {
-      store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
-    }
+    store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
   return (
@@ -128,7 +126,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
                   <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
                 </li>
-                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
+                <li className="note-dialog__option">
                   <IconButton
                     onClick={() => {
                       onUnstack(note.id!, note.author);
