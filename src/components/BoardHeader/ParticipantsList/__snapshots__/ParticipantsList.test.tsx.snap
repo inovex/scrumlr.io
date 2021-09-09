@@ -2,6 +2,74 @@
 
 exports[`ParticipantsList should render correctly on close 1`] = `<div />`;
 
+exports[`ParticipantsList should render correctly on filtered participants 1`] = `
+<div
+  id="portal"
+>
+  <div
+    class="portal"
+    role="dialog"
+  >
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="1"
+    />
+    <div
+      data-focus-lock-disabled="false"
+    >
+      <div
+        class="portal__frame"
+      >
+        <div
+          class="portal__content"
+          role="dialog"
+        >
+          <aside
+            class="participants"
+          >
+            <header
+              class="participants__header"
+            >
+              <h1>
+                Board Participants
+              </h1>
+              <input
+                placeholder="Search Participant"
+              />
+            </header>
+            <ul
+              class="participants__list"
+            >
+              <li>
+                <figure>
+                  <img
+                    src="avatar.png"
+                  />
+                  <figcaption>
+                    Participant 0
+                  </figcaption>
+                </figure>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;
+
 exports[`ParticipantsList should render correctly on open 1`] = `
 <div
   id="portal"
