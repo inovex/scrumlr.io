@@ -15,7 +15,7 @@ type VotesProps = {
   activeVoting: boolean;
 };
 
-export const filterVotes = (votes: VoteClientModel[], activeVoting: boolean) => !activeVoting ? votes : votes.filter((v) => v.user === Parse.User.current()?.id);
+export const filterVotes = (votes: VoteClientModel[], activeVoting: boolean) => votes.filter((vote) => !activeVoting || vote.user === Parse.User.current()?.id);
 
 export const Votes = (props: VotesProps) => {
   const addVote = () => {
