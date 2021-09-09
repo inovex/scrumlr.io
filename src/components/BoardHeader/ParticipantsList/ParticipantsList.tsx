@@ -22,12 +22,12 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
       <aside className="participants">
         <header className="participants__header">
           <h1>Board Participants</h1>
-          <input placeholder="Search Participant" onChange={(event) => setSearchString(event.target.value.trim())} />
+          <input placeholder="Search Participant" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </header>
 
         <ul className="participants__list">
           {props.participants
-            .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.includes(substr)))
+            .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
               <li>
                 <figure>
