@@ -9,6 +9,7 @@
   background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
+  z-index: 200;
 }
 @media #{$smartphone} {
   .participants {
