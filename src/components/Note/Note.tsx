@@ -7,10 +7,11 @@ import {ActionFactory} from "store/action";
 import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {filterVotes, Votes} from "components/Votes";
+import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
+import {filterVotes} from "utils/votes";
 
 interface NoteProps {
   isAdmin: boolean;
