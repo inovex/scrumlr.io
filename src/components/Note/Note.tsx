@@ -7,7 +7,7 @@ import {ActionFactory} from "store/action";
 import React, {useRef} from "react";
 import NoteDialog from "components/NoteDialog/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {Votes} from "components/Votes";
+import {filterVotes, Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
@@ -71,7 +71,12 @@ const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
-          <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
+          <Votes
+            className="note__votes"
+            noteId={props.noteId!}
+            votes={filterVotes(props.votes.concat(props.childrenNotes.flatMap((n) => n.votes)), props.activeVoting)}
+            activeVoting={props.activeVoting}
+          />
         </footer>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} />
       </div>

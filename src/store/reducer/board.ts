@@ -3,6 +3,8 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 
+import {Toast} from "utils/Toast";
+
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
     case ActionType.InitializeBoard: {
@@ -12,6 +14,12 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.EditBoard: {
+      // Moderator started voting phase - notification to moderator (user who started the voting)
+      if (state.data?.voting !== action.board.voting && action.board.voting !== undefined) {
+        if (action.board.voting === "active") Toast.success("You started the voting phase!");
+        else Toast.error("You ended the voting phase!");
+      }
+
       return {
         status: state.status,
         data: {
@@ -75,6 +83,12 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.UpdatedBoard: {
+      // User notification
+      if (state.data?.voting !== action.board.voting && action.board.voting !== undefined) {
+        if (action.board.voting === "active") Toast.success("Voting phase started! You can vote now!");
+        else Toast.error("Voting phase ended! You can't vote anymore!");
+      }
+
       if (!state.data?.dirty) {
         return {
           status: state.status,
