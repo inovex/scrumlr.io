@@ -83,5 +83,5 @@
 .board-header__users {
   width: 25%;
   display: flex;
-  justify-content: right;
+  flex-direction: row-reverse;
 }
