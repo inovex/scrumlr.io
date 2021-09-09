@@ -62,5 +62,8 @@ exports[`Note should have correct style show note with correct style 1`] = `
       </div>
     </footer>
   </div>
+  <div
+    class="note__in-stack"
+  />
 </li>
 `;

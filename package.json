@@ -6,7 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@testing-library/dom": "^8.2.0",
+    "@testing-library/dom": "^8.3.0",
     "@types/classnames": "^2.3.1",
     "@types/qrcode.react": "^1.0.2",
     "@types/react-dnd": "^3.0.2",
@@ -36,7 +36,7 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.171",
-    "@types/node": "^16.7.13",
+    "@types/node": "^16.9.0",
     "@types/parse": "^2.18.10",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",

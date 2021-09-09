@@ -5,6 +5,7 @@ import classNames from "classnames";
 import Parse from "parse";
 import IconButton from "components/IconButton/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
+import {ReactComponent as unstackIcon} from "assets/icon-unstack.svg";
 import React from "react";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
@@ -46,6 +47,10 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
     if (editable(authorId)) {
       store.dispatch(ActionFactory.deleteNote(id));
     }
+  };
+
+  const onUnstack = (id: string, authorId: string) => {
+    store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
   return (
@@ -120,6 +125,17 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
               <ul className="note-dialog__options">
                 <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
                   <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
+                </li>
+                <li className="note-dialog__option">
+                  <IconButton
+                    onClick={() => {
+                      onUnstack(note.id!, note.author);
+                      onClose();
+                    }}
+                    direction="right"
+                    label="Unstack"
+                    icon={unstackIcon}
+                  />
                 </li>
               </ul>
             </aside>
