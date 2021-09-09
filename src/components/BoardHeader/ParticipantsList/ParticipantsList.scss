@@ -21,7 +21,6 @@
   height: 86px;
   padding-left: 20px;
   position: relative;
-  // box-shadow: 0 0 8px 0 rgba(0, 87, 255, 0.25);
 }
 @media (prefers-color-scheme: dark) {
   .participants {
@@ -51,7 +50,7 @@
   top: 44px;
 
   &::placeholder {
-    opacity: 0.8;
+    opacity: 1;
   }
 }
 
