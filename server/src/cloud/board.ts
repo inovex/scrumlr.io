@@ -74,6 +74,7 @@ export type EditableBoardAttributes = {
   expirationUTCTime?: Date;
   joinConfirmationRequired?: boolean;
   voting?: "active" | "disabled";
+  votingIteration: number;
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -119,7 +120,7 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, voteLimit: 10}, {useMasterKey: true});
+    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);

@@ -28,8 +28,7 @@ export const initializeVoteFunctions = () => {
     }
     // Create vote for corresponding note, user and board
     const note = Parse.Object.extend("Note").createWithoutData(request.note);
-    const vote = newObject("Vote", {board, note, user}, {readRoles: [getMemberRoleName(request.board)]});
-    vote.set("votingIteration", board.get("votingIteration"));
+    const vote = newObject("Vote", {board, note, user, votingIteration: await board.get("votingIteration")}, {readRoles: [getMemberRoleName(request.board)]});
     await vote.save(null, {useMasterKey: true});
 
     return {status: "Success", description: "Your vote has been added"};
