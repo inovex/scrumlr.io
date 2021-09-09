@@ -19,7 +19,7 @@ const createNote = () => {
     notes: [{}],
     users: {
       admins: [],
-      basic: ["test-user-1, test-user-2, test-user-3, "],
+      basic: ["test-user-1", "test-user-2", "test-user-3"],
       all: [],
     },
   };
