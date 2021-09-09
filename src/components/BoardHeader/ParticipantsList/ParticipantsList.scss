@@ -42,7 +42,7 @@
 .participants__header > input {
   background-color: transparent;
   color: $color-white;
-  opacity: 0.8;
+  opacity: 1;
   font-size: 13px;
   letter-spacing: 0.27px;
   border: none;
@@ -51,6 +51,7 @@
 
   &::placeholder {
     opacity: 1;
+    color: white;
   }
 }
 
