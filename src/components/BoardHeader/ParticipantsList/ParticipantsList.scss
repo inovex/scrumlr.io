@@ -3,12 +3,17 @@
 .participants {
   position: absolute;
   top: 92px;
-  right: 40px;
+  right: 80px;
   width: 300px;
   border-radius: 16px;
   background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
+}
+@media #{$smartphone} {
+  .participants {
+    right: calc(50% - 150px);
+  }
 }
 
 .participants__header {
@@ -44,7 +49,12 @@
   border: none;
   position: absolute;
   top: 44px;
+
+  &::placeholder {
+    opacity: 0.8;
+  }
 }
+
 .participants__header > input:focus {
   outline: none;
   border-bottom: 1px solid white;
