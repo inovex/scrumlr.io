@@ -9,10 +9,16 @@
   padding: 10px 20px;
   border-radius: 16px;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .board-users:hover {
   background-color: rgba(0, 87, 255, 0.06);
+}
+@media (prefers-color-scheme: dark) {
+  .board-users:hover {
+    background-color: rgba(255, 0, 105, 0.15);
+  }
 }
 
 .board-users li {
