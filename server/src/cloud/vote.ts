@@ -23,6 +23,7 @@ export const initializeVoteFunctions = () => {
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("board", board);
     voteQuery.equalTo("user", user);
+    voteQuery.equalTo("votingIteration", board.get("votingIteration"));
     if ((await voteQuery.count({useMasterKey: true})) >= board.get("voteLimit")) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
