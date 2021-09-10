@@ -1,8 +1,5 @@
 @import "constants/style.scss";
 
-$cookie-consent-width: 100%;
-$cookie-consent-top: 100%;
-$cookie-consent-position: sticky;
 $cookie-consent-decline-button: #dadada;
 $cookie-consent-decline-text: #4d4d4d;
 $cookie-consent-button-text-size: 18px;
@@ -10,11 +7,9 @@ $cookie-consent-button-text-size: 18px;
 .cookie-notice--show {
   background: $color-light-gray;
   color: $color-black;
-  position: $cookie-consent-position;
-  top: $cookie-consent-top;
-  width: $cookie-consent-width;
+  position: sticky;
+  top: 100%;
   padding: $padding--small;
-  display: block;
 }
 
 .cookie-notice--hidden {
