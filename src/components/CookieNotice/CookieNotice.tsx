@@ -7,26 +7,6 @@ import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import CookiePolicy from "./CookiePolicy";
 
-/**
- * Converts string value to boolean value.
- * @param input string that needs conversion to boolean value.
- */
-const stringToBoolean = (input: string): boolean => {
-  switch (input.toLowerCase().trim()) {
-    case "true":
-    case "yes":
-    case "1":
-      return true;
-    case "false":
-    case "no":
-    case "0":
-    case null:
-      return false;
-    default:
-      return false;
-  }
-};
-
 const CookieNotice = () => {
   /** cookie name */
   const scrumlrCookieName = "scrumlr_cookieConsent";
@@ -35,9 +15,10 @@ const CookieNotice = () => {
     cookieConsent: applicationState.cookieConsent,
   }));
 
+  /** check for existing cookie and use use its value */
   if (localStorage.getItem(scrumlrCookieName)) {
     cookieState.cookieConsent.name = scrumlrCookieName;
-    cookieState.cookieConsent.value = stringToBoolean(localStorage[scrumlrCookieName]);
+    cookieState.cookieConsent.value = localStorage[scrumlrCookieName] === "true";
   }
 
   const [showCookieNotice, setShowCookieNotice] = React.useState(true); // state: states whether cookie notice is shown.
@@ -48,8 +29,9 @@ const CookieNotice = () => {
     setShowDialog(!showDialog);
   };
 
-  const shouldShowCookieNotice = () => !localStorage.getItem(scrumlrCookieName); // function: checks if scrumlrCookieName is present in localStorage.
-  // If not, shouldShowCookieNotice becomes true.
+  // show cookie notice if there's no cookie in local storage
+  const shouldShowCookieNotice = !localStorage.getItem(scrumlrCookieName);
+
   /**
    * Saves cookie consent to storage.
    * @param value: true or false, depending on given consent for cookies
@@ -64,9 +46,9 @@ const CookieNotice = () => {
    * Sets cookie consent value i.e. scrumlrCookieName true.
    */
   const acceptFunction = () => {
-    if (shouldShowCookieNotice()) {
+    if (shouldShowCookieNotice) {
       saveToStorage(scrumlrCookieName, "true");
-      setShowCookieNotice(!showCookieNotice);
+      setShowCookieNotice(false);
       store.dispatch(ActionFactory.addCookie(scrumlrCookieName, true));
     }
   };
@@ -75,9 +57,9 @@ const CookieNotice = () => {
    * Sets cookie consent value i.e. scrumlrCookieName false.
    */
   const declineFunction = () => {
-    if (shouldShowCookieNotice()) {
+    if (shouldShowCookieNotice) {
       saveToStorage(scrumlrCookieName, "false");
-      setShowCookieNotice(!showCookieNotice);
+      setShowCookieNotice(false);
       store.dispatch(ActionFactory.addCookie(scrumlrCookieName, false));
     }
   };
@@ -86,7 +68,7 @@ const CookieNotice = () => {
     setShowDialog(true);
   };
 
-  if (!shouldShowCookieNotice()) return null; // prevents cookie notice being shown if scrumlrCookieName is set.
+  if (!shouldShowCookieNotice) return null; // prevents cookie notice being shown if scrumlrCookieName is set.
 
   // cookie notice rendering
   return (
