@@ -4,16 +4,12 @@ $cookie-consent-decline-button: #dadada;
 $cookie-consent-decline-text: #4d4d4d;
 $cookie-consent-button-text-size: 18px;
 
-.cookie-notice--show {
+.cookie-notice {
   background: $color-light-gray;
   color: $color-black;
   position: sticky;
   top: 100%;
   padding: $padding--small;
-}
-
-.cookie-notice--hidden {
-  display: none;
 }
 
 .cookie-notice__buttons {

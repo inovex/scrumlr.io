@@ -7,30 +7,32 @@ import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import CookiePolicy from "./CookiePolicy";
 
+const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
+
 const CookieNotice = () => {
   /** cookie name */
-  const scrumlrCookieName = "scrumlr_cookieConsent";
 
   const cookieState = useSelector((applicationState: ApplicationState) => ({
     cookieConsent: applicationState.cookieConsent,
   }));
 
   /** check for existing cookie and use use its value */
-  if (localStorage.getItem(scrumlrCookieName)) {
-    cookieState.cookieConsent.name = scrumlrCookieName;
-    cookieState.cookieConsent.value = localStorage[scrumlrCookieName] === "true";
+  if (localStorage.getItem(COOKIE_CONSENT_NAME)) {
+    cookieState.cookieConsent.name = COOKIE_CONSENT_NAME;
+    cookieState.cookieConsent.value = localStorage[COOKIE_CONSENT_NAME] === "true";
   }
 
-  const [showCookieNotice, setShowCookieNotice] = React.useState(true); // state: states whether cookie notice is shown.
+  // state: states whether cookie notice is shown.
+  const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
   const [open, setOpen] = React.useState(true); // state: states whether backdrop is open.
 
   const [showDialog, setShowDialog] = React.useState(false);
-  const handleShowDialog = () => {
+  const toggleShowDialog = () => {
     setShowDialog(!showDialog);
   };
 
   // show cookie notice if there's no cookie in local storage
-  const shouldShowCookieNotice = !localStorage.getItem(scrumlrCookieName);
+  const shouldShowCookieNotice = !localStorage.getItem(COOKIE_CONSENT_NAME);
 
   /**
    * Saves cookie consent to storage.
@@ -45,41 +47,41 @@ const CookieNotice = () => {
   /**
    * Sets cookie consent value i.e. scrumlrCookieName true.
    */
-  const acceptFunction = () => {
+  const accept = () => {
     if (shouldShowCookieNotice) {
-      saveToStorage(scrumlrCookieName, "true");
+      saveToStorage(COOKIE_CONSENT_NAME, "true");
       setShowCookieNotice(false);
-      store.dispatch(ActionFactory.addCookie(scrumlrCookieName, true));
+      store.dispatch(ActionFactory.addCookie(COOKIE_CONSENT_NAME, true));
     }
   };
 
   /**
    * Sets cookie consent value i.e. scrumlrCookieName false.
    */
-  const declineFunction = () => {
+  const decline = () => {
     if (shouldShowCookieNotice) {
-      saveToStorage(scrumlrCookieName, "false");
+      saveToStorage(COOKIE_CONSENT_NAME, "false");
       setShowCookieNotice(false);
-      store.dispatch(ActionFactory.addCookie(scrumlrCookieName, false));
+      store.dispatch(ActionFactory.addCookie(COOKIE_CONSENT_NAME, false));
     }
   };
 
   const openPolicy = () => {
     setShowDialog(true);
   };
+  // prevents cookie notice being shown if scrumlrCookieName is set in localStorage
+  if (!shouldShowCookieNotice) return null;
+  if (!showCookieNotice) return null;
 
-  if (!shouldShowCookieNotice) return null; // prevents cookie notice being shown if scrumlrCookieName is set.
-
-  // cookie notice rendering
   return (
-    <div className={showCookieNotice ? "cookie-notice--show" : "cookie-notice--hidden"}>
+    <div className="cookie-notice">
       <Backdrop
         className="cookie-notice__backdrop"
         invisible
         open={open}
         onClick={() => {
           setOpen(false);
-          acceptFunction();
+          accept();
         }}
       />
 
@@ -98,15 +100,15 @@ const CookieNotice = () => {
           Learn more about our Cookie Policy
         </button>
 
-        <button className="cookie-notice__button-decline" type="button" onClick={declineFunction}>
+        <button className="cookie-notice__button-decline" type="button" onClick={decline}>
           Decline
         </button>
 
-        <button className="cookie-notice__button-accept" type="button" color="primary" onClick={acceptFunction}>
+        <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
           Accept
         </button>
       </div>
-      <CookiePolicy scrumlrCookieName={scrumlrCookieName} acceptFunction={acceptFunction} onClose={handleShowDialog} show={showDialog} />
+      <CookiePolicy scrumlrCookieName={COOKIE_CONSENT_NAME} acceptFunction={accept} onClose={toggleShowDialog} show={showDialog} />
     </div>
   );
 };
