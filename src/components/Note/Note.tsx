@@ -86,7 +86,7 @@ const Note = (props: NoteProps) => {
             activeVoting={props.activeVoting}
           />
         </footer>
-        <NoteDialog {...{...props, votes: filteredVotes}} onClose={handleShowDialog} show={showDialog} />
+        <NoteDialog {...props} votes={filteredVotes} onClose={handleShowDialog} show={showDialog} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
