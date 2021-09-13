@@ -58,6 +58,8 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
+  const filteredVotes = filterVotes(props.votes, props.activeVoting);
+
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
@@ -75,11 +77,16 @@ const Note = (props: NoteProps) => {
           <Votes
             className="note__votes"
             noteId={props.noteId!}
-            votes={filterVotes(props.votes.concat(props.childrenNotes.flatMap((n) => n.votes)), props.activeVoting)}
+            votes={filteredVotes.concat(
+              filterVotes(
+                props.childrenNotes.flatMap((n) => n.votes),
+                props.activeVoting
+              )
+            )}
             activeVoting={props.activeVoting}
           />
         </footer>
-        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} />
+        <NoteDialog {...{...props, votes: filteredVotes}} onClose={handleShowDialog} show={showDialog} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
