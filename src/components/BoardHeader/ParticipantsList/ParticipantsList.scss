@@ -66,7 +66,34 @@
   padding: 0;
   margin: 0;
   max-height: 240px;
-  overflow: scroll;
+  overflow: auto;
+  scrollbar-color: $color-middle-gray #fff;
+}
+
+.participants__list::-webkit-scrollbar {
+  width: 10px;
+  background-color: #fff;
+}
+
+.participants__list::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
+
+.participants__list::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: $color-middle-gray;
+}
+
+@media (prefers-color-scheme: dark) {
+  .participants__list {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+  }
+  .participants__list::-webkit-scrollbar {
+    background-color: $color-dark-mode-note;
+  }
+  .participants__list::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
 }
 
 .participants__list > li {
@@ -93,7 +120,7 @@
 .participants__list > li:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: 300px;
+  width: 100%;
   background: linear-gradient(
     to right,
     rgba(173, 173, 173, 0) 0%,
