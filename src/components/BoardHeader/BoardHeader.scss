@@ -4,8 +4,8 @@
   position: fixed;
   display: flex;
   height: $header__height;
-  width: 100vw;
-  margin-top: 10px;
+  width: calc(100vw - 20px);
+  margin: 10px 10px 0 10px;
 }
 
 .board-header > * {
@@ -32,7 +32,7 @@
 }
 @media (prefers-color-scheme: dark) {
   .info-block--hoverable:hover {
-    background-color: rgba(255, 0, 105, 0.08); // Ask designer for correct color
+    background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
   }
 }
 
@@ -82,5 +82,6 @@
 
 .board-header__users {
   width: 25%;
-  margin-right: 12px;
+  display: flex;
+  flex-direction: row-reverse;
 }

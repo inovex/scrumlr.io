@@ -12,7 +12,8 @@ import {NoteClientModel} from "types/note";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {VoteClientModel} from "types/vote";
-import {filterVotes, Votes} from "../Votes";
+import {filterVotes} from "utils/votes";
+import {Votes} from "../Votes";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -77,7 +78,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <figcaption className="note-dialog__author-name">{authorName}</figcaption>
               </figure>
             )}
-            <Votes className="note__votes" noteId={noteId!} votes={filterVotes(votes, activeVoting)} activeVoting={activeVoting} />
+            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
           </footer>
 
           <aside>

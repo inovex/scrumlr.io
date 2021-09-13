@@ -2,8 +2,11 @@ import {useState} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import BoardUsers from "components/BoardUsers/BoardUsers";
+import {useAppSelector} from "store";
 import HeaderLogo from "./HeaderLogo/HeaderLogo";
 import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
+import {ParticipantsList} from "./ParticipantsList";
+
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -13,7 +16,9 @@ export interface BoardHeaderProps {
 }
 
 const BoardHeader = ({name, boardstatus, currentUserIsModerator}: BoardHeaderProps) => {
+  const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
+  const [showParticipants, setShowParticipants] = useState(false);
 
   return (
     <div className="board-header">
@@ -33,10 +38,11 @@ const BoardHeader = ({name, boardstatus, currentUserIsModerator}: BoardHeaderPro
           </div>
         </div>
       </div>
-      <div className="board-header__users">
+      <div className="board-header__users" onClick={() => setShowParticipants((showParticipants) => !showParticipants)}>
         <BoardUsers />
       </div>
       {currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
+      <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} />
     </div>
   );
 };
