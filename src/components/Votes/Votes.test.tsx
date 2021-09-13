@@ -63,20 +63,4 @@ describe("Votes", () => {
       expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.deleteVote("test-id"));
     });
   });
-
-  describe("should dispatch to store on button press", () => {
-    const storeDispatchSpy = jest.spyOn(store, "dispatch");
-
-    test("addVote", () => {
-      const votes = render(createVotes(true, true));
-      fireEvent.click(votes.container.getElementsByClassName("dot-button")[1]);
-      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.addVote("test-id"));
-    });
-
-    test("deleteVote", () => {
-      const votes = render(createVotes(true, true));
-      fireEvent.click(votes.container.getElementsByClassName("dot-button")[0]);
-      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.deleteVote("test-id"));
-    });
-  });
 });
