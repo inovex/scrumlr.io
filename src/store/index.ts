@@ -12,7 +12,6 @@ import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirm
 import {passColumnMiddleware} from "./middleware/column";
 import {passJoinRequestMiddleware} from "./middleware/joinRequest";
 import {joinRequestReducer} from "./reducer/joinRequest";
-import {cookieReducer} from "./reducer/cookie";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
@@ -30,7 +29,6 @@ const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
   notes: noteReducer,
   users: usersReducer,
-  cookieConsent: cookieReducer,
   joinRequests: joinRequestReducer,
 });
 

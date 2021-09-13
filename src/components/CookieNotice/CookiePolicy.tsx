@@ -1,25 +1,22 @@
 import "./CookiePolicy.scss";
-import store from "store";
-import {ActionFactory} from "store/action";
 import {useEffect, useState} from "react";
 import Portal from "components/Portal/Portal";
 import marked from "marked";
 import policyText from "./CookiePolicyText.md";
 
 interface CookiePolicyProps {
-  scrumlrCookieName: string;
   acceptFunction: () => void;
   onClose: () => void;
   show: boolean;
 }
 
-const CookiePolicy = ({scrumlrCookieName, acceptFunction, onClose, show}: CookiePolicyProps) => {
+const CookiePolicy = ({acceptFunction, onClose, show}: CookiePolicyProps) => {
   const [policy, setPolicy] = useState({markdown: ""});
 
   useEffect(() => {
     fetch(policyText)
       .then((response) => response.text())
-      .then((text) => setPolicy({markdown: marked(text, {sanitize: true})}));
+      .then((text) => setPolicy({markdown: marked(text)}));
   }, []);
 
   if (!show) {
@@ -28,7 +25,6 @@ const CookiePolicy = ({scrumlrCookieName, acceptFunction, onClose, show}: Cookie
 
   const handleAccept = () => {
     acceptFunction();
-    store.dispatch(ActionFactory.addCookie(scrumlrCookieName, true));
   };
 
   return (

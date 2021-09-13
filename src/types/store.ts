@@ -2,7 +2,6 @@ import {BoardClientModel} from "./board";
 import {NoteClientModel} from "./note";
 import {UserClientModel} from "./user";
 import {JoinRequestClientModel} from "./joinRequest";
-import {CookieClientModel} from "./cookie";
 
 export interface BoardState {
   status: "unknown" | "pending" | "ready" | "rejected" | "accepted";
@@ -19,6 +18,5 @@ export interface ApplicationState {
   board: BoardState;
   notes: NoteClientModel[];
   users: UsersState;
-  cookieConsent: CookieClientModel;
   joinRequests: JoinRequestClientModel[];
 }
