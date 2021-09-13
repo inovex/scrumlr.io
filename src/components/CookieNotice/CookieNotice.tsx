@@ -6,13 +6,12 @@ import CookiePolicy from "./CookiePolicy";
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 
 const CookieNotice = () => {
-  // state: states whether cookie notice is shown.
+  // states whether cookie notice is shown.
   const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
-  const [open, setOpen] = React.useState(true); // state: states whether backdrop is open.
 
-  const [showDialog, setShowDialog] = React.useState(false);
-  const toggleShowDialog = () => {
-    setShowDialog(!showDialog);
+  const [showCookiePolicy, setShowCookiePolicy] = React.useState(false);
+  const toggleShowCookiePolicy = () => {
+    setShowCookiePolicy(!showCookiePolicy);
   };
 
   // show cookie notice if there's no cookie in local storage
@@ -49,7 +48,7 @@ const CookieNotice = () => {
   };
 
   const openPolicy = () => {
-    setShowDialog(true);
+    setShowCookiePolicy(true);
   };
   // prevents cookie notice being shown if scrumlrCookieName is set in localStorage
   if (!shouldShowCookieNotice) return null;
@@ -60,9 +59,9 @@ const CookieNotice = () => {
       <Backdrop
         className="cookie-notice__backdrop"
         invisible
-        open={open}
+        open={showCookieNotice}
         onClick={() => {
-          setOpen(false);
+          setShowCookieNotice(false);
           accept();
         }}
       />
@@ -90,7 +89,7 @@ const CookieNotice = () => {
           Accept
         </button>
       </div>
-      <CookiePolicy acceptFunction={accept} onClose={toggleShowDialog} show={showDialog} />
+      <CookiePolicy acceptFunction={accept} onClose={toggleShowCookiePolicy} show={showCookiePolicy} />
     </div>
   );
 };
