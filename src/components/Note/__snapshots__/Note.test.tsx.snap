@@ -41,16 +41,6 @@ exports[`Note should have correct style show note with correct style 1`] = `
         class="votes note__votes"
       >
         <button
-          class="dot-button dot-button__delete"
-        >
-          <span
-            class="dot-button__folded-corner"
-          />
-          <span>
-            1
-          </span>
-        </button>
-        <button
           class="dot-button dot-button__add"
         >
           <svg

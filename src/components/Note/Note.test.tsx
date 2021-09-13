@@ -2,6 +2,7 @@ import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
+import Parse from "parse";
 import Note from "./Note";
 
 const mockStore = configureStore();
@@ -46,10 +47,22 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
         showAuthors={showAuthors}
         votes={[
           {
-            id: "test-id",
+            id: "test-vote-0",
             board: "test-board",
-            note: "0",
-            user: "test-user",
+            note: "test-id",
+            user: "test-user-1",
+          },
+          {
+            id: "test-vote-1",
+            board: "test-board",
+            note: "test-id",
+            user: "test-user-2",
+          },
+          {
+            id: "test-vote-2",
+            board: "test-board",
+            note: "test-id",
+            user: "test-user-2",
           },
         ]}
         childrenNotes={[
@@ -136,6 +149,26 @@ describe("Note", () => {
     test("check div with class name note__in-stack", () => {
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.querySelector(".note__root")!.lastChild).toHaveClass("note__in-stack");
+    });
+  });
+
+  describe("Test amount of visible votes", () => {
+    test("test-user-1 has one vote during vote phase", () => {
+      Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
+      const {container} = render(createNote("Test Text", "Test Author", true));
+      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("1");
+    });
+
+    test("test-user-2 hast two votes during vote phase", () => {
+      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+      const {container} = render(createNote("Test Text", "Test Author", true));
+      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
+    });
+
+    test("test-user-3 hast zero votes during vote phase and has only the add vote button", () => {
+      Parse.User.current = jest.fn(() => ({id: "test-user-3"}));
+      const {container} = render(createNote("Test Text", "Test Author", true));
+      expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);
     });
   });
 });

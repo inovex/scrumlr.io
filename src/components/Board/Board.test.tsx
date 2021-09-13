@@ -32,7 +32,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
   return (
     <Provider store={store}>
-      <BoardContext name="" boardstatus="">
+      <BoardContext name="" boardstatus="" currentUserIsModerator>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" />
         ))}
@@ -43,8 +43,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
 describe("basic", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: "testId"}));
-    Parse.User.current = mockCurrentUser;
+    Parse.User.current = jest.fn(() => ({id: "testId"}));
     window.IntersectionObserver = jest.fn(
       () =>
         ({
@@ -67,43 +66,43 @@ describe("basic", () => {
   describe("side-panels", () => {
     test("left side-panel is present", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+      expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
     });
 
     test("right side-panel is present", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
+      expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
     });
 
     test("left side-panel has correct accent color", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__backlog-blue");
+      expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
     });
 
     test("right side-panel has correct accent color", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__planning-pink");
+      expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
     });
 
     describe("side-panels", () => {
       test("left side-panel is present", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+        expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
       });
 
       test("right side-panel is present", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
+        expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
       });
 
       test("left side-panel has correct accent color", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__backlog-blue");
+        expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
       });
 
       test("right side-panel has correct accent color", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__planning-pink");
+        expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
       });
 
       test("side-panels have correct accent color with single column", () => {
