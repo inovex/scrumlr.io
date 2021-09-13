@@ -14,6 +14,7 @@ const createNote = () => {
     board: {
       data: {
         columns: [{id: "test_column", name: "test_header", hidden: false}],
+        votingIteration: 0,
       },
     },
     notes: [{}],
@@ -25,6 +26,7 @@ const createNote = () => {
   };
 
   const store = mockStore(initialState);
+
   const [NoteContext] = wrapWithTestBackend(Note);
 
   return (
@@ -46,18 +48,21 @@ const createNote = () => {
             board: "test-board",
             note: "test-id",
             user: "test-user-1",
+            votingIteration: 0,
           },
           {
             id: "1",
             board: "test-board",
             note: "test-id",
             user: "test-user-2",
+            votingIteration: 0,
           },
           {
             id: "2",
             board: "test-board",
             note: "test-id",
             user: "test-user-2",
+            votingIteration: 0,
           },
         ]}
         childrenNotes={[]}
@@ -79,6 +84,7 @@ const createVotes = (withVotes: boolean, activeVoting: boolean, className?: stri
               board: "test-board",
               note: "test-note",
               user: "test-user",
+              votingIteration: 0,
             },
           ]
         : []
