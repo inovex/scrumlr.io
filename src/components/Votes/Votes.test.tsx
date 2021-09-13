@@ -15,7 +15,7 @@ const createVotes = (withVotes: boolean, activeVoting: boolean, className?: stri
               board: "test-board",
               note: "test-note",
               user: "test-user",
-              votingIteration: 0,
+              votingIteration: 1,
             },
           ]
         : []
