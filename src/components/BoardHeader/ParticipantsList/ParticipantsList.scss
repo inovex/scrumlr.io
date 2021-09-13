@@ -68,6 +68,7 @@
   max-height: 240px;
   overflow: auto;
   scrollbar-color: $color-middle-gray #fff;
+  background-color: #fff;
 }
 
 .participants__list::-webkit-scrollbar {
@@ -100,11 +101,8 @@
   background-color: white;
   position: relative;
   height: 48px;
-  padding: 10px 20px;
-}
-
-.participants__list > li:hover {
-  background-color: #f3f3f3;
+  padding: 10px 10px 10px 20px;
+  width: 285px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -151,7 +149,7 @@
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 300;
-  width: 222px;
+  width: 190px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -167,4 +165,9 @@
   height: 28px;
   width: 28px;
   border-radius: 100%;
+}
+
+.participant__permission-toggle {
+  right: 0;
+  top: 2px;
 }

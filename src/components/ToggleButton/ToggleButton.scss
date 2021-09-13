@@ -1,0 +1,39 @@
+@import "constants/style";
+
+.toggle-button {
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  cursor: pointer;
+  padding: 0;
+}
+
+.toggle-button::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  top: 11px;
+  left: 0;
+  background-color: #c8c8c8;
+  border-radius: 2px;
+}
+.toggle-button::after {
+  content: "";
+  position: absolute;
+  height: 12px;
+  width: 12px;
+  border-radius: 100%;
+  transition: all 0.25s linear;
+  top: 6px;
+}
+.toggle-button--left::after {
+  left: 0;
+  background-color: $color-backlog-blue;
+}
+.toggle-button--right::after {
+  left: 12px;
+  background-color: $color-planning-pink;
+}

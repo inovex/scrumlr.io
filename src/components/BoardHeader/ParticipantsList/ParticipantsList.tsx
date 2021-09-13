@@ -3,6 +3,7 @@ import {useState} from "react";
 import {UserClientModel} from "types/user";
 import avatar from "assets/avatar.png";
 import "./ParticipantsList.scss";
+import {ToggleButton} from "components/ToggleButton";
 
 type ParticipantsListProps = {
   open: boolean;
@@ -29,13 +30,19 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
           {props.participants
             .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
-              <li>
-                <figure>
-                  <img src={avatar} />
-                  <figcaption>{participant.displayName}</figcaption>
-                </figure>
-              </li>
-            ))}
+                <li>
+                  <figure>
+                    <img src={avatar} />
+                    <figcaption>{participant.displayName}</figcaption>
+                  </figure>
+                  <ToggleButton
+                    className="participant__permission-toggle"
+                    values={["participant", "moderator"]}
+                    defaultValue={participant.admin ? "moderator" : "participant"}
+                    onClick={(val: string) => console.log(val)}
+                  />
+                </li>
+              ))}
         </ul>
       </aside>
     </Portal>
