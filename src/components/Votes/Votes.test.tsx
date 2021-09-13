@@ -7,6 +7,8 @@ import {Provider} from "react-redux";
 import Parse from "parse";
 import Note from "components/Note/Note";
 import {Votes} from "./Votes";
+import Board from "../Board/Board";
+import Column from "../Column/Column";
 
 const mockStore = configureStore();
 const createNote = () => {
@@ -92,6 +94,32 @@ const createVotes = (withVotes: boolean, activeVoting: boolean, className?: stri
     activeVoting={activeVoting}
   />
 );
+
+const createBoardWithColumns = () => {
+  const initialState = {
+    board: {
+      data: {
+        columns: [{id: "test_column", name: "Positive", hidden: false}],
+      },
+    },
+    notes: [],
+    users: {
+      admins: [],
+      basic: [],
+      all: [],
+    },
+  };
+  const store = mockStore(initialState);
+  const [BoardContext] = wrapWithTestBackend(Board);
+
+  return (
+    <Provider store={store}>
+      <BoardContext name="" boardstatus="" currentUserIsModerator>
+        <Column key="backlog-blue" id="test_column" color="backlog-blue" name="Positive" />
+      </BoardContext>
+    </Provider>
+  );
+};
 
 describe("Votes", () => {
   describe("should render correctly", () => {
