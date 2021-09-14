@@ -1,4 +1,4 @@
-import {UpdateVoteConfiguration} from "../../types/voteConfiguration";
+import {UpdateVoteConfiguration, VoteConfigurationClientModel} from "types/voteConfiguration";
 
 export const VoteConfigurationActionType = {
   /*
@@ -9,6 +9,9 @@ export const VoteConfigurationActionType = {
   AddVoteConfiguration: "@@SCRUMLR/addVoteConfiguration" as const,
   UpdateVoteConfiguration: "@@SCRUMLR/updateVoteConfiguration" as const,
   RemoveVoteConfiguration: "@@SCRUMLR/removeVoteConfiguration" as const,
+  RemovedVoteConfiguration: "@@SCRUMLR/removedVoteConfiguration" as const,
+  AddedVoteConfiguration: "@@SCRUMLR/addedVoteConfiguration" as const,
+  UpdatedVoteConfiguration: "@@SCRUMLR/updatedVoteConfiguration" as const,
 };
 
 export const VoteConfigurationActionFactory = {
@@ -22,6 +25,16 @@ export const VoteConfigurationActionFactory = {
   addVoteConfiguration: (board: string, voteConfiguration: UpdateVoteConfiguration) => ({
     type: VoteConfigurationActionType.AddVoteConfiguration,
     board,
+    voteConfiguration,
+  }),
+
+  /**
+   *
+   *
+   *
+   */
+  addedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+    type: VoteConfigurationActionType.AddedVoteConfiguration,
     voteConfiguration,
   }),
 
@@ -46,9 +59,22 @@ export const VoteConfigurationActionFactory = {
     type: VoteConfigurationActionType.RemoveVoteConfiguration,
     board,
   }),
+
+  /**
+   *
+   *
+   *
+   * @param board
+   */
+  removedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+    type: VoteConfigurationActionType.RemovedVoteConfiguration,
+    voteConfiguration,
+  }),
 };
 
 export type VoteConfigurationReduxAction =
   | ReturnType<typeof VoteConfigurationActionFactory.addVoteConfiguration>
+  | ReturnType<typeof VoteConfigurationActionFactory.addedVoteConfiguration>
   | ReturnType<typeof VoteConfigurationActionFactory.updateVoteConfiguration>
-  | ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>;
+  | ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>
+  | ReturnType<typeof VoteConfigurationActionFactory.removedVoteConfiguration>;

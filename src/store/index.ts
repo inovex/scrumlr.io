@@ -8,6 +8,7 @@ import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {voteReducer} from "./reducer/vote";
 import {usersReducer} from "./reducer/users";
+import {voteConfigurationReducer} from "./reducer/voteConfiguration";
 import {passNoteMiddleware} from "./middleware/note";
 import {passVoteMiddlware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
@@ -15,6 +16,7 @@ import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirm
 import {passColumnMiddleware} from "./middleware/column";
 import {passJoinRequestMiddleware} from "./middleware/joinRequest";
 import {joinRequestReducer} from "./reducer/joinRequest";
+import {passVoteConfigurationMiddlware} from "./middleware/voteConfiguration";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
@@ -26,6 +28,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
     passJoinRequestMiddleware(stateAPI, dispatch, action);
+    passVoteConfigurationMiddlware(stateAPI, dispatch, action);
   }
 };
 
@@ -35,6 +38,7 @@ const rootReducer = combineReducers<ApplicationState>({
   users: usersReducer,
   joinRequests: joinRequestReducer,
   votes: voteReducer,
+  voteConfigurations: voteConfigurationReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));
