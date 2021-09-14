@@ -1,4 +1,4 @@
-import {UpdateVoteConfiguration, VoteConfigurationClientModel} from "types/voteConfiguration";
+import {VoteConfiguration, VoteConfigurationClientModel} from "types/voteConfiguration";
 
 export const VoteConfigurationActionType = {
   AddVoteConfiguration: "@@SCRUMLR/addVoteConfiguration" as const,
@@ -11,16 +11,15 @@ export const VoteConfigurationActionType = {
 };
 
 export const VoteConfigurationActionFactory = {
-  addVoteConfiguration: (board: string, voteConfiguration: UpdateVoteConfiguration) => ({
+  addVoteConfiguration: (voteConfiguration: VoteConfiguration) => ({
     type: VoteConfigurationActionType.AddVoteConfiguration,
-    board,
     voteConfiguration,
   }),
   addedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
     type: VoteConfigurationActionType.AddedVoteConfiguration,
     voteConfiguration,
   }),
-  updateVoteConfiguration: (voteConfiguration: UpdateVoteConfiguration) => ({
+  updateVoteConfiguration: (voteConfiguration: VoteConfiguration) => ({
     type: VoteConfigurationActionType.UpdateVoteConfiguration,
     voteConfiguration,
   }),

@@ -1,37 +1,38 @@
 import {requireValidBoardAdmin, getAdminRoleName, getMemberRoleName} from "./permission";
 import {api, newObject} from "./util";
 
-export interface VoteConfiguration {
-  board: string;
+export interface EditableVoteConfigurationAttributes {
   voteLimit: number;
   multipleVotesPerNote: boolean;
   hideVotesDuringVotingPhase: boolean;
 }
 
+export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
+
 export const initializeVoteConfigurationFunctions = () => {
   // Add vote configuration
-  api<VoteConfiguration, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+  api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
+    await requireValidBoardAdmin(user, request.voteConfiguration.board);
+    const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.voteConfiguration.board}' does not exist`};
     }
 
     // Voting iteraion will incremented after pressing the start voting phase button
     const voteConfiguration = newObject(
       "VoteConfiguration",
       {
-        board: Parse.Object.extend("Board").createWithoutData(request.board),
+        board: Parse.Object.extend("Board").createWithoutData(request.voteConfiguration.board),
         votingIteration: (await board.get("votingIteration")) + 1,
-        voteLimit: request.voteLimit,
-        multipleVotesPerNote: request.multipleVotesPerNote,
-        hideVotesDuringVotingPhase: request.hideVotesDuringVotingPhase,
+        voteLimit: request.voteConfiguration.voteLimit,
+        multipleVotesPerNote: request.voteConfiguration.multipleVotesPerNote,
+        hideVotesDuringVotingPhase: request.voteConfiguration.hideVotesDuringVotingPhase,
       },
       {
-        readRoles: [getMemberRoleName(request.board), getAdminRoleName(request.board)],
-        writeRoles: [getAdminRoleName(request.board)],
+        readRoles: [getMemberRoleName(request.voteConfiguration.board), getAdminRoleName(request.voteConfiguration.board)],
+        writeRoles: [getAdminRoleName(request.voteConfiguration.board)],
       }
     );
 
@@ -41,13 +42,13 @@ export const initializeVoteConfigurationFunctions = () => {
   });
 
   // Update vote configuration
-  api<VoteConfiguration, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+  api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
+    await requireValidBoardAdmin(user, request.voteConfiguration.board);
+    const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.voteConfiguration.board}' does not exist`};
     }
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
@@ -55,14 +56,14 @@ export const initializeVoteConfigurationFunctions = () => {
     // Voting iteraion will incremented after pressing the start voting phase button
     const voteConfiguration = await voteConfigurationQuery.get("votingIteration", board.get("votingIteration") + 1);
 
-    if (request.voteLimit) {
-      voteConfiguration.set("voteLimit", request.voteLimit);
+    if (request.voteConfiguration.voteLimit) {
+      voteConfiguration.set("voteLimit", request.voteConfiguration.voteLimit);
     }
-    if (request.multipleVotesPerNote != null) {
-      voteConfiguration.set("voteLimit", request.multipleVotesPerNote);
+    if (request.voteConfiguration.multipleVotesPerNote != null) {
+      voteConfiguration.set("voteLimit", request.voteConfiguration.multipleVotesPerNote);
     }
-    if (request.hideVotesDuringVotingPhase != null) {
-      voteConfiguration.set("hideVotesDuringVotingPhase", request.hideVotesDuringVotingPhase);
+    if (request.voteConfiguration.hideVotesDuringVotingPhase != null) {
+      voteConfiguration.set("hideVotesDuringVotingPhase", request.voteConfiguration.hideVotesDuringVotingPhase);
     }
 
     await voteConfiguration.save(null, {useMasterKey: true});

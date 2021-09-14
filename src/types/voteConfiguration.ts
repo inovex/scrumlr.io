@@ -22,13 +22,13 @@ export interface VoteConfigurationClientModel {
   hideVotesDuringVotingPhase: boolean;
 }
 
-type UpdateableVoteConfigurationAttributes = {
+type EditableVoteConfigurationAttributes = {
   voteLimit: number;
   multipleVotesPerNote: boolean;
   hideVotesDuringVotingPhase: boolean;
 };
 
-export type VoteConfiguration = Partial<UpdateableVoteConfigurationAttributes>;
+export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
 
 export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
   board: voteConfiguration.get("board").id,
