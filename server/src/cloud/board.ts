@@ -1,4 +1,5 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {stringify} from "querystring";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -30,6 +31,30 @@ const addAsMember = async (user: Parse.User, boardId: string) => {
     return memberRole.save(null, {useMasterKey: true});
   }
 
+  throw new Error(`No roles for board '${boardId}' found`);
+};
+
+const addToModerators = async (user: Parse.User, boardId: string) => {
+  const adminRoleQuery = new Parse.Query(Parse.Role);
+  adminRoleQuery.equalTo("name", getAdminRoleName(boardId));
+
+  const adminRole = await adminRoleQuery.first({useMasterKey: true});
+  if (adminRole) {
+    adminRole.getUsers().add(user);
+    return adminRole.save(null, {useMasterKey: true});
+  }
+  throw new Error(`No roles for board '${boardId}' found`);
+};
+
+const removeFromModerators = async (user: Parse.User, boardId: string) => {
+  const adminRoleQuery = new Parse.Query(Parse.Role);
+  adminRoleQuery.equalTo("name", getAdminRoleName(boardId));
+
+  const adminRole = await adminRoleQuery.first({useMasterKey: true});
+  if (adminRole) {
+    adminRole.getUsers().remove(user);
+    return adminRole.save(null, {useMasterKey: true});
+  }
   throw new Error(`No roles for board '${boardId}' found`);
 };
 
@@ -310,5 +335,28 @@ export const initializeBoardFunctions = () => {
 
     await board.destroy({useMasterKey: true});
     return true;
+  });
+
+  api<
+    {
+      userId: string;
+      boardId: string;
+      moderator: boolean;
+    },
+    {status: string; description: string}
+  >("changePermission", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    if (request.moderator) {
+      await addToModerators(Parse.User.createWithoutData(request.userId), request.boardId);
+      return {status: "Success", description: "User was successfully added to the list of moderators"};
+    } 
+      if (request.userId === user.id) {
+        return {status: "Error", description: "You cannot remove yourself from the list of moderators"};
+      }
+
+      await removeFromModerators(Parse.User.createWithoutData(request.userId), request.boardId);
+      return {status: "Success", description: "User was successfully removed from the list of moderators"};
+    
   });
 };

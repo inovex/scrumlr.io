@@ -19,8 +19,8 @@ export interface BoardState {
   lastVisibleColumnIndex: number;
 }
 
-const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
-  const [state, setState] = useState<BoardState>({firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)});
+const Board = (props: BoardProps) => {
+  const [state, setState] = useState<BoardState>({firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(props.children)});
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
@@ -35,7 +35,7 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
 
     if (board) {
       // initialize column visibility states
-      columnVisibilityStatesRef.current = new Array(React.Children.count(children));
+      columnVisibilityStatesRef.current = new Array(React.Children.count(props.children));
       const columnVisibilityStates = columnVisibilityStatesRef.current;
       columnVisibilityStates.fill(false);
 
@@ -69,15 +69,15 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
       };
     }
     return undefined;
-  }, [children]);
+  }, [props.children]);
 
-  const columnsCount = React.Children.count(children);
-  if (!children || columnsCount === 0) {
+  const columnsCount = React.Children.count(props.children);
+  if (!props.children || columnsCount === 0) {
     return <div className="board--empty">Empty board</div>;
   }
 
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
-  const columnColors = React.Children.map(children, (child) => child.props.color);
+  const columnColors = React.Children.map(props.children, (child) => child.props.color);
 
   const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
   const showPreviousButton = firstVisibleColumnIndex > 0;
@@ -97,7 +97,7 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
 
-      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
+      <BoardHeader name={props.name} boardstatus={props.boardstatus} currentUserIsModerator={props.currentUserIsModerator} />
       <MenuBars />
 
       {showPreviousButton && (
@@ -108,7 +108,7 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
 
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
-        {children}
+        {props.children}
         <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
       </main>
 

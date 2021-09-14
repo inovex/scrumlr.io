@@ -7,6 +7,7 @@ type ToggleButtonProps<T> = {
   values: [T, T];
   defaultValue: T;
   onClick?: (value: T) => void;
+  disabled?: boolean;
 };
 
 export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
@@ -20,8 +21,9 @@ export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
   return (
     <button
       title={`Toggle to ${value === props.values[0] ? props.values[1] : props.values[0]}`}
+      disabled={props.disabled}
       onClick={onClick}
-      className={classNames("toggle-button", {"toggle-button--left": value === props.values[0]}, {"toggle-button--right": value === props.values[1]})}
+      className={classNames("toggle-button", {"toggle-button--left": value === props.values[0]}, {"toggle-button--right": value === props.values[1]}, props.className)}
     />
   );
 };

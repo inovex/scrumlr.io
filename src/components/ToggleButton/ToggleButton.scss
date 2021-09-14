@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .toggle-button {
-  width: 24px;
+  width: 40px;
   height: 24px;
   background-color: transparent;
   border: none;
@@ -10,30 +10,40 @@
   padding: 0;
 }
 
+.toggle-button:disabled {
+  cursor: not-allowed;
+}
+
 .toggle-button::before {
   content: "";
   position: absolute;
-  height: 2px;
+  height: 8px;
   width: 100%;
-  top: 11px;
+  top: 8px;
   left: 0;
-  background-color: #c8c8c8;
-  border-radius: 2px;
+  background: #edeff2 0% 0% no-repeat padding-box;
+  border-radius: 4px;
 }
 .toggle-button::after {
   content: "";
   position: absolute;
-  height: 12px;
-  width: 12px;
+  height: 24px;
+  width: 24px;
   border-radius: 100%;
   transition: all 0.25s linear;
-  top: 6px;
+  top: 0;
 }
 .toggle-button--left::after {
   left: 0;
   background-color: $color-backlog-blue;
+  box-shadow: 0px 4px 8px #0057ff29;
 }
 .toggle-button--right::after {
-  left: 12px;
+  left: 16px;
   background-color: $color-planning-pink;
+  box-shadow: 0px 4px 8px #ff006929;
+}
+.toggle-button:disabled::after {
+  background-color: #a3a6aa;
+  box-shadow: none;
 }

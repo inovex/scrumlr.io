@@ -6,7 +6,6 @@ import {useAppSelector} from "store";
 import HeaderLogo from "./HeaderLogo/HeaderLogo";
 import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
 import {ParticipantsList} from "./ParticipantsList";
-
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -15,7 +14,7 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-const BoardHeader = ({name, boardstatus, currentUserIsModerator}: BoardHeaderProps) => {
+const BoardHeader = (props: BoardHeaderProps) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -25,24 +24,26 @@ const BoardHeader = ({name, boardstatus, currentUserIsModerator}: BoardHeaderPro
       <HeaderLogo />
       <div className="board-header__infos">
         <div
-          className={classNames("info-block", {"info-block--hoverable": currentUserIsModerator})}
+          className={classNames("info-block", {"info-block--hoverable": props.currentUserIsModerator})}
           onClick={() => {
-            if (currentUserIsModerator) setShowMenu(!showMenu);
+            if (props.currentUserIsModerator) setShowMenu(!showMenu);
           }}
           role="dialog"
         >
-          <p className="board-header__status">{boardstatus}</p>
+          <p className="board-header__status">{props.boardstatus}</p>
           <div className="board-header__title-block">
             <img className="board-header__status-image" src={lock} alt="Private Session" />
-            <h1 className="board-header__title">{name}</h1>
+            <h1 className="board-header__title">{props.name}</h1>
           </div>
         </div>
       </div>
       <div className="board-header__users" onClick={() => setShowParticipants((showParticipants) => !showParticipants)}>
         <BoardUsers />
       </div>
-      {currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
-      <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} />
+      {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
+      {users.length > 0 && (
+        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />
+      )}
     </div>
   );
 };
