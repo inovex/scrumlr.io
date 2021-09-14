@@ -13,6 +13,7 @@
 }
 
 .note-dialog__note {
+  margin-bottom: 25px;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
@@ -76,8 +77,8 @@
   outline: none;
 }
 
-.note-dialog__text:hover,
-.note-dialog__text:focus {
+.note-dialog__note--own-card .note-dialog__text:hover,
+.note-dialog__note--own-card .note-dialog__text:focus {
   border-color: #adadad;
 }
 @media (prefers-color-scheme: dark) {
@@ -86,8 +87,12 @@
   }
 }
 
+.note-dialog__footer {
+  position: relative;
+  height: 26px;
+}
 .note-dialog__author {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   // reset css from figure-element:
   margin: 0;
@@ -119,11 +124,13 @@
   bottom: 10px;
   right: 25px;
 }
-
-@media #{$menu-desktop} {
+.note-dialog__options {
+  top: 0;
+  right: -40px - $margin--default;
+}
+@media screen and (max-width: 766px) {
   .note-dialog__options {
-    top: 0;
-    right: -80px - $margin--default;
+    display: none;
   }
 }
 

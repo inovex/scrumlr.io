@@ -1,4 +1,5 @@
 import {act, render, fireEvent} from "@testing-library/react";
+import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Column from "components/Column/Column";
 import {Color} from "constants/colors";
 import configureStore from "redux-mock-store";
@@ -27,22 +28,22 @@ const createBoardWithColumns = (...colors: Color[]) => {
     },
   };
   const store = mockStore(initialState);
+  const [BoardContext] = wrapWithTestBackend(Board);
 
   return (
     <Provider store={store}>
-      <Board name="" boardstatus="">
+      <BoardContext name="" boardstatus="" currentUserIsModerator>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" />
         ))}
-      </Board>
+      </BoardContext>
     </Provider>
   );
 };
 
 describe("basic", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: "testId"}));
-    Parse.User.current = mockCurrentUser;
+    Parse.User.current = jest.fn(() => ({id: "testId"}));
     window.IntersectionObserver = jest.fn(
       () =>
         ({
@@ -65,43 +66,43 @@ describe("basic", () => {
   describe("side-panels", () => {
     test("left side-panel is present", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+      expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
     });
 
     test("right side-panel is present", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
+      expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
     });
 
     test("left side-panel has correct accent color", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__backlog-blue");
+      expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
     });
 
     test("right side-panel has correct accent color", () => {
       const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__planning-pink");
+      expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
     });
 
     describe("side-panels", () => {
       test("left side-panel is present", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").firstChild).toHaveClass("board__spacer-left");
+        expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
       });
 
       test("right side-panel is present", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").lastChild).toHaveClass("board__spacer-right");
+        expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
       });
 
       test("left side-panel has correct accent color", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").firstChild).toHaveClass("accent-color__backlog-blue");
+        expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
       });
 
       test("right side-panel has correct accent color", () => {
         const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board").lastChild).toHaveClass("accent-color__planning-pink");
+        expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
       });
 
       test("side-panels have correct accent color with single column", () => {

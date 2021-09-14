@@ -1,0 +1,14 @@
+apiVersion: v2
+name: scrumlr
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "0.0.1"
+dependencies:
+- name: mongodb
+  version: ~10.23.9
+  repository: https://charts.bitnami.com/bitnami
+  alias: mongodb
+# - name: ingress-nginx
+#   version: ~3.35.0
+#   repository: https://kubernetes.github.io/ingress-nginx

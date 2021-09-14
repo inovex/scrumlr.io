@@ -28,12 +28,12 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       return state.filter((note) => note.id !== action.noteId);
     }
     case ActionType.EditNote: {
-      const noteIndex = state.findIndex((note) => note.id === action.noteId);
+      const noteIndex = state.findIndex((note) => note.id === action.note.id);
 
       const newState = [...state];
       newState.splice(noteIndex, 1, {
         ...state[noteIndex],
-        text: action.text,
+        ...action.note,
         dirty: true,
       });
       return newState;

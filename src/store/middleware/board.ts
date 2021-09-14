@@ -3,9 +3,11 @@ import {ApplicationState} from "types/store";
 import Parse from "parse";
 import {mapUserServerToClientModel, UserServerModel} from "types/user";
 import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
+import {mapVoteServerToClientModel, VoteServerModel} from "types/vote";
 import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
+import {API} from "api";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -156,7 +158,29 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         });
         subscription.on("open", () => {
           noteQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeNotes((results as unknown as NoteServerModel[]).map(mapNoteServerToClientModel)));
+            dispatch(ActionFactory.initializeNotes((results as NoteServerModel[]).map(mapNoteServerToClientModel)));
+          });
+        });
+      });
+    };
+
+    const createVoteSubscription = () => {
+      const voteQuery = new Parse.Query("Vote");
+      voteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
+      voteQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("create", (object) => {
+          dispatch(ActionFactory.createdVote(mapVoteServerToClientModel(object as VoteServerModel)));
+        });
+        subscription.on("delete", (object) => {
+          dispatch(ActionFactory.deletedVote(object.id));
+        });
+        // subscription.on("delete", () => {});
+        subscription.on("open", () => {
+          voteQuery.find().then((results) => {
+            dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
           });
         });
       });
@@ -173,8 +197,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
-      subscription.on("delete", () => {
-        dispatch(ActionFactory.deleteBoard());
+      subscription.on("delete", (object) => {
+        dispatch(ActionFactory.deleteBoard(object.id));
       });
 
       let connectionsCount = 0;
@@ -186,6 +210,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
           createJoinRequestSubscription();
           createNoteSubscription();
           createUsersSubscription();
+          createVoteSubscription();
 
           boardQuery.first().then((board) => {
             dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
@@ -200,5 +225,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         }
       });
     });
+  }
+  if (action.type === ActionType.EditBoard) {
+    API.editBoard(action.board);
+  }
+
+  if (action.type === ActionType.DeleteBoard) {
+    API.deleteBoard(action.boardId);
   }
 };

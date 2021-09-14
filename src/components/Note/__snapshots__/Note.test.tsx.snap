@@ -2,38 +2,58 @@
 
 exports[`Note should have correct style show note with correct style 1`] = `
 <li
-  class="note"
+  class="note__root"
 >
   <div
-    class="note__content"
+    class="note"
   >
-    <p
-      class="note__text"
+    <div
+      class="note__content"
     >
-      Test Text
-    </p>
-    <svg
-      class="note__edit"
+      <p
+        class="note__text"
+      >
+        Test Text
+      </p>
+      <svg
+        class="note__edit"
+      >
+        icon-edit.svg
+      </svg>
+    </div>
+    <footer
+      class="note__footer"
     >
-      icon-edit.svg
-    </svg>
+      <figure
+        aria-roledescription="author"
+        class="note__author"
+      >
+        <img
+          alt="User"
+          class="note__author-image"
+          src="avatar.png"
+        />
+        <figcaption
+          class="note__author-name"
+        />
+      </figure>
+      <div
+        class="votes note__votes"
+      >
+        <button
+          class="dot-button dot-button__add"
+        >
+          <svg
+            class="dot-button__add-icon"
+          >
+            icon-add.svg
+          </svg>
+        </button>
+      </div>
+    </footer>
   </div>
-  <footer
-    class="note__footer"
-  >
-    <figure
-      aria-roledescription="author"
-      class="note__author"
-    >
-      <img
-        alt="User"
-        class="note__author-image"
-        src="avatar.png"
-      />
-      <figcaption
-        class="note__author-name"
-      />
-    </figure>
-  </footer>
+  <div
+    class="note__in-stack"
+  />
 </li>
 `;

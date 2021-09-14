@@ -1,22 +1,24 @@
-import {useSelector} from "react-redux";
 import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import BoardComponent from "components/Board/Board";
 import Column from "components/Column/Column";
-import {ApplicationState} from "types/store";
 import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
+import {useAppSelector} from "store";
 
 function Board() {
-  const state = useSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
+    votes: applicationState.votes,
   }));
 
+  const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
+
   let joinRequestComponent;
-  if (state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined) {
+  if (currentUserIsModerator) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
     if (pendingJoinRequests && pendingJoinRequests.length > 0) {
       joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
@@ -36,13 +38,31 @@ function Board() {
     return (
       <>
         {joinRequestComponent}
-        <BoardComponent name={state.board.data!.name} boardstatus={boardstatus}>
+        <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board.data!.columns.map((column) => (
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
               {state.notes
                 .filter((note) => note.columnId === column.id)
+                .filter((note) => note.parentId == null)
                 .map((note) => (
-                  <Note key={note.id} noteId={note.id} text={note.text} authorId={note.author} columnName={column.name} columnColor={column.color} />
+                  <Note
+                    showAuthors={state.board.data!.showAuthors}
+                    isAdmin={currentUserIsModerator}
+                    key={note.id}
+                    noteId={note.id}
+                    text={note.text}
+                    authorId={note.author}
+                    authorName={state.users.all.filter((user) => user.id === note.author)[0]?.displayName}
+                    columnId={column.id!}
+                    columnName={column.name}
+                    columnColor={column.color}
+                    childrenNotes={state.notes
+                      .filter((n) => note.id && note.id === n.parentId)
+                      .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
+                      .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
+                    votes={state.votes.filter((vote) => vote.note === note.id)}
+                    activeVoting={state.board.data?.voting === "active"}
+                  />
                 ))}
             </Column>
           ))}

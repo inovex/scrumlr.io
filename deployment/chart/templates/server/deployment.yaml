@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "scrumlr-fullname" .Values.server }}
+  labels: 
+    {{- include "selectorLabels" .Values.server | nindent 6 }}
+    {{- include "labels" . | nindent 6 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "selectorLabels" .Values.server | nindent 6 }}
+  template:
+    metadata:
+      labels: 
+        {{- include "selectorLabels" .Values.server | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ include "scrumlr-fullname" .Values.server }}
+          image: {{ .Values.server.image }}
+          imagePullPolicy:  {{ .Values.server.imagePullPolicy }}
+          ports:
+            - name: {{ .Values.server.portName }}
+              containerPort: {{ .Values.server.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "scrumlr-fullname" .Values.server }}
+            - secretRef:
+                name: {{ include "scrumlr-fullname" .Values.server }}
+           {{- if .Values.server.livenessProbe }}
+          livenessProbe: 
+          {{- toYaml .Values.server.livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.readinessProbe }}
+          readinessProbe: 
+          {{- toYaml .Values.server.readinessProbe | nindent 12 }}  
+          {{- end }}
+      restartPolicy:  {{ .Values.server.restartPolicy }}
