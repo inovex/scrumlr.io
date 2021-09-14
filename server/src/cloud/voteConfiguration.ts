@@ -1,11 +1,8 @@
-import {requireValidBoardAdmin, getAdminRoleName} from "./permission";
+import {requireValidBoardAdmin, getAdminRoleName, getMemberRoleName} from "./permission";
 import {api, newObject} from "./util";
 
 export interface VoteConfiguration {
   board: string;
-}
-
-export interface ConfigureVoting extends VoteConfiguration {
   voteLimit: number;
   multipleVotesPerNote: boolean;
   hideVotesDuringVotingPhase: boolean;
@@ -13,7 +10,7 @@ export interface ConfigureVoting extends VoteConfiguration {
 
 export const initializeVoteConfigurationFunctions = () => {
   // Add vote configuration
-  api<ConfigureVoting, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
+  api<VoteConfiguration, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
 
@@ -26,13 +23,16 @@ export const initializeVoteConfigurationFunctions = () => {
     const voteConfiguration = newObject(
       "VoteConfiguration",
       {
-        board,
-        voteLimit: request.voteLimit,
+        board: Parse.Object.extend("Board").createWithoutData(request.board),
         votingIteration: (await board.get("votingIteration")) + 1,
+        voteLimit: request.voteLimit,
         multipleVotesPerNote: request.multipleVotesPerNote,
         hideVotesDuringVotingPhase: request.hideVotesDuringVotingPhase,
       },
-      {readRoles: [getAdminRoleName(request.board)]}
+      {
+        readRoles: [getMemberRoleName(request.board), getAdminRoleName(request.board)],
+        writeRoles: [getAdminRoleName(request.board)],
+      }
     );
 
     await voteConfiguration.save(null, {useMasterKey: true});
@@ -41,7 +41,7 @@ export const initializeVoteConfigurationFunctions = () => {
   });
 
   // Update vote configuration
-  api<ConfigureVoting, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
+  api<VoteConfiguration, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
 
@@ -70,7 +70,7 @@ export const initializeVoteConfigurationFunctions = () => {
   });
 
   // Cancle voting during voting phase
-  api<VoteConfiguration, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
+  api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
 

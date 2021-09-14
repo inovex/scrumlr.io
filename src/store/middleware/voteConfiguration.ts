@@ -9,9 +9,8 @@ export const passVoteConfigurationMiddlware = async (stateAPI: MiddlewareAPI<Dis
     API.updateVoteConfiguration(action.voteConfiguration);
   }
 
-  const boardId = stateAPI.getState().board.data!.id;
-
   if (action.type === ActionType.AddVoteConfiguration) {
+    const boardId = stateAPI.getState().board.data!.id;
     const response = (await API.addVoteConfiguration(boardId, action.voteConfiguration)) as {status: string; description: string};
     if (response.status === "Error") {
       Toast.error(response.description);
@@ -19,6 +18,7 @@ export const passVoteConfigurationMiddlware = async (stateAPI: MiddlewareAPI<Dis
   }
 
   if (action.type === ActionType.RemoveVoteConfiguration) {
+    const boardId = stateAPI.getState().board.data!.id;
     API.removeVoteConfiguration(boardId);
   }
 };

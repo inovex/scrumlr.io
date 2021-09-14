@@ -28,7 +28,7 @@ type UpdateableVoteConfigurationAttributes = {
   hideVotesDuringVotingPhase: boolean;
 };
 
-export type UpdateVoteConfiguration = Partial<UpdateableVoteConfigurationAttributes>;
+export type VoteConfiguration = Partial<UpdateableVoteConfigurationAttributes>;
 
 export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
   board: voteConfiguration.get("board").id,
