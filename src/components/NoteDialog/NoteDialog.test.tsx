@@ -56,7 +56,7 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean) 
           {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
         ]}
-        onClose={() => {}}
+        voteConfiguration={{board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false}}
       />
     </Provider>
   );

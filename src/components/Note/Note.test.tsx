@@ -70,6 +70,7 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
         ]}
         authorName=""
+        voteConfiguration={{board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false}}
       />
     </Provider>
   );
