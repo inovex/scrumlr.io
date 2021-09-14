@@ -30,7 +30,7 @@ type UpdateableVoteConfigurationAttributes = {
 
 export type UpdateVoteConfiguration = Partial<UpdateableVoteConfigurationAttributes>;
 
-export const mapNoteServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
+export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
   board: voteConfiguration.get("board").id,
   votingIteration: voteConfiguration.get("votingIteration"),
   voteLimit: voteConfiguration.get("voteLimit"),

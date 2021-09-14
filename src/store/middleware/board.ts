@@ -4,6 +4,7 @@ import Parse from "parse";
 import {mapUserServerToClientModel, UserServerModel} from "types/user";
 import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
 import {mapVoteServerToClientModel, VoteServerModel} from "types/vote";
+import {mapVoteConfigurationServerToClientModel, VoteConfigurationServerModel} from "types/voteConfiguration";
 import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
@@ -186,6 +187,28 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
       });
     };
 
+    const createVoteConfigurationSubscription = () => {
+      const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+      voteConfigurationQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
+      voteConfigurationQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("create", (object) => {
+          dispatch(ActionFactory.addedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
+        });
+        subscription.on("delete", (object) => {
+          dispatch(ActionFactory.removedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
+        });
+        // subscription.on("delete", () => {});
+        subscription.on("open", () => {
+          voteConfigurationQuery.find().then((results) => {
+            dispatch(ActionFactory.initializeVoteConfigurations((results as VoteConfigurationServerModel[]).map(mapVoteConfigurationServerToClientModel)));
+          });
+        });
+      });
+    };
+
     const boardQuery = new Parse.Query("Board");
     boardQuery.equalTo("objectId", action.boardId);
     boardQuery.subscribe().then((subscription) => {
@@ -211,6 +234,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
           createNoteSubscription();
           createUsersSubscription();
           createVoteSubscription();
+          createVoteConfigurationSubscription();
 
           boardQuery.first().then((board) => {
             dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));

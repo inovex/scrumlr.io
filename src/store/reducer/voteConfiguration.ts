@@ -10,6 +10,9 @@ export const voteConfigurationReducer = (state: VoteConfigurationClientModel[] =
     case ActionType.RemovedVoteConfiguration: {
       return state.filter((voteConfiguration) => voteConfiguration.votingIteration !== action.voteConfiguration.votingIteration);
     }
+    case ActionType.InitializeVoteConfigurations: {
+      return [...action.voteConfigurations];
+    }
     default: {
       return state;
     }
