@@ -29,7 +29,7 @@ function MenuBars() {
   const toggleVoting = (active: boolean) => {
     store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
     // Testing
-    store.dispatch(ActionFactory.addVoteConfiguration({board: boardId, voteLimit: 10, showVotesOfOtherUsers: true, multipleVotesPerNote: false}));
+    store.dispatch(ActionFactory.addVoteConfiguration({board: boardId, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true}));
   };
 
   return (
