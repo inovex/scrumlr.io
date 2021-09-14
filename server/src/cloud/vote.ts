@@ -33,8 +33,12 @@ export const initializeVoteFunctions = () => {
       return {status: "Error", description: "You have already cast all your votes"};
     }
 
-    // Create vote for corresponding note, user and board
     const note = Parse.Object.extend("Note").createWithoutData(request.note);
+
+    if ((await voteQuery.equalTo("note", note).count({useMasterKey: true})) >= 1 && !voteConfiguration.get("allowMultipleVotesPerNote")) {
+      return {status: "Error", description: "You can't vote multiple times per note"};
+    }
+
     const vote = newObject("Vote", {board, note, user}, {readRoles: [getMemberRoleName(request.board)]});
     await vote.save(null, {useMasterKey: true});
 
