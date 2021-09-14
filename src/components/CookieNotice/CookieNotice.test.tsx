@@ -33,22 +33,22 @@ describe("Cookie Notice should be rendered with:", () => {
   });
   test("cookie notice: root node", () => {
     const {container} = render(createCookieNotice());
-    expect(container.firstChild).toHaveClass("cookie-notice--show");
+    expect(container.firstChild).toHaveClass("cookie-notice");
   });
   test("cookie notice: backdrop", () => {
     const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice--show")!.childNodes[0]).toHaveClass("MuiBackdrop-root cookie-notice__backdrop MuiBackdrop-invisible");
+    expect(container.querySelector(".cookie-notice")!.childNodes[0]).toHaveClass("MuiBackdrop-root cookie-notice__backdrop MuiBackdrop-invisible");
   });
   test("cookie notice: header", () => {
     const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice--show")!.childNodes[1]).toHaveClass("cookie-notice__header");
+    expect(container.querySelector(".cookie-notice")!.childNodes[1]).toHaveClass("cookie-notice__header");
   });
   test("cookie notice: body", () => {
     const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice--show")!.childNodes[2]).toHaveClass("cookie-notice__body");
+    expect(container.querySelector(".cookie-notice")!.childNodes[2]).toHaveClass("cookie-notice__body");
   });
   test("cookie notice: buttons section", () => {
     const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice--show")!.childNodes[3]).toHaveClass("cookie-notice__buttons");
+    expect(container.querySelector(".cookie-notice")!.childNodes[3]).toHaveClass("cookie-notice__buttons");
   });
 });
