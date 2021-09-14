@@ -12,6 +12,7 @@ import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
 import {filterVotes} from "utils/votes";
+import {VoteConfigurationClientModel} from "types/voteConfiguration";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -25,6 +26,7 @@ interface NoteProps {
   showAuthors: boolean;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
+  voteConfiguration: VoteConfigurationClientModel;
   activeVoting: boolean;
 }
 
@@ -58,7 +60,7 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
-  const filteredVotes = filterVotes(props.votes, props.activeVoting);
+  const filteredVotes = filterVotes(props.votes, props.activeVoting, props.voteConfiguration?.showVotesOfOtherUsers);
 
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
@@ -80,7 +82,8 @@ const Note = (props: NoteProps) => {
             votes={filteredVotes.concat(
               filterVotes(
                 props.childrenNotes.flatMap((n) => n.votes),
-                props.activeVoting
+                props.activeVoting,
+                props.voteConfiguration.showVotesOfOtherUsers
               )
             )}
             activeVoting={props.activeVoting}

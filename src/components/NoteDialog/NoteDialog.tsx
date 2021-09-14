@@ -13,6 +13,7 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {VoteClientModel} from "types/vote";
 import {filterVotes} from "utils/votes";
+import {VoteConfigurationClientModel} from "types/voteConfiguration";
 import {Votes} from "../Votes";
 
 interface NoteDialogProps {
@@ -28,10 +29,26 @@ interface NoteDialogProps {
   onClose: () => void;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
+  voteConfiguration: VoteConfigurationClientModel;
   activeVoting: boolean;
 }
 
-const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuthors, columnName, columnColor, onClose, childrenNotes, votes, activeVoting}: NoteDialogProps) => {
+const NoteDialog = ({
+  noteId,
+  show,
+  text,
+  authorId,
+  isAdmin,
+  authorName,
+  showAuthors,
+  columnName,
+  columnColor,
+  onClose,
+  childrenNotes,
+  votes,
+  voteConfiguration,
+  activeVoting,
+}: NoteDialogProps) => {
   if (!show) {
     return null;
   }
@@ -119,7 +136,7 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
-              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, activeVoting)} activeVoting={activeVoting} />
+              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, activeVoting, voteConfiguration.showVotesOfOtherUsers)} activeVoting={activeVoting} />
             </footer>
 
             <aside>
