@@ -66,7 +66,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 264px;
+  max-height: 272px;
   overflow: auto;
   scrollbar-color: $color-middle-gray #fff;
   background-color: #fff;
@@ -101,8 +101,6 @@
 .list__header {
   height: 32px;
   position: relative;
-  margin-right: 25px;
-  margin-left: 20px;
 }
 
 .list__header > label {
@@ -116,19 +114,17 @@
 
 .list__header > label:first-child {
   text-align: left;
-  left: 0;
+  left: 20px;
 }
 .list__header > label:last-child {
   text-align: right;
-  right: 0;
+  left: 244px;
 }
 
 .participants__list > li {
   background-color: white;
   position: relative;
   height: 48px;
-  padding: 10px 10px 10px 20px;
-  width: 285px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -144,34 +140,28 @@
 .participants__list > li:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(173, 173, 173, 0) 0%,
-    rgba(173, 173, 173, 0) 5%,
-    rgba(173, 173, 173, 0.5) 25%,
-    rgba(173, 173, 173, 0.5) 75%,
-    rgba(173, 173, 173, 0) 95%,
-    rgba(173, 173, 173, 0) 100%
-  );
+  width: calc(100% - 64px);
+  background-color: #edeff2;
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 64px;
 }
 
 .participants__list figure {
-  display: inline-flex;
-  align-items: center;
-  align-items: center;
-  height: 28px;
-  vertical-align: baseline;
   margin: 0;
+}
+
+.participants__list img {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 
 .participants__list figcaption {
   display: inline-block;
-  line-height: 28px;
-  margin-left: 10px;
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 300;
@@ -180,6 +170,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #111111;
+  position: absolute;
+  top: 15px;
+  left: 64px;
 }
 @media (prefers-color-scheme: dark) {
   .participants__list figcaption {
@@ -187,13 +180,8 @@
   }
 }
 
-.participants__list img {
-  height: 28px;
-  width: 28px;
-  border-radius: 100%;
-}
-
 .participant__permission-toggle {
   transform: scale(0.9);
-  right: 10px;
+  left: 244px;
+  top: 12px;
 }
