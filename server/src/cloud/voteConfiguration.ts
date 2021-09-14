@@ -4,7 +4,7 @@ import {api, newObject} from "./util";
 export interface EditableVoteConfigurationAttributes {
   voteLimit: number;
   multipleVotesPerNote: boolean;
-  hideVotesDuringVotingPhase: boolean;
+  showVotesOfOtherUsers: boolean;
 }
 
 export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
@@ -28,7 +28,7 @@ export const initializeVoteConfigurationFunctions = () => {
         votingIteration: (await board.get("votingIteration")) + 1,
         voteLimit: request.voteConfiguration.voteLimit,
         multipleVotesPerNote: request.voteConfiguration.multipleVotesPerNote,
-        hideVotesDuringVotingPhase: request.voteConfiguration.hideVotesDuringVotingPhase,
+        showVotesOfOtherUsers: request.voteConfiguration.showVotesOfOtherUsers,
       },
       {
         readRoles: [getMemberRoleName(request.voteConfiguration.board), getAdminRoleName(request.voteConfiguration.board)],
@@ -62,8 +62,8 @@ export const initializeVoteConfigurationFunctions = () => {
     if (request.voteConfiguration.multipleVotesPerNote != null) {
       voteConfiguration.set("voteLimit", request.voteConfiguration.multipleVotesPerNote);
     }
-    if (request.voteConfiguration.hideVotesDuringVotingPhase != null) {
-      voteConfiguration.set("hideVotesDuringVotingPhase", request.voteConfiguration.hideVotesDuringVotingPhase);
+    if (request.voteConfiguration.showVotesOfOtherUsers != null) {
+      voteConfiguration.set("showVotesOfOtherUsers", request.voteConfiguration.showVotesOfOtherUsers);
     }
 
     await voteConfiguration.save(null, {useMasterKey: true});

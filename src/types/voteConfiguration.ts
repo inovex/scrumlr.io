@@ -8,7 +8,7 @@ export interface VoteConfigurationServerModel extends Parse.Object {
   votingIteration: number;
   voteLimit: number;
   multipleVotesPerNote: boolean;
-  hideVotesDuringVotingPhase: boolean;
+  showVotesOfOtherUsers: boolean;
 }
 
 /**
@@ -19,13 +19,13 @@ export interface VoteConfigurationClientModel {
   votingIteration: number;
   voteLimit: number;
   multipleVotesPerNote: boolean;
-  hideVotesDuringVotingPhase: boolean;
+  showVotesOfOtherUsers: boolean;
 }
 
 type EditableVoteConfigurationAttributes = {
   voteLimit: number;
   multipleVotesPerNote: boolean;
-  hideVotesDuringVotingPhase: boolean;
+  showVotesOfOtherUsers: boolean;
 };
 
 export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
@@ -35,5 +35,5 @@ export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteC
   votingIteration: voteConfiguration.get("votingIteration"),
   voteLimit: voteConfiguration.get("voteLimit"),
   multipleVotesPerNote: voteConfiguration.get("multipleVotesPerNote"),
-  hideVotesDuringVotingPhase: voteConfiguration.get("hideVotesDuringVotingPhase"),
+  showVotesOfOtherUsers: voteConfiguration.get("showVotesOfOtherUsers"),
 });

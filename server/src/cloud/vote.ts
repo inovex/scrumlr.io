@@ -23,9 +23,16 @@ export const initializeVoteFunctions = () => {
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("board", board);
     voteQuery.equalTo("user", user);
-    if ((await voteQuery.count({useMasterKey: true})) >= board.get("voteLimit")) {
+
+    // Get voteConfiguration
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    voteConfigurationQuery.equalTo("board", board);
+    const voteConfiguration = await voteConfigurationQuery.get("votingIteration", await board.get("votingIteration"));
+
+    if ((await voteQuery.count({useMasterKey: true})) >= voteConfiguration.get("voteLimit")) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
+
     // Create vote for corresponding note, user and board
     const note = Parse.Object.extend("Note").createWithoutData(request.note);
     const vote = newObject("Vote", {board, note, user}, {readRoles: [getMemberRoleName(request.board)]});

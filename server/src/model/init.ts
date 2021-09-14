@@ -13,7 +13,6 @@ const addInitialBoardSchema = async () => {
   schema.addDate("timerUTCEndTime");
   schema.addDate("expirationUTCTime");
   schema.addString("voting", {defaultValue: "disabled"});
-  schema.addBoolean("showVotesOfOtherUsers", {defaultValue: false});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
@@ -43,8 +42,8 @@ const addInitialVoteConfigurationSchema = async () => {
   schema.addPointer("board", "Board", {required: true});
   schema.addNumber("votingIteration", {required: true, defaultValue: 1});
   schema.addNumber("voteLimit", {defaultValue: 0});
-  schema.addBoolean("multipleVotesPerNote", {defaultValue: true});
-  schema.addBoolean("hideVotesDuringVotingPhase", {defaultValue: true});
+  schema.addBoolean("allowMultipleVotesPerNote", {defaultValue: true});
+  schema.addBoolean("showVotesOfOtherUsers", {defaultValue: false});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
