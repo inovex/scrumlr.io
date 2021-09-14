@@ -26,12 +26,16 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
         <header className="participants__header">
-          <h1>Board Participants</h1>
+          <h4>Board Participants ({props.participants.length})</h4>
           <input placeholder="Search Participant" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </header>
-
         <ul className="participants__list">
+          <div className="list__header">
+            <label>Name</label>
+            <label>Admin</label>
+          </div>
           {props.participants
+            .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
             .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
               <li>

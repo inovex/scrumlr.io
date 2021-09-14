@@ -30,14 +30,14 @@
   }
 }
 
-.participants__header > h1 {
+.participants__header > h4 {
   margin: 0;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 18px;
   line-height: 18px;
   letter-spacing: 0.25px;
   position: absolute;
-  top: 20px;
+  top: 24px;
 }
 
 .participants__header > input {
@@ -47,8 +47,9 @@
   font-size: 13px;
   letter-spacing: 0.27px;
   border: none;
+  border-bottom: 1px solid transparent;
   position: absolute;
-  top: 44px;
+  bottom: 24px;
 
   &::placeholder {
     opacity: 1;
@@ -65,7 +66,7 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 240px;
+  max-height: 264px;
   overflow: auto;
   scrollbar-color: $color-middle-gray #fff;
   background-color: #fff;
@@ -95,6 +96,31 @@
   .participants__list::-webkit-scrollbar-thumb {
     background-color: $color-darkest-gray;
   }
+}
+
+.list__header {
+  height: 32px;
+  position: relative;
+  margin-right: 25px;
+  margin-left: 20px;
+}
+
+.list__header > label {
+  letter-spacing: 0.18px;
+  color: #a3a6aa;
+  opacity: 0.8;
+  font-size: 12px;
+  position: absolute;
+  top: 16px;
+}
+
+.list__header > label:first-child {
+  text-align: left;
+  left: 0;
+}
+.list__header > label:last-child {
+  text-align: right;
+  right: 0;
 }
 
 .participants__list > li {
@@ -149,7 +175,7 @@
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 300;
-  width: 190px;
+  width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -168,6 +194,6 @@
 }
 
 .participant__permission-toggle {
-  right: 0;
-  transform: scale(0.8);
+  transform: scale(0.9);
+  right: 10px;
 }
