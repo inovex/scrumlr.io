@@ -7,8 +7,8 @@ $cookie-consent-button-text-size: 18px;
 .cookie-notice {
   background: $color-light-gray;
   color: $color-black;
-  position: sticky;
-  top: 100%;
+  position: fixed;
+  bottom: 0;
   padding: $padding--small;
 }
 
