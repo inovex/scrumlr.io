@@ -89,7 +89,7 @@ const CookieNotice = () => {
           Accept
         </button>
       </div>
-      <CookiePolicy acceptFunction={accept} onClose={toggleShowCookiePolicy} show={showCookiePolicy} />
+      <CookiePolicy acceptFunction={accept} onClose={toggleShowCookiePolicy} show={showCookiePolicy} darkBackground />
     </div>
   );
 };

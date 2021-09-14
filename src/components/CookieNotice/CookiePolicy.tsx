@@ -8,9 +8,10 @@ interface CookiePolicyProps {
   acceptFunction: () => void;
   onClose: () => void;
   show: boolean;
+  darkBackground: boolean;
 }
 
-const CookiePolicy = ({acceptFunction, onClose, show}: CookiePolicyProps) => {
+const CookiePolicy = ({acceptFunction, onClose, show, darkBackground}: CookiePolicyProps) => {
   const [policy, setPolicy] = useState({markdown: ""});
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const CookiePolicy = ({acceptFunction, onClose, show}: CookiePolicyProps) => {
   };
 
   return (
-    <Portal onClose={onClose}>
+    <Portal onClose={onClose} darkBackground={darkBackground}>
       <div className="cookie-policy">
         <div className="cookie-policy__title">
           <h1>Cookie Policy of scrumlr.io</h1>
