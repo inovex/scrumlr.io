@@ -3,7 +3,7 @@ import {api, newObject} from "./util";
 
 export interface EditableVoteConfigurationAttributes {
   voteLimit: number;
-  multipleVotesPerNote: boolean;
+  allowMultipleVotesPerNote: boolean;
   showVotesOfOtherUsers: boolean;
 }
 
@@ -27,7 +27,7 @@ export const initializeVoteConfigurationFunctions = () => {
         board: Parse.Object.extend("Board").createWithoutData(request.voteConfiguration.board),
         votingIteration: (await board.get("votingIteration")) + 1,
         voteLimit: request.voteConfiguration.voteLimit,
-        multipleVotesPerNote: request.voteConfiguration.multipleVotesPerNote,
+        allowMultipleVotesPerNote: request.voteConfiguration.allowMultipleVotesPerNote,
         showVotesOfOtherUsers: request.voteConfiguration.showVotesOfOtherUsers,
       },
       {
@@ -59,8 +59,8 @@ export const initializeVoteConfigurationFunctions = () => {
     if (request.voteConfiguration.voteLimit) {
       voteConfiguration.set("voteLimit", request.voteConfiguration.voteLimit);
     }
-    if (request.voteConfiguration.multipleVotesPerNote != null) {
-      voteConfiguration.set("voteLimit", request.voteConfiguration.multipleVotesPerNote);
+    if (request.voteConfiguration.allowMultipleVotesPerNote != null) {
+      voteConfiguration.set("voteLimit", request.voteConfiguration.allowMultipleVotesPerNote);
     }
     if (request.voteConfiguration.showVotesOfOtherUsers != null) {
       voteConfiguration.set("showVotesOfOtherUsers", request.voteConfiguration.showVotesOfOtherUsers);
