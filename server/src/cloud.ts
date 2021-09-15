@@ -6,6 +6,6 @@ import {initializeVoteConfigurationFunctions} from "./cloud/voteConfiguration";
 
 initializeBoardFunctions();
 initializeColumnFunctions();
+initializeVoteConfigurationFunctions();
 initializeNoteFunctions();
 initializeVoteFunctions();
-initializeVoteConfigurationFunctions();

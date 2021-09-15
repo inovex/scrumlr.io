@@ -231,10 +231,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         if (connectionsCount === 1) {
           // first connect to the board
           createJoinRequestSubscription();
+          createVoteConfigurationSubscription();
           createNoteSubscription();
           createUsersSubscription();
           createVoteSubscription();
-          createVoteConfigurationSubscription();
 
           boardQuery.first().then((board) => {
             dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));

@@ -62,7 +62,7 @@ function Board() {
                       .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                       .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
-                    voteConfiguration={state.voteConfigurations[state.voteConfigurations.length - 1]}
+                    voteConfiguration={state.voteConfigurations.filter((config) => config.votingIteration === state.board.data.votingIteration)[0]}
                     activeVoting={state.board.data?.voting === "active"}
                   />
                 ))}
