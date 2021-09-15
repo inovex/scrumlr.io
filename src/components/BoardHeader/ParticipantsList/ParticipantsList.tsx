@@ -4,7 +4,7 @@ import {UserClientModel} from "types/user";
 import avatar from "assets/avatar.png";
 import "./ParticipantsList.scss";
 import {ToggleButton} from "components/ToggleButton";
-import store from "store";
+import store, {useAppSelector} from "store";
 import Parse from "parse";
 import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
@@ -18,6 +18,7 @@ type ParticipantsListProps = {
 
 export const ParticipantsList = (props: ParticipantsListProps) => {
   const [searchString, setSearchString] = useState("");
+  const boardOwner = useAppSelector((state) => state.board.data?.owner);
 
   if (!props.open) {
     return null;
@@ -45,11 +46,11 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
                   <img src={avatar} />
                   <figcaption>{participant.displayName}</figcaption>
                 </figure>
-                {/* Show the permission toggle if the current user is moderator and it's not the toggle for the user himself */}
+                {/* Show the permission toggle if the current user is moderator */}
                 {props.currentUserIsModerator && (
                   <ToggleButton
                     className="participant__permission-toggle"
-                    disabled={Parse.User.current()?.id === participant.id}
+                    disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
                     values={["participant", "moderator"]}
                     defaultValue={participant.admin ? "moderator" : "participant"}
                     onClick={(val: "participant" | "moderator") => {

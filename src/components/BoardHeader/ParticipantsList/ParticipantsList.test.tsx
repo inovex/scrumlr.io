@@ -1,11 +1,16 @@
 import {render, fireEvent} from "@testing-library/react";
-import store from "store";
 import {ActionFactory} from "store/action";
 import {UserClientModel} from "types/user";
 import Parse from "parse";
+import * as store from "store";
 import {ParticipantsList} from ".";
 
 describe("ParticipantsList", () => {
+  beforeAll(() => {
+    // @ts-ignore
+    store.useAppSelector = jest.fn();
+  });
+
   const createParticipantsList = (props: {open: boolean; onClose?: () => void; currentUserIsModerator: boolean; numberOfParticipants?: number}) => (
     <ParticipantsList
       open={props.open}
@@ -53,7 +58,7 @@ describe("ParticipantsList", () => {
     });
 
     test("permission toggle should call store.dispatch", () => {
-      store.dispatch = jest.fn();
+      store.default.dispatch = jest.fn();
       const portal = global.document.createElement("div");
       portal.setAttribute("id", "portal");
       global.document.querySelector("body")!.appendChild(portal);
@@ -61,13 +66,25 @@ describe("ParticipantsList", () => {
         container: global.document.querySelector("#portal")!,
       });
       fireEvent.click(container.getElementsByClassName("participant__permission-toggle")[0]);
-      expect(store.dispatch).toHaveBeenCalled();
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("0", true));
+      expect(store.default.dispatch).toHaveBeenCalled();
+      expect(store.default.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("0", true));
     });
 
     test("should disable permission toggle of own user", () => {
       // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "0"}));
+      const portal = global.document.createElement("div");
+      portal.setAttribute("id", "portal");
+      global.document.querySelector("body")!.appendChild(portal);
+      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, numberOfParticipants: 3}), {
+        container: global.document.querySelector("#portal")!,
+      });
+      expect(container.getElementsByClassName("participant__permission-toggle")[0]).toHaveAttribute("disabled");
+    });
+
+    test("should disable permission toggle of board creator", () => {
+      // @ts-ignore
+      store.useAppSelector = jest.fn(() => "0");
       const portal = global.document.createElement("div");
       portal.setAttribute("id", "portal");
       global.document.querySelector("body")!.appendChild(portal);

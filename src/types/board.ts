@@ -23,6 +23,7 @@ export interface BoardServerModel {
   voteLimit: number;
   createdAt: Date;
   updatedAt: Date;
+  owner: Parse.User;
 }
 
 export type EditableBoardAttributes = {
@@ -53,6 +54,7 @@ export interface BoardClientModel extends EditableBoardAttributes {
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
+  owner: any;
 }
 
 export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
@@ -78,4 +80,5 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   createdAt: board.createdAt,
   updatedAt: board.updatedAt,
   dirty: false,
+  owner: board.owner.objectId,
 });

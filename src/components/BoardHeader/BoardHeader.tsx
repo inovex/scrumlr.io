@@ -41,6 +41,7 @@ const BoardHeader = (props: BoardHeaderProps) => {
         <BoardUsers />
       </div>
       {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
+      {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
         <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />
       )}
