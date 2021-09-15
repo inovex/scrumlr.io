@@ -38,7 +38,7 @@ const rootReducer = combineReducers<ApplicationState>({
   users: usersReducer,
   joinRequests: joinRequestReducer,
   votes: voteReducer,
-  voteConfigurations: voteConfigurationReducer,
+  voteConfiguration: voteConfigurationReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));

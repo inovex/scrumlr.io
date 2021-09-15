@@ -22,5 +22,5 @@ export interface ApplicationState {
   users: UsersState;
   joinRequests: JoinRequestClientModel[];
   votes: VoteClientModel[];
-  voteConfigurations: VoteConfigurationClientModel[];
+  voteConfiguration: VoteConfigurationClientModel;
 }

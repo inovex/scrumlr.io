@@ -5,7 +5,7 @@ export const VoteConfigurationActionType = {
   AddedVoteConfiguration: "@@SCRUMLR/addedVoteConfiguration" as const,
   RemoveVoteConfiguration: "@@SCRUMLR/removeVoteConfiguration" as const,
   RemovedVoteConfiguration: "@@SCRUMLR/removedVoteConfiguration" as const,
-  InitializeVoteConfigurations: "@@SCRUMLR/initializeVoteConfigurations" as const,
+  InitializeVoteConfiguration: "@@SCRUMLR/initializeVoteConfiguration" as const,
 };
 
 export const VoteConfigurationActionFactory = {
@@ -25,9 +25,9 @@ export const VoteConfigurationActionFactory = {
     type: VoteConfigurationActionType.RemovedVoteConfiguration,
     voteConfiguration,
   }),
-  initializeVoteConfigurations: (voteConfigurations: VoteConfigurationClientModel[]) => ({
-    type: VoteConfigurationActionType.InitializeVoteConfigurations,
-    voteConfigurations,
+  initializeVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+    type: VoteConfigurationActionType.InitializeVoteConfiguration,
+    voteConfiguration,
   }),
 };
 
@@ -36,4 +36,4 @@ export type VoteConfigurationReduxAction =
   | ReturnType<typeof VoteConfigurationActionFactory.addedVoteConfiguration>
   | ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>
   | ReturnType<typeof VoteConfigurationActionFactory.removedVoteConfiguration>
-  | ReturnType<typeof VoteConfigurationActionFactory.initializeVoteConfigurations>;
+  | ReturnType<typeof VoteConfigurationActionFactory.initializeVoteConfiguration>;

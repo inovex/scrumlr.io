@@ -189,7 +189,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
 
     const createVoteConfigurationSubscription = () => {
       const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
-      voteConfigurationQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
+      const board = Parse.Object.extend("Board").createWithoutData(action.boardId);
+      voteConfigurationQuery.equalTo("board", board);
       voteConfigurationQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
@@ -202,9 +203,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         });
         // subscription.on("delete", () => {});
         subscription.on("open", () => {
-          voteConfigurationQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeVoteConfigurations((results as VoteConfigurationServerModel[]).map(mapVoteConfigurationServerToClientModel)));
-          });
+          voteConfigurationQuery
+            .equalTo("votingIteration", board.get("votingIteration"))
+            .first()
+            .then((result) => {
+              dispatch(ActionFactory.initializeVoteConfiguration(mapVoteConfigurationServerToClientModel(result as unknown as VoteConfigurationServerModel)));
+            });
         });
       });
     };

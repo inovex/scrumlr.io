@@ -13,7 +13,7 @@ function Board() {
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
     votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
-    voteConfigurations: applicationState.voteConfigurations,
+    voteConfiguration: applicationState.voteConfiguration,
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
@@ -62,7 +62,7 @@ function Board() {
                       .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                       .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
-                    voteConfiguration={state.voteConfigurations.filter((config) => config.votingIteration === state.board.data?.votingIteration)[0]}
+                    voteConfiguration={state.voteConfiguration}
                     activeVoting={state.board.data?.voting === "active"}
                   />
                 ))}
