@@ -41,35 +41,6 @@ export const initializeVoteConfigurationFunctions = () => {
     return {status: "Success", description: "Your vote configuration has been added"};
   });
 
-  // Update vote configuration
-  api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.voteConfiguration.board);
-    const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
-
-    // Check if the board exists
-    if (!board) {
-      return {status: "Error", description: `Board '${request.voteConfiguration.board}' does not exist`};
-    }
-
-    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
-    voteConfigurationQuery.equalTo("board", board);
-    // Voting iteraion will incremented after pressing the start voting phase button
-    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", board.get("votingIteration") + 1).first();
-
-    if (request.voteConfiguration.voteLimit) {
-      voteConfiguration.set("voteLimit", request.voteConfiguration.voteLimit);
-    }
-    if (request.voteConfiguration.allowMultipleVotesPerNote != null) {
-      voteConfiguration.set("voteLimit", request.voteConfiguration.allowMultipleVotesPerNote);
-    }
-    if (request.voteConfiguration.showVotesOfOtherUsers != null) {
-      voteConfiguration.set("showVotesOfOtherUsers", request.voteConfiguration.showVotesOfOtherUsers);
-    }
-
-    await voteConfiguration.save(null, {useMasterKey: true});
-    return {status: "Success", description: "Your vote configuration has been updated"};
-  });
-
   // Cancle voting during voting phase
   api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);

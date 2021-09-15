@@ -5,10 +5,6 @@ import {Toast} from "utils/Toast";
 import {ActionType, ReduxAction} from "../action";
 
 export const passVoteConfigurationMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === ActionType.UpdateVoteConfiguration) {
-    API.updateVoteConfiguration(action.voteConfiguration);
-  }
-
   if (action.type === ActionType.AddVoteConfiguration) {
     const response = (await API.addVoteConfiguration(action.voteConfiguration)) as {status: string; description: string};
     if (response.status === "Error") {
