@@ -42,7 +42,7 @@
   background-color: #0057ff;
   box-shadow: 0px 4px 8px #0057ff29;
 }
-@media (prefers-color-theme: dark) {
+@media (prefers-color-scheme: dark) {
   .toggle-button--right::after {
     background-color: #ff0069;
     box-shadow: 0px 4px 8px #ff006929;

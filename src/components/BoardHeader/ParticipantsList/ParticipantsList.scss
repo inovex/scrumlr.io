@@ -98,6 +98,7 @@
 @media (prefers-color-scheme: dark) {
   .participants__list {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    background-color: $color-dark-mode-note;
   }
   .participants__list::-webkit-scrollbar {
     background-color: $color-dark-mode-note;
