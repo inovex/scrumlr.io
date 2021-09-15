@@ -12,7 +12,7 @@ function Board() {
     notes: applicationState.notes,
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
-    votes: applicationState.votes,
+    votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
     voteConfigurations: applicationState.voteConfigurations,
   }));
 

@@ -2,6 +2,7 @@ export interface VoteServerModel extends Parse.Object {
   board: Parse.Object;
   note: Parse.Object;
   user: Parse.Object;
+  votingIteration: number;
 }
 
 export interface VoteClientModel {
@@ -13,6 +14,8 @@ export interface VoteClientModel {
   note: string;
 
   user: string;
+
+  votingIteration: number;
 }
 
 export const mapVoteServerToClientModel = (vote: VoteServerModel): VoteClientModel => ({
@@ -20,4 +23,5 @@ export const mapVoteServerToClientModel = (vote: VoteServerModel): VoteClientMod
   board: vote.get("board").id,
   note: vote.get("note").id,
   user: vote.get("user").id,
+  votingIteration: vote.get("votingIteration"),
 });

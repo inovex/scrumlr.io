@@ -39,7 +39,8 @@ export const initializeVoteFunctions = () => {
       return {status: "Error", description: "You can't vote multiple times per note"};
     }
 
-    const vote = newObject("Vote", {board, note, user}, {readRoles: [getMemberRoleName(request.board)]});
+    const vote = newObject("Vote", {board, note, user, votingIteration: await board.get("votingIteration")}, {readRoles: [getMemberRoleName(request.board)]});
+
     await vote.save(null, {useMasterKey: true});
 
     return {status: "Success", description: "Your vote has been added"};

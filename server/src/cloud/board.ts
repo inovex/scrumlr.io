@@ -74,6 +74,7 @@ export type EditableBoardAttributes = {
   expirationUTCTime?: Date;
   joinConfirmationRequired?: boolean;
   voting?: "active" | "disabled";
+  votingIteration: number;
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -271,6 +272,9 @@ export const initializeBoardFunctions = () => {
       board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
     }
     if (request.board.voting) {
+      if (request.board.voting === "active") {
+        board.set("votingIteration", board.get("votingIteration") + 1);
+      }
       board.set("voting", request.board.voting);
     }
 
