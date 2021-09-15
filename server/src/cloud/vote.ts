@@ -19,16 +19,18 @@ export const initializeVoteFunctions = () => {
     if (board.get("voting") === "disabled") {
       return {status: "Error", description: "You cannot vote while voting is disabled"};
     }
+
+    const votingIteration = await board.get("votingIteration");
     // Check if user will exceed vote limit
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("board", board);
     voteQuery.equalTo("user", user);
+    voteQuery.equalTo("votingIteration", votingIteration);
 
     // Get voteConfiguration
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
-    console.log(board.get("votingIteration"));
-    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", await board.get("votingIteration")).first({useMasterKey: true});
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
 
     if ((await voteQuery.count({useMasterKey: true})) >= voteConfiguration.get("voteLimit")) {
       return {status: "Error", description: "You have already cast all your votes"};
@@ -36,11 +38,13 @@ export const initializeVoteFunctions = () => {
 
     const note = Parse.Object.extend("Note").createWithoutData(request.note);
 
-    if ((await voteQuery.equalTo("note", note).count({useMasterKey: true})) >= 1 && !voteConfiguration.get("allowMultipleVotesPerNote")) {
+    voteQuery.equalTo("note", note);
+
+    if ((await voteQuery.count({useMasterKey: true})) >= 1 && !voteConfiguration.get("allowMultipleVotesPerNote")) {
       return {status: "Error", description: "You can't vote multiple times per note"};
     }
 
-    const vote = newObject("Vote", {board, note, user, votingIteration: await board.get("votingIteration")}, {readRoles: [getMemberRoleName(request.board)]});
+    const vote = newObject("Vote", {board, note, user, votingIteration}, {readRoles: [getMemberRoleName(request.board)]});
 
     await vote.save(null, {useMasterKey: true});
     return {status: "Success", description: "Your vote has been added"};

@@ -27,10 +27,10 @@ function MenuBars() {
   const isAdmin = admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
 
   const toggleVoting = (active: boolean) => {
-    store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
     if (active) {
-      store.dispatch(ActionFactory.addVoteConfiguration({board: boardId, voteLimit: 10, showVotesOfOtherUsers: true, allowMultipleVotesPerNote: false}));
+      store.dispatch(ActionFactory.addVoteConfiguration({board: boardId, voteLimit: 5, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true}));
     }
+    store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
   };
 
   return (

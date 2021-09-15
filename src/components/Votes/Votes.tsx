@@ -38,11 +38,13 @@ export const Votes = (props: VotesProps) => {
           <span>{props.votes.length.toString()}</span>
         </DotButton>
       )}
-      {props.activeVoting && (props.voteConfiguration.allowMultipleVotesPerNote || (!props.voteConfiguration.allowMultipleVotesPerNote && props.votes.length < 1)) && (
-        <DotButton className="dot-button__add" onClick={addVote}>
-          <PlusIcon className="dot-button__add-icon" />
-        </DotButton>
-      )}
+      {props.activeVoting &&
+        (props.voteConfiguration.allowMultipleVotesPerNote ||
+          (!props.voteConfiguration.allowMultipleVotesPerNote && props.votes.filter((vote) => vote.user === Parse.User.current()?.id).length < 1)) && (
+          <DotButton className="dot-button__add" onClick={addVote}>
+            <PlusIcon className="dot-button__add-icon" />
+          </DotButton>
+        )}
     </div>
   );
 };

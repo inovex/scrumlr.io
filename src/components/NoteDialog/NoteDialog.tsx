@@ -139,7 +139,7 @@ const NoteDialog = ({
               <Votes
                 className="note__votes"
                 noteId={note.id!}
-                votes={filterVotes(note.votes, activeVoting, voteConfiguration.showVotesOfOtherUsers)}
+                votes={filterVotes(note.votes, activeVoting, voteConfiguration?.showVotesOfOtherUsers)}
                 activeVoting={activeVoting}
                 voteConfiguration={voteConfiguration}
               />
