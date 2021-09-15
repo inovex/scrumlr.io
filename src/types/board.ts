@@ -18,6 +18,7 @@ export interface BoardServerModel {
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
+  votingIteration: number;
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
   createdAt: Date;
@@ -34,6 +35,7 @@ export type EditableBoardAttributes = {
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
+  votingIteration: number;
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
 };
@@ -70,6 +72,7 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   timerUTCEndTime: board.timerUTCEndTime,
   expirationUTCTime: board.expirationUTCTime,
   voting: board.voting,
+  votingIteration: board.votingIteration,
   showVotesOfOtherUsers: board.showVotesOfOtherUsers,
   voteLimit: board.voteLimit,
   createdAt: board.createdAt,
