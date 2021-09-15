@@ -28,3 +28,6 @@ ui-debug.log
 
 # vscode
 /.vscode
+
+# env files
+server/.env

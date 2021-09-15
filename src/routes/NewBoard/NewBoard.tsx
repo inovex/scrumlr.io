@@ -8,9 +8,7 @@ import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 
-export type NewBoardProps = RouteComponentProps;
-
-function NewBoard(props: NewBoardProps) {
+function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
     "Positive/Negative/Actions": [
       {name: "Positive", hidden: false, color: "backlog-blue"},
@@ -49,8 +47,28 @@ function NewBoard(props: NewBoardProps) {
     }
   }
 
-  async function onLogin() {
+  async function onAnonymousLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
+    await onCreateBoard();
+  }
+
+  async function onLogout() {
+    await Parse.User.logOut();
+    props.history.push("/");
+  }
+
+  async function onGoogleSignIn() {
+    const redirectURI = await API.signInWithGoogle();
+    window.location.href = redirectURI;
+  }
+
+  if (Parse.User.current()) {
+    return (
+      <div>
+        <button onClick={onCreateBoard}>Create Board</button>
+        <button onClick={onLogout}>Logout</button>
+      </div>
+    );
   }
 
   return (
@@ -69,12 +87,14 @@ function NewBoard(props: NewBoardProps) {
 
       <button
         onClick={async () => {
-          if (!Parse.User.current()) await onLogin();
+          if (!Parse.User.current()) await onAnonymousLogin();
           onCreateBoard();
         }}
       >
         Create new Board
       </button>
+
+      <button onClick={onGoogleSignIn}>Sign in with Google</button>
     </div>
   );
 }
