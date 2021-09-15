@@ -87,6 +87,7 @@ const Note = (props: NoteProps) => {
               )
             )}
             activeVoting={props.activeVoting}
+            voteConfiguration={props.voteConfiguration}
           />
         </footer>
         <NoteDialog {...props} votes={filteredVotes} onClose={handleShowDialog} show={showDialog} />

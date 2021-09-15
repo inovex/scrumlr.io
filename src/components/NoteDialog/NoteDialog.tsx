@@ -95,7 +95,7 @@ const NoteDialog = ({
                 <figcaption className="note-dialog__author-name">{authorName}</figcaption>
               </figure>
             )}
-            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
+            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} voteConfiguration={voteConfiguration} />
           </footer>
 
           <aside>
@@ -136,7 +136,13 @@ const NoteDialog = ({
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
-              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, activeVoting, voteConfiguration.showVotesOfOtherUsers)} activeVoting={activeVoting} />
+              <Votes
+                className="note__votes"
+                noteId={note.id!}
+                votes={filterVotes(note.votes, activeVoting, voteConfiguration.showVotesOfOtherUsers)}
+                activeVoting={activeVoting}
+                voteConfiguration={voteConfiguration}
+              />
             </footer>
 
             <aside>
