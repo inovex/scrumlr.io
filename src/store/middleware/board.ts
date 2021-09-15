@@ -167,7 +167,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
 
     const createVoteSubscription = () => {
       const voteQuery = new Parse.Query("Vote");
-      voteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
+      const board = Parse.Object.extend("Board").createWithoutData(action.boardId);
+      voteQuery.equalTo("board", board);
       voteQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
@@ -180,9 +181,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
         });
         // subscription.on("delete", () => {});
         subscription.on("open", () => {
-          voteQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
-          });
+          voteQuery
+            .equalTo("votingIteration", board.get("votingIteration"))
+            .find()
+            .then((results) => {
+              dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
+            });
         });
       });
     };
