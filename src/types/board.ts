@@ -1,4 +1,5 @@
 import {Color} from "constants/colors";
+import Parse from "parse";
 
 export interface BoardServerModel {
   objectId: string;
@@ -23,7 +24,7 @@ export interface BoardServerModel {
   voteLimit: number;
   createdAt: Date;
   updatedAt: Date;
-  owner: Parse.User;
+  owner: Parse.Object;
 }
 
 export type EditableBoardAttributes = {
@@ -80,5 +81,6 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   createdAt: board.createdAt,
   updatedAt: board.updatedAt,
   dirty: false,
+  // @ts-ignore
   owner: board.owner.objectId,
 });
