@@ -27,7 +27,8 @@ export const initializeVoteFunctions = () => {
     // Get voteConfiguration
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
-    const voteConfiguration = await voteConfigurationQuery.get("votingIteration", await board.get("votingIteration"));
+    console.log(board.get("votingIteration"));
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", await board.get("votingIteration")).first({useMasterKey: true});
 
     if ((await voteQuery.count({useMasterKey: true})) >= voteConfiguration.get("voteLimit")) {
       return {status: "Error", description: "You have already cast all your votes"};

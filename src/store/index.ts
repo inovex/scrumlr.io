@@ -25,10 +25,10 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
     passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
     passBoardMiddleware(stateAPI, dispatch, action);
     passColumnMiddleware(stateAPI, dispatch, action);
+    passVoteConfigurationMiddlware(stateAPI, dispatch, action);
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
     passJoinRequestMiddleware(stateAPI, dispatch, action);
-    passVoteConfigurationMiddlware(stateAPI, dispatch, action);
   }
 };
 

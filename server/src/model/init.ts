@@ -42,7 +42,7 @@ const addInitialVoteSchema = async () => {
 const addInitialVoteConfigurationSchema = async () => {
   const schema = new Parse.Schema("VoteConfiguration");
   schema.addPointer("board", "Board", {required: true});
-  schema.addNumber("votingIteration", {required: true, defaultValue: 1});
+  schema.addNumber("votingIteration", {required: true, defaultValue: 0});
   schema.addNumber("voteLimit", {required: true, defaultValue: 0});
   schema.addBoolean("allowMultipleVotesPerNote", {required: true, defaultValue: true});
   schema.addBoolean("showVotesOfOtherUsers", {required: true, defaultValue: false});

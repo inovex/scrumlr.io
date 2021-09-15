@@ -44,9 +44,6 @@ function NewBoard(props: NewBoardProps) {
     if (Parse.User.current()) {
       const boardId = await API.createBoard(boardName, joinConfirmationRequired, columnTemplates[columnTemplate]);
       props.history.push(`/board/${boardId}`);
-
-      // Add default vote configuration - changed soon
-      await API.addVoteConfiguration({board: boardId, voteLimit: 10, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false});
     } else {
       Toast.error("You must be logged in to create a board. Reload the page and try again");
     }

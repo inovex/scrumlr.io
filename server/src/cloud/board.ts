@@ -120,7 +120,17 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns}, {useMasterKey: true});
+    const savedBoard = await board.save({...request, columns, votingIteration: 0}, {useMasterKey: true});
+
+    // Add default vote configuration
+    const voteConfiguration = new Parse.Object("VoteConfiguration", {
+      board,
+      votingIteration: 0,
+      voteLimit: 10,
+      allowMultipleVotesPerNote: true,
+      showVotesOfOtherUsers: false,
+    });
+    voteConfiguration.save(null, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);

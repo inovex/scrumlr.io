@@ -54,7 +54,7 @@ export const initializeVoteConfigurationFunctions = () => {
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
     // Voting iteraion will incremented after pressing the start voting phase button
-    const voteConfiguration = await voteConfigurationQuery.get("votingIteration", board.get("votingIteration") + 1);
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", board.get("votingIteration") + 1).first();
 
     if (request.voteConfiguration.voteLimit) {
       voteConfiguration.set("voteLimit", request.voteConfiguration.voteLimit);
@@ -83,7 +83,7 @@ export const initializeVoteConfigurationFunctions = () => {
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
     // Voting iteraion already incremented
-    const voteConfiguration = await voteConfigurationQuery.get("votingIteration", board.get("votingIteration"));
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", board.get("votingIteration")).first();
 
     await voteConfiguration.destroy({useMasterKey: true});
 
