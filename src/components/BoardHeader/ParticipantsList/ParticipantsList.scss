@@ -20,7 +20,6 @@
 .participants__header {
   color: white;
   height: 86px;
-  padding-left: 20px;
   position: relative;
 }
 @media (prefers-color-scheme: dark) {
@@ -38,6 +37,7 @@
   letter-spacing: 0.25px;
   position: absolute;
   top: 24px;
+  left: 24px;
 }
 
 .participants__header > input {
@@ -50,6 +50,8 @@
   border-bottom: 1px solid transparent;
   position: absolute;
   bottom: 24px;
+  left: 46px;
+  opacity: 0.8;
 
   &::placeholder {
     opacity: 1;
@@ -62,10 +64,17 @@
   border-bottom: 1px solid white;
 }
 
+.header__icon {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+}
+
 .participants__list {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  min-height: 80px;
   max-height: 272px;
   overflow: auto;
   scrollbar-color: $color-middle-gray #fff;
@@ -102,6 +111,11 @@
   height: 32px;
   position: relative;
 }
+@media (prefers-color-scheme: dark) {
+  .list__header {
+    background: $color-dark-mode-note;
+  }
+}
 
 .list__header > label {
   letter-spacing: 0.18px;
@@ -112,11 +126,11 @@
   top: 16px;
 }
 
-.list__header > label:first-child {
+.list__header > label:nth-child(1) {
   text-align: left;
   left: 20px;
 }
-.list__header > label:last-child {
+.list__header > label:nth-child(2) {
   text-align: right;
   left: 244px;
 }
