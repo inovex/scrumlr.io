@@ -21,6 +21,7 @@ const createVotes = (withVotes: boolean, activeVoting: boolean, className?: stri
         : []
     }
     activeVoting={activeVoting}
+    voteConfiguration={{board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false}}
   />
 );
 

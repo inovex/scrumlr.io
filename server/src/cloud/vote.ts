@@ -42,7 +42,6 @@ export const initializeVoteFunctions = () => {
     const vote = newObject("Vote", {board, note, user, votingIteration: await board.get("votingIteration")}, {readRoles: [getMemberRoleName(request.board)]});
 
     await vote.save(null, {useMasterKey: true});
-
     return {status: "Success", description: "Your vote has been added"};
   });
 
