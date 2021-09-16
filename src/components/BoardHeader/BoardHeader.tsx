@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import BoardUsers from "components/BoardUsers/BoardUsers";
@@ -16,11 +16,24 @@ export interface BoardHeaderProps {
 
 const BoardHeader = (props: BoardHeaderProps) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
+  const endTime = useAppSelector((state) => state.board.data?.timerUTCEndTime);
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
 
+  // @ts-ignore
+  const [timeLeft, setTimeLeft] = useState(endTime ? endTime - new Date() : 0);
+
+  useEffect(() => {
+    // @ts-ignore
+    const timer = setTimeout(() => {
+      // @ts-ignore
+      setTimeLeft(endTime ? (new Date(endTime.iso) - new Date()) / 1000 : 0);
+    }, 1000);
+  });
+
   return (
     <div className="board-header">
+      {`${timeLeft}`}
       <HeaderLogo />
       <div className="board-header__infos">
         <div
