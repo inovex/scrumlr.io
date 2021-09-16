@@ -147,6 +147,8 @@ export const initializeBoardFunctions = () => {
     const savedBoard = await board.save({...request, columns, votingIteration: 0, owner: user}, {useMasterKey: true});
 
     // Add default vote configuration (allows default vote settings defined during the board creation)
+
+    /*
     const voteConfiguration = new Parse.Object("VoteConfiguration", {
       board,
       votingIteration: 0,
@@ -155,6 +157,7 @@ export const initializeBoardFunctions = () => {
       showVotesOfOtherUsers: false,
     });
     voteConfiguration.save(null, {useMasterKey: true});
+    */
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);

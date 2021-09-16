@@ -211,7 +211,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
             .equalTo("votingIteration", board.get("votingIteration"))
             .first()
             .then((result) => {
-              dispatch(ActionFactory.initializeVoteConfiguration(mapVoteConfigurationServerToClientModel(result as unknown as VoteConfigurationServerModel)));
+              if (result) {
+                dispatch(ActionFactory.initializeVoteConfiguration(mapVoteConfigurationServerToClientModel(result as unknown as VoteConfigurationServerModel)));
+              }
             });
         });
       });
