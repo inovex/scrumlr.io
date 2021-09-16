@@ -50,7 +50,7 @@ export const UsersActionFactory = {
    * Creates an action that should be dispatch when a moderator changes the permissions of a participant
    *
    * @param userId the identifier of the user whose permissions are being changed
-   * @param moderator the flag whether the user recieves or loses moderator permissions
+   * @param moderator the flag whether the user receives or loses moderator permissions
    */
 
   changePermission: (userId: string, moderator: boolean) => ({

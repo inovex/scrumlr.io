@@ -6,7 +6,7 @@ export const UserAPI = {
    *
    * @param userId the identifier of the user whose permissions are being changed
    * @param boardId the identifier of the board
-   * @param moderator the flag wheter the user recieves or loses moderator permissions
+   * @param moderator the flag whether the user receives or loses moderator permissions
    * @returns a {status, description} object
    */
   changePermission: (userId: string, boardId: string, moderator: boolean) => callAPI("changePermission", {userId, boardId, moderator}),
