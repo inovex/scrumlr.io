@@ -13,11 +13,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.EditBoard: {
-      // Moderator started voting phase - notifica″tion to moderator (user who started the voting)
-      if (action.board.voting === "active") {
-        Toast.success("You started the voting phase!");
-      } else if (action.board.voting === "disabled") {
-        Toast.error("You ended the voting phase!");
+      // Moderator started voting phase - notification to moderator (user who started the voting)
+      if (action.board.voting) {
+        Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
 
       return {
