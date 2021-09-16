@@ -237,4 +237,11 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       document.location.pathname = "/new";
     }
   }
+
+  if (action.type === ActionType.SetTimer) {
+    API.setTimer(action.endDate, stateAPI.getState().board.data!.id);
+  }
+  if (action.type === ActionType.CancelTimer) {
+    API.cancelTimer(stateAPI.getState().board.data!.id);
+  }
 };

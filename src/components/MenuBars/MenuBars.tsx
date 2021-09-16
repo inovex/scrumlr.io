@@ -30,6 +30,14 @@ function MenuBars() {
     store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
   };
 
+  const toggleTimer = (active: boolean) => {
+    if (active) {
+      store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)));
+    } else {
+      store.dispatch(ActionFactory.cancelTimer());
+    }
+  };
+
   return (
     <div className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <div className="menu user-menu">
@@ -44,7 +52,7 @@ function MenuBars() {
         <div className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
-            <MenuToggle direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={() => null} />
+            <MenuToggle direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>

@@ -35,4 +35,6 @@ export const BoardAPI = {
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
   deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
+  setTimer: (endDate: Date, boardId: string) => callAPI("setTimer", {endDate, boardId}),
+  cancelTimer: (boardId: string) => callAPI("cancelTimer", {boardId}),
 };
