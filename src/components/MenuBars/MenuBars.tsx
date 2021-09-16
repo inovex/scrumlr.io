@@ -31,7 +31,15 @@ function MenuBars() {
   };
 
   return (
-    <div className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
+    <div
+      id="menu-bars"
+      className={classNames(
+        "menu-bars",
+        {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu},
+        {"menu-bars--isAdmin": isAdmin},
+        {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
+      )}
+    >
       <div className="menu user-menu">
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />

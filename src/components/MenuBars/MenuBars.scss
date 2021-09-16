@@ -5,17 +5,17 @@
   z-index: $menu-z-index;
 }
 
-@media screen and (max-width: 1343px) {
-  .menu-bars {
+.menu-bars--bottom {
+  &.menu-bars {
     position: fixed;
     left: calc(50% - 134px);
     bottom: 8px;
     -webkit-touch-callout: none;
   }
-  .menu-bars--isAdmin {
+  &.menu-bars--isAdmin {
     left: calc(50% - 168px);
   }
-  .menu-bars--user {
+  &.menu-bars--user {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
         background-color: $color-white;
@@ -35,23 +35,23 @@
       }
     }
   }
-  .menu-bars--user > .user-menu {
+  &.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
     bottom: 8px;
   }
-  .menu-bars--user > .admin-menu {
+  &.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
     bottom: 72px;
   }
-  .menu-bars--user > .menu-bars__switch > .switch__icon--add {
+  &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
     opacity: 0;
     transform: rotate(360deg);
   }
 
-  .menu-bars--admin {
+  &.menu-bars--admin {
     @media (prefers-color-scheme: light) {
       .menu-bars__switch {
         background-color: $color-white;
@@ -71,17 +71,17 @@
       }
     }
   }
-  .menu-bars--admin > .admin-menu {
+  &.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
     bottom: 8px;
   }
-  .menu-bars--admin > .user-menu {
+  &.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
     bottom: -56px;
   }
-  .menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
+  &.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
     visibility: hidden;
     opacity: 0;
     transform: rotate(-360deg);
@@ -109,7 +109,7 @@
   }
 }
 
-@media #{$menu-desktop} {
+.menu-bars:not(.menu-bars--bottom) {
   .menu-bars__switch {
     display: none;
   }
@@ -125,11 +125,11 @@
   --secondaryColor: #7c123e;
 }
 
-@media #{$menu-mobile} {
+.menu-bars--bottom {
   .menu {
     border-radius: 35px;
     height: 64px;
-    overflow: hidden;
+    // overflow: hidden;
     width: 268px;
     visibility: hidden;
     opacity: 0;
@@ -158,7 +158,7 @@
   }
 }
 
-@media #{$menu-desktop} {
+.menu-bars:not(.menu-bars--bottom) {
   .user-menu {
     left: 8px;
   }
