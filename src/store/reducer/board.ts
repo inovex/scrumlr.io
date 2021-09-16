@@ -13,8 +13,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.EditBoard: {
-      // Moderator started voting phase - notification to moderator (user who started the voting)
-      if (state.data?.voting !== action.board.voting) {
+      // Moderator started voting phase - notification to moderator (user w″ho started the voting)
+      if (state.data?.voting !== action.board.voting && action.board.voting) {
         if (action.board.voting === "active") {
           Toast.success("You started the voting phase!");
         } else {
@@ -86,7 +86,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.UpdatedBoard: {
       // User notification
-      if (state.data?.voting !== action.board.voting) {
+      if (state.data?.voting !== action.board.voting && action.board.voting) {
         if (action.board.voting === "active") {
           Toast.success("Voting phase started! You can vote now!");
         } else {
