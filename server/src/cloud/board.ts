@@ -1,4 +1,5 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {stringify} from "querystring";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -365,5 +366,27 @@ export const initializeBoardFunctions = () => {
 
     await removeFromModerators(Parse.User.createWithoutData(request.userId), request.boardId);
     return {status: "Success", description: "User was successfully removed from the list of moderators"};
+  });
+
+  api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
+    const board = await boardQuery.get(request.boardId, {useMasterKey: true});
+    board.set("timerUTCEndTime", request.endDate);
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully set"};
+  });
+
+  api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
+    const board = await boardQuery.get(request.boardId, {useMasterKey: true});
+    board.unset("timerUTCEndTime");
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully removed"};
   });
 };
