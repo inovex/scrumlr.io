@@ -122,7 +122,7 @@ export const initializeBoardFunctions = () => {
     }, {});
     const savedBoard = await board.save({...request, columns, votingIteration: 0}, {useMasterKey: true});
 
-    // Add default vote configuration
+    // Add default vote configuration (allows default vote settings defined during the board creation)
     const voteConfiguration = new Parse.Object("VoteConfiguration", {
       board,
       votingIteration: 0,

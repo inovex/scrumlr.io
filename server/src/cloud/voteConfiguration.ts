@@ -10,7 +10,9 @@ export interface EditableVoteConfigurationAttributes {
 export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
 
 export const initializeVoteConfigurationFunctions = () => {
-  // Add vote configuration
+  /**
+   * Add vote configurtaions for each voting iteration.
+   */
   api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.voteConfiguration.board);
     const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
@@ -41,7 +43,9 @@ export const initializeVoteConfigurationFunctions = () => {
     return {status: "Success", description: "Your vote configuration has been added"};
   });
 
-  // Cancle voting during voting phase and remove vote configuration
+  /**
+   * Cancel voting phases needs also to remove the vote configurations with the corresponding voting iteration.
+   */
   api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});

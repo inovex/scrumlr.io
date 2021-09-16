@@ -27,11 +27,12 @@ export const initializeVoteFunctions = () => {
     voteQuery.equalTo("user", user);
     voteQuery.equalTo("votingIteration", votingIteration);
 
-    // Get voteConfiguration
+    // Gets the vote configuration of the current voting iteration
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
     const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
 
+    // Check if user exceeds his vote limit
     if ((await voteQuery.count({useMasterKey: true})) >= voteConfiguration.get("voteLimit")) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
@@ -40,6 +41,7 @@ export const initializeVoteFunctions = () => {
 
     voteQuery.equalTo("note", note);
 
+    // Check if user has voted already on this note
     if ((await voteQuery.count({useMasterKey: true})) >= 1 && !voteConfiguration.get("allowMultipleVotesPerNote")) {
       return {status: "Error", description: "You can't vote multiple times per note"};
     }
