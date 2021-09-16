@@ -15,6 +15,7 @@ import {passBoardMiddleware} from "./middleware/board";
 import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
 import {passColumnMiddleware} from "./middleware/column";
 import {passJoinRequestMiddleware} from "./middleware/joinRequest";
+import {passUsersMiddleware} from "./middleware/users";
 import {joinRequestReducer} from "./reducer/joinRequest";
 import {passVoteConfigurationMiddlware} from "./middleware/voteConfiguration";
 
@@ -29,6 +30,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
     passJoinRequestMiddleware(stateAPI, dispatch, action);
+    passUsersMiddleware(stateAPI, dispatch, action);
   }
 };
 

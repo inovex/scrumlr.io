@@ -33,6 +33,30 @@ const addAsMember = async (user: Parse.User, boardId: string) => {
   throw new Error(`No roles for board '${boardId}' found`);
 };
 
+const addToModerators = async (user: Parse.User, boardId: string) => {
+  const adminRoleQuery = new Parse.Query(Parse.Role);
+  adminRoleQuery.equalTo("name", getAdminRoleName(boardId));
+
+  const adminRole = await adminRoleQuery.first({useMasterKey: true});
+  if (adminRole) {
+    adminRole.getUsers().add(user);
+    return adminRole.save(null, {useMasterKey: true});
+  }
+  throw new Error(`No roles for board '${boardId}' found`);
+};
+
+const removeFromModerators = async (user: Parse.User, boardId: string) => {
+  const adminRoleQuery = new Parse.Query(Parse.Role);
+  adminRoleQuery.equalTo("name", getAdminRoleName(boardId));
+
+  const adminRole = await adminRoleQuery.first({useMasterKey: true});
+  if (adminRole) {
+    adminRole.getUsers().remove(user);
+    return adminRole.save(null, {useMasterKey: true});
+  }
+  throw new Error(`No roles for board '${boardId}' found`);
+};
+
 const respondToJoinRequest = async (currentUser: Parse.User, users: string[], board: string, manipulate: (object: Parse.Object) => void) => {
   await requireValidBoardAdmin(currentUser, board);
 
@@ -120,7 +144,7 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, votingIteration: 0}, {useMasterKey: true});
+    const savedBoard = await board.save({...request, columns, votingIteration: 0, owner: user}, {useMasterKey: true});
 
     // Add default vote configuration (allows default vote settings defined during the board creation)
     const voteConfiguration = new Parse.Object("VoteConfiguration", {
@@ -324,5 +348,32 @@ export const initializeBoardFunctions = () => {
 
     await board.destroy({useMasterKey: true});
     return true;
+  });
+
+  type ChangePermissionRequest = {
+    userId: string;
+    boardId: string;
+    moderator: boolean;
+  };
+
+  api<ChangePermissionRequest, {status: string; description: string}>("changePermission", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    if (request.moderator) {
+      await addToModerators(Parse.User.createWithoutData(request.userId), request.boardId);
+      return {status: "Success", description: "User was successfully added to the list of moderators"};
+    }
+    // Make sure that moderators cannot remove themselfs from the list of moderators
+    if (request.userId === user.id) {
+      return {status: "Error", description: "You cannot remove yourself from the list of moderators"};
+    }
+    // Make sure that the board creator cannot get removed from the list of moderators)
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (request.userId === board.get("owner").id) {
+      return {status: "Error", description: "The creator of the board cannot be removed from the list of moderators"};
+    }
+
+    await removeFromModerators(Parse.User.createWithoutData(request.userId), request.boardId);
+    return {status: "Success", description: "User was successfully removed from the list of moderators"};
   });
 };

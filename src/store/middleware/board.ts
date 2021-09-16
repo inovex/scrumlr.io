@@ -12,7 +12,7 @@ import {API} from "api";
 
 let closeSubscriptions: (() => void)[] = [];
 
-export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
+export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
     closeSubscriptions.forEach((closeCallback) => closeCallback());
     closeSubscriptions = [];
@@ -263,6 +263,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
   }
 
   if (action.type === ActionType.DeleteBoard) {
-    API.deleteBoard(action.boardId);
+    const reponse = await API.deleteBoard(action.boardId);
+    console.log(reponse);
+    if (reponse) {
+      document.location.pathname = "/new";
+    }
   }
 };

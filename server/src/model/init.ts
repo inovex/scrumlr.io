@@ -3,6 +3,7 @@ import Parse from "parse/node";
 const addInitialBoardSchema = async () => {
   const schema = new Parse.Schema("Board");
   schema.addString("name");
+  schema.addPointer("owner", "_User", {required: true});
   schema.addPointer("template", "Template");
   schema.addObject("columns", {defaultValue: {}});
   schema.addBoolean("joinConfirmationRequired", {defaultValue: false});
