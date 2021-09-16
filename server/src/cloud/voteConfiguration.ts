@@ -41,7 +41,7 @@ export const initializeVoteConfigurationFunctions = () => {
     return {status: "Success", description: "Your vote configuration has been added"};
   });
 
-  // Cancle voting during voting phase
+  // Cancle voting during voting phase and remove vote configuration
   api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
