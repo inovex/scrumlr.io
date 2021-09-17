@@ -20,7 +20,6 @@
 .participants__header {
   color: white;
   height: 86px;
-  padding-left: 20px;
   position: relative;
 }
 @media (prefers-color-scheme: dark) {
@@ -30,14 +29,15 @@
   }
 }
 
-.participants__header > h1 {
+.participants__header > h4 {
   margin: 0;
-  font-weight: 500;
+  font-weight: bold;
   font-size: 18px;
   line-height: 18px;
   letter-spacing: 0.25px;
   position: absolute;
-  top: 20px;
+  top: 24px;
+  left: 24px;
 }
 
 .participants__header > input {
@@ -47,8 +47,11 @@
   font-size: 13px;
   letter-spacing: 0.27px;
   border: none;
+  border-bottom: 1px solid transparent;
   position: absolute;
-  top: 44px;
+  bottom: 24px;
+  left: 46px;
+  opacity: 0.8;
 
   &::placeholder {
     opacity: 1;
@@ -61,13 +64,21 @@
   border-bottom: 1px solid white;
 }
 
+.header__icon {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+}
+
 .participants__list {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 240px;
+  min-height: 80px;
+  max-height: 272px;
   overflow: auto;
   scrollbar-color: $color-middle-gray #fff;
+  background-color: #fff;
 }
 
 .participants__list::-webkit-scrollbar {
@@ -87,6 +98,7 @@
 @media (prefers-color-scheme: dark) {
   .participants__list {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    background-color: $color-dark-mode-note;
   }
   .participants__list::-webkit-scrollbar {
     background-color: $color-dark-mode-note;
@@ -96,15 +108,38 @@
   }
 }
 
+.list__header {
+  height: 32px;
+  position: relative;
+}
+@media (prefers-color-scheme: dark) {
+  .list__header {
+    background: $color-dark-mode-note;
+  }
+}
+
+.list__header > label {
+  letter-spacing: 0.18px;
+  color: #a3a6aa;
+  opacity: 0.8;
+  font-size: 12px;
+  position: absolute;
+  top: 16px;
+}
+
+.list__header > label:nth-child(1) {
+  text-align: left;
+  left: 20px;
+}
+.list__header > label:nth-child(2) {
+  text-align: right;
+  left: 244px;
+}
+
 .participants__list > li {
   background-color: white;
   position: relative;
   height: 48px;
-  padding: 10px 20px;
-}
-
-.participants__list > li:hover {
-  background-color: #f3f3f3;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -120,42 +155,39 @@
 .participants__list > li:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(173, 173, 173, 0) 0%,
-    rgba(173, 173, 173, 0) 5%,
-    rgba(173, 173, 173, 0.5) 25%,
-    rgba(173, 173, 173, 0.5) 75%,
-    rgba(173, 173, 173, 0) 95%,
-    rgba(173, 173, 173, 0) 100%
-  );
+  width: calc(100% - 64px);
+  background-color: #edeff2;
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 64px;
 }
 
 .participants__list figure {
-  display: inline-flex;
-  align-items: center;
-  align-items: center;
-  height: 28px;
-  vertical-align: baseline;
   margin: 0;
+}
+
+.participants__list img {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+  position: absolute;
+  top: 10px;
+  left: 20px;
 }
 
 .participants__list figcaption {
   display: inline-block;
-  line-height: 28px;
-  margin-left: 10px;
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 300;
-  width: 222px;
+  width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #111111;
+  position: absolute;
+  top: 15px;
+  left: 64px;
 }
 @media (prefers-color-scheme: dark) {
   .participants__list figcaption {
@@ -163,8 +195,8 @@
   }
 }
 
-.participants__list img {
-  height: 28px;
-  width: 28px;
-  border-radius: 100%;
+.participant__permission-toggle {
+  transform: scale(0.9);
+  left: 244px;
+  top: 12px;
 }
