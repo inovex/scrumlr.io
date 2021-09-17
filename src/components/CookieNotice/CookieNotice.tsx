@@ -1,6 +1,6 @@
 import "./CookieNotice.scss";
 import React from "react";
-import Backdrop from "@material-ui/core/Backdrop";
+import Portal from "components/Portal/Portal";
 import CookiePolicy from "./CookiePolicy";
 
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
@@ -53,42 +53,40 @@ const CookieNotice = () => {
   if (!shouldShowCookieNotice || !showCookieNotice) return null;
 
   return (
-    <div className="cookie-notice">
-      <Backdrop
-        className="cookie-notice__backdrop"
-        invisible
-        open={showCookieNotice}
-        onClick={() => {
-          setShowCookieNotice(false);
-          accept();
-        }}
-      />
+    <Portal
+      onClose={() => {
+        setShowCookieNotice(false);
+        accept();
+      }}
+      darkBackground={false}
+    >
+      <div className="cookie-notice">
+        <div className="cookie-notice__header">
+          <h3>Cookies</h3>
+        </div>
 
-      <div className="cookie-notice__header">
-        <h3>Cookies</h3>
+        <div className="cookie-notice__body">
+          <p>
+            We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice,
+            by interacting with any link or button outside of this notice or by continuing to browse otherwise.
+          </p>
+        </div>
+        <div className="cookie-notice__buttons">
+          <button className="cookie-notice__button-cookie-policy" type="button" onClick={openPolicy}>
+            Learn more about our Cookie Policy
+          </button>
+
+          <button className="cookie-notice__button-decline" type="button" onClick={decline}>
+            Decline
+          </button>
+
+          <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
+            Accept
+          </button>
+        </div>
+        <CookiePolicy accept={accept} decline={decline} onClose={toggleShowCookiePolicy} show={showCookiePolicy} darkBackground />
       </div>
-
-      <div className="cookie-notice__body">
-        <p>
-          We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice, by
-          interacting with any link or button outside of this notice or by continuing to browse otherwise.
-        </p>
-      </div>
-      <div className="cookie-notice__buttons">
-        <button className="cookie-notice__button-cookie-policy" type="button" onClick={openPolicy}>
-          Learn more about our Cookie Policy
-        </button>
-
-        <button className="cookie-notice__button-decline" type="button" onClick={decline}>
-          Decline
-        </button>
-
-        <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
-          Accept
-        </button>
-      </div>
-      <CookiePolicy accept={accept} decline={decline} onClose={toggleShowCookiePolicy} show={showCookiePolicy} darkBackground />
-    </div>
+    </Portal>
   );
 };
 
