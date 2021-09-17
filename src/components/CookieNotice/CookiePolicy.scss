@@ -1,13 +1,12 @@
 @import "constants/style.scss";
 
-$cookie-consent-button-text-size: 18px;
-
 .portal {
-  border-radius: 5px;
+  height: 100%;
+  width: 100%;
 }
-
-.cookie-policy {
-  margin: $margin--small;
+.portal--darkBackground {
+  top: 0;
+  left: 0;
 }
 
 .cookie-policy__title {
@@ -31,21 +30,30 @@ $cookie-consent-button-text-size: 18px;
   padding: $padding--default;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
+  display: flex;
 }
 
-.cookie-policy__button-accept {
-  background: $color-backlog-blue;
-  color: $color-white;
-  margin: 0 0 0 auto;
+.cookie-policy__button {
   border: none;
   padding: 5px 15px;
   border-radius: 5px;
-  font-family: inherit;
-  font-size: $cookie-consent-button-text-size;
-  justify-content: flex-end;
-  display: flex;
-  position: sticky;
+  font-size: 18px;
+
+  &-accept {
+    @extend .cookie-policy__button;
+    background: $color-backlog-blue;
+    color: $color-white;
+    margin: 0 0 $margin--default $margin--default;
+  }
+
+  &-decline {
+    @extend .cookie-policy__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 0 $margin--default auto;
+  }
 }
-.cookie-policy__button-accept:hover {
+
+.cookie-policy__button:hover {
   transform: scale(1.05);
 }

@@ -1,9 +1,5 @@
 @import "constants/style.scss";
 
-$cookie-consent-decline-button: #dadada;
-$cookie-consent-decline-text: #4d4d4d;
-$cookie-consent-button-text-size: 18px;
-
 .cookie-notice {
   background: $color-light-gray;
   color: $color-black;
@@ -16,44 +12,32 @@ $cookie-consent-button-text-size: 18px;
   display: flex;
 }
 
-.cookie-notice__button-accept {
-  background: $color-backlog-blue;
-  color: $color-white;
-  margin: 0 0 $margin--default $margin--default;
+.cookie-notice__button {
   border: none;
   padding: 5px 15px;
   border-radius: 5px;
-  font-family: inherit;
-  font-size: $cookie-consent-button-text-size;
-}
-.cookie-notice__button-accept:hover {
-  transform: scale(1.05);
+  font-size: 18px;
+
+  &-accept {
+    @extend .cookie-notice__button;
+    background: $color-backlog-blue;
+    color: $color-white;
+    margin: 0 0 $margin--default $margin--default;
+  }
+  &-decline {
+    @extend .cookie-notice__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 0 $margin--default $margin--default;
+  }
+  &-cookie-policy {
+    @extend .cookie-notice__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 auto $margin--default 0;
+  }
 }
 
-.cookie-notice__button-decline {
-  background: $cookie-consent-decline-button;
-  color: $cookie-consent-decline-text;
-  margin: 0 0 $margin--default $margin--default;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: $cookie-consent-button-text-size;
-}
-.cookie-notice__button-decline:hover {
-  transform: scale(1.05);
-}
-
-.cookie-notice__button-cookie-policy {
-  background: $cookie-consent-decline-button;
-  color: $cookie-consent-decline-text;
-  margin: 0 auto $margin--default 0;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: $cookie-consent-button-text-size;
-}
-.cookie-notice__button-cookie-policy:hover {
+.cookie-notice__button:hover {
   transform: scale(1.05);
 }

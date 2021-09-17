@@ -5,13 +5,14 @@ import marked from "marked";
 import policyText from "./CookiePolicyText.md";
 
 interface CookiePolicyProps {
-  acceptFunction: () => void;
+  decline: () => void;
+  accept: () => void;
   onClose: () => void;
   show: boolean;
   darkBackground: boolean;
 }
 
-const CookiePolicy = ({acceptFunction, onClose, show, darkBackground}: CookiePolicyProps) => {
+const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
   const [policy, setPolicy] = useState({markdown: ""});
 
   useEffect(() => {
@@ -24,8 +25,12 @@ const CookiePolicy = ({acceptFunction, onClose, show, darkBackground}: CookiePol
     return null;
   }
 
-  const handleAccept = () => {
-    acceptFunction();
+  const onAccept = () => {
+    accept();
+  };
+
+  const onDecline = () => {
+    decline();
   };
 
   return (
@@ -36,7 +41,10 @@ const CookiePolicy = ({acceptFunction, onClose, show, darkBackground}: CookiePol
         </div>
         <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: policy.markdown}} />
         <div className="cookie-policy__footer">
-          <button className="cookie-policy__button-accept" type="button" onClick={handleAccept}>
+          <button className="cookie-policy__button-decline" type="button" onClick={onDecline}>
+            Decline
+          </button>
+          <button className="cookie-policy__button-accept" type="button" onClick={onAccept}>
             Accept
           </button>
         </div>
