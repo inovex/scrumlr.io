@@ -11,6 +11,9 @@ interface JoinBoardResponse {
 
 const goOnline = (user: Parse.User, boardId: string) => {
   user.add("boards", boardId);
+  if (!user.get("showHiddenColumns")) {
+    user.set("showHiddenColumns", false);
+  }
   user.save(null, {useMasterKey: true});
 };
 
