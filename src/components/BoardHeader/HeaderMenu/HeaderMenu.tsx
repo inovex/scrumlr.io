@@ -8,6 +8,7 @@ import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
+import Parse from "parse";
 import "./HeaderMenu.scss";
 
 type HeaderMenuProps = {
@@ -18,7 +19,9 @@ type HeaderMenuProps = {
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
+    user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
   }));
+
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
@@ -91,6 +94,25 @@ const HeaderMenu = (props: HeaderMenuProps) => {
               />
             </div>
             <label className="item-button__label">{state.board!.showAuthors ? "Hide" : "Show"} authors of card</label>
+          </button>
+        </li>
+        <li className="header-menu__item">
+          <button
+            className="menu__item-button"
+            onClick={() => {
+              store.dispatch(ActionFactory.editUserConfiguration(Parse.User.current()?.id || "", {showHiddenColumns: !state.user?.showHiddenColumns}));
+            }}
+          >
+            <div className="item-button__toggle-container">
+              <div
+                className={classNames(
+                  "item-button__toggle",
+                  {"item-button__toggle--left": state.user?.showHiddenColumns},
+                  {"item-button__toggle--right": !state.user?.showHiddenColumns}
+                )}
+              />
+            </div>
+            <label className="item-button__label">{state.user?.showHiddenColumns ? "Hide" : "Show"} hidden columns</label>
           </button>
         </li>
         <li className="header-menu__item">
