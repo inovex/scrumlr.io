@@ -17,7 +17,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
+        <CookiePolicy accept={() => {}} decline={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
@@ -31,7 +31,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
+        <CookiePolicy accept={() => {}} decline={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
@@ -45,11 +45,25 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
+        <CookiePolicy accept={() => {}} decline={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
     expect(container.querySelector(".cookie-policy")!.childNodes[2]).toHaveClass("cookie-policy__footer");
+  });
+
+  test("cookie policy: decline button", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookiePolicy accept={() => {}} decline={() => {}} onClose={() => {}} show darkBackground />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-policy__footer")!.childNodes[0]).toHaveClass("cookie-policy__button-decline");
   });
 
   test("cookie policy: accept button", () => {
@@ -59,10 +73,10 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
+        <CookiePolicy accept={() => {}} decline={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
-    expect(container.querySelector(".cookie-policy__footer")!.childNodes[0]).toHaveClass("cookie-policy__button-accept");
+    expect(container.querySelector(".cookie-policy__footer")!.childNodes[1]).toHaveClass("cookie-policy__button-accept");
   });
 });
