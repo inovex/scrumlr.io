@@ -1,7 +1,8 @@
 import {google} from "googleapis";
+import axios from "axios";
 import {publicApi} from "./util";
 
-const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_REDIRECT_URI} = process.env;
+const {GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, AUTH_REDIRECT_URI} = process.env;
 
 const getGoogleOAuth2Client = () => {
   const {OAuth2} = google.auth;

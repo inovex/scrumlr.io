@@ -12,6 +12,7 @@
     "@types/react-dnd": "^3.0.2",
     "@types/react-dnd-html5-backend": "^3.0.2",
     "classnames": "^2.3.1",
+    "googleapis": "^87.0.0",
     "lodash": "^4.17.20",
     "parse": "^3.3.0",
     "qrcode.react": "^1.0.1",
