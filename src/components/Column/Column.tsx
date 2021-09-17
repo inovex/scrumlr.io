@@ -6,16 +6,18 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {ToggleButton} from "components/ToggleButton";
 
 export interface ColumnProps {
   id: string;
   name: string;
   color: Color;
   hidden: boolean;
+  currentUserIsModerator: boolean;
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, hidden, children}: ColumnProps) => {
+const Column = ({id, name, color, hidden, currentUserIsModerator, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -42,6 +44,16 @@ const Column = ({id, name, color, hidden, children}: ColumnProps) => {
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
+            {currentUserIsModerator && (
+              <ToggleButton
+                className=""
+                values={["visible", "hidden"]}
+                defaultValue={hidden ? "hidden" : "visible"}
+                onClick={(val: "visible" | "hidden") => {
+                  store.dispatch(ActionFactory.editColumn({id, hidden: !hidden}));
+                }}
+              />
+            )}
           </div>
           <NoteInput columnId={id} />
         </header>
