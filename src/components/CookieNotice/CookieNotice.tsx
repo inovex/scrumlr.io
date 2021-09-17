@@ -8,10 +8,9 @@ const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 const CookieNotice = () => {
   // states whether cookie notice is shown.
   const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
-
-  const [showCookiePolicy, setShowCookiePolicy] = React.useState(false);
+  const [showCookiePolicy, setShowCookiePolicy] = React.useState<boolean>(false);
   const toggleShowCookiePolicy = () => {
-    setShowCookiePolicy(!showCookiePolicy);
+    setShowCookiePolicy((currValue) => !currValue);
   };
 
   // show cookie notice if there's no cookie in local storage
