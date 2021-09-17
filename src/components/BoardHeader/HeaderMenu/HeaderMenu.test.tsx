@@ -13,6 +13,9 @@ describe("HeaderMenu", () => {
         joinConfirmationRequired: true,
       },
     },
+    users: {
+      all: [],
+    },
   });
 
   describe("should render correctly", () => {

@@ -3,7 +3,7 @@ import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Column from "../Column";
 
 const [ColumnContext] = wrapWithTestBackend(Column);
-const createColumn = () => <ColumnContext id="TestID" name="Testheader" color="planning-pink" />;
+const createColumn = () => <ColumnContext id="TestID" name="Testheader" color="planning-pink" hidden={false} currentUserIsModerator={false} />;
 
 describe("Column", () => {
   describe("should render correctly", () => {
