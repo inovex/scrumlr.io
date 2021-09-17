@@ -17,6 +17,8 @@ function Board() {
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
+  const currentUser = state.users.all.find((user) => user.id === Parse.User.current()!.id);
+
   let joinRequestComponent;
   if (currentUserIsModerator) {
     const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
@@ -40,9 +42,9 @@ function Board() {
         {joinRequestComponent}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board
-            .data!.columns.filter((column) => !column.hidden)
+            .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && currentUser?.showHiddenColumns))
             .map((column) => (
-              <Column key={column.id} id={column.id!} name={column.name} hidden={column.hidden} color={column.color}>
+              <Column key={column.id} id={column.id!} name={column.name} hidden={column.hidden} currentUserIsModerator={currentUserIsModerator} color={column.color}>
                 {state.notes
                   .filter((note) => note.columnId === column.id)
                   .filter((note) => note.parentId == null)
