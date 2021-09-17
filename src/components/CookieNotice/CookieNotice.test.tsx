@@ -3,9 +3,8 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import CookieNotice from "./CookieNotice";
 
-const mockStore = configureStore();
-
-const createCookieNotice = () => {
+describe("Cookie Notice should be rendered with:", () => {
+  const mockStore = configureStore();
   const initialState = {
     cookieConsent: {
       name: null,
@@ -14,41 +13,87 @@ const createCookieNotice = () => {
   };
   const store = mockStore(initialState);
 
-  return (
-    <Provider store={store}>
-      <CookieNotice />
-    </Provider>
-  );
-};
-
-describe("Cookie Notice should be rendered with:", () => {
-  beforeEach(() => {
-    window.IntersectionObserver = jest.fn(
-      () =>
-        ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
-    );
-  });
-  test("cookie notice: root node", () => {
-    const {container} = render(createCookieNotice());
-    expect(container.firstChild).toHaveClass("cookie-notice");
-  });
-  test("cookie notice: backdrop", () => {
-    const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice")!.childNodes[0]).toHaveClass("MuiBackdrop-root cookie-notice__backdrop MuiBackdrop-invisible");
-  });
   test("cookie notice: header", () => {
-    const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice")!.childNodes[1]).toHaveClass("cookie-notice__header");
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[0]).toHaveClass("cookie-notice__header");
   });
+
   test("cookie notice: body", () => {
-    const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice")!.childNodes[2]).toHaveClass("cookie-notice__body");
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[1]).toHaveClass("cookie-notice__body");
   });
+
   test("cookie notice: buttons section", () => {
-    const {container} = render(createCookieNotice());
-    expect(container.querySelector(".cookie-notice")!.childNodes[3]).toHaveClass("cookie-notice__buttons");
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[2]).toHaveClass("cookie-notice__buttons");
+  });
+
+  test("cookie notice: cookie policy button", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[2]!.childNodes[0]).toHaveClass("cookie-notice__button-cookie-policy");
+  });
+
+  test("cookie notice: decline button", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[2]!.childNodes[1]).toHaveClass("cookie-notice__button-decline");
+  });
+
+  test("cookie notice: accept button", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+
+    const {container} = render(
+      <Provider store={store}>
+        <CookieNotice />
+      </Provider>,
+      {container: global.document.querySelector("#portal")!}
+    );
+    expect(container.querySelector(".cookie-notice")!.childNodes[2]!.childNodes[2]).toHaveClass("cookie-notice__button-accept");
   });
 });
