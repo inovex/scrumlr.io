@@ -23,6 +23,9 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           0
         </span>
+        <div
+          class="columns__header-toggle-space"
+        />
       </div>
       <div
         class="MuiInputBase-root MuiFilledInput-root NoteInput-root-15 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"

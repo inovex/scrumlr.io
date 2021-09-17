@@ -34,7 +34,7 @@ describe("Column", () => {
 
     test("column header cardnumber is present", () => {
       const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")!.lastChild).toHaveClass("column__header-card-number");
+      expect(container.querySelector(".column__header-title")!.children[1]).toHaveClass("column__header-card-number");
     });
 
     test("header text has correct title", () => {
