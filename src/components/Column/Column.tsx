@@ -44,16 +44,18 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
-            {currentUserIsModerator && (
-              <ToggleButton
-                className=""
-                values={["visible", "hidden"]}
-                defaultValue={hidden ? "hidden" : "visible"}
-                onClick={(val: "visible" | "hidden") => {
-                  store.dispatch(ActionFactory.editColumn({id, hidden: !hidden}));
-                }}
-              />
-            )}
+            <div className="columns__header-toggle-space">
+              {currentUserIsModerator && (
+                <ToggleButton
+                  className="columns__header-toggle"
+                  values={["visible", "hidden"]}
+                  defaultValue={!hidden ? "visible" : "hidden"}
+                  onClick={(val: "visible" | "hidden") => {
+                    store.dispatch(ActionFactory.editColumn({id, hidden: !hidden}));
+                  }}
+                />
+              )}
+            </div>
           </div>
           <NoteInput columnId={id} />
         </header>

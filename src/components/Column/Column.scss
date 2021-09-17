@@ -109,3 +109,15 @@
   grid-row-gap: 20px;
   grid-column-gap: 24px;
 }
+
+.columns__header-toggle-space {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.columns__header-toggle {
+  transform: scale(0.7);
+  margin-left: auto;
+}
