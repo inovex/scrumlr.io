@@ -1,5 +1,5 @@
 /** This object lists board users object specific internal Redux Action types. */
-import {UserClientModel} from "types/user";
+import {UserClientModel, EditUserConfigurationRequest, UserServerModel} from "types/user";
 
 /** This object lists board users object specific internal Redux Action types. */
 export const UsersActionType = {
@@ -10,7 +10,9 @@ export const UsersActionType = {
    */
   SetUsers: "@@SCRUMLR/setUsers" as const,
   SetUserStatus: "@@SCRUMLR/setUserStatus" as const,
+  UpdateUser: "@@SCRUMLR/updateUser" as const,
   ChangePermission: "@@SCRUMLR/changePermission" as const,
+  EditUserConfiguration: "@@SCRUMLR/editUserConfiguration" as const,
 };
 
 /** Factory or creator class of internal Redux board users object specific actions. */
@@ -47,6 +49,16 @@ export const UsersActionFactory = {
   }),
 
   /**
+   * Creates an action that should be dispatched when the server notifies about a changed user configuration
+   *
+   * @param user the updated user
+   */
+  updateUser: (user: UserServerModel) => ({
+    type: UsersActionType.UpdateUser,
+    user,
+  }),
+
+  /**
    * Creates an action that should be dispatch when a moderator changes the permissions of a participant
    *
    * @param userId the identifier of the user whose permissions are being changed
@@ -58,9 +70,24 @@ export const UsersActionFactory = {
     userId,
     moderator,
   }),
+
+  /**
+   * Creates an action that should be dispatch when a user change configurations
+   *
+   * @param userId the identifier of the user whose permissions are being changed
+   * @param userConfigurationRequest contains configurations changed by user
+   */
+
+  editUserConfiguration: (userId: string, userConfigurationRequest: EditUserConfigurationRequest) => ({
+    type: UsersActionType.EditUserConfiguration,
+    userId,
+    userConfigurationRequest,
+  }),
 };
 
 export type UsersReduxAction =
   | ReturnType<typeof UsersActionFactory.setUsers>
   | ReturnType<typeof UsersActionFactory.setUserStatus>
-  | ReturnType<typeof UsersActionFactory.changePermission>;
+  | ReturnType<typeof UsersActionFactory.changePermission>
+  | ReturnType<typeof UsersActionFactory.editUserConfiguration>
+  | ReturnType<typeof UsersActionFactory.updateUser>;

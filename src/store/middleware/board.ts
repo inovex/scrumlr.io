@@ -63,6 +63,18 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       const memberQuery = new Parse.Query(Parse.Role);
       memberQuery.equalTo("name", `member_of_${action.boardId}`);
 
+      const updateQuery = new Parse.Query(Parse.User);
+      updateQuery.contains("boards", action.boardId);
+
+      updateQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("update", (result) => {
+          dispatch(ActionFactory.updateUser(result.toJSON() as unknown as UserServerModel));
+        });
+      });
+
       const usersQuery = Parse.Query.or(adminsQuery, memberQuery);
       usersQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
