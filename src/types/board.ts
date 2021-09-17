@@ -1,16 +1,11 @@
 import {Color} from "constants/colors";
 import Parse from "parse";
+import {ColumnClientModel, ColumnServerModel} from "types/column";
 
 export interface BoardServerModel {
   objectId: string;
   name: string;
-  columns: {
-    [columnId: string]: {
-      name: string;
-      color: string;
-      hidden: boolean;
-    };
-  };
+  columns: ColumnServerModel;
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
@@ -46,12 +41,7 @@ export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
 export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
-  columns: {
-    id?: string;
-    name: string;
-    color: Color;
-    hidden: boolean;
-  }[];
+  columns: ColumnClientModel[];
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
@@ -61,12 +51,15 @@ export interface BoardClientModel extends EditableBoardAttributes {
 export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
   id: board.objectId,
   name: board.name,
-  columns: Object.keys(board.columns).map((columnId) => ({
-    id: columnId,
-    name: board.columns[columnId].name,
-    color: board.columns[columnId].color as Color,
-    hidden: board.columns[columnId].hidden,
-  })),
+  columns: Object.keys(board.columns).map(
+    (columnId) =>
+      ({
+        id: columnId,
+        name: board.columns[columnId].name,
+        color: board.columns[columnId].color as Color,
+        hidden: board.columns[columnId].hidden,
+      } as ColumnClientModel)
+  ),
   accessCode: board.accessCode,
   joinConfirmationRequired: board.joinConfirmationRequired,
   encryptedContent: board.encryptedContent,

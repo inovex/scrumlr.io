@@ -1,4 +1,4 @@
-import {Color} from "constants/colors";
+import {AddColumnRequest, EditColumnRequest} from "types/column";
 import {callAPI} from "./callApi";
 
 export const ColumnAPI = {
@@ -6,14 +6,15 @@ export const ColumnAPI = {
    * Adds a column with the specified name and configuration to a board.
    *
    * @param boardId the board id
-   * @param name the column name
-   * @param color the column color
-   * @param hidden flag whether the column should be displayed to all users or hidden from basic users
+   * @param addColumnRequest contains
+   *  name: the column name
+   *  color: the column color
+   *  hidden: flag whether the column should be displayed to all users or hidden from basic users
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  addColumn: (boardId: string, name: string, color: Color, hidden = false) =>
-    callAPI<{boardId: string; name: string; hidden: boolean}, boolean>("addColumn", {boardId, name, hidden}),
+  addColumn: (boardId: string, addColumnRequest: AddColumnRequest) =>
+    callAPI<{boardId: string; addColumnRequest: AddColumnRequest}, boolean>("addColumn", {boardId, addColumnRequest}),
   /**
    * Deletes a column with the specified id.
    *
@@ -27,13 +28,14 @@ export const ColumnAPI = {
    * Edit a column with the specified id.
    *
    * @param boardId the board id
-   * @param columnId the column id
-   * @param name new name to set (optional)
-   * @param color new column color to set (optional)
-   * @param hidden flag to set whether this columns should be visible to all basic users (optional)
+   * @param editColumnRequest contains
+   *  columnId: the column id
+   *  name: new name to set (optional)
+   *  color: new column color to set (optional)
+   *  hidden: flag to set whether this columns should be visible to all basic users (optional)
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editColumn: (boardId: string, columnId: string, name?: string, color?: Color, hidden?: boolean) =>
-    callAPI<{boardId: string; columnId: string; name?: string; hidden?: boolean}, boolean>("editColumn", {boardId, columnId, name, hidden}),
+  editColumn: (boardId: string, editColumnRequest: EditColumnRequest) =>
+    callAPI<{boardId: string; editColumnRequest: EditColumnRequest}, boolean>("editColumn", {boardId, editColumnRequest}),
 };

@@ -1,4 +1,4 @@
-import {Color} from "constants/colors";
+import {AddColumnRequest, EditColumnRequest} from "types/column";
 
 /** This object lists column object specific internal Redux Action types. */
 export const ColumnActionType = {
@@ -22,30 +22,27 @@ export const ColumnActionFactory = {
   /**
    * Creates an action which should be dispatched when the user wants to add a column to the current board.
    *
-   * @param name the column name
-   * @param color the color of the column
-   * @param hidden the flag which indicates whether this column should be visible to all basic users
+   * @param addColumnRequest contains
+   *  name: the column name
+   *  color: the color of the column
+   *  hidden: the flag which indicates whether this column should be visible to all basic users
    */
-  addColumn: (name: string, color: Color, hidden = false) => ({
+  addColumn: (addColumnRequest: AddColumnRequest) => ({
     type: ColumnActionType.AddColumn,
-    name,
-    color,
-    hidden,
+    addColumnRequest,
   }),
   /**
    * Creates an action which should be dispatched when the user edits a column.
    *
-   * @param columnId the edited column id
-   * @param name the new name
-   * @param color the new color of the column
-   * @param hidden the new hidden state
+   * @param editColumnRequest contains
+   *  columnId: the edited column id
+   *  name: the new name
+   *  color: the new color of the column
+   *  hidden: the new hidden state
    */
-  editColumn: (columnId: string, name?: string, color?: Color, hidden?: boolean) => ({
+  editColumn: (editColumnRequest: EditColumnRequest) => ({
     type: ColumnActionType.EditColumn,
-    columnId,
-    name,
-    color,
-    hidden,
+    editColumnRequest,
   }),
   /**
    * Creates an action which should be dispatched when the user wants to delete a column.

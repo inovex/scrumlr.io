@@ -11,10 +11,11 @@ export interface ColumnProps {
   id: string;
   name: string;
   color: Color;
+  hidden: boolean;
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, children}: ColumnProps) => {
+const Column = ({id, name, color, hidden, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
