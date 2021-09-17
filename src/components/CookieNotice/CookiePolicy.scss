@@ -46,3 +46,6 @@ $cookie-consent-button-text-size: 18px;
   display: flex;
   position: sticky;
 }
+.cookie-policy__button-accept:hover {
+  transform: scale(1.05);
+}

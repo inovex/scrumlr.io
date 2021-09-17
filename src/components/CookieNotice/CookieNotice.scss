@@ -27,7 +27,7 @@ $cookie-consent-button-text-size: 18px;
   font-size: $cookie-consent-button-text-size;
 }
 .cookie-notice__button-accept:hover {
-  opacity: 0.5;
+  transform: scale(1.05);
 }
 
 .cookie-notice__button-decline {
@@ -41,7 +41,7 @@ $cookie-consent-button-text-size: 18px;
   font-size: $cookie-consent-button-text-size;
 }
 .cookie-notice__button-decline:hover {
-  opacity: 0.5;
+  transform: scale(1.05);
 }
 
 .cookie-notice__button-cookie-policy {
@@ -55,5 +55,5 @@ $cookie-consent-button-text-size: 18px;
   font-size: $cookie-consent-button-text-size;
 }
 .cookie-notice__button-cookie-policy:hover {
-  opacity: 0.5;
+  transform: scale(1.05);
 }

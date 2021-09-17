@@ -18,7 +18,7 @@ const CookiePolicy = ({acceptFunction, onClose, show, darkBackground}: CookiePol
     fetch(policyText)
       .then((response) => response.text())
       .then((text) => setPolicy({markdown: marked(text)}));
-  }, []);
+  });
 
   if (!show) {
     return null;

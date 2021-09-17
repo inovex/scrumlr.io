@@ -17,7 +17,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy scrumlrCookieName="scrumlr_cookieConsent" acceptFunction={() => {}} onClose={() => {}} show />
+        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
@@ -31,7 +31,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy scrumlrCookieName="scrumlr_cookieConsent" acceptFunction={() => {}} onClose={() => {}} show />
+        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
@@ -45,7 +45,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy scrumlrCookieName="scrumlr_cookieConsent" acceptFunction={() => {}} onClose={() => {}} show />
+        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );
@@ -59,7 +59,7 @@ describe("Cookie Policy should be rendered with:", () => {
 
     const {container} = render(
       <Provider store={store}>
-        <CookiePolicy scrumlrCookieName="scrumlr_cookieConsent" acceptFunction={() => {}} onClose={() => {}} show />
+        <CookiePolicy acceptFunction={() => {}} onClose={() => {}} show darkBackground />
       </Provider>,
       {container: global.document.querySelector("#portal")!}
     );

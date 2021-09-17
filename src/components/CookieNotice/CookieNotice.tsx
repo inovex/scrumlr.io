@@ -49,9 +49,8 @@ const CookieNotice = () => {
   const openPolicy = () => {
     setShowCookiePolicy(true);
   };
-  // prevents cookie notice being shown if scrumlrCookieName is set in localStorage
-  if (!shouldShowCookieNotice) return null;
-  if (!showCookieNotice) return null;
+  // prevents cookie notice from being shown if scrumlrCookieName is set in localStorage
+  if (!shouldShowCookieNotice || !showCookieNotice) return null;
 
   return (
     <div className="cookie-notice">
