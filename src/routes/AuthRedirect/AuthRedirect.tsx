@@ -15,6 +15,7 @@ function AuthRedirect() {
     if (params.error) {
       setStatus({error: params.error as string});
     } else if (params.code && params.state) {
+      /** GOOGLE-OAUTH */
       if ((params.state as string).startsWith("google")) {
         API.verifyGoogleSignIn(params.code as string, params.state as string)
           .then((res) => {
@@ -37,6 +38,7 @@ function AuthRedirect() {
           });
       }
 
+      /** GITHUB-OAUTH */
       if ((params.state as string).startsWith("github")) {
         API.verifyGithubSignIn(params.code as string, params.state as string)
           .then((res) => {

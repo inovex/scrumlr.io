@@ -16,6 +16,13 @@ export const AuthAPI = {
   signInWithGoogle: () => callAPI<{state: string}, string>("GoogleSignIn", {state: generateState("google")}),
 
   /**
+   * Sign in with GitHub.
+   *
+   * @returns the redirection URL
+   */
+  signInWithGithub: () => callAPI<{state: string}, string>("GithubSignIn", {state: generateState("github")}),
+
+  /**
    * Verify the sign in with Google by the specified code.
    *
    * @param code the verification code returned by the authentication provider
@@ -37,7 +44,7 @@ export const AuthAPI = {
   },
 
   /**
-   * Verify the sign in with Google by the specified code.
+   * Verify the sign in with GitHub by the specified code.
    *
    * @param code the verification code returned by the authentication provider
    * @param state the state passed by the authentication provider (see https://auth0.com/docs/protocols/state-parameters)

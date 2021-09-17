@@ -51,4 +51,33 @@ export const initializeAuthFunctions = (): void => {
       };
     });
   }
+  if (GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET && AUTH_REDIRECT_URI) {
+    console.log("Initializing auth API for provider GitHub");
+
+    publicApi<{state: string}, string>(
+      "GithubSignIn",
+      async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`
+    );
+
+    publicApi<{code: string}, UserInformation>("GithubVerifySignIn", async ({code}) => {
+      const accessTokenRequest = await axios.post(
+        "https://github.com/login/oauth/access_token",
+        {
+          client_id: GITHUB_CLIENT_ID,
+          client_secret: GITHUB_CLIENT_SECRET,
+          code,
+        },
+        {headers: {Accept: "application/json"}}
+      );
+      const accessToken = accessTokenRequest.data.access_token;
+      const user: any = await axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}});
+
+      return {
+        id: user.data.id,
+        name: user.data.name,
+        accessToken,
+        photoURL: user.data.avatar_url,
+      };
+    });
+  }
 };

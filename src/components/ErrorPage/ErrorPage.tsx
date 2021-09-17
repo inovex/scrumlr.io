@@ -6,9 +6,9 @@ export interface ErrorPageProps {
 
 function ErrorPage({errorMessage}: ErrorPageProps) {
   return (
-    <div className="error-page">
+    <section className="error-page">
       <span>{errorMessage}</span>
-    </div>
+    </section>
   );
 }
 
