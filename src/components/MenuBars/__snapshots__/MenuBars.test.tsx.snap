@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Menu should only render add-menu for participants 1`] = `
-<div
+<aside
   class="menu-bars menu-bars--user"
   id="menu-bars"
 >
-  <aside
+  <section
     class="menu user-menu"
   >
     <div
@@ -93,16 +93,16 @@ exports[`Menu should only render add-menu for participants 1`] = `
         </svg>
       </button>
     </div>
-  </aside>
-</div>
+  </section>
+</aside>
 `;
 
 exports[`Menu should render both add- and settings-menu for moderators 1`] = `
-<div
+<aside
   class="menu-bars menu-bars--user menu-bars--isAdmin"
   id="menu-bars"
 >
-  <aside
+  <section
     class="menu user-menu"
   >
     <div
@@ -190,8 +190,8 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
     </div>
-  </aside>
-  <aside
+  </section>
+  <section
     class="menu admin-menu"
   >
     <div
@@ -293,7 +293,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
     </div>
-  </aside>
+  </section>
   <button
     class="menu-bars__switch"
   >
@@ -308,5 +308,5 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       icon-toggle-settings-menu.svg
     </svg>
   </button>
-</div>
+</aside>
 `;
