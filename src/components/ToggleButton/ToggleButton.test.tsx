@@ -3,7 +3,7 @@ import {ToggleButton} from "./ToggleButton";
 
 describe("ToggleButton", () => {
   const createToggleButton = (props: {className?: string; disabled?: boolean; onClick?: (value: string) => void}) => (
-    <ToggleButton values={["value1", "value2"]} defaultValue="value1" className={props.className} disabled={props.disabled} onClick={props.onClick} />
+    <ToggleButton values={["value1", "value2"]} value="value1" className={props.className} disabled={props.disabled} onClick={props.onClick} />
   );
 
   test("should render correctly", () => {
@@ -28,12 +28,10 @@ describe("ToggleButton", () => {
     expect(onClickMock).toHaveBeenCalled();
   });
 
-  test("should toggle between values on component click", () => {
+  test("should return the opposite value", () => {
     const onClickMock = jest.fn();
     const {container} = render(createToggleButton({onClick: onClickMock}));
     fireEvent.click(container.firstChild!);
     expect(onClickMock).toHaveBeenCalledWith("value2");
-    fireEvent.click(container.firstChild!);
-    expect(onClickMock).toHaveBeenCalledWith("value1");
   });
 });
