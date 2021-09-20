@@ -11,6 +11,8 @@ interface JoinBoardResponse {
 
 const goOnline = (user: Parse.User, boardId: string) => {
   user.add("boards", boardId);
+
+  // Add default user configuration if not already available in database
   if (!user.get("showHiddenColumns")) {
     user.set("showHiddenColumns", false);
   }

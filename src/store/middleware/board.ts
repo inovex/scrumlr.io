@@ -63,9 +63,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       const memberQuery = new Parse.Query(Parse.Role);
       memberQuery.equalTo("name", `member_of_${action.boardId}`);
 
+      // Subscription to detect changes in the user configuration
       const updateQuery = new Parse.Query(Parse.User);
       updateQuery.contains("boards", action.boardId);
-
       updateQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
