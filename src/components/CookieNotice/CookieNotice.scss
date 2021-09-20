@@ -1,0 +1,44 @@
+@import "constants/style.scss";
+
+.cookie-notice {
+  background: $color-light-gray;
+  color: $color-black;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: $padding--small;
+}
+
+.cookie-notice__buttons {
+  display: flex;
+}
+
+.cookie-notice__button {
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 18px;
+
+  &-accept {
+    @extend .cookie-notice__button;
+    background: $color-backlog-blue;
+    color: $color-white;
+    margin: 0 0 $margin--default $margin--default;
+  }
+  &-decline {
+    @extend .cookie-notice__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 0 $margin--default $margin--default;
+  }
+  &-cookie-policy {
+    @extend .cookie-notice__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 auto $margin--default 0;
+  }
+}
+
+.cookie-notice__button:hover {
+  transform: scale(1.05);
+}
