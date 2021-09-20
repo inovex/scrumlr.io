@@ -16,6 +16,9 @@ const goOnline = (user: Parse.User, boardId: string) => {
   if (!user.get("showHiddenColumns")) {
     user.set("showHiddenColumns", false);
   }
+  if (!user.get("showHiddenNotes")) {
+    user.set("showHiddenNotes", false);
+  }
   user.save(null, {useMasterKey: true});
 };
 

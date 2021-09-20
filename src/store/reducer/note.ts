@@ -11,6 +11,7 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         author: Parse.User.current()!.id,
         dirty: true,
+        hidden: false,
       };
       return [...state, localNote];
     }

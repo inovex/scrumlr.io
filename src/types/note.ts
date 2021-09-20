@@ -10,6 +10,7 @@ export interface NoteServerModel extends Parse.Object {
   parent?: Parse.Object;
   createdAt: Date;
   updatedAt: Date;
+  hidden: boolean;
 }
 
 /**
@@ -37,6 +38,9 @@ export interface NoteClientModel {
   /** The last update date of this object. */
   updatedAt?: Date;
 
+  /** Indicates whether the note is visiable to all users */
+  hidden: boolean;
+
   /**
    * This flag indicated whether local changes have yet to be persisted.
    * It is set to `true` if some fields aren't persisted yet and `false` otherwise.
@@ -50,6 +54,7 @@ type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
+  hidden: boolean;
 };
 
 export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
@@ -62,5 +67,6 @@ export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientMod
   parentId: note.get("parent")?.id,
   createdAt: note.get("createdAt"),
   updatedAt: note.get("updatedAt"),
+  hidden: note.get("hidden"),
   dirty: false,
 });
