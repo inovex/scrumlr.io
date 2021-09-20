@@ -3,6 +3,7 @@
 exports[`Menu should only render add-menu for participants 1`] = `
 <div
   class="menu-bars menu-bars--user"
+  id="menu-bars"
 >
   <div
     class="menu user-menu"
@@ -99,6 +100,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
 exports[`Menu should render both add- and settings-menu for moderators 1`] = `
 <div
   class="menu-bars menu-bars--user menu-bars--isAdmin"
+  id="menu-bars"
 >
   <div
     class="menu user-menu"
