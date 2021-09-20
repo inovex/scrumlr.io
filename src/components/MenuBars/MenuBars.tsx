@@ -40,23 +40,23 @@ function MenuBars() {
         {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
       )}
     >
-      <div className="menu user-menu">
+      <aside className="menu user-menu">
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
         </div>
-      </div>
+      </aside>
       {isAdmin && (
-        <div className="menu admin-menu">
+        <aside className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={() => null} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>
-        </div>
+        </aside>
       )}
       {isAdmin && (
         <button className="menu-bars__switch" onClick={() => toggleMenus((prevState) => !prevState)}>

@@ -5,7 +5,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
   class="menu-bars menu-bars--user"
   id="menu-bars"
 >
-  <div
+  <aside
     class="menu user-menu"
   >
     <div
@@ -93,7 +93,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
         </svg>
       </button>
     </div>
-  </div>
+  </aside>
 </div>
 `;
 
@@ -102,7 +102,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
   class="menu-bars menu-bars--user menu-bars--isAdmin"
   id="menu-bars"
 >
-  <div
+  <aside
     class="menu user-menu"
   >
     <div
@@ -190,8 +190,8 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
     </div>
-  </div>
-  <div
+  </aside>
+  <aside
     class="menu admin-menu"
   >
     <div
@@ -293,7 +293,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
     </div>
-  </div>
+  </aside>
   <button
     class="menu-bars__switch"
   >
