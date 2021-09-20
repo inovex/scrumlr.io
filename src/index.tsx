@@ -8,6 +8,7 @@ import {ToastContainer} from "react-toastify";
 import Parse from "parse";
 import store from "./store";
 import Router from "./routes/Router";
+import CookieNotice from "./components/CookieNotice/CookieNotice";
 
 Parse.initialize("Scrumlr");
 Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || "http://localhost:4000/api";
@@ -19,6 +20,7 @@ ReactDOM.render(
       <DndProvider backend={HTML5Backend}>
         <Router />
         <ToastContainer />
+        <CookieNotice />
       </DndProvider>
     </Provider>
   </React.StrictMode>,
