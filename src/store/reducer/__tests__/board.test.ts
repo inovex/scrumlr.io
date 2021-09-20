@@ -3,9 +3,8 @@ import {AddColumnRequest, EditColumnRequest} from "types/column";
 import {boardReducer} from "../board";
 import {ActionFactory} from "../../action";
 
-describe("board reducer", () => {
+describe("column tests", () => {
   let initialState: BoardState;
-
   beforeEach(() => {
     initialState = {
       data: {
@@ -42,7 +41,7 @@ describe("board reducer", () => {
 
   test("edit column (partial)", () => {
     const editRequest: EditColumnRequest = {id: "test_column_1", name: "New name"};
-    const newState = boardReducer(initialState, ActionFactory.editColumn({id: "test_column_1", name: "New name"}));
+    const newState = boardReducer(initialState, ActionFactory.editColumn(editRequest));
     expect(newState.data.columns[0].name).toEqual("New name");
   });
 });
