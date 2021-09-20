@@ -1,4 +1,5 @@
 import {Color} from "constants/colors";
+import Parse from "parse";
 
 export interface BoardServerModel {
   objectId: string;
@@ -18,10 +19,12 @@ export interface BoardServerModel {
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
+  votingIteration: number;
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
   createdAt: Date;
   updatedAt: Date;
+  owner: Parse.Object;
 }
 
 export type EditableBoardAttributes = {
@@ -34,6 +37,7 @@ export type EditableBoardAttributes = {
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
+  votingIteration: number;
   showVotesOfOtherUsers: boolean;
   voteLimit: number;
 };
@@ -51,6 +55,7 @@ export interface BoardClientModel extends EditableBoardAttributes {
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
+  owner: any;
 }
 
 export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
@@ -70,9 +75,12 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   timerUTCEndTime: board.timerUTCEndTime,
   expirationUTCTime: board.expirationUTCTime,
   voting: board.voting,
+  votingIteration: board.votingIteration,
   showVotesOfOtherUsers: board.showVotesOfOtherUsers,
   voteLimit: board.voteLimit,
   createdAt: board.createdAt,
   updatedAt: board.updatedAt,
   dirty: false,
+  // @ts-ignore
+  owner: board.owner.objectId,
 });

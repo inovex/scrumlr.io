@@ -3,6 +3,7 @@ import {NoteAPI} from "./note";
 import {ColumnAPI} from "./column";
 import {VoteAPI} from "./vote";
 import {AuthAPI} from "./auth";
+import {UserAPI} from "./user";
 
 /** This class lists all API functions of the server. */
 export const API = {
@@ -11,4 +12,5 @@ export const API = {
   ...NoteAPI,
   ...VoteAPI,
   ...AuthAPI,
+  ...UserAPI,
 };
