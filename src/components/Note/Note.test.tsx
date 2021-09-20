@@ -4,6 +4,7 @@ import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import Parse from "parse";
 import {VoteConfigurationClientModel} from "types/voteConfiguration";
+import {VoteClientModel} from "types/vote";
 import Note from "./Note";
 
 const mockStore = configureStore();
@@ -12,7 +13,30 @@ const createNote = (
   text: string,
   authorId: string,
   showAuthors: boolean,
-  voteConfiguration: VoteConfigurationClientModel = {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false}
+  voteConfiguration: VoteConfigurationClientModel = {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false},
+  votes: VoteClientModel[] = [
+    {
+      id: "test-vote-0",
+      board: "test-board",
+      note: "test-id",
+      user: "test-user-1",
+      votingIteration: 1,
+    },
+    {
+      id: "test-vote-1",
+      board: "test-board",
+      note: "test-id",
+      user: "test-user-2",
+      votingIteration: 1,
+    },
+    {
+      id: "test-vote-2",
+      board: "test-board",
+      note: "test-id",
+      user: "test-user-2",
+      votingIteration: 1,
+    },
+  ]
 ) => {
   const initialState = {
     board: {
@@ -51,29 +75,7 @@ const createNote = (
         isAdmin
         activeVoting
         showAuthors={showAuthors}
-        votes={[
-          {
-            id: "test-vote-0",
-            board: "test-board",
-            note: "test-id",
-            user: "test-user-1",
-            votingIteration: 1,
-          },
-          {
-            id: "test-vote-1",
-            board: "test-board",
-            note: "test-id",
-            user: "test-user-2",
-            votingIteration: 1,
-          },
-          {
-            id: "test-vote-2",
-            board: "test-board",
-            note: "test-id",
-            user: "test-user-2",
-            votingIteration: 1,
-          },
-        ]}
+        votes={votes}
         childrenNotes={[
           {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
@@ -105,6 +107,20 @@ describe("Note", () => {
     test("note is present", () => {
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note");
+    });
+
+    test("note--own-card is present", () => {
+      // @ts-ignore
+      Parse.User.current = jest.fn(() => ({id: "Test Author"}));
+      const {container} = render(createNote("Test Text", "Test Author", true));
+      expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note--own-card");
+    });
+
+    test("note--own-card is not present", () => {
+      // @ts-ignore
+      Parse.User.current = jest.fn(() => ({id: "Test Author"}));
+      const {container} = render(createNote("Test Text", "Test Author 2", true));
+      expect(container.querySelector(".note__root")!.firstChild).not.toHaveClass("note--own-card");
     });
 
     test("note content is present", () => {
@@ -164,24 +180,28 @@ describe("Note", () => {
 
   describe("Test amount of visible votes", () => {
     test("test-user-1 has one vote during vote phase", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("1");
     });
 
     test("test-user-2 has two votes during vote phase", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
 
     test("test-user-3 has zero votes during vote phase and has only the add vote button", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-3"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);
     });
 
     test("test-user-1 can see three votes", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
       const {container} = render(
         createNote("Test Text", "test-user-1", true, {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
@@ -190,11 +210,45 @@ describe("Note", () => {
     });
 
     test("test-user-2 can see three votes", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(
         createNote("Test Text", "test-user-2", true, {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
       );
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
+    });
+  });
+
+  describe("Test allowMultipleVotesPerNote works correctly", () => {
+    test("allowMultipleVotesPerNote: false", () => {
+      // @ts-ignore
+      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+
+      const votes = [
+        {
+          id: "test-vote-0",
+          board: "test-board",
+          note: "test-id",
+          user: "test-user-1",
+          votingIteration: 1,
+        },
+        {
+          id: "test-vote-1",
+          board: "test-board",
+          note: "test-id",
+          user: "test-user-2",
+          votingIteration: 1,
+        },
+      ];
+
+      const {container} = render(
+        createNote("Test Text", "test-user-2", true, {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true}, votes)
+      );
+
+      expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);
+      expect(container.querySelector(".note__votes")?.firstChild).toHaveClass("dot-button__delete");
+      expect(container.querySelector(".dot-button__delete")?.firstChild).toHaveClass("dot-button__folded-corner");
+      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
   });
 });
