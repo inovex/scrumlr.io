@@ -95,13 +95,13 @@
   visibility: hidden;
 }
 
-.menu-item--active:hover > .menu-item__icon--end,
-.menu-item--active:active > .menu-item__icon--end {
+.menu-item--active:not(:disabled):hover > .menu-item__icon--end,
+.menu-item--active:not(:disabled):active > .menu-item__icon--end {
   visibility: visible;
 }
 
-.menu-item--active:hover > .menu-item__icon--start,
-.menu-item--active:active > .menu-item__icon--start {
+.menu-item--active:not(:disabled):hover > .menu-item__icon--start,
+.menu-item--active:not(:disabled):active > .menu-item__icon--start {
   visibility: hidden;
 }
 
