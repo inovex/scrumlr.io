@@ -69,10 +69,12 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
           },
         ]}
         childrenNotes={[
-          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
-          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
+          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], hidden: false},
+          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], hidden: false},
         ]}
         authorName=""
+        hidden={false}
+        currentUserIsModerator={false}
       />
     </Provider>
   );
@@ -157,18 +159,21 @@ describe("Note", () => {
 
   describe("Test amount of visible votes", () => {
     test("test-user-1 has one vote during vote phase", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("1");
     });
 
     test("test-user-2 hast two votes during vote phase", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
 
     test("test-user-3 hast zero votes during vote phase and has only the add vote button", () => {
+      // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-3"}));
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);
