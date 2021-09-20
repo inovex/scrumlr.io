@@ -49,8 +49,8 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
                 <ToggleButton
                   className="columns__header-toggle"
                   values={["hidden", "visible"]}
-                  defaultValue={hidden ? "hidden" : "visible"}
-                  onClick={() => {
+                  value={hidden ? "hidden" : "visible"}
+                  onToggle={() => {
                     store.dispatch(ActionFactory.editColumn({id, hidden: !hidden}));
                   }}
                 />
