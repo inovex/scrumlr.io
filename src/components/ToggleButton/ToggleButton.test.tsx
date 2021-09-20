@@ -2,8 +2,16 @@ import {render, fireEvent} from "@testing-library/react";
 import {ToggleButton} from "./ToggleButton";
 
 describe("ToggleButton", () => {
-  const createToggleButton = (props: {className?: string; disabled?: boolean; onClick?: (value: string) => void}) => (
-    <ToggleButton values={["value1", "value2"]} value="value1" className={props.className} disabled={props.disabled} onClick={props.onClick} />
+  const createToggleButton = (props: {value?: string; className?: string; disabled?: boolean; onToggle?: (value: string) => void; onLeft?: () => void; onRight?: () => void}) => (
+    <ToggleButton
+      values={["value1", "value2"]}
+      value={props.value ?? "value1"}
+      className={props.className}
+      disabled={props.disabled}
+      onToggle={props.onToggle}
+      onLeft={props.onLeft}
+      onRight={props.onRight}
+    />
   );
 
   test("should render correctly", () => {
@@ -22,16 +30,30 @@ describe("ToggleButton", () => {
   });
 
   test("should call onClick on component click", () => {
-    const onClickMock = jest.fn();
-    const {container} = render(createToggleButton({onClick: onClickMock}));
+    const onToggleMock = jest.fn();
+    const {container} = render(createToggleButton({onToggle: onToggleMock}));
     fireEvent.click(container.firstChild!);
-    expect(onClickMock).toHaveBeenCalled();
+    expect(onToggleMock).toHaveBeenCalled();
   });
 
   test("should return the opposite value", () => {
-    const onClickMock = jest.fn();
-    const {container} = render(createToggleButton({onClick: onClickMock}));
+    const onToggleMock = jest.fn();
+    const {container} = render(createToggleButton({onToggle: onToggleMock}));
     fireEvent.click(container.firstChild!);
-    expect(onClickMock).toHaveBeenCalledWith("value2");
+    expect(onToggleMock).toHaveBeenCalledWith("value2");
+  });
+
+  test("should call onLeft if toggled to the left", () => {
+    const onRightMock = jest.fn();
+    const {container} = render(createToggleButton({onRight: onRightMock}));
+    fireEvent.click(container.firstChild!);
+    expect(onRightMock).toHaveBeenCalled();
+  });
+
+  test("should call onRight if toggled to the right", () => {
+    const onLeftMock = jest.fn();
+    const {container} = render(createToggleButton({value: "value2", onLeft: onLeftMock}));
+    fireEvent.click(container.firstChild!);
+    expect(onLeftMock).toHaveBeenCalled();
   });
 });

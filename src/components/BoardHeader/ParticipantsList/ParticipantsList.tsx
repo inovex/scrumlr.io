@@ -53,7 +53,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
                     disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
                     values={["participant", "moderator"]}
                     value={participant.admin ? "moderator" : "participant"}
-                    onClick={(val: "participant" | "moderator") => {
+                    onToggle={(val: "participant" | "moderator") => {
                       store.dispatch(ActionFactory.changePermission(participant.id, val === "moderator"));
                     }}
                   />
