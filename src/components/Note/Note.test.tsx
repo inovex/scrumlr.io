@@ -251,4 +251,21 @@ describe("Note", () => {
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
   });
+
+  describe("Test voteLimit works correctly", () => {
+    test("voteLimit: 0", () => {
+      // @ts-ignore
+      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+
+      const votes: VoteClientModel[] = [];
+
+      const {container} = render(
+        createNote("Test Text", "test-user-2", true, {board: "test-board", votingIteration: 1, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true}, votes)
+      );
+
+      expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);
+      expect(container.querySelector(".note__votes")?.firstChild).not.toHaveClass("dot-button__delete");
+      expect(container.querySelector(".note__votes")?.firstChild).toHaveClass("dot-button__add");
+    });
+  });
 });

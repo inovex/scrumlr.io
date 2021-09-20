@@ -26,6 +26,10 @@ export const Votes = (props: VotesProps) => {
     store.dispatch(ActionFactory.deleteVote(props.noteId));
   };
 
+  const votes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
+
+  const showAddVoteButton = props.activeVoting && (props.voteConfiguration.allowMultipleVotesPerNote || (!props.voteConfiguration.allowMultipleVotesPerNote && votes.length < 1));
+
   return (
     <div className={classNames("votes", props.className)}>
       {props.votes.length > 0 && (
@@ -38,13 +42,11 @@ export const Votes = (props: VotesProps) => {
           <span>{props.votes.length.toString()}</span>
         </DotButton>
       )}
-      {props.activeVoting &&
-        (props.voteConfiguration.allowMultipleVotesPerNote ||
-          (!props.voteConfiguration.allowMultipleVotesPerNote && props.votes.filter((vote) => vote.user === Parse.User.current()?.id).length < 1)) && (
-          <DotButton className="dot-button__add" onClick={addVote}>
-            <PlusIcon className="dot-button__add-icon" />
-          </DotButton>
-        )}
+      {showAddVoteButton && (
+        <DotButton className="dot-button__add" onClick={addVote}>
+          <PlusIcon className="dot-button__add-icon" />
+        </DotButton>
+      )}
     </div>
   );
 };
