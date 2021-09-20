@@ -1,5 +1,5 @@
-import "./ToggleButton.scss";
 import classNames from "classnames";
+import "./ToggleButton.scss";
 
 type ToggleButtonProps<T> = {
   className?: string;
