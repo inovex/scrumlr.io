@@ -29,14 +29,16 @@ interface NoteDialogProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
+  hidden: boolean;
+  currentUserIsModerator: boolean;
 }
 
-const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuthors, columnName, columnColor, onClose, childrenNotes, votes, activeVoting}: NoteDialogProps) => {
-  if (!show) {
+const NoteDialog = (props: NoteDialogProps) => {
+  if (!props.show) {
     return null;
   }
 
-  const editable = (authorId: string) => Parse.User.current()?.id === authorId || isAdmin;
+  const editable = (authorId: string) => Parse.User.current()?.id === authorId || props.isAdmin;
 
   const onEdit = (id: string, authorId: string, text: string) => {
     if (editable(authorId)) {
@@ -50,54 +52,71 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
     }
   };
 
-  const onUnstack = (id: string, authorId: string) => {
+  const onUnstack = (id: string) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
+  const switchVisibility = (id: string, hidden: boolean) => {
+    store.dispatch(ActionFactory.editNote({id, hidden: !hidden}));
+  };
+
   return (
-    <Portal onClose={onClose} darkBackground>
-      <div className={`note-dialog ${getColorClassName(columnColor as Color)}`}>
-        <h2 className="note-dialog__header">{columnName}</h2>
-        <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === authorId})}>
+    <Portal onClose={props.onClose} darkBackground>
+      <div className={`note-dialog ${getColorClassName(props.columnColor as Color)}`}>
+        <h2 className="note-dialog__header">{props.columnName}</h2>
+        <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
           <div className="note-dialog__content">
             <blockquote
               className="note-dialog__text"
-              contentEditable={editable(authorId)}
+              contentEditable={editable(props.authorId)}
               suppressContentEditableWarning
               onBlur={(e: React.FocusEvent<HTMLElement>) => {
-                onEdit(noteId!, authorId, e.target.textContent as string);
+                onEdit(props.noteId!, props.authorId, e.target.textContent as string);
               }}
             >
-              {text}
+              {props.text}
             </blockquote>
           </div>
           <footer className="note-dialog__footer">
-            {(showAuthors || Parse.User.current()?.id === authorId) && (
+            {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
               <figure className="note-dialog__author">
                 <img className="note-dialog__author-image" src={avatar} alt="User" />
-                <figcaption className="note-dialog__author-name">{authorName}</figcaption>
+                <figcaption className="note-dialog__author-name">{props.authorName}</figcaption>
               </figure>
             )}
-            <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
+            <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
           </footer>
 
           <aside>
             <ul className="note-dialog__options">
-              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(authorId)})}>
+              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(props.authorId)})}>
                 <IconButton
                   onClick={() => {
-                    onDelete(noteId!, authorId);
-                    onClose();
+                    onDelete(props.noteId!, props.authorId);
+                    props.onClose();
                   }}
                   direction="right"
                   label="Delete"
                   icon={deleteIcon}
                 />
               </li>
+              {props.currentUserIsModerator && (
+                <li className={classNames("note-dialog__option")}>
+                  <IconButton
+                    onClick={() => {
+                      switchVisibility(props.noteId!, props.hidden);
+                      props.onClose();
+                    }}
+                    direction="right"
+                    label={props.hidden ? "Show" : "Hide"}
+                    icon={props.hidden ? unstackIcon : unstackIcon}
+                  />
+                </li>
+              )}
             </ul>
           </aside>
         </div>
-        {childrenNotes.map((note) => (
+        {props.childrenNotes.map((note) => (
           <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
             <div className="note-dialog__content">
               <blockquote
@@ -113,13 +132,13 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
             </div>
 
             <footer className="note-dialog__footer">
-              {(showAuthors || Parse.User.current()?.id === note.author) && (
+              {(props.showAuthors || Parse.User.current()?.id === note.author) && (
                 <figure className="note-dialog__author">
                   <img className="note-dialog__author-image" src={avatar} alt="User" />
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
-              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, activeVoting)} activeVoting={activeVoting} />
+              <Votes className="note__votes" noteId={note.id!} votes={filterVotes(note.votes, props.activeVoting)} activeVoting={props.activeVoting} />
             </footer>
 
             <aside>
@@ -130,14 +149,27 @@ const NoteDialog = ({noteId, show, text, authorId, isAdmin, authorName, showAuth
                 <li className="note-dialog__option">
                   <IconButton
                     onClick={() => {
-                      onUnstack(note.id!, note.author);
-                      onClose();
+                      onUnstack(note.id!);
+                      props.onClose();
                     }}
                     direction="right"
                     label="Unstack"
                     icon={unstackIcon}
                   />
                 </li>
+                {props.currentUserIsModerator && (
+                  <li className={classNames("note-dialog__option")}>
+                    <IconButton
+                      onClick={() => {
+                        switchVisibility(note.id!, note.hidden);
+                        props.onClose();
+                      }}
+                      direction="right"
+                      label={note.hidden ? "Show" : "Hide"}
+                      icon={note.hidden ? unstackIcon : unstackIcon}
+                    />
+                  </li>
+                )}
               </ul>
             </aside>
           </div>

@@ -119,6 +119,25 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="menu__item-button"
             onClick={() => {
+              store.dispatch(ActionFactory.editUserConfiguration(Parse.User.current()?.id || "", {showHiddenNotes: !state.user?.showHiddenNotes}));
+            }}
+          >
+            <div className="item-button__toggle-container">
+              <div
+                className={classNames(
+                  "item-button__toggle",
+                  {"item-button__toggle--left": state.user?.showHiddenNotes},
+                  {"item-button__toggle--right": !state.user?.showHiddenNotes}
+                )}
+              />
+            </div>
+            <label className="item-button__label">{state.user?.showHiddenNotes ? "Hide" : "Show"} hidden notes</label>
+          </button>
+        </li>
+        <li className="header-menu__item">
+          <button
+            className="menu__item-button"
+            onClick={() => {
               setShowDelete(false);
               setShowQrCode(!showQrCode);
             }}
