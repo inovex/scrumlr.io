@@ -5,12 +5,14 @@ interface AddNoteRequest {
   boardId: string;
   columnId: string;
   text: string;
+  hidden: boolean;
 }
 
 type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
+  hidden: boolean;
 };
 
 type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
@@ -29,6 +31,7 @@ export const initializeNoteFunctions = () => {
         author: user,
         board: Parse.Object.extend("Board").createWithoutData(request.boardId),
         columnId: request.columnId,
+        hidden: request.hidden,
       },
       {
         readRoles: [getMemberRoleName(request.boardId), getAdminRoleName(request.boardId)],
@@ -46,6 +49,11 @@ export const initializeNoteFunctions = () => {
     if (request.note.parentId) {
       if (request.note.parentId === "unstack") note.unset("parent");
       else note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
+    }
+
+    // child notes keep their hidden status, but if the parent note is not visible, neither are the child notes
+    if (request.note.hidden !== undefined) {
+      note.set("hidden", request.note.hidden);
     }
 
     if (request.note.columnId) {
