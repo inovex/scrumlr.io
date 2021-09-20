@@ -6,7 +6,7 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {ToggleButton} from "components/ToggleButton";
+// import {ToggleButton} from "components/ToggleButton";
 
 export interface ColumnProps {
   id: string;
@@ -44,6 +44,7 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
+            {/*
             <div className="columns__header-toggle-space">
               {currentUserIsModerator && (
                 <ToggleButton
@@ -56,6 +57,7 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
                 />
               )}
             </div>
+            */}
           </div>
           <NoteInput columnId={id} />
         </header>
