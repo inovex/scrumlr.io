@@ -60,8 +60,6 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
-  console.log(props.voteConfiguration);
-
   const filteredVotes = filterVotes(props.votes, props.activeVoting, props.voteConfiguration?.showVotesOfOtherUsers);
 
   return (
