@@ -142,10 +142,14 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomCreature}`;
 };
 
-export const getInitials = (name: string): string =>
-  name
-    .split(" ")
-    .map((n) => n[0])
-    .join("");
+export const getInitials = (name: string): string => {
+  if (name.indexOf(" ") > -1) {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
+  }
+  return name.substring(0, 2);
+};
 
 export default getRandomName;

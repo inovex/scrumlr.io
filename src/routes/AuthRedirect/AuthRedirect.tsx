@@ -25,7 +25,6 @@ function AuthRedirect() {
               id_token: res.user.idToken,
               access_token: res.user.accessToken,
             };
-
             user.linkWith("google", {authData}).then(() => {
               user.set("displayName", res.user.name);
               user.save().then(() => {
@@ -47,7 +46,6 @@ function AuthRedirect() {
               id: res.user.id,
               access_token: res.user.accessToken,
             };
-
             user.linkWith("github", {authData}).then(() => {
               user.set("displayName", res.user.name);
               user.save().then(() => {

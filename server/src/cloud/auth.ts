@@ -19,8 +19,6 @@ export interface UserInformation {
 
 export const initializeAuthFunctions = (): void => {
   if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && AUTH_REDIRECT_URI) {
-    console.log("Initializing auth API for provider Google");
-
     // https://github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
     publicApi<{state: string}, string>("GoogleSignIn", async ({state}) => {
       const oauth2Client = getGoogleOAuth2Client();
@@ -52,8 +50,6 @@ export const initializeAuthFunctions = (): void => {
     });
   }
   if (GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET && AUTH_REDIRECT_URI) {
-    console.log("Initializing auth API for provider GitHub");
-
     publicApi<{state: string}, string>(
       "GithubSignIn",
       async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`
@@ -70,11 +66,10 @@ export const initializeAuthFunctions = (): void => {
         {headers: {Accept: "application/json"}}
       );
       const accessToken = accessTokenRequest.data.access_token;
-      const user: any = await axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}});
-
+      const user = await axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}});
       return {
         id: user.data.id,
-        name: user.data.name,
+        name: user.data.login,
         accessToken,
         photoURL: user.data.avatar_url,
       };
