@@ -19,7 +19,7 @@ export const VoteConfigurationAPI = {
    */
   removeVoteConfiguration: (board: string) => callAPI("removeVoteConfiguration", {board}),
   /**
-   * Adds a vote configuration to a board.
+   * Updates a vote configuration.
    *
    * @param voteConfiguration the current vote configuration
    *
