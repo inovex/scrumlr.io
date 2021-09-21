@@ -12,6 +12,7 @@ export const voteConfigurationReducer = (state: VoteConfigurationClientModel = d
      * If we receive a new vote configuration (e.g. we update the vote configuraton or we receive the intitial vote configuration), we need to update our state too.
      */
     case ActionType.InitializeVoteConfiguration:
+    case ActionType.UpdatedVoteConfiguration:
     case ActionType.AddedVoteConfiguration: {
       return action.voteConfiguration;
     }

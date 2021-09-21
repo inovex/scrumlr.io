@@ -9,10 +9,15 @@ describe("vote configuration reducer", () => {
   beforeEach(() => {
     initialState = {
       voteConfiguration: {board: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
+      board: {status: "unknown"},
+      users: {admins: [], basic: [], all: []},
+      notes: [],
+      votes: [],
+      joinRequests: [],
     };
   });
 
-  test("add vote conmfiguration", () => {
+  test("add vote configuration", () => {
     const voteConfiguration = {
       board: "test_board",
       votingIteration: 1,
@@ -20,12 +25,22 @@ describe("vote configuration reducer", () => {
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: true,
     } as VoteConfigurationClientModel;
-    const newState = voteConfigurationReducer(initialState, ActionFactory.addedVoteConfiguration({voteConfiguration}));
-    expect(newState.voteConfiguration).toEqual(voteConfiguration);
+    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.addedVoteConfiguration(voteConfiguration));
+    expect(newState).toEqual(voteConfiguration);
   });
 
-  test("add vote conmfiguration", () => {
-    const newState = voteConfigurationReducer(initialState, ActionFactory.removeVoteConfiguration(null));
-    expect(newState.voteConfiguration).toEqual(initialState.voteConfiguration);
+  test("update vote configuration", () => {
+    const voteConfiguration = {
+      board: "test_board",
+      votingIteration: 1,
+      voteLimit: 5,
+    } as VoteConfigurationClientModel;
+    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.addedVoteConfiguration(voteConfiguration));
+    expect(newState).toEqual(voteConfiguration);
+  });
+
+  test("remove vote configuration", () => {
+    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.removeVoteConfiguration(""));
+    expect(newState).toEqual(initialState.voteConfiguration);
   });
 });

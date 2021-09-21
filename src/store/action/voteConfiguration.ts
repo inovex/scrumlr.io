@@ -5,6 +5,8 @@ export const VoteConfigurationActionType = {
   AddedVoteConfiguration: "@@SCRUMLR/addedVoteConfiguration" as const,
   RemoveVoteConfiguration: "@@SCRUMLR/removeVoteConfiguration" as const,
   RemovedVoteConfiguration: "@@SCRUMLR/removedVoteConfiguration" as const,
+  UpdateVoteConfiguration: "@@SCRUMLR/updateVoteConfiguration" as const,
+  UpdatedVoteConfiguration: "@@SCRUMLR/updatedVoteConfiguration" as const,
   InitializeVoteConfiguration: "@@SCRUMLR/initializeVoteConfiguration" as const,
 };
 
@@ -46,6 +48,24 @@ export const VoteConfigurationActionFactory = {
     voteConfiguration,
   }),
   /**
+   * Creates an action which should be dispatched when the user wants to update a vote configuration.
+   *
+   * @param voteConfiguration the current updated vote configuration
+   */
+  updateVoteConfiguration: (voteConfiguration: VoteConfiguration) => ({
+    type: VoteConfigurationActionType.UpdateVoteConfiguration,
+    voteConfiguration,
+  }),
+  /**
+   * Creates an action which should be dispatched when a vote configuration was updated on the server.
+   *
+   * @param voteConfiguration the vote configuration updated on the server
+   */
+  updatedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+    type: VoteConfigurationActionType.UpdatedVoteConfiguration,
+    voteConfiguration,
+  }),
+  /**
    * Creates an action which should be dispatched when the server returns the las vote configuration
    *
    * @param voteConfiguration current vote configuration (e.g. a user can join during voting phase)
@@ -61,4 +81,6 @@ export type VoteConfigurationReduxAction =
   | ReturnType<typeof VoteConfigurationActionFactory.addedVoteConfiguration>
   | ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>
   | ReturnType<typeof VoteConfigurationActionFactory.removedVoteConfiguration>
-  | ReturnType<typeof VoteConfigurationActionFactory.initializeVoteConfiguration>;
+  | ReturnType<typeof VoteConfigurationActionFactory.initializeVoteConfiguration>
+  | ReturnType<typeof VoteConfigurationActionFactory.updateVoteConfiguration>
+  | ReturnType<typeof VoteConfigurationActionFactory.updatedVoteConfiguration>;
