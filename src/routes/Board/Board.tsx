@@ -10,7 +10,7 @@ function Board() {
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes.filter(
-      (note) => !applicationState.board.data?.showNotesOfOtherUsers || (applicationState.board.data?.showNotesOfOtherUsers && Parse.User.current()?.id === note.author)
+      (note) => applicationState.board.data?.showNotesOfOtherUsers || (!applicationState.board.data?.showNotesOfOtherUsers && Parse.User.current()?.id === note.author)
     ),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
