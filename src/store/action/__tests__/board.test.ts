@@ -85,10 +85,11 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.editBoard({name: "Name", showAuthors: true});
+      const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", showAuthors: true});
       expect(action).toEqual({
         type: "@@SCRUMLR/editBoard",
         board: {
+          id: "test_board",
           name: "Name",
           showAuthors: true,
         },
@@ -132,8 +133,8 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.deleteBoard();
-      expect(action).toEqual({type: "@@SCRUMLR/deleteBoard"});
+      const action = BoardActionFactory.deleteBoard("test_board");
+      expect(action).toEqual({type: "@@SCRUMLR/deleteBoard", boardId: "test_board"});
     });
   });
 
@@ -197,6 +198,25 @@ describe("board actions", () => {
         type: "@@SCRUMLR/pendingBoardAccessConfirmation",
         requestReference: "requestReference",
       });
+    });
+  });
+
+  describe("cancel voting", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.cancelVoting>, BoardReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.cancelVoting>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = BoardActionFactory.cancelVoting("test_board");
+      expect(action).toEqual({type: "@@SCRUMLR/cancelVoting", board: "test_board"});
     });
   });
 });

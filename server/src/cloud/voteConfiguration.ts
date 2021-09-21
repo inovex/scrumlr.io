@@ -58,7 +58,7 @@ export const initializeVoteConfigurationFunctions = () => {
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
     // Voting iteraion already incremented
-    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", board.get("votingIteration")).first();
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", await board.get("votingIteration")).first();
 
     await voteConfiguration.destroy({useMasterKey: true});
 
