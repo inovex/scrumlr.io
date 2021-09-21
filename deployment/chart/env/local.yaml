@@ -1,0 +1,6 @@
+frontend:
+  config:
+    REACT_APP_SERVER_API_URL: http://localhost/api
+    REACT_APP_LIVEQUERY_URL: ws://localhost/ws
+    SKIP_PREFLIGHT_CHECK: "true"
+

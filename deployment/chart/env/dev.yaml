@@ -1,5 +1,11 @@
 frontend:
-  config:
-    REACT_APP_SERVER_API_URL: http://localhost/api
-    REACT_APP_LIVEQUERY_URL: ws://localhost/ws
-    SKIP_PREFLIGHT_CHECK: "true"
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
+livequery:
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
+  imagePullPolicy: IfNotPresent
+server:
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
+  imagePullPolicy: IfNotPresent
+dashboard:
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-dashboard:latest
+
