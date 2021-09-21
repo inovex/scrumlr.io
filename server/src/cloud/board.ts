@@ -339,6 +339,11 @@ export const initializeBoardFunctions = () => {
     const joinRequests = await joinRequestQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
 
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    joinRequestQuery.equalTo("board", board);
+    const voteConfigurations = await voteConfigurationQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(voteConfigurations, {useMasterKey: true});
+
     const adminRoleQuery = new Parse.Query(Parse.Role);
     adminRoleQuery.equalTo("name", `admin_of_${request.id}`);
     const adminRoles = await adminRoleQuery.findAll({useMasterKey: true});
@@ -378,5 +383,37 @@ export const initializeBoardFunctions = () => {
 
     await removeFromModerators(Parse.User.createWithoutData(request.userId), request.boardId);
     return {status: "Success", description: "User was successfully removed from the list of moderators"};
+  });
+
+  /**
+   * Cancel voting
+   */
+  api<{board: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
+    await requireValidBoardAdmin(user, request.board);
+    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.board}' does not exist`};
+    }
+
+    const votingIteration = board.get("votingIteration");
+
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    voteConfigurationQuery.equalTo("board", board);
+    // Voting iteraion already incremented
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first();
+    await voteConfiguration.destroy({useMasterKey: true});
+
+    const voteQuery = new Parse.Query("Vote");
+    voteQuery.equalTo("board", board);
+    voteQuery.equalTo("votingIteration", votingIteration);
+    const votes = await voteQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(votes, {useMasterKey: true});
+
+    board.set("voting", false);
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Your voting phase was canceled"};
   });
 };

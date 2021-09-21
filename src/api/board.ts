@@ -35,4 +35,12 @@ export const BoardAPI = {
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
   deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
+  /**
+   * Cancel the current voting phase.
+   *
+   * @param board id
+   *
+   * @returns 'true' if the operation succeeded or throws an error otherwise
+   */
+  cancelVoting: (board: string) => callAPI("cancelVoting", {board}),
 };

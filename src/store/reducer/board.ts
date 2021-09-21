@@ -135,6 +135,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "rejected",
       };
     }
+    case ActionType.CancelVoting: {
+      return state;
+    }
     default: {
       return state;
     }

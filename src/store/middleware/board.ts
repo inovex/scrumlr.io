@@ -9,6 +9,7 @@ import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
+import {Toast} from "utils/Toast";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -269,6 +270,13 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
     console.log(reponse);
     if (reponse) {
       document.location.pathname = "/new";
+    }
+  }
+
+  if (action.type === ActionType.CancelVoting) {
+    const response = (await API.cancelVoting(action.board)) as {status: string; description: string};
+    if (response.status === "Error") {
+      Toast.error(response.description);
     }
   }
 };

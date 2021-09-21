@@ -44,7 +44,7 @@ export const initializeVoteConfigurationFunctions = () => {
   });
 
   /**
-   * Cancel voting phases needs also to remove the vote configurations with the corresponding voting iteration.
+   * Remove vote configurtaions for each voting iteration.
    */
   api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.board);

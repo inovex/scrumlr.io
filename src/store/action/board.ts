@@ -16,6 +16,7 @@ export const BoardActionType = {
   PermittedBoardAccess: "@@SCRUMLR/permittedBoardAccess" as const,
   RejectedBoardAccess: "@@SCRUMLR/rejectedBoardAccess" as const,
   PendingBoardAccessConfirmation: "@@SCRUMLR/pendingBoardAccessConfirmation" as const,
+  CancelVoting: "@@SCRUMLR/cancelVoting" as const,
 };
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -94,6 +95,15 @@ export const BoardActionFactory = {
     type: BoardActionType.PendingBoardAccessConfirmation,
     requestReference,
   }),
+  /**
+   * Creates an action which should be dispatched when the current voting phase was canceled.
+   *
+   * @param requestReference the reference id on the join request
+   */
+  cancelVoting: (board: string) => ({
+    type: BoardActionType.CancelVoting,
+    board,
+  }),
 };
 
 export type BoardReduxAction =
@@ -105,4 +115,5 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.deleteBoard>
   | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
   | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>
-  | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>;
+  | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
+  | ReturnType<typeof BoardActionFactory.cancelVoting>;
