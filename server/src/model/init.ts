@@ -28,7 +28,6 @@ const addInitialNoteSchema = async () => {
   schema.addString("columnId", {required: true});
   schema.addPointer("author", "_User", {required: true});
   schema.addString("text", {required: true});
-  schema.addBoolean("hidden", {required: true, defaultValue: false});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
