@@ -3,14 +3,12 @@ import {api} from "./util";
 
 /**
  * @param showHiddenColumns Allows moderators to toggle the display of hidden columns (visible only to themselves)
- * @param showHiddenNotes Allows moderators to toggle the display of hidden columns (visible only to themselves)
  */
 type EditUserConfigurationRequest = {
   userId: string;
   boardId: string;
   editUserConfigurationRequest: {
     showHiddenColumns: boolean;
-    showHiddenNotes: boolean;
   };
 };
 
@@ -23,10 +21,6 @@ export const initializeUserFunctions = () => {
 
     if (request.editUserConfigurationRequest.showHiddenColumns !== undefined) {
       user.set("showHiddenColumns", request.editUserConfigurationRequest.showHiddenColumns);
-    }
-
-    if (request.editUserConfigurationRequest.showHiddenNotes !== undefined) {
-      user.set("showHiddenNotes", request.editUserConfigurationRequest.showHiddenNotes);
     }
 
     user.save(null, {useMasterKey: true});

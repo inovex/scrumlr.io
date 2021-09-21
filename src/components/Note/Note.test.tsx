@@ -69,12 +69,10 @@ const createNote = (text: string, authorId: string, showAuthors: boolean) => {
           },
         ]}
         childrenNotes={[
-          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], hidden: false},
-          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], hidden: false},
+          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
+          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
         ]}
         authorName=""
-        hidden={false}
-        currentUserIsModerator={false}
       />
     </Provider>
   );

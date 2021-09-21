@@ -29,8 +29,6 @@ interface NoteDialogProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
-  hidden: boolean;
-  currentUserIsModerator: boolean;
 }
 
 const NoteDialog = (props: NoteDialogProps) => {
