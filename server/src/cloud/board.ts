@@ -397,12 +397,12 @@ export const initializeBoardFunctions = () => {
       return {status: "Error", description: `Board '${request.board}' does not exist`};
     }
 
-    const votingIteration = board.get("votingIteration");
+    const votingIteration = await board.get("votingIteration");
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
     voteConfigurationQuery.equalTo("board", board);
     // Voting iteraion already incremented
-    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first();
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
     await voteConfiguration.destroy({useMasterKey: true});
 
     const voteQuery = new Parse.Query("Vote");
@@ -411,7 +411,8 @@ export const initializeBoardFunctions = () => {
     const votes = await voteQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(votes, {useMasterKey: true});
 
-    board.set("voting", false);
+    // add new value canceled?
+    board.set("voting", "disabled");
     await board.save(null, {useMasterKey: true});
 
     return {status: "Success", description: "Your voting phase was canceled"};
