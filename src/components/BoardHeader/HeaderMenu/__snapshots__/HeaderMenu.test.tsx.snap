@@ -98,28 +98,7 @@ exports[`HeaderMenu should render correctly on open 1`] = `
                   class="item-button__label"
                 >
                   Show
-                   hidden columns
-                </label>
-              </button>
-            </li>
-            <li
-              class="header-menu__item"
-            >
-              <button
-                class="menu__item-button"
-              >
-                <div
-                  class="item-button__toggle-container"
-                >
-                  <div
-                    class="item-button__toggle item-button__toggle--right"
-                  />
-                </div>
-                <label
-                  class="item-button__label"
-                >
-                  Show
-                   hidden notes
+                   columns
                 </label>
               </button>
             </li>

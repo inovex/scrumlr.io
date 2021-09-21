@@ -56,10 +56,6 @@ const NoteDialog = (props: NoteDialogProps) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
-  const switchVisibility = (id: string, hidden: boolean) => {
-    store.dispatch(ActionFactory.editNote({id, hidden: !hidden}));
-  };
-
   return (
     <Portal onClose={props.onClose} darkBackground>
       <div className={`note-dialog ${getColorClassName(props.columnColor as Color)}`}>
@@ -100,19 +96,6 @@ const NoteDialog = (props: NoteDialogProps) => {
                   icon={deleteIcon}
                 />
               </li>
-              {props.currentUserIsModerator && (
-                <li className={classNames("note-dialog__option")}>
-                  <IconButton
-                    onClick={() => {
-                      switchVisibility(props.noteId!, props.hidden);
-                      props.onClose();
-                    }}
-                    direction="right"
-                    label={props.hidden ? "Show" : "Hide"}
-                    icon={props.hidden ? unstackIcon : unstackIcon}
-                  />
-                </li>
-              )}
             </ul>
           </aside>
         </div>
@@ -157,19 +140,6 @@ const NoteDialog = (props: NoteDialogProps) => {
                     icon={unstackIcon}
                   />
                 </li>
-                {props.currentUserIsModerator && (
-                  <li className={classNames("note-dialog__option")}>
-                    <IconButton
-                      onClick={() => {
-                        switchVisibility(note.id!, note.hidden);
-                        props.onClose();
-                      }}
-                      direction="right"
-                      label={note.hidden ? "Show" : "Hide"}
-                      icon={note.hidden ? unstackIcon : unstackIcon}
-                    />
-                  </li>
-                )}
               </ul>
             </aside>
           </div>

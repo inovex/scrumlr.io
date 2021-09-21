@@ -112,26 +112,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
                 )}
               />
             </div>
-            <label className="item-button__label">{state.user?.showHiddenColumns ? "Hide" : "Show"} hidden columns</label>
-          </button>
-        </li>
-        <li className="header-menu__item">
-          <button
-            className="menu__item-button"
-            onClick={() => {
-              store.dispatch(ActionFactory.editUserConfiguration(Parse.User.current()?.id || "", {showHiddenNotes: !state.user?.showHiddenNotes}));
-            }}
-          >
-            <div className="item-button__toggle-container">
-              <div
-                className={classNames(
-                  "item-button__toggle",
-                  {"item-button__toggle--left": state.user?.showHiddenNotes},
-                  {"item-button__toggle--right": !state.user?.showHiddenNotes}
-                )}
-              />
-            </div>
-            <label className="item-button__label">{state.user?.showHiddenNotes ? "Hide" : "Show"} hidden notes</label>
+            <label className="item-button__label">{state.user?.showHiddenColumns ? "Hide" : "Show"} columns</label>
           </button>
         </li>
         <li className="header-menu__item">
