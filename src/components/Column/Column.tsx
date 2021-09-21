@@ -6,7 +6,6 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
-// import {ToggleButton} from "components/ToggleButton";
 
 export interface ColumnProps {
   id: string;
