@@ -99,6 +99,7 @@ export type EditableBoardAttributes = {
   joinConfirmationRequired?: boolean;
   voting?: "active" | "disabled";
   votingIteration: number;
+  showNotesOfOtherUsers: boolean;
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -300,6 +301,9 @@ export const initializeBoardFunctions = () => {
         board.set("votingIteration", board.get("votingIteration") + 1);
       }
       board.set("voting", request.board.voting);
+    }
+    if (request.board.showNotesOfOtherUsers !== undefined) {
+      board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
     }
 
     await board.save(null, {useMasterKey: true});

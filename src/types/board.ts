@@ -21,6 +21,7 @@ export interface BoardServerModel {
   voting: "active" | "disabled";
   votingIteration: number;
   showVotesOfOtherUsers: boolean;
+  showNotesOfOtherUsers: boolean;
   voteLimit: number;
   createdAt: Date;
   updatedAt: Date;
@@ -39,6 +40,7 @@ export type EditableBoardAttributes = {
   voting: "active" | "disabled";
   votingIteration: number;
   showVotesOfOtherUsers: boolean;
+  showNotesOfOtherUsers: boolean;
   voteLimit: number;
 };
 
@@ -77,6 +79,7 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   voting: board.voting,
   votingIteration: board.votingIteration,
   showVotesOfOtherUsers: board.showVotesOfOtherUsers,
+  showNotesOfOtherUsers: board.showNotesOfOtherUsers,
   voteLimit: board.voteLimit,
   createdAt: board.createdAt,
   updatedAt: board.updatedAt,

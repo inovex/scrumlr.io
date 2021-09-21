@@ -97,6 +97,25 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="menu__item-button"
             onClick={() => {
+              store.dispatch(ActionFactory.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
+            }}
+          >
+            <div className="item-button__toggle-container">
+              <div
+                className={classNames(
+                  "item-button__toggle",
+                  {"item-button__toggle--left": state.board!.showNotesOfOtherUsers},
+                  {"item-button__toggle--right": !state.board!.showNotesOfOtherUsers}
+                )}
+              />
+            </div>
+            <label className="item-button__label">{state.board!.showNotesOfOtherUsers ? "Hide" : "Show"} notes of other users</label>
+          </button>
+        </li>
+        <li className="header-menu__item">
+          <button
+            className="menu__item-button"
+            onClick={() => {
               setShowDelete(false);
               setShowQrCode(!showQrCode);
             }}

@@ -9,7 +9,9 @@ import {useAppSelector} from "store";
 function Board() {
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
-    notes: applicationState.notes,
+    notes: applicationState.notes.filter(
+      (note) => !applicationState.board.data?.showNotesOfOtherUsers || (applicationState.board.data?.showNotesOfOtherUsers && Parse.User.current()?.id === note.author)
+    ),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
     votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
