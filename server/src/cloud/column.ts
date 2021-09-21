@@ -15,13 +15,13 @@ export interface AddColumnRequest {
 
 export interface DeleteColumnRequest {
   boardId: string;
-  id: string;
+  columnId: string;
 }
 
 export interface EditColumnRequest {
   boardId: string;
   editColumnRequest: {
-    id: string;
+    columnId: string;
     name?: string;
     color?: Color;
     hidden?: boolean;
@@ -66,10 +66,10 @@ export const initializeColumnFunctions = () => {
     }
 
     const columns = board.get("columns");
-    delete columns[request.id];
+    delete columns[request.columnId];
     await board.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: `Column ${request.id} deleted`};
+    return {status: "Success", description: `Column ${request.columnId} deleted`};
   });
 
   api<EditColumnRequest, {status: string; description: string}>("editColumn", async (user, request) => {
@@ -82,23 +82,23 @@ export const initializeColumnFunctions = () => {
     }
     const columns = board.get("columns");
     if (request.editColumnRequest.name) {
-      columns[request.editColumnRequest.id].name = request.editColumnRequest.name;
+      columns[request.editColumnRequest.columnId].name = request.editColumnRequest.name;
     }
 
     if (request.editColumnRequest.color) {
       if (isOfTypeColor(request.editColumnRequest.color)) {
-        columns[request.editColumnRequest.id].color = request.editColumnRequest.color;
+        columns[request.editColumnRequest.columnId].color = request.editColumnRequest.color;
       } else {
         throw new Error(`specified column color '${request.editColumnRequest.color}' is not allowed`);
       }
     }
 
     if (request.editColumnRequest.hidden !== undefined) {
-      columns[request.editColumnRequest.id].hidden = request.editColumnRequest.hidden;
+      columns[request.editColumnRequest.columnId].hidden = request.editColumnRequest.hidden;
     }
 
     await board.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: `Column ${request.editColumnRequest.id} edited`};
+    return {status: "Success", description: `Column ${request.editColumnRequest.columnId} edited`};
   });
 };

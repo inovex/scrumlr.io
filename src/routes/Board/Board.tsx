@@ -44,9 +44,9 @@ function Board() {
           {state.board
             .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && currentUser?.showHiddenColumns))
             .map((column) => (
-              <Column key={column.id} id={column.id!} name={column.name} hidden={column.hidden} currentUserIsModerator={currentUserIsModerator} color={column.color}>
+              <Column key={column.columnId} id={column.columnId!} name={column.name} hidden={column.hidden} currentUserIsModerator={currentUserIsModerator} color={column.color}>
                 {state.notes
-                  .filter((note) => note.columnId === column.id)
+                  .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
                   .filter((note) => !note.hidden || (currentUserIsModerator && currentUser?.showHiddenNotes))
                   .map((note) => (
@@ -58,7 +58,7 @@ function Board() {
                       text={note.text}
                       authorId={note.author}
                       authorName={state.users.all.filter((user) => user.id === note.author)[0]?.displayName}
-                      columnId={column.id!}
+                      columnId={column.columnId!}
                       columnName={column.name}
                       columnColor={column.color}
                       childrenNotes={state.notes

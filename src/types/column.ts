@@ -6,7 +6,7 @@ export type EditableColumnAttributes = {
   hidden: boolean;
 };
 
-export type EditColumnRequest = {id: string} & Partial<EditableColumnAttributes>;
+export type EditColumnRequest = {columnId: string} & Partial<EditableColumnAttributes>;
 export type AddColumnRequest = EditableColumnAttributes;
 
 export interface ColumnServerModel {
@@ -18,7 +18,7 @@ export interface ColumnServerModel {
 }
 
 export interface ColumnClientModel {
-  id?: string;
+  columnId?: string;
   name: string;
   color: Color;
   hidden: boolean;

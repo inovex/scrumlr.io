@@ -54,7 +54,7 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   columns: Object.keys(board.columns).map(
     (columnId) =>
       ({
-        id: columnId,
+        columnId,
         name: board.columns[columnId].name,
         color: board.columns[columnId].color as Color,
         hidden: board.columns[columnId].hidden,
