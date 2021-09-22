@@ -277,7 +277,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   }
 
   if (action.type === ActionType.CancelVoting) {
-    const response = (await API.cancelVoting(action.board)) as {status: string; description: string};
+    const response = (await API.cancelVoting(action.boardId)) as {status: string; description: string};
     if (response.status === "Error") {
       Toast.error(response.description);
     }
