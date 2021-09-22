@@ -15,7 +15,7 @@ export interface VoteConfigurationServerModel extends Parse.Object {
  * The representation of a vote configuration on the client.
  */
 export interface VoteConfigurationClientModel {
-  board?: string;
+  boardId?: string;
   votingIteration: number;
   voteLimit: number;
   allowMultipleVotesPerNote: boolean;
@@ -31,7 +31,7 @@ type EditableVoteConfigurationAttributes = {
 export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
 
 export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
-  board: voteConfiguration.get("board").id,
+  boardId: voteConfiguration.get("board").id,
   votingIteration: voteConfiguration.get("votingIteration"),
   voteLimit: voteConfiguration.get("voteLimit"),
   allowMultipleVotesPerNote: voteConfiguration.get("allowMultipleVotesPerNote"),

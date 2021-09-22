@@ -22,11 +22,11 @@ describe("vote comfiguration actions", () => {
     });
 
     test("created action", () => {
-      const action = VoteConfigurationActionFactory.addVoteConfiguration({board: "test_board", voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true});
+      const action = VoteConfigurationActionFactory.addVoteConfiguration({boardId: "test_board", voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true});
       expect(action).toEqual({
         type: "@@SCRUMLR/addVoteConfiguration",
         voteConfiguration: {
-          board: "test_board",
+          boardId: "test_board",
           voteLimit: 5,
           allowMultipleVotesPerNote: true,
           showVotesOfOtherUsers: true,
@@ -52,7 +52,7 @@ describe("vote comfiguration actions", () => {
       const action = VoteConfigurationActionFactory.removeVoteConfiguration("test_board");
       expect(action).toEqual({
         type: "@@SCRUMLR/removeVoteConfiguration",
-        board: "test_board",
+        boardId: "test_board",
       });
     });
   });
@@ -72,7 +72,7 @@ describe("vote comfiguration actions", () => {
 
     test("created action", () => {
       const action = VoteConfigurationActionFactory.initializeVoteConfiguration({
-        board: "test_board",
+        boardId: "test_board",
         votingIteration: 1,
         voteLimit: 5,
         allowMultipleVotesPerNote: true,
@@ -81,7 +81,7 @@ describe("vote comfiguration actions", () => {
       expect(action).toEqual({
         type: "@@SCRUMLR/initializeVoteConfiguration",
         voteConfiguration: {
-          board: "test_board",
+          boardId: "test_board",
           votingIteration: 1,
           voteLimit: 5,
           allowMultipleVotesPerNote: true,

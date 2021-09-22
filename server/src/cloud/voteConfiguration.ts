@@ -7,34 +7,34 @@ export interface EditableVoteConfigurationAttributes {
   showVotesOfOtherUsers: boolean;
 }
 
-export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
+export type VoteConfiguration = {boardId: string} & Partial<EditableVoteConfigurationAttributes>;
 
 export const initializeVoteConfigurationFunctions = () => {
   /**
    * Add vote configurtaions for each voting iteration.
    */
   api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.voteConfiguration.board);
-    const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
+    await requireValidBoardAdmin(user, request.voteConfiguration.boardId);
+    const board = await new Parse.Query("Board").get(request.voteConfiguration.boardId, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.voteConfiguration.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.voteConfiguration.boardId}' does not exist`};
     }
 
     // Voting iteraion will incremented after pressing the start voting phase button
     const voteConfiguration = newObject(
       "VoteConfiguration",
       {
-        board: Parse.Object.extend("Board").createWithoutData(request.voteConfiguration.board),
+        board: Parse.Object.extend("Board").createWithoutData(request.voteConfiguration.boardId),
         votingIteration: (await board.get("votingIteration")) + 1,
         voteLimit: request.voteConfiguration.voteLimit,
         allowMultipleVotesPerNote: request.voteConfiguration.allowMultipleVotesPerNote,
         showVotesOfOtherUsers: request.voteConfiguration.showVotesOfOtherUsers,
       },
       {
-        readRoles: [getMemberRoleName(request.voteConfiguration.board), getAdminRoleName(request.voteConfiguration.board)],
-        writeRoles: [getAdminRoleName(request.voteConfiguration.board)],
+        readRoles: [getMemberRoleName(request.voteConfiguration.boardId), getAdminRoleName(request.voteConfiguration.boardId)],
+        writeRoles: [getAdminRoleName(request.voteConfiguration.boardId)],
       }
     );
 
@@ -46,13 +46,13 @@ export const initializeVoteConfigurationFunctions = () => {
   /**
    * Remove vote configurtaions for each voting iteration.
    */
-  api<{board: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+  api<{boardId: string}, {status: string; description: string}>("removeVoteConfiguration", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
@@ -69,12 +69,12 @@ export const initializeVoteConfigurationFunctions = () => {
    * Update vote configurtaions for each voting iteration.
    */
   api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("updateVoteConfiguration", async (user, request) => {
-    await requireValidBoardAdmin(user, request.voteConfiguration.board);
-    const board = await new Parse.Query("Board").get(request.voteConfiguration.board, {useMasterKey: true});
+    await requireValidBoardAdmin(user, request.voteConfiguration.boardId);
+    const board = await new Parse.Query("Board").get(request.voteConfiguration.boardId, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.voteConfiguration.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.voteConfiguration.boardId}' does not exist`};
     }
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");

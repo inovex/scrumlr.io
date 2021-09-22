@@ -8,7 +8,7 @@ describe("vote configuration reducer", () => {
 
   beforeEach(() => {
     initialState = {
-      voteConfiguration: {board: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
+      voteConfiguration: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
       board: {status: "unknown"},
       users: {admins: [], basic: [], all: []},
       notes: [],
@@ -19,7 +19,7 @@ describe("vote configuration reducer", () => {
 
   test("add vote configuration", () => {
     const voteConfiguration = {
-      board: "test_board",
+      boardId: "test_board",
       votingIteration: 1,
       voteLimit: 5,
       allowMultipleVotesPerNote: false,
@@ -31,7 +31,7 @@ describe("vote configuration reducer", () => {
 
   test("update vote configuration", () => {
     const voteConfiguration = {
-      board: "test_board",
+      boardId: "test_board",
       votingIteration: 1,
       voteLimit: 5,
     } as VoteConfigurationClientModel;

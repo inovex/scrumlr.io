@@ -32,11 +32,11 @@ export const VoteConfigurationActionFactory = {
   /**
    * Creates an action which should be dispatched when the user/admin wants to remove a vote configuration.
    *
-   * @param board the current board id
+   * @param boardId the current board id
    */
-  removeVoteConfiguration: (board: string) => ({
+  removeVoteConfiguration: (boardId: string) => ({
     type: VoteConfigurationActionType.RemoveVoteConfiguration,
-    board,
+    boardId,
   }),
   /**
    * Creates an action which should be dispatched when a new vote configuration was removed on the server.
