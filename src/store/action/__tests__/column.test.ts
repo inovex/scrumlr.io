@@ -1,7 +1,7 @@
 import {AddColumnRequest} from "types/column";
-import {AssertTypeEqual} from "../../../testUtils";
-import {ColumnActionFactory, ColumnActionType, ColumnReduxAction} from "../column";
-import {ReduxAction} from "../index";
+import {AssertTypeEqual} from "testUtils";
+import {ColumnActionFactory, ColumnActionType, ColumnReduxAction} from "store/action/column";
+import {ReduxAction} from "store/action";
 
 describe("column actions", () => {
   test("equal number of action types and factory functions", () => {

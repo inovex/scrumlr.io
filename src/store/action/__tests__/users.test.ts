@@ -1,72 +1,72 @@
-import {UsersActionFactory, UsersActionType, UsersReduxAction} from "../users";
-import {ReduxAction} from "../index";
-import {UserClientModel} from "../../../types/user";
-import {AssertTypeEqual} from "../../../testUtils";
+import {UsersActionFactory, UsersActionType, UsersReduxAction} from "store/action/users";
+import {ReduxAction} from "store/action";
+import {UserClientModel} from "types/user";
+import {AssertTypeEqual} from "testUtils";
 
-describe('users actions', () => {
-    test('equal number of action types and factory functions', () => {
-        expect(Object.keys(UsersActionType).length).toEqual(Object.keys(UsersActionFactory).length);
+describe("users actions", () => {
+  test("equal number of action types and factory functions", () => {
+    expect(Object.keys(UsersActionType).length).toEqual(Object.keys(UsersActionFactory).length);
+  });
+
+  describe("set users", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, UsersReduxAction> = true;
+      expect(assertion).toBe(true);
     });
 
-    describe('set users', () => {
-        test('type is listed in users redux actions', () => {
-            // testing type equality here will not report an error at runtime but cause problems with typescript
-            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, UsersReduxAction> = true;
-            expect(assertion).toBe(true);
-        });
-
-        test('type is listed in general redux actions', () => {
-            // testing type equality here will not report an error at runtime but cause problems with typescript
-            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, ReduxAction> = true;
-            expect(assertion).toBe(true);
-        });
-
-        test('created action', () => {
-            const user: UserClientModel = {
-                id: 'id',
-                displayName: 'John Doe',
-                admin: true,
-                updatedAt: new Date('2020-11-30'),
-                createdAt: new Date('2020-11-30')
-            };
-            const action = UsersActionFactory.setUsers([ user ], true);
-
-            expect(action).toEqual({
-                type: '@@SCRUMLR/setUsers',
-                users: [ user ],
-                admin: true
-            });
-        });
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, ReduxAction> = true;
+      expect(assertion).toBe(true);
     });
 
-    describe('set user status', () => {
-        test('type is listed in users redux actions', () => {
-            // testing type equality here will not report an error at runtime but cause problems with typescript
-            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, UsersReduxAction> = true;
-            expect(assertion).toBe(true);
-        });
+    test("created action", () => {
+      const user: UserClientModel = {
+        id: "id",
+        displayName: "John Doe",
+        admin: true,
+        updatedAt: new Date("2020-11-30"),
+        createdAt: new Date("2020-11-30"),
+      };
+      const action = UsersActionFactory.setUsers([user], true);
 
-        test('type is listed in general redux actions', () => {
-            // testing type equality here will not report an error at runtime but cause problems with typescript
-            const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, ReduxAction> = true;
-            expect(assertion).toBe(true);
-        });
-
-        test('created action', () => {
-            const user: UserClientModel = {
-                id: 'id',
-                displayName: 'John Doe',
-                admin: true,
-                updatedAt: new Date('2020-11-30'),
-                createdAt: new Date('2020-11-30')
-            };
-            const action = UsersActionFactory.setUserStatus(user.id, true);
-
-            expect(action).toEqual({
-                type: '@@SCRUMLR/setUserStatus',
-                userId: user.id,
-                status: true
-            });
-        });
+      expect(action).toEqual({
+        type: "@@SCRUMLR/setUsers",
+        users: [user],
+        admin: true,
+      });
     });
+  });
+
+  describe("set user status", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, UsersReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserStatus>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const user: UserClientModel = {
+        id: "id",
+        displayName: "John Doe",
+        admin: true,
+        updatedAt: new Date("2020-11-30"),
+        createdAt: new Date("2020-11-30"),
+      };
+      const action = UsersActionFactory.setUserStatus(user.id, true);
+
+      expect(action).toEqual({
+        type: "@@SCRUMLR/setUserStatus",
+        userId: user.id,
+        status: true,
+      });
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import {Color} from "../constants/colors";
+import {Color} from "constants/colors";
 
 export type EditableColumnAttributes = {
   name: string;
