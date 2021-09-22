@@ -79,12 +79,12 @@ livequery:
   livenessProbe:
     tcpSocket:
       port: livequeryport
-    initialDelaySeconds: 10
+    initialDelaySeconds: 40
     periodSeconds: 20
   readinessProbe:
     tcpSocket:
       port: livequeryport
-    initialDelaySeconds: 10
+    initialDelaySeconds: 30
     periodSeconds: 10
   config:
     SCRUMLR_OPERATION_MODE: "livequery"
@@ -117,7 +117,7 @@ server:
     httpGet:
       path: /api/health
       port: 4000
-    initialDelaySeconds: 30
+    initialDelaySeconds: 40
     periodSeconds: 10
     timeoutSeconds: 5
   readinessProbe:
@@ -127,11 +127,15 @@ server:
       httpHeaders:
                 - name: X-Parse-Application-Id
                   value: Scrumlr
-    initialDelaySeconds: 10
+    initialDelaySeconds: 30
     periodSeconds: 5
     timeoutSeconds: 5
 mongodb:
   fullnameOverride: scrumlr-database
+  image:
+    pullPolicy: Always
+  persistence:
+    enabled: false
   auth:
     enabled: false
   labels: { 

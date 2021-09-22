@@ -21,10 +21,7 @@ spec:
           imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
           ports:
             - name: {{ .Values.frontend.portName }}
-              containerPort: {{.Values.frontend.hostPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "scrumlr-fullname" .Values.frontend }}
+              containerPort: {{.Values.frontend.hostPort }} 
           {{- if .Values.frontend.livenessProbe }}
           livenessProbe:
           {{- toYaml .Values.frontend.livenessProbe | nindent 12 }}
