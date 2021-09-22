@@ -1,7 +1,7 @@
 import {ApplicationState} from "types/store";
 import {VoteConfigurationClientModel} from "types/voteConfiguration";
-import {voteConfigurationReducer} from "../voteConfiguration";
-import {ActionFactory} from "../../action";
+import {voteConfigurationReducer} from "store/reducer/voteConfiguration";
+import {ActionFactory} from "store/action";
 
 describe("vote configuration reducer", () => {
   let initialState: ApplicationState;

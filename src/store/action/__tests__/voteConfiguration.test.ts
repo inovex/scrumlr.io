@@ -1,7 +1,7 @@
 import {AssertTypeEqual} from "testUtils";
 import {VoteConfigurationClientModel} from "types/voteConfiguration";
-import {ReduxAction} from "../index";
-import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "../voteConfiguration";
+import {ReduxAction} from "store/action";
+import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "store/action/voteConfiguration";
 
 describe("vote comfiguration actions", () => {
   test("equal number of action types and factory functions", () => {
