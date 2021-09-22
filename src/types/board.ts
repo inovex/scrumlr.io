@@ -16,7 +16,7 @@ export interface BoardServerModel {
   encryptedContent: boolean;
   showContentOfOtherUsers: boolean;
   showAuthors: boolean;
-  timerUTCEndTime: Date;
+  timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;
@@ -34,7 +34,7 @@ export type EditableBoardAttributes = {
   encryptedContent: boolean;
   showContentOfOtherUsers: boolean;
   showAuthors: boolean;
-  timerUTCEndTime: Date;
+  timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;

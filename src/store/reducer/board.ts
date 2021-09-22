@@ -3,7 +3,6 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
-import {callAPI} from "api/callApi";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -91,25 +90,10 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         }
       }
 
-      // let boardTimerUTCEndTime;
-      if (action.board.timerUTCEndTime && action.board.timerUTCEndTime !== state.data?.timerUTCEndTime) {
-        callAPI("getServerTime", {}).then((response) => {
-          const serverTimeInMilliseconds = Date.parse(response as string);
-          const browserTimeInMilliseconds = Date.parse(new Date().toString());
-          const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
-          // difference > 0: Browserzeit ist vor der Serverzeit
-          // difference < 0: Browserzeit ist hinter der Serverzeit
-          // @ts-ignore
-          const boardTimer = new Date(action.board.timerUTCEndTime.iso);
-          console.log(boardTimer);
-          console.log(new Date(boardTimer.getTime() + differenceInMilliseconds));
-        });
-      }
-
       if (!state.data?.dirty) {
         return {
           status: state.status,
-          data: {...action.board},
+          data: action.board,
         };
       }
 

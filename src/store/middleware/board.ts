@@ -8,6 +8,7 @@ import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
+import {callAPI} from "api/callApi";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -193,8 +194,22 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         subscription.unsubscribe();
       });
 
-      subscription.on("update", (object) => {
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
+      subscription.on("update", async (object) => {
+        let timerUTCEndTime;
+        const board = object.toJSON() as unknown as BoardServerModel;
+        if (board.timerUTCEndTime != null) {
+          const serverTime: string = await callAPI("getServerTime", {});
+          const serverTimeInMilliseconds = Date.parse(serverTime);
+          const browserTimeInMilliseconds = Date.parse(new Date().toString());
+          const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
+          // difference > 0: Browserzeit ist vor der Serverzeit
+          // difference < 0: Browserzeit ist hinter der Serverzeit
+          // @ts-ignore
+          const boardTimer = new Date(board.timerUTCEndTime.iso);
+          timerUTCEndTime = new Date(boardTimer.getTime() + differenceInMilliseconds);
+        }
+
+        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel({...(object.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
       });
 
       subscription.on("delete", (object) => {
@@ -212,8 +227,22 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           createUsersSubscription();
           createVoteSubscription();
 
-          boardQuery.first().then((board) => {
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
+          boardQuery.first().then(async (board) => {
+            const b = board?.toJSON() as unknown as BoardServerModel;
+            let timerUTCEndTime;
+            if (b.timerUTCEndTime != null) {
+              const serverTime: string = await callAPI("getServerTime", {});
+              const serverTimeInMilliseconds = Date.parse(serverTime);
+              const browserTimeInMilliseconds = Date.parse(new Date().toString());
+              const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
+              // difference > 0: Browserzeit ist vor der Serverzeit
+              // difference < 0: Browserzeit ist hinter der Serverzeit
+              // @ts-ignore
+              const boardTimer = new Date(b.timerUTCEndTime.iso);
+              timerUTCEndTime = new Date(boardTimer.getTime() + differenceInMilliseconds);
+            }
+
+            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel({...(board?.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
           });
         } else {
           // reconnect
