@@ -1,0 +1,59 @@
+@import "constants/style.scss";
+
+.portal {
+  height: 100%;
+  width: 100%;
+}
+.portal--darkBackground {
+  top: 0;
+  left: 0;
+}
+
+.cookie-policy__title {
+  color: $color-black;
+  background-color: $color-light-gray;
+  padding: 5px $padding--default 5px $padding--default;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.cookie-policy__body {
+  color: $color-black;
+  background-color: $color-light-gray;
+  padding: $padding--default;
+  height: 375px;
+  overflow: auto;
+}
+
+.cookie-policy__footer {
+  background-color: $color-light-gray;
+  padding: $padding--default;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  display: flex;
+}
+
+.cookie-policy__button {
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  font-size: 18px;
+
+  &-accept {
+    @extend .cookie-policy__button;
+    background: $color-backlog-blue;
+    color: $color-white;
+    margin: 0 0 $margin--default $margin--default;
+  }
+
+  &-decline {
+    @extend .cookie-policy__button;
+    background: #dadada;
+    color: #4d4d4d;
+    margin: 0 0 $margin--default auto;
+  }
+}
+
+.cookie-policy__button:hover {
+  transform: scale(1.05);
+}
