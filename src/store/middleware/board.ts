@@ -233,7 +233,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
             if (b.timerUTCEndTime != null) {
               const serverTime: string = await callAPI("getServerTime", {});
               const serverTimeInMilliseconds = Date.parse(serverTime);
-              const browserTimeInMilliseconds = Date.parse(new Date().toString());
+              const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
               const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
               // difference > 0: Browserzeit ist vor der Serverzeit
               // difference < 0: Browserzeit ist hinter der Serverzeit
