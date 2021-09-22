@@ -15,7 +15,9 @@ function AuthRedirect() {
     if (params.error) {
       setStatus({error: params.error as string});
     } else if (params.code && params.state) {
-      /** GOOGLE-OAUTH */
+      /**
+       * GOOGLE-OAUTH
+       * */
       if ((params.state as string).startsWith("google")) {
         API.verifyGoogleSignIn(params.code as string, params.state as string)
           .then((res) => {
@@ -37,7 +39,9 @@ function AuthRedirect() {
           });
       }
 
-      /** GITHUB-OAUTH */
+      /**
+       * GITHUB-OAUTH
+       * */
       if ((params.state as string).startsWith("github")) {
         API.verifyGithubSignIn(params.code as string, params.state as string)
           .then((res) => {
@@ -47,6 +51,29 @@ function AuthRedirect() {
               access_token: res.user.accessToken,
             };
             user.linkWith("github", {authData}).then(() => {
+              user.set("displayName", res.user.name);
+              user.save().then(() => {
+                window.location.href = res.redirectURL;
+              });
+            });
+          })
+          .catch(() => {
+            setStatus({error: "State does not match"});
+          });
+      }
+
+      /**
+       * MICROSOFT-OAUTH
+       * */
+      if ((params.state as string).startsWith("microsoft")) {
+        API.verifyMicrosoftSignIn(params.code as string, params.state as string)
+          .then((res) => {
+            const user = new Parse.User();
+            const authData = {
+              id: res.user.id,
+              access_token: res.user.accessToken,
+            };
+            user.linkWith("microsoft", {authData}).then(() => {
               user.set("displayName", res.user.name);
               user.save().then(() => {
                 window.location.href = res.redirectURL;

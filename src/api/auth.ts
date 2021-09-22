@@ -61,4 +61,31 @@ export const AuthAPI = {
     }
     throw new Error("state does not match");
   },
+
+  /**
+   * Sign in with Microsoft.
+   *
+   * @returns the redirection URL
+   */
+  signInWithMicrosoft: () => callAPI<{state: string}, string>("MicrosoftSignIn", {state: generateState("microsoft")}),
+  /**
+   * Verify the sign in with Microsoft by the specified code.
+   *
+   * @param code the verification code returned by the authentication provider
+   * @param state the state passed by the authentication provider (see https://auth0.com/docs/protocols/state-parameters)
+   *
+   * @returns user information and redirect URL
+   */
+  verifyMicrosoftSignIn: async (code: string, state: string) => {
+    // check if state is available in storage and execute call on match
+    const redirectURL = sessionStorage.getItem(state);
+    if (redirectURL) {
+      const user = await callAPI<{code: string}, {id: string; name: string; accessToken: string}>("MicrosoftVerifySignIn", {code});
+      return {
+        user,
+        redirectURL,
+      };
+    }
+    throw new Error("state does not match");
+  },
 };

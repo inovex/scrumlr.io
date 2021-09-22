@@ -1,4 +1,3 @@
-import * as React from "react";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {getRandomName} from "constants/Name";
 import {RouteComponentProps} from "react-router";
@@ -7,6 +6,19 @@ import {API} from "api";
 import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
+import {useState} from "react";
+
+export const onGoogleSignIn = async () => {
+  window.location.href = await API.signInWithGoogle(); // redirectURI: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
+};
+
+export const onGithubSignIn = async () => {
+  window.location.href = await API.signInWithGithub(); // redirectURI: https://github.com/login/oauth/authorize...
+};
+
+export const onMicrosoftSignIn = async () => {
+  window.location.href = await API.signInWithMicrosoft(); // redirectURI https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
+};
 
 function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
@@ -33,10 +45,10 @@ function NewBoard(props: RouteComponentProps) {
     ],
   };
 
-  const [displayName, setDisplayName] = React.useState(getRandomName());
-  const [boardName, setBoardName] = React.useState("BoardName");
-  const [columnTemplate, setColumnTemplate] = React.useState("Positive/Negative/Actions");
-  const [joinConfirmationRequired, setJoinConfirmationRequired] = React.useState(false);
+  const [displayName, setDisplayName] = useState(getRandomName());
+  const [boardName, setBoardName] = useState("BoardName");
+  const [columnTemplate, setColumnTemplate] = useState("Positive/Negative/Actions");
+  const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(false);
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
@@ -55,16 +67,6 @@ function NewBoard(props: RouteComponentProps) {
   async function onLogout() {
     await Parse.User.logOut();
     props.history.push("/");
-  }
-
-  async function onGoogleSignIn() {
-    const redirectURI = await API.signInWithGoogle();
-    window.location.href = redirectURI;
-  }
-
-  async function onGithubSignIn() {
-    const redirectURI = await API.signInWithGithub();
-    window.location.href = redirectURI;
   }
 
   if (Parse.User.current()) {
@@ -100,6 +102,7 @@ function NewBoard(props: RouteComponentProps) {
       </button>
       <button onClick={onGoogleSignIn}>Sign in with Google</button>
       <button onClick={onGithubSignIn}>Sign in with Github</button>
+      <button onClick={onMicrosoftSignIn}>Sign in with Microsoft</button>
     </div>
   );
 }
