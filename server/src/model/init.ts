@@ -9,13 +9,13 @@ const addInitialBoardSchema = async () => {
   schema.addBoolean("joinConfirmationRequired", {defaultValue: false});
   schema.addBoolean("encryptedContent", {defaultValue: false});
   schema.addString("accessCode");
-  schema.addBoolean("showContentOfOtherUsers", {defaultValue: true});
   schema.addBoolean("showAuthors", {defaultValue: true});
   schema.addDate("timerUTCEndTime");
   schema.addDate("expirationUTCTime");
   schema.addString("voting", {defaultValue: "disabled"});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
   schema.addBoolean("showVotesOfOtherUsers", {defaultValue: false});
+  schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
   schema.addNumber("voteLimit", {defaultValue: 0});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
