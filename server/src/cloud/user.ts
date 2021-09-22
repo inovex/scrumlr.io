@@ -1,4 +1,4 @@
-import {requireValidBoardMember} from "./permission";
+import {requireValidBoardAdmin, requireValidBoardMember} from "./permission";
 import {api} from "./util";
 
 /**
@@ -19,7 +19,8 @@ export const initializeUserFunctions = () => {
   api<EditUserConfigurationRequest, {status: string; description: string}>("editUserConfiguration", async (user, request) => {
     await requireValidBoardMember(user, request.boardId);
 
-    if (request.editUserConfigurationRequest.showHiddenColumns !== undefined) {
+    if (request.editUserConfigurationRequest.showHiddenColumns != undefined) {
+      await requireValidBoardAdmin(user, request.boardId);
       user.set("showHiddenColumns", request.editUserConfigurationRequest.showHiddenColumns);
     }
 

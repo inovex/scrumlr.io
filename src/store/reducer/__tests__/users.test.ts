@@ -1,7 +1,7 @@
-import {UsersState} from "../../../types/store";
-import {usersReducer} from "../users";
-import {ActionFactory} from "../../action";
-import {UserClientModel} from "../../../types/user";
+import {UsersState} from "types/store";
+import {usersReducer} from "store/reducer/users";
+import {ActionFactory} from "store/action";
+import {UserClientModel} from "types/user";
 
 const createUser = (id: string, name: string, admin: boolean): UserClientModel => ({
   id,

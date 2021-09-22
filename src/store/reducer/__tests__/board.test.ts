@@ -1,7 +1,7 @@
 import {BoardState} from "types/store";
 import {AddColumnRequest, EditColumnRequest} from "types/column";
-import {boardReducer} from "../board";
-import {ActionFactory} from "../../action";
+import {boardReducer} from "store/reducer/board";
+import {ActionFactory} from "store/action";
 
 describe("column tests", () => {
   let initialState: BoardState;

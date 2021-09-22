@@ -50,7 +50,6 @@ type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
-  hidden: boolean;
 };
 
 export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
