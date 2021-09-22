@@ -22,27 +22,27 @@ export const ColumnActionFactory = {
   /**
    * Creates an action which should be dispatched when the user wants to add a column to the current board.
    *
-   * @param addColumnRequest contains
+   * @param column contains
    *  name: the column name
    *  color: the color of the column
    *  hidden: the flag which indicates whether this column should be visible to all basic users
    */
-  addColumn: (addColumnRequest: AddColumnRequest) => ({
+  addColumn: (column: AddColumnRequest) => ({
     type: ColumnActionType.AddColumn,
-    addColumnRequest,
+    column,
   }),
   /**
    * Creates an action which should be dispatched when the user edits a column.
    *
-   * @param editColumnRequest contains
+   * @param column contains
    *  columnId: the edited column id
    *  name: the new name
    *  color: the new color of the column
    *  hidden: the new hidden state
    */
-  editColumn: (editColumnRequest: EditColumnRequest) => ({
+  editColumn: (column: EditColumnRequest) => ({
     type: ColumnActionType.EditColumn,
-    editColumnRequest,
+    column,
   }),
   /**
    * Creates an action which should be dispatched when the user wants to delete a column.

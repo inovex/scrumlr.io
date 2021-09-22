@@ -12,8 +12,10 @@ describe("column tests", () => {
         name: "test_board",
         columns: [
           {
-            id: "test_column_1",
+            columnId: "test_column_1",
             name: "test_column_1",
+            color: "backlog-blue",
+            hidden: false,
           },
         ],
       },
@@ -34,13 +36,13 @@ describe("column tests", () => {
   });
 
   test("edit column (full)", () => {
-    const editRequest: EditColumnRequest = {id: "test_column_1", name: "New name", color: "planning-pink", hidden: true};
-    const newState = boardReducer(initialState, ActionFactory.editColumn({id: "test_column_1", name: "New name", color: "planning-pink", hidden: true}));
+    const editRequest: EditColumnRequest = {columnId: "test_column_1", name: "New name", color: "planning-pink", hidden: true};
+    const newState = boardReducer(initialState, ActionFactory.editColumn({columnId: "test_column_1", name: "New name", color: "planning-pink", hidden: true}));
     expect(newState.data.columns[0]).toEqual(editRequest);
   });
 
   test("edit column (partial)", () => {
-    const editRequest: EditColumnRequest = {id: "test_column_1", name: "New name"};
+    const editRequest: EditColumnRequest = {columnId: "test_column_1", name: "New name"};
     const newState = boardReducer(initialState, ActionFactory.editColumn(editRequest));
     expect(newState.data.columns[0].name).toEqual("New name");
   });

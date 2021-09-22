@@ -6,7 +6,7 @@ import Color, {isOfTypeColor} from "../util/Color";
 
 export interface AddColumnRequest {
   boardId: string;
-  addColumnRequest: {
+  column: {
     name: string;
     color: Color;
     hidden: boolean;
@@ -20,7 +20,7 @@ export interface DeleteColumnRequest {
 
 export interface EditColumnRequest {
   boardId: string;
-  editColumnRequest: {
+  column: {
     columnId: string;
     name?: string;
     color?: Color;
@@ -40,14 +40,14 @@ export const initializeColumnFunctions = () => {
     }
 
     const columns = board.get("columns");
-    if (!isOfTypeColor(request.addColumnRequest.color)) {
-      throw new Error(`color ${request.addColumnRequest.color} is not allowed for columns`);
+    if (!isOfTypeColor(request.column.color)) {
+      throw new Error(`color ${request.column.color} is not allowed for columns`);
     }
 
     columns[newObjectId(serverConfig.objectIdSize)] = {
-      name: request.addColumnRequest.name,
-      color: request.addColumnRequest.color,
-      hidden: request.addColumnRequest.hidden,
+      name: request.column.name,
+      color: request.column.color,
+      hidden: request.column.hidden,
     };
 
     await board.save(null, {useMasterKey: true});
@@ -81,24 +81,24 @@ export const initializeColumnFunctions = () => {
       return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
     const columns = board.get("columns");
-    if (request.editColumnRequest.name) {
-      columns[request.editColumnRequest.columnId].name = request.editColumnRequest.name;
+    if (request.column.name) {
+      columns[request.column.columnId].name = request.column.name;
     }
 
-    if (request.editColumnRequest.color) {
-      if (isOfTypeColor(request.editColumnRequest.color)) {
-        columns[request.editColumnRequest.columnId].color = request.editColumnRequest.color;
+    if (request.column.color) {
+      if (isOfTypeColor(request.column.color)) {
+        columns[request.column.columnId].color = request.column.color;
       } else {
-        throw new Error(`specified column color '${request.editColumnRequest.color}' is not allowed`);
+        throw new Error(`specified column color '${request.column.color}' is not allowed`);
       }
     }
 
-    if (request.editColumnRequest.hidden !== undefined) {
-      columns[request.editColumnRequest.columnId].hidden = request.editColumnRequest.hidden;
+    if (request.column.hidden !== undefined) {
+      columns[request.column.columnId].hidden = request.column.hidden;
     }
 
     await board.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: `Column ${request.editColumnRequest.columnId} edited`};
+    return {status: "Success", description: `Column ${request.column.columnId} edited`};
   });
 };

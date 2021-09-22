@@ -24,7 +24,7 @@ describe("column actions", () => {
     test("created action", () => {
       const action = ColumnActionFactory.addColumn({name: "Name", color: "planning-pink", hidden: false});
       expect(action).toEqual({
-        addColumnRequest: {
+        column: {
           color: "planning-pink",
           hidden: false,
           name: "Name",
@@ -48,11 +48,11 @@ describe("column actions", () => {
     });
 
     test("created action", () => {
-      const action = ColumnActionFactory.editColumn({id: "columnId", name: "New name"});
+      const action = ColumnActionFactory.editColumn({columnId: "columnId", name: "New name"});
       expect(action).toEqual({
         type: "@@SCRUMLR/editColumn",
-        editColumnRequest: {
-          id: "columnId",
+        column: {
+          columnId: "columnId",
           name: "New name",
         },
       });

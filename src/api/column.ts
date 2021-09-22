@@ -6,15 +6,14 @@ export const ColumnAPI = {
    * Adds a column with the specified name and configuration to a board.
    *
    * @param boardId the board id
-   * @param addColumnRequest contains
+   * @param column contains
    *  name: the column name
    *  color: the column color
    *  hidden: flag whether the column should be displayed to all users or hidden from basic users
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  addColumn: (boardId: string, addColumnRequest: AddColumnRequest) =>
-    callAPI<{boardId: string; addColumnRequest: AddColumnRequest}, boolean>("addColumn", {boardId, addColumnRequest}),
+  addColumn: (boardId: string, column: AddColumnRequest) => callAPI<{boardId: string; column: AddColumnRequest}, boolean>("addColumn", {boardId, column}),
   /**
    * Deletes a column with the specified id.
    *
@@ -28,7 +27,7 @@ export const ColumnAPI = {
    * Edit a column with the specified id.
    *
    * @param boardId the board id
-   * @param editColumnRequest contains
+   * @param column contains
    *  columnId: the column id
    *  name: new name to set (optional)
    *  color: new column color to set (optional)
@@ -36,6 +35,5 @@ export const ColumnAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editColumn: (boardId: string, editColumnRequest: EditColumnRequest) =>
-    callAPI<{boardId: string; editColumnRequest: EditColumnRequest}, boolean>("editColumn", {boardId, editColumnRequest}),
+  editColumn: (boardId: string, column: EditColumnRequest) => callAPI<{boardId: string; column: EditColumnRequest}, boolean>("editColumn", {boardId, column}),
 };

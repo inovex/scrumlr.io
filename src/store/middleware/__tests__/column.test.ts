@@ -34,8 +34,8 @@ describe("column middleware", () => {
   });
 
   test("edit column", () => {
-    passColumnMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.editColumn({id: "columnId", name: "New name", color: "planning-pink", hidden: true}));
-    expect(API.editColumn).toHaveBeenCalledWith("boardId", {id: "columnId", name: "New name", color: "planning-pink", hidden: true});
+    passColumnMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.editColumn({columnId: "columnId", name: "New name", color: "planning-pink", hidden: true}));
+    expect(API.editColumn).toHaveBeenCalledWith("boardId", {columnId: "columnId", name: "New name", color: "planning-pink", hidden: true});
   });
 
   test("delete column", () => {
