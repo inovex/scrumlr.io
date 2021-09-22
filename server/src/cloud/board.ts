@@ -97,13 +97,13 @@ export interface CreateBoardRequest {
 
 export type EditableBoardAttributes = {
   name: string;
-  showContentOfOtherUsers?: boolean;
   showAuthors?: boolean;
   timerUTCEndTime?: Date;
   expirationUTCTime?: Date;
   joinConfirmationRequired?: boolean;
   voting?: "active" | "disabled";
   votingIteration: number;
+  showNotesOfOtherUsers: boolean;
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -149,7 +149,7 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user}, {useMasterKey: true});
+    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -282,9 +282,6 @@ export const initializeBoardFunctions = () => {
     if (!board) {
       throw new Error(`Board ${request.board.id} not found`);
     }
-    if (request.board.showContentOfOtherUsers != null) {
-      board.set("showContentOfOtherUsers", request.board.showContentOfOtherUsers);
-    }
     if (request.board.showAuthors != null) {
       board.set("showAuthors", request.board.showAuthors);
     }
@@ -305,6 +302,9 @@ export const initializeBoardFunctions = () => {
         board.set("votingIteration", board.get("votingIteration") + 1);
       }
       board.set("voting", request.board.voting);
+    }
+    if (request.board.showNotesOfOtherUsers != undefined) {
+      board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
     }
 
     await board.save(null, {useMasterKey: true});
