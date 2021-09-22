@@ -9,7 +9,6 @@ const addInitialBoardSchema = async () => {
   schema.addBoolean("joinConfirmationRequired", {defaultValue: false});
   schema.addBoolean("encryptedContent", {defaultValue: false});
   schema.addString("accessCode");
-  schema.addBoolean("showContentOfOtherUsers", {defaultValue: true});
   schema.addBoolean("showAuthors", {defaultValue: true});
   schema.addDate("timerUTCEndTime");
   schema.addDate("expirationUTCTime");

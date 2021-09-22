@@ -14,7 +14,6 @@ export interface BoardServerModel {
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
-  showContentOfOtherUsers: boolean;
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
@@ -33,7 +32,6 @@ export type EditableBoardAttributes = {
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
-  showContentOfOtherUsers: boolean;
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
@@ -72,7 +70,6 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   accessCode: board.accessCode,
   joinConfirmationRequired: board.joinConfirmationRequired,
   encryptedContent: board.encryptedContent,
-  showContentOfOtherUsers: board.showContentOfOtherUsers,
   showAuthors: board.showAuthors,
   timerUTCEndTime: board.timerUTCEndTime,
   expirationUTCTime: board.expirationUTCTime,

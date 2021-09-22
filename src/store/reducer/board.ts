@@ -105,7 +105,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.name === undefined || state.data.name === action.board.name) &&
         (action.board.joinConfirmationRequired === undefined || state.data.joinConfirmationRequired === action.board.joinConfirmationRequired) &&
         (action.board.encryptedContent === undefined || state.data.encryptedContent === action.board.encryptedContent) &&
-        (action.board.showContentOfOtherUsers === undefined || state.data.showContentOfOtherUsers === action.board.showContentOfOtherUsers) &&
         (action.board.showAuthors === undefined || state.data.showAuthors === action.board.showAuthors) &&
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
         (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
