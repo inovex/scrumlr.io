@@ -389,4 +389,6 @@ export const initializeBoardFunctions = () => {
 
     return {status: "Success", description: "Timer was successfully removed"};
   });
+
+  api<{}, string>("getServerTime", async (user, request) => new Date().toISOString());
 };
