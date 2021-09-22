@@ -99,6 +99,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
           // difference > 0: Browserzeit ist vor der Serverzeit
           // difference < 0: Browserzeit ist hinter der Serverzeit
+          // @ts-ignore
           const boardTimer = new Date(action.board.timerUTCEndTime.iso);
           console.log(boardTimer);
           console.log(new Date(boardTimer.getTime() + differenceInMilliseconds));
