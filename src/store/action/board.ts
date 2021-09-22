@@ -98,11 +98,11 @@ export const BoardActionFactory = {
   /**
    * Creates an action which should be dispatched when the current voting phase was canceled.
    *
-   * @param requestReference the reference id on the join request
+   * @param boardId
    */
-  cancelVoting: (board: string) => ({
+  cancelVoting: (boardId: string) => ({
     type: BoardActionType.CancelVoting,
-    board,
+    boardId,
   }),
 };
 

@@ -388,13 +388,13 @@ export const initializeBoardFunctions = () => {
   /**
    * Cancel voting
    */
-  api<{board: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
-    await requireValidBoardAdmin(user, request.board);
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+  api<{boardId: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
     const votingIteration = await board.get("votingIteration");

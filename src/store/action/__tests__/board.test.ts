@@ -216,7 +216,7 @@ describe("board actions", () => {
 
     test("created action", () => {
       const action = BoardActionFactory.cancelVoting("test_board");
-      expect(action).toEqual({type: "@@SCRUMLR/cancelVoting", board: "test_board"});
+      expect(action).toEqual({type: "@@SCRUMLR/cancelVoting", boardId: "test_board"});
     });
   });
 });

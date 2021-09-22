@@ -42,5 +42,5 @@ export const BoardAPI = {
    *
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
-  cancelVoting: (board: string) => callAPI("cancelVoting", {board}),
+  cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
 };
