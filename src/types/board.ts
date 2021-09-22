@@ -14,12 +14,12 @@ export interface BoardServerModel {
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
-  showContentOfOtherUsers: boolean;
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;
+  showNotesOfOtherUsers: boolean;
   createdAt: Date;
   updatedAt: Date;
   owner: Parse.Object;
@@ -30,12 +30,12 @@ export type EditableBoardAttributes = {
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
-  showContentOfOtherUsers: boolean;
   showAuthors: boolean;
   timerUTCEndTime: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;
+  showNotesOfOtherUsers: boolean;
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -66,12 +66,12 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
   accessCode: board.accessCode,
   joinConfirmationRequired: board.joinConfirmationRequired,
   encryptedContent: board.encryptedContent,
-  showContentOfOtherUsers: board.showContentOfOtherUsers,
   showAuthors: board.showAuthors,
   timerUTCEndTime: board.timerUTCEndTime,
   expirationUTCTime: board.expirationUTCTime,
   voting: board.voting,
   votingIteration: board.votingIteration,
+  showNotesOfOtherUsers: board.showNotesOfOtherUsers,
   createdAt: board.createdAt,
   updatedAt: board.updatedAt,
   dirty: false,
