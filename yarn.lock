@@ -2008,10 +2008,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/parse@^2.18.10":
-  version "2.18.10"
-  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.10.tgz#50a8b3fcbab95fddc956c8b37c24c47102ab0809"
-  integrity sha512-0p+STyQx9KSNGlWmTMKp62Rn9mt5PpeVRMN7yABvtf1NIbLzb4opru0UmA6xVA9fJW06y6rKc+Ue5BxVK5SE0Q==
+"@types/parse@^2.18.11":
+  version "2.18.11"
+  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.11.tgz#398da0fee35d169924cf574c783083f54d944770"
+  integrity sha512-SWa7i8cNKc80Xw6JRqG842wILmmTdRcic3jmPw8AgweR8Xur3b9pZXY4ZbEXzB688cLq0zPdxatoXIZukfYoTg==
   dependencies:
     "@types/node" "*"
 
