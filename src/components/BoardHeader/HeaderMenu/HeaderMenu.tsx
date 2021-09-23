@@ -120,7 +120,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             className="menu__item-button"
             onClick={() => {
               if (state.user?.id) {
-                store.dispatch(ActionFactory.editUserConfiguration(state.user?.id, {showHiddenColumns: !state.user.showHiddenColumns}));
+                store.dispatch(ActionFactory.editUserConfiguration(state.user?.id, {showHiddenColumns: !state.user?.showHiddenColumns}));
               }
             }}
           >
