@@ -99,6 +99,7 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
+  moderationPhase?: "active" | "disabled";
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -297,6 +298,9 @@ export const initializeBoardFunctions = () => {
         board.set("votingIteration", board.get("votingIteration") + 1);
       }
       board.set("voting", request.board.voting);
+    }
+    if (request.board.moderationPhase) {
+      board.set("moderationPhase", request.board.moderationPhase);
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);

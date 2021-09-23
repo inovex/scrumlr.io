@@ -17,6 +17,7 @@ const addInitialBoardSchema = async () => {
   schema.addBoolean("showVotesOfOtherUsers", {defaultValue: false});
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
   schema.addNumber("voteLimit", {defaultValue: 0});
+  schema.addString("moderationPhase", {defaultValue: "disabled"});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
@@ -27,6 +28,7 @@ const addInitialNoteSchema = async () => {
   schema.addPointer("parent", "Note", {required: false});
   schema.addString("columnId", {required: true});
   schema.addPointer("author", "_User", {required: true});
+  schema.addBoolean("focus", {required: true, defaultValue: false});
   schema.addString("text", {required: true});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
