@@ -85,10 +85,11 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.editBoard({name: "Name", showAuthors: true});
+      const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", showAuthors: true});
       expect(action).toEqual({
         type: "@@SCRUMLR/editBoard",
         board: {
+          id: "test_board",
           name: "Name",
           showAuthors: true,
         },
@@ -132,8 +133,8 @@ describe("board actions", () => {
     });
 
     test("created action", () => {
-      const action = BoardActionFactory.deleteBoard();
-      expect(action).toEqual({type: "@@SCRUMLR/deleteBoard"});
+      const action = BoardActionFactory.deleteBoard("test_board");
+      expect(action).toEqual({type: "@@SCRUMLR/deleteBoard", boardId: "test_board"});
     });
   });
 
