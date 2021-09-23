@@ -1,6 +1,10 @@
-import {useEffect, useState} from "react";
 import ReactDOM from "react-dom";
+import {useEffect, useState} from "react";
+import Parse from "parse";
 import classNames from "classnames";
+import store, {useAppSelector} from "store";
+import {ActionFactory} from "store/action";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 
 type TimerProps = {
@@ -8,6 +12,7 @@ type TimerProps = {
 };
 
 export const Timer = (props: TimerProps) => {
+  const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number} | null>(null);
 
   useEffect(() => {
@@ -25,7 +30,14 @@ export const Timer = (props: TimerProps) => {
   if (!timeLeft) return null;
   return ReactDOM.createPortal(
     <aside className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
-      {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
+      <span>
+        {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
+      </span>
+      {isModerator && (
+        <button onClick={() => store.dispatch(ActionFactory.cancelTimer())} title="Stop timer">
+          <CloseIcon />
+        </button>
+      )}
     </aside>,
     document.body
   );
