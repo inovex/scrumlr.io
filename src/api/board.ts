@@ -38,9 +38,9 @@ export const BoardAPI = {
   /**
    * Cancel the current voting phase.
    *
-   * @param board id
+   * @param boardId the board id
    *
-   * @returns 'true' if the operation succeeded or throws an error otherwise
+   * @returns `{status: string, description: string}`
    */
   cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
 };

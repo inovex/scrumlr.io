@@ -34,7 +34,7 @@ export const initializeVoteFunctions = () => {
     const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
 
     // Check if user exceeds his vote limit
-    if ((await voteQuery.count({useMasterKey: true})) >= voteConfiguration.get("voteLimit")) {
+    if ((await voteQuery.count({useMasterKey: true})) >= (await voteConfiguration.get("voteLimit"))) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
 
@@ -43,7 +43,7 @@ export const initializeVoteFunctions = () => {
     voteQuery.equalTo("note", note);
 
     // Check if user has voted already on this note
-    if ((await voteQuery.count({useMasterKey: true})) >= 1 && !voteConfiguration.get("allowMultipleVotesPerNote")) {
+    if ((await voteQuery.count({useMasterKey: true})) >= 1 && !(await voteConfiguration.get("allowMultipleVotesPerNote"))) {
       return {status: "Error", description: "You can't vote multiple times per note"};
     }
 

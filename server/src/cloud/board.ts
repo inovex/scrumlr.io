@@ -384,6 +384,11 @@ export const initializeBoardFunctions = () => {
       return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
+    // Check if the board exists
+    if ((await board.get("voting")) === "disabled") {
+      return {status: "Error", description: `Voting is already disabled`};
+    }
+
     const votingIteration = await board.get("votingIteration");
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");

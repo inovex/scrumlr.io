@@ -28,7 +28,7 @@ type EditableVoteConfigurationAttributes = {
   showVotesOfOtherUsers: boolean;
 };
 
-export type VoteConfiguration = {board: string} & Partial<EditableVoteConfigurationAttributes>;
+export type VoteConfiguration = {board: string} & EditableVoteConfigurationAttributes;
 
 export const mapVoteConfigurationServerToClientModel = (voteConfiguration: VoteConfigurationServerModel): VoteConfigurationClientModel => ({
   boardId: voteConfiguration.get("board").id,

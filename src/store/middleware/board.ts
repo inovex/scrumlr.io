@@ -206,9 +206,6 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         subscription.on("delete", (object) => {
           dispatch(ActionFactory.removedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
         });
-        subscription.on("update", (object) => {
-          dispatch(ActionFactory.updatedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
-        });
         subscription.on("open", () => {
           voteConfigurationQuery
             .equalTo("votingIteration", board.get("votingIteration"))

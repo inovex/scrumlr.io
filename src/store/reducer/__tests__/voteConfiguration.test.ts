@@ -28,19 +28,4 @@ describe("vote configuration reducer", () => {
     const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.addedVoteConfiguration(voteConfiguration));
     expect(newState).toEqual(voteConfiguration);
   });
-
-  test("update vote configuration", () => {
-    const voteConfiguration = {
-      boardId: "test_board",
-      votingIteration: 1,
-      voteLimit: 5,
-    } as VoteConfigurationClientModel;
-    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.addedVoteConfiguration(voteConfiguration));
-    expect(newState).toEqual(voteConfiguration);
-  });
-
-  test("remove vote configuration", () => {
-    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.removeVoteConfiguration(""));
-    expect(newState).toEqual(initialState.voteConfiguration);
-  });
 });

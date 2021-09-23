@@ -14,20 +14,4 @@ export const passVoteConfigurationMiddlware = async (stateAPI: MiddlewareAPI<Dis
       Toast.error(response.description);
     }
   }
-  /**
-   * New vote configuration added by the moderator/admin
-   */
-  if (action.type === ActionType.UpdateVoteConfiguration) {
-    const response = (await API.updateVoteConfiguration(action.voteConfiguration)) as {status: string; description: string};
-    if (response.status === "Error") {
-      Toast.error(response.description);
-    }
-  }
-  /**
-   * Remove current vote configuration from the database (if we cancel a voting iteraion, we don't need the entry in the backend anymore)
-   */
-  if (action.type === ActionType.RemoveVoteConfiguration) {
-    const boardId = stateAPI.getState().board.data!.id;
-    API.removeVoteConfiguration(boardId);
-  }
 };

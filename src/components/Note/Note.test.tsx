@@ -13,7 +13,7 @@ const createNote = (
   text: string,
   authorId: string,
   showAuthors: boolean,
-  voteConfiguration: VoteConfigurationClientModel = {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false},
+  voteConfiguration: VoteConfigurationClientModel = {boardId: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: false},
   votes: VoteClientModel[] = [
     {
       id: "test-vote-0",
@@ -204,7 +204,7 @@ describe("Note", () => {
       // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
       const {container} = render(
-        createNote("Test Text", "test-user-1", true, {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
+        createNote("Test Text", "test-user-1", true, {boardId: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
       );
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
@@ -213,7 +213,7 @@ describe("Note", () => {
       // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(
-        createNote("Test Text", "test-user-2", true, {board: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
+        createNote("Test Text", "test-user-2", true, {boardId: "test-board", votingIteration: 1, voteLimit: 5, allowMultipleVotesPerNote: true, showVotesOfOtherUsers: true})
       );
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
@@ -260,7 +260,13 @@ describe("Note", () => {
       const votes: VoteClientModel[] = [];
 
       const {container} = render(
-        createNote("Test Text", "test-user-2", true, {board: "test-board", votingIteration: 1, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true}, votes)
+        createNote(
+          "Test Text",
+          "test-user-2",
+          true,
+          {boardId: "test-board", votingIteration: 1, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
+          votes
+        )
       );
 
       expect(container.querySelector(".note__votes")?.childElementCount).toEqual(1);

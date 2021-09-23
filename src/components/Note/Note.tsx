@@ -11,8 +11,6 @@ import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
-import {filterVotes} from "utils/votes";
-import {VoteConfigurationClientModel} from "types/voteConfiguration";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -26,7 +24,6 @@ interface NoteProps {
   showAuthors: boolean;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
-  voteConfiguration: VoteConfigurationClientModel;
   activeVoting: boolean;
 }
 
@@ -60,8 +57,6 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
-  const filteredVotes = filterVotes(props.votes, props.activeVoting, props.voteConfiguration?.showVotesOfOtherUsers);
-
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
@@ -76,21 +71,9 @@ const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
-          <Votes
-            className="note__votes"
-            noteId={props.noteId!}
-            votes={filteredVotes.concat(
-              filterVotes(
-                props.childrenNotes.flatMap((n) => n.votes),
-                props.activeVoting,
-                props.voteConfiguration.showVotesOfOtherUsers
-              )
-            )}
-            activeVoting={props.activeVoting}
-            voteConfiguration={props.voteConfiguration}
-          />
+          <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </footer>
-        <NoteDialog {...props} votes={filteredVotes} onClose={handleShowDialog} show={showDialog} />
+        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>

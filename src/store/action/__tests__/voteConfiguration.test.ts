@@ -35,28 +35,6 @@ describe("vote comfiguration actions", () => {
     });
   });
 
-  describe("remove vote configuration", () => {
-    test("type is listed in users redux actions", () => {
-      // testing type equality here will not report an error at runtime but cause problems with typescript
-      const assertion: AssertTypeEqual<ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>, VoteConfigurationReduxAction> = true;
-      expect(assertion).toBe(true);
-    });
-
-    test("type is listed in general redux actions", () => {
-      // testing type equality here will not report an error at runtime but cause problems with typescript
-      const assertion: AssertTypeEqual<ReturnType<typeof VoteConfigurationActionFactory.removeVoteConfiguration>, ReduxAction> = true;
-      expect(assertion).toBe(true);
-    });
-
-    test("created action", () => {
-      const action = VoteConfigurationActionFactory.removeVoteConfiguration("test_board");
-      expect(action).toEqual({
-        type: "@@SCRUMLR/removeVoteConfiguration",
-        boardId: "test_board",
-      });
-    });
-  });
-
   describe("initialize vote configuration", () => {
     test("type is listed in users redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript

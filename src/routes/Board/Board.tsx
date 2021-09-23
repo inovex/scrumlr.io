@@ -12,7 +12,11 @@ function Board() {
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
-    votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
+    votes: applicationState.votes.filter(
+      (vote) =>
+        vote.votingIteration === applicationState.board.data?.votingIteration &&
+        (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
+    ),
     voteConfiguration: applicationState.voteConfiguration,
   }));
 
@@ -62,7 +66,6 @@ function Board() {
                       .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                       .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
-                    voteConfiguration={state.voteConfiguration}
                     activeVoting={state.board.data?.voting === "active"}
                   />
                 ))}
