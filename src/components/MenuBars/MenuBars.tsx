@@ -35,24 +35,32 @@ function MenuBars() {
   };
 
   return (
-    <div className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
-      <div className="menu user-menu">
+    <aside
+      id="menu-bars"
+      className={classNames(
+        "menu-bars",
+        {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu},
+        {"menu-bars--isAdmin": isAdmin},
+        {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
+      )}
+    >
+      <section className="menu user-menu">
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
         </div>
-      </div>
+      </section>
       {isAdmin && (
-        <div className="menu admin-menu">
+        <section className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={() => null} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>
-        </div>
+        </section>
       )}
       {isAdmin && (
         <button className="menu-bars__switch" onClick={() => toggleMenus((prevState) => !prevState)}>
@@ -60,7 +68,7 @@ function MenuBars() {
           <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" />
         </button>
       )}
-    </div>
+    </aside>
   );
 }
 
