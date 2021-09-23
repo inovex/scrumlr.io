@@ -26,7 +26,7 @@ interface NoteProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
-  activeModerationPhase: boolean;
+  activeModeration: boolean;
   focus: boolean;
   currentUserIsModerator: boolean;
 }
@@ -36,7 +36,7 @@ const Note = (props: NoteProps) => {
 
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
-    if (props.activeModerationPhase && props.currentUserIsModerator) {
+    if (props.activeModeration && props.currentUserIsModerator) {
       if (props.noteId) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !showDialog}));
       }
@@ -94,7 +94,7 @@ const Note = (props: NoteProps) => {
             activeVoting={props.activeVoting}
           />
         </footer>
-        <NoteDialog {...props} votes={filteredVotes} onClose={handleShowDialog} show={showDialog || (props.activeModerationPhase && props.focus)} />
+        <NoteDialog {...props} votes={filteredVotes} onClose={handleShowDialog} show={(showDialog && !props.activeModeration) || (props.activeModeration && props.focus)} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>

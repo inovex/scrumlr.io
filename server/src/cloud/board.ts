@@ -99,7 +99,7 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  moderationPhase?: "active" | "disabled";
+  moderation?: "active" | "disabled";
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -145,7 +145,10 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
+    const savedBoard = await board.save(
+      {...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true, moderation: "disabled"},
+      {useMasterKey: true}
+    );
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -299,8 +302,8 @@ export const initializeBoardFunctions = () => {
       }
       board.set("voting", request.board.voting);
     }
-    if (request.board.moderationPhase) {
-      board.set("moderationPhase", request.board.moderationPhase);
+    if (request.board.moderation) {
+      board.set("moderation", request.board.moderation);
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);

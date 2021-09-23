@@ -62,7 +62,7 @@ function Board() {
                       .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                     votes={state.votes.filter((vote) => vote.note === note.id)}
                     activeVoting={state.board.data?.voting === "active"}
-                    activeModerationPhase={state.board.data?.moderationPhase === "active"}
+                    activeModeration={state.board.data?.moderation === "active"}
                     focus={note.focus}
                     currentUserIsModerator={currentUserIsModerator}
                   />

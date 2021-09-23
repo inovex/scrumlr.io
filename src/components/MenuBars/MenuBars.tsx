@@ -30,8 +30,8 @@ function MenuBars() {
     store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
   };
 
-  const toggleModerationPhase = (active: boolean) => {
-    store.dispatch(ActionFactory.editBoard({id: boardId, moderationPhase: active ? "active" : "disabled"}));
+  const toggleModeration = (active: boolean) => {
+    store.dispatch(ActionFactory.editBoard({id: boardId, moderation: active ? "active" : "disabled"}));
   };
 
   return (
@@ -58,7 +58,7 @@ function MenuBars() {
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={() => null} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
-            <MenuToggle direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={toggleModerationPhase} />
+            <MenuToggle direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={toggleModeration} />
           </div>
         </section>
       )}
