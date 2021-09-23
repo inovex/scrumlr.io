@@ -1,11 +1,13 @@
 @import "constants/style.scss";
 
+$number-of-menu-items: 4;
+
 // DISABLED
 .menu-item:disabled {
   cursor: not-allowed;
 }
 .menu-item:disabled .menu-item__icon {
-  color: #adadad;
+  color: #a3a6aa;
   background: transparent;
 }
 
@@ -26,7 +28,7 @@
 .menu-bars--bottom {
   $menu-item__first-position-left: 28px;
 
-  @for $i from 1 through 4 {
+  @for $i from 1 through $number-of-menu-items {
     .menu-item:nth-child(#{$i}) {
       left: $menu-item__first-position-left + (($i - 1) * 58px);
     }
@@ -77,7 +79,7 @@
     background: var(--primaryColor);
   }
 }
-.menu-item:not(:disabled):hover {
+.menu-item:enabled:hover {
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
       color: $color-white;
@@ -95,20 +97,20 @@
   visibility: hidden;
 }
 
-.menu-item--active:not(:disabled):hover > .menu-item__icon--end,
-.menu-item--active:not(:disabled):active > .menu-item__icon--end {
+.menu-item--active:enabled:hover > .menu-item__icon--end,
+.menu-item--active:enabled:active > .menu-item__icon--end {
   visibility: visible;
 }
 
-.menu-item--active:not(:disabled):hover > .menu-item__icon--start,
-.menu-item--active:not(:disabled):active > .menu-item__icon--start {
+.menu-item--active:enabled:hover > .menu-item__icon--start,
+.menu-item--active:enabled:active > .menu-item__icon--start {
   visibility: hidden;
 }
 
 // Columns partly hidden, no touch screen device
 @media (pointer: fine) {
   .menu-bars--bottom {
-    .menu-item:not(:disabled):hover {
+    .menu-item:enabled:hover {
       .menu-item__tooltip {
         width: 200px;
         opacity: 1;
@@ -159,7 +161,7 @@
 // Columns partly hidden, touch screen device (=> no hover)
 @media (pointer: coarse) {
   .menu-bars--bottom {
-    .menu-item:not(:disabled):active {
+    .menu-item:enabled:active {
       left: 0;
       height: 100%;
       width: 100%;
@@ -207,13 +209,13 @@
 // ALL columns are fully visible
 // *****************************
 .menu-bars:not(.menu-bars--bottom) {
-  .menu-item:not(:disabled):hover > .menu-item__tooltip {
+  .menu-item:enabled:hover > .menu-item__tooltip {
     width: 230px;
   }
-  .menu-item--left:not(:disabled):hover .tooltip__text {
+  .menu-item--left:enabled:hover .tooltip__text {
     margin-right: 48px;
   }
-  .menu-item--right:not(:disabled):hover .tooltip__text {
+  .menu-item--right:enabled:hover .tooltip__text {
     margin-left: 48px;
   }
 

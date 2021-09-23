@@ -115,12 +115,6 @@
   }
 }
 
-.menu-bars:not(.menu-bars--bottom) {
-  .menu-bars__switch {
-    display: none;
-  }
-}
-
 .user-menu {
   --primaryColor: #0057ff;
   --secondaryColor: #253f71;
@@ -165,6 +159,10 @@
 }
 
 .menu-bars:not(.menu-bars--bottom) {
+  .menu-bars__switch {
+    display: none;
+  }
+
   .user-menu {
     left: 8px;
   }
