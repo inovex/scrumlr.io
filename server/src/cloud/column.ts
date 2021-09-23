@@ -93,7 +93,7 @@ export const initializeColumnFunctions = () => {
       }
     }
 
-    if (request.column.hidden !== undefined) {
+    if (request.column.hidden != undefined) {
       columns[request.column.columnId].hidden = request.column.hidden;
     }
 

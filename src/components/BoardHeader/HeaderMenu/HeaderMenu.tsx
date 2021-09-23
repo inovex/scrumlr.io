@@ -119,7 +119,9 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="menu__item-button"
             onClick={() => {
-              store.dispatch(ActionFactory.editUserConfiguration(Parse.User.current()?.id || "", {showHiddenColumns: !state.user?.showHiddenColumns}));
+              if (state.user?.id) {
+                store.dispatch(ActionFactory.editUserConfiguration(state.user?.id, {showHiddenColumns: !state.user.showHiddenColumns}));
+              }
             }}
           >
             <div className="item-button__toggle-container">

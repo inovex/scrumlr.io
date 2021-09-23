@@ -26,6 +26,6 @@ export const initializeUserFunctions = () => {
 
     user.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: "User was successfully removed from the list of moderators"};
+    return {status: "Success", description: "User configuration edited."};
   });
 };
