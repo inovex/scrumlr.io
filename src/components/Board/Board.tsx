@@ -97,6 +97,8 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
   const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
 
+  document.getElementById("menu-bars")?.classList.toggle("menu-bars--bottom", showPreviousButton || showNextButton);
+
   const handlePreviousClick = () => {
     boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };

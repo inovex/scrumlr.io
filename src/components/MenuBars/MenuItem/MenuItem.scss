@@ -1,225 +1,231 @@
 @import "constants/style.scss";
 
+$number-of-menu-items: 4;
+
+// DISABLED
+.menu-item:disabled {
+  cursor: not-allowed;
+}
+.menu-item:disabled .menu-item__icon {
+  color: #a3a6aa;
+  background: transparent;
+}
+
 .menu-item:focus {
   outline: none;
 }
 
-// MOBILE
-@media #{$menu-mobile} {
+.menu-item {
+  background-color: transparent;
+  border: none;
+  border-radius: 18px;
+  height: 36px;
+  padding: 0;
+  position: relative;
+  width: 36px;
+}
+
+.menu-bars--bottom {
   $menu-item__first-position-left: 28px;
 
-  @for $i from 1 through 6 {
+  @for $i from 1 through $number-of-menu-items {
     .menu-item:nth-child(#{$i}) {
       left: $menu-item__first-position-left + (($i - 1) * 58px);
     }
   }
 
   .menu-item {
-    background-color: transparent;
-    border: none;
-    border-radius: 18px;
-    padding: 0;
     position: absolute;
-    width: 36px;
-    top: 0;
+    top: 14px;
     right: 0;
     bottom: 0;
-    height: 36px;
   }
+}
 
-  .menu-item:not(:disabled):hover,
-  .menu-item:not(:disabled):active {
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: $menu-item-z-index;
-    transition: left 2s 0.25s;
+.menu-item__tooltip {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  width: 0;
+  height: 36px;
+  border-radius: 16px;
+}
 
-    @media (prefers-color-scheme: light) {
+.tooltip__text {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 16px;
+  color: var(--primaryColor);
+}
+@media (prefers-color-scheme: dark) {
+  .tooltip__text {
+    color: $color-white;
+  }
+}
+
+.menu-item__icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 100%;
+  color: var(--primaryColor);
+  background: $color-white;
+}
+@media (prefers-color-scheme: dark) {
+  .menu-item__icon {
+    color: $color-white;
+    background: var(--primaryColor);
+  }
+}
+.menu-item:enabled:hover {
+  @media (prefers-color-scheme: light) {
+    .menu-item__icon {
+      color: $color-white;
+      background-color: var(--primaryColor);
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .menu-item__icon {
+      color: $color-white;
+      background-color: var(--secondaryColor);
+    }
+  }
+}
+.menu-item__icon--end {
+  visibility: hidden;
+}
+
+.menu-item--active:enabled:hover > .menu-item__icon--end,
+.menu-item--active:enabled:active > .menu-item__icon--end {
+  visibility: visible;
+}
+
+.menu-item--active:enabled:hover > .menu-item__icon--start,
+.menu-item--active:enabled:active > .menu-item__icon--start {
+  visibility: hidden;
+}
+
+// Columns partly hidden, no touch screen device
+@media (pointer: fine) {
+  .menu-bars--bottom {
+    .menu-item:enabled:hover {
       .menu-item__tooltip {
+        width: 200px;
+        opacity: 1;
+        visibility: visible;
+        // Tooltip will be shown after 0.5s delay, but cleared instantly
+        transition-delay: 0.5s;
+      }
+    }
+
+    .menu-item__tooltip {
+      position: absolute;
+      animation: none;
+      top: -58px;
+      left: calc(-100px + 18px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.1s linear;
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+      background-color: $color-white;
+    }
+    .menu-item__tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: calc(50% - 5px);
+      border-width: 5px;
+      border-style: solid;
+      border-color: $color-white transparent transparent transparent;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .menu-item__tooltip {
+        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
         background-color: var(--primaryColor);
       }
+      .menu-item__tooltip::after {
+        border-color: var(--primaryColor) transparent transparent transparent;
+      }
+    }
+
+    .tooltip__text {
+      width: 200px;
+      white-space: nowrap;
+    }
+  }
+}
+
+// Columns partly hidden, touch screen device (=> no hover)
+@media (pointer: coarse) {
+  .menu-bars--bottom {
+    .menu-item:enabled:active {
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: $menu-item-z-index;
+      transition: left 2s 0.25s;
+
+      .menu-item__tooltip {
+        height: 100%;
+        width: 100%;
+        transition: width 0.5s 0.25s ease;
+      }
+      .menu-item__icon {
+        left: 28px;
+        transition: left 2s 0.5s, visibility 0s 0.5s;
+      }
+    }
+
+    .menu-item__tooltip {
+      position: relative;
+      top: -14px;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      border-radius: 32px;
+      background-color: var(--primaryColor);
     }
     @media (prefers-color-scheme: dark) {
       .menu-item__tooltip {
         background-color: $color-white;
       }
     }
-  }
-
-  .menu-item:not(:disabled):hover > .menu-item__tooltip,
-  .menu-item:not(:disabled):active > .menu-item__tooltip {
-    height: 100%;
-    width: 100%;
-    transition: background-color 0.5s 0.25s ease, width 0.5s 0.25s ease, height 0.5s 0.25s ease;
-  }
-
-  .menu-item:not(:disabled):hover > .menu-item__icon,
-  .menu-item:not(:disabled):active > .menu-item__icon {
-    left: $menu-item__first-position-left;
-    transition: left 2s 0.5s, visibility 0s 0.5s;
-  }
-
-  .menu-item:not(:disabled):hover > .tooltip__text,
-  .menu-item:not(:disabled):active > .tooltip__text {
-    margin-right: 48px;
-  }
-
-  .menu-item--active:hover > .menu-item__icon--end,
-  .menu-item--active:active > .menu-item__icon--end {
-    visibility: visible;
-  }
-
-  .menu-item--active:hover > .menu-item__icon--start,
-  .menu-item--active:active > .menu-item__icon--start {
-    visibility: hidden;
-  }
-
-  .menu-item__tooltip {
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    font-size: 14px;
-    font-weight: bold;
-    height: 36px;
-    letter-spacing: 1px;
-    line-height: 16px;
-    padding: 0;
-    text-align: right;
-    white-space: nowrap;
-    width: 0;
-    overflow: hidden;
-    border-radius: 32px;
-    transition-duration: 0s;
-  }
-
-  .tooltip__text {
-    margin-left: 72px;
-    text-transform: uppercase;
-  }
-  @media (prefers-color-scheme: light) {
     .tooltip__text {
+      margin-left: 72px;
       color: $color-white;
     }
-  }
-  @media (prefers-color-scheme: dark) {
-    .tooltip__text {
-      color: var(--primaryColor);
+    @media (prefers-color-scheme: dark) {
+      .tooltip__text {
+        color: var(--primaryColor);
+      }
     }
-  }
-
-  .menu-item__icon {
-    left: 0;
-    position: absolute;
-    top: 14px;
-    border-radius: 100%;
-    transition: left 0s;
-  }
-  @media (prefers-color-scheme: light) {
-    .menu-item__icon {
-      color: var(--primaryColor);
-      background: $color-white;
-    }
-  }
-  @media (prefers-color-scheme: dark) {
-    .menu-item__icon {
-      color: $color-white;
-      background: var(--primaryColor);
-    }
-  }
-
-  .menu-item__icon--end {
-    visibility: hidden;
   }
 }
 
-// DESKTOP
-@media #{$menu-desktop} {
-  .menu-item {
-    border: none;
-    border-radius: 18px;
-    padding: 0;
-    background-color: transparent;
-    height: 36px;
-    width: 36px;
-    position: relative;
-    transition: background-color 0.25s ease-in-out, left 2s;
-  }
-  .menu-item:not(:disabled):hover {
-    @media (prefers-color-scheme: light) {
-      .menu-item__icon {
-        color: $color-white;
-        background-color: var(--primaryColor);
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      .menu-item__icon {
-        color: $color-white;
-        background-color: var(--secondaryColor);
-      }
-    }
-  }
-  .menu-item:not(:disabled):hover > .menu-item__tooltip {
+// *****************************
+// ALL columns are fully visible
+// *****************************
+.menu-bars:not(.menu-bars--bottom) {
+  .menu-item:enabled:hover > .menu-item__tooltip {
     width: 230px;
   }
-  .menu-item:not(:disabled):hover > .menu-item__icon {
-    animation: none;
-  }
-  .menu-item--left:not(:disabled):hover > .menu-item__tooltip > .tooltip__text {
+  .menu-item--left:enabled:hover .tooltip__text {
     margin-right: 48px;
   }
-  .menu-item--right:not(:disabled):hover > .menu-item__tooltip > .tooltip__text {
+  .menu-item--right:enabled:hover .tooltip__text {
     margin-left: 48px;
-  }
-  .menu-item--active:not(:disabled):hover > .menu-item__icon--end {
-    display: inline;
-  }
-  .menu-item--active:not(:disabled):hover > .menu-item__icon--start {
-    display: none;
-  }
-
-  .menu-item__icon {
-    top: 0;
-    left: 0;
-    border-radius: 100%;
-  }
-  @media (prefers-color-scheme: light) {
-    .menu-item__icon {
-      color: var(--primaryColor);
-      background: $color-white;
-    }
-  }
-  @media (prefers-color-scheme: dark) {
-    .menu-item__icon {
-      color: $color-white;
-      background: var(--primaryColor);
-    }
-  }
-
-  .menu-item__icon--end {
-    display: none;
   }
 
   .menu-item__tooltip {
     position: absolute;
-    animation: none;
-    border-radius: 16px;
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    font-size: 14px;
-    font-weight: bold;
-    height: 36px;
-    letter-spacing: 1px;
-    line-height: 16px;
-    padding: 0;
-    text-align: right;
     white-space: nowrap;
-    width: 0;
-    z-index: -1;
     overflow: hidden;
-    right: 0;
     transition: width 0.25s ease-in-out;
+    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    background-color: $color-white;
   }
   .menu-item--left > .menu-item__tooltip {
     right: 0;
@@ -229,52 +235,28 @@
     left: 0;
     top: 0;
   }
-  @media (prefers-color-scheme: light) {
-    .menu-item__tooltip {
-      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      background-color: $color-white;
-      color: var(--primaryColor);
-    }
-  }
   @media (prefers-color-scheme: dark) {
     .menu-item__tooltip {
       box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       background-color: var(--primaryColor);
-      color: $color-white;
     }
   }
-
   .tooltip__text {
-    text-transform: uppercase;
     position: absolute;
-  }
-  .menu-item--right > .menu-item__tooltip > .tooltip__text {
-    margin-left: 36px;
-    transition: margin-left 0.5s ease-in-out;
-    left: 0;
-  }
-  .menu-item--left > .menu-item__tooltip > .tooltip__text {
-    margin-right: 36px;
-    transition: margin-right 0.5s ease-in-out;
-    right: 0;
-  }
-  @media (prefers-color-scheme: light) {
-    .tooltip__text {
-      color: var(--primaryColor);
-    }
+    color: var(--primaryColor);
+    transition: margin 0.5s ease-in-out;
   }
   @media (prefers-color-scheme: dark) {
     .tooltip__text {
       color: $color-white;
     }
   }
-}
-
-// DISABLED
-.menu-item:disabled {
-  cursor: not-allowed;
-}
-.menu-item:disabled .menu-item__icon {
-  color: #adadad;
-  background: transparent;
+  .menu-item--right .tooltip__text {
+    margin-left: 36px;
+    left: 0;
+  }
+  .menu-item--left .tooltip__text {
+    margin-right: 36px;
+    right: 0;
+  }
 }
