@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/parse": "^2.18.10",
+    "@types/parse": "^2.18.11",
     "env-cmd": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -33,13 +33,10 @@
     "axios": "^0.21.4",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
-    "express-session": "^1.17.2",
     "googleapis": "^85.0.0",
     "http-proxy-middleware": "^2.0.1",
     "parse": "^3.3.0",
     "parse-server": "^4.10.3",
-    "passport": "^0.4.1",
-    "passport-google-oauth2": "^0.2.0",
     "qs": "^6.10.1"
   },
   "lint-staged": {
