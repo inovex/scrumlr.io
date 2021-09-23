@@ -18,6 +18,11 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
 
+      // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
+      if (action.board.moderationPhase) {
+        Toast.success(`You ${action.board.moderationPhase === "active" ? "started" : "ended"} the moderation phase!`);
+      }
+
       return {
         status: state.status,
         data: {
@@ -87,6 +92,15 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           Toast.success("Voting phase started! You can vote now!");
         } else {
           Toast.error("Voting phase ended! You can't vote anymore!");
+        }
+      }
+
+      // User notification
+      if (state.data?.moderationPhase !== action.board.moderationPhase) {
+        if (action.board.moderationPhase === "active") {
+          Toast.success("Moderation phase started!");
+        } else {
+          Toast.error("Moderation phase ended!");
         }
       }
 
