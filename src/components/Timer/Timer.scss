@@ -5,6 +5,10 @@
   transform: translateX(-50%);
   z-index: 300;
 }
+.timer--top {
+  bottom: auto;
+  top: 90px;
+}
 .timer > * {
   color: white;
   background-color: #0057ff;

@@ -29,7 +29,13 @@ export const Timer = (props: TimerProps) => {
 
   if (!timeLeft) return null;
   return ReactDOM.createPortal(
-    <aside className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+    <aside
+      className={classNames(
+        "timer",
+        {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0},
+        {"timer--top": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
+      )}
+    >
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
@@ -39,6 +45,6 @@ export const Timer = (props: TimerProps) => {
         </button>
       )}
     </aside>,
-    document.body
+    document.getElementById("root")!
   );
 };
