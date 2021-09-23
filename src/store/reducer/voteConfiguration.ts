@@ -4,7 +4,7 @@ import {ActionType, ReduxAction} from "store/action";
 /**
  * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)
  */
-const defaultVoteConfiguration = {votingIteration: 0, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true};
+const defaultVoteConfiguration = {boardId: "Empty", votingIteration: 0, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true};
 
 export const voteConfigurationReducer = (state: VoteConfigurationClientModel = defaultVoteConfiguration, action: ReduxAction): VoteConfigurationClientModel => {
   switch (action.type) {
