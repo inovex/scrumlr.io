@@ -33,7 +33,7 @@ export interface NoteClientModel {
   parentId?: string;
 
   /** Focused during moderation phase. */
-  focus?: boolean;
+  focus: boolean;
 
   /** The creation date of this object. */
   createdAt?: Date;
