@@ -1,11 +1,26 @@
-import * as React from "react";
 import {RouteComponentProps} from "react-router";
 import {getRandomName} from "constants/Name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
+import {useState} from "react";
+import Parse from "parse";
+import {onGithubSignIn, onGoogleSignIn, onMicrosoftSignIn} from "../NewBoard/NewBoard";
 
 function LoginBoard(props: RouteComponentProps) {
-  const [displayName, setDisplayName] = React.useState(getRandomName());
+  const [displayName, setDisplayName] = useState(getRandomName());
+
+  if (Parse.User.current() && sessionStorage.getItem("boardId")) {
+    try {
+      props.history.push(sessionStorage.getItem("boardId")!);
+    } catch (err) {
+      Toast.error("An error occured while redirecting you");
+    }
+    sessionStorage.clear();
+  }
+
+  if (props.history.location.state !== undefined && !sessionStorage.getItem("boardId")) {
+    sessionStorage.setItem("boardId", (props.history.location.state as {from: {pathname: string}}).from.pathname);
+  }
 
   async function handleLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
@@ -31,6 +46,9 @@ function LoginBoard(props: RouteComponentProps) {
         maxLength={20}
       />
       <button onClick={handleLogin}>Join Board</button>
+      <button onClick={onGoogleSignIn}>Sign in with Google</button>
+      <button onClick={onGithubSignIn}>Sign in with Github</button>
+      <button onClick={onMicrosoftSignIn}>Sign in with Microsoft</button>
     </div>
   );
 }

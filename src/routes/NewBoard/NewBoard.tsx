@@ -6,16 +6,14 @@ import {API} from "api";
 import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const onGoogleSignIn = async () => {
   window.location.href = await API.signInWithGoogle(); // redirectURI: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
 };
-
 export const onGithubSignIn = async () => {
   window.location.href = await API.signInWithGithub(); // redirectURI: https://github.com/login/oauth/authorize...
 };
-
 export const onMicrosoftSignIn = async () => {
   window.location.href = await API.signInWithMicrosoft(); // redirectURI https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
 };
@@ -46,7 +44,7 @@ function NewBoard(props: RouteComponentProps) {
   };
 
   const [displayName, setDisplayName] = useState(getRandomName());
-  const [boardName, setBoardName] = useState("BoardName");
+  const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Positive/Negative/Actions");
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(false);
 
@@ -69,10 +67,25 @@ function NewBoard(props: RouteComponentProps) {
     props.history.push("/");
   }
 
+  useEffect(() => {
+    if (localStorage.getItem("Parse/Scrumlr/currentUser")) setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
+  }, []);
+
   if (Parse.User.current()) {
     return (
       <div>
-        <button onClick={onCreateBoard}>Create Board</button>
+        <p>User: {displayName}</p>
+        <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
+        <label>
+          <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
+          JoinConfirmationRequired
+        </label>
+        <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
+          {Object.keys(columnTemplates).map((key) => (
+            <option value={key}>{key}</option>
+          ))}
+        </select>
+        <button onClick={onCreateBoard}>Create new Board</button>
         <button onClick={onLogout}>Logout</button>
       </div>
     );
@@ -95,14 +108,13 @@ function NewBoard(props: RouteComponentProps) {
       <button
         onClick={async () => {
           if (!Parse.User.current()) await onAnonymousLogin();
-          onCreateBoard();
         }}
       >
-        Create new Board
+        Create new board anonymously
       </button>
-      <button onClick={onGoogleSignIn}>Sign in with Google</button>
-      <button onClick={onGithubSignIn}>Sign in with Github</button>
-      <button onClick={onMicrosoftSignIn}>Sign in with Microsoft</button>
+      <button onClick={onGoogleSignIn}>SignIn with Google </button>
+      <button onClick={onGithubSignIn}>SignIn with Github</button>
+      <button onClick={onMicrosoftSignIn}>SignIn with Microsoft</button>
     </div>
   );
 }
