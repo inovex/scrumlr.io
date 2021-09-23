@@ -2,7 +2,7 @@ import {VoteConfigurationClientModel} from "types/voteConfiguration";
 import {ActionType, ReduxAction} from "store/action";
 
 /**
- * Default ovte configuration if the state is undefined (e.g. no default vote configuration available in the database)
+ * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)
  */
 const defaultVoteConfiguration = {votingIteration: 0, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true};
 

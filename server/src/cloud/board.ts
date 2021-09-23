@@ -146,18 +146,6 @@ export const initializeBoardFunctions = () => {
     }, {});
     const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
 
-    // Add default vote configuration (allows default vote settings defined during the board creation)
-    /*
-    const voteConfiguration = new Parse.Object("VoteConfiguration", {
-      board,
-      votingIteration: 0,
-      voteLimit: 10,
-      allowMultipleVotesPerNote: true,
-      showVotesOfOtherUsers: false,
-    });
-    voteConfiguration.save(null, {useMasterKey: true});
-    */
-
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
     adminRoleACL.setPublicWriteAccess(false);
@@ -339,7 +327,7 @@ export const initializeBoardFunctions = () => {
     await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
 
     const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
-    joinRequestQuery.equalTo("board", board);
+    voteConfigurationQuery.equalTo("board", board);
     const voteConfigurations = await voteConfigurationQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(voteConfigurations, {useMasterKey: true});
 
@@ -414,6 +402,6 @@ export const initializeBoardFunctions = () => {
     board.set("voting", "disabled");
     await board.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: "Your voting phase was canceled"};
+    return {status: "Success", description: "Current voting phase was canceled"};
   });
 };

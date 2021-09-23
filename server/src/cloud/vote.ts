@@ -21,7 +21,8 @@ export const initializeVoteFunctions = () => {
     }
 
     const votingIteration = await board.get("votingIteration");
-    // Check if user will exceed vote limit
+
+    // Select votes of current iteration
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("board", board);
     voteQuery.equalTo("user", user);

@@ -7,12 +7,16 @@ jest.mock("api", () => ({
   API: {
     addVoteConfiguration: jest.fn(),
     removeVoteConfiguration: jest.fn(),
+    updateVoteConfiguration: jest.fn(),
   },
 }));
 
 beforeEach(() => {
   (API.addVoteConfiguration as jest.Mock).mockClear();
   (API.removeVoteConfiguration as jest.Mock).mockClear();
+  (API.updateVoteConfiguration as jest.Mock).mockClear();
+  (API.addVoteConfiguration as jest.Mock).mockReturnValue({status: "Success"});
+  (API.updateVoteConfiguration as jest.Mock).mockReturnValue({status: "Success"});
 });
 
 const stateAPI = {
@@ -26,25 +30,43 @@ const stateAPI = {
 };
 
 describe("voteConfiguration middleware", () => {
-  /*
-  Causes unhandled exceptions: Reason -> await and the Toast error message
   test("add voteConfiguration", () => {
-    passVoteConfigurationMiddlware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.addVoteConfiguration({
-      board: "boardId",
-      votingIteration: 1,
-      voteLimit: 5,
-      allowMultipleVotesPerNote: true,
-      showVotesOfOtherUsers: false
-    }));
+    passVoteConfigurationMiddlware(
+      stateAPI as MiddlewareAPI,
+      jest.fn(),
+      ActionFactory.addVoteConfiguration({
+        board: "boardId",
+        voteLimit: 5,
+        allowMultipleVotesPerNote: true,
+        showVotesOfOtherUsers: false,
+      })
+    );
     expect(API.addVoteConfiguration).toHaveBeenCalledWith({
       board: "boardId",
-      votingIteration: 1,
       voteLimit: 5,
       allowMultipleVotesPerNote: true,
-      showVotesOfOtherUsers: false
+      showVotesOfOtherUsers: false,
     });
   });
-  */
+
+  test("update voteConfiguration", () => {
+    passVoteConfigurationMiddlware(
+      stateAPI as MiddlewareAPI,
+      jest.fn(),
+      ActionFactory.updateVoteConfiguration({
+        board: "boardId",
+        voteLimit: 5,
+        allowMultipleVotesPerNote: true,
+        showVotesOfOtherUsers: false,
+      })
+    );
+    expect(API.updateVoteConfiguration).toHaveBeenCalledWith({
+      board: "boardId",
+      voteLimit: 5,
+      allowMultipleVotesPerNote: true,
+      showVotesOfOtherUsers: false,
+    });
+  });
 
   test("remove VoteConfiguration", () => {
     passVoteConfigurationMiddlware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.removeVoteConfiguration("boardId"));
