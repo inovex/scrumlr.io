@@ -12,22 +12,25 @@ type TimerProps = {
 };
 
 export const Timer = (props: TimerProps) => {
+  const calculateTime = () => {
+    const difference = +props.endTime - +new Date();
+    return {
+      h: Math.max(Math.floor((difference / 1000 / 60 / 60) % 24), 0),
+      m: Math.max(Math.floor((difference / 1000 / 60) % 60), 0),
+      s: Math.max(Math.floor((difference / 1000) % 60), 0),
+    };
+  };
+
   const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
-  const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number} | null>(null);
+  const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
 
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
-      const difference = +props.endTime - +new Date();
-      setTimeLeft({
-        h: Math.max(Math.floor((difference / 1000 / 60 / 60) % 24), 0),
-        m: Math.max(Math.floor((difference / 1000 / 60) % 60), 0),
-        s: Math.max(Math.floor((difference / 1000) % 60), 0),
-      });
+      setTimeLeft(calculateTime());
     }, 250);
     return () => clearTimeout(timerUpdateTimeout);
   });
 
-  if (!timeLeft) return null;
   return ReactDOM.createPortal(
     <aside
       className={classNames(

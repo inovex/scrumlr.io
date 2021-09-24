@@ -5,7 +5,7 @@ import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
 import {useAppSelector} from "store";
-import {Timer} from "components/Timer/Timer";
+import {Timer} from "components/Timer";
 
 function Board() {
   const state = useAppSelector((applicationState) => ({

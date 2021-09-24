@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Timer should render correctly 1`] = `
+<aside
+  class="timer"
+>
+  <span>
+    02
+    :
+    59
+  </span>
+</aside>
+`;
