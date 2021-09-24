@@ -12,6 +12,16 @@ import {callAPI} from "api/callApi";
 
 let closeSubscriptions: (() => void)[] = [];
 
+const getBrowserServerTimeDifference = async () => {
+  const serverTime: string = await callAPI("getServerTime", {});
+  const serverTimeInMilliseconds = Date.parse(serverTime);
+  const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
+  const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
+  // difference > 0: Browserzeit ist vor der Serverzeit
+  // difference < 0: Browserzeit ist hinter der Serverzeit
+  return differenceInMilliseconds;
+};
+
 export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
     closeSubscriptions.forEach((closeCallback) => closeCallback());
@@ -198,15 +208,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         let timerUTCEndTime;
         const board = object.toJSON() as unknown as BoardServerModel;
         if (board.timerUTCEndTime != null) {
-          const serverTime: string = await callAPI("getServerTime", {});
-          const serverTimeInMilliseconds = Date.parse(serverTime);
-          const browserTimeInMilliseconds = Date.parse(new Date().toString());
-          const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
-          // difference > 0: Browserzeit ist vor der Serverzeit
-          // difference < 0: Browserzeit ist hinter der Serverzeit
+          const difference = await getBrowserServerTimeDifference();
           // @ts-ignore
-          const boardTimer = new Date(board.timerUTCEndTime.iso);
-          timerUTCEndTime = new Date(boardTimer.getTime() + differenceInMilliseconds);
+          timerUTCEndTime = new Date(new Date(board.timerUTCEndTime.iso).getTime() + difference);
         }
 
         dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel({...(object.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
@@ -231,15 +235,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
             const b = board?.toJSON() as unknown as BoardServerModel;
             let timerUTCEndTime;
             if (b.timerUTCEndTime != null) {
-              const serverTime: string = await callAPI("getServerTime", {});
-              const serverTimeInMilliseconds = Date.parse(serverTime);
-              const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
-              const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
-              // difference > 0: Browserzeit ist vor der Serverzeit
-              // difference < 0: Browserzeit ist hinter der Serverzeit
+              const difference = await getBrowserServerTimeDifference();
               // @ts-ignore
-              const boardTimer = new Date(b.timerUTCEndTime.iso);
-              timerUTCEndTime = new Date(boardTimer.getTime() + differenceInMilliseconds);
+              timerUTCEndTime = new Date(new Date(b.timerUTCEndTime.iso).getTime() + difference);
             }
 
             dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel({...(board?.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
@@ -268,13 +266,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   }
 
   if (action.type === ActionType.SetTimer) {
-    const serverTime: string = await callAPI("getServerTime", {});
-    const serverTimeInMilliseconds = Date.parse(serverTime);
-    const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
-    const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
-    // difference > 0: Browserzeit ist vor der Serverzeit
-    // difference < 0: Browserzeit ist hinter der Serverzeit
-    API.setTimer(new Date(action.endDate.getTime() - differenceInMilliseconds), stateAPI.getState().board.data!.id);
+    const difference = await getBrowserServerTimeDifference();
+    API.setTimer(new Date(action.endDate.getTime() - difference), stateAPI.getState().board.data!.id);
   }
   if (action.type === ActionType.CancelTimer) {
     API.cancelTimer(stateAPI.getState().board.data!.id);
