@@ -268,7 +268,13 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   }
 
   if (action.type === ActionType.SetTimer) {
-    API.setTimer(action.endDate, stateAPI.getState().board.data!.id);
+    const serverTime: string = await callAPI("getServerTime", {});
+    const serverTimeInMilliseconds = Date.parse(serverTime);
+    const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
+    const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
+    // difference > 0: Browserzeit ist vor der Serverzeit
+    // difference < 0: Browserzeit ist hinter der Serverzeit
+    API.setTimer(new Date(action.endDate.getTime() - differenceInMilliseconds), stateAPI.getState().board.data!.id);
   }
   if (action.type === ActionType.CancelTimer) {
     API.cancelTimer(stateAPI.getState().board.data!.id);
