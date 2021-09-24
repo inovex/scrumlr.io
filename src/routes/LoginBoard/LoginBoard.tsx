@@ -45,10 +45,10 @@ function LoginBoard(props: RouteComponentProps) {
         }}
         maxLength={20}
       />
-      <button onClick={handleLogin}>Join Board</button>
-      <button onClick={onGoogleSignIn}>Sign in with Google</button>
-      <button onClick={onGithubSignIn}>Sign in with Github</button>
-      <button onClick={onMicrosoftSignIn}>Sign in with Microsoft</button>
+      <button onClick={handleLogin}>Join Board Anonymously</button>
+      <button onClick={onGoogleSignIn}>Join with Google SignIn</button>
+      <button onClick={onGithubSignIn}>Join with Github SignIn</button>
+      <button onClick={onMicrosoftSignIn}>Join with Microsoft SignIn</button>
     </div>
   );
 }
