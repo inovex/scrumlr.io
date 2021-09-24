@@ -23,6 +23,7 @@ function MenuBars() {
   const currentUser = Parse.User.current();
   const admins = useAppSelector((state) => state.users.admins);
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const timer = useAppSelector((state) => state.board.data?.timerUTCEndTime);
 
   const isAdmin = admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
 
@@ -60,7 +61,7 @@ function MenuBars() {
         <section className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
-            <MenuToggle direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
+            <MenuToggle value={timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>
