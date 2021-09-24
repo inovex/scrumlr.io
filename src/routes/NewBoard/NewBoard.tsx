@@ -68,7 +68,9 @@ function NewBoard(props: RouteComponentProps) {
   }
 
   useEffect(() => {
-    if (localStorage.getItem("Parse/Scrumlr/currentUser")) setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
+    if (localStorage.getItem("Parse/Scrumlr/currentUser")) {
+      setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
+    }
   }, []);
 
   if (Parse.User.current()) {
