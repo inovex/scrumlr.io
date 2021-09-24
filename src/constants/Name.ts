@@ -143,12 +143,14 @@ export const getRandomName = () => {
 };
 
 export const getInitials = (name: string): string => {
+  // return first char of each word in name
   if (name.indexOf(" ") > -1) {
     return name
       .split(" ")
       .map((n) => n[0])
       .join("");
   }
+  // return first 2 chars of single-word name
   return name.substring(0, 2);
 };
 
