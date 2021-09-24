@@ -9,6 +9,7 @@ import {onGithubSignIn, onGoogleSignIn, onMicrosoftSignIn} from "../NewBoard/New
 function LoginBoard(props: RouteComponentProps) {
   const [displayName, setDisplayName] = useState(getRandomName());
 
+  // after oauth-redirection to current page, redirect to board path that was set before oauth
   if (Parse.User.current() && sessionStorage.getItem("boardId")) {
     try {
       props.history.push(sessionStorage.getItem("boardId")!);
@@ -18,10 +19,12 @@ function LoginBoard(props: RouteComponentProps) {
     sessionStorage.clear();
   }
 
-  if (props.history.location.state !== undefined && !sessionStorage.getItem("boardId")) {
+  // safe board path in sessionStorage if there was an internal redirect because of lacking authentification
+  if (props.history.location.state && !sessionStorage.getItem("boardId")) {
     sessionStorage.setItem("boardId", (props.history.location.state as {from: {pathname: string}}).from.pathname);
   }
 
+  // anonymous sign in after internal redirection, so boardpath is still in history
   async function handleLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
     try {
