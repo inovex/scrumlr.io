@@ -371,8 +371,11 @@ export const initializeBoardFunctions = () => {
   api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
-    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
-    const board = await boardQuery.get(request.boardId, {useMasterKey: true});
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
     board.set("timerUTCEndTime", request.endDate);
     await board.save(null, {useMasterKey: true});
 
@@ -382,8 +385,11 @@ export const initializeBoardFunctions = () => {
   api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
-    const boardQuery = new Parse.Query(Parse.Object.extend("Board"));
-    const board = await boardQuery.get(request.boardId, {useMasterKey: true});
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
     board.unset("timerUTCEndTime");
     await board.save(null, {useMasterKey: true});
 
