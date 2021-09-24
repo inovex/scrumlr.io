@@ -12,12 +12,16 @@
 .timer > * {
   color: white;
   background-color: #0057ff;
-  box-shadow: 0 8px 16px #0057ff25;
   vertical-align: bottom;
+}
+.timer:not(.timer--top) > * {
+  box-shadow: 0 8px 16px #0057ff25;
 }
 @media (prefers-color-scheme: dark) {
   .timer > * {
     background-color: #ff0069;
+  }
+  .timer:not(.timer--top) > * {
     box-shadow: 0 8px 16px #ff006925;
   }
 }
