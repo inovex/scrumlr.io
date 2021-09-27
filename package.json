@@ -14,7 +14,7 @@
     "classnames": "^2.3.1",
     "lodash": "^4.17.20",
     "marked": "^3.0.3",
-    "parse": "^3.3.0",
+    "parse": "^3.3.1",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-dnd": "^14.0.3",
