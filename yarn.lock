@@ -4565,15 +4565,6 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dnd-core@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-14.0.0.tgz#973ab3470d0a9ac5a0fa9021c4feba93ad12347d"
-  integrity sha512-wTDYKyjSqWuYw3ZG0GJ7k+UIfzxTNoZLjDrut37PbcPGNfwhlKYlPUqjAKUjOOv80izshUiqusaKgJPItXSevA==
-  dependencies:
-    "@react-dnd/asap" "^4.0.0"
-    "@react-dnd/invariant" "^2.0.0"
-    redux "^4.0.5"
-
 dnd-core@14.0.1:
   version "14.0.1"
   resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-14.0.1.tgz#76d000e41c494983210fb20a48b835f81a203c2e"
@@ -10190,12 +10181,12 @@ react-dnd-html5-backend@*, react-dnd-html5-backend@^14.0.2:
   dependencies:
     dnd-core "14.0.1"
 
-react-dnd-test-backend@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-backend/-/react-dnd-test-backend-14.0.0.tgz#4ab247dfc54aafc4570b3491510067d4d87a2199"
-  integrity sha512-eeAFsxEYV05+uoCth4lZTzaIZf9J3D7Mlr1IVCpJ5IHcaLylN2wY6OK2jE51G/lCwzs+55evAOIueMM1fDf+IQ==
+react-dnd-test-backend@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-test-backend/-/react-dnd-test-backend-14.0.1.tgz#687ed2834a3b51df91706a97a42f6d43b55dc054"
+  integrity sha512-jLGc03K0qd5a0Q+knR8qzUzHqFDEhu3yOxOhJNyWIQucGUbyRhklghJblTJnuvOCNFusnHYOuHERwcvJjXMMbg==
   dependencies:
-    dnd-core "14.0.0"
+    dnd-core "14.0.1"
 
 react-dnd-test-utils@^14.0.2:
   version "14.0.2"
