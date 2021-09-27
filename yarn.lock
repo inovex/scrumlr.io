@@ -10202,14 +10202,14 @@ react-dnd-test-utils@^14.0.2:
   resolved "https://registry.yarnpkg.com/react-dnd-test-utils/-/react-dnd-test-utils-14.0.2.tgz#fd9cec916aed9921004b9ff594531b59415d7293"
   integrity sha512-djiiirSvyB2muJ48baz0R0vNModOX2VCVhUlj2HaLdIEkPXAzQZyq8dQIo0A3/fWh5Mcr+GiG1Ec+qSH8eUQUg==
 
-react-dnd@*, react-dnd@^14.0.3:
-  version "14.0.3"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-14.0.3.tgz#1762c1ec84815439f2d8a6a40efd1f57eee41ba6"
-  integrity sha512-i73Hx5SKfDRdwXe30+CjF/DidiRdt/gwpPN14ajkPR20t/0osnNKFNHg3DLV6RZym+DJ0pO9H5APeMsBWGU3+Q==
+react-dnd@*, react-dnd@^14.0.4:
+  version "14.0.4"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-14.0.4.tgz#ffb4ea0e2a3a5532f9c6294d565742008a52b8b0"
+  integrity sha512-AFJJXzUIWp5WAhgvI85ESkDCawM0lhoVvfo/lrseLXwFdH3kEO3v8I2C81QPqBW2UEyJBIPStOhPMGYGFtq/bg==
   dependencies:
     "@react-dnd/invariant" "^2.0.0"
     "@react-dnd/shallowequal" "^2.0.0"
-    dnd-core "14.0.0"
+    dnd-core "14.0.1"
     fast-deep-equal "^3.1.3"
     hoist-non-react-statics "^3.3.2"
 
