@@ -28,6 +28,8 @@ interface NoteDialogProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
+  activeModeration: boolean;
+  currentUserIsModerator: boolean;
 }
 
 const NoteDialog = (props: NoteDialogProps) => {
@@ -36,6 +38,8 @@ const NoteDialog = (props: NoteDialogProps) => {
   }
 
   const editable = (authorId: string) => Parse.User.current()?.id === authorId || props.isAdmin;
+
+  const showOptions = !props.activeModeration || props.currentUserIsModerator;
 
   const onEdit = (id: string, authorId: string, text: string) => {
     if (editable(authorId)) {
@@ -80,21 +84,23 @@ const NoteDialog = (props: NoteDialogProps) => {
             <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
           </footer>
 
-          <aside>
-            <ul className="note-dialog__options">
-              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(props.authorId)})}>
-                <IconButton
-                  onClick={() => {
-                    onDelete(props.noteId!, props.authorId);
-                    props.onClose();
-                  }}
-                  direction="right"
-                  label="Delete"
-                  icon={deleteIcon}
-                />
-              </li>
-            </ul>
-          </aside>
+          {showOptions && (
+            <aside>
+              <ul className="note-dialog__options">
+                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(props.authorId)})}>
+                  <IconButton
+                    onClick={() => {
+                      onDelete(props.noteId!, props.authorId);
+                      props.onClose();
+                    }}
+                    direction="right"
+                    label="Delete"
+                    icon={deleteIcon}
+                  />
+                </li>
+              </ul>
+            </aside>
+          )}
         </div>
         {props.childrenNotes.map((note) => (
           <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
@@ -121,24 +127,26 @@ const NoteDialog = (props: NoteDialogProps) => {
               <Votes className="note__votes" noteId={note.id!} votes={note.votes} activeVoting={props.activeVoting} />
             </footer>
 
-            <aside>
-              <ul className="note-dialog__options">
-                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
-                  <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
-                </li>
-                <li className="note-dialog__option">
-                  <IconButton
-                    onClick={() => {
-                      onUnstack(note.id!, note.author);
-                      props.onClose();
-                    }}
-                    direction="right"
-                    label="Unstack"
-                    icon={unstackIcon}
-                  />
-                </li>
-              </ul>
-            </aside>
+            {showOptions && (
+              <aside>
+                <ul className="note-dialog__options">
+                  <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
+                    <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
+                  </li>
+                  <li className="note-dialog__option">
+                    <IconButton
+                      onClick={() => {
+                        onUnstack(note.id!, note.author);
+                        props.onClose();
+                      }}
+                      direction="right"
+                      label="Unstack"
+                      icon={unstackIcon}
+                    />
+                  </li>
+                </ul>
+              </aside>
+            )}
           </div>
         ))}
       </div>

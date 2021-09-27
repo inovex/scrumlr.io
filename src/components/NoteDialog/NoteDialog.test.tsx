@@ -58,6 +58,8 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean) 
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
         ]}
         onClose={() => {}}
+        activeModeration={false}
+        currentUserIsModerator={false}
       />
     </Provider>
   );
