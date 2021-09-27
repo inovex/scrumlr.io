@@ -19,19 +19,37 @@ export const initializeVoteFunctions = () => {
     if (board.get("voting") === "disabled") {
       return {status: "Error", description: "You cannot vote while voting is disabled"};
     }
-    // Check if user will exceed vote limit
+
+    const votingIteration = await board.get("votingIteration");
+
+    // Select votes of current iteration
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("board", board);
     voteQuery.equalTo("user", user);
-    voteQuery.equalTo("votingIteration", board.get("votingIteration"));
-    if ((await voteQuery.count({useMasterKey: true})) >= board.get("voteLimit")) {
+    voteQuery.equalTo("votingIteration", votingIteration);
+
+    // Gets the vote configuration of the current voting iteration
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    voteConfigurationQuery.equalTo("board", board);
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
+
+    // Check if user exceeds his vote limit
+    if ((await voteQuery.count({useMasterKey: true})) >= (await voteConfiguration.get("voteLimit"))) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
-    // Create vote for corresponding note, user and board
-    const note = Parse.Object.extend("Note").createWithoutData(request.note);
-    const vote = newObject("Vote", {board, note, user, votingIteration: await board.get("votingIteration")}, {readRoles: [getMemberRoleName(request.board)]});
-    await vote.save(null, {useMasterKey: true});
 
+    const note = Parse.Object.extend("Note").createWithoutData(request.note);
+
+    voteQuery.equalTo("note", note);
+
+    // Check if user has voted already on this note
+    if ((await voteQuery.count({useMasterKey: true})) >= 1 && !(await voteConfiguration.get("allowMultipleVotesPerNote"))) {
+      return {status: "Error", description: "You can't vote multiple times per note"};
+    }
+
+    const vote = newObject("Vote", {board, note, user, votingIteration}, {readRoles: [getMemberRoleName(request.board)]});
+
+    await vote.save(null, {useMasterKey: true});
     return {status: "Success", description: "Your vote has been added"};
   });
 
