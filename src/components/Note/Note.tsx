@@ -36,8 +36,10 @@ const Note = (props: NoteProps) => {
 
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
-    if (props.activeModeration && props.currentUserIsModerator) {
-      if (props.noteId) {
+    // Toggle cards for all users (note dialogs that were visible before the moderation phase are also visible after the moderation phase)
+    if (props.activeModeration) {
+      // Only moderators can show cards for all users (other users should not interact with the cards)
+      if (props.noteId && props.currentUserIsModerator) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
