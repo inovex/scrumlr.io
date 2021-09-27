@@ -43,4 +43,18 @@ export const BoardAPI = {
    * @returns `{status: string, description: string}`
    */
   cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
+  /** Sets the date where the timer of the board ends.
+   *
+   * @param endDate the date/time where the timer ends
+   * @param boardId the board identifier
+   * @returns a {status, description} object
+   */
+  setTimer: (endDate: Date, boardId: string) => callAPI("setTimer", {endDate, boardId}),
+  /**
+   * Cancels the timer of the board.
+   *
+   * @param boardId the board identifier
+   * @returns a {status, description} object
+   */
+  cancelTimer: (boardId: string) => callAPI("cancelTimer", {boardId}),
 };

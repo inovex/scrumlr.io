@@ -15,7 +15,7 @@ export interface BoardServerModel {
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
   showAuthors: boolean;
-  timerUTCEndTime: Date;
+  timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;
@@ -31,7 +31,7 @@ export type EditableBoardAttributes = {
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
   showAuthors: boolean;
-  timerUTCEndTime: Date;
+  timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
   votingIteration: number;

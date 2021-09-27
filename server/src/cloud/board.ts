@@ -409,4 +409,34 @@ export const initializeBoardFunctions = () => {
 
     return {status: "Success", description: "Current voting phase was canceled"};
   });
+
+  api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    board.set("timerUTCEndTime", request.endDate);
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully set"};
+  });
+
+  api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    board.unset("timerUTCEndTime");
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully removed"};
+  });
+
+  api<{}, string>("getServerTime", async (user, request) => new Date().toUTCString());
 };

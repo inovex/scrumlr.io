@@ -5,6 +5,7 @@ import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
 import {useAppSelector} from "store";
+import {Timer} from "components/Timer";
 
 function Board() {
   const state = useAppSelector((applicationState) => ({
@@ -43,6 +44,7 @@ function Board() {
     return (
       <>
         {joinRequestComponent}
+        {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board.data!.columns.map((column) => (
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>
