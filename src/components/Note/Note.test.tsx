@@ -34,7 +34,9 @@ const createNote = (
       user: "test-user-2",
       votingIteration: 1,
     },
-  ]
+  ],
+  focus = false,
+  moderation = false
 ) => {
   const initialState = {
     board: {
@@ -79,8 +81,8 @@ const createNote = (
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false},
         ]}
         authorName=""
-        activeModeration={false}
-        focus={false}
+        activeModeration={moderation}
+        focus={focus}
         currentUserIsModerator={false}
       />
     </Provider>
@@ -205,6 +207,42 @@ describe("Note", () => {
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(createNote("Test Text", "test-user-2", true));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
+    });
+  });
+
+  describe("Test NoteDialog created/not created", () => {
+    beforeEach(() => {
+      const portal = global.document.createElement("div");
+      portal.setAttribute("id", "portal");
+      global.document.querySelector("body")!.appendChild(portal);
+    });
+
+    test("NoteDialog is present: snapshot", () => {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, true), {
+        container: global.document.querySelector("#portal")!,
+      });
+      expect(container).toMatchSnapshot();
+    });
+
+    test("NoteDialog is present: class", () => {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, true), {
+        container: global.document.querySelector("#portal")!,
+      });
+      expect(container.querySelector(".note-dialog")).toBeDefined();
+    });
+
+    test("NoteDialog is not present: snapshot", () => {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, true), {
+        container: global.document.querySelector("#portal")!,
+      });
+      expect(container).toMatchSnapshot();
+    });
+
+    test("NoteDialog isn't present: class", () => {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, true), {
+        container: global.document.querySelector("#portal")!,
+      });
+      expect(container.querySelector(".note-dialog")).toBeNull();
     });
   });
 });

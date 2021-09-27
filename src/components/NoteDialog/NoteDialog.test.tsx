@@ -2,11 +2,12 @@ import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
+import Parse from "parse";
 import NoteDialog from "./NoteDialog";
 
 const mockStore = configureStore();
 
-const createNoteDialog = (text: string, authorId: string, showAuthors: boolean) => {
+const createNoteDialog = (text: string, authorId: string, showAuthors: boolean, activeModeration = false, currentUserIsModerator = false) => {
   const initialState = {
     board: {
       data: {
@@ -58,8 +59,8 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean) 
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []},
         ]}
         onClose={() => {}}
-        activeModeration={false}
-        currentUserIsModerator={false}
+        activeModeration={activeModeration}
+        currentUserIsModerator={currentUserIsModerator}
       />
     </Provider>
   );
@@ -129,6 +130,24 @@ describe("NoteDialog", () => {
     test("note-dialog__footer is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
       expect(container.querySelector(".note-dialog__note")?.children.item(1)).toHaveClass("note-dialog__footer");
+    });
+
+    describe("Moderation phase", () => {
+      test("moderation: note-dialog__options note three isn't present", () => {
+        // @ts-ignore
+        Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+        const {container} = render(createNoteDialog("Test Text", "test-user-1", true, true), {container: global.document.querySelector("#portal")!});
+        expect(container.querySelector(".note-dialog")?.children.item(3)?.children.length).toEqual(2);
+        expect(container.querySelector(".note-dialog")?.children.item(3)?.lastChild).not.toHaveClass("note-dialog__options");
+      });
+
+      test("moderation: note-dialog__options note three is present", () => {
+        // @ts-ignore
+        Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+        const {container} = render(createNoteDialog("Test Text", "test-user-1", true, true, true), {container: global.document.querySelector("#portal")!});
+        expect(container.querySelector(".note-dialog")?.children.item(3)?.children.length).toEqual(3);
+        expect(container.querySelector(".note-dialog")?.children.item(3)?.lastChild?.firstChild).toHaveClass("note-dialog__options");
+      });
     });
   });
 });
