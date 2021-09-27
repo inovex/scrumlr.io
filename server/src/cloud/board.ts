@@ -333,6 +333,11 @@ export const initializeBoardFunctions = () => {
     const joinRequests = await joinRequestQuery.findAll({useMasterKey: true});
     await Parse.Object.destroyAll(joinRequests, {useMasterKey: true});
 
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    voteConfigurationQuery.equalTo("board", board);
+    const voteConfigurations = await voteConfigurationQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(voteConfigurations, {useMasterKey: true});
+
     const adminRoleQuery = new Parse.Query(Parse.Role);
     adminRoleQuery.equalTo("name", `admin_of_${request.id}`);
     const adminRoles = await adminRoleQuery.findAll({useMasterKey: true});
@@ -373,4 +378,72 @@ export const initializeBoardFunctions = () => {
     await removeFromModerators(Parse.User.createWithoutData(request.userId), request.boardId);
     return {status: "Success", description: "User was successfully removed from the list of moderators"};
   });
+
+  /**
+   * Cancel voting
+   */
+  api<{boardId: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    // Check if the board exists
+    if ((await board.get("voting")) === "disabled") {
+      return {status: "Error", description: `Voting is already disabled`};
+    }
+
+    const votingIteration = await board.get("votingIteration");
+
+    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+    voteConfigurationQuery.equalTo("board", board);
+    // Voting iteraion already incremented
+    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
+    await voteConfiguration.destroy({useMasterKey: true});
+
+    const voteQuery = new Parse.Query("Vote");
+    voteQuery.equalTo("board", board);
+    voteQuery.equalTo("votingIteration", votingIteration);
+    const votes = await voteQuery.findAll({useMasterKey: true});
+    await Parse.Object.destroyAll(votes, {useMasterKey: true});
+
+    // add new value canceled?
+    board.set("voting", "disabled");
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Current voting phase was canceled"};
+  });
+
+  api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    board.set("timerUTCEndTime", request.endDate);
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully set"};
+  });
+
+  api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
+    await requireValidBoardAdmin(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    board.unset("timerUTCEndTime");
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: "Timer was successfully removed"};
+  });
+
+  api<{}, string>("getServerTime", async (user, request) => new Date().toUTCString());
 };

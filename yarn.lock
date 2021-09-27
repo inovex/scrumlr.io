@@ -1165,10 +1165,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@7.14.6":
-  version "7.14.6"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.6.tgz#535203bc0892efc7dec60bdc27b2ecf6e409062d"
-  integrity sha512-/PCB2uJ7oM44tz8YhC4Z/6PeOKXp4K588f+5M3clr1M4zbqztlo0XEfJ2LEzj/FgwfgGcIdl8n7YYjTCI0BYwg==
+"@babel/runtime@7.14.8":
+  version "7.14.8"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.8.tgz#7119a56f421018852694290b9f9148097391b446"
+  integrity sha512-twj3L8Og5SaCRCErB4x4ajbvBIVV77CGeFglHpeg5WC5FF8TZzBWXtTJ4MqaD9QszLYTtr+IsaAL2rEUevb+eg==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1791,10 +1791,10 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@testing-library/dom@^8.0.0", "@testing-library/dom@^8.5.0":
-  version "8.5.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.5.0.tgz#56e31331015f943a68c6ec27e259fdf16c69ab7d"
-  integrity sha512-O0fmHFaPlqaYCpa/cBL0cvroMridb9vZsMLacgIqrlxj+fd+bGF8UfAgwsLCHRF84KLBafWlm9CuOvxeNTlodw==
+"@testing-library/dom@^8.0.0", "@testing-library/dom@^8.6.0":
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/dom/-/dom-8.6.0.tgz#c92ba5b714882eabfd7f25d8f5c59d4a4b0bfcac"
+  integrity sha512-EDBMEWK8IVpNF7B7C1knb0lLB4Si9RWte/YTEi6CqmqUK5CYCoecwOOG9pEijU/H6s3u0drUxH5sKT07FCgFIg==
   dependencies:
     "@babel/code-frame" "^7.10.4"
     "@babel/runtime" "^7.12.5"
@@ -1973,10 +1973,10 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
-"@types/lodash@^4.14.173":
-  version "4.14.173"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.173.tgz#9d3b674c67a26cf673756f6aca7b429f237f91ed"
-  integrity sha512-vv0CAYoaEjCw/mLy96GBTnRoZrSxkGE0BKzKimdR8P3OzrNYNvBgtW7p055A+E8C31vXNUhWKoFCbhq7gbyhFg==
+"@types/lodash@^4.14.174":
+  version "4.14.174"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.174.tgz#b4b06b6eced9850eed6b6a8f1abdd0f5192803c1"
+  integrity sha512-KMBLT6+g9qrGXpDt7ohjWPUD34WA/jasrtjTEHStF0NPdEwJ1N9SZ+4GaMVDeuk/y0+X5j9xFm6mNiXS7UoaLQ==
 
 "@types/marked@^3.0.0":
   version "3.0.1"
@@ -1993,10 +1993,10 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@^16.9.6":
-  version "16.9.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.6.tgz#040a64d7faf9e5d9e940357125f0963012e66f04"
-  integrity sha512-YHUZhBOMTM3mjFkXVcK+WwAcYmyhe1wL4lfqNtzI0b3qAy7yuSetnM7QJazgE5PFmgVTNGiLOgRFfJMqW7XpSQ==
+"@types/node@*", "@types/node@^16.10.1":
+  version "16.10.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.10.1.tgz#f3647623199ca920960006b3dccf633ea905f243"
+  integrity sha512-4/Z9DMPKFexZj/Gn3LylFgamNKHm4K3QDi0gz9B26Uk0c8izYf97B5fxfpspMNkWlFupblKM/nV8+NA9Ffvr+w==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -4069,10 +4069,10 @@ crypto-browserify@^3.11.0:
     randombytes "^2.0.0"
     randomfill "^1.0.3"
 
-crypto-js@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.0.0.tgz#2904ab2677a9d042856a2ea2ef80de92e4a36dcc"
-  integrity sha512-bzHZN8Pn+gS7DQA6n+iUmBfl0hO5DJq++QP3U6uTucDtk/0iGpXd/Gg7CGR0p8tJhofJyaKoWBuJI4eAO00BBg==
+crypto-js@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -4565,14 +4565,14 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-dnd-core@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-14.0.0.tgz#973ab3470d0a9ac5a0fa9021c4feba93ad12347d"
-  integrity sha512-wTDYKyjSqWuYw3ZG0GJ7k+UIfzxTNoZLjDrut37PbcPGNfwhlKYlPUqjAKUjOOv80izshUiqusaKgJPItXSevA==
+dnd-core@14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-14.0.1.tgz#76d000e41c494983210fb20a48b835f81a203c2e"
+  integrity sha512-+PVS2VPTgKFPYWo3vAFEA8WPbTf7/xo43TifH9G8S1KqnrQu0o77A3unrF5yOugy4mIz7K5wAVFHUcha7wsz6A==
   dependencies:
     "@react-dnd/asap" "^4.0.0"
     "@react-dnd/invariant" "^2.0.0"
-    redux "^4.0.5"
+    redux "^4.1.1"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -8956,12 +8956,12 @@ parse5@6.0.1:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
 
-parse@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/parse/-/parse-3.3.0.tgz#96b9ae164a42612c0db9a5be601a772a4b4d0df0"
-  integrity sha512-SQkTDupU7JQBJpYFIpO8TlQjUtjboUdkXaak57pjoC1ZVbhaiNyLsdYbrlM0B+sNYhlvcMh7zwZW48u10+zm0A==
+parse@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/parse/-/parse-3.3.1.tgz#01d5be56879349db5045a6943648a37a6e336ed9"
+  integrity sha512-jrb8tpeanh49lIXuQYbaJoMzywX9YiBtM17aCvYGfaHYJipSTHABA774t8IZap+F8Pb4GgZ0fM4ObfiuO4395A==
   dependencies:
-    "@babel/runtime" "7.14.6"
+    "@babel/runtime" "7.14.8"
     "@babel/runtime-corejs3" "7.14.6"
     idb-keyval "5.0.6"
     react-native-crypto-js "1.0.0"
@@ -8969,7 +8969,7 @@ parse@^3.3.0:
     ws "7.5.0"
     xmlhttprequest "1.8.0"
   optionalDependencies:
-    crypto-js "4.0.0"
+    crypto-js "4.1.1"
 
 parseurl@~1.3.2, parseurl@~1.3.3:
   version "1.3.3"
@@ -10174,33 +10174,33 @@ react-dev-utils@^11.0.3:
     strip-ansi "6.0.0"
     text-table "0.2.0"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^14.0.1:
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-14.0.1.tgz#37d43d6b6ddd91069101969d9eac6d688a9d57ef"
-  integrity sha512-ZDmpvFpd1NR4riw/CMbr8C3mgP6ZhsTf0c48a36kw4ZW8emgiugNlAz/qhhZ4/Pz9TO6DZ63sQohUTTl+AWGiA==
+react-dnd-html5-backend@*, react-dnd-html5-backend@^14.0.2:
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-14.0.2.tgz#25019388f6abdeeda3a6fea835dff155abb2085c"
+  integrity sha512-QgN6rYrOm4UUj6tIvN8ovImu6uP48xBXF2rzVsp6tvj6d5XQ7OjHI4SJ/ZgGobOneRAU3WCX4f8DGCYx0tuhlw==
   dependencies:
-    dnd-core "14.0.0"
+    dnd-core "14.0.1"
 
-react-dnd-test-backend@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-backend/-/react-dnd-test-backend-14.0.0.tgz#4ab247dfc54aafc4570b3491510067d4d87a2199"
-  integrity sha512-eeAFsxEYV05+uoCth4lZTzaIZf9J3D7Mlr1IVCpJ5IHcaLylN2wY6OK2jE51G/lCwzs+55evAOIueMM1fDf+IQ==
-  dependencies:
-    dnd-core "14.0.0"
-
-react-dnd-test-utils@^14.0.1:
+react-dnd-test-backend@^14.0.1:
   version "14.0.1"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-utils/-/react-dnd-test-utils-14.0.1.tgz#85fdc588601910be722b7de7d4ea814cddb257e4"
-  integrity sha512-d0fhrRpX4OUeXDN+Wjj2sue39+qsDwLRzGSkjsnkNHE58XznkozGEw8iSYCaMzazNS9CoPkJku1SrQ/Ayd5Vig==
+  resolved "https://registry.yarnpkg.com/react-dnd-test-backend/-/react-dnd-test-backend-14.0.1.tgz#687ed2834a3b51df91706a97a42f6d43b55dc054"
+  integrity sha512-jLGc03K0qd5a0Q+knR8qzUzHqFDEhu3yOxOhJNyWIQucGUbyRhklghJblTJnuvOCNFusnHYOuHERwcvJjXMMbg==
+  dependencies:
+    dnd-core "14.0.1"
 
-react-dnd@*, react-dnd@^14.0.3:
-  version "14.0.3"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-14.0.3.tgz#1762c1ec84815439f2d8a6a40efd1f57eee41ba6"
-  integrity sha512-i73Hx5SKfDRdwXe30+CjF/DidiRdt/gwpPN14ajkPR20t/0osnNKFNHg3DLV6RZym+DJ0pO9H5APeMsBWGU3+Q==
+react-dnd-test-utils@^14.0.2:
+  version "14.0.2"
+  resolved "https://registry.yarnpkg.com/react-dnd-test-utils/-/react-dnd-test-utils-14.0.2.tgz#fd9cec916aed9921004b9ff594531b59415d7293"
+  integrity sha512-djiiirSvyB2muJ48baz0R0vNModOX2VCVhUlj2HaLdIEkPXAzQZyq8dQIo0A3/fWh5Mcr+GiG1Ec+qSH8eUQUg==
+
+react-dnd@*, react-dnd@^14.0.4:
+  version "14.0.4"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-14.0.4.tgz#ffb4ea0e2a3a5532f9c6294d565742008a52b8b0"
+  integrity sha512-AFJJXzUIWp5WAhgvI85ESkDCawM0lhoVvfo/lrseLXwFdH3kEO3v8I2C81QPqBW2UEyJBIPStOhPMGYGFtq/bg==
   dependencies:
     "@react-dnd/invariant" "^2.0.0"
     "@react-dnd/shallowequal" "^2.0.0"
-    dnd-core "14.0.0"
+    dnd-core "14.0.1"
     fast-deep-equal "^3.1.3"
     hoist-non-react-statics "^3.3.2"
 
@@ -10366,10 +10366,10 @@ react-scripts@^4.0.3:
   optionalDependencies:
     fsevents "^2.1.3"
 
-react-toastify@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-8.0.2.tgz#11f73b3a847fcffeb47b1823e8974e9895f98fae"
-  integrity sha512-0Nud2d0VD4LIevgkB4L8NYoQ5plTpfqgj2CRVxs58SGA/TTO+2Ojz4C1bLUdGUWsw0zuWqd4GJqxNuMIv0cXMw==
+react-toastify@^8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-8.0.3.tgz#7fbf65f69ec357aab8dd03c1496f9177aa92409a"
+  integrity sha512-rv3koC7f9lKKSkdpYgo/TGzgWlrB/aaiUInF1DyV7BpiM4kyTs+uhu6/r8XDMtBY2FOIHK+FlK3Iv7OzpA/tCA==
   dependencies:
     clsx "^1.1.1"
 

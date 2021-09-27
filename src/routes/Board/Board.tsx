@@ -5,6 +5,7 @@ import Parse from "parse";
 import Note from "components/Note/Note";
 import JoinRequest from "components/JoinRequest/JoinRequest";
 import {useAppSelector} from "store";
+import {Timer} from "components/Timer";
 
 function Board() {
   const state = useAppSelector((applicationState) => ({
@@ -12,7 +13,12 @@ function Board() {
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
-    votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
+    votes: applicationState.votes.filter(
+      (vote) =>
+        vote.votingIteration === applicationState.board.data?.votingIteration &&
+        (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
+    ),
+    voteConfiguration: applicationState.voteConfiguration,
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
@@ -38,6 +44,7 @@ function Board() {
     return (
       <>
         {joinRequestComponent}
+        {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board.data!.columns.map((column) => (
             <Column key={column.id} id={column.id!} name={column.name} color={column.color}>

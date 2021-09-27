@@ -4,10 +4,13 @@ import Parse from "parse";
 import {mapUserServerToClientModel, UserServerModel} from "types/user";
 import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
 import {mapVoteServerToClientModel, VoteServerModel} from "types/vote";
+import {mapVoteConfigurationServerToClientModel, VoteConfigurationServerModel} from "types/voteConfiguration";
 import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
+import {Toast} from "utils/Toast";
+import {getBrowserServerTimeDifference} from "utils/timer";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -166,7 +169,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
 
     const createVoteSubscription = () => {
       const voteQuery = new Parse.Query("Vote");
-      voteQuery.equalTo("board", Parse.Object.extend("Board").createWithoutData(action.boardId));
+      const board = Parse.Object.extend("Board").createWithoutData(action.boardId);
+      voteQuery.equalTo("board", board);
       voteQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
@@ -179,9 +183,39 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         });
         // subscription.on("delete", () => {});
         subscription.on("open", () => {
-          voteQuery.find().then((results) => {
-            dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
-          });
+          voteQuery
+            .equalTo("votingIteration", board.get("votingIteration"))
+            .find()
+            .then((results) => {
+              dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
+            });
+        });
+      });
+    };
+
+    const createVoteConfigurationSubscription = () => {
+      const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+      const board = Parse.Object.extend("Board").createWithoutData(action.boardId);
+      voteConfigurationQuery.equalTo("board", board);
+      voteConfigurationQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("create", (object) => {
+          dispatch(ActionFactory.addedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
+        });
+        subscription.on("delete", (object) => {
+          dispatch(ActionFactory.removedVoteConfiguration(mapVoteConfigurationServerToClientModel(object as VoteConfigurationServerModel)));
+        });
+        subscription.on("open", () => {
+          voteConfigurationQuery
+            .equalTo("votingIteration", board.get("votingIteration"))
+            .first()
+            .then((result) => {
+              if (result) {
+                dispatch(ActionFactory.initializeVoteConfiguration(mapVoteConfigurationServerToClientModel(result as unknown as VoteConfigurationServerModel)));
+              }
+            });
         });
       });
     };
@@ -193,8 +227,16 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         subscription.unsubscribe();
       });
 
-      subscription.on("update", (object) => {
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
+      subscription.on("update", async (object) => {
+        let timerUTCEndTime;
+        const board = object.toJSON() as unknown as BoardServerModel;
+        if (board.timerUTCEndTime != null) {
+          const difference = await getBrowserServerTimeDifference();
+          // @ts-ignore
+          timerUTCEndTime = new Date(new Date(board.timerUTCEndTime.iso).getTime() + difference);
+        }
+
+        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel({...(object.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
       });
 
       subscription.on("delete", (object) => {
@@ -208,12 +250,21 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         if (connectionsCount === 1) {
           // first connect to the board
           createJoinRequestSubscription();
+          createVoteConfigurationSubscription();
           createNoteSubscription();
           createUsersSubscription();
           createVoteSubscription();
 
-          boardQuery.first().then((board) => {
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
+          boardQuery.first().then(async (board) => {
+            const b = board?.toJSON() as unknown as BoardServerModel;
+            let timerUTCEndTime;
+            if (b.timerUTCEndTime != null) {
+              const difference = await getBrowserServerTimeDifference();
+              // @ts-ignore
+              timerUTCEndTime = new Date(new Date(b.timerUTCEndTime.iso).getTime() + difference);
+            }
+
+            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel({...(board?.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
           });
         } else {
           // reconnect
@@ -229,12 +280,24 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   if (action.type === ActionType.EditBoard) {
     API.editBoard(action.board);
   }
-
   if (action.type === ActionType.DeleteBoard) {
     const reponse = await API.deleteBoard(action.boardId);
     console.log(reponse);
     if (reponse) {
       document.location.pathname = "/new";
     }
+  }
+  if (action.type === ActionType.CancelVoting) {
+    const response = (await API.cancelVoting(action.boardId)) as {status: string; description: string};
+    if (response.status === "Error") {
+      Toast.error(response.description);
+    }
+  }
+  if (action.type === ActionType.SetTimer) {
+    const difference = await getBrowserServerTimeDifference();
+    API.setTimer(new Date(action.endDate.getTime() - difference), stateAPI.getState().board.data!.id);
+  }
+  if (action.type === ActionType.CancelTimer) {
+    API.cancelTimer(stateAPI.getState().board.data!.id);
   }
 };

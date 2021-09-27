@@ -50,6 +50,7 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean) 
             board: "test-board",
             note: "0",
             user: "test-user",
+            votingIteration: 1,
           },
         ]}
         childrenNotes={[
