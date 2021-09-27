@@ -12,77 +12,46 @@ function AuthRedirect() {
   const params = queryString.parse(location.search);
 
   useEffect(() => {
-    if (params.error) {
-      setStatus({error: params.error as string});
-    } else if (params.code && params.state) {
-      /**
-       * GOOGLE-OAUTH
-       * */
-      if ((params.state as string).startsWith("google")) {
-        API.verifySignIn(params.code as string, params.state as string, "google")
-          .then((res) => {
-            const user = new Parse.User();
-            const authData = {
+    const signInMethod = (authProvider: string): void => {
+      API.verifySignIn(params.code as string, params.state as string, authProvider)
+        .then((res) => {
+          const user = new Parse.User();
+          let authData;
+          if (authProvider === "google") {
+            authData = {
               id: res.user.id,
               id_token: res.user.idToken,
               access_token: res.user.accessToken,
             };
-            user.linkWith("google", {authData}).then(() => {
-              user.set("displayName", res.user.name);
-              user.save().then(() => {
-                window.location.href = res.redirectURL;
-              });
+          } else {
+            authData = {
+              id: res.user.id,
+              access_token: res.user.accessToken,
+            };
+          }
+          user.linkWith(authProvider, {authData}).then(() => {
+            user.set("displayName", res.user.name);
+            user.save().then(() => {
+              window.location.href = res.redirectURL;
             });
-          })
-          .catch(() => {
-            setStatus({error: "State does not match"});
           });
-      }
+        })
+        .catch(() => {
+          setStatus({error: "State does not match"});
+        });
+    };
 
-      /**
-       * GITHUB-OAUTH
-       * */
+    if (params.error) {
+      setStatus({error: params.error as string});
+    } else if (params.code && params.state) {
+      if ((params.state as string).startsWith("google")) {
+        signInMethod("google");
+      }
       if ((params.state as string).startsWith("github")) {
-        API.verifySignIn(params.code as string, params.state as string, "github")
-          .then((res) => {
-            const user = new Parse.User();
-            const authData = {
-              id: res.user.id,
-              access_token: res.user.accessToken,
-            };
-            user.linkWith("github", {authData}).then(() => {
-              user.set("displayName", res.user.name);
-              user.save().then(() => {
-                window.location.href = res.redirectURL;
-              });
-            });
-          })
-          .catch(() => {
-            setStatus({error: "State does not match"});
-          });
+        signInMethod("github");
       }
-
-      /**
-       * MICROSOFT-OAUTH
-       * */
       if ((params.state as string).startsWith("microsoft")) {
-        API.verifySignIn(params.code as string, params.state as string, "microsoft")
-          .then((res) => {
-            const user = new Parse.User();
-            const authData = {
-              id: res.user.id,
-              access_token: res.user.accessToken,
-            };
-            user.linkWith("microsoft", {authData}).then(() => {
-              user.set("displayName", res.user.name);
-              user.save().then(() => {
-                window.location.href = res.redirectURL;
-              });
-            });
-          })
-          .catch(() => {
-            setStatus({error: "State does not match"});
-          });
+        signInMethod("microsoft");
       }
     } else {
       setStatus({error: "Not a valid entrypoint"});

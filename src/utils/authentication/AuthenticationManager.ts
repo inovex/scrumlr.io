@@ -23,15 +23,14 @@ const signInAnonymously = async (displayName?: string, photoURL?: string) => {
 };
 
 /**
- * Redirects to OAuth page of provider
- *
+ * Redirects to OAuth page of provider:
+ *    https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
+ *    https://github.com/login/oauth/authorize...
+ *    https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
  * @param authProvider name of the OAuth Provider
  */
 const signInWithAuthProvider = async (authProvider: string) => {
   window.location.href = await API.signIn(authProvider);
-  // redirectURI: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
-  // redirectURI: https://github.com/login/oauth/authorize...
-  // redirectURI https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
 };
 
 export const AuthenticationManager = {
