@@ -19,6 +19,7 @@ import {ActionFactory} from "store/action";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   const currentUser = Parse.User.current();
   const state = useAppSelector((state) => ({
@@ -54,7 +55,7 @@ function MenuBars() {
         {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
       )}
     >
-      <section className="menu user-menu">
+      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={() => setAnimate(false)}>
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
@@ -63,7 +64,7 @@ function MenuBars() {
         </div>
       </section>
       {isAdmin && (
-        <section className="menu admin-menu">
+        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={() => setAnimate(false)}>
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle value={state.timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
@@ -73,7 +74,13 @@ function MenuBars() {
         </section>
       )}
       {isAdmin && (
-        <button className="menu-bars__switch" onClick={() => toggleMenus((prevState) => !prevState)}>
+        <button
+          className="menu-bars__switch"
+          onClick={() => {
+            setAnimate(true);
+            toggleMenus((prevState) => !prevState);
+          }}
+        >
           <ToggleAddMenuIcon className="switch__icon switch__icon--add" />
           <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" />
         </button>
