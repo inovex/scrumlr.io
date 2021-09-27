@@ -96,10 +96,18 @@ export const BoardActionFactory = {
     type: BoardActionType.PendingBoardAccessConfirmation,
     requestReference,
   }),
+  /**
+   * Creates an action which should be dispatched when a moderator wants to set a timer.
+   *
+   * @param endDate the date where the timer ends
+   */
   setTimer: (endDate: Date) => ({
     type: BoardActionType.SetTimer,
     endDate,
   }),
+  /**
+   * Creates an action which should be dispatched when a moderator wants to cancel the timer.
+   */
   cancelTimer: () => ({
     type: BoardActionType.CancelTimer,
   }),
