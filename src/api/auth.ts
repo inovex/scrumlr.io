@@ -26,7 +26,13 @@ export const AuthAPI = {
    */
   verifyGoogleSignIn: async (code: string, state: string) => {
     // check if state is available in storage and execute call on match
-    const redirectURL = sessionStorage.getItem(state);
+    let redirectURL;
+    if (sessionStorage.getItem("boardId")) {
+      redirectURL = sessionStorage.getItem("boardId");
+    } else {
+      redirectURL = sessionStorage.getItem(state);
+    }
+    sessionStorage.clear();
     if (redirectURL) {
       const user = await callAPI<{code: string}, {id: string; name: string; accessToken: string; idToken: string}>("GoogleVerifySignIn", {code});
       return {
@@ -54,7 +60,13 @@ export const AuthAPI = {
    */
   verifyGithubSignIn: async (code: string, state: string) => {
     // check if state is available in storage and execute call on match
-    const redirectURL = sessionStorage.getItem(state);
+    let redirectURL;
+    if (sessionStorage.getItem("boardId")) {
+      redirectURL = sessionStorage.getItem("boardId");
+    } else {
+      redirectURL = sessionStorage.getItem(state);
+    }
+    sessionStorage.clear();
     if (redirectURL) {
       const user = await callAPI<{code: string}, {id: string; name: string; accessToken: string}>("GithubVerifySignIn", {code});
       return {
@@ -82,7 +94,13 @@ export const AuthAPI = {
    */
   verifyMicrosoftSignIn: async (code: string, state: string) => {
     // check if state is available in storage and execute call on match
-    const redirectURL = sessionStorage.getItem(state);
+    let redirectURL;
+    if (sessionStorage.getItem("boardId")) {
+      redirectURL = sessionStorage.getItem("boardId");
+    } else {
+      redirectURL = sessionStorage.getItem(state);
+    }
+    sessionStorage.clear();
     if (redirectURL) {
       const user = await callAPI<{code: string}, {id: string; name: string; accessToken: string}>("MicrosoftVerifySignIn", {code});
       return {

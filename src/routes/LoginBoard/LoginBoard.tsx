@@ -3,28 +3,12 @@ import {getRandomName} from "constants/Name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
-import Parse from "parse";
 import LoginProviders from "../../components/LoginProviders/LoginProviders";
 
 function LoginBoard(props: RouteComponentProps) {
   const [displayName, setDisplayName] = useState(getRandomName());
 
-  // after oauth-redirection to current page, redirect to board path that was set before oauth
-  if (Parse.User.current() && sessionStorage.getItem("boardId")) {
-    try {
-      props.history.push(sessionStorage.getItem("boardId")!);
-    } catch (err) {
-      Toast.error("An error occured while redirecting you");
-    }
-    sessionStorage.clear();
-  }
-
-  // safe board path in sessionStorage if there was an internal redirect because of lacking authentification
-  if (props.history.location.state && !sessionStorage.getItem("boardId")) {
-    sessionStorage.setItem("boardId", (props.history.location.state as {from: {pathname: string}}).from.pathname);
-  }
-
-  // anonymous sign in after internal redirection, so boardpath is still in history
+  // anonymous sign in and redirection to boardpath that is in history
   async function handleLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
     try {
