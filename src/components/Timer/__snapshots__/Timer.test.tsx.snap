@@ -3,6 +3,7 @@
 exports[`Timer should render correctly 1`] = `
 <aside
   class="timer"
+  id="timer"
 >
   <span>
     02
