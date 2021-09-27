@@ -1,0 +1,94 @@
+.timer {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 300;
+}
+.timer--top {
+  bottom: auto;
+  top: 98px;
+}
+.timer > * {
+  color: white;
+  background-color: #0057ff;
+  vertical-align: bottom;
+}
+.timer:not(.timer--top) > * {
+  box-shadow: 0 8px 16px #0057ff25;
+}
+@media (prefers-color-scheme: dark) {
+  .timer > * {
+    background-color: #ff0069;
+  }
+  .timer:not(.timer--top) > * {
+    box-shadow: 0 8px 16px #ff006925;
+  }
+}
+.timer > span {
+  display: inline-block;
+  border-radius: 18px;
+  width: 84px;
+  cursor: default;
+  font-weight: bold;
+  line-height: 36px;
+  text-align: center;
+}
+.timer > span:not(:only-child) {
+  margin-right: 10px;
+}
+.timer > button {
+  border: none;
+  display: inline-block;
+  height: 36px;
+  width: 36px;
+  border-radius: 18px;
+  cursor: pointer;
+  padding: 0;
+}
+
+// Shake animation on expired timer
+.timer--expired > span {
+  animation: shake 0.5s;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .timer--expired > span {
+    animation: none;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}

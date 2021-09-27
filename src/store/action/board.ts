@@ -16,6 +16,8 @@ export const BoardActionType = {
   PermittedBoardAccess: "@@SCRUMLR/permittedBoardAccess" as const,
   RejectedBoardAccess: "@@SCRUMLR/rejectedBoardAccess" as const,
   PendingBoardAccessConfirmation: "@@SCRUMLR/pendingBoardAccessConfirmation" as const,
+  SetTimer: "@@SCRUMLR/setTimer" as const,
+  CancelTimer: "@@SCRUMLR/cancelTimer" as const,
 };
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -94,6 +96,21 @@ export const BoardActionFactory = {
     type: BoardActionType.PendingBoardAccessConfirmation,
     requestReference,
   }),
+  /**
+   * Creates an action which should be dispatched when a moderator wants to set a timer.
+   *
+   * @param endDate the date where the timer ends
+   */
+  setTimer: (endDate: Date) => ({
+    type: BoardActionType.SetTimer,
+    endDate,
+  }),
+  /**
+   * Creates an action which should be dispatched when a moderator wants to cancel the timer.
+   */
+  cancelTimer: () => ({
+    type: BoardActionType.CancelTimer,
+  }),
 };
 
 export type BoardReduxAction =
@@ -105,4 +122,6 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.deleteBoard>
   | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
   | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>
-  | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>;
+  | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
+  | ReturnType<typeof BoardActionFactory.setTimer>
+  | ReturnType<typeof BoardActionFactory.cancelTimer>;
