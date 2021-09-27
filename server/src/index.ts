@@ -30,7 +30,7 @@ if (OPERATION_MODE !== "livequery") {
     ...serverConfig,
     cloud: `${__dirname}/cloud.ts`,
     liveQuery: {
-      classNames: ["Board", "Note", "JoinRequest", "_Role", "_User", "Vote"],
+      classNames: ["Board", "Note", "JoinRequest", "_Role", "_User", "Vote", "VoteConfiguration"],
     },
     auth: {
       anonymous: {},
