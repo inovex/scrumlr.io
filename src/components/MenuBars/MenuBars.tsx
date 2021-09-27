@@ -1,21 +1,24 @@
 import {useState} from "react";
+import {ActionFactory} from "store/action";
+import store, {useAppSelector} from "store";
 import Parse from "parse";
 import classNames from "classnames";
+
 import MenuButton from "components/MenuBars/MenuItem/MenuButton";
 import MenuToggle from "components/MenuBars/MenuItem/MenuToggle";
+
 import {ReactComponent as AddImageIcon} from "assets/icon-addimage.svg";
 import {ReactComponent as AddStickerIcon} from "assets/icon-addsticker.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as ColumnIcon} from "assets/icon-column.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
+import {TimerButton} from "./MenuDropdown/TimerButton";
+
 import "./MenuBars.scss";
-import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -34,14 +37,6 @@ function MenuBars() {
       store.dispatch(ActionFactory.addVoteConfiguration({boardId: state.boardId, voteLimit: 5, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true}));
     }
     store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
-  };
-
-  const toggleTimer = (active: boolean) => {
-    if (active) {
-      store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)));
-    } else {
-      store.dispatch(ActionFactory.cancelTimer());
-    }
   };
 
   return (
@@ -66,7 +61,7 @@ function MenuBars() {
         <section className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
-            <MenuToggle value={state.timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
+            <TimerButton />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>
