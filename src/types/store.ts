@@ -3,6 +3,7 @@ import {NoteClientModel} from "./note";
 import {VoteClientModel} from "./vote";
 import {UserClientModel} from "./user";
 import {JoinRequestClientModel} from "./joinRequest";
+import {VoteConfigurationClientModel} from "./voteConfiguration";
 
 export interface BoardState {
   status: "unknown" | "pending" | "ready" | "rejected" | "accepted";
@@ -21,4 +22,5 @@ export interface ApplicationState {
   users: UsersState;
   joinRequests: JoinRequestClientModel[];
   votes: VoteClientModel[];
+  voteConfiguration: VoteConfigurationClientModel;
 }

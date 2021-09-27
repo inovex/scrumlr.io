@@ -30,6 +30,9 @@ function MenuBars() {
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
 
   const toggleVoting = (active: boolean) => {
+    if (active) {
+      store.dispatch(ActionFactory.addVoteConfiguration({boardId: state.boardId, voteLimit: 5, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true}));
+    }
     store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
   };
 
