@@ -14,7 +14,7 @@ export const api = <RequestData extends ParseObjectParams = ParseObjectParams, R
   });
 };
 
-export const publicApi = <RequestData extends ParseObjectParams = ParseObjectParams, ResponseType = void>(
+export const authApi = <RequestData extends ParseObjectParams = ParseObjectParams, ResponseType = void>(
   name: string,
   call: (request: RequestData) => ResponseType | Promise<ResponseType>
 ): void => {

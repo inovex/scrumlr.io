@@ -4,7 +4,7 @@ import {AuthenticationManager} from "utils/authentication/AuthenticationManager"
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import Parse from "parse";
-import {onGithubSignIn, onGoogleSignIn, onMicrosoftSignIn} from "../NewBoard/NewBoard";
+import LoginProviders from "../../components/LoginProviders/LoginProviders";
 
 function LoginBoard(props: RouteComponentProps) {
   const [displayName, setDisplayName] = useState(getRandomName());
@@ -49,9 +49,7 @@ function LoginBoard(props: RouteComponentProps) {
         maxLength={20}
       />
       <button onClick={handleLogin}>Join Board Anonymously</button>
-      <button onClick={onGoogleSignIn}>Join with Google SignIn</button>
-      <button onClick={onGithubSignIn}>Join with Github SignIn</button>
-      <button onClick={onMicrosoftSignIn}>Join with Microsoft SignIn</button>
+      <LoginProviders />
     </div>
   );
 }

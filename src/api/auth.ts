@@ -1,8 +1,9 @@
+import {v4 as uuidv4} from "uuid";
 import {callAPI} from "./callApi";
 
 const generateState = (prefix: string) => {
   // generate random state id and store origin into the session storage
-  const state = `${prefix}-${Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)}`;
+  const state = `${prefix}-${uuidv4()}`;
   sessionStorage.setItem(state, window.location.href);
   return state;
 };
@@ -14,6 +15,7 @@ export const AuthAPI = {
    * @returns the redirection URL
    */
   signInWithGoogle: () => callAPI<{state: string}, string>("GoogleSignIn", {state: generateState("google")}),
+
   /**
    * Verify the sign in with Google by the specified code.
    *
@@ -41,6 +43,7 @@ export const AuthAPI = {
    * @returns the redirection URL
    */
   signInWithGithub: () => callAPI<{state: string}, string>("GithubSignIn", {state: generateState("github")}),
+
   /**
    * Verify the sign in with GitHub by the specified code.
    *
@@ -68,6 +71,7 @@ export const AuthAPI = {
    * @returns the redirection URL
    */
   signInWithMicrosoft: () => callAPI<{state: string}, string>("MicrosoftSignIn", {state: generateState("microsoft")}),
+
   /**
    * Verify the sign in with Microsoft by the specified code.
    *
