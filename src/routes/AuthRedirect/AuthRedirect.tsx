@@ -19,7 +19,7 @@ function AuthRedirect() {
        * GOOGLE-OAUTH
        * */
       if ((params.state as string).startsWith("google")) {
-        API.verifyGoogleSignIn(params.code as string, params.state as string)
+        API.verifySignIn(params.code as string, params.state as string, "google")
           .then((res) => {
             const user = new Parse.User();
             const authData = {
@@ -43,7 +43,7 @@ function AuthRedirect() {
        * GITHUB-OAUTH
        * */
       if ((params.state as string).startsWith("github")) {
-        API.verifyGithubSignIn(params.code as string, params.state as string)
+        API.verifySignIn(params.code as string, params.state as string, "github")
           .then((res) => {
             const user = new Parse.User();
             const authData = {
@@ -66,7 +66,7 @@ function AuthRedirect() {
        * MICROSOFT-OAUTH
        * */
       if ((params.state as string).startsWith("microsoft")) {
-        API.verifyMicrosoftSignIn(params.code as string, params.state as string)
+        API.verifySignIn(params.code as string, params.state as string, "microsoft")
           .then((res) => {
             const user = new Parse.User();
             const authData = {

@@ -22,21 +22,19 @@ const signInAnonymously = async (displayName?: string, photoURL?: string) => {
   }
 };
 
-const onGoogleSignIn = async () => {
-  window.location.href = await API.signInWithGoogle(); // redirectURI: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
-};
-
-const onGithubSignIn = async () => {
-  window.location.href = await API.signInWithGithub(); // redirectURI: https://github.com/login/oauth/authorize...
-};
-
-const onMicrosoftSignIn = async () => {
-  window.location.href = await API.signInWithMicrosoft(); // redirectURI https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
+/**
+ * Redirects to OAuth page of provider
+ *
+ * @param authProvider name of the OAuth Provider
+ */
+const signInWithAuthProvider = async (authProvider: string) => {
+  window.location.href = await API.signIn(authProvider);
+  // redirectURI: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount...
+  // redirectURI: https://github.com/login/oauth/authorize...
+  // redirectURI https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
 };
 
 export const AuthenticationManager = {
   signInAnonymously,
-  onGoogleSignIn,
-  onGithubSignIn,
-  onMicrosoftSignIn,
+  signInWithAuthProvider,
 };

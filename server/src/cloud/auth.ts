@@ -25,7 +25,7 @@ export const initializeAuthFunctions = (): void => {
      * github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
      * https://www.npmjs.com/package/googleapis#oauth2-client
      */
-    authApi<{state: string}, string>("GoogleSignIn", async ({state}) => {
+    authApi<{state: string}, string>("googleSignIn", async ({state}) => {
       const oauth2Client = getGoogleOAuth2Client();
       return oauth2Client.generateAuthUrl({
         access_type: "offline", // gets refresh_token
@@ -38,7 +38,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges the code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("GoogleVerifySignIn", async ({code}) => {
+    authApi<{code: string}, UserInformation>("googleVerifySignIn", async ({code}) => {
       const oauth2Client = getGoogleOAuth2Client();
       const {tokens} = await oauth2Client.getToken(code);
       oauth2Client.setCredentials(tokens);
@@ -63,7 +63,7 @@ export const initializeAuthFunctions = (): void => {
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps
      */
     authApi<{state: string}, string>(
-      "GithubSignIn",
+      "githubSignIn",
       async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`
     );
 
@@ -71,7 +71,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("GithubVerifySignIn", async ({code}) => {
+    authApi<{code: string}, UserInformation>("githubVerifySignIn", async ({code}) => {
       const accessTokenRequest = await axios.post(
         "https://github.com/login/oauth/access_token",
         {
@@ -98,7 +98,7 @@ export const initializeAuthFunctions = (): void => {
      * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
      */
     authApi<{state: string}, string>(
-      "MicrosoftSignIn",
+      "microsoftSignIn",
       async ({state}) =>
         `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${MICROSOFT_CLIENT_ID}&response_type=code&redirect_uri=${encodeURI(
           AUTH_REDIRECT_URI
@@ -109,7 +109,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("MicrosoftVerifySignIn", async ({code}) => {
+    authApi<{code: string}, UserInformation>("microsoftVerifySignIn", async ({code}) => {
       const postData = {
         client_id: MICROSOFT_CLIENT_ID,
         scope: "User.Read",
