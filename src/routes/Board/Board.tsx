@@ -13,7 +13,12 @@ function Board() {
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
-    votes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.board.data?.votingIteration),
+    votes: applicationState.votes.filter(
+      (vote) =>
+        vote.votingIteration === applicationState.board.data?.votingIteration &&
+        (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
+    ),
+    voteConfiguration: applicationState.voteConfiguration,
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;

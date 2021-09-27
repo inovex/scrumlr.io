@@ -36,7 +36,14 @@ export const BoardAPI = {
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
   deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
   /**
-   * Sets the date where the timer of the board ends.
+   * Cancel the current voting phase.
+   *
+   * @param boardId the board id
+   *
+   * @returns `{status: string, description: string}`
+   */
+  cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
+  /** Sets the date where the timer of the board ends.
    *
    * @param endDate the date/time where the timer ends
    * @param boardId the board identifier

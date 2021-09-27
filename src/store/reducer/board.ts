@@ -109,9 +109,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
         (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
-        (action.board.showVotesOfOtherUsers === undefined || state.data.showVotesOfOtherUsers === action.board.showVotesOfOtherUsers) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
-        (action.board.voteLimit === undefined || state.data.voteLimit === action.board.voteLimit) &&
         isEqual(stateColumns, actionColumns)
       ) {
         return {

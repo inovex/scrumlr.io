@@ -14,9 +14,7 @@ const addInitialBoardSchema = async () => {
   schema.addDate("expirationUTCTime");
   schema.addString("voting", {defaultValue: "disabled"});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
-  schema.addBoolean("showVotesOfOtherUsers", {defaultValue: false});
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
-  schema.addNumber("voteLimit", {defaultValue: 0});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
@@ -38,6 +36,17 @@ const addInitialVoteSchema = async () => {
   schema.addPointer("note", "Note", {required: true});
   schema.addPointer("user", "_User", {required: true});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
+  schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
+  return schema.save();
+};
+
+const addInitialVoteConfigurationSchema = async () => {
+  const schema = new Parse.Schema("VoteConfiguration");
+  schema.addPointer("board", "Board", {required: true});
+  schema.addNumber("votingIteration", {required: true, defaultValue: 0});
+  schema.addNumber("voteLimit", {required: true, defaultValue: 10});
+  schema.addBoolean("allowMultipleVotesPerNote", {required: true, defaultValue: true});
+  schema.addBoolean("showVotesOfOtherUsers", {required: true, defaultValue: false});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };
@@ -64,6 +73,7 @@ export const initServer = async (appId: string, serverUrl: string, masterKey: st
     await addInitialNoteSchema();
     await addInitialJoinRequestSchema();
     await addInitialVoteSchema();
+    await addInitialVoteConfigurationSchema();
     console.log("Initialized schema");
 
     await Parse.Config.save({
