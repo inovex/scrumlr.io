@@ -8,19 +8,9 @@ import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
 import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
-import {callAPI} from "api/callApi";
+import {getBrowserServerTimeDifference} from "utils/timer";
 
 let closeSubscriptions: (() => void)[] = [];
-
-const getBrowserServerTimeDifference = async () => {
-  const serverTime: string = await callAPI("getServerTime", {});
-  const serverTimeInMilliseconds = Date.parse(serverTime);
-  const browserTimeInMilliseconds = Date.parse(new Date().toUTCString());
-  const differenceInMilliseconds = browserTimeInMilliseconds - serverTimeInMilliseconds;
-  // difference > 0: Browserzeit ist vor der Serverzeit
-  // difference < 0: Browserzeit ist hinter der Serverzeit
-  return differenceInMilliseconds;
-};
 
 export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
