@@ -21,13 +21,24 @@ function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
 
   const currentUser = Parse.User.current();
-  const admins = useAppSelector((state) => state.users.admins);
-  const boardId = useAppSelector((state) => state.board.data!.id);
+  const state = useAppSelector((state) => ({
+    admins: state.users.admins,
+    boardId: state.board.data!.id,
+    timer: state.board.data?.timerUTCEndTime,
+  }));
 
-  const isAdmin = admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
+  const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
 
   const toggleVoting = (active: boolean) => {
-    store.dispatch(ActionFactory.editBoard({id: boardId, voting: active ? "active" : "disabled"}));
+    store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
+  };
+
+  const toggleTimer = (active: boolean) => {
+    if (active) {
+      store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)));
+    } else {
+      store.dispatch(ActionFactory.cancelTimer());
+    }
   };
 
   return (
@@ -52,7 +63,7 @@ function MenuBars() {
         <section className="menu admin-menu">
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
-            <MenuToggle disabled direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={() => null} />
+            <MenuToggle value={state.timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
             <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
           </div>
