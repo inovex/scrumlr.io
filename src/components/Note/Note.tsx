@@ -38,10 +38,12 @@ const Note = (props: NoteProps) => {
   const handleShowDialog = () => {
     if (props.activeModeration && props.currentUserIsModerator) {
       if (props.noteId) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !showDialog}));
+        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
+        setShowDialog(!props.focus);
       }
+    } else {
+      setShowDialog(!showDialog);
     }
-    setShowDialog(!showDialog);
   };
 
   const [{isDragging}, drag] = useDrag({
