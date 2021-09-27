@@ -14,6 +14,8 @@ type TimerProps = {
 export const Timer = (props: TimerProps) => {
   const calculateTime = () => {
     const difference = +props.endTime - +new Date();
+    // In this object the remaining time is calculated
+    // If the ending date of the timer is past the current date, it will show zero
     return {
       h: Math.max(Math.floor((difference / 1000 / 60 / 60) % 24), 0),
       m: Math.max(Math.floor((difference / 1000 / 60) % 60), 0),
@@ -32,13 +34,7 @@ export const Timer = (props: TimerProps) => {
   });
 
   return ReactDOM.createPortal(
-    <aside
-      className={classNames(
-        "timer",
-        {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0},
-        {"timer--top": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
-      )}
-    >
+    <aside id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
