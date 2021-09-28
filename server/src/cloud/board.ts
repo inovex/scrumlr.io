@@ -145,10 +145,7 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save(
-      {...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true, moderation: "disabled"},
-      {useMasterKey: true}
-    );
+    const savedBoard = await board.save({...request, columns, owner: user}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
