@@ -15,6 +15,7 @@ const addInitialBoardSchema = async () => {
   schema.addString("voting", {defaultValue: "disabled"});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
+  schema.addObject("userSettings", {defaultValue: {}});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };

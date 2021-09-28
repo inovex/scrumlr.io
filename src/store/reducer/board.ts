@@ -17,15 +17,25 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
+      action.board;
+      const {userSetting, ...actions} = action.board;
 
-      return {
+      const newState = {
         status: state.status,
         data: {
           ...state.data!,
-          ...action.board,
+          ...actions,
           dirty: true,
         },
       };
+
+      if (userSetting) {
+        const setting = newState.data.userSettings.find((user) => user.id === userSetting.id);
+        if (setting) {
+          // Update needed settings
+        }
+      }
+      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";
@@ -100,6 +110,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       const stateColumns = state.data.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
       const actionColumns = action.board.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
 
+      const stateUserSettings = state.data.userSettings.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+      const actionUserSettings = action.board.userSettings.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+
       // check if current model from server equals local copy
       if (
         (action.board.name === undefined || state.data.name === action.board.name) &&
@@ -110,7 +123,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
-        isEqual(stateColumns, actionColumns)
+        isEqual(stateColumns, actionColumns) &&
+        isEqual(stateUserSettings, actionUserSettings)
       ) {
         return {
           status: state.status,

@@ -99,7 +99,15 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
+  userSetting: {
+    id: string;
+    test?: string;
+  };
 };
+
+export interface UserSettings {
+  [userId: string]: {};
+}
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
@@ -144,7 +152,11 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
+
+    const userSettings: UserSettings = {};
+    userSettings[user.id] = {};
+
+    const savedBoard = await board.save({...request, columns, userSettings, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -247,6 +259,12 @@ export const initializeBoardFunctions = () => {
         joinRequestReference: savedJoinRequest.id,
       };
     }
+
+    const userSettings: UserSettings = (await board.get("userSettings")) ?? {};
+    userSettings[user.id] = {};
+    board.set("userSettings", userSettings);
+    await board.save(null, {useMasterKey: true});
+
     await addAsMember(user, request.boardId);
     return {status: "accepted"};
   });
@@ -300,6 +318,12 @@ export const initializeBoardFunctions = () => {
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
+    }
+    if (request.board.userSetting && request.board.userSetting.id === user.id) {
+      const userSettings: UserSettings = (await board.get("userSettings")) ?? {};
+      // Here you can update the settings and check if already existing
+      userSettings[user.id] = {};
+      board.set("userSettings", userSettings);
     }
 
     await board.save(null, {useMasterKey: true});

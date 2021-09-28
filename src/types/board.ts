@@ -11,6 +11,9 @@ export interface BoardServerModel {
       hidden: boolean;
     };
   };
+  userSettings: {
+    [userId: string]: {};
+  };
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
@@ -38,7 +41,11 @@ export type EditableBoardAttributes = {
   showNotesOfOtherUsers: boolean;
 };
 
-export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
+export type UserSetting = {
+  id: string;
+};
+
+export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes & {userSetting: UserSetting}>;
 
 export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
@@ -47,6 +54,9 @@ export interface BoardClientModel extends EditableBoardAttributes {
     name: string;
     color: Color;
     hidden: boolean;
+  }[];
+  userSettings: {
+    id: string;
   }[];
   createdAt: Date;
   updatedAt: Date;
@@ -62,6 +72,9 @@ export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClien
     name: board.columns[columnId].name,
     color: board.columns[columnId].color as Color,
     hidden: board.columns[columnId].hidden,
+  })),
+  userSettings: Object.keys(board.userSettings).map((userId) => ({
+    id: userId,
   })),
   accessCode: board.accessCode,
   joinConfirmationRequired: board.joinConfirmationRequired,
