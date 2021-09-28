@@ -48,11 +48,13 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
-            <div className="column__header-toggle">
-              <button className="column__header-toggle-button" onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}>
-                <Icon className="column__header-toggle-button-icon" />
-              </button>
-            </div>
+            {currentUserIsModerator && (
+              <div className="column__header-toggle">
+                <button className="column__header-toggle-button" onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}>
+                  <Icon className="column__header-toggle-button-icon" />
+                </button>
+              </div>
+            )}
           </div>
           <NoteInput columnId={id} />
         </header>
