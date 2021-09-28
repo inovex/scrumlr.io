@@ -7,11 +7,16 @@
   }
 }
 
+.dropdown-item--open .dropdown {
+  transition-delay: 0.25s;
+}
+
 @media (pointer: fine) {
   .menu-bars--bottom {
     .dropdown-item--open,
-    .menu-item.dropdown-item--open:hover {
+    .menu-item.dropdown-item--open:enabled:hover {
       .menu-item__tooltip {
+        transition: all 0.25s 0s ease-out;
         width: 245px;
         opacity: 1;
         visibility: visible;
@@ -72,9 +77,5 @@
     top: 36px;
     right: -265px;
     box-shadow: 0px 8px 24px #0057ff3d;
-  }
-
-  .dropdown-item--open .dropdown {
-    transition-delay: 0.25s;
   }
 }

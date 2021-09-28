@@ -16,7 +16,7 @@ import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
-import {TimerButton} from "./MenuDropdown/TimerButton";
+import {TimerButton} from "./MenuItem/variants/TimerButton";
 
 import "./MenuBars.scss";
 

@@ -1,8 +1,8 @@
 import {useState} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
-import Dropdown from "components/MenuBars/MenuDropdown/Dropdown";
-import {DropdownButton} from "components/MenuBars/MenuDropdown/DropdownButton";
+import Dropdown from "components/Dropdown";
+import {DropdownButton} from "components/MenuBars/MenuItem/DropdownButton";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 
 export const TimerButton = () => {

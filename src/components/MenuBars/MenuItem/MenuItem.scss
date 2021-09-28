@@ -98,7 +98,6 @@ $number-of-menu-items: 4;
 // Columns partly hidden, no touch screen device
 @media (pointer: fine) {
   .menu-bars--bottom {
-    .dropdown-item--open,
     .menu-item:enabled:hover {
       .menu-item__tooltip {
         width: 200px;

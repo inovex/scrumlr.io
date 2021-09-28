@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import classNames from "classnames";
+import "./MenuItem.scss";
 import "./DropdownButton.scss";
-import "../MenuItem/MenuItem.scss";
 
 type DropdownButtonProps = {
   direction: "left" | "right";
