@@ -23,6 +23,19 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           0
         </span>
+        <div
+          class="column__header-toggle"
+        >
+          <button
+            class="column__header-toggle-button"
+          >
+            <svg
+              class="column__header-toggle-button-icon"
+            >
+              icon-unstack.svg
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         class="MuiInputBase-root MuiFilledInput-root NoteInput-root-15 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
