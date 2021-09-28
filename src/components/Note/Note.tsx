@@ -70,7 +70,7 @@ const Note = (props: NoteProps) => {
   drop(noteRef);
 
   return (
-    <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
+    <li className={classNames("note__root", {"note__root-disabled-click": props.activeModeration && !props.currentUserIsModerator})} onClick={handleShowDialog} ref={noteRef}>
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
         <div className="note__content">
           <p className="note__text">{props.text}</p>
