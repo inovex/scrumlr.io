@@ -6,6 +6,12 @@ import LoadingScreen from "components/LoadingScreen/LoadingScreen";
 import {useLocation} from "react-router";
 import ErrorPage from "components/ErrorPage/ErrorPage";
 
+interface IAuthData {
+  id: string;
+  access_token: string;
+  id_token?: string;
+}
+
 function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
   const location = useLocation();
@@ -16,16 +22,12 @@ function AuthRedirect() {
       API.verifySignIn(params.code as string, params.state as string, authProvider)
         .then((res) => {
           const user = new Parse.User();
-          let authData = {
+          const authData: IAuthData = {
             id: res.user.id,
             access_token: res.user.accessToken,
-            id_token: "",
           };
           if (authProvider === "google") {
-            authData = {
-              ...authData,
-              id_token: res.user.idToken,
-            };
+            authData.id_token = res.user.idToken;
           }
           user.linkWith(authProvider, {authData}).then(() => {
             user.set("displayName", res.user.name);
