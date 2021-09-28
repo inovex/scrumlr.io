@@ -6,6 +6,9 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
+// need to replace icon-unstack.svg with icon-visible.svg/icon-hidden.svg
+import {ReactComponent as visibleIcon} from "assets/icon-unstack.svg";
+import {ReactComponent as hiddenIcon} from "assets/icon-unstack.svg";
 
 export interface ColumnProps {
   id: string;
@@ -36,6 +39,8 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
     }
   }
 
+  const Icon = hidden ? hiddenIcon : visibleIcon;
+
   return (
     <section className={`column ${getColorClassName(color)}`} ref={columnRef}>
       <div className="column__content">
@@ -43,6 +48,11 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
+            <div className="column__header-toggle">
+              <button className="column__header-toggle-button" onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}>
+                <Icon className="column__header-toggle-button-icon" />
+              </button>
+            </div>
           </div>
           <NoteInput columnId={id} />
         </header>
