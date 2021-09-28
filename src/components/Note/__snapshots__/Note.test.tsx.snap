@@ -5,7 +5,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
   id="portal"
 >
   <li
-    class="note__root"
+    class="note__root note__root-disabled-click"
   >
     <div
       class="note"
@@ -252,7 +252,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
     />
   </div>
   <li
-    class="note__root"
+    class="note__root note__root-disabled-click"
   >
     <div
       class="note"
