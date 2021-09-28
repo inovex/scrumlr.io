@@ -16,17 +16,15 @@ function AuthRedirect() {
       API.verifySignIn(params.code as string, params.state as string, authProvider)
         .then((res) => {
           const user = new Parse.User();
-          let authData;
+          let authData = {
+            id: res.user.id,
+            access_token: res.user.accessToken,
+            id_token: "",
+          };
           if (authProvider === "google") {
             authData = {
-              id: res.user.id,
+              ...authData,
               id_token: res.user.idToken,
-              access_token: res.user.accessToken,
-            };
-          } else {
-            authData = {
-              id: res.user.id,
-              access_token: res.user.accessToken,
             };
           }
           user.linkWith(authProvider, {authData}).then(() => {
