@@ -19,8 +19,6 @@ import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.s
 import {TimerButton} from "./MenuDropdown/TimerButton";
 
 import "./MenuBars.scss";
-import {DropdownButton} from "./MenuDropdown/DropdownButton";
-import Dropdown from "components/MenuBars/MenuDropdown/Dropdown";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -53,20 +51,8 @@ function MenuBars() {
     >
       <section className="menu user-menu">
         <div className="menu__items">
-          <MenuToggle direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
-          <DropdownButton direction="right" label="Add image or giphy" icon={AddImageIcon}>
-            <Dropdown>
-              <Dropdown.Main>
-                <Dropdown.ItemButton onClick={() => store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)))}>1 Minute</Dropdown.ItemButton>
-                <Dropdown.ItemButton onClick={() => store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)))}>3 Minute</Dropdown.ItemButton>
-                <Dropdown.ItemButton onClick={() => store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 5 * 60000)))}>5 Minute</Dropdown.ItemButton>
-                <Dropdown.ItemButton onClick={() => store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() * 60000)))} />
-              </Dropdown.Main>
-              <Dropdown.Footer>
-                <Dropdown.ItemButton onClick={() => store.dispatch(ActionFactory.cancelTimer())}>Cancel Timer</Dropdown.ItemButton>
-              </Dropdown.Footer>
-            </Dropdown>
-          </DropdownButton>
+          <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
+          <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
         </div>
