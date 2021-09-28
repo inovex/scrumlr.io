@@ -6,22 +6,35 @@ type DropdownProps = {
   className?: string;
 };
 
-const Dropdown: React.FC<DropdownProps> & {Main: React.FC; Footer: React.FC; Item: React.FC} = (props) => <menu className={classNames("dropdown", props.className)}>{props.children}</menu>;
+type DropdownSubcomponents = {
+  Main: React.FC;
+  Footer: React.FC;
+  Item: React.FC;
+  ItemButton: React.FC<{onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void}>;
+};
+
+const Dropdown: React.FC<DropdownProps> & DropdownSubcomponents = (props) => <menu className={classNames("dropdown", props.className)}>{props.children}</menu>;
 
 const DropdownMain: React.FC = (props) => (
-    <main>
-      <ul>{props.children}</ul>
-    </main>
-  );
+  <main className="dropdown__main">
+    <ul>{props.children}</ul>
+  </main>
+);
 const DropdownFooter: React.FC = (props) => (
-    <footer>
-      <ul>{props.children}</ul>
-    </footer>
-  );
-const DropdownItem: React.FC = (props) => <li>{props.children}</li>;
+  <footer className="dropdown__footer">
+    <ul>{props.children}</ul>
+  </footer>
+);
+const DropdownItem: React.FC = (props) => <li className="dropdown__item">{props.children}</li>;
+const DropdownItemButton: React.FC<{onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void}> = (props) => (
+  <li className="dropdown__item-button">
+    <button onClick={(e) => props.onClick?.(e)}>{props.children}</button>
+  </li>
+);
 
 Dropdown.Main = DropdownMain;
 Dropdown.Footer = DropdownFooter;
 Dropdown.Item = DropdownItem;
+Dropdown.ItemButton = DropdownItemButton;
 
 export default Dropdown;
