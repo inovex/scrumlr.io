@@ -101,7 +101,6 @@ export type EditableBoardAttributes = {
   showNotesOfOtherUsers: boolean;
   userSetting: {
     id: string;
-    test?: string;
   };
 };
 
