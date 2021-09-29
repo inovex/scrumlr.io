@@ -36,33 +36,41 @@ const Note = (props: NoteProps) => {
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
 
   const handleShowDialog = () => {
-    if (props.activeModeration.status && props.noteId && props.currentUserIsModerator) {
-      store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
-      setShowDialog(!props.focus);
-    } else if (!props.activeModeration.status) {
+    if (props.activeModeration.status) {
+      if (props.noteId && props.currentUserIsModerator) {
+        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
+        setShowDialog(!props.focus);
+      }
+    } else {
       setShowDialog(!showDialog);
     }
   };
 
   useEffect(() => {
-    if (showDialog === props.focus) return;
-    if (props.activeModeration.status && props.noteId) {
-      if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id) {
+    if (showDialog === props.focus) {
+      return;
+    }
+
+    if (props.activeModeration.status) {
+      // Moderator has already one dialog open
+      if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
       } else {
         setShowDialog(false);
       }
-    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
-      setShowDialog(false);
+    } else {
+      // Disable dialog for all other users
+      if (props.activeModeration.userId !== Parse.User.current()?.id) {
+        setShowDialog(false);
+      }
     }
   }, [props.activeModeration.status]);
 
   useEffect(() => {
     if (showDialog !== props.focus) {
-      if (!props.activeModeration.status && props.activeModeration.userId === Parse.User.current()?.id) {
-        return;
+      if (props.activeModeration.status || props.activeModeration.userId !== Parse.User.current()?.id) {
+        setShowDialog(props.focus);
       }
-      setShowDialog(props.focus);
     }
   }, [props.focus]);
 

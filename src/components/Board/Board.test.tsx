@@ -18,6 +18,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
           {id: "RN1VQn6StI", name: "Negative", hidden: false, color: colors[1]},
           {id: "YwPiaNxejW", name: "Actions", hidden: true, color: colors[2]},
         ],
+        moderation: {userId: "", status: "active"},
       },
     },
     notes: [],
