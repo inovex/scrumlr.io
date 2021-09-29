@@ -228,18 +228,18 @@ describe("Note", () => {
       const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, {userId: "Test Author", status: true}), {
         container: global.document.querySelector("#portal")!,
       });
-      expect(container.querySelector(".note-dialog")).toBeDefined();
+      expect(container.querySelector(".note-dialog")).not.toBeNull();
     });
 
     test("NoteDialog is not present: snapshot", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, {userId: "Test Author", status: true}), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, {userId: "Test Author", status: false}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container).toMatchSnapshot();
     });
 
     test("NoteDialog isn't present: class", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, {userId: "Test Author", status: true}), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, {userId: "Test Author", status: false}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container.querySelector(".note-dialog")).toBeNull();

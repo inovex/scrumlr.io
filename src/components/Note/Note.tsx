@@ -45,6 +45,7 @@ const Note = (props: NoteProps) => {
   };
 
   useEffect(() => {
+    if (showDialog === props.focus) return;
     if (props.activeModeration.status && props.noteId) {
       if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
@@ -52,8 +53,8 @@ const Note = (props: NoteProps) => {
         setShowDialog(false);
       }
     } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
-        setShowDialog(false);
-      }
+      setShowDialog(false);
+    }
   }, [props.activeModeration.status]);
 
   useEffect(() => {
