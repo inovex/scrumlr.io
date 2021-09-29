@@ -62,10 +62,14 @@ export const initializeAuthFunctions = (): void => {
      * Function generates consent page URL where the code is retrieved
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps
      */
-    authApi<{state: string}, string>(
-      "githubSignIn",
-      async ({state}) => `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&scope=user&state=${state}&redirect_uri=${encodeURI(AUTH_REDIRECT_URI)}`
-    );
+    authApi<{state: string}, string>("githubSignIn", async ({state}) => {
+      const url = new URL("/login/oauth/authorize", "https://github.com");
+      url.searchParams.append("client_id", GITHUB_CLIENT_ID);
+      url.searchParams.append("scope", "user");
+      url.searchParams.append("state", state);
+      url.searchParams.append("redirect_uri", AUTH_REDIRECT_URI);
+      return url.toString();
+    });
 
     /**
      * 1) Function exchanges code for access token.
@@ -97,13 +101,16 @@ export const initializeAuthFunctions = (): void => {
      * Function generates consent page URL where the code is retrieved
      * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
      */
-    authApi<{state: string}, string>(
-      "microsoftSignIn",
-      async ({state}) =>
-        `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${MICROSOFT_CLIENT_ID}&response_type=code&redirect_uri=${encodeURI(
-          AUTH_REDIRECT_URI
-        )}&response_mode=query&scope=User.Read&state=${state}`
-    );
+    authApi<{state: string}, string>("microsoftSignIn", async ({state}) => {
+      const url = new URL("/common/oauth2/v2.0/authorize", "https://login.microsoftonline.com");
+      url.searchParams.append("client_id", MICROSOFT_CLIENT_ID);
+      url.searchParams.append("response_type", "code");
+      url.searchParams.append("state", state);
+      url.searchParams.append("scope", "User.Read");
+      url.searchParams.append("response_mode", "query");
+      url.searchParams.append("redirect_uri", AUTH_REDIRECT_URI);
+      return url.toString();
+    });
 
     /**
      * 1) Function exchanges code for access token.
