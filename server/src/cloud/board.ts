@@ -301,6 +301,16 @@ export const initializeBoardFunctions = () => {
     }
     if (request.board.moderation) {
       board.set("moderation", request.board.moderation);
+
+      if (request.board.moderation === "disabled") {
+        const notesQuery = new Parse.Query("Note");
+        notesQuery.equalTo("board", board);
+        notesQuery.first({useMasterKey: true}).then(async (note) => {
+          console.log(note);
+          note.set("focus", false);
+          await note.save(null, {useMasterKey: true});
+        });
+      }
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);

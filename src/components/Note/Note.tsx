@@ -49,15 +49,7 @@ const Note = (props: NoteProps) => {
 
   useEffect(() => {
     setShowDialog(props.focus);
-  }, [props.focus]);
-
-  useEffect(() => {
-    setShowDialog(false);
-    // Clean up
-    if (!props.activeModeration && props.focus && props.noteId) {
-      store.dispatch(ActionFactory.editNote({id: props.noteId, focus: false}));
-    }
-  }, [props.activeModeration]);
+  }, [props.focus, props.activeModeration]);
 
   const [{isDragging}, drag] = useDrag({
     type: props.childrenNotes.length > 0 ? "STACK" : "NOTE",
