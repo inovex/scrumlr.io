@@ -18,7 +18,7 @@ export interface BoardServerModel {
   timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
-  moderation: "active" | "disabled";
+  moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
   createdAt: Date;
@@ -35,7 +35,7 @@ export type EditableBoardAttributes = {
   timerUTCEndTime?: Date;
   expirationUTCTime: Date;
   voting: "active" | "disabled";
-  moderation: "active" | "disabled";
+  moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
 };

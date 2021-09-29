@@ -25,7 +25,7 @@ interface NoteProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
-  activeModeration: boolean;
+  activeModeration: {userId?: string; status: boolean};
   focus: boolean;
   currentUserIsModerator: boolean;
 }
@@ -33,23 +33,37 @@ interface NoteProps {
 const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
-  const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration);
+  const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
 
   const handleShowDialog = () => {
-    // Toggle cards for all users (note dialogs that were visible before the moderation phase are also visible after the moderation phase)
-    if (props.activeModeration) {
-      // Only moderators can show cards for all users (other users should not interact with the cards)
-      if (props.noteId && props.currentUserIsModerator) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
-      }
-    } else {
+    if (props.activeModeration.status && props.noteId && props.currentUserIsModerator) {
+      store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
+      setShowDialog(!props.focus);
+    } else if (!props.activeModeration.status) {
       setShowDialog(!showDialog);
     }
   };
 
   useEffect(() => {
-    setShowDialog(props.focus);
-  }, [props.focus, props.activeModeration]);
+    if (props.activeModeration.status && props.noteId) {
+      if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id) {
+        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
+      } else {
+        setShowDialog(false);
+      }
+    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
+        setShowDialog(false);
+      }
+  }, [props.activeModeration.status]);
+
+  useEffect(() => {
+    if (showDialog !== props.focus) {
+      if (!props.activeModeration.status && props.activeModeration.userId === Parse.User.current()?.id) {
+        return;
+      }
+      setShowDialog(props.focus);
+    }
+  }, [props.focus]);
 
   const [{isDragging}, drag] = useDrag({
     type: props.childrenNotes.length > 0 ? "STACK" : "NOTE",
@@ -74,7 +88,11 @@ const Note = (props: NoteProps) => {
   drop(noteRef);
 
   return (
-    <li className={classNames("note__root", {"note__root-disabled-click": props.activeModeration && !props.currentUserIsModerator})} onClick={handleShowDialog} ref={noteRef}>
+    <li
+      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && !props.currentUserIsModerator})}
+      onClick={handleShowDialog}
+      ref={noteRef}
+    >
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
         <div className="note__content">
           <p className="note__text">{props.text}</p>

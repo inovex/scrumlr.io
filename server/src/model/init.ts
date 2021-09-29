@@ -13,7 +13,7 @@ const addInitialBoardSchema = async () => {
   schema.addDate("timerUTCEndTime");
   schema.addDate("expirationUTCTime");
   schema.addString("voting", {defaultValue: "disabled"});
-  schema.addString("moderation", {defaultValue: "disabled"});
+  schema.addObject("moderation", {defaultValue: {}});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});

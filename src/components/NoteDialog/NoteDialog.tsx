@@ -28,7 +28,7 @@ interface NoteDialogProps {
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
-  activeModeration: boolean;
+  activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;
 }
 
@@ -39,7 +39,7 @@ const NoteDialog = (props: NoteDialogProps) => {
 
   const editable = (authorId: string) => Parse.User.current()?.id === authorId || props.isAdmin;
 
-  const showOptions = !props.activeModeration || props.currentUserIsModerator;
+  const showOptions = !props.activeModeration.status || props.currentUserIsModerator;
 
   const onEdit = (id: string, authorId: string, text: string) => {
     if (editable(authorId)) {

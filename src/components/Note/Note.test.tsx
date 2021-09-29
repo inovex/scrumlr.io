@@ -36,7 +36,7 @@ const createNote = (
     },
   ],
   focus = false,
-  moderation = false
+  moderation = {userId: authorId, status: false}
 ) => {
   const initialState = {
     board: {
@@ -218,28 +218,28 @@ describe("Note", () => {
     });
 
     test("NoteDialog is present: snapshot", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, true), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, {userId: "Test Author", status: true}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container).toMatchSnapshot();
     });
 
     test("NoteDialog is present: class", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, true), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, {userId: "Test Author", status: true}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container.querySelector(".note-dialog")).toBeDefined();
     });
 
     test("NoteDialog is not present: snapshot", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, true), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, true, {userId: "Test Author", status: true}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container).toMatchSnapshot();
     });
 
     test("NoteDialog isn't present: class", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, true), {
+      const {container} = render(createNote("Test Text", "Test Author", true, undefined, false, {userId: "Test Author", status: true}), {
         container: global.document.querySelector("#portal")!,
       });
       expect(container.querySelector(".note-dialog")).toBeNull();

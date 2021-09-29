@@ -20,7 +20,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
 
       // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
       if (action.board.moderation) {
-        Toast.success(`You ${action.board.moderation === "active" ? "started" : "ended"} the moderation phase!`);
+        Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
       }
 
       return {
@@ -96,8 +96,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       }
 
       // User notification
-      if (state.data?.moderation !== action.board.moderation) {
-        if (action.board.moderation === "active") {
+      if (state.data?.moderation.status !== action.board.moderation.status) {
+        if (action.board.moderation.status === "active") {
           Toast.success("Moderation phase started!");
         } else {
           Toast.error("Moderation phase ended!");

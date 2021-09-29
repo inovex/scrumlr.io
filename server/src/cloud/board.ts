@@ -99,7 +99,7 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  moderation?: "active" | "disabled";
+  moderation?: {userId?: string; status: "active" | "disabled"};
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -302,7 +302,7 @@ export const initializeBoardFunctions = () => {
     if (request.board.moderation) {
       board.set("moderation", request.board.moderation);
 
-      if (request.board.moderation === "disabled") {
+      if (request.board.moderation.status === "disabled") {
         const notesQuery = new Parse.Query("Note");
         notesQuery.equalTo("board", board);
         notesQuery.first({useMasterKey: true}).then(async (note) => {
