@@ -47,11 +47,11 @@ const Note = (props: NoteProps) => {
   };
 
   useEffect(() => {
-    if (showDialog === props.focus) {
-      return;
-    }
-
     if (props.activeModeration.status) {
+      // Nothing to update
+      if (showDialog === props.focus) {
+        return;
+      }
       // Moderator has already one dialog open
       if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
