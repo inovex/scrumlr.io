@@ -11,6 +11,7 @@ import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
 import {Toast} from "utils/Toast";
 import {getBrowserServerTimeDifference} from "utils/timer";
+import {StatusResponse} from "types";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -300,7 +301,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
     }
   }
   if (action.type === ActionType.CancelVoting) {
-    const response = (await API.cancelVoting(action.boardId)) as {status: string; description: string};
+    const response = (await API.cancelVoting(action.boardId)) as StatusResponse;
     if (response.status === "Error") {
       Toast.error(response.description);
     }

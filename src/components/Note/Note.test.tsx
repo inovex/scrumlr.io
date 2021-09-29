@@ -183,7 +183,7 @@ describe("Note", () => {
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
 
-    test("test-user-2 hast two votes during vote phase", () => {
+    test("test-user-2 has two votes during vote phase", () => {
       // @ts-ignore
       Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
       const {container} = render(createNote("Test Text", "Test Author", true));

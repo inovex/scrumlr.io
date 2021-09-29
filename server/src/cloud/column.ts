@@ -1,4 +1,5 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {StatusResponse} from "types";
 import {requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -29,7 +30,7 @@ export interface EditColumnRequest {
 }
 
 export const initializeColumnFunctions = () => {
-  api<AddColumnRequest, {status: string; description: string}>("addColumn", async (user, request) => {
+  api<AddColumnRequest, StatusResponse>("addColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
@@ -54,7 +55,7 @@ export const initializeColumnFunctions = () => {
     return {status: "Success", description: `New column added`};
   });
 
-  api<DeleteColumnRequest, {status: string; description: string}>("deleteColumn", async (user, request) => {
+  api<DeleteColumnRequest, StatusResponse>("deleteColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     // TODO delete notes & votes
@@ -72,7 +73,7 @@ export const initializeColumnFunctions = () => {
     return {status: "Success", description: `Column ${request.columnId} deleted`};
   });
 
-  api<EditColumnRequest, {status: string; description: string}>("editColumn", async (user, request) => {
+  api<EditColumnRequest, StatusResponse>("editColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});

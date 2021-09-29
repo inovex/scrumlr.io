@@ -1,3 +1,4 @@
+import {StatusResponse} from "types";
 import {requireValidBoardAdmin, requireValidBoardMember} from "./permission";
 import {api} from "./util";
 
@@ -7,7 +8,7 @@ import {api} from "./util";
 type EditUserConfigurationRequest = {
   userId: string;
   boardId: string;
-  editUserConfigurationRequest: {
+  userConfiguration: {
     showHiddenColumns: boolean;
   };
 };
@@ -16,12 +17,12 @@ export const initializeUserFunctions = () => {
   /**
    * Allows users to configure their settings.
    */
-  api<EditUserConfigurationRequest, {status: string; description: string}>("editUserConfiguration", async (user, request) => {
+  api<EditUserConfigurationRequest, StatusResponse>("editUserConfiguration", async (user, request) => {
     await requireValidBoardMember(user, request.boardId);
 
-    if (request.editUserConfigurationRequest.showHiddenColumns != undefined) {
+    if (request.userConfiguration.showHiddenColumns != undefined) {
       await requireValidBoardAdmin(user, request.boardId);
-      user.set("showHiddenColumns", request.editUserConfigurationRequest.showHiddenColumns);
+      user.set("showHiddenColumns", request.userConfiguration.showHiddenColumns);
     }
 
     user.save(null, {useMasterKey: true});

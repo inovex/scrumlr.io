@@ -1,3 +1,4 @@
+import {StatusResponse} from "types";
 import {AddColumnRequest, EditColumnRequest} from "types/column";
 import {callAPI} from "./callApi";
 
@@ -13,8 +14,7 @@ export const ColumnAPI = {
    *
    * @returns status and (error-)description of request
    */
-  addColumn: (boardId: string, column: AddColumnRequest) =>
-    callAPI<{boardId: string; column: AddColumnRequest}, {status: string; description: string}>("addColumn", {boardId, column}),
+  addColumn: (boardId: string, column: AddColumnRequest) => callAPI<{boardId: string; column: AddColumnRequest}, StatusResponse>("addColumn", {boardId, column}),
   /**
    * Deletes a column with the specified id.
    *
@@ -23,7 +23,7 @@ export const ColumnAPI = {
    *
    * @returns status and (error-)description of request
    */
-  deleteColumn: (boardId: string, columnId: string) => callAPI<{boardId: string; columnId: string}, {status: string; description: string}>("deleteColumn", {boardId, columnId}),
+  deleteColumn: (boardId: string, columnId: string) => callAPI<{boardId: string; columnId: string}, StatusResponse>("deleteColumn", {boardId, columnId}),
   /**
    * Edit a column with the specified id.
    *
@@ -36,6 +36,5 @@ export const ColumnAPI = {
    *
    * @returns status and (error-)description of request
    */
-  editColumn: (boardId: string, column: EditColumnRequest) =>
-    callAPI<{boardId: string; column: EditColumnRequest}, {status: string; description: string}>("editColumn", {boardId, column}),
+  editColumn: (boardId: string, column: EditColumnRequest) => callAPI<{boardId: string; column: EditColumnRequest}, StatusResponse>("editColumn", {boardId, column}),
 };

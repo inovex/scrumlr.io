@@ -1,4 +1,5 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {StatusResponse} from "types";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -356,7 +357,7 @@ export const initializeBoardFunctions = () => {
     moderator: boolean;
   };
 
-  api<ChangePermissionRequest, {status: string; description: string}>("changePermission", async (user, request) => {
+  api<ChangePermissionRequest, StatusResponse>("changePermission", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     if (request.moderator) {
@@ -380,7 +381,7 @@ export const initializeBoardFunctions = () => {
   /**
    * Cancel voting
    */
-  api<{boardId: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
+  api<{boardId: string}, StatusResponse>("cancelVoting", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
@@ -415,7 +416,7 @@ export const initializeBoardFunctions = () => {
     return {status: "Success", description: "Current voting phase was canceled"};
   });
 
-  api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
+  api<{endDate: Date; boardId: string}, StatusResponse>("setTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
@@ -429,7 +430,7 @@ export const initializeBoardFunctions = () => {
     return {status: "Success", description: "Timer was successfully set"};
   });
 
-  api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
+  api<{boardId: string}, StatusResponse>("cancelTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});

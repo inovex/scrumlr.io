@@ -17,9 +17,9 @@ export const UserAPI = {
    *
    * @param userId the identifier of the user whose permissions are being changed
    * @param boardId the identifier of the board
-   * @param editUserConfigurationRequest user configuration which needs to be changed
+   * @param userConfiguration user configuration which needs to be changed
    * @returns a {status, description} object
    */
-  editUserConfiguration: (userId: string, boardId: string, editUserConfigurationRequest: EditUserConfigurationRequest) =>
-    callAPI("editUserConfiguration", {userId, boardId, editUserConfigurationRequest}),
+  editUserConfiguration: (userId: string, boardId: string, userConfiguration: EditUserConfigurationRequest) =>
+    callAPI("editUserConfiguration", {userId, boardId, userConfiguration}),
 };

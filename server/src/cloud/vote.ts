@@ -1,3 +1,4 @@
+import {StatusResponse} from "types";
 import {requireValidBoardMember, getMemberRoleName} from "./permission";
 import {api, newObject} from "./util";
 
@@ -7,7 +8,7 @@ export interface VoteRequest {
 }
 
 export const initializeVoteFunctions = () => {
-  api<VoteRequest, {status: string; description: string}>("addVote", async (user, request) => {
+  api<VoteRequest, StatusResponse>("addVote", async (user, request) => {
     await requireValidBoardMember(user, request.board);
 
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
@@ -53,7 +54,7 @@ export const initializeVoteFunctions = () => {
     return {status: "Success", description: "Your vote has been added"};
   });
 
-  api<VoteRequest, {status: string; description: string}>("removeVote", async (user, request) => {
+  api<VoteRequest, StatusResponse>("removeVote", async (user, request) => {
     const note = Parse.Object.extend("Note").createWithoutData(request.note);
     const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
 
