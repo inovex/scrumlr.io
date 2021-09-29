@@ -45,6 +45,12 @@ function MenuBars() {
     }
   };
 
+  const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
+    if (event.currentTarget.attributes.getNamedItem("class")?.nodeValue?.includes("menu-animation")) {
+      setAnimate(false);
+    }
+  };
+
   return (
     <aside
       id="menu-bars"
@@ -55,7 +61,7 @@ function MenuBars() {
         {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
       )}
     >
-      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={() => setAnimate(false)}>
+      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
@@ -64,7 +70,7 @@ function MenuBars() {
         </div>
       </section>
       {isAdmin && (
-        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={() => setAnimate(false)}>
+        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle value={state.timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
