@@ -99,10 +99,18 @@ const Note = (props: NoteProps) => {
   return (
     <li
       className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && !props.currentUserIsModerator})}
-      onClick={handleShowDialog}
+      onClick={!props.activeModeration.status || props.currentUserIsModerator ? handleShowDialog : () => {}}
       ref={noteRef}
     >
-      <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
+      <div
+        className={classNames(
+          "note",
+          {"note--own-card": Parse.User.current()?.id === props.authorId},
+          {"note--isDragging": isDragging},
+          {"note--isOver": isOver && canDrop},
+          {"note__disabled-click": props.activeModeration.status && !props.currentUserIsModerator}
+        )}
+      >
         <div className="note__content">
           <p className="note__text">{props.text}</p>
           <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />

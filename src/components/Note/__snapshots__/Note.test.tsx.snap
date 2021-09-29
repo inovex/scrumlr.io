@@ -255,7 +255,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
     class="note__root note__root-disabled-click"
   >
     <div
-      class="note"
+      class="note note__disabled-click"
     >
       <div
         class="note__content"

@@ -28,11 +28,6 @@ $note__author-margin-left: 10px;
   z-index: $note-z-index;
 }
 
-.note__root-disabled-click {
-  cursor: default;
-  pointer-events: none;
-}
-
 .note__in-stack {
   position: absolute;
   width: calc(100% - 16px);
@@ -169,4 +164,12 @@ $note__author-margin-left: 10px;
 
 .note__delete-button--visible {
   display: block;
+}
+
+.note__root-disabled-click {
+  cursor: not-allowed;
+}
+
+.note__disabled-click {
+  pointer-events: none;
 }
