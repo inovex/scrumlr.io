@@ -222,7 +222,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item--disabled menu-item--left"
+        class="menu-item menu-item--left"
       >
         <div
           class="menu-item__tooltip"
@@ -230,7 +230,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Start timer
+            Timer
           </span>
         </div>
         <svg
@@ -238,11 +238,58 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         >
           icon-timer.svg
         </svg>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
+        <menu
+          class="dropdown"
         >
-          icon-close.svg
-        </svg>
+          <main
+            class="dropdown__main"
+          >
+            <ul>
+              <li
+                class="dropdown__item-button"
+              >
+                <button>
+                  1 Minute
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button"
+              >
+                <button>
+                  3 Minute
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button"
+              >
+                <button>
+                  5 Minute
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button"
+              >
+                <button>
+                  <span>
+                    Custom time
+                  </span>
+                  <button>
+                    -
+                  </button>
+                  <input
+                    max="59"
+                    min="0"
+                    type="number"
+                    value="0"
+                  />
+                  <button>
+                    +
+                  </button>
+                </button>
+              </li>
+            </ul>
+          </main>
+        </menu>
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"

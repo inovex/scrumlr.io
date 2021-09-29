@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dropdown should render correctly 1`] = `
+<menu
+  class="dropdown"
+>
+  <main
+    class="dropdown__main"
+  >
+    <ul>
+      <li
+        class="dropdown__item"
+      >
+        Item
+      </li>
+      <li
+        class="dropdown__item-button"
+      >
+        <button>
+          Item Button
+        </button>
+      </li>
+    </ul>
+  </main>
+  <footer
+    class="dropdown__footer"
+  >
+    <ul>
+      <li
+        class="dropdown__item"
+      >
+        Item
+      </li>
+    </ul>
+  </footer>
+</menu>
+`;
