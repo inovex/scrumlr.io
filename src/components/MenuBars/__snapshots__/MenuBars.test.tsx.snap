@@ -239,51 +239,63 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           icon-timer.svg
         </svg>
         <menu
-          class="dropdown"
+          class="dropdown timer__dropdown"
         >
           <main
             class="dropdown__main"
           >
             <ul>
               <li
-                class="dropdown__item-button"
+                class="dropdown__item-button timer-dropdown__item-button"
               >
                 <button>
-                  1 Minute
+                  <label>
+                    1 minute
+                  </label>
+                  <div>
+                    1
+                  </div>
                 </button>
               </li>
               <li
-                class="dropdown__item-button"
+                class="dropdown__item-button timer-dropdown__item-button"
               >
                 <button>
-                  3 Minute
+                  <label>
+                    3 minute
+                  </label>
+                  <div>
+                    3
+                  </div>
                 </button>
               </li>
               <li
-                class="dropdown__item-button"
+                class="dropdown__item-button timer-dropdown__item-button"
               >
                 <button>
-                  5 Minute
+                  <label>
+                    5 minute
+                  </label>
+                  <div>
+                    5
+                  </div>
                 </button>
               </li>
               <li
-                class="dropdown__item-button"
+                class="dropdown__item-button timer-dropdown__item-button"
               >
                 <button>
-                  <span>
+                  <label>
                     Custom time
-                  </span>
-                  <button>
-                    -
-                  </button>
-                  <input
-                    max="59"
-                    min="0"
-                    type="number"
-                    value="0"
-                  />
+                  </label>
                   <button>
                     +
+                  </button>
+                  <input
+                    value="10"
+                  />
+                  <button>
+                    -
                   </button>
                 </button>
               </li>
