@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
+import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -18,7 +19,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
       action.board;
-      const {userSetting, ...actions} = action.board;
+      const {userConfiguration, ...actions} = action.board;
 
       const newState = {
         status: state.status,
@@ -29,10 +30,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         },
       };
 
-      if (userSetting) {
-        const setting = newState.data.userSettings.find((user) => user.id === userSetting.id);
+      if (userConfiguration) {
+        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
         if (setting) {
-          // Update needed settings
         }
       }
       return newState;
@@ -110,8 +110,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       const stateColumns = state.data.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
       const actionColumns = action.board.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
 
-      const stateUserSettings = state.data.userSettings.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
-      const actionUserSettings = action.board.userSettings.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+      const stateUserConfigurations = state.data.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+      const actionUserConfigurations = action.board.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
 
       // check if current model from server equals local copy
       if (
@@ -124,7 +124,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
         isEqual(stateColumns, actionColumns) &&
-        isEqual(stateUserSettings, actionUserSettings)
+        isEqual(stateUserConfigurations, actionUserConfigurations)
       ) {
         return {
           status: state.status,

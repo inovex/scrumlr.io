@@ -99,12 +99,10 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  userSetting: {
-    id: string;
-  };
+  userConfiguration: {};
 };
 
-export interface UserSettings {
+export interface UserConfigurations {
   [userId: string]: {};
 }
 
@@ -152,10 +150,13 @@ export const initializeBoardFunctions = () => {
       return acc;
     }, {});
 
-    const userSettings: UserSettings = {};
-    userSettings[user.id] = {};
+    const userConfigurations: UserConfigurations = {};
+    userConfigurations[user.id] = {};
 
-    const savedBoard = await board.save({...request, columns, userSettings, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
+    const savedBoard = await board.save(
+      {...request, columns, userConfigurations, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true},
+      {useMasterKey: true}
+    );
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -259,9 +260,9 @@ export const initializeBoardFunctions = () => {
       };
     }
 
-    const userSettings: UserSettings = (await board.get("userSettings")) ?? {};
-    userSettings[user.id] = {};
-    board.set("userSettings", userSettings);
+    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+    userConfigurations[user.id] = {};
+    board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
 
     await addAsMember(user, request.boardId);
@@ -318,11 +319,11 @@ export const initializeBoardFunctions = () => {
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
     }
-    if (request.board.userSetting && request.board.userSetting.id === user.id) {
-      const userSettings: UserSettings = (await board.get("userSettings")) ?? {};
+    if (request.board.userConfiguration) {
+      const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
       // Here you can update the settings and check if already existing
-      userSettings[user.id] = {};
-      board.set("userSettings", userSettings);
+      userConfigurations[user.id] = {};
+      board.set("userConfigurations", userConfigurations);
     }
 
     await board.save(null, {useMasterKey: true});

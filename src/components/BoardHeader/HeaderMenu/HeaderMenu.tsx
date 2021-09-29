@@ -82,7 +82,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <button
             className="menu__item-button"
             onClick={() => {
-              store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
+              store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors, userConfiguration: {test: "Testetetet"}}));
             }}
           >
             <div className="item-button__toggle-container">
