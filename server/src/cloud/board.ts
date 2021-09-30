@@ -102,9 +102,9 @@ export type EditableBoardAttributes = {
   userConfiguration: {};
 };
 
-export interface UserConfigurations {
+export type UserConfigurations = {
   [userId: string]: {};
-}
+};
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
