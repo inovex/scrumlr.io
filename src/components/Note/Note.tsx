@@ -81,6 +81,7 @@ const Note = (props: NoteProps) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    canDrag: () => !props.activeModeration.status || props.currentUserIsModerator,
   });
 
   const [{isOver, canDrop}, drop] = useDrop(() => ({
