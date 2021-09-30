@@ -38,7 +38,6 @@ const Note = (props: NoteProps) => {
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.currentUserIsModerator) {
-        console.log(props.noteId);
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
