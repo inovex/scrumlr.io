@@ -38,7 +38,7 @@
     "http-proxy-middleware": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
     "parse": "^3.3.1",
-    "parse-server": "^4.10.3",
+    "parse-server": "^4.10.4",
     "qs": "^6.10.1"
   },
   "lint-staged": {
