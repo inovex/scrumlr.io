@@ -6,7 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "@testing-library/dom": "^8.6.0",
+    "@testing-library/dom": "^8.7.0",
     "@types/classnames": "^2.3.1",
     "@types/qrcode.react": "^1.0.2",
     "@types/react-dnd": "^3.0.2",
@@ -55,7 +55,7 @@
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-css-modules": "^2.11.0",
     "eslint-plugin-import": "2.24.2",
-    "eslint-plugin-jest": "^24.4.2",
+    "eslint-plugin-jest": "^24.5.0",
     "eslint-plugin-jsx-a11y": "6.4.1",
     "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-prettier": "^4.0.0",
