@@ -99,6 +99,11 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
+  userConfiguration: {};
+};
+
+export type UserConfigurations = {
+  [userId: string]: {};
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -144,7 +149,14 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true}, {useMasterKey: true});
+
+    const userConfigurations: UserConfigurations = {};
+    userConfigurations[user.id] = {};
+
+    const savedBoard = await board.save(
+      {...request, columns, userConfigurations, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true},
+      {useMasterKey: true}
+    );
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -247,6 +259,12 @@ export const initializeBoardFunctions = () => {
         joinRequestReference: savedJoinRequest.id,
       };
     }
+
+    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+    userConfigurations[user.id] = {};
+    board.set("userConfigurations", userConfigurations);
+    await board.save(null, {useMasterKey: true});
+
     await addAsMember(user, request.boardId);
     return {status: "accepted"};
   });
@@ -300,6 +318,12 @@ export const initializeBoardFunctions = () => {
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
+    }
+    if (request.board.userConfiguration) {
+      const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+      // Here you can update the settings and check if already existing
+      userConfigurations[user.id] = {};
+      board.set("userConfigurations", userConfigurations);
     }
 
     await board.save(null, {useMasterKey: true});
