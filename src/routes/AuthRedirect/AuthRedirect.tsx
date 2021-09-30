@@ -19,6 +19,7 @@ function AuthRedirect() {
 
   useEffect(() => {
     const signInMethod = (authProvider: string): void => {
+      // // after deployment for apple user name handling: API.verifySignIn(params.code as string, params.state as string, authProvider, params.user as string)
       API.verifySignIn(params.code as string, params.state as string, authProvider)
         .then((res) => {
           const user = new Parse.User();
@@ -53,10 +54,13 @@ function AuthRedirect() {
       if ((params.state as string).startsWith("microsoft")) {
         signInMethod("microsoft");
       }
+      if ((params.state as string).startsWith("apple")) {
+        signInMethod("apple");
+      }
     } else {
       setStatus({error: "Not a valid entrypoint"});
     }
-  }, [params.code, params.error, params.state]);
+  }, [params.code, params.error, params.state, params.user]);
 
   if (status.error) {
     return <ErrorPage errorMessage="Oops! Unable to sign in." />;
