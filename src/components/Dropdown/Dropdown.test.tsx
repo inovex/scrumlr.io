@@ -4,7 +4,7 @@ import Dropdown from "./Dropdown";
 describe("Dropdown", () => {
   const onClickMock = jest.fn();
 
-  const dropdown = (
+  const dropdownComponent = (
     <Dropdown>
       <Dropdown.Main>
         <Dropdown.Item>Item</Dropdown.Item>
@@ -17,12 +17,12 @@ describe("Dropdown", () => {
   );
 
   test("should render correctly", () => {
-    const {container} = render(dropdown);
+    const {container} = render(dropdownComponent);
     expect(container.firstChild).toMatchSnapshot();
   });
 
   test("item button should call callback on click event", () => {
-    const {container} = render(dropdown);
+    const {container} = render(dropdownComponent);
     const itemButton = container.getElementsByTagName("button")[0];
     fireEvent.click(itemButton);
     expect(onClickMock).toHaveBeenCalled();

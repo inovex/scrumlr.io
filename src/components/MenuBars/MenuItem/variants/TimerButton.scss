@@ -1,12 +1,22 @@
+@import "constants/style.scss";
+
+$timer-dropdown__color-light: $color-black;
+$timer-dropdown__color-dark: $color-white;
+
 .timer-dropdown__item-button label {
   text-align: left;
   letter-spacing: 0.49px;
   font-size: 14px;
-  color: #111111;
+  color: $timer-dropdown__color-light;
   opacity: 1;
   position: absolute;
   left: 19px;
   top: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  .timer-dropdown__item-button label {
+    color: $timer-dropdown__color-dark;
+  }
 }
 
 .timer-dropdown__item-button div,
@@ -15,7 +25,7 @@
   height: 24px;
   width: 24px;
 
-  border: 2px solid #ff0069;
+  border: 2px solid var(--primaryColor);
   border-radius: 12px;
   background-color: transparent;
 
@@ -23,7 +33,7 @@
   top: 12px;
   right: 16px;
 
-  color: #ff0069;
+  color: var(--primaryColor);
   font-size: 14px;
   line-height: 20px;
   font-weight: 600;
@@ -41,12 +51,19 @@
   height: 24px;
   background-color: transparent;
   border: none;
-  border-bottom: 2px solid #000000;
+  color: $timer-dropdown__color-light;
+  border-bottom: 2px solid $timer-dropdown__color-light;
   border-radius: 2px;
   text-align: center;
   position: absolute;
   top: 12px;
   right: 44px;
+}
+@media (prefers-color-scheme: dark) {
+  .timer-dropdown__item-button > * > input {
+    color: $timer-dropdown__color-dark;
+    border-bottom: 2px solid $timer-dropdown__color-dark;
+  }
 }
 .timer-dropdown__item-button > * > input:focus {
   outline: none;

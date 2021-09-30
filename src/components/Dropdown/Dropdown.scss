@@ -1,20 +1,32 @@
 @import "constants/style.scss";
 
+$dropdown__width: 245px;
+
+$dropdown__background-light: $color-white;
+$dropdown__background-dark: $color-dark-mode-note;
+
+$dropdown__item-height: 48px;
+
+$dropdown__item-seperator-background: #edeff2;
+$dropdown__section-seperator-background: #cdcfd2;
+$dropdown__item-hover-background-light: #efefef;
+$dropdown__item-hover-background-dark: #414959;
+
 .dropdown {
   box-sizing: border-box;
   position: absolute;
-  width: 245px;
+  width: $dropdown__width;
   max-height: 0;
   transition: none;
   overflow: hidden;
   padding: 0;
   margin: 0;
-  background-color: $color-white;
+  background-color: $dropdown__background-light;
   z-index: -1;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown {
-    background-color: $color-dark-mode-note;
+    background-color: $dropdown__background-dark;
   }
 }
 .dropdown-item--open .dropdown {
@@ -40,35 +52,41 @@
   border: {
     top: 1px solid;
     bottom: 0;
-    image: linear-gradient(to right, transparent 0px, transparent 49px, #cdcfd2 50px, #cdcfd2 240px) 1;
+    image: linear-gradient(to right, transparent 0px, transparent 49px, $dropdown__item-seperator-background 50px, $dropdown__item-seperator-background 240px) 1;
   }
   margin-bottom: 10px;
 }
 
 .dropdown__item,
 .dropdown__item-button {
-  height: 48px;
+  height: $dropdown__item-height;
   width: 100%;
-  background-color: white;
+  background-color: $dropdown__background-light;
   position: relative;
   box-sizing: border-box;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown__item,
   .dropdown__item-button {
-    background-color: $color-dark-mode-note;
+    background-color: $dropdown__background-dark;
   }
 }
 .dropdown__item:hover,
 .dropdown__item-button:hover {
-  background-color: #efefef; // TODO
+  background-color: $dropdown__item-hover-background-light;
+}
+@media (prefers-color-scheme: dark) {
+  .dropdown__item:hover,
+  .dropdown__item-button:hover {
+    background-color: $dropdown__item-hover-background-dark;
+  }
 }
 .dropdown__item:not(:last-child),
 .dropdown__item-button:not(:last-child) {
   border: {
     bottom: 1px solid;
     top: 0;
-    image: linear-gradient(to right, transparent 0px, transparent 49px, #edeff2 50px, #edeff2 240px) 1;
+    image: linear-gradient(to right, transparent 0px, transparent 49px, $dropdown__item-seperator-background 50px, $dropdown__item-seperator-background 240px) 1;
   }
 }
 .dropdown__item-button > button {

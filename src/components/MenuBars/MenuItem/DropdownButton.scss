@@ -1,5 +1,7 @@
 @import "constants/style.scss";
 
+$dropdown__box-shadow: var(--primaryColor) 3d;
+
 .dropdown-item--open {
   .menu-item__icon {
     color: $color-white;
@@ -29,18 +31,11 @@
       bottom: 94px;
       left: 18px;
       transform: translateX(-50%);
-      box-shadow: 0px 8px 24px #ff00693d;
       border-top-left-radius: 16px;
       border-top-right-radius: 16px;
       border-bottom-left-radius: unset;
       border-bottom-right-radius: unset;
-    }
-
-    .admin-menu .dropdown {
-      box-shadow: 0px 8px 24px #ff00693d;
-    }
-    .user-menu .dropdown {
-      box-shadow: 0px 8px 24px #0057ff3d;
+      box-shadow: 0px 8px 24px $dropdown__box-shadow;
     }
   }
 }
