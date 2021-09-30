@@ -35,10 +35,6 @@ function MenuToggle(props: MenuToggleProps) {
 
   return (
     <button
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        setClickCount((prev) => ++prev % 3);
-      }}
       disabled={props.disabled}
       className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`, {
         "menu-item--touch-hover": clickCount === 1,
@@ -46,6 +42,10 @@ function MenuToggle(props: MenuToggleProps) {
       onClick={() => {
         props.onToggle(!value);
         setValue((val) => !val);
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        setClickCount((prev) => ++prev % 3);
       }}
     >
       <div className="menu-item__tooltip">

@@ -80,6 +80,7 @@ $number-of-menu-items: 4;
   }
 }
 .menu-item--touch-hover,
+.menu-item--touch-click,
 .menu-item:enabled:hover {
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
@@ -98,11 +99,13 @@ $number-of-menu-items: 4;
   visibility: hidden;
 }
 
+.menu-item--active.menu-item--touch-hover > .menu-item__icon--end,
 .menu-item--active:enabled:hover > .menu-item__icon--end,
 .menu-item--active:enabled:active > .menu-item__icon--end {
   visibility: visible;
 }
 
+.menu-item--active.menu-item--touch-hover > .menu-item__icon--start,
 .menu-item--active:enabled:hover > .menu-item__icon--start,
 .menu-item--active:enabled:active > .menu-item__icon--start {
   visibility: hidden;

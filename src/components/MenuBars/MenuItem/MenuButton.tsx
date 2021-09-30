@@ -26,14 +26,13 @@ function MenuButton(props: MenuButtonProps) {
 
   return (
     <button
-      onTouchEnd={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setClickCount((prev) => ++prev % 3);
-      }}
       disabled={props.disabled}
       className={classNames(`menu-item menu-item--${props.direction}`, {"menu-item--touch-hover": clickCount === 1})}
       onClick={() => props.onClick()}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        setClickCount((prev) => ++prev % 3);
+      }}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>
