@@ -306,7 +306,6 @@ export const initializeBoardFunctions = () => {
         const notesQuery = new Parse.Query("Note");
         notesQuery.equalTo("board", board);
         notesQuery.first({useMasterKey: true}).then(async (note) => {
-          console.log(note);
           note.set("focus", false);
           await note.save(null, {useMasterKey: true});
         });
