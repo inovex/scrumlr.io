@@ -79,6 +79,7 @@ $number-of-menu-items: 4;
     background: var(--primaryColor);
   }
 }
+.menu-item--touch-hover,
 .menu-item:enabled:hover {
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
@@ -108,100 +109,54 @@ $number-of-menu-items: 4;
 }
 
 // Columns partly hidden, no touch screen device
-@media (pointer: fine) {
-  .menu-bars--bottom {
-    .menu-item:enabled:hover {
-      .menu-item__tooltip {
-        width: 200px;
-        opacity: 1;
-        visibility: visible;
-        // Tooltip will be shown after 0.5s delay, but cleared instantly
-        transition-delay: 0.5s;
-      }
-    }
-
+.menu-bars--bottom {
+  .menu-item--touch-hover,
+  .menu-item:enabled:hover {
     .menu-item__tooltip {
-      position: absolute;
-      animation: none;
-      top: -58px;
-      left: calc(-100px + 18px);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.1s linear;
-      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      background-color: $color-white;
-    }
-    .menu-item__tooltip::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: calc(50% - 5px);
-      border-width: 5px;
-      border-style: solid;
-      border-color: $color-white transparent transparent transparent;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .menu-item__tooltip {
-        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-        background-color: var(--primaryColor);
-      }
-      .menu-item__tooltip::after {
-        border-color: var(--primaryColor) transparent transparent transparent;
-      }
-    }
-
-    .tooltip__text {
       width: 200px;
-      white-space: nowrap;
+      opacity: 1;
+      visibility: visible;
     }
   }
-}
+  .menu-item:enabled:hover {
+    // Tooltip will be shown after 0.5s delay, but cleared instantly
+    transition-delay: 0.5s;
+  }
 
-// Columns partly hidden, touch screen device (=> no hover)
-@media (pointer: coarse) {
-  .menu-bars--bottom {
-    .menu-item:enabled:active {
-      left: 0;
-      height: 100%;
-      width: 100%;
-      z-index: $menu-item-z-index;
-      transition: left 2s 0.25s;
+  .menu-item__tooltip {
+    position: absolute;
+    animation: none;
+    top: -58px;
+    left: calc(-100px + 18px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.1s linear;
+    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    background-color: $color-white;
+  }
+  .menu-item__tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: calc(50% - 5px);
+    border-width: 5px;
+    border-style: solid;
+    border-color: $color-white transparent transparent transparent;
+  }
 
-      .menu-item__tooltip {
-        height: 100%;
-        width: 100%;
-        transition: width 0.5s 0.25s ease;
-      }
-      .menu-item__icon {
-        left: 28px;
-        transition: left 2s 0.5s, visibility 0s 0.5s;
-      }
-    }
-
+  @media (prefers-color-scheme: dark) {
     .menu-item__tooltip {
-      position: relative;
-      top: -14px;
-      text-align: right;
-      white-space: nowrap;
-      overflow: hidden;
-      border-radius: 32px;
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
       background-color: var(--primaryColor);
     }
-    @media (prefers-color-scheme: dark) {
-      .menu-item__tooltip {
-        background-color: $color-white;
-      }
+    .menu-item__tooltip::after {
+      border-color: var(--primaryColor) transparent transparent transparent;
     }
-    .tooltip__text {
-      margin-left: 72px;
-      color: $color-white;
-    }
-    @media (prefers-color-scheme: dark) {
-      .tooltip__text {
-        color: var(--primaryColor);
-      }
-    }
+  }
+
+  .tooltip__text {
+    width: 200px;
+    white-space: nowrap;
   }
 }
 

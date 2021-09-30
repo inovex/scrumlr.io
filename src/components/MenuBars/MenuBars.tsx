@@ -58,7 +58,7 @@ function MenuBars() {
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
-          <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
+          <MenuButton direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>

@@ -15,16 +15,34 @@ type MenuToggleProps = {
 
 function MenuToggle(props: MenuToggleProps) {
   const [value, setValue] = useState(props.value ?? false);
+  const [clickCount, setClickCount] = useState(0);
   const Icon = props.icon;
 
   useEffect(() => {
     setValue(props.value!);
   }, [props.value]);
 
+  useEffect(() => {
+    if (clickCount > 0) {
+      window.addEventListener("click", () => setClickCount(0), {once: true});
+    }
+    if (clickCount === 2) {
+      props.onToggle(!value);
+      setValue((val) => !val);
+      setClickCount(0);
+    }
+  }, [clickCount]);
+
   return (
     <button
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        setClickCount((prev) => ++prev % 3);
+      }}
       disabled={props.disabled}
-      className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`)}
+      className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`, {
+        "menu-item--touch-hover": clickCount === 1,
+      })}
       onClick={() => {
         props.onToggle(!value);
         setValue((val) => !val);
