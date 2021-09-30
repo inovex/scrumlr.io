@@ -25,6 +25,7 @@ interface NoteDialogProps {
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
+  onDeleteOfParent: () => void;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
   activeVoting: boolean;
@@ -91,7 +92,7 @@ const NoteDialog = (props: NoteDialogProps) => {
                   <IconButton
                     onClick={() => {
                       onDelete(props.noteId!, props.authorId);
-                      props.onClose();
+                      props.onDeleteOfParent();
                     }}
                     direction="right"
                     label="Delete"

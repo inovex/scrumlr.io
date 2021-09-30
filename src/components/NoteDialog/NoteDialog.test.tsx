@@ -61,6 +61,7 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean, 
         onClose={() => {}}
         activeModeration={activeModeration}
         currentUserIsModerator={currentUserIsModerator}
+        onDeleteOfParent={() => {}}
       />
     </Provider>
   );

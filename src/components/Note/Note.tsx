@@ -38,6 +38,7 @@ const Note = (props: NoteProps) => {
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.currentUserIsModerator) {
+        console.log(props.noteId);
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
@@ -124,7 +125,7 @@ const Note = (props: NoteProps) => {
           )}
           <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </footer>
-        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} />
+        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
