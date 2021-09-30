@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.11.2",
     "@testing-library/dom": "^8.6.0",
     "@types/classnames": "^2.3.1",
+    "@types/history": "^4.7.9",
     "@types/qrcode.react": "^1.0.2",
     "@types/react-dnd": "^3.0.2",
     "@types/react-dnd-html5-backend": "^3.0.2",
