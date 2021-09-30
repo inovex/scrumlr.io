@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
+import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -17,15 +18,24 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
+      action.board;
+      const {userConfiguration, ...actions} = action.board;
 
-      return {
+      const newState = {
         status: state.status,
         data: {
           ...state.data!,
-          ...action.board,
+          ...actions,
           dirty: true,
         },
       };
+
+      if (userConfiguration) {
+        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
+        if (setting) {
+        }
+      }
+      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";
@@ -100,6 +110,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       const stateColumns = state.data.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
       const actionColumns = action.board.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
 
+      const stateUserConfigurations = state.data.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+      const actionUserConfigurations = action.board.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+
       // check if current model from server equals local copy
       if (
         (action.board.name === undefined || state.data.name === action.board.name) &&
@@ -110,7 +123,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
-        isEqual(stateColumns, actionColumns)
+        isEqual(stateColumns, actionColumns) &&
+        isEqual(stateUserConfigurations, actionUserConfigurations)
       ) {
         return {
           status: state.status,
