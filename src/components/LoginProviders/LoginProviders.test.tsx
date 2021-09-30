@@ -1,4 +1,4 @@
-import {render} from "@testing-library/react";
+import {render, screen} from "@testing-library/react";
 import LoginProviders from "./LoginProviders";
 
 describe("Check for all provider buttons", () => {
@@ -6,16 +6,16 @@ describe("Check for all provider buttons", () => {
     const {container} = render(<LoginProviders />);
     expect(container.firstChild).toHaveClass("login-control");
   });
-  test("first button", () => {
-    const {container} = render(<LoginProviders />);
-    expect(container.firstChild!.childNodes[0].textContent).toEqual("Sign in with Google");
+  test("google sign in", () => {
+    render(<LoginProviders />);
+    expect(screen.getByText(/Sign in with Google/i)).toBeInTheDocument();
   });
-  test("second button", () => {
-    const {container} = render(<LoginProviders />);
-    expect(container.firstChild!.childNodes[1].textContent).toEqual("Sign in with Github");
+  test("github sign in", () => {
+    render(<LoginProviders />);
+    expect(screen.getByText(/Sign in with Github/i)).toBeInTheDocument();
   });
-  test("third button", () => {
-    const {container} = render(<LoginProviders />);
-    expect(container.firstChild!.childNodes[2].textContent).toEqual("Sign in with Microsoft");
+  test("microsoft sign in", () => {
+    render(<LoginProviders />);
+    expect(screen.getByText(/Sign in with Microsoft/i)).toBeInTheDocument();
   });
 });
