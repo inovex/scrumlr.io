@@ -1,0 +1,47 @@
+@import "constants/style";
+
+.header-menu__export-container {
+  height: 0px;
+  width: 100%;
+  background-color: $color-white;
+  transition: height 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 10px;
+}
+.header-menu__export-container--visible {
+  box-sizing: border-box;
+  height: 90px;
+  border-bottom: 1px solid #efefef;
+}
+
+.header-menu__export-container > .menu__item-button {
+  background-color: transparent;
+  border: none;
+  padding: none;
+  height: 30px;
+  width: 80%;
+  border: 1px solid #111111;
+  border-radius: 32px;
+  background-color: transparent;
+  color: #111111;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f3f3f3;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-menu__export-container {
+    background-color: $color-dark-mode-note;
+  }
+
+  .header-menu__export-container > .menu__item-button:hover {
+    background-color: #3d4555;
+  }
+}

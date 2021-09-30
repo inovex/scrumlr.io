@@ -9,6 +9,7 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
 import "./HeaderMenu.scss";
+import {Export} from "./HeaderMenuItems/Export";
 
 type HeaderMenuProps = {
   open: boolean;
@@ -19,11 +20,13 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
   }));
+
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
   const [showQrCode, setShowQrCode] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showExport, setShowExport] = useState(false);
 
   if (!props.open) {
     return null;
@@ -117,6 +120,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             className="menu__item-button"
             onClick={() => {
               setShowDelete(false);
+              setShowExport(false);
               setShowQrCode(!showQrCode);
             }}
           >
@@ -135,6 +139,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             className="menu__item-button"
             onClick={() => {
               setShowQrCode(false);
+              setShowExport(false);
               setShowDelete(!showDelete);
             }}
           >
@@ -150,6 +155,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             Delete board
           </button>
         </li>
+        <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
       </ul>
     </Portal>
   );
