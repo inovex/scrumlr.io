@@ -19,11 +19,10 @@ function Board() {
         (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
     ),
     voteConfiguration: applicationState.voteConfiguration,
+    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
-
-  const currentUser = state.users.all.find((user) => user.id === Parse.User.current()!.id);
 
   let joinRequestComponent;
   if (currentUserIsModerator) {
@@ -42,6 +41,7 @@ function Board() {
   if (state.board.status === "pending") {
     return <LoadingScreen />;
   }
+
   if (state.board.status === "ready") {
     return (
       <>
@@ -49,7 +49,7 @@ function Board() {
         {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board
-            .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && currentUser?.showHiddenColumns))
+            .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
             .map((column) => (
               <Column key={column.columnId} id={column.columnId!} name={column.name} hidden={column.hidden} currentUserIsModerator={currentUserIsModerator} color={column.color}>
                 {state.notes

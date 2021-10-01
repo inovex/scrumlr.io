@@ -1,5 +1,6 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
 import {StatusResponse} from "types";
+import {UserConfigurations} from "types/user";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -108,10 +109,6 @@ export type EditableBoardAttributes = {
   userConfiguration: {};
 };
 
-export type UserConfigurations = {
-  [userId: string]: {};
-};
-
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
 export type DeleteBoardRequest = {id: string};
@@ -157,7 +154,7 @@ export const initializeBoardFunctions = () => {
     }, {});
 
     const userConfigurations: UserConfigurations = {};
-    userConfigurations[user.id] = {};
+    userConfigurations[user.id] = {showHiddenColumns: false};
 
     const savedBoard = await board.save(
       {...request, columns, userConfigurations, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true},
@@ -267,7 +264,7 @@ export const initializeBoardFunctions = () => {
     }
 
     const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
-    userConfigurations[user.id] = {};
+    userConfigurations[user.id] = {showHiddenColumns: false};
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
 
@@ -328,7 +325,7 @@ export const initializeBoardFunctions = () => {
     if (request.board.userConfiguration) {
       const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
       // Here you can update the settings and check if already existing
-      userConfigurations[user.id] = {};
+      userConfigurations[user.id] = {...userConfigurations[user.id]};
       board.set("userConfigurations", userConfigurations);
     }
 

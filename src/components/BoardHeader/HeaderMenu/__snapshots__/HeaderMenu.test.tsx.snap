@@ -112,13 +112,13 @@ exports[`HeaderMenu should render correctly on open 1`] = `
                   class="item-button__toggle-container"
                 >
                   <div
-                    class="item-button__toggle item-button__toggle--right"
+                    class="item-button__toggle item-button__toggle--left"
                   />
                 </div>
                 <label
                   class="item-button__label"
                 >
-                  Show
+                  Hide
                    columns
                 </label>
               </button>

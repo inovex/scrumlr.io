@@ -48,7 +48,7 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
 
       const user = newState.all.find((member) => member.id === action.user.objectId);
       if (user) {
-        user.showHiddenColumns = action.user.showHiddenColumns;
+        // if needed
       }
       return newState;
     }

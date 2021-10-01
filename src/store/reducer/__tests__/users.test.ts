@@ -10,7 +10,6 @@ const createUser = (id: string, name: string, admin: boolean): UserClientModel =
   createdAt: new Date(),
   updatedAt: new Date(),
   online: true,
-  showHiddenColumns: true,
 });
 
 describe("users reducer", () => {

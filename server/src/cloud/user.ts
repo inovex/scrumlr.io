@@ -1,4 +1,5 @@
 import {StatusResponse} from "types";
+import {UserConfigurations} from "types/user";
 import {requireValidBoardAdmin, requireValidBoardMember} from "./permission";
 import {api} from "./util";
 
@@ -6,10 +7,9 @@ import {api} from "./util";
  * @param showHiddenColumns Allows moderators to toggle the display of hidden columns (visible only to themselves)
  */
 type EditUserConfigurationRequest = {
-  userId: string;
   boardId: string;
   userConfiguration: {
-    showHiddenColumns: boolean;
+    showHiddenColumns?: boolean;
   };
 };
 
@@ -20,13 +20,21 @@ export const initializeUserFunctions = () => {
   api<EditUserConfigurationRequest, StatusResponse>("editUserConfiguration", async (user, request) => {
     await requireValidBoardMember(user, request.boardId);
 
-    if (request.userConfiguration.showHiddenColumns != undefined) {
-      await requireValidBoardAdmin(user, request.boardId);
-      user.set("showHiddenColumns", request.userConfiguration.showHiddenColumns);
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
-    user.save(null, {useMasterKey: true});
+    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
 
+    if (request.userConfiguration.showHiddenColumns != undefined) {
+      userConfigurations[user.id] = {...userConfigurations[user.id], showHiddenColumns: request.userConfiguration.showHiddenColumns};
+    }
+    console.log(request);
+    console.log(userConfigurations);
+    board.set("userConfigurations", userConfigurations);
+    await board.save(null, {useMasterKey: true});
     return {status: "Success", description: "User configuration edited."};
   });
 };

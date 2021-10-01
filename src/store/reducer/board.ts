@@ -13,12 +13,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: action.board,
       };
     }
+
     case ActionType.EditBoard: {
       // Moderator started voting phase - notification to moderator (user who started the voting)
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
-      action.board;
+
       const {userConfiguration, ...actions} = action.board;
 
       const newState = {

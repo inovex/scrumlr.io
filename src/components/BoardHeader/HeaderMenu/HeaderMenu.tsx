@@ -20,6 +20,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
     user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
+    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
   const [boardName, setBoardName] = useState(state.board!.name);
@@ -120,7 +121,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             className="menu__item-button"
             onClick={() => {
               if (state.user?.id) {
-                store.dispatch(ActionFactory.editUserConfiguration(state.user?.id, {showHiddenColumns: !state.user?.showHiddenColumns}));
+                store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
               }
             }}
           >
@@ -128,12 +129,12 @@ const HeaderMenu = (props: HeaderMenuProps) => {
               <div
                 className={classNames(
                   "item-button__toggle",
-                  {"item-button__toggle--left": state.user?.showHiddenColumns},
-                  {"item-button__toggle--right": !state.user?.showHiddenColumns}
+                  {"item-button__toggle--left": state.userConfiguration?.showHiddenColumns},
+                  {"item-button__toggle--right": !state.userConfiguration?.showHiddenColumns}
                 )}
               />
             </div>
-            <label className="item-button__label">{state.user?.showHiddenColumns ? "Hide" : "Show"} columns</label>
+            <label className="item-button__label">{state.userConfiguration?.showHiddenColumns ? "Hide" : "Show"} columns</label>
           </button>
         </li>
         <li className="header-menu__item">

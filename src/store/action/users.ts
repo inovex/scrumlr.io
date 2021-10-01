@@ -74,13 +74,11 @@ export const UsersActionFactory = {
   /**
    * Creates an action that should be dispatch when a user change configurations
    *
-   * @param userId the identifier of the user whose permissions are being changed
    * @param userConfigurationRequest contains configurations changed by user
    */
 
-  editUserConfiguration: (userId: string, userConfigurationRequest: EditUserConfigurationRequest) => ({
+  editUserConfiguration: (userConfigurationRequest: EditUserConfigurationRequest) => ({
     type: UsersActionType.EditUserConfiguration,
-    userId,
     userConfigurationRequest,
   }),
 };
