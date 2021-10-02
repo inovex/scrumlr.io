@@ -59,7 +59,13 @@
   font-weight: bold;
   letter-spacing: 0.5px;
   line-height: 40px;
-  margin: 0px;
+  margin: 0;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(100vw - 260px);
+  max-width: 28vw;
 }
 @media (prefers-color-scheme: dark) {
   .board-header__title {
