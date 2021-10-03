@@ -1,5 +1,5 @@
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
-import {getRandomName} from "constants/Name";
+import {getRandomName} from "constants/name";
 import {RouteComponentProps} from "react-router";
 import Parse from "parse";
 import {API} from "api";

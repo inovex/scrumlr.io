@@ -144,9 +144,9 @@ export const getRandomName = () => {
 
 export const getInitials = (name: string): string => {
   // return first char of each word in name
-  if (name.indexOf(" ") > -1) {
+  if (name.indexOf(" ") >= 0) {
     const matches = name.match(/\b(\w)/g);
-    return matches!.join("");
+    return `${matches![0]}${matches![1]}`;
   }
   // return first 2 chars of single-word name
   return name.substring(0, 2);

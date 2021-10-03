@@ -1,5 +1,5 @@
 import {RouteComponentProps} from "react-router";
-import {getRandomName} from "constants/Name";
+import {getRandomName} from "constants/name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
