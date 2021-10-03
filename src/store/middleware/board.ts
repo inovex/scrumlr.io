@@ -282,7 +282,6 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   }
   if (action.type === ActionType.DeleteBoard) {
     const reponse = await API.deleteBoard(action.boardId);
-    console.log(reponse);
     if (reponse) {
       document.location.pathname = "/new";
     }

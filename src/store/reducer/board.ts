@@ -44,9 +44,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           columns: [
             ...state.data!.columns,
             {
-              name: action.name,
-              color: action.color,
-              hidden: action.hidden,
+              name: action.column.name,
+              color: action.column.color,
+              hidden: action.column.hidden,
             },
           ],
           dirty: true,
@@ -55,13 +55,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.EditColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.id === action.column.columnId);
       const column = newColumns[columnIndex];
       newColumns.splice(columnIndex, 1, {
         ...column,
-        name: action.name || column.name,
-        color: action.color || column.color,
-        hidden: action.hidden === undefined ? column.hidden : action.hidden,
+        name: action.column.name || column.name,
+        color: action.column.color || column.color,
+        hidden: action.column.hidden === undefined ? column.hidden : action.column.hidden,
       });
       return {
         status: state.status,

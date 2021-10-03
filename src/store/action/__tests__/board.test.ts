@@ -95,6 +95,18 @@ describe("board actions", () => {
         },
       });
     });
+
+    test("created action", () => {
+      const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", moderation: {userId: "test_user", status: "active"}});
+      expect(action).toEqual({
+        type: "@@SCRUMLR/editBoard",
+        board: {
+          id: "test_board",
+          name: "Name",
+          moderation: {userId: "test_user", status: "active"},
+        },
+      });
+    });
   });
 
   describe("updated board", () => {
