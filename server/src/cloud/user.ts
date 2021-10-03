@@ -26,13 +26,12 @@ export const initializeUserFunctions = () => {
       return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
-    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+    const userConfigurations: UserConfigurations = await board.get("userConfigurations");
 
     if (request.userConfiguration.showHiddenColumns != undefined) {
       userConfigurations[user.id] = {...userConfigurations[user.id], showHiddenColumns: request.userConfiguration.showHiddenColumns};
     }
-    console.log(request);
-    console.log(userConfigurations);
+
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
     return {status: "Success", description: "User configuration edited."};

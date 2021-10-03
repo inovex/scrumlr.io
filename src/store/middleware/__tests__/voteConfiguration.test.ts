@@ -30,14 +30,14 @@ describe("voteConfiguration middleware", () => {
       stateAPI as MiddlewareAPI,
       jest.fn(),
       ActionFactory.addVoteConfiguration({
-        board: "boardId",
+        boardId: "boardId",
         voteLimit: 5,
         allowMultipleVotesPerNote: true,
         showVotesOfOtherUsers: false,
       })
     );
     expect(API.addVoteConfiguration).toHaveBeenCalledWith({
-      board: "boardId",
+      boardId: "boardId",
       voteLimit: 5,
       allowMultipleVotesPerNote: true,
       showVotesOfOtherUsers: false,

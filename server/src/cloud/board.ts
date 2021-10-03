@@ -106,7 +106,6 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  userConfiguration: {};
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -321,12 +320,6 @@ export const initializeBoardFunctions = () => {
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
-    }
-    if (request.board.userConfiguration) {
-      const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
-      // Here you can update the settings and check if already existing
-      userConfigurations[user.id] = {...userConfigurations[user.id]};
-      board.set("userConfigurations", userConfigurations);
     }
 
     await board.save(null, {useMasterKey: true});
