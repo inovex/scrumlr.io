@@ -3,7 +3,7 @@ import axios from "axios";
 import qs from "qs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
-import {authApi} from "./util";
+import {publicApi} from "./util";
 
 const {
   GOOGLE_CLIENT_ID,
@@ -40,7 +40,7 @@ export const initializeAuthFunctions = (): void => {
      * github.com/autodidaktum/google-oauth2-parse-react/blob/master/deploy/cloud/main.js
      * https://www.npmjs.com/package/googleapis#oauth2-client
      */
-    authApi<{state: string}, string>("googleSignIn", async ({state}) => {
+    publicApi<{state: string}, string>("googleSignIn", async ({state}) => {
       const oauth2Client = getGoogleOAuth2Client();
       return oauth2Client.generateAuthUrl({
         access_type: "offline", // gets refresh_token
@@ -53,7 +53,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges the code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("googleVerifySignIn", async ({code}) => {
+    publicApi<{code: string}, UserInformation>("googleVerifySignIn", async ({code}) => {
       const oauth2Client = getGoogleOAuth2Client();
       const {tokens} = await oauth2Client.getToken(code);
       oauth2Client.setCredentials(tokens);
@@ -77,7 +77,7 @@ export const initializeAuthFunctions = (): void => {
      * Function generates consent page URL where the code is retrieved
      * https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps
      */
-    authApi<{state: string}, string>("githubSignIn", async ({state}) => {
+    publicApi<{state: string}, string>("githubSignIn", async ({state}) => {
       const url = new URL("/login/oauth/authorize", "https://github.com");
       url.searchParams.append("client_id", GITHUB_CLIENT_ID);
       url.searchParams.append("scope", "user");
@@ -90,7 +90,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("githubVerifySignIn", async ({code}) => {
+    publicApi<{code: string}, UserInformation>("githubVerifySignIn", async ({code}) => {
       const accessTokenRequest = await axios.post(
         "https://github.com/login/oauth/access_token",
         {
@@ -116,7 +116,7 @@ export const initializeAuthFunctions = (): void => {
      * Function generates consent page URL where the code is retrieved
      * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow
      */
-    authApi<{state: string}, string>("microsoftSignIn", async ({state}) => {
+    publicApi<{state: string}, string>("microsoftSignIn", async ({state}) => {
       const url = new URL("/common/oauth2/v2.0/authorize", "https://login.microsoftonline.com");
       url.searchParams.append("client_id", MICROSOFT_CLIENT_ID);
       url.searchParams.append("response_type", "code");
@@ -131,7 +131,7 @@ export const initializeAuthFunctions = (): void => {
      * 1) Function exchanges code for access token.
      * 2) Access token is used to retrieve user information.
      */
-    authApi<{code: string}, UserInformation>("microsoftVerifySignIn", async ({code}) => {
+    publicApi<{code: string}, UserInformation>("microsoftVerifySignIn", async ({code}) => {
       const postData = {
         client_id: MICROSOFT_CLIENT_ID,
         scope: "User.Read",
@@ -164,7 +164,7 @@ export const initializeAuthFunctions = (): void => {
      * Function generates consent page URL where the code is retrieved
      * https://medium.com/identity-beyond-borders/sign-in-with-apple-a-zero-code-change-approach-54b44d59f60c
      */
-    authApi<{state: string}, string>("appleSignIn", async ({state}) => {
+    publicApi<{state: string}, string>("appleSignIn", async ({state}) => {
       const url = new URL("/auth/authorize", "https://appleid.apple.com");
       url.searchParams.append("response_type", "code");
       url.searchParams.append("redirect_uri", AUTH_REDIRECT_URI);
@@ -184,7 +184,7 @@ export const initializeAuthFunctions = (): void => {
      * https://sarunw.com/posts/sign-in-with-apple-4/
      * user information is only available on first contact: https://developer.apple.com/forums/thread/127677
      */
-    authApi<{code: string; appleUser: string}, UserInformation>("appleVerifySignIn", async ({code, appleUser}) => {
+    publicApi<{code: string; appleUser: string}, UserInformation>("appleVerifySignIn", async ({code, appleUser}) => {
       const getClientSecret = async (): Promise<string> => {
         const privateKey = fs.readFileSync(APPLE_PRIVATE_KEY_FILE_PATH); // TODO: Download and include private key: https://help.apple.com/developer-account/#/devcdfbb56a3
         // 0) JWT Generation as client_secret
