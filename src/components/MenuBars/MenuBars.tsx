@@ -49,6 +49,7 @@ function MenuBars() {
   const toggleModeration = (active: boolean) => {
     store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
   };
+
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
     if (event.currentTarget.attributes.getNamedItem("class")?.nodeValue?.includes("menu-animation")) {
       setAnimate(false);
