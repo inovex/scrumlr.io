@@ -39,6 +39,7 @@ export const AuthAPI = {
   // after deployment for apple user name handling: verifySignIn: async (code: string, state: string, authProvider: string, appleUser: string) => {
   verifySignIn: async (code: string, state: string, authProvider: string) => {
     // check if state is available in storage and execute call on match
+
     let redirectURL;
     if (sessionStorage.getItem("boardId")) {
       redirectURL = sessionStorage.getItem("boardId");
@@ -46,6 +47,7 @@ export const AuthAPI = {
       redirectURL = sessionStorage.getItem(state);
     }
     sessionStorage.clear();
+
     if (redirectURL) {
       // after deployment for apple user name handling: const user =
       // await callAPI<{code: string; appleUser: string}, {id: string; name: string; accessToken: string; idToken: string}>(`${authProvider}VerifySignIn`, {code,appleUser});
@@ -57,6 +59,7 @@ export const AuthAPI = {
         redirectURL,
       };
     }
+
     throw new Error("state does not match");
   },
 };
