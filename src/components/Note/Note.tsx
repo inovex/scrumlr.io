@@ -65,7 +65,7 @@ const Note = (props: NoteProps) => {
           <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
         </div>
         <footer className="note__footer">
-          {(props.showAuthors || Parse.User.current?.id === props.authorId) && (
+          {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
               <img className="note__author-image" src={avatar} alt="User" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
