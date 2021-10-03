@@ -63,7 +63,7 @@ function AuthRedirect() {
   }, [params.code, params.error, params.state, params.user]);
 
   if (status.error) {
-    return <ErrorPage errorMessage={status.error} />;
+    return <ErrorPage errorMessage="Oops! Sign-in failed, please try again." />;
   }
 
   return <LoadingScreen />;
