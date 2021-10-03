@@ -28,9 +28,10 @@ const signInAnonymously = async (displayName?: string, photoURL?: string) => {
  *    https://github.com/login/oauth/authorize...
  *    https://login.microsoftonline.com/common/oauth2/v2.0/authorize..
  * @param authProvider name of the OAuth Provider
+ * @param originURL origin URL
  */
-const signInWithAuthProvider = async (authProvider: string) => {
-  window.location.href = await API.signIn(authProvider);
+const signInWithAuthProvider = async (authProvider: string, originURL: string) => {
+  window.location.href = await API.signIn(authProvider, originURL);
 };
 
 export const AuthenticationManager = {

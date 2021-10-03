@@ -30,21 +30,21 @@ describe("check for all provider buttons", () => {
       const {container} = render(<LoginProviders />);
       const button = container.querySelector("#google");
       fireEvent.click(button!);
-      expect(signInSpy).toHaveBeenCalledWith("google");
+      expect(signInSpy).toHaveBeenCalledWith("google", expect.anything());
     });
 
     test("github sign in", () => {
       const {container} = render(<LoginProviders />);
       const button = container.querySelector("#github");
       fireEvent.click(button!);
-      expect(signInSpy).toHaveBeenCalledWith("github");
+      expect(signInSpy).toHaveBeenCalledWith("github", expect.anything());
     });
 
     test("microsoft sign in", () => {
       const {container} = render(<LoginProviders />);
       const button = container.querySelector("#microsoft");
       fireEvent.click(button!);
-      expect(signInSpy).toHaveBeenCalledWith("microsoft");
+      expect(signInSpy).toHaveBeenCalledWith("microsoft", expect.anything());
     });
   });
 });

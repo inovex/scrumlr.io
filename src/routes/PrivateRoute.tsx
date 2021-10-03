@@ -6,7 +6,6 @@ function PrivateRoute(props: RouteProps) {
   if (currentUser) {
     return <Route {...props} />;
   }
-  sessionStorage.setItem("boardId", props.location!.pathname);
   return <Redirect to={{pathname: "/login", state: {from: props.location}}} />;
 }
 

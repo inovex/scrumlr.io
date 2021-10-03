@@ -1,10 +1,10 @@
 import {v4 as uuidv4} from "uuid";
 import {callAPI} from "./callApi";
 
-const generateState = (prefix: string) => {
+const generateState = (prefix: string, originURL: string) => {
   // generate random state id and store origin into the session storage
   const state = `${prefix}-${uuidv4()}`;
-  sessionStorage.setItem(state, window.location.href);
+  sessionStorage.setItem(state, originURL);
   return state;
 };
 
@@ -25,7 +25,7 @@ export const AuthAPI = {
    *
    * @returns the redirection URL
    */
-  signIn: (authProvider: string) => callAPI<{state: string}, string>(`${authProvider}SignIn`, {state: generateState(authProvider)}),
+  signIn: (authProvider: string, originURL: string) => callAPI<{state: string}, string>(`${authProvider}SignIn`, {state: generateState(authProvider, originURL)}),
 
   /**
    * Verify the sign in with the OAuth provider by the specified code.
@@ -40,13 +40,7 @@ export const AuthAPI = {
   verifySignIn: async (code: string, state: string, authProvider: string) => {
     // check if state is available in storage and execute call on match
 
-    let redirectURL;
-    if (sessionStorage.getItem("boardId")) {
-      redirectURL = sessionStorage.getItem("boardId");
-    } else {
-      redirectURL = sessionStorage.getItem(state);
-    }
-    sessionStorage.clear();
+    const redirectURL = sessionStorage.getItem(state);
 
     if (redirectURL) {
       // after deployment for apple user name handling: const user =

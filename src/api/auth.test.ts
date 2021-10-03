@@ -13,7 +13,7 @@ describe("auth api", () => {
   });
 
   test("verification returns user", async () => {
-    sessionStorage.setItem("boardId", "123");
+    sessionStorage.setItem("state", "123");
     callAPI.mockResolvedValue({name: "John Doe"});
 
     const result = await AuthAPI.verifySignIn("code", "state", "provider");
@@ -23,14 +23,6 @@ describe("auth api", () => {
       },
       redirectURL: "123",
     });
-  });
-
-  test("verification returns correct board id", async () => {
-    sessionStorage.setItem("boardId", "123");
-    callAPI.mockResolvedValue({name: "John Doe"});
-
-    const result = await AuthAPI.verifySignIn("code", "state", "provider");
-    expect(result.redirectURL).toEqual("123");
   });
 
   test("verification returns correct state URL", async () => {
