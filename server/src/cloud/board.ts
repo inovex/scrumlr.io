@@ -115,6 +115,10 @@ export interface JoinBoardRequest {
   boardId: string;
 }
 
+export type UserConfigurations = {
+  [userId: string]: {};
+};
+
 export const initializeBoardFunctions = () => {
   (Parse.Cloud as any).onLiveQueryEvent(({event, sessionToken}) => {
     if (event === "connect" || event === "ws_disconnect") {
@@ -145,7 +149,10 @@ export const initializeBoardFunctions = () => {
       };
       return acc;
     }, {});
-    const savedBoard = await board.save({...request, columns, owner: user}, {useMasterKey: true});
+
+    const userConfigurations: UserConfigurations = {};
+    userConfigurations[user.id] = {};
+    const savedBoard = await board.save({...request, columns, owner: user, userConfigurations}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -248,6 +255,12 @@ export const initializeBoardFunctions = () => {
         joinRequestReference: savedJoinRequest.id,
       };
     }
+
+    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+    userConfigurations[user.id] = {};
+    board.set("userConfigurations", userConfigurations);
+    await board.save(null, {useMasterKey: true});
+
     await addAsMember(user, request.boardId);
     return {status: "accepted"};
   });

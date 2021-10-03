@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
+import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -17,20 +18,28 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
+      const {userConfiguration, ...actions} = action.board;
 
       // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
       if (action.board.moderation) {
         Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
       }
 
-      return {
+      const newState = {
         status: state.status,
         data: {
           ...state.data!,
-          ...action.board,
+          ...actions,
           dirty: true,
         },
       };
+
+      if (userConfiguration) {
+        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
+        if (setting) {
+        }
+      }
+      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";
@@ -44,9 +53,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           columns: [
             ...state.data!.columns,
             {
-              name: action.column.name,
-              color: action.column.color,
-              hidden: action.column.hidden,
+              name: action.name,
+              color: action.color,
+              hidden: action.hidden,
             },
           ],
           dirty: true,
@@ -55,13 +64,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.EditColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.column.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
       const column = newColumns[columnIndex];
       newColumns.splice(columnIndex, 1, {
         ...column,
-        name: action.column.name || column.name,
-        color: action.column.color || column.color,
-        hidden: action.column.hidden === undefined ? column.hidden : action.column.hidden,
+        name: action.name || column.name,
+        color: action.color || column.color,
+        hidden: action.hidden === undefined ? column.hidden : action.hidden,
       });
       return {
         status: state.status,
@@ -114,6 +123,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       const stateColumns = state.data.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
       const actionColumns = action.board.columns.map((column) => ({name: column.name, hidden: column.hidden})).sort((a, b) => a.name.localeCompare(b.name));
 
+      const stateUserConfigurations = state.data.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+      const actionUserConfigurations = action.board.userConfigurations.map((user) => ({user: user.id})).sort((a, b) => a.user.localeCompare(b.user));
+
       // check if current model from server equals local copy
       if (
         (action.board.name === undefined || state.data.name === action.board.name) &&
@@ -124,7 +136,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
-        isEqual(stateColumns, actionColumns)
+        isEqual(stateColumns, actionColumns) &&
+        isEqual(stateUserConfigurations, actionUserConfigurations)
       ) {
         return {
           status: state.status,

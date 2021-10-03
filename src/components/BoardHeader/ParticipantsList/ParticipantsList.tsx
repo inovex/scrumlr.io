@@ -41,7 +41,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
             .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
-              <li>
+              <li key={participant.id}>
                 <figure>
                   <img src={avatar} />
                   <figcaption>{participant.displayName}</figcaption>
