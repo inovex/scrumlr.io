@@ -157,10 +157,10 @@ $bottom_distance: 12px;
   content: "";
   height: 1px;
   width: 100%;
-  background-color: #edeff2;
+  background-color: $color-light-gray;
   position: absolute;
   bottom: 0;
-  left: 0px;
+  left: 0;
 }
 
 .participants__list figure {
