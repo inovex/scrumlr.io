@@ -24,9 +24,9 @@ const BoardHeader = (props: BoardHeaderProps) => {
       <HeaderLogo />
       <div className="board-header__infos">
         <div
-          className={classNames("info-block", {"info-block--hoverable": props.currentUserIsModerator})}
+          className={classNames("info-block", "info-block--hoverable")}
           onClick={() => {
-            if (props.currentUserIsModerator) setShowMenu(!showMenu);
+            setShowMenu(!showMenu);
           }}
           role="dialog"
         >
@@ -40,7 +40,7 @@ const BoardHeader = (props: BoardHeaderProps) => {
       <div className="board-header__users" onClick={() => setShowParticipants((showParticipants) => !showParticipants)}>
         <BoardUsers />
       </div>
-      {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
+      <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
         <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />
