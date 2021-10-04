@@ -16,11 +16,10 @@ function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
   const location = useLocation();
   const params = queryString.parse(location.search);
-  const [originURL, setOriginURL] = useState("/");
+  const originURL = sessionStorage.getItem(params.state as string) || "/";
 
   useEffect(() => {
     const signInMethod = (authProvider: string): void => {
-      setOriginURL(sessionStorage.getItem(params.state as string)!);
       // after deployment for apple user name handling: API.verifySignIn(params.code as string, params.state as string, authProvider, params.user as string)
       API.verifySignIn(params.code as string, params.state as string, authProvider)
         .then((res) => {

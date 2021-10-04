@@ -1,4 +1,5 @@
 import "./ErrorPage.scss";
+import {useHistory} from "react-router";
 
 export interface ErrorPageProps {
   errorMessage: string;
@@ -6,24 +7,18 @@ export interface ErrorPageProps {
 }
 
 function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
+  const history = useHistory();
+  const redirect = (newURL: string) => () => {
+    history.push(newURL);
+  };
   return (
     <>
       <section className="error-page">
         <span>{errorMessage}</span>
-        <button
-          id="home-button"
-          onClick={() => {
-            window.location.href = "/";
-          }}
-        >
+        <button data-testid="home-button" onClick={redirect("/")}>
           Home
         </button>
-        <button
-          id="back-button"
-          onClick={() => {
-            window.location.href = originURL;
-          }}
-        >
+        <button data-testid="back-button" onClick={redirect(originURL)}>
           Go Back
         </button>
       </section>

@@ -11,11 +11,11 @@ describe("error page renders all elements", () => {
     expect(screen.getByText(/test-message/i)).toBeInTheDocument();
   });
   test("Home button", () => {
-    const {container} = render(<ErrorPage errorMessage="test" originURL="/" />);
-    expect(container.querySelector("#home-button")).toBeInTheDocument();
+    const {getByTestId} = render(<ErrorPage errorMessage="test" originURL="/" />);
+    expect(getByTestId("home-button")).toBeInTheDocument();
   });
   test("Back button", () => {
-    const {container} = render(<ErrorPage errorMessage="test" originURL="/" />);
-    expect(container.querySelector("#back-button")).toBeInTheDocument();
+    const {getByTestId} = render(<ErrorPage errorMessage="test" originURL="/" />);
+    expect(getByTestId("back-button")).toBeInTheDocument();
   });
 });
