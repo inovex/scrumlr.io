@@ -1,5 +1,7 @@
 @import "constants/style";
 
+$bottom_distance: 12px;
+
 .participants {
   position: absolute;
   top: 92px;
@@ -43,13 +45,12 @@
 .participants__header > input {
   background-color: transparent;
   color: $color-white;
-  opacity: 1;
   font-size: 13px;
   letter-spacing: 0.27px;
   border: none;
   border-bottom: 1px solid transparent;
   position: absolute;
-  bottom: 24px;
+  bottom: $bottom_distance;
   left: 46px;
   opacity: 0.8;
 
@@ -66,7 +67,7 @@
 
 .header__icon {
   position: absolute;
-  bottom: 24px;
+  bottom: $bottom_distance;
   left: 24px;
 }
 
