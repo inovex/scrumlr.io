@@ -92,9 +92,12 @@ function NewBoard(props: RouteComponentProps) {
         <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
         JoinConfirmationRequired
       </label>
+
       <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
         {Object.keys(columnTemplates).map((key) => (
-          <option value={key}>{key}</option>
+          <option key={key} value={key}>
+            {key}
+          </option>
         ))}
       </select>
       <button
