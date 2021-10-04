@@ -15,10 +15,14 @@ export type ExportProps = {
 
 const generateCSV = (state: ExportProps) => {
   const columns = parse(state.board.columns, {quote: "", fields: ["id", "name", "color", "hidden"]});
+  const board = parse(state.board, {
+    quote: "",
+    fields: ["id", "name", "joinConfirmationRequired", "encryptedContent", "showAuthors", "voting", "votingIteration", "showNotesOfOtherUsers", "createdAt", "updatedAt", "owner"],
+  });
   const notes = parse(state.notes, {quote: "", fields: ["id", "columnId", "text", "author", "parentId", "createdAt", "updatedAt"]});
   const votes = parse(state.votes, {quote: "", fields: ["id", "board", "note", "user", "votingIteration"]});
   const users = parse(state.users.all, {quote: "", fields: ["id", "displayName", "admin", "createdAt", "updatedAt", "online"]});
-  return [columns, notes, votes, users];
+  return [columns, board, notes, votes, users];
 };
 
 const fileName = (state: ExportProps) => {
@@ -38,9 +42,10 @@ export const exportAsCSV = (state: ExportProps) => {
 };
 
 export const exportAsCSVZip = (state: ExportProps) => {
-  const [columns, notes, votes, users] = generateCSV(state);
+  const [columns, board, notes, votes, users] = generateCSV(state);
   const zip = new JSZip();
   zip.file("columns.csv", columns);
+  zip.file("board.csv", board);
   zip.file("notes.csv", notes);
   zip.file("votes.csv", votes);
   zip.file("users.csv", users);

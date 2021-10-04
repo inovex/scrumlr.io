@@ -1,5 +1,5 @@
 import {useAppSelector} from "store";
-import {exportAsCSVZip, exportAsJSON} from "utils/export";
+import {exportAsCSV, exportAsJSON} from "utils/export";
 import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import {Dispatch, SetStateAction} from "react";
@@ -42,7 +42,7 @@ export const Export = (props: ExportProps) => {
           <ExportIcon className="item-button__icon" />
           <label className="item-button__label">Export as json</label>
         </button>
-        <button className="menu__item-button" onClick={() => exportAsCSVZip(state)}>
+        <button className="menu__item-button" onClick={() => exportAsCSV(state)}>
           <ExportIcon className="item-button__icon" />
           <label className="item-button__label">Export as csv</label>
         </button>
