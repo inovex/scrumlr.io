@@ -1,11 +1,56 @@
-import {ApplicationState} from "types/store";
-import {Parser} from "json2csv";
+import {UsersState} from "types/store";
+import {parse} from "json2csv";
+import {NoteClientModel} from "types/note";
+import {VoteClientModel} from "types/vote";
+import {BoardClientModel} from "types/board";
+import JSZip from "jszip";
+import {saveAs} from "file-saver";
 
-export const exportAsCSV = (state: ApplicationState) => {
-  const json2csvParser = new Parser({quote: ""});
-  const csv = json2csvParser.parse(exportAsJSON(state));
-  console.log(csv);
-  return "test";
+export type ExportProps = {
+  board: BoardClientModel;
+  notes: NoteClientModel[];
+  votes: VoteClientModel[];
+  users: UsersState;
 };
 
-export const exportAsJSON = (state: ApplicationState) => JSON.stringify(state, null, 4);
+const generateCSV = (state: ExportProps) => {
+  const columns = parse(state.board.columns, {quote: "", fields: ["id", "name", "color", "hidden"]});
+  const notes = parse(state.notes, {quote: "", fields: ["id", "columnId", "text", "author", "parentId", "createdAt", "updatedAt"]});
+  const votes = parse(state.votes, {quote: "", fields: ["id", "board", "note", "user", "votingIteration"]});
+  const users = parse(state.users.all, {quote: "", fields: ["id", "displayName", "admin", "createdAt", "updatedAt", "online"]});
+  return [columns, notes, votes, users];
+};
+
+const fileName = (state: ExportProps) => {
+  const date = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
+  return `${date}_${state.board.name}`;
+};
+
+export const exportAsCSV = (state: ExportProps) => {
+  const csvs = generateCSV(state);
+  let csv = "";
+  csvs.forEach((entry) => {
+    csv += entry;
+    csv += "\n\n";
+  });
+  const blob = new Blob([csv]);
+  saveAs(blob, `${fileName(state)}.csv`);
+};
+
+export const exportAsCSVZip = (state: ExportProps) => {
+  const [columns, notes, votes, users] = generateCSV(state);
+  const zip = new JSZip();
+  zip.file("columns.csv", columns);
+  zip.file("notes.csv", notes);
+  zip.file("votes.csv", votes);
+  zip.file("users.csv", users);
+  zip.generateAsync({type: "blob"}).then((content) => {
+    saveAs(content, `${fileName(state)}.zip`);
+  });
+};
+
+export const exportAsJSON = (state: ExportProps) => {
+  const content = JSON.stringify(state, null, 4);
+  const blob = new Blob([content]);
+  saveAs(blob, `${fileName(state)}.json`);
+};

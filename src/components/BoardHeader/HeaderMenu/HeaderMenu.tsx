@@ -45,6 +45,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setActiveEditMode(false);
         setShowQrCode(false);
         setShowDelete(false);
+        setShowExport(false);
         setBoardName(state.board!.name);
         setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
