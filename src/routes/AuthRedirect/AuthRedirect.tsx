@@ -16,10 +16,12 @@ function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
   const location = useLocation();
   const params = queryString.parse(location.search);
+  const [originURL, setOriginURL] = useState("/");
 
   useEffect(() => {
     const signInMethod = (authProvider: string): void => {
-      // // after deployment for apple user name handling: API.verifySignIn(params.code as string, params.state as string, authProvider, params.user as string)
+      setOriginURL(sessionStorage.getItem(params.state as string)!);
+      // after deployment for apple user name handling: API.verifySignIn(params.code as string, params.state as string, authProvider, params.user as string)
       API.verifySignIn(params.code as string, params.state as string, authProvider)
         .then((res) => {
           const user = new Parse.User();
@@ -63,7 +65,7 @@ function AuthRedirect() {
   }, [params.code, params.error, params.state, params.user]);
 
   if (status.error) {
-    return <ErrorPage errorMessage="Oops! Sign-in failed, please try again." />;
+    return <ErrorPage errorMessage="Oops! Sign-in failed, please try again." originURL={originURL} />;
   }
 
   return <LoadingScreen />;
