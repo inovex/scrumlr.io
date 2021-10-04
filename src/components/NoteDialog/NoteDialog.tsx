@@ -97,7 +97,7 @@ const NoteDialog = (props: NoteDialogProps) => {
           </aside>
         </div>
         {props.childrenNotes.map((note) => (
-          <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
+          <div key={note.id} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
             <div className="note-dialog__content">
               <blockquote
                 className="note-dialog__text"
