@@ -11,6 +11,7 @@ function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
       <section className="error-page">
         <span>{errorMessage}</span>
         <button
+          id="home-button"
           onClick={() => {
             window.location.href = "/";
           }}
@@ -18,6 +19,7 @@ function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
           Home
         </button>
         <button
+          id="back-button"
           onClick={() => {
             window.location.href = originURL;
           }}
