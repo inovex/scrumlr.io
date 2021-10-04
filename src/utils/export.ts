@@ -13,7 +13,7 @@ export type ExportProps = {
   users: UsersState;
 };
 
-const generateCSV = (state: ExportProps) => {
+export const generateCSV = (state: ExportProps) => {
   const columns = parse(state.board.columns, {quote: "", fields: ["id", "name", "color", "hidden"]});
   const board = parse(state.board, {
     quote: "",
@@ -25,7 +25,7 @@ const generateCSV = (state: ExportProps) => {
   return [columns, board, notes, votes, users];
 };
 
-const fileName = (state: ExportProps) => {
+export const fileName = (state: ExportProps) => {
   const date = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
   return `${date}_${state.board.name}`;
 };
@@ -37,7 +37,7 @@ export const exportAsCSV = (state: ExportProps) => {
     csv += entry;
     csv += "\n\n";
   });
-  const blob = new Blob([csv]);
+  const blob = new Blob([csv], {type: "application/csv"});
   saveAs(blob, `${fileName(state)}.csv`);
 };
 
@@ -55,7 +55,7 @@ export const exportAsCSVZip = (state: ExportProps) => {
 };
 
 export const exportAsJSON = (state: ExportProps) => {
-  const content = JSON.stringify(state, null, 4);
-  const blob = new Blob([content]);
+  const content = JSON.stringify(state);
+  const blob = new Blob([content], {type: "application/json"});
   saveAs(blob, `${fileName(state)}.json`);
 };

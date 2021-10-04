@@ -4,6 +4,7 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {exportAsJSON, exportAsCSV, exportAsCSVZip} from "utils/export";
 import {HeaderMenu} from "./HeaderMenu";
 
 const mockStore = configureStore();
@@ -12,6 +13,15 @@ jest.mock("store", () => ({
   ...jest.requireActual("store"),
   dispatch: jest.fn(),
 }));
+
+jest.mock("utils/export", () => ({
+  ...jest.requireActual("utils/export"),
+  exportAsJSON: jest.fn(),
+  exportAsCSV: jest.fn(),
+  exportAsCSVZip: jest.fn(),
+}));
+
+jest.mock("file-saver", () => ({saveAs: jest.fn()}));
 
 const initialState = {
   board: {
@@ -90,6 +100,30 @@ describe("HeaderMenu", () => {
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");
+    });
+  });
+
+  describe("blob download", () => {
+    test("json function called", () => {
+      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      const button = container.querySelector(".header-menu")?.lastChild?.firstChild?.firstChild!;
+      expect(button).toHaveClass("menu__item-button");
+      fireEvent.click(button);
+      fireEvent.click(container.querySelector(".header-menu__export-container")?.firstChild!);
+      expect(exportAsJSON).toBeCalled();
+    });
+
+    test("csv (zip) function called", () => {
+      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      const button = container.querySelector(".header-menu")?.lastChild?.firstChild?.firstChild!;
+      expect(button).toHaveClass("menu__item-button");
+      fireEvent.click(button);
+      fireEvent.click(container.querySelector(".header-menu__export-container")?.lastChild!);
+      try {
+        expect(exportAsCSV).toBeCalled();
+      } catch (error) {
+        expect(exportAsCSVZip).toBeCalled();
+      }
     });
   });
 });
