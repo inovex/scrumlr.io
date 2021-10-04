@@ -177,11 +177,6 @@ exports[`HeaderMenu should render correctly on open 1`] = `
             <div
               class="menu__item-button"
             >
-              <a
-                download="export."
-                href=""
-                style="display: none;"
-              />
               <li
                 class="header-menu__item"
               >
