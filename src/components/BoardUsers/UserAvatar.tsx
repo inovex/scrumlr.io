@@ -2,13 +2,14 @@ import "./BoardUser.scss";
 import {getInitials} from "constants/Name";
 
 export interface UserAvatarProps {
+  group: string;
   id: string;
   name: string;
   avatar?: string;
 }
 
-const UserAvatar = ({name, avatar}: UserAvatarProps) => (
-  <li className="user-avatar">
+const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
+  <li className={`${group}-avatar`}>
     {avatar ? (
       <img src={avatar} alt={name} />
     ) : (

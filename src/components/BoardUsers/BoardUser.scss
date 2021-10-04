@@ -40,3 +40,8 @@
     color: white;
   }
 }
+
+.participants-avatar {
+  @extend .rest-users;
+  margin: 5px;
+}

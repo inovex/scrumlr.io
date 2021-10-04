@@ -1,13 +1,13 @@
 import Portal from "components/Portal/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
-import avatar from "assets/avatar.png";
 import "./ParticipantsList.scss";
 import {ToggleButton} from "components/ToggleButton";
 import store, {useAppSelector} from "store";
 import Parse from "parse";
 import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
+import UserAvatar from "../../BoardUsers/UserAvatar";
 
 type ParticipantsListProps = {
   open: boolean;
@@ -28,7 +28,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
         <header className="participants__header">
-          <h4>Board Participants ({props.participants.length})</h4>
+          <h4>Participants ({props.participants.length})</h4>
           <SearchIcon className="header__icon" />
           <input placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </header>
@@ -42,10 +42,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
               <li key={participant.id}>
-                <figure>
-                  <img src={avatar} />
-                  <figcaption>{participant.displayName}</figcaption>
-                </figure>
+                <UserAvatar key={participant.id} id={participant.id} name={participant.displayName} group="participants" />
                 {/* Show the permission toggle if the current user is moderator */}
                 {props.currentUserIsModerator && (
                   <ToggleButton
