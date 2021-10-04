@@ -16,7 +16,7 @@ describe("ParticipantsList", () => {
       open={props.open}
       onClose={() => props.onClose?.()}
       currentUserIsModerator={props.currentUserIsModerator}
-      participants={[...Array(props.numberOfParticipants ?? 0).keys()].map((n) => ({id: `${0}`, displayName: `Participant ${n}`} as unknown as UserClientModel))}
+      participants={[...Array(props.numberOfParticipants ?? 0).keys()].map((n) => ({id: `${n}`, displayName: `Participant ${n}`} as unknown as UserClientModel))}
     />
   );
 
