@@ -13,11 +13,6 @@ interface JoinBoardResponse {
 
 const goOnline = (user: Parse.User, boardId: string) => {
   user.add("boards", boardId);
-
-  // Add default user configuration if not already available in database
-  if (!user.get("showHiddenColumns")) {
-    user.set("showHiddenColumns", false);
-  }
   user.save(null, {useMasterKey: true});
 };
 
@@ -262,7 +257,7 @@ export const initializeBoardFunctions = () => {
       };
     }
 
-    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
+    const userConfigurations: UserConfigurations = await board.get("userConfigurations");
     userConfigurations[user.id] = {showHiddenColumns: false};
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
