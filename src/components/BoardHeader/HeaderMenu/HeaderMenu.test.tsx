@@ -23,7 +23,7 @@ describe("HeaderMenu", () => {
 
       const {container} = render(
         <Provider store={store}>
-          <HeaderMenu open onClose={() => undefined} />
+          <HeaderMenu open onClose={() => undefined} currentUserIsModerator={false} />
         </Provider>,
         {container: global.document.querySelector("#portal")!}
       );
@@ -33,7 +33,7 @@ describe("HeaderMenu", () => {
     test("on close", () => {
       const {container} = render(
         <Provider store={store}>
-          <HeaderMenu open={false} onClose={() => undefined} />
+          <HeaderMenu open={false} onClose={() => undefined} currentUserIsModerator={false} />
         </Provider>,
         {container: global.document.querySelector("#portal")!}
       );
