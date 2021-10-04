@@ -156,11 +156,11 @@ $bottom_distance: 12px;
 .participants__list > li:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: calc(100% - 64px);
+  width: 100%;
   background-color: #edeff2;
   position: absolute;
   bottom: 0;
-  left: 64px;
+  left: 0px;
 }
 
 .participants__list figure {
