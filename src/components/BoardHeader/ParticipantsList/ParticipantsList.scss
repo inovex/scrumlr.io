@@ -77,34 +77,15 @@
   min-height: 80px;
   max-height: 272px;
   overflow: auto;
+  scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray #fff;
   background-color: #fff;
-}
-
-.participants__list::-webkit-scrollbar {
-  width: 10px;
-  background-color: #fff;
-}
-
-.participants__list::-webkit-scrollbar-track {
-  border-radius: 8px;
-}
-
-.participants__list::-webkit-scrollbar-thumb {
-  border-radius: 8px;
-  background-color: $color-middle-gray;
 }
 
 @media (prefers-color-scheme: dark) {
   .participants__list {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
     background-color: $color-dark-mode-note;
-  }
-  .participants__list::-webkit-scrollbar {
-    background-color: $color-dark-mode-note;
-  }
-  .participants__list::-webkit-scrollbar-thumb {
-    background-color: $color-darkest-gray;
   }
 }
 
