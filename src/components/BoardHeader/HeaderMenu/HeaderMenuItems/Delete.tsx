@@ -4,7 +4,6 @@ import {ActionFactory} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {Dispatch, SetStateAction} from "react";
 import "./HeaderMenuItems.scss";
-import "../HeaderMenu.scss";
 import classNames from "classnames";
 
 export type DeleteProps = {

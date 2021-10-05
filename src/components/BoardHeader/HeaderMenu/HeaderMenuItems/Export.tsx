@@ -4,7 +4,6 @@ import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import {Dispatch, SetStateAction} from "react";
 import "./HeaderMenuItems.scss";
-import "../HeaderMenu.scss";
 import classNames from "classnames";
 
 export type ExportProps = {

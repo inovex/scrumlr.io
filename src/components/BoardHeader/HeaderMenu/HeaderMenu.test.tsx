@@ -64,7 +64,7 @@ describe("HeaderMenu", () => {
 
     test("Click on hide authors", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      const button = container.querySelector(".header-menu")?.children.item(1)?.firstChild!.firstChild?.firstChild!;
+      const button = container.querySelector(".header-menu")?.children.item(1)?.firstChild?.firstChild?.firstChild!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showAuthors: false}));
@@ -72,7 +72,7 @@ describe("HeaderMenu", () => {
 
     test("Click on hide notes", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(1)!.firstChild?.firstChild!;
+      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(1)?.firstChild?.firstChild!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
@@ -80,7 +80,7 @@ describe("HeaderMenu", () => {
 
     test("Click on share board", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(2)!.firstChild?.firstChild!;
+      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(2)?.firstChild?.firstChild!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__qrcode-container")).toHaveClass("header-menu__qrcode-container--visible");
@@ -88,7 +88,7 @@ describe("HeaderMenu", () => {
 
     test("Click on delete board", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(3)!.firstChild?.firstChild!;
+      const button = container.querySelector(".header-menu")?.children.item(1)?.children.item(3)?.firstChild?.firstChild!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__delete-container")).toHaveClass("header-menu__delete-container--visible");

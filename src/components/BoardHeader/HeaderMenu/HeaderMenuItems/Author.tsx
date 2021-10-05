@@ -2,7 +2,6 @@ import store, {useAppSelector} from "store";
 import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import "./HeaderMenuItems.scss";
-import "../HeaderMenu.scss";
 import classNames from "classnames";
 
 export type AuthorProps = {};
