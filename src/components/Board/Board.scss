@@ -24,9 +24,6 @@
 
   overflow: hidden;
 }
-.board::-webkit-scrollbar {
-  display: none;
-}
 
 .board > * {
   scroll-snap-align: start;
