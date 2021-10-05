@@ -38,7 +38,6 @@
 
 .board-header__status {
   color: $color-middle-gray;
-  font-family: Raleway;
   font-size: 12px;
   font-weight: bold;
   letter-spacing: 0.25px;
@@ -54,12 +53,16 @@
 
 .board-header__title {
   color: $color-black;
-  font-family: Raleway;
   font-size: 32px;
   font-weight: bold;
   letter-spacing: 0.5px;
   line-height: 40px;
-  margin: 0px;
+  margin: 0;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 28vw;
 }
 @media (prefers-color-scheme: dark) {
   .board-header__title {
