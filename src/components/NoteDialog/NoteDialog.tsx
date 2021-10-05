@@ -54,7 +54,7 @@ const NoteDialog = (props: NoteDialogProps) => {
   };
 
   return (
-    <Portal onClose={props.onClose} darkBackground>
+    <Portal onClose={props.onClose} darkBackground disableOverflow>
       <div className={`note-dialog ${getColorClassName(props.columnColor as Color)}`}>
         <h2 className="note-dialog__header">{props.columnName}</h2>
         <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>

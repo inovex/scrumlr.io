@@ -10,12 +10,13 @@ export interface PortalProps {
   children: React.ReactNode;
   onClose?: () => void;
   darkBackground: boolean;
+  disableOverflow?: boolean;
 }
 
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-const Portal = ({onClose, children, darkBackground}: PortalProps) => {
+const Portal = ({onClose, children, darkBackground, disableOverflow}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
@@ -58,7 +59,7 @@ const Portal = ({onClose, children, darkBackground}: PortalProps) => {
       role="dialog"
     >
       <FocusLock>
-        <div className="portal__frame">
+        <div className={classNames("portal__frame", {"portal__frame--disable-overflow": disableOverflow || false})}>
           <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
             {children}
           </div>
