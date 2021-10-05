@@ -9,6 +9,7 @@ global.Blob = function (content, options) {
 const state: ExportProps = {
   board: {
     id: "test",
+    name: "board",
     columns: [{id: "GG0fWzyCwd", name: "Positive", hidden: false, color: "green"}],
   },
   notes: [{id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: []}],
@@ -43,5 +44,13 @@ describe("Export methods", () => {
       csv += "\n\n";
     });
     expect(FileSaver.saveAs).toHaveBeenCalledWith({content: [csv], options: {type: "text/csv"}}, `${fileName(state)}.csv`);
+  });
+
+  test("fileName", () => {
+    const mockDate = new Date(12345678);
+    const spy = jest.spyOn(global, "Date").mockImplementation(() => mockDate);
+    const name = fileName(state);
+    expect(name).toEqual("1970-01-01_board");
+    spy.mockRestore();
   });
 });

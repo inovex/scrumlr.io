@@ -26,7 +26,7 @@ export const generateCSV = (state: ExportProps) => {
 };
 
 export const fileName = (state: ExportProps) => {
-  const date = new Date().toJSON().slice(0, 10).replace(/-/g, "/");
+  const date = new Date().toJSON().slice(0, 10);
   return `${date}_${state.board.name}`;
 };
 
