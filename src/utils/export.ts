@@ -37,7 +37,7 @@ export const exportAsCSV = (state: ExportProps) => {
     csv += entry;
     csv += "\n\n";
   });
-  const blob = new Blob([csv], {type: "application/csv"});
+  const blob = new Blob([csv], {type: "text/csv"});
   saveAs(blob, `${fileName(state)}.csv`);
 };
 

@@ -42,6 +42,6 @@ describe("Export methods", () => {
       csv += entry;
       csv += "\n\n";
     });
-    expect(FileSaver.saveAs).toHaveBeenCalledWith({content: [csv], options: {type: "application/csv"}}, `${fileName(state)}.csv`);
+    expect(FileSaver.saveAs).toHaveBeenCalledWith({content: [csv], options: {type: "text/csv"}}, `${fileName(state)}.csv`);
   });
 });
