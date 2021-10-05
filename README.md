@@ -7,7 +7,9 @@
     <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
   </p>
   <p>
-    <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg"/>
+    <a href="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml">
+      <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg"/>
+    </a>
   </p>
 </div>
 
