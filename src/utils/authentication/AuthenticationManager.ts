@@ -1,6 +1,6 @@
 import Parse from "parse";
-import {Toast} from "../Toast";
-import {API} from "../../api";
+import {Toast} from "utils/Toast";
+import {API} from "api";
 
 /**
  * Sign in anonymously.

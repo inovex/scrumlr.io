@@ -3,7 +3,7 @@ import {getRandomName} from "constants/name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
-import LoginProviders from "../../components/LoginProviders/LoginProviders";
+import LoginProviders from "components/LoginProviders/LoginProviders";
 
 function LoginBoard(props: RouteComponentProps) {
   const [displayName, setDisplayName] = useState(getRandomName());

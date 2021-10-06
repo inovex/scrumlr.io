@@ -7,7 +7,7 @@ import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 import {useEffect, useState} from "react";
-import LoginProviders from "../../components/LoginProviders/LoginProviders";
+import LoginProviders from "components/LoginProviders/LoginProviders";
 
 function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
