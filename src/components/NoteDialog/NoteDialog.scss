@@ -155,13 +155,16 @@ $padding--note-dialog-scrollbar: 16px;
 
 .note-dialog__scrollbar-wrapper {
   direction: rtl;
-  overflow: auto;
-  overflow-x: hidden;
+  overflow-y: auto;
   max-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large} - 100px);
   min-width: calc(240px + 30vw);
   align-items: center;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray #fff;
+}
+
+.note-dialog__scrollbar-wrapper .note-dialog__wrapper .note-dialog__note-wrapper:last-child .note-dialog__note {
+  margin-bottom: 0;
 }
 
 @media (prefers-color-scheme: dark) {
