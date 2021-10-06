@@ -130,7 +130,7 @@ $bottom_distance: 12px;
 
 .list__header > label:nth-child(1) {
   text-align: left;
-  left: 20px;
+  left: 12px;
 }
 .list__header > label:nth-child(2) {
   text-align: right;
@@ -156,11 +156,11 @@ $bottom_distance: 12px;
 .participants__list > li:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: 100%;
-  background-color: $color-light-gray;
+  width: calc(100% - 48px);
+  background-color: $color-middle-gray;
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 48px;
 }
 
 .participants__list figure {

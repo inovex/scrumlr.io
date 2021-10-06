@@ -28,7 +28,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
         <header className="participants__header">
-          <h4>Participants ({props.participants.length})</h4>
+          <h4>Participants {props.participants.length}</h4>
           <SearchIcon className="header__icon" />
           <input placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </header>
