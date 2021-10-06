@@ -62,4 +62,6 @@
 
 .portal__frame--disable-overflow {
   overflow: hidden;
+  width: calc(100vw);
+  height: calc(100vh);
 }

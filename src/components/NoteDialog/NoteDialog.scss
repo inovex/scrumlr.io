@@ -1,13 +1,15 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
 
+$padding--note-dialog-scrollbar: 16px;
+
 .note-dialog__header {
   font-size: 48px;
   color: $color-white;
   width: max-content;
   border-bottom: solid 3px var(--accent-color);
   padding-bottom: $padding--default;
-  margin: $margin--default 0 $margin--large 0;
+  margin: $margin--default 0 $margin--large $padding--note-dialog-scrollbar;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
 }
@@ -22,20 +24,12 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;
-  min-width: calc(240px + 10vw);
-  width: calc(100vw - 36px);
-  max-width: 380px;
+  width: 100%;
 }
 @media (prefers-color-scheme: dark) {
   .note-dialog__note {
     background-color: $color-dark-mode-note;
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
-}
-@media #{$menu-desktop} {
-  .note-dialog__note {
-    max-width: 440px;
-    width: calc(100vw - 32px);
   }
 }
 
@@ -118,20 +112,9 @@
 
 //Options
 .note-dialog__options {
+  padding: 0 0 0 $padding--default;
   list-style-type: none;
-  position: absolute;
-  margin: 0;
-  bottom: 10px;
-  right: 25px;
-}
-.note-dialog__options {
-  top: 0;
-  right: -40px - $margin--default;
-}
-@media screen and (max-width: 766px) {
-  .note-dialog__options {
-    display: none;
-  }
+  position: relative;
 }
 
 .note-dialog__option {
@@ -156,11 +139,44 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+
+  & svg {
+    fill: #fff;
+    width: 20px;
+    height: 20px;
+    align-self: center;
+  }
 }
 
-.note-dialog__options-icon svg {
-  fill: #fff;
-  width: 20px;
-  height: 20px;
-  align-self: center;
+.note-dialog__wrapper {
+  direction: ltr;
+  margin: 0 $padding--note-dialog-scrollbar 0 $padding--note-dialog-scrollbar;
+}
+
+.note-dialog__scrollbar-wrapper {
+  direction: rtl;
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large} - 100px);
+  min-width: calc(240px + 30vw);
+  align-items: center;
+  scrollbar-width: 10px;
+  scrollbar-color: $color-middle-gray #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .note-dialog__scrollbar-wrapper {
+    scrollbar-color: $color-middle-gray $color-dark-mode-note;
+  }
+}
+
+.note-dialog__note-wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+@media screen and (max-width: 766px) {
+  .note-dialog__options {
+    display: none;
+  }
 }

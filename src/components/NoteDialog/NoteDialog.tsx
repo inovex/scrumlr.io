@@ -57,90 +57,92 @@ const NoteDialog = (props: NoteDialogProps) => {
     <Portal onClose={props.onClose} darkBackground disableOverflow>
       <div className={`note-dialog ${getColorClassName(props.columnColor as Color)}`}>
         <h2 className="note-dialog__header">{props.columnName}</h2>
-        <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
-          <div className="note-dialog__content">
-            <blockquote
-              className="note-dialog__text"
-              contentEditable={editable(props.authorId)}
-              suppressContentEditableWarning
-              onBlur={(e: React.FocusEvent<HTMLElement>) => {
-                onEdit(props.noteId!, props.authorId, e.target.textContent as string);
-              }}
-            >
-              {props.text}
-            </blockquote>
-          </div>
-          <footer className="note-dialog__footer">
-            {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
-              <figure className="note-dialog__author">
-                <img className="note-dialog__author-image" src={avatar} alt="User" />
-                <figcaption className="note-dialog__author-name">{props.authorName}</figcaption>
-              </figure>
-            )}
-            <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
-          </footer>
-
-          <aside>
-            <ul className="note-dialog__options">
-              <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(props.authorId)})}>
-                <IconButton
-                  onClick={() => {
-                    onDelete(props.noteId!, props.authorId);
-                    props.onClose();
-                  }}
-                  direction="right"
-                  label="Delete"
-                  icon={deleteIcon}
-                />
-              </li>
-            </ul>
-          </aside>
-        </div>
-        {props.childrenNotes.map((note) => (
-          <div key={note.id} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
-            <div className="note-dialog__content">
-              <blockquote
-                className="note-dialog__text"
-                contentEditable={editable(note.author)}
-                suppressContentEditableWarning
-                onBlur={(e: React.FocusEvent<HTMLElement>) => {
-                  onEdit(note.id!, note.author, e.target.textContent as string);
-                }}
-              >
-                {note.text}
-              </blockquote>
-            </div>
-
-            <footer className="note-dialog__footer">
-              {(props.showAuthors || Parse.User.current()?.id === note.author) && (
-                <figure className="note-dialog__author">
-                  <img className="note-dialog__author-image" src={avatar} alt="User" />
-                  <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
-                </figure>
-              )}
-              <Votes className="note__votes" noteId={note.id!} votes={note.votes} activeVoting={props.activeVoting} />
-            </footer>
-
-            <aside>
+        <div className="note-dialog__scrollbar-wrapper">
+          <div className="note-dialog__wrapper">
+            <div className="note-dialog__note-wrapper">
+              <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
+                <div className="note-dialog__content">
+                  <blockquote
+                    className="note-dialog__text"
+                    contentEditable={editable(props.authorId)}
+                    suppressContentEditableWarning
+                    onBlur={(e: React.FocusEvent<HTMLElement>) => {
+                      onEdit(props.noteId!, props.authorId, e.target.textContent as string);
+                    }}
+                  >
+                    {props.text}
+                  </blockquote>
+                </div>
+                <footer className="note-dialog__footer">
+                  {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
+                    <figure className="note-dialog__author">
+                      <img className="note-dialog__author-image" src={avatar} alt="User" />
+                      <figcaption className="note-dialog__author-name">{props.authorName}</figcaption>
+                    </figure>
+                  )}
+                  <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
+                </footer>
+              </div>
               <ul className="note-dialog__options">
-                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
-                  <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
-                </li>
-                <li className="note-dialog__option">
+                <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(props.authorId)})}>
                   <IconButton
                     onClick={() => {
-                      onUnstack(note.id!, note.author);
+                      onDelete(props.noteId!, props.authorId);
                       props.onClose();
                     }}
                     direction="right"
-                    label="Unstack"
-                    icon={unstackIcon}
+                    label="Delete"
+                    icon={deleteIcon}
                   />
                 </li>
               </ul>
-            </aside>
+            </div>
+            {props.childrenNotes.map((note) => (
+              <div className="note-dialog__note-wrapper">
+                <div key={note.id} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
+                  <div className="note-dialog__content">
+                    <blockquote
+                      className="note-dialog__text"
+                      contentEditable={editable(note.author)}
+                      suppressContentEditableWarning
+                      onBlur={(e: React.FocusEvent<HTMLElement>) => {
+                        onEdit(note.id!, note.author, e.target.textContent as string);
+                      }}
+                    >
+                      {note.text}
+                    </blockquote>
+                  </div>
+
+                  <footer className="note-dialog__footer">
+                    {(props.showAuthors || Parse.User.current()?.id === note.author) && (
+                      <figure className="note-dialog__author">
+                        <img className="note-dialog__author-image" src={avatar} alt="User" />
+                        <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
+                      </figure>
+                    )}
+                    <Votes className="note__votes" noteId={note.id!} votes={note.votes} activeVoting={props.activeVoting} />
+                  </footer>
+                </div>
+                <ul className="note-dialog__options">
+                  <li className={classNames("note-dialog__option", {"note-dialog__option--not-editable": !editable(note.author)})}>
+                    <IconButton onClick={() => onDelete(note.id!, note.author)} direction="right" label="Delete" icon={deleteIcon} />
+                  </li>
+                  <li className="note-dialog__option">
+                    <IconButton
+                      onClick={() => {
+                        onUnstack(note.id!, note.author);
+                        props.onClose();
+                      }}
+                      direction="right"
+                      label="Unstack"
+                      icon={unstackIcon}
+                    />
+                  </li>
+                </ul>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </Portal>
   );
