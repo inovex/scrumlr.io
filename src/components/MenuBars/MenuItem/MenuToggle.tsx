@@ -15,37 +15,40 @@ type MenuToggleProps = {
 
 function MenuToggle(props: MenuToggleProps) {
   const [value, setValue] = useState(props.value ?? false);
-  const [clickCount, setClickCount] = useState(0);
+  const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
   useEffect(() => {
     setValue(props.value!);
   }, [props.value]);
 
-  useEffect(() => {
-    if (clickCount > 0) {
-      window.addEventListener("click", () => setClickCount(0), {once: true});
-    }
-    if (clickCount === 2) {
-      props.onToggle(!value);
-      setValue((val) => !val);
-      setClickCount(0);
-    }
-  }, [clickCount]);
+  const onToggle = () => {
+    props.onToggle?.(!value);
+    setValue((currVal) => !currVal);
+  };
 
   return (
     <button
       disabled={props.disabled}
       className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`, {
-        "menu-item--touch-hover": clickCount === 1,
+        "menu-item--touch-hover": touchHover,
       })}
       onClick={() => {
-        props.onToggle(!value);
-        setValue((val) => !val);
+        if (document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          onToggle();
+        }
       }}
       onTouchEnd={(e) => {
-        e.preventDefault();
-        setClickCount((prev) => ++prev % 3);
+        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          e.preventDefault();
+          window.addEventListener("click", () => setTouchHover(false), {once: true});
+          setTouchHover(true);
+        }
+        if (touchHover) {
+          e.preventDefault();
+          setTouchHover(false);
+          onToggle();
+        }
       }}
     >
       <div className="menu-item__tooltip">
