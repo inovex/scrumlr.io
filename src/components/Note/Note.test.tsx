@@ -150,11 +150,6 @@ describe("Note", () => {
       expect(container.querySelector(".note__footer")).not.toHaveClass("note__author");
     });
 
-    test("note author image is present", () => {
-      const {container} = render(createNote("Test Text", "Test Author", true));
-      expect(container.querySelector(".note__author")?.firstChild).toHaveClass("note__author-image");
-    });
-
     test("note author name is present", () => {
       const {container} = render(createNote("Test Text", "Test Author", true));
       expect(container.querySelector(".note__author")?.lastChild).toHaveClass("note__author-name");

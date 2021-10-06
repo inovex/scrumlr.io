@@ -28,11 +28,16 @@ exports[`Note should have correct style show note with correct style 1`] = `
         aria-roledescription="author"
         class="note__author"
       >
-        <img
-          alt="User"
-          class="note__author-image"
-          src="avatar.png"
-        />
+        <li
+          class="note-avatar"
+        >
+          <div
+            class="user__initials"
+            title=""
+          >
+            NA
+          </div>
+        </li>
         <figcaption
           class="note__author-name"
         />
