@@ -56,7 +56,6 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
-  // TODO FIX: UserAvatar throws error because of getInitials
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
@@ -67,7 +66,7 @@ const Note = (props: NoteProps) => {
         <footer className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={props.authorId} name="Wild Willy" group="note" />
+              <UserAvatar id={props.authorId} name={props.authorName} group="note" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
