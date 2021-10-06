@@ -1,5 +1,4 @@
 import "./Note.scss";
-import avatar from "assets/avatar.png";
 import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
@@ -11,6 +10,7 @@ import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
+import UserAvatar from "../BoardUsers/UserAvatar";
 
 interface NoteProps {
   isAdmin: boolean;
@@ -29,7 +29,6 @@ interface NoteProps {
 
 const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-
   const [showDialog, setShowDialog] = React.useState(false);
   const handleShowDialog = () => {
     setShowDialog(!showDialog);
@@ -57,6 +56,7 @@ const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
+  // TODO FIX: UserAvatar throws error because of getInitials
   return (
     <li className="note__root" onClick={handleShowDialog} ref={noteRef}>
       <div className={classNames("note", {"note--own-card": Parse.User.current()?.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver && canDrop})}>
@@ -67,7 +67,7 @@ const Note = (props: NoteProps) => {
         <footer className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
-              <img className="note__author-image" src={avatar} alt="User" />
+              <UserAvatar id={props.authorId} name="Wild Willy" group="note" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}

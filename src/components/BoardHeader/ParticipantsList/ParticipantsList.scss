@@ -1,6 +1,7 @@
 @import "constants/style";
 
-$bottom_distance: 12px;
+$header-bottom_distance: 12px;
+$header-left_distance: 24px;
 
 .participants {
   position: absolute;
@@ -31,18 +32,29 @@ $bottom_distance: 12px;
   }
 }
 
-.participants__header > h4 {
-  margin: 0;
+.participants__header-text {
+  margin-top: 0;
   font-weight: bold;
   font-size: 18px;
   line-height: 18px;
   letter-spacing: 0.25px;
   position: absolute;
   top: 24px;
-  left: 24px;
+  left: $header-left_distance;
 }
 
-.participants__header > input {
+.participants__header-number {
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.25px;
+  position: absolute;
+  top: 12px;
+  left: $header-left_distance + 110px;
+}
+
+.participants__header-input {
   background-color: transparent;
   color: $color-white;
   font-size: 13px;
@@ -50,8 +62,9 @@ $bottom_distance: 12px;
   border: none;
   border-bottom: 1px solid transparent;
   position: absolute;
-  bottom: $bottom_distance;
-  left: 46px;
+  bottom: $header-bottom_distance;
+  left: $header-left_distance;
+  padding-left: 24px;
   opacity: 0.8;
 
   &::placeholder {
@@ -67,8 +80,8 @@ $bottom_distance: 12px;
 
 .header__icon {
   position: absolute;
-  bottom: $bottom_distance;
-  left: 24px;
+  bottom: $header-bottom_distance;
+  left: $header-left_distance;
 }
 
 .participants__list {
@@ -137,27 +150,27 @@ $bottom_distance: 12px;
   left: 244px;
 }
 
-.participants__list > li {
+.participants__list-item {
   background-color: white;
   position: relative;
   height: 48px;
 }
 
 @media (prefers-color-scheme: dark) {
-  .participants__list > li {
+  .participants__list-item {
     background-color: $color-dark-mode-note;
   }
 
-  .participants__list > li:hover {
+  .participants__list-item:hover {
     background-color: #3d4555;
   }
 }
 
-.participants__list > li:not(:last-child)::after {
+.participants__list-item:not(:last-child)::after {
   content: "";
   height: 1px;
   width: calc(100% - 48px);
-  background-color: $color-middle-gray;
+  background-color: rgba(35, 35, 35, 0.3);
   position: absolute;
   bottom: 0;
   left: 48px;

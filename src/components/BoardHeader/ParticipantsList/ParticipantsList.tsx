@@ -28,9 +28,12 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
         <header className="participants__header">
-          <h4>Participants {props.participants.length}</h4>
+          <div className="participants__header-title">
+            <h4 className="participants__header-text">Participants</h4>
+            <span className="participants__header-number"> {props.participants.length} </span>
+          </div>
           <SearchIcon className="header__icon" />
-          <input placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+          <input className="participants__header-input" placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </header>
         <ul className="participants__list">
           <div className="list__header">
@@ -41,7 +44,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
             .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
             .map((participant) => (
-              <li key={participant.id}>
+              <li className="participants__list-item" key={participant.id}>
                 <UserAvatar key={participant.id} id={participant.id} name={participant.displayName} group="participants" />
                 {/* Show the permission toggle if the current user is moderator */}
                 {props.currentUserIsModerator && (

@@ -127,6 +127,7 @@ $note__author-margin-left: 10px;
 .note__footer {
   position: relative;
   height: 26px;
+  //padding-bottom: 38px;
 }
 .note__author {
   display: inline-flex;
@@ -135,7 +136,6 @@ $note__author-margin-left: 10px;
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font: inherit;
   vertical-align: baseline;
 }
