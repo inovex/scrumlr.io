@@ -34,17 +34,29 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
             <header
               class="participants__header"
             >
-              <h4>
-                Board Participants (
-                3
-                )
-              </h4>
+              <div
+                class="participants__header-title"
+              >
+                <h4
+                  class="participants__header-text"
+                >
+                  Participants
+                </h4>
+                <span
+                  class="participants__header-number"
+                >
+                   
+                  3
+                   
+                </span>
+              </div>
               <svg
                 class="header__icon"
               >
                 icon-search.svg
               </svg>
               <input
+                class="participants__header-input"
                 placeholder="Search"
               />
             </header>
@@ -61,41 +73,53 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
                   Admin
                 </label>
               </div>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 0
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 0"
+                  >
+                    P0
+                  </div>
+                </li>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
               </li>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 1
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 1"
+                  >
+                    P1
+                  </div>
+                </li>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
               </li>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 2
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 2"
+                  >
+                    P2
+                  </div>
+                </li>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
@@ -150,17 +174,29 @@ exports[`ParticipantsList should render correctly on filtered participants 1`] =
             <header
               class="participants__header"
             >
-              <h4>
-                Board Participants (
-                3
-                )
-              </h4>
+              <div
+                class="participants__header-title"
+              >
+                <h4
+                  class="participants__header-text"
+                >
+                  Participants
+                </h4>
+                <span
+                  class="participants__header-number"
+                >
+                   
+                  3
+                   
+                </span>
+              </div>
               <svg
                 class="header__icon"
               >
                 icon-search.svg
               </svg>
               <input
+                class="participants__header-input"
                 placeholder="Search"
               />
             </header>
@@ -174,15 +210,19 @@ exports[`ParticipantsList should render correctly on filtered participants 1`] =
                   Name
                 </label>
               </div>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 0
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 0"
+                  >
+                    P0
+                  </div>
+                </li>
               </li>
             </ul>
           </aside>
@@ -232,17 +272,29 @@ exports[`ParticipantsList should render correctly on open 1`] = `
             <header
               class="participants__header"
             >
-              <h4>
-                Board Participants (
-                3
-                )
-              </h4>
+              <div
+                class="participants__header-title"
+              >
+                <h4
+                  class="participants__header-text"
+                >
+                  Participants
+                </h4>
+                <span
+                  class="participants__header-number"
+                >
+                   
+                  3
+                   
+                </span>
+              </div>
               <svg
                 class="header__icon"
               >
                 icon-search.svg
               </svg>
               <input
+                class="participants__header-input"
                 placeholder="Search"
               />
             </header>
@@ -256,35 +308,47 @@ exports[`ParticipantsList should render correctly on open 1`] = `
                   Name
                 </label>
               </div>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 0
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 0"
+                  >
+                    P0
+                  </div>
+                </li>
               </li>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 1
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 1"
+                  >
+                    P1
+                  </div>
+                </li>
               </li>
-              <li>
-                <figure>
-                  <img
-                    src="avatar.png"
-                  />
-                  <figcaption>
-                    Participant 2
-                  </figcaption>
-                </figure>
+              <li
+                class="participants__list-item"
+              >
+                <li
+                  class="participants-avatar"
+                >
+                  <div
+                    class="user__initials"
+                    title="Participant 2"
+                  >
+                    P2
+                  </div>
+                </li>
               </li>
             </ul>
           </aside>
