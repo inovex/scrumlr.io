@@ -117,10 +117,6 @@ export interface JoinBoardRequest {
   boardId: string;
 }
 
-export type UserConfigurations = {
-  [userId: string]: {};
-};
-
 export const initializeBoardFunctions = () => {
   (Parse.Cloud as any).onLiveQueryEvent(({event, sessionToken}) => {
     if (event === "connect" || event === "ws_disconnect") {
