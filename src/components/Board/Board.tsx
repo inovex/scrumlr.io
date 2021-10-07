@@ -17,10 +17,17 @@ export interface BoardProps {
 export interface BoardState {
   firstVisibleColumnIndex: number;
   lastVisibleColumnIndex: number;
+  showNextButton: boolean;
+  showPreviousButton: boolean;
 }
 
 const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
-  const [state, setState] = useState<BoardState>({firstVisibleColumnIndex: 0, lastVisibleColumnIndex: React.Children.count(children)});
+  const [state, setState] = useState<BoardState>({
+    firstVisibleColumnIndex: 0,
+    lastVisibleColumnIndex: React.Children.count(children),
+    showNextButton: false,
+    showPreviousButton: false,
+  });
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
@@ -50,9 +57,18 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
           const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
           columnVisibilityStates[index] = entry.isIntersecting;
         });
+
+        const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
+        const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
+
+        document.getElementById("timer")?.classList.toggle("timer--top", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0);
+        document.getElementById("menu-bars")?.classList.toggle("menu-bars--bottom", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0);
+
         setState({
-          firstVisibleColumnIndex: columnVisibilityStates.findIndex((value) => value),
-          lastVisibleColumnIndex: columnVisibilityStates.lastIndexOf(true),
+          firstVisibleColumnIndex,
+          lastVisibleColumnIndex,
+          showNextButton: lastVisibleColumnIndex < columnsCount - 1,
+          showPreviousButton: firstVisibleColumnIndex > 0,
         });
       };
       const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -91,14 +107,8 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
   const columnColors = React.Children.map(children, (child) => child.props.color);
 
-  const showNextButton = lastVisibleColumnIndex < columnsCount - 1;
-  const showPreviousButton = firstVisibleColumnIndex > 0;
-
   const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
-
-  document.getElementById("timer")?.classList.toggle("timer--top", showPreviousButton || showNextButton);
-  document.getElementById("menu-bars")?.classList.toggle("menu-bars--bottom", showPreviousButton || showNextButton);
 
   const handlePreviousClick = () => {
     boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
@@ -115,7 +125,7 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
       <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
 
-      {showPreviousButton && (
+      {state.showPreviousButton && (
         <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden>
           <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
         </button>
@@ -127,7 +137,7 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
         <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
       </main>
 
-      {showNextButton && (
+      {state.showNextButton && (
         <button
           className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`}
           onClick={handleNextClick}
