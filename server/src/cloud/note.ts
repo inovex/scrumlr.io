@@ -43,39 +43,32 @@ export const initializeNoteFunctions = () => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.note.id, {useMasterKey: true});
 
-    if (request.note.columnId) {
-      note.set("columnId", request.note.columnId);
-
-      const childNotesQuery = new Parse.Query("Note");
-      childNotesQuery.equalTo("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
-      await childNotesQuery.find({useMasterKey: true}).then(async (childNotes) => {
-        childNotes.forEach(
-          (childNote) => {
-            childNote.set("columnId", request.note.columnId);
-          },
-          {useMasterKey: true}
-        );
-        await Parse.Object.saveAll(childNotes, {useMasterKey: true});
-      });
-    }
+    // Find all notes with the edited note as parent
+    const childNotesQuery = new Parse.Query("Note");
+    childNotesQuery.equalTo("parent", note);
+    const childNotes = await childNotesQuery.findAll({useMasterKey: true});
 
     if (request.note.parentId) {
       if (request.note.parentId === "unstack") note.unset("parent");
       else {
         note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
-
-        const childNotesQuery = new Parse.Query("Note");
-        childNotesQuery.equalTo("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
-        await childNotesQuery.find({useMasterKey: true}).then(async (childNotes) => {
-          childNotes.forEach(
-            (childNote) => {
-              childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
-            },
-            {useMasterKey: true}
-          );
-          await Parse.Object.saveAll(childNotes, {useMasterKey: true});
-        });
+        childNotes.forEach(
+          (childNote) => {
+            childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
+          },
+          {useMasterKey: true}
+        );
       }
+    }
+
+    if (request.note.columnId) {
+      note.set("columnId", request.note.columnId);
+      childNotes.forEach(
+        (childNote) => {
+          childNote.set("columnId", request.note.columnId);
+        },
+        {useMasterKey: true}
+      );
     }
 
     if (request.note.text) {
@@ -86,6 +79,7 @@ export const initializeNoteFunctions = () => {
       }
     }
 
+    await Parse.Object.saveAll(childNotes, {useMasterKey: true});
     await note.save(null, {useMasterKey: true});
     return true;
   });
