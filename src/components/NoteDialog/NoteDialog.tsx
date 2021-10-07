@@ -49,7 +49,7 @@ const NoteDialog = (props: NoteDialogProps) => {
     }
   };
 
-  const onUnstack = (id: string, authorId: string) => {
+  const onUnstack = (id: string) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
@@ -97,7 +97,7 @@ const NoteDialog = (props: NoteDialogProps) => {
           </aside>
         </div>
         {props.childrenNotes.map((note) => (
-          <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
+          <div key={note.id} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === note.author})}>
             <div className="note-dialog__content">
               <blockquote
                 className="note-dialog__text"
@@ -129,7 +129,7 @@ const NoteDialog = (props: NoteDialogProps) => {
                 <li className="note-dialog__option">
                   <IconButton
                     onClick={() => {
-                      onUnstack(note.id!, note.author);
+                      onUnstack(note.id!);
                       props.onClose();
                     }}
                     direction="right"

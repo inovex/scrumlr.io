@@ -22,6 +22,7 @@ import "./MenuBars.scss";
 
 function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   const currentUser = Parse.User.current();
   const state = useAppSelector((state) => ({
@@ -39,6 +40,20 @@ function MenuBars() {
     store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
   };
 
+  // const toggleTimer = (active: boolean) => {
+  //   if (active) {
+  //     store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)));
+  //   } else {
+  //     store.dispatch(ActionFactory.cancelTimer());
+  //   }
+  // };
+
+  const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
+    if (event.currentTarget.attributes.getNamedItem("class")?.nodeValue?.includes("menu-animation")) {
+      setAnimate(false);
+    }
+  };
+
   return (
     <aside
       id="menu-bars"
@@ -49,7 +64,7 @@ function MenuBars() {
         {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
       )}
     >
-      <section className="menu user-menu">
+      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
           <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
@@ -58,7 +73,7 @@ function MenuBars() {
         </div>
       </section>
       {isAdmin && (
-        <section className="menu admin-menu">
+        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <TimerButton />
@@ -68,7 +83,13 @@ function MenuBars() {
         </section>
       )}
       {isAdmin && (
-        <button className="menu-bars__switch" onClick={() => toggleMenus((prevState) => !prevState)}>
+        <button
+          className="menu-bars__switch"
+          onClick={() => {
+            setAnimate(true);
+            toggleMenus((prevState) => !prevState);
+          }}
+        >
           <ToggleAddMenuIcon className="switch__icon switch__icon--add" />
           <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" />
         </button>

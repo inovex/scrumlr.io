@@ -41,7 +41,6 @@
 }
 
 .column__header-text {
-  font-family: Raleway;
   font-size: 24px;
   color: $color-black;
   border-bottom: solid 3px var(--accent-color);
@@ -50,14 +49,8 @@
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
 }
-@media (prefers-color-scheme: dark) {
-  .column__header-text {
-    color: $color-white;
-  }
-}
 
 .column__header-card-number {
-  font-family: Raleway;
   font-size: 20px;
   color: $color-middle-gray;
   font-weight: 600;
@@ -108,4 +101,35 @@
   grid-auto-flow: row;
   grid-row-gap: 20px;
   grid-column-gap: 24px;
+}
+
+.column__header-toggle {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.column__header-toggle-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.column__header-toggle-button:hover > .column__header-toggle-button-icon {
+  animation: none;
+  color: var(--accent-color);
+}
+
+.column__header-toggle-button-icon {
+  color: $color-black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .column__header-text {
+    color: $color-white;
+  }
+
+  .column__header-toggle-button-icon {
+    color: $color-white;
+  }
 }
