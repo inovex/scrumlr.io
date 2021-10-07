@@ -68,7 +68,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
           </div>
         )}
-        <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+        <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
       </ul>
     </Portal>
   );

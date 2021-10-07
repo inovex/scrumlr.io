@@ -3,7 +3,6 @@ import {parse} from "json2csv";
 import {NoteClientModel} from "types/note";
 import {VoteClientModel} from "types/vote";
 import {BoardClientModel} from "types/board";
-import JSZip from "jszip";
 import {saveAs} from "file-saver";
 
 export type ExportProps = {
@@ -39,19 +38,6 @@ export const exportAsCSV = (state: ExportProps) => {
   });
   const blob = new Blob([csv], {type: "text/csv"});
   saveAs(blob, `${fileName(state)}.csv`);
-};
-
-export const exportAsCSVZip = (state: ExportProps) => {
-  const [columns, board, notes, votes, users] = generateCSV(state);
-  const zip = new JSZip();
-  zip.file("columns.csv", columns);
-  zip.file("board.csv", board);
-  zip.file("notes.csv", notes);
-  zip.file("votes.csv", votes);
-  zip.file("users.csv", users);
-  zip.generateAsync({type: "blob"}).then((content) => {
-    saveAs(content, `${fileName(state)}.zip`);
-  });
 };
 
 export const exportAsJSON = (state: ExportProps) => {

@@ -12,7 +12,7 @@ export const Note = (props: NoteProps) => {
   }));
 
   return (
-    <div className="menu__item-button" id="note">
+    <div className="menu__item-button" data-testid="note">
       <li className="header-menu__item">
         <button
           className="menu__item-button"

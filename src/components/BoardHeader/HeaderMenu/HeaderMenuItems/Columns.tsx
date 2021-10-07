@@ -15,7 +15,7 @@ export const Columns = (props: ColumnProps) => {
   }));
 
   return (
-    <div className="menu__item-button" id="columns">
+    <div className="menu__item-button" data-testid="columns">
       <li className="header-menu__item">
         <button
           className="menu__item-button"

@@ -10,6 +10,7 @@ export type ExportProps = {
   setShowDelete: Dispatch<SetStateAction<boolean>>;
   setShowQrCode: Dispatch<SetStateAction<boolean>>;
   setShowExport: Dispatch<SetStateAction<boolean>>;
+  onClose: () => void;
   showExport: boolean;
 };
 
@@ -22,7 +23,7 @@ export const Export = (props: ExportProps) => {
   }));
 
   return (
-    <div className="menu__item-button" id="export">
+    <div className="menu__item-button" data-testid="export">
       <li className="header-menu__item">
         <button
           className="menu__item-button"
@@ -37,11 +38,25 @@ export const Export = (props: ExportProps) => {
         </button>
       </li>
       <li className={classNames("header-menu__export-container", {"header-menu__export-container--visible": props.showExport})}>
-        <button className="menu__item-button" id="export-json" onClick={() => exportAsJSON(state)}>
+        <button
+          className="menu__item-button"
+          data-testid="export-json"
+          onClick={() => {
+            exportAsJSON(state);
+            props.onClose();
+          }}
+        >
           <ExportIcon className="item-button__icon" />
           <label className="item-button__label">Export as json</label>
         </button>
-        <button className="menu__item-button" id="export-csv" onClick={() => exportAsCSV(state)}>
+        <button
+          className="menu__item-button"
+          data-testid="export-csv"
+          onClick={() => {
+            exportAsCSV(state);
+            props.onClose();
+          }}
+        >
           <ExportIcon className="item-button__icon" />
           <label className="item-button__label">Export as csv</label>
         </button>

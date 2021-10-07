@@ -12,7 +12,7 @@ export type QRCodeProps = {
 };
 
 export const QrCode = (props: QRCodeProps) => (
-  <div className="menu__item-button" id="qrcode">
+  <div className="menu__item-button" data-testid="qrcode">
     <li className="header-menu__item">
       <button
         className="menu__item-button"

@@ -4,8 +4,9 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {exportAsJSON, exportAsCSV, exportAsCSVZip} from "utils/export";
+import {exportAsJSON, exportAsCSV} from "utils/export";
 import Parse from "parse";
+import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "./HeaderMenu";
 
 const mockStore = configureStore();
@@ -94,20 +95,20 @@ describe("HeaderMenu", () => {
     });
 
     test("Click on hide authors", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#author")).not.toBeNull();
+      render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      expect(screen.getByTestId("author")).not.toBeNull();
 
-      const button = container.querySelector("#author")?.querySelector("button")!;
+      const button = screen.getByTestId("author")?.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showAuthors: false}));
     });
 
     test("Click on hide notes", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#note")).not.toBeNull();
+      render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      expect(screen.getByTestId("note")).not.toBeNull();
 
-      const button = container.querySelector("#note")?.querySelector("button")!;
+      const button = screen.getByTestId("note")?.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
@@ -115,9 +116,9 @@ describe("HeaderMenu", () => {
 
     test("Click on share board", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#qrcode")).not.toBeNull();
+      expect(screen.getByTestId("qrcode")).not.toBeNull();
 
-      const button = container.querySelector("#qrcode")?.querySelector("button")!;
+      const button = screen.getByTestId("qrcode")?.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__qrcode-container")).toHaveClass("header-menu__qrcode-container--visible");
@@ -125,9 +126,9 @@ describe("HeaderMenu", () => {
 
     test("Click on delete board", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#delete")).not.toBeNull();
+      expect(screen.getByTestId("delete")).not.toBeNull();
 
-      const button = container.querySelector("#delete")?.querySelector("button")!;
+      const button = screen.getByTestId("delete")?.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__delete-container")).toHaveClass("header-menu__delete-container--visible");
@@ -135,9 +136,9 @@ describe("HeaderMenu", () => {
 
     test("Click on export board", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#export")).not.toBeNull();
+      expect(screen.getByTestId("export")).not.toBeNull();
 
-      const button = container.querySelector("#export")?.querySelector("button")!;
+      const button = screen.getByTestId("export")?.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");
@@ -146,25 +147,21 @@ describe("HeaderMenu", () => {
 
   describe("blob download", () => {
     test("json function called", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#export-json")).not.toBeNull();
+      render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      expect(screen.getByTestId("export-json")).not.toBeNull();
 
-      const button = container.querySelector("#export-json")!;
+      const button = screen.getByTestId("export-json")!;
       fireEvent.click(button);
       expect(exportAsJSON).toBeCalled();
     });
 
     test("csv (zip) function called", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector("#export-csv")).not.toBeNull();
+      render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      expect(screen.getByTestId("export-csv")).not.toBeNull();
 
-      const button = container.querySelector("#export-csv")!;
+      const button = screen.getByTestId("export-csv")!;
       fireEvent.click(button);
-      try {
-        expect(exportAsCSV).toBeCalled();
-      } catch (error) {
-        expect(exportAsCSVZip).toBeCalled();
-      }
+      expect(exportAsCSV).toBeCalled();
     });
   });
 });

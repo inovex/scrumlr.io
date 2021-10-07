@@ -19,7 +19,7 @@ export const Delete = (props: DeleteProps) => {
   }));
 
   return (
-    <div className="menu__item-button" id="delete">
+    <div className="menu__item-button" data-testid="delete">
       <li className="header-menu__item">
         <button
           className="menu__item-button"
