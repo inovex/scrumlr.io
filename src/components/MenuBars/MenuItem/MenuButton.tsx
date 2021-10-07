@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import "./MenuItem.scss";
 
 type MenuButtonProps = {
@@ -11,27 +11,25 @@ type MenuButtonProps = {
 };
 
 function MenuButton(props: MenuButtonProps) {
-  const [clickCount, setClickCount] = useState(0);
+  const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
-
-  useEffect(() => {
-    if (clickCount > 0) {
-      window.addEventListener("click", () => setClickCount(0), {once: true});
-    }
-    if (clickCount === 2) {
-      props.onClick();
-      setClickCount(0);
-    }
-  }, [clickCount]);
 
   return (
     <button
       disabled={props.disabled}
-      className={classNames(`menu-item menu-item--${props.direction}`, {"menu-item--touch-hover": clickCount === 1})}
+      className={classNames(`menu-item menu-item--${props.direction}`, {"menu-item--touch-hover": touchHover})}
       onClick={() => props.onClick()}
       onTouchEnd={(e) => {
-        e.preventDefault();
-        setClickCount((prev) => ++prev % 3);
+        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          e.preventDefault();
+          window.addEventListener("click", () => setTouchHover(false), {once: true});
+          setTouchHover(true);
+        }
+        if (touchHover) {
+          e.preventDefault();
+          setTouchHover(false);
+          props.onClick();
+        }
       }}
     >
       <div className="menu-item__tooltip">
