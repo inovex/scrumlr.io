@@ -15,19 +15,40 @@ type MenuToggleProps = {
 
 function MenuToggle(props: MenuToggleProps) {
   const [value, setValue] = useState(props.value ?? false);
+  const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
   useEffect(() => {
     setValue(props.value!);
   }, [props.value]);
 
+  const onToggle = () => {
+    props.onToggle?.(!value);
+    setValue((currVal) => !currVal);
+  };
+
   return (
     <button
       disabled={props.disabled}
-      className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`)}
+      className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`, {
+        "menu-item--touch-hover": touchHover,
+      })}
       onClick={() => {
-        props.onToggle(!value);
-        setValue((val) => !val);
+        if (document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          onToggle();
+        }
+      }}
+      onTouchEnd={(e) => {
+        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          e.preventDefault();
+          window.addEventListener("click", () => setTouchHover(false), {once: true});
+          setTouchHover(true);
+        }
+        if (touchHover) {
+          e.preventDefault();
+          setTouchHover(false);
+          onToggle();
+        }
       }}
     >
       <div className="menu-item__tooltip">
