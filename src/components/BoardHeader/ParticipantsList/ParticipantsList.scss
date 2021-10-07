@@ -1,6 +1,6 @@
 @import "src/constants/style.scss";
 
-$header-bottom_distance: 12px;
+$header-bottom_distance: 16px;
 $header-left_distance: 24px;
 
 .participants {
@@ -124,6 +124,7 @@ $header-left_distance: 24px;
 .list__header > label:nth-child(2) {
   text-align: right;
   left: 244px;
+  background-color: white;
 }
 
 .participants__list-item {

@@ -28,6 +28,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   if (!props.open) {
     return null;
   }
+  const showMe = searchString.split(" ").every((substr) => me!.displayName.toLowerCase().includes(substr));
 
   return (
     <Portal onClose={props.onClose} darkBackground={false}>
@@ -46,22 +47,23 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
 
-          <li className="participants__list-item" key={me!.id}>
-            <UserAvatar key={me!.id} id={me!.id} name={me!.displayName} group="participants" />
-            {/* Show the permission toggle if the current user is moderator */}
-            {props.currentUserIsModerator && (
-              <ToggleButton
-                className="participant__permission-toggle"
-                disabled={Parse.User.current()?.id === me!.id || me!.id === boardOwner}
-                values={["participant", "moderator"]}
-                value={me!.admin ? "moderator" : "participant"}
-                onToggle={(val: "participant" | "moderator") => {
-                  store.dispatch(ActionFactory.changePermission(me!.id, val === "moderator"));
-                }}
-              />
-            )}
-          </li>
-
+          {showMe && (
+            <li className="participants__list-item" key={me!.id}>
+              <UserAvatar key={me!.id} id={me!.id} name={me!.displayName} group="participants" />
+              {/* Show the permission toggle if the current user is moderator */}
+              {props.currentUserIsModerator && (
+                <ToggleButton
+                  className="participant__permission-toggle"
+                  disabled={Parse.User.current()?.id === me!.id || me!.id === boardOwner}
+                  values={["participant", "moderator"]}
+                  value={me!.admin ? "moderator" : "participant"}
+                  onToggle={(val: "participant" | "moderator") => {
+                    store.dispatch(ActionFactory.changePermission(me!.id, val === "moderator"));
+                  }}
+                />
+              )}
+            </li>
+          )}
           {them.length > 0 &&
             them
               .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
