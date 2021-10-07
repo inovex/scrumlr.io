@@ -23,7 +23,6 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
           newState.all.push(member);
         }
       });
-
       return newState;
     }
     case ActionType.SetUserStatus: {
@@ -38,6 +37,19 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
         user.online = action.status;
       }
 
+      return newState;
+    }
+    case ActionType.UpdateUser: {
+      const newState = {
+        admins: state.admins,
+        basic: state.basic,
+        all: state.all,
+      };
+
+      const user = newState.all.find((member) => member.id === action.user.objectId);
+      if (user) {
+        // if needed
+      }
       return newState;
     }
     default: {

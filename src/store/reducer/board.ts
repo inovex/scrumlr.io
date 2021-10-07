@@ -13,12 +13,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: action.board,
       };
     }
+
     case ActionType.EditBoard: {
       // Moderator started voting phase - notification to moderator (user who started the voting)
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
-      action.board;
+
       const {userConfiguration, ...actions} = action.board;
 
       const newState = {
@@ -49,9 +50,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           columns: [
             ...state.data!.columns,
             {
-              name: action.name,
-              color: action.color,
-              hidden: action.hidden,
+              name: action.column.name,
+              color: action.column.color,
+              hidden: action.column.hidden,
             },
           ],
           dirty: true,
@@ -60,13 +61,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.EditColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.columnId === action.column.columnId);
       const column = newColumns[columnIndex];
       newColumns.splice(columnIndex, 1, {
         ...column,
-        name: action.name || column.name,
-        color: action.color || column.color,
-        hidden: action.hidden === undefined ? column.hidden : action.hidden,
+        name: action.column.name || column.name,
+        color: action.column.color || column.color,
+        hidden: action.column.hidden === undefined ? column.hidden : action.column.hidden,
       });
       return {
         status: state.status,
@@ -79,7 +80,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.DeleteColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.columnId === action.columnId);
       newColumns.splice(columnIndex, 1);
       return {
         status: state.status,
