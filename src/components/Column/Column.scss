@@ -17,10 +17,10 @@
 }
 @media (prefers-color-scheme: dark) {
   .column:nth-child(even) {
-    background-color: $color-white-one;
+    background-color: $color-dark-one;
   }
   .column:nth-child(odd) {
-    background-color: $color-white-two;
+    background-color: $color-dark-two;
   }
 }
 

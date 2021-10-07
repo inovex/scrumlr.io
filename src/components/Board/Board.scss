@@ -52,12 +52,12 @@
 @media (prefers-color-scheme: dark) {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
-    background-color: $color-white-one;
+    background-color: $color-dark-one;
   }
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: #272f41;
+    background-color: $color-dark-two;
   }
 }
 
