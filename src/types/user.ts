@@ -14,6 +14,23 @@ export interface UserClientModel {
   online: boolean;
 }
 
+type EditableUserConfiguration = {
+  showHiddenColumns: boolean;
+};
+
+export type UserConfigurationServerModel = {
+  [userId: string]: {
+    showHiddenColumns: boolean;
+  };
+};
+
+export type UserConfigurationClientModel = {
+  id: string;
+  showHiddenColumns: boolean;
+};
+
+export type EditUserConfigurationRequest = Partial<EditableUserConfiguration>;
+
 export const mapUserServerToClientModel = (user: UserServerModel, {admin, online}: {admin: boolean; online: boolean}): UserClientModel => ({
   id: user.objectId,
   displayName: user.displayName,

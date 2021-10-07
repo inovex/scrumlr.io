@@ -49,7 +49,7 @@ const NoteDialog = (props: NoteDialogProps) => {
     }
   };
 
-  const onUnstack = (id: string, authorId: string) => {
+  const onUnstack = (id: string) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
 
@@ -129,7 +129,7 @@ const NoteDialog = (props: NoteDialogProps) => {
                 <li className="note-dialog__option">
                   <IconButton
                     onClick={() => {
-                      onUnstack(note.id!, note.author);
+                      onUnstack(note.id!);
                       props.onClose();
                     }}
                     direction="right"

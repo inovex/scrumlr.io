@@ -1,4 +1,6 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {StatusResponse} from "types";
+import {UserConfigurations} from "types/user";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -99,11 +101,6 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  userConfiguration: {};
-};
-
-export type UserConfigurations = {
-  [userId: string]: {};
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -151,7 +148,7 @@ export const initializeBoardFunctions = () => {
     }, {});
 
     const userConfigurations: UserConfigurations = {};
-    userConfigurations[user.id] = {};
+    userConfigurations[user.id] = {showHiddenColumns: false};
 
     const savedBoard = await board.save(
       {...request, columns, userConfigurations, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true},
@@ -260,8 +257,8 @@ export const initializeBoardFunctions = () => {
       };
     }
 
-    const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
-    userConfigurations[user.id] = {};
+    const userConfigurations: UserConfigurations = await board.get("userConfigurations");
+    userConfigurations[user.id] = {showHiddenColumns: false};
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
 
@@ -319,12 +316,6 @@ export const initializeBoardFunctions = () => {
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
     }
-    if (request.board.userConfiguration) {
-      const userConfigurations: UserConfigurations = (await board.get("userConfigurations")) ?? {};
-      // Here you can update the settings and check if already existing
-      userConfigurations[user.id] = {};
-      board.set("userConfigurations", userConfigurations);
-    }
 
     await board.save(null, {useMasterKey: true});
     return true;
@@ -375,7 +366,7 @@ export const initializeBoardFunctions = () => {
     moderator: boolean;
   };
 
-  api<ChangePermissionRequest, {status: string; description: string}>("changePermission", async (user, request) => {
+  api<ChangePermissionRequest, StatusResponse>("changePermission", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     if (request.moderator) {
@@ -399,7 +390,7 @@ export const initializeBoardFunctions = () => {
   /**
    * Cancel voting
    */
-  api<{boardId: string}, {status: string; description: string}>("cancelVoting", async (user, request) => {
+  api<{boardId: string}, StatusResponse>("cancelVoting", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
@@ -434,7 +425,7 @@ export const initializeBoardFunctions = () => {
     return {status: "Success", description: "Current voting phase was canceled"};
   });
 
-  api<{endDate: Date; boardId: string}, {status: string; description: string}>("setTimer", async (user, request) => {
+  api<{endDate: Date; boardId: string}, StatusResponse>("setTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
@@ -448,7 +439,7 @@ export const initializeBoardFunctions = () => {
     return {status: "Success", description: "Timer was successfully set"};
   });
 
-  api<{boardId: string}, {status: string; description: string}>("cancelTimer", async (user, request) => {
+  api<{boardId: string}, StatusResponse>("cancelTimer", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});

@@ -1,16 +1,15 @@
-import * as React from "react";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
-import {getRandomName} from "constants/Name";
+import {getRandomName} from "constants/name";
 import {RouteComponentProps} from "react-router";
 import Parse from "parse";
 import {API} from "api";
 import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
+import {useEffect, useState} from "react";
+import LoginProviders from "components/LoginProviders/LoginProviders";
 
-export type NewBoardProps = RouteComponentProps;
-
-function NewBoard(props: NewBoardProps) {
+function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
     "Positive/Negative/Actions": [
       {name: "Positive", hidden: false, color: "backlog-blue"},
@@ -35,10 +34,10 @@ function NewBoard(props: NewBoardProps) {
     ],
   };
 
-  const [displayName, setDisplayName] = React.useState(getRandomName());
-  const [boardName, setBoardName] = React.useState("BoardName");
-  const [columnTemplate, setColumnTemplate] = React.useState("Positive/Negative/Actions");
-  const [joinConfirmationRequired, setJoinConfirmationRequired] = React.useState(false);
+  const [displayName, setDisplayName] = useState(getRandomName());
+  const [boardName, setBoardName] = useState("Board Name");
+  const [columnTemplate, setColumnTemplate] = useState("Positive/Negative/Actions");
+  const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(false);
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
@@ -49,8 +48,40 @@ function NewBoard(props: NewBoardProps) {
     }
   }
 
-  async function onLogin() {
+  async function onAnonymousLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
+    await onCreateBoard();
+  }
+
+  async function onLogout() {
+    await Parse.User.logOut();
+    props.history.push("/");
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem("Parse/Scrumlr/currentUser")) {
+      setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
+    }
+  }, []);
+
+  if (Parse.User.current()) {
+    return (
+      <div>
+        <p>User: {displayName}</p>
+        <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
+        <label>
+          <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
+          JoinConfirmationRequired
+        </label>
+        <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
+          {Object.keys(columnTemplates).map((key) => (
+            <option value={key}>{key}</option>
+          ))}
+        </select>
+        <button onClick={onCreateBoard}>Create new Board</button>
+        <button onClick={onLogout}>Logout</button>
+      </div>
+    );
   }
 
   return (
@@ -69,15 +100,14 @@ function NewBoard(props: NewBoardProps) {
           </option>
         ))}
       </select>
-
       <button
         onClick={async () => {
-          if (!Parse.User.current()) await onLogin();
-          onCreateBoard();
+          if (!Parse.User.current()) await onAnonymousLogin();
         }}
       >
-        Create new Board
+        Create new board anonymously
       </button>
+      <LoginProviders />
     </div>
   );
 }
