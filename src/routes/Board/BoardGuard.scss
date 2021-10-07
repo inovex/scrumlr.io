@@ -1,3 +1,5 @@
+@import "constants/style";
+
 .board-guard {
   height: 100%;
   display: flex;
@@ -21,7 +23,7 @@
 
 @media (prefers-color-scheme: dark) {
   .board-guard {
-    background-color: #242c3d;
+    background-color: $color-white-one;
   }
 
   .board-guard__info {

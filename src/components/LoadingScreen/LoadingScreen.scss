@@ -1,13 +1,15 @@
+@import "constants/style";
+
 .loading-screen {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 @media (prefers-color-scheme: dark) {
-    .loading-screen {
-        background-color: #242c3d;
-    }
+  .loading-screen {
+    background-color: $color-white-one;
+  }
 }

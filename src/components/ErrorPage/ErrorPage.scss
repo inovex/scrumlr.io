@@ -1,3 +1,5 @@
+@import "constants/style";
+
 .error-page {
   height: 100%;
   display: flex;
@@ -8,6 +10,6 @@
 
 @media (prefers-color-scheme: dark) {
   .error-page {
-    background-color: #242c3d;
+    background-color: $color-white-one;
   }
 }
