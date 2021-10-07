@@ -80,7 +80,6 @@ $number-of-menu-items: 4;
   }
 }
 .menu-item--touch-hover,
-.menu-item--touch-click,
 .menu-item:enabled:hover {
   @media (prefers-color-scheme: light) {
     .menu-item__icon {
@@ -167,12 +166,15 @@ $number-of-menu-items: 4;
 // ALL columns are fully visible
 // *****************************
 .menu-bars:not(.menu-bars--bottom) {
+  .menu-item--touch-hover:enabled > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
     width: 230px;
   }
+  .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
   .menu-item--left:enabled:hover .tooltip__text {
     margin-right: 48px;
   }
+  .menu-item--right.menu-item--touch-hover:enabled .tooltip__text,
   .menu-item--right:enabled:hover .tooltip__text {
     margin-left: 48px;
   }
