@@ -1,19 +1,13 @@
 import {Color} from "constants/colors";
 import Parse from "parse";
+import {ColumnClientModel, ColumnServerModel} from "types/column";
+import {UserConfigurationClientModel, UserConfigurationServerModel} from "./user";
 
 export interface BoardServerModel {
   objectId: string;
   name: string;
-  columns: {
-    [columnId: string]: {
-      name: string;
-      color: string;
-      hidden: boolean;
-    };
-  };
-  userConfigurations: {
-    [userId: string]: {};
-  };
+  columns: ColumnServerModel;
+  userConfigurations: UserConfigurationServerModel;
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
@@ -41,21 +35,16 @@ export type EditableBoardAttributes = {
   showNotesOfOtherUsers: boolean;
 };
 
-export type UserConfiguration = {};
+export type UserConfiguration = {
+  showHiddenColumns: boolean;
+};
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes & {userConfiguration: UserConfiguration}>;
 
 export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
-  columns: {
-    id?: string;
-    name: string;
-    color: Color;
-    hidden: boolean;
-  }[];
-  userConfigurations: {
-    id: string;
-  }[];
+  columns: ColumnClientModel[];
+  userConfigurations: UserConfigurationClientModel[];
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
@@ -65,15 +54,22 @@ export interface BoardClientModel extends EditableBoardAttributes {
 export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
   id: board.objectId,
   name: board.name,
-  columns: Object.keys(board.columns).map((columnId) => ({
-    id: columnId,
-    name: board.columns[columnId].name,
-    color: board.columns[columnId].color as Color,
-    hidden: board.columns[columnId].hidden,
-  })),
-  userConfigurations: Object.keys(board.userConfigurations).map((userId) => ({
-    id: userId,
-  })),
+  columns: Object.keys(board.columns).map(
+    (columnId) =>
+      ({
+        columnId,
+        name: board.columns[columnId].name,
+        color: board.columns[columnId].color as Color,
+        hidden: board.columns[columnId].hidden,
+      } as ColumnClientModel)
+  ),
+  userConfigurations: Object.keys(board.userConfigurations).map(
+    (id) =>
+      ({
+        id,
+        showHiddenColumns: board.userConfigurations[id].showHiddenColumns,
+      } as UserConfigurationClientModel)
+  ),
   accessCode: board.accessCode,
   joinConfirmationRequired: board.joinConfirmationRequired,
   encryptedContent: board.encryptedContent,

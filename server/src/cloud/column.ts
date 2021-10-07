@@ -1,4 +1,5 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
+import {StatusResponse} from "types";
 import {requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
@@ -6,9 +7,11 @@ import Color, {isOfTypeColor} from "../util/Color";
 
 export interface AddColumnRequest {
   boardId: string;
-  name: string;
-  color: Color;
-  hidden: boolean;
+  column: {
+    name: string;
+    color: Color;
+    hidden: boolean;
+  };
 }
 
 export interface DeleteColumnRequest {
@@ -18,77 +21,85 @@ export interface DeleteColumnRequest {
 
 export interface EditColumnRequest {
   boardId: string;
-  columnId: string;
-  name?: string;
-  color?: Color;
-  hidden?: boolean;
+  column: {
+    columnId: string;
+    name?: string;
+    color?: Color;
+    hidden?: boolean;
+  };
 }
 
 export const initializeColumnFunctions = () => {
-  api<AddColumnRequest, boolean>("addColumn", async (user, request) => {
+  api<AddColumnRequest, StatusResponse>("addColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
-    if (board) {
-      const columns = board.get("columns");
-      if (!isOfTypeColor(request.color)) {
-        throw new Error(`color ${request.color} is not allowed for columns`);
-      }
 
-      columns[newObjectId(serverConfig.objectIdSize)] = {
-        name: request.name,
-        color: request.color,
-        hidden: request.hidden,
-      };
-      await board.save({columns}, {useMasterKey: true});
-      return true;
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
-    throw new Error(`Board '${request.boardId}' not found`);
+    const columns = board.get("columns");
+    if (!isOfTypeColor(request.column.color)) {
+      throw new Error(`color ${request.column.color} is not allowed for columns`);
+    }
+
+    columns[newObjectId(serverConfig.objectIdSize)] = {
+      name: request.column.name,
+      color: request.column.color,
+      hidden: request.column.hidden,
+    };
+
+    await board.save(null, {useMasterKey: true});
+    return {status: "Success", description: `New column added`};
   });
 
-  api<DeleteColumnRequest, boolean>("deleteColumn", async (user, request) => {
+  api<DeleteColumnRequest, StatusResponse>("deleteColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     // TODO delete notes & votes
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
-    if (board) {
-      const columns = board.get("columns");
-      delete columns[request.columnId];
-      await board.save({columns}, {useMasterKey: true});
-      return true;
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
-    return true;
+    const columns = board.get("columns");
+    delete columns[request.columnId];
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: `Column ${request.columnId} deleted`};
   });
 
-  api<EditColumnRequest, boolean>("editColumn", async (user, request) => {
+  api<EditColumnRequest, StatusResponse>("editColumn", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
 
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
-    if (board) {
-      const columns = board.get("columns");
-      if (request.name) {
-        columns[request.columnId].name = request.name;
-      }
-
-      if (request.color) {
-        if (isOfTypeColor(request.color)) {
-          columns[request.columnId].color = request.color;
-        } else {
-          throw new Error(`specified column color '${request.color}' is not allowed`);
-        }
-      }
-
-      if (request.hidden !== undefined) {
-        columns[request.columnId].hidden = request.hidden;
-      }
-
-      await board.save({columns}, {useMasterKey: true});
-      return true;
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+    const columns = board.get("columns");
+    if (request.column.name) {
+      columns[request.column.columnId].name = request.column.name;
     }
 
-    throw new Error(`Column '${request.columnId}' on board '${request.boardId}' not found`);
+    if (request.column.color) {
+      if (isOfTypeColor(request.column.color)) {
+        columns[request.column.columnId].color = request.column.color;
+      } else {
+        throw new Error(`specified column color '${request.column.color}' is not allowed`);
+      }
+    }
+
+    if (request.column.hidden != undefined) {
+      columns[request.column.columnId].hidden = request.column.hidden;
+    }
+
+    await board.save(null, {useMasterKey: true});
+
+    return {status: "Success", description: `Column ${request.column.columnId} edited`};
   });
 };
