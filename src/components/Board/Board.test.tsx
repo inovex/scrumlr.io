@@ -19,6 +19,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
           {id: "YwPiaNxejW", name: "Actions", hidden: true, color: colors[2]},
         ],
         moderation: {userId: "", status: "active"},
+        userConfigurations: [{id: "testId", showHiddenColumns: true}],
       },
     },
     notes: [],
@@ -35,7 +36,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
     <Provider store={store}>
       <BoardContext name="" boardstatus="" currentUserIsModerator>
         {colors.map((color, index) => (
-          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" />
+          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
         ))}
       </BoardContext>
     </Provider>

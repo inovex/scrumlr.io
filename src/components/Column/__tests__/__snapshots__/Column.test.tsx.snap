@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Column Test behavior of hidden columns Snapshot: Hide button should be visible 1`] = `
+<div
+  class="column__header-toggle"
+>
+  <button
+    class="column__header-toggle-button"
+  >
+    <svg
+      class="column__header-toggle-button-icon"
+    >
+      icon-unstack.svg
+    </svg>
+  </button>
+</div>
+`;
+
 exports[`Column should have correct style show column with correct style 1`] = `
 <section
   class="column accent-color__planning-pink"

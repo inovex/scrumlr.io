@@ -1,3 +1,4 @@
+import {StatusResponse} from "types";
 import {requireValidBoardAdmin, getAdminRoleName, getMemberRoleName} from "./permission";
 import {api, newObject} from "./util";
 
@@ -13,7 +14,7 @@ export const initializeVoteConfigurationFunctions = () => {
   /**
    * Add vote configurtaions for each voting iteration.
    */
-  api<{voteConfiguration: VoteConfiguration}, {status: string; description: string}>("addVoteConfiguration", async (user, request) => {
+  api<{voteConfiguration: VoteConfiguration}, StatusResponse>("addVoteConfiguration", async (user, request) => {
     await requireValidBoardAdmin(user, request.voteConfiguration.boardId);
     const board = await new Parse.Query("Board").get(request.voteConfiguration.boardId, {useMasterKey: true});
 
