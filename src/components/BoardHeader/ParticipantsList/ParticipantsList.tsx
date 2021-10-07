@@ -7,7 +7,7 @@ import store, {useAppSelector} from "store";
 import Parse from "parse";
 import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
-import UserAvatar from "../../BoardUsers/UserAvatar";
+import UserAvatar from "components/BoardUsers/UserAvatar";
 
 type ParticipantsListProps = {
   open: boolean;
@@ -19,6 +19,11 @@ type ParticipantsListProps = {
 export const ParticipantsList = (props: ParticipantsListProps) => {
   const [searchString, setSearchString] = useState("");
   const boardOwner = useAppSelector((state) => state.board.data?.owner);
+
+  const users = useAppSelector((state) => state.users.all);
+  const currentUser = Parse.User.current();
+  const me = users.find((user) => user.id === currentUser!.id);
+  const them = users.filter((user) => user.id !== currentUser!.id && user.online);
 
   if (!props.open) {
     return null;
@@ -40,26 +45,44 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             <label>Name</label>
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
-          {props.participants
-            .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
-            .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
-            .map((participant) => (
-              <li className="participants__list-item" key={participant.id}>
-                <UserAvatar key={participant.id} id={participant.id} name={participant.displayName} group="participants" />
-                {/* Show the permission toggle if the current user is moderator */}
-                {props.currentUserIsModerator && (
-                  <ToggleButton
-                    className="participant__permission-toggle"
-                    disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
-                    values={["participant", "moderator"]}
-                    value={participant.admin ? "moderator" : "participant"}
-                    onToggle={(val: "participant" | "moderator") => {
-                      store.dispatch(ActionFactory.changePermission(participant.id, val === "moderator"));
-                    }}
-                  />
-                )}
-              </li>
-            ))}
+
+          <li className="participants__list-item" key={me!.id}>
+            <UserAvatar key={me!.id} id={me!.id} name={me!.displayName} group="participants" />
+            {/* Show the permission toggle if the current user is moderator */}
+            {props.currentUserIsModerator && (
+              <ToggleButton
+                className="participant__permission-toggle"
+                disabled={Parse.User.current()?.id === me!.id || me!.id === boardOwner}
+                values={["participant", "moderator"]}
+                value={me!.admin ? "moderator" : "participant"}
+                onToggle={(val: "participant" | "moderator") => {
+                  store.dispatch(ActionFactory.changePermission(me!.id, val === "moderator"));
+                }}
+              />
+            )}
+          </li>
+
+          {them.length > 0 &&
+            them
+              .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
+              .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
+              .map((participant) => (
+                <li className="participants__list-item" key={participant.id}>
+                  <UserAvatar key={participant.id} id={participant.id} name={participant.displayName} group="participants" />
+                  {/* Show the permission toggle if the current user is moderator */}
+                  {props.currentUserIsModerator && (
+                    <ToggleButton
+                      className="participant__permission-toggle"
+                      disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
+                      values={["participant", "moderator"]}
+                      value={participant.admin ? "moderator" : "participant"}
+                      onToggle={(val: "participant" | "moderator") => {
+                        store.dispatch(ActionFactory.changePermission(participant.id, val === "moderator"));
+                      }}
+                    />
+                  )}
+                </li>
+              ))}
         </ul>
       </aside>
     </Portal>
