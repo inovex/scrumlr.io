@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": "src/",
     "target": "es5",
     "outDir": "build",
     "module": "commonjs",
@@ -13,6 +14,8 @@
     "lib": [
       "esnext", "dom"
     ],
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "rootDir": "src",
+  },
+  "include": ["src"]
 }

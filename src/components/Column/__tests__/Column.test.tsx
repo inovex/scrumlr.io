@@ -1,9 +1,17 @@
-import {render} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
+import store from "store";
+import {ActionFactory} from "store/action";
 import Column from "../Column";
 
+jest.mock("store", () => ({
+  dispatch: jest.fn(),
+}));
+
 const [ColumnContext] = wrapWithTestBackend(Column);
-const createColumn = () => <ColumnContext id="TestID" name="Testheader" color="planning-pink" />;
+const createColumn = (currentUserIsModerator = false) => (
+  <ColumnContext id="TestID" name="Testheader" color="planning-pink" hidden={false} currentUserIsModerator={currentUserIsModerator} />
+);
 
 describe("Column", () => {
   describe("should render correctly", () => {
@@ -34,7 +42,7 @@ describe("Column", () => {
 
     test("column header cardnumber is present", () => {
       const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")!.lastChild).toHaveClass("column__header-card-number");
+      expect(container.querySelector(".column__header-title")!.children[1]).toHaveClass("column__header-card-number");
     });
 
     test("header text has correct title", () => {
@@ -47,6 +55,29 @@ describe("Column", () => {
     test("show column with correct style", () => {
       const {container} = render(createColumn());
       expect(container.firstChild).toMatchSnapshot();
+    });
+  });
+
+  describe("Test behavior of hidden columns", () => {
+    test("Hide button should be visible", () => {
+      const {container} = render(createColumn(true));
+      expect(container.querySelector(".column__header-title")?.lastChild).toHaveClass("column__header-toggle");
+    });
+
+    test("Hide button should not be visible", () => {
+      const {container} = render(createColumn(false));
+      expect(container.querySelector(".column__header-title")?.lastChild).not.toHaveClass("column__header-toggle");
+    });
+
+    test("Snapshot: Hide button should be visible", () => {
+      const {container} = render(createColumn(true));
+      expect(container.querySelector(".column__header-title")?.lastChild).toMatchSnapshot();
+    });
+
+    test("Hide button clicked", () => {
+      const {container} = render(createColumn(true));
+      fireEvent.click(container.querySelector(".column__header-toggle")?.firstChild!);
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editColumn({columnId: "TestID", hidden: true}));
     });
   });
 });
