@@ -89,7 +89,19 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
 
   const columnsCount = React.Children.count(children);
   if (!children || columnsCount === 0) {
-    return <div className="board--empty">Empty board</div>;
+    // Empty board
+    return (
+      <div className="board--empty">
+        <style>{`.board { --board__columns: ${columnsCount} }`}</style>
+        <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
+        <MenuBars />
+        <main className="board" ref={boardRef}>
+          {/* Fixed color - can also be dynamic */}
+          <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
+          <div className={`board__spacer-right ${getColorClassName("backlog-blue")}`} />
+        </main>
+      </div>
+    );
   }
 
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;

@@ -8,6 +8,7 @@ import Portal from "components/Portal/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";
+import Parse from "parse";
 import "./HeaderMenu.scss";
 
 type HeaderMenuProps = {
@@ -18,7 +19,10 @@ type HeaderMenuProps = {
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
+    user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
+    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
+
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
@@ -110,6 +114,27 @@ const HeaderMenu = (props: HeaderMenuProps) => {
               />
             </div>
             <label className="item-button__label">{state.board!.showNotesOfOtherUsers ? "Hide" : "Show"} notes of other users</label>
+          </button>
+        </li>
+        <li className="header-menu__item">
+          <button
+            className="menu__item-button"
+            onClick={() => {
+              if (state.user?.id) {
+                store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
+              }
+            }}
+          >
+            <div className="item-button__toggle-container">
+              <div
+                className={classNames(
+                  "item-button__toggle",
+                  {"item-button__toggle--left": state.userConfiguration?.showHiddenColumns},
+                  {"item-button__toggle--right": !state.userConfiguration?.showHiddenColumns}
+                )}
+              />
+            </div>
+            <label className="item-button__label">{state.userConfiguration?.showHiddenColumns ? "Hide" : "Show"} columns</label>
           </button>
         </li>
         <li className="header-menu__item">
