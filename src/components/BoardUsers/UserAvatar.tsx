@@ -1,5 +1,5 @@
 import "./BoardUser.scss";
-import {getInitials} from "constants/Name";
+import {getInitials} from "constants/name";
 
 export interface UserAvatarProps {
   group: string;
