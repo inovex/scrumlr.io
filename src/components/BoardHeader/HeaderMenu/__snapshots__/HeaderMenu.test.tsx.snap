@@ -62,9 +62,12 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 </form>
               </li>
             </div>
-            <div>
+            <div
+              class="header-menu-moderator"
+            >
               <div
                 class="menu__item-button"
+                id="author"
               >
                 <li
                   class="header-menu__item"
@@ -90,6 +93,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               </div>
               <div
                 class="menu__item-button"
+                id="note"
               >
                 <li
                   class="header-menu__item"
@@ -115,6 +119,33 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               </div>
               <div
                 class="menu__item-button"
+                id="columns"
+              >
+                <li
+                  class="header-menu__item"
+                >
+                  <button
+                    class="menu__item-button"
+                  >
+                    <div
+                      class="item-button__toggle-container"
+                    >
+                      <div
+                        class="item-button__toggle item-button__toggle--left"
+                      />
+                    </div>
+                    <label
+                      class="item-button__label"
+                    >
+                      Hide
+                       columns
+                    </label>
+                  </button>
+                </li>
+              </div>
+              <div
+                class="menu__item-button"
+                id="qrcode"
               >
                 <li
                   class="header-menu__item"
@@ -152,32 +183,10 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               </div>
               <div
                 class="menu__item-button"
+                id="delete"
               >
                 <li
                   class="header-menu__item"
-                <div
-                  class="item-button__toggle-container"
-                >
-                  <div
-                    class="item-button__toggle item-button__toggle--left"
-                  />
-                </div>
-                <label
-                  class="item-button__label"
-                >
-                  Hide
-                   columns
-                </label>
-              </button>
-            </li>
-            <li
-              class="header-menu__item"
-            >
-              <button
-                class="menu__item-button"
-              >
-                <svg
-                  class="item-button__icon"
                 >
                   <button
                     class="menu__item-button"
@@ -219,6 +228,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
             </div>
             <div
               class="menu__item-button"
+              id="export"
             >
               <li
                 class="header-menu__item"
@@ -243,6 +253,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               >
                 <button
                   class="menu__item-button"
+                  id="export-json"
                 >
                   <svg
                     class="item-button__icon"
@@ -257,6 +268,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 </button>
                 <button
                   class="menu__item-button"
+                  id="export-csv"
                 >
                   <svg
                     class="item-button__icon"
@@ -342,6 +354,7 @@ exports[`HeaderMenu should render correctly user 1`] = `
             </div>
             <div
               class="menu__item-button"
+              id="export"
             >
               <li
                 class="header-menu__item"
@@ -366,6 +379,7 @@ exports[`HeaderMenu should render correctly user 1`] = `
               >
                 <button
                   class="menu__item-button"
+                  id="export-json"
                 >
                   <svg
                     class="item-button__icon"
@@ -380,6 +394,7 @@ exports[`HeaderMenu should render correctly user 1`] = `
                 </button>
                 <button
                   class="menu__item-button"
+                  id="export-csv"
                 >
                   <svg
                     class="item-button__icon"

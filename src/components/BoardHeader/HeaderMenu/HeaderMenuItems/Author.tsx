@@ -12,7 +12,7 @@ export const Author = (props: AuthorProps) => {
   }));
 
   return (
-    <div className="menu__item-button">
+    <div className="menu__item-button" id="author">
       <li className="header-menu__item">
         <button
           className="menu__item-button"

@@ -3,16 +3,19 @@ import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import "./HeaderMenuItems.scss";
 import classNames from "classnames";
+import Parse from "parse";
 
 export type ColumnProps = {};
 
 export const Columns = (props: ColumnProps) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
+    user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
+    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
   return (
-    <div className="menu__item-button">
+    <div className="menu__item-button" id="columns">
       <li className="header-menu__item">
         <button
           className="menu__item-button"

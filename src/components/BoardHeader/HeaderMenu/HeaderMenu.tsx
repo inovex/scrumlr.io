@@ -60,7 +60,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           setJoinConfirmationRequired={setJoinConfirmationRequired}
         />
         {props.currentUserIsModerator && (
-          <div>
+          <div className="header-menu-moderator">
             <Author />
             <Note />
             <Columns />
