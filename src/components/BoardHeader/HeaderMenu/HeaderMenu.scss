@@ -11,22 +11,16 @@ $header-menu__item-height: 48px;
   border-radius: 16px;
   left: calc(50% - 144px);
   top: 92px;
-  background-color: $header-menu-color--light;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
   list-style-type: none;
   padding: 0;
 }
-@media (prefers-color-scheme: dark) {
-  .header-menu {
-    background-color: $header-menu-color--dark;
-    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-  }
-}
 
 .header-menu__info {
   position: relative;
   height: 86px;
+  background-color: $header-menu-color--light;
 }
 
 .info__board-name {
@@ -149,14 +143,6 @@ $header-menu__item-height: 48px;
 .header-menu__item:hover {
   background-color: #f3f3f3;
 }
-@media (prefers-color-scheme: dark) {
-  .header-menu__item {
-    background-color: $color-dark-mode-note;
-  }
-  .header-menu__item:hover {
-    background-color: #3d4555;
-  }
-}
 
 .menu__item-button {
   background-color: transparent;
@@ -187,11 +173,6 @@ $header-menu__item-height: 48px;
   line-height: 24px;
   vertical-align: middle;
   cursor: pointer;
-}
-@media (prefers-color-scheme: dark) {
-  .item-button__label {
-    color: $color-white;
-  }
 }
 
 .item-button__toggle-container {
@@ -281,11 +262,7 @@ $header-menu__item-height: 48px;
   position: relative;
   overflow: hidden;
 }
-@media (prefers-color-scheme: dark) {
-  .header-menu__delete-container {
-    background-color: $color-dark-mode-note;
-  }
-}
+
 .header-menu__delete-container--visible {
   box-sizing: border-box;
   height: 120px;
@@ -313,4 +290,25 @@ $header-menu__item-height: 48px;
 }
 .delete-container__delete-board :active {
   scale: 0.95;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-menu {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  .header-menu__info {
+    background-color: $header-menu-color--dark;
+  }
+  .header-menu__delete-container {
+    background-color: $color-dark-mode-note;
+  }
+  .item-button__label {
+    color: $color-white;
+  }
+  .header-menu__item {
+    background-color: $color-dark-mode-note;
+  }
+  .header-menu__item:hover {
+    background-color: #3d4555;
+  }
 }

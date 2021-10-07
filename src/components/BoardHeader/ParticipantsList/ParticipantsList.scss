@@ -9,7 +9,6 @@ $header-left_distance: 24px;
   right: 80px;
   width: 300px;
   border-radius: 16px;
-  background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
   z-index: 200;
@@ -24,6 +23,7 @@ $header-left_distance: 24px;
   color: white;
   height: 86px;
   position: relative;
+  background-color: $color-backlog-blue;
 }
 
 .participants__header-text {
@@ -84,7 +84,7 @@ $header-left_distance: 24px;
   margin: 0;
   min-height: 80px;
   max-height: 272px;
-  overflow: auto;
+  overflow: hidden;
   scrollbar-color: $color-middle-gray #fff;
   background-color: #fff;
 }
@@ -151,8 +151,10 @@ $header-left_distance: 24px;
 
 @media (prefers-color-scheme: dark) {
   .participants {
-    background-color: $color-planning-pink;
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  .participants__header {
+    background-color: $color-planning-pink;
   }
   .participants__list {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
