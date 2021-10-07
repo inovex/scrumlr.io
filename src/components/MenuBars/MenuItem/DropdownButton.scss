@@ -16,6 +16,7 @@ $dropdown__box-shadow: var(--primaryColor) 3d;
 @media (pointer: fine) {
   .menu-bars--bottom {
     .dropdown-item--open,
+    .menu-item--touch-hover.dropdown-item--open,
     .menu-item.dropdown-item--open:enabled:hover {
       .menu-item__tooltip {
         transition: all 0.25s 0s ease-out;

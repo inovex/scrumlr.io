@@ -103,47 +103,25 @@ $number-of-menu-items: 4;
   .menu-item--touch-hover,
   .menu-item:enabled:hover {
     .menu-item__tooltip {
-      position: absolute;
-      animation: none;
-      top: -58px;
-      left: 18px;
-      transform: translateX(-50%);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.1s linear;
-      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      background-color: var(--primaryColor);
+      width: 200px;
+      opacity: 1;
+      visibility: visible;
+      // Tooltip will be shown after 0.5s delay, but cleared instantly
+      transition-delay: 0.5s;
     }
-    .menu-item__tooltip::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: calc(50% - 5px);
-      border-width: 5px;
-      border-style: solid;
-      border-color: var(--primaryColor) transparent transparent transparent;
-    }
-
-    .tooltip__text {
-      width: 100%;
-      white-space: nowrap;
-    }
-  }
-  .menu-item:enabled:hover {
-    // Tooltip will be shown after 0.5s delay, but cleared instantly
-    transition-delay: 0.5s;
   }
 
   .menu-item__tooltip {
     position: absolute;
     animation: none;
     top: -58px;
-    left: calc(-100px + 18px);
+    left: 18px;
+    transform: translateX(-50%);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.1s linear;
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-    background-color: $color-white;
+    background-color: var(--primaryColor);
   }
   .menu-item__tooltip::after {
     content: "";
@@ -152,21 +130,11 @@ $number-of-menu-items: 4;
     left: calc(50% - 5px);
     border-width: 5px;
     border-style: solid;
-    border-color: $color-white transparent transparent transparent;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .menu-item__tooltip {
-      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: var(--primaryColor);
-    }
-    .menu-item__tooltip::after {
-      border-color: var(--primaryColor) transparent transparent transparent;
-    }
+    border-color: var(--primaryColor) transparent transparent transparent;
   }
 
   .tooltip__text {
-    width: 200px;
+    width: 100%;
     white-space: nowrap;
   }
 }

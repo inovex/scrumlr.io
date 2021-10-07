@@ -11,6 +11,7 @@ type DropdownButtonProps = {
 };
 
 export const DropdownButton: React.FC<DropdownButtonProps> = (props) => {
+  const [touchHover, setTouchHover] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const Icon = props.icon;
 
@@ -22,9 +23,21 @@ export const DropdownButton: React.FC<DropdownButtonProps> = (props) => {
 
   return (
     <button
-      className={classNames("menu-item", `menu-item--${props.direction}`, {"dropdown-item--open": showDropdown})}
+      className={classNames("menu-item", `menu-item--${props.direction}`, {"dropdown-item--open": showDropdown}, {"menu-item--touch-hover": touchHover})}
       onClick={() => {
         setShowDropdown((prev) => !prev);
+      }}
+      onTouchEnd={(e) => {
+        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
+          e.preventDefault();
+          window.addEventListener("click", () => setTouchHover(false), {once: true});
+          setTouchHover(true);
+        }
+        if (touchHover) {
+          e.preventDefault();
+          setTouchHover(false);
+          setShowDropdown(true);
+        }
       }}
     >
       <div className="menu-item__tooltip">
