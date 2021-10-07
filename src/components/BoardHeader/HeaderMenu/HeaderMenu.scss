@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style";
 
 $header-menu-color--light: $color-backlog-blue;
 $header-menu-color--dark: $color-planning-pink;
@@ -111,7 +111,7 @@ $header-menu__item-height: 48px;
   border: 1px solid $color-white;
   border-bottom: 0;
   top: -7px;
-  left: 0px;
+  left: 0;
   transition: transform 0.3s linear;
 }
 .info__access-mode-lock--unlocked::after {
@@ -122,7 +122,8 @@ $header-menu__item-height: 48px;
   position: absolute;
   height: 24px;
   width: 50px;
-  border: 1.5px solid #f9fafb;
+  box-shadow: 0 0 0 0.1em #f9fafb;
+  border-color: transparent;
   border-radius: 32px;
   background-color: transparent;
   color: $color-white;
@@ -160,7 +161,7 @@ $header-menu__item-height: 48px;
 .menu__item-button {
   background-color: transparent;
   border: none;
-  padding: none;
+  padding: 0;
   height: 100%;
   width: 100%;
   text-align: left;
@@ -235,7 +236,7 @@ $header-menu__item-height: 48px;
 }
 
 .header-menu__qrcode-container {
-  height: 0px;
+  height: 0;
   width: 100%;
   background-color: $color-white;
   transition: height 0.5s ease-in-out;
@@ -273,7 +274,7 @@ $header-menu__item-height: 48px;
 }
 
 .header-menu__delete-container {
-  height: 0px;
+  height: 0;
   width: 100%;
   transition: height 0.5s ease-in-out;
   background-color: $color-white;

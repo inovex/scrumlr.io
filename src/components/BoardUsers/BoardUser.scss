@@ -5,7 +5,7 @@
   box-sizing: border-box;
   height: 40px;
   width: 40px;
-  box-shadow: 0 0 0 0.11em $color-black;
+  box-shadow: 0 0 0 0.1em $color-black;
   border-color: var(--accent-color);
   border-radius: 100px;
   display: inline-block;
@@ -34,7 +34,7 @@
 @media (prefers-color-scheme: dark) {
   .user-avatar,
   .rest-users {
-    box-shadow: 0 0 0 0.11em $color-white;
+    box-shadow: 0 0 0 0.1em $color-white;
     background-color: $color-darkest-gray;
   }
 
