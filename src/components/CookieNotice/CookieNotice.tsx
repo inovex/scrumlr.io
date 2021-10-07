@@ -22,7 +22,6 @@ const CookieNotice = () => {
    */
   const saveToStorage = (key: string, value: string) => {
     localStorage.setItem(key, value);
-    document.cookie = `${key}=${value};`;
   };
 
   /**

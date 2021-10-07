@@ -4,7 +4,7 @@ import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import BoardUsers from "components/BoardUsers/BoardUsers";
 import Parse from "parse";
-import {getRandomName} from "constants/Name";
+import {getRandomName} from "constants/name";
 import {ApplicationState} from "types/store";
 
 const mockStore = configureStore();
