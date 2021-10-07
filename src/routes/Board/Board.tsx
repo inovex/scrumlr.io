@@ -58,7 +58,7 @@ function Board() {
                   .map((note) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
-                      isAdmin={currentUserIsModerator}
+                      currentUserIsModerator={currentUserIsModerator}
                       key={note.id}
                       noteId={note.id}
                       text={note.text}
@@ -75,7 +75,6 @@ function Board() {
                       activeVoting={state.board.data?.voting === "active"}
                       activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
                       focus={note.focus}
-                      currentUserIsModerator={currentUserIsModerator}
                     />
                   ))}
               </Column>

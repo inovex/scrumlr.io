@@ -15,7 +15,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     >
       <blockquote
         class="note-dialog__text"
-        contenteditable="true"
+        contenteditable="false"
       >
         Test Text
       </blockquote>
@@ -64,7 +64,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option"
+          class="note-dialog__option note-dialog__option--not-editable"
         >
           <button
             class="icon-button icon-button--right"
@@ -96,7 +96,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     >
       <blockquote
         class="note-dialog__text"
-        contenteditable="true"
+        contenteditable="false"
       />
     </div>
     <footer
@@ -133,7 +133,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option"
+          class="note-dialog__option note-dialog__option--not-editable"
         >
           <button
             class="icon-button icon-button--right"
@@ -187,7 +187,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     >
       <blockquote
         class="note-dialog__text"
-        contenteditable="true"
+        contenteditable="false"
       />
     </div>
     <footer
@@ -224,7 +224,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option"
+          class="note-dialog__option note-dialog__option--not-editable"
         >
           <button
             class="icon-button icon-button--right"

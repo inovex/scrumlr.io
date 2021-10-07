@@ -36,7 +36,6 @@ const createNoteDialog = (text: string, authorId: string, showAuthors: boolean, 
     <Provider store={store}>
       <NoteDialogContext
         noteId="0"
-        isAdmin
         text={text}
         authorId={authorId}
         columnName=""

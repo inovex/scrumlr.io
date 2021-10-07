@@ -101,7 +101,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
           role="dialog"
         >
           <div
-            class="note-dialog accent-color__"
+            class="note-dialog accent-color__ note-dialog__disabled-pointer"
           >
             <h2
               class="note-dialog__header"
@@ -114,7 +114,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
               >
                 <blockquote
                   class="note-dialog__text"
-                  contenteditable="true"
+                  contenteditable="false"
                 >
                   Test Text
                 </blockquote>
@@ -167,7 +167,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
               >
                 <blockquote
                   class="note-dialog__text"
-                  contenteditable="true"
+                  contenteditable="false"
                 />
               </div>
               <footer
@@ -208,7 +208,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
               >
                 <blockquote
                   class="note-dialog__text"
-                  contenteditable="true"
+                  contenteditable="false"
                 />
               </div>
               <footer

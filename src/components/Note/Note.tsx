@@ -13,7 +13,6 @@ import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
 
 interface NoteProps {
-  isAdmin: boolean;
   text: string;
   authorId: string;
   authorName: string;

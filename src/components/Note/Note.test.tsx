@@ -84,7 +84,6 @@ const createNote = (props: Partial<TestProps>) => {
         columnId=""
         columnName=""
         columnColor=""
-        isAdmin
         activeVoting
         showAuthors={props.showAuthors || false}
         votes={props.votes || defaultVotes}
