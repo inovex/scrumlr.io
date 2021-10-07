@@ -34,10 +34,6 @@ if (OPERATION_MODE !== "livequery") {
     },
     auth: {
       anonymous: {},
-      /* github: {
-                id: "user's Github id (string)",
-                access_token: "an authorized Github access token for the user"
-            } */
     },
   };
   if (OPERATION_MODE === "server") {
