@@ -1,4 +1,4 @@
-import {exportAsJSON, exportAsCSV, exportAsCSVZip, ExportProps, fileName, generateCSV} from "utils/export";
+import {exportAsJSON, exportAsCSV, ExportProps, fileName, generateCSV} from "utils/export";
 import FileSaver from "file-saver";
 
 jest.mock("file-saver", () => ({saveAs: jest.fn()}));
@@ -37,12 +37,7 @@ describe("Export methods", () => {
 
   test("csv function called", () => {
     exportAsCSV(state);
-    const csvs = generateCSV(state);
-    let csv = "";
-    csvs.forEach((entry) => {
-      csv += entry;
-      csv += "\n\n";
-    });
+    const csv = generateCSV(state);
     expect(FileSaver.saveAs).toHaveBeenCalledWith({content: [csv], options: {type: "text/csv"}}, `${fileName(state)}.csv`);
   });
 
