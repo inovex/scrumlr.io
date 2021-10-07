@@ -5,12 +5,6 @@
   z-index: $menu-z-index;
 }
 
-@media (pointer: coarse) {
-  .menu {
-    overflow: hidden;
-  }
-}
-
 .menu-bars--bottom {
   &.menu-bars {
     position: fixed;
