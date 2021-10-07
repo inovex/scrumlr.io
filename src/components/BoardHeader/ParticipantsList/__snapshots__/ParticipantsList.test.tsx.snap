@@ -76,7 +76,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -85,7 +85,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
                   >
                     P0
                   </div>
-                </li>
+                </div>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
@@ -93,7 +93,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -102,7 +102,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
                   >
                     P1
                   </div>
-                </li>
+                </div>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
@@ -110,7 +110,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -119,7 +119,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
                   >
                     P2
                   </div>
-                </li>
+                </div>
                 <button
                   class="toggle-button toggle-button--left participant__permission-toggle"
                 />
@@ -213,7 +213,7 @@ exports[`ParticipantsList should render correctly on filtered participants 1`] =
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -222,7 +222,7 @@ exports[`ParticipantsList should render correctly on filtered participants 1`] =
                   >
                     P0
                   </div>
-                </li>
+                </div>
               </li>
             </ul>
           </aside>
@@ -311,7 +311,7 @@ exports[`ParticipantsList should render correctly on open 1`] = `
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -320,12 +320,12 @@ exports[`ParticipantsList should render correctly on open 1`] = `
                   >
                     P0
                   </div>
-                </li>
+                </div>
               </li>
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -334,12 +334,12 @@ exports[`ParticipantsList should render correctly on open 1`] = `
                   >
                     P1
                   </div>
-                </li>
+                </div>
               </li>
               <li
                 class="participants__list-item"
               >
-                <li
+                <div
                   class="participants-avatar"
                 >
                   <div
@@ -348,7 +348,7 @@ exports[`ParticipantsList should render correctly on open 1`] = `
                   >
                     P2
                   </div>
-                </li>
+                </div>
               </li>
             </ul>
           </aside>

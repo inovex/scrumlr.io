@@ -23,7 +23,9 @@ const BoardUsers = () => {
         </li>
       )}
       {usersToShow.map((user) => (
-        <UserAvatar key={user.id} id={user.id} name={user.displayName} group="user" />
+        <li>
+          <UserAvatar key={user.id} id={user.id} name={user.displayName} group="user" />
+        </li>
       ))}
       {!!me && <UserAvatar id={me.id} name={me.displayName} group="user" />}
     </ul>

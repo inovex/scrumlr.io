@@ -9,7 +9,7 @@ export interface UserAvatarProps {
 }
 
 const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
-  <li className={`${group}-avatar`}>
+  <div className={`${group}-avatar`}>
     {avatar ? (
       <img src={avatar} alt={name} />
     ) : (
@@ -17,7 +17,7 @@ const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
         {getInitials(name)}
       </div>
     )}
-  </li>
+  </div>
 );
 
 export default UserAvatar;
