@@ -26,7 +26,7 @@ const mapProps = (state: ExportProps) =>
     const votes = state.votes.filter((vote) => vote.note === note.id);
     const result = {
       id: note.id,
-      author: note.author,
+      author: state.users.all.find((user) => user.id === note.author)?.displayName || note.author,
       text: note.text,
       column: state.board.columns.find((column) => column.columnId === note.columnId)?.name!,
       timestamp: note.createdAt,
