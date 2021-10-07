@@ -25,14 +25,6 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
     return null;
   }
 
-  const onAccept = () => {
-    accept();
-  };
-
-  const onDecline = () => {
-    decline();
-  };
-
   return (
     <Portal onClose={onClose} darkBackground={darkBackground}>
       <div className="cookie-policy">
@@ -41,10 +33,10 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
         </div>
         <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: policy.markdown}} />
         <div className="cookie-policy__footer">
-          <button className="cookie-policy__button-decline" type="button" onClick={onDecline}>
+          <button className="cookie-policy__button-decline" type="button" onClick={decline}>
             Decline
           </button>
-          <button className="cookie-policy__button-accept" type="button" onClick={onAccept}>
+          <button className="cookie-policy__button-accept" type="button" onClick={accept}>
             Accept
           </button>
         </div>

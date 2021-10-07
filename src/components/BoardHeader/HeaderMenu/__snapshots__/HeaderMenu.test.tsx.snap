@@ -155,6 +155,29 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               >
                 <li
                   class="header-menu__item"
+                <div
+                  class="item-button__toggle-container"
+                >
+                  <div
+                    class="item-button__toggle item-button__toggle--left"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Hide
+                   columns
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <svg
+                  class="item-button__icon"
                 >
                   <button
                     class="menu__item-button"

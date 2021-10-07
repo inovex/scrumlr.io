@@ -2,11 +2,13 @@ import {useState} from "react";
 import {ApplicationState} from "types/store";
 import {useSelector} from "react-redux";
 import Portal from "components/Portal/Portal";
+import Parse from "parse";
 import "./HeaderMenu.scss";
 import {Export} from "./HeaderMenuItems/Export";
 import {Delete} from "./HeaderMenuItems/Delete";
 import {QrCode} from "./HeaderMenuItems/QRCode";
 import {Note} from "./HeaderMenuItems/Note";
+import {Columns} from "./HeaderMenuItems/Columns";
 import {Author} from "./HeaderMenuItems/Author";
 import {BoardHeaderSetting} from "./HeaderMenuItems/BoardHeaderSetting";
 
@@ -19,6 +21,8 @@ type HeaderMenuProps = {
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
+    user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
+    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
   const [boardName, setBoardName] = useState(state.board!.name);
@@ -59,6 +63,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           <div>
             <Author />
             <Note />
+            <Columns />
             <QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
             <Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
           </div>
