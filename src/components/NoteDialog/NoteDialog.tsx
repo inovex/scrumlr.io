@@ -13,6 +13,7 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {VoteClientModel} from "types/vote";
 import {Votes} from "../Votes";
+import UserAvatar from "../BoardUsers/UserAvatar";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -73,7 +74,7 @@ const NoteDialog = (props: NoteDialogProps) => {
           <footer className="note-dialog__footer">
             {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
               <figure className="note-dialog__author">
-                <img className="note-dialog__author-image" src={avatar} alt="User" />
+                <UserAvatar id={props.authorId} name={props.authorName} group="note-dialog" />
                 <figcaption className="note-dialog__author-name">{props.authorName}</figcaption>
               </figure>
             )}
