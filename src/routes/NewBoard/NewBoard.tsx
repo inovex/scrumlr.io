@@ -7,9 +7,9 @@ import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 import {useEffect, useState} from "react";
-import LoginProviders from "components/LoginProviders/LoginProviders";
+import {LoginProviders} from "components/LoginProviders";
 
-function NewBoard(props: RouteComponentProps) {
+export function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
     "Positive/Negative/Actions": [
       {name: "Positive", hidden: false, color: "backlog-blue"},
@@ -111,5 +111,3 @@ function NewBoard(props: RouteComponentProps) {
     </div>
   );
 }
-
-export default NewBoard;

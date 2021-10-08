@@ -5,7 +5,7 @@ import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
 import React, {useEffect, useRef} from "react";
-import NoteDialog from "components/NoteDialog/NoteDialog";
+import {NoteDialog} from "components/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
@@ -29,7 +29,7 @@ interface NoteProps {
   currentUserIsModerator: boolean;
 }
 
-const Note = (props: NoteProps) => {
+export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
@@ -130,5 +130,3 @@ const Note = (props: NoteProps) => {
     </li>
   );
 };
-
-export default Note;

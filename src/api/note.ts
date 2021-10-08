@@ -1,5 +1,5 @@
 import {EditNoteRequest} from "types/note";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 export const NoteAPI = {
   /**

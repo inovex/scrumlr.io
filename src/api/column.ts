@@ -1,6 +1,6 @@
 import {StatusResponse} from "types";
 import {AddColumnRequest, EditColumnRequest} from "types/column";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 export const ColumnAPI = {
   /**

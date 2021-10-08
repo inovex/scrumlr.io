@@ -13,7 +13,7 @@ type MenuToggleProps = {
   disabled?: boolean;
 };
 
-function MenuToggle(props: MenuToggleProps) {
+export function MenuToggle(props: MenuToggleProps) {
   const [value, setValue] = useState(props.value ?? false);
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
@@ -59,5 +59,3 @@ function MenuToggle(props: MenuToggleProps) {
     </button>
   );
 }
-
-export default MenuToggle;
