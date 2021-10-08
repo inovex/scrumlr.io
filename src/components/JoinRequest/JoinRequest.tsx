@@ -4,7 +4,7 @@ import avatar from "assets/avatar.png";
 import {JoinRequestClientModel} from "types/joinRequest";
 import "./JoinRequest.scss";
 
-function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
   function handleAccept(boardId: string, userIds: string[]) {
     store.dispatch(ActionFactory.acceptJoinRequests(boardId, userIds));
   }
@@ -100,5 +100,3 @@ function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
     </div>
   );
 }
-
-export default JoinRequest;

@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI, 
 import {TypedUseSelectorHook, useSelector} from "react-redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
-import {ApplicationState} from "../types/store";
+import {ApplicationState} from "types/store";
 import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";

@@ -1,11 +1,11 @@
-import {AuthenticationManager} from "../../utils/authentication/AuthenticationManager";
+import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 
 export interface LoginProvidersProps {
   originURL?: string;
 }
 
 // TODO: Include after deployment: <button onClick={() => AuthenticationManager.signInWithAuthProvider("apple")}>Sign in with Apple</button>
-const LoginProviders = ({originURL = window.location.href}) => (
+export const LoginProviders = ({originURL = window.location.href}) => (
   <div className="login-control">
     <button id="google" onClick={() => AuthenticationManager.signInWithAuthProvider("google", originURL)}>
       Sign in with Google
@@ -18,4 +18,3 @@ const LoginProviders = ({originURL = window.location.href}) => (
     </button>
   </div>
 );
-export default LoginProviders;

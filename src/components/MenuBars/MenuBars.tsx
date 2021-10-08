@@ -1,8 +1,7 @@
 import {useState} from "react";
 import Parse from "parse";
 import classNames from "classnames";
-import MenuButton from "components/MenuBars/MenuItem/MenuButton";
-import MenuToggle from "components/MenuBars/MenuItem/MenuToggle";
+import {MenuButton,MenuToggle} from "components/MenuBars/MenuItem";
 import {ReactComponent as AddImageIcon} from "assets/icon-addimage.svg";
 import {ReactComponent as AddStickerIcon} from "assets/icon-addsticker.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
@@ -17,7 +16,7 @@ import "./MenuBars.scss";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 
-function MenuBars() {
+export function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -94,5 +93,3 @@ function MenuBars() {
     </aside>
   );
 }
-
-export default MenuBars;
