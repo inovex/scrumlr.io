@@ -9,7 +9,7 @@ describe("ParticipantsList", () => {
   beforeAll(() => {
     // @ts-ignore
     store.useAppSelector = jest.fn();
-    const mockCurrentUser = jest.fn(() => ({id: "@_online"}));
+    const mockCurrentUser = jest.fn(() => ({id: "0"}));
     // @ts-ignore
     Parse.User.current = mockCurrentUser;
   });
