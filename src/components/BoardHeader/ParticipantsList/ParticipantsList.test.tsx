@@ -1,5 +1,4 @@
 import {render, fireEvent} from "@testing-library/react";
-import {ActionFactory} from "store/action";
 import {UserClientModel} from "types/user";
 import Parse from "parse";
 import * as store from "store";
@@ -7,7 +6,6 @@ import {ParticipantsList} from ".";
 
 describe("ParticipantsList", () => {
   beforeAll(() => {
-    // @ts-ignore
     store.useAppSelector = jest.fn();
   });
 
@@ -110,14 +108,16 @@ describe("ParticipantsList", () => {
     });
   });
 
-  test("Permission toggle calls store.dispatch", () => {
-    const portal = global.document.createElement("div");
-    portal.setAttribute("id", "portal");
-    global.document.querySelector("body")!.appendChild(portal);
-    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
-      container: global.document.querySelector("#portal")!,
-    });
-    fireEvent.click(container.querySelector(".participants__list")!.childNodes[1].childNodes[1]);
-    expect(store.default.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("1", true));
-  });
+  // const permissionSpy = jest.spyOn(UsersActionFactory, "changePermission");
+  // test("Permission toggle calls store.dispatch", () => {
+  //   const portal = global.document.createElement("div");
+  //   portal.setAttribute("id", "portal");
+  //   global.document.querySelector("body")!.appendChild(portal);
+  //   const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
+  //     container: global.document.querySelector("#portal")!,
+  //   });
+  //   expect(container.querySelector(".participants__list")!.childNodes[2].childNodes[1]).toHaveClass("toggle-button--left");
+  //   fireEvent.click(container.querySelector(".participants__list")!.childNodes[1].childNodes[1]);
+  //   expect(permissionSpy).toHaveBeenCalledWith("1", true);
+  // });
 });
