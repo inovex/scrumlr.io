@@ -20,14 +20,14 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   const [searchString, setSearchString] = useState("");
   const boardOwner = useAppSelector((state) => state.board.data?.owner);
 
-  const users = useAppSelector((state) => state.users.all);
   const currentUser = Parse.User.current();
-  const me = users.find((user) => user.id === currentUser!.id);
-  const them = users.filter((user) => user.id !== currentUser!.id && user.online);
+  const me = props.participants.find((user) => user.id === currentUser!.id);
+  const them = props.participants.filter((user) => user.id !== currentUser!.id && user.online);
 
   if (!props.open) {
     return null;
   }
+
   const showMe = searchString.split(" ").every((substr) => me!.displayName.toLowerCase().includes(substr));
 
   return (

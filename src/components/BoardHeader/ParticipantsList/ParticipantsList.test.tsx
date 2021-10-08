@@ -9,6 +9,9 @@ describe("ParticipantsList", () => {
   beforeAll(() => {
     // @ts-ignore
     store.useAppSelector = jest.fn();
+    const mockCurrentUser = jest.fn(() => ({id: "@_online"}));
+    // @ts-ignore
+    Parse.User.current = mockCurrentUser;
   });
 
   const createParticipantsList = (props: {open: boolean; onClose?: () => void; currentUserIsModerator: boolean; numberOfParticipants?: number}) => (
