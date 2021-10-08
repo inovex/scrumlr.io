@@ -28,7 +28,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
         aria-roledescription="author"
         class="note__author"
       >
-        <li
+        <div
           class="note-avatar"
         >
           <div
@@ -37,7 +37,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
           >
             NA
           </div>
-        </li>
+        </div>
         <figcaption
           class="note__author-name"
         />
