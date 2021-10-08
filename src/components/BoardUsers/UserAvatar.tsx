@@ -8,7 +8,7 @@ export interface UserAvatarProps {
   avatar?: string;
 }
 
-const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
+export const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
   <div className={`${group}-avatar`}>
     {avatar ? (
       <img src={avatar} alt={name} />
@@ -19,5 +19,3 @@ const UserAvatar = ({name, avatar, group}: UserAvatarProps) => (
     )}
   </div>
 );
-
-export default UserAvatar;
