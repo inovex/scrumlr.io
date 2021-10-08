@@ -1,6 +1,6 @@
 import {Color} from "constants/colors";
 import {EditBoardRequest} from "types/board";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 export const BoardAPI = {
   /**

@@ -3,9 +3,9 @@ import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppSelector} from "store";
-import {HeaderLogo} from "./HeaderLogo";
-import {HeaderMenu} from "./HeaderMenu";
-import {ParticipantsList} from "./ParticipantsList";
+import {HeaderLogo} from "components/BoardHeader/HeaderLogo";
+import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
+import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {

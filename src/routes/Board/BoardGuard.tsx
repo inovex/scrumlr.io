@@ -3,7 +3,7 @@ import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {RouteComponentProps} from "react-router";
 import {LoadingIndicator} from "components/LoadingIndicator";
-import {Board} from "./Board";
+import {Board} from "routes/Board";
 import "./BoardGuard.scss";
 
 export type BoardGuardProps = RouteComponentProps<{id: string}>;
