@@ -1,6 +1,6 @@
 import "./CookiePolicy.scss";
 import {useEffect, useState} from "react";
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import marked from "marked";
 import policyText from "./CookiePolicyText.md";
 
@@ -12,7 +12,7 @@ interface CookiePolicyProps {
   darkBackground: boolean;
 }
 
-const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
+export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
   const [policy, setPolicy] = useState({markdown: ""});
 
   useEffect(() => {
@@ -44,5 +44,3 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
     </Portal>
   );
 };
-
-export default CookiePolicy;

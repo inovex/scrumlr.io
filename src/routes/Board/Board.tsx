@@ -1,13 +1,13 @@
-import LoadingScreen from "components/LoadingScreen/LoadingScreen";
-import BoardComponent from "components/Board/Board";
-import Column from "components/Column/Column";
+import {LoadingScreen} from "components/LoadingScreen";
+import {BoardComponent} from "components/Board";
+import {Column} from "components/Column";
 import Parse from "parse";
-import Note from "components/Note/Note";
-import JoinRequest from "components/JoinRequest/JoinRequest";
+import {Note} from "components/Note";
+import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
 import {Timer} from "components/Timer";
 
-function Board() {
+export function Board() {
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
@@ -83,4 +83,3 @@ function Board() {
   }
   return <LoadingScreen />;
 }
-export default Board;

@@ -1,10 +1,10 @@
 import {useState} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
-import BoardUsers from "components/BoardUsers/BoardUsers";
+import {BoardUsers} from "components/BoardUsers";
 import {useAppSelector} from "store";
-import HeaderLogo from "./HeaderLogo/HeaderLogo";
-import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
+import {HeaderLogo} from "./HeaderLogo";
+import {HeaderMenu} from "./HeaderMenu";
 import {ParticipantsList} from "./ParticipantsList";
 import "./BoardHeader.scss";
 
@@ -14,7 +14,7 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-const BoardHeader = (props: BoardHeaderProps) => {
+export const BoardHeader = (props: BoardHeaderProps) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -48,4 +48,3 @@ const BoardHeader = (props: BoardHeaderProps) => {
     </div>
   );
 };
-export default BoardHeader;

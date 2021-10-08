@@ -6,9 +6,9 @@ import {HTML5Backend} from "react-dnd-html5-backend";
 import "./index.scss";
 import {ToastContainer} from "react-toastify";
 import Parse from "parse";
+import {CookieNotice} from "components/CookieNotice";
 import store from "./store";
 import Router from "./routes/Router";
-import CookieNotice from "./components/CookieNotice/CookieNotice";
 
 Parse.initialize("Scrumlr");
 Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || "http://localhost:4000/api";

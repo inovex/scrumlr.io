@@ -10,7 +10,7 @@ type MenuButtonProps = {
   disabled?: boolean;
 };
 
-function MenuButton(props: MenuButtonProps) {
+export function MenuButton(props: MenuButtonProps) {
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
@@ -39,5 +39,3 @@ function MenuButton(props: MenuButtonProps) {
     </button>
   );
 }
-
-export default MenuButton;
