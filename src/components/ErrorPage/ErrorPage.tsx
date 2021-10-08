@@ -6,7 +6,7 @@ export interface ErrorPageProps {
   originURL: string;
 }
 
-function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
+export function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
   const history = useHistory();
   const redirect = (newURL: string) => () => {
     history.push(newURL);
@@ -25,5 +25,3 @@ function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
     </>
   );
 }
-
-export default ErrorPage;

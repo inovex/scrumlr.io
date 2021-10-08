@@ -1,9 +1,9 @@
 import "./NoteDialog.scss";
 import avatar from "assets/avatar.png";
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import classNames from "classnames";
 import Parse from "parse";
-import IconButton from "components/IconButton/IconButton";
+import {IconButton} from "components/IconButton";
 import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as unstackIcon} from "assets/icon-unstack.svg";
 import React from "react";
@@ -30,7 +30,7 @@ interface NoteDialogProps {
   activeVoting: boolean;
 }
 
-const NoteDialog = (props: NoteDialogProps) => {
+export const NoteDialog = (props: NoteDialogProps) => {
   if (!props.show) {
     return null;
   }
@@ -145,4 +145,3 @@ const NoteDialog = (props: NoteDialogProps) => {
     </Portal>
   );
 };
-export default NoteDialog;
