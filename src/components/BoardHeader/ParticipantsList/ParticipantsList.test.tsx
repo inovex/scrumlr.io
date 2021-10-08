@@ -9,92 +9,115 @@ describe("ParticipantsList", () => {
   beforeAll(() => {
     // @ts-ignore
     store.useAppSelector = jest.fn();
-    const mockCurrentUser = jest.fn(() => ({id: "0"}));
-    // @ts-ignore
-    Parse.User.current = mockCurrentUser;
   });
 
-  const createParticipantsList = (props: {open: boolean; onClose?: () => void; currentUserIsModerator: boolean; numberOfParticipants?: number}) => (
-    <ParticipantsList
-      open={props.open}
-      onClose={() => props.onClose?.()}
-      currentUserIsModerator={props.currentUserIsModerator}
-      participants={[...Array(props.numberOfParticipants ?? 0).keys()].map((n) => ({id: `${n}`, displayName: `Participant ${n}`} as unknown as UserClientModel))}
-    />
-  );
+  const createParticipantsList = (props: {open: boolean; onClose?: () => void; currentUserIsModerator: boolean; currentUserId: string}) => {
+    const userAdmin: UserClientModel = {
+      id: "0",
+      displayName: "Adam Admin",
+      admin: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      online: true,
+    };
+    const userParticipant: UserClientModel = {
+      id: "1",
+      displayName: "Patty Participant",
+      admin: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      online: true,
+    };
+    const users = [userAdmin, userParticipant];
 
-  describe("should render correctly", () => {
-    test("on filtered participants", () => {
+    Parse.User.current = jest.fn(() => ({id: props.currentUserId}));
+
+    return <ParticipantsList open={props.open} onClose={() => props.onClose?.()} currentUserIsModerator={props.currentUserIsModerator} participants={users} />;
+  };
+
+  test("Show nothing because portal is closed", () => {
+    const {container} = render(createParticipantsList({open: false, currentUserIsModerator: false, currentUserId: "0"}), {container: global.document.querySelector("#portal")!});
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  test("Show correct number of current participants", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
+      container: global.document.querySelector("#portal")!,
+    });
+    expect(container.querySelector(".participants__header-number")).toHaveTextContent("2");
+  });
+
+  test("Show toggleButton as moderator", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
+      container: global.document.querySelector("#portal")!,
+    });
+    expect(container.querySelector(".participants__list-item")!.childNodes[1]).toHaveClass("toggle-button toggle-button--right participant__permission-toggle");
+  });
+
+  test("Don't show toggleButton as participant without moderator rights", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "0"}), {
+      container: global.document.querySelector("#portal")!,
+    });
+    expect(container.querySelector(".participants__list-item")!.firstChild).toHaveClass("participants-avatar");
+    expect(container.querySelector(".participants__list-item")!.childElementCount).toBe(1);
+  });
+
+  test("Show just the participants that's is looked for with correct initials", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "0"}), {
+      container: global.document.querySelector("#portal")!,
+    });
+    fireEvent.change(container.querySelector(".participants__header-input")!, {target: {value: "Patty Participant"}});
+    expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
+    expect(container.querySelector(".participants__list")!.childElementCount).toBe(2);
+    expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("PP");
+  });
+
+  describe("Show correct user always on top of list", () => {
+    test("Patty Participant", () => {
       const portal = global.document.createElement("div");
       portal.setAttribute("id", "portal");
       global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, numberOfParticipants: 3}), {
+      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "1"}), {
         container: global.document.querySelector("#portal")!,
       });
-      fireEvent.change(container.querySelector("input")!, {target: {value: "Participant 0"}});
-      expect(container).toMatchSnapshot();
+      expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
+      expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("PP");
+      expect(container.querySelector(".participants__list")!.childElementCount).toBe(3);
     });
 
-    test("as moderator", () => {
+    test("Adam Admin", () => {
       const portal = global.document.createElement("div");
       portal.setAttribute("id", "portal");
       global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, numberOfParticipants: 3}), {
+      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "0"}), {
         container: global.document.querySelector("#portal")!,
       });
-      expect(container).toMatchSnapshot();
+      expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
+      expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("AA");
+      expect(container.querySelector(".participants__list")!.childElementCount).toBe(3);
     });
+  });
 
-    test("on open", () => {
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, numberOfParticipants: 3}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      expect(container).toMatchSnapshot();
+  test("Permission toggle calls store.dispatch", () => {
+    const portal = global.document.createElement("div");
+    portal.setAttribute("id", "portal");
+    global.document.querySelector("body")!.appendChild(portal);
+    const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
+      container: global.document.querySelector("#portal")!,
     });
-
-    test("on close", () => {
-      const {container} = render(createParticipantsList({open: false, currentUserIsModerator: false}), {container: global.document.querySelector("#portal")!});
-      expect(container).toMatchSnapshot();
-    });
-
-    test("permission toggle should call store.dispatch", () => {
-      store.default.dispatch = jest.fn();
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, numberOfParticipants: 3}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      fireEvent.click(container.getElementsByClassName("participant__permission-toggle")[0]);
-      expect(store.default.dispatch).toHaveBeenCalled();
-      expect(store.default.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("0", true));
-    });
-
-    test("should disable permission toggle of own user", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "0"}));
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, numberOfParticipants: 3}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      expect(container.getElementsByClassName("participant__permission-toggle")[0]).toHaveAttribute("disabled");
-    });
-
-    test("should disable permission toggle of board creator", () => {
-      // @ts-ignore
-      store.useAppSelector = jest.fn(() => "0");
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
-      const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, numberOfParticipants: 3}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      expect(container.getElementsByClassName("participant__permission-toggle")[0]).toHaveAttribute("disabled");
-    });
+    fireEvent.click(container.querySelector(".participants__list")!.childNodes[1].childNodes[1]);
+    expect(store.default.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("1", true));
   });
 });

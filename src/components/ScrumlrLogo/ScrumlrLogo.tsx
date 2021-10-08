@@ -6,7 +6,7 @@ interface ScrumlrLogoProps {
   className?: string;
 }
 
-function ScrumlrLogo({accentColorClassNames, className}: ScrumlrLogoProps) {
+export const ScrumlrLogo = ({accentColorClassNames, className}: ScrumlrLogoProps) => {
   const gradientStops = [<stop key="gradient-default-stop" className="scrumlr-logo__stop" />];
 
   if (accentColorClassNames && accentColorClassNames.length > 0) {
@@ -58,6 +58,4 @@ function ScrumlrLogo({accentColorClassNames, className}: ScrumlrLogoProps) {
       </g>
     </svg>
   );
-}
-
-export default ScrumlrLogo;
+};

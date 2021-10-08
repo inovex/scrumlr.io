@@ -3,7 +3,7 @@ import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import BoardUsers from "components/BoardUsers/BoardUsers";
 import {useAppSelector} from "store";
-import ScrumlrLogo from "components/ScrumlrLogo/ScrumlrLogo";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
 import {ParticipantsList} from "./ParticipantsList";
 import "./BoardHeader.scss";
