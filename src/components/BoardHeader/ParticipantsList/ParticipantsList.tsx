@@ -7,7 +7,7 @@ import store, {useAppSelector} from "store";
 import Parse from "parse";
 import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
-import UserAvatar from "components/BoardUsers/UserAvatar";
+import {UserAvatar} from "components/BoardUsers";
 
 type ParticipantsListProps = {
   open: boolean;

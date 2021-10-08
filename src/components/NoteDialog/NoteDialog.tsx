@@ -12,8 +12,8 @@ import {NoteClientModel} from "types/note";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {VoteClientModel} from "types/vote";
+import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "../Votes";
-import UserAvatar from "../BoardUsers/UserAvatar";
 
 interface NoteDialogProps {
   noteId?: string;

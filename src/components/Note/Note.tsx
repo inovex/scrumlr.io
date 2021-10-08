@@ -10,7 +10,7 @@ import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
-import UserAvatar from "../BoardUsers/UserAvatar";
+import {UserAvatar} from "components/BoardUsers";
 
 interface NoteProps {
   isAdmin: boolean;
