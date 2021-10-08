@@ -3,7 +3,7 @@ import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import BoardUsers from "components/BoardUsers/BoardUsers";
 import {useAppSelector} from "store";
-import HeaderLogo from "./HeaderLogo/HeaderLogo";
+import ScrumlrLogo from "components/ScrumlrLogo/ScrumlrLogo";
 import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
 import {ParticipantsList} from "./ParticipantsList";
 import "./BoardHeader.scss";
@@ -21,7 +21,7 @@ const BoardHeader = (props: BoardHeaderProps) => {
 
   return (
     <div className="board-header">
-      <HeaderLogo />
+      <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       <div className="board-header__infos">
         <div
           className={classNames("info-block", {"info-block--hoverable": props.currentUserIsModerator})}

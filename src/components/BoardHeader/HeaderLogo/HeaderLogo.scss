@@ -1,16 +1,16 @@
-@import "constants/style";
+@import "src/constants/style";
 
 .board-header__logo {
-    width: 25%;
-  }
-  
+  width: 25%;
+}
+
 .board-header__logo-img {
   margin-left: 60px;
   height: 50px;
   display: none;
   text-align: center;
   padding-right: 6px;
-} 
+}
 
 @media #{$smartphone} and (prefers-color-scheme: light) {
   .board-header__logo-light-small {
