@@ -2,13 +2,13 @@ import {useEffect} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {RouteComponentProps} from "react-router";
-import LoadingIndicator from "components/LoadingIndicator/LoadingIndicator";
-import Board from "./Board";
+import {LoadingIndicator} from "components/LoadingIndicator";
+import {Board} from "routes/Board";
 import "./BoardGuard.scss";
 
 export type BoardGuardProps = RouteComponentProps<{id: string}>;
 
-const BoardGuard = (props: BoardGuardProps) => {
+export const BoardGuard = (props: BoardGuardProps) => {
   const boardStatus = useAppSelector((state) => state.board.status);
 
   useEffect(() => {
@@ -40,5 +40,3 @@ const BoardGuard = (props: BoardGuardProps) => {
     </div>
   );
 };
-
-export default BoardGuard;

@@ -1,4 +1,4 @@
-import UserAvatar from "components/BoardUsers/UserAvatar";
+import {UserAvatar} from "components/BoardUsers";
 import "./BoardUsers.scss";
 import Parse from "parse";
 import {useAppSelector} from "store";
@@ -6,7 +6,7 @@ import {useAppSelector} from "store";
 // it might be a good idea to set this number dynamically (e.g., according to the device: desktop vs. mobile)
 const NUM_OF_DISPLAYED_USERS = 4;
 
-const BoardUsers = () => {
+export const BoardUsers = () => {
   const users = useAppSelector((state) => state.users.all);
   const currentUser = Parse.User.current();
 
@@ -29,5 +29,3 @@ const BoardUsers = () => {
     </ul>
   );
 };
-
-export default BoardUsers;

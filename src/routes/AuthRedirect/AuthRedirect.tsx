@@ -2,9 +2,9 @@ import queryString from "query-string";
 import {useEffect, useState} from "react";
 import Parse from "parse";
 import {API} from "api";
-import LoadingScreen from "components/LoadingScreen/LoadingScreen";
+import {LoadingScreen} from "components/LoadingScreen";
 import {useLocation} from "react-router";
-import ErrorPage from "components/ErrorPage/ErrorPage";
+import {ErrorPage} from "components/ErrorPage";
 
 interface IAuthData {
   id: string;
@@ -12,7 +12,7 @@ interface IAuthData {
   id_token?: string;
 }
 
-function AuthRedirect() {
+export function AuthRedirect() {
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
   const location = useLocation();
   const params = queryString.parse(location.search);
@@ -69,5 +69,3 @@ function AuthRedirect() {
 
   return <LoadingScreen />;
 }
-
-export default AuthRedirect;
