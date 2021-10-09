@@ -83,7 +83,7 @@ export const Note = (props: NoteProps) => {
   });
 
   const [{isOver, canDrop}, drop] = useDrop(() => ({
-    accept: "NOTE",
+    accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
         store.dispatch(ActionFactory.editNote({id: item.id, parentId: props.noteId, columnId: props.columnId}));
