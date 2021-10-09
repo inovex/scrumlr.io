@@ -1,7 +1,27 @@
 import {BoardState} from "types/store";
-import {AddColumnRequest, EditColumnRequest} from "types/column";
+import {EditBoardRequest} from "types/board";
 import {boardReducer} from "store/reducer/board";
+import {AddColumnRequest, EditColumnRequest} from "types/column";
 import {ActionFactory} from "store/action";
+
+describe("moderation configuration reducer", () => {
+  let initialState: BoardState;
+
+  beforeEach(() => {
+    initialState = {
+      status: "unknown",
+    };
+  });
+
+  test("edit board", () => {
+    const data: EditBoardRequest = {
+      id: "test_board",
+      moderation: {userId: "test_user", status: "active"},
+    };
+    const newState = boardReducer(initialState, ActionFactory.editBoard(data));
+    expect(newState.data?.moderation).toEqual(data.moderation);
+  });
+});
 
 describe("column tests", () => {
   let initialState: BoardState;
@@ -23,7 +43,7 @@ describe("column tests", () => {
   });
 
   test("add column", () => {
-    const test_column: AddColumnRequest = {name: "test_column_2", hidden: false};
+    const test_column: AddColumnRequest = {name: "test_column_2", hidden: false, color: "backlog-blue"};
     const newState = boardReducer(initialState, ActionFactory.addColumn(test_column));
 
     expect(newState.data.columns.length).toEqual(2);
