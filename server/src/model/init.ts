@@ -11,7 +11,6 @@ const addInitialBoardSchema = async () => {
   schema.addString("accessCode");
   schema.addBoolean("showAuthors", {defaultValue: true});
   schema.addDate("timerUTCEndTime");
-  schema.addDate("expirationUTCTime");
   schema.addString("voting", {defaultValue: "disabled"});
   schema.addObject("moderation", {defaultValue: {}});
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});

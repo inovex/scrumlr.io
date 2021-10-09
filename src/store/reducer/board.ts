@@ -134,7 +134,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.encryptedContent === undefined || state.data.encryptedContent === action.board.encryptedContent) &&
         (action.board.showAuthors === undefined || state.data.showAuthors === action.board.showAuthors) &&
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
-        (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
         isEqual(stateColumns, actionColumns) &&
