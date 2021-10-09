@@ -32,6 +32,8 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
+  const columnsCount = React.Children.count(children);
+
   useEffect(() => {
     const board = boardRef.current;
 
@@ -87,7 +89,6 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     return undefined;
   }, [children]);
 
-  const columnsCount = React.Children.count(children);
   if (!children || columnsCount === 0) {
     // Empty board
     return (
