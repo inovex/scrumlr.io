@@ -1,7 +1,6 @@
 .board-users {
   margin-right: 40px;
   list-style-type: none;
-  padding: 0;
   align-self: center;
   display: flex;
   flex-direction: row-reverse;
@@ -26,6 +25,10 @@
 }
 
 @media screen and (max-width: 768px) {
+  .board-users {
+    margin-right: 8px;
+  }
+
   .board-users li:not(:last-child) {
     display: none;
   }
