@@ -101,6 +101,7 @@ export type EditableBoardAttributes = {
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
+  moderation?: {userId?: string; status: "active" | "disabled"};
 };
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
@@ -149,11 +150,7 @@ export const initializeBoardFunctions = () => {
 
     const userConfigurations: UserConfigurations = {};
     userConfigurations[user.id] = {showHiddenColumns: false};
-
-    const savedBoard = await board.save(
-      {...request, columns, userConfigurations, voteLimit: 10, votingIteration: 0, owner: user, showNotesOfOtherUsers: true},
-      {useMasterKey: true}
-    );
+    const savedBoard = await board.save({...request, columns, owner: user, userConfigurations}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -312,6 +309,18 @@ export const initializeBoardFunctions = () => {
         board.set("votingIteration", board.get("votingIteration") + 1);
       }
       board.set("voting", request.board.voting);
+    }
+    if (request.board.moderation) {
+      board.set("moderation", request.board.moderation);
+
+      if (request.board.moderation.status === "disabled") {
+        const notesQuery = new Parse.Query("Note");
+        notesQuery.equalTo("board", board);
+        notesQuery.first({useMasterKey: true}).then(async (note) => {
+          note.set("focus", false);
+          await note.save(null, {useMasterKey: true});
+        });
+      }
     }
     if (request.board.showNotesOfOtherUsers != undefined) {
       board.set("showNotesOfOtherUsers", request.board.showNotesOfOtherUsers);
