@@ -3,7 +3,6 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
-import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -24,23 +23,14 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
       }
 
-      const {userConfiguration, ...actions} = action.board;
-
-      const newState = {
+      return {
         status: state.status,
         data: {
           ...state.data!,
-          ...actions,
+          ...action.board,
           dirty: true,
         },
       };
-
-      if (userConfiguration) {
-        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
-        if (setting) {
-        }
-      }
-      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";

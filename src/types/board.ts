@@ -37,11 +37,7 @@ export type EditableBoardAttributes = {
   showNotesOfOtherUsers: boolean;
 };
 
-export type UserConfiguration = {
-  showHiddenColumns: boolean;
-};
-
-export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes & {userConfiguration: UserConfiguration}>;
+export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
 export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
