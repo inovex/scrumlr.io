@@ -96,7 +96,6 @@ export type EditableBoardAttributes = {
   name: string;
   showAuthors?: boolean;
   timerUTCEndTime?: Date;
-  expirationUTCTime?: Date;
   joinConfirmationRequired?: boolean;
   voting?: "active" | "disabled";
   votingIteration: number;
@@ -294,9 +293,6 @@ export const initializeBoardFunctions = () => {
     }
     if (request.board.timerUTCEndTime) {
       board.set("timerUTCEndTime", request.board.timerUTCEndTime);
-    }
-    if (request.board.expirationUTCTime) {
-      board.set("expirationUTCTime", request.board.expirationUTCTime);
     }
     if (request.board.name) {
       board.set("name", request.board.name);
