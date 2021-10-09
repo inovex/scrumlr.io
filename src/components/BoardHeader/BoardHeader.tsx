@@ -37,9 +37,9 @@ export const BoardHeader = (props: BoardHeaderProps) => {
           </div>
         </div>
       </div>
-      <div className="board-header__users" onClick={() => setShowParticipants((showParticipants) => !showParticipants)}>
+      <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
         <BoardUsers />
-      </div>
+      </button>
       {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
