@@ -31,6 +31,7 @@ describe("Menu", () => {
       board: {
         data: {
           id: "test-id",
+          moderation: {userId: "", status: "false"},
         },
       },
     };
@@ -46,6 +47,7 @@ describe("Menu", () => {
       board: {
         data: {
           id: "test-id",
+          moderation: {userId: "", status: "active"},
         },
       },
     };

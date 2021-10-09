@@ -11,6 +11,7 @@ type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
+  focus: boolean;
 };
 
 type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
@@ -29,6 +30,7 @@ export const initializeNoteFunctions = () => {
         author: user,
         board: Parse.Object.extend("Board").createWithoutData(request.boardId),
         columnId: request.columnId,
+        focus: false,
       },
       {
         readRoles: [getMemberRoleName(request.boardId), getAdminRoleName(request.boardId)],
@@ -42,6 +44,10 @@ export const initializeNoteFunctions = () => {
   api<{note: EditNoteRequest}, boolean>("editNote", async (user, request) => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.note.id, {useMasterKey: true});
+
+    if (!note) {
+      return false;
+    }
 
     if (request.note.parentId) {
       if (request.note.parentId === "unstack") note.unset("parent");
@@ -70,6 +76,10 @@ export const initializeNoteFunctions = () => {
       } else {
         throw new Error(`Not authorized to edit note '${request.note.id}'`);
       }
+    }
+
+    if (request.note.focus != undefined) {
+      note.set("focus", request.note.focus);
     }
 
     await note.save(null, {useMasterKey: true});
