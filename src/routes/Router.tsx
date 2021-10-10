@@ -14,7 +14,9 @@ const Router = () => (
       <Route path="/new" component={NewBoard as FunctionComponent} />
       <Route path="/login" component={LoginBoard as FunctionComponent} />
       <Route path="/auth/redirect" component={AuthRedirect as FunctionComponent} />
-      <Route path="/test" component={PassphraseDialog as FunctionComponent} />
+      <Route path="/test">
+        <PassphraseDialog onPassphrase={() => Promise.resolve(false)} />
+      </Route>
       <PrivateRoute path="/board/:id" component={BoardGuard as FunctionComponent} />
     </Switch>
   </BrowserRouter>
