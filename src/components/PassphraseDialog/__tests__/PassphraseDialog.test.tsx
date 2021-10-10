@@ -62,13 +62,15 @@ describe("<PassphraseDialog />", () => {
     });
   });
 
-  test("manual verification is visible", () => {
-    const {container} = render(<PassphraseDialog onPassphrase={jest.fn()} />);
-    expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeNull();
-  });
+  describe("manual verification hint", () => {
+    test("manual verification is visible", () => {
+      const {container} = render(<PassphraseDialog onPassphrase={jest.fn()} />);
+      expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeNull();
+    });
 
-  test("manual verification is not visible", () => {
-    const {container} = render(<PassphraseDialog manualVerificationAvailable onPassphrase={jest.fn()} />);
-    expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeDefined();
+    test("manual verification is not visible", () => {
+      const {container} = render(<PassphraseDialog manualVerificationAvailable onPassphrase={jest.fn()} />);
+      expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeDefined();
+    });
   });
 });
