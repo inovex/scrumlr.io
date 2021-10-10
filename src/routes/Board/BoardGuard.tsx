@@ -33,6 +33,8 @@ export const BoardGuard = (props: BoardGuardProps) => {
       </div>
     );
   }
+
+  // TODO add PassphraseDialog here if password is enabled
   return (
     <div className="board-guard">
       <LoadingIndicator />
