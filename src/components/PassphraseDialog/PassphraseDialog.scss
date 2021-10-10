@@ -1,0 +1,37 @@
+@import "constants/style";
+
+.passphrase-dialog {
+  margin: $margin--default;
+  padding: $padding--large;
+
+  width: 100%;
+  max-width: 420px;
+
+  height: 100%;
+  max-height: 240px;
+
+  border-radius: $margin--default;
+
+  background: $color-backlog-blue;
+}
+
+.passphrase-dialog__input-label {
+  display: block;
+
+  color: $color-white;
+  font-size: clamp(16px, 4vw, 24px);
+  font-weight: bolder;
+
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
+.passphrase-dialog__error {
+  display: block;
+
+  color: $color-retro-red;
+  font-size: clamp(12px, 1vw, 14px);
+
+  text-align: center;
+  margin-top: 0.5em;
+}

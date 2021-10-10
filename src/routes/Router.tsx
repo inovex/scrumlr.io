@@ -5,6 +5,7 @@ import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
 import PrivateRoute from "routes/PrivateRoute";
 import {AuthRedirect} from "routes/AuthRedirect";
+import PassphraseDialog from "../components/PassphraseDialog/PassphraseDialog";
 
 const Router = () => (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const Router = () => (
       <Route path="/new" component={NewBoard as FunctionComponent} />
       <Route path="/login" component={LoginBoard as FunctionComponent} />
       <Route path="/auth/redirect" component={AuthRedirect as FunctionComponent} />
+      <Route path="/test" component={PassphraseDialog as FunctionComponent} />
       <PrivateRoute path="/board/:id" component={BoardGuard as FunctionComponent} />
     </Switch>
   </BrowserRouter>
