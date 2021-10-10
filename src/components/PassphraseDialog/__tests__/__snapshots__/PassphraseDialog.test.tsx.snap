@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PassphraseDialog /> render loading screen 1`] = `
+<div
+  class="loading-screen"
+>
+  <div>
+    Logo
+  </div>
+  <div
+    class="passphrase-dialog"
+  >
+    <form
+      class="passphrase-dialog__form"
+    >
+      <label
+        class="passphrase-dialog__input-label"
+        for="passphrase"
+      >
+        Enter the passphrase to access this board
+      </label>
+      <input
+        aria-invalid="false"
+        id="passphrase"
+        type="password"
+        value=""
+      />
+      <button
+        aria-label="Toggle passphrase visibility"
+        aria-pressed="false"
+        type="button"
+      >
+        Toggle passphrase visibility
+      </button>
+      <button
+        type="submit"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+  <span>
+    Collaborative session. By continuing you're accepting our privacy policy.
+  </span>
+</div>
+`;
+
+exports[`<PassphraseDialog /> snapshot test 1`] = `
+<div
+  class="loading-screen"
+>
+  <div>
+    Logo
+  </div>
+  <div
+    class="passphrase-dialog"
+  >
+    <form
+      class="passphrase-dialog__form"
+    >
+      <label
+        class="passphrase-dialog__input-label"
+        for="passphrase"
+      >
+        Enter the passphrase to access this board
+      </label>
+      <input
+        aria-invalid="false"
+        id="passphrase"
+        type="password"
+        value=""
+      />
+      <button
+        aria-label="Toggle passphrase visibility"
+        aria-pressed="false"
+        type="button"
+      >
+        Toggle passphrase visibility
+      </button>
+      <button
+        type="submit"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+  <span>
+    Collaborative session. By continuing you're accepting our privacy policy.
+  </span>
+</div>
+`;
