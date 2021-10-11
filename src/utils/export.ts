@@ -38,12 +38,12 @@ export const generateCSV = (state: ExportProps) => {
 export const mapToExport = (state: ExportProps) =>
   state.notes.map((note) => {
     const votes = state.votes.filter((vote) => vote.note === note.id);
-    const result: Partial<ExportFormat> = {
+    const result: ExportFormat = {
       noteId: note.id || "-",
       author: state.users.all.find((user) => user.id === note.author)?.displayName || note.author,
       text: note.text,
       column: state.board.columns.find((column) => column.columnId === note.columnId)?.name!,
-      timestamp: note.createdAt?.toLocaleTimeString() || "-",
+      timestamp: note.createdAt?.toUTCString().replace(",", "") || "-",
       parent: note.parentId || "-",
       votes: votes.length,
     };
