@@ -44,12 +44,12 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             <label>Name</label>
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
-          {showMe && <Participant participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner} />}
+          {showMe && <Participant participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />}
           {them.length > 0 &&
             them
               .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
               .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
-              .map((participant) => <Participant participant={participant} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner} />)}
+              .map((participant) => <Participant participant={participant} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />)}
         </ul>
       </aside>
     </Portal>
