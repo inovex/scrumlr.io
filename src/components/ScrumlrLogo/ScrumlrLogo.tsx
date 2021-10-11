@@ -14,7 +14,7 @@ export const ScrumlrLogo = ({accentColorClassNames, className}: ScrumlrLogoProps
     gradientStops.pop();
 
     const stopInterval = Number((1 / accentColorClassNames.length).toFixed(2));
-    for (let i = 0; i < accentColorClassNames.length; i++) {
+    for (let i = 0; i < accentColorClassNames.length; i += 1) {
       gradientStops.push(<stop key={`gradient-stop${i}-start`} offset={stopInterval * i} className={`${accentColorClassNames[i]} scrumlr-logo__stop`} />);
 
       gradientStops.push(
