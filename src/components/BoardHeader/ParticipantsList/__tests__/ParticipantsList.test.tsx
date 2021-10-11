@@ -75,7 +75,7 @@ describe("ParticipantsList", () => {
     const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "0"}), {
       container: global.document.querySelector("#portal")!,
     });
-    expect(container.querySelector(".participants__list-item")!.firstChild).toHaveClass("participants-avatar");
+    expect(container.querySelector(".participants__list-item")!.firstChild).toHaveClass("participant__user-avatar");
     expect(container.querySelector(".participants__list-item")!.childElementCount).toBe(1);
   });
 

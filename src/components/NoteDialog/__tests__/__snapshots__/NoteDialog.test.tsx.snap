@@ -27,7 +27,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__author"
       >
         <div
-          class="note-dialog-avatar"
+          class="user-avatar note-dialog__user-avatar"
         >
           <div
             class="user__initials"

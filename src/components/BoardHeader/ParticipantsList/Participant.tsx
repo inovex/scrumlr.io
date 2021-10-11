@@ -5,6 +5,7 @@ import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {FunctionComponent} from "react";
+import "./Participant.scss";
 
 interface ParticipantProps {
   participant: UserClientModel;
@@ -14,7 +15,7 @@ interface ParticipantProps {
 
 export const Participant: FunctionComponent<ParticipantProps> = ({participant, currentUserIsModerator, boardOwner}) => (
   <li className="participants__list-item">
-    <UserAvatar id={participant!.id} name={participant!.displayName} group="participants" />
+    <UserAvatar id={participant!.id} name={participant!.displayName} className="participant__user-avatar" />
     {currentUserIsModerator && (
       <ToggleButton
         className="participant__permission-toggle"

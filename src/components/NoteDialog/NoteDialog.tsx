@@ -87,7 +87,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
           <footer className="note-dialog__footer">
             {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
               <figure className="note-dialog__author">
-                <UserAvatar id={props.authorId} name={props.authorName} group="note-dialog" />
+                <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__user-avatar" />
                 <figcaption className="note-dialog__author-name">{props.authorName}</figcaption>
               </figure>
             )}

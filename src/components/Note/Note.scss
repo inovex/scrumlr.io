@@ -28,6 +28,13 @@ $note__author-margin-left: 10px;
   z-index: $note-z-index;
 }
 
+.note .note__user-avatar {
+  height: 28px;
+  width: 28px;
+  font-size: 13px;
+  padding: 15px;
+}
+
 .note__in-stack {
   position: absolute;
   width: calc(100% - 16px);
