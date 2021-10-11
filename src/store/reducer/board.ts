@@ -3,7 +3,6 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
-import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -19,24 +18,19 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
+      // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
+      if (action.board.moderation) {
+        Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
+      }
 
-      const {userConfiguration, ...actions} = action.board;
-
-      const newState = {
+      return {
         status: state.status,
         data: {
           ...state.data!,
-          ...actions,
+          ...action.board,
           dirty: true,
         },
       };
-
-      if (userConfiguration) {
-        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
-        if (setting) {
-        }
-      }
-      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";
@@ -101,6 +95,15 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         }
       }
 
+      // User notification
+      if (state.data?.moderation.status !== action.board.moderation.status) {
+        if (action.board.moderation.status === "active") {
+          Toast.success("Moderation phase started!");
+        } else {
+          Toast.error("Moderation phase ended!");
+        }
+      }
+
       if (!state.data?.dirty) {
         return {
           status: state.status,
@@ -121,7 +124,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.encryptedContent === undefined || state.data.encryptedContent === action.board.encryptedContent) &&
         (action.board.showAuthors === undefined || state.data.showAuthors === action.board.showAuthors) &&
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
-        (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
         isEqual(stateColumns, actionColumns) &&

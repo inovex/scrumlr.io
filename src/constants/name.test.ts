@@ -1,4 +1,4 @@
-import {getInitials} from "./name";
+import {getInitials} from "constants/name";
 
 describe("initials", () => {
   test("name without spaces", () => {

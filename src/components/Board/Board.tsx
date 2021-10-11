@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {getColorClassName} from "constants/colors";
-import {ColumnProps} from "components/Column/Column";
+import {ColumnProps} from "components/Column";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
-import MenuBars from "components/MenuBars/MenuBars";
-import BoardHeader from "components/BoardHeader/BoardHeader";
+import {MenuBars} from "components/MenuBars";
+import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 
 export interface BoardProps {
@@ -21,7 +21,7 @@ export interface BoardState {
   showPreviousButton: boolean;
 }
 
-const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
+export const BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -149,5 +149,3 @@ const Board = ({children, name, boardstatus, currentUserIsModerator}: BoardProps
     </>
   );
 };
-
-export default Board;

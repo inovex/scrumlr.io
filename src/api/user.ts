@@ -1,5 +1,5 @@
 import {EditUserConfigurationRequest} from "types/user";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 export const UserAPI = {
   /**

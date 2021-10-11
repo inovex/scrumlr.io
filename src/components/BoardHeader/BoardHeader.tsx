@@ -1,11 +1,11 @@
 import {useState} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
-import BoardUsers from "components/BoardUsers/BoardUsers";
+import {BoardUsers} from "components/BoardUsers";
 import {useAppSelector} from "store";
-import HeaderLogo from "./HeaderLogo/HeaderLogo";
-import {HeaderMenu} from "./HeaderMenu/HeaderMenu";
-import {ParticipantsList} from "./ParticipantsList";
+import {HeaderLogo} from "components/BoardHeader/HeaderLogo";
+import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
+import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -14,7 +14,7 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-const BoardHeader = (props: BoardHeaderProps) => {
+export const BoardHeader = (props: BoardHeaderProps) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -37,9 +37,9 @@ const BoardHeader = (props: BoardHeaderProps) => {
           </div>
         </div>
       </div>
-      <div className="board-header__users" onClick={() => setShowParticipants((showParticipants) => !showParticipants)}>
+      <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
         <BoardUsers />
-      </div>
+      </button>
       {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
@@ -48,4 +48,3 @@ const BoardHeader = (props: BoardHeaderProps) => {
     </div>
   );
 };
-export default BoardHeader;

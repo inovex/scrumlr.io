@@ -1,6 +1,6 @@
 import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
-import NoteInput from "components/NoteInput/NoteInput";
+import {NoteInput} from "components/NoteInput";
 import React, {useRef} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
@@ -19,7 +19,7 @@ export interface ColumnProps {
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, hidden, currentUserIsModerator, children}: ColumnProps) => {
+export const Column = ({id, name, color, hidden, currentUserIsModerator, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -65,4 +65,3 @@ const Column = ({id, name, color, hidden, currentUserIsModerator, children}: Col
     </section>
   );
 };
-export default Column;
