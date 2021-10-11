@@ -62,7 +62,7 @@ const exportFormat = (props: TestProps) => [
     author: props.userAvaiable ? "Test user" : "test-user-id",
     text: "test-text",
     column: "Positive",
-    timestamp: props.timestampAvailable ? new Date(12345).toUTCString() : "-",
+    timestamp: props.timestampAvailable ? new Date(12345).toLocaleTimeString() : "-",
     parent: props.parentAvailable ? "note-parent" : "-",
     votes: props.noteIdAvailable ? 1 : 0,
     voting_iteration_1: props.noteIdAvailable ? 1 : 0,

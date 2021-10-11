@@ -43,7 +43,7 @@ export const mapToExport = (state: ExportProps) =>
       author: state.users.all.find((user) => user.id === note.author)?.displayName || note.author,
       text: note.text,
       column: state.board.columns.find((column) => column.columnId === note.columnId)?.name!,
-      timestamp: note.createdAt?.toUTCString() || "-",
+      timestamp: note.createdAt?.toLocaleTimeString() || "-",
       parent: note.parentId || "-",
       votes: votes.length,
     };
