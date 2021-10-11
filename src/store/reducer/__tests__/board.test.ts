@@ -43,11 +43,11 @@ describe("column tests", () => {
   });
 
   test("add column", () => {
-    const test_column: AddColumnRequest = {name: "test_column_2", hidden: false, color: "backlog-blue"};
-    const newState = boardReducer(initialState, ActionFactory.addColumn(test_column));
+    const testColumn: AddColumnRequest = {name: "test_column_2", hidden: false, color: "backlog-blue"};
+    const newState = boardReducer(initialState, ActionFactory.addColumn(testColumn));
 
     expect(newState.data.columns.length).toEqual(2);
-    expect(newState.data.columns[1]).toEqual(test_column);
+    expect(newState.data.columns[1]).toEqual(testColumn);
   });
 
   test("remove column", () => {

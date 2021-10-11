@@ -21,11 +21,11 @@ export function MenuBars() {
   const [animate, setAnimate] = useState(false);
 
   const currentUser = Parse.User.current();
-  const state = useAppSelector((state) => ({
-    admins: state.users.admins,
-    boardId: state.board.data!.id,
-    timer: state.board.data?.timerUTCEndTime,
-    moderation: state.board.data?.moderation.status,
+  const state = useAppSelector((rootState) => ({
+    admins: rootState.users.admins,
+    boardId: rootState.board.data!.id,
+    timer: rootState.board.data?.timerUTCEndTime,
+    moderation: rootState.board.data?.moderation.status,
   }));
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
