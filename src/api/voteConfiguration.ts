@@ -1,5 +1,5 @@
 import {VoteConfiguration} from "types/voteConfiguration";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 export const VoteConfigurationAPI = {
   /**

@@ -238,15 +238,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       });
 
       subscription.on("update", async (object) => {
-        let timerUTCEndTime;
-        const board = object.toJSON() as unknown as BoardServerModel;
-        if (board.timerUTCEndTime != null) {
-          const difference = await getBrowserServerTimeDifference();
-          // @ts-ignore
-          timerUTCEndTime = new Date(new Date(board.timerUTCEndTime.iso).getTime() + difference);
-        }
-
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel({...(object.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
+        dispatch(ActionFactory.updatedBoard(await mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
       subscription.on("delete", (object) => {
@@ -266,15 +258,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           createVoteSubscription();
 
           boardQuery.first().then(async (board) => {
-            const b = board?.toJSON() as unknown as BoardServerModel;
-            let timerUTCEndTime;
-            if (b.timerUTCEndTime != null) {
-              const difference = await getBrowserServerTimeDifference();
-              // @ts-ignore
-              timerUTCEndTime = new Date(new Date(b.timerUTCEndTime.iso).getTime() + difference);
-            }
-
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel({...(board?.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
+            dispatch(ActionFactory.initializeBoard(await mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
           });
         } else {
           // reconnect
