@@ -51,19 +51,10 @@ $header-menu-button-width: 24px;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .header-menu__export-container {
-    background-color: $color-dark-mode-note;
-  }
-
-  .header-menu__export-container > .header-menu__item-button:hover {
-    background-color: $header-menu-hover-color--dark;
-  }
-}
-
 .header-menu__info {
   position: relative;
   height: 86px;
+  background-color: $header-menu-color--light;
 }
 
 .info__board-name {
@@ -131,12 +122,9 @@ $header-menu-button-width: 24px;
   height: 6px;
   width: 6px;
   background-color: $header-menu-color--light;
+  border-radius: 3px;
 }
-@media (prefers-color-scheme: dark) {
-  .info__access-mode-lock::before {
-    background-color: $header-menu-color--dark;
-  }
-}
+
 .info__access-mode-lock::after {
   position: absolute;
   content: "";
@@ -158,7 +146,8 @@ $header-menu-button-width: 24px;
   position: absolute;
   height: $header-menu-button-height;
   width: 50px;
-  border: 1.5px solid #f9fafb;
+  box-shadow: 0 0 0 0.1em #f9fafb;
+  border-color: transparent;
   border-radius: 32px;
   background-color: transparent;
   color: $color-white;
@@ -183,14 +172,6 @@ $header-menu-button-width: 24px;
 }
 .header-menu__item:hover {
   background-color: $header-menu-hover-color--light;
-}
-@media (prefers-color-scheme: dark) {
-  .header-menu__item {
-    background-color: $color-dark-mode-note;
-  }
-  .header-menu__item:hover {
-    background-color: $header-menu-hover-color--dark;
-  }
 }
 
 .header-menu__item-button {
@@ -218,15 +199,10 @@ $header-menu-button-width: 24px;
   width: 180px;
   color: $color-black;
   font-size: 14px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   line-height: $header-menu-button-height;
   vertical-align: middle;
   cursor: pointer;
-}
-@media (prefers-color-scheme: dark) {
-  .item-button__label {
-    color: $color-white;
-  }
 }
 
 .item-button__toggle-switch-container {
@@ -316,11 +292,7 @@ $header-menu-button-width: 24px;
   position: relative;
   overflow: hidden;
 }
-@media (prefers-color-scheme: dark) {
-  .header-menu__delete-container {
-    background-color: $color-dark-mode-note;
-  }
-}
+
 .header-menu__delete-container--visible {
   box-sizing: border-box;
   height: 120px;
@@ -348,4 +320,31 @@ $header-menu-button-width: 24px;
 }
 .delete-container__delete-board :active {
   scale: 0.95;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-menu {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  .header-menu__info {
+    background-color: $header-menu-color--dark;
+  }
+  .header-menu__delete-container {
+    background-color: $color-dark-mode-note;
+  }
+  .item-button__label {
+    color: $color-white;
+  }
+  .header-menu__item {
+    background-color: $color-dark-mode-note;
+  }
+  .header-menu__item:hover {
+    background-color: #3d4555;
+  }
+  .header-menu__export-container {
+    background-color: $color-dark-mode-note;
+  }
+  .header-menu__export-container > .header-menu__item-button:hover {
+    background-color: $header-menu-hover-color--dark;
+  }
 }
