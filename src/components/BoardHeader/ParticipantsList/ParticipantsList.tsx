@@ -43,7 +43,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .map((participant) => (
               <li key={participant.id}>
                 <figure>
-                  <img src={avatar} />
+                  <img alt={`Avatar of ${participant.displayName}`} src={avatar} />
                   <figcaption>{participant.displayName}</figcaption>
                 </figure>
                 {/* Show the permission toggle if the current user is moderator */}

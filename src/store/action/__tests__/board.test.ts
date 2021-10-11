@@ -84,7 +84,7 @@ describe("board actions", () => {
       expect(assertion).toBe(true);
     });
 
-    test("created action", () => {
+    test("create action with change of show authors configuration", () => {
       const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", showAuthors: true});
       expect(action).toEqual({
         type: "@@SCRUMLR/editBoard",
@@ -96,7 +96,7 @@ describe("board actions", () => {
       });
     });
 
-    test("created action", () => {
+    test("create action with change of moderation settings", () => {
       const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", moderation: {userId: "test_user", status: "active"}});
       expect(action).toEqual({
         type: "@@SCRUMLR/editBoard",

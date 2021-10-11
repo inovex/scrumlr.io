@@ -76,7 +76,7 @@ describe("Column", () => {
 
     test("Hide button clicked", () => {
       const {container} = render(createColumn(true));
-      fireEvent.click(container.querySelector(".column__header-toggle")?.firstChild!);
+      fireEvent.click(container.querySelector(".column__header-toggle")!.firstChild!);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editColumn({columnId: "TestID", hidden: true}));
     });
   });
