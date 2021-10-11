@@ -28,7 +28,7 @@ export const BoardHeaderSetting = (props: BoardHeaderSettingProps) => {
   };
 
   return (
-    <div className="menu__item-button">
+    <div className="header-menu__item-button">
       <li className="header-menu__info">
         <form
           onSubmit={(e) => {

@@ -23,10 +23,10 @@ export const Export = (props: ExportProps) => {
   }));
 
   return (
-    <div className="menu__item-button" data-testid="export">
+    <div className="header-menu__item-button" data-testid="export">
       <li className="header-menu__item">
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           onClick={() => {
             props.setShowDelete(false);
             props.setShowQrCode(false);
@@ -39,7 +39,7 @@ export const Export = (props: ExportProps) => {
       </li>
       <li className={classNames("header-menu__export-container", {"header-menu__export-container--visible": props.showExport})}>
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           data-testid="export-json"
           onClick={() => {
             exportAsJSON(state);
@@ -50,7 +50,7 @@ export const Export = (props: ExportProps) => {
           <label className="item-button__label">Export as json</label>
         </button>
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           data-testid="export-csv"
           onClick={() => {
             exportAsCSV(state);

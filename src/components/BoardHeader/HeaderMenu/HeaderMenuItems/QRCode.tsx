@@ -12,10 +12,10 @@ export type QRCodeProps = {
 };
 
 export const QrCode = (props: QRCodeProps) => (
-  <div className="menu__item-button" data-testid="qrcode">
+  <div className="header-menu__item-button" data-testid="qrcode">
     <li className="header-menu__item">
       <button
-        className="menu__item-button"
+        className="header-menu__item-button"
         onClick={() => {
           props.setShowDelete(false);
           props.setShowExport(false);

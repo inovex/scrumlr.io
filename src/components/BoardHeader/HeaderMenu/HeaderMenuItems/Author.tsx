@@ -4,25 +4,27 @@ import {ActionFactory} from "store/action";
 import "./HeaderMenuItems.scss";
 import classNames from "classnames";
 
-export type AuthorProps = {};
-
-export const Author = (props: AuthorProps) => {
+export const Author = () => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));
 
   return (
-    <div className="menu__item-button" data-testid="author">
+    <div className="header-menu__item-button" data-testid="author">
       <li className="header-menu__item">
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           onClick={() => {
             store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
           }}
         >
-          <div className="item-button__toggle-container">
+          <div className="item-button__toggle-switch-container">
             <div
-              className={classNames("item-button__toggle", {"item-button__toggle--left": state.board!.showAuthors}, {"item-button__toggle--right": !state.board!.showAuthors})}
+              className={classNames(
+                "item-button__toggle-switch",
+                {"item-button__toggle-switch--left": state.board!.showAuthors},
+                {"item-button__toggle-switch--right": !state.board!.showAuthors}
+              )}
             />
           </div>
           <label className="item-button__label">{state.board!.showAuthors ? "Hide" : "Show"} authors of card</label>

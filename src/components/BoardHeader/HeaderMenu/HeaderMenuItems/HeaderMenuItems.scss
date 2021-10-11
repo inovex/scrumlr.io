@@ -2,7 +2,6 @@
 
 $header-menu-color--light: $color-backlog-blue;
 $header-menu-color--dark: $color-planning-pink;
-$header-menu-width: 288px;
 $header-menu__item-height: 48px;
 $header-menu__item-border-width: 1px;
 $header-menu-hover-color--dark: #3d4555;
@@ -36,15 +35,14 @@ $header-menu-button-width: 24px;
   border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
 }
 
-.header-menu__export-container > .menu__item-button {
+.header-menu__export-container > .header-menu__item-button {
   background-color: transparent;
   border: none;
-  padding: none;
+  padding: 0;
   height: 30px;
   width: 80%;
   border: $header-menu__item-border-width solid $color-black;
   border-radius: 32px;
-  background-color: transparent;
   color: $color-black;
   cursor: pointer;
 
@@ -58,7 +56,7 @@ $header-menu-button-width: 24px;
     background-color: $color-dark-mode-note;
   }
 
-  .header-menu__export-container > .menu__item-button:hover {
+  .header-menu__export-container > .header-menu__item-button:hover {
     background-color: $header-menu-hover-color--dark;
   }
 }
@@ -149,7 +147,7 @@ $header-menu-button-width: 24px;
   border: $header-menu__item-border-width solid $color-white;
   border-bottom: 0;
   top: -7px;
-  left: 0px;
+  left: 0;
   transition: transform 0.3s linear;
 }
 .info__access-mode-lock--unlocked::after {
@@ -195,17 +193,17 @@ $header-menu-button-width: 24px;
   }
 }
 
-.menu__item-button {
+.header-menu__item-button {
   background-color: transparent;
   border: none;
-  padding: none;
+  padding: 0;
   height: 100%;
   width: 100%;
   text-align: left;
   cursor: pointer;
 }
-.menu__item-button:focus,
-.menu__item-button:hover {
+.header-menu__item-button:focus,
+.header-menu__item-button:hover {
   outline: none;
 }
 .item-button__icon {
@@ -231,7 +229,7 @@ $header-menu-button-width: 24px;
   }
 }
 
-.item-button__toggle-container {
+.item-button__toggle-switch-container {
   width: $header-menu-icon-width;
   height: $header-menu__item-height;
   display: inline-flex;
@@ -239,13 +237,13 @@ $header-menu-button-width: 24px;
   align-items: center;
   vertical-align: middle;
 }
-.item-button__toggle {
+.item-button__toggle-switch {
   width: $header-menu-button-width;
   height: $header-menu-button-height;
   position: relative;
   display: inline-block;
 }
-.item-button__toggle::after {
+.item-button__toggle-switch::after {
   content: "";
   height: $header-menu-toggle-button-height;
   width: $header-menu-toggle-button-width;
@@ -254,7 +252,7 @@ $header-menu-button-width: 24px;
   top: calc(50% - #{$header-menu-toggle-button-height} / 2);
   transition: all 0.25s linear;
 }
-.item-button__toggle::before {
+.item-button__toggle-switch::before {
   content: "";
   height: $header-menu-toggle-height;
   width: 24px;
@@ -263,17 +261,17 @@ $header-menu-button-width: 24px;
   border-radius: $header-menu-toggle-height;
   top: calc(50% - #{$header-menu-toggle-height} / 2);
 }
-.item-button__toggle--left::after {
+.item-button__toggle-switch--left::after {
   left: 0;
   background-color: $color-backlog-blue;
 }
-.item-button__toggle--right::after {
+.item-button__toggle-switch--right::after {
   left: $header-menu-toggle-button-width;
   background-color: $color-planning-pink;
 }
 
 .header-menu__qrcode-container {
-  height: 0px;
+  height: 0;
   width: 100%;
   background-color: $color-white;
   transition: height 0.5s ease-in-out;
@@ -311,7 +309,7 @@ $header-menu-button-width: 24px;
 }
 
 .header-menu__delete-container {
-  height: 0px;
+  height: 0;
   width: 100%;
   transition: height 0.5s ease-in-out;
   background-color: $color-white;

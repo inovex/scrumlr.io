@@ -4,28 +4,26 @@ import {ActionFactory} from "store/action";
 import "./HeaderMenuItems.scss";
 import classNames from "classnames";
 
-export type NoteProps = {};
-
-export const Note = (props: NoteProps) => {
+export const Note = () => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));
 
   return (
-    <div className="menu__item-button" data-testid="note">
+    <div className="header-menu__item-button" data-testid="note">
       <li className="header-menu__item">
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           onClick={() => {
             store.dispatch(ActionFactory.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
           }}
         >
-          <div className="item-button__toggle-container">
+          <div className="item-button__toggle-switch-container">
             <div
               className={classNames(
-                "item-button__toggle",
-                {"item-button__toggle--left": state.board!.showNotesOfOtherUsers},
-                {"item-button__toggle--right": !state.board!.showNotesOfOtherUsers}
+                "item-button__toggle-switch",
+                {"item-button__toggle-switch--left": state.board!.showNotesOfOtherUsers},
+                {"item-button__toggle-switch--right": !state.board!.showNotesOfOtherUsers}
               )}
             />
           </div>

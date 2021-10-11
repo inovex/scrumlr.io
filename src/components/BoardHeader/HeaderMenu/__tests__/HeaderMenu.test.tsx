@@ -5,11 +5,14 @@ import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {exportAsJSON, exportAsCSV} from "utils/export";
-import Parse from "parse";
+import Parse, {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
+import {mocked} from "ts-jest/utils";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
+mockedUser.current = jest.fn(() => ({id: "test"} as never));
 
 jest.mock("store", () => ({
   ...jest.requireActual("store"),
@@ -66,8 +69,7 @@ const createHeaderMenu = (currentUserIsModerator: boolean) => {
 
 describe("HeaderMenu", () => {
   beforeEach(() => {
-    // @ts-ignore
-    Parse.User.current = jest.fn(() => ({id: "test"}));
+    mockedUser.current = jest.fn(() => ({id: "test"} as never));
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
     global.document.querySelector("body")!.appendChild(portal);
@@ -99,7 +101,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("author")).not.toBeNull();
 
       const button = screen.getByTestId("author")!.querySelector("button")!;
-      expect(button).toHaveClass("menu__item-button");
+      expect(button).toHaveClass("header-menu__item-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -112,7 +114,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("note")).not.toBeNull();
 
       const button = screen.getByTestId("note")!.querySelector("button")!;
-      expect(button).toHaveClass("menu__item-button");
+      expect(button).toHaveClass("header-menu__item-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -125,7 +127,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("qrcode")).not.toBeNull();
 
       const button = screen.getByTestId("qrcode")!.querySelector("button")!;
-      expect(button).toHaveClass("menu__item-button");
+      expect(button).toHaveClass("header-menu__item-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -138,7 +140,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("delete")).not.toBeNull();
 
       const button = screen.getByTestId("delete")!.querySelector("button")!;
-      expect(button).toHaveClass("menu__item-button");
+      expect(button).toHaveClass("header-menu__item-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -151,7 +153,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("export")).not.toBeNull();
 
       const button = screen.getByTestId("export")!.querySelector("button")!;
-      expect(button).toHaveClass("menu__item-button");
+      expect(button).toHaveClass("header-menu__item-button");
       fireEvent.click(button);
       await waitFor(() => {
         expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");

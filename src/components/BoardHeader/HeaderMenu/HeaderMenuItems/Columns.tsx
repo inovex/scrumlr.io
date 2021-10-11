@@ -15,22 +15,22 @@ export const Columns = (props: ColumnProps) => {
   }));
 
   return (
-    <div className="menu__item-button" data-testid="columns">
+    <div className="header-menu__item-button" data-testid="columns">
       <li className="header-menu__item">
         <button
-          className="menu__item-button"
+          className="header-menu__item-button"
           onClick={() => {
             if (state.user?.id) {
               store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
             }
           }}
         >
-          <div className="item-button__toggle-container">
+          <div className="item-button__toggle-switch-container">
             <div
               className={classNames(
-                "item-button__toggle",
-                {"item-button__toggle--left": state.userConfiguration?.showHiddenColumns},
-                {"item-button__toggle--right": !state.userConfiguration?.showHiddenColumns}
+                "item-button__toggle-switch",
+                {"item-button__toggle-switch--left": state.userConfiguration?.showHiddenColumns},
+                {"item-button__toggle-switch--right": !state.userConfiguration?.showHiddenColumns}
               )}
             />
           </div>
