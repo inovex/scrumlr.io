@@ -13,9 +13,9 @@
 }
 
 .board-header__infos {
-  width: 50%;
   display: flex;
   justify-content: center;
+  flex: 1 1 100%;
 }
 
 .info-block {
