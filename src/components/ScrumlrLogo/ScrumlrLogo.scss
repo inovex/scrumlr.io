@@ -21,9 +21,7 @@
 }
 
 .scrumlr-logo {
-  margin-left: 30px;
-  height: 64px;
-  padding-right: 6px;
+  height: 48px;
 }
 
 .scrumlr-logo__stop {
@@ -40,23 +38,20 @@
   }
 }
 
-.scrumlr-logo__text--desktop,
-.scrumlr-logo__underline--desktop {
+.scrumlr-logo--mobile {
+  min-width: 44px;
+}
+
+.scrumlr-logo--desktop {
   display: none;
 }
 
 @media screen and (min-width: 768px) {
-  .scrumlr-logo {
-    margin-left: 60px;
-  }
-
-  .scrumlr-logo__text--desktop,
-  .scrumlr-logo__underline--desktop {
+  .scrumlr-logo--desktop {
     display: initial;
   }
 
-  .scrumlr-logo__text--mobile,
-  .scrumlr-logo__underline--mobile {
+  .scrumlr-logo--mobile {
     display: none;
   }
 }

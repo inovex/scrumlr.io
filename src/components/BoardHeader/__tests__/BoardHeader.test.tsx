@@ -23,7 +23,7 @@ const createBoardHeader = (name: string, boardstatus: string) => {
 
   return (
     <Provider store={store}>
-      <BoardHeader name={name} boardstatus={boardstatus} />
+      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
     </Provider>
   );
 };
@@ -47,17 +47,17 @@ describe("Board Header", () => {
   describe("show board-header-components", () => {
     test("show board-header__logo", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header")!.firstChild).toHaveClass("board-header__logo");
+      expect(container.querySelector(".board-header__logo")).toBeDefined();
     });
 
     test("show board-header__infos", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header")!.childNodes[1]).toHaveClass("board-header__infos");
+      expect(container.querySelector(".board-header__infos")).toBeDefined();
     });
 
     test("show board-header__users", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header")!.childNodes[2]).toHaveClass("board-header__users");
+      expect(container.querySelector(".board-header__users")).toBeDefined();
     });
   });
 
