@@ -23,8 +23,8 @@ export const BoardUsers = () => {
         </li>
       )}
       {usersToShow.map((user) => (
-        <li>
-          <UserAvatar key={user.id} id={user.id} name={user.displayName} />
+        <li key={user.id}>
+          <UserAvatar id={user.id} name={user.displayName} />
         </li>
       ))}
       {!!me && <UserAvatar id={me.id} name={me.displayName} />}
