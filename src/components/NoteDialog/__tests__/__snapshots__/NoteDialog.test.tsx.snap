@@ -124,7 +124,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
                   icon-delete.svg
                 </svg>
               </button>
-                                    
+               
             </li>
             <li
               class="note-dialog__option"
@@ -196,7 +196,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
                   icon-delete.svg
                 </svg>
               </button>
-                                    
+               
             </li>
             <li
               class="note-dialog__option"

@@ -1,8 +1,10 @@
+export type JoinRequestStatus = "pending" | "accepted" | "rejected";
+
 export interface JoinRequestServerModel extends Parse.Object {
   objectId: string;
   board: Parse.Object;
   user: Parse.Object;
-  status: "pending" | "accepted" | "rejected";
+  status: JoinRequestStatus;
   updatedAt: Date;
   createdAt: Date;
 }
@@ -12,7 +14,7 @@ export interface JoinRequestClientModel {
   userId: string;
   displayName: string;
   boardId: string;
-  status: "pending" | "accepted" | "rejected";
+  status: JoinRequestStatus;
 }
 
 export const mapJoinRequestServerToClientModel = (joinRequest: JoinRequestServerModel) => ({
