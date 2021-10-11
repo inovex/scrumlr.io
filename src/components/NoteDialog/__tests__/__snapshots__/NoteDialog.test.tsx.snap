@@ -26,11 +26,16 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
       <figure
         class="note-dialog__author"
       >
-        <img
-          alt="User"
-          class="note-dialog__author-image"
-          src="avatar.png"
-        />
+        <div
+          class="user-avatar note-dialog__user-avatar"
+        >
+          <div
+            class="user__initials"
+            title=""
+          >
+            NA
+          </div>
+        </div>
         <figcaption
           class="note-dialog__author-name"
         />
