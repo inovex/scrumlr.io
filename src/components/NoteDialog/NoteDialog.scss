@@ -64,11 +64,6 @@
   font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
   margin-bottom: $note__text-margin-bottom;
   padding: 5px;
   border: 1px dashed transparent;
