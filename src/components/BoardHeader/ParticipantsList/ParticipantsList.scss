@@ -27,7 +27,7 @@ $header-left_distance: 24px;
 }
 
 .participants__header-text {
-  margin-top: 0;
+  margin: 0;
   font-weight: bold;
   font-size: 18px;
   line-height: 18px;
@@ -44,8 +44,8 @@ $header-left_distance: 24px;
   line-height: 18px;
   letter-spacing: 0.25px;
   position: absolute;
-  top: 12px;
-  left: $header-left_distance + 110px;
+  top: -12px;
+  right: -12px;
 }
 
 .participants__header-input {
