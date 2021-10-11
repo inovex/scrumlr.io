@@ -13,9 +13,8 @@ interface ParticipantProps {
 }
 
 export const Participant: FunctionComponent<ParticipantProps> = ({participant, currentUserIsModerator, boardOwner}) => (
-  <li className="participants__list-item" key={`Participant ${participant!.id}`}>
-    <UserAvatar key={`UserAvatar of ${participant!.id}`} id={participant!.id} name={participant!.displayName} group="participants" />
-    {/* Show the permission toggle if the current user is moderator */}
+  <li className="participants__list-item">
+    <UserAvatar id={participant!.id} name={participant!.displayName} group="participants" />
     {currentUserIsModerator && (
       <ToggleButton
         className="participant__permission-toggle"
