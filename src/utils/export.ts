@@ -2,34 +2,48 @@ import {UsersState} from "types/store";
 import {parse} from "json2csv";
 import {NoteClientModel} from "types/note";
 import {VoteClientModel} from "types/vote";
-import {BoardClientModel} from "types/board";
 import {saveAs} from "file-saver";
+import {ColumnClientModel} from "types/column";
 
 export type ExportProps = {
-  board: BoardClientModel;
+  board: {
+    columns: ColumnClientModel[];
+    votingIteration: number;
+    name: string;
+  };
   notes: NoteClientModel[];
   votes: VoteClientModel[];
   users: UsersState;
 };
 
+export type ExportFormat = {
+  noteId: string;
+  author: string;
+  text: string;
+  column: string;
+  timestamp: string;
+  parent: string;
+  votes: number;
+};
+
 export const generateCSV = (state: ExportProps) => {
-  const fields = ["id", "author", "text", "column", "timestamp", "parent", "votes"];
+  const fields = ["noteId", "author", "text", "column", "timestamp", "parent", "votes"];
   for (let i = 1; i <= state.board.votingIteration; ++i) {
     fields.push(`voting_iteration_${i}`);
   }
-  const csv = parse(mapProps(state), {quote: "", fields});
+  const csv = parse(mapToExport(state), {quote: "", fields});
   return csv;
 };
 
-const mapProps = (state: ExportProps) =>
+export const mapToExport = (state: ExportProps) =>
   state.notes.map((note) => {
     const votes = state.votes.filter((vote) => vote.note === note.id);
-    const result = {
-      id: note.id,
+    const result: Partial<ExportFormat> = {
+      noteId: note.id || "-",
       author: state.users.all.find((user) => user.id === note.author)?.displayName || note.author,
       text: note.text,
       column: state.board.columns.find((column) => column.columnId === note.columnId)?.name!,
-      timestamp: note.createdAt,
+      timestamp: note.createdAt?.toUTCString() || "-",
       parent: note.parentId || "-",
       votes: votes.length,
     };
@@ -51,7 +65,7 @@ export const exportAsCSV = (state: ExportProps) => {
 };
 
 export const exportAsJSON = (state: ExportProps) => {
-  const content = JSON.stringify(state);
+  const content = JSON.stringify(mapToExport(state), null, 2);
   const blob = new Blob([content], {type: "application/json"});
   saveAs(blob, `${fileName(state)}.json`);
 };
