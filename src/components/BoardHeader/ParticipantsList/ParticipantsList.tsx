@@ -44,7 +44,6 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             <label>Name</label>
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
-
           {showMe && <Participant participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner} />}
           {them.length > 0 &&
             them
