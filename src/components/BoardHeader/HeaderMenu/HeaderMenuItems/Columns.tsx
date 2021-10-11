@@ -18,9 +18,7 @@ export const Columns = () => {
         <button
           className="header-menu__item-button"
           onClick={() => {
-            if (state.user?.id) {
               store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
-            }
           }}
         >
           <div className="item-button__toggle-switch-container">
