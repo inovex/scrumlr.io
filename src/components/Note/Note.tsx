@@ -57,11 +57,9 @@ export const Note = (props: NoteProps) => {
       } else {
         setShowDialog(false);
       }
-    } else {
+    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
       // Disable dialog for all other users
-      if (props.activeModeration.userId !== Parse.User.current()?.id) {
-        setShowDialog(false);
-      }
+      setShowDialog(false);
     }
   }, [props.activeModeration.status]);
 

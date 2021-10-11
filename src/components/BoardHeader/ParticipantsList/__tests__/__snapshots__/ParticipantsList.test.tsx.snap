@@ -64,6 +64,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 0"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -77,6 +78,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 1"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -90,6 +92,7 @@ exports[`ParticipantsList should render correctly as moderator 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 2"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -177,6 +180,7 @@ exports[`ParticipantsList should render correctly on filtered participants 1`] =
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 0"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -259,6 +263,7 @@ exports[`ParticipantsList should render correctly on open 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 0"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -269,6 +274,7 @@ exports[`ParticipantsList should render correctly on open 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 1"
                     src="avatar.png"
                   />
                   <figcaption>
@@ -279,6 +285,7 @@ exports[`ParticipantsList should render correctly on open 1`] = `
               <li>
                 <figure>
                   <img
+                    alt="Avatar of Participant 2"
                     src="avatar.png"
                   />
                   <figcaption>
