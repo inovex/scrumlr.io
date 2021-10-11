@@ -1,7 +1,7 @@
 import "./CookieNotice.scss";
 import React from "react";
 import {Portal} from "components/Portal";
-import {CookiePolicy} from "components/CookieNotice";
+import {CookiePolicy} from "./CookiePolicy";
 
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 

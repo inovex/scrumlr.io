@@ -8,6 +8,7 @@ export interface NoteServerModel extends Parse.Object {
   text: string;
   author: Parse.Object;
   parent?: Parse.Object;
+  focus: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,6 +32,9 @@ export interface NoteClientModel {
   /** The parent of this note (if stacked). */
   parentId?: string;
 
+  /** Focused during moderation phase. */
+  focus: boolean;
+
   /** The creation date of this object. */
   createdAt?: Date;
 
@@ -50,6 +54,7 @@ type EditableNoteAttributes = {
   columnId: string;
   parentId: string;
   text: string;
+  focus: boolean;
 };
 
 export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
@@ -60,6 +65,7 @@ export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientMod
   text: note.get("text"),
   author: note.get("author").id,
   parentId: note.get("parent")?.id,
+  focus: note.get("focus"),
   createdAt: note.get("createdAt"),
   updatedAt: note.get("updatedAt"),
   dirty: false,

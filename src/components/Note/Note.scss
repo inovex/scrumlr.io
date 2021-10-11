@@ -165,3 +165,11 @@ $note__author-margin-left: 10px;
 .note__delete-button--visible {
   display: block;
 }
+
+.note__root-disabled-click {
+  cursor: not-allowed;
+}
+
+.note__disabled-click {
+  pointer-events: none;
+}

@@ -19,7 +19,7 @@ ReactDOM.render(
     <Provider store={store}>
       <DndProvider backend={HTML5Backend}>
         <Router />
-        <ToastContainer />
+        <ToastContainer limit={2} />
         <CookieNotice />
       </DndProvider>
     </Provider>

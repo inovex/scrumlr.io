@@ -21,10 +21,11 @@ export function MenuBars() {
   const [animate, setAnimate] = useState(false);
 
   const currentUser = Parse.User.current();
-  const state = useAppSelector((state) => ({
-    admins: state.users.admins,
-    boardId: state.board.data!.id,
-    timer: state.board.data?.timerUTCEndTime,
+  const state = useAppSelector((rootState) => ({
+    admins: rootState.users.admins,
+    boardId: rootState.board.data!.id,
+    timer: rootState.board.data?.timerUTCEndTime,
+    moderation: rootState.board.data?.moderation.status,
   }));
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
@@ -42,6 +43,10 @@ export function MenuBars() {
     } else {
       store.dispatch(ActionFactory.cancelTimer());
     }
+  };
+
+  const toggleModeration = (active: boolean) => {
+    store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
   };
 
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
@@ -74,7 +79,14 @@ export function MenuBars() {
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <MenuToggle value={state.timer != null} direction="left" toggleStartLabel="Start timer" toggleStopLabel="Stop timer" icon={TimerIcon} onToggle={toggleTimer} />
             <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
-            <MenuToggle disabled direction="left" toggleStartLabel="Start focused mode" toggleStopLabel="End focused mode" icon={FocusIcon} onToggle={() => null} />
+            <MenuToggle
+              value={state.moderation === "active"}
+              direction="left"
+              toggleStartLabel="Start focused mode"
+              toggleStopLabel="End focused mode"
+              icon={FocusIcon}
+              onToggle={toggleModeration}
+            />
           </div>
         </section>
       )}

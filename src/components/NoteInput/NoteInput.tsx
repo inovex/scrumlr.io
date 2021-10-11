@@ -62,9 +62,9 @@ export const CustomInput = withStyles(
 export const NoteInput = ({columnId}: NoteInputProps) => {
   const [value, setValue] = React.useState("");
 
-  function handleChangeNotetext(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-  }
+  };
   const onAddNote = () => {
     if (value) {
       store.dispatch(ActionFactory.addNote(columnId!, value));

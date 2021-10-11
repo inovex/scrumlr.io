@@ -6,7 +6,7 @@ import {MenuBars} from "components/MenuBars";
 
 const mockStore = configureStore();
 
-const createMenuBars = (state: {}) => {
+const createMenuBars = (state: Record<string, unknown>) => {
   const store = mockStore(state);
 
   return (
@@ -31,6 +31,7 @@ describe("Menu", () => {
       board: {
         data: {
           id: "test-id",
+          moderation: {userId: "", status: "false"},
         },
       },
     };
@@ -46,6 +47,7 @@ describe("Menu", () => {
       board: {
         data: {
           id: "test-id",
+          moderation: {userId: "", status: "active"},
         },
       },
     };
