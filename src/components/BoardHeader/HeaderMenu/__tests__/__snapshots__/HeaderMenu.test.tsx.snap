@@ -1,0 +1,209 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HeaderMenu should render correctly on close 1`] = `<div />`;
+
+exports[`HeaderMenu should render correctly on open 1`] = `
+<div
+  id="portal"
+>
+  <div
+    class="portal"
+    role="dialog"
+  >
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="1"
+    />
+    <div
+      data-focus-lock-disabled="false"
+    >
+      <div
+        class="portal__frame"
+      >
+        <div
+          class="portal__content"
+          role="dialog"
+        >
+          <ul
+            class="header-menu"
+          >
+            <li
+              class="header-menu__info"
+            >
+              <form>
+                <input
+                  class="info__board-name"
+                  disabled=""
+                  value="Header Menu Test"
+                />
+                <button
+                  class="info__access-mode"
+                  disabled=""
+                  type="button"
+                >
+                  <div
+                    class="info__access-mode-lock"
+                  />
+                  Private Session
+                </button>
+                <button
+                  class="info__edit-button"
+                  type="submit"
+                >
+                  edit
+                </button>
+              </form>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <div
+                  class="item-button__toggle-container"
+                >
+                  <div
+                    class="item-button__toggle item-button__toggle--left"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Hide
+                   authors of card
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <div
+                  class="item-button__toggle-container"
+                >
+                  <div
+                    class="item-button__toggle item-button__toggle--right"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Show
+                   notes of other users
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <div
+                  class="item-button__toggle-container"
+                >
+                  <div
+                    class="item-button__toggle item-button__toggle--left"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Hide
+                   columns
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <svg
+                  class="item-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <label
+                  class="item-button__label"
+                >
+                  Share board
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__qrcode-container"
+            >
+              <canvas
+                class="qrcode-container__qrcode"
+                height="260"
+                style="height: 260px; width: 260px;"
+                width="260"
+              />
+              <button
+                class="qrcode-container__copy-to-clipboard"
+              >
+                Copy Invite URL
+              </button>
+            </li>
+            <li
+              class="header-menu__item"
+            >
+              <button
+                class="menu__item-button"
+              >
+                <svg
+                  class="item-button__icon"
+                >
+                  icon-delete.svg
+                </svg>
+                <label
+                  class="item-button__label"
+                >
+                  Delete board
+                </label>
+              </button>
+            </li>
+            <li
+              class="header-menu__delete-container"
+            >
+              <label
+                class="delete-container__warning-label"
+              >
+                <b>
+                  Are you absolutely sure that you want to delete the board?
+                </b>
+                 This action 
+                <b>
+                  cannot
+                </b>
+                 be undone.
+              </label>
+              <button
+                class="delete-container__delete-board"
+              >
+                Delete board
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;

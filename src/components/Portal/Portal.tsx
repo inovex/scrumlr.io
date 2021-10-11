@@ -16,7 +16,7 @@ export interface PortalProps {
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-const Portal = ({onClose, children, darkBackground, disableOverflow}: PortalProps) => {
+export const Portal = ({onClose, children, darkBackground, disableOverflow}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
@@ -69,5 +69,3 @@ const Portal = ({onClose, children, darkBackground, disableOverflow}: PortalProp
     portal
   );
 };
-
-export default Portal;

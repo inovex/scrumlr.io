@@ -1,31 +1,29 @@
 import {Color} from "constants/colors";
-import Parse from "parse";
+import {ColumnClientModel, ColumnServerModel} from "types/column";
+import {UserConfigurationClientModel, UserConfigurationServerModel} from "./user";
+import {getBrowserServerTimeDifference} from "../utils/timer";
 
 export interface BoardServerModel {
   objectId: string;
   name: string;
-  columns: {
-    [columnId: string]: {
-      name: string;
-      color: string;
-      hidden: boolean;
-    };
-  };
-  userConfigurations: {
-    [userId: string]: {};
-  };
+  columns: ColumnServerModel;
+  userConfigurations: UserConfigurationServerModel;
   accessCode: string;
   joinConfirmationRequired: boolean;
   encryptedContent: boolean;
   showAuthors: boolean;
-  timerUTCEndTime?: Date;
-  expirationUTCTime: Date;
+  timerUTCEndTime: {
+    iso: string;
+  };
   voting: "active" | "disabled";
+  moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  owner: Parse.Object;
+  createdAt: string;
+  updatedAt: string;
+  owner: {
+    objectId: string;
+  };
 }
 
 export type EditableBoardAttributes = {
@@ -35,57 +33,62 @@ export type EditableBoardAttributes = {
   encryptedContent: boolean;
   showAuthors: boolean;
   timerUTCEndTime?: Date;
-  expirationUTCTime: Date;
   voting: "active" | "disabled";
+  moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
 };
 
-export type UserConfiguration = {};
-
-export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes & {userConfiguration: UserConfiguration}>;
+export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
 export interface BoardClientModel extends EditableBoardAttributes {
   id: string;
-  columns: {
-    id?: string;
-    name: string;
-    color: Color;
-    hidden: boolean;
-  }[];
-  userConfigurations: {
-    id: string;
-  }[];
+  columns: ColumnClientModel[];
+  userConfigurations: UserConfigurationClientModel[];
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
-  owner: any;
+  owner: string;
 }
 
-export const mapBoardServerToClientModel = (board: BoardServerModel): BoardClientModel => ({
-  id: board.objectId,
-  name: board.name,
-  columns: Object.keys(board.columns).map((columnId) => ({
-    id: columnId,
-    name: board.columns[columnId].name,
-    color: board.columns[columnId].color as Color,
-    hidden: board.columns[columnId].hidden,
-  })),
-  userConfigurations: Object.keys(board.userConfigurations).map((userId) => ({
-    id: userId,
-  })),
-  accessCode: board.accessCode,
-  joinConfirmationRequired: board.joinConfirmationRequired,
-  encryptedContent: board.encryptedContent,
-  showAuthors: board.showAuthors,
-  timerUTCEndTime: board.timerUTCEndTime,
-  expirationUTCTime: board.expirationUTCTime,
-  voting: board.voting,
-  votingIteration: board.votingIteration,
-  showNotesOfOtherUsers: board.showNotesOfOtherUsers,
-  createdAt: board.createdAt,
-  updatedAt: board.updatedAt,
-  dirty: false,
-  // @ts-ignore
-  owner: board.owner.objectId,
-});
+export const mapBoardServerToClientModel = async (board: BoardServerModel): Promise<BoardClientModel> => {
+  let timerUTCEndTime;
+  if (board.timerUTCEndTime != null) {
+    const difference = await getBrowserServerTimeDifference();
+    timerUTCEndTime = new Date(new Date(board.timerUTCEndTime.iso).getTime() + difference);
+  }
+
+  return {
+    id: board.objectId,
+    name: board.name,
+    columns: Object.keys(board.columns).map(
+      (columnId) =>
+        ({
+          columnId,
+          name: board.columns[columnId].name,
+          color: board.columns[columnId].color as Color,
+          hidden: board.columns[columnId].hidden,
+        } as ColumnClientModel)
+    ),
+    userConfigurations: Object.keys(board.userConfigurations).map(
+      (id) =>
+        ({
+          id,
+          showHiddenColumns: board.userConfigurations[id].showHiddenColumns,
+        } as UserConfigurationClientModel)
+    ),
+    accessCode: board.accessCode,
+    joinConfirmationRequired: board.joinConfirmationRequired,
+    encryptedContent: board.encryptedContent,
+    showAuthors: board.showAuthors,
+    timerUTCEndTime,
+    voting: board.voting,
+    votingIteration: board.votingIteration,
+    showNotesOfOtherUsers: board.showNotesOfOtherUsers,
+    createdAt: new Date(board.createdAt),
+    updatedAt: new Date(board.updatedAt),
+    dirty: false,
+    owner: board.owner.objectId,
+    moderation: board.moderation,
+  };
+};

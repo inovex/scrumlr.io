@@ -1,20 +1,25 @@
 import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
-import NoteInput from "components/NoteInput/NoteInput";
+import {NoteInput} from "components/NoteInput";
 import React, {useRef} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
+// need to replace icon-unstack.svg with icon-visible.svg/icon-hidden.svg
+import {ReactComponent as visibleIcon} from "assets/icon-unstack.svg";
+import {ReactComponent as hiddenIcon} from "assets/icon-unstack.svg";
 
 export interface ColumnProps {
   id: string;
   name: string;
   color: Color;
+  hidden: boolean;
+  currentUserIsModerator: boolean;
   children?: React.ReactNode;
 }
 
-const Column = ({id, name, color, children}: ColumnProps) => {
+export const Column = ({id, name, color, hidden, currentUserIsModerator, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -34,6 +39,8 @@ const Column = ({id, name, color, children}: ColumnProps) => {
     }
   }
 
+  const Icon = hidden ? hiddenIcon : visibleIcon;
+
   return (
     <section className={`column ${getColorClassName(color)}`} ref={columnRef}>
       <div className="column__content">
@@ -41,6 +48,13 @@ const Column = ({id, name, color, children}: ColumnProps) => {
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
+            {currentUserIsModerator && (
+              <div className="column__header-toggle">
+                <button className="column__header-toggle-button" onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}>
+                  <Icon className="column__header-toggle-button-icon" />
+                </button>
+              </div>
+            )}
           </div>
           <NoteInput columnId={id} />
         </header>
@@ -51,4 +65,3 @@ const Column = ({id, name, color, children}: ColumnProps) => {
     </section>
   );
 };
-export default Column;

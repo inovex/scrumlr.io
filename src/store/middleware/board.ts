@@ -11,6 +11,7 @@ import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
 import {Toast} from "utils/Toast";
 import {getBrowserServerTimeDifference} from "utils/timer";
+import {StatusResponse} from "types";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -65,6 +66,18 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       adminsQuery.equalTo("name", `admin_of_${action.boardId}`);
       const memberQuery = new Parse.Query(Parse.Role);
       memberQuery.equalTo("name", `member_of_${action.boardId}`);
+
+      // Subscription to detect changes in the user configuration
+      const updateQuery = new Parse.Query(Parse.User);
+      updateQuery.contains("boards", action.boardId);
+      updateQuery.subscribe().then((subscription) => {
+        closeSubscriptions.push(() => {
+          subscription.unsubscribe();
+        });
+        subscription.on("update", (result) => {
+          dispatch(ActionFactory.updateUser(result.toJSON() as unknown as UserServerModel));
+        });
+      });
 
       const usersQuery = Parse.Query.or(adminsQuery, memberQuery);
       usersQuery.subscribe().then((subscription) => {
@@ -228,15 +241,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       });
 
       subscription.on("update", async (object) => {
-        let timerUTCEndTime;
-        const board = object.toJSON() as unknown as BoardServerModel;
-        if (board.timerUTCEndTime != null) {
-          const difference = await getBrowserServerTimeDifference();
-          // @ts-ignore
-          timerUTCEndTime = new Date(new Date(board.timerUTCEndTime.iso).getTime() + difference);
-        }
-
-        dispatch(ActionFactory.updatedBoard(mapBoardServerToClientModel({...(object.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
+        dispatch(ActionFactory.updatedBoard(await mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
       subscription.on("delete", (object) => {
@@ -256,15 +261,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           createVoteSubscription();
 
           boardQuery.first().then(async (board) => {
-            const b = board?.toJSON() as unknown as BoardServerModel;
-            let timerUTCEndTime;
-            if (b.timerUTCEndTime != null) {
-              const difference = await getBrowserServerTimeDifference();
-              // @ts-ignore
-              timerUTCEndTime = new Date(new Date(b.timerUTCEndTime.iso).getTime() + difference);
-            }
-
-            dispatch(ActionFactory.initializeBoard(mapBoardServerToClientModel({...(board?.toJSON() as unknown as BoardServerModel), timerUTCEndTime})));
+            dispatch(ActionFactory.initializeBoard(await mapBoardServerToClientModel(board?.toJSON() as unknown as BoardServerModel)));
           });
         } else {
           // reconnect
@@ -282,13 +279,12 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   }
   if (action.type === ActionType.DeleteBoard) {
     const reponse = await API.deleteBoard(action.boardId);
-    console.log(reponse);
     if (reponse) {
       document.location.pathname = "/new";
     }
   }
   if (action.type === ActionType.CancelVoting) {
-    const response = (await API.cancelVoting(action.boardId)) as {status: string; description: string};
+    const response = (await API.cancelVoting(action.boardId)) as StatusResponse;
     if (response.status === "Error") {
       Toast.error(response.description);
     }

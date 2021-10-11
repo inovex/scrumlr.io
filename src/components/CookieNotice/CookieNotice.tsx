@@ -1,11 +1,11 @@
 import "./CookieNotice.scss";
 import React from "react";
-import Portal from "components/Portal/Portal";
-import CookiePolicy from "./CookiePolicy";
+import {Portal} from "components/Portal";
+import {CookiePolicy} from "components/CookieNotice";
 
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 
-const CookieNotice = () => {
+export const CookieNotice = () => {
   const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
   const [showCookiePolicy, setShowCookiePolicy] = React.useState<boolean>(false);
   const toggleShowCookiePolicy = () => {
@@ -22,7 +22,6 @@ const CookieNotice = () => {
    */
   const saveToStorage = (key: string, value: string) => {
     localStorage.setItem(key, value);
-    document.cookie = `${key}=${value};`;
   };
 
   /**
@@ -88,5 +87,3 @@ const CookieNotice = () => {
     </Portal>
   );
 };
-
-export default CookieNotice;

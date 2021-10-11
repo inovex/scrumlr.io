@@ -8,4 +8,9 @@ export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
     const boardId = stateAPI.getState().board.data!.id;
     API.changePermission(action.userId, boardId, action.moderator);
   }
+
+  if (action.type === ActionType.EditUserConfiguration) {
+    const boardId = stateAPI.getState().board.data!.id;
+    API.editUserConfiguration(boardId, action.userConfigurationRequest);
+  }
 };

@@ -3,7 +3,6 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
-import Parse from "parse";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -13,29 +12,25 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: action.board,
       };
     }
+
     case ActionType.EditBoard: {
       // Moderator started voting phase - notification to moderator (user who started the voting)
       if (action.board.voting) {
         Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
       }
-      action.board;
-      const {userConfiguration, ...actions} = action.board;
+      // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
+      if (action.board.moderation) {
+        Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
+      }
 
-      const newState = {
+      return {
         status: state.status,
         data: {
           ...state.data!,
-          ...actions,
+          ...action.board,
           dirty: true,
         },
       };
-
-      if (userConfiguration) {
-        const setting = newState.data.userConfigurations.find((user) => user.id === Parse.User.current()?.id);
-        if (setting) {
-        }
-      }
-      return newState;
     }
     case ActionType.DeleteBoard: {
       // document.location.pathname = "/new";
@@ -49,9 +44,9 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           columns: [
             ...state.data!.columns,
             {
-              name: action.name,
-              color: action.color,
-              hidden: action.hidden,
+              name: action.column.name,
+              color: action.column.color,
+              hidden: action.column.hidden,
             },
           ],
           dirty: true,
@@ -60,13 +55,13 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.EditColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.columnId === action.column.columnId);
       const column = newColumns[columnIndex];
       newColumns.splice(columnIndex, 1, {
         ...column,
-        name: action.name || column.name,
-        color: action.color || column.color,
-        hidden: action.hidden === undefined ? column.hidden : action.hidden,
+        name: action.column.name || column.name,
+        color: action.column.color || column.color,
+        hidden: action.column.hidden === undefined ? column.hidden : action.column.hidden,
       });
       return {
         status: state.status,
@@ -79,7 +74,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case ActionType.DeleteColumn: {
       const newColumns = [...state.data!.columns];
-      const columnIndex = newColumns.findIndex((column) => column.id === action.columnId);
+      const columnIndex = newColumns.findIndex((column) => column.columnId === action.columnId);
       newColumns.splice(columnIndex, 1);
       return {
         status: state.status,
@@ -97,6 +92,15 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           Toast.success("Voting phase started! You can vote now!");
         } else {
           Toast.error("Voting phase ended! You can't vote anymore!");
+        }
+      }
+
+      // User notification
+      if (state.data?.moderation.status !== action.board.moderation.status) {
+        if (action.board.moderation.status === "active") {
+          Toast.success("Moderation phase started!");
+        } else {
+          Toast.error("Moderation phase ended!");
         }
       }
 
@@ -120,7 +124,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         (action.board.encryptedContent === undefined || state.data.encryptedContent === action.board.encryptedContent) &&
         (action.board.showAuthors === undefined || state.data.showAuthors === action.board.showAuthors) &&
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
-        (action.board.expirationUTCTime === undefined || state.data.expirationUTCTime === action.board.expirationUTCTime) &&
         (action.board.voting === undefined || state.data.voting === action.board.voting) &&
         (action.board.showNotesOfOtherUsers === undefined || state.data.showNotesOfOtherUsers === action.board.showNotesOfOtherUsers) &&
         isEqual(stateColumns, actionColumns) &&

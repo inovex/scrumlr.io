@@ -71,10 +71,11 @@ $padding--note-dialog-scrollbar: 16px;
   outline: none;
 }
 
-.note-dialog__note--own-card .note-dialog__text:hover,
-.note-dialog__note--own-card .note-dialog__text:focus {
+.note-dialog__text-hover:hover,
+.note-dialog__text-hover:focus {
   border-color: #adadad;
 }
+
 @media (prefers-color-scheme: dark) {
   .note-dialog__text {
     color: $color-white;
@@ -182,4 +183,16 @@ $padding--note-dialog-scrollbar: 16px;
   .note-dialog__options {
     display: none;
   }
+}
+
+.note-dialog__pointer-moderator {
+  cursor: pointer;
+}
+
+.note-dialog__disabled-pointer {
+  cursor: not-allowed;
+}
+
+.note-dialog__disabled-click {
+  pointer-events: none;
 }

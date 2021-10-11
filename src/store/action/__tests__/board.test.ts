@@ -1,7 +1,7 @@
 import {AssertTypeEqual} from "testUtils";
 import {BoardClientModel} from "types/board";
-import {BoardActionFactory, BoardActionType, BoardReduxAction} from "../board";
-import {ReduxAction} from "../index";
+import {BoardActionFactory, BoardActionType, BoardReduxAction} from "store/action/board";
+import {ReduxAction} from "store/action";
 
 describe("board actions", () => {
   test("equal number of action types and factory functions", () => {
@@ -92,6 +92,18 @@ describe("board actions", () => {
           id: "test_board",
           name: "Name",
           showAuthors: true,
+        },
+      });
+    });
+
+    test("created action", () => {
+      const action = BoardActionFactory.editBoard({id: "test_board", name: "Name", moderation: {userId: "test_user", status: "active"}});
+      expect(action).toEqual({
+        type: "@@SCRUMLR/editBoard",
+        board: {
+          id: "test_board",
+          name: "Name",
+          moderation: {userId: "test_user", status: "active"},
         },
       });
     });

@@ -1,4 +1,4 @@
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
 import avatar from "assets/avatar.png";

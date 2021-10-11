@@ -1,8 +1,8 @@
 import "./CookiePolicy.scss";
 import {useEffect, useState} from "react";
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import marked from "marked";
-import policyText from "./CookiePolicyText.md";
+import policyText from "components/CookieNotice/CookiePolicyText.md";
 
 interface CookiePolicyProps {
   decline: () => void;
@@ -12,7 +12,7 @@ interface CookiePolicyProps {
   darkBackground: boolean;
 }
 
-const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
+export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
   const [policy, setPolicy] = useState({markdown: ""});
 
   useEffect(() => {
@@ -25,14 +25,6 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
     return null;
   }
 
-  const onAccept = () => {
-    accept();
-  };
-
-  const onDecline = () => {
-    decline();
-  };
-
   return (
     <Portal onClose={onClose} darkBackground={darkBackground}>
       <div className="cookie-policy">
@@ -41,10 +33,10 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
         </div>
         <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: policy.markdown}} />
         <div className="cookie-policy__footer">
-          <button className="cookie-policy__button-decline" type="button" onClick={onDecline}>
+          <button className="cookie-policy__button-decline" type="button" onClick={decline}>
             Decline
           </button>
-          <button className="cookie-policy__button-accept" type="button" onClick={onAccept}>
+          <button className="cookie-policy__button-accept" type="button" onClick={accept}>
             Accept
           </button>
         </div>
@@ -52,5 +44,3 @@ const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePo
     </Portal>
   );
 };
-
-export default CookiePolicy;
