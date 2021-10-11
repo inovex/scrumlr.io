@@ -5,9 +5,7 @@ import "./HeaderMenuItems.scss";
 import classNames from "classnames";
 import Parse from "parse";
 
-export type ColumnProps = {};
-
-export const Columns = (props: ColumnProps) => {
+export const Columns = () => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
     user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
