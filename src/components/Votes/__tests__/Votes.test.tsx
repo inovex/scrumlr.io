@@ -33,10 +33,10 @@ const createVotes = (
       showVotesOfOtherUsers: false,
     },
   };
-  const store = mockStore(initialState);
+  const mockedStore = mockStore(initialState);
   const [VoteContext] = wrapWithTestBackend(Votes);
   return (
-    <Provider store={store}>
+    <Provider store={mockedStore}>
       <VoteContext noteId="test-id" className={className} votes={withVotes ? votes : []} activeVoting={activeVoting} />
     </Provider>
   );

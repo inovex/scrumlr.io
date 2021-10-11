@@ -72,10 +72,10 @@ const createNote = (props: Partial<TestProps>) => {
       all: [],
     },
   };
-  const store = mockStore(initialState);
+  const mockedStore = mockStore(initialState);
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
-    <Provider store={store}>
+    <Provider store={mockedStore}>
       <NoteContext
         key=""
         noteId="0"

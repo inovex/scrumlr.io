@@ -99,38 +99,38 @@ describe("NoteDialog", () => {
 
     test("three note-dialog__note present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes.length).toEqual(3);
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes.length).toEqual(3);
     });
 
     test("note-dialog__note one is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes[0]).toHaveClass("note-dialog__note");
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes[0]).toHaveClass("note-dialog__note");
     });
 
     test("note-dialog__note two is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes[1]).toHaveClass("note-dialog__note");
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes[1]).toHaveClass("note-dialog__note");
     });
 
     test("note-dialog__note three is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes[2]).toHaveClass("note-dialog__note");
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes[2]).toHaveClass("note-dialog__note");
     });
 
     test("note-dialog__options note two is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes[1].querySelector(".note-dialog__options")).toBeDefined();
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes[1].querySelector(".note-dialog__options")).toBeDefined();
     });
 
     test("note-dialog__options note three is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-      expect(note_dialog_notes[2].querySelector(".note-dialog__options")).toBeDefined();
+      const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+      expect(noteDialogNotes[2].querySelector(".note-dialog__options")).toBeDefined();
     });
 
     test("note-dialog__content is present", () => {
@@ -155,8 +155,8 @@ describe("NoteDialog", () => {
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}), {
           container: global.document.querySelector("#portal")!,
         });
-        const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes.length).toEqual(3);
+        const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+        expect(noteDialogNotes.length).toEqual(3);
       });
 
       test("moderation: last note-dialog__options note isn't present", () => {
@@ -165,11 +165,11 @@ describe("NoteDialog", () => {
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}), {
           container: global.document.querySelector("#portal")!,
         });
-        const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes[note_dialog_notes.length - 1].children.length).toEqual(2);
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__options")).toBeNull();
+        const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+        expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(2);
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__options")).toBeNull();
       });
 
       test("moderation: last note-dialog__notes has two children", () => {
@@ -178,8 +178,8 @@ describe("NoteDialog", () => {
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}), {
           container: global.document.querySelector("#portal")!,
         });
-        const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes[note_dialog_notes.length - 1].children.length).toEqual(2);
+        const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+        expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(2);
       });
 
       test("moderation: last note-dialog__options note is present", () => {
@@ -188,10 +188,10 @@ describe("NoteDialog", () => {
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}, true), {
           container: global.document.querySelector("#portal")!,
         });
-        const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
-        expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__options")).not.toBeNull();
+        const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__options")).not.toBeNull();
       });
 
       test("moderation: last note-dialog__notes has three children", () => {
@@ -200,8 +200,8 @@ describe("NoteDialog", () => {
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}, true), {
           container: global.document.querySelector("#portal")!,
         });
-        const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes[note_dialog_notes.length - 1].children.length).toEqual(3);
+        const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
+        expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(3);
       });
     });
   });
