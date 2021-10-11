@@ -142,9 +142,8 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomCreature}`;
 };
 
-export const getInitials = (name: string): string => {
+export const getInitials = (name: string): string | undefined => {
   // This name check is a quick fix because Name is undefined at first
-  // TODO FIX: UserAvatar throws error because of getInitials
   if (name) {
     // return first char of each word in name
     if (name.indexOf(" ") >= 0) {
@@ -154,7 +153,7 @@ export const getInitials = (name: string): string => {
     // return first 2 chars of single-word name
     return name.substring(0, 2);
   }
-  return "NA";
+  return undefined;
 };
 
 export default getRandomName;
