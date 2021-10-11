@@ -1,16 +1,10 @@
-import {useState} from "react";
-import {ApplicationState} from "types/store";
-import {useSelector} from "react-redux";
 import {Portal} from "components/Portal";
 import Parse from "parse";
+import {useState} from "react";
+import {useSelector} from "react-redux";
+import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
-import {Export} from "./HeaderMenuItems/Export";
-import {Delete} from "./HeaderMenuItems/Delete";
-import {QrCode} from "./HeaderMenuItems/QRCode";
-import {Note} from "./HeaderMenuItems/Note";
-import {Columns} from "./HeaderMenuItems/Columns";
-import {Author} from "./HeaderMenuItems/Author";
-import {BoardHeaderSetting} from "./HeaderMenuItems/BoardHeaderSetting";
+import {Author, BoardHeaderSetting, Columns, Delete, Export, Note, QrCode} from "./HeaderMenuItems";
 
 type HeaderMenuProps = {
   open: boolean;

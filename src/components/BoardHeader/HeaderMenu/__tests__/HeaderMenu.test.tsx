@@ -98,7 +98,7 @@ describe("HeaderMenu", () => {
       render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(screen.getByTestId("author")).not.toBeNull();
 
-      const button = screen.getByTestId("author")?.querySelector("button")!;
+      const button = screen.getByTestId("author")!.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showAuthors: false}));
@@ -108,7 +108,7 @@ describe("HeaderMenu", () => {
       render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(screen.getByTestId("note")).not.toBeNull();
 
-      const button = screen.getByTestId("note")?.querySelector("button")!;
+      const button = screen.getByTestId("note")!.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
@@ -118,7 +118,7 @@ describe("HeaderMenu", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(screen.getByTestId("qrcode")).not.toBeNull();
 
-      const button = screen.getByTestId("qrcode")?.querySelector("button")!;
+      const button = screen.getByTestId("qrcode")!.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__qrcode-container")).toHaveClass("header-menu__qrcode-container--visible");
@@ -128,7 +128,7 @@ describe("HeaderMenu", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(screen.getByTestId("delete")).not.toBeNull();
 
-      const button = screen.getByTestId("delete")?.querySelector("button")!;
+      const button = screen.getByTestId("delete")!.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__delete-container")).toHaveClass("header-menu__delete-container--visible");
@@ -138,7 +138,7 @@ describe("HeaderMenu", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(screen.getByTestId("export")).not.toBeNull();
 
-      const button = screen.getByTestId("export")?.querySelector("button")!;
+      const button = screen.getByTestId("export")!.querySelector("button")!;
       expect(button).toHaveClass("menu__item-button");
       fireEvent.click(button);
       expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");
