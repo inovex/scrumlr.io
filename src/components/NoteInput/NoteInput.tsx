@@ -9,7 +9,7 @@ export interface NoteInputProps {
   columnId: string;
 }
 
-const CustomInput = withStyles(
+export const CustomInput = withStyles(
   () =>
     createStyles({
       root: {
@@ -59,12 +59,12 @@ const CustomInput = withStyles(
   {name: "NoteInput"}
 )(FilledInput);
 
-const NoteInput = ({columnId}: NoteInputProps) => {
+export const NoteInput = ({columnId}: NoteInputProps) => {
   const [value, setValue] = React.useState("");
 
-  function handleChangeNotetext(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-  }
+  };
   const onAddNote = () => {
     if (value) {
       store.dispatch(ActionFactory.addNote(columnId!, value));
@@ -90,4 +90,3 @@ const NoteInput = ({columnId}: NoteInputProps) => {
     />
   );
 };
-export default NoteInput;

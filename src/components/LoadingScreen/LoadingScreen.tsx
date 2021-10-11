@@ -1,13 +1,10 @@
-import './LoadingScreen.scss';
-import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
+import "./LoadingScreen.scss";
+import {LoadingIndicator} from "components/LoadingIndicator";
 
-function LoadingScreen() {
-
-    return (
-        <div className='loading-screen'>
-            <LoadingIndicator/>
-        </div>
-    );
+export function LoadingScreen() {
+  return (
+    <div className="loading-screen">
+      <LoadingIndicator />
+    </div>
+  );
 }
-
-export default LoadingScreen;

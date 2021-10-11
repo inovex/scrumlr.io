@@ -1,13 +1,13 @@
-import LoadingScreen from "components/LoadingScreen/LoadingScreen";
-import BoardComponent from "components/Board/Board";
-import Column from "components/Column/Column";
+import {LoadingScreen} from "components/LoadingScreen";
+import {BoardComponent} from "components/Board";
+import {Column} from "components/Column";
 import Parse from "parse";
-import Note from "components/Note/Note";
-import JoinRequest from "components/JoinRequest/JoinRequest";
+import {Note} from "components/Note";
+import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
 import {Timer} from "components/Timer";
 
-function Board() {
+export function Board() {
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
@@ -58,7 +58,7 @@ function Board() {
                   .map((note) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
-                      isAdmin={currentUserIsModerator}
+                      currentUserIsModerator={currentUserIsModerator}
                       key={note.id}
                       noteId={note.id}
                       text={note.text}
@@ -73,6 +73,8 @@ function Board() {
                         .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                       votes={state.votes.filter((vote) => vote.note === note.id)}
                       activeVoting={state.board.data?.voting === "active"}
+                      activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
+                      focus={note.focus}
                     />
                   ))}
               </Column>
@@ -83,4 +85,3 @@ function Board() {
   }
   return <LoadingScreen />;
 }
-export default Board;

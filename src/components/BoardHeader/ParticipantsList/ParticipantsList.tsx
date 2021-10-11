@@ -1,4 +1,4 @@
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
 import avatar from "assets/avatar.png";
@@ -43,7 +43,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             .map((participant) => (
               <li key={participant.id}>
                 <figure>
-                  <img src={avatar} />
+                  <img alt={`Avatar of ${participant.displayName}`} src={avatar} />
                   <figcaption>{participant.displayName}</figcaption>
                 </figure>
                 {/* Show the permission toggle if the current user is moderator */}

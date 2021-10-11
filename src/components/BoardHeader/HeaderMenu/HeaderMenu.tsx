@@ -4,7 +4,7 @@ import {ActionFactory} from "store/action";
 import {ApplicationState} from "types/store";
 import {useSelector} from "react-redux";
 import QRCode from "qrcode.react";
-import Portal from "components/Portal/Portal";
+import {Portal} from "components/Portal";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import classNames from "classnames";

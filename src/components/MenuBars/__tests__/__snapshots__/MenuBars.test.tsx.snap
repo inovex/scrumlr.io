@@ -1,0 +1,369 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu should only render add-menu for participants 1`] = `
+<aside
+  class="menu-bars menu-bars--user"
+  id="menu-bars"
+>
+  <section
+    class="menu user-menu"
+  >
+    <div
+      class="menu__items"
+    >
+      <button
+        class="menu-item menu-item--disabled menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Mark me as done
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-check.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Add image or giphy
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addimage.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Add sticker
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addsticker.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Settings
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-settings.svg
+        </svg>
+      </button>
+    </div>
+  </section>
+</aside>
+`;
+
+exports[`Menu should render both add- and settings-menu for moderators 1`] = `
+<aside
+  class="menu-bars menu-bars--user menu-bars--isAdmin"
+  id="menu-bars"
+>
+  <section
+    class="menu user-menu"
+  >
+    <div
+      class="menu__items"
+    >
+      <button
+        class="menu-item menu-item--disabled menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Mark me as done
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-check.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Add image or giphy
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addimage.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Add sticker
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addsticker.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Settings
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-settings.svg
+        </svg>
+      </button>
+    </div>
+  </section>
+  <section
+    class="menu admin-menu"
+  >
+    <div
+      class="menu__items"
+    >
+      <button
+        class="menu-item menu-item--disabled menu-item--left"
+        disabled=""
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Start column mode
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-column.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--left"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Timer
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-timer.svg
+        </svg>
+        <menu
+          class="dropdown timer__dropdown"
+        >
+          <main
+            class="dropdown__main"
+          >
+            <ul>
+              <li
+                class="dropdown__item-button timer-dropdown__item-button"
+              >
+                <button>
+                  <label>
+                    1 minute
+                  </label>
+                  <div>
+                    1
+                  </div>
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button timer-dropdown__item-button"
+              >
+                <button>
+                  <label>
+                    3 minute
+                  </label>
+                  <div>
+                    3
+                  </div>
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button timer-dropdown__item-button"
+              >
+                <button>
+                  <label>
+                    5 minute
+                  </label>
+                  <div>
+                    5
+                  </div>
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button timer-dropdown__item-button"
+              >
+                <button>
+                  <label>
+                    Custom time
+                  </label>
+                  <button>
+                    +
+                  </button>
+                  <input
+                    value="10"
+                  />
+                  <button>
+                    -
+                  </button>
+                </button>
+              </li>
+            </ul>
+          </main>
+        </menu>
+      </button>
+      <button
+        class="menu-item menu-item--disabled menu-item--left"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Start voting phase
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-vote.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--disabled menu-item--left"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Start focused mode
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-focus.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+    </div>
+  </section>
+  <button
+    class="menu-bars__switch"
+  >
+    <svg
+      class="switch__icon switch__icon--add"
+    >
+      icon-toggle-add-menu.svg
+    </svg>
+    <svg
+      class="switch__icon switch__icon--settings"
+    >
+      icon-toggle-settings-menu.svg
+    </svg>
+  </button>
+</aside>
+`;

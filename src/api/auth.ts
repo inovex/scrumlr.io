@@ -1,5 +1,5 @@
 import {v4 as uuidv4} from "uuid";
-import {callAPI} from "./callApi";
+import {callAPI} from "api/callApi";
 
 const generateState = (prefix: string, originURL: string) => {
   // generate random state id and store origin into the session storage

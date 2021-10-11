@@ -1,5 +1,5 @@
 import {google} from "googleapis";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import qs from "qs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
@@ -32,6 +32,22 @@ export interface UserInformation {
   accessToken: string;
   photoURL: string;
 }
+
+type AccessTokenResponse = AxiosResponse<{
+  access_token: string;
+  id_token?: string;
+}>;
+
+type GitHubUserInformationResponse = AxiosResponse<{
+  id: string;
+  login: string;
+  avatar_url: string;
+}>;
+
+type MicrosoftUserInformationResponse = AxiosResponse<{
+  id: string;
+  displayName: string;
+}>;
 
 export const initializeAuthFunctions = (): void => {
   if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && AUTH_REDIRECT_URI) {
@@ -91,7 +107,7 @@ export const initializeAuthFunctions = (): void => {
      * 2) Access token is used to retrieve user information.
      */
     publicApi<{code: string}, UserInformation>("githubVerifySignIn", async ({code}) => {
-      const accessTokenRequest = await axios.post(
+      const accessTokenRequest = await axios.post<any, AccessTokenResponse>(
         "https://github.com/login/oauth/access_token",
         {
           client_id: GITHUB_CLIENT_ID,
@@ -101,7 +117,9 @@ export const initializeAuthFunctions = (): void => {
         {headers: {Accept: "application/json"}}
       );
       const accessToken = accessTokenRequest.data.access_token;
-      const user = await axios.get("https://api.github.com/user", {headers: {Authorization: `token ${accessToken}`, Accept: "application/json"}});
+      const user = await axios.get<any, GitHubUserInformationResponse>("https://api.github.com/user", {
+        headers: {Authorization: `token ${accessToken}`, Accept: "application/json"},
+      });
       return {
         id: user.data.id,
         name: user.data.login,
@@ -145,9 +163,11 @@ export const initializeAuthFunctions = (): void => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       };
-      const accessTokenRequest = await axios.post(`https://login.microsoftonline.com/common/oauth2/v2.0/token`, qs.stringify(postData), config);
+      const accessTokenRequest = await axios.post<any, AccessTokenResponse>(`https://login.microsoftonline.com/common/oauth2/v2.0/token`, qs.stringify(postData), config);
       const accessToken = accessTokenRequest.data.access_token;
-      const user = await axios.get("https://graph.microsoft.com/v1.0/me", {headers: {Authorization: `Bearer ${accessToken}`, Accept: "application/json"}});
+      const user = await axios.get<any, MicrosoftUserInformationResponse>("https://graph.microsoft.com/v1.0/me", {
+        headers: {Authorization: `Bearer ${accessToken}`, Accept: "application/json"},
+      });
       // https://docs.microsoft.com/en-us/graph/api/profilephoto-get?view=graph-rest-1.0 -> photo retrieval not supported for personal account | otherwise admin rigths needed
       return {
         id: user.data.id,
@@ -219,7 +239,7 @@ export const initializeAuthFunctions = (): void => {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       };
-      const accessTokenRequest = await axios.post("https://appleid.apple.com/auth/token", qs.stringify(postData), config);
+      const accessTokenRequest = await axios.post<any, AccessTokenResponse>("https://appleid.apple.com/auth/token", qs.stringify(postData), config);
       const accessToken = accessTokenRequest.data.access_token;
       const idToken = accessTokenRequest.data.id_token;
       const user = JSON.parse(atob((idToken as string).split(".")[1]));
