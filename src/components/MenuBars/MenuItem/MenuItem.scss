@@ -123,6 +123,25 @@ $number-of-menu-items: 4;
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
     background-color: var(--primaryColor);
   }
+  @media screen and (max-width: 450px) {
+    .menu-item:nth-child(1) {
+      .menu-item__tooltip {
+        transform: translateX(-25%);
+      }
+      .menu-item__tooltip::after {
+        left: calc(25% - 5px);
+      }
+    }
+    .menu-item:nth-child(4) {
+      .menu-item__tooltip {
+        transform: translateX(-75%);
+      }
+      .menu-item__tooltip::after {
+        left: calc(75% - 5px);
+      }
+    }
+  }
+
   .menu-item__tooltip::after {
     content: "";
     position: absolute;

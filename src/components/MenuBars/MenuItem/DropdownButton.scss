@@ -1,6 +1,6 @@
 @import "constants/style.scss";
 
-$dropdown__box-shadow: var(--primaryColor) 3d;
+$dropdown__box-shadow: var(--primaryColor) 3 d;
 
 .dropdown-item--open {
   .menu-item__icon {
@@ -13,30 +13,38 @@ $dropdown__box-shadow: var(--primaryColor) 3d;
   transition-delay: 0.25s;
 }
 
-@media (pointer: fine) {
-  .menu-bars--bottom {
-    .dropdown-item--open,
-    .menu-item--touch-hover.dropdown-item--open,
-    .menu-item.dropdown-item--open:enabled:hover {
-      .menu-item__tooltip {
-        transition: all 0.25s 0s ease-out;
-        width: 245px;
-        opacity: 1;
-        visibility: visible;
-        border-top-left-radius: unset;
-        border-top-right-radius: unset;
+.menu-bars--bottom {
+  .dropdown-item--open,
+  .menu-item--touch-hover.dropdown-item--open,
+  .menu-item.dropdown-item--open:enabled:hover {
+    .menu-item__tooltip {
+      transition: all 0.25s 0s ease-out;
+      width: 245px;
+      opacity: 1;
+      visibility: visible;
+      border-top-left-radius: unset;
+      border-top-right-radius: unset;
+    }
+  }
+
+  .dropdown {
+    bottom: 94px;
+    left: 18px;
+    transform: translateX(-50%);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 8px 24px $dropdown__box-shadow;
+  }
+
+  @media screen and (max-width: 450px) {
+    .menu-item:nth-child(1) {
+      .dropdown {
+        transform: translateX(-25%);
       }
     }
-
-    .dropdown {
-      bottom: 94px;
-      left: 18px;
-      transform: translateX(-50%);
-      border-top-left-radius: 16px;
-      border-top-right-radius: 16px;
-      border-bottom-left-radius: unset;
-      border-bottom-right-radius: unset;
-      box-shadow: 0px 8px 24px $dropdown__box-shadow;
+    .menu-item:nth-child(4) {
+      .dropdown {
+        transform: translateX(-75%);
+      }
     }
   }
 }
@@ -67,11 +75,12 @@ $dropdown__box-shadow: var(--primaryColor) 3d;
   .admin-menu .dropdown {
     top: 36px;
     left: -265px;
-    box-shadow: 0px 8px 24px #ff00693d;
+    box-shadow: 0 8px 24px #ff00693d;
   }
+
   .user-menu .dropdown {
     top: 36px;
     right: -265px;
-    box-shadow: 0px 8px 24px #0057ff3d;
+    box-shadow: 0 8px 24px #0057ff3d;
   }
 }
