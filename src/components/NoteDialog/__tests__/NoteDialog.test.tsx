@@ -194,14 +194,14 @@ describe("NoteDialog", () => {
         expect(note_dialog_notes[note_dialog_notes.length - 1].querySelector(".note-dialog__options")).not.toBeNull();
       });
 
-      test("moderation: last note-dialog__notes has three children", () => {
+      test("moderation: last note-dialog__notes has two children as moderator", () => {
         // @ts-ignore
         Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
         const {container} = render(createNoteDialog("Test Text", "test-user-1", true, {userId: "test-user-1", status: true}, true), {
           container: global.document.querySelector("#portal")!,
         });
         const note_dialog_notes = container.querySelectorAll(".note-dialog__note");
-        expect(note_dialog_notes[note_dialog_notes.length - 1].children.length).toEqual(3);
+        expect(note_dialog_notes[note_dialog_notes.length - 1].children.length).toEqual(2);
       });
     });
   });

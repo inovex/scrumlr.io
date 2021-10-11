@@ -9,7 +9,7 @@ $padding--note-dialog-scrollbar: 16px;
   width: max-content;
   border-bottom: solid 3px var(--accent-color);
   padding-bottom: $padding--default;
-  margin: $margin--default 0 $margin--large $padding--note-dialog-scrollbar;
+  margin: $margin--default 0 $margin--large 0;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
 }
@@ -84,6 +84,9 @@ $padding--note-dialog-scrollbar: 16px;
 
 .note-dialog__footer {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   height: 26px;
 }
 .note-dialog__author {
@@ -113,70 +116,43 @@ $padding--note-dialog-scrollbar: 16px;
 
 //Options
 .note-dialog__options {
-  padding: 0 0 0 $padding--default;
   list-style-type: none;
   position: relative;
-}
-
-.note-dialog__option {
-  box-sizing: border-box;
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: baseline;
+  padding: 0;
 }
 
 .note-dialog__option--not-editable {
   display: none;
 }
 
-.note-dialog__option + .note-dialog__option {
-  margin-top: $margin--small;
-}
-
 .note-dialog__option-button {
   height: 32px;
 }
 
-.note-dialog__options-icon {
-  display: flex;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-
-  & svg {
-    fill: #fff;
-    width: 20px;
-    height: 20px;
-    align-self: center;
-  }
-}
-
-.note-dialog__wrapper {
-  direction: ltr;
-  margin: 0 $padding--note-dialog-scrollbar 0 $padding--note-dialog-scrollbar;
-}
-
-.note-dialog__scrollbar-wrapper {
-  direction: rtl;
-  overflow-y: auto;
-  max-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large} - 100px);
-  min-width: calc(240px + 30vw);
-  align-items: center;
+.note-dialog_scrollbar {
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray #fff;
 }
 
-.note-dialog__scrollbar-wrapper .note-dialog__wrapper .note-dialog__note-wrapper:last-child .note-dialog__note {
+.note-dialog__wrapper {
+  max-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large} - 100px);
+  min-width: calc(240px + 30vw);
+  overflow-y: auto;
+
+  padding-right: $padding--note-dialog-scrollbar;
+}
+
+.note-dialog__wrapper .note-dialog__note:last-child {
   margin-bottom: 0;
 }
 
 @media (prefers-color-scheme: dark) {
-  .note-dialog__scrollbar-wrapper {
+  .note-dialog__wrapper {
     scrollbar-color: $color-middle-gray $color-dark-mode-note;
   }
-}
-
-.note-dialog__note-wrapper {
-  display: flex;
-  align-items: flex-start;
 }
 
 @media screen and (max-width: 766px) {
