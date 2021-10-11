@@ -2,12 +2,10 @@ import {Portal} from "components/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
 import "./ParticipantsList.scss";
-import {ToggleButton} from "components/ToggleButton";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import Parse from "parse";
-import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
-import {UserAvatar} from "components/BoardUsers";
+import {Participant} from "./Participant";
 
 type ParticipantsListProps = {
   open: boolean;
@@ -21,8 +19,8 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   const boardOwner = useAppSelector((state) => state.board.data?.owner);
 
   const currentUser = Parse.User.current();
-  const me = props.participants.find((user) => user.id === currentUser!.id);
-  const them = props.participants.filter((user) => user.id !== currentUser!.id && user.online);
+  const me = props.participants.find((participant) => participant.id === currentUser!.id);
+  const them = props.participants.filter((participant) => participant.id !== currentUser!.id && participant.online);
 
   if (!props.open) {
     return null;
@@ -47,44 +45,12 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
 
-          {showMe && (
-            <li className="participants__list-item" key={me!.id}>
-              <UserAvatar key={me!.id} id={me!.id} name={me!.displayName} group="participants" />
-              {/* Show the permission toggle if the current user is moderator */}
-              {props.currentUserIsModerator && (
-                <ToggleButton
-                  className="participant__permission-toggle"
-                  disabled={Parse.User.current()?.id === me!.id || me!.id === boardOwner}
-                  values={["participant", "moderator"]}
-                  value={me!.admin ? "moderator" : "participant"}
-                  onToggle={(val: "participant" | "moderator") => {
-                    store.dispatch(ActionFactory.changePermission(me!.id, val === "moderator"));
-                  }}
-                />
-              )}
-            </li>
-          )}
+          {showMe && <Participant participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner} />}
           {them.length > 0 &&
             them
               .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
               .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
-              .map((participant) => (
-                <li className="participants__list-item" key={participant.id}>
-                  <UserAvatar key={participant.id} id={participant.id} name={participant.displayName} group="participants" />
-                  {/* Show the permission toggle if the current user is moderator */}
-                  {props.currentUserIsModerator && (
-                    <ToggleButton
-                      className="participant__permission-toggle"
-                      disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
-                      values={["participant", "moderator"]}
-                      value={participant.admin ? "moderator" : "participant"}
-                      onToggle={(val: "participant" | "moderator") => {
-                        store.dispatch(ActionFactory.changePermission(participant.id, val === "moderator"));
-                      }}
-                    />
-                  )}
-                </li>
-              ))}
+              .map((participant) => <Participant participant={participant} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner} />)}
         </ul>
       </aside>
     </Portal>
