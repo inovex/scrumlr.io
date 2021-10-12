@@ -1,14 +1,14 @@
 .board-users {
-  margin-right: 40px;
   list-style-type: none;
   align-self: center;
   display: flex;
   flex-direction: row-reverse;
   width: max-content;
-  padding: 10px 20px;
   border-radius: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  padding: 0;
+  margin: 0;
 }
 
 .board-users:hover {

@@ -31,11 +31,14 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
           aria-roledescription="author"
           class="note__author"
         >
-          <img
-            alt="User"
-            class="note__author-image"
-            src="avatar.png"
-          />
+          <div
+            class="user-avatar note__user-avatar"
+          >
+            <div
+              class="user__initials"
+              title=""
+            />
+          </div>
           <figcaption
             class="note__author-name"
           />
@@ -125,11 +128,14 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                 <figure
                   class="note-dialog__author"
                 >
-                  <img
-                    alt="User"
-                    class="note-dialog__author-image"
-                    src="avatar.png"
-                  />
+                  <div
+                    class="user-avatar note-dialog__user-avatar"
+                  >
+                    <div
+                      class="user__initials"
+                      title=""
+                    />
+                  </div>
                   <figcaption
                     class="note-dialog__author-name"
                   />
@@ -278,11 +284,14 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
           aria-roledescription="author"
           class="note__author"
         >
-          <img
-            alt="User"
-            class="note__author-image"
-            src="avatar.png"
-          />
+          <div
+            class="user-avatar note__user-avatar"
+          >
+            <div
+              class="user__initials"
+              title=""
+            />
+          </div>
           <figcaption
             class="note__author-name"
           />
@@ -347,11 +356,14 @@ exports[`Note should have correct style show note with correct style 1`] = `
         aria-roledescription="author"
         class="note__author"
       >
-        <img
-          alt="User"
-          class="note__author-image"
-          src="avatar.png"
-        />
+        <div
+          class="user-avatar note__user-avatar"
+        >
+          <div
+            class="user__initials"
+            title=""
+          />
+        </div>
         <figcaption
           class="note__author-name"
         />

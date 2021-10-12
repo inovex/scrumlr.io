@@ -12,6 +12,13 @@
   line-height: $line-height--large;
 }
 
+.note-dialog .note-dialog__user-avatar {
+  height: 22px;
+  width: 22px;
+  font-size: 10px;
+  padding: 12px;
+}
+
 .note-dialog__note {
   margin-bottom: 25px;
   padding: $padding--default $padding--medium;

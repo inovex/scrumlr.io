@@ -44,11 +44,11 @@ export const initializeNoteFunctions = () => {
   api<{note: EditNoteRequest}, boolean>("editNote", async (user, request) => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.note.id, {useMasterKey: true});
-    
+
     if (!note) {
       return false;
     }
-    
+
     // Find all notes with the edited note as parent
     const childNotesQuery = new Parse.Query("Note");
     childNotesQuery.equalTo("parent", note);
@@ -84,11 +84,11 @@ export const initializeNoteFunctions = () => {
         throw new Error(`Not authorized to edit note '${request.note.id}'`);
       }
     }
-    
+
     if (request.note.focus != undefined) {
       note.set("focus", request.note.focus);
     }
-    
+
     await Parse.Object.saveAll(childNotes, {useMasterKey: true});
     await note.save(null, {useMasterKey: true});
     return true;

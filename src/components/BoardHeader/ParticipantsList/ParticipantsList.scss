@@ -1,4 +1,7 @@
-@import "constants/style";
+@import "constants/style.scss";
+
+$header-bottom_distance: 16px;
+$header-left_distance: 24px;
 
 .participants {
   position: absolute;
@@ -6,7 +9,6 @@
   right: 80px;
   width: 300px;
   border-radius: 16px;
-  background-color: $color-backlog-blue;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
   z-index: 200;
@@ -21,15 +23,10 @@
   color: white;
   height: 86px;
   position: relative;
-}
-@media (prefers-color-scheme: dark) {
-  .participants {
-    background-color: $color-planning-pink;
-    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-  }
+  background-color: $color-backlog-blue;
 }
 
-.participants__header > h4 {
+.participants__header-text {
   margin: 0;
   font-weight: bold;
   font-size: 18px;
@@ -37,20 +34,31 @@
   letter-spacing: 0.25px;
   position: absolute;
   top: 24px;
-  left: 24px;
+  left: $header-left_distance;
 }
 
-.participants__header > input {
+.participants__header-number {
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.25px;
+  position: absolute;
+  top: -12px;
+  right: -12px;
+}
+
+.participants__header-input {
   background-color: transparent;
   color: $color-white;
-  opacity: 1;
   font-size: 13px;
   letter-spacing: 0.27px;
   border: none;
   border-bottom: 1px solid transparent;
   position: absolute;
-  bottom: 24px;
-  left: 46px;
+  bottom: $header-bottom_distance;
+  left: $header-left_distance;
+  padding-left: 24px;
   opacity: 0.8;
 
   &::placeholder {
@@ -66,8 +74,8 @@
 
 .header__icon {
   position: absolute;
-  bottom: 24px;
-  left: 24px;
+  bottom: $header-bottom_distance;
+  left: $header-left_distance;
 }
 
 .participants__list {
@@ -95,27 +103,9 @@
   background-color: $color-middle-gray;
 }
 
-@media (prefers-color-scheme: dark) {
-  .participants__list {
-    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
-    background-color: $color-dark-mode-note;
-  }
-  .participants__list::-webkit-scrollbar {
-    background-color: $color-dark-mode-note;
-  }
-  .participants__list::-webkit-scrollbar-thumb {
-    background-color: $color-darkest-gray;
-  }
-}
-
 .list__header {
   height: 32px;
   position: relative;
-}
-@media (prefers-color-scheme: dark) {
-  .list__header {
-    background: $color-dark-mode-note;
-  }
 }
 
 .list__header > label {
@@ -129,74 +119,63 @@
 
 .list__header > label:nth-child(1) {
   text-align: left;
-  left: 20px;
+  left: 12px;
 }
 .list__header > label:nth-child(2) {
   text-align: right;
   left: 244px;
 }
 
-.participants__list > li {
+.participants__list-item {
   background-color: white;
   position: relative;
   height: 48px;
+  padding-bottom: 52px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .participants__list > li {
-    background-color: $color-dark-mode-note;
-  }
-
-  .participants__list > li:hover {
-    background-color: #3d4555;
-  }
-}
-
-.participants__list > li:not(:last-child)::after {
+.participants__list-item:not(:last-child)::after {
   content: "";
   height: 1px;
-  width: calc(100% - 64px);
-  background-color: #edeff2;
+  width: calc(100% - 48px);
+  background-color: rgba(35, 35, 35, 0.1);
   position: absolute;
   bottom: 0;
-  left: 64px;
-}
-
-.participants__list figure {
-  margin: 0;
-}
-
-.participants__list img {
-  height: 28px;
-  width: 28px;
-  border-radius: 100%;
-  position: absolute;
-  top: 10px;
-  left: 20px;
-}
-
-.participants__list figcaption {
-  display: inline-block;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  font-weight: 300;
-  width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #111111;
-  position: absolute;
-  top: 15px;
-  left: 64px;
-}
-@media (prefers-color-scheme: dark) {
-  .participants__list figcaption {
-    color: white;
-  }
+  left: 48px;
 }
 
 .participant__permission-toggle {
   transform: scale(0.9);
   left: 244px;
   top: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .participants {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+  .participants__header {
+    background-color: $color-planning-pink;
+  }
+  .participants__list {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    background-color: $color-dark-mode-note;
+  }
+  .participants__list::-webkit-scrollbar {
+    background-color: $color-dark-mode-note;
+  }
+  .participants__list::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
+  .list__header {
+    background: $color-dark-mode-note;
+  }
+  .participants__list-item {
+    background-color: $color-dark-mode-note;
+  }
+  .participants__list-item:hover {
+    background-color: #3d4555;
+  }
+  .participants__list-item:not(:last-child)::after {
+    background-color: rgba(125, 125, 125, 0.1);
+  }
 }
