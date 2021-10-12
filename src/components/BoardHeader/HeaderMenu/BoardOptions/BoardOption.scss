@@ -1,7 +1,5 @@
 @import "constants/style";
 
-$header-menu-hover-color--dark: #3d4555;
-
 .board-option {
   background: $color-dark-mode-note;
 }
@@ -11,5 +9,5 @@ $header-menu-hover-color--dark: #3d4555;
 }
 
 .board-option:hover {
-  background: $header-menu-hover-color--dark;
+  background: $color-dark-mode-note--hover;
 }

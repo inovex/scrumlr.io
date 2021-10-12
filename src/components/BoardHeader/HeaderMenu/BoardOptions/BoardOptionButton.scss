@@ -1,7 +1,6 @@
 @import "constants/style";
 
 $header-menu__item-border-width: 1px;
-$header-menu-hover-color--dark: #3d4555;
 $header-menu-hover-color--light: #f3f3f3;
 $header-menu-button-height: 24px;
 $header-menu-icon-width: 79px;
@@ -53,10 +52,6 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 @media (prefers-color-scheme: dark) {
-  .header-menu__export-container > .board-option-button:hover {
-    background-color: $header-menu-hover-color--dark;
-  }
-
   .board-option-button__label {
     color: $color-white;
   }
@@ -64,7 +59,8 @@ $header-menu-border-bottom-color: #efefef;
   .board-option-button--expandable {
     background-color: $color-dark-mode-note;
   }
+
   .board-option-button--expandable:hover {
-    background-color: #3d4555;
+    background-color: $color-dark-mode-note--hover;
   }
 }
