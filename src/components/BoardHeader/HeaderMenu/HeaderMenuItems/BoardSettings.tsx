@@ -5,7 +5,7 @@ import "./HeaderMenuItems.scss";
 import classNames from "classnames";
 import {Dispatch, SetStateAction} from "react";
 
-export type BoardHeaderSettingProps = {
+export type BoardSettingsProps = {
   activeEditMode: boolean;
   joinConfirmationRequired: boolean;
   boardName: string;
@@ -15,7 +15,7 @@ export type BoardHeaderSettingProps = {
   setJoinConfirmationRequired: Dispatch<SetStateAction<boolean>>;
 };
 
-export const BoardHeaderSetting = (props: BoardHeaderSettingProps) => {
+export const BoardSettings = (props: BoardSettingsProps) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));

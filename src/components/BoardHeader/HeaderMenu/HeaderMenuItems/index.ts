@@ -1,5 +1,5 @@
 export * from "./Author";
-export * from "./BoardHeaderSetting";
+export * from "./BoardSettings";
 export * from "./Columns";
 export * from "./Delete";
 export * from "./Export";

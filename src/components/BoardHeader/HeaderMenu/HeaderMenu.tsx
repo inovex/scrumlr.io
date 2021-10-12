@@ -4,7 +4,7 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
-import {Author, BoardHeaderSetting, Columns, Delete, Export, Note, QrCode} from "./HeaderMenuItems";
+import {Author, BoardSettings, Columns, Delete, Export, Note, QrCode} from "./HeaderMenuItems";
 
 type HeaderMenuProps = {
   open: boolean;
@@ -44,7 +44,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       darkBackground={false}
     >
       <ul className="header-menu">
-        <BoardHeaderSetting
+        <BoardSettings
           activeEditMode={activeEditMode}
           joinConfirmationRequired={joinConfirmationRequired}
           boardName={boardName}
