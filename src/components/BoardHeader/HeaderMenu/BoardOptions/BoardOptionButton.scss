@@ -3,6 +3,9 @@
 $header-menu__item-border-width: 1px;
 $header-menu-hover-color--dark: #3d4555;
 $header-menu-hover-color--light: #f3f3f3;
+$header-menu-button-height: 24px;
+$header-menu-icon-width: 79px;
+$header-menu-icon-height: 24px;
 
 .board-option-button {
   background-color: transparent;
@@ -33,8 +36,30 @@ $header-menu-hover-color--light: #f3f3f3;
   }
 }
 
+.board-option-button__label {
+  height: $header-menu-button-height;
+  width: 180px;
+  color: $color-black;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: $header-menu-button-height;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.board-option-button__icon {
+  width: $header-menu-icon-width;
+  height: $header-menu-icon-height;
+  color: #a3a6aa;
+  vertical-align: middle;
+}
+
 @media (prefers-color-scheme: dark) {
   .header-menu__export-container > .board-option-button:hover {
     background-color: $header-menu-hover-color--dark;
+  }
+
+  .board-option-button__label {
+    color: $color-white;
   }
 }

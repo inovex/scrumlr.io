@@ -14,6 +14,7 @@ export const ShowAuthorOption = () => {
   return (
     <BoardOption data-testid="author">
       <BoardOptionButton
+        label={`${state.board!.showAuthors ? "Hide" : "Show"} authors of card`}
         onClick={() => {
           store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
         }}
@@ -27,7 +28,6 @@ export const ShowAuthorOption = () => {
             )}
           />
         </div>
-        <label className="item-button__label">{state.board!.showAuthors ? "Hide" : "Show"} authors of card</label>
       </BoardOptionButton>
     </BoardOption>
   );

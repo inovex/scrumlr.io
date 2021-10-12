@@ -76,12 +76,11 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                     class="item-button__toggle-switch item-button__toggle-switch--left"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Hide
-                   authors of card
-                </label>
+                  Hide authors of card
+                </span>
               </button>
             </li>
             <li
@@ -98,12 +97,11 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                     class="item-button__toggle-switch item-button__toggle-switch--right"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Show
-                   notes of other users
-                </label>
+                  Show notes of other users
+                </span>
               </button>
             </li>
             <li
@@ -119,12 +117,11 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                     class="item-button__toggle-switch item-button__toggle-switch--left"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Hide
-                   columns
-                </label>
+                  Hide columns
+                </span>
               </button>
             </li>
             <li
@@ -138,15 +135,15 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   class="board-option-button"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-share.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Share board
-                  </label>
+                  </span>
                 </button>
               </li>
               <li
@@ -176,15 +173,15 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   class="board-option-button"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-delete.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Delete board
-                  </label>
+                  </span>
                 </button>
               </li>
               <li
@@ -220,15 +217,15 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   class="board-option-button"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-share.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Export board
-                  </label>
+                  </span>
                 </button>
               </li>
               <li
@@ -346,15 +343,15 @@ exports[`HeaderMenu should render correctly user 1`] = `
                   class="board-option-button"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-share.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Export board
-                  </label>
+                  </span>
                 </button>
               </li>
               <li

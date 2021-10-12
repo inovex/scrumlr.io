@@ -14,6 +14,7 @@ export const ShowOtherUsersNotesOption = () => {
   return (
     <BoardOption data-testid="note">
       <BoardOptionButton
+        label={`${state.board!.showNotesOfOtherUsers ? "Hide" : "Show"} notes of other users`}
         onClick={() => {
           store.dispatch(ActionFactory.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
         }}
@@ -27,7 +28,6 @@ export const ShowOtherUsersNotesOption = () => {
             )}
           />
         </div>
-        <label className="item-button__label">{state.board!.showNotesOfOtherUsers ? "Hide" : "Show"} notes of other users</label>
       </BoardOptionButton>
     </BoardOption>
   );

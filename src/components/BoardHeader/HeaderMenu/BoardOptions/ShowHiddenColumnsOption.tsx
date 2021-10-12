@@ -17,6 +17,7 @@ export const ShowHiddenColumnsOption = () => {
   return (
     <BoardOption>
       <BoardOptionButton
+        label={`${state.userConfiguration?.showHiddenColumns ? "Hide" : "Show"} columns`}
         onClick={() => {
           store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
         }}
@@ -30,7 +31,6 @@ export const ShowHiddenColumnsOption = () => {
             )}
           />
         </div>
-        <label className="item-button__label">{state.userConfiguration?.showHiddenColumns ? "Hide" : "Show"} columns</label>
       </BoardOptionButton>
     </BoardOption>
   );

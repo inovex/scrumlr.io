@@ -28,15 +28,14 @@ export const ExportBoardOption = (props: ExportProps) => {
     <BoardOption data-testid="export">
       <li className="header-menu__item">
         <BoardOptionButton
+          label="Export board"
+          icon={ExportIcon}
           onClick={() => {
             props.setShowDelete(false);
             props.setShowQrCode(false);
             props.setShowExport(!props.showExport);
           }}
-        >
-          <ExportIcon className="item-button__icon" />
-          <label className="item-button__label">Export board</label>
-        </BoardOptionButton>
+        />
       </li>
       <li className={classNames("header-menu__export-container", {"header-menu__export-container--visible": props.showExport})}>
         <button

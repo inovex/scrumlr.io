@@ -158,24 +158,6 @@ $header-menu-button-width: 24px;
   background-color: $header-menu-hover-color--light;
 }
 
-.item-button__icon {
-  width: $header-menu-icon-width;
-  height: $header-menu-icon-height;
-  color: #a3a6aa;
-  vertical-align: middle;
-}
-
-.item-button__label {
-  height: $header-menu-button-height;
-  width: 180px;
-  color: $color-black;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  line-height: $header-menu-button-height;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
 .item-button__toggle-switch-container {
   width: $header-menu-icon-width;
   height: $header-menu__item-height;
@@ -303,9 +285,7 @@ $header-menu-button-width: 24px;
   .header-menu__delete-container {
     background-color: $color-dark-mode-note;
   }
-  .item-button__label {
-    color: $color-white;
-  }
+
   .header-menu__item {
     background-color: $color-dark-mode-note;
   }

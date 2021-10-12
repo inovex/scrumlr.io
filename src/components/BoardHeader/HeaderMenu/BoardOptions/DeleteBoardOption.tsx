@@ -24,15 +24,14 @@ export const DeleteBoardOption = (props: DeleteProps) => {
     <BoardOption data-testid="delete">
       <li className="header-menu__item">
         <BoardOptionButton
+          label="Delete board"
+          icon={DeleteIcon}
           onClick={() => {
             props.setShowQrCode(false);
             props.setShowExport(false);
             props.setShowDelete(!props.showDelete);
           }}
-        >
-          <DeleteIcon className="item-button__icon" />
-          <label className="item-button__label">Delete board</label>
-        </BoardOptionButton>
+        />
       </li>
       <li className={classNames("header-menu__delete-container", {"header-menu__delete-container--visible": props.showDelete})}>
         <label className="delete-container__warning-label">

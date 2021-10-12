@@ -17,15 +17,14 @@ export const ShareQrCodeOption = (props: QRCodeProps) => (
   <BoardOption data-testid="qrcode">
     <li className="header-menu__item">
       <BoardOptionButton
+        label="Share board"
+        icon={ShareIcon}
         onClick={() => {
           props.setShowDelete(false);
           props.setShowExport(false);
           props.setShowQrCode(!props.showQrCode);
         }}
-      >
-        <ShareIcon className="item-button__icon" />
-        <label className="item-button__label">Share board</label>
-      </BoardOptionButton>
+      />
     </li>
     <li className={classNames("header-menu__qrcode-container", {"header-menu__qrcode-container--visible": props.showQrCode})}>
       <QRCode value={document.location.href} size={260} className="qrcode-container__qrcode" />
