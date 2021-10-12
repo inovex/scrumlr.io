@@ -4,7 +4,6 @@ import {ToggleButton} from "components/ToggleButton";
 import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {FunctionComponent} from "react";
 import "./Participant.scss";
 
 interface ParticipantProps {
@@ -13,9 +12,12 @@ interface ParticipantProps {
   boardOwner: string;
 }
 
-export const Participant: FunctionComponent<ParticipantProps> = ({participant, currentUserIsModerator, boardOwner}) => (
-  <li className="participants__list-item">
-    <UserAvatar id={participant!.id} name={participant!.displayName} className="participant__user-avatar" />
+export const Participant = ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) => (
+  <li className="participant">
+    <figure className="note__author" aria-roledescription="author">
+      <UserAvatar id={participant.id} name={participant.displayName} className="participant__user-avatar" />
+      <figcaption>{participant.displayName}</figcaption>
+    </figure>
     {currentUserIsModerator && (
       <ToggleButton
         className="participant__permission-toggle"
