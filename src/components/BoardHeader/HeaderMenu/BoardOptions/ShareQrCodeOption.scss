@@ -2,6 +2,7 @@
 
 $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
+$header-menu-button-height: 24px;
 
 .share-qr-code-option__container {
   height: 0;
@@ -15,4 +16,30 @@ $header-menu-border-bottom-color: #efefef;
   box-sizing: border-box;
   height: 324px;
   border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
+}
+
+.share-qr-code-option__qrcode {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+}
+
+.share-qr-code-option__copy-to-clipboard {
+  position: absolute;
+  height: $header-menu-button-height;
+  width: 144px;
+  border: $header-menu__item-border-width solid $color-black;
+  border-radius: 32px;
+  background-color: transparent;
+  color: $color-black;
+  cursor: pointer;
+  left: 72px;
+  top: 288px;
+}
+
+.share-qr-code-option__copy-to-clipboard:focus {
+  outline: 0;
+}
+.share-qr-code-option__copy-to-clipboard:active {
+  scale: 0.95;
 }

@@ -1,5 +1,8 @@
 @import "constants/style";
 
+$header-menu__item-border-width: 1px;
+$header-menu-button-height: 24px;
+
 .delete-board-option__container {
   height: 0;
   width: 100%;
@@ -18,4 +21,30 @@
   .delete-board-option__container {
     background-color: $color-dark-mode-note;
   }
+}
+
+.delete-board-option__warning-label {
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  color: $color-waring-red;
+}
+
+.delete-board-option__delete-board {
+  position: absolute;
+  top: 80px;
+  left: 72px;
+  height: $header-menu-button-height;
+  width: 144px;
+  border: $header-menu__item-border-width solid $color-waring-red;
+  border-radius: 32px;
+  background-color: transparent;
+  color: $color-waring-red;
+  cursor: pointer;
+}
+.delete-board-option__delete-board :focus {
+  outline: 0;
+}
+.delete-board-option__delete-board :active {
+  scale: 0.95;
 }

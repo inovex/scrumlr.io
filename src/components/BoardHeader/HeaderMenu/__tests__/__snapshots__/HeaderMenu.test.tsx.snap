@@ -146,13 +146,13 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 class="share-qr-code-option__container"
               >
                 <canvas
-                  class="qrcode-container__qrcode"
+                  class="share-qr-code-option__qrcode"
                   height="260"
                   style="height: 260px; width: 260px;"
                   width="260"
                 />
                 <button
-                  class="qrcode-container__copy-to-clipboard"
+                  class="share-qr-code-option__copy-to-clipboard"
                 >
                   Copy Invite URL
                 </button>
@@ -180,7 +180,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 class="delete-board-option__container"
               >
                 <label
-                  class="delete-container__warning-label"
+                  class="delete-board-option__warning-label"
                 >
                   <b>
                     Are you absolutely sure that you want to delete the board?
@@ -192,7 +192,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                    be undone.
                 </label>
                 <button
-                  class="delete-container__delete-board"
+                  class="delete-board-option__delete-board"
                 >
                   Delete board
                 </button>

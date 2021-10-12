@@ -27,8 +27,8 @@ export const ShareQrCodeOption = (props: QRCodeProps) => (
       }}
     />
     <div className={classNames("share-qr-code-option__container", {"share-qr-code-option__container--visible": props.showQrCode})}>
-      <QRCode value={document.location.href} size={260} className="qrcode-container__qrcode" />
-      <button className="qrcode-container__copy-to-clipboard" onClick={() => navigator.clipboard.writeText(document.location.href)}>
+      <QRCode value={document.location.href} size={260} className="share-qr-code-option__qrcode" />
+      <button className="share-qr-code-option__copy-to-clipboard" onClick={() => navigator.clipboard.writeText(document.location.href)}>
         Copy Invite URL
       </button>
     </div>

@@ -128,56 +128,6 @@ $header-menu-button-width: 24px;
   scale: 0.95;
 }
 
-.qrcode-container__qrcode {
-  position: absolute;
-  top: 13px;
-  left: 13px;
-}
-
-.qrcode-container__copy-to-clipboard {
-  position: absolute;
-  height: $header-menu-button-height;
-  width: 144px;
-  border: $header-menu__item-border-width solid $color-black;
-  border-radius: 32px;
-  background-color: transparent;
-  color: $color-black;
-  cursor: pointer;
-  left: 72px;
-  top: 288px;
-}
-.qrcode-container__copy-to-clipboard:focus {
-  outline: 0;
-}
-.qrcode-container__copy-to-clipboard:active {
-  scale: 0.95;
-}
-
-.delete-container__warning-label {
-  position: absolute;
-  top: 13px;
-  left: 13px;
-  color: $color-waring-red;
-}
-.delete-container__delete-board {
-  position: absolute;
-  top: 80px;
-  left: 72px;
-  height: $header-menu-button-height;
-  width: 144px;
-  border: $header-menu__item-border-width solid $color-waring-red;
-  border-radius: 32px;
-  background-color: transparent;
-  color: $color-waring-red;
-  cursor: pointer;
-}
-.delete-container__delete-board :focus {
-  outline: 0;
-}
-.delete-container__delete-board :active {
-  scale: 0.95;
-}
-
 @media (prefers-color-scheme: dark) {
   .header-menu {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);

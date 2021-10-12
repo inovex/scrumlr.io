@@ -34,10 +34,10 @@ export const DeleteBoardOption = (props: DeleteProps) => {
         }}
       />
       <div className={classNames("delete-board-option__container", {"delete-board-option__container--visible": props.showDelete})}>
-        <label className="delete-container__warning-label">
+        <label className="delete-board-option__warning-label">
           <b>Are you absolutely sure that you want to delete the board?</b> This action <b>cannot</b> be undone.
         </label>
-        <button className="delete-container__delete-board" onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}>
+        <button className="delete-board-option__delete-board" onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}>
           Delete board
         </button>
       </div>
