@@ -1,6 +1,6 @@
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import {Dispatch, SetStateAction} from "react";
-import "../BoardSettings/HeaderMenuItems.scss";
+import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import QRCode from "qrcode.react";
 import {BoardOption} from "./BoardOption";

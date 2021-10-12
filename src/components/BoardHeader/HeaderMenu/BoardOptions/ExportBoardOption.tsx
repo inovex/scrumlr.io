@@ -3,7 +3,7 @@ import {exportAsCSV, exportAsJSON} from "utils/export";
 import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import {Dispatch, SetStateAction} from "react";
-import "../BoardSettings/HeaderMenuItems.scss";
+import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";

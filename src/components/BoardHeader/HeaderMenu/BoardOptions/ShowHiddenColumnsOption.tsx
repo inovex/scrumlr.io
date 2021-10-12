@@ -1,7 +1,7 @@
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
-import "../BoardSettings/HeaderMenuItems.scss";
+import "../BoardSettings/BoardSettings.scss";
 import Parse from "parse";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";

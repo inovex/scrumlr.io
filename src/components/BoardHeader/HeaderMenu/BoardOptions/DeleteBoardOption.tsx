@@ -3,7 +3,7 @@ import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {Dispatch, SetStateAction} from "react";
-import "../BoardSettings/HeaderMenuItems.scss";
+import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";

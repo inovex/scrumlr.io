@@ -1,7 +1,7 @@
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
-import "./HeaderMenuItems.scss";
+import "./BoardSettings.scss";
 import classNames from "classnames";
 import {Dispatch, SetStateAction} from "react";
 
@@ -28,7 +28,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
   };
 
   return (
-    <li className="header-menu__info">
+    <li className="board-settings">
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -39,7 +39,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
         }}
       >
         <input
-          className="info__board-name"
+          className="board-settings__board-name"
           value={props.boardName}
           disabled={!props.activeEditMode}
           onChange={(e) => props.setBoardName(e.target.value)}
@@ -48,12 +48,17 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           }}
           onFocus={(e) => e.target.select()}
         />
-        <button type="button" className="info__access-mode" disabled={!props.activeEditMode} onClick={() => props.setJoinConfirmationRequired(!props.joinConfirmationRequired)}>
-          <div className={classNames("info__access-mode-lock", {"info__access-mode-lock--unlocked": !props.joinConfirmationRequired})} />
+        <button
+          type="button"
+          className="board-settings__access-mode"
+          disabled={!props.activeEditMode}
+          onClick={() => props.setJoinConfirmationRequired(!props.joinConfirmationRequired)}
+        >
+          <div className={classNames("board-settings__access-mode-lock", {"board-settings__access-mode-lock--unlocked": !props.joinConfirmationRequired})} />
           {props.joinConfirmationRequired ? "Private Session" : "Public Session"}
         </button>
         {props.currentUserIsModerator && (
-          <button type="submit" className="info__edit-button">
+          <button type="submit" className="board-settings__edit-button">
             {props.activeEditMode ? "save" : "edit"}
           </button>
         )}

@@ -16,13 +16,13 @@ $header-menu-toggle-height: 3px;
 $header-menu-button-height: 24px;
 $header-menu-button-width: 24px;
 
-.header-menu__info {
+.board-settings {
   position: relative;
   height: 86px;
   background-color: $header-menu-color--light;
 }
 
-.info__board-name {
+.board-settings__board-name {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -43,11 +43,11 @@ $header-menu-button-width: 24px;
   outline: 0;
   transition: border-color 0.1s linear;
 }
-.info__board-name:disabled {
+.board-settings__board-name:disabled {
   border-color: transparent;
 }
 
-.info__access-mode {
+.board-settings__access-mode {
   position: absolute;
   top: 44px;
   left: 20px;
@@ -66,11 +66,11 @@ $header-menu-button-width: 24px;
   padding: 0 0 5px 0;
   transition: border-color 0.1s linear;
 }
-.info__access-mode:disabled {
+.board-settings__access-mode:disabled {
   cursor: default;
   border-color: transparent;
 }
-.info__access-mode-lock {
+.board-settings__access-mode-lock {
   display: inline-block;
   position: relative;
   width: 10px;
@@ -81,7 +81,7 @@ $header-menu-button-width: 24px;
   border-radius: 3px;
   margin-right: 5px;
 }
-.info__access-mode-lock::before {
+.board-settings__access-mode-lock::before {
   content: "";
   position: absolute;
   height: 6px;
@@ -90,7 +90,7 @@ $header-menu-button-width: 24px;
   border-radius: 3px;
 }
 
-.info__access-mode-lock::after {
+.board-settings__access-mode-lock::after {
   position: absolute;
   content: "";
   width: 6px;
@@ -103,11 +103,11 @@ $header-menu-button-width: 24px;
   left: 0;
   transition: transform 0.3s linear;
 }
-.info__access-mode-lock--unlocked::after {
+.board-settings__access-mode-lock--unlocked::after {
   transform: rotate(-45deg) translate(0, -1px);
 }
 
-.info__edit-button {
+.board-settings__edit-button {
   position: absolute;
   height: $header-menu-button-height;
   width: 50px;
@@ -121,10 +121,10 @@ $header-menu-button-width: 24px;
   left: 212px;
   transition: scale 0.1s ease-in-out;
 }
-.info__edit-button:focus {
+.board-settings__edit-button:focus {
   outline: 0;
 }
-.info__edit-button:active {
+.board-settings__edit-button:active {
   scale: 0.95;
 }
 
@@ -132,7 +132,7 @@ $header-menu-button-width: 24px;
   .header-menu {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }
-  .header-menu__info {
+  .board-settings {
     background-color: $header-menu-color--dark;
   }
 }
