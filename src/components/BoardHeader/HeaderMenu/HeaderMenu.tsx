@@ -13,6 +13,8 @@ type HeaderMenuProps = {
   currentUserIsModerator: boolean;
 };
 
+type ExpandableOptions = "share" | "delete" | "export";
+
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
@@ -23,21 +25,25 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
-  const [showQrCode, setShowQrCode] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showExport, setShowExport] = useState(false);
+  const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
 
   if (!props.open) {
     return null;
   }
 
+  const onExpand = (option: ExpandableOptions) => () => {
+    if (option === expandedOption) {
+      setExpandedOption(undefined);
+    } else {
+      setExpandedOption(option);
+    }
+  };
+
   return (
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setShowQrCode(false);
-        setShowDelete(false);
-        setShowExport(false);
+        setExpandedOption(undefined);
         setBoardName(state.board!.name);
         setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
@@ -59,11 +65,11 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
-            <BoardOption.ShareQrCodeOption showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-            <BoardOption.DeleteBoardOption showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+            <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
+            <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
           </>
         )}
-        <BoardOption.ExportBoardOption showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
+        <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
       </ul>
     </Portal>
   );

@@ -2,7 +2,6 @@ import {useAppSelector} from "store";
 import {exportAsCSV, exportAsJSON} from "utils/export";
 import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
-import {Dispatch, SetStateAction} from "react";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
@@ -10,11 +9,9 @@ import {BoardOptionButton} from "./BoardOptionButton";
 import "./ExportBoardOption.scss";
 
 export type ExportProps = {
-  setShowDelete: Dispatch<SetStateAction<boolean>>;
-  setShowQrCode: Dispatch<SetStateAction<boolean>>;
-  setShowExport: Dispatch<SetStateAction<boolean>>;
+  onClick: () => void;
   onClose: () => void;
-  showExport: boolean;
+  expand: boolean;
 };
 
 export const ExportBoardOption = (props: ExportProps) => {
@@ -27,17 +24,8 @@ export const ExportBoardOption = (props: ExportProps) => {
 
   return (
     <BoardOption data-testid="export">
-      <BoardOptionButton
-        label="Export board"
-        icon={ExportIcon}
-        isExpandable
-        onClick={() => {
-          props.setShowDelete(false);
-          props.setShowQrCode(false);
-          props.setShowExport(!props.showExport);
-        }}
-      />
-      <div className={classNames("export-board-option__container", {"export-board-option__container--visible": props.showExport})}>
+      <BoardOptionButton label="Export board" icon={ExportIcon} isExpandable onClick={props.onClick} />
+      <div className={classNames("export-board-option__container", {"export-board-option__container--visible": props.expand})}>
         <BoardOptionButton
           label="Export as json"
           icon={ExportIcon}
