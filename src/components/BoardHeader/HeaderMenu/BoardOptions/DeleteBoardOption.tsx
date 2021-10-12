@@ -26,7 +26,7 @@ export const DeleteBoardOption = (props: DeleteProps) => {
       <BoardOptionButton
         label="Delete board"
         icon={DeleteIcon}
-        className="board-option-button--expandable"
+        isExpandable
         onClick={() => {
           props.setShowQrCode(false);
           props.setShowExport(false);

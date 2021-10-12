@@ -19,7 +19,7 @@ export const ShareQrCodeOption = (props: QRCodeProps) => (
     <BoardOptionButton
       label="Share board"
       icon={ShareIcon}
-      className="board-option-button--expandable"
+      isExpandable
       onClick={() => {
         props.setShowDelete(false);
         props.setShowExport(false);

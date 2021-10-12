@@ -30,7 +30,7 @@ export const ExportBoardOption = (props: ExportProps) => {
       <BoardOptionButton
         label="Export board"
         icon={ExportIcon}
-        className="board-option-button--expandable"
+        isExpandable
         onClick={() => {
           props.setShowDelete(false);
           props.setShowQrCode(false);

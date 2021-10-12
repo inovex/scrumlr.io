@@ -7,15 +7,16 @@ export interface BoardOptionButtonProps {
   icon?: ElementType;
   onClick: (...args: any) => any;
   className?: string;
+  isExpandable?: boolean;
   children?: ReactNode;
   [key: string]: any;
 }
 
-export const BoardOptionButton: FC<BoardOptionButtonProps> = ({label, icon, onClick, className, children, ...other}) => {
+export const BoardOptionButton: FC<BoardOptionButtonProps> = ({label, icon, onClick, isExpandable = false, className, children, ...other}) => {
   const Icon = icon!;
 
   return (
-    <button className={classNames("board-option-button", className)} onClick={onClick} {...other}>
+    <button className={classNames("board-option-button", {"board-option-button--expandable": isExpandable})} onClick={onClick} {...other}>
       {icon && <Icon className="board-option-button__icon" />}
       {children}
       <span className="board-option-button__label">{label}</span>
