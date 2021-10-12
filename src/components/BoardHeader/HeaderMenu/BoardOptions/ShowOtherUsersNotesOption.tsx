@@ -6,7 +6,7 @@ import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 
-export const Note = () => {
+export const ShowOtherUsersNotesOption = () => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));

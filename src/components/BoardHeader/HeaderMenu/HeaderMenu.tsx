@@ -56,14 +56,14 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         />
         {props.currentUserIsModerator && (
           <>
-            <BoardOption.Author />
-            <BoardOption.Note />
-            <BoardOption.Columns />
-            <BoardOption.QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-            <BoardOption.Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+            <BoardOption.ShowAuthorOption />
+            <BoardOption.ShowOtherUsersNotesOption />
+            <BoardOption.ShowHiddenColumnsOption />
+            <BoardOption.ShareQrCodeOption showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+            <BoardOption.DeleteBoardOption showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
           </>
         )}
-        <BoardOption.Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
+        <BoardOption.ExportBoardOption showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
       </ul>
     </Portal>
   );

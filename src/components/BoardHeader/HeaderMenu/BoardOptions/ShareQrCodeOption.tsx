@@ -13,7 +13,7 @@ export type QRCodeProps = {
   showQrCode: boolean;
 };
 
-export const QrCode = (props: QRCodeProps) => (
+export const ShareQrCodeOption = (props: QRCodeProps) => (
   <BoardOption data-testid="qrcode">
     <li className="header-menu__item">
       <BoardOptionButton

@@ -1,15 +1,15 @@
-import {Author} from "./Author";
-import {Columns} from "./Columns";
-import {Delete} from "./Delete";
-import {Export} from "./Export";
-import {Note} from "./Note";
-import {QrCode} from "./QRCode";
+import {ShowAuthorOption} from "./ShowAuthorOption";
+import {ShowHiddenColumnsOption} from "./ShowHiddenColumnsOption";
+import {DeleteBoardOption} from "./DeleteBoardOption";
+import {ExportBoardOption} from "./ExportBoardOption";
+import {ShowOtherUsersNotesOption} from "./ShowOtherUsersNotesOption";
+import {ShareQrCodeOption} from "./ShareQrCodeOption";
 
 export const BoardOption = {
-  Author,
-  Columns,
-  Delete,
-  Export,
-  Note,
-  QrCode,
+  ShowAuthorOption,
+  ShowHiddenColumnsOption,
+  DeleteBoardOption,
+  ExportBoardOption,
+  ShowOtherUsersNotesOption,
+  ShareQrCodeOption,
 };

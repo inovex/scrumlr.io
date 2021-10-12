@@ -15,7 +15,7 @@ export type DeleteProps = {
   showDelete: boolean;
 };
 
-export const Delete = (props: DeleteProps) => {
+export const DeleteBoardOption = (props: DeleteProps) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));
