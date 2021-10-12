@@ -2,10 +2,8 @@ frontend:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
 livequery:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
-  imagePullPolicy: IfNotPresent
 server:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
-  imagePullPolicy: IfNotPresent
 dashboard:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-dashboard:latest
 

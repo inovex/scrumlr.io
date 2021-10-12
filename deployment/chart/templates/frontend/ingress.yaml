@@ -8,35 +8,47 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- if .Values.cert.enabled }}
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    {{- end }}
 spec:
+  {{- if and .Values.cert.enabled  .Values.hostname }}
+  tls:
+  - hosts:
+    - {{ .Values.hostname }}
+    secretName:  {{ .Values.cert.name }}
+ {{- end }}
   rules:
   - http:
       paths:
-      - path: {{ .Values.frontend.path }}
+      - path: / 
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.frontend }}
             port:
-              number: {{ .Values.frontend.port }} 
+              number: 80 
       - path: /new
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.frontend }}
             port:
-              number: {{ .Values.frontend.port }} 
+              number: 80 
       - path: /login 
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.frontend }}
             port:
-              number: {{ .Values.frontend.port }} 
+              number: 80 
       - path: /board/
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.frontend }}
             port:
-              number: {{ .Values.frontend.port }}      
+              number: 80 
+  {{- if .Values.hostname}}
+    host: {{ .Values.hostname }} 
+  {{- end}}

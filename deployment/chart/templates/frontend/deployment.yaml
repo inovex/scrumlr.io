@@ -6,7 +6,7 @@ metadata:
     {{- include "selectorLabels" .Values.frontend | nindent 6}}
     {{- include "labels" . | nindent 6}}
 spec:
-  replicas: 1
+  replicas: {{ .Values.frontend.replicas | default 1}} 
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.frontend | nindent 8}}
@@ -18,16 +18,19 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.frontend }}
           image: {{ .Values.frontend.image }}
-          imagePullPolicy: {{ .Values.frontend.imagePullPolicy }}
+          imagePullPolicy: IfNotPresent 
           ports:
-            - name: {{ .Values.frontend.portName }}
-              containerPort: {{.Values.frontend.hostPort }} 
-          {{- if .Values.frontend.livenessProbe }}
+            - containerPort: 80 
           livenessProbe:
-          {{- toYaml .Values.frontend.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.frontend.readinessProbe }}
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 3
           readinessProbe: 
-          {{- toYaml .Values.frontend.readinessProbe | nindent 12 }}
-          {{- end }}
-      restartPolicy: {{ .Values.frontend.restartPolicy }}
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 3
+      restartPolicy: Always 

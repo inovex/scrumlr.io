@@ -6,7 +6,7 @@ metadata:
     {{- include "selectorLabels" .Values.server | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.server.replicas | default 1 }} 
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.server | nindent 6 }}
@@ -18,21 +18,30 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.server }}
           image: {{ .Values.server.image }}
-          imagePullPolicy:  {{ .Values.server.imagePullPolicy }}
+          imagePullPolicy: IfNotPresent 
           ports:
-            - name: {{ .Values.server.portName }}
-              containerPort: {{ .Values.server.port }}
+            - name: server 
+              containerPort: 4000 
           envFrom:
             - configMapRef:
                 name: {{ include "scrumlr-fullname" .Values.server }}
             - secretRef:
                 name: {{ include "scrumlr-fullname" .Values.server }}
-           {{- if .Values.server.livenessProbe }}
           livenessProbe: 
-          {{- toYaml .Values.server.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.server.readinessProbe }}
+            httpGet:
+              path: /api/health
+              port: server 
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            timeoutSeconds: 5
           readinessProbe: 
-          {{- toYaml .Values.server.readinessProbe | nindent 12 }}  
-          {{- end }}
-      restartPolicy:  {{ .Values.server.restartPolicy }}
+            httpGet:
+              path: /api/users
+              port: server 
+              httpHeaders:
+              - name: X-Parse-Application-Id
+                value: Scrumlr
+            initialDelaySeconds: 10 
+            periodSeconds: 5
+            timeoutSeconds: 5
+      restartPolicy: Always 

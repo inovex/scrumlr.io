@@ -7,8 +7,8 @@ metadata:
     {{- include "labels" . | nindent 6 }}
 spec:
   ports:
-    - port: {{ .Values.frontend.port }}
-      targetPort: {{ .Values.frontend.hostPort }}
+    - port: 80 
+      targetPort: 80
       protocol: TCP
   selector:
     {{- include "selectorLabels" .Values.frontend | nindent 6 }}

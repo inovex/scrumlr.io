@@ -6,7 +6,7 @@ metadata:
     {{- include "selectorLabels" .Values.dashboard | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.dashboard.replicas | default 1}}
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.dashboard  | nindent 6 }}
@@ -16,23 +16,22 @@ spec:
         {{- include "selectorLabels" .Values.dashboard | nindent 8 }}
     spec:
       containers:
-        - name: {{ include "scrumlr-fullname" .Values.dashboard }}
-          image: {{ .Values.dashboard.image }}
-          imagePullPolicy: {{ .Values.dashboard.imagePullPolicy }}
-          ports:
-            - name: {{ .Values.dashboard.portName}}
-              containerPort: {{ .Values.dashboard.hostPort }}
-          envFrom:
-            - configMapRef:
-                name: {{ include "scrumlr-fullname" .Values.dashboard }}
-            - secretRef:
-                name: {{ include "scrumlr-fullname" .Values.dashboard }}
-          {{- if .Values.dashboard.livenessProbe }}
-          livenessProbe:
-          {{- toYaml .Values.dashboard.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.dashboard.readinessProbe }}
-          readinessProbe:
-          {{- toYaml .Values.dashboard.readinessProbe | nindent 12 }}
-          {{- end }}
-      restartPolicy: {{ .Values.dashboard.restartPolicy }} 
+      - name: {{ include "scrumlr-fullname" .Values.dashboard }}
+        image: {{ .Values.dashboard.image }} 
+        imagePullPolicy: IfNotPresent 
+        ports:
+        - name: dashboard 
+          containerPort: 4040 
+        envFrom:
+        - configMapRef:
+            name: {{ include "scrumlr-fullname" .Values.dashboard }}
+        - secretRef:
+            name: {{ include "scrumlr-fullname" .Values.dashboard }}
+        livenessProbe:
+          httpGet:
+            path: /dashboard
+            port: 4040
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+      restartPolicy: Always 

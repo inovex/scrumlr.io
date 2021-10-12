@@ -7,14 +7,26 @@ metadata:
     {{- include "labels" . | nindent 6 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    {{- if .Values.cert.enabled }}
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    {{- end }}
 spec:
+  {{- if and .Values.cert.enabled .Values.hostname}}
+  tls:
+  - hosts:
+    - {{ .Values.hostname }}
+    secretName:  {{ .Values.cert.name }}
+ {{- end }}
   rules:
   - http:
       paths:
-      - path:  {{ .Values.server.path }}
+      - path: /api 
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.server }}
             port:
-              number: {{ .Values.server.port }}
+              number: 4000
+  {{- if .Values.hostname }} 
+    host: {{ .Values.hostname }}
+  {{- end}}
