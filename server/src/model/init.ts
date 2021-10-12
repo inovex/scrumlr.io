@@ -81,7 +81,7 @@ export const initServer = async (appId: string, serverUrl: string, masterKey: st
     await Parse.Config.save({
       versions: {
         Board: 1,
-        ShowOtherUsersNotesOption: 1,
+        Note: 1,
         JoinRequest: 1,
         Vote: 1,
       },
