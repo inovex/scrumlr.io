@@ -46,7 +46,6 @@ $header-menu-border-bottom-color: #efefef;
   background-color: $color-white;
   transition: background-color 0.15s ease-in-out;
   box-sizing: border-box;
-  border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
 }
 
 .board-option-button--expandable:hover {

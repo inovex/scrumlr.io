@@ -21,10 +21,10 @@ $header-menu-border-bottom-color: #efefef;
   flex-direction: column;
   row-gap: 10px;
 }
+
 .export-board-option__container--visible {
   box-sizing: border-box;
   height: 90px;
-  border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
 }
 
 .export-board-option__container > .board-option-button {
