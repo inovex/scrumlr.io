@@ -54,13 +54,13 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           setJoinConfirmationRequired={setJoinConfirmationRequired}
         />
         {props.currentUserIsModerator && (
-          <div className="header-menu-moderator">
+          <>
             <Author />
             <Note />
             <Columns />
             <QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
             <Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-          </div>
+          </>
         )}
         <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
       </ul>

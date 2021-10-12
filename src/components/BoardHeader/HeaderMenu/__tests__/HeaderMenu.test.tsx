@@ -86,14 +86,14 @@ describe("HeaderMenu", () => {
       expect(container).toMatchSnapshot();
     });
 
-    test("Header menu has 7 entries", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(3);
+    test("count of menu items for basic users", () => {
+      const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(2);
     });
 
-    test("HeaderMenu for moderators has 5 entries", () => {
+    test("tests count of menu items for moderators", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu-moderator")?.children.length).toEqual(5);
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(7);
     });
 
     test("Click on hide authors", async () => {
