@@ -131,7 +131,7 @@ describe("HeaderMenu", () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__qrcode-container")).toHaveClass("header-menu__qrcode-container--visible");
+        expect(container.querySelector(".share-qr-code-option__container")).toHaveClass("share-qr-code-option__container--visible");
       });
     });
 
@@ -144,7 +144,7 @@ describe("HeaderMenu", () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__delete-container")).toHaveClass("header-menu__delete-container--visible");
+        expect(container.querySelector(".delete-board-option__container")).toHaveClass("delete-board-option__container--visible");
       });
     });
 
@@ -156,7 +156,7 @@ describe("HeaderMenu", () => {
       expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");
+        expect(container.querySelector(".export-board-option__container")).toHaveClass("export-board-option__container--visible");
       });
     });
   });

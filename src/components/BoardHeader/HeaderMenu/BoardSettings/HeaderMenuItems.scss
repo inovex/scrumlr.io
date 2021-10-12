@@ -16,25 +16,6 @@ $header-menu-toggle-height: 3px;
 $header-menu-button-height: 24px;
 $header-menu-button-width: 24px;
 
-.header-menu__export-container {
-  height: 0;
-  width: 100%;
-  background: $color-white;
-  transition: height 0.5s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  row-gap: 10px;
-}
-.header-menu__export-container--visible {
-  box-sizing: border-box;
-  height: 90px;
-  border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
-}
-
 .header-menu__info {
   position: relative;
   height: 86px;
@@ -147,30 +128,6 @@ $header-menu-button-width: 24px;
   scale: 0.95;
 }
 
-.header-menu__item {
-  height: $header-menu__item-height;
-  background-color: $color-white;
-  transition: background-color 0.15s ease-in-out;
-  box-sizing: border-box;
-  border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
-}
-.header-menu__item:hover {
-  background-color: $header-menu-hover-color--light;
-}
-
-.header-menu__qrcode-container {
-  height: 0;
-  width: 100%;
-  background-color: $color-white;
-  transition: height 0.5s ease-in-out;
-  position: relative;
-  overflow: hidden;
-}
-.header-menu__qrcode-container--visible {
-  box-sizing: border-box;
-  height: 324px;
-  border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
-}
 .qrcode-container__qrcode {
   position: absolute;
   top: 13px;
@@ -196,19 +153,6 @@ $header-menu-button-width: 24px;
   scale: 0.95;
 }
 
-.header-menu__delete-container {
-  height: 0;
-  width: 100%;
-  transition: height 0.5s ease-in-out;
-  background-color: $color-white;
-  position: relative;
-  overflow: hidden;
-}
-
-.header-menu__delete-container--visible {
-  box-sizing: border-box;
-  height: 120px;
-}
 .delete-container__warning-label {
   position: absolute;
   top: 13px;
@@ -240,18 +184,5 @@ $header-menu-button-width: 24px;
   }
   .header-menu__info {
     background-color: $header-menu-color--dark;
-  }
-  .header-menu__delete-container {
-    background-color: $color-dark-mode-note;
-  }
-
-  .header-menu__item {
-    background-color: $color-dark-mode-note;
-  }
-  .header-menu__item:hover {
-    background-color: #3d4555;
-  }
-  .header-menu__export-container {
-    background-color: $color-dark-mode-note;
   }
 }

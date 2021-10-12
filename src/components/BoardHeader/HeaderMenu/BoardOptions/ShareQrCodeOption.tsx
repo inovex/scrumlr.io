@@ -5,6 +5,7 @@ import classNames from "classnames";
 import QRCode from "qrcode.react";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
+import "./ShareQrCodeOption.scss";
 
 export type QRCodeProps = {
   setShowDelete: Dispatch<SetStateAction<boolean>>;
@@ -15,22 +16,21 @@ export type QRCodeProps = {
 
 export const ShareQrCodeOption = (props: QRCodeProps) => (
   <BoardOption data-testid="qrcode">
-    <li className="header-menu__item">
-      <BoardOptionButton
-        label="Share board"
-        icon={ShareIcon}
-        onClick={() => {
-          props.setShowDelete(false);
-          props.setShowExport(false);
-          props.setShowQrCode(!props.showQrCode);
-        }}
-      />
-    </li>
-    <li className={classNames("header-menu__qrcode-container", {"header-menu__qrcode-container--visible": props.showQrCode})}>
+    <BoardOptionButton
+      label="Share board"
+      icon={ShareIcon}
+      className="board-option-button--expandable"
+      onClick={() => {
+        props.setShowDelete(false);
+        props.setShowExport(false);
+        props.setShowQrCode(!props.showQrCode);
+      }}
+    />
+    <div className={classNames("share-qr-code-option__container", {"share-qr-code-option__container--visible": props.showQrCode})}>
       <QRCode value={document.location.href} size={260} className="qrcode-container__qrcode" />
       <button className="qrcode-container__copy-to-clipboard" onClick={() => navigator.clipboard.writeText(document.location.href)}>
         Copy Invite URL
       </button>
-    </li>
+    </div>
   </BoardOption>
 );

@@ -7,6 +7,7 @@ import "../BoardSettings/HeaderMenuItems.scss";
 import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
+import "./ExportBoardOption.scss";
 
 export type ExportProps = {
   setShowDelete: Dispatch<SetStateAction<boolean>>;
@@ -26,41 +27,36 @@ export const ExportBoardOption = (props: ExportProps) => {
 
   return (
     <BoardOption data-testid="export">
-      <li className="header-menu__item">
+      <BoardOptionButton
+        label="Export board"
+        icon={ExportIcon}
+        className="board-option-button--expandable"
+        onClick={() => {
+          props.setShowDelete(false);
+          props.setShowQrCode(false);
+          props.setShowExport(!props.showExport);
+        }}
+      />
+      <div className={classNames("export-board-option__container", {"export-board-option__container--visible": props.showExport})}>
         <BoardOptionButton
-          label="Export board"
+          label="Export as json"
           icon={ExportIcon}
-          onClick={() => {
-            props.setShowDelete(false);
-            props.setShowQrCode(false);
-            props.setShowExport(!props.showExport);
-          }}
-        />
-      </li>
-      <li className={classNames("header-menu__export-container", {"header-menu__export-container--visible": props.showExport})}>
-        <button
-          className="header-menu__item-button"
-          data-testid="export-json"
           onClick={() => {
             exportAsJSON(state);
             props.onClose();
           }}
-        >
-          <ExportIcon className="item-button__icon" />
-          <label className="item-button__label">Export as json</label>
-        </button>
-        <button
-          className="header-menu__item-button"
-          data-testid="export-csv"
+          data-testid="export-json"
+        />
+        <BoardOptionButton
+          label="Export as csv"
+          icon={ExportIcon}
           onClick={() => {
             exportAsCSV(state);
             props.onClose();
           }}
-        >
-          <ExportIcon className="item-button__icon" />
-          <label className="item-button__label">Export as csv</label>
-        </button>
-      </li>
+          data-testid="export-csv"
+        />
+      </div>
     </BoardOption>
   );
 };

@@ -1,0 +1,21 @@
+@import "constants/style";
+
+.delete-board-option__container {
+  height: 0;
+  width: 100%;
+  transition: height 0.5s ease-in-out;
+  background-color: $color-white;
+  position: relative;
+  overflow: hidden;
+}
+
+.delete-board-option__container--visible {
+  box-sizing: border-box;
+  height: 120px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .delete-board-option__container {
+    background-color: $color-dark-mode-note;
+  }
+}

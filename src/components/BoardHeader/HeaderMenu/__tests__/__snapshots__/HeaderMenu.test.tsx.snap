@@ -128,26 +128,22 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
               class="board-option"
               data-testid="qrcode"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button board-option-button--expandable"
               >
-                <button
-                  class="board-option-button"
+                <svg
+                  class="board-option-button__icon"
                 >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-share.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Share board
-                  </span>
-                </button>
-              </li>
-              <li
-                class="header-menu__qrcode-container"
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Share board
+                </span>
+              </button>
+              <div
+                class="share-qr-code-option__container"
               >
                 <canvas
                   class="qrcode-container__qrcode"
@@ -160,32 +156,28 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 >
                   Copy Invite URL
                 </button>
-              </li>
+              </div>
             </li>
             <li
               class="board-option"
               data-testid="delete"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button board-option-button--expandable"
               >
-                <button
-                  class="board-option-button"
+                <svg
+                  class="board-option-button__icon"
                 >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-delete.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Delete board
-                  </span>
-                </button>
-              </li>
-              <li
-                class="header-menu__delete-container"
+                  icon-delete.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Delete board
+                </span>
+              </button>
+              <div
+                class="delete-board-option__container"
               >
                 <label
                   class="delete-container__warning-label"
@@ -204,17 +196,32 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 >
                   Delete board
                 </button>
-              </li>
+              </div>
             </li>
             <li
               class="board-option"
               data-testid="export"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button board-option-button--expandable"
+              >
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Export board
+                </span>
+              </button>
+              <div
+                class="export-board-option__container"
               >
                 <button
                   class="board-option-button"
+                  data-testid="export-json"
                 >
                   <svg
                     class="board-option-button__icon"
@@ -224,44 +231,25 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    Export board
+                    Export as json
                   </span>
                 </button>
-              </li>
-              <li
-                class="header-menu__export-container"
-              >
                 <button
-                  class="header-menu__item-button"
-                  data-testid="export-json"
-                >
-                  <svg
-                    class="item-button__icon"
-                  >
-                    icon-share.svg
-                  </svg>
-                  <label
-                    class="item-button__label"
-                  >
-                    Export as json
-                  </label>
-                </button>
-                <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                   data-testid="export-csv"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-share.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Export as csv
-                  </label>
+                  </span>
                 </button>
-              </li>
+              </div>
             </li>
           </ul>
         </div>
@@ -336,11 +324,26 @@ exports[`HeaderMenu should render correctly user 1`] = `
               class="board-option"
               data-testid="export"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button board-option-button--expandable"
+              >
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Export board
+                </span>
+              </button>
+              <div
+                class="export-board-option__container"
               >
                 <button
                   class="board-option-button"
+                  data-testid="export-json"
                 >
                   <svg
                     class="board-option-button__icon"
@@ -350,44 +353,25 @@ exports[`HeaderMenu should render correctly user 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    Export board
+                    Export as json
                   </span>
                 </button>
-              </li>
-              <li
-                class="header-menu__export-container"
-              >
                 <button
-                  class="header-menu__item-button"
-                  data-testid="export-json"
-                >
-                  <svg
-                    class="item-button__icon"
-                  >
-                    icon-share.svg
-                  </svg>
-                  <label
-                    class="item-button__label"
-                  >
-                    Export as json
-                  </label>
-                </button>
-                <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                   data-testid="export-csv"
                 >
                   <svg
-                    class="item-button__icon"
+                    class="board-option-button__icon"
                   >
                     icon-share.svg
                   </svg>
-                  <label
-                    class="item-button__label"
+                  <span
+                    class="board-option-button__label"
                   >
                     Export as csv
-                  </label>
+                  </span>
                 </button>
-              </li>
+              </div>
             </li>
           </ul>
         </div>
