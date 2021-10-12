@@ -24,8 +24,8 @@ export const Timer = (props: TimerProps) => {
   };
 
   const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
-  const warningSound = new Audio(`${process.env.PUBLIC_URL  }/timer_warning.mp3`);
-  const finishedSound = new Audio(`${process.env.PUBLIC_URL  }/timer_finished.mp3`);
+  const warningSound = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
+  const finishedSound = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
   const [hasPlayedWarningSound, setHasPlayedWarningSound] = useState(false);
   const [hasPlayedFinishedSound, setHasPlayedFinishedSound] = useState(false);
