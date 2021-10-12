@@ -70,10 +70,10 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-switch-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle-switch item-button__toggle-switch--left"
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
                   />
                 </div>
                 <span
@@ -91,10 +91,10 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-switch-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle-switch item-button__toggle-switch--right"
+                    class="board-option-toggle__switch board-option-toggle__switch--left"
                   />
                 </div>
                 <span
@@ -111,10 +111,10 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-switch-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle-switch item-button__toggle-switch--left"
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
                   />
                 </div>
                 <span

@@ -158,47 +158,6 @@ $header-menu-button-width: 24px;
   background-color: $header-menu-hover-color--light;
 }
 
-.item-button__toggle-switch-container {
-  width: $header-menu-icon-width;
-  height: $header-menu__item-height;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  vertical-align: middle;
-}
-.item-button__toggle-switch {
-  width: $header-menu-button-width;
-  height: $header-menu-button-height;
-  position: relative;
-  display: inline-block;
-}
-.item-button__toggle-switch::after {
-  content: "";
-  height: $header-menu-toggle-button-height;
-  width: $header-menu-toggle-button-width;
-  position: absolute;
-  border-radius: 100%;
-  top: calc(50% - #{$header-menu-toggle-button-height} / 2);
-  transition: all 0.25s linear;
-}
-.item-button__toggle-switch::before {
-  content: "";
-  height: $header-menu-toggle-height;
-  width: 24px;
-  background-color: $header-menu-toggle-background-color;
-  position: absolute;
-  border-radius: $header-menu-toggle-height;
-  top: calc(50% - #{$header-menu-toggle-height} / 2);
-}
-.item-button__toggle-switch--left::after {
-  left: 0;
-  background-color: $color-backlog-blue;
-}
-.item-button__toggle-switch--right::after {
-  left: $header-menu-toggle-button-width;
-  background-color: $color-planning-pink;
-}
-
 .header-menu__qrcode-container {
   height: 0;
   width: 100%;
