@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "constants/style.scss";
 
 $note__border-radius: 16px;
 $note__text-margin-bottom: 9px;
@@ -26,6 +26,13 @@ $note__author-margin-left: 10px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   z-index: $note-z-index;
+}
+
+.note .note__user-avatar {
+  height: 28px;
+  width: 28px;
+  font-size: 13px;
+  padding: 15px;
 }
 
 .note__in-stack {
@@ -127,6 +134,7 @@ $note__author-margin-left: 10px;
 .note__footer {
   position: relative;
   height: 26px;
+  //padding-bottom: 38px;
 }
 .note__author {
   display: inline-flex;
@@ -135,7 +143,6 @@ $note__author-margin-left: 10px;
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
   font: inherit;
   vertical-align: baseline;
 }

@@ -142,14 +142,18 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomCreature}`;
 };
 
-export const getInitials = (name: string): string => {
-  // return first char of each word in name
-  if (name.indexOf(" ") >= 0) {
-    const matches = name.match(/\b(\w)/g);
-    return `${matches![0]}${matches![1]}`;
+export const getInitials = (name: string): string | undefined => {
+  // This name check is a quick fix because Name is undefined at first
+  if (name) {
+    // return first char of each word in name
+    if (name.indexOf(" ") >= 0) {
+      const matches = name.match(/\b(\w)/g);
+      return `${matches![0]}${matches![1]}`;
+    }
+    // return first 2 chars of single-word name
+    return name.substring(0, 2);
   }
-  // return first 2 chars of single-word name
-  return name.substring(0, 2);
+  return undefined;
 };
 
 export default getRandomName;

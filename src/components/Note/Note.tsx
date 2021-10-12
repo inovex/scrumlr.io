@@ -1,5 +1,4 @@
 import "./Note.scss";
-import avatar from "assets/avatar.png";
 import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
@@ -11,6 +10,7 @@ import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
+import {UserAvatar} from "components/BoardUsers";
 
 interface NoteProps {
   text: string;
@@ -31,9 +31,7 @@ interface NoteProps {
 
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
-
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.currentUserIsModerator) {
@@ -116,7 +114,7 @@ export const Note = (props: NoteProps) => {
         <footer className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
-              <img className="note__author-image" src={avatar} alt="User" />
+              <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
