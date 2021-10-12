@@ -1,0 +1,40 @@
+@import "constants/style";
+
+$header-menu__item-border-width: 1px;
+$header-menu-hover-color--dark: #3d4555;
+$header-menu-hover-color--light: #f3f3f3;
+
+.board-option-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.board-option-button:focus,
+.board-option-button:hover {
+  outline: none;
+}
+
+.header-menu__export-container > .board-option-button {
+  background-color: transparent;
+  padding: 0;
+  height: 30px;
+  width: 80%;
+  border: $header-menu__item-border-width solid $color-black;
+  border-radius: 32px;
+  color: $color-black;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $header-menu-hover-color--light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .header-menu__export-container > .board-option-button:hover {
+    background-color: $header-menu-hover-color--dark;
+  }
+}

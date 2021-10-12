@@ -3,8 +3,10 @@ import {exportAsCSV, exportAsJSON} from "utils/export";
 import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import {Dispatch, SetStateAction} from "react";
-import "./HeaderMenuItems.scss";
+import "../BoardSettings/HeaderMenuItems.scss";
 import classNames from "classnames";
+import {BoardOption} from "./BoardOption";
+import {BoardOptionButton} from "./BoardOptionButton";
 
 export type ExportProps = {
   setShowDelete: Dispatch<SetStateAction<boolean>>;
@@ -23,10 +25,9 @@ export const Export = (props: ExportProps) => {
   }));
 
   return (
-    <div className="header-menu__item-button" data-testid="export">
+    <BoardOption data-testid="export">
       <li className="header-menu__item">
-        <button
-          className="header-menu__item-button"
+        <BoardOptionButton
           onClick={() => {
             props.setShowDelete(false);
             props.setShowQrCode(false);
@@ -35,7 +36,7 @@ export const Export = (props: ExportProps) => {
         >
           <ExportIcon className="item-button__icon" />
           <label className="item-button__label">Export board</label>
-        </button>
+        </BoardOptionButton>
       </li>
       <li className={classNames("header-menu__export-container", {"header-menu__export-container--visible": props.showExport})}>
         <button
@@ -61,6 +62,6 @@ export const Export = (props: ExportProps) => {
           <label className="item-button__label">Export as csv</label>
         </button>
       </li>
-    </div>
+    </BoardOption>
   );
 };

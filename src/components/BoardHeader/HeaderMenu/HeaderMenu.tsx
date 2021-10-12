@@ -4,7 +4,8 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
-import {Author, BoardSettings, Columns, Delete, Export, Note, QrCode} from "./HeaderMenuItems";
+import {BoardOption} from "./BoardOptions";
+import {BoardSettings} from "./BoardSettings";
 
 type HeaderMenuProps = {
   open: boolean;
@@ -55,14 +56,14 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         />
         {props.currentUserIsModerator && (
           <>
-            <Author />
-            <Note />
-            <Columns />
-            <QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-            <Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+            <BoardOption.Author />
+            <BoardOption.Note />
+            <BoardOption.Columns />
+            <BoardOption.QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
+            <BoardOption.Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
           </>
         )}
-        <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
+        <BoardOption.Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
       </ul>
     </Portal>
   );

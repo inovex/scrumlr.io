@@ -35,22 +35,6 @@ $header-menu-button-width: 24px;
   border-bottom: $header-menu__item-border-width solid $header-menu-border-bottom-color;
 }
 
-.header-menu__export-container > .header-menu__item-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  height: 30px;
-  width: 80%;
-  border: $header-menu__item-border-width solid $color-black;
-  border-radius: 32px;
-  color: $color-black;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $header-menu-hover-color--light;
-  }
-}
-
 .header-menu__info {
   position: relative;
   height: 86px;
@@ -174,19 +158,6 @@ $header-menu-button-width: 24px;
   background-color: $header-menu-hover-color--light;
 }
 
-.header-menu__item-button {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-.header-menu__item-button:focus,
-.header-menu__item-button:hover {
-  outline: none;
-}
 .item-button__icon {
   width: $header-menu-icon-width;
   height: $header-menu-icon-height;
@@ -343,8 +314,5 @@ $header-menu-button-width: 24px;
   }
   .header-menu__export-container {
     background-color: $color-dark-mode-note;
-  }
-  .header-menu__export-container > .header-menu__item-button:hover {
-    background-color: $header-menu-hover-color--dark;
   }
 }

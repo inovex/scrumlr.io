@@ -62,93 +62,80 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                 </form>
               </li>
             </div>
-            <div
-              class="header-menu__item-button"
+            <li
+              class="board-option"
               data-testid="author"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button"
               >
-                <button
-                  class="header-menu__item-button"
+                <div
+                  class="item-button__toggle-switch-container"
                 >
                   <div
-                    class="item-button__toggle-switch-container"
-                  >
-                    <div
-                      class="item-button__toggle-switch item-button__toggle-switch--left"
-                    />
-                  </div>
-                  <label
-                    class="item-button__label"
-                  >
-                    Hide
-                     authors of card
-                  </label>
-                </button>
-              </li>
-            </div>
-            <div
-              class="header-menu__item-button"
+                    class="item-button__toggle-switch item-button__toggle-switch--left"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Hide
+                   authors of card
+                </label>
+              </button>
+            </li>
+            <li
+              class="board-option"
               data-testid="note"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button"
               >
-                <button
-                  class="header-menu__item-button"
+                <div
+                  class="item-button__toggle-switch-container"
                 >
                   <div
-                    class="item-button__toggle-switch-container"
-                  >
-                    <div
-                      class="item-button__toggle-switch item-button__toggle-switch--right"
-                    />
-                  </div>
-                  <label
-                    class="item-button__label"
-                  >
-                    Show
-                     notes of other users
-                  </label>
-                </button>
-              </li>
-            </div>
-            <div
-              class="header-menu__item-button"
-              data-testid="columns"
+                    class="item-button__toggle-switch item-button__toggle-switch--right"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Show
+                   notes of other users
+                </label>
+              </button>
+            </li>
+            <li
+              class="board-option"
             >
-              <li
-                class="header-menu__item"
+              <button
+                class="board-option-button"
               >
-                <button
-                  class="header-menu__item-button"
+                <div
+                  class="item-button__toggle-switch-container"
                 >
                   <div
-                    class="item-button__toggle-switch-container"
-                  >
-                    <div
-                      class="item-button__toggle-switch item-button__toggle-switch--left"
-                    />
-                  </div>
-                  <label
-                    class="item-button__label"
-                  >
-                    Hide
-                     columns
-                  </label>
-                </button>
-              </li>
-            </div>
-            <div
-              class="header-menu__item-button"
+                    class="item-button__toggle-switch item-button__toggle-switch--left"
+                  />
+                </div>
+                <label
+                  class="item-button__label"
+                >
+                  Hide
+                   columns
+                </label>
+              </button>
+            </li>
+            <li
+              class="board-option"
               data-testid="qrcode"
             >
               <li
                 class="header-menu__item"
               >
                 <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                 >
                   <svg
                     class="item-button__icon"
@@ -177,16 +164,16 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   Copy Invite URL
                 </button>
               </li>
-            </div>
-            <div
-              class="header-menu__item-button"
+            </li>
+            <li
+              class="board-option"
               data-testid="delete"
             >
               <li
                 class="header-menu__item"
               >
                 <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                 >
                   <svg
                     class="item-button__icon"
@@ -221,16 +208,16 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   Delete board
                 </button>
               </li>
-            </div>
-            <div
-              class="header-menu__item-button"
+            </li>
+            <li
+              class="board-option"
               data-testid="export"
             >
               <li
                 class="header-menu__item"
               >
                 <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                 >
                   <svg
                     class="item-button__icon"
@@ -278,7 +265,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
                   </label>
                 </button>
               </li>
-            </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -348,15 +335,15 @@ exports[`HeaderMenu should render correctly user 1`] = `
                 </form>
               </li>
             </div>
-            <div
-              class="header-menu__item-button"
+            <li
+              class="board-option"
               data-testid="export"
             >
               <li
                 class="header-menu__item"
               >
                 <button
-                  class="header-menu__item-button"
+                  class="board-option-button"
                 >
                   <svg
                     class="item-button__icon"
@@ -404,7 +391,7 @@ exports[`HeaderMenu should render correctly user 1`] = `
                   </label>
                 </button>
               </li>
-            </div>
+            </li>
           </ul>
         </div>
       </div>

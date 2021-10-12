@@ -101,7 +101,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("author")).not.toBeNull();
 
       const button = screen.getByTestId("author")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -114,7 +114,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("note")).not.toBeNull();
 
       const button = screen.getByTestId("note")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -127,7 +127,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("qrcode")).not.toBeNull();
 
       const button = screen.getByTestId("qrcode")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -140,7 +140,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("delete")).not.toBeNull();
 
       const button = screen.getByTestId("delete")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -153,7 +153,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("export")).not.toBeNull();
 
       const button = screen.getByTestId("export")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
       await waitFor(() => {
         expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");

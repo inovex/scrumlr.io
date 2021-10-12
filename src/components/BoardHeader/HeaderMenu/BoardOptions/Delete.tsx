@@ -3,8 +3,10 @@ import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {Dispatch, SetStateAction} from "react";
-import "./HeaderMenuItems.scss";
+import "../BoardSettings/HeaderMenuItems.scss";
 import classNames from "classnames";
+import {BoardOption} from "./BoardOption";
+import {BoardOptionButton} from "./BoardOptionButton";
 
 export type DeleteProps = {
   setShowDelete: Dispatch<SetStateAction<boolean>>;
@@ -19,10 +21,9 @@ export const Delete = (props: DeleteProps) => {
   }));
 
   return (
-    <div className="header-menu__item-button" data-testid="delete">
+    <BoardOption data-testid="delete">
       <li className="header-menu__item">
-        <button
-          className="header-menu__item-button"
+        <BoardOptionButton
           onClick={() => {
             props.setShowQrCode(false);
             props.setShowExport(false);
@@ -31,7 +32,7 @@ export const Delete = (props: DeleteProps) => {
         >
           <DeleteIcon className="item-button__icon" />
           <label className="item-button__label">Delete board</label>
-        </button>
+        </BoardOptionButton>
       </li>
       <li className={classNames("header-menu__delete-container", {"header-menu__delete-container--visible": props.showDelete})}>
         <label className="delete-container__warning-label">
@@ -41,6 +42,6 @@ export const Delete = (props: DeleteProps) => {
           Delete board
         </button>
       </li>
-    </div>
+    </BoardOption>
   );
 };
