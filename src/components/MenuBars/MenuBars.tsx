@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {ActionFactory} from "store/action";
 import store, {useAppSelector} from "store";
 import Parse from "parse";
@@ -37,14 +37,6 @@ export function MenuBars() {
     }
     store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
   };
-
-  // const toggleTimer = (active: boolean) => {
-  //   if (active) {
-  //     store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + 3 * 60000)));
-  //   } else {
-  //     store.dispatch(ActionFactory.cancelTimer());
-  //   }
-  // };
 
   const toggleModeration = (active: boolean) => {
     store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));

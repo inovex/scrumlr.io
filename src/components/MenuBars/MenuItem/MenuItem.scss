@@ -120,8 +120,11 @@ $number-of-menu-items: 4;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.1s linear;
-    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    box-shadow: 0 16px 32px 0 #0057ff3d;
     background-color: var(--primaryColor);
+  }
+  .admin-menu .menu-item__tooltip {
+    box-shadow: 0 16px 32px 0 #ff00693d;
   }
   @media screen and (max-width: 450px) {
     .menu-item:nth-child(1) {

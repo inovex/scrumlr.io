@@ -8,7 +8,8 @@ type DropdownProps = {
 
 type DropdownItemButtonProps = {
   className?: string;
-  onClick?: (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onTouchEnd?: (e: React.TouchEvent<HTMLButtonElement>) => void;
 };
 
 type DropdownSubcomponents = {
@@ -33,7 +34,9 @@ const DropdownFooter: React.FC<DropdownProps> = (props) => (
 const DropdownItem: React.FC<DropdownProps> = (props) => <li className={classNames("dropdown__item", props.className)}>{props.children}</li>;
 const DropdownItemButton: React.FC<DropdownItemButtonProps> = (props) => (
   <li className={classNames("dropdown__item-button", props.className)}>
-    <button onClick={(e) => props.onClick?.(e)}>{props.children}</button>
+    <button onClick={(e) => props.onClick?.(e)} onTouchEnd={(e) => props.onTouchEnd?.(e)}>
+      {props.children}{" "}
+    </button>
   </li>
 );
 

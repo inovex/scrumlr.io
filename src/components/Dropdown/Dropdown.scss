@@ -52,7 +52,7 @@ $dropdown__item-hover-background-dark: #414959;
   border: {
     top: 1px solid;
     bottom: 0;
-    image: linear-gradient(to right, transparent 0px, transparent 49px, $dropdown__item-seperator-background 50px, $dropdown__item-seperator-background 240px) 1;
+    color: $dropdown__item-seperator-background;
   }
   margin-bottom: 10px;
 }
