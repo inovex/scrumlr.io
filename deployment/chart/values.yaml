@@ -6,11 +6,12 @@ hostname:
 cache:
   name: cache
   replicas: 
-
+  
 dashboard:
   name: dashboard
   replicas: 
   image: scrumlr-dashboard
+  imagePullPolicy: 
   config:
     SERVER_URL: "http://localhost/api"
     APP_ID: "Scrumlr"
@@ -23,12 +24,15 @@ dashboard:
 frontend:
   name: frontend
   image: scrumlr-frontend
+  imagePullPolicy: 
   replicas:
+
 
 livequery:
   name: livequery
   replicas: 
   image: scrumlr-parse
+  imagePullPolicy: 
   config:
     SCRUMLR_OPERATION_MODE: "livequery"
     SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
@@ -42,6 +46,7 @@ livequery:
 server:
   name: server
   image: scrumlr-parse
+  imagePullPolicy: 
   replicas: 
   config:
     SCRUMLR_OPERATION_MODE: "server"

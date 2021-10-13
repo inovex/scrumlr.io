@@ -21,7 +21,7 @@ fi
 if [[ "$(docker images -q scrumlr-parse)" == "" ]]; 
 then
     echo "Image scrumlr-parse: missing";
-    docker build -f ../server/Dockerfile -t scrumlr-parse ../server
+    docker build -f ../server/Dockerfile -t scrumlr-server ../server
 else
     echo "Image scrumlr-parse: found";
 fi

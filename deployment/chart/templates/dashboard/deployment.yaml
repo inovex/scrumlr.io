@@ -18,7 +18,7 @@ spec:
       containers:
       - name: {{ include "scrumlr-fullname" .Values.dashboard }}
         image: {{ .Values.dashboard.image }} 
-        imagePullPolicy: IfNotPresent 
+        imagePullPolicy: {{ .Values.frontend.imagePullPolicy | default "IfNotPresent" }}
         ports:
         - name: dashboard 
           containerPort: 4040 
