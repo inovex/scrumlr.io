@@ -241,7 +241,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         <menu
           class="dropdown timer__dropdown"
         >
-          <main
+          <div
             class="dropdown__main"
           >
             <ul>
@@ -255,7 +255,6 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <div>
                     1
                   </div>
-                   
                 </button>
               </li>
               <li
@@ -268,7 +267,6 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <div>
                     3
                   </div>
-                   
                 </button>
               </li>
               <li
@@ -281,7 +279,6 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <div>
                     5
                   </div>
-                   
                 </button>
               </li>
               <li
@@ -300,11 +297,10 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <button>
                     -
                   </button>
-                   
                 </button>
               </li>
             </ul>
-          </main>
+          </div>
         </menu>
       </button>
       <button

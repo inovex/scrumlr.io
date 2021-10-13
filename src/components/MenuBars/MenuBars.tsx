@@ -13,7 +13,7 @@ import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
-import {TimerButton} from "./MenuItem/variants/TimerButton";
+import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
 
@@ -71,7 +71,7 @@ export function MenuBars() {
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
-            <TimerButton />
+            <TimerToggleButton />
             <MenuToggle
               value={state.voting === "active"}
               direction="left"

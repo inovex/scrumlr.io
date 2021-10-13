@@ -2,11 +2,11 @@ import {useState} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import Dropdown from "components/Dropdown";
-import {MenuDropdown} from "components/MenuBars/MenuItem/MenuDropdown";
+import {DropdownToggleButton} from "components/MenuBars/MenuItem/DropdownToggleButton";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
-import "./TimerButton.scss";
+import "./TimerToggleButton.scss";
 
-export const TimerButton = () => {
+export const TimerToggleButton = () => {
   const timer = useAppSelector((state) => state.board.data?.timerUTCEndTime);
   const [customTime, setCustomTime] = useState(10);
 
@@ -15,7 +15,7 @@ export const TimerButton = () => {
   };
 
   return (
-    <MenuDropdown direction="left" label="Timer" icon={TimerIcon}>
+    <DropdownToggleButton direction="left" label="Timer" icon={TimerIcon}>
       <Dropdown className="timer__dropdown">
         <Dropdown.Main>
           <Dropdown.ItemButton className="timer-dropdown__item-button" onClick={() => onClick(1)}>
@@ -60,6 +60,6 @@ export const TimerButton = () => {
           </Dropdown.Footer>
         )}
       </Dropdown>
-    </MenuDropdown>
+    </DropdownToggleButton>
   );
 };

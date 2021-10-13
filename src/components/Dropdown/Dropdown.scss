@@ -1,16 +1,7 @@
 @import "constants/style.scss";
 
 $dropdown__width: 245px;
-
-$dropdown__background-light: $color-white;
-$dropdown__background-dark: $color-dark-mode-note;
-
 $dropdown__item-height: 48px;
-
-$dropdown__item-seperator-background: #edeff2;
-$dropdown__section-seperator-background: #cdcfd2;
-$dropdown__item-hover-background-light: #efefef;
-$dropdown__item-hover-background-dark: #414959;
 
 .dropdown {
   box-sizing: border-box;
@@ -21,12 +12,12 @@ $dropdown__item-hover-background-dark: #414959;
   overflow: hidden;
   padding: 0;
   margin: 0;
-  background-color: $dropdown__background-light;
+  background-color: $color-white;
   z-index: -1;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown {
-    background-color: $dropdown__background-dark;
+    background-color: $color-dark-mode-note;
   }
 }
 .dropdown-item--open .dropdown {
@@ -52,7 +43,7 @@ $dropdown__item-hover-background-dark: #414959;
   border: {
     top: 1px solid;
     bottom: 0;
-    color: $dropdown__item-seperator-background;
+    color: $color-light-gray;
   }
   margin-bottom: 10px;
 }
@@ -61,24 +52,24 @@ $dropdown__item-hover-background-dark: #414959;
 .dropdown__item-button {
   height: $dropdown__item-height;
   width: 100%;
-  background-color: $dropdown__background-light;
+  background-color: $color-white;
   position: relative;
   box-sizing: border-box;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown__item,
   .dropdown__item-button {
-    background-color: $dropdown__background-dark;
+    background-color: $color-dark-mode-note;
   }
 }
 .dropdown__item:hover,
 .dropdown__item-button:hover {
-  background-color: $dropdown__item-hover-background-light;
+  background-color: $hover-background-light;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown__item:hover,
   .dropdown__item-button:hover {
-    background-color: $dropdown__item-hover-background-dark;
+    background-color: $hover-background-dark;
   }
 }
 .dropdown__item:not(:last-child),
@@ -86,7 +77,7 @@ $dropdown__item-hover-background-dark: #414959;
   border: {
     bottom: 1px solid;
     top: 0;
-    image: linear-gradient(to right, transparent 0px, transparent 49px, $dropdown__item-seperator-background 50px, $dropdown__item-seperator-background 240px) 1;
+    image: linear-gradient(to right, transparent 0px, transparent 49px, $color-light-gray 50px, $color-light-gray 240px) 1;
   }
 }
 .dropdown__item-button > button {

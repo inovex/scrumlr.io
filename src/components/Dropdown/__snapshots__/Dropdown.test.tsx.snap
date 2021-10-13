@@ -4,7 +4,7 @@ exports[`Dropdown should render correctly 1`] = `
 <menu
   class="dropdown"
 >
-  <main
+  <div
     class="dropdown__main"
   >
     <ul>
@@ -18,12 +18,11 @@ exports[`Dropdown should render correctly 1`] = `
       >
         <button>
           Item Button
-           
         </button>
       </li>
     </ul>
-  </main>
-  <footer
+  </div>
+  <div
     class="dropdown__footer"
   >
     <ul>
@@ -33,6 +32,6 @@ exports[`Dropdown should render correctly 1`] = `
         Item
       </li>
     </ul>
-  </footer>
+  </div>
 </menu>
 `;

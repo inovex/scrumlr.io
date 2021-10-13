@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import classNames from "classnames";
 import "./MenuItem.scss";
-import "./MenuDropdown.scss";
+import "./DropdownToggleButton.scss";
 
 type DropdownButtonProps = {
   direction: "left" | "right";
@@ -10,7 +10,7 @@ type DropdownButtonProps = {
   disabled?: boolean;
 };
 
-export const MenuDropdown: React.FC<DropdownButtonProps> = (props) => {
+export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
   const [touchHover, setTouchHover] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const Icon = props.icon;

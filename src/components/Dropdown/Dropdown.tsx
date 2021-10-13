@@ -1,16 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import "./Dropdown.scss";
-
-type DropdownProps = {
-  className?: string;
-};
-
-type DropdownItemButtonProps = {
-  className?: string;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onTouchEnd?: (e: React.TouchEvent<HTMLButtonElement>) => void;
-};
+import {DropdownItemButton, DropdownItemButtonProps} from "./DropdownItemButton";
+import {DropdownMain} from "./DropdownMain";
+import {DropdownFooter} from "./DropdownFooter";
+import {DropdownItem} from "./DropdownItem";
+import {DropdownProps} from "./DropdownProps";
 
 type DropdownSubcomponents = {
   Main: React.FC<DropdownProps>;
@@ -19,25 +14,10 @@ type DropdownSubcomponents = {
   ItemButton: React.FC<DropdownItemButtonProps>;
 };
 
-const Dropdown: React.FC<DropdownProps> & DropdownSubcomponents = (props) => <menu className={classNames("dropdown", props.className)}>{props.children}</menu>;
-
-const DropdownMain: React.FC<DropdownProps> = (props) => (
-  <main className={classNames("dropdown__main", props.className)}>
-    <ul>{props.children}</ul>
-  </main>
-);
-const DropdownFooter: React.FC<DropdownProps> = (props) => (
-  <footer className={classNames("dropdown__footer", props.className)}>
-    <ul>{props.children}</ul>
-  </footer>
-);
-const DropdownItem: React.FC<DropdownProps> = (props) => <li className={classNames("dropdown__item", props.className)}>{props.children}</li>;
-const DropdownItemButton: React.FC<DropdownItemButtonProps> = (props) => (
-  <li className={classNames("dropdown__item-button", props.className)}>
-    <button onClick={(e) => props.onClick?.(e)} onTouchEnd={(e) => props.onTouchEnd?.(e)}>
-      {props.children}{" "}
-    </button>
-  </li>
+const Dropdown: React.FC<DropdownProps> & DropdownSubcomponents = ({className, children, ...other}) => (
+  <menu className={classNames("dropdown", className)} {...other}>
+    {children}
+  </menu>
 );
 
 Dropdown.Main = DropdownMain;
