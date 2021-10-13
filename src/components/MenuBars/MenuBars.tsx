@@ -26,6 +26,7 @@ export function MenuBars() {
     admins: rootState.users.admins,
     boardId: rootState.board.data!.id,
     timer: rootState.board.data?.timerUTCEndTime,
+    voting: rootState.board.data?.voting,
     moderation: rootState.board.data?.moderation.status,
   }));
 
@@ -71,7 +72,14 @@ export function MenuBars() {
           <div className="menu__items">
             <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
             <TimerButton />
-            <MenuToggle direction="left" toggleStartLabel="Start voting phase" toggleStopLabel="End voting phase" icon={VoteIcon} onToggle={toggleVoting} />
+            <MenuToggle
+              value={state.voting === "active"}
+              direction="left"
+              toggleStartLabel="Start voting phase"
+              toggleStopLabel="End voting phase"
+              icon={VoteIcon}
+              onToggle={toggleVoting}
+            />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
