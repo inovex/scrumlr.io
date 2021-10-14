@@ -27,9 +27,9 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props) => {
 
   return (
     <div key={props.key} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
-      <NoteDialogNoteComponents.NoteDialogContent {...props} />
-      <NoteDialogNoteComponents.NoteDialogFooter {...props} />
-      {showOptions && <NoteDialogNoteComponents.NoteDialogOptions {...props} />}
+      <NoteDialogNoteComponents.Content {...props} />
+      <NoteDialogNoteComponents.Footer {...props} />
+      {showOptions && <NoteDialogNoteComponents.Options {...props} />}
     </div>
   );
 };
