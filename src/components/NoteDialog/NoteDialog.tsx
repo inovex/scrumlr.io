@@ -1,5 +1,4 @@
 import "./NoteDialog.scss";
-import avatar from "assets/avatar.png";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
 import Parse from "parse";
@@ -130,7 +129,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
             <footer className="note-dialog__footer">
               {(props.showAuthors || Parse.User.current()?.id === note.author) && (
                 <figure className="note-dialog__author">
-                  <img className="note-dialog__author-image" src={avatar} alt="User" />
+                  <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__user-avatar" />
                   <figcaption className="note-dialog__author-name">{note.authorName}</figcaption>
                 </figure>
               )}
