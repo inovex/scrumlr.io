@@ -4,7 +4,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
 import {VoteClientModel} from "types/vote";
 import "./NoteDialog.scss";
-import {NoteDialogHeader, NoteDialogNote} from "./NoteDialogComponents";
+import {NoteDialogComponents} from "./NoteDialogComponents";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -38,10 +38,10 @@ export const NoteDialog = (props: NoteDialogProps) => {
           {"note-dialog__disabled-pointer": !props.currentUserIsModerator && props.activeModeration.status}
         )}
       >
-        <NoteDialogHeader columnName={props.columnName} />
-        <NoteDialogNote {...props} showUnstackButton={false} />
+        <NoteDialogComponents.Header columnName={props.columnName} />
+        <NoteDialogComponents.Note {...props} showUnstackButton={false} />
         {props.childrenNotes.map((note) => (
-          <NoteDialogNote {...props} {...note} showUnstackButton key={note.id} noteId={note.id} authorId={note.author} />
+          <NoteDialogComponents.Note {...props} {...note} showUnstackButton key={note.id} noteId={note.id} authorId={note.author} />
         ))}
         ;
       </div>
