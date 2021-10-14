@@ -41,7 +41,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
         <NoteDialogComponents.Header columnName={props.columnName} />
         <NoteDialogComponents.Note {...props} showUnstackButton={false} />
         {props.childrenNotes.map((note) => (
-          <NoteDialogComponents.Note {...props} {...note} showUnstackButton key={note.id} noteId={note.id} authorId={note.author} />
+          <NoteDialogComponents.Note {...props} {...note} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
         ))}
         ;
       </div>

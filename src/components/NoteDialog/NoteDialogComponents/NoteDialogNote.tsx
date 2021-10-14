@@ -18,14 +18,13 @@ export type NoteDialogNoteProps = {
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;
   showUnstackButton: boolean;
-  key?: React.Key;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {
   const showOptions = !props.activeModeration.status || props.currentUserIsModerator;
 
   return (
-    <div key={props.key} className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
+    <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
       <NoteDialogNoteComponents.Content {...props} />
       <NoteDialogNoteComponents.Footer {...props} />
       {showOptions && <NoteDialogNoteComponents.Options {...props} />}
