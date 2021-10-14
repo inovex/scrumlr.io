@@ -111,7 +111,7 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{props.text}</p>
           <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
         </div>
-        <footer className="note__footer">
+        <div className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
               <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" />
@@ -119,7 +119,7 @@ export const Note = (props: NoteProps) => {
             </figure>
           )}
           <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
-        </footer>
+        </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}

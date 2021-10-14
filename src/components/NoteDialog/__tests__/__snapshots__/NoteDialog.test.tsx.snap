@@ -20,7 +20,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         Test Text
       </blockquote>
     </div>
-    <footer
+    <div
       class="note-dialog__footer"
     >
       <figure
@@ -61,7 +61,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           </svg>
         </button>
       </div>
-    </footer>
+    </div>
     <aside>
       <ul
         class="note-dialog__options"
@@ -102,7 +102,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         contenteditable="false"
       />
     </div>
-    <footer
+    <div
       class="note-dialog__footer"
     >
       <figure
@@ -130,7 +130,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           </svg>
         </button>
       </div>
-    </footer>
+    </div>
     <aside>
       <ul
         class="note-dialog__options"
@@ -193,7 +193,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         contenteditable="false"
       />
     </div>
-    <footer
+    <div
       class="note-dialog__footer"
     >
       <figure
@@ -221,7 +221,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           </svg>
         </button>
       </div>
-    </footer>
+    </div>
     <aside>
       <ul
         class="note-dialog__options"

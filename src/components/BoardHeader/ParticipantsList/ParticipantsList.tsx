@@ -31,7 +31,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   return (
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
-        <header className="participants__header">
+        <div className="participants__header">
           <div className="participants__header-title">
             <h4 className="participants__header-text">
               <span>Participants</span>
@@ -40,7 +40,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
           </div>
           <SearchIcon className="header__icon" />
           <input className="participants__header-input" placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
-        </header>
+        </div>
         <ul className="participants__list">
           <div className="list__header">
             <label>Name</label>
