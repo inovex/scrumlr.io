@@ -4,13 +4,16 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
-import {Author, BoardHeaderSetting, Columns, Delete, Export, Note, QrCode} from "./HeaderMenuItems";
+import {BoardOption} from "./BoardOptions";
+import {BoardSettings} from "./BoardSettings";
 
 type HeaderMenuProps = {
   open: boolean;
   onClose: () => void;
   currentUserIsModerator: boolean;
 };
+
+type ExpandableOptions = "share" | "delete" | "export";
 
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
@@ -22,21 +25,25 @@ const HeaderMenu = (props: HeaderMenuProps) => {
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
-  const [showQrCode, setShowQrCode] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showExport, setShowExport] = useState(false);
+  const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
 
   if (!props.open) {
     return null;
   }
 
+  const onExpand = (option: ExpandableOptions) => () => {
+    if (option === expandedOption) {
+      setExpandedOption(undefined);
+    } else {
+      setExpandedOption(option);
+    }
+  };
+
   return (
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setShowQrCode(false);
-        setShowDelete(false);
-        setShowExport(false);
+        setExpandedOption(undefined);
         setBoardName(state.board!.name);
         setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
         props.onClose();
@@ -44,7 +51,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       darkBackground={false}
     >
       <ul className="header-menu">
-        <BoardHeaderSetting
+        <BoardSettings
           activeEditMode={activeEditMode}
           joinConfirmationRequired={joinConfirmationRequired}
           boardName={boardName}
@@ -54,15 +61,15 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           setJoinConfirmationRequired={setJoinConfirmationRequired}
         />
         {props.currentUserIsModerator && (
-          <div className="header-menu-moderator">
-            <Author />
-            <Note />
-            <Columns />
-            <QrCode showQrCode={showQrCode} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-            <Delete showDelete={showDelete} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} />
-          </div>
+          <>
+            <BoardOption.ShowAuthorOption />
+            <BoardOption.ShowOtherUsersNotesOption />
+            <BoardOption.ShowHiddenColumnsOption />
+            <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
+            <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
+          </>
         )}
-        <Export showExport={showExport} setShowExport={setShowExport} setShowDelete={setShowDelete} setShowQrCode={setShowQrCode} onClose={props.onClose} />
+        <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
       </ul>
     </Portal>
   );

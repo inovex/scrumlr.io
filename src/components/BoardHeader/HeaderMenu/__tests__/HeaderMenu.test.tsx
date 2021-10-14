@@ -86,14 +86,14 @@ describe("HeaderMenu", () => {
       expect(container).toMatchSnapshot();
     });
 
-    test("Header menu has 7 entries", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(3);
+    test("count of menu items for basic users", () => {
+      const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(2);
     });
 
-    test("HeaderMenu for moderators has 5 entries", () => {
+    test("tests count of menu items for moderators", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu-moderator")?.children.length).toEqual(5);
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(7);
     });
 
     test("Click on hide authors", async () => {
@@ -101,7 +101,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("author")).not.toBeNull();
 
       const button = screen.getByTestId("author")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -114,7 +114,7 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("note")).not.toBeNull();
 
       const button = screen.getByTestId("note")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
@@ -127,11 +127,11 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("qrcode")).not.toBeNull();
 
       const button = screen.getByTestId("qrcode")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__qrcode-container")).toHaveClass("header-menu__qrcode-container--visible");
+        expect(container.querySelector(".share-qr-code-option__container")).toHaveClass("share-qr-code-option__container--visible");
       });
     });
 
@@ -140,11 +140,11 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("delete")).not.toBeNull();
 
       const button = screen.getByTestId("delete")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__delete-container")).toHaveClass("header-menu__delete-container--visible");
+        expect(container.querySelector(".delete-board-option__container")).toHaveClass("delete-board-option__container--visible");
       });
     });
 
@@ -153,10 +153,10 @@ describe("HeaderMenu", () => {
       expect(screen.getByTestId("export")).not.toBeNull();
 
       const button = screen.getByTestId("export")!.querySelector("button")!;
-      expect(button).toHaveClass("header-menu__item-button");
+      expect(button).toHaveClass("board-option-button");
       fireEvent.click(button);
       await waitFor(() => {
-        expect(container.querySelector(".header-menu__export-container")).toHaveClass("header-menu__export-container--visible");
+        expect(container.querySelector(".export-board-option__container")).toHaveClass("export-board-option__container--visible");
       });
     });
   });
