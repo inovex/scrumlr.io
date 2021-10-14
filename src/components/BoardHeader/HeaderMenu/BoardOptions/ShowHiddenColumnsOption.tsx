@@ -15,7 +15,7 @@ export const ShowHiddenColumnsOption = () => {
   }));
 
   return (
-    <BoardOption>
+    <BoardOption data-testid="column">
       <BoardOptionButton
         label={`${state.userConfiguration?.showHiddenColumns ? "Hide" : "Show"} columns`}
         onClick={() => {

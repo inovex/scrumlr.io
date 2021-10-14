@@ -1,9 +1,8 @@
-import {FC, ReactNode} from "react";
+import {FC} from "react";
 import "./BoardOption.scss";
 import classNames from "classnames";
 
 export interface BoardOptionProps {
-  children: ReactNode;
   className?: string;
   [key: string]: any;
 }

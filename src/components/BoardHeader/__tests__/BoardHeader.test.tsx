@@ -1,10 +1,13 @@
 import {render} from "@testing-library/react";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
-import Parse from "parse";
+import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
+import {mocked} from "ts-jest/utils";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
+mockedUser.current = jest.fn(() => ({id: "test"} as never));
 
 const createBoardHeader = (name: string, boardstatus: string) => {
   const initialState = {
@@ -45,8 +48,7 @@ describe("Board Header", () => {
         } as unknown as IntersectionObserver)
     );
 
-    // @ts-ignore
-    Parse.User.current = jest.fn(() => ({id: "test"}));
+    mockedUser.current = jest.fn(() => ({id: "test"} as never));
   });
 
   test("show boardheader", () => {

@@ -4,13 +4,20 @@ import {exportAsCSV, exportAsJSON, ExportProps, fileName, generateCSV, mapToExpo
 jest.mock("file-saver", () => ({saveAs: jest.fn()}));
 
 type TestProps = {
-  userAvaiable: boolean;
-  parentAvailable: boolean;
-  noteIdAvailable: boolean;
-  timestampAvailable: boolean;
+  userAvaiable?: boolean;
+  parentAvailable?: boolean;
+  noteIdAvailable?: boolean;
+  timestampAvailable?: boolean;
 };
 
-const createState = (props: TestProps) =>
+const createState = (
+  {userAvaiable = true, parentAvailable = true, noteIdAvailable = true, timestampAvailable = true}: TestProps = {
+    userAvaiable: true,
+    parentAvailable: true,
+    noteIdAvailable: true,
+    timestampAvailable: true,
+  }
+) =>
   ({
     board: {
       name: "board",
@@ -19,14 +26,14 @@ const createState = (props: TestProps) =>
     },
     notes: [
       {
-        id: props.noteIdAvailable ? "test-note" : undefined,
+        id: noteIdAvailable ? "test-note" : undefined,
         columnId: "test-column",
         text: "test-text",
         author: "test-user-id",
-        parentId: props.parentAvailable ? "note-parent" : undefined,
+        parentId: parentAvailable ? "note-parent" : undefined,
         dirty: true,
         focus: false,
-        createdAt: props.timestampAvailable ? new Date(12345) : undefined,
+        createdAt: timestampAvailable ? new Date(12345) : undefined,
       },
     ],
     votes: [
@@ -41,7 +48,7 @@ const createState = (props: TestProps) =>
     users: {
       admins: [],
       basic: [],
-      all: props.userAvaiable
+      all: userAvaiable
         ? [
             {
               displayName: "Test user",
@@ -56,22 +63,29 @@ const createState = (props: TestProps) =>
     },
   } as ExportProps);
 
-const exportFormat = (props: TestProps) => [
+const exportFormat = (
+  {userAvaiable = true, parentAvailable = true, noteIdAvailable = true, timestampAvailable = true}: TestProps = {
+    userAvaiable: true,
+    parentAvailable: true,
+    noteIdAvailable: true,
+    timestampAvailable: true,
+  }
+) => [
   {
-    noteId: props.noteIdAvailable ? "test-note" : "-",
-    author: props.userAvaiable ? "Test user" : "test-user-id",
+    noteId: noteIdAvailable ? "test-note" : "-",
+    author: userAvaiable ? "Test user" : "test-user-id",
     text: "test-text",
     column: "Positive",
-    timestamp: props.timestampAvailable ? new Date(12345).toUTCString().replace(",", "") : "-",
-    parent: props.parentAvailable ? "note-parent" : "-",
-    votes: props.noteIdAvailable ? 1 : 0,
-    voting_iteration_1: props.noteIdAvailable ? 1 : 0,
+    timestamp: timestampAvailable ? new Date(12345).toUTCString().replace(",", "") : "-",
+    parent: parentAvailable ? "note-parent" : "-",
+    votes: noteIdAvailable ? 1 : 0,
+    voting_iteration_1: noteIdAvailable ? 1 : 0,
   },
 ];
 
 describe("Export", () => {
   test("json function called", async () => {
-    const state = createState({userAvaiable: true, noteIdAvailable: true, parentAvailable: true, timestampAvailable: true});
+    const state = createState();
     const json = JSON.stringify(mapToExport(state), null, 2);
     const blob = new Blob([json], {type: "application/json"});
     const blobSpy = jest.spyOn(global, "Blob").mockImplementationOnce(() => blob);
@@ -82,7 +96,7 @@ describe("Export", () => {
   });
 
   test("csv function called", async () => {
-    const state = createState({userAvaiable: true, noteIdAvailable: true, parentAvailable: true, timestampAvailable: true});
+    const state = createState();
     const csv = generateCSV(state);
     const blob = new Blob([csv], {type: "text/csv"});
     const blobSpy = jest.spyOn(global, "Blob").mockImplementationOnce(() => blob);
@@ -93,7 +107,7 @@ describe("Export", () => {
   });
 
   test("correct file name", () => {
-    const state = createState({userAvaiable: true, noteIdAvailable: true, parentAvailable: true, timestampAvailable: true});
+    const state = createState();
     const mockDate = new Date(12345678);
     const dateSpy = jest.spyOn(global, "Date").mockImplementationOnce(() => mockDate as unknown as string);
     const name = fileName(state);
@@ -102,35 +116,34 @@ describe("Export", () => {
   });
 
   test("correct export mapping with available user", () => {
-    const props = {userAvaiable: true, noteIdAvailable: true, parentAvailable: true, timestampAvailable: true};
-    const state = createState(props);
+    const state = createState();
     const mappedExport = mapToExport(state);
-    expect(mappedExport).toEqual(exportFormat(props));
+    expect(mappedExport).toEqual(exportFormat());
   });
 
   test("correct export mapping without available user", () => {
-    const props = {userAvaiable: false, noteIdAvailable: true, parentAvailable: true, timestampAvailable: true};
+    const props = {userAvaiable: false};
     const state = createState(props);
     const mappedExport = mapToExport(state);
     expect(mappedExport).toEqual(exportFormat(props));
   });
 
   test("correct export mapping without noteId", () => {
-    const props = {userAvaiable: true, noteIdAvailable: false, parentAvailable: true, timestampAvailable: true};
+    const props = {noteIdAvailable: false};
     const state = createState(props);
     const mappedExport = mapToExport(state);
     expect(mappedExport).toEqual(exportFormat(props));
   });
 
   test("correct export mapping without parent", () => {
-    const props = {userAvaiable: true, noteIdAvailable: true, parentAvailable: false, timestampAvailable: true};
+    const props = {parentAvailable: false};
     const state = createState(props);
     const mappedExport = mapToExport(state);
     expect(mappedExport).toEqual(exportFormat(props));
   });
 
   test("correct export mapping without timestamp", () => {
-    const props = {userAvaiable: false, noteIdAvailable: true, parentAvailable: true, timestampAvailable: false};
+    const props = {timestampAvailable: false};
     const state = createState(props);
     const mappedExport = mapToExport(state);
     expect(mappedExport).toEqual(exportFormat(props));

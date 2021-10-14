@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HeaderMenu should render correctly moderator 1`] = `
+exports[`<HeaderMenu/> should render correctly moderator 1`] = `
 <div
   id="portal"
 >
@@ -102,6 +102,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
             </li>
             <li
               class="board-option"
+              data-testid="column"
             >
               <button
                 class="board-option-button"
@@ -260,7 +261,7 @@ exports[`HeaderMenu should render correctly moderator 1`] = `
 </div>
 `;
 
-exports[`HeaderMenu should render correctly user 1`] = `
+exports[`<HeaderMenu/> should render correctly user 1`] = `
 <div
   id="portal"
 >
