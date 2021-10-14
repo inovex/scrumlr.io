@@ -122,7 +122,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   Test Text
                 </blockquote>
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -163,7 +163,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
@@ -176,7 +176,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   contenteditable="false"
                 />
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -207,7 +207,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
@@ -220,7 +220,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   contenteditable="false"
                 />
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -251,7 +251,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             ;
           </div>

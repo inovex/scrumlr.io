@@ -15,7 +15,7 @@ type NoteDialogFooterProps = {
 };
 
 export const NoteDialogFooter: FC<NoteDialogFooterProps> = ({showAuthors, authorId, authorName, noteId, votes, activeVoting}: NoteDialogFooterProps) => (
-  <footer className="note-dialog__footer">
+  <div className="note-dialog__footer">
     {(showAuthors || Parse.User.current()?.id === authorId) && (
       <figure className="note-dialog__author">
         <UserAvatar id={authorId} name={authorName} className="note-dialog__user-avatar" />
@@ -23,5 +23,5 @@ export const NoteDialogFooter: FC<NoteDialogFooterProps> = ({showAuthors, author
       </figure>
     )}
     <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
-  </footer>
+  </div>
 );
