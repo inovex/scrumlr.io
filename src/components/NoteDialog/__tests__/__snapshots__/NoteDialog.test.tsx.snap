@@ -67,7 +67,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option note-dialog__option--not-editable"
+          class="note-dialog__option"
         >
           <button
             class="icon-button icon-button--right"
@@ -108,11 +108,14 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
       <figure
         class="note-dialog__author"
       >
-        <img
-          alt="User"
-          class="note-dialog__author-image"
-          src="avatar.png"
-        />
+        <div
+          class="user-avatar note-dialog__user-avatar"
+        >
+          <div
+            class="user__initials"
+            title=""
+          />
+        </div>
         <figcaption
           class="note-dialog__author-name"
         />
@@ -136,7 +139,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option note-dialog__option--not-editable"
+          class="note-dialog__option"
         >
           <button
             class="icon-button icon-button--right"
@@ -199,11 +202,14 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
       <figure
         class="note-dialog__author"
       >
-        <img
-          alt="User"
-          class="note-dialog__author-image"
-          src="avatar.png"
-        />
+        <div
+          class="user-avatar note-dialog__user-avatar"
+        >
+          <div
+            class="user__initials"
+            title=""
+          />
+        </div>
         <figcaption
           class="note-dialog__author-name"
         />
@@ -227,7 +233,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
         class="note-dialog__options"
       >
         <li
-          class="note-dialog__option note-dialog__option--not-editable"
+          class="note-dialog__option"
         >
           <button
             class="icon-button icon-button--right"
@@ -273,5 +279,6 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
       </ul>
     </aside>
   </div>
+  ;
 </div>
 `;

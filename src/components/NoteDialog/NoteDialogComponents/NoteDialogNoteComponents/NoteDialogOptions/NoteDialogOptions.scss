@@ -1,0 +1,33 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+//Options
+.note-dialog__options {
+  list-style-type: none;
+  position: absolute;
+  margin: 0;
+  bottom: 10px;
+  right: 25px;
+}
+.note-dialog__options {
+  top: 0;
+  right: -40px - $margin--default;
+}
+@media screen and (max-width: 766px) {
+  .note-dialog__options {
+    display: none;
+  }
+}
+
+.note-dialog__option {
+  box-sizing: border-box;
+  display: block;
+}
+
+.note-dialog__option--not-editable {
+  display: none;
+}
+
+.note-dialog__option + .note-dialog__option {
+  margin-top: $margin--small;
+}

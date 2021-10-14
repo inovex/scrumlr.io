@@ -1,0 +1,35 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+.note-dialog__content {
+  display: flex;
+  width: 100%;
+}
+
+.note-dialog__text {
+  background: none;
+  margin: 0;
+  min-height: 3 * $line-height--medium;
+  width: 100%;
+  color: $color-black;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
+  line-height: $line-height--medium;
+  margin-bottom: $note__text-margin-bottom;
+  padding: 5px;
+  border: 1px dashed transparent;
+  border-radius: 5px;
+  transition: border-color 0.5s ease-in-out;
+  outline: none;
+}
+
+.note-dialog__text-hover:hover,
+.note-dialog__text-hover:focus {
+  border-color: #adadad;
+}
+
+@media (prefers-color-scheme: dark) {
+  .note-dialog__text {
+    color: $color-white;
+  }
+}

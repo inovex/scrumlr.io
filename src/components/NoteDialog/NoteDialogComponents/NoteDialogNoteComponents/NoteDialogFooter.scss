@@ -1,0 +1,38 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+.note-dialog__footer {
+  position: relative;
+  height: 26px;
+}
+.note-dialog__author {
+  display: inline-flex;
+  align-items: center;
+  // reset css from figure-element:
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.note-dialog__author-image {
+  height: $note__author-image-size;
+  width: $note__author-image-size;
+  border-radius: 100%;
+}
+
+.note-dialog__author-name {
+  margin-left: $note__author-margin-left;
+  color: $color-dark-gray;
+  font-size: $note__author-name-size;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--small;
+}
+
+.note-dialog .note-dialog__user-avatar {
+  height: 22px;
+  width: 22px;
+  font-size: 10px;
+  padding: 12px;
+}
