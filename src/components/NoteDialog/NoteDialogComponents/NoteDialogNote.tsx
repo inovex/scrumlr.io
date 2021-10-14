@@ -3,6 +3,7 @@ import Parse from "parse";
 import {FC} from "react";
 import {VoteClientModel} from "types/vote";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
+import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
   noteId?: string;

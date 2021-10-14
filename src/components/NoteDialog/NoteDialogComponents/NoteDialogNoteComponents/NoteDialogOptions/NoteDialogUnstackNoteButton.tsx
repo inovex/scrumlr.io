@@ -11,7 +11,7 @@ type NoteDialogUnstackNoteProps = {
   onClose: () => void;
 };
 
-export const NoteDialogUnstackNote: FC<NoteDialogUnstackNoteProps> = ({showUnstackButton, noteId, onClose}) => {
+export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({showUnstackButton, noteId, onClose}) => {
   const onUnstack = (id: string) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
