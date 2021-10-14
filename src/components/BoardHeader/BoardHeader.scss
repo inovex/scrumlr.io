@@ -7,10 +7,25 @@
   top: 10px;
 }
 
-.board-header__logo {
+.board-header > a {
   position: absolute;
   left: 0;
-  top: 32px;
+  top: 20px;
+  padding: 5px 20px;
+  border-radius: 16px;
+  width: max-content;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.board-header > a:hover {
+  background-color: rgba(0, 87, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-header > a:hover {
+    background-color: rgba(255, 0, 105, 0.15);
+  }
 }
 
 .board-header__infos {
@@ -91,6 +106,7 @@
   margin-right: 10px;
   display: none;
 }
+
 @media #{$tablet} {
   .board-header {
     left: 60px;

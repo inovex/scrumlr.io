@@ -21,7 +21,7 @@ export const BoardHeader = (props: BoardHeaderProps) => {
 
   return (
     <div className="board-header">
-      <a href={document.location.origin}>
+      <a href={document.location.origin} title="Back to homepage">
         <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </a>
       <div className="board-header__infos">
