@@ -10,7 +10,7 @@ type NoteDialogDeleteNoteProps = {
   onDeleteOfParent: () => void;
 };
 
-export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteId, onDeleteOfParent}) => {
+export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteId, onDeleteOfParent}: NoteDialogDeleteNoteProps) => {
   const onDelete = (id: string) => {
     store.dispatch(ActionFactory.deleteNote(id));
   };

@@ -14,7 +14,7 @@ type NoteDialogFooterProps = {
   activeVoting: boolean;
 };
 
-export const NoteDialogFooter: FC<NoteDialogFooterProps> = ({showAuthors, authorId, authorName, noteId, votes, activeVoting}) => (
+export const NoteDialogFooter: FC<NoteDialogFooterProps> = ({showAuthors, authorId, authorName, noteId, votes, activeVoting}: NoteDialogFooterProps) => (
   <footer className="note-dialog__footer">
     {(showAuthors || Parse.User.current()?.id === authorId) && (
       <figure className="note-dialog__author">

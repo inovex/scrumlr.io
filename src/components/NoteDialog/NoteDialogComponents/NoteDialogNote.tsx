@@ -9,7 +9,6 @@ export type NoteDialogNoteProps = {
   noteId?: string;
   text: string;
   authorId: string;
-  show: boolean;
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
@@ -22,7 +21,7 @@ export type NoteDialogNoteProps = {
   key?: React.Key;
 };
 
-export const NoteDialogNote: FC<NoteDialogNoteProps> = (props) => {
+export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {
   const showOptions = !props.activeModeration.status || props.currentUserIsModerator;
 
   return (

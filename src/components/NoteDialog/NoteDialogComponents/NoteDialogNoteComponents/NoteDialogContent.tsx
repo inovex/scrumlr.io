@@ -13,7 +13,7 @@ type NoteDialogContentProps = {
   text: string;
 };
 
-export const NoteDialogContent: FC<NoteDialogContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}) => {
+export const NoteDialogContent: FC<NoteDialogContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogContentProps) => {
   const editable = (authorId: string) => (Parse.User.current()?.id === authorId || currentUserIsModerator) && !activeModeration.status;
 
   const onEdit = (id: string, authorId: string, text: string) => {

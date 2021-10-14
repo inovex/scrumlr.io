@@ -6,12 +6,11 @@ import {ReactComponent as unstackIcon} from "assets/icon-unstack.svg";
 import "./NoteDialogOptions.scss";
 
 type NoteDialogUnstackNoteProps = {
-  showUnstackButton: boolean;
   noteId?: string;
   onClose: () => void;
 };
 
-export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({showUnstackButton, noteId, onClose}) => {
+export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, onClose}: NoteDialogUnstackNoteProps) => {
   const onUnstack = (id: string) => {
     store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
   };
