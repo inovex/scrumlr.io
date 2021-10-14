@@ -65,7 +65,7 @@ describe("ParticipantsList", () => {
     const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
       container: global.document.querySelector("#portal")!,
     });
-    expect(container.querySelector(".participants__list-item")!.childNodes[1]).toHaveClass("toggle-button toggle-button--right participant__permission-toggle");
+    expect(container.querySelector(".participant")!.childNodes[1]).toHaveClass("toggle-button toggle-button--right participant__permission-toggle");
   });
 
   test("Don't show toggleButton as participant without moderator rights", () => {
@@ -75,8 +75,7 @@ describe("ParticipantsList", () => {
     const {container} = render(createParticipantsList({open: true, currentUserIsModerator: false, currentUserId: "0"}), {
       container: global.document.querySelector("#portal")!,
     });
-    expect(container.querySelector(".participants__list-item")!.firstChild).toHaveClass("participant__user-avatar");
-    expect(container.querySelector(".participants__list-item")!.childElementCount).toBe(1);
+    expect(container.querySelector(".participant")!.childElementCount).toBe(1);
   });
 
   test("Show just the participants that's is looked for with correct initials", () => {
