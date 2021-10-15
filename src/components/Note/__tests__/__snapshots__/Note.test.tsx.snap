@@ -182,11 +182,14 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                 <figure
                   class="note-dialog__author"
                 >
-                  <img
-                    alt="User"
-                    class="note-dialog__author-image"
-                    src="avatar.png"
-                  />
+                  <div
+                    class="user-avatar note-dialog__user-avatar"
+                  >
+                    <div
+                      class="user__initials"
+                      title=""
+                    />
+                  </div>
                   <figcaption
                     class="note-dialog__author-name"
                   />
@@ -223,11 +226,14 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                 <figure
                   class="note-dialog__author"
                 >
-                  <img
-                    alt="User"
-                    class="note-dialog__author-image"
-                    src="avatar.png"
-                  />
+                  <div
+                    class="user-avatar note-dialog__user-avatar"
+                  >
+                    <div
+                      class="user__initials"
+                      title=""
+                    />
+                  </div>
                   <figcaption
                     class="note-dialog__author-name"
                   />
