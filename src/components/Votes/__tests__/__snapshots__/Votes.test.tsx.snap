@@ -14,10 +14,10 @@ exports[`Votes should render correctly with no votes and active voting 1`] = `
     class="votes"
   >
     <button
-      class="dot-button dot-button__add"
+      class="dot-button vote-button-add"
     >
       <svg
-        class="dot-button__add-icon"
+        class="vote-button-add-icon"
       >
         icon-add.svg
       </svg>
@@ -40,20 +40,20 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
     class="votes"
   >
     <button
-      class="dot-button dot-button__delete"
+      class="dot-button vote-button-remove"
     >
       <span
-        class="dot-button__folded-corner"
+        class="vote-button-remove__folded-corner"
       />
       <span>
         1
       </span>
     </button>
     <button
-      class="dot-button dot-button__add"
+      class="dot-button vote-button-add"
     >
       <svg
-        class="dot-button__add-icon"
+        class="vote-button-add-icon"
       >
         icon-add.svg
       </svg>
@@ -68,11 +68,11 @@ exports[`Votes should render correctly with votes and disabled voting 1`] = `
     class="votes"
   >
     <button
-      class="dot-button dot-button__delete"
+      class="dot-button vote-button-remove"
       disabled=""
     >
       <span
-        class="dot-button__folded-corner"
+        class="vote-button-remove__folded-corner"
       />
       <span>
         1
