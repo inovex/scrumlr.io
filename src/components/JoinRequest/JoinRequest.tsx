@@ -17,16 +17,16 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
     const joinRequest = joinRequests[0];
     return (
       <div className="join-request join-request--single">
-        <header className="join-request__header">
+        <div className="join-request__header">
           <span className="join-request__header-text">Jemand möchte dem Board beitreten</span>
-        </header>
-        <main className="join-request__main">
+        </div>
+        <div className="join-request__main">
           <figure className="join-request__request-figure">
             <img className="join-request__request-image" src={avatar} alt="User" />
             <figcaption className="join-request__request-name">{joinRequest.displayName}</figcaption>
           </figure>
-        </main>
-        <footer className="join-request__footer">
+        </div>
+        <div className="join-request__footer">
           <button
             onClick={() => handleReject(joinRequest.boardId, [joinRequest.userId])}
             className="join-request__button join-request__footer-button join-request--single__footer-button"
@@ -39,16 +39,16 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
           >
             Annehmen
           </button>
-        </footer>
+        </div>
       </div>
     );
   }
   return (
     <div className="join-request join-request--multiple">
-      <header className="join-request__header">
+      <div className="join-request__header">
         <span className="join-request__header-text">Mehrere Personen möchten dem Board beitreten</span>
-      </header>
-      <main className="join-request__main">
+      </div>
+      <div className="join-request__main">
         <div className="join-request__requests-preview">
           <img src={avatar} alt="User" className="join-request__preview-image" />
           <img src={avatar} alt="User" className="join-request__preview-image" />
@@ -72,8 +72,8 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
             </li>
           ))}
         </ul>
-      </main>
-      <footer className="join-request__footer join-request--multiple__footer">
+      </div>
+      <div className="join-request__footer join-request--multiple__footer">
         <button
           className="join-request__button join-request__footer-button join-request--multiple__footer-button"
           onClick={() =>
@@ -96,7 +96,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
         >
           Alle Annehmen
         </button>
-      </footer>
+      </div>
     </div>
   );
 }
