@@ -93,6 +93,9 @@
 .note-dialog__footer {
   position: relative;
   height: 26px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .note-dialog__author {
   display: inline-flex;
