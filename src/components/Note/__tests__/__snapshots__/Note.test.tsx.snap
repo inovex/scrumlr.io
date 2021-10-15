@@ -24,7 +24,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
           icon-edit.svg
         </svg>
       </div>
-      <footer
+      <div
         class="note__footer"
       >
         <figure
@@ -66,7 +66,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
             </svg>
           </button>
         </div>
-      </footer>
+      </div>
     </div>
     <div
       class="note__in-stack"
@@ -122,7 +122,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   Test Text
                 </blockquote>
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -163,7 +163,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
@@ -176,7 +176,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   contenteditable="false"
                 />
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -207,7 +207,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
@@ -220,7 +220,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   contenteditable="false"
                 />
               </div>
-              <footer
+              <div
                 class="note-dialog__footer"
               >
                 <figure
@@ -251,7 +251,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
           </div>
         </div>
@@ -283,7 +283,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
           icon-edit.svg
         </svg>
       </div>
-      <footer
+      <div
         class="note__footer"
       >
         <figure
@@ -325,7 +325,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
             </svg>
           </button>
         </div>
-      </footer>
+      </div>
     </div>
     <div
       class="note__in-stack"
@@ -355,7 +355,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
         icon-edit.svg
       </svg>
     </div>
-    <footer
+    <div
       class="note__footer"
     >
       <figure
@@ -397,7 +397,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
           </svg>
         </button>
       </div>
-    </footer>
+    </div>
   </div>
   <div
     class="note__in-stack"

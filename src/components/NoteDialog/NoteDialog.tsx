@@ -83,7 +83,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
               {props.text}
             </blockquote>
           </div>
-          <footer className="note-dialog__footer">
+          <div className="note-dialog__footer">
             {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
               <figure className="note-dialog__author">
                 <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__user-avatar" />
@@ -91,7 +91,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
               </figure>
             )}
             <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
-          </footer>
+          </div>
 
           {showOptions && (
             <aside>
@@ -126,7 +126,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
               </blockquote>
             </div>
 
-            <footer className="note-dialog__footer">
+            <div className="note-dialog__footer">
               {(props.showAuthors || Parse.User.current()?.id === note.author) && (
                 <figure className="note-dialog__author">
                   <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__user-avatar" />
@@ -134,7 +134,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
                 </figure>
               )}
               <Votes className="note__votes" noteId={note.id!} votes={note.votes} activeVoting={props.activeVoting} />
-            </footer>
+            </div>
 
             {showOptions && (
               <aside>
