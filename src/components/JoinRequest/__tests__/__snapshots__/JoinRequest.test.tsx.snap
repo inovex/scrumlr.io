@@ -4,7 +4,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
 <div
   class="join-request join-request--multiple"
 >
-  <header
+  <div
     class="join-request__header"
   >
     <span
@@ -12,8 +12,8 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     >
       Mehrere Personen möchten dem Board beitreten
     </span>
-  </header>
-  <main
+  </div>
+  <div
     class="join-request__main"
   >
     <div
@@ -123,8 +123,8 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         </figure>
       </li>
     </ul>
-  </main>
-  <footer
+  </div>
+  <div
     class="join-request__footer join-request--multiple__footer"
   >
     <button
@@ -137,7 +137,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     >
       Alle Annehmen
     </button>
-  </footer>
+  </div>
 </div>
 `;
 
@@ -145,7 +145,7 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
 <div
   class="join-request join-request--single"
 >
-  <header
+  <div
     class="join-request__header"
   >
     <span
@@ -153,8 +153,8 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
     >
       Jemand möchte dem Board beitreten
     </span>
-  </header>
-  <main
+  </div>
+  <div
     class="join-request__main"
   >
     <figure
@@ -171,8 +171,8 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
         displayName-0
       </figcaption>
     </figure>
-  </main>
-  <footer
+  </div>
+  <div
     class="join-request__footer"
   >
     <button
@@ -185,6 +185,6 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
     >
       Annehmen
     </button>
-  </footer>
+  </div>
 </div>
 `;
