@@ -2,7 +2,7 @@
   "name": "scrumlr.io-server",
   "version": "1.0.0",
   "private": true,
-  "license": "MIT with Commons Clause",
+  "license": "MIT",
   "scripts": {
     "serve": "nodemon --watch \"src/**\" --ext \"ts\" --exec \"ts-node -r dotenv/config src/index.ts\"",
     "start": "ts-node -r dotenv/config src/index.ts",
