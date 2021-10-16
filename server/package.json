@@ -1,6 +1,12 @@
 {
   "name": "scrumlr.io-server",
-  "version": "1.0.0",
+  "description": "Server sources for the collaborative webapp scrumlr.io",
+  "homepage": "https://github.com/inovex/scrumlr.io#readme",
+  "bugs": {
+    "url" : "https://github.com/inovex/scrumlr.io/issues",
+    "email" : "info@scrumlr.io"
+  },
+  "version": "2.0.0-dev",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -44,9 +50,5 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
     "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
-  },
-  "resolutions": {
-    "**/**/axios": "^0.21.1",
-    "**/**/netmask": "^2.0.1"
   }
 }
