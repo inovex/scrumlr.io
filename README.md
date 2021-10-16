@@ -47,4 +47,4 @@ Thanks to all our users, contributors & supporters!
 
 ## License
 
-Scrumlr is [MIT licensed with Commons Clause](https://github.com/inovex/scrumlr.io/blob/main/LICENSE).
+Scrumlr is [MIT licensed](https://github.com/inovex/scrumlr.io/blob/main/LICENSE).
