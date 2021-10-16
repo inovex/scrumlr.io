@@ -95,6 +95,7 @@
   grid-auto-flow: row;
   grid-row-gap: 20px;
   grid-column-gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
 
 .column__header-toggle {
