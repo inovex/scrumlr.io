@@ -65,6 +65,8 @@
   transition: all 0.25s ease-in-out;
   flex: 1;
   margin-top: 10px;
+  scrollbar-width: 10px;
+  scrollbar-color: $color-middle-gray $color-white;
 }
 
 .column__notes-wrapper--isOver {
@@ -78,20 +80,12 @@
 
 .column__notes-wrapper::-webkit-scrollbar-track {
   border-radius: 8px;
+  background-color: $color-white;
 }
 
 .column__notes-wrapper::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: $color-middle-gray;
-}
-
-@media (prefers-color-scheme: dark) {
-  .column__notes-wrapper::-webkit-scrollbar-track {
-    background-color: $color-dark-mode-note;
-  }
-  .column__notes-wrapper::-webkit-scrollbar-thumb {
-    background-color: $color-darkest-gray;
-  }
 }
 
 .column__note-list {
@@ -128,8 +122,16 @@
   .column__header-text {
     color: $color-white;
   }
-
   .column__header-toggle-button-icon {
     color: $color-white;
+  }
+  .column__notes-wrapper::-webkit-scrollbar-track {
+    background-color: $color-dark-mode-note;
+  }
+  .column__notes-wrapper::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
+  .column__notes-wrapper {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
