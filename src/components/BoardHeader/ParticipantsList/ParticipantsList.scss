@@ -85,17 +85,19 @@ $header-left_distance: 24px;
   min-height: 80px;
   max-height: 272px;
   overflow: auto;
-  scrollbar-color: $color-middle-gray #fff;
-  background-color: #fff;
+  scrollbar-width: 10px;
+  scrollbar-color: $color-middle-gray $color-white;
+  background-color: $color-white;
 }
 
 .participants__list::-webkit-scrollbar {
   width: 10px;
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 .participants__list::-webkit-scrollbar-track {
   border-radius: 8px;
+  background-color: $color-white;
 }
 
 .participants__list::-webkit-scrollbar-thumb {
