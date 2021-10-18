@@ -3,7 +3,7 @@ import "./Votes.scss";
 import classNames from "classnames";
 import {VoteClientModel} from "types/vote";
 import Parse from "parse";
-import {VFC} from "react";
+import {FC} from "react";
 import {VoteButtons} from "./VoteButtons";
 
 type VotesProps = {
@@ -13,7 +13,7 @@ type VotesProps = {
   activeVoting: boolean;
 };
 
-export const Votes: VFC<VotesProps> = (props) => {
+export const Votes: FC<VotesProps> = (props) => {
   const voteConfiguration = useAppSelector((state) => state.voteConfiguration);
   const ownVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
   const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownVotes.length < 1));

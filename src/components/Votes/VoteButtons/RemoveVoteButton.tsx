@@ -4,7 +4,7 @@ import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
 import {VoteClientModel} from "types/vote";
-import {VFC} from "react";
+import {FC} from "react";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -13,7 +13,7 @@ type RemoveVoteProps = {
   ownVotes: VoteClientModel[];
 };
 
-export const RemoveVoteButton: VFC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes}) => {
   const deleteVote = () => {
     store.dispatch(ActionFactory.deleteVote(noteId));
   };
