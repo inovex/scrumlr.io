@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
+exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = `
 <div
   class="note-dialog accent-color__"
 >
