@@ -3,13 +3,13 @@ import {ActionFactory} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./AddVoteButton.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
-import {FC} from "react";
+import {VFC} from "react";
 
 type AddVoteProps = {
   noteId: string;
 };
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId}: AddVoteProps) => {
+export const AddVoteButton: VFC<AddVoteProps> = ({noteId}) => {
   const addVote = () => {
     store.dispatch(ActionFactory.addVote(noteId));
   };
