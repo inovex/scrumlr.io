@@ -1,6 +1,6 @@
-import {NoteDialogContent as Content} from "./NoteDialogContent";
-import {NoteDialogOptions as Options} from "./NoteDialogOptions/NoteDialogOptions";
-import {NoteDialogFooter as Footer} from "./NoteDialogFooter";
+import {NoteDialogNoteContent as Content} from "./NoteDialogNoteContent";
+import {NoteDialogNoteOptions as Options} from "./NoteDialogOptions";
+import {NoteDialogNoteFooter as Footer} from "./NoteDialogNoteFooter";
 
 export const NoteDialogNoteComponents = {
   Content,

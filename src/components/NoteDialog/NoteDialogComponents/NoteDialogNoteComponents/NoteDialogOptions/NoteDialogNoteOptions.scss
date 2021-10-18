@@ -1,7 +1,6 @@
 @import "constants/style";
-@import "components/Note/Note.scss";
 
-.note-dialog__options {
+.note-dialog__note-options {
   list-style-type: none;
   position: absolute;
   margin: 0;
@@ -10,11 +9,11 @@
   right: -40px - $margin--default;
 }
 @media screen and (max-width: 766px) {
-  .note-dialog__options {
+  .note-dialog__noteoptions {
     display: none;
   }
 }
 
-.note-dialog__option + .note-dialog__option {
+.note-dialog__note-option + .note-dialog__note-option {
   margin-top: $margin--small;
 }

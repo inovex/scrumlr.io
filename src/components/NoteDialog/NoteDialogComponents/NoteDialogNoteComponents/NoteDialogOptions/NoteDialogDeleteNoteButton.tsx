@@ -3,7 +3,6 @@ import {IconButton} from "components/IconButton";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
-import "./NoteDialogOptions.scss";
 
 type NoteDialogDeleteNoteProps = {
   noteId?: string;
@@ -16,16 +15,14 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
   };
 
   return (
-    <li className="note-dialog__option">
-      <IconButton
-        onClick={() => {
-          onDelete(noteId!);
-          onDeleteOfParent();
-        }}
-        direction="right"
-        label="Delete"
-        icon={deleteIcon}
-      />
-    </li>
+    <IconButton
+      onClick={() => {
+        onDelete(noteId!);
+        onDeleteOfParent();
+      }}
+      direction="right"
+      label="Delete"
+      icon={deleteIcon}
+    />
   );
 };

@@ -11,23 +11,23 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     class="note-dialog__note"
   >
     <div
-      class="note-dialog__content"
+      class="note-dialog__note-content"
     >
       <blockquote
-        class="note-dialog__text"
+        class="note-dialog__note-content__text"
         contenteditable="false"
       >
         Test Text
       </blockquote>
     </div>
     <div
-      class="note-dialog__footer"
+      class="note-dialog__note-footer"
     >
       <figure
-        class="note-dialog__author"
+        class="note-dialog__note-author"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="user-avatar note-dialog__note-user-avatar"
         >
           <div
             class="user__initials"
@@ -35,7 +35,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           />
         </div>
         <figcaption
-          class="note-dialog__author-name"
+          class="note-dialog__note-author-name"
         />
       </figure>
       <div
@@ -64,7 +64,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     </div>
     <aside>
       <ul
-        class="note-dialog__options"
+        class="note-dialog__note-options"
       />
     </aside>
   </div>
@@ -72,21 +72,21 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     class="note-dialog__note"
   >
     <div
-      class="note-dialog__content"
+      class="note-dialog__note-content"
     >
       <blockquote
-        class="note-dialog__text"
+        class="note-dialog__note-content__text"
         contenteditable="false"
       />
     </div>
     <div
-      class="note-dialog__footer"
+      class="note-dialog__note-footer"
     >
       <figure
-        class="note-dialog__author"
+        class="note-dialog__note-author"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="user-avatar note-dialog__note-user-avatar"
         >
           <div
             class="user__initials"
@@ -94,7 +94,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           />
         </div>
         <figcaption
-          class="note-dialog__author-name"
+          class="note-dialog__note-author-name"
         />
       </figure>
       <div
@@ -113,10 +113,10 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     </div>
     <aside>
       <ul
-        class="note-dialog__options"
+        class="note-dialog__note-options"
       >
         <li
-          class="note-dialog__option"
+          class="note-dialog__note-option"
         >
           <button
             class="icon-button icon-button--right"
@@ -144,21 +144,21 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     class="note-dialog__note"
   >
     <div
-      class="note-dialog__content"
+      class="note-dialog__note-content"
     >
       <blockquote
-        class="note-dialog__text"
+        class="note-dialog__note-content__text"
         contenteditable="false"
       />
     </div>
     <div
-      class="note-dialog__footer"
+      class="note-dialog__note-footer"
     >
       <figure
-        class="note-dialog__author"
+        class="note-dialog__note-author"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="user-avatar note-dialog__note-user-avatar"
         >
           <div
             class="user__initials"
@@ -166,7 +166,7 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
           />
         </div>
         <figcaption
-          class="note-dialog__author-name"
+          class="note-dialog__note-author-name"
         />
       </figure>
       <div
@@ -185,10 +185,10 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     </div>
     <aside>
       <ul
-        class="note-dialog__options"
+        class="note-dialog__note-options"
       >
         <li
-          class="note-dialog__option"
+          class="note-dialog__note-option"
         >
           <button
             class="icon-button icon-button--right"

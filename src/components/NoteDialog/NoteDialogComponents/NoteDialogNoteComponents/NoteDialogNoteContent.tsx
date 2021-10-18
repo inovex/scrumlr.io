@@ -3,9 +3,9 @@ import Parse from "parse";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
-import "./NoteDialogContent.scss";
+import "./NoteDialogNoteContent.scss";
 
-type NoteDialogContentProps = {
+type NoteDialogNoteContentProps = {
   noteId?: string;
   authorId: string;
   currentUserIsModerator: boolean;
@@ -13,7 +13,7 @@ type NoteDialogContentProps = {
   text: string;
 };
 
-export const NoteDialogContent: FC<NoteDialogContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogNoteContentProps) => {
   const editable = (authorId: string) => (Parse.User.current()?.id === authorId || currentUserIsModerator) && !activeModeration.status;
 
   const onEdit = (id: string, authorId: string, text: string) => {
@@ -23,9 +23,9 @@ export const NoteDialogContent: FC<NoteDialogContentProps> = ({noteId, authorId,
   };
 
   return (
-    <div className="note-dialog__content">
+    <div className="note-dialog__note-content">
       <blockquote
-        className={classNames("note-dialog__text", {".note-dialog__text-hover": editable(authorId)})}
+        className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable(authorId)})}
         contentEditable={editable(authorId)}
         suppressContentEditableWarning
         onBlur={(e: React.FocusEvent<HTMLElement>) => {

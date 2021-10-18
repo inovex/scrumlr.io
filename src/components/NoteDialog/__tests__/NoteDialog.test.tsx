@@ -135,12 +135,12 @@ describe("NoteDialog", () => {
 
     test("note-dialog__content is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".note-dialog__note")?.firstChild).toHaveClass("note-dialog__content");
+      expect(container.querySelector(".note-dialog__note")?.firstChild).toHaveClass("note-dialog__note-content");
     });
 
     test("note-dialog__footer is present", () => {
       const {container} = render(createNoteDialog("Test Text", "Test Author", true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".note-dialog__note")?.children[1]).toHaveClass("note-dialog__footer");
+      expect(container.querySelector(".note-dialog__note")?.children[1]).toHaveClass("note-dialog__note-footer");
     });
 
     test("note-dialog match snapshot", () => {
@@ -167,9 +167,9 @@ describe("NoteDialog", () => {
         });
         const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
         expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(2);
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__options")).toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-content")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-footer")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-options")).toBeNull();
       });
 
       test("moderation: last note-dialog__notes has two children", () => {
@@ -189,9 +189,9 @@ describe("NoteDialog", () => {
           container: global.document.querySelector("#portal")!,
         });
         const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__content")).not.toBeNull();
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__footer")).not.toBeNull();
-        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__options")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-content")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-footer")).not.toBeNull();
+        expect(noteDialogNotes[noteDialogNotes.length - 1].querySelector(".note-dialog__note-options")).not.toBeNull();
       });
 
       test("moderation: last note-dialog__notes has three children", () => {

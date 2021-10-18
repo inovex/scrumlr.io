@@ -1,12 +1,12 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
 
-.note-dialog__content {
+.note-dialog__note-content {
   display: flex;
   width: 100%;
 }
 
-.note-dialog__text {
+.note-dialog__note-content__text {
   background: none;
   margin: 0;
   min-height: 3 * $line-height--medium;
@@ -23,13 +23,13 @@
   outline: none;
 }
 
-.note-dialog__text-hover:hover,
-.note-dialog__text-hover:focus {
+.note-dialog__note-content__text-hover:hover,
+.note-dialog__note-content__text-hover:focus {
   border-color: #adadad;
 }
 
 @media (prefers-color-scheme: dark) {
-  .note-dialog__text {
+  .note-dialog__note-content__text {
     color: $color-white;
   }
 }

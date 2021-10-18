@@ -1,11 +1,11 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
 
-.note-dialog__footer {
+.note-dialog__note-footer {
   position: relative;
   height: 26px;
 }
-.note-dialog__author {
+.note-dialog__note-author {
   display: inline-flex;
   align-items: center;
   // reset css from figure-element:
@@ -16,13 +16,13 @@
   vertical-align: baseline;
 }
 
-.note-dialog__author-image {
+.note-dialog__note-author-image {
   height: $note__author-image-size;
   width: $note__author-image-size;
   border-radius: 100%;
 }
 
-.note-dialog__author-name {
+.note-dialog__note-author-name {
   margin-left: $note__author-margin-left;
   color: $color-dark-gray;
   font-size: $note__author-name-size;
@@ -30,7 +30,7 @@
   line-height: $line-height--small;
 }
 
-.note-dialog .note-dialog__user-avatar {
+.note-dialog .note-dialog__note-user-avatar {
   height: 22px;
   width: 22px;
   font-size: 10px;

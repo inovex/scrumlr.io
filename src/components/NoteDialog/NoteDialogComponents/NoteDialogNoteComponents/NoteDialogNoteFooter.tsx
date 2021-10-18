@@ -3,9 +3,9 @@ import {Votes} from "components/Votes";
 import Parse from "parse";
 import {FC} from "react";
 import {VoteClientModel} from "types/vote";
-import "./NoteDialogFooter.scss";
+import "./NoteDialogNoteFooter.scss";
 
-type NoteDialogFooterProps = {
+type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
   authorId: string;
   authorName: string;
@@ -14,12 +14,12 @@ type NoteDialogFooterProps = {
   activeVoting: boolean;
 };
 
-export const NoteDialogFooter: FC<NoteDialogFooterProps> = ({showAuthors, authorId, authorName, noteId, votes, activeVoting}: NoteDialogFooterProps) => (
-  <div className="note-dialog__footer">
+export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = ({showAuthors, authorId, authorName, noteId, votes, activeVoting}: NoteDialogNoteFooterProps) => (
+  <div className="note-dialog__note-footer">
     {(showAuthors || Parse.User.current()?.id === authorId) && (
-      <figure className="note-dialog__author">
-        <UserAvatar id={authorId} name={authorName} className="note-dialog__user-avatar" />
-        <figcaption className="note-dialog__author-name">{authorName}</figcaption>
+      <figure className="note-dialog__note-author">
+        <UserAvatar id={authorId} name={authorName} className="note-dialog__note-user-avatar" />
+        <figcaption className="note-dialog__note-author-name">{authorName}</figcaption>
       </figure>
     )}
     <Votes className="note__votes" noteId={noteId!} votes={votes} activeVoting={activeVoting} />
