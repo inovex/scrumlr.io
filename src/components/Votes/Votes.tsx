@@ -3,7 +3,7 @@ import "./Votes.scss";
 import classNames from "classnames";
 import {VoteClientModel} from "types/vote";
 import Parse from "parse";
-import {VoteButtons} from "./buttons";
+import {VoteButtons} from "./VoteButtons";
 
 type VotesProps = {
   className?: string;
