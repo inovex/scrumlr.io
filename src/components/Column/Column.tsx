@@ -44,7 +44,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, childre
   return (
     <section className={`column ${getColorClassName(color)}`} ref={columnRef}>
       <div className="column__content">
-        <header className="column__header">
+        <div className="column__header">
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{React.Children.count(children)}</span>
@@ -57,7 +57,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, childre
             )}
           </div>
           <NoteInput columnId={id} />
-        </header>
+        </div>
         <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>

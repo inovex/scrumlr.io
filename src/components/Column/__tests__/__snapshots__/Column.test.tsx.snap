@@ -23,7 +23,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
   <div
     class="column__content"
   >
-    <header
+    <div
       class="column__header"
     >
       <div
@@ -59,7 +59,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
         </div>
       </div>
-    </header>
+    </div>
     <div
       class="column__notes-wrapper"
     >

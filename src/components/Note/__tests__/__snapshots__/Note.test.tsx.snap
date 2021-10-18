@@ -24,7 +24,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
           icon-edit.svg
         </svg>
       </div>
-      <footer
+      <div
         class="note__footer"
       >
         <figure
@@ -66,7 +66,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
             </svg>
           </button>
         </div>
-      </footer>
+      </div>
     </div>
     <div
       class="note__in-stack"
@@ -113,23 +113,23 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
               class="note-dialog__note"
             >
               <div
-                class="note-dialog__content"
+                class="note-dialog__note-content"
               >
                 <blockquote
-                  class="note-dialog__text"
+                  class="note-dialog__note-content__text"
                   contenteditable="false"
                 >
                   Test Text
                 </blockquote>
               </div>
-              <footer
-                class="note-dialog__footer"
+              <div
+                class="note-dialog__note-footer"
               >
                 <figure
-                  class="note-dialog__author"
+                  class="note-dialog__note-author"
                 >
                   <div
-                    class="user-avatar note-dialog__user-avatar"
+                    class="user-avatar note-dialog__note-user-avatar"
                   >
                     <div
                       class="user__initials"
@@ -137,7 +137,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     />
                   </div>
                   <figcaption
-                    class="note-dialog__author-name"
+                    class="note-dialog__note-author-name"
                   />
                 </figure>
                 <div
@@ -163,27 +163,27 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
             >
               <div
-                class="note-dialog__content"
+                class="note-dialog__note-content"
               >
                 <blockquote
-                  class="note-dialog__text"
+                  class="note-dialog__note-content__text"
                   contenteditable="false"
                 />
               </div>
-              <footer
-                class="note-dialog__footer"
+              <div
+                class="note-dialog__note-footer"
               >
                 <figure
-                  class="note-dialog__author"
+                  class="note-dialog__note-author"
                 >
                   <div
-                    class="user-avatar note-dialog__user-avatar"
+                    class="user-avatar note-dialog__note-user-avatar"
                   >
                     <div
                       class="user__initials"
@@ -191,7 +191,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     />
                   </div>
                   <figcaption
-                    class="note-dialog__author-name"
+                    class="note-dialog__note-author-name"
                   />
                 </figure>
                 <div
@@ -207,27 +207,27 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
             <div
               class="note-dialog__note"
             >
               <div
-                class="note-dialog__content"
+                class="note-dialog__note-content"
               >
                 <blockquote
-                  class="note-dialog__text"
+                  class="note-dialog__note-content__text"
                   contenteditable="false"
                 />
               </div>
-              <footer
-                class="note-dialog__footer"
+              <div
+                class="note-dialog__note-footer"
               >
                 <figure
-                  class="note-dialog__author"
+                  class="note-dialog__note-author"
                 >
                   <div
-                    class="user-avatar note-dialog__user-avatar"
+                    class="user-avatar note-dialog__note-user-avatar"
                   >
                     <div
                       class="user__initials"
@@ -235,7 +235,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     />
                   </div>
                   <figcaption
-                    class="note-dialog__author-name"
+                    class="note-dialog__note-author-name"
                   />
                 </figure>
                 <div
@@ -251,8 +251,9 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     </svg>
                   </button>
                 </div>
-              </footer>
+              </div>
             </div>
+            ;
           </div>
         </div>
       </div>
@@ -283,7 +284,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
           icon-edit.svg
         </svg>
       </div>
-      <footer
+      <div
         class="note__footer"
       >
         <figure
@@ -325,7 +326,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
             </svg>
           </button>
         </div>
-      </footer>
+      </div>
     </div>
     <div
       class="note__in-stack"
@@ -355,7 +356,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
         icon-edit.svg
       </svg>
     </div>
-    <footer
+    <div
       class="note__footer"
     >
       <figure
@@ -397,7 +398,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
           </svg>
         </button>
       </div>
-    </footer>
+    </div>
   </div>
   <div
     class="note__in-stack"

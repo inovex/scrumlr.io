@@ -6,11 +6,10 @@ $header-menu-width: 288px;
 $header-menu__item-height: 48px;
 
 .header-menu {
-  position: fixed;
   width: 288px;
   border-radius: 16px;
   left: calc(50% - 144px);
-  top: 92px;
+  margin-top: -30px;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   overflow: hidden;
   list-style-type: none;
