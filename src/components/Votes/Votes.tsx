@@ -16,7 +16,7 @@ type VotesProps = {
 export const Votes: FC<VotesProps> = (props) => {
   const voteConfiguration = useAppSelector((state) => state.voteConfiguration);
   const ownVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
-  const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownVotes.length < 1));
+  const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownVotes.length == 0));
 
   return (
     <div className={classNames("votes", props.className)}>
