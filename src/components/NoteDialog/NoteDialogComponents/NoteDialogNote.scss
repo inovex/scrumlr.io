@@ -1,0 +1,40 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+.note-dialog__note {
+  margin-bottom: 25px;
+  padding: $padding--default $padding--medium;
+  position: relative;
+  border-radius: $note__border-radius;
+  background-color: $color-white;
+  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  list-style-type: none;
+  z-index: $note-dialog-z-index;
+  min-width: calc(240px + 10vw);
+  width: calc(100vw - 36px);
+  max-width: 380px;
+}
+@media (prefers-color-scheme: dark) {
+  .note-dialog__note {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+}
+@media #{$menu-desktop} {
+  .note-dialog__note {
+    max-width: 440px;
+    width: calc(100vw - 32px);
+  }
+}
+
+.note-dialog__note--own-card::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  width: $note__indicator-width;
+  height: $note__indicator-height;
+  border-radius: 0 $note__indicator-width $note__indicator-width 0;
+  background: var(--accent-color);
+}
