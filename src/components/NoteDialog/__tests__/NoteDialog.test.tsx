@@ -20,12 +20,12 @@ type NoteDialogTestProps = {
   text?: string;
   authorId?: string;
   showAuthors?: boolean;
-  activeModeration?: {userId?: string; status?: boolean};
+  activeModeration?: {userId: string; status: boolean};
   currentUserIsModerator?: boolean;
 };
 
 const createNoteDialog = (
-  {text, authorId, showAuthors, activeModeration = {userId: authorId, status: false}, currentUserIsModerator = false}: NoteDialogTestProps = {
+  {text = "Test Text", authorId = "Test Author", showAuthors = true, activeModeration = {userId: authorId, status: false}, currentUserIsModerator = false}: NoteDialogTestProps = {
     text: "Test Text",
     authorId: "Test Author",
     showAuthors: true,
