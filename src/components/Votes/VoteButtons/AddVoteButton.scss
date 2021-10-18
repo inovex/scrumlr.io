@@ -7,7 +7,7 @@
   color: var(--accent-color);
 }
 
-.vote-button-add-icon {
+.vote-button-add__icon {
   position: absolute;
   top: 5px;
   left: 5px;
@@ -19,7 +19,7 @@
 .vote-button-add:not([disabled]):hover {
   background-color: var(--accent-color);
 
-  .vote-button-add-icon {
+  .vote-button-add__icon {
     fill: $color-white;
   }
 }

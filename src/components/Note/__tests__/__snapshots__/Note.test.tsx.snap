@@ -60,7 +60,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
             class="dot-button vote-button-add"
           >
             <svg
-              class="vote-button-add-icon"
+              class="vote-button-add__icon"
             >
               icon-add.svg
             </svg>
@@ -157,7 +157,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     class="dot-button vote-button-add"
                   >
                     <svg
-                      class="vote-button-add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -201,7 +201,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     class="dot-button vote-button-add"
                   >
                     <svg
-                      class="vote-button-add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -245,7 +245,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     class="dot-button vote-button-add"
                   >
                     <svg
-                      class="vote-button-add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -320,7 +320,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
             class="dot-button vote-button-add"
           >
             <svg
-              class="vote-button-add-icon"
+              class="vote-button-add__icon"
             >
               icon-add.svg
             </svg>
@@ -392,7 +392,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
           class="dot-button vote-button-add"
         >
           <svg
-            class="vote-button-add-icon"
+            class="vote-button-add__icon"
           >
             icon-add.svg
           </svg>
