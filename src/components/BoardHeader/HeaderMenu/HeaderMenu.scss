@@ -139,7 +139,9 @@ $header-menu__item-height: 48px;
   box-sizing: border-box;
   border-bottom: 1px solid #efefef;
 }
-.header-menu__item:hover {
+
+.menu__item-button:focus,
+.menu__item-button:hover {
   background-color: #f3f3f3;
 }
 
@@ -284,10 +286,10 @@ $header-menu__item-height: 48px;
   color: #e5534b;
   cursor: pointer;
 }
-.delete-container__delete-board :focus {
+.delete-container__delete-board:focus {
   outline: 0;
 }
-.delete-container__delete-board :active {
+.delete-container__delete-board:active {
   scale: 0.95;
 }
 
@@ -307,7 +309,9 @@ $header-menu__item-height: 48px;
   .header-menu__item {
     background-color: $color-dark-mode-note;
   }
-  .header-menu__item:hover {
+
+  .menu__item-button:focus,
+  .menu__item-button:hover {
     background-color: #3d4555;
   }
 }

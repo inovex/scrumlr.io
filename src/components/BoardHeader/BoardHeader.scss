@@ -21,6 +21,13 @@
   position: absolute;
   right: 0;
   top: 32px;
+
+  display: flex;
+  flex-direction: row-reverse;
+
+  background: none;
+  border: none;
+  outline: none;
 }
 
 .board-header__infos {
@@ -33,17 +40,22 @@
   padding: 5px 20px;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
+  background-color: transparent;
+  border-color: transparent;
+  outline: none;
 }
 
 .info-block--hoverable {
   cursor: pointer;
 }
 
+.info-block--hoverable:focus,
 .info-block--hoverable:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
+  .info-block--hoverable:focus,
   .info-block--hoverable:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
   }
@@ -100,13 +112,4 @@
   .board-header__status-image {
     display: block;
   }
-}
-
-.board-header__users {
-  display: flex;
-  flex-direction: row-reverse;
-
-  background: none;
-  border: none;
-  outline: none;
 }

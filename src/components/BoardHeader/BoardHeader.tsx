@@ -23,21 +23,29 @@ export const BoardHeader = (props: BoardHeaderProps) => {
     <div className="board-header">
       <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       <div className="board-header__infos">
-        <div
+        <button
           className={classNames("info-block", {"info-block--hoverable": props.currentUserIsModerator})}
           onClick={() => {
             if (props.currentUserIsModerator) setShowMenu(!showMenu);
           }}
           role="dialog"
+          tabIndex={1}
         >
           <p className="board-header__status">{props.boardstatus}</p>
           <div className="board-header__title-block">
             <img className="board-header__status-image" src={lock} alt="Private Session" />
             <h1 className="board-header__title">{props.name}</h1>
           </div>
-        </div>
+        </button>
       </div>
-      <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
+      <button
+        tabIndex={100}
+        aria-label="Show participants"
+        aria-haspopup
+        aria-pressed={showParticipants}
+        className="board-header__users"
+        onClick={() => setShowParticipants(!showParticipants)}
+      >
         <BoardUsers />
       </button>
       {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}

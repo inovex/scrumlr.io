@@ -107,8 +107,9 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+  outline: none;
 }
-
+.column__header-toggle-button:focus > .column__header-toggle-button-icon,
 .column__header-toggle-button:hover > .column__header-toggle-button-icon {
   animation: none;
   color: var(--accent-color);
