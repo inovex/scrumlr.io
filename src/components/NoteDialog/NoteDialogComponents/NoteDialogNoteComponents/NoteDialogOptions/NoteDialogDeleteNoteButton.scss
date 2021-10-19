@@ -1,0 +1,18 @@
+@import "constants/style";
+
+.note-dialog__note-option__remove {
+  height: 22px;
+  width: 22px;
+  background-color: transparent;
+  color: rgba($color-backlog-blue, 0.4);
+}
+
+.note-dialog__note-option__remove-icon {
+  height: 22px;
+  width: 22px;
+}
+
+.note-dialog__note-option__remove:focus,
+.note-dialog__note-option__remove:hover {
+  color: $color-backlog-blue;
+}

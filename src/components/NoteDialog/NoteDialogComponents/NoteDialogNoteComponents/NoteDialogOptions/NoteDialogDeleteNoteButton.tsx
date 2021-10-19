@@ -3,6 +3,7 @@ import {DotButton} from "components/DotButton";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
+import "./NoteDialogDeleteNoteButton.scss";
 
 type NoteDialogDeleteNoteProps = {
   noteId?: string;
@@ -20,8 +21,9 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
         onDelete(noteId!);
         onDeleteOfParent();
       }}
+      className="note-dialog__note-option__remove"
     >
-      <DeleteIcon className="" />
+      <DeleteIcon className="note-dialog__note-option__remove-icon" />
     </DotButton>
   );
 };

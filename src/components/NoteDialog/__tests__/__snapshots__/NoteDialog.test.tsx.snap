@@ -44,31 +44,35 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               class="note-dialog__note-author-name"
             />
           </figure>
-          <ul
-            class="note-dialog__note-options"
-          />
           <div
-            class="votes note__votes"
+            class="note-dialog__note-footer__options-and-votes"
           >
-            <button
-              class="dot-button vote-button-remove"
+            <ul
+              class="note-dialog__note-options"
+            />
+            <div
+              class="votes"
             >
-              <span
-                class="vote-button-remove__folded-corner"
-              />
-              <span>
-                1
-              </span>
-            </button>
-            <button
-              class="dot-button vote-button-add"
-            >
-              <svg
-                class="vote-button-add__icon"
+              <button
+                class="dot-button vote-button-remove"
               >
-                icon-add.svg
-              </svg>
-            </button>
+                <span
+                  class="vote-button-remove__folded-corner"
+                />
+                <span>
+                  1
+                </span>
+              </button>
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -101,35 +105,39 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               class="note-dialog__note-author-name"
             />
           </figure>
-          <ul
-            class="note-dialog__note-options"
+          <div
+            class="note-dialog__note-footer__options-and-votes"
           >
-            <li
-              class="note-dialog__note-option"
+            <ul
+              class="note-dialog__note-options"
+            >
+              <li
+                class="note-dialog__note-option"
+              >
+                <button
+                  class="dot-button note-dialog__note-option__unstack"
+                >
+                  <svg
+                    class="note-dialog__note-option__unstack-icon"
+                  >
+                    icon-unstack.svg
+                  </svg>
+                </button>
+              </li>
+            </ul>
+            <div
+              class="votes"
             >
               <button
-                class="dot-button"
+                class="dot-button vote-button-add"
               >
                 <svg
-                  class=""
+                  class="vote-button-add__icon"
                 >
-                  icon-unstack.svg
+                  icon-add.svg
                 </svg>
               </button>
-            </li>
-          </ul>
-          <div
-            class="votes note__votes"
-          >
-            <button
-              class="dot-button vote-button-add"
-            >
-              <svg
-                class="vote-button-add__icon"
-              >
-                icon-add.svg
-              </svg>
-            </button>
+            </div>
           </div>
         </div>
       </div>
@@ -162,35 +170,39 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               class="note-dialog__note-author-name"
             />
           </figure>
-          <ul
-            class="note-dialog__note-options"
+          <div
+            class="note-dialog__note-footer__options-and-votes"
           >
-            <li
-              class="note-dialog__note-option"
+            <ul
+              class="note-dialog__note-options"
+            >
+              <li
+                class="note-dialog__note-option"
+              >
+                <button
+                  class="dot-button note-dialog__note-option__unstack"
+                >
+                  <svg
+                    class="note-dialog__note-option__unstack-icon"
+                  >
+                    icon-unstack.svg
+                  </svg>
+                </button>
+              </li>
+            </ul>
+            <div
+              class="votes"
             >
               <button
-                class="dot-button"
+                class="dot-button vote-button-add"
               >
                 <svg
-                  class=""
+                  class="vote-button-add__icon"
                 >
-                  icon-unstack.svg
+                  icon-add.svg
                 </svg>
               </button>
-            </li>
-          </ul>
-          <div
-            class="votes note__votes"
-          >
-            <button
-              class="dot-button vote-button-add"
-            >
-              <svg
-                class="vote-button-add__icon"
-              >
-                icon-add.svg
-              </svg>
-            </button>
+            </div>
           </div>
         </div>
       </div>

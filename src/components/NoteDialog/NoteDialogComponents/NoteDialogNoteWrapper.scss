@@ -3,10 +3,14 @@
 
 .note-dialog__scrollbar {
   max-height: 600px;
-  min-width: 500px;
   overflow: auto;
+  padding-left: 30px;
 }
 
 .note-dialog__note-wrapper {
-  padding-right: 25px;
+  padding-right: 30px;
+}
+
+.note-dialog__note-wrapper .note-dialog__note:last-child {
+  margin-bottom: 0;
 }

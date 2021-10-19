@@ -1,6 +1,8 @@
 @import "constants/style";
 
 .vote-button-add {
+  height: 28px;
+  width: 28px;
   position: absolute;
   right: -5px;
   background-color: rgba(var(--accent-color-rgb), 0.2);

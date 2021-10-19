@@ -31,8 +31,10 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
       )}
-      {showOptions && <NoteDialogNoteComponents.Options {...props} />}
-      <Votes className="note__votes" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
+      <div className="note-dialog__note-footer__options-and-votes">
+        {showOptions && <NoteDialogNoteComponents.Options {...props} />}
+        <Votes className="" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />
+      </div>
     </div>
   );
 };

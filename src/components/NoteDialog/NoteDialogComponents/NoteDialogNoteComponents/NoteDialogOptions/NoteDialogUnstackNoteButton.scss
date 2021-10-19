@@ -1,0 +1,18 @@
+@import "constants/style";
+
+.note-dialog__note-option__unstack {
+  height: 22px;
+  width: 22px;
+  background-color: transparent;
+  color: rgba(var(--accent-color-rgb), 0.4);
+}
+
+.note-dialog__note-option__unstack-icon {
+  height: 22px;
+  width: 22px;
+}
+
+.note-dialog__note-option__unstack:focus,
+.note-dialog__note-option__unstack:hover {
+  color: var(--accent-color);
+}

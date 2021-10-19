@@ -1,6 +1,8 @@
 @import "constants/style";
 
 .vote-button-remove {
+  height: 28px;
+  width: 28px;
   position: absolute;
   left: 5px;
   background-color: rgba(var(--accent-color-rgb), 0.2);

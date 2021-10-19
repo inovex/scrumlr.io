@@ -147,27 +147,31 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                       />
                     </figure>
                     <div
-                      class="votes note__votes"
+                      class="note-dialog__note-footer__options-and-votes"
                     >
-                      <button
-                        class="dot-button vote-button-remove"
+                      <div
+                        class="votes"
                       >
-                        <span
-                          class="vote-button-remove__folded-corner"
-                        />
-                        <span>
-                          3
-                        </span>
-                      </button>
-                      <button
-                        class="dot-button vote-button-add"
-                      >
-                        <svg
-                          class="vote-button-add__icon"
+                        <button
+                          class="dot-button vote-button-remove"
                         >
-                          icon-add.svg
-                        </svg>
-                      </button>
+                          <span
+                            class="vote-button-remove__folded-corner"
+                          />
+                          <span>
+                            3
+                          </span>
+                        </button>
+                        <button
+                          class="dot-button vote-button-add"
+                        >
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -201,17 +205,21 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                       />
                     </figure>
                     <div
-                      class="votes note__votes"
+                      class="note-dialog__note-footer__options-and-votes"
                     >
-                      <button
-                        class="dot-button vote-button-add"
+                      <div
+                        class="votes"
                       >
-                        <svg
-                          class="vote-button-add__icon"
+                        <button
+                          class="dot-button vote-button-add"
                         >
-                          icon-add.svg
-                        </svg>
-                      </button>
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -245,17 +253,21 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                       />
                     </figure>
                     <div
-                      class="votes note__votes"
+                      class="note-dialog__note-footer__options-and-votes"
                     >
-                      <button
-                        class="dot-button vote-button-add"
+                      <div
+                        class="votes"
                       >
-                        <svg
-                          class="vote-button-add__icon"
+                        <button
+                          class="dot-button vote-button-add"
                         >
-                          icon-add.svg
-                        </svg>
-                      </button>
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
