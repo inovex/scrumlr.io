@@ -1,8 +1,8 @@
 import {FC} from "react";
-import {IconButton} from "components/IconButton";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {ReactComponent as unstackIcon} from "assets/icon-unstack.svg";
+import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
+import {DotButton} from "components/DotButton";
 
 type NoteDialogUnstackNoteProps = {
   noteId?: string;
@@ -15,14 +15,13 @@ export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({not
   };
 
   return (
-    <IconButton
+    <DotButton
       onClick={() => {
         onUnstack(noteId!);
         onClose();
       }}
-      direction="right"
-      label="Unstack"
-      icon={unstackIcon}
-    />
+    >
+      <UnstackIcon className="" />
+    </DotButton>
   );
 };

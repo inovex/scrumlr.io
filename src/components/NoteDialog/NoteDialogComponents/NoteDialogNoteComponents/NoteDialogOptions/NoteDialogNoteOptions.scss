@@ -2,18 +2,18 @@
 
 .note-dialog__note-options {
   list-style-type: none;
-  position: absolute;
-  margin: 0;
-  bottom: 10px;
-  top: 0;
-  right: -40px - $margin--default;
-}
-@media screen and (max-width: 766px) {
-  .note-dialog__noteoptions {
-    display: none;
-  }
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
 }
 
-.note-dialog__note-option + .note-dialog__note-option {
-  margin-top: $margin--small;
+.note-dialog__note-option {
+  padding-top: 0;
+}
+
+@media screen and (max-width: 766px) {
+  .note-dialog__note-options {
+    display: none;
+  }
 }

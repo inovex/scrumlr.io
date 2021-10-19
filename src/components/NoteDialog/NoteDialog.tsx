@@ -29,7 +29,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
     return null;
   }
   return (
-    <Portal onClose={props.onClose} darkBackground>
+    <Portal onClose={props.onClose} darkBackground hiddenOverflow>
       <div
         className={classNames(
           "note-dialog",
@@ -39,11 +39,12 @@ export const NoteDialog = (props: NoteDialogProps) => {
         )}
       >
         <NoteDialogComponents.Header columnName={props.columnName} />
-        <NoteDialogComponents.Note {...props} showUnstackButton={false} />
-        {props.childrenNotes.map((note) => (
-          <NoteDialogComponents.Note {...props} {...note} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
-        ))}
-        ;
+        <NoteDialogComponents.Wrapper>
+          <NoteDialogComponents.Note {...props} showUnstackButton={false} />
+          {props.childrenNotes.map((note) => (
+            <NoteDialogComponents.Note {...props} {...note} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
+          ))}
+        </NoteDialogComponents.Wrapper>
       </div>
     </Portal>
   );

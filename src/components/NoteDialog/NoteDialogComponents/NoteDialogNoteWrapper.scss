@@ -1,0 +1,12 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+.note-dialog__scrollbar {
+  max-height: 600px;
+  min-width: 500px;
+  overflow: auto;
+}
+
+.note-dialog__note-wrapper {
+  padding-right: 25px;
+}
