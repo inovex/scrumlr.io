@@ -1,8 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`HeaderMenu should render correctly on close 1`] = `<div />`;
-
-exports[`HeaderMenu should render correctly on open 1`] = `
+exports[`<HeaderMenu/> should render correctly moderator 1`] = `
 <div
   id="portal"
 >
@@ -34,26 +32,26 @@ exports[`HeaderMenu should render correctly on open 1`] = `
             class="header-menu"
           >
             <li
-              class="header-menu__info"
+              class="board-settings"
             >
               <form>
                 <input
-                  class="info__board-name"
+                  class="board-settings__board-name"
                   disabled=""
-                  value="Header Menu Test"
+                  value="board"
                 />
                 <button
-                  class="info__access-mode"
+                  class="board-settings__access-mode"
                   disabled=""
                   type="button"
                 >
                   <div
-                    class="info__access-mode-lock"
+                    class="board-settings__access-mode-lock"
                   />
                   Private Session
                 </button>
                 <button
-                  class="info__edit-button"
+                  class="board-settings__edit-button"
                   type="submit"
                 >
                   edit
@@ -61,139 +59,312 @@ exports[`HeaderMenu should render correctly on open 1`] = `
               </form>
             </li>
             <li
-              class="header-menu__item"
+              class="board-option"
+              data-testid="author"
             >
               <button
-                class="menu__item-button"
+                class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle item-button__toggle--left"
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Hide
-                   authors of card
-                </label>
+                  Hide authors of card
+                </span>
               </button>
             </li>
             <li
-              class="header-menu__item"
+              class="board-option"
+              data-testid="note"
             >
               <button
-                class="menu__item-button"
+                class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle item-button__toggle--right"
+                    class="board-option-toggle__switch board-option-toggle__switch--left"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Show
-                   notes of other users
-                </label>
+                  Show notes of other users
+                </span>
               </button>
             </li>
             <li
-              class="header-menu__item"
+              class="board-option"
+              data-testid="column"
             >
               <button
-                class="menu__item-button"
+                class="board-option-button"
               >
                 <div
-                  class="item-button__toggle-container"
+                  class="board-option-toggle"
                 >
                   <div
-                    class="item-button__toggle item-button__toggle--left"
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
                   />
                 </div>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
-                  Hide
-                   columns
-                </label>
+                  Hide columns
+                </span>
               </button>
             </li>
             <li
-              class="header-menu__item"
+              class="board-option"
+              data-testid="qrcode"
             >
               <button
-                class="menu__item-button"
+                class="board-option-button board-option-button--expandable"
               >
                 <svg
-                  class="item-button__icon"
+                  class="board-option-button__icon"
                 >
                   icon-share.svg
                 </svg>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
                   Share board
-                </label>
+                </span>
               </button>
-            </li>
-            <li
-              class="header-menu__qrcode-container"
-            >
-              <canvas
-                class="qrcode-container__qrcode"
-                height="260"
-                style="height: 260px; width: 260px;"
-                width="260"
-              />
-              <button
-                class="qrcode-container__copy-to-clipboard"
+              <div
+                class="share-qr-code-option__container"
               >
-                Copy Invite URL
-              </button>
+                <canvas
+                  class="share-qr-code-option__qrcode"
+                  height="260"
+                  style="height: 260px; width: 260px;"
+                  width="260"
+                />
+                <button
+                  class="share-qr-code-option__copy-to-clipboard"
+                >
+                  Copy Invite URL
+                </button>
+              </div>
             </li>
             <li
-              class="header-menu__item"
+              class="board-option"
+              data-testid="delete"
             >
               <button
-                class="menu__item-button"
+                class="board-option-button board-option-button--expandable"
               >
                 <svg
-                  class="item-button__icon"
+                  class="board-option-button__icon"
                 >
                   icon-delete.svg
                 </svg>
-                <label
-                  class="item-button__label"
+                <span
+                  class="board-option-button__label"
                 >
                   Delete board
-                </label>
+                </span>
               </button>
+              <div
+                class="delete-board-option__container"
+              >
+                <label
+                  class="delete-board-option__warning-label"
+                >
+                  <b>
+                    Are you absolutely sure that you want to delete the board?
+                  </b>
+                   This action 
+                  <b>
+                    cannot
+                  </b>
+                   be undone.
+                </label>
+                <button
+                  class="delete-board-option__delete-board"
+                >
+                  Delete board
+                </button>
+              </div>
             </li>
             <li
-              class="header-menu__delete-container"
+              class="board-option"
+              data-testid="export"
             >
-              <label
-                class="delete-container__warning-label"
-              >
-                <b>
-                  Are you absolutely sure that you want to delete the board?
-                </b>
-                 This action 
-                <b>
-                  cannot
-                </b>
-                 be undone.
-              </label>
               <button
-                class="delete-container__delete-board"
+                class="board-option-button board-option-button--expandable"
               >
-                Delete board
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Export board
+                </span>
               </button>
+              <div
+                class="export-board-option__container"
+              >
+                <button
+                  class="board-option-button"
+                  data-testid="export-json"
+                >
+                  <svg
+                    class="board-option-button__icon"
+                  >
+                    icon-share.svg
+                  </svg>
+                  <span
+                    class="board-option-button__label"
+                  >
+                    Export as json
+                  </span>
+                </button>
+                <button
+                  class="board-option-button"
+                  data-testid="export-csv"
+                >
+                  <svg
+                    class="board-option-button__icon"
+                  >
+                    icon-share.svg
+                  </svg>
+                  <span
+                    class="board-option-button__label"
+                  >
+                    Export as csv
+                  </span>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+  </div>
+</div>
+`;
+
+exports[`<HeaderMenu/> should render correctly user 1`] = `
+<div
+  id="portal"
+>
+  <div
+    class="portal"
+    role="dialog"
+  >
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="0"
+    />
+    <div
+      data-focus-guard="true"
+      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
+      tabindex="1"
+    />
+    <div
+      data-focus-lock-disabled="false"
+    >
+      <div
+        class="portal__frame"
+      >
+        <div
+          class="portal__content"
+          role="dialog"
+        >
+          <ul
+            class="header-menu"
+          >
+            <li
+              class="board-settings"
+            >
+              <form>
+                <input
+                  class="board-settings__board-name"
+                  disabled=""
+                  value="board"
+                />
+                <button
+                  class="board-settings__access-mode"
+                  disabled=""
+                  type="button"
+                >
+                  <div
+                    class="board-settings__access-mode-lock"
+                  />
+                  Private Session
+                </button>
+              </form>
+            </li>
+            <li
+              class="board-option"
+              data-testid="export"
+            >
+              <button
+                class="board-option-button board-option-button--expandable"
+              >
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Export board
+                </span>
+              </button>
+              <div
+                class="export-board-option__container"
+              >
+                <button
+                  class="board-option-button"
+                  data-testid="export-json"
+                >
+                  <svg
+                    class="board-option-button__icon"
+                  >
+                    icon-share.svg
+                  </svg>
+                  <span
+                    class="board-option-button__label"
+                  >
+                    Export as json
+                  </span>
+                </button>
+                <button
+                  class="board-option-button"
+                  data-testid="export-csv"
+                >
+                  <svg
+                    class="board-option-button__icon"
+                  >
+                    icon-share.svg
+                  </svg>
+                  <span
+                    class="board-option-button__label"
+                  >
+                    Export as csv
+                  </span>
+                </button>
+              </div>
             </li>
           </ul>
         </div>
