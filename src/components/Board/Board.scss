@@ -41,23 +41,23 @@
 
 .board__spacer-left:nth-child(odd),
 .board__spacer-right:nth-child(odd) {
-  background-color: #f9fafb;
+  background-color: $color-white-one;
 }
 
 .board__spacer-left:nth-child(even),
 .board__spacer-right:nth-child(even) {
-  background-color: #f6f5fb;
+  background-color: $color-white-two;
 }
 
 @media (prefers-color-scheme: dark) {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
-    background-color: #242c3d;
+    background-color: $color-dark-one;
   }
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: #272f41;
+    background-color: $color-dark-two;
   }
 }
 
