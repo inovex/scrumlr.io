@@ -1,0 +1,52 @@
+@import "constants/style";
+
+$header-menu__item-border-width: 1px;
+$header-menu-hover-color--dark: #3d4555;
+$header-menu-hover-color--light: #f3f3f3;
+$header-menu-button-height: 24px;
+$header-menu-icon-width: 79px;
+$header-menu-icon-height: 24px;
+$header-menu-border-bottom-color: #efefef;
+
+.export-board-option__container {
+  height: 0;
+  width: 100%;
+  background: $color-white;
+  transition: height 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.export-board-option__container--visible {
+  box-sizing: border-box;
+  height: 90px;
+}
+
+.export-board-option__container > .board-option-button {
+  background-color: transparent;
+  padding: 0;
+  height: 30px;
+  width: 80%;
+  border: $header-menu__item-border-width solid $color-black;
+  border-radius: 32px;
+  color: $color-black;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $header-menu-hover-color--light;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .export-board-option__container > .board-option-button:hover {
+    background-color: $header-menu-hover-color--dark;
+  }
+  .export-board-option__container {
+    background-color: $color-dark-mode-note;
+  }
+}
