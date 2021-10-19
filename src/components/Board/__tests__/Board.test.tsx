@@ -128,6 +128,10 @@ describe("navigation", () => {
           disconnect: jest.fn(),
         } as unknown as IntersectionObserver)
     );
+
+    const root = global.document.createElement("div");
+    root.setAttribute("id", "root");
+    global.document.querySelector("body")!.appendChild(root);
   });
 
   let intersectionObserver: IntersectionObserver;
@@ -194,6 +198,18 @@ describe("navigation", () => {
     test("navigation is shown when some columns are outside of the viewport", () => {
       showColumns(false, true, false);
       expect(container.querySelector(".board__navigation")).toBeInTheDocument();
+    });
+
+    test("column-visibility attribute is set correctly on fully visible columns", () => {
+      const rootContainer = render(createBoardWithColumns("planning-pink", "backlog-blue", "poker-purple"), {container: global.document.querySelector("#root")!});
+      showColumns(true, true, true);
+      expect(rootContainer.container.getAttribute("column-visibility")).toBe("visible");
+    });
+
+    test("column-visibility attribute is set correctly on partly visible columns", () => {
+      const rootContainer = render(createBoardWithColumns("planning-pink", "backlog-blue", "poker-purple"), {container: global.document.querySelector("#root")!});
+      showColumns(true, true, false);
+      expect(rootContainer.container.getAttribute("column-visibility")).toBe("collapsed");
     });
 
     test("correct scroll of previous button", () => {
