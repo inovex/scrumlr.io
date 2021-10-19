@@ -47,20 +47,20 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
           class="votes note__votes"
         >
           <button
-            class="dot-button dot-button__delete"
+            class="dot-button vote-button-remove"
           >
             <span
-              class="dot-button__folded-corner"
+              class="vote-button-remove__folded-corner"
             />
             <span>
               3
             </span>
           </button>
           <button
-            class="dot-button dot-button__add"
+            class="dot-button vote-button-add"
           >
             <svg
-              class="dot-button__add-icon"
+              class="vote-button-add__icon"
             >
               icon-add.svg
             </svg>
@@ -144,20 +144,20 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   class="votes note__votes"
                 >
                   <button
-                    class="dot-button dot-button__delete"
+                    class="dot-button vote-button-remove"
                   >
                     <span
-                      class="dot-button__folded-corner"
+                      class="vote-button-remove__folded-corner"
                     />
                     <span>
                       3
                     </span>
                   </button>
                   <button
-                    class="dot-button dot-button__add"
+                    class="dot-button vote-button-add"
                   >
                     <svg
-                      class="dot-button__add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -198,10 +198,10 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   class="votes note__votes"
                 >
                   <button
-                    class="dot-button dot-button__add"
+                    class="dot-button vote-button-add"
                   >
                     <svg
-                      class="dot-button__add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -242,10 +242,10 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   class="votes note__votes"
                 >
                   <button
-                    class="dot-button dot-button__add"
+                    class="dot-button vote-button-add"
                   >
                     <svg
-                      class="dot-button__add-icon"
+                      class="vote-button-add__icon"
                     >
                       icon-add.svg
                     </svg>
@@ -307,20 +307,20 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
           class="votes note__votes"
         >
           <button
-            class="dot-button dot-button__delete"
+            class="dot-button vote-button-remove"
           >
             <span
-              class="dot-button__folded-corner"
+              class="vote-button-remove__folded-corner"
             />
             <span>
               3
             </span>
           </button>
           <button
-            class="dot-button dot-button__add"
+            class="dot-button vote-button-add"
           >
             <svg
-              class="dot-button__add-icon"
+              class="vote-button-add__icon"
             >
               icon-add.svg
             </svg>
@@ -379,20 +379,20 @@ exports[`Note should have correct style show note with correct style 1`] = `
         class="votes note__votes"
       >
         <button
-          class="dot-button dot-button__delete"
+          class="dot-button vote-button-remove"
         >
           <span
-            class="dot-button__folded-corner"
+            class="vote-button-remove__folded-corner"
           />
           <span>
             3
           </span>
         </button>
         <button
-          class="dot-button dot-button__add"
+          class="dot-button vote-button-add"
         >
           <svg
-            class="dot-button__add-icon"
+            class="vote-button-add__icon"
           >
             icon-add.svg
           </svg>
