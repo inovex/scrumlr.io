@@ -1,0 +1,19 @@
+@import "constants/style";
+
+.note-dialog__note-options {
+  list-style-type: none;
+  position: absolute;
+  margin: 0;
+  bottom: 10px;
+  top: 0;
+  right: -40px - $margin--default;
+}
+@media screen and (max-width: 766px) {
+  .note-dialog__noteoptions {
+    display: none;
+  }
+}
+
+.note-dialog__note-option + .note-dialog__note-option {
+  margin-top: $margin--small;
+}
