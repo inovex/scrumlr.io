@@ -9,18 +9,18 @@
   height: 100vh;
   display: flex;
 }
-.column:nth-child(even) {
-  background-color: #f9fafb;
-}
 .column:nth-child(odd) {
-  background-color: #f6f5fb;
+  background-color: $color-white-one;
+}
+.column:nth-child(even) {
+  background-color: $color-white-two;
 }
 @media (prefers-color-scheme: dark) {
   .column:nth-child(even) {
-    background-color: #242c3d;
+    background-color: $color-dark-one;
   }
   .column:nth-child(odd) {
-    background-color: #272f41;
+    background-color: $color-dark-two;
   }
 }
 

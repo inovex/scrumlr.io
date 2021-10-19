@@ -196,12 +196,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         });
         // subscription.on("delete", () => {});
         subscription.on("open", () => {
-          voteQuery
-            .equalTo("votingIteration", board.get("votingIteration"))
-            .find()
-            .then((results) => {
-              dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
-            });
+          voteQuery.find().then((results) => {
+            dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
+          });
         });
       });
     };
