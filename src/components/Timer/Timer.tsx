@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Parse from "parse";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
@@ -9,6 +9,19 @@ import "./Timer.scss";
 
 type TimerProps = {
   endTime: Date;
+};
+
+const stopAudio = (audio: HTMLAudioElement) => {
+  audio.pause();
+  audio.currentTime = 0;
+};
+
+const usePrevious = (value: any) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 };
 
 export const Timer = (props: TimerProps) => {
@@ -24,11 +37,13 @@ export const Timer = (props: TimerProps) => {
   };
 
   const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
-  const warningSound = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
-  const finishedSound = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
+  const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
+  const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
-  const [hasPlayedWarningSound, setHasPlayedWarningSound] = useState(false);
-  const [hasPlayedFinishedSound, setHasPlayedFinishedSound] = useState(false);
+  const [playCountdown, setPlayCountdown] = useState(false);
+  const [playTimesUp, setPlayTimesUp] = useState(false);
+  const previousPlayCountdownState = usePrevious(playCountdown);
+  const previousPlayTimesUpState = usePrevious(playTimesUp);
 
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
@@ -38,13 +53,31 @@ export const Timer = (props: TimerProps) => {
   });
 
   useEffect(() => {
+    if (!previousPlayCountdownState && playCountdown) {
+      countdownAudio.play();
+      return () => {
+        stopAudio(countdownAudio);
+      };
+    }
+    return () => {};
+  }, [playCountdown]);
+
+  useEffect(() => {
+    if (!previousPlayTimesUpState && playTimesUp) {
+      timesUpAudio.play();
+      return () => {
+        stopAudio(timesUpAudio);
+      };
+    }
+    return () => {};
+  }, [playTimesUp]);
+
+  useEffect(() => {
     if (timeLeft.m === 0) {
-      if (timeLeft.s <= 30 && !hasPlayedWarningSound) {
-        setHasPlayedWarningSound(true);
-        warningSound.play();
-      } else if (timeLeft.s <= 0 && !hasPlayedFinishedSound) {
-        setHasPlayedFinishedSound(true);
-        finishedSound.play();
+      if (timeLeft.s <= 30 && !playCountdown) {
+        setPlayCountdown(true);
+      } else if (timeLeft.s <= 0 && !playTimesUp) {
+        setPlayTimesUp(true);
       }
     }
   }, [timeLeft]);
