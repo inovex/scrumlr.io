@@ -18,3 +18,16 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
 .note-dialog__note-wrapper .note-dialog__note:last-child {
   margin-bottom: 0;
 }
+
+.note-dialog__note-animation {
+  animation: fadeout 1s 1;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
