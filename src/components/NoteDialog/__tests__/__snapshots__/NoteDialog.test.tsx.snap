@@ -47,9 +47,6 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           <div
             class="note-dialog__note-footer__options-and-votes"
           >
-            <ul
-              class="note-dialog__note-options"
-            />
             <div
               class="votes"
             >
@@ -73,6 +70,9 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                 </svg>
               </button>
             </div>
+            <ul
+              class="note-dialog__note-options"
+            />
           </div>
         </div>
       </div>
@@ -108,6 +108,19 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           <div
             class="note-dialog__note-footer__options-and-votes"
           >
+            <div
+              class="votes"
+            >
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
             <ul
               class="note-dialog__note-options"
             >
@@ -125,19 +138,6 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                 </button>
               </li>
             </ul>
-            <div
-              class="votes"
-            >
-              <button
-                class="dot-button vote-button-add"
-              >
-                <svg
-                  class="vote-button-add__icon"
-                >
-                  icon-add.svg
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -173,6 +173,19 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           <div
             class="note-dialog__note-footer__options-and-votes"
           >
+            <div
+              class="votes"
+            >
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
             <ul
               class="note-dialog__note-options"
             >
@@ -190,19 +203,6 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                 </button>
               </li>
             </ul>
-            <div
-              class="votes"
-            >
-              <button
-                class="dot-button vote-button-add"
-              >
-                <svg
-                  class="vote-button-add__icon"
-                >
-                  icon-add.svg
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
       </div>

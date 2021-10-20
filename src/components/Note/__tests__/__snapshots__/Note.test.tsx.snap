@@ -97,7 +97,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
       data-focus-lock-disabled="false"
     >
       <div
-        class="portal__frame portal__frame--hiddenOverflow"
+        class="portal__frame portal__frame--hiddenOverflow portal__frame--centered portal__frame--disabledPadding"
       >
         <div
           class="portal__content"

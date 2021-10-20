@@ -11,12 +11,14 @@ export interface PortalProps {
   onClose?: () => void;
   darkBackground: boolean;
   hiddenOverflow?: boolean;
+  centered?: boolean;
+  disabledPadding?: boolean;
 }
 
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal = ({onClose, children, darkBackground, hiddenOverflow}: PortalProps) => {
+export const Portal = ({onClose, children, darkBackground, hiddenOverflow, centered, disabledPadding}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
@@ -59,7 +61,14 @@ export const Portal = ({onClose, children, darkBackground, hiddenOverflow}: Port
       role="dialog"
     >
       <FocusLock>
-        <div className={classNames("portal__frame", {"portal__frame--hiddenOverflow": hiddenOverflow})}>
+        <div
+          className={classNames(
+            "portal__frame",
+            {"portal__frame--hiddenOverflow": hiddenOverflow},
+            {"portal__frame--centered": centered},
+            {"portal__frame--disabledPadding": disabledPadding}
+          )}
+        >
           <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
             {children}
           </div>

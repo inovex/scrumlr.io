@@ -63,3 +63,12 @@
 .portal__frame--hiddenOverflow {
   overflow: hidden;
 }
+
+.portal__frame--centered {
+  width: calc(100vw);
+  height: calc(100vh);
+}
+
+.portal__frame--disabledPadding {
+  padding: 0;
+}

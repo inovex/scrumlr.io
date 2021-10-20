@@ -14,8 +14,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  height: 26px;
-  width: 130px;
+}
+
+.votes + .note-dialog__note-options {
+  margin-left: 20px;
 }
 
 .note-dialog__note-author {
