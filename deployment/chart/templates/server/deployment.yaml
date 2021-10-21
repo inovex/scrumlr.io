@@ -18,7 +18,7 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.server }}
           image: {{ .Values.server.image }}
-          imagePullPolicy: {{ .Values.server.imagePullPolicy | default ifNotPresent }}  
+          imagePullPolicy: {{ .Values.server.imagePullPolicy | default "IfNotPresent" }}  
           ports:
             - name: server 
               containerPort: 4000 

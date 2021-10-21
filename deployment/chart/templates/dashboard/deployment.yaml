@@ -6,7 +6,7 @@ metadata:
     {{- include "selectorLabels" .Values.dashboard | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
 spec:
-  replicas: {{ .Values.dashboard.replicas | default 1}}
+  replicas: {{ .Values.dashboard.replicas | default 1 }}
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.dashboard  | nindent 6 }}

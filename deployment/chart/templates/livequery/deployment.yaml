@@ -18,7 +18,7 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.livequery }}
           image: {{ .Values.livequery.image }}
-          imagePullPolicy: {{ .Values.livequery.imagePullPolicy | default IfNotPresent }} 
+          imagePullPolicy: {{ .Values.livequery.imagePullPolicy | default "IfNotPresent" }} 
           envFrom:
             - configMapRef: 
                 name: {{ include "scrumlr-fullname" .Values.livequery }}
