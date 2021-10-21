@@ -1,18 +1,19 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
+@import "components/NoteDialog/NoteDialog.scss";
 
 $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large});
 
 .note-dialog__scrollbar {
-  max-height: calc(#{$note-dialog__scrollbar-height} - 100px);
+  max-height: calc(#{$note-dialog__scrollbar-height} - #{$note-dialog-top-margin});
   overflow-y: auto;
 
   overflow: auto;
-  padding-left: 15px;
+  padding-left: $note-dialog-padding-side;
 }
 
 .note-dialog__note-wrapper {
-  padding-right: 30px;
+  padding-right: calc(2 * #{$note-dialog-padding-side});
 }
 
 .note-dialog__note-wrapper .note-dialog__note:last-child {
