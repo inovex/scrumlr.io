@@ -10,6 +10,7 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
 
   overflow: auto;
   padding-left: $note-dialog-spacing-side;
+  scrollbar-color: $color-middle-gray $color-white;
 }
 
 .note-dialog__note-wrapper {
@@ -20,15 +21,28 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
   margin-bottom: 0;
 }
 
-.note-dialog__note-animation {
-  animation: fadeout 1s 1;
+.note-dialog__scrollbar::-webkit-scrollbar {
+  width: 10px;
 }
 
-@keyframes fadeout {
-  0% {
-    opacity: 0;
+.note-dialog__scrollbar::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: $color-white;
+}
+
+.note-dialog__scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: $color-middle-gray;
+}
+
+@media (prefers-color-scheme: dark) {
+  .note-dialog__scrollbar::-webkit-scrollbar-track {
+    background-color: $color-dark-mode-note;
   }
-  100% {
-    opacity: 1;
+  .note-dialog__scrollbar::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
+  .note-dialog__scrollbar {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
