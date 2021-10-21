@@ -1,10 +1,10 @@
 @import "constants/style";
 
 $note-dialog-top-margin: 100px;
-$note-dialog-padding-side: 15px;
+$note-dialog-spacing-side: 15px;
 
 .note-dialog {
-  margin-top: $note-dialog-padding-side;
+  margin-top: $note-dialog-top-margin;
 }
 
 .note-dialog__pointer-moderator {

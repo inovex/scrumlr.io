@@ -9,11 +9,11 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
   overflow-y: auto;
 
   overflow: auto;
-  padding-left: $note-dialog-padding-side;
+  padding-left: $note-dialog-spacing-side;
 }
 
 .note-dialog__note-wrapper {
-  padding-right: calc(2 * #{$note-dialog-padding-side});
+  padding-right: calc(2 * #{$note-dialog-spacing-side});
 }
 
 .note-dialog__note-wrapper .note-dialog__note:last-child {
