@@ -7,7 +7,7 @@
   top: 10px;
 }
 
-.board-header > a {
+.board-header__link {
   position: absolute;
   left: 0;
   top: 20px;
@@ -18,12 +18,12 @@
   transition: background-color 0.2s ease-in-out;
 }
 
-.board-header > a:hover {
+.board-header__link:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
-  .board-header > a:hover {
+  .board-header__link:hover {
     background-color: rgba(255, 0, 105, 0.15);
   }
 }
