@@ -6,6 +6,7 @@ import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import Parse from "parse";
 import {BoardComponent} from "components/Board";
+import {BrowserRouter} from "react-router-dom";
 
 const mockStore = configureStore();
 
@@ -33,13 +34,15 @@ const createBoardWithColumns = (...colors: Color[]) => {
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
 
   return (
-    <Provider store={store}>
-      <BoardContext name="" boardstatus="" currentUserIsModerator>
-        {colors.map((color, index) => (
-          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
-        ))}
-      </BoardContext>
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <BoardContext name="" boardstatus="" currentUserIsModerator>
+          {colors.map((color, index) => (
+            <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
+          ))}
+        </BoardContext>
+      </Provider>
+    </BrowserRouter>
   );
 };
 
