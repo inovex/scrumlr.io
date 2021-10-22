@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {VFC, useState} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import {BoardUsers} from "components/BoardUsers";
@@ -6,6 +6,7 @@ import {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
+import {Link} from "react-router-dom";
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -14,16 +15,16 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-export const BoardHeader = (props: BoardHeaderProps) => {
+export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
 
   return (
     <div className="board-header">
-      <a href={document.location.origin} title="Back to homepage">
+      <Link to="/">
         <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-      </a>
+      </Link>
       <div className="board-header__infos">
         <div
           className={classNames("info-block", "info-block--hoverable")}
