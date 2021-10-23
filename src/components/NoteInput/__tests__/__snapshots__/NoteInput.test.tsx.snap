@@ -1,23 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Note Input should have correct style show noteinput with correct style 1`] = `
-<div
-  class="note-input"
->
-  <input
-    class="note-input__input"
-    placeholder="Add your note..."
-    type="text"
-    value=""
-  />
-  <svg
-    class="note-input__icon"
-  >
-    icon-add.svg
-  </svg>
-</div>
-`;
-
 exports[`Note Input should render correctly 1`] = `
 <div
   class="note-input"
