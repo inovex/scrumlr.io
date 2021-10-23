@@ -5,35 +5,43 @@
   width: 100%;
   position: relative;
   margin-bottom: 16px;
+  background-color: #edeff2;
+  border-radius: 20px;
 }
 
 .note-input__input {
+  position: absolute;
+  left: 20px;
+  right: 40px;
   color: black;
   font-size: 14px;
   font-weight: bold;
   line-height: 24px;
   letter-spacing: 0.25px;
-  padding: 10px 20px;
+  padding: 8px 0;
   font-family: Raleway, sans-serif;
-  background-color: #edeff2;
+  background-color: transparent;
   border: none;
-  border-radius: 20px;
-  width: 100%;
   margin: 0;
   transition: box-shadow 0.25s ease-in-out;
 }
-.note-input__input:hover,
 .note-input__input:focus {
   outline: none;
+}
+
+.note-input:hover,
+.note-input:focus-within {
   box-shadow: 0 6px 9px 0 rgba(0, 87, 255, 0.16);
 }
 @media (prefers-color-scheme: dark) {
-  .note-input__input {
-    color: white;
+  .note-input {
     background-color: #4c5566;
   }
-  .note-input__input:hover,
-  .note-input__input:focus {
+  .note-input__input {
+    color: white;
+  }
+  .note-input:hover,
+  .note-input:focus-within {
     box-shadow: 0 6px 9px 0 #232323;
   }
 }
