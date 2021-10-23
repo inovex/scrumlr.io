@@ -1,0 +1,13 @@
+@import "constants/style";
+
+.board-option {
+  background: $color-dark-mode-note;
+}
+
+.board-option + .board-option {
+  border-top: 1px solid #efefef;
+}
+
+.board-option:hover {
+  background: $color-dark-mode-note--hover;
+}

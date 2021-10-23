@@ -5,7 +5,7 @@
   transform: translateX(-50%);
   z-index: 300;
 }
-.timer--top {
+[column-visibility="collapsed"] .timer {
   bottom: auto;
   top: 98px;
 }
@@ -14,14 +14,14 @@
   background-color: #0057ff;
   vertical-align: bottom;
 }
-.timer:not(.timer--top) > * {
+[column-visibility="collapsed"] .timer > * {
   box-shadow: 0 8px 16px #0057ff25;
 }
 @media (prefers-color-scheme: dark) {
   .timer > * {
     background-color: #ff0069;
   }
-  .timer:not(.timer--top) > * {
+  [column-visibility="collapsed"] .timer > * {
     box-shadow: 0 8px 16px #ff006925;
   }
 }
