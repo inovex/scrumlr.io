@@ -2,10 +2,9 @@
 
 .participant {
   display: flex;
-  background-color: white;
+  background-color: $color-white;
   height: 48px;
 
-  margin: 0;
   padding: 0;
   width: 100%;
 
@@ -37,7 +36,7 @@
   width: 28px;
   min-height: 28px;
   min-width: 28px;
-  font-size: 13px;
+  font-size: $text-size;
   margin: 0;
 }
 
@@ -49,7 +48,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #111111;
+  color: $color-black;
   margin-left: 8px;
 }
 
@@ -70,6 +69,6 @@
     background-color: rgba(125, 125, 125, 0.1);
   }
   .participant__name {
-    color: white;
+    color: $color-white;
   }
 }
