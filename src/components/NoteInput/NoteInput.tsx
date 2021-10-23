@@ -34,7 +34,7 @@ export const NoteInput = ({columnId}: NoteInputProps) => {
           }
         }}
       />
-      <PlusIcon className="note-input__icon" />
+      <PlusIcon onClick={onAddNote} className="note-input__icon" />
     </div>
   );
 };
