@@ -1,15 +1,26 @@
 import {render} from "@testing-library/react";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
+import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
+import {mocked} from "ts-jest/utils";
+import {BrowserRouter} from "react-router-dom";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
+mockedUser.current = jest.fn(() => ({id: "test"} as never));
 
 const createBoardHeader = (name: string, boardstatus: string) => {
   const initialState = {
     board: {
       data: {
         columns: [],
+        userConfigurations: [
+          {
+            id: "test",
+            showHiddenColumns: true,
+          },
+        ],
       },
     },
     notes: [],
@@ -22,9 +33,11 @@ const createBoardHeader = (name: string, boardstatus: string) => {
   const store = mockStore(initialState);
 
   return (
-    <Provider store={store}>
-      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
+      </Provider>
+    </BrowserRouter>
   );
 };
 
@@ -37,6 +50,8 @@ describe("Board Header", () => {
           disconnect: jest.fn(),
         } as unknown as IntersectionObserver)
     );
+
+    mockedUser.current = jest.fn(() => ({id: "test"} as never));
   });
 
   test("show boardheader", () => {
