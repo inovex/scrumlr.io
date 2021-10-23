@@ -1,8 +1,49 @@
 @import "constants/style";
 
+.note-input {
+  height: 40px;
+  width: 100%;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.note-input__input {
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 24px;
+  letter-spacing: 0.25px;
+  padding: 10px 20px;
+  font-family: Raleway, sans-serif;
+  background-color: #edeff2;
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  margin: 0;
+  transition: box-shadow 0.25s ease-in-out;
+}
+.note-input__input:hover,
+.note-input__input:focus {
+  outline: none;
+  box-shadow: 0 6px 9px 0 rgba(0, 87, 255, 0.16);
+}
+@media (prefers-color-scheme: dark) {
+  .note-input__input {
+    color: white;
+    background-color: #4c5566;
+  }
+  .note-input__input:hover,
+  .note-input__input:focus {
+    box-shadow: 0 6px 9px 0 #232323;
+  }
+}
+
 .note-input__icon {
-  width: 14px;
-  height: 14px;
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  width: 20px;
+  height: 20px;
   fill: var(--accent-color);
   align-self: center;
 }

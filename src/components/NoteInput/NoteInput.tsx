@@ -3,61 +3,10 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {InputAdornment, createStyles, withStyles, FilledInput} from "@material-ui/core";
 
 export interface NoteInputProps {
   columnId: string;
 }
-
-export const CustomInput = withStyles(
-  () =>
-    createStyles({
-      root: {
-        borderRadius: 20,
-        height: 40,
-        width: "100%",
-        backgroundColor: "#EDEFF2",
-        marginTop: 16,
-        marginBottom: 32,
-        "&.MuiFilledInput-underline::before , &.MuiFilledInput-underline::after": {
-          display: "none",
-        },
-        "&:hover , &.Mui-focused": {
-          backgroundColor: "white",
-          boxShadow: "0 6px 9px 0 rgba(0,87,255,0.16)",
-        },
-      },
-      input: {
-        color: "black",
-        fontSize: 14,
-        fontWeight: "bold",
-        lineHeight: 24,
-        letterSpacing: 0.25,
-        padding: "10px 20px 10px 20px",
-        // Use the system font instead of the default Roboto font.
-        fontFamily: ["Raleway", "sans-serif"].join(","),
-        "& .MuiFilledInput-underline:before": {
-          borderBottomColor: "green",
-          borderBottom: 0,
-          position: "relative",
-          left: 20,
-        },
-      },
-      "@media (prefers-color-scheme: dark)": {
-        root: {
-          backgroundColor: "#4C5566",
-          "&:hover , &.Mui-focused": {
-            backgroundColor: "#4C5566",
-            boxShadow: "0 6px 9px 0 #232323",
-          },
-        },
-        input: {
-          color: "white",
-        },
-      },
-    }),
-  {name: "NoteInput"}
-)(FilledInput);
 
 export const NoteInput = ({columnId}: NoteInputProps) => {
   const [value, setValue] = React.useState("");
@@ -72,21 +21,20 @@ export const NoteInput = ({columnId}: NoteInputProps) => {
     }
   };
   return (
-    <CustomInput
-      placeholder="Add your note..."
-      type="text"
-      value={value}
-      onChange={handleChangeNotetext}
-      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter") {
-          onAddNote();
-        }
-      }}
-      endAdornment={
-        <InputAdornment position="end">
-          <PlusIcon onClick={onAddNote} className="note-input__icon" />
-        </InputAdornment>
-      }
-    />
+    <div className="note-input">
+      <input
+        className="note-input__input"
+        placeholder="Add your note..."
+        type="text"
+        value={value}
+        onChange={handleChangeNotetext}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === "Enter") {
+            onAddNote();
+          }
+        }}
+      />
+      <PlusIcon className="note-input__icon" />
+    </div>
   );
 };
