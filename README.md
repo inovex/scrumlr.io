@@ -33,7 +33,7 @@ $ cd scrumlr.io
 - [Node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/)
 - [Docker](https://www.docker.com/)
-- _(optional)_ [Minikube](https://kubernetes.io/docs/tasks/tools/)
+- _(optional)_ [minikube](https://kubernetes.io/docs/tasks/tools/)
 - _(optional)_ [kubectl](https://kubernetes.io/docs/tasks/tools/)
 
 ## Run
@@ -41,11 +41,10 @@ $ cd scrumlr.io
 1. run the server (backend) with docker
 
     ```bash
-    $ cd server
-    $ docker-compose up -d
+    $ docker-compose --project-directory server/ up -d
     ```
 
-    *If server code has been changed make sure to run it with the **--build** option:* `docker-compose up -d --build`
+    *If server code has been changed make sure to run it with the `--build` option.
 
 
 2. run the client (frontend)
@@ -64,7 +63,7 @@ $ cd scrumlr.io
 
   You can **optionally** run the server on a local Kubernetes setup for development.
 
-  ### Minikube
+  ### minikube
 
   1. **Use the Docker daemon for minikube**
 
@@ -73,7 +72,7 @@ $ cd scrumlr.io
       ```bash
       $ eval $(minikube docker-env)
       ```
-     Important note: You have to run eval $(minikube docker-env) on each terminal you want to use, since it only sets the environment variables for the current shell session.
+     Important note: You have to run eval `$(minikube docker-env)` on each terminal you want to use, since it only sets the environment variables for the current shell session.
 
   2. **Start your cluster**
 
@@ -81,7 +80,7 @@ $ cd scrumlr.io
       $ minikube start
       ```
 
-     Optional: You can increase the available cpu cores and memory size in docker-desktop. The allocated resources can then also be used for minikube (e.g. 4 cpu cores and 8GB of ram):
+     Optional: You can increase the available cpu cores and memory size in Docker desktop. The allocated resources can then also be used for minikube (e.g. 4 CPU cores and 8GB of ram):
       ```bash
       $ minikube start --cpus 4 --memory 7962
       ```
@@ -94,7 +93,7 @@ $ cd scrumlr.io
 
   4. **Run our deployment script**
 
-     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
+     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all Kubernetes resources afterwards.
       ```bash
       $ cd deployment
       $ sh build.sh
@@ -133,7 +132,7 @@ $ cd scrumlr.io
 
   4. **Run our build & deployment script**
 
-     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
+     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all Kubernetes resources afterwards.
       ```bash
       $ cd deployment
       $ sh build.sh
