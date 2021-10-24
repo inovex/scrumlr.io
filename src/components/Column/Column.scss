@@ -9,18 +9,18 @@
   height: 100vh;
   display: flex;
 }
-.column:nth-child(even) {
-  background-color: #f9fafb;
-}
 .column:nth-child(odd) {
-  background-color: #f6f5fb;
+  background-color: $color-white-one;
+}
+.column:nth-child(even) {
+  background-color: $color-white-two;
 }
 @media (prefers-color-scheme: dark) {
   .column:nth-child(even) {
-    background-color: #242c3d;
+    background-color: $color-dark-one;
   }
   .column:nth-child(odd) {
-    background-color: #272f41;
+    background-color: $color-dark-two;
   }
 }
 
@@ -65,6 +65,8 @@
   transition: all 0.25s ease-in-out;
   flex: 1;
   margin-top: 10px;
+  scrollbar-width: 10px;
+  scrollbar-color: $color-middle-gray $color-white;
 }
 
 .column__notes-wrapper--isOver {
@@ -78,20 +80,12 @@
 
 .column__notes-wrapper::-webkit-scrollbar-track {
   border-radius: 8px;
+  background-color: $color-white;
 }
 
 .column__notes-wrapper::-webkit-scrollbar-thumb {
   border-radius: 8px;
   background-color: $color-middle-gray;
-}
-
-@media (prefers-color-scheme: dark) {
-  .column__notes-wrapper::-webkit-scrollbar-track {
-    background-color: $color-dark-mode-note;
-  }
-  .column__notes-wrapper::-webkit-scrollbar-thumb {
-    background-color: $color-darkest-gray;
-  }
 }
 
 .column__note-list {
@@ -101,6 +95,7 @@
   grid-auto-flow: row;
   grid-row-gap: 20px;
   grid-column-gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
 
 .column__header-toggle {
@@ -128,8 +123,16 @@
   .column__header-text {
     color: $color-white;
   }
-
   .column__header-toggle-button-icon {
     color: $color-white;
+  }
+  .column__notes-wrapper::-webkit-scrollbar-track {
+    background-color: $color-dark-mode-note;
+  }
+  .column__notes-wrapper::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
+  .column__notes-wrapper {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
