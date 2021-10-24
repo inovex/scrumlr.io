@@ -97,7 +97,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
       data-focus-lock-disabled="false"
     >
       <div
-        class="portal__frame"
+        class="portal__frame portal__frame--hiddenOverflow portal__frame--centered portal__frame--disabledPadding"
       >
         <div
           class="portal__content"
@@ -110,150 +110,169 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
               class="note-dialog__header"
             />
             <div
-              class="note-dialog__note"
+              class="note-dialog__scrollbar"
             >
               <div
-                class="note-dialog__note-content"
+                class="note-dialog__note-wrapper"
               >
-                <blockquote
-                  class="note-dialog__note-content__text"
-                  contenteditable="false"
-                >
-                  Test Text
-                </blockquote>
-              </div>
-              <div
-                class="note-dialog__note-footer"
-              >
-                <figure
-                  class="note-dialog__note-author"
+                <div
+                  class="note-dialog__note"
                 >
                   <div
-                    class="user-avatar note-dialog__note-user-avatar"
+                    class="note-dialog__note-content"
                   >
+                    <blockquote
+                      class="note-dialog__note-content__text"
+                      contenteditable="false"
+                    >
+                      Test Text
+                    </blockquote>
+                  </div>
+                  <div
+                    class="note-dialog__note-footer"
+                  >
+                    <figure
+                      class="note-dialog__note-author"
+                    >
+                      <div
+                        class="user-avatar note-dialog__note-user-avatar"
+                      >
+                        <div
+                          class="user__initials"
+                          title=""
+                        />
+                      </div>
+                      <figcaption
+                        class="note-dialog__note-author-name"
+                      />
+                    </figure>
                     <div
-                      class="user__initials"
-                      title=""
+                      class="note-dialog__note-footer__options-and-votes"
+                    >
+                      <div
+                        class="votes"
+                      >
+                        <button
+                          class="dot-button vote-button-remove"
+                        >
+                          <span
+                            class="vote-button-remove__folded-corner"
+                          />
+                          <span>
+                            3
+                          </span>
+                        </button>
+                        <button
+                          class="dot-button vote-button-add"
+                        >
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="note-dialog__note"
+                >
+                  <div
+                    class="note-dialog__note-content"
+                  >
+                    <blockquote
+                      class="note-dialog__note-content__text"
+                      contenteditable="false"
                     />
                   </div>
-                  <figcaption
-                    class="note-dialog__note-author-name"
-                  />
-                </figure>
-                <div
-                  class="votes note__votes"
-                >
-                  <button
-                    class="dot-button vote-button-remove"
+                  <div
+                    class="note-dialog__note-footer"
                   >
-                    <span
-                      class="vote-button-remove__folded-corner"
-                    />
-                    <span>
-                      3
-                    </span>
-                  </button>
-                  <button
-                    class="dot-button vote-button-add"
-                  >
-                    <svg
-                      class="vote-button-add__icon"
+                    <figure
+                      class="note-dialog__note-author"
                     >
-                      icon-add.svg
-                    </svg>
-                  </button>
+                      <div
+                        class="user-avatar note-dialog__note-user-avatar"
+                      >
+                        <div
+                          class="user__initials"
+                          title=""
+                        />
+                      </div>
+                      <figcaption
+                        class="note-dialog__note-author-name"
+                      />
+                    </figure>
+                    <div
+                      class="note-dialog__note-footer__options-and-votes"
+                    >
+                      <div
+                        class="votes"
+                      >
+                        <button
+                          class="dot-button vote-button-add"
+                        >
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="note-dialog__note"
+                >
+                  <div
+                    class="note-dialog__note-content"
+                  >
+                    <blockquote
+                      class="note-dialog__note-content__text"
+                      contenteditable="false"
+                    />
+                  </div>
+                  <div
+                    class="note-dialog__note-footer"
+                  >
+                    <figure
+                      class="note-dialog__note-author"
+                    >
+                      <div
+                        class="user-avatar note-dialog__note-user-avatar"
+                      >
+                        <div
+                          class="user__initials"
+                          title=""
+                        />
+                      </div>
+                      <figcaption
+                        class="note-dialog__note-author-name"
+                      />
+                    </figure>
+                    <div
+                      class="note-dialog__note-footer__options-and-votes"
+                    >
+                      <div
+                        class="votes"
+                      >
+                        <button
+                          class="dot-button vote-button-add"
+                        >
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div
-              class="note-dialog__note"
-            >
-              <div
-                class="note-dialog__note-content"
-              >
-                <blockquote
-                  class="note-dialog__note-content__text"
-                  contenteditable="false"
-                />
-              </div>
-              <div
-                class="note-dialog__note-footer"
-              >
-                <figure
-                  class="note-dialog__note-author"
-                >
-                  <div
-                    class="user-avatar note-dialog__note-user-avatar"
-                  >
-                    <div
-                      class="user__initials"
-                      title=""
-                    />
-                  </div>
-                  <figcaption
-                    class="note-dialog__note-author-name"
-                  />
-                </figure>
-                <div
-                  class="votes note__votes"
-                >
-                  <button
-                    class="dot-button vote-button-add"
-                  >
-                    <svg
-                      class="vote-button-add__icon"
-                    >
-                      icon-add.svg
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div
-              class="note-dialog__note"
-            >
-              <div
-                class="note-dialog__note-content"
-              >
-                <blockquote
-                  class="note-dialog__note-content__text"
-                  contenteditable="false"
-                />
-              </div>
-              <div
-                class="note-dialog__note-footer"
-              >
-                <figure
-                  class="note-dialog__note-author"
-                >
-                  <div
-                    class="user-avatar note-dialog__note-user-avatar"
-                  >
-                    <div
-                      class="user__initials"
-                      title=""
-                    />
-                  </div>
-                  <figcaption
-                    class="note-dialog__note-author-name"
-                  />
-                </figure>
-                <div
-                  class="votes note__votes"
-                >
-                  <button
-                    class="dot-button vote-button-add"
-                  >
-                    <svg
-                      class="vote-button-add__icon"
-                    >
-                      icon-add.svg
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-            ;
           </div>
         </div>
       </div>
