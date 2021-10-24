@@ -1,5 +1,7 @@
 @import "constants/style";
 
+$board-header__settings-icon-size: 36px;
+
 .board-header {
   position: fixed;
   left: 30px;
@@ -86,6 +88,9 @@
   line-height: 40px;
   margin: 0;
 
+  // horizontally center board name and push settings icon to the right
+  padding-left: $board-header__settings-icon-size;
+
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -118,6 +123,9 @@
 
 .board-header__settings-icon {
   display: none;
+
+  width: $board-header__settings-icon-size;
+  height: $board-header__settings-icon-size;
 
   vertical-align: bottom;
   color: #7585a4;
