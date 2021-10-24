@@ -41,7 +41,7 @@ $ cd scrumlr.io
 1. run the server (backend) with docker
 
     ```bash
-    $ docker-compose --project-directory server/ up -d
+    $ docker compose --project-directory server/ up -d
     ```
 
     *If server code has been changed make sure to run it with the `--build` option.
