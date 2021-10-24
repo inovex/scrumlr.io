@@ -1,0 +1,48 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+@import "components/NoteDialog/NoteDialog.scss";
+
+$note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large});
+
+.note-dialog__scrollbar {
+  max-height: calc(#{$note-dialog__scrollbar-height} - #{$note-dialog-top-margin});
+  overflow-y: auto;
+
+  overflow: auto;
+  padding-left: $note-dialog-spacing-side;
+  scrollbar-color: $color-middle-gray $color-white;
+}
+
+.note-dialog__note-wrapper {
+  padding-right: calc(2 * #{$note-dialog-spacing-side});
+}
+
+.note-dialog__note-wrapper .note-dialog__note:last-child {
+  margin-bottom: 0;
+}
+
+.note-dialog__scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.note-dialog__scrollbar::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: $color-white;
+}
+
+.note-dialog__scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: $color-middle-gray;
+}
+
+@media (prefers-color-scheme: dark) {
+  .note-dialog__scrollbar::-webkit-scrollbar-track {
+    background-color: $color-dark-mode-note;
+  }
+  .note-dialog__scrollbar::-webkit-scrollbar-thumb {
+    background-color: $color-darkest-gray;
+  }
+  .note-dialog__scrollbar {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+  }
+}

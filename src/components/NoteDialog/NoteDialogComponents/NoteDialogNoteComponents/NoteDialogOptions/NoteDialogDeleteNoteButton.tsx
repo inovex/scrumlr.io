@@ -1,8 +1,9 @@
-import {ReactComponent as deleteIcon} from "assets/icon-delete.svg";
-import {IconButton} from "components/IconButton";
+import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
+import {DotButton} from "components/DotButton";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
+import "./NoteDialogDeleteNoteButton.scss";
 
 type NoteDialogDeleteNoteProps = {
   noteId?: string;
@@ -15,14 +16,14 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
   };
 
   return (
-    <IconButton
+    <DotButton
       onClick={() => {
         onDelete(noteId!);
         onDeleteOfParent();
       }}
-      direction="right"
-      label="Delete"
-      icon={deleteIcon}
-    />
+      className="note-dialog__note-option__remove"
+    >
+      <DeleteIcon className="note-dialog__note-option__remove-icon" />
+    </DotButton>
   );
 };
