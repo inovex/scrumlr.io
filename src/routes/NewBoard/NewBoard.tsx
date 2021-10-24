@@ -15,7 +15,7 @@ export function NewBoard(props: RouteComponentProps) {
       {name: "Lean Coffee", hidden: false, color: "grooming-green"},
       {name: "Actions", hidden: true, color: "backlog-blue"},
     ],
-    "Simple Retro": [
+    "Positive/Negative": [
       {name: "Positive", hidden: false, color: "backlog-blue"},
       {name: "Negative", hidden: false, color: "lean-lilac"},
       {name: "Actions", hidden: true, color: "planning-pink"},
