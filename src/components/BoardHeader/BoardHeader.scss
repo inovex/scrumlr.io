@@ -92,9 +92,6 @@ $board-header__settings-icon-size: 36px;
   line-height: 40px;
   margin: 0;
 
-  // horizontally center board name and push settings icon to the right
-  padding: 0 $board-header__settings-icon-size;
-
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -143,6 +140,11 @@ $board-header__settings-icon-size: 36px;
   .board-header {
     left: 60px;
     right: 60px;
+  }
+
+  .board-header__name {
+    // horizontally center board name and push settings icon to the right
+    padding: 0 $board-header__settings-icon-size;
   }
 
   .board-header__settings-icon {
