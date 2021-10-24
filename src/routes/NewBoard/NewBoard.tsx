@@ -32,7 +32,7 @@ export function NewBoard(props: RouteComponentProps) {
       {name: "Glad", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
-    "KALM (Keep/Add/Less/More": [
+    "KALM (Keep/Add/Less/More)": [
       {name: "Keep", hidden: false, color: "grooming-green"},
       {name: "Add", hidden: false, color: "retro-red"},
       {name: "Less", hidden: false, color: "backlog-blue"},
