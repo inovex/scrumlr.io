@@ -255,7 +255,7 @@ describe("<NoteDialog/>", () => {
           container: global.document.querySelector("#portal")!,
         });
         const noteDialogNotes = container.querySelectorAll(".note-dialog__note");
-        expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(3);
+        expect(noteDialogNotes[noteDialogNotes.length - 1].children.length).toEqual(2);
       });
     });
   });
