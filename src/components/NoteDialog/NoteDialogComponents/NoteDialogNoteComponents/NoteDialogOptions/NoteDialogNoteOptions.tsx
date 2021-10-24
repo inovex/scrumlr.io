@@ -15,19 +15,17 @@ type NoteDialogNoteOptionsProps = {
 export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
   const showDeleteButton = props.authorId === Parse.User.current()?.id;
   return (
-    <aside>
-      <ul className="note-dialog__note-options">
-        {showDeleteButton && (
-          <li className="note-dialog__note-option">
-            <NoteDialogDeleteNoteButton {...props} />
-          </li>
-        )}
-        {props.showUnstackButton && (
-          <li className="note-dialog__note-option">
-            <NoteDialogUnstackNoteButton {...props} />
-          </li>
-        )}
-      </ul>
-    </aside>
+    <ul className="note-dialog__note-options">
+      {showDeleteButton && (
+        <li className="note-dialog__note-option">
+          <NoteDialogDeleteNoteButton {...props} />
+        </li>
+      )}
+      {props.showUnstackButton && (
+        <li className="note-dialog__note-option">
+          <NoteDialogUnstackNoteButton {...props} />
+        </li>
+      )}
+    </ul>
   );
 };
