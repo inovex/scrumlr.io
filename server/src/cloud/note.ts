@@ -77,6 +77,11 @@ export const initializeNoteFunctions = () => {
       );
     }
 
+    // Avoid updating the children if there is no need for
+    if (request.note.columnId || request.note.parentId) {
+      await Parse.Object.saveAll(childNotes, {useMasterKey: true});
+    }
+
     if (request.note.text) {
       if ((await isAdmin(user, note.get("board").id)) || user.id === note.get("author").id) {
         note.set("text", request.note.text);
@@ -89,7 +94,6 @@ export const initializeNoteFunctions = () => {
       note.set("focus", request.note.focus);
     }
 
-    await Parse.Object.saveAll(childNotes, {useMasterKey: true});
     await note.save(null, {useMasterKey: true});
     return true;
   });
