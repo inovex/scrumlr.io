@@ -59,6 +59,16 @@ $ cd scrumlr.io
 <details>
   <summary>Read more on alternative development setups</summary>
 
+  ## Start server with nodemon and restart on code change
+
+  Start the database and the server in separate processes instead of booting up the whole compose file.
+
+  ```bash
+  $ docker compose --project-directory server/ up -d database dashboard
+  $ yarn --cwd server/ install
+  $ yarn --cwd server/ serve
+  ```
+
   ## Run local Kubernetes development environment
 
   You can **optionally** run the server on a local Kubernetes setup for development.
@@ -107,7 +117,7 @@ $ cd scrumlr.io
       $ minikube tunnel
       ```
 
-  ### Docker-Desktop
+  ### Docker Desktop
 
   On MacOS and Windows machines you could also use the Docker Desktop application as Kubernetes context.
 
