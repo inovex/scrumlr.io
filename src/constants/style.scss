@@ -17,41 +17,34 @@ $color-dark-mode-note--hover: #3d4555;
 
 // theme colors
 $color-backlog-blue: #0057ff;
-$color-grooming-green: #17c072;
+$color-grooming-green: #60c2ab;
 $color-lean-lilac: #c000ff;
-$color-online-orange: rgb(255, 60, 26);
+$color-online-orange: #c0a967;
 $color-planning-pink: #ff0069;
 $color-poker-purple: #5e00ff;
-$color-retro-red: #df1313;
-$color-waring-red: #e5534b;
+$color-retro-red: #cc6267;
+$color-warning-red: #e5534b;
 
 .accent-color__backlog-blue {
   --accent-color: #{$color-backlog-blue};
-  --accent-color-rgb: 0, 87, 255;
 }
 .accent-color__grooming-green {
   --accent-color: #{$color-grooming-green};
-  --accent-color-rgb: 23, 192, 114;
 }
 .accent-color__lean-lilac {
   --accent-color: #{$color-lean-lilac};
-  --accent-color-rgb: 192, 0, 255;
 }
 .accent-color__online-orange {
   --accent-color: #{$color-online-orange};
-  --accent-color-rgb: 255, 60, 25;
 }
 .accent-color__planning-pink {
   --accent-color: #{$color-planning-pink};
-  --accent-color-rgb: 255, 0, 105;
 }
 .accent-color__poker-purple {
   --accent-color: #{$color-poker-purple};
-  --accent-color-rgb: 94, 0, 255;
 }
 .accent-color__retro-red {
   --accent-color: #{$color-retro-red};
-  --accent-color-rgb: 223, 19, 19;
 }
 
 // menu colors
