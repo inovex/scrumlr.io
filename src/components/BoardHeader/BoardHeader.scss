@@ -2,18 +2,43 @@
 
 .board-header {
   position: fixed;
-  display: flex;
-  height: $header__height;
-  width: calc(100vw - 20px);
-  margin: 10px 10px 0 10px;
+  left: 30px;
+  right: 30px;
+  top: 10px;
 }
 
-.board-header > * {
-  align-self: center;
+.board-header__link {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  padding: 5px 20px;
+  border-radius: 16px;
+  width: max-content;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.board-header__link:hover {
+  background-color: rgba(0, 87, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-header__link:hover {
+    background-color: rgba(255, 0, 105, 0.15);
+  }
 }
 
 .board-header__infos {
-  width: 50%;
+  margin: 18px auto 0;
+}
+
+.board-header__users {
+  position: absolute;
+  right: 0;
+  top: 32px;
+}
+
+.board-header__infos {
   display: flex;
   justify-content: center;
 }
@@ -24,12 +49,15 @@
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 }
+
 .info-block--hoverable {
   cursor: pointer;
 }
+
 .info-block--hoverable:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
+
 @media (prefers-color-scheme: dark) {
   .info-block--hoverable:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
@@ -64,6 +92,7 @@
   white-space: nowrap;
   max-width: 28vw;
 }
+
 @media (prefers-color-scheme: dark) {
   .board-header__title {
     color: $color-white;
@@ -77,7 +106,13 @@
   margin-right: 10px;
   display: none;
 }
+
 @media #{$tablet} {
+  .board-header {
+    left: 60px;
+    right: 60px;
+  }
+
   .board-header__status-image {
     display: block;
   }
@@ -86,7 +121,6 @@
 .board-header__users {
   display: flex;
   flex-direction: row-reverse;
-  flex: 1 1 25%;
 
   background: none;
   border: none;

@@ -1,5 +1,4 @@
 import "./Note.scss";
-import avatar from "assets/avatar.png";
 import classNames from "classnames";
 import Parse from "parse";
 import store from "store";
@@ -11,6 +10,7 @@ import {Votes} from "components/Votes";
 import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
+import {UserAvatar} from "components/BoardUsers";
 
 interface NoteProps {
   text: string;
@@ -31,9 +31,7 @@ interface NoteProps {
 
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
-
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.currentUserIsModerator) {
@@ -57,11 +55,9 @@ export const Note = (props: NoteProps) => {
       } else {
         setShowDialog(false);
       }
-    } else {
+    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
       // Disable dialog for all other users
-      if (props.activeModeration.userId !== Parse.User.current()?.id) {
-        setShowDialog(false);
-      }
+      setShowDialog(false);
     }
   }, [props.activeModeration.status]);
 
@@ -115,15 +111,15 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{props.text}</p>
           <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
         </div>
-        <footer className="note__footer">
+        <div className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
-              <img className="note__author-image" src={avatar} alt="User" />
+              <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
           <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
-        </footer>
+        </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}

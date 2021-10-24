@@ -1,13 +1,11 @@
 import {Portal} from "components/Portal";
 import {useState} from "react";
 import {UserClientModel} from "types/user";
-import avatar from "assets/avatar.png";
 import "./ParticipantsList.scss";
-import {ToggleButton} from "components/ToggleButton";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import Parse from "parse";
-import {ActionFactory} from "store/action";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
+import {Participant} from "./Participant";
 
 type ParticipantsListProps = {
   open: boolean;
@@ -20,46 +18,40 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   const [searchString, setSearchString] = useState("");
   const boardOwner = useAppSelector((state) => state.board.data?.owner);
 
+  const currentUser = Parse.User.current();
+  const me = props.participants.find((participant) => participant.id === currentUser!.id);
+  const them = props.participants.filter((participant) => participant.id !== currentUser!.id && participant.online);
+
   if (!props.open) {
     return null;
   }
 
+  const showMe = searchString.split(" ").every((substr) => me!.displayName.toLowerCase().includes(substr));
+
   return (
     <Portal onClose={props.onClose} darkBackground={false}>
       <aside className="participants">
-        <header className="participants__header">
-          <h4>Board Participants ({props.participants.length})</h4>
+        <div className="participants__header">
+          <div className="participants__header-title">
+            <h4 className="participants__header-text">
+              <span>Participants</span>
+              <span className="participants__header-number">{props.participants.length} </span>
+            </h4>
+          </div>
           <SearchIcon className="header__icon" />
-          <input placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
-        </header>
+          <input className="participants__header-input" placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+        </div>
         <ul className="participants__list">
           <div className="list__header">
             <label>Name</label>
             {props.currentUserIsModerator && <label>Admin</label>}
           </div>
-          {props.participants
-            .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
-            .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
-            .map((participant) => (
-              <li key={participant.id}>
-                <figure>
-                  <img src={avatar} />
-                  <figcaption>{participant.displayName}</figcaption>
-                </figure>
-                {/* Show the permission toggle if the current user is moderator */}
-                {props.currentUserIsModerator && (
-                  <ToggleButton
-                    className="participant__permission-toggle"
-                    disabled={Parse.User.current()?.id === participant.id || participant.id === boardOwner}
-                    values={["participant", "moderator"]}
-                    value={participant.admin ? "moderator" : "participant"}
-                    onToggle={(val: "participant" | "moderator") => {
-                      store.dispatch(ActionFactory.changePermission(participant.id, val === "moderator"));
-                    }}
-                  />
-                )}
-              </li>
-            ))}
+          {showMe && <Participant key={me!.id} participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />}
+          {them.length > 0 &&
+            them
+              .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
+              .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
+              .map((participant) => <Participant key={participant.id} participant={participant} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />)}
         </ul>
       </aside>
     </Portal>

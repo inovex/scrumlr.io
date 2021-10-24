@@ -1,0 +1,66 @@
+@import "constants/style";
+
+$header-menu__item-border-width: 1px;
+$header-menu-hover-color--light: #f3f3f3;
+$header-menu-button-height: 24px;
+$header-menu-icon-width: 79px;
+$header-menu-icon-height: 24px;
+$header-menu__item-height: 48px;
+$header-menu-border-bottom-color: #efefef;
+
+.board-option-button {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.board-option-button:focus,
+.board-option-button:hover {
+  outline: none;
+}
+
+.board-option-button__label {
+  height: $header-menu-button-height;
+  width: 180px;
+  color: $color-black;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  line-height: $header-menu-button-height;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.board-option-button__icon {
+  width: $header-menu-icon-width;
+  height: $header-menu-icon-height;
+  color: #a3a6aa;
+  vertical-align: middle;
+}
+
+.board-option-button--expandable {
+  height: $header-menu__item-height;
+  background-color: $color-white;
+  transition: background-color 0.15s ease-in-out;
+  box-sizing: border-box;
+}
+
+.board-option-button--expandable:hover {
+  background-color: $header-menu-hover-color--light;
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-option-button__label {
+    color: $color-white;
+  }
+
+  .board-option-button--expandable {
+    background-color: $color-dark-mode-note;
+  }
+
+  .board-option-button--expandable:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
+}

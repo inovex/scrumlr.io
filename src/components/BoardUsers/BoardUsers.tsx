@@ -1,7 +1,7 @@
-import {UserAvatar} from "components/BoardUsers";
 import "./BoardUsers.scss";
 import Parse from "parse";
 import {useAppSelector} from "store";
+import {UserAvatar} from "./UserAvatar";
 
 // it might be a good idea to set this number dynamically (e.g., according to the device: desktop vs. mobile)
 const NUM_OF_DISPLAYED_USERS = 4;
@@ -23,7 +23,9 @@ export const BoardUsers = () => {
         </li>
       )}
       {usersToShow.map((user) => (
-        <UserAvatar key={user.id} id={user.id} name={user.displayName} />
+        <li key={user.id}>
+          <UserAvatar id={user.id} name={user.displayName} />
+        </li>
       ))}
       {!!me && <UserAvatar id={me.id} name={me.displayName} />}
     </ul>

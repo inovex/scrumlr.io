@@ -32,6 +32,8 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
+  const columnsCount = React.Children.count(children);
+
   useEffect(() => {
     const board = boardRef.current;
 
@@ -61,8 +63,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
         const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
         const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
 
-        document.getElementById("timer")?.classList.toggle("timer--top", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0);
-        document.getElementById("menu-bars")?.classList.toggle("menu-bars--bottom", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0);
+        document.getElementById("root")!.setAttribute("column-visibility", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0 ? "collapsed" : "visible");
 
         setState({
           firstVisibleColumnIndex,
@@ -87,7 +88,6 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     return undefined;
   }, [children]);
 
-  const columnsCount = React.Children.count(children);
   if (!children || columnsCount === 0) {
     // Empty board
     return (

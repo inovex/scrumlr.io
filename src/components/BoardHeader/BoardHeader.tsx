@@ -1,11 +1,12 @@
-import {useState} from "react";
+import {VFC, useState} from "react";
 import classNames from "classnames";
 import lock from "assets/icon-lock.svg";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppSelector} from "store";
-import {HeaderLogo} from "components/BoardHeader/HeaderLogo";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
+import {Link} from "react-router-dom";
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -14,19 +15,21 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-export const BoardHeader = (props: BoardHeaderProps) => {
+export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
 
   return (
     <div className="board-header">
-      <HeaderLogo />
+      <Link to="/" className="board-header__link">
+        <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+      </Link>
       <div className="board-header__infos">
         <div
-          className={classNames("info-block", {"info-block--hoverable": props.currentUserIsModerator})}
+          className={classNames("info-block", "info-block--hoverable")}
           onClick={() => {
-            if (props.currentUserIsModerator) setShowMenu(!showMenu);
+            setShowMenu(!showMenu);
           }}
           role="dialog"
         >
@@ -40,7 +43,7 @@ export const BoardHeader = (props: BoardHeaderProps) => {
       <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
         <BoardUsers />
       </button>
-      {props.currentUserIsModerator && <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} />}
+      <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
         <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />

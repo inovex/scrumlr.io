@@ -72,10 +72,10 @@ const createNote = (props: Partial<TestProps>) => {
       all: [],
     },
   };
-  const store = mockStore(initialState);
+  const mockedStore = mockStore(initialState);
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
-    <Provider store={store}>
+    <Provider store={mockedStore}>
       <NoteContext
         key=""
         noteId="0"
@@ -164,11 +164,6 @@ describe("Note", () => {
     test("note author is hidden", () => {
       const {container} = render(createNote({showAuthors: false}));
       expect(container.querySelector(".note__footer")).not.toHaveClass("note__author");
-    });
-
-    test("note author image is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__author")?.firstChild).toHaveClass("note__author-image");
     });
 
     test("note author name is present", () => {

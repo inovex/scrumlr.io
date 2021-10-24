@@ -1,9 +1,11 @@
+@import "constants/style.scss";
+
 .user-avatar,
 .rest-users {
   box-sizing: border-box;
   height: 40px;
   width: 40px;
-  border: 1px solid;
+  box-shadow: 0 0 0 0.1em $color-black;
   border-color: var(--accent-color);
   border-radius: 100px;
   display: inline-block;
@@ -22,6 +24,7 @@
   align-items: center;
   height: 95%;
   color: var(--accent-color);
+  font-weight: bold;
 }
 
 .rest-users__count::before {
@@ -31,12 +34,13 @@
 @media (prefers-color-scheme: dark) {
   .user-avatar,
   .rest-users {
-    border-color: white;
-    background-color: black;
+    box-shadow: 0 0 0 0.1em $color-white;
+    background-color: $color-darkest-gray;
   }
 
   .user__initials,
   .rest-users__count {
     color: white;
+    font-weight: bold;
   }
 }

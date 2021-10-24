@@ -2,6 +2,10 @@
 
 // base colors
 $color-white: #ffffff;
+$color-white-one: #f9fafb;
+$color-white-two: #f6f5fb;
+$color-dark-one: #242c3d;
+$color-dark-two: #272f41;
 $color-light-gray: #edeff2;
 $color-middle-gray: #a3a6aa;
 $color-dark-gray: #859093;
@@ -9,6 +13,7 @@ $color-darkest-gray: #232323;
 $color-black: #111111;
 $color-dark-mode: #272f41;
 $color-dark-mode-note: #313949;
+$color-dark-mode-note--hover: #3d4555;
 
 // theme colors
 $color-backlog-blue: #0057ff;
@@ -18,6 +23,7 @@ $color-online-orange: rgb(255, 60, 26);
 $color-planning-pink: #ff0069;
 $color-poker-purple: #5e00ff;
 $color-retro-red: #df1313;
+$color-waring-red: #e5534b;
 
 .accent-color__backlog-blue {
   --accent-color: #{$color-backlog-blue};
@@ -53,6 +59,11 @@ $menu-color-regular--primary: $color-backlog-blue;
 $menu-color-regular--secondary: #253f71;
 $menu-color-admin--primary: $color-planning-pink;
 $menu-color-admin--secondary: #7c123e;
+
+// hover colors
+
+$hover-background-light: #efefef;
+$hover-background-dark: #414959;
 
 // board & column constants
 $board__side-panel-width: 64px;

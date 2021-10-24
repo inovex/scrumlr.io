@@ -23,7 +23,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
   <div
     class="column__content"
   >
-    <header
+    <div
       class="column__header"
     >
       <div
@@ -41,25 +41,21 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </span>
       </div>
       <div
-        class="MuiInputBase-root MuiFilledInput-root NoteInput-root-15 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
+        class="note-input"
       >
         <input
-          class="MuiInputBase-input MuiFilledInput-input NoteInput-input-16 MuiInputBase-inputAdornedEnd MuiFilledInput-inputAdornedEnd"
+          class="note-input__input"
           placeholder="Add your note..."
           type="text"
           value=""
         />
-        <div
-          class="MuiInputAdornment-root MuiInputAdornment-positionEnd"
+        <svg
+          class="note-input__icon"
         >
-          <svg
-            class="note-input__icon"
-          >
-            icon-add.svg
-          </svg>
-        </div>
+          icon-add.svg
+        </svg>
       </div>
-    </header>
+    </div>
     <div
       class="column__notes-wrapper"
     >

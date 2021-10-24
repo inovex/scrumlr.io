@@ -25,7 +25,7 @@ $number-of-menu-items: 4;
   width: 36px;
 }
 
-.menu-bars--bottom {
+[column-visibility="collapsed"] .menu-bars {
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through $number-of-menu-items {
@@ -57,12 +57,7 @@ $number-of-menu-items: 4;
   text-transform: uppercase;
   letter-spacing: 1px;
   line-height: 16px;
-  color: var(--primaryColor);
-}
-@media (prefers-color-scheme: dark) {
-  .tooltip__text {
-    color: $color-white;
-  }
+  color: $color-white;
 }
 
 .menu-item__icon {
@@ -81,17 +76,9 @@ $number-of-menu-items: 4;
 }
 .menu-item--touch-hover,
 .menu-item:enabled:hover {
-  @media (prefers-color-scheme: light) {
-    .menu-item__icon {
-      color: $color-white;
-      background-color: var(--primaryColor);
-    }
-  }
-  @media (prefers-color-scheme: dark) {
-    .menu-item__icon {
-      color: $color-white;
-      background-color: var(--secondaryColor);
-    }
+  .menu-item__icon {
+    color: $color-white;
+    background-color: var(--secondaryColor);
   }
 }
 .menu-item__icon--end {
@@ -111,31 +98,52 @@ $number-of-menu-items: 4;
 }
 
 // Columns partly hidden, no touch screen device
-.menu-bars--bottom {
+[column-visibility="collapsed"] .menu-bars {
   .menu-item--touch-hover,
   .menu-item:enabled:hover {
     .menu-item__tooltip {
       width: 200px;
       opacity: 1;
       visibility: visible;
+      // Tooltip will be shown after 0.5s delay, but cleared instantly
+      transition-delay: 0.5s;
     }
-  }
-  .menu-item:enabled:hover {
-    // Tooltip will be shown after 0.5s delay, but cleared instantly
-    transition-delay: 0.5s;
   }
 
   .menu-item__tooltip {
     position: absolute;
     animation: none;
     top: -58px;
-    left: calc(-100px + 18px);
+    left: 18px;
+    transform: translateX(-50%);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.1s linear;
-    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-    background-color: $color-white;
+    box-shadow: 0 16px 32px 0 #0057ff3d;
+    background-color: var(--primaryColor);
   }
+  .admin-menu .menu-item__tooltip {
+    box-shadow: 0 16px 32px 0 #ff00693d;
+  }
+  @media screen and (max-width: 450px) {
+    .menu-item:nth-child(1) {
+      .menu-item__tooltip {
+        transform: translateX(-25%);
+      }
+      .menu-item__tooltip::after {
+        left: calc(25% - 5px);
+      }
+    }
+    .menu-item:nth-child(4) {
+      .menu-item__tooltip {
+        transform: translateX(-75%);
+      }
+      .menu-item__tooltip::after {
+        left: calc(75% - 5px);
+      }
+    }
+  }
+
   .menu-item__tooltip::after {
     content: "";
     position: absolute;
@@ -143,21 +151,11 @@ $number-of-menu-items: 4;
     left: calc(50% - 5px);
     border-width: 5px;
     border-style: solid;
-    border-color: $color-white transparent transparent transparent;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .menu-item__tooltip {
-      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: var(--primaryColor);
-    }
-    .menu-item__tooltip::after {
-      border-color: var(--primaryColor) transparent transparent transparent;
-    }
+    border-color: var(--primaryColor) transparent transparent transparent;
   }
 
   .tooltip__text {
-    width: 200px;
+    width: 100%;
     white-space: nowrap;
   }
 }
@@ -165,18 +163,18 @@ $number-of-menu-items: 4;
 // *****************************
 // ALL columns are fully visible
 // *****************************
-.menu-bars:not(.menu-bars--bottom) {
+[column-visibility="visible"] .menu-bars {
   .menu-item--touch-hover:enabled > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
-    width: 230px;
+    width: 212px;
   }
   .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
   .menu-item--left:enabled:hover .tooltip__text {
-    margin-right: 48px;
+    right: 30px;
   }
   .menu-item--right.menu-item--touch-hover:enabled .tooltip__text,
   .menu-item--right:enabled:hover .tooltip__text {
-    margin-left: 48px;
+    left: 30px;
   }
 
   .menu-item__tooltip {
@@ -184,39 +182,41 @@ $number-of-menu-items: 4;
     white-space: nowrap;
     overflow: hidden;
     transition: width 0.25s ease-in-out;
-    box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-    background-color: $color-white;
+    box-shadow: 0px 0px 24px #ff006955;
+    background-color: var(--primaryColor);
+  }
+  .admin-menu .menu-item__tooltip {
+    box-shadow: 0px 0px 24px #ff006955;
+  }
+  .user-menu .menu-item__tooltip {
+    box-shadow: 0px 0px 24px #0057ff55;
+  }
+  .menu-item__icon {
+    transition: all 0.25s linear;
   }
   .menu-item--left > .menu-item__tooltip {
-    right: 0;
+    right: 18px;
     top: 0;
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
   }
   .menu-item--right > .menu-item__tooltip {
-    left: 0;
+    left: 18px;
     top: 0;
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
   }
-  @media (prefers-color-scheme: dark) {
-    .menu-item__tooltip {
-      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      background-color: var(--primaryColor);
-    }
-  }
+
   .tooltip__text {
     position: absolute;
-    color: var(--primaryColor);
-    transition: margin 0.5s ease-in-out;
-  }
-  @media (prefers-color-scheme: dark) {
-    .tooltip__text {
-      color: $color-white;
-    }
+    width: max-content;
+    color: $color-white;
+    transition: all 0.5s ease-out;
   }
   .menu-item--right .tooltip__text {
-    margin-left: 36px;
-    left: 0;
+    left: 18px;
   }
   .menu-item--left .tooltip__text {
-    margin-right: 36px;
-    right: 0;
+    right: 18px;
   }
 }

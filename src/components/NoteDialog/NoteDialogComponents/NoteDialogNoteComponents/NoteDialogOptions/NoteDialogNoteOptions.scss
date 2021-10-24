@@ -1,0 +1,18 @@
+$option-height: 22px;
+$option-width: 22px;
+
+.note-dialog__note-options {
+  list-style-type: none;
+  position: relative;
+  display: inline-flex;
+  height: 26px;
+  width: calc(2 * #{$option-width});
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.note-dialog__note-option {
+  padding-top: 0;
+}
