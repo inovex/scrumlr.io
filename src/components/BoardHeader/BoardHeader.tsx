@@ -1,6 +1,6 @@
 import {VFC, useState} from "react";
-import classNames from "classnames";
-import lock from "assets/icon-lock.svg";
+import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
+import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";
 import {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -21,33 +21,40 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const [showParticipants, setShowParticipants] = useState(false);
 
   return (
-    <div className="board-header">
-      <Link to="/" className="board-header__link">
+    <header className="board-header">
+      <Link to="/" className="board-header__link" aria-label="Return to homepage">
         <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
-      <div className="board-header__infos">
-        <div
-          className={classNames("info-block", "info-block--hoverable")}
+
+      <div className="board-header__name-and-settings">
+        <button
+          className="board-header_name-and-settings-button"
           onClick={() => {
             setShowMenu(!showMenu);
           }}
-          role="dialog"
+          aria-haspopup
+          aria-pressed={showMenu}
         >
-          <p className="board-header__status">{props.boardstatus}</p>
-          <div className="board-header__title-block">
-            <img className="board-header__status-image" src={lock} alt="Private Session" />
-            <h1 className="board-header__title">{props.name}</h1>
+          <div className="board-header__access-policy-status">
+            <LockIcon className="board-header__access-policy-status-icon" title={props.boardstatus} />
+            <span>{props.boardstatus}</span>
           </div>
-        </div>
+          <div>
+            <h1 className="board-header__name">{props.name}</h1>
+            <SettingsIcon className="board-header__settings-icon" />
+          </div>
+        </button>
       </div>
+
       <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
         <BoardUsers />
       </button>
+
       <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
       {users.length > 0 && (
         <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />
       )}
-    </div>
+    </header>
   );
 };

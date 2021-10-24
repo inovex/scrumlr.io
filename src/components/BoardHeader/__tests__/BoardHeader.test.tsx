@@ -67,7 +67,7 @@ describe("Board Header", () => {
 
     test("show board-header__infos", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__infos")).toBeDefined();
+      expect(container.querySelector(".board-header__name-and-settings")).toBeDefined();
     });
 
     test("show board-header__users", () => {
@@ -79,17 +79,17 @@ describe("Board Header", () => {
   describe("show title and boardstatus", () => {
     test("show title", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__title")).toHaveTextContent("Title");
+      expect(container.querySelector(".board-header__name")).toHaveTextContent("Title");
     });
 
     test("show boardstatus private", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__status")).toHaveTextContent("Private Session");
+      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Private Session");
     });
 
     test("show boardstatus public", () => {
       const {container} = render(createBoardHeader("Title", "Public Session"));
-      expect(container.querySelector(".board-header__status")).toHaveTextContent("Public Session");
+      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
     });
   });
 });
