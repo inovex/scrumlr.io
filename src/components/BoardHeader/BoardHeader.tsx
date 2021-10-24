@@ -39,7 +39,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             <LockIcon className="board-header__access-policy-status-icon" title={props.boardstatus} />
             <span>{props.boardstatus}</span>
           </div>
-          <div>
+          <div className="board-header__name-container">
             <h1 className="board-header__name">{props.name}</h1>
             <SettingsIcon className="board-header__settings-icon" />
           </div>

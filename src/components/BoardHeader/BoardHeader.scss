@@ -78,6 +78,10 @@ $board-header__settings-icon-size: 36px;
   text-align: center;
 }
 
+.board-header__name-container {
+  position: relative;
+}
+
 .board-header__name {
   display: inline-block;
 
@@ -89,7 +93,7 @@ $board-header__settings-icon-size: 36px;
   margin: 0;
 
   // horizontally center board name and push settings icon to the right
-  padding-left: $board-header__settings-icon-size;
+  padding: 0 $board-header__settings-icon-size;
 
   text-overflow: ellipsis;
   overflow: hidden;
@@ -127,12 +131,12 @@ $board-header__settings-icon-size: 36px;
   width: $board-header__settings-icon-size;
   height: $board-header__settings-icon-size;
 
+  position: absolute;
+  right: -8px;
+  bottom: 4px;
+
   vertical-align: bottom;
   color: #7585a4;
-  margin-left: 8px;
-
-  margin-bottom: 4px;
-  margin-right: -10px;
 }
 
 @media #{$tablet} {
