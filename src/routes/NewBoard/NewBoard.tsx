@@ -11,8 +11,7 @@ import {LoginProviders} from "components/LoginProviders";
 
 export function NewBoard(props: RouteComponentProps) {
   const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
-    "Lean Coffee": [{name: "Lean Coffee", hidden: false, color: "grooming-green"}],
-    "Lean Coffee (with Actions)": [
+    "Lean Coffee": [
       {name: "Lean Coffee", hidden: false, color: "grooming-green"},
       {name: "Actions", hidden: true, color: "backlog-blue"},
     ],
