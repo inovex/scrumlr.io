@@ -1,19 +1,18 @@
-@import "constants/style";
+$option-height: 22px;
+$option-width: 22px;
 
 .note-dialog__note-options {
   list-style-type: none;
-  position: absolute;
+  position: relative;
+  display: inline-flex;
+  height: 26px;
+  width: calc(2 * #{$option-width});
+  padding: 0;
   margin: 0;
-  bottom: 10px;
-  top: 0;
-  right: -40px - $margin--default;
-}
-@media screen and (max-width: 766px) {
-  .note-dialog__noteoptions {
-    display: none;
-  }
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
-.note-dialog__note-option + .note-dialog__note-option {
-  margin-top: $margin--small;
+.note-dialog__note-option {
+  padding-top: 0;
 }

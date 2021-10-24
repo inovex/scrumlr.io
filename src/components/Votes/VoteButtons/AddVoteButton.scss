@@ -1,6 +1,9 @@
 @import "constants/style";
+@import "./VoteButton.scss";
 
 .vote-button-add {
+  height: $vote-button-height;
+  width: $vote-button-width;
   position: absolute;
   right: -5px;
   background-color: rgba(var(--accent-color-rgb), 0.2);
@@ -9,10 +12,10 @@
 
 .vote-button-add__icon {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  height: 18px;
-  width: 18px;
+  top: $vote-button-top;
+  left: $vote-button-left;
+  height: $vote-button-icon-height;
+  width: $vote-button-icon-width;
   fill: var(--accent-color);
 }
 

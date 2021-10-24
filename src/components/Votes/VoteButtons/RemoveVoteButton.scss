@@ -1,8 +1,11 @@
 @import "constants/style";
+@import "./VoteButton.scss";
 
 .vote-button-remove {
+  height: $vote-button-height;
+  width: $vote-button-width;
   position: absolute;
-  left: 5px;
+  left: $vote-button-left;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
 }

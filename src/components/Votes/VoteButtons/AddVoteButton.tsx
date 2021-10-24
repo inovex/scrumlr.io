@@ -2,6 +2,7 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./AddVoteButton.scss";
+import "./VoteButton.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {FC} from "react";
 
