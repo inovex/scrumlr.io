@@ -11,7 +11,7 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;
-  min-width: calc(240px + 10vw);
+  min-width: calc(240px);
   width: calc(100vw - 36px);
   max-width: 380px;
 }
@@ -21,9 +21,9 @@
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
   }
 }
-@media #{$menu-desktop} {
+@media #{$tablet} {
   .note-dialog__note {
-    max-width: 440px;
+    max-width: 600px;
     width: calc(100vw - 32px);
   }
 }

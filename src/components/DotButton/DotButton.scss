@@ -1,8 +1,6 @@
 @import "constants/style";
 
 .dot-button {
-  height: 28px;
-  width: 28px;
   border-radius: 100%;
   border: none;
   transition: all 0.25s ease-in-out;
@@ -11,6 +9,7 @@
   line-height: 28px;
   font-weight: 600;
   cursor: pointer;
+  outline: none;
 }
 .dot-button:disabled {
   cursor: default;
