@@ -10,7 +10,6 @@ import {useEffect, useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
-import {generateRandomString} from "utils/random";
 
 const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
   "Lean Coffee": [
@@ -59,8 +58,7 @@ export function NewBoard(props: RouteComponentProps) {
   const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
   const [accessPolicy, setAccessPolicy] = useState(0);
-
-  const [passphrase, setPassphrase] = useState(generateRandomString());
+  const [passphrase, setPassphrase] = useState("");
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
@@ -95,6 +93,8 @@ export function NewBoard(props: RouteComponentProps) {
     props.history.push("/");
   }
 
+  const isCreatedBoardDisabled = accessPolicy === AccessPolicy.ByPassphrase && !passphrase;
+
   useEffect(() => {
     if (localStorage.getItem("Parse/Scrumlr/currentUser")) {
       setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
@@ -114,7 +114,9 @@ export function NewBoard(props: RouteComponentProps) {
             <option value={key}>{key}</option>
           ))}
         </select>
-        <button onClick={onCreateBoard}>Create new Board</button>
+        <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
+          Create new Board
+        </button>
         <button onClick={onLogout}>Logout</button>
       </div>
     );
@@ -137,6 +139,7 @@ export function NewBoard(props: RouteComponentProps) {
         onClick={async () => {
           if (!Parse.User.current()) await onAnonymousLogin();
         }}
+        disabled={isCreatedBoardDisabled}
       >
         Create new board anonymously
       </button>

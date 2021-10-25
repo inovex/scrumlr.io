@@ -1,6 +1,7 @@
 import {ChangeEvent, FC} from "react";
 import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
+import {generateRandomString} from "utils/random";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -29,10 +30,14 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       AdditionalAccessPolicySettings = (
         <>
           <label>
-            <span>Passphrase</span>
+            <div>Passphrase</div>
             <input type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
           </label>
-          {!passphrase && <span>A passphrase must be set</span>}
+          <button onClick={() => onPassphraseChange(generateRandomString())}>Generate random passphrase</button>
+          <button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
+            Copy passphrase to clipboard
+          </button>
+          {!passphrase && <div>A passphrase must be set</div>}
         </>
       );
       break;
@@ -44,7 +49,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   return (
     <div className="access-policy-selection">
       <label>
-        <span>Access Policy</span>
+        <div>Access Policy</div>
         <input type="range" min={0} max={3} step={1} value={accessPolicy} onChange={handlePolicyChange} />
       </label>
       {AccessPolicyDescription}
