@@ -37,7 +37,30 @@ $board-header__settings-icon-size: 36px;
 .board-header__users {
   position: absolute;
   right: 0;
-  top: 32px;
+  top: 27px;
+  border-radius: 16px;
+  padding: 5px 20px;
+
+  display: flex;
+  flex-direction: row-reverse;
+
+  background: none;
+  border: none;
+  outline: none;
+
+  cursor: pointer;
+}
+
+.board-header__users:focus,
+.board-header__users:hover {
+  background-color: rgba(0, 87, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-header__users:focus,
+  .board-header__users:hover {
+    background-color: rgba(255, 0, 105, 0.15);
+  }
 }
 
 .board-header__name-and-settings {
@@ -58,11 +81,13 @@ $board-header__settings-icon-size: 36px;
   cursor: pointer;
 }
 
+.board-header_name-and-settings-button:focus,
 .board-header_name-and-settings-button:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
+  .board-header_name-and-settings-button:focus,
   .board-header_name-and-settings-button:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
   }
@@ -150,13 +175,4 @@ $board-header__settings-icon-size: 36px;
   .board-header__settings-icon {
     display: inline;
   }
-}
-
-.board-header__users {
-  display: flex;
-  flex-direction: row-reverse;
-
-  background: none;
-  border: none;
-  outline: none;
 }
