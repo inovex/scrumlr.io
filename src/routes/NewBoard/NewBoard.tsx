@@ -7,6 +7,7 @@ import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 import {useEffect, useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
+import {AppInfo} from "components/AppInfo";
 import {columnTemplates} from "./columnTemplates";
 
 export function NewBoard(props: RouteComponentProps) {
@@ -56,6 +57,8 @@ export function NewBoard(props: RouteComponentProps) {
         </select>
         <button onClick={onCreateBoard}>Create new Board</button>
         <button onClick={onLogout}>Logout</button>
+
+        <AppInfo />
       </div>
     );
   }
@@ -84,6 +87,8 @@ export function NewBoard(props: RouteComponentProps) {
         Create new board anonymously
       </button>
       <LoginProviders />
+
+      <AppInfo />
     </div>
   );
 }
