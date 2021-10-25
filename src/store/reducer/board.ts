@@ -104,6 +104,15 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         }
       }
 
+      // Timer notification
+      if (state.data?.timerUTCEndTime !== action.board.timerUTCEndTime) {
+        if (action.board.timerUTCEndTime) {
+          Toast.success("Timer started!");
+        } else {
+          Toast.error("Timer cancelled!");
+        }
+      }
+
       if (!state.data?.dirty) {
         return {
           status: state.status,
