@@ -32,7 +32,7 @@ export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onSu
           <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
             Toggle passphrase visibility
           </button>
-          <button type="submit" onClick={handleSubmit}>
+          <button type="submit" className="passphrase-dialog__submit-button" disabled={!passphrase} onClick={handleSubmit}>
             Submit
           </button>
         </form>

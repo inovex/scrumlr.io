@@ -107,6 +107,8 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         Toggle passphrase visibility
       </button>
       <button
+        class="passphrase-dialog__submit-button"
+        disabled=""
         type="submit"
       >
         Submit

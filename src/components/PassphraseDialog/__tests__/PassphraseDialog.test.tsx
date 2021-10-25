@@ -8,28 +8,17 @@ describe("<PassphraseDialog />", () => {
   });
 
   describe("passphrase input", () => {
-    test("error is not visible in default state", () => {
+    test("submit is disabled while passphrase is empty", () => {
       const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector(".passphrase-dialog__error")).toBeNull();
+      expect(container.querySelector(".passphrase-dialog__submit-button")!.hasAttribute("disabled")).toBeTruthy();
     });
 
-    test("show error on invalid passphrase", async () => {
-      const {container} = render(<PassphraseDialog onSubmit={() => Promise.resolve(false)} />);
-      fireEvent.click(container.querySelector('button[type="submit"]')!);
+    test("submit is available if passphrase is set", async () => {
+      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+      fireEvent.change(container.querySelector("#passphrase")!, {target: {value: "1234"}});
 
       await waitFor(() => {
-        expect(container.querySelector(".passphrase-dialog__error")).toBeDefined();
-      });
-    });
-
-    test("set aria props on invalid passphrase", async () => {
-      const {container} = render(<PassphraseDialog onSubmit={() => Promise.resolve(false)} />);
-      fireEvent.click(container.querySelector('button[type="submit"]')!);
-
-      await waitFor(() => {
-        const passphraseElement = container.querySelector("#passphrase")!;
-        expect(passphraseElement.getAttribute("aria-invalid")).toEqual("true");
-        expect(passphraseElement.getAttribute("aria-describedby")).toEqual("passphrase-error");
+        expect(container.querySelector(".passphrase-dialog__submit-button")!.hasAttribute("disabled")).toBeFalsy();
       });
     });
   });
@@ -69,7 +58,7 @@ describe("<PassphraseDialog />", () => {
     });
 
     test("manual verification is not visible", () => {
-      const {container} = render(<PassphraseDialog manualVerificationAvailable onSubmit={jest.fn()} />);
+      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
       expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeDefined();
     });
   });

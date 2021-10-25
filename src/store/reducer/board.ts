@@ -28,7 +28,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: {
           ...state.data!,
           ...action.board,
-          accessPolicy: action.board.accessPolicy?.type || state.data!.accessPolicy,
+          accessPolicy: (action.board.accessPolicy?.type || state.data?.accessPolicy)!,
           dirty: true,
         },
       };
