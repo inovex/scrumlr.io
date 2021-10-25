@@ -21,7 +21,7 @@ export const ColumnAPI = {
    * @param boardId the board id
    * @param columnId the column id
    *
-   * @returns status and (error-)description of request
+   * @returns a {status, description} object
    */
   deleteColumn: (boardId: string, columnId: string) => callAPI<{boardId: string; columnId: string}, StatusResponse>("deleteColumn", {boardId, columnId}),
   /**
@@ -34,7 +34,7 @@ export const ColumnAPI = {
    *  color: new column color to set (optional)
    *  hidden: flag to set whether this columns should be visible to all basic users (optional)
    *
-   * @returns status and (error-)description of request
+   * @returns a {status, description} object
    */
   editColumn: (boardId: string, column: EditColumnRequest) => callAPI<{boardId: string; column: EditColumnRequest}, StatusResponse>("editColumn", {boardId, column}),
 };

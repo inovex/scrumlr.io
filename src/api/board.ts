@@ -18,8 +18,7 @@ export const BoardAPI = {
   /**
    * Edits the board with the specified parameters.
    *
-   * @params board object with the board attributes that have to be changed
-   *
+   * @param board object with the board attributes that have to be changed
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
   editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
@@ -43,14 +42,18 @@ export const BoardAPI = {
 
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
-  deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
-
+  /**
+   * Deletes the board with the specified boardId.
+   *
+   * @param boardId identifies the board which will be deleted
+   * @returns 'true' if the operation succeeded or throws an error otherwise
+   */
+  deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
   /**
    * Cancel the current voting phase.
    *
    * @param boardId the board id
-   *
-   * @returns `{status: string, description: string}`
+   * @returns a {status, description} object
    */
   cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
 

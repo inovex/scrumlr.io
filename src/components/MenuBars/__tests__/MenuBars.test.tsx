@@ -1,10 +1,12 @@
 import {render} from "@testing-library/react";
-import configureStore from "redux-mock-store";
-import {Provider} from "react-redux";
-import Parse from "parse";
 import {MenuBars} from "components/MenuBars";
+import {User} from "parse";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
+import {mocked} from "ts-jest/utils";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
 
 const createMenuBars = (state: Record<string, unknown>) => {
   const store = mockStore(state);
@@ -18,9 +20,7 @@ const createMenuBars = (state: Record<string, unknown>) => {
 
 describe("Menu", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: "testId"}));
-    // @ts-ignore
-    Parse.User.current = mockCurrentUser;
+    mockedUser.current = jest.fn(() => ({id: "testId"} as never));
   });
 
   test("should render both add- and settings-menu for moderators", () => {
