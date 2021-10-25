@@ -45,66 +45,6 @@ $header-menu-button-width: 24px;
   border-color: transparent;
 }
 
-.board-settings__access-mode {
-  position: absolute;
-  top: 44px;
-  left: 20px;
-  height: 18px;
-  width: max-content;
-  border: none;
-  background-color: transparent;
-  text-align: left;
-  color: $color-white;
-  opacity: 0.8;
-  font-size: 13px;
-  letter-spacing: 0.27px;
-  line-height: 18px;
-  cursor: pointer;
-  border-bottom: $header-menu__item-border-width dashed $color-white;
-  padding: 0 0 5px 0;
-  transition: border-color 0.1s linear;
-}
-.board-settings__access-mode:disabled {
-  cursor: default;
-  border-color: transparent;
-}
-.board-settings__access-mode-lock {
-  display: inline-block;
-  position: relative;
-  width: 10px;
-  height: 10px;
-  border: 2px solid $color-white;
-  background-color: $color-white;
-  opacity: 0.8;
-  border-radius: 3px;
-  margin-right: 5px;
-}
-.board-settings__access-mode-lock::before {
-  content: "";
-  position: absolute;
-  height: 6px;
-  width: 6px;
-  background-color: $header-menu-color--light;
-  border-radius: 3px;
-}
-
-.board-settings__access-mode-lock::after {
-  position: absolute;
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border: $header-menu__item-border-width solid $color-white;
-  border-bottom: 0;
-  top: -7px;
-  left: 0;
-  transition: transform 0.3s linear;
-}
-.board-settings__access-mode-lock--unlocked::after {
-  transform: rotate(-45deg) translate(0, -1px);
-}
-
 .board-settings__edit-button {
   position: absolute;
   height: $header-menu-button-height;

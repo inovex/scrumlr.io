@@ -10,6 +10,7 @@ import {useEffect, useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
+import {generateRandomString} from "utils/random";
 
 const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
   "Lean Coffee": [
@@ -59,8 +60,7 @@ export function NewBoard(props: RouteComponentProps) {
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
   const [accessPolicy, setAccessPolicy] = useState(0);
 
-  // FIXME randomly generate initial passphrase
-  const [passphrase, setPassphrase] = useState("1234");
+  const [passphrase, setPassphrase] = useState(generateRandomString());
 
   async function onCreateBoard() {
     if (Parse.User.current()) {

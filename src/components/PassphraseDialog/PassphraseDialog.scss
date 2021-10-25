@@ -1,5 +1,9 @@
 @import "constants/style";
 
+.passphrase-dialog__logo {
+  margin-bottom: 2em;
+}
+
 .passphrase-dialog {
   margin: $margin--default;
   padding: $padding--large;
@@ -12,7 +16,7 @@
 
   border-radius: $margin--default;
 
-  background: $color-backlog-blue;
+  background: $color-dark-two;
 }
 
 .passphrase-dialog__input-label {
@@ -34,4 +38,17 @@
 
   text-align: center;
   margin-top: 0.5em;
+}
+
+.passphrase-dialog__hint {
+  margin-top: 1em;
+
+  display: block;
+  text-align: justify;
+
+  width: 66%;
+  max-width: 280px;
+
+  color: $color-white;
+  font-size: $text-size;
 }

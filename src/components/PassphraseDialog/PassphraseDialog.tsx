@@ -1,5 +1,6 @@
 import React, {FunctionComponent, useState} from "react";
 import "./PassphraseDialog.scss";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
@@ -20,7 +21,7 @@ export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onSu
 
   return (
     <div className="loading-screen">
-      <div>Logo</div>
+      <ScrumlrLogo className="passphrase-dialog__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       <div className="passphrase-dialog">
         <form className="passphrase-dialog__form">
           <label htmlFor="passphrase" className="passphrase-dialog__input-label">
@@ -36,7 +37,8 @@ export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onSu
           </button>
         </form>
       </div>
-      <span>Collaborative session. By continuing you're accepting our privacy policy.</span>
+
+      <span className="passphrase-dialog__hint">Collaborative session. By continuing you're accepting our privacy policy.</span>
     </div>
   );
 };

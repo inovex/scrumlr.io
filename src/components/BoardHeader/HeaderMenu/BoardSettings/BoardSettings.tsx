@@ -1,7 +1,9 @@
 import "./BoardSettings.scss";
-import classNames from "classnames";
 import {Dispatch, SetStateAction} from "react";
 import {AccessPolicyType} from "types/board";
+import store, {useAppSelector} from "store";
+import {ApplicationState} from "types/store";
+import {ActionFactory} from "store/action";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
@@ -14,16 +16,15 @@ export type BoardSettingsProps = {
 };
 
 export const BoardSettings = (props: BoardSettingsProps) => {
-  /* const state = useAppSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
-  })); */
+  }));
 
   const onSubmit = () => {
-    // FIXME edit board here
-    /* if (props.activeEditMode && (state.board!.\joinConfirmationRequired !== props.joinConfirmationRequired || state.board!.name !== props.boardName)) {
-      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: props.boardName, joinConfirmationRequired: props.joinConfirmationRequired}));
+    if (props.activeEditMode && state.board!.name !== props.boardName) {
+      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: props.boardName}));
     }
-    props.setActiveEditMode(!props.activeEditMode); */
+    props.setActiveEditMode(!props.activeEditMode);
   };
 
   return (
@@ -48,15 +49,6 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           onFocus={(e) => e.target.select()}
         />
 
-        <button
-          type="button"
-          className="board-settings__access-mode"
-          disabled={!props.activeEditMode}
-          onClick={() => {} /* () => props.setJoinConfirmationRequired(!props.joinConfirmationRequired) */}
-        >
-          <div className={classNames("board-settings__access-mode-lock", {"board-settings__access-mode-lock--unlocked": props.accessPolicy === "Public"})} />
-          {props.accessPolicy !== "Public" ? "Private Session" : "Public Session"}
-        </button>
         {props.currentUserIsModerator && (
           <button type="submit" className="board-settings__edit-button">
             {props.activeEditMode ? "save" : "edit"}

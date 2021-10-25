@@ -23,12 +23,12 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
       }
 
-      // FIXME edit board stuff
       return {
         status: state.status,
         data: {
           ...state.data!,
-          // ...action.board,
+          ...action.board,
+          accessPolicy: action.board.accessPolicy?.type || state.data!.accessPolicy,
           dirty: true,
         },
       };
