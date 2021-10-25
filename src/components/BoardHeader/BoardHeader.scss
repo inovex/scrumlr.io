@@ -1,6 +1,9 @@
 @import "constants/style";
 
 $board-header__settings-icon-size: 36px;
+$board-header__hover-padding-top-bottom: 5px;
+$board-header__hover-padding-side: 20px;
+$board-header__hover-padding: $board-header__hover-padding-top-bottom $board-header__hover-padding-side;
 
 .board-header {
   position: fixed;
@@ -13,7 +16,7 @@ $board-header__settings-icon-size: 36px;
   position: absolute;
   left: 0;
   top: 20px;
-  padding: 5px 20px;
+  padding: $board-header__hover-padding;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -37,9 +40,9 @@ $board-header__settings-icon-size: 36px;
 .board-header__users {
   position: absolute;
   right: 0;
-  top: 27px;
+  top: calc(32px - #{$board-header__hover-padding-top-bottom});
   border-radius: 16px;
-  padding: 5px 20px;
+  padding: $board-header__hover-padding;
 
   display: flex;
   flex-direction: row-reverse;
@@ -70,7 +73,7 @@ $board-header__settings-icon-size: 36px;
 
 .board-header_name-and-settings-button {
   width: max-content;
-  padding: 5px 20px;
+  padding: $board-header__hover-padding;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 
