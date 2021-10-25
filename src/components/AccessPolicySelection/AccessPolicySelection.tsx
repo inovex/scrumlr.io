@@ -31,9 +31,11 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
         <>
           <label>
             <div>Passphrase</div>
-            <input type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
+            <input data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
           </label>
-          <button onClick={() => onPassphraseChange(generateRandomString())}>Generate random passphrase</button>
+          <button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
+            Generate random passphrase
+          </button>
           <button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
             Copy passphrase to clipboard
           </button>
