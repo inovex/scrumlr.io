@@ -2,7 +2,7 @@ import {callAPI} from "api/callApi";
 
 export const VoteAPI = {
   /**
-   * Changes the permissions of a participant.
+   * Add a vote to a note.
    *
    * @param boardId the identifier of the board
    * @param noteId the note id
@@ -10,7 +10,7 @@ export const VoteAPI = {
    */
   addVote: (boardId: string, noteId: string) => callAPI("addVote", {boardId, noteId}),
   /**
-   * Changes the permissions of a participant.
+   * Removes/Deletes a vote from a note.
    *
    * @param boardId the identifier of the board
    * @param noteId the note id
