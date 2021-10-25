@@ -1,23 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Note Input should have correct style show noteinput with correct style 1`] = `
+exports[`Note Input should render correctly 1`] = `
 <div
-  class="MuiInputBase-root MuiFilledInput-root NoteInput-root-3 MuiFilledInput-underline MuiInputBase-adornedEnd MuiFilledInput-adornedEnd"
+  class="note-input"
 >
   <input
-    class="MuiInputBase-input MuiFilledInput-input NoteInput-input-4 MuiInputBase-inputAdornedEnd MuiFilledInput-inputAdornedEnd"
+    class="note-input__input"
     placeholder="Add your note..."
     type="text"
     value=""
   />
-  <div
-    class="MuiInputAdornment-root MuiInputAdornment-positionEnd"
+  <svg
+    class="note-input__icon"
   >
-    <svg
-      class="note-input__icon"
-    >
-      icon-add.svg
-    </svg>
-  </div>
+    icon-add.svg
+  </svg>
 </div>
 `;

@@ -3,40 +3,16 @@ import {getRandomName} from "constants/name";
 import {RouteComponentProps} from "react-router";
 import Parse from "parse";
 import {API} from "api";
-import {Color} from "constants/colors";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 import {useEffect, useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
+import {columnTemplates} from "./columnTemplates";
 
 export function NewBoard(props: RouteComponentProps) {
-  const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
-    "Positive/Negative/Actions": [
-      {name: "Positive", hidden: false, color: "backlog-blue"},
-      {name: "Negative", hidden: false, color: "lean-lilac"},
-      {name: "Actions", hidden: false, color: "planning-pink"},
-    ],
-    "Mad/Sad/Glad": [
-      {name: "Mad", hidden: false, color: "online-orange"},
-      {name: "Sad", hidden: false, color: "retro-red"},
-      {name: "Glad", hidden: false, color: "poker-purple"},
-    ],
-    "Start/Stop/Continue": [
-      {name: "Start", hidden: false, color: "grooming-green"},
-      {name: "Stop", hidden: false, color: "retro-red"},
-      {name: "Continue", hidden: false, color: "backlog-blue"},
-    ],
-    "KALM (Keep/Add/Less/More": [
-      {name: "Keep", hidden: false, color: "grooming-green"},
-      {name: "Add", hidden: false, color: "retro-red"},
-      {name: "Less", hidden: false, color: "backlog-blue"},
-      {name: "More", hidden: false, color: "poker-purple"},
-    ],
-  };
-
   const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
-  const [columnTemplate, setColumnTemplate] = useState("Positive/Negative/Actions");
+  const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
   const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(false);
 
   async function onCreateBoard() {

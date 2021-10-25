@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
+exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = `
 <div
   class="note-dialog accent-color__"
 >
@@ -8,276 +8,205 @@ exports[`NoteDialog should render correctly note-dialog match snapshot 1`] = `
     class="note-dialog__header"
   />
   <div
-    class="note-dialog__note"
+    class="note-dialog__scrollbar"
   >
     <div
-      class="note-dialog__content"
+      class="note-dialog__note-wrapper"
     >
-      <blockquote
-        class="note-dialog__text"
-        contenteditable="false"
-      >
-        Test Text
-      </blockquote>
-    </div>
-    <div
-      class="note-dialog__footer"
-    >
-      <figure
-        class="note-dialog__author"
+      <div
+        class="note-dialog__note"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="note-dialog__note-content"
         >
-          <div
-            class="user__initials"
-            title=""
-          />
-        </div>
-        <figcaption
-          class="note-dialog__author-name"
-        />
-      </figure>
-      <div
-        class="votes note__votes"
-      >
-        <button
-          class="dot-button dot-button__delete"
-        >
-          <span
-            class="dot-button__folded-corner"
-          />
-          <span>
-            1
-          </span>
-        </button>
-        <button
-          class="dot-button dot-button__add"
-        >
-          <svg
-            class="dot-button__add-icon"
+          <blockquote
+            class="note-dialog__note-content__text"
+            contenteditable="false"
           >
-            icon-add.svg
-          </svg>
-        </button>
-      </div>
-    </div>
-    <aside>
-      <ul
-        class="note-dialog__options"
-      >
-        <li
-          class="note-dialog__option note-dialog__option--not-editable"
+            Test Text
+          </blockquote>
+        </div>
+        <div
+          class="note-dialog__note-footer"
         >
-          <button
-            class="icon-button icon-button--right"
+          <figure
+            class="note-dialog__note-author"
           >
             <div
-              class="icon-button__tooltip"
+              class="user-avatar note-dialog__note-user-avatar"
             >
-              <span
-                class="tooltip__text"
-              >
-                Delete
-              </span>
+              <div
+                class="user__initials"
+                title=""
+              />
             </div>
-            <svg
-              class="icon-button__icon icon-button__icon--start"
+            <figcaption
+              class="note-dialog__note-author-name"
+            />
+          </figure>
+          <div
+            class="note-dialog__note-footer__options-and-votes"
+          >
+            <div
+              class="votes"
             >
-              icon-delete.svg
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </aside>
-  </div>
-  <div
-    class="note-dialog__note"
-  >
-    <div
-      class="note-dialog__content"
-    >
-      <blockquote
-        class="note-dialog__text"
-        contenteditable="false"
-      />
-    </div>
-    <div
-      class="note-dialog__footer"
-    >
-      <figure
-        class="note-dialog__author"
+              <button
+                class="dot-button vote-button-remove"
+              >
+                <span
+                  class="vote-button-remove__folded-corner"
+                />
+                <span>
+                  1
+                </span>
+              </button>
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
+            <ul
+              class="note-dialog__note-options"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="note-dialog__note"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="note-dialog__note-content"
         >
-          <div
-            class="user__initials"
-            title=""
+          <blockquote
+            class="note-dialog__note-content__text"
+            contenteditable="false"
           />
         </div>
-        <figcaption
-          class="note-dialog__author-name"
-        />
-      </figure>
-      <div
-        class="votes note__votes"
-      >
-        <button
-          class="dot-button dot-button__add"
+        <div
+          class="note-dialog__note-footer"
         >
-          <svg
-            class="dot-button__add-icon"
+          <figure
+            class="note-dialog__note-author"
           >
-            icon-add.svg
-          </svg>
-        </button>
+            <div
+              class="user-avatar note-dialog__note-user-avatar"
+            >
+              <div
+                class="user__initials"
+                title=""
+              />
+            </div>
+            <figcaption
+              class="note-dialog__note-author-name"
+            />
+          </figure>
+          <div
+            class="note-dialog__note-footer__options-and-votes"
+          >
+            <div
+              class="votes"
+            >
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
+            <ul
+              class="note-dialog__note-options"
+            >
+              <li
+                class="note-dialog__note-option"
+              >
+                <button
+                  class="dot-button note-dialog__note-option__unstack"
+                >
+                  <svg
+                    class="note-dialog__note-option__unstack-icon"
+                  >
+                    icon-unstack.svg
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
-    <aside>
-      <ul
-        class="note-dialog__options"
-      >
-        <li
-          class="note-dialog__option note-dialog__option--not-editable"
-        >
-          <button
-            class="icon-button icon-button--right"
-          >
-            <div
-              class="icon-button__tooltip"
-            >
-              <span
-                class="tooltip__text"
-              >
-                Delete
-              </span>
-            </div>
-            <svg
-              class="icon-button__icon icon-button__icon--start"
-            >
-              icon-delete.svg
-            </svg>
-          </button>
-        </li>
-        <li
-          class="note-dialog__option"
-        >
-          <button
-            class="icon-button icon-button--right"
-          >
-            <div
-              class="icon-button__tooltip"
-            >
-              <span
-                class="tooltip__text"
-              >
-                Unstack
-              </span>
-            </div>
-            <svg
-              class="icon-button__icon icon-button__icon--start"
-            >
-              icon-unstack.svg
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </aside>
-  </div>
-  <div
-    class="note-dialog__note"
-  >
-    <div
-      class="note-dialog__content"
-    >
-      <blockquote
-        class="note-dialog__text"
-        contenteditable="false"
-      />
-    </div>
-    <div
-      class="note-dialog__footer"
-    >
-      <figure
-        class="note-dialog__author"
+      <div
+        class="note-dialog__note"
       >
         <div
-          class="user-avatar note-dialog__user-avatar"
+          class="note-dialog__note-content"
         >
-          <div
-            class="user__initials"
-            title=""
+          <blockquote
+            class="note-dialog__note-content__text"
+            contenteditable="false"
           />
         </div>
-        <figcaption
-          class="note-dialog__author-name"
-        />
-      </figure>
-      <div
-        class="votes note__votes"
-      >
-        <button
-          class="dot-button dot-button__add"
+        <div
+          class="note-dialog__note-footer"
         >
-          <svg
-            class="dot-button__add-icon"
+          <figure
+            class="note-dialog__note-author"
           >
-            icon-add.svg
-          </svg>
-        </button>
+            <div
+              class="user-avatar note-dialog__note-user-avatar"
+            >
+              <div
+                class="user__initials"
+                title=""
+              />
+            </div>
+            <figcaption
+              class="note-dialog__note-author-name"
+            />
+          </figure>
+          <div
+            class="note-dialog__note-footer__options-and-votes"
+          >
+            <div
+              class="votes"
+            >
+              <button
+                class="dot-button vote-button-add"
+              >
+                <svg
+                  class="vote-button-add__icon"
+                >
+                  icon-add.svg
+                </svg>
+              </button>
+            </div>
+            <ul
+              class="note-dialog__note-options"
+            >
+              <li
+                class="note-dialog__note-option"
+              >
+                <button
+                  class="dot-button note-dialog__note-option__unstack"
+                >
+                  <svg
+                    class="note-dialog__note-option__unstack-icon"
+                  >
+                    icon-unstack.svg
+                  </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-    <aside>
-      <ul
-        class="note-dialog__options"
-      >
-        <li
-          class="note-dialog__option note-dialog__option--not-editable"
-        >
-          <button
-            class="icon-button icon-button--right"
-          >
-            <div
-              class="icon-button__tooltip"
-            >
-              <span
-                class="tooltip__text"
-              >
-                Delete
-              </span>
-            </div>
-            <svg
-              class="icon-button__icon icon-button__icon--start"
-            >
-              icon-delete.svg
-            </svg>
-          </button>
-        </li>
-        <li
-          class="note-dialog__option"
-        >
-          <button
-            class="icon-button icon-button--right"
-          >
-            <div
-              class="icon-button__tooltip"
-            >
-              <span
-                class="tooltip__text"
-              >
-                Unstack
-              </span>
-            </div>
-            <svg
-              class="icon-button__icon icon-button__icon--start"
-            >
-              icon-unstack.svg
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </aside>
   </div>
 </div>
 `;
