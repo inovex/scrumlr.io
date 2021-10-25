@@ -49,7 +49,7 @@ $dropdown__box-shadow: var(--primaryColor) 3 d;
   }
 }
 
-[column-visibility="visibile"] .menu-bars {
+[column-visibility="visible"] .menu-bars {
   .dropdown-item--open .menu-item__tooltip,
   .menu-item.dropdown-item--open:hover .menu-item__tooltip {
     width: 300px;
