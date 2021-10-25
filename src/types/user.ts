@@ -11,6 +11,7 @@ export interface UserClientModel {
   admin: boolean;
   createdAt: Date;
   updatedAt: Date;
+  ready: boolean;
   online: boolean;
 }
 
@@ -37,5 +38,6 @@ export const mapUserServerToClientModel = (user: UserServerModel, {admin, online
   admin,
   createdAt: user.createdAt,
   updatedAt: user.updatedAt,
+  ready: false,
   online,
 });
