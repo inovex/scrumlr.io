@@ -1,5 +1,5 @@
 import {render, fireEvent} from "@testing-library/react";
-import Dropdown from "./Dropdown";
+import Dropdown from "components/Dropdown";
 
 describe("Dropdown", () => {
   const onClickMock = jest.fn();
