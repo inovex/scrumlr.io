@@ -24,7 +24,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
 
   const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
-  const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(state.board!.joinConfirmationRequired);
+  const [accessPolicy, setAccessPolicy] = useState(state.board!.accessPolicy);
   const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
 
   if (!props.open) {
@@ -45,7 +45,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setActiveEditMode(false);
         setExpandedOption(undefined);
         setBoardName(state.board!.name);
-        setJoinConfirmationRequired(state.board!.joinConfirmationRequired);
+        setAccessPolicy(state.board!.accessPolicy);
         props.onClose();
       }}
       darkBackground={false}
@@ -53,12 +53,12 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       <ul className="header-menu">
         <BoardSettings
           activeEditMode={activeEditMode}
-          joinConfirmationRequired={joinConfirmationRequired}
+          accessPolicy={accessPolicy}
           boardName={boardName}
           currentUserIsModerator={props.currentUserIsModerator}
           setActiveEditMode={setActiveEditMode}
           setBoardName={setBoardName}
-          setJoinConfirmationRequired={setJoinConfirmationRequired}
+          setAccessPolicy={setAccessPolicy}
         />
         {props.currentUserIsModerator && (
           <>

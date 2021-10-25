@@ -1,7 +1,15 @@
 import {Color} from "constants/colors";
 import {ColumnClientModel, ColumnServerModel} from "types/column";
+import {getBrowserServerTimeDifference} from "utils/timer";
 import {UserConfigurationClientModel, UserConfigurationServerModel} from "./user";
-import {getBrowserServerTimeDifference} from "../utils/timer";
+
+export enum AccessPolicy {
+  "Public" = 0,
+  "ByPassphrase" = 1,
+  "ManualVerification" = 2,
+}
+
+export type AccessPolicyType = keyof typeof AccessPolicy;
 
 export interface BoardServerModel {
   objectId: string;
@@ -9,7 +17,11 @@ export interface BoardServerModel {
   columns: ColumnServerModel;
   userConfigurations: UserConfigurationServerModel;
   accessCode: string;
-  joinConfirmationRequired: boolean;
+  accessPolicy: {
+    type: AccessPolicyType;
+    salt?: string;
+    passphrase?: string;
+  };
   encryptedContent: boolean;
   showAuthors: boolean;
   timerUTCEndTime: {
@@ -29,7 +41,10 @@ export interface BoardServerModel {
 export type EditableBoardAttributes = {
   name: string;
   accessCode: string;
-  joinConfirmationRequired: boolean;
+  accessPolicy: {
+    type: AccessPolicyType;
+    passphrase?: string;
+  };
   encryptedContent: boolean;
   showAuthors: boolean;
   timerUTCEndTime?: Date;
@@ -41,10 +56,11 @@ export type EditableBoardAttributes = {
 
 export type EditBoardRequest = {id: string} & Partial<EditableBoardAttributes>;
 
-export interface BoardClientModel extends EditableBoardAttributes {
+export interface BoardClientModel extends Omit<EditableBoardAttributes, "accessPolicy"> {
   id: string;
   columns: ColumnClientModel[];
   userConfigurations: UserConfigurationClientModel[];
+  accessPolicy: AccessPolicyType;
   createdAt: Date;
   updatedAt: Date;
   dirty: boolean;
@@ -78,7 +94,7 @@ export const mapBoardServerToClientModel = async (board: BoardServerModel): Prom
         } as UserConfigurationClientModel)
     ),
     accessCode: board.accessCode,
-    joinConfirmationRequired: board.joinConfirmationRequired,
+    accessPolicy: board.accessPolicy.type,
     encryptedContent: board.encryptedContent,
     showAuthors: board.showAuthors,
     timerUTCEndTime,

@@ -7,12 +7,14 @@ export const BoardAPI = {
    * Creates a board with the specified parameters and returns the board id.
    *
    * @param columns the definition of the columns
+   * @param accessPolicy the access policy configuration of the board
    * @param name the board name
    *
    * @returns the board id of the created board
    */
-  createBoard: (name: string, joinConfirmationRequired: boolean, columns: {name: string; hidden: boolean; color: Color}[]) =>
-    callAPI<{columns: {name: string; hidden: boolean}[]; name: string; joinConfirmationRequired: boolean}, string>("createBoard", {columns, name, joinConfirmationRequired}),
+  createBoard: (name: string, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
+    callAPI<{columns: {name: string; hidden: boolean}[]; name: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
+
   /**
    * Edits the board with the specified parameters.
    *
@@ -21,6 +23,7 @@ export const BoardAPI = {
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
   editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
+
   /**
    * Create join request for a board session.
    * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join
@@ -28,13 +31,20 @@ export const BoardAPI = {
    * the reference on the join request state in the attribute `joinRequestReference`.
    *
    * @param boardId the board id
+   * @param passphrase optional passphrose for the join request
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  joinBoard: (boardId: string) => callAPI<{boardId: string}, {status: "accepted" | "rejected" | "pending"; joinRequestReference?: string}>("joinBoard", {boardId}),
+  joinBoard: (boardId: string, passphrase?: string) =>
+    callAPI<{boardId: string; passphrase?: string}, {status: "accepted" | "rejected" | "pending" | "passphrase_required" | "incorrect_passphrase"; joinRequestReference?: string}>(
+      "joinBoard",
+      {boardId, passphrase}
+    ),
+
   acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
   rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
   deleteBoard: (id: string) => callAPI("deleteBoard", {id}),
+
   /**
    * Cancel the current voting phase.
    *
@@ -43,6 +53,7 @@ export const BoardAPI = {
    * @returns `{status: string, description: string}`
    */
   cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
+
   /** Sets the date where the timer of the board ends.
    *
    * @param endDate the date/time where the timer ends
@@ -50,6 +61,7 @@ export const BoardAPI = {
    * @returns a {status, description} object
    */
   setTimer: (endDate: Date, boardId: string) => callAPI("setTimer", {endDate, boardId}),
+
   /**
    * Cancels the timer of the board.
    *

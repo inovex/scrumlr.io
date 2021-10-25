@@ -16,6 +16,8 @@ export const BoardActionType = {
   PermittedBoardAccess: "@@SCRUMLR/permittedBoardAccess" as const,
   RejectedBoardAccess: "@@SCRUMLR/rejectedBoardAccess" as const,
   PendingBoardAccessConfirmation: "@@SCRUMLR/pendingBoardAccessConfirmation" as const,
+  PassphraseChallengeRequired: "@@SCRUMLR/passphraseChallengeRequired" as const,
+  IncorrectPassphrase: "@@SCRUMLR/incorrectPassphrase" as const,
   CancelVoting: "@@SCRUMLR/cancelVoting" as const,
   SetTimer: "@@SCRUMLR/setTimer" as const,
   CancelTimer: "@@SCRUMLR/cancelTimer" as const,
@@ -36,10 +38,12 @@ export const BoardActionFactory = {
    * Creates an action which should be dispatched when the user tries to join a board.
    *
    * @param boardId the board id
+   * @param passphrase optional passphrase is board is protected by it
    */
-  joinBoard: (boardId: string) => ({
+  joinBoard: (boardId: string, passphrase?: string) => ({
     type: BoardActionType.JoinBoard,
     boardId,
+    passphrase,
   }),
   /**
    * Creates an action which should be dispatched when the initial query on the board data from the server returns
@@ -97,6 +101,12 @@ export const BoardActionFactory = {
     type: BoardActionType.PendingBoardAccessConfirmation,
     requestReference,
   }),
+  requirePassphraseChallenge: () => ({
+    type: BoardActionType.PassphraseChallengeRequired,
+  }),
+  incorrectPassphrase: () => ({
+    type: BoardActionType.IncorrectPassphrase,
+  }),
   /**
    * Creates an action which should be dispatched when the current voting phase was canceled.
    *
@@ -134,4 +144,6 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
   | ReturnType<typeof BoardActionFactory.cancelVoting>
   | ReturnType<typeof BoardActionFactory.setTimer>
-  | ReturnType<typeof BoardActionFactory.cancelTimer>;
+  | ReturnType<typeof BoardActionFactory.cancelTimer>
+  | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>
+  | ReturnType<typeof BoardActionFactory.incorrectPassphrase>;

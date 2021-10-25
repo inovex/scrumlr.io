@@ -2,21 +2,16 @@ import React, {FunctionComponent, useState} from "react";
 import "./PassphraseDialog.scss";
 
 export interface PassphraseDialogProps {
-  manualVerificationAvailable?: boolean;
-  onPassphrase: (passphrase: string) => Promise<boolean>;
+  onSubmit: (passphrase: string) => void;
 }
 
-export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onPassphrase, manualVerificationAvailable = false}) => {
-  const [error, setError] = useState<string>();
+export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onSubmit}) => {
   const [passphrase, setPassphrase] = useState<string>("");
   const [visiblePassphrase, setVisiblePassphrase] = useState(false);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const validPassphrase = await onPassphrase(passphrase);
-    if (!validPassphrase) {
-      setError("Incorrect passphrase");
-    }
+    await onSubmit(passphrase);
   };
 
   const togglePassphraseVisibility = () => {
@@ -31,14 +26,7 @@ export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onPa
           <label htmlFor="passphrase" className="passphrase-dialog__input-label">
             Enter the passphrase to access this board
           </label>
-          <input
-            id="passphrase"
-            type={visiblePassphrase ? "text" : "password"}
-            value={passphrase}
-            onChange={(e) => setPassphrase(e.target.value)}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? "passphrase-error" : undefined}
-          />
+          <input id="passphrase" type={visiblePassphrase ? "text" : "password"} value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />
 
           <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
             Toggle passphrase visibility
@@ -46,15 +34,7 @@ export const PassphraseDialog: FunctionComponent<PassphraseDialogProps> = ({onPa
           <button type="submit" onClick={handleSubmit}>
             Submit
           </button>
-
-          {error && (
-            <span id="passphrase-error" className="passphrase-dialog__error">
-              {error}
-            </span>
-          )}
         </form>
-
-        {manualVerificationAvailable && <span className="passphrase-dialog__manual-verification">Wait for admin approval</span>}
       </div>
       <span>Collaborative session. By continuing you're accepting our privacy policy.</span>
     </div>

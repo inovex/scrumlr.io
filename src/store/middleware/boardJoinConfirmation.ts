@@ -6,7 +6,7 @@ import {API} from "api";
 
 export const passBoardJoinConfirmationMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.JoinBoard) {
-    API.joinBoard(action.boardId).then((response) => {
+    API.joinBoard(action.boardId, action.passphrase).then((response) => {
       // explicit 'store.dispatch' is required here or otherwise this middleware wont be called again
       if (response.status === "accepted") {
         stateAPI.dispatch(ActionFactory.permittedBoardAccess(action.boardId));
@@ -14,6 +14,10 @@ export const passBoardJoinConfirmationMiddleware = (stateAPI: MiddlewareAPI<Disp
         stateAPI.dispatch(ActionFactory.rejectedBoardAccess());
       } else if (response.status === "pending") {
         stateAPI.dispatch(ActionFactory.pendingBoardAccessConfirmation(response.joinRequestReference!));
+      } else if (response.status === "passphrase_required") {
+        stateAPI.dispatch(ActionFactory.requirePassphraseChallenge());
+      } else if (response.status === "incorrect_passphrase") {
+        stateAPI.dispatch(ActionFactory.incorrectPassphrase());
       }
     });
   }

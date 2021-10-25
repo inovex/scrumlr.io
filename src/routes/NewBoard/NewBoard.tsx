@@ -8,58 +8,77 @@ import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
 import {useEffect, useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
+import {AccessPolicySelection} from "components/AccessPolicySelection";
+import {AccessPolicy} from "types/board";
+
+const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
+  "Lean Coffee": [
+    {name: "Lean Coffee", hidden: false, color: "grooming-green"},
+    {name: "Actions", hidden: true, color: "backlog-blue"},
+  ],
+  "Positive/Negative": [
+    {name: "Positive", hidden: false, color: "backlog-blue"},
+    {name: "Negative", hidden: false, color: "lean-lilac"},
+    {name: "Actions", hidden: true, color: "planning-pink"},
+  ],
+  "Start/Stop/Continue": [
+    {name: "Start", hidden: false, color: "grooming-green"},
+    {name: "Stop", hidden: false, color: "retro-red"},
+    {name: "Continue", hidden: false, color: "backlog-blue"},
+  ],
+  "Mad/Sad/Glad": [
+    {name: "Mad", hidden: false, color: "online-orange"},
+    {name: "Sad", hidden: false, color: "retro-red"},
+    {name: "Glad", hidden: false, color: "poker-purple"},
+    {name: "Actions", hidden: true, color: "planning-pink"},
+  ],
+  "KALM (Keep/Add/Less/More)": [
+    {name: "Keep", hidden: false, color: "grooming-green"},
+    {name: "Add", hidden: false, color: "retro-red"},
+    {name: "Less", hidden: false, color: "backlog-blue"},
+    {name: "More", hidden: false, color: "poker-purple"},
+    {name: "Actions", hidden: true, color: "planning-pink"},
+  ],
+  "Plus & Delta": [
+    {name: "Plus", hidden: false, color: "backlog-blue"},
+    {name: "Delta", hidden: false, color: "lean-lilac"},
+    {name: "Actions", hidden: true, color: "planning-pink"},
+  ],
+  "4L (Liked, Learned, Lacked, Longed for)": [
+    {name: "Liked", hidden: false, color: "grooming-green"},
+    {name: "Learned", hidden: false, color: "retro-red"},
+    {name: "Lacked", hidden: false, color: "backlog-blue"},
+    {name: "Longed for", hidden: false, color: "poker-purple"},
+    {name: "Actions", hidden: true, color: "planning-pink"},
+  ],
+};
 
 export function NewBoard(props: RouteComponentProps) {
-  const columnTemplates: {[key: string]: {name: string; hidden: boolean; color: Color}[]} = {
-    "Lean Coffee": [
-      {name: "Lean Coffee", hidden: false, color: "grooming-green"},
-      {name: "Actions", hidden: true, color: "backlog-blue"},
-    ],
-    "Positive/Negative": [
-      {name: "Positive", hidden: false, color: "backlog-blue"},
-      {name: "Negative", hidden: false, color: "lean-lilac"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-    "Start/Stop/Continue": [
-      {name: "Start", hidden: false, color: "grooming-green"},
-      {name: "Stop", hidden: false, color: "retro-red"},
-      {name: "Continue", hidden: false, color: "backlog-blue"},
-    ],
-    "Mad/Sad/Glad": [
-      {name: "Mad", hidden: false, color: "online-orange"},
-      {name: "Sad", hidden: false, color: "retro-red"},
-      {name: "Glad", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-    "KALM (Keep/Add/Less/More)": [
-      {name: "Keep", hidden: false, color: "grooming-green"},
-      {name: "Add", hidden: false, color: "retro-red"},
-      {name: "Less", hidden: false, color: "backlog-blue"},
-      {name: "More", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-    "Plus & Delta": [
-      {name: "Plus", hidden: false, color: "backlog-blue"},
-      {name: "Delta", hidden: false, color: "lean-lilac"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-    "4L (Liked, Learned, Lacked, Longed for)": [
-      {name: "Liked", hidden: false, color: "grooming-green"},
-      {name: "Learned", hidden: false, color: "retro-red"},
-      {name: "Lacked", hidden: false, color: "backlog-blue"},
-      {name: "Longed for", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-  };
-
   const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
-  const [joinConfirmationRequired, setJoinConfirmationRequired] = useState(false);
+  const [accessPolicy, setAccessPolicy] = useState(0);
+
+  // FIXME randomly generate initial passphrase
+  const [passphrase, setPassphrase] = useState("1234");
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
-      const boardId = await API.createBoard(boardName, joinConfirmationRequired, columnTemplates[columnTemplate]);
+      let additionalAccessPolicyOptions = {};
+      if (accessPolicy === AccessPolicy.ByPassphrase && Boolean(passphrase)) {
+        additionalAccessPolicyOptions = {
+          passphrase,
+        };
+      }
+
+      const boardId = await API.createBoard(
+        boardName,
+        {
+          type: AccessPolicy[accessPolicy],
+          ...additionalAccessPolicyOptions,
+        },
+        columnTemplates[columnTemplate]
+      );
       props.history.push(`/board/${boardId}`);
     } else {
       Toast.error("You must be logged in to create a board. Reload the page and try again");
@@ -87,10 +106,9 @@ export function NewBoard(props: RouteComponentProps) {
       <div>
         <p>User: {displayName}</p>
         <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-        <label>
-          <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
-          JoinConfirmationRequired
-        </label>
+
+        <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
+
         <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
           {Object.keys(columnTemplates).map((key) => (
             <option value={key}>{key}</option>
@@ -106,10 +124,7 @@ export function NewBoard(props: RouteComponentProps) {
     <div className="new-board">
       {!Parse.User.current() && <input className="new-board__input" defaultValue={displayName} type="text" onChange={(e) => setDisplayName(e.target.value)} maxLength={20} />}
       <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-      <label>
-        <input type="checkbox" checked={joinConfirmationRequired} onChange={(e) => setJoinConfirmationRequired(e.target.checked)} />
-        JoinConfirmationRequired
-      </label>
+      <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
 
       <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
         {Object.keys(columnTemplates).map((key) => (

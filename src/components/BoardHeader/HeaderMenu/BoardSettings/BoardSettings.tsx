@@ -1,30 +1,29 @@
-import store, {useAppSelector} from "store";
-import {ApplicationState} from "types/store";
-import {ActionFactory} from "store/action";
 import "./BoardSettings.scss";
 import classNames from "classnames";
 import {Dispatch, SetStateAction} from "react";
+import {AccessPolicyType} from "types/board";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
-  joinConfirmationRequired: boolean;
+  accessPolicy: AccessPolicyType;
   boardName: string;
   currentUserIsModerator: boolean;
   setActiveEditMode: Dispatch<SetStateAction<boolean>>;
   setBoardName: Dispatch<SetStateAction<string>>;
-  setJoinConfirmationRequired: Dispatch<SetStateAction<boolean>>;
+  setAccessPolicy: Dispatch<SetStateAction<AccessPolicyType>>;
 };
 
 export const BoardSettings = (props: BoardSettingsProps) => {
-  const state = useAppSelector((applicationState: ApplicationState) => ({
+  /* const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
-  }));
+  })); */
 
   const onSubmit = () => {
-    if (props.activeEditMode && (state.board!.joinConfirmationRequired !== props.joinConfirmationRequired || state.board!.name !== props.boardName)) {
+    // FIXME edit board here
+    /* if (props.activeEditMode && (state.board!.\joinConfirmationRequired !== props.joinConfirmationRequired || state.board!.name !== props.boardName)) {
       store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: props.boardName, joinConfirmationRequired: props.joinConfirmationRequired}));
     }
-    props.setActiveEditMode(!props.activeEditMode);
+    props.setActiveEditMode(!props.activeEditMode); */
   };
 
   return (
@@ -48,14 +47,15 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           }}
           onFocus={(e) => e.target.select()}
         />
+
         <button
           type="button"
           className="board-settings__access-mode"
           disabled={!props.activeEditMode}
-          onClick={() => props.setJoinConfirmationRequired(!props.joinConfirmationRequired)}
+          onClick={() => {} /* () => props.setJoinConfirmationRequired(!props.joinConfirmationRequired) */}
         >
-          <div className={classNames("board-settings__access-mode-lock", {"board-settings__access-mode-lock--unlocked": !props.joinConfirmationRequired})} />
-          {props.joinConfirmationRequired ? "Private Session" : "Public Session"}
+          <div className={classNames("board-settings__access-mode-lock", {"board-settings__access-mode-lock--unlocked": props.accessPolicy === "Public"})} />
+          {props.accessPolicy !== "Public" ? "Private Session" : "Public Session"}
         </button>
         {props.currentUserIsModerator && (
           <button type="submit" className="board-settings__edit-button">

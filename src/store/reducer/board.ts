@@ -23,11 +23,12 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
       }
 
+      // FIXME edit board stuff
       return {
         status: state.status,
         data: {
           ...state.data!,
-          ...action.board,
+          // ...action.board,
           dirty: true,
         },
       };
@@ -120,7 +121,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       // check if current model from server equals local copy
       if (
         (action.board.name === undefined || state.data.name === action.board.name) &&
-        (action.board.joinConfirmationRequired === undefined || state.data.joinConfirmationRequired === action.board.joinConfirmationRequired) &&
+        (action.board.accessPolicy === undefined || state.data.accessPolicy === action.board.accessPolicy) &&
         (action.board.encryptedContent === undefined || state.data.encryptedContent === action.board.encryptedContent) &&
         (action.board.showAuthors === undefined || state.data.showAuthors === action.board.showAuthors) &&
         (action.board.timerUTCEndTime === undefined || state.data.timerUTCEndTime === action.board.timerUTCEndTime) &&
@@ -150,6 +151,16 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     case ActionType.RejectedBoardAccess: {
       return {
         status: "rejected",
+      };
+    }
+    case ActionType.PassphraseChallengeRequired: {
+      return {
+        status: "passphrase_required",
+      };
+    }
+    case ActionType.IncorrectPassphrase: {
+      return {
+        status: "incorrect_passphrase",
       };
     }
     default: {
