@@ -51,6 +51,7 @@
   .participant {
     background-color: $color-dark-mode-note;
   }
+  .participant:focus,
   .participant:hover {
     background-color: #3d4555;
   }
