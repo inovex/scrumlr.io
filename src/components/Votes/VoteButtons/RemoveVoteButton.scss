@@ -6,7 +6,7 @@
   width: $vote-button-width;
   position: absolute;
   left: $vote-button-left;
-  background-color: rgba(var(--accent-color), 0.2);
+  background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
 }
 

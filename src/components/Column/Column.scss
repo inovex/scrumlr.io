@@ -71,7 +71,7 @@
 
 .column__notes-wrapper--isOver {
   border-color: var(--accent-color);
-  background-color: rgba(var(--accent-color), 0.2);
+  background-color: rgba(var(--accent-color-rgb), 0.2);
 }
 
 .column__notes-wrapper::-webkit-scrollbar {
