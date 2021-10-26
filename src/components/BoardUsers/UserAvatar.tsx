@@ -1,6 +1,6 @@
 import "./BoardUser.scss";
-import {getInitials} from "constants/name";
 import classNames from "classnames";
+import {Avatar} from "../Avatar";
 
 export interface UserAvatarProps {
   className?: string;
@@ -9,14 +9,6 @@ export interface UserAvatarProps {
   avatar?: string;
 }
 
-export const UserAvatar = ({name, avatar, className}: UserAvatarProps) => (
-  <div className={classNames("user-avatar", className)}>
-    {avatar ? (
-      <img src={avatar} alt={name} />
-    ) : (
-      <div className="user__initials" title={name}>
-        {getInitials(name)}
-      </div>
-    )}
-  </div>
+export const UserAvatar = ({name, id, avatar, className}: UserAvatarProps) => (
+  <div className={classNames("user-avatar", className)}>{avatar ? <img src={avatar} alt={name} /> : <Avatar seed={id} />}</div>
 );
