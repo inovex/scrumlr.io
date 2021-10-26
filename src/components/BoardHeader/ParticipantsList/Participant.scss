@@ -9,6 +9,7 @@
   width: 100%;
 
   align-items: center;
+  justify-content: space-between;
 }
 
 .participant:not(:last-child)::after {
@@ -19,6 +20,12 @@
   position: absolute;
   bottom: 0;
   left: 48px;
+}
+
+.participant__figure {
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
 
 .participant__avatar-and-name {
@@ -32,7 +39,7 @@
 }
 
 .participant .participant__user-avatar-wrapper {
-  margin: 10px 0 0 12px;
+  margin: 0 12px 0 12px;
   height: 28px;
   width: 28px;
 }
@@ -51,13 +58,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: $color-black;
-  margin-left: 8px;
 }
 
 .participant .participant__permission-toggle {
   position: relative;
   flex: 0 0 40px;
-  margin-right: 20px;
+  margin-right: 16px;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -14,9 +14,9 @@ interface ParticipantProps {
 
 export const Participant = ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) => (
   <li className="participant">
-    <figure aria-roledescription="participant">
+    <figure className="participant__figure" aria-roledescription="participant">
       <UserAvatar id={participant.id} name={participant.displayName} className="participant__user-avatar-wrapper" avatarClassName="participant__user-avatar" />
-      <figcaption>{participant.displayName}</figcaption>
+      <figcaption className="participant__name">{participant.displayName}</figcaption>
     </figure>
     {currentUserIsModerator && (
       <ToggleButton
