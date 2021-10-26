@@ -28,6 +28,7 @@ describe("users actions", () => {
         admin: true,
         updatedAt: new Date("2020-11-30"),
         createdAt: new Date("2020-11-30"),
+        ready: true,
         online: false,
       };
       const action = UsersActionFactory.setUsers([user], true);
@@ -60,6 +61,7 @@ describe("users actions", () => {
         admin: true,
         updatedAt: new Date("2020-11-30"),
         createdAt: new Date("2020-11-30"),
+        ready: true,
         online: false,
       };
       const action = UsersActionFactory.setUserStatus(user.id, true);
@@ -68,6 +70,29 @@ describe("users actions", () => {
         type: "@@SCRUMLR/setUserStatus",
         userId: user.id,
         status: true,
+      });
+    });
+  });
+
+  describe("set user ready status", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserReadyStatus>, UsersReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUserReadyStatus>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = UsersActionFactory.setUserReadyStatus(true);
+
+      expect(action).toEqual({
+        type: "@@SCRUMLR/setUserReadyStatus",
+        ready: true,
       });
     });
   });
