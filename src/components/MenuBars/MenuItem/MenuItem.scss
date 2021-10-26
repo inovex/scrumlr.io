@@ -74,6 +74,7 @@ $number-of-menu-items: 4;
     background: var(--primaryColor);
   }
 }
+.menu-item:enabled:focus,
 .menu-item--touch-hover,
 .menu-item:enabled:hover {
   .menu-item__icon {
@@ -87,11 +88,13 @@ $number-of-menu-items: 4;
 
 .menu-item--active.menu-item--touch-hover > .menu-item__icon--end,
 .menu-item--active:enabled:hover > .menu-item__icon--end,
+.menu-item--active:enabled:focus > .menu-item__icon--end,
 .menu-item--active:enabled:active > .menu-item__icon--end {
   visibility: visible;
 }
 
 .menu-item--active.menu-item--touch-hover > .menu-item__icon--start,
+.menu-item--active:enabled:focus > .menu-item__icon--start,
 .menu-item--active:enabled:hover > .menu-item__icon--start,
 .menu-item--active:enabled:active > .menu-item__icon--start {
   visibility: hidden;
@@ -100,6 +103,7 @@ $number-of-menu-items: 4;
 // Columns partly hidden, no touch screen device
 [column-visibility="collapsed"] .menu-bars {
   .menu-item--touch-hover,
+  .menu-item:enabled:focus,
   .menu-item:enabled:hover {
     .menu-item__tooltip {
       width: 200px;
@@ -165,14 +169,17 @@ $number-of-menu-items: 4;
 // *****************************
 [column-visibility="visible"] .menu-bars {
   .menu-item--touch-hover:enabled > .menu-item__tooltip,
+  .menu-item:enabled:focus > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
     width: 212px;
   }
   .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
+  .menu-item--left:enabled:focus .tooltip__text,
   .menu-item--left:enabled:hover .tooltip__text {
     right: 30px;
   }
   .menu-item--right.menu-item--touch-hover:enabled .tooltip__text,
+  .menu-item--right:enabled:focus .tooltip__text,
   .menu-item--right:enabled:hover .tooltip__text {
     left: 30px;
   }

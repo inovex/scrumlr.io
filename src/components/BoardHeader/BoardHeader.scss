@@ -20,11 +20,13 @@ $board-header__settings-icon-size: 36px;
   transition: background-color 0.2s ease-in-out;
 }
 
+.board-header__link:focus,
 .board-header__link:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
+  .board-header__link:focus,
   .board-header__link:hover {
     background-color: rgba(255, 0, 105, 0.15);
   }
@@ -65,11 +67,13 @@ $board-header__settings-icon-size: 36px;
   cursor: pointer;
 }
 
+.board-header_name-and-settings-button:focus,
 .board-header_name-and-settings-button:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
+  .board-header_name-and-settings-button:focus,
   .board-header_name-and-settings-button:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
   }
