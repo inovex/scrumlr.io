@@ -1,8 +1,9 @@
 import store from "store";
 import {ActionFactory} from "store/action";
-import avatar from "assets/avatar.png";
+
 import {JoinRequestClientModel} from "types/joinRequest";
 import "./JoinRequest.scss";
+import {UserAvatar} from "../BoardUsers";
 
 export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
   function handleAccept(boardId: string, userIds: string[]) {
@@ -22,7 +23,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
         </div>
         <div className="join-request__main">
           <figure className="join-request__request-figure">
-            <img className="join-request__request-image" src={avatar} alt="User" />
+            <UserAvatar id={joinRequest.userId} name={joinRequest.displayName} />
             <figcaption className="join-request__request-name">{joinRequest.displayName}</figcaption>
           </figure>
         </div>
@@ -50,8 +51,6 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
       </div>
       <div className="join-request__main">
         <div className="join-request__requests-preview">
-          <img src={avatar} alt="User" className="join-request__preview-image" />
-          <img src={avatar} alt="User" className="join-request__preview-image" />
           {joinRequests.length > 2 && <div className="join-request__preview-rest">+{joinRequests.length - 2}</div>}
           <span className="join-request__preview-names">{joinRequests.map((joinRequest) => joinRequest.displayName).join(", ")}</span>
         </div>
@@ -60,7 +59,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
           {joinRequests.map((joinRequest) => (
             <li key={joinRequest.id}>
               <figure className="join-request__requests-figure">
-                <img src={avatar} className="join-request__requests-avatar" alt="Avatar" />
+                <UserAvatar id={joinRequest.userId} name={joinRequest.displayName} />
                 <figcaption className="join-request__requests-displayname">{joinRequest.displayName}</figcaption>
                 <button className="join-request__button join-request__requests-button" onClick={() => handleReject(joinRequest.boardId, [joinRequest.userId])}>
                   Ablehnen
