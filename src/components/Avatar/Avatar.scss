@@ -3,11 +3,9 @@
 .avatar {
   width: 48px;
   height: 48px;
-
-  --avatar__background-color: #{$color-backlog-blue};
 }
 
 .avatar #Circle-Background,
 .avatar #Color\/Palette\/Blue-01 {
-  fill: var(--avatar__background-color);
+  fill: var(--accent-color);
 }

@@ -2,6 +2,7 @@ import Avataar from "avataaars";
 import {FC} from "react";
 import "./Avatar.scss";
 import classNames from "classnames";
+import {getColorClassName, getColorForIndex} from "../../constants/colors";
 
 const SKIN_COLORS = ["Tanned", "Yellow", "Pale", "Light", "Brown", "DarkBrown", "Black"] as const;
 export type AvatarSkinColor = typeof SKIN_COLORS[number];
@@ -114,7 +115,7 @@ const hashCode = function (s: string) {
       hash = ((hash << 5) - hash + s.charCodeAt(i++)) | 0;
     }
   }
-  return hash;
+  return Math.abs(hash);
 };
 
 const generateRandomProps = (seed: string) => {
@@ -142,6 +143,8 @@ const generateRandomProps = (seed: string) => {
   props.eyebrowType = EYEBROW_TYPES[hash % EYEBROW_TYPES.length];
   props.eyeType = EYE_TYPES[hash % EYE_TYPES.length];
   props.mouthType = MOUTH_TYPES[hash % MOUTH_TYPES.length];
+
+  props.className = getColorClassName(getColorForIndex(hash));
 
   return props;
 };
@@ -180,7 +183,8 @@ export const Avatar: FC<AvatarProps> = ({
   mouthType,
 }) => {
   if (seed) {
-    return <Avataar className={classNames("avatar", className)} avatarStyle="Circle" {...generateRandomProps(seed)} />;
+    const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
+    return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
   }
 
   return (
