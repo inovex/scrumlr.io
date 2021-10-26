@@ -37,7 +37,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
         </form>
       </div>
 
-      <span className="passphrase-dialog__hint">Collaborative session. By continuing you're accepting our privacy policy.</span>
+      <span className="passphrase-dialog__hint">Collaborative session. By continuing you&apos;re accepting our privacy policy.</span>
     </div>
   );
 };

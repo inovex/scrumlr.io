@@ -60,8 +60,14 @@ const removeFromModerators = async (user: Parse.User, boardId: string) => {
   throw new Error(`No roles for board '${boardId}' found`);
 };
 
+const AccessPolicyType = {
+  Public: "Public" as const,
+  ByPassphrase: "ByPassphrase" as const,
+  ManualVerification: "ManualVerification" as const,
+};
+
 type AccessPolicy = {
-  type: "Public" | "ByPassphrase" | "ManualVerification";
+  type: keyof typeof AccessPolicyType;
   passphrase?: string;
 };
 
@@ -176,7 +182,7 @@ export const initializeBoardFunctions = () => {
     userConfigurations[user.id] = {showHiddenColumns: false};
 
     let {accessPolicy} = request;
-    if (accessPolicy.type === "ByPassphrase") {
+    if (accessPolicy.type === AccessPolicyType.ByPassphrase) {
       accessPolicy = convertToAccessPolicyByPassphrase(accessPolicy);
     }
 
@@ -239,8 +245,8 @@ export const initializeBoardFunctions = () => {
     }
 
     const accessPolicy = board.get("accessPolicy");
-    if (accessPolicy.type !== "Public") {
-      if (accessPolicy.type === "ByPassphrase") {
+    if (accessPolicy.type !== AccessPolicyType.Public) {
+      if (accessPolicy.type === AccessPolicyType.ByPassphrase) {
         if (!request.passphrase) {
           return {
             status: "passphrase_required",
@@ -257,7 +263,7 @@ export const initializeBoardFunctions = () => {
         }
       }
 
-      if (accessPolicy.type === "ManualVerification") {
+      if (accessPolicy.type === AccessPolicyType.ManualVerification) {
         const BoardClass = Parse.Object.extend("Board");
         const boardReference = BoardClass.createWithoutData(request.boardId);
 
@@ -350,7 +356,7 @@ export const initializeBoardFunctions = () => {
       board.set("name", request.board.name);
     }
     if (request.board.accessPolicy != null) {
-      if (request.board.accessPolicy.type === "ByPassphrase") {
+      if (request.board.accessPolicy.type === AccessPolicyType.ByPassphrase) {
         board.set("accessPolicy", convertToAccessPolicyByPassphrase(request.board.accessPolicy));
       } else {
         board.set("accessPolicy", request.board.accessPolicy);
