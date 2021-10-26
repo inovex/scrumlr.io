@@ -91,6 +91,7 @@
   background-color: $color-white;
   border-radius: 8px 8px 0 0;
 }
+
 @media (prefers-color-scheme: dark) {
   .join-request__main {
     background-color: $color-dark-mode-note;

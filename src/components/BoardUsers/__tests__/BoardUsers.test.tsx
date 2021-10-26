@@ -57,7 +57,7 @@ describe("users", () => {
 
     const {container} = render(createBoardUsers(state));
 
-    const renderdUsersnames = Array.from(container.querySelectorAll(".user__initials"))
+    const renderdUsersnames = Array.from(container.querySelectorAll(".user-avatar"))
       .map((ui) => ui.getAttribute("title"))
       .join(":");
     const onlineUsernames = [...otherOnlineUsers.slice(0, 3), currentUser].map((u) => u.displayName).join(":");
@@ -73,7 +73,7 @@ describe("users", () => {
     };
 
     const boardUsers = render(createBoardUsers(state));
-    expect(boardUsers.container.querySelectorAll(".user__initials")).toHaveLength(4);
+    expect(boardUsers.container.querySelectorAll(".user-avatar")).toHaveLength(4);
 
     // 5 online users -> display 5
     const newState1 = {
@@ -85,7 +85,7 @@ describe("users", () => {
       },
     };
     const newBoardUsers1 = render(createBoardUsers(newState1));
-    expect(newBoardUsers1.container.querySelectorAll(".user__initials")).toHaveLength(5);
+    expect(newBoardUsers1.container.querySelectorAll(".user-avatar")).toHaveLength(5);
 
     // 6 online users -> display 4 & rest user count of 2
     const newState2 = {
@@ -97,7 +97,7 @@ describe("users", () => {
       },
     };
     const newBoardUsers2 = render(createBoardUsers(newState2));
-    expect(newBoardUsers2.container.querySelectorAll(".user__initials")).toHaveLength(4);
+    expect(newBoardUsers2.container.querySelectorAll(".user-avatar")).toHaveLength(4);
     expect(newBoardUsers2.container.querySelector(".rest-users__count")).toHaveTextContent("2");
   });
 });

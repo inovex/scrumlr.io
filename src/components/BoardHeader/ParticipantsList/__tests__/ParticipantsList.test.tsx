@@ -88,7 +88,6 @@ describe("ParticipantsList", () => {
     fireEvent.change(container.querySelector(".participants__header-input")!, {target: {value: "Patty Participant"}});
     expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
     expect(container.querySelector(".participants__list")!.childElementCount).toBe(2);
-    expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("PP");
   });
 
   describe("Show correct user always on top of list", () => {
@@ -100,7 +99,6 @@ describe("ParticipantsList", () => {
         container: global.document.querySelector("#portal")!,
       });
       expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
-      expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("PP");
       expect(container.querySelector(".participants__list")!.childElementCount).toBe(3);
     });
 
@@ -112,7 +110,6 @@ describe("ParticipantsList", () => {
         container: global.document.querySelector("#portal")!,
       });
       expect(container.querySelector(".participants__list")!.firstChild).toHaveClass("list__header");
-      expect(container.querySelector(".participants__list")!.childNodes[1]).toHaveTextContent("AA");
       expect(container.querySelector(".participants__list")!.childElementCount).toBe(3);
     });
   });

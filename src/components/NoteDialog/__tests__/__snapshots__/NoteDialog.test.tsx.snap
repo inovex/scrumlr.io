@@ -34,11 +34,461 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           >
             <div
               class="user-avatar note-dialog__note-user-avatar"
+              title=""
             >
-              <div
-                class="user__initials"
-                title=""
-              />
+              <svg
+                class="avatar note-dialog__note-user-avatar accent-color__grooming-green"
+                height="280px"
+                version="1.1"
+                viewBox="0 0 264 280"
+                width="264px"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <desc>
+                  Created with getavataaars.com
+                </desc>
+                <defs>
+                  <circle
+                    cx="120"
+                    cy="120"
+                    id="react-path-576"
+                    r="120"
+                  />
+                  <path
+                    d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
+                    id="react-path-577"
+                  />
+                  <path
+                    d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
+                    id="react-path-578"
+                  />
+                </defs>
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                  id="Avataaar"
+                  stroke="none"
+                  stroke-width="1"
+                >
+                  <g
+                    id="Avataaar/Circle"
+                    transform="translate(-825.000000, -1100.000000)"
+                  >
+                    <g
+                      transform="translate(825.000000, 1100.000000)"
+                    >
+                      <g
+                        fill-rule="evenodd"
+                        id="Circle"
+                        stroke-width="1"
+                        transform="translate(12.000000, 40.000000)"
+                      >
+                        <mask
+                          fill="white"
+                          id="react-mask-579"
+                        >
+                          <use
+                            xlink:href="#react-path-576"
+                          />
+                        </mask>
+                        <use
+                          fill="#E6E6E6"
+                          id="Circle-Background"
+                          xlink:href="#react-path-576"
+                        />
+                        <g
+                          fill="#65C9FF"
+                          id="Color/Palette/Blue-01"
+                          mask="url(#react-mask-579)"
+                        >
+                          <rect
+                            height="240"
+                            id="🖍Color"
+                            width="240"
+                            x="0"
+                            y="0"
+                          />
+                        </g>
+                      </g>
+                      <mask
+                        fill="white"
+                        id="react-mask-580"
+                      >
+                        <use
+                          xlink:href="#react-path-577"
+                        />
+                      </mask>
+                      <g
+                        id="Mask"
+                      />
+                      <g
+                        fill-rule="evenodd"
+                        id="Avataaar"
+                        mask="url(#react-mask-580)"
+                        stroke-width="1"
+                      >
+                        <g
+                          id="Body"
+                          transform="translate(32.000000, 36.000000)"
+                        >
+                          <mask
+                            fill="white"
+                            id="react-mask-581"
+                          >
+                            <use
+                              xlink:href="#react-path-578"
+                            />
+                          </mask>
+                          <use
+                            fill="#D0C6AC"
+                            xlink:href="#react-path-578"
+                          />
+                          <g
+                            fill="#D08B5B"
+                            id="Skin/👶🏽-03-Brown"
+                            mask="url(#react-mask-581)"
+                          >
+                            <g
+                              id="Color"
+                              transform="translate(0.000000, 0.000000)"
+                            >
+                              <rect
+                                height="280"
+                                width="264"
+                                x="0"
+                                y="0"
+                              />
+                            </g>
+                          </g>
+                          <path
+                            d="M156,79 L156,102 C156,132.927946 130.927946,158 100,158 C69.072054,158 44,132.927946 44,102 L44,79 L44,94 C44,124.927946 69.072054,150 100,150 C130.927946,150 156,124.927946 156,94 L156,79 Z"
+                            fill="#000000"
+                            fill-opacity="0.100000001"
+                            id="Neck-Shadow"
+                            mask="url(#react-mask-581)"
+                          />
+                        </g>
+                        <g
+                          id="Clothing/Overall"
+                          transform="translate(0.000000, 170.000000)"
+                        >
+                          <defs>
+                            <path
+                              d="M94,29.6883435 L94,74 L170,74 L170,29.6883435 C179.362956,30.9893126 188.149952,34.0907916 196.00002,38.6318143 L196,110 L187,110 L77,110 L68,110 L68,38.6318027 C75.8500482,34.0907916 84.6370437,30.9893126 94,29.6883435 Z"
+                              id="react-path-582"
+                            />
+                          </defs>
+                          <mask
+                            fill="white"
+                            id="react-mask-583"
+                          >
+                            <use
+                              xlink:href="#react-path-582"
+                            />
+                          </mask>
+                          <use
+                            fill="#B7C1DB"
+                            fill-rule="evenodd"
+                            id="Overall"
+                            xlink:href="#react-path-582"
+                          />
+                          <g
+                            fill="#A7FFC4"
+                            fill-rule="evenodd"
+                            id="Color/Palette/Gray-01"
+                            mask="url(#react-mask-583)"
+                          >
+                            <rect
+                              height="110"
+                              id="🖍Color"
+                              width="264"
+                              x="0"
+                              y="0"
+                            />
+                          </g>
+                          <circle
+                            cx="81"
+                            cy="83"
+                            fill="#F4F4F4"
+                            fill-rule="evenodd"
+                            id="Button"
+                            r="5"
+                          />
+                          <circle
+                            cx="183"
+                            cy="83"
+                            fill="#F4F4F4"
+                            fill-rule="evenodd"
+                            id="Button"
+                            r="5"
+                          />
+                        </g>
+                        <g
+                          fill="#000000"
+                          id="Face"
+                          transform="translate(76.000000, 82.000000)"
+                        >
+                          <g
+                            id="Mouth/Vomit"
+                            transform="translate(2.000000, 52.000000)"
+                          >
+                            <defs>
+                              <path
+                                d="M34.0082051,12.6020819 C35.1280248,23.0929366 38.2345159,31.9944054 53.9961505,31.9999974 C69.757785,32.0055894 72.9169073,23.0424631 73.9942614,12.5047938 C74.0809675,11.6567158 73.1738581,10.9999965 72.0369872,10.9999965 C65.3505138,10.9999965 62.6703194,12.4951994 53.9894323,12.4999966 C45.3085452,12.5047938 40.7567994,10.9999965 36.0924943,10.9999965 C34.9490269,10.9999965 33.8961688,11.5524868 34.0082051,12.6020819 Z"
+                                id="react-path-584"
+                              />
+                              <path
+                                d="M59.9170416,36 L60,36 C60,39.3137085 62.6862915,42 66,42 C69.3137085,42 72,39.3137085 72,36 L72,35 L72,31 C72,27.6862915 69.3137085,25 66,25 L66,25 L42,25 L42,25 C38.6862915,25 36,27.6862915 36,31 L36,31 L36,35 L36,38 C36,41.3137085 38.6862915,44 42,44 C45.3137085,44 48,41.3137085 48,38 L48,36 L48.0829584,36 C48.5590365,33.1622867 51.0270037,31 54,31 C56.9729963,31 59.4409635,33.1622867 59.9170416,36 Z"
+                                id="react-path-585"
+                              />
+                              <filter
+                                filterUnits="objectBoundingBox"
+                                height="105.3%"
+                                id="react-filter-587"
+                                width="102.8%"
+                                x="-1.4%"
+                                y="-2.6%"
+                              >
+                                <feoffset
+                                  dx="0"
+                                  dy="-1"
+                                  in="SourceAlpha"
+                                  result="shadowOffsetInner1"
+                                />
+                                <fecomposite
+                                  in="shadowOffsetInner1"
+                                  in2="SourceAlpha"
+                                  k2="-1"
+                                  k3="1"
+                                  operator="arithmetic"
+                                  result="shadowInnerInner1"
+                                />
+                                <fecolormatrix
+                                  in="shadowInnerInner1"
+                                  type="matrix"
+                                  values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0"
+                                />
+                              </filter>
+                            </defs>
+                            <mask
+                              fill="white"
+                              id="react-mask-586"
+                            >
+                              <use
+                                transform="translate(54.000000, 21.499998) scale(1, -1) translate(-54.000000, -21.499998) "
+                                xlink:href="#react-path-584"
+                              />
+                            </mask>
+                            <use
+                              fill="#000000"
+                              fill-opacity="0.699999988"
+                              fill-rule="evenodd"
+                              id="Mouth"
+                              transform="translate(54.000000, 21.499998) scale(1, -1) translate(-54.000000, -21.499998) "
+                              xlink:href="#react-path-584"
+                            />
+                            <rect
+                              fill="#FFFFFF"
+                              fill-rule="evenodd"
+                              height="16"
+                              id="Teeth"
+                              mask="url(#react-mask-586)"
+                              rx="5"
+                              width="31"
+                              x="39"
+                              y="0"
+                            />
+                            <g
+                              id="Vomit-Stuff"
+                            >
+                              <use
+                                fill="#88C553"
+                                fill-rule="evenodd"
+                                xlink:href="#react-path-585"
+                              />
+                              <use
+                                fill="black"
+                                fill-opacity="1"
+                                filter="url(#react-filter-587)"
+                                xlink:href="#react-path-585"
+                              />
+                            </g>
+                          </g>
+                          <g
+                            fill-opacity="0.16"
+                            id="Nose/Default"
+                            transform="translate(28.000000, 40.000000)"
+                          >
+                            <path
+                              d="M16,8 C16,12.418278 21.372583,16 28,16 L28,16 C34.627417,16 40,12.418278 40,8"
+                              id="Nose"
+                            />
+                          </g>
+                          <g
+                            id="Eyes/Wink-Wacky-😜"
+                            transform="translate(0.000000, 8.000000)"
+                          >
+                            <circle
+                              cx="82"
+                              cy="22"
+                              fill="#FFFFFF"
+                              id="Cornea?-I-don't-know"
+                              r="12"
+                            />
+                            <circle
+                              cx="82"
+                              cy="22"
+                              fill="#000000"
+                              fill-opacity="0.699999988"
+                              id="Eye"
+                              r="6"
+                            />
+                            <path
+                              d="M16.1601674,25.4473116 C18.006676,21.648508 22.1644225,19 26.9975803,19 C31.8136766,19 35.9591217,21.629842 37.8153518,25.4071242 C38.3667605,26.5291977 37.5821037,27.4474817 36.790607,26.7670228 C34.3395063,24.6597833 30.8587163,23.3437884 26.9975803,23.3437884 C23.2572061,23.3437884 19.8737584,24.5787519 17.4375392,26.5716412 C16.5467928,27.3002944 15.6201012,26.5583844 16.1601674,25.4473116 Z"
+                              fill="#000000"
+                              fill-opacity="0.599999964"
+                              id="Winky-Doodle"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.599999964"
+                            id="Eyebrow/Outline/Raised-Excited"
+                          >
+                            <g
+                              id="I-Browse"
+                              transform="translate(12.000000, 0.000000)"
+                            >
+                              <path
+                                d="M3.97579559,17.1279169 C5.47099148,7.60476158 18.0585488,1.10867597 27.1635167,5.30104271 C28.1668367,5.76301969 29.3546946,5.32417444 29.8166716,4.32085442 C30.2786486,3.3175344 29.8398033,2.12967649 28.8364833,1.66769952 C17.3488212,-3.62177466 1.93575948,4.3324746 0.0242044059,16.507492 C-0.147121205,17.5986938 0.598585765,18.6221744 1.68978754,18.7935 C2.78098932,18.9648257 3.80446998,18.2191187 3.97579559,17.1279169 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                              />
+                              <path
+                                d="M61.9757956,17.1279169 C63.4709915,7.60476158 76.0585488,1.10867597 85.1635167,5.30104271 C86.1668367,5.76301969 87.3546946,5.32417444 87.8166716,4.32085442 C88.2786486,3.3175344 87.8398033,2.12967649 86.8364833,1.66769952 C75.3488212,-3.62177466 59.9357595,4.3324746 58.0242044,16.507492 C57.8528788,17.5986938 58.5985858,18.6221744 59.6897875,18.7935 C60.7809893,18.9648257 61.80447,18.2191187 61.9757956,17.1279169 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                                transform="translate(73.000097, 9.410436) scale(-1, 1) translate(-73.000097, -9.410436) "
+                              />
+                            </g>
+                          </g>
+                        </g>
+                        <g
+                          fill-rule="evenodd"
+                          id="Top"
+                          stroke-width="1"
+                        >
+                          <defs>
+                            <rect
+                              height="280"
+                              id="react-path-590"
+                              width="264"
+                              x="0"
+                              y="0"
+                            />
+                            <filter
+                              filterUnits="objectBoundingBox"
+                              height="108.0%"
+                              id="react-filter-588"
+                              width="101.5%"
+                              x="-0.8%"
+                              y="-2.0%"
+                            >
+                              <feoffset
+                                dx="0"
+                                dy="2"
+                                in="SourceAlpha"
+                                result="shadowOffsetOuter1"
+                              />
+                              <fecolormatrix
+                                in="shadowOffsetOuter1"
+                                result="shadowMatrixOuter1"
+                                type="matrix"
+                                values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.16 0"
+                              />
+                              <femerge>
+                                <femergenode
+                                  in="shadowMatrixOuter1"
+                                />
+                                <femergenode
+                                  in="SourceGraphic"
+                                />
+                              </femerge>
+                            </filter>
+                          </defs>
+                          <mask
+                            fill="white"
+                            id="react-mask-589"
+                          >
+                            <use
+                              xlink:href="#react-path-590"
+                            />
+                          </mask>
+                          <g
+                            id="Mask"
+                          />
+                          <g
+                            id="Top/No-Hair"
+                            mask="url(#react-mask-589)"
+                          >
+                            <g
+                              transform="translate(-1.000000, 0.000000)"
+                            >
+                              <g
+                                fill="none"
+                                id="Top/_Resources/Round"
+                                transform="translate(62.000000, 85.000000)"
+                              >
+                                <defs>
+                                  <path
+                                    d="M80.4646192,16.3941179 C84.3801509,8.45869677 92.552602,3 102,3 C110.919691,3 118.702887,7.86591082 122.839921,15.0880638 C123.050197,15.0306504 123.271519,15 123.5,15 L131.5,15 C132.880712,15 134,16.1192881 134,17.5 C134,18.8807119 132.880712,20 131.5,20 L124.963126,20 C125.637355,22.2145921 126,24.5649459 126,27 C126,40.254834 115.254834,51 102,51 C88.745166,51 78,40.254834 78,27 C78,25.5781066 78.1236513,24.1850936 78.3607874,22.8311273 C78.2762458,18.4553035 74.9135957,15 70.8624171,15 C67.1256697,15 63.9747186,17.9397535 63.4417635,21.8300629 C63.8073299,23.4951922 64,25.2250958 64,27 C64,40.254834 53.254834,51 40,51 C26.745166,51 16,40.254834 16,27 C16,24.5649459 16.3626451,22.2145921 17.0368738,20 L10.5,20 C9.11928813,20 8,18.8807119 8,17.5 C8,16.1192881 9.11928813,15 10.5,15 L10.5,15 L18.5,15 C18.728481,15 18.9498033,15.0306504 19.1600793,15.0880638 C23.2971127,7.86591082 31.0803092,3 40,3 C49.3521568,3 57.4549431,8.34919095 61.415666,16.15488 C63.4929212,13.0392725 66.9494432,11 70.8624171,11 C74.8746823,11 78.4070368,13.1440781 80.4646192,16.3941179 Z M40,47 C51.045695,47 60,38.045695 60,27 C60,15.954305 51.045695,7 40,7 C28.954305,7 20,15.954305 20,27 C20,38.045695 28.954305,47 40,47 Z M102,47 C113.045695,47 122,38.045695 122,27 C122,15.954305 113.045695,7 102,7 C90.954305,7 82,15.954305 82,27 C82,38.045695 90.954305,47 102,47 Z"
+                                    id="react-path-591"
+                                  />
+                                  <filter
+                                    filterUnits="objectBoundingBox"
+                                    height="108.3%"
+                                    id="react-filter-592"
+                                    width="101.6%"
+                                    x="-0.8%"
+                                    y="-2.1%"
+                                  >
+                                    <feoffset
+                                      dx="0"
+                                      dy="2"
+                                      in="SourceAlpha"
+                                      result="shadowOffsetOuter1"
+                                    />
+                                    <fecolormatrix
+                                      in="shadowOffsetOuter1"
+                                      type="matrix"
+                                      values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0"
+                                    />
+                                  </filter>
+                                </defs>
+                                <g
+                                  id="Lennon-Glasses"
+                                >
+                                  <use
+                                    fill="black"
+                                    fill-opacity="1"
+                                    filter="url(#react-filter-592)"
+                                    xlink:href="#react-path-591"
+                                  />
+                                  <use
+                                    fill="#252C2F"
+                                    fill-rule="evenodd"
+                                    xlink:href="#react-path-591"
+                                  />
+                                </g>
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
             </div>
             <figcaption
               class="note-dialog__note-author-name"
@@ -95,11 +545,386 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           >
             <div
               class="user-avatar note-dialog__note-user-avatar"
+              title=""
             >
-              <div
-                class="user__initials"
-                title=""
-              />
+              <svg
+                class="avatar note-dialog__note-user-avatar"
+                height="280px"
+                version="1.1"
+                viewBox="0 0 264 280"
+                width="264px"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <desc>
+                  Created with getavataaars.com
+                </desc>
+                <defs>
+                  <circle
+                    cx="120"
+                    cy="120"
+                    id="react-path-593"
+                    r="120"
+                  />
+                  <path
+                    d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
+                    id="react-path-594"
+                  />
+                  <path
+                    d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
+                    id="react-path-595"
+                  />
+                </defs>
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                  id="Avataaar"
+                  stroke="none"
+                  stroke-width="1"
+                >
+                  <g
+                    id="Avataaar/Circle"
+                    transform="translate(-825.000000, -1100.000000)"
+                  >
+                    <g
+                      transform="translate(825.000000, 1100.000000)"
+                    >
+                      <g
+                        fill-rule="evenodd"
+                        id="Circle"
+                        stroke-width="1"
+                        transform="translate(12.000000, 40.000000)"
+                      >
+                        <mask
+                          fill="white"
+                          id="react-mask-596"
+                        >
+                          <use
+                            xlink:href="#react-path-593"
+                          />
+                        </mask>
+                        <use
+                          fill="#E6E6E6"
+                          id="Circle-Background"
+                          xlink:href="#react-path-593"
+                        />
+                        <g
+                          fill="#65C9FF"
+                          id="Color/Palette/Blue-01"
+                          mask="url(#react-mask-596)"
+                        >
+                          <rect
+                            height="240"
+                            id="🖍Color"
+                            width="240"
+                            x="0"
+                            y="0"
+                          />
+                        </g>
+                      </g>
+                      <mask
+                        fill="white"
+                        id="react-mask-597"
+                      >
+                        <use
+                          xlink:href="#react-path-594"
+                        />
+                      </mask>
+                      <g
+                        id="Mask"
+                      />
+                      <g
+                        fill-rule="evenodd"
+                        id="Avataaar"
+                        mask="url(#react-mask-597)"
+                        stroke-width="1"
+                      >
+                        <g
+                          id="Body"
+                          transform="translate(32.000000, 36.000000)"
+                        >
+                          <mask
+                            fill="white"
+                            id="react-mask-598"
+                          >
+                            <use
+                              xlink:href="#react-path-595"
+                            />
+                          </mask>
+                          <use
+                            fill="#D0C6AC"
+                            xlink:href="#react-path-595"
+                          />
+                          <g
+                            fill="#EDB98A"
+                            id="Skin/👶🏽-03-Brown"
+                            mask="url(#react-mask-598)"
+                          >
+                            <g
+                              id="Color"
+                              transform="translate(0.000000, 0.000000)"
+                            >
+                              <rect
+                                height="280"
+                                width="264"
+                                x="0"
+                                y="0"
+                              />
+                            </g>
+                          </g>
+                          <path
+                            d="M156,79 L156,102 C156,132.927946 130.927946,158 100,158 C69.072054,158 44,132.927946 44,102 L44,79 L44,94 C44,124.927946 69.072054,150 100,150 C130.927946,150 156,124.927946 156,94 L156,79 Z"
+                            fill="#000000"
+                            fill-opacity="0.100000001"
+                            id="Neck-Shadow"
+                            mask="url(#react-mask-598)"
+                          />
+                        </g>
+                        <g
+                          id="Clothing/Blazer-+-Shirt"
+                          transform="translate(0.000000, 170.000000)"
+                        >
+                          <defs>
+                            <path
+                              d="M133.960472,0.294916112 C170.936473,3.32499816 200,34.2942856 200,72.0517235 L200,81 L0,81 L0,72.0517235 C1.22536245e-14,33.9525631 29.591985,2.76498122 67.0454063,0.219526408 C67.0152598,0.593114549 67,0.969227185 67,1.34762511 C67,13.2107177 81.9984609,22.8276544 100.5,22.8276544 C119.001539,22.8276544 134,13.2107177 134,1.34762511 C134,0.994669088 133.986723,0.64370138 133.960472,0.294916112 Z"
+                              id="react-path-599"
+                            />
+                          </defs>
+                          <g
+                            id="Shirt"
+                            transform="translate(32.000000, 29.000000)"
+                          >
+                            <mask
+                              fill="white"
+                              id="react-mask-600"
+                            >
+                              <use
+                                xlink:href="#react-path-599"
+                              />
+                            </mask>
+                            <use
+                              fill="#E6E6E6"
+                              id="Clothes"
+                              xlink:href="#react-path-599"
+                            />
+                            <g
+                              fill="#262E33"
+                              id="Color/Palette/Black"
+                              mask="url(#react-mask-600)"
+                            >
+                              <g
+                                id="🖍Color"
+                                transform="translate(-32.000000, -29.000000)"
+                              >
+                                <rect
+                                  height="110"
+                                  width="264"
+                                  x="0"
+                                  y="0"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              fill="#000000"
+                              fill-opacity="0.16"
+                              id="Shadowy"
+                              mask="url(#react-mask-600)"
+                              opacity="0.599999964"
+                            >
+                              <g
+                                id="Hola-👋🏼"
+                                transform="translate(60.000000, -25.000000)"
+                              >
+                                <ellipse
+                                  cx="40.5"
+                                  cy="27.8476251"
+                                  rx="39.6351047"
+                                  ry="26.9138272"
+                                />
+                              </g>
+                            </g>
+                          </g>
+                          <g
+                            id="Blazer"
+                            transform="translate(32.000000, 28.000000)"
+                          >
+                            <path
+                              d="M68.784807,1.12222847 C30.512317,2.80409739 -1.89486556e-14,34.3646437 -1.42108547e-14,73.0517235 L0,73.0517235 L0,82 L69.3616767,82 C65.9607412,69.9199941 64,55.7087296 64,40.5 C64,26.1729736 65.7399891,12.7311115 68.784807,1.12222847 Z M131.638323,82 L200,82 L200,73.0517235 C200,34.7067641 170.024954,3.36285166 132.228719,1.17384225 C135.265163,12.7709464 137,26.1942016 137,40.5 C137,55.7087296 135.039259,69.9199941 131.638323,82 Z"
+                              fill="#3A4C5A"
+                              id="Saco"
+                            />
+                            <path
+                              d="M149,58 L158.555853,50.83311 L158.555853,50.83311 C159.998897,49.7508275 161.987779,49.7682725 163.411616,50.8757011 L170,56 L149,58 Z"
+                              fill="#E6E6E6"
+                              id="Pocket-hanky"
+                            />
+                            <path
+                              d="M69,1.13686838e-13 C65,19.3333333 66.6666667,46.6666667 74,82 L58,82 L44,46 L50,37 L44,31 L63,1 C65.027659,0.369238637 67.027659,0.0359053037 69,1.13686838e-13 Z"
+                              fill="#2F4351"
+                              id="Wing"
+                            />
+                            <path
+                              d="M151,1.13686838e-13 C147,19.3333333 148.666667,46.6666667 156,82 L140,82 L126,46 L132,37 L126,31 L145,1 C147.027659,0.369238637 149.027659,0.0359053037 151,1.13686838e-13 Z"
+                              fill="#2F4351"
+                              id="Wing"
+                              transform="translate(141.000000, 41.000000) scale(-1, 1) translate(-141.000000, -41.000000) "
+                            />
+                          </g>
+                        </g>
+                        <g
+                          fill="#000000"
+                          id="Face"
+                          transform="translate(76.000000, 82.000000)"
+                        >
+                          <g
+                            fill-opacity="0.699999988"
+                            id="Mouth/Default"
+                            transform="translate(2.000000, 52.000000)"
+                          >
+                            <path
+                              d="M40,15 C40,22.7319865 46.2680135,29 54,29 L54,29 C61.7319865,29 68,22.7319865 68,15"
+                              id="Mouth"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.16"
+                            id="Nose/Default"
+                            transform="translate(28.000000, 40.000000)"
+                          >
+                            <path
+                              d="M16,8 C16,12.418278 21.372583,16 28,16 L28,16 C34.627417,16 40,12.418278 40,8"
+                              id="Nose"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.599999964"
+                            id="Eyes/Default-😀"
+                            transform="translate(0.000000, 8.000000)"
+                          >
+                            <circle
+                              cx="30"
+                              cy="22"
+                              id="Eye"
+                              r="6"
+                            />
+                            <circle
+                              cx="82"
+                              cy="22"
+                              id="Eye"
+                              r="6"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.599999964"
+                            id="Eyebrow/Outline/Default"
+                          >
+                            <g
+                              id="I-Browse"
+                              transform="translate(12.000000, 6.000000)"
+                            >
+                              <path
+                                d="M3.63024536,11.1585767 C7.54515501,5.64986673 18.2779197,2.56083721 27.5230268,4.83118046 C28.5957248,5.0946055 29.6788665,4.43856013 29.9422916,3.36586212 C30.2057166,2.2931641 29.5496712,1.21002236 28.4769732,0.94659732 C17.7403633,-1.69001789 5.31209962,1.88699832 0.369754639,8.84142326 C-0.270109626,9.74178291 -0.0589363917,10.9903811 0.84142326,11.6302454 C1.74178291,12.2701096 2.9903811,12.0589364 3.63024536,11.1585767 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                              />
+                              <path
+                                d="M61.6302454,11.1585767 C65.545155,5.64986673 76.2779197,2.56083721 85.5230268,4.83118046 C86.5957248,5.0946055 87.6788665,4.43856013 87.9422916,3.36586212 C88.2057166,2.2931641 87.5496712,1.21002236 86.4769732,0.94659732 C75.7403633,-1.69001789 63.3120996,1.88699832 58.3697546,8.84142326 C57.7298904,9.74178291 57.9410636,10.9903811 58.8414233,11.6302454 C59.7417829,12.2701096 60.9903811,12.0589364 61.6302454,11.1585767 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                                transform="translate(73.000154, 6.039198) scale(-1, 1) translate(-73.000154, -6.039198) "
+                              />
+                            </g>
+                          </g>
+                        </g>
+                        <g
+                          fill-rule="evenodd"
+                          id="Top"
+                          stroke-width="1"
+                        >
+                          <defs>
+                            <rect
+                              height="280"
+                              id="react-path-603"
+                              width="264"
+                              x="0"
+                              y="0"
+                            />
+                            <path
+                              d="M133.506381,81.3351151 C137.363649,83.3307002 140,87.3574737 140,92 L140,105 C140,111.018625 135.569129,116.002364 129.791419,116.867187 C128.048193,137.114792 115.530782,154.282984 98,162.610951 L98,162.610951 L98,181 L102,181 C119.490913,181 135.525121,187.236892 148,197.608051 L148,74 C148,53.5654643 139.717268,35.0654643 126.325902,21.6740982 C112.934536,8.28273213 94.4345357,-3.55271368e-15 74,0 C33.1309285,7.10542736e-15 -7.10542736e-15,33.1309285 0,74 L0,257.716445 C13.5691766,255.775526 24,244.105888 24,230 L24,184.423101 C30.9346808,182.200199 38.3271796,181 46,181 L50,181 L50,162.610951 C38.7726252,157.277407 29.6015372,148.317951 24,137.245847 L24,75.2659587 C33.1467898,72.2910056 42.777598,68.0170651 52.3415164,62.4953343 C67.7445474,53.6023901 80.4313947,42.9409152 89.0661426,32.3970356 C90.8310687,37.5951441 93.1752556,42.8009742 96.1104311,47.8848473 C104.877881,63.0705152 117.224186,74.2337047 130,79.9170491 L130,80.1659169 C130.400422,80.233095 130.794121,80.3201038 131.18005,80.4258987 C131.954509,80.7493055 132.730185,81.0524853 133.506381,81.3351151 Z"
+                              id="react-path-604"
+                            />
+                          </defs>
+                          <mask
+                            fill="white"
+                            id="react-mask-601"
+                          >
+                            <use
+                              xlink:href="#react-path-603"
+                            />
+                          </mask>
+                          <g
+                            id="Mask"
+                          />
+                          <g
+                            id="Top/Long-Hair/Straight"
+                            mask="url(#react-mask-601)"
+                          >
+                            <g
+                              transform="translate(-1.000000, 0.000000)"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                                id="Hair"
+                                stroke-width="1"
+                                transform="translate(59.000000, 18.000000)"
+                              >
+                                <mask
+                                  fill="white"
+                                  id="react-mask-602"
+                                >
+                                  <use
+                                    xlink:href="#react-path-604"
+                                  />
+                                </mask>
+                                <use
+                                  fill="#944F23"
+                                  id="Mask-Hair"
+                                  xlink:href="#react-path-604"
+                                />
+                                <g
+                                  fill="#4A312C"
+                                  id="Skin/👶🏽-03-Brown"
+                                  mask="url(#react-mask-602)"
+                                >
+                                  <g
+                                    id="Color"
+                                    transform="translate(0.000000, 0.000000) "
+                                  >
+                                    <rect
+                                      height="280"
+                                      width="264"
+                                      x="0"
+                                      y="0"
+                                    />
+                                  </g>
+                                </g>
+                              </g>
+                              <path
+                                d="M192.506381,99.3351151 C197.3745,101.107702 202.263079,102.071957 207,102.148232 L207,102.148232 L207,92 C207,71.5654643 198.717268,53.0654643 185.325902,39.6740982 C198.717268,53.0654643 207,71.5654643 207,92 L207,215.608051 C194.525121,205.236892 178.490913,199 161,199 L157,199 L157,180.610951 L157,180.610951 C174.530782,172.282984 187.048193,155.114792 188.791419,134.867187 C194.569129,134.002364 199,129.018625 199,123 L199,110 C199,105.357474 196.363649,101.3307 192.506381,99.3351151 Z M190.18005,98.4258987 C189.794121,98.3201038 189.400422,98.233095 189,98.1659169 L189,97.9170491 C189.392974,98.0918644 189.786355,98.2614951 190.18005,98.4258987 Z M83,155.245847 C88.6015372,166.317951 97.7726252,175.277407 109,180.610951 L109,199 L105,199 C97.3271796,199 89.9346808,200.200199 83,202.423101 L83,155.245847 Z"
+                                fill="#000000"
+                                fill-opacity="0.24"
+                                fill-rule="evenodd"
+                                id="Shadow"
+                              />
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
             </div>
             <figcaption
               class="note-dialog__note-author-name"
@@ -160,11 +985,386 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
           >
             <div
               class="user-avatar note-dialog__note-user-avatar"
+              title=""
             >
-              <div
-                class="user__initials"
-                title=""
-              />
+              <svg
+                class="avatar note-dialog__note-user-avatar"
+                height="280px"
+                version="1.1"
+                viewBox="0 0 264 280"
+                width="264px"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <desc>
+                  Created with getavataaars.com
+                </desc>
+                <defs>
+                  <circle
+                    cx="120"
+                    cy="120"
+                    id="react-path-605"
+                    r="120"
+                  />
+                  <path
+                    d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
+                    id="react-path-606"
+                  />
+                  <path
+                    d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
+                    id="react-path-607"
+                  />
+                </defs>
+                <g
+                  fill="none"
+                  fill-rule="evenodd"
+                  id="Avataaar"
+                  stroke="none"
+                  stroke-width="1"
+                >
+                  <g
+                    id="Avataaar/Circle"
+                    transform="translate(-825.000000, -1100.000000)"
+                  >
+                    <g
+                      transform="translate(825.000000, 1100.000000)"
+                    >
+                      <g
+                        fill-rule="evenodd"
+                        id="Circle"
+                        stroke-width="1"
+                        transform="translate(12.000000, 40.000000)"
+                      >
+                        <mask
+                          fill="white"
+                          id="react-mask-608"
+                        >
+                          <use
+                            xlink:href="#react-path-605"
+                          />
+                        </mask>
+                        <use
+                          fill="#E6E6E6"
+                          id="Circle-Background"
+                          xlink:href="#react-path-605"
+                        />
+                        <g
+                          fill="#65C9FF"
+                          id="Color/Palette/Blue-01"
+                          mask="url(#react-mask-608)"
+                        >
+                          <rect
+                            height="240"
+                            id="🖍Color"
+                            width="240"
+                            x="0"
+                            y="0"
+                          />
+                        </g>
+                      </g>
+                      <mask
+                        fill="white"
+                        id="react-mask-609"
+                      >
+                        <use
+                          xlink:href="#react-path-606"
+                        />
+                      </mask>
+                      <g
+                        id="Mask"
+                      />
+                      <g
+                        fill-rule="evenodd"
+                        id="Avataaar"
+                        mask="url(#react-mask-609)"
+                        stroke-width="1"
+                      >
+                        <g
+                          id="Body"
+                          transform="translate(32.000000, 36.000000)"
+                        >
+                          <mask
+                            fill="white"
+                            id="react-mask-610"
+                          >
+                            <use
+                              xlink:href="#react-path-607"
+                            />
+                          </mask>
+                          <use
+                            fill="#D0C6AC"
+                            xlink:href="#react-path-607"
+                          />
+                          <g
+                            fill="#EDB98A"
+                            id="Skin/👶🏽-03-Brown"
+                            mask="url(#react-mask-610)"
+                          >
+                            <g
+                              id="Color"
+                              transform="translate(0.000000, 0.000000)"
+                            >
+                              <rect
+                                height="280"
+                                width="264"
+                                x="0"
+                                y="0"
+                              />
+                            </g>
+                          </g>
+                          <path
+                            d="M156,79 L156,102 C156,132.927946 130.927946,158 100,158 C69.072054,158 44,132.927946 44,102 L44,79 L44,94 C44,124.927946 69.072054,150 100,150 C130.927946,150 156,124.927946 156,94 L156,79 Z"
+                            fill="#000000"
+                            fill-opacity="0.100000001"
+                            id="Neck-Shadow"
+                            mask="url(#react-mask-610)"
+                          />
+                        </g>
+                        <g
+                          id="Clothing/Blazer-+-Shirt"
+                          transform="translate(0.000000, 170.000000)"
+                        >
+                          <defs>
+                            <path
+                              d="M133.960472,0.294916112 C170.936473,3.32499816 200,34.2942856 200,72.0517235 L200,81 L0,81 L0,72.0517235 C1.22536245e-14,33.9525631 29.591985,2.76498122 67.0454063,0.219526408 C67.0152598,0.593114549 67,0.969227185 67,1.34762511 C67,13.2107177 81.9984609,22.8276544 100.5,22.8276544 C119.001539,22.8276544 134,13.2107177 134,1.34762511 C134,0.994669088 133.986723,0.64370138 133.960472,0.294916112 Z"
+                              id="react-path-611"
+                            />
+                          </defs>
+                          <g
+                            id="Shirt"
+                            transform="translate(32.000000, 29.000000)"
+                          >
+                            <mask
+                              fill="white"
+                              id="react-mask-612"
+                            >
+                              <use
+                                xlink:href="#react-path-611"
+                              />
+                            </mask>
+                            <use
+                              fill="#E6E6E6"
+                              id="Clothes"
+                              xlink:href="#react-path-611"
+                            />
+                            <g
+                              fill="#262E33"
+                              id="Color/Palette/Black"
+                              mask="url(#react-mask-612)"
+                            >
+                              <g
+                                id="🖍Color"
+                                transform="translate(-32.000000, -29.000000)"
+                              >
+                                <rect
+                                  height="110"
+                                  width="264"
+                                  x="0"
+                                  y="0"
+                                />
+                              </g>
+                            </g>
+                            <g
+                              fill="#000000"
+                              fill-opacity="0.16"
+                              id="Shadowy"
+                              mask="url(#react-mask-612)"
+                              opacity="0.599999964"
+                            >
+                              <g
+                                id="Hola-👋🏼"
+                                transform="translate(60.000000, -25.000000)"
+                              >
+                                <ellipse
+                                  cx="40.5"
+                                  cy="27.8476251"
+                                  rx="39.6351047"
+                                  ry="26.9138272"
+                                />
+                              </g>
+                            </g>
+                          </g>
+                          <g
+                            id="Blazer"
+                            transform="translate(32.000000, 28.000000)"
+                          >
+                            <path
+                              d="M68.784807,1.12222847 C30.512317,2.80409739 -1.89486556e-14,34.3646437 -1.42108547e-14,73.0517235 L0,73.0517235 L0,82 L69.3616767,82 C65.9607412,69.9199941 64,55.7087296 64,40.5 C64,26.1729736 65.7399891,12.7311115 68.784807,1.12222847 Z M131.638323,82 L200,82 L200,73.0517235 C200,34.7067641 170.024954,3.36285166 132.228719,1.17384225 C135.265163,12.7709464 137,26.1942016 137,40.5 C137,55.7087296 135.039259,69.9199941 131.638323,82 Z"
+                              fill="#3A4C5A"
+                              id="Saco"
+                            />
+                            <path
+                              d="M149,58 L158.555853,50.83311 L158.555853,50.83311 C159.998897,49.7508275 161.987779,49.7682725 163.411616,50.8757011 L170,56 L149,58 Z"
+                              fill="#E6E6E6"
+                              id="Pocket-hanky"
+                            />
+                            <path
+                              d="M69,1.13686838e-13 C65,19.3333333 66.6666667,46.6666667 74,82 L58,82 L44,46 L50,37 L44,31 L63,1 C65.027659,0.369238637 67.027659,0.0359053037 69,1.13686838e-13 Z"
+                              fill="#2F4351"
+                              id="Wing"
+                            />
+                            <path
+                              d="M151,1.13686838e-13 C147,19.3333333 148.666667,46.6666667 156,82 L140,82 L126,46 L132,37 L126,31 L145,1 C147.027659,0.369238637 149.027659,0.0359053037 151,1.13686838e-13 Z"
+                              fill="#2F4351"
+                              id="Wing"
+                              transform="translate(141.000000, 41.000000) scale(-1, 1) translate(-141.000000, -41.000000) "
+                            />
+                          </g>
+                        </g>
+                        <g
+                          fill="#000000"
+                          id="Face"
+                          transform="translate(76.000000, 82.000000)"
+                        >
+                          <g
+                            fill-opacity="0.699999988"
+                            id="Mouth/Default"
+                            transform="translate(2.000000, 52.000000)"
+                          >
+                            <path
+                              d="M40,15 C40,22.7319865 46.2680135,29 54,29 L54,29 C61.7319865,29 68,22.7319865 68,15"
+                              id="Mouth"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.16"
+                            id="Nose/Default"
+                            transform="translate(28.000000, 40.000000)"
+                          >
+                            <path
+                              d="M16,8 C16,12.418278 21.372583,16 28,16 L28,16 C34.627417,16 40,12.418278 40,8"
+                              id="Nose"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.599999964"
+                            id="Eyes/Default-😀"
+                            transform="translate(0.000000, 8.000000)"
+                          >
+                            <circle
+                              cx="30"
+                              cy="22"
+                              id="Eye"
+                              r="6"
+                            />
+                            <circle
+                              cx="82"
+                              cy="22"
+                              id="Eye"
+                              r="6"
+                            />
+                          </g>
+                          <g
+                            fill-opacity="0.599999964"
+                            id="Eyebrow/Outline/Default"
+                          >
+                            <g
+                              id="I-Browse"
+                              transform="translate(12.000000, 6.000000)"
+                            >
+                              <path
+                                d="M3.63024536,11.1585767 C7.54515501,5.64986673 18.2779197,2.56083721 27.5230268,4.83118046 C28.5957248,5.0946055 29.6788665,4.43856013 29.9422916,3.36586212 C30.2057166,2.2931641 29.5496712,1.21002236 28.4769732,0.94659732 C17.7403633,-1.69001789 5.31209962,1.88699832 0.369754639,8.84142326 C-0.270109626,9.74178291 -0.0589363917,10.9903811 0.84142326,11.6302454 C1.74178291,12.2701096 2.9903811,12.0589364 3.63024536,11.1585767 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                              />
+                              <path
+                                d="M61.6302454,11.1585767 C65.545155,5.64986673 76.2779197,2.56083721 85.5230268,4.83118046 C86.5957248,5.0946055 87.6788665,4.43856013 87.9422916,3.36586212 C88.2057166,2.2931641 87.5496712,1.21002236 86.4769732,0.94659732 C75.7403633,-1.69001789 63.3120996,1.88699832 58.3697546,8.84142326 C57.7298904,9.74178291 57.9410636,10.9903811 58.8414233,11.6302454 C59.7417829,12.2701096 60.9903811,12.0589364 61.6302454,11.1585767 Z"
+                                fill-rule="nonzero"
+                                id="Eyebrow"
+                                transform="translate(73.000154, 6.039198) scale(-1, 1) translate(-73.000154, -6.039198) "
+                              />
+                            </g>
+                          </g>
+                        </g>
+                        <g
+                          fill-rule="evenodd"
+                          id="Top"
+                          stroke-width="1"
+                        >
+                          <defs>
+                            <rect
+                              height="280"
+                              id="react-path-615"
+                              width="264"
+                              x="0"
+                              y="0"
+                            />
+                            <path
+                              d="M133.506381,81.3351151 C137.363649,83.3307002 140,87.3574737 140,92 L140,105 C140,111.018625 135.569129,116.002364 129.791419,116.867187 C128.048193,137.114792 115.530782,154.282984 98,162.610951 L98,162.610951 L98,181 L102,181 C119.490913,181 135.525121,187.236892 148,197.608051 L148,74 C148,53.5654643 139.717268,35.0654643 126.325902,21.6740982 C112.934536,8.28273213 94.4345357,-3.55271368e-15 74,0 C33.1309285,7.10542736e-15 -7.10542736e-15,33.1309285 0,74 L0,257.716445 C13.5691766,255.775526 24,244.105888 24,230 L24,184.423101 C30.9346808,182.200199 38.3271796,181 46,181 L50,181 L50,162.610951 C38.7726252,157.277407 29.6015372,148.317951 24,137.245847 L24,75.2659587 C33.1467898,72.2910056 42.777598,68.0170651 52.3415164,62.4953343 C67.7445474,53.6023901 80.4313947,42.9409152 89.0661426,32.3970356 C90.8310687,37.5951441 93.1752556,42.8009742 96.1104311,47.8848473 C104.877881,63.0705152 117.224186,74.2337047 130,79.9170491 L130,80.1659169 C130.400422,80.233095 130.794121,80.3201038 131.18005,80.4258987 C131.954509,80.7493055 132.730185,81.0524853 133.506381,81.3351151 Z"
+                              id="react-path-616"
+                            />
+                          </defs>
+                          <mask
+                            fill="white"
+                            id="react-mask-613"
+                          >
+                            <use
+                              xlink:href="#react-path-615"
+                            />
+                          </mask>
+                          <g
+                            id="Mask"
+                          />
+                          <g
+                            id="Top/Long-Hair/Straight"
+                            mask="url(#react-mask-613)"
+                          >
+                            <g
+                              transform="translate(-1.000000, 0.000000)"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                                id="Hair"
+                                stroke-width="1"
+                                transform="translate(59.000000, 18.000000)"
+                              >
+                                <mask
+                                  fill="white"
+                                  id="react-mask-614"
+                                >
+                                  <use
+                                    xlink:href="#react-path-616"
+                                  />
+                                </mask>
+                                <use
+                                  fill="#944F23"
+                                  id="Mask-Hair"
+                                  xlink:href="#react-path-616"
+                                />
+                                <g
+                                  fill="#4A312C"
+                                  id="Skin/👶🏽-03-Brown"
+                                  mask="url(#react-mask-614)"
+                                >
+                                  <g
+                                    id="Color"
+                                    transform="translate(0.000000, 0.000000) "
+                                  >
+                                    <rect
+                                      height="280"
+                                      width="264"
+                                      x="0"
+                                      y="0"
+                                    />
+                                  </g>
+                                </g>
+                              </g>
+                              <path
+                                d="M192.506381,99.3351151 C197.3745,101.107702 202.263079,102.071957 207,102.148232 L207,102.148232 L207,92 C207,71.5654643 198.717268,53.0654643 185.325902,39.6740982 C198.717268,53.0654643 207,71.5654643 207,92 L207,215.608051 C194.525121,205.236892 178.490913,199 161,199 L157,199 L157,180.610951 L157,180.610951 C174.530782,172.282984 187.048193,155.114792 188.791419,134.867187 C194.569129,134.002364 199,129.018625 199,123 L199,110 C199,105.357474 196.363649,101.3307 192.506381,99.3351151 Z M190.18005,98.4258987 C189.794121,98.3201038 189.400422,98.233095 189,98.1659169 L189,97.9170491 C189.392974,98.0918644 189.786355,98.2614951 190.18005,98.4258987 Z M83,155.245847 C88.6015372,166.317951 97.7726252,175.277407 109,180.610951 L109,199 L105,199 C97.3271796,199 89.9346808,200.200199 83,202.423101 L83,155.245847 Z"
+                                fill="#000000"
+                                fill-opacity="0.24"
+                                fill-rule="evenodd"
+                                id="Shadow"
+                              />
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </svg>
             </div>
             <figcaption
               class="note-dialog__note-author-name"
