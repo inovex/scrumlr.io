@@ -27,7 +27,7 @@ $header-menu-button-height: 24px;
   position: absolute;
   top: 13px;
   left: 13px;
-  color: $color-waring-red;
+  color: $color-warning-red;
 }
 
 .delete-board-option__delete-board {
@@ -36,10 +36,10 @@ $header-menu-button-height: 24px;
   left: 72px;
   height: $header-menu-button-height;
   width: 144px;
-  border: $header-menu__item-border-width solid $color-waring-red;
+  border: $header-menu__item-border-width solid $color-warning-red;
   border-radius: 32px;
   background-color: transparent;
-  color: $color-waring-red;
+  color: $color-warning-red;
   cursor: pointer;
 }
 .delete-board-option__delete-board :focus {
