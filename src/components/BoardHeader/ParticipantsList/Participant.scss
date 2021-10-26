@@ -26,11 +26,15 @@
   margin: 0;
 }
 
-.participant .participant__user-avatar {
+.participant .participant__user-avatar-wrapper {
   margin: 10px 0 0 12px;
   height: 28px;
   width: 28px;
-  font-size: 13px;
+}
+
+.participant .participant__user-avatar {
+  height: 28px;
+  width: 28px;
 }
 
 .participant figcaption {

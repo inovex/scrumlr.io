@@ -106,47 +106,44 @@ const MOUTH_TYPES = ["Concerned", "Default", "Disbelief", "Eating", "Grimace", "
 export type AvatarMouthType = typeof MOUTH_TYPES[number];
 
 const hashCode = function (s: string) {
-  let h = 0;
-  const l = s.length;
+  let hash = 0;
+  const stringLength = s.length;
   let i = 0;
-  if (l > 0) {
-    while (i < l) {
-      h = ((h << 5) - h + s.charCodeAt(i++)) | 0;
+  if (stringLength > 0) {
+    while (i < stringLength) {
+      hash = ((hash << 5) - hash + s.charCodeAt(i++)) | 0;
     }
   }
-  return h;
+  return hash;
 };
 
 const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
+  const props: AvatarProps = {};
 
-  const skinColor = SKIN_COLORS[hash % SKIN_COLORS.length];
-  const topType = TOP_TYPES[hash % TOP_TYPES.length];
-  const clotheType = CLOTHE_TYPES[hash % CLOTHE_TYPES.length];
-  const clotheColor = CLOTHE_COLORS[hash % CLOTHE_COLORS.length];
-  const graphicType = GRAPHIC_TYPES[hash % GRAPHIC_TYPES.length];
-  const hairColor = HAIR_COLORS[hash % HAIR_COLORS.length];
-  const facialHairColor = FACIAL_HAIR_COLORS[hash % FACIAL_HAIR_COLORS.length];
-  const facialHairType = FACIAL_HAIR_COLORS[hash % FACIAL_HAIR_COLORS.length];
-  const accessoriesType = ACCESSORIES_TYPES[hash % ACCESSORIES_TYPES.length];
-  const eyebrowType = EYEBROW_TYPES[hash % EYEBROW_TYPES.length];
-  const eyeType = EYE_TYPES[hash % EYE_TYPES.length];
-  const mouthType = MOUTH_TYPES[hash % MOUTH_TYPES.length];
+  props.skinColor = SKIN_COLORS[hash % SKIN_COLORS.length];
+  props.topType = TOP_TYPES[hash % TOP_TYPES.length];
+  props.clotheType = CLOTHE_TYPES[hash % CLOTHE_TYPES.length];
+  props.clotheColor = CLOTHE_COLORS[hash % CLOTHE_COLORS.length];
+  props.graphicType = GRAPHIC_TYPES[hash % GRAPHIC_TYPES.length];
+  props.hairColor = HAIR_COLORS[hash % HAIR_COLORS.length];
 
-  return {
-    skinColor,
-    topType,
-    clotheType,
-    clotheColor,
-    graphicType,
-    hairColor,
-    facialHairType,
-    facialHairColor,
-    accessoriesType,
-    eyebrowType,
-    eyeType,
-    mouthType,
-  };
+  const hasFacialHair = hash % 2 === 0;
+  if (hasFacialHair) {
+    props.facialHairColor = FACIAL_HAIR_COLORS[hash % FACIAL_HAIR_COLORS.length];
+    props.facialHairType = FACIAL_HAIR_TYPES[hash % FACIAL_HAIR_TYPES.length];
+  }
+
+  const hasAccessories = hash % 2 === 0;
+  if (hasAccessories) {
+    props.accessoriesType = ACCESSORIES_TYPES[hash % ACCESSORIES_TYPES.length];
+  }
+
+  props.eyebrowType = EYEBROW_TYPES[hash % EYEBROW_TYPES.length];
+  props.eyeType = EYE_TYPES[hash % EYE_TYPES.length];
+  props.mouthType = MOUTH_TYPES[hash % MOUTH_TYPES.length];
+
+  return props;
 };
 
 export interface AvatarProps {
