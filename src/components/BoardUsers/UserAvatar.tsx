@@ -10,5 +10,7 @@ export interface UserAvatarProps {
 }
 
 export const UserAvatar = ({name, id, avatar, className}: UserAvatarProps) => (
-  <div className={classNames("user-avatar", className)}>{avatar ? <img src={avatar} alt={name} /> : <Avatar seed={id} />}</div>
+  <div className={classNames("user-avatar", className)} title={name}>
+    {avatar ? <img src={avatar} alt={name} /> : <Avatar seed={id} />}
+  </div>
 );
