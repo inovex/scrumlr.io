@@ -10,6 +10,7 @@ $note-input__input-right: 40px;
   margin-bottom: 16px;
   background-color: #edeff2;
   border-radius: 20px;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .note-input__input {
@@ -27,8 +28,8 @@ $note-input__input-right: 40px;
   border: none;
   margin: 0;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
-  transition: box-shadow 0.25s ease-in-out;
 }
+
 .note-input__input:focus {
   outline: none;
 }
