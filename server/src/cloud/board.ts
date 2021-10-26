@@ -71,7 +71,7 @@ type AccessPolicyByPassphrase = AccessPolicy & {
 };
 
 const convertToAccessPolicyByPassphrase = (accessPolicy: AccessPolicy): AccessPolicyByPassphrase => {
-  const salt = crypto.randomBytes(20).toString("hex");
+  const salt = crypto.randomBytes(32).toString("hex");
   const passphrase = crypto
     .createHash("sha256")
     .update(accessPolicy.passphrase + salt)
