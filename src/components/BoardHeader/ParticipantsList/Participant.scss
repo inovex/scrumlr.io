@@ -1,9 +1,14 @@
 @import "constants/style.scss";
 
 .participant {
-  background-color: white;
-  position: relative;
+  display: flex;
+  background-color: $color-white;
   height: 48px;
+
+  padding: 0;
+  width: 100%;
+
+  align-items: center;
 }
 
 .participant:not(:last-child)::after {
@@ -16,14 +21,14 @@
   left: 48px;
 }
 
-.participant__permission-toggle {
-  transform: scale(0.9);
-  left: 244px;
-  top: 12px;
-}
-
-.participant figure {
+.participant__avatar-and-name {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 12px;
   margin: 0;
+  flex: 1 1 100%;
+  overflow: hidden;
 }
 
 .participant .participant__user-avatar-wrapper {
@@ -37,20 +42,24 @@
   width: 28px;
 }
 
-.participant figcaption {
+.participant__name {
   display: inline-block;
   font-size: 14px;
   letter-spacing: 0.5px;
   font-weight: 300;
-  width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #111111;
-  position: absolute;
-  top: 15px;
-  left: 64px;
+  color: $color-black;
+  margin-left: 8px;
 }
+
+.participant .participant__permission-toggle {
+  position: relative;
+  flex: 0 0 40px;
+  margin-right: 20px;
+}
+
 @media (prefers-color-scheme: dark) {
   .participant {
     background-color: $color-dark-mode-note;
@@ -61,7 +70,7 @@
   .participant:not(:last-child)::after {
     background-color: rgba(125, 125, 125, 0.1);
   }
-  .participant figcaption {
-    color: white;
+  .participant__name {
+    color: $color-white;
   }
 }
