@@ -1,14 +1,16 @@
 import {fireEvent, render} from "@testing-library/react";
-import configureStore from "redux-mock-store";
-import {Provider} from "react-redux";
+import {Note} from "components/Note";
+import {User} from "parse";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
-import Parse from "parse";
-import {VoteClientModel} from "types/vote";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {Note} from "components/Note";
+import {mocked} from "ts-jest/utils";
+import {VoteClientModel} from "types/vote";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
 
 jest.mock("store", () => ({
   ...jest.requireActual("store"),
@@ -112,6 +114,10 @@ describe("Note", () => {
   });
 
   describe("should render correctly", () => {
+    beforeEach(() => {
+      mockedUser.current = jest.fn(() => ({id: "Test Author"} as never));
+    });
+
     test("note__root is present", () => {
       const {container} = render(createNote({showAuthors: true}));
       expect(container.firstChild).toHaveClass("note__root");
@@ -123,15 +129,11 @@ describe("Note", () => {
     });
 
     test("note--own-card is present", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "Test Author"}));
       const {container} = render(createNote({showAuthors: true}));
       expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note--own-card");
     });
 
     test("note--own-card is not present", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "Test Author"}));
       const {container} = render(createNote({showAuthors: true, authorId: "Test Author 2"}));
       expect(container.querySelector(".note__root")!.firstChild).not.toHaveClass("note--own-card");
     });
@@ -188,29 +190,25 @@ describe("Note", () => {
 
   describe("Test amount of visible votes", () => {
     test("test-user-1 has one vote during vote phase", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
       const {container} = render(createNote({showAuthors: true, authorId: "test-user-1"}));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
 
     test("test-user-2 has two votes during vote phase", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
       const {container} = render(createNote({showAuthors: true, authorId: "test-user-2"}));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
 
     test("test-user-1 can see three votes", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-1"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
       const {container} = render(createNote({showAuthors: true, authorId: "test-user-1"}));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
 
     test("test-user-2 can see three votes", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
       const {container} = render(createNote({showAuthors: true, authorId: "test-user-2"}));
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
     });
