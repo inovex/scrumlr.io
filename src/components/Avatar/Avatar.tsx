@@ -106,6 +106,12 @@ export type AvatarEyebrowType = typeof EYEBROW_TYPES[number];
 const MOUTH_TYPES = ["Concerned", "Default", "Disbelief", "Eating", "Grimace", "Sad", "ScreamOpen", "Serious", "Smile", "Tongue", "Twinkle", "Vomit"] as const;
 export type AvatarMouthType = typeof MOUTH_TYPES[number];
 
+/**
+ * Generates a fixed hash number for any given string.
+ *
+ * @param s the string to hash
+ * @returns the hash code
+ */
 const hashCode = function (s: string) {
   let hash = 0;
   const stringLength = s.length;
@@ -118,6 +124,12 @@ const hashCode = function (s: string) {
   return Math.abs(hash);
 };
 
+/**
+ * Generates a set of properties by the specified seed.
+ *
+ * @param seed the seed will be hashed by the `hashCode` function and define the outcome
+ * @returns a set of properties for the `<Avatar />` component
+ */
 const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
   const props: AvatarProps = {};
@@ -129,13 +141,13 @@ const generateRandomProps = (seed: string) => {
   props.graphicType = GRAPHIC_TYPES[hash % GRAPHIC_TYPES.length];
   props.hairColor = HAIR_COLORS[hash % HAIR_COLORS.length];
 
-  const hasFacialHair = hash % 2 === 0;
+  const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
   if (hasFacialHair) {
     props.facialHairColor = FACIAL_HAIR_COLORS[hash % FACIAL_HAIR_COLORS.length];
     props.facialHairType = FACIAL_HAIR_TYPES[hash % FACIAL_HAIR_TYPES.length];
   }
 
-  const hasAccessories = hash % 2 === 0;
+  const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
   if (hasAccessories) {
     props.accessoriesType = ACCESSORIES_TYPES[hash % ACCESSORIES_TYPES.length];
   }
@@ -166,6 +178,25 @@ export interface AvatarProps {
   mouthType?: AvatarMouthType;
 }
 
+/**
+ * This components renders an avatar of a person. If the prop `seed` is set the
+ * properties for the look will be generated.
+ *
+ * @param seed The seed will define the define the set of properties if define.
+ * @param className Additional CSS classes
+ * @param skinColor the skin color
+ * @param topType the style for the top of the head (e.g. a hat or hair)
+ * @param clotheColor the clothe color
+ * @param graphicType the graphic if the clothe is a graphic shirt
+ * @param clotheType the clothe type
+ * @param hairColor the hair color
+ * @param facialHairColor the facial hair color
+ * @param facialHairType the facial hair type
+ * @param accessoriesType optional accessories the avatars can have
+ * @param eyebrowType the eyebrow type
+ * @param eyeType the eye type
+ * @param mouthType the mouth type
+ */
 export const Avatar: FC<AvatarProps> = ({
   seed,
   className,
