@@ -51,17 +51,20 @@ $dropdown__box-shadow: var(--primaryColor) 3 d;
 
 [column-visibility="visible"] .menu-bars {
   .dropdown-item--open .menu-item__tooltip,
+  .menu-item.dropdown-item--open:focus .menu-item__tooltip,
   .menu-item.dropdown-item--open:hover .menu-item__tooltip {
     width: 300px;
   }
 
   .dropdown-item--open.menu-item--left .tooltip__text,
+  .dropdown-item--open.menu-item--left:enabled:focus .tooltip__text,
   .dropdown-item--open.menu-item--left:enabled:hover .tooltip__text {
     right: 270px;
     transform: translateX(100%);
   }
 
   .dropdown-item--open.menu-item--right .tooltip__text,
+  .dropdown-item--open.menu-item--right:enabled:focus .tooltip__text,
   .dropdown-item--open.menu-item--right:enabled:hover .tooltip__text {
     left: 270px;
     transform: translateX(-100%);
