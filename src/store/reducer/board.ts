@@ -86,7 +86,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.UpdatedBoard: {
-      // User notification
+      // Voting notification
       if (state.data?.voting !== action.board.voting) {
         if (action.board.voting === "active") {
           Toast.success("Voting phase started! You can vote now!");
@@ -95,12 +95,23 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         }
       }
 
-      // User notification
+      // Moderation notification
       if (state.data?.moderation.status !== action.board.moderation.status) {
         if (action.board.moderation.status === "active") {
           Toast.success("Moderation phase started!");
         } else {
           Toast.error("Moderation phase ended!");
+        }
+      }
+
+      // Timer notification
+      if (state.data?.timerUTCEndTime?.getTime() !== action.board.timerUTCEndTime?.getTime()) {
+        if (action.board.timerUTCEndTime) {
+          Toast.success("Timer started!");
+        } else if (state.data!.timerUTCEndTime!.getTime() <= new Date().getTime()) {
+          Toast.error("Timer ended!");
+        } else {
+          Toast.error("Timer canceled!");
         }
       }
 

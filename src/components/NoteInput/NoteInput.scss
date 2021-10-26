@@ -1,5 +1,8 @@
 @import "constants/style";
 
+$note-input__input-left: 20px;
+$note-input__input-right: 40px;
+
 .note-input {
   height: 40px;
   width: 100%;
@@ -11,8 +14,8 @@
 
 .note-input__input {
   position: absolute;
-  left: 20px;
-  right: 40px;
+  left: $note-input__input-left;
+  right: $note-input__input-right;
   color: black;
   font-size: 14px;
   font-weight: bold;
@@ -23,6 +26,7 @@
   background-color: transparent;
   border: none;
   margin: 0;
+  width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   transition: box-shadow 0.25s ease-in-out;
 }
 .note-input__input:focus {
