@@ -3,18 +3,18 @@ import {requireValidBoardMember, getMemberRoleName} from "./permission";
 import {api, newObject} from "./util";
 
 export interface VoteRequest {
-  board: string;
-  note: string;
+  boardId: string;
+  noteId: string;
 }
 
 export const initializeVoteFunctions = () => {
   api<VoteRequest, StatusResponse>("addVote", async (user, request) => {
-    await requireValidBoardMember(user, request.board);
+    await requireValidBoardMember(user, request.boardId);
 
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
     // Check if the board exists
     if (!board) {
-      return {status: "Error", description: `Board '${request.board}' does not exist`};
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
     // Check if 'voting' is active
     if (board.get("voting") === "disabled") {
@@ -39,7 +39,7 @@ export const initializeVoteFunctions = () => {
       return {status: "Error", description: "You have already cast all your votes"};
     }
 
-    const note = Parse.Object.extend("Note").createWithoutData(request.note);
+    const note = Parse.Object.extend("Note").createWithoutData(request.noteId);
 
     voteQuery.equalTo("note", note);
 
@@ -48,15 +48,15 @@ export const initializeVoteFunctions = () => {
       return {status: "Error", description: "You can't vote multiple times per note"};
     }
 
-    const vote = newObject("Vote", {board, note, user, votingIteration}, {readRoles: [getMemberRoleName(request.board)]});
+    const vote = newObject("Vote", {board, note, user, votingIteration}, {readRoles: [getMemberRoleName(request.boardId)]});
 
     await vote.save(null, {useMasterKey: true});
     return {status: "Success", description: "Your vote has been added"};
   });
 
   api<VoteRequest, StatusResponse>("removeVote", async (user, request) => {
-    const note = Parse.Object.extend("Note").createWithoutData(request.note);
-    const board = await new Parse.Query("Board").get(request.board, {useMasterKey: true});
+    const note = Parse.Object.extend("Note").createWithoutData(request.noteId);
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("note", note);
@@ -65,7 +65,7 @@ export const initializeVoteFunctions = () => {
 
     // Check if vote exists
     if (!vote) {
-      return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.note}'`};
+      return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
     }
     // Check if 'voting' is active
     if (board.get("voting") === "disabled") {

@@ -134,7 +134,9 @@ $note__author-margin-left: 10px;
 .note__footer {
   position: relative;
   height: 26px;
-  //padding-bottom: 38px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .note__author {
   display: inline-flex;

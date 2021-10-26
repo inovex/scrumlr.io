@@ -1,18 +1,15 @@
 @import "constants/style";
 
 .dot-button {
-  height: 28px;
-  width: 28px;
   border-radius: 100%;
-  background-color: rgba(var(--accent-color-rgb), 0.2);
   border: none;
   transition: all 0.25s ease-in-out;
   padding: 0;
   font-size: 14px;
   line-height: 28px;
   font-weight: 600;
-  color: var(--accent-color);
   cursor: pointer;
+  outline: none;
 }
 .dot-button:disabled {
   cursor: default;

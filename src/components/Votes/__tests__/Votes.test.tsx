@@ -5,10 +5,12 @@ import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {VoteClientModel} from "types/vote";
-import Parse from "parse";
+import {User} from "parse";
 import {Votes} from "components/Votes";
+import {mocked} from "ts-jest/utils";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
 
 const createVotes = (
   withVotes: boolean,
@@ -84,8 +86,7 @@ describe("Votes", () => {
 
   describe("Test allowMultipleVotesPerNote works correctly", () => {
     test("allowMultipleVotesPerNote: false", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
 
       const votes = [
         {
@@ -106,24 +107,23 @@ describe("Votes", () => {
 
       const {container} = render(createVotes(true, true, undefined, votes));
 
-      expect(container.querySelector(".votes")?.firstChild).toHaveClass("dot-button__delete");
-      expect(container.querySelector(".votes")?.firstChild).toHaveClass("dot-button--own-vote");
+      expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove");
+      expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove--own-vote");
       expect(container.querySelector(".votes")?.childElementCount).toEqual(1);
-      expect(container.querySelector(".dot-button__delete")?.firstChild).toHaveClass("dot-button__folded-corner");
+      expect(container.querySelector(".vote-button-remove")?.firstChild).toHaveClass("vote-button-remove__folded-corner");
       expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
   });
 
   describe("Test voteLimit works correctly", () => {
     test("voteLimit: 0", () => {
-      // @ts-ignore
-      Parse.User.current = jest.fn(() => ({id: "test-user-2"}));
+      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
 
       const {container} = render(createVotes(false, true));
 
       expect(container.querySelector(".votes")?.childElementCount).toEqual(1);
-      expect(container.querySelector(".votes")?.firstChild).not.toHaveClass("dot-button__delete");
-      expect(container.querySelector(".votes")?.firstChild).toHaveClass("dot-button__add");
+      expect(container.querySelector(".votes")?.firstChild).not.toHaveClass("vote-button-remove");
+      expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-add");
     });
   });
 });

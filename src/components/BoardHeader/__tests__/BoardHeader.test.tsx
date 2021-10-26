@@ -1,15 +1,26 @@
 import {render} from "@testing-library/react";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
+import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
+import {mocked} from "ts-jest/utils";
+import {BrowserRouter} from "react-router-dom";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
+mockedUser.current = jest.fn(() => ({id: "test"} as never));
 
 const createBoardHeader = (name: string, boardstatus: string) => {
   const initialState = {
     board: {
       data: {
         columns: [],
+        userConfigurations: [
+          {
+            id: "test",
+            showHiddenColumns: true,
+          },
+        ],
       },
     },
     notes: [],
@@ -22,9 +33,11 @@ const createBoardHeader = (name: string, boardstatus: string) => {
   const store = mockStore(initialState);
 
   return (
-    <Provider store={store}>
-      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
+      </Provider>
+    </BrowserRouter>
   );
 };
 
@@ -37,6 +50,8 @@ describe("Board Header", () => {
           disconnect: jest.fn(),
         } as unknown as IntersectionObserver)
     );
+
+    mockedUser.current = jest.fn(() => ({id: "test"} as never));
   });
 
   test("show boardheader", () => {
@@ -52,7 +67,7 @@ describe("Board Header", () => {
 
     test("show board-header__infos", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__infos")).toBeDefined();
+      expect(container.querySelector(".board-header__name-and-settings")).toBeDefined();
     });
 
     test("show board-header__users", () => {
@@ -64,17 +79,17 @@ describe("Board Header", () => {
   describe("show title and boardstatus", () => {
     test("show title", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__title")).toHaveTextContent("Title");
+      expect(container.querySelector(".board-header__name")).toHaveTextContent("Title");
     });
 
     test("show boardstatus private", () => {
       const {container} = render(createBoardHeader("Title", "Private Session"));
-      expect(container.querySelector(".board-header__status")).toHaveTextContent("Private Session");
+      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Private Session");
     });
 
     test("show boardstatus public", () => {
       const {container} = render(createBoardHeader("Title", "Public Session"));
-      expect(container.querySelector(".board-header__status")).toHaveTextContent("Public Session");
+      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
     });
   });
 });
