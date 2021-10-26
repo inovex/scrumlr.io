@@ -1,5 +1,10 @@
 @import "constants/style";
 
+$board-header__settings-icon-size: 36px;
+$board-header__hover-padding-top-bottom: 5px;
+$board-header__hover-padding-side: 20px;
+$board-header__hover-padding: $board-header__hover-padding-top-bottom $board-header__hover-padding-side;
+
 .board-header {
   position: fixed;
   left: 30px;
@@ -11,7 +16,7 @@
   position: absolute;
   left: 0;
   top: 20px;
-  padding: 5px 20px;
+  padding: $board-header__hover-padding;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -28,43 +33,70 @@
   }
 }
 
-.board-header__infos {
+.board-header__name-and-settings {
   margin: 18px auto 0;
 }
 
 .board-header__users {
   position: absolute;
   right: 0;
-  top: 32px;
-}
-
-.board-header__infos {
-  display: flex;
-  justify-content: center;
-}
-
-.info-block {
-  width: max-content;
-  padding: 5px 20px;
+  top: calc(32px - #{$board-header__hover-padding-top-bottom});
   border-radius: 16px;
-  transition: background-color 0.2s ease-in-out;
-}
+  padding: $board-header__hover-padding;
 
-.info-block--hoverable {
+  display: flex;
+  flex-direction: row-reverse;
+
+  background: none;
+  border: none;
+  outline: none;
+
   cursor: pointer;
 }
 
-.info-block--hoverable:hover {
+.board-header__users:focus,
+.board-header__users:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
-  .info-block--hoverable:hover {
+  .board-header__users:focus,
+  .board-header__users:hover {
+    background-color: rgba(255, 0, 105, 0.15);
+  }
+}
+
+.board-header__name-and-settings {
+  display: flex;
+  justify-content: center;
+}
+
+.board-header_name-and-settings-button {
+  width: max-content;
+  padding: $board-header__hover-padding;
+  border-radius: 16px;
+  transition: background-color 0.2s ease-in-out;
+
+  outline: 0;
+  border: 0;
+  background: none;
+
+  cursor: pointer;
+}
+
+.board-header_name-and-settings-button:focus,
+.board-header_name-and-settings-button:hover {
+  background-color: rgba(0, 87, 255, 0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  .board-header_name-and-settings-button:focus,
+  .board-header_name-and-settings-button:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
   }
 }
 
-.board-header__status {
+.board-header__access-policy-status {
   color: $color-middle-gray;
   font-size: 12px;
   font-weight: bold;
@@ -74,12 +106,13 @@
   text-align: center;
 }
 
-.board-header__title-block {
-  display: flex;
-  justify-content: center;
+.board-header__name-container {
+  position: relative;
 }
 
-.board-header__title {
+.board-header__name {
+  display: inline-block;
+
   color: $color-black;
   font-size: 32px;
   font-weight: bold;
@@ -94,17 +127,41 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .board-header__title {
+  .board-header__name {
     color: $color-white;
+  }
+
+  .board-header__settings-icon {
+    color: #313949;
   }
 }
 
-.board-header__status-image {
-  width: 24px;
-  height: 24px;
+.board-header__access-policy-status-icon {
+  display: inline;
+  vertical-align: bottom;
+
+  width: 20px;
+  height: 20px;
   align-self: center;
-  margin-right: 10px;
+  margin-right: 4px;
+}
+
+.board-header__access-policy-status-icon * {
+  fill: $color-middle-gray;
+}
+
+.board-header__settings-icon {
   display: none;
+
+  width: $board-header__settings-icon-size;
+  height: $board-header__settings-icon-size;
+
+  position: absolute;
+  right: -8px;
+  bottom: 4px;
+
+  vertical-align: bottom;
+  color: #7585a4;
 }
 
 @media #{$tablet} {
@@ -113,16 +170,12 @@
     right: 60px;
   }
 
-  .board-header__status-image {
-    display: block;
+  .board-header__name {
+    // horizontally center board name and push settings icon to the right
+    padding: 0 $board-header__settings-icon-size;
   }
-}
 
-.board-header__users {
-  display: flex;
-  flex-direction: row-reverse;
-
-  background: none;
-  border: none;
-  outline: none;
+  .board-header__settings-icon {
+    display: inline;
+  }
 }
