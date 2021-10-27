@@ -49,6 +49,12 @@ export const UsersActionFactory = {
     status,
   }),
 
+  /**
+   * Sets the ready status of a user by the given value. It will be applied immediately on the local
+   * client and send to the server via the middleware and an API request.
+   *
+   * @param ready the ready state to set
+   */
   setUserReadyStatus: (ready: boolean) => ({
     type: UsersActionType.SetUserReadyStatus,
     ready,
