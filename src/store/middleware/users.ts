@@ -13,4 +13,9 @@ export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
     const boardId = stateAPI.getState().board.data!.id;
     API.editUserConfiguration(boardId, action.userConfigurationRequest);
   }
+
+  if (action.type === ActionType.SetUserReadyStatus) {
+    const boardId = stateAPI.getState().board.data!.id;
+    API.setReadyStatus(boardId, action.ready);
+  }
 };

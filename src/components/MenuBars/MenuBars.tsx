@@ -24,6 +24,7 @@ export function MenuBars() {
   const currentUser = Parse.User.current();
   const state = useAppSelector((rootState) => ({
     admins: rootState.users.admins,
+    allUsers: rootState.users.all,
     boardId: rootState.board.data!.id,
     timer: rootState.board.data?.timerUTCEndTime,
     voting: rootState.board.data?.voting,
@@ -31,6 +32,7 @@ export function MenuBars() {
   }));
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
+  const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
 
   const toggleVoting = (active: boolean) => {
     if (active) {
@@ -41,6 +43,10 @@ export function MenuBars() {
 
   const toggleModeration = (active: boolean) => {
     store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
+  };
+
+  const toggleReadyState = () => {
+    store.dispatch(ActionFactory.setUserReadyStatus(!isReady));
   };
 
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
@@ -61,7 +67,7 @@ export function MenuBars() {
     >
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
-          <MenuToggle disabled direction="right" toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={() => null} />
+          <MenuToggle direction="right" value={isReady} toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={toggleReadyState} />
           <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
           <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />

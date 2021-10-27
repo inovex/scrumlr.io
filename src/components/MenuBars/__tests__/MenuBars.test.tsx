@@ -27,6 +27,7 @@ describe("Menu", () => {
     const state = {
       users: {
         admins: [{id: "testId"}],
+        all: [{id: "testId"}],
       },
       board: {
         data: {
@@ -43,6 +44,7 @@ describe("Menu", () => {
     const state = {
       users: {
         admins: [],
+        all: [],
       },
       board: {
         data: {
