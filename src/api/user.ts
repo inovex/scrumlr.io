@@ -20,4 +20,13 @@ export const UserAPI = {
    * @returns a {status, description} object
    */
   editUserConfiguration: (boardId: string, userConfiguration: EditUserConfigurationRequest) => callAPI("editUserConfiguration", {boardId, userConfiguration}),
+
+  /**
+   * Set the ready state of a user
+   *
+   * @param boardId the identifier of the board
+   * @param ready the ready state of the user
+   * @returns a {status, description} object
+   */
+  setReadyStatus: (boardId: string, ready: boolean) => callAPI("setReadyStatus", {boardId, ready}),
 };

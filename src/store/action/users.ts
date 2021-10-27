@@ -10,6 +10,7 @@ export const UsersActionType = {
    */
   SetUsers: "@@SCRUMLR/setUsers" as const,
   SetUserStatus: "@@SCRUMLR/setUserStatus" as const,
+  SetUserReadyStatus: "@@SCRUMLR/setUserReadyStatus" as const,
   UpdateUser: "@@SCRUMLR/updateUser" as const,
   ChangePermission: "@@SCRUMLR/changePermission" as const,
   EditUserConfiguration: "@@SCRUMLR/editUserConfiguration" as const,
@@ -40,12 +41,23 @@ export const UsersActionFactory = {
    * a user
    *
    * @param userId the user identifier
-   * @param status flag which indeicates whether the user is online or went offline
+   * @param status flag which indicates whether the user is online or went offline
    */
   setUserStatus: (userId: string, status: boolean) => ({
     type: UsersActionType.SetUserStatus,
     userId,
     status,
+  }),
+
+  /**
+   * Sets the ready status of a user by the given value. It will be applied immediately on the local
+   * client and send to the server via the middleware and an API request.
+   *
+   * @param ready the ready state to set
+   */
+  setUserReadyStatus: (ready: boolean) => ({
+    type: UsersActionType.SetUserReadyStatus,
+    ready,
   }),
 
   /**
@@ -64,7 +76,6 @@ export const UsersActionFactory = {
    * @param userId the identifier of the user whose permissions are being changed
    * @param moderator the flag whether the user receives or loses moderator permissions
    */
-
   changePermission: (userId: string, moderator: boolean) => ({
     type: UsersActionType.ChangePermission,
     userId,
@@ -76,7 +87,6 @@ export const UsersActionFactory = {
    *
    * @param userConfigurationRequest contains configurations changed by user
    */
-
   editUserConfiguration: (userConfigurationRequest: EditUserConfigurationRequest) => ({
     type: UsersActionType.EditUserConfiguration,
     userConfigurationRequest,
@@ -86,6 +96,7 @@ export const UsersActionFactory = {
 export type UsersReduxAction =
   | ReturnType<typeof UsersActionFactory.setUsers>
   | ReturnType<typeof UsersActionFactory.setUserStatus>
+  | ReturnType<typeof UsersActionFactory.setUserReadyStatus>
   | ReturnType<typeof UsersActionFactory.changePermission>
   | ReturnType<typeof UsersActionFactory.editUserConfiguration>
   | ReturnType<typeof UsersActionFactory.updateUser>;
