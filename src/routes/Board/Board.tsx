@@ -32,9 +32,8 @@ export function Board() {
     }
   }
   let boardstatus = "Public Session";
-  const joinConfirmationRequired = state.board.data?.joinConfirmationRequired;
-  const accessCode = state.board.data?.accessCode;
-  if (joinConfirmationRequired === true || (accessCode !== undefined && accessCode !== "")) {
+  const accessPolicy = state.board.data?.accessPolicy;
+  if (accessPolicy !== "Public") {
     boardstatus = "Private Session";
   }
 
