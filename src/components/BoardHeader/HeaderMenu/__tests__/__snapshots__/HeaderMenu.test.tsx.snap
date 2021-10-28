@@ -41,16 +41,6 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   value="board"
                 />
                 <button
-                  class="board-settings__access-mode"
-                  disabled=""
-                  type="button"
-                >
-                  <div
-                    class="board-settings__access-mode-lock"
-                  />
-                  Private Session
-                </button>
-                <button
                   class="board-settings__edit-button"
                   type="submit"
                 >
@@ -305,16 +295,6 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   disabled=""
                   value="board"
                 />
-                <button
-                  class="board-settings__access-mode"
-                  disabled=""
-                  type="button"
-                >
-                  <div
-                    class="board-settings__access-mode-lock"
-                  />
-                  Private Session
-                </button>
               </form>
             </li>
             <li

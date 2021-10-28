@@ -6,9 +6,8 @@ const addInitialBoardSchema = async () => {
   schema.addPointer("owner", "_User", {required: true});
   schema.addPointer("template", "Template");
   schema.addObject("columns", {defaultValue: {}});
-  schema.addBoolean("joinConfirmationRequired", {defaultValue: false});
   schema.addBoolean("encryptedContent", {defaultValue: false});
-  schema.addString("accessCode");
+  schema.addObject("accessPolicy", {defaultValue: {type: "Public"}});
   schema.addBoolean("showAuthors", {defaultValue: true});
   schema.addDate("timerUTCEndTime");
   schema.addString("voting", {defaultValue: "disabled"});
@@ -16,6 +15,7 @@ const addInitialBoardSchema = async () => {
   schema.addNumber("votingIteration", {required: true, defaultValue: 0});
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
   schema.addObject("userConfigurations", {defaultValue: {}});
+  schema.addArray("usersMarkedReady", {required: false, defaultValue: []});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };

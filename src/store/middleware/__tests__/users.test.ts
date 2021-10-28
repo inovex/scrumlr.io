@@ -16,6 +16,7 @@ const stateAPI = {
 jest.mock("api", () => ({
   API: {
     editUserConfiguration: jest.fn(),
+    setReadyStatus: jest.fn(),
   },
 }));
 
@@ -25,15 +26,16 @@ describe("users middleware", () => {
       stateAPI as MiddlewareAPI,
       jest.fn(),
       ActionFactory.editUserConfiguration({
-        userConfiguration: {
-          showHiddenColumns: true,
-        },
+        showHiddenColumns: true,
       })
     );
     expect(API.editUserConfiguration).toHaveBeenCalledWith("boardId", {
-      userConfiguration: {
-        showHiddenColumns: true,
-      },
+      showHiddenColumns: true,
     });
+  });
+
+  test("set user ready status", () => {
+    passUsersMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.setUserReadyStatus(true));
+    expect(API.setReadyStatus).toHaveBeenCalledWith("boardId", true);
   });
 });

@@ -3,13 +3,11 @@
 .user-avatar,
 .rest-users {
   box-sizing: border-box;
-  height: 40px;
-  width: 40px;
-  box-shadow: 0 0 0 0.1em $color-black;
-  border-color: var(--accent-color);
+  height: 48px;
+  width: 48px;
   border-radius: 100px;
   display: inline-block;
-  background-color: white;
+  position: relative;
 }
 
 .rest-users,
@@ -19,6 +17,7 @@
 
 .user__initials,
 .rest-users__count {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -31,13 +30,18 @@
   content: "+";
 }
 
-@media (prefers-color-scheme: dark) {
-  .user-avatar,
-  .rest-users {
-    box-shadow: 0 0 0 0.1em $color-white;
-    background-color: $color-darkest-gray;
-  }
+.user-avatar__ready {
+  position: absolute;
+  top: -8px;
+  right: -8px;
 
+  width: 24px;
+  height: 24px;
+
+  color: $color-grooming-green;
+}
+
+@media (prefers-color-scheme: dark) {
   .user__initials,
   .rest-users__count {
     color: white;

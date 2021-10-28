@@ -42,7 +42,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
 .board-header__users {
   position: absolute;
   right: 0;
-  top: calc(32px - #{$board-header__hover-padding-top-bottom});
+  top: calc(24px - #{$board-header__hover-padding-top-bottom});
   border-radius: 16px;
   padding: $board-header__hover-padding;
 

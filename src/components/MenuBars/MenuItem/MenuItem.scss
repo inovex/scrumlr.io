@@ -82,6 +82,12 @@ $number-of-menu-items: 4;
     background-color: var(--secondaryColor);
   }
 }
+
+.menu-item--active .menu-item__icon {
+  background-color: $color-grooming-green;
+  color: $color-white;
+}
+
 .menu-item__icon--end {
   visibility: hidden;
 }
