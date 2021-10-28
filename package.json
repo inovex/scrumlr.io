@@ -10,6 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "avataaars": "^2.0.0",
     "classnames": "^2.3.1",
     "file-saver": "^2.0.5",
     "googleapis": "^89.0.0",

@@ -114,7 +114,7 @@ export const Note = (props: NoteProps) => {
         <div className="note__footer">
           {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" />
+              <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}

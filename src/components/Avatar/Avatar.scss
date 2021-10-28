@@ -1,0 +1,12 @@
+@import "constants/style";
+
+.avatar {
+  width: 48px;
+  height: 48px;
+}
+
+.avatar #Circle-Background,
+.avatar #Color\/Palette\/Blue-01 {
+  fill: var(--accent-color);
+  filter: brightness(45%);
+}
