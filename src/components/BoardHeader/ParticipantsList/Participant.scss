@@ -4,6 +4,7 @@
   background-color: white;
   position: relative;
   height: 48px;
+  outline: 0;
 }
 
 .participant:not(:last-child)::after {

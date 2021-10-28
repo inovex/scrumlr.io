@@ -5,6 +5,7 @@ import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
 import "./Participant.scss";
+import {TabIndex} from "constants/tabIndex";
 
 interface ParticipantProps {
   participant: UserClientModel;
@@ -13,7 +14,7 @@ interface ParticipantProps {
 }
 
 export const Participant = ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) => (
-  <li className="participant">
+  <li tabIndex={TabIndex.default} className="participant">
     <figure aria-roledescription="participant">
       <UserAvatar id={participant.id} name={participant.displayName} className="participant__user-avatar" />
       <figcaption>{participant.displayName}</figcaption>
@@ -27,6 +28,7 @@ export const Participant = ({participant, currentUserIsModerator, boardOwner}: P
         onToggle={(val: "participant" | "moderator") => {
           store.dispatch(ActionFactory.changePermission(participant!.id, val === "moderator"));
         }}
+        tabIndex={TabIndex.default}
       />
     )}
   </li>

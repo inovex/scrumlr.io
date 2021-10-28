@@ -12,6 +12,7 @@ $timer-dropdown__color-dark: $color-white;
   position: absolute;
   left: 19px;
   top: 16px;
+  outline: 0;
 }
 @media (prefers-color-scheme: dark) {
   .timer-dropdown__item-button label {

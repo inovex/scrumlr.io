@@ -8,6 +8,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {Link} from "react-router-dom";
 import "./BoardHeader.scss";
+import {TabIndex} from "constants/tabIndex";
 
 export interface BoardHeaderProps {
   boardstatus: string;
@@ -22,7 +23,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
   return (
     <header className="board-header">
-      <Link to="/" className="board-header__link" aria-label="Return to homepage">
+      <Link tabIndex={TabIndex.BoardHeader} to="/" className="board-header__link" aria-label="Return to homepage">
         <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
 
@@ -34,6 +35,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           }}
           aria-haspopup
           aria-pressed={showMenu}
+          tabIndex={TabIndex.BoardHeader + 1}
         >
           <div className="board-header__access-policy-status">
             <LockIcon className="board-header__access-policy-status-icon" title={props.boardstatus} />
@@ -46,7 +48,14 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         </button>
       </div>
 
-      <button aria-label="Show participants" aria-haspopup aria-pressed={showParticipants} className="board-header__users" onClick={() => setShowParticipants(!showParticipants)}>
+      <button
+        tabIndex={TabIndex.BoardHeader + 2}
+        aria-label="Show participants"
+        aria-haspopup
+        aria-pressed={showParticipants}
+        className="board-header__users"
+        onClick={() => setShowParticipants(!showParticipants)}
+      >
         <BoardUsers />
       </button>
 

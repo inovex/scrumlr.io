@@ -8,6 +8,7 @@ type DropdownButtonProps = {
   label: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
+  setTabable: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
@@ -19,6 +20,7 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
     if (showDropdown) {
       window.addEventListener("click", () => setShowDropdown(false), {once: true});
     }
+    props.setTabable(showDropdown);
   }, [showDropdown]);
 
   return (
@@ -44,7 +46,6 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
         <span className="tooltip__text">{props.label}</span>
       </div>
       <Icon className="menu-item__icon menu-item__icon--start" />
-
       {props.children}
     </button>
   );

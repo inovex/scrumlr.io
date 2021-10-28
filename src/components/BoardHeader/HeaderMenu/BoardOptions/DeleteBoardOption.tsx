@@ -7,6 +7,7 @@ import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./DeleteBoardOption.scss";
+import {TabIndex} from "constants/tabIndex";
 
 export type DeleteProps = {
   onClick: () => void;
@@ -25,7 +26,11 @@ export const DeleteBoardOption = (props: DeleteProps) => {
         <label className="delete-board-option__warning-label">
           <b>Are you absolutely sure that you want to delete the board?</b> This action <b>cannot</b> be undone.
         </label>
-        <button className="delete-board-option__delete-board" onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}>
+        <button
+          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
+          className="delete-board-option__delete-board"
+          onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}
+        >
           Delete board
         </button>
       </div>
