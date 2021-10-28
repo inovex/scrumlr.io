@@ -9,6 +9,7 @@
   width: 100%;
 
   align-items: center;
+  justify-content: space-between;
 }
 
 .participant:not(:last-child)::after {
@@ -25,19 +26,21 @@
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 12px;
+  padding: 0 12px 0 0;
   margin: 0;
   flex: 1 1 100%;
   overflow: hidden;
 }
 
-.participant .participant__avatar {
+.participant .participant__user-avatar-wrapper {
+  margin: 0 12px 0 12px;
   height: 28px;
   width: 28px;
-  min-height: 28px;
-  min-width: 28px;
-  font-size: $text-size;
-  margin: 0;
+}
+
+.participant .participant__user-avatar {
+  height: 28px;
+  width: 28px;
 }
 
 .participant__name {
@@ -49,13 +52,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: $color-black;
-  margin-left: 8px;
 }
 
 .participant .participant__permission-toggle {
   position: relative;
   flex: 0 0 40px;
-  margin-right: 20px;
+  margin-right: 16px;
 }
 
 @media (prefers-color-scheme: dark) {

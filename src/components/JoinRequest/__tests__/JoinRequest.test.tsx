@@ -1,4 +1,4 @@
-import {render, fireEvent} from "@testing-library/react";
+import {render, fireEvent, getByText} from "@testing-library/react";
 import {JoinRequest} from "components/JoinRequest";
 import store from "store";
 import {ActionFactory} from "store/action";
@@ -37,26 +37,26 @@ describe("JoinRequest", () => {
   describe("should call store.dispatch correctly", () => {
     test("single join request should call rejectJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
-      fireEvent.click(container.querySelector(".join-request__footer").firstChild);
+      fireEvent.click(getByText(container, "Reject"));
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0"]));
     });
 
     test("single join request should call acceptJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
-      fireEvent.click(container.querySelector(".join-request__footer").lastChild);
+      fireEvent.click(getByText(container, "Accept"));
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0"]));
-    });
-
-    test("multiple join request should call rejectJoinRequests correctly", () => {
-      const {container} = render(createJoinRequest(3));
-      fireEvent.click(container.querySelector(".join-request__footer").firstChild);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
     test("multiple join request should call acceptJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
-      fireEvent.click(container.querySelector(".join-request__footer").lastChild);
+      fireEvent.click(getByText(container, "Accept all")!);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
+    });
+
+    test("multiple join request should call rejectJoinRequests correctly", () => {
+      const {container} = render(createJoinRequest(3));
+      fireEvent.click(getByText(container, "Reject all")!);
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
