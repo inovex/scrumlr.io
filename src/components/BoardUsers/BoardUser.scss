@@ -16,6 +16,7 @@
 
 .user__initials,
 .rest-users__count {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,6 +27,17 @@
 
 .rest-users__count::before {
   content: "+";
+}
+
+.user-avatar__ready {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  width: 24px;
+  height: 24px;
+
+  color: $color-grooming-green;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -1,13 +1,14 @@
 import {newObjectId} from "parse-server/lib/cryptoUtils";
 import {StatusResponse} from "types";
 import {UserConfigurations} from "types/user";
+import * as crypto from "crypto";
 import {getAdminRoleName, getMemberRoleName, isMember, isOnline, requireValidBoardAdmin} from "./permission";
 import {api} from "./util";
 import {serverConfig} from "../index";
 import Color, {isOfTypeColor} from "../util/Color";
 
 interface JoinBoardResponse {
-  status: "accepted" | "rejected" | "pending";
+  status: "accepted" | "passphrase_required" | "incorrect_passphrase" | "rejected" | "pending";
   joinRequestReference?: string;
 }
 
@@ -59,6 +60,36 @@ const removeFromModerators = async (user: Parse.User, boardId: string) => {
   throw new Error(`No roles for board '${boardId}' found`);
 };
 
+const AccessPolicyType = {
+  Public: "Public" as const,
+  ByPassphrase: "ByPassphrase" as const,
+  ManualVerification: "ManualVerification" as const,
+};
+
+type AccessPolicy = {
+  type: keyof typeof AccessPolicyType;
+  passphrase?: string;
+};
+
+type AccessPolicyByPassphrase = AccessPolicy & {
+  passphrase: string;
+  salt: string;
+};
+
+const convertToAccessPolicyByPassphrase = (accessPolicy: AccessPolicy): AccessPolicyByPassphrase => {
+  const salt = crypto.randomBytes(32).toString("hex");
+  const passphrase = crypto
+    .createHash("sha256")
+    .update(accessPolicy.passphrase + salt)
+    .digest("base64");
+
+  return {
+    type: accessPolicy.type,
+    salt,
+    passphrase,
+  };
+};
+
 const respondToJoinRequest = async (currentUser: Parse.User, users: string[], board: string, manipulate: (object: Parse.Object) => void) => {
   await requireValidBoardAdmin(currentUser, board);
 
@@ -87,16 +118,15 @@ export interface CreateBoardRequest {
     hidden: boolean;
   }[];
   name?: string;
-  joinConfirmationRequired?: boolean;
   encryptedContent?: boolean;
-  accessCode?: string;
+  accessPolicy: AccessPolicy;
 }
 
 export type EditableBoardAttributes = {
   name: string;
   showAuthors?: boolean;
   timerUTCEndTime?: Date;
-  joinConfirmationRequired?: boolean;
+  accessPolicy?: AccessPolicy;
   voting?: "active" | "disabled";
   votingIteration: number;
   showNotesOfOtherUsers: boolean;
@@ -114,6 +144,7 @@ export interface JoinRequestResponse {
 
 export interface JoinBoardRequest {
   boardId: string;
+  passphrase?: string;
 }
 
 export const initializeBoardFunctions = () => {
@@ -149,7 +180,13 @@ export const initializeBoardFunctions = () => {
 
     const userConfigurations: UserConfigurations = {};
     userConfigurations[user.id] = {showHiddenColumns: false};
-    const savedBoard = await board.save({...request, columns, owner: user, userConfigurations}, {useMasterKey: true});
+
+    let {accessPolicy} = request;
+    if (accessPolicy.type === AccessPolicyType.ByPassphrase) {
+      accessPolicy = convertToAccessPolicyByPassphrase(accessPolicy);
+    }
+
+    const savedBoard = await board.save({...request, accessPolicy, columns, owner: user, userConfigurations}, {useMasterKey: true});
 
     const adminRoleACL = new Parse.ACL();
     adminRoleACL.setPublicReadAccess(false);
@@ -207,50 +244,71 @@ export const initializeBoardFunctions = () => {
       };
     }
 
-    if (board.get("joinConfirmationRequired")) {
-      const BoardClass = Parse.Object.extend("Board");
-      const boardReference = BoardClass.createWithoutData(request.boardId);
-
-      const joinRequestQuery = new Parse.Query("JoinRequest");
-      joinRequestQuery.equalTo("board", boardReference);
-      joinRequestQuery.equalTo("user", user);
-      const joinRequestQueryResult = await joinRequestQuery.first({
-        useMasterKey: true,
-      });
-
-      if (joinRequestQueryResult) {
-        if (joinRequestQueryResult.get("status") === "accepted") {
-          await addAsMember(user, request.boardId);
+    const accessPolicy = board.get("accessPolicy");
+    if (accessPolicy.type !== AccessPolicyType.Public) {
+      if (accessPolicy.type === AccessPolicyType.ByPassphrase) {
+        if (!request.passphrase) {
           return {
-            status: "accepted",
+            status: "passphrase_required",
+          };
+        }
+        const passphrase = crypto
+          .createHash("sha256")
+          .update(request.passphrase + accessPolicy.salt)
+          .digest("base64");
+        if (passphrase !== accessPolicy.passphrase) {
+          return {
+            status: "incorrect_passphrase",
+          };
+        }
+      }
+
+      if (accessPolicy.type === AccessPolicyType.ManualVerification) {
+        const BoardClass = Parse.Object.extend("Board");
+        const boardReference = BoardClass.createWithoutData(request.boardId);
+
+        const joinRequestQuery = new Parse.Query("JoinRequest");
+        joinRequestQuery.equalTo("board", boardReference);
+        joinRequestQuery.equalTo("user", user);
+        const joinRequestQueryResult = await joinRequestQuery.first({
+          useMasterKey: true,
+        });
+
+        if (joinRequestQueryResult) {
+          if (joinRequestQueryResult.get("status") === "accepted") {
+            await addAsMember(user, request.boardId);
+            return {
+              status: "accepted",
+              joinRequestReference: joinRequestQueryResult.id,
+              accessKey: joinRequestQueryResult.get("accessKey"),
+            };
+          }
+
+          return {
+            status: joinRequestQueryResult.get("status"),
             joinRequestReference: joinRequestQueryResult.id,
             accessKey: joinRequestQueryResult.get("accessKey"),
           };
         }
+        const joinRequest = new Parse.Object("JoinRequest");
+        joinRequest.set("user", user);
+        joinRequest.set("board", boardReference);
+
+        const joinRequestACL = new Parse.ACL();
+        joinRequestACL.setReadAccess(user.id, true);
+        joinRequestACL.setRoleReadAccess(getAdminRoleName(request.boardId), true);
+        joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.boardId), true);
+        joinRequest.setACL(joinRequestACL);
+
+        const savedJoinRequest = await joinRequest.save(null, {
+          useMasterKey: true,
+        });
 
         return {
-          status: joinRequestQueryResult.get("status"),
-          joinRequestReference: joinRequestQueryResult.id,
-          accessKey: joinRequestQueryResult.get("accessKey"),
+          status: "pending",
+          joinRequestReference: savedJoinRequest.id,
         };
       }
-      const joinRequest = new Parse.Object("JoinRequest");
-      joinRequest.set("user", user);
-      joinRequest.set("board", boardReference);
-
-      const joinRequestACL = new Parse.ACL();
-      joinRequestACL.setReadAccess(user.id, true);
-      joinRequestACL.setRoleReadAccess(getAdminRoleName(request.boardId), true);
-      joinRequestACL.setRoleWriteAccess(getAdminRoleName(request.boardId), true);
-      joinRequest.setACL(joinRequestACL);
-
-      const savedJoinRequest = await joinRequest.save(null, {
-        useMasterKey: true,
-      });
-      return {
-        status: "pending",
-        joinRequestReference: savedJoinRequest.id,
-      };
     }
 
     const userConfigurations: UserConfigurations = await board.get("userConfigurations");
@@ -297,8 +355,12 @@ export const initializeBoardFunctions = () => {
     if (request.board.name) {
       board.set("name", request.board.name);
     }
-    if (request.board.joinConfirmationRequired != null) {
-      board.set("joinConfirmationRequired", request.board.joinConfirmationRequired);
+    if (request.board.accessPolicy != null) {
+      if (request.board.accessPolicy.type === AccessPolicyType.ByPassphrase) {
+        board.set("accessPolicy", convertToAccessPolicyByPassphrase(request.board.accessPolicy));
+      } else {
+        board.set("accessPolicy", request.board.accessPolicy);
+      }
     }
     if (request.board.voting) {
       if (request.board.voting === "active") {

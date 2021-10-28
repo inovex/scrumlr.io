@@ -1,6 +1,6 @@
 import {StatusResponse} from "types";
 import {UserConfigurations} from "types/user";
-import {requireValidBoardAdmin, requireValidBoardMember} from "./permission";
+import {requireValidBoardMember} from "./permission";
 import {api} from "./util";
 
 /**
@@ -11,6 +11,11 @@ type EditUserConfigurationRequest = {
   userConfiguration: {
     showHiddenColumns?: boolean;
   };
+};
+
+type SetUserReadyStateRequest = {
+  boardId: string;
+  ready: boolean;
 };
 
 export const initializeUserFunctions = () => {
@@ -35,5 +40,24 @@ export const initializeUserFunctions = () => {
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
     return {status: "Success", description: "User configuration edited."};
+  });
+
+  api<SetUserReadyStateRequest, StatusResponse>("setReadyStatus", async (user, request) => {
+    await requireValidBoardMember(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    if (request.ready) {
+      board.addUnique("usersMarkedReady", user.id);
+    } else {
+      board.remove("usersMarkedReady", user.id);
+    }
+
+    await board.save(null, {useMasterKey: true});
+    return {status: "Success", description: "User ready state set."};
   });
 };

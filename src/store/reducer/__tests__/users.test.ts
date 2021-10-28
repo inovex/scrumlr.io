@@ -2,13 +2,20 @@ import {UsersState} from "types/store";
 import {usersReducer} from "store/reducer/users";
 import {ActionFactory} from "store/action";
 import {UserClientModel} from "types/user";
+import {User} from "parse";
+import {mocked} from "ts-jest/utils";
 
-const createUser = (id: string, name: string, admin: boolean): UserClientModel => ({
+jest.mock("parse");
+
+const mockedUser = mocked(User, true);
+
+const createUser = (id: string, name: string, admin: boolean, ready = false): UserClientModel => ({
   id,
   displayName: name,
   admin,
   createdAt: new Date(),
   updatedAt: new Date(),
+  ready,
   online: true,
 });
 
@@ -20,6 +27,7 @@ describe("users reducer", () => {
       admins: [],
       basic: [],
       all: [],
+      usersMarkedReady: [],
     };
   });
 
@@ -50,8 +58,8 @@ describe("users reducer", () => {
 
     expect(state2.admins).toEqual([admin]);
     expect(state2.basic).toEqual([user]);
-    expect(state2.all).toContain(admin);
-    expect(state2.all).toContain(user);
+    expect(state2.all).toContainEqual(admin);
+    expect(state2.all).toContainEqual(user);
   });
 
   test("set user status correctly offline/online", () => {
@@ -65,5 +73,35 @@ describe("users reducer", () => {
 
     const state3 = usersReducer(state2, ActionFactory.setUserStatus(user.id, true));
     expect(state3.all.find((u) => u.id === user.id)?.online).toBe(true);
+  });
+
+  describe("readiness of users", () => {
+    test("set user as ready", () => {
+      mockedUser.current = jest.fn(() => ({id: "1"} as never));
+
+      const user = createUser("1", "John Doe", false, false);
+      const state1 = usersReducer(initialState, ActionFactory.setUsers([user], false));
+      expect(state1.usersMarkedReady).toHaveLength(0);
+
+      const state2 = usersReducer(state1, ActionFactory.setUserReadyStatus(true));
+      expect(state2.usersMarkedReady).toHaveLength(1);
+      expect(state2.all[0].ready).toBeTruthy();
+    });
+
+    test("updated board will update ready status of users", () => {
+      const user = createUser("1", "John Doe", false, false);
+
+      const state1 = usersReducer(initialState, ActionFactory.setUsers([user], false));
+      expect(state1.usersMarkedReady).toHaveLength(0);
+
+      const state2 = usersReducer(
+        state1,
+        ActionFactory.updatedBoard({
+          usersMarkedReady: ["1"],
+        } as any)
+      );
+      expect(state2.usersMarkedReady).toHaveLength(1);
+      expect(state2.all[0].ready).toBeTruthy();
+    });
   });
 });

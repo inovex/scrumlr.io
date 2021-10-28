@@ -6,11 +6,12 @@ import {JoinRequestClientModel} from "./joinRequest";
 import {VoteConfigurationClientModel} from "./voteConfiguration";
 
 export interface BoardState {
-  status: "unknown" | "pending" | "ready" | "rejected" | "accepted";
+  status: "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
   data?: BoardClientModel;
 }
 
 export interface UsersState {
+  usersMarkedReady: string[];
   admins: UserClientModel[];
   basic: UserClientModel[];
   all: UserClientModel[];
