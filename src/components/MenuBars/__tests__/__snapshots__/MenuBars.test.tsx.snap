@@ -248,7 +248,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               <li
                 class="dropdown__item-button timer-dropdown__item-button"
               >
-                <button>
+                <button
+                  tabindex="-1"
+                >
                   <label>
                     1 minute
                   </label>
@@ -260,7 +262,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               <li
                 class="dropdown__item-button timer-dropdown__item-button"
               >
-                <button>
+                <button
+                  tabindex="-1"
+                >
                   <label>
                     3 minute
                   </label>
@@ -272,7 +276,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               <li
                 class="dropdown__item-button timer-dropdown__item-button"
               >
-                <button>
+                <button
+                  tabindex="-1"
+                >
                   <label>
                     5 minute
                   </label>
@@ -284,17 +290,24 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               <li
                 class="dropdown__item-button timer-dropdown__item-button"
               >
-                <button>
+                <button
+                  tabindex="-1"
+                >
                   <label>
                     Custom time
                   </label>
-                  <button>
+                  <button
+                    tabindex="-1"
+                  >
                     +
                   </button>
                   <input
+                    tabindex="-1"
                     value="10"
                   />
-                  <button>
+                  <button
+                    tabindex="-1"
+                  >
                     -
                   </button>
                 </button>
