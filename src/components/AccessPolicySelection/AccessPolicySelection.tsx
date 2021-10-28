@@ -44,7 +44,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       );
       break;
     case AccessPolicy.ManualVerification:
-      AccessPolicyDescription = <div>Admins of board can to manually verify or reject each access request individually.</div>;
+      AccessPolicyDescription = <div>Admins of board can manually verify or reject each access request individually.</div>;
       break;
   }
 
