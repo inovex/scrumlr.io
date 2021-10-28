@@ -25,13 +25,13 @@ frontend:
 
 livequery:
   name: livequery
-  image: scrumlr-parse
+  image: scrumlr-server
   imagePullPolicy: 
   replicas: 
 
 server:
   name: server
-  image: scrumlr-parse
+  image: scrumlr-server
   imagePullPolicy: 
   replicas: 
 
