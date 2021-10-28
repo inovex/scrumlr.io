@@ -1,0 +1,16 @@
+name: self hosted test
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    name: test job
+    runs-on: self-hosted
+    steps:
+      - name: test commands
+        run: | 
+          echo "OK"
+          curl https://registry.kube.com/v2/_catalog
+          docker info
+          kubectl get nodes
+
