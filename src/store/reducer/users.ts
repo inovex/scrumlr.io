@@ -1,9 +1,38 @@
 import {UsersState} from "types/store";
 import {UserClientModel} from "types/user";
+import Parse from "parse";
+import union from "lodash/union";
+import without from "lodash/without";
 import {ActionType, ReduxAction} from "../action";
 
-export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
+const mapReadyState = (readyUsers: string[] = [], state: Omit<UsersState, "usersMarkedReady">) => {
+  const newState = {
+    admins: state.admins.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+    basic: state.basic.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+    all: state.all.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+    usersMarkedReady: readyUsers,
+  };
+
+  return newState;
+};
+
+export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
+    case ActionType.SetUserReadyStatus:
+      let {usersMarkedReady} = state;
+      if (usersMarkedReady !== undefined) {
+        const userId = Parse.User.current()!.id;
+        if (action.ready) {
+          usersMarkedReady = union(usersMarkedReady, [userId]);
+        } else {
+          usersMarkedReady = without(usersMarkedReady, userId);
+        }
+        return mapReadyState(usersMarkedReady, state);
+      }
+      return state;
+    case ActionType.InitializeBoard:
+    case ActionType.UpdatedBoard:
+      return mapReadyState(action.board.usersMarkedReady, state);
     case ActionType.SetUsers: {
       const newState = {
         admins: state.admins,
@@ -23,7 +52,8 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
           newState.all.push(member);
         }
       });
-      return newState;
+
+      return mapReadyState(state.usersMarkedReady, newState);
     }
     case ActionType.SetUserStatus: {
       const newState = {
@@ -37,7 +67,7 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
         user.online = action.status;
       }
 
-      return newState;
+      return mapReadyState(state.usersMarkedReady, newState);
     }
     case ActionType.UpdateUser: {
       const newState = {
@@ -46,11 +76,13 @@ export const usersReducer = (state: UsersState = {admins: [], basic: [], all: []
         all: state.all,
       };
 
+      // FIXME no updates here, this should be implemented
       const user = newState.all.find((member) => member.id === action.user.objectId);
       if (user) {
         // if needed
       }
-      return newState;
+
+      return mapReadyState(state.usersMarkedReady, newState);
     }
     default: {
       return state;

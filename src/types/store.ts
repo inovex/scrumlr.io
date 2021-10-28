@@ -11,6 +11,7 @@ export interface BoardState {
 }
 
 export interface UsersState {
+  usersMarkedReady: string[];
   admins: UserClientModel[];
   basic: UserClientModel[];
   all: UserClientModel[];
