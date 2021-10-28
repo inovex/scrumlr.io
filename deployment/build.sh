@@ -18,10 +18,10 @@ else
     echo "Image scrumlr-frontend: found";
 fi
 
-if [[ "$(docker images -q scrumlr-parse)" == "" ]]; 
+if [[ "$(docker images -q scrumlr-server)" == "" ]]; 
 then
-    echo "Image scrumlr-parse: missing";
+    echo "Image scrumlr-server: missing";
     docker build -f ../server/Dockerfile -t scrumlr-server ../server
 else
-    echo "Image scrumlr-parse: found";
+    echo "Image scrumlr-server: found";
 fi

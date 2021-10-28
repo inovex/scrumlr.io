@@ -21,12 +21,13 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 data:
-  DASHBOARD_DEFAULT_PASSWORD: JDJhJDEyJFFKcjZGUG1LU2hLNTFGekt3RkJnMnVabEpCV3IuOEpULkRwT1RCOXlIT3N1c2VPREY0amU2
   MASTER_KEY: bWFzdGVyS2V5
+  DASHBOARD_DEFAULT_PASSWORD: JDJhJDEyJFFKcjZGUG1LU2hLNTFGekt3RkJnMnVabEpCV3IuOEpULkRwT1RCOXlIT3N1c2VPREY0amU2
 ---
 # Source: scrumlr/templates/livequery/secrets.yaml
 apiVersion: v1
@@ -36,6 +37,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -50,6 +52,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -64,14 +67,15 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 data:
-  APP_ID: Scrumlr
-  APP_NAME: Scrumlr
-  DASHBOARD_DEFAULT_USER: scrumlr
-  SERVER_URL: http://localhost/api
+  SERVER_URL: "/api"
+  APP_ID: "Scrumlr"
+  APP_NAME: "Scrumlr" 
+  DASHBOARD_DEFAULT_USER: "scrumlr"
 ---
 # Source: scrumlr/templates/livequery/configmap.yaml
 apiVersion: v1
@@ -81,16 +85,17 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 data:
-  SCRUMLR_API_HOST: scrumlr-server
+  SCRUMLR_OPERATION_MODE: "livequery"
+  SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
+  SCRUMLR_API_HOST: "scrumlr-server"
   SCRUMLR_API_PORT: "4000"
-  SCRUMLR_CACHE_URL: redis://scrumlr-cache:6379
-  SCRUMLR_DATABASE_URI: mongodb://scrumlr-database:27017/dev
-  SCRUMLR_OPERATION_MODE: livequery
   SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
+  SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"
 ---
 # Source: scrumlr/templates/server/configmap.yaml
 apiVersion: v1
@@ -100,35 +105,17 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 data:
-  SCRUMLR_API_HOST: localhost
+  SCRUMLR_OPERATION_MODE: "server"
+  SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
+  SCRUMLR_API_HOST: "localhost"
   SCRUMLR_API_PORT: "4000"
-  SCRUMLR_CACHE_URL: redis://scrumlr-cache:6379
-  SCRUMLR_DATABASE_URI: mongodb://scrumlr-database:27017/dev
-  SCRUMLR_OPERATION_MODE: server
   SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
----
-# Source: scrumlr/charts/mongodb/templates/standalone/pvc.yaml
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: scrumlr-database
-  namespace: default
-  labels:
-    app.kubernetes.io/name: mongodb
-    helm.sh/chart: mongodb-10.23.13
-    app.kubernetes.io/instance: scrumlr
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: mongodb
-spec:
-  accessModes:
-    - "ReadWriteOnce"
-  resources:
-    requests:
-      storage: "8Gi"
+  SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"
 ---
 # Source: scrumlr/charts/mongodb/templates/standalone/svc.yaml
 apiVersion: v1
@@ -162,17 +149,19 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-cache
       app.kubernetes.io/components: cache
+      app: scrumlr-cache
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
   ports:
-    - port: 6379
-      targetPort: 6379
+    - port: 6379 
+      targetPort: redis 
       protocol: TCP
   selector:
       app.kubernetes.io/name: scrumlr-cache
       app.kubernetes.io/components: cache
+      app: scrumlr-cache
 ---
 # Source: scrumlr/templates/dashboard/service.yaml
 apiVersion: v1
@@ -182,17 +171,19 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
   ports:
-    - port: 4040
-      targetPort: 4040
+    - port: 4040 
+      targetPort: dashboard 
       protocol: TCP
   selector:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
 ---
 # Source: scrumlr/templates/frontend/service.yaml
 apiVersion: v1
@@ -202,17 +193,19 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-frontend
       app.kubernetes.io/components: frontend
+      app: scrumlr-frontend
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
   ports:
-    - port: 80
+    - port: 80 
       targetPort: 80
       protocol: TCP
   selector:
       app.kubernetes.io/name: scrumlr-frontend
       app.kubernetes.io/components: frontend
+      app: scrumlr-frontend
 ---
 # Source: scrumlr/templates/livequery/service.yaml
 apiVersion: v1
@@ -222,17 +215,19 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
   ports:
-    - port: 4000
-      targetPort: 4000
+    - port: 4000 
+      targetPort: 4000 
       protocol: TCP
   selector:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
 ---
 # Source: scrumlr/templates/server/service.yaml
 apiVersion: v1
@@ -242,17 +237,19 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
   ports:
-    - port: 4000
-      targetPort: 4000
+    - port: 4000 
+      targetPort: server 
       protocol: TCP
   selector:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
 ---
 # Source: scrumlr/charts/mongodb/templates/standalone/dep-sts.yaml
 apiVersion: apps/v1
@@ -379,8 +376,7 @@ spec:
               subPath: 
       volumes:
         - name: datadir
-          persistentVolumeClaim:
-            claimName: scrumlr-database
+          emptyDir: {}
 ---
 # Source: scrumlr/templates/cache/deployment.yaml
 apiVersion: apps/v1
@@ -390,6 +386,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-cache
       app.kubernetes.io/components: cache
+      app: scrumlr-cache
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -399,19 +396,21 @@ spec:
     matchLabels:
       app.kubernetes.io/name: scrumlr-cache
       app.kubernetes.io/components: cache
+      app: scrumlr-cache
   template:
     metadata:
       labels:
         app.kubernetes.io/name: scrumlr-cache
         app.kubernetes.io/components: cache
+        app: scrumlr-cache
     spec:
       containers:
         - name: scrumlr-cache 
           image: redis:6.2.4-alpine
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: IfNotPresent 
           ports:
-            - name: redis
-              containerPort: 6379
+          - name: redis
+            containerPort: 6379
           livenessProbe:
             tcpSocket:
               port: 6379
@@ -421,7 +420,7 @@ spec:
             exec:
               command:
               - redis-cli
-              - ping
+              - ping  
             initialDelaySeconds: 5
             periodSeconds: 10
       restartPolicy: Always
@@ -434,6 +433,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -443,31 +443,33 @@ spec:
     matchLabels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
   template:
     metadata:
       labels:
         app.kubernetes.io/name: scrumlr-dashboard
         app.kubernetes.io/components: dashboard
+        app: scrumlr-dashboard
     spec:
       containers:
-        - name: scrumlr-dashboard
-          image: scrumlr-dashboard
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: dashboard
-              containerPort: 4040
-          envFrom:
-            - configMapRef:
-                name: scrumlr-dashboard
-            - secretRef:
-                name: scrumlr-dashboard
-          livenessProbe:
-            httpGet:
-              path: /dashboard
-              port: 4040
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
+      - name: scrumlr-dashboard
+        image: scrumlr-dashboard 
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: dashboard 
+          containerPort: 4040 
+        envFrom:
+        - configMapRef:
+            name: scrumlr-dashboard
+        - secretRef:
+            name: scrumlr-dashboard
+        livenessProbe:
+          httpGet:
+            path: /dashboard
+            port: 4040
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
       restartPolicy: Always
 ---
 # Source: scrumlr/templates/frontend/deployment.yaml
@@ -478,35 +480,37 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-frontend
       app.kubernetes.io/components: frontend
+      app: scrumlr-frontend
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
-  replicas: 1
+  replicas: 1 
   selector:
     matchLabels:
         app.kubernetes.io/name: scrumlr-frontend
         app.kubernetes.io/components: frontend
+        app: scrumlr-frontend
   template:
     metadata:
       labels:
         app.kubernetes.io/name: scrumlr-frontend
-        app.kubernetes.io/components: frontend    
+        app.kubernetes.io/components: frontend
+        app: scrumlr-frontend    
     spec:
       containers:
         - name: scrumlr-frontend
           image: scrumlr-frontend
           imagePullPolicy: IfNotPresent
           ports:
-            - name: frontendport
-              containerPort: 80
+            - containerPort: 80 
           livenessProbe:
             httpGet:
               path: /
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 3
-          readinessProbe:
+          readinessProbe: 
             httpGet:
               path: /
               port: 80
@@ -522,44 +526,47 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
-  replicas: 1
+  replicas: 1 
   selector:
     matchLabels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
   template:
     metadata:
       labels:
         app.kubernetes.io/name: scrumlr-livequery
-        app.kubernetes.io/components: livequery  
+        app.kubernetes.io/components: livequery
+        app: scrumlr-livequery  
     spec:
       containers:
         - name: scrumlr-livequery
           image: scrumlr-parse
-          imagePullPolicy:  Never
+          imagePullPolicy: IfNotPresent 
           envFrom:
             - configMapRef: 
                 name: scrumlr-livequery
             - secretRef:
                 name: scrumlr-livequery
           ports:
-            - name: livequeryport
-              containerPort: 4000
+            - name: livequery 
+              containerPort: 4000 
           livenessProbe:
-            initialDelaySeconds: 10
+            tcpSocket:
+              port: livequery 
+            initialDelaySeconds: 40
             periodSeconds: 20
+          readinessProbe: 
             tcpSocket:
-              port: livequeryport
-          readinessProbe:
-            initialDelaySeconds: 10
+              port: livequery 
+            initialDelaySeconds: 10 
             periodSeconds: 10
-            tcpSocket:
-              port: livequeryport
-      restartPolicy:  Always
+      restartPolicy: Always
 ---
 # Source: scrumlr/templates/server/deployment.yaml
 apiVersion: apps/v1
@@ -569,51 +576,54 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
 spec:
-  replicas: 1
+  replicas: 1 
   selector:
     matchLabels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
   template:
     metadata:
       labels:
         app.kubernetes.io/name: scrumlr-server
         app.kubernetes.io/components: server
+        app: scrumlr-server
     spec:
       containers:
         - name: scrumlr-server
           image: scrumlr-parse
-          imagePullPolicy:  Never
+          imagePullPolicy: IfNotPresent  
           ports:
-            - name: serverport
-              containerPort: 4000
+            - name: server 
+              containerPort: 4000 
           envFrom:
             - configMapRef:
                 name: scrumlr-server
             - secretRef:
                 name: scrumlr-server
-          livenessProbe:
+          livenessProbe: 
             httpGet:
               path: /api/health
-              port: 4000
-            initialDelaySeconds: 30
+              port: server 
+            initialDelaySeconds: 40
             periodSeconds: 10
             timeoutSeconds: 5
-          readinessProbe:
+          readinessProbe: 
             httpGet:
+              path: /api/users
+              port: server 
               httpHeaders:
               - name: X-Parse-Application-Id
                 value: Scrumlr
-              path: /api/users
-              port: 4000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 10 
             periodSeconds: 5
             timeoutSeconds: 5
-      restartPolicy:  Always
+      restartPolicy: Always
 ---
 # Source: scrumlr/templates/dashboard/ingress.yaml
 apiVersion: networking.k8s.io/v1
@@ -623,6 +633,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-dashboard
       app.kubernetes.io/components: dashboard
+      app: scrumlr-dashboard
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -648,6 +659,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-frontend
       app.kubernetes.io/components: frontend
+      app: scrumlr-frontend
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -658,7 +670,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: / 
         pathType: Prefix
         backend:
           service:
@@ -695,18 +707,18 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-livequery
       app.kubernetes.io/components: livequery
+      app: scrumlr-livequery
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-  annotations:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - http:
       paths:
-      - path:  /ws
+      - path: /ws 
         pathType: Prefix
         backend:
           service:
@@ -722,6 +734,7 @@ metadata:
   labels:
       app.kubernetes.io/name: scrumlr-server
       app.kubernetes.io/components: server
+      app: scrumlr-server
       app.kubernetes.io/managed-by: Helm
       app.kubernetes.io/part-of: scrumlr
       helm.sh/chart: scrumlr-0.1.0
@@ -731,7 +744,7 @@ spec:
   rules:
   - http:
       paths:
-      - path:  /api
+      - path: /api 
         pathType: Prefix
         backend:
           service:
