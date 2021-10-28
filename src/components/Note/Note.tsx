@@ -118,7 +118,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
-          <Votes className="note__votes" noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
+          <Votes noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>
