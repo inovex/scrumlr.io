@@ -172,6 +172,48 @@ describe("board actions", () => {
     });
   });
 
+  describe("require passphrase on board access", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>, BoardReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = BoardActionFactory.requirePassphraseChallenge();
+      expect(action).toEqual({
+        type: "@@SCRUMLR/passphraseChallengeRequired",
+      });
+    });
+  });
+
+  describe("incorrect passphrase on board access", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.incorrectPassphrase>, BoardReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof BoardActionFactory.incorrectPassphrase>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = BoardActionFactory.incorrectPassphrase();
+      expect(action).toEqual({
+        type: "@@SCRUMLR/incorrectPassphrase",
+      });
+    });
+  });
+
   describe("rejected board access", () => {
     test("type is listed in users redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript
