@@ -10,14 +10,18 @@ jobs:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'}}
     steps:
+
+      - name: checkout repository
+        uses: actions/checkout@v2
+
       - name: generate values-dev.yaml
         run: |
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           cat > values-dev.yaml << EOF
-          hostname: $pr_mumber.scrumlr.fra.ics.inovex.io
+          hostname: $PR_NUMBER.scrumlr.fra.ics.inovex.io
           cert:
             enabled: true
-            name: scrumlr-cert-$pr_number
+            name: scrumlr-cert-$PR_NUMBER
           frontend:
             image: registry.kube.com/scrumlr-frontend:$PR_NUMBER
             imagePullPolicy: Always
@@ -30,14 +34,15 @@ jobs:
           dashboard:
             image: registry.kube.com/scrumlr-dashboard:$PR_NUMBER
             imagePullPolicy: Always
-          EOF 
+          EOF
+
       - name: deploy pr 
         run: |
-          kubectl get po -n scrumlr-$PR_NUMBER  | grep 'Running\|Completed' && helm uninstall scrumlr-$PR_NUMBER
+          kubectl get po -n scrumlr-$PR_NUMBER  | grep 'Running\|Completed' && helm uninstall scrumlr-$PR_NUMBER -n scrumlr-$PR-NUMBER && kubectl delete ns scrumlr-$PR_NUMBER
           kubectl wait --for=delete namespace/scrumlr-$PR_NUMBER --timeout=60s
-          helm install scrumlr-$PR_NUMBER ./deployment/chart -f dev.yaml --namespace scrumlr-$PR_NUMBER --create-namespace
+          helm install scrumlr-$PR_NUMBER ./deployment/chart -f values-dev.yaml --namespace scrumlr-$PR_NUMBER --create-namespace
     deploy-main:
-      name: Deploy Main Branch 
+      name: Deploy Main Branch
       runs-on: self-hosted
       if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'}}
       steps:

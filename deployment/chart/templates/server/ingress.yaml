@@ -8,7 +8,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     {{- if .Values.cert.enabled }}
-    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    cert-manager.io/cluster-issuer: {{if .Values.cert.prod}}"letsencrypt-production"{{ else }}"letsencrypt-staging"{{ end }}
     {{- end }}
 spec:
   {{- if and .Values.cert.enabled .Values.hostname}}

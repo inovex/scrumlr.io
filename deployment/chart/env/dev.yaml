@@ -1,3 +1,9 @@
+hostname: dev.scrumlr.fra.ics.inovex.io
+cert:
+  enabled: true
+  prod: true
+  name: scrumlr-cert-main
+
 frontend:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
 livequery:
