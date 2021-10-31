@@ -125,3 +125,25 @@ $menu-desktop: "screen and (min-width: 1344px)";
 @mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
+
+// apply styles on given selector if columns are collapsed (not all visible on a single screen)
+@mixin collapsedColumns($selector) {
+  @media screen and (max-width: 767px) {
+    #{$selector} {
+      @content;
+    }
+  }
+
+  [column-visibility="collapsed"] #{$selector} {
+    @content;
+  }
+}
+
+// apply styles on given selector if columns are visible entirely on the screen
+@mixin visibleColumns($selector) {
+  @media screen and (min-width: 768px) {
+    [column-visibility="visible"] #{$selector} {
+      @content;
+    }
+  }
+}
