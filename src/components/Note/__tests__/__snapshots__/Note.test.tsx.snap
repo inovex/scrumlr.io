@@ -9,6 +9,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
   >
     <div
       class="note"
+      tabindex="0"
     >
       <div
         class="note__content"
@@ -1938,6 +1939,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
   >
     <div
       class="note note__disabled-click"
+      tabindex="0"
     >
       <div
         class="note__content"
@@ -2460,6 +2462,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
 >
   <div
     class="note"
+    tabindex="0"
   >
     <div
       class="note__content"
