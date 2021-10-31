@@ -69,3 +69,12 @@ $timer-dropdown__color-dark: $color-white;
 .timer-dropdown__item-button > * > input:focus {
   outline: none;
 }
+
+.timer-dropdown__time-button {
+  outline: none;
+}
+
+.timer-dropdown__time-button:focus,
+.timer-dropdown__time-button:hover {
+  transform: scale(1.2);
+}

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import classNames from "classnames";
 import "./MenuItem.scss";
 import "./DropdownToggleButton.scss";
+import {TabIndex} from "constants/tabIndex";
 
 type DropdownButtonProps = {
   direction: "left" | "right";
@@ -9,6 +10,7 @@ type DropdownButtonProps = {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
   setTabable: React.Dispatch<React.SetStateAction<boolean>>;
+  tabIndex?: number;
 };
 
 export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
@@ -41,6 +43,7 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
           setShowDropdown(true);
         }
       }}
+      tabIndex={props.tabIndex ?? TabIndex.default}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>

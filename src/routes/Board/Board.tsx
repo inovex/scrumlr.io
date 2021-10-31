@@ -6,6 +6,7 @@ import {Note} from "components/Note";
 import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
 import {Timer} from "components/Timer";
+import {TabIndex} from "constants/tabIndex";
 
 export function Board() {
   const state = useAppSelector((applicationState) => ({
@@ -49,12 +50,20 @@ export function Board() {
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board
             .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
-            .map((column) => (
-              <Column key={column.columnId} id={column.columnId!} name={column.name} hidden={column.hidden} currentUserIsModerator={currentUserIsModerator} color={column.color}>
+            .map((column, columnIndex) => (
+              <Column
+                tabIndex={TabIndex.Column + columnIndex}
+                key={column.columnId}
+                id={column.columnId!}
+                name={column.name}
+                hidden={column.hidden}
+                currentUserIsModerator={currentUserIsModerator}
+                color={column.color}
+              >
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
-                  .map((note) => (
+                  .map((note, noteIndex) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
                       currentUserIsModerator={currentUserIsModerator}
@@ -74,6 +83,7 @@ export function Board() {
                       activeVoting={state.board.data?.voting === "active"}
                       activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
                       focus={note.focus}
+                      tabIndex={TabIndex.Note + columnIndex * TabIndex.Note + noteIndex}
                     />
                   ))}
               </Column>

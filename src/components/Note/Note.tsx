@@ -11,6 +11,7 @@ import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
+import {TabIndex} from "constants/tabIndex";
 
 interface NoteProps {
   text: string;
@@ -27,6 +28,7 @@ interface NoteProps {
   activeModeration: {userId?: string; status: boolean};
   focus: boolean;
   currentUserIsModerator: boolean;
+  tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
@@ -106,6 +108,7 @@ export const Note = (props: NoteProps) => {
           {"note--isOver": isOver && canDrop},
           {"note__disabled-click": props.activeModeration.status && !props.currentUserIsModerator}
         )}
+        tabIndex={props.tabIndex ?? TabIndex.default}
       >
         <div className="note__content">
           <p className="note__text">{props.text}</p>

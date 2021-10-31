@@ -21,6 +21,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   width: max-content;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  outline: none;
 }
 
 .board-header__link:focus,
