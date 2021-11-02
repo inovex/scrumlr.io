@@ -83,7 +83,7 @@ export function Board() {
                       activeVoting={state.board.data?.voting === "active"}
                       activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
                       focus={note.focus}
-                      tabIndex={TabIndex.Note + columnIndex * TabIndex.Note + noteIndex}
+                      tabIndex={TabIndex.Note + columnIndex * TabIndex.Note + noteIndex * 3}
                     />
                   ))}
               </Column>

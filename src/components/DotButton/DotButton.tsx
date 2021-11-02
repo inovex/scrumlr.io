@@ -7,6 +7,7 @@ type DotButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
   children?: ReactElement | ReactElement[];
+  tabIndex: number;
 };
 
 export const DotButton = (props: DotButtonProps) => (
@@ -17,6 +18,7 @@ export const DotButton = (props: DotButtonProps) => (
       e.stopPropagation();
       props.onClick?.();
     }}
+    tabIndex={props.tabIndex}
   >
     {props.children}
   </button>
