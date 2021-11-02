@@ -1,3 +1,5 @@
+@import "constants/style.scss";
+
 .timer {
   position: fixed;
   bottom: 16px;
@@ -5,7 +7,7 @@
   transform: translateX(-50%);
   z-index: 300;
 }
-[column-visibility="collapsed"] .timer {
+@include collapsedColumns(".timer") {
   bottom: auto;
   top: 98px;
 }
@@ -14,14 +16,14 @@
   background-color: #0057ff;
   vertical-align: bottom;
 }
-[column-visibility="collapsed"] .timer > * {
+@include collapsedColumns(".timer > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
 @media (prefers-color-scheme: dark) {
   .timer > * {
     background-color: #ff0069;
   }
-  [column-visibility="collapsed"] .timer > * {
+  @include collapsedColumns(".timer > *") {
     box-shadow: 0 8px 16px #ff006925;
   }
 }
