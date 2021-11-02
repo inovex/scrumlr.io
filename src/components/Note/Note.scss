@@ -60,6 +60,7 @@ $note__author-margin-left: 10px;
   }
 }
 
+.note:focus-within,
 .note:focus,
 .note:hover {
   transform: scale(1.02);
