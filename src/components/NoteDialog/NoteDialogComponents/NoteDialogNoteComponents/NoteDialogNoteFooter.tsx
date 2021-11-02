@@ -32,7 +32,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
         </figure>
       )}
       <div className="note-dialog__note-footer__options-and-votes">
-        {(props.activeVoting || props.votes.length != 0) && <Votes className="" noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />}
+        {(props.activeVoting || props.votes.length != 0) && <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />}
         {showOptions && <NoteDialogNoteComponents.Options {...props} />}
       </div>
     </div>
