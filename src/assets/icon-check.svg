@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <g fill="none" fill-rule="evenodd">
-    <polyline stroke="currentColor" stroke-linecap="square" stroke-width="2" points="12.463 18.398 16.477 22.324 26.463 12.324"/>
-    <path stroke="currentColor" stroke-width="1.5" d="M23.5189655,9.6595669 C21.9372606,8.61083051 20.0399638,8 18,8 C12.4771525,8 8,12.4771525 8,18 C8,23.5228475 12.4771525,28 18,28 C23.5228475,28 28,23.5228475 28,18 C28,17.5448544 27.9695928,17.0968108 27.910699,16.6577898" opacity=".7"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewbox="0 0 36 36">
+  <g fill="none">
+    <polyline stroke="currentColor" stroke-linecap="square" stroke-width="2" points="12.463 18.398 16.477 22.324 26.463 12.324" fill="none"/>
+    <path stroke="currentColor" stroke-width="1.5" d="M23.5189655,9.6595669 C21.9372606,8.61083051 20.0399638,8 18,8 C12.4771525,8 8,12.4771525 8,18 C8,23.5228475 12.4771525,28 18,28 C23.5228475,28 28,23.5228475 28,18 C28,17.5448544 27.9695928,17.0968108 27.910699,16.6577898" opacity=".7" fill="none"/>
   </g>
 </svg>

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <g fill="none" fill-rule="evenodd" transform="rotate(-90 18 12)">
-    <polygon points="0 0 24 0 24 24 0 24"/>
+  <g fill="none" transform="rotate(-90 18 12)" >
+    <polygon points="0 0 24 0 24 24 0 24" />
     <rect width="17" height="8" x="3" y="8" stroke="currentColor" stroke-width="2" rx="1"/>
-    <path stroke="currentColor" stroke-width="1.5" d="M20,2.11889648 L20,2.11889648 L20,3 C20,3.55228475 19.5522847,4 19,4 L4,4 C3.44771525,4 3,3.55228475 3,3 L3,1.91210938 L3,1.91210938" opacity=".7"/>
-    <path stroke="currentColor" stroke-width="1.5" d="M20,20.1188965 L20,20.1188965 L20,21 C20,21.5522847 19.5522847,22 19,22 L4,22 C3.44771525,22 3,21.5522847 3,21 L3,19.9121094 L3,19.9121094" opacity=".7" transform="matrix(1 0 0 -1 0 41.912)"/>
+    <path stroke="currentColor" stroke-width="1.5" d="M20,2.11889648 L20,2.11889648 L20,3 C20,3.55228475 19.5522847,4 19,4 L4,4 C3.44771525,4 3,3.55228475 3,3 L3,1.91210938 L3,1.91210938" opacity=".7" fill="none"/>
+    <path stroke="currentColor" stroke-width="1.5" d="M20,20.1188965 L20,20.1188965 L20,21 C20,21.5522847 19.5522847,22 19,22 L4,22 C3.44771525,22 3,21.5522847 3,21 L3,19.9121094 L3,19.9121094" opacity=".7" transform="matrix(1 0 0 -1 0 41.912)" fill="none"/>
   </g>
 </svg>

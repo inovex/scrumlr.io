@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
   <g opacity="0.8">
-    <rect width="20" height="20" fill="rgba(255,255,255,0)" />
+    <rect width="20" height="20" fill="none" />
     <g transform="translate(4.752 5)">
-      <circle cx="4" cy="4" r="4" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+      <circle cx="4" cy="4" r="4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
         stroke-width="1.5" />
-      <path d="M17.47,16.887l3.77,3.81" transform="translate(-10.744 -9.838)" fill="none" stroke="#fff"
+      <path d="M17.47,16.887l3.77,3.81" transform="translate(-10.744 -9.838)" fill="none" stroke="currentColor"
         stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
     </g>
   </g>
