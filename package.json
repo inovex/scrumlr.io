@@ -17,7 +17,7 @@
     "json2csv": "^5.0.6",
     "lodash": "^4.17.20",
     "marked": "3.0.8",
-    "parse": "^3.3.1",
+    "parse": "^3.4.0",
     "qrcode.react": "^1.0.1",
     "query-string": "^7.0.1",
     "react": "^17.0.2",
