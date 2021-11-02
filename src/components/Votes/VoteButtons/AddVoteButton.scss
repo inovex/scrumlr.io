@@ -2,18 +2,18 @@
 @import "./VoteButton.scss";
 
 .vote-button-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   height: $vote-button-height;
   width: $vote-button-width;
-  position: absolute;
-  right: -5px;
+
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
 }
 
 .vote-button-add__icon {
-  position: absolute;
-  top: $vote-button-top;
-  left: $vote-button-left;
   height: $vote-button-icon-height;
   width: $vote-button-icon-width;
   fill: var(--accent-color);
