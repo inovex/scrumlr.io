@@ -23,8 +23,10 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
   return (
     <header className="board-header">
-      <Link tabIndex={TabIndex.BoardHeader} to="/" className="board-header__link" aria-label="Return to homepage">
-        <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+      <Link to="/" aria-label="Return to homepage">
+        <button tabIndex={TabIndex.BoardHeader} className="board-header__link">
+          <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+        </button>
       </Link>
 
       <div className="board-header__name-and-settings">

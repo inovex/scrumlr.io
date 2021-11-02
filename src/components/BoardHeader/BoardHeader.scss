@@ -22,6 +22,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   outline: none;
+  background-color: transparent;
+  border: none;
 }
 
 .board-header__link:focus,
