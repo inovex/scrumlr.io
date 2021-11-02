@@ -502,6 +502,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
             >
               <button
                 class="dot-button vote-button-remove"
+                tabindex="0"
               >
                 <span
                   class="vote-button-remove__folded-corner"
@@ -512,6 +513,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               </button>
               <button
                 class="dot-button vote-button-add"
+                tabindex="0"
               >
                 <svg
                   class="vote-button-add__icon"
@@ -938,6 +940,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
             >
               <button
                 class="dot-button vote-button-add"
+                tabindex="0"
               >
                 <svg
                   class="vote-button-add__icon"
@@ -954,6 +957,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               >
                 <button
                   class="dot-button note-dialog__note-option__unstack"
+                  tabindex="0"
                 >
                   <svg
                     class="note-dialog__note-option__unstack-icon"
@@ -1378,6 +1382,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
             >
               <button
                 class="dot-button vote-button-add"
+                tabindex="0"
               >
                 <svg
                   class="vote-button-add__icon"
@@ -1394,6 +1399,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
               >
                 <button
                   class="dot-button note-dialog__note-option__unstack"
+                  tabindex="0"
                 >
                   <svg
                     class="note-dialog__note-option__unstack-icon"
