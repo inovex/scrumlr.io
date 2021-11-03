@@ -546,7 +546,7 @@ spec:
     spec:
       containers:
         - name: scrumlr-livequery
-          image: scrumlr-parse
+          image: scrumlr-server
           imagePullPolicy: IfNotPresent 
           envFrom:
             - configMapRef: 
@@ -596,7 +596,7 @@ spec:
     spec:
       containers:
         - name: scrumlr-server
-          image: scrumlr-parse
+          image: scrumlr-server
           imagePullPolicy: IfNotPresent  
           ports:
             - name: server 

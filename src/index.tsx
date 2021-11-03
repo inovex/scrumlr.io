@@ -11,7 +11,7 @@ import store from "store";
 import Router from "routes/Router";
 
 Parse.initialize("Scrumlr");
-Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || `https://${window.location.hostname}/api`;
+Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || `${window.location.protocol}//${window.location.hostname}/api`;
 Parse.liveQueryServerURL = process.env.REACT_APP_LIVEQUERY_URL || `wss://${window.location.hostname}/ws`;
 
 ReactDOM.render(
