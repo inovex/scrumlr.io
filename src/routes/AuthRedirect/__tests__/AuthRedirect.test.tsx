@@ -1,12 +1,16 @@
 import {API} from "api";
-import Parse from "parse";
+import {Attributes, User} from "parse";
 import {render, waitFor} from "@testing-library/react";
 import {createMemoryHistory} from "history";
 import {Router} from "react-router";
 import {AuthRedirect} from "routes/AuthRedirect";
+import {mocked} from "ts-jest/utils";
 
 jest.mock("api");
 jest.mock("parse");
+
+const mockedVerifySignIn = mocked(API.verifySignIn);
+const mockedUser = mocked(User, true);
 
 const history = createMemoryHistory();
 
@@ -55,7 +59,7 @@ describe("routing tests", () => {
     test("redirect user on successful sign in", async () => {
       const targetURLAfterSuccessfulSignIn = "http://destiny.com";
 
-      API.verifySignIn.mockResolvedValue(
+      mockedVerifySignIn.mockResolvedValue(
         new Promise((resolve) => {
           resolve({
             user: {
@@ -75,7 +79,7 @@ describe("routing tests", () => {
         save: jest.fn().mockReturnValue(Promise.resolve(true)),
       };
 
-      Parse.User.mockImplementation(() => user);
+      mockedUser.mockImplementation(() => user as unknown as User<Attributes>);
 
       history.push("?code=test_code&state=google-test");
       render(

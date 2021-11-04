@@ -5,7 +5,9 @@ exports[`DotButton should render correctly 1`] = `
   <button
     class="dot-button"
   >
-    test-text
+    <span>
+      test-text
+    </span>
   </button>
 </div>
 `;
@@ -15,7 +17,9 @@ exports[`DotButton should render correctly with additional classname 1`] = `
   <button
     class="dot-button test-classname"
   >
-    test-text
+    <span>
+      test-text
+    </span>
   </button>
 </div>
 `;

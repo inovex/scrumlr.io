@@ -5,8 +5,10 @@ import {UserClientModel} from "./user";
 import {JoinRequestClientModel} from "./joinRequest";
 import {VoteConfigurationClientModel} from "./voteConfiguration";
 
+export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
+
 export interface BoardState {
-  status: "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
+  status: BoardStatus;
   data?: BoardClientModel;
 }
 
