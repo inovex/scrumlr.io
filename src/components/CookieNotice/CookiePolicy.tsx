@@ -1,7 +1,7 @@
 import "./CookiePolicy.scss";
 import {useEffect, useState} from "react";
 import {Portal} from "components/Portal";
-import marked from "marked";
+import {marked} from "marked";
 import policyText from "components/CookieNotice/CookiePolicyText.md";
 
 interface CookiePolicyProps {
