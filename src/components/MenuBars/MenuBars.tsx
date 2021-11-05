@@ -56,15 +56,7 @@ export function MenuBars() {
   };
 
   return (
-    <aside
-      id="menu-bars"
-      className={classNames(
-        "menu-bars",
-        {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu},
-        {"menu-bars--isAdmin": isAdmin},
-        {"menu-bars--bottom": document.getElementById("menu-bars")?.classList.contains("menu-bars--bottom")}
-      )}
-    >
+    <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
           <MenuToggle direction="right" value={isReady} toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={toggleReadyState} />
