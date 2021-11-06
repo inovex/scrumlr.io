@@ -5,6 +5,7 @@ import {API} from "api";
 import {LoadingScreen} from "components/LoadingScreen";
 import {useLocation} from "react-router";
 import {ErrorPage} from "components/ErrorPage";
+import {useTranslation} from "react-i18next";
 
 interface IAuthData {
   id: string;
@@ -13,6 +14,8 @@ interface IAuthData {
 }
 
 export function AuthRedirect() {
+  const {t} = useTranslation();
+
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
   const location = useLocation();
   const params = queryString.parse(location.search);
@@ -64,7 +67,7 @@ export function AuthRedirect() {
   }, [params.code, params.error, params.state, params.user]);
 
   if (status.error) {
-    return <ErrorPage errorMessage="Oops! Sign-in failed, please try again." originURL={originURL} />;
+    return <ErrorPage errorMessage={t("AuthRedirect.error")} originURL={originURL} />;
   }
 
   return <LoadingScreen />;

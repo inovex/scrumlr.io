@@ -4,8 +4,11 @@ import {AuthenticationManager} from "utils/authentication/AuthenticationManager"
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
+import {useTranslation} from "react-i18next";
 
 export function LoginBoard(props: RouteComponentProps) {
+  const {t} = useTranslation();
+
   const [displayName, setDisplayName] = useState(getRandomName());
   const history = useHistory<{from: {pathname: string}}>();
 
@@ -15,7 +18,7 @@ export function LoginBoard(props: RouteComponentProps) {
     try {
       props.history.push(history.location.state.from.pathname);
     } catch (err) {
-      Toast.error("An error occured while redirecting you");
+      Toast.error(t("LoginBoard.errorOnRedirect"));
     }
   }
 
@@ -33,7 +36,7 @@ export function LoginBoard(props: RouteComponentProps) {
         }}
         maxLength={20}
       />
-      <button onClick={handleLogin}>Join Board Anonymously</button>
+      <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
       <LoginProviders originURL={history.location.state.from.pathname} />
     </div>
   );

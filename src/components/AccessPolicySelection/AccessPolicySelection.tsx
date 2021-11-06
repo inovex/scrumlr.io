@@ -2,6 +2,7 @@ import {ChangeEvent, FC} from "react";
 import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
+import {useTranslation} from "react-i18next";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -11,6 +12,8 @@ export interface AccessPolicySelectionProps {
 }
 
 export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
+  const {t} = useTranslation();
+
   const handlePolicyChange = (e: ChangeEvent<HTMLInputElement>) => {
     const accessPolicy = Number.parseInt(e.target.value);
 
@@ -23,10 +26,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
     case AccessPolicy.Public:
-      AccessPolicyDescription = <div>Access by URL without further verification.</div>;
+      AccessPolicyDescription = <div>{t("AccessPolicySelection.public")}</div>;
       break;
     case AccessPolicy.ByPassphrase:
-      AccessPolicyDescription = <div>Access by URL and passphrase.</div>;
+      AccessPolicyDescription = <div>{t("AccessPolicySelection.byPassphrase")}</div>;
       AdditionalAccessPolicySettings = (
         <>
           <label>
@@ -34,17 +37,17 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
             <input data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
           </label>
           <button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
-            Generate random passphrase
+            {t("AccessPolicySelection.generatePassphrase")}
           </button>
           <button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
-            Copy passphrase to clipboard
+            {t("AccessPolicySelection.copyPassphraseToClipboard")}
           </button>
-          {!passphrase && <div>A passphrase must be set</div>}
+          {!passphrase && <div>{t("AccessPolicySelection.passphraseValidationError")}</div>}
         </>
       );
       break;
     case AccessPolicy.ManualVerification:
-      AccessPolicyDescription = <div>Admins of board can manually verify or reject each access request individually.</div>;
+      AccessPolicyDescription = <div>{t("AccessPolicySelection.manualVerification")}</div>;
       break;
   }
 

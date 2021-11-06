@@ -10,9 +10,12 @@ import {LoginProviders} from "components/LoginProviders";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {AppInfo} from "components/AppInfo";
+import {useTranslation} from "react-i18next";
 import {columnTemplates} from "./columnTemplates";
 
 export function NewBoard(props: RouteComponentProps) {
+  const {t} = useTranslation();
+
   const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
@@ -38,7 +41,7 @@ export function NewBoard(props: RouteComponentProps) {
       );
       props.history.push(`/board/${boardId}`);
     } else {
-      Toast.error("You must be logged in to create a board. Reload the page and try again");
+      Toast.error(t("NewBoard.createBoardError"));
     }
   }
 
@@ -74,10 +77,9 @@ export function NewBoard(props: RouteComponentProps) {
           ))}
         </select>
         <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
-          Create new Board
+          {t("NewBoard.createNewBoard")}
         </button>
-        <button onClick={onLogout}>Logout</button>
-
+        <button onClick={onLogout}>{t("NewBoard.logout")}</button>
         <AppInfo />
       </div>
     );
@@ -102,7 +104,7 @@ export function NewBoard(props: RouteComponentProps) {
         }}
         disabled={isCreatedBoardDisabled}
       >
-        Create new board anonymously
+        {t("NewBoard.createNewBoardAnonymous")}
       </button>
       <LoginProviders />
 

@@ -1,0 +1,42 @@
+{
+  "NewBoard": {
+    "createNewBoard": "Create new Board",
+    "createNewBoardAnonymous": "Create new board anonymously",
+    "createBoardError": "You must be logged in to create a board. Reload the page and try again",
+    "logout": "Logout"
+  },
+  "LoginBoard": {
+    "errorOnRedirect": "An error occurred while redirecting you",
+    "joinAnonymous": "Join board anonymously"
+  },
+  "Board": {
+    "publicSession": "Public Session",
+    "privateSession": "Private Session"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "Incorrect passphrase used.",
+    "reject": "You have been rejected.",
+    "returnToHomepage": "Return to homepage",
+    "waitingForApproval": "Waiting for approval."
+  },
+  "AuthRedirect": {
+    "error": "Oops! Sign-in failed, please try again."
+  },
+  "AccessPolicySelection": {
+    "public": "Access by URL without further verification.",
+    "byPassphrase": "Access by URL and passphrase.",
+    "manualVerification": "Admins of board can manually verify or reject each access request individually.",
+    "generatePassphrase": "Generate random passphrase",
+    "copyPassphraseToClipboard": "Copy passphrase to clipboard",
+    "passphraseValidationError": "A passphrase must be set"
+  },
+  "BoardHeader": {
+    "showParticipants": "Show participants"
+  },
+  "ParticipantsList": {
+    "title": "Participants",
+    "search": "Search",
+    "headerLegendName": "Name",
+    "headerLegendAdmin": "Admin"
+  }
+}
