@@ -124,5 +124,9 @@
     "5min": "5 minute",
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
+  },
+  "BoardSettings": {
+    "save": "save",
+    "edit": "edit"
   }
 }

@@ -124,5 +124,9 @@
     "5min": "5 Minuten",
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
+  },
+  "BoardSettings": {
+    "save": "speichern",
+    "edit": "bearbeiten"
   }
 }
