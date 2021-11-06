@@ -2,6 +2,8 @@ import {render, fireEvent, getByText} from "@testing-library/react";
 import {JoinRequest} from "components/JoinRequest";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {I18nextProvider} from "react-i18next";
+import i18n from "i18nTest";
 
 jest.mock("store", () => ({
   dispatch: jest.fn(),
@@ -19,7 +21,11 @@ describe("JoinRequest", () => {
         status: "pending" as const,
       });
     }
-    return <JoinRequest joinRequests={joinRequests} />;
+    return (
+      <I18nextProvider i18n={i18n}>
+        <JoinRequest joinRequests={joinRequests} />
+      </I18nextProvider>
+    );
   };
 
   describe("should render correctly", () => {
