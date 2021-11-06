@@ -38,5 +38,30 @@
     "search": "Search",
     "headerLegendName": "Name",
     "headerLegendAdmin": "Admin"
+  },
+  "DeleteBoardOption": {
+    "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
+    "button": "Delete board"
+  },
+  "ExportBoardOption": {
+    "button": "Export board",
+    "exportAsJson": "Export as json",
+    "exportAsCSV": "Export as csv"
+  },
+  "ShareQrCodeOption": {
+    "button": "Share board",
+    "copyInviteURL": "Copy Invite URL"
+  },
+  "ShowAuthorOption": {
+    "show": "Show authors of card",
+    "hide": "Hide authors of card"
+  },
+  "ShowHiddenColumnsOption": {
+    "show": "Show columns",
+    "hide": "Hide columns"
+  },
+  "ShowOtherUsersNotesOption": {
+    "show": "Show notes of other users",
+    "hide": "Hide notes of other users"
   }
 }
