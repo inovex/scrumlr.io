@@ -1,11 +1,14 @@
 import "./CookieNotice.scss";
 import React from "react";
 import {Portal} from "components/Portal";
+import {useTranslation} from "react-i18next";
 import {CookiePolicy} from "./CookiePolicy";
 
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 
 export const CookieNotice = () => {
+  const {t} = useTranslation();
+
   const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
   const [showCookiePolicy, setShowCookiePolicy] = React.useState<boolean>(false);
   const toggleShowCookiePolicy = () => {
@@ -64,22 +67,19 @@ export const CookieNotice = () => {
         </div>
 
         <div className="cookie-notice__body">
-          <p>
-            We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice,
-            by interacting with any link or button outside of this notice or by continuing to browse otherwise.
-          </p>
+          <p>{t("CookieNotice.description")}</p>
         </div>
         <div className="cookie-notice__buttons">
           <button className="cookie-notice__button-cookie-policy" type="button" onClick={openPolicy}>
-            Learn more about our Cookie Policy
+            {t("CookieNotice.learnMore")}
           </button>
 
           <button className="cookie-notice__button-decline" type="button" onClick={decline}>
-            Decline
+            {t("CookieNotice.decline")}
           </button>
 
           <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
-            Accept
+            {t("CookieNotice.accept")}
           </button>
         </div>
         <CookiePolicy accept={accept} decline={decline} onClose={toggleShowCookiePolicy} show={showCookiePolicy} darkBackground />

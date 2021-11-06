@@ -65,7 +65,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ShowAuthorOption.hide
+                  Hide authors of card
                 </span>
               </button>
             </li>
@@ -86,7 +86,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ShowOtherUsersNotesOption.show
+                  Show notes of other users
                 </span>
               </button>
             </li>
@@ -107,7 +107,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ShowHiddenColumnsOption.hide
+                  Hide columns
                 </span>
               </button>
             </li>
@@ -126,7 +126,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ShareQrCodeOption.button
+                  Share board
                 </span>
               </button>
               <div
@@ -141,7 +141,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <button
                   class="share-qr-code-option__copy-to-clipboard"
                 >
-                  ShareQrCodeOption.copyInviteURL
+                  Copy Invite URL
                 </button>
               </div>
             </li>
@@ -169,12 +169,12 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <label
                   class="delete-board-option__warning-label"
                 >
-                  DeleteBoardOption.warning
+                  Are you absolutely sure that you want to delete the board? This action cannot be undone.
                 </label>
                 <button
                   class="delete-board-option__delete-board"
                 >
-                  DeleteBoardOption.button
+                  Delete board
                 </button>
               </div>
             </li>
@@ -193,7 +193,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ExportBoardOption.button
+                  Export board
                 </span>
               </button>
               <div
@@ -211,7 +211,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    ExportBoardOption.exportAsJson
+                    Export as json
                   </span>
                 </button>
                 <button
@@ -226,7 +226,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    ExportBoardOption.exportAsCSV
+                    Export as csv
                   </span>
                 </button>
               </div>
@@ -301,7 +301,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  ExportBoardOption.button
+                  Export board
                 </span>
               </button>
               <div
@@ -319,7 +319,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    ExportBoardOption.exportAsJson
+                    Export as json
                   </span>
                 </button>
                 <button
@@ -334,7 +334,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   <span
                     class="board-option-button__label"
                   >
-                    ExportBoardOption.exportAsCSV
+                    Export as csv
                   </span>
                 </button>
               </div>
