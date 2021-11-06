@@ -16,8 +16,11 @@ import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.s
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
+import {useTranslation} from "react-i18next";
 
 export function MenuBars() {
+  const {t} = useTranslation();
+
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -59,30 +62,44 @@ export function MenuBars() {
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
-          <MenuToggle direction="right" value={isReady} toggleStartLabel="Mark me as done" toggleStopLabel="Unmark me as done" icon={CheckIcon} onToggle={toggleReadyState} />
-          <MenuButton disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
-          <MenuButton disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
-          <MenuButton disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
+          <MenuToggle
+            direction="right"
+            value={isReady}
+            toggleStartLabel={t("MenuBars.markAsDone")}
+            toggleStopLabel={t("MenuBars.unmarkAsDone")}
+            icon={CheckIcon}
+            onToggle={toggleReadyState}
+          />
+          <MenuButton disabled direction="right" label={t("MenuBars.addImage")} icon={AddImageIcon} onClick={() => null} />
+          <MenuButton disabled direction="right" label={t("MenuBars.addSticker")} icon={AddStickerIcon} onClick={() => null} />
+          <MenuButton disabled direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <MenuToggle disabled direction="left" toggleStartLabel="Start column mode" toggleStopLabel="End column mode" icon={ColumnIcon} onToggle={() => null} />
+            <MenuToggle
+              disabled
+              direction="left"
+              toggleStartLabel={t("MenuBars.editColumns")}
+              toggleStopLabel={t("MenuBars.stopEditingColumns")}
+              icon={ColumnIcon}
+              onToggle={() => null}
+            />
             <TimerToggleButton />
             <MenuToggle
               value={state.voting === "active"}
               direction="left"
-              toggleStartLabel="Start voting phase"
-              toggleStopLabel="End voting phase"
+              toggleStartLabel={t("MenuBars.startVoting")}
+              toggleStopLabel={t("MenuBars.stopVoting")}
               icon={VoteIcon}
               onToggle={toggleVoting}
             />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
-              toggleStartLabel="Start focused mode"
-              toggleStopLabel="End focused mode"
+              toggleStartLabel={t("MenuBars.startFocusMode")}
+              toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
             />

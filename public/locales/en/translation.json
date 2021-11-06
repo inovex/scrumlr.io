@@ -103,5 +103,26 @@
     "decline": "Decline",
     "accept": "Accept",
     "body": "This document informs Users about the technologies that help scrumlr.io to achieve the purposes described below.\nSuch technologies allow the Owner to access and store information (for example by using a Cookie) or use resources\n(for example by running a script) on a User’s device as they interact with scrumlr.io.\n\nFor simplicity, all such technologies are defined as &quot;Trackers&quot; within this document – unless there is a\nreason to differentiate. For example, while Cookies can be used on both web and mobile browsers, it would be inaccurate\nto talk about Cookies in the context of mobile apps as they are a browser-based Tracker. For this\nreason, within this document, the term Cookies is only used where it is specifically meant to indicate that particular\ntype of Tracker.\n\nSome of the purposes for which Trackers are used may also require the User&apos;s consent. Whenever consent is given,\nit can be freely withdrawn at any time following the instructions provided in this document.\n\nScrumlr.io only uses Trackers managed directly by the Owner (so-called &quot;first-party&quot; Trackers). The validity\nand expiration periods of first-party Cookies and other similar Trackers may vary depending on the lifetime set by the\nOwner. Some of them expire upon termination of the User’s browsing session.\n\n## Activities strictly necessary for the operation of scrumlr.io and delivery of the Service\n\nScrumlr.io uses so-called “technical” Cookies and other similar Trackers to carry out activities that are strictly\nnecessary for the operation or delivery of the Service.\n\n## How to manage preferences and provide or withdraw consent\n\nThere are various ways to manage Tracker related preferences and to provide and withdraw consent, where relevant:\nUsers can manage preferences related to Trackers from directly within their own device settings, for example, by\npreventing the use or storage of Trackers. Additionally, whenever the use of Trackers is based on consent, Users can\nprovide or withdraw such consent by setting their preferences within the cookie notice or by updating such preferences\naccordingly via the relevant consent-preferences widget, if available.\n\nIt is also possible, via relevant browser or device features, to delete previously stored Trackers, including those\nused to remember the User’s initial consent. Other Trackers in the browser’s local memory may be cleared by deleting\nthe browsing history.\n\n## Locating Tracker Settings\n\nUsers can, for example, find information about how to manage Cookies in the most commonly used browsers at the following\naddresses:\n\n- Google Chrome\n- Mozilla Firefox\n- Apple Safari\n- Microsoft Internet Explorer\n- Microsoft Edge\n- Brave\n- Opera\n\nUsers may also manage certain categories of Trackers used on mobile apps by opting out through relevant device settings,\nsuch as the device advertising settings for mobile devices, or tracking settings in general (Users may open the device\nsettings, view and look for the relevant setting).\n\nOwner and Data Controller\ninovex GmbH\n\nKarlsruher Straße 71\n\n75179 Pforzheim\n\nGermany\n\nOwner contact email: info@scrumlr.io\n\nGiven the objective complexity surrounding tracking technologies, Users are encouraged to contact the Owner should they\nwish to receive any further information on the use of such technologies by scrumlr.io."
+  },
+  "MenuBars": {
+    "markAsDone": "Mark me as done",
+    "unmarkAsDone": "Unmark me as done",
+    "addImage": "Add image or giphy",
+    "addSticker": "Add sticker",
+    "settings": "Settings",
+    "editColumns": "Start column mode",
+    "stopEditingColumns": "End column mode",
+    "startVoting": "Start voting phase",
+    "stopVoting": "End voting phase",
+    "startFocusMode": "Start focused mode",
+    "stopFocusMode": "End focused mode"
+  },
+  "TimerToggleButton": {
+    "label": "Timer",
+    "1min": "1 minute",
+    "3min": "3 minute",
+    "5min": "5 minute",
+    "customTime": "Custom time",
+    "cancelTimer": "Cancel timer"
   }
 }
