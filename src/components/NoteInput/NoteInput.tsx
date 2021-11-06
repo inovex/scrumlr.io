@@ -3,12 +3,15 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {useTranslation} from "react-i18next";
 
 export interface NoteInputProps {
   columnId: string;
 }
 
 export const NoteInput = ({columnId}: NoteInputProps) => {
+  const {t} = useTranslation();
+
   const [value, setValue] = React.useState("");
 
   const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +27,7 @@ export const NoteInput = ({columnId}: NoteInputProps) => {
     <div className="note-input">
       <input
         className="note-input__input"
-        placeholder="Add your note..."
+        placeholder={t("NoteInput.placeholder")}
         type="text"
         value={value}
         onChange={handleChangeNotetext}

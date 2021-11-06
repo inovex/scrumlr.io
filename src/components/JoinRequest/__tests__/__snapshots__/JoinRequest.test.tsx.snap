@@ -7,7 +7,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
   <div
     class="join-request__header"
   >
-    Someone requests to participate
+    JoinRequest.title
   </div>
   <div
     class="join-request__main"
@@ -445,12 +445,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           <button
             class="join-request__button"
           >
-            Reject
+            JoinRequest.reject
           </button>
           <button
             class="join-request__button"
           >
-            Accept
+            JoinRequest.accept
           </button>
         </div>
       </li>
@@ -823,12 +823,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           <button
             class="join-request__button"
           >
-            Reject
+            JoinRequest.reject
           </button>
           <button
             class="join-request__button"
           >
-            Accept
+            JoinRequest.accept
           </button>
         </div>
       </li>
@@ -1287,12 +1287,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
           <button
             class="join-request__button"
           >
-            Reject
+            JoinRequest.reject
           </button>
           <button
             class="join-request__button"
           >
-            Accept
+            JoinRequest.accept
           </button>
         </div>
       </li>
@@ -1304,12 +1304,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
     <button
       class="join-request__button"
     >
-      Reject all
+      JoinRequest.rejectAll
     </button>
     <button
       class="join-request__button"
     >
-      Accept all
+      JoinRequest.acceptAll
     </button>
   </div>
 </div>
@@ -1322,7 +1322,7 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
   <div
     class="join-request__header"
   >
-    Someone requests to participate
+    JoinRequest.title
   </div>
   <div
     class="join-request__main"
@@ -1760,12 +1760,12 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
           <button
             class="join-request__button"
           >
-            Reject
+            JoinRequest.reject
           </button>
           <button
             class="join-request__button"
           >
-            Accept
+            JoinRequest.accept
           </button>
         </div>
       </li>

@@ -63,5 +63,33 @@
   "ShowOtherUsersNotesOption": {
     "show": "Show notes of other users",
     "hide": "Hide notes of other users"
+  },
+  "ErrorPage": {
+    "navigateHome": "Home",
+    "navigateBack": "Go back"
+  },
+  "JoinRequest": {
+    "title": "Someone requests to participate",
+    "accept": "Accept",
+    "reject": "Reject",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Sign in with Google",
+    "signInWithGitHub": "Sign in with Github",
+    "signInWithMicrosoft": "Sign in with Microsoft"
+  },
+  "NoteInput": {
+    "placeholder": "Add your note..."
+  },
+  "PassphraseDialog": {
+    "passphraseInputLabel": "Enter the passphrase to access this board",
+    "togglePassphraseVisibility": "Toggle passphrase visibility",
+    "submit": "Submit",
+    "hint": "Collaborative session. By continuing you're accepting our privacy policy."
+  },
+  "Timer": {
+    "stopTimer": "Stop timer"
   }
 }
