@@ -37,12 +37,14 @@ $header-menu-border-bottom-color: #efefef;
   color: $color-black;
   cursor: pointer;
 
+  &focus,
   &:hover {
     background-color: $header-menu-hover-color--light;
   }
 }
 
 @media (prefers-color-scheme: dark) {
+  .export-board-option__container > .board-option-button:focus,
   .export-board-option__container > .board-option-button:hover {
     background-color: $header-menu-hover-color--dark;
   }

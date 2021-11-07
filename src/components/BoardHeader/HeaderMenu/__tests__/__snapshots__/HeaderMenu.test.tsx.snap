@@ -140,6 +140,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 />
                 <button
                   class="share-qr-code-option__copy-to-clipboard"
+                  tabindex="-1"
                 >
                   Copy Invite URL
                 </button>
@@ -180,6 +181,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 </label>
                 <button
                   class="delete-board-option__delete-board"
+                  tabindex="-1"
                 >
                   Delete board
                 </button>
@@ -209,6 +211,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <button
                   class="board-option-button"
                   data-testid="export-json"
+                  tabindex="-1"
                 >
                   <svg
                     class="board-option-button__icon"
@@ -224,6 +227,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <button
                   class="board-option-button"
                   data-testid="export-csv"
+                  tabindex="-1"
                 >
                   <svg
                     class="board-option-button__icon"
@@ -317,6 +321,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 <button
                   class="board-option-button"
                   data-testid="export-json"
+                  tabindex="-1"
                 >
                   <svg
                     class="board-option-button__icon"
@@ -332,6 +337,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 <button
                   class="board-option-button"
                   data-testid="export-csv"
+                  tabindex="-1"
                 >
                   <svg
                     class="board-option-button__icon"

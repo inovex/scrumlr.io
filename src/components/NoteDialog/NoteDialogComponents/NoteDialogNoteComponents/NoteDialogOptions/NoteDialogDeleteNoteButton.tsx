@@ -1,5 +1,6 @@
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {DotButton} from "components/DotButton";
+import {TabIndex} from "constants/tabIndex";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
@@ -22,6 +23,7 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
         onDeleteOfParent();
       }}
       className="note-dialog__note-option__remove"
+      tabIndex={TabIndex.default}
     >
       <DeleteIcon className="note-dialog__note-option__remove-icon" />
     </DotButton>

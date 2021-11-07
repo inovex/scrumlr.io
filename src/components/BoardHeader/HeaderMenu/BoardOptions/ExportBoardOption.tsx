@@ -7,6 +7,7 @@ import classNames from "classnames";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./ExportBoardOption.scss";
+import {TabIndex} from "constants/tabIndex";
 
 export type ExportProps = {
   onClick: () => void;
@@ -34,6 +35,7 @@ export const ExportBoardOption = (props: ExportProps) => {
             props.onClose();
           }}
           data-testid="export-json"
+          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
         />
         <BoardOptionButton
           label="Export as csv"
@@ -43,6 +45,7 @@ export const ExportBoardOption = (props: ExportProps) => {
             props.onClose();
           }}
           data-testid="export-csv"
+          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
         />
       </div>
     </BoardOption>

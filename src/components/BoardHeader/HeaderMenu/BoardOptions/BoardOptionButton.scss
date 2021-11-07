@@ -47,6 +47,8 @@ $header-menu-border-bottom-color: #efefef;
   box-sizing: border-box;
 }
 
+.board-option-button:focus,
+.board-option-button--expandable:focus,
 .board-option-button--expandable:hover {
   background-color: $header-menu-hover-color--light;
 }
@@ -69,6 +71,8 @@ $header-menu-border-bottom-color: #efefef;
     background-color: $color-dark-mode-note;
   }
 
+  .board-option-button:focus,
+  .board-option-button--expandable:focus,
   .board-option-button--expandable:hover {
     background-color: $color-dark-mode-note--hover;
   }
