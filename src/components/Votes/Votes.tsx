@@ -4,6 +4,7 @@ import classNames from "classnames";
 import {VoteClientModel} from "types/vote";
 import Parse from "parse";
 import {FC} from "react";
+import {TabIndex} from "constants/tabIndex";
 import {VoteButtons} from "./VoteButtons";
 
 type VotesProps = {
@@ -11,6 +12,7 @@ type VotesProps = {
   noteId: string;
   votes: VoteClientModel[];
   activeVoting: boolean;
+  tabIndex?: number;
 };
 
 export const Votes: FC<VotesProps> = (props) => {
@@ -20,8 +22,8 @@ export const Votes: FC<VotesProps> = (props) => {
 
   return (
     <div className={classNames("votes", props.className)}>
-      {props.votes.length > 0 && <VoteButtons.Remove {...props} ownVotes={ownVotes} />}
-      {showAddVoteButton && <VoteButtons.Add {...props} />}
+      {props.votes.length > 0 && <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={ownVotes} />}
+      {showAddVoteButton && <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} />}
     </div>
   );
 };

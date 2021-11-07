@@ -3,12 +3,14 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {TabIndex} from "constants/tabIndex";
 
 export interface NoteInputProps {
   columnId: string;
+  tabIndex?: number;
 }
 
-export const NoteInput = ({columnId}: NoteInputProps) => {
+export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
   const [value, setValue] = React.useState("");
 
   const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +35,7 @@ export const NoteInput = ({columnId}: NoteInputProps) => {
             onAddNote();
           }
         }}
+        tabIndex={tabIndex ?? TabIndex.default}
       />
       <PlusIcon onClick={onAddNote} className="note-input__icon" />
     </div>

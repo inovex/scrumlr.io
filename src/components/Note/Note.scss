@@ -59,8 +59,12 @@ $note__author-margin-left: 10px;
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
   }
 }
+
+.note:focus-within,
+.note:focus,
 .note:hover {
   transform: scale(1.02);
+  outline: none;
 }
 .note--isDragging {
   opacity: 0.5;
@@ -126,6 +130,8 @@ $note__author-margin-left: 10px;
     color: $color-white;
   }
 }
+
+.note:focus > .note__content > .note__edit,
 .note:hover > .note__content > .note__edit {
   opacity: 100%;
 }

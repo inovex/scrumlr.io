@@ -21,13 +21,18 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   width: max-content;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  outline: none;
+  background-color: transparent;
+  border: none;
 }
 
+.board-header__link:focus,
 .board-header__link:hover {
   background-color: rgba(0, 87, 255, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
+  .board-header__link:focus,
   .board-header__link:hover {
     background-color: rgba(255, 0, 105, 0.15);
   }

@@ -19,6 +19,7 @@
   color: var(--accent-color);
 }
 
+.vote-button-add:not([disabled]):focus,
 .vote-button-add:not([disabled]):hover {
   background-color: var(--accent-color);
 

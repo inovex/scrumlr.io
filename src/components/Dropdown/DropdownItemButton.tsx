@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
 import {DropdownProps} from "./DropdownProps";
 
 export type DropdownItemButtonProps = DropdownProps & {
@@ -7,9 +8,9 @@ export type DropdownItemButtonProps = DropdownProps & {
   onTouchEnd?: (e: React.TouchEvent<HTMLButtonElement>) => void;
 };
 
-export const DropdownItemButton: React.FC<DropdownItemButtonProps> = ({className, children, onClick, onTouchEnd, ...other}) => (
+export const DropdownItemButton: React.FC<DropdownItemButtonProps> = ({className, tabIndex, children, onClick, onTouchEnd, ...other}) => (
   <li className={classNames("dropdown__item-button", className)} {...other}>
-    <button onClick={onClick} onTouchEnd={onTouchEnd}>
+    <button tabIndex={tabIndex ?? TabIndex.disabled} onClick={onClick} onTouchEnd={onTouchEnd}>
       {children}
     </button>
   </li>
