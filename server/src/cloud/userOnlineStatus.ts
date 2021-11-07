@@ -5,9 +5,11 @@ export const initializeUserOnlineStatus = () => {
 
       query.equalTo("sessionToken", sessionToken);
       query.first({useMasterKey: true}).then((session) => {
-        const user = session.get("user");
-        user.unset("boards");
-        user.save(null, {useMasterKey: true});
+        if (session) {
+          const user = session.get("user");
+          user.unset("boards");
+          user.save(null, {useMasterKey: true});
+        }
       });
     }
   });
