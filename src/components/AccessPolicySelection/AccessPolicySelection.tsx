@@ -33,7 +33,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       AdditionalAccessPolicySettings = (
         <>
           <label>
-            <div>Passphrase</div>
+            <div>{t("AccessPolicySelection.passphrase")}</div>
             <input data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
           </label>
           <button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>

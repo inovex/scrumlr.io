@@ -24,6 +24,7 @@
   },
   "AccessPolicySelection": {
     "title": "Zugriffsberechtigung",
+    "passphrase": "Passwort",
     "public": "Zugriff für alle über die URL möglich.",
     "byPassphrase": "Zugriff über die URL wird per Passwort geschützt.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",

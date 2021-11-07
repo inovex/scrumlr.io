@@ -24,6 +24,7 @@
   },
   "AccessPolicySelection": {
     "title": "Access policy",
+    "passphrase": "Passphrase",
     "public": "Access by URL without further verification.",
     "byPassphrase": "Access by URL and passphrase.",
     "manualVerification": "Admins of board can manually verify or reject each access request individually.",
