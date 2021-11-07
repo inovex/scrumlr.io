@@ -14,9 +14,6 @@ i18n
       caches: ["localStorage"],
     },
     fallbackLng: "en",
-    interpolation: {
-      escapeValue: false,
-    },
     react: {
       useSuspense: false,
       wait: false,

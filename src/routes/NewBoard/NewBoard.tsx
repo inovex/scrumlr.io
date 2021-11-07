@@ -66,7 +66,9 @@ export function NewBoard(props: RouteComponentProps) {
   if (Parse.User.current()) {
     return (
       <div>
-        <p>User: {displayName}</p>
+        <p>
+          {t("NewBoard.user")}: {displayName}
+        </p>
         <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
 
         <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
