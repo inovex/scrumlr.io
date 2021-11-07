@@ -9,7 +9,7 @@ $header-menu__item-height: 48px;
 $header-menu-border-bottom-color: #efefef;
 
 .board-option-button {
-  background-color: transparent;
+  background-color: $color-white;
   border: none;
   padding: 0;
   height: 100%;
@@ -19,7 +19,7 @@ $header-menu-border-bottom-color: #efefef;
 }
 .board-option-button:focus,
 .board-option-button:hover {
-  outline: none;
+  background-color: $header-menu-hover-color--light;
 }
 
 .board-option-button__label {
@@ -52,6 +52,15 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 @media (prefers-color-scheme: dark) {
+  .board-option-button {
+    background-color: $color-dark-mode-note;
+  }
+
+  .board-option-button:focus,
+  .board-option-button:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
+
   .board-option-button__label {
     color: $color-white;
   }
