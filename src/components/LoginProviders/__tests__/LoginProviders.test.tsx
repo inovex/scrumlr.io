@@ -1,6 +1,7 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {LoginProviders} from "components/LoginProviders";
+import {render} from "testUtils";
 
 describe("check for all provider buttons", () => {
   test("root element", () => {

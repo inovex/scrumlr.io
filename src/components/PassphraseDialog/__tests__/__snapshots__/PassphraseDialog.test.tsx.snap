@@ -92,7 +92,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         class="passphrase-dialog__input-label"
         for="passphrase"
       >
-        PassphraseDialog.passphraseInputLabel
+        Enter the passphrase to access this board
       </label>
       <input
         id="passphrase"
@@ -104,21 +104,21 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         aria-pressed="false"
         type="button"
       >
-        PassphraseDialog.togglePassphraseVisibility
+        Toggle passphrase visibility
       </button>
       <button
         class="passphrase-dialog__submit-button"
         disabled=""
         type="submit"
       >
-        PassphraseDialog.submit
+        Submit
       </button>
     </form>
   </div>
   <span
     class="passphrase-dialog__hint"
   >
-    PassphraseDialog.hint
+    Collaborative session. By continuing you're accepting our privacy policy.
   </span>
 </div>
 `;

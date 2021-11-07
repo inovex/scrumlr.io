@@ -1,4 +1,4 @@
-import {render, fireEvent} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {UserClientModel} from "types/user";
 import {useAppSelector} from "store";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
@@ -6,6 +6,7 @@ import {ActionFactory} from "store/action";
 import {mocked} from "ts-jest/utils";
 import {User} from "parse";
 import * as store from "store";
+import {render} from "testUtils";
 
 jest.mock("store");
 jest.mock("parse");

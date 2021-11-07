@@ -1,5 +1,6 @@
-import {render, screen} from "@testing-library/react";
+import {screen} from "@testing-library/react";
 import {ErrorPage} from "components/ErrorPage";
+import {render} from "testUtils";
 
 describe("error page renders all elements", () => {
   test("root element", () => {

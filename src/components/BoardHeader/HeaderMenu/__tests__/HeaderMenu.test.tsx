@@ -1,4 +1,4 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
@@ -11,6 +11,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {mocked} from "ts-jest/utils";
 import {I18nextProvider} from "react-i18next";
 import i18n from "i18nTest";
+import {render} from "testUtils";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);

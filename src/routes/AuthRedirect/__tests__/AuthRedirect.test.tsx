@@ -1,9 +1,10 @@
 import {API} from "api";
 import Parse from "parse";
-import {render, waitFor} from "@testing-library/react";
+import {waitFor} from "@testing-library/react";
 import {createMemoryHistory} from "history";
 import {Router} from "react-router";
 import {AuthRedirect} from "routes/AuthRedirect";
+import {render} from "testUtils";
 
 jest.mock("api");
 jest.mock("parse");

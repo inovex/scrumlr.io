@@ -1,9 +1,10 @@
-import {render, fireEvent, getByText} from "@testing-library/react";
+import {fireEvent, getByText} from "@testing-library/react";
 import {JoinRequest} from "components/JoinRequest";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {I18nextProvider} from "react-i18next";
 import i18n from "i18nTest";
+import {render} from "testUtils";
 
 jest.mock("store", () => ({
   dispatch: jest.fn(),

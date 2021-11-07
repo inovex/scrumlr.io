@@ -20,7 +20,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.markAsDone
+            Mark me as done
           </span>
         </div>
         <svg
@@ -44,7 +44,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.addImage
+            Add image or giphy
           </span>
         </div>
         <svg
@@ -63,7 +63,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.addSticker
+            Add sticker
           </span>
         </div>
         <svg
@@ -82,7 +82,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.settings
+            Settings
           </span>
         </div>
         <svg
@@ -116,7 +116,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.markAsDone
+            Mark me as done
           </span>
         </div>
         <svg
@@ -140,7 +140,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.addImage
+            Add image or giphy
           </span>
         </div>
         <svg
@@ -159,7 +159,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.addSticker
+            Add sticker
           </span>
         </div>
         <svg
@@ -178,7 +178,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.settings
+            Settings
           </span>
         </div>
         <svg
@@ -205,7 +205,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.editColumns
+            Start column mode
           </span>
         </div>
         <svg
@@ -228,7 +228,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            TimerToggleButton.label
+            Timer
           </span>
         </div>
         <svg
@@ -248,7 +248,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               >
                 <button>
                   <label>
-                    TimerToggleButton.1min
+                    1 minute
                   </label>
                   <div>
                     1
@@ -260,7 +260,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               >
                 <button>
                   <label>
-                    TimerToggleButton.3min
+                    3 minute
                   </label>
                   <div>
                     3
@@ -272,7 +272,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               >
                 <button>
                   <label>
-                    TimerToggleButton.5min
+                    5 minute
                   </label>
                   <div>
                     5
@@ -284,7 +284,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
               >
                 <button>
                   <label>
-                    TimerToggleButton.customTime
+                    Custom time
                   </label>
                   <button>
                     +
@@ -310,7 +310,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.startVoting
+            Start voting phase
           </span>
         </div>
         <svg
@@ -333,7 +333,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.startFocusMode
+            Start focused mode
           </span>
         </div>
         <svg

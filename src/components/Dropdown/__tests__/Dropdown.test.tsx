@@ -1,4 +1,5 @@
-import {render, fireEvent} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
+import {render} from "testUtils";
 import Dropdown from "../Dropdown";
 
 describe("Dropdown", () => {

@@ -6,7 +6,7 @@ exports[`Note Input should render correctly 1`] = `
 >
   <input
     class="note-input__input"
-    placeholder="NoteInput.placeholder"
+    placeholder="Add your note..."
     type="text"
     value=""
   />
