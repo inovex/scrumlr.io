@@ -13,7 +13,7 @@ $dropdown__box-shadow: var(--primaryColor) 3 d;
   transition-delay: 0.25s;
 }
 
-[column-visibility="collapsed"] .menu-bars {
+@include collapsedColumns(".menu-bars") {
   .dropdown-item--open,
   .menu-item--touch-hover.dropdown-item--open,
   .menu-item.dropdown-item--open:enabled:hover {
@@ -49,7 +49,7 @@ $dropdown__box-shadow: var(--primaryColor) 3 d;
   }
 }
 
-[column-visibility="visible"] .menu-bars {
+@include visibleColumns(".menu-bars") {
   .dropdown-item--open .menu-item__tooltip,
   .menu-item.dropdown-item--open:focus .menu-item__tooltip,
   .menu-item.dropdown-item--open:hover .menu-item__tooltip {

@@ -5,7 +5,7 @@
   z-index: $menu-z-index;
 }
 
-[column-visibility="collapsed"] .menu-bars {
+@include collapsedColumns(".menu-bars") {
   &.menu-bars {
     position: fixed;
     left: calc(50% - 134px);
@@ -119,7 +119,7 @@
   --secondaryColor: #7c123e;
 }
 
-[column-visibility="collapsed"] .menu-bars {
+@include collapsedColumns(".menu-bars") {
   .menu {
     border-radius: 35px;
     height: 64px;
@@ -155,7 +155,7 @@
   }
 }
 
-[column-visibility="visible"] .menu-bars {
+@include visibleColumns(".menu-bars") {
   .menu-bars__switch {
     display: none;
   }

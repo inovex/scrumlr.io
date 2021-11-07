@@ -25,7 +25,7 @@ $number-of-menu-items: 4;
   width: 36px;
 }
 
-[column-visibility="collapsed"] .menu-bars {
+@include collapsedColumns(".menu-bars") {
   $menu-item__first-position-left: 28px;
 
   @for $i from 1 through $number-of-menu-items {
@@ -107,7 +107,7 @@ $number-of-menu-items: 4;
 }
 
 // Columns partly hidden, no touch screen device
-[column-visibility="collapsed"] .menu-bars {
+@include collapsedColumns(".menu-bars") {
   .menu-item--touch-hover,
   .menu-item:enabled:focus,
   .menu-item:enabled:hover {
@@ -173,7 +173,7 @@ $number-of-menu-items: 4;
 // *****************************
 // ALL columns are fully visible
 // *****************************
-[column-visibility="visible"] .menu-bars {
+@include visibleColumns(".menu-bars") {
   .menu-item--touch-hover:enabled > .menu-item__tooltip,
   .menu-item:enabled:focus > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
