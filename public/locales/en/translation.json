@@ -134,5 +134,19 @@
   },
   "AppInfo": {
     "version": "App version: <0>{{version}}</0>"
+  },
+  "Toast": {
+    "authenticationError": "There occurred a problem while signing you in",
+    "votingStarted": "You started the voting phase!",
+    "votingFinished": "You ended the voting phase!",
+    "focusModeStart": "You started the moderation phase!",
+    "focusModeFinished": "You ended the moderation phase",
+    "votingPhaseStarted": "Voting phase started! You can vote now!",
+    "votingPhaseEnded": "Voting phase ended! You can't vote anymore!",
+    "moderationStarted": "Moderation phase started!",
+    "moderationEnded": "Moderation phase ended!",
+    "timerStarted": "Timer started!",
+    "timerEnded": "Timer ended!",
+    "timerCancelled": "Timer cancelled!"
   }
 }

@@ -134,5 +134,19 @@
   },
   "AppInfo": {
     "version": "Anwendungsversion: <0>{{version}}</0>"
+  },
+  "Toast": {
+    "authenticationError": "Ein Fehler trat beim Einloggen auf",
+    "votingStarted": "Du hast eine Abstimmung gestartet!",
+    "votingFinished": "Du hast die Abstimmung beendet!",
+    "focusModeStart": "Du hast die Moderation gestartet!",
+    "focusModeFinished": "Du hast die Moderation beendet!",
+    "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
+    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weitere Stimmen werden gezählt!",
+    "moderationStarted": "Der Moderator wird nun Inhalte teilen!",
+    "moderationEnded": "Die Moderation wurde beendet!",
+    "timerStarted": "Ein Alarm wurde gesetzt!",
+    "timerEnded": "Der Alarm ist beendet!",
+    "timerCancelled": "Der Alarm wurde abgebrochen!"
   }
 }
