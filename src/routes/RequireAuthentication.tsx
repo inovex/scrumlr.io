@@ -3,7 +3,7 @@ import Parse from "parse";
 import {useLocation} from "react-router";
 import {ReactNode} from "react";
 
-function PrivateRoute({children}: {children: ReactNode}) {
+function RequireAuthentication({children}: {children: ReactNode}) {
   const location = useLocation();
   const currentUser = Parse.User.current();
   if (currentUser) {
@@ -12,4 +12,4 @@ function PrivateRoute({children}: {children: ReactNode}) {
   return <Navigate to="/login" state={{from: location}} />;
 }
 
-export default PrivateRoute;
+export default RequireAuthentication;
