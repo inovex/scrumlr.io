@@ -1,12 +1,15 @@
-import {Redirect, Route, RouteProps} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import Parse from "parse";
+import {useLocation} from "react-router";
+import {ReactNode} from "react";
 
-function PrivateRoute(props: RouteProps) {
+function PrivateRoute({children}: {children: ReactNode}) {
+  const location = useLocation();
   const currentUser = Parse.User.current();
   if (currentUser) {
-    return <Route {...props} />;
+    return <>{children}</>;
   }
-  return <Redirect to={{pathname: "/login", state: {from: props.location}}} />;
+  return <Navigate to="/login" state={{from: location}} />;
 }
 
 export default PrivateRoute;

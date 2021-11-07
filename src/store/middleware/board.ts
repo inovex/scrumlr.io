@@ -275,9 +275,9 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
     API.editBoard(action.board);
   }
   if (action.type === ActionType.DeleteBoard) {
-    const reponse = await API.deleteBoard(action.boardId);
-    if (reponse) {
-      document.location.pathname = "/new";
+    const response = await API.deleteBoard(action.boardId);
+    if (response) {
+      document.location.pathname = "/";
     }
   }
   if (action.type === ActionType.CancelVoting) {
