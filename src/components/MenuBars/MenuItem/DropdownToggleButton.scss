@@ -20,6 +20,7 @@ $dropdown__box-shadow: var(--primaryColor) 3 d;
     .menu-item__tooltip {
       transition: all 0.25s 0s ease-out;
       width: 245px;
+      min-width: 245px;
       opacity: 1;
       visibility: visible;
       border-top-left-radius: unset;
