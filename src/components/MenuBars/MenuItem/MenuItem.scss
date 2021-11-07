@@ -46,7 +46,7 @@ $number-of-menu-items: 4;
   display: inline-flex;
   box-sizing: border-box;
   align-items: center;
-  width: 0;
+  max-width: 0;
   height: 36px;
   border-radius: 16px;
 }
@@ -108,7 +108,7 @@ $number-of-menu-items: 4;
   .menu-item--touch-hover,
   .menu-item:enabled:hover {
     .menu-item__tooltip {
-      width: 200px;
+      max-width: 264px;
       opacity: 1;
       visibility: visible;
       // Tooltip will be shown after 0.5s delay, but cleared instantly
@@ -162,6 +162,7 @@ $number-of-menu-items: 4;
 
   .tooltip__text {
     width: 100%;
+    padding: 0 16px;
     white-space: nowrap;
   }
 }
@@ -172,7 +173,8 @@ $number-of-menu-items: 4;
 @include visibleColumns(".menu-bars") {
   .menu-item--touch-hover:enabled > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
-    width: 212px;
+    width: auto;
+    max-width: 384px;
   }
   .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
   .menu-item--left:enabled:hover .tooltip__text {
@@ -187,15 +189,15 @@ $number-of-menu-items: 4;
     position: absolute;
     white-space: nowrap;
     overflow: hidden;
-    transition: width 0.25s ease-in-out;
-    box-shadow: 0px 0px 24px #ff006955;
+    transition: max-width 0.25s ease-in-out;
+    box-shadow: 0 0 24px #ff006955;
     background-color: var(--primaryColor);
   }
   .admin-menu .menu-item__tooltip {
-    box-shadow: 0px 0px 24px #ff006955;
+    box-shadow: 0 0 24px #ff006955;
   }
   .user-menu .menu-item__tooltip {
-    box-shadow: 0px 0px 24px #0057ff55;
+    box-shadow: 0 0 24px #0057ff55;
   }
   .menu-item__icon {
     transition: all 0.25s linear;
@@ -214,15 +216,14 @@ $number-of-menu-items: 4;
   }
 
   .tooltip__text {
-    position: absolute;
-    width: max-content;
     color: $color-white;
     transition: all 0.5s ease-out;
+    padding: 16px;
   }
   .menu-item--right .tooltip__text {
-    left: 18px;
+    padding-left: 30px;
   }
   .menu-item--left .tooltip__text {
-    right: 18px;
+    padding-right: 30px;
   }
 }
