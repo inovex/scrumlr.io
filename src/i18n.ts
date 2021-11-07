@@ -17,10 +17,11 @@ i18n
       useSuspense: false,
       wait: false,
     },
+  })
+  .then(() => {
+    if (localStorage.getItem("Scrumlr/locale") !== i18n.language && i18n.language) {
+      localStorage.setItem("Scrumlr/locale", i18n.language);
+    }
   });
-
-if (localStorage.getItem("Scrumlr/locale") !== i18n.language) {
-  localStorage.setItem("Scrumlr/locale", i18n.language);
-}
 
 export default i18n;

@@ -12,6 +12,7 @@ $header-menu-toggle-background-color: #c8c8c8;
 
 .board-option-toggle {
   width: $header-menu-icon-width;
+  min-width: $header-menu-icon-width;
   height: $header-menu__item-height;
   display: inline-flex;
   justify-content: center;

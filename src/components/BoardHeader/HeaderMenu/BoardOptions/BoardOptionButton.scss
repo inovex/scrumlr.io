@@ -9,6 +9,9 @@ $header-menu__item-height: 48px;
 $header-menu-border-bottom-color: #efefef;
 
 .board-option-button {
+  display: flex;
+  align-items: center;
+
   background-color: $color-white;
   border: none;
   padding: 0;
@@ -17,20 +20,21 @@ $header-menu-border-bottom-color: #efefef;
   text-align: left;
   cursor: pointer;
 }
+
 .board-option-button:focus,
 .board-option-button:hover {
   background-color: $header-menu-hover-color--light;
 }
 
 .board-option-button__label {
-  height: $header-menu-button-height;
-  width: 180px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
-  line-height: $header-menu-button-height;
-  vertical-align: middle;
   cursor: pointer;
+  padding-right: 16px;
 }
 
 .board-option-button__icon {
