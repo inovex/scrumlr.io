@@ -3,7 +3,7 @@
     "createNewBoard": "Erstelle eine Sitzung",
     "createNewBoardAnonymous": "Erstelle anonym eine neue Sitzung",
     "createBoardError": "Du musst eingloggt sein um eine neue Sitzung erstellen zu können.",
-    "logout": "Logout"
+    "logout": "Ausloggen"
   },
   "LoginBoard": {
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
