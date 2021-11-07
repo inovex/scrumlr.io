@@ -23,6 +23,7 @@
     "error": "Oops! Sign-in failed, please try again."
   },
   "AccessPolicySelection": {
+    "title": "Access policy",
     "public": "Access by URL without further verification.",
     "byPassphrase": "Access by URL and passphrase.",
     "manualVerification": "Admins of board can manually verify or reject each access request individually.",

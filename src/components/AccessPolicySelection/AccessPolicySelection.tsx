@@ -54,7 +54,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   return (
     <div className="access-policy-selection">
       <label>
-        <div>Access Policy</div>
+        <div>{t("AccessPolicySelection.title")}</div>
         <input type="range" min={0} max={3} step={1} value={accessPolicy} onChange={handlePolicyChange} />
       </label>
       {AccessPolicyDescription}

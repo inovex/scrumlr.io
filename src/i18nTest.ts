@@ -8,14 +8,11 @@ i18n
   .use(initReactI18next)
   .init({
     backend: {
-      loadPath: join(__dirname, "../public/locales/{{lng}}/{{ns}}.json"),
+      loadPath: join(__dirname, "../public/locales/en/translation.json"),
     },
     initImmediate: false,
     lng: "en",
-    debug: true,
-    interpolation: {
-      escapeValue: false,
-    },
+    debug: false,
     react: {
       useSuspense: false,
       wait: false,

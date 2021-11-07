@@ -23,6 +23,7 @@
     "error": "Oops! Der Login hat nicht funktioniert. Bitte versuche es nochmal."
   },
   "AccessPolicySelection": {
+    "title": "Zugriffsberechtigung",
     "public": "Zugriff für alle über die URL möglich.",
     "byPassphrase": "Zugriff über die URL wird per Passwort geschützt.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
