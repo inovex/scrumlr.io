@@ -8,7 +8,11 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    lng: localStorage.getItem("Scrumlr/locale") || undefined,
+    detection: {
+      lookupLocalStorage: "Scrumlr/locale",
+      order: ["localStorage"],
+      caches: ["localStorage"],
+    },
     fallbackLng: "en",
     interpolation: {
       escapeValue: false,
@@ -17,11 +21,6 @@ i18n
       useSuspense: false,
       wait: false,
     },
-  })
-  .then(() => {
-    if (localStorage.getItem("Scrumlr/locale") !== i18n.language && i18n.language) {
-      localStorage.setItem("Scrumlr/locale", i18n.language);
-    }
   });
 
 export default i18n;

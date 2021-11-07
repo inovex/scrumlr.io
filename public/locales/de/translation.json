@@ -10,8 +10,8 @@
     "joinAnonymous": "Nehme anonym an der Sitzung Teil"
   },
   "Board": {
-    "publicSession": "Öffentliche Sitzung",
-    "privateSession": "Private Sitzung"
+    "publicSession": "Öffentlich",
+    "privateSession": "Privat"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Falsches Passwort.",
