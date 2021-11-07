@@ -9,8 +9,6 @@ import {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {mocked} from "ts-jest/utils";
-import {I18nextProvider} from "react-i18next";
-import i18n from "i18nTest";
 import {render} from "testUtils";
 
 const mockStore = configureStore();
@@ -71,9 +69,7 @@ const createHeaderMenu = (currentUserIsModerator: boolean) => {
   const [HeaderMenuContext] = wrapWithTestBackend(HeaderMenu);
   return (
     <Provider store={store}>
-      <I18nextProvider i18n={i18n}>
-        <HeaderMenuContext open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
-      </I18nextProvider>
+      <HeaderMenuContext open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
     </Provider>
   );
 };
