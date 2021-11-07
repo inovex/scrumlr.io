@@ -16,7 +16,7 @@
 .vote-button-add__icon {
   height: $vote-button-icon-height;
   width: $vote-button-icon-width;
-  fill: var(--accent-color);
+  color: var(--accent-color);
 }
 
 .vote-button-add:not([disabled]):focus,
@@ -24,6 +24,6 @@
   background-color: var(--accent-color);
 
   .vote-button-add__icon {
-    fill: $color-white;
+    color: $color-white;
   }
 }

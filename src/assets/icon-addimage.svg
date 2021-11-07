@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <g fill="none" fill-rule="evenodd">
+  <g fill="none">
     <path stroke="currentColor" stroke-width="1.5" d="M16.0533295,9 L23.7704918,9 C25.4273461,9 26.7704918,10.3431458 26.7704918,12 C26.7704918,12.3254249 26.7704918,12.5631242 26.7704918,12.7130977 M26.7704918,14.7694244 C26.7704918,16.5984412 26.7704918,19.3419664 26.7704918,23 C26.7704918,23.4985517 26.6488802,23.9686995 26.4337035,24.3823969 M12.7704918,26 C11.1136376,26 9.7704918,24.6568542 9.7704918,23 L9.7704918,15.0920143 L9.7704918,15.0920143" opacity=".7"/>
     <line x1="7" x2="13" y1="9" y2="9" stroke="currentColor" stroke-linecap="square" stroke-width="2"/>
     <line x1="10" x2="10" y1="6" y2="12" stroke="currentColor" stroke-linecap="square" stroke-width="2"/>
