@@ -6,6 +6,7 @@ exports[`Column Test behavior of hidden columns Snapshot: Hide button should be 
 >
   <button
     class="column__header-toggle-button"
+    tabindex="-1"
   >
     <svg
       class="column__header-toggle-button-icon"
@@ -46,6 +47,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
         <input
           class="note-input__input"
           placeholder="Add your note..."
+          tabindex="0"
           type="text"
           value=""
         />
@@ -58,6 +60,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
     </div>
     <div
       class="column__notes-wrapper"
+      tabindex="-1"
     >
       <ul
         class="column__note-list"

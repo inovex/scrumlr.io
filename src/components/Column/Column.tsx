@@ -9,6 +9,7 @@ import {ActionFactory} from "store/action";
 // need to replace icon-unstack.svg with icon-visible.svg/icon-hidden.svg
 import {ReactComponent as visibleIcon} from "assets/icon-unstack.svg";
 import {ReactComponent as hiddenIcon} from "assets/icon-unstack.svg";
+import {TabIndex} from "constants/tabIndex";
 
 export interface ColumnProps {
   id: string;
@@ -17,9 +18,10 @@ export interface ColumnProps {
   hidden: boolean;
   currentUserIsModerator: boolean;
   children?: React.ReactNode;
+  tabIndex?: number;
 }
 
-export const Column = ({id, name, color, hidden, currentUserIsModerator, children}: ColumnProps) => {
+export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -50,15 +52,19 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, childre
             <span className="column__header-card-number">{React.Children.count(children)}</span>
             {currentUserIsModerator && (
               <div className="column__header-toggle">
-                <button className="column__header-toggle-button" onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}>
+                <button
+                  tabIndex={TabIndex.disabled}
+                  className="column__header-toggle-button"
+                  onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}
+                >
                   <Icon className="column__header-toggle-button-icon" />
                 </button>
               </div>
             )}
           </div>
-          <NoteInput columnId={id} />
+          <NoteInput columnId={id} tabIndex={tabIndex} />
         </div>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
+        <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">{children}</ul>
         </div>
       </div>

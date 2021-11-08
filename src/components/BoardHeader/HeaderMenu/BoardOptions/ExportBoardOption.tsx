@@ -4,10 +4,11 @@ import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
+import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./ExportBoardOption.scss";
-import {useTranslation} from "react-i18next";
 
 export type ExportProps = {
   onClick: () => void;
@@ -37,6 +38,7 @@ export const ExportBoardOption = (props: ExportProps) => {
             props.onClose();
           }}
           data-testid="export-json"
+          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
         />
         <BoardOptionButton
           label={t("ExportBoardOption.exportAsCSV")}
@@ -46,6 +48,7 @@ export const ExportBoardOption = (props: ExportProps) => {
             props.onClose();
           }}
           data-testid="export-csv"
+          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
         />
       </div>
     </BoardOption>

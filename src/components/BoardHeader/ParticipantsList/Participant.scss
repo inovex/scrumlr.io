@@ -4,6 +4,7 @@
   display: flex;
   background-color: $color-white;
   height: 48px;
+  outline: 0;
 
   padding: 0;
   width: 100%;
@@ -58,12 +59,19 @@
   position: relative;
   flex: 0 0 40px;
   margin-right: 16px;
+  outline: none;
+}
+
+.participant .participant__permission-toggle:focus::after,
+.participant .participant__permission-toggle:hover::after {
+  transform: scale(1.2);
 }
 
 @media (prefers-color-scheme: dark) {
   .participant {
     background-color: $color-dark-mode-note;
   }
+  .participant:focus,
   .participant:hover {
     background-color: #3d4555;
   }
