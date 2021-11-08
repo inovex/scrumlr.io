@@ -24,7 +24,7 @@ export const DeleteBoardOption = (props: DeleteProps) => {
 
   return (
     <BoardOption data-testid="delete">
-      <BoardOptionButton label="Delete board" icon={DeleteIcon} isExpandable onClick={props.onClick} />
+      <BoardOptionButton label={t("DeleteBoardOption.button")} icon={DeleteIcon} isExpandable onClick={props.onClick} />
       <div className={classNames("delete-board-option__container", {"delete-board-option__container--visible": props.expand})}>
         <label className="delete-board-option__warning-label">{t("DeleteBoardOption.warning")}</label>
         <button
