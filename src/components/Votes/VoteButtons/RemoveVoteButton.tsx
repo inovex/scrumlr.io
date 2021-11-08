@@ -11,15 +11,21 @@ type RemoveVoteProps = {
   activeVoting: boolean;
   votes: VoteClientModel[];
   ownVotes: VoteClientModel[];
+  tabIndex: number;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes, tabIndex}) => {
   const deleteVote = () => {
     store.dispatch(ActionFactory.deleteVote(noteId));
   };
 
   return (
-    <DotButton className={classNames("vote-button-remove", {"vote-button-remove--own-vote": ownVotes.length > 0})} disabled={!activeVoting} onClick={deleteVote}>
+    <DotButton
+      tabIndex={tabIndex}
+      className={classNames("vote-button-remove", {"vote-button-remove--own-vote": ownVotes.length > 0})}
+      disabled={!activeVoting}
+      onClick={deleteVote}
+    >
       <span className="vote-button-remove__folded-corner" />
       <span>{votes.length.toString()}</span>
     </DotButton>

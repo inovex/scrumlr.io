@@ -11,6 +11,7 @@ import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
 import {NoteClientModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
+import {TabIndex} from "constants/tabIndex";
 
 interface NoteProps {
   text: string;
@@ -27,6 +28,7 @@ interface NoteProps {
   activeModeration: {userId?: string; status: boolean};
   focus: boolean;
   currentUserIsModerator: boolean;
+  tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
@@ -96,6 +98,7 @@ export const Note = (props: NoteProps) => {
     <li
       className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && !props.currentUserIsModerator})}
       onClick={!props.activeModeration.status || props.currentUserIsModerator ? handleShowDialog : () => {}}
+      onKeyPress={(!props.activeModeration.status || props.currentUserIsModerator) && !showDialog ? handleShowDialog : () => {}}
       ref={noteRef}
     >
       <div
@@ -106,6 +109,7 @@ export const Note = (props: NoteProps) => {
           {"note--isOver": isOver && canDrop},
           {"note__disabled-click": props.activeModeration.status && !props.currentUserIsModerator}
         )}
+        tabIndex={props.tabIndex ?? TabIndex.default}
       >
         <div className="note__content">
           <p className="note__text">{props.text}</p>
@@ -118,7 +122,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
-          <Votes noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
+          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
         </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>

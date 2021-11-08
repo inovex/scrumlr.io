@@ -62,12 +62,23 @@ $dropdown__item-height: 48px;
     background-color: $color-dark-mode-note;
   }
 }
+
+.dropdown__item-button > button {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 100%;
+  outline: 0;
+}
+
 .dropdown__item:hover,
+.dropdown__item-button > button:focus,
 .dropdown__item-button:hover {
   background-color: $hover-background-light;
 }
 @media (prefers-color-scheme: dark) {
   .dropdown__item:hover,
+  .dropdown__item-button > button:focus,
   .dropdown__item-button:hover {
     background-color: $hover-background-dark;
   }
@@ -79,10 +90,4 @@ $dropdown__item-height: 48px;
     top: 0;
     image: linear-gradient(to right, transparent 0px, transparent 49px, $color-light-gray 50px, $color-light-gray 240px) 1;
   }
-}
-.dropdown__item-button > button {
-  background-color: transparent;
-  border: none;
-  height: 100%;
-  width: 100%;
 }

@@ -1,6 +1,6 @@
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {getRandomName} from "constants/name";
-import {RouteComponentProps} from "react-router";
+
 import Parse from "parse";
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
@@ -10,9 +10,11 @@ import {LoginProviders} from "components/LoginProviders";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {AppInfo} from "components/AppInfo";
+import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
 
-export function NewBoard(props: RouteComponentProps) {
+export function NewBoard() {
+  const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
@@ -36,7 +38,7 @@ export function NewBoard(props: RouteComponentProps) {
         },
         columnTemplates[columnTemplate]
       );
-      props.history.push(`/board/${boardId}`);
+      navigate(`/board/${boardId}`);
     } else {
       Toast.error("You must be logged in to create a board. Reload the page and try again");
     }
@@ -49,7 +51,7 @@ export function NewBoard(props: RouteComponentProps) {
 
   async function onLogout() {
     await Parse.User.logOut();
-    props.history.push("/");
+    navigate("/");
   }
 
   const isCreatedBoardDisabled = accessPolicy === AccessPolicy.ByPassphrase && !passphrase;

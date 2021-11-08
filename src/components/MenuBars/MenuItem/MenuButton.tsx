@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
 import {useState} from "react";
 import "./MenuItem.scss";
 
@@ -8,6 +9,7 @@ type MenuButtonProps = {
   label: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
+  tabIndex?: number;
 };
 
 export function MenuButton(props: MenuButtonProps) {
@@ -31,6 +33,7 @@ export function MenuButton(props: MenuButtonProps) {
           props.onClick();
         }
       }}
+      tabIndex={props.tabIndex ?? TabIndex.default}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>

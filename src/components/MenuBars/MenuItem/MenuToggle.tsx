@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import classNames from "classnames";
 import "./MenuItem.scss";
+import {TabIndex} from "constants/tabIndex";
 
 type MenuToggleProps = {
   direction: "left" | "right";
@@ -11,6 +12,7 @@ type MenuToggleProps = {
   toggleStopLabel: string;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
+  tabIndex?: number;
 };
 
 export function MenuToggle(props: MenuToggleProps) {
@@ -50,6 +52,7 @@ export function MenuToggle(props: MenuToggleProps) {
           onToggle();
         }
       }}
+      tabIndex={props.tabIndex ?? TabIndex.default}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{value ? props.toggleStopLabel : props.toggleStartLabel}</span>
