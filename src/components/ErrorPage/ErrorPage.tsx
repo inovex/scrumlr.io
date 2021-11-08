@@ -1,5 +1,5 @@
 import "./ErrorPage.scss";
-import {useHistory} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 export interface ErrorPageProps {
   errorMessage: string;
@@ -7,9 +7,9 @@ export interface ErrorPageProps {
 }
 
 export function ErrorPage({errorMessage, originURL}: ErrorPageProps) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const redirect = (newURL: string) => () => {
-    history.push(newURL);
+    navigate(newURL);
   };
   return (
     <>

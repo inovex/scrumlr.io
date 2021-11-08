@@ -1,41 +1,37 @@
 import {API} from "api";
 import Parse from "parse";
 import {render, waitFor} from "@testing-library/react";
-import {createMemoryHistory} from "history";
-import {Router} from "react-router";
+
+import {MemoryRouter} from "react-router";
 import {AuthRedirect} from "routes/AuthRedirect";
 
 jest.mock("api");
 jest.mock("parse");
 
-const history = createMemoryHistory();
-
 describe("routing tests", () => {
   test("missing params on page visit -> ErrorPage", () => {
     const {container} = render(
-      <Router history={history}>
+      <MemoryRouter>
         <AuthRedirect />
-      </Router>
+      </MemoryRouter>
     );
     expect(container.firstChild).toHaveClass("error-page");
   });
 
   test("error in params -> ErrorPage", () => {
-    history.push("?error=params_error");
     const {container} = render(
-      <Router history={history}>
+      <MemoryRouter initialEntries={["?error=params_error"]}>
         <AuthRedirect />
-      </Router>
+      </MemoryRouter>
     );
     expect(container.firstChild).toHaveClass("error-page");
   });
 
   test("correct params are set -> LoadingScreen", () => {
-    history.push("?code=test_code&state=test_state");
     const {container} = render(
-      <Router history={history}>
+      <MemoryRouter initialEntries={["?code=test_code&state=test_state"]}>
         <AuthRedirect />
-      </Router>
+      </MemoryRouter>
     );
     expect(container.firstChild).toHaveClass("loading-screen");
   });
@@ -77,11 +73,10 @@ describe("routing tests", () => {
 
       Parse.User.mockImplementation(() => user);
 
-      history.push("?code=test_code&state=google-test");
       render(
-        <Router history={history}>
+        <MemoryRouter initialEntries={["?code=test_code&state=google-test"]}>
           <AuthRedirect />
-        </Router>
+        </MemoryRouter>
       );
 
       await waitFor(() => expect(window.location.href).toEqual(targetURLAfterSuccessfulSignIn));
