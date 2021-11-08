@@ -2,7 +2,7 @@ import classNames from "classnames";
 import {FC, useEffect} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
-type NoteDialogNoteWrapperProps = {};
+type NoteDialogNoteWrapperProps = Record<string, never>;
 
 export const NoteDialogNoteWrapper: FC<NoteDialogNoteWrapperProps> = ({children}) => {
   const handleScroll = (scrollbar: Element) => {
@@ -39,7 +39,7 @@ export const NoteDialogNoteWrapper: FC<NoteDialogNoteWrapperProps> = ({children}
 
   useEffect(() => {
     const scrollbar = document.querySelector(".note-dialog__scrollbar")!;
-    scrollbar.addEventListener("scroll", (e) => handleScroll(scrollbar));
+    scrollbar.addEventListener("scroll", () => handleScroll(scrollbar));
   }, [children]);
   return (
     <div className={classNames("note-dialog__scrollbar")}>

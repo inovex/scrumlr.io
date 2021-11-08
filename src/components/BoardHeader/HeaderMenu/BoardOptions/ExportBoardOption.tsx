@@ -4,10 +4,10 @@ import {ApplicationState} from "types/store";
 import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./ExportBoardOption.scss";
-import {TabIndex} from "constants/tabIndex";
 
 export type ExportProps = {
   onClick: () => void;

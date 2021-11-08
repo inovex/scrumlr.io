@@ -2,10 +2,10 @@ import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import QRCode from "qrcode.react";
+import {TabIndex} from "constants/tabIndex";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./ShareQrCodeOption.scss";
-import {TabIndex} from "constants/tabIndex";
 
 export type QRCodeProps = {
   onClick: () => void;

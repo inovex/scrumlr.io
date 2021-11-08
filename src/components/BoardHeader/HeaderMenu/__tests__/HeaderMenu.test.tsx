@@ -64,10 +64,10 @@ const initialState = {
 };
 
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
-  const store = mockStore(initialState);
+  const mockedStore = mockStore(initialState);
   const [HeaderMenuContext] = wrapWithTestBackend(HeaderMenu);
   return (
-    <Provider store={store}>
+    <Provider store={mockedStore}>
       <HeaderMenuContext open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
     </Provider>
   );

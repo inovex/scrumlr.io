@@ -18,7 +18,7 @@ const mapReadyState = (readyUsers: string[] = [], state: Omit<UsersState, "users
 
 export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
-    case ActionType.SetUserReadyStatus:
+    case ActionType.SetUserReadyStatus: {
       let {usersMarkedReady} = state;
       if (usersMarkedReady !== undefined) {
         const userId = Parse.User.current()!.id;
@@ -30,6 +30,7 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         return mapReadyState(usersMarkedReady, state);
       }
       return state;
+    }
     case ActionType.InitializeBoard:
     case ActionType.UpdatedBoard:
       return mapReadyState(action.board.usersMarkedReady, state);

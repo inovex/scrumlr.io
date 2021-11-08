@@ -4,10 +4,10 @@ import {ActionFactory} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./DeleteBoardOption.scss";
-import {TabIndex} from "constants/tabIndex";
 
 export type DeleteProps = {
   onClick: () => void;

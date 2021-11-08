@@ -9,6 +9,7 @@ export interface BoardOptionButtonProps {
   className?: string;
   isExpandable?: boolean;
   children?: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

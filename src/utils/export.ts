@@ -26,15 +26,6 @@ export type ExportFormat = {
   votes: number;
 };
 
-export const generateCSV = (state: ExportProps) => {
-  const fields = ["noteId", "author", "text", "column", "timestamp", "parent", "votes"];
-  for (let i = 1; i <= state.board.votingIteration; ++i) {
-    fields.push(`voting_iteration_${i}`);
-  }
-  const csv = parse(mapToExport(state), {quote: "", fields});
-  return csv;
-};
-
 export const mapToExport = (state: ExportProps) =>
   state.notes.map((note) => {
     const votes = state.votes.filter((vote) => vote.note === note.id);
@@ -53,6 +44,15 @@ export const mapToExport = (state: ExportProps) =>
     }
     return {...result, ...votingIterations};
   });
+
+export const generateCSV = (state: ExportProps) => {
+  const fields = ["noteId", "author", "text", "column", "timestamp", "parent", "votes"];
+  for (let i = 1; i <= state.board.votingIteration; ++i) {
+    fields.push(`voting_iteration_${i}`);
+  }
+  const csv = parse(mapToExport(state), {quote: "", fields});
+  return csv;
+};
 
 export const fileName = (state: ExportProps) => {
   const date = new Date().toJSON().slice(0, 10);

@@ -2,10 +2,10 @@ import {useEffect} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {LoadingIndicator} from "components/LoadingIndicator";
-import {Board} from "./Board";
-import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
+import {Board} from "./Board";
+import "./BoardGuard.scss";
 
 export const BoardGuard = () => {
   const {boardId} = useParams<"boardId">();

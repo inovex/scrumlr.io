@@ -16,8 +16,8 @@ const stopAudio = (audio: HTMLAudioElement) => {
   audio.currentTime = 0;
 };
 
-const usePrevious = (value: any) => {
-  const ref = useRef();
+const usePrevious = (value: boolean) => {
+  const ref = useRef<boolean>();
   useEffect(() => {
     ref.current = value;
   });

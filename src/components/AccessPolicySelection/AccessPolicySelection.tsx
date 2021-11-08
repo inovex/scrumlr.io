@@ -12,15 +12,15 @@ export interface AccessPolicySelectionProps {
 
 export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
   const handlePolicyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const accessPolicy = Number.parseInt(e.target.value);
-
-    if (accessPolicy >= 0 && accessPolicy <= 2) {
-      onAccessPolicyChange(accessPolicy);
+    const newAccessPolicy = Number.parseInt(e.target.value, 10);
+    if (newAccessPolicy >= 0 && newAccessPolicy <= 2) {
+      onAccessPolicyChange(newAccessPolicy);
     }
   };
 
   let AccessPolicyDescription;
   let AdditionalAccessPolicySettings;
+
   switch (accessPolicy) {
     case AccessPolicy.Public:
       AccessPolicyDescription = <div>Access by URL without further verification.</div>;
