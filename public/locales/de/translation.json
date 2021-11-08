@@ -1,14 +1,14 @@
 {
   "NewBoard": {
     "createNewBoard": "Erstelle eine Sitzung",
-    "createNewBoardAnonymous": "Erstelle anonym eine neue Sitzung",
+    "createNewBoardAnonymous": "Erstelle anonym eine Sitzung",
     "createBoardError": "Du musst eingloggt sein um eine neue Sitzung erstellen zu können.",
     "logout": "Ausloggen",
-    "user": "Benutzer"
+    "user": "Anwender"
   },
   "LoginBoard": {
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "joinAnonymous": "Nehme anonym an der Sitzung Teil"
+    "joinAnonymous": "Nehme anonym an der Sitzung teil"
   },
   "Board": {
     "publicSession": "Öffentlich",
