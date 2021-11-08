@@ -80,7 +80,7 @@
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
-    "signInWithGitHub": "Sign in mit Github",
+    "signInWithGitHub": "Einloggen mit Github",
     "signInWithMicrosoft": "Sign in mit Microsoft"
   },
   "NoteInput": {
