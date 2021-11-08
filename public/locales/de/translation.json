@@ -79,7 +79,7 @@
     "rejectAll": "Alle ablehnen"
   },
   "LoginProviders": {
-    "signInWithGoogle": "Sign in mit Google",
+    "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Sign in mit Github",
     "signInWithMicrosoft": "Sign in mit Microsoft"
   },
