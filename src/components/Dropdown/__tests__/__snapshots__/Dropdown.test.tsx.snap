@@ -16,7 +16,9 @@ exports[`Dropdown should render correctly 1`] = `
       <li
         class="dropdown__item-button"
       >
-        <button>
+        <button
+          tabindex="-1"
+        >
           Item Button
         </button>
       </li>

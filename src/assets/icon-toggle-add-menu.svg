@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" viewBox="0 0 36 36">
-  <g fill="none" fill-rule="evenodd">
+  <g fill="none">
     <polygon fill="currentColor" fill-rule="nonzero" points="18.75 14.874 18.75 20.874 17.25 20.874 17.25 14.874"/>
     <polygon fill="currentColor" fill-rule="nonzero" points="21 17.124 21 18.624 15 18.624 15 17.124"/>
     <path fill="currentColor" fill-rule="nonzero" d="M18,11.5 C14.4101491,11.5 11.5,14.4101491 11.5,18 C11.5,21.5898509 14.4101491,24.5 18,24.5 C21.5898509,24.5 24.5,21.5898509 24.5,18 C24.5,14.4101491 21.5898509,11.5 18,11.5 Z M18,13 C20.7614237,13 23,15.2385763 23,18 C23,20.7614237 20.7614237,23 18,23 C15.2385763,23 13,20.7614237 13,18 C13,15.2385763 15.2385763,13 18,13 Z"/>

@@ -12,6 +12,7 @@ $timer-dropdown__color-dark: $color-white;
   position: absolute;
   left: 19px;
   top: 16px;
+  outline: 0;
 }
 @media (prefers-color-scheme: dark) {
   .timer-dropdown__item-button label {
@@ -67,4 +68,13 @@ $timer-dropdown__color-dark: $color-white;
 }
 .timer-dropdown__item-button > * > input:focus {
   outline: none;
+}
+
+.timer-dropdown__time-button {
+  outline: none;
+}
+
+.timer-dropdown__time-button:focus,
+.timer-dropdown__time-button:hover {
+  transform: scale(1.2);
 }

@@ -3,5 +3,6 @@
 exports[`ToggleButton should render correctly 1`] = `
 <button
   class="toggle-button toggle-button--left"
+  tabindex="-1"
 />
 `;

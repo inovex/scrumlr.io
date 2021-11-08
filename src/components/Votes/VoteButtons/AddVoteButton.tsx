@@ -8,15 +8,16 @@ import {FC} from "react";
 
 type AddVoteProps = {
   noteId: string;
+  tabIndex: number;
 };
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId}) => {
+export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex}) => {
   const addVote = () => {
     store.dispatch(ActionFactory.addVote(noteId));
   };
 
   return (
-    <DotButton className="vote-button-add" onClick={addVote}>
+    <DotButton tabIndex={tabIndex} className="vote-button-add" onClick={addVote}>
       <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );

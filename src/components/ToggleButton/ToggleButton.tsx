@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import {TabIndex} from "constants/tabIndex";
 import "./ToggleButton.scss";
 
 type ToggleButtonProps<T> = {
@@ -33,6 +34,10 @@ type ToggleButtonProps<T> = {
    * Triggered if the toggle changes to the right.
    */
   onRight?: () => void;
+  /**
+   * Allows tabIndex
+   */
+  tabIndex?: number;
 };
 
 export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
@@ -51,6 +56,7 @@ export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
       disabled={props.disabled}
       onClick={onClick}
       className={classNames("toggle-button", {"toggle-button--left": props.value === props.values[0]}, {"toggle-button--right": props.value === props.values[1]}, props.className)}
+      tabIndex={props.tabIndex ?? TabIndex.disabled}
     />
   );
 };

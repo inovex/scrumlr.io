@@ -26,8 +26,8 @@
   "AccessPolicySelection": {
     "title": "Zugriffsberechtigung",
     "passphrase": "Passwort",
-    "public": "Zugriff für alle über die URL möglich.",
-    "byPassphrase": "Zugriff über die URL wird per Passwort geschützt.",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
@@ -79,9 +79,9 @@
     "rejectAll": "Alle ablehnen"
   },
   "LoginProviders": {
-    "signInWithGoogle": "Sign in mit Google",
-    "signInWithGitHub": "Sign in mit Github",
-    "signInWithMicrosoft": "Sign in mit Microsoft"
+    "signInWithGoogle": "Einloggen mit Google",
+    "signInWithGitHub": "Einloggen mit Github",
+    "signInWithMicrosoft": "Einloggen mit Microsoft"
   },
   "NoteInput": {
     "placeholder": "Füge ein Kärtchen hinzu..."

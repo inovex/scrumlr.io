@@ -47,6 +47,11 @@
   border-radius: 18px;
   cursor: pointer;
   padding: 0;
+  outline: none;
+}
+
+.timer > button:focus {
+  transform: scale(1.1);
 }
 
 // Shake animation on expired timer

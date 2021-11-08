@@ -14,6 +14,7 @@
   color: $color-white;
 }
 
+.vote-button-remove.vote-button-remove--own-vote:not([disabled]):focus > .vote-button-remove__folded-corner,
 .vote-button-remove.vote-button-remove--own-vote:not([disabled]):hover > .vote-button-remove__folded-corner {
   border-width: 12px 0 0 12px;
 }
