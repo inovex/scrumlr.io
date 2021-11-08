@@ -27,7 +27,7 @@
     "title": "Zugriffsberechtigung",
     "passphrase": "Passwort",
     "public": "Zugriff für alle Teilnehmer über die URL möglich.",
-    "byPassphrase": "Zugriff über die URL wird per Passwort geschützt.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
