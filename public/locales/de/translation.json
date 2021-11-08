@@ -81,7 +81,7 @@
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Einloggen mit Github",
-    "signInWithMicrosoft": "Sign in mit Microsoft"
+    "signInWithMicrosoft": "Einloggen mit Microsoft"
   },
   "NoteInput": {
     "placeholder": "Füge ein Kärtchen hinzu..."
