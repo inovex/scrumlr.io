@@ -11,7 +11,7 @@ jest.mock("parse");
 
 const mockedVerifySignIn = mocked(API.verifySignIn);
 const mockedUser = mocked(User, true);
-
+        
 describe("routing tests", () => {
   test("missing params on page visit -> ErrorPage", () => {
     const {container} = render(
