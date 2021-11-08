@@ -48,12 +48,12 @@
   },
   "ExportBoardOption": {
     "button": "Sitzung exportieren",
-    "exportAsJson": "Als JSON exportieren",
-    "exportAsCSV": "Als CSV exportieren"
+    "exportAsJson": "JSON exportieren",
+    "exportAsCSV": "CSV exportieren"
   },
   "ShareQrCodeOption": {
     "button": "Sitzung teilen",
-    "copyInviteURL": "Teilnahme-URL kopieren"
+    "copyInviteURL": "URL kopieren"
   },
   "ShowAuthorOption": {
     "show": "Zeige Ersteller der Kärtchen",
