@@ -4,6 +4,7 @@ import http from "http";
 import {createProxyMiddleware} from "http-proxy-middleware";
 import path from "path";
 import {initServer} from "./model/init";
+import {initializeUserOnlineStatus} from "./cloud/userOnlineStatus";
 
 const OPERATION_MODE = process.env.SCRUMLR_OPERATION_MODE || "bundled";
 if (["bundled", "server", "livequery"].indexOf(OPERATION_MODE) < 0) {
@@ -70,6 +71,12 @@ if (OPERATION_MODE === "livequery") {
   ParseServer.createLiveQueryServer(httpServer, {
     redisURL: CACHE_URI,
   });
+
+  Parse.initialize("Scrumlr");
+  Parse.serverURL = `http://${HOST}:${PORT}/api`;
+  Parse.masterKey = MASTER_KEY;
+
+  initializeUserOnlineStatus();
 } else if (OPERATION_MODE === "bundled") {
   ParseServer.createLiveQueryServer(httpServer);
 }

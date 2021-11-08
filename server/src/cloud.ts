@@ -5,6 +5,7 @@ import {initializeNoteFunctions} from "./cloud/note";
 import {initializeUserFunctions} from "./cloud/user";
 import {initializeVoteConfigurationFunctions} from "./cloud/voteConfiguration";
 import {initializeVoteFunctions} from "./cloud/vote";
+import {initializeUserOnlineStatus} from "./cloud/userOnlineStatus";
 
 initializeAuthFunctions();
 initializeBoardFunctions();
@@ -13,3 +14,4 @@ initializeNoteFunctions();
 initializeUserFunctions();
 initializeVoteConfigurationFunctions();
 initializeVoteFunctions();
+initializeUserOnlineStatus();

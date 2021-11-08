@@ -17,11 +17,6 @@ const goOnline = (user: Parse.User, boardId: string) => {
   user.save(null, {useMasterKey: true});
 };
 
-const goOffline = (user: Parse.User) => {
-  user.unset("boards");
-  user.save(null, {useMasterKey: true});
-};
-
 const addAsMember = async (user: Parse.User, boardId: string) => {
   const memberRoleQuery = new Parse.Query(Parse.Role);
   memberRoleQuery.equalTo("name", getMemberRoleName(boardId));
@@ -148,21 +143,6 @@ export interface JoinBoardRequest {
 }
 
 export const initializeBoardFunctions = () => {
-  (Parse.Cloud as any).onLiveQueryEvent(({event, sessionToken}) => {
-    if (event === "connect" || event === "ws_disconnect") {
-      const query = new Parse.Query<Parse.Object>("_Session");
-
-      query.equalTo("sessionToken", sessionToken);
-      query.first({useMasterKey: true}).then((session) => {
-        const user = session.get("user");
-
-        if (event === "ws_disconnect") {
-          goOffline(user);
-        }
-      });
-    }
-  });
-
   api<CreateBoardRequest, string>("createBoard", async (user, request) => {
     const board = new Parse.Object("Board");
     const columns = request.columns.reduce((acc, current) => {

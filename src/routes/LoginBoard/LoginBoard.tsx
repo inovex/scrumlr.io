@@ -1,22 +1,24 @@
-import {RouteComponentProps, useHistory} from "react-router";
+import {useNavigate} from "react-router-dom";
 import {getRandomName} from "constants/name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {useTranslation} from "react-i18next";
+import {useLocation} from "react-router";
 
-export function LoginBoard(props: RouteComponentProps) {
+export function LoginBoard() {
   const {t} = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(getRandomName());
-  const history = useHistory<{from: {pathname: string}}>();
 
   // anonymous sign in and redirection to boardpath that is in history
   async function handleLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
     try {
-      props.history.push(history.location.state.from.pathname);
+      navigate(location.state.from.pathname);
     } catch (err) {
       Toast.error(t("LoginBoard.errorOnRedirect"));
     }
@@ -37,7 +39,7 @@ export function LoginBoard(props: RouteComponentProps) {
         maxLength={20}
       />
       <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
-      <LoginProviders originURL={history.location.state.from.pathname} />
+      <LoginProviders originURL={location.state.from.pathname} />
     </div>
   );
 }

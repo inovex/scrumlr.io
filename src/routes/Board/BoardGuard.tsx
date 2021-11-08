@@ -1,28 +1,26 @@
 import {useEffect} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
-import {RouteComponentProps} from "react-router";
 import {LoadingIndicator} from "components/LoadingIndicator";
 import {Board} from "./Board";
 import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
+import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 
-export type BoardGuardProps = RouteComponentProps<{id: string}>;
-
-export const BoardGuard = (props: BoardGuardProps) => {
+export const BoardGuard = () => {
+  const {boardId} = useParams<"boardId">();
   const {t} = useTranslation();
 
   const boardStatus = useAppSelector((state) => state.board.status);
-  const boardId = props.match.params.id;
 
   useEffect(() => {
-    store.dispatch(ActionFactory.joinBoard(boardId));
+    store.dispatch(ActionFactory.joinBoard(boardId!));
 
     return () => {
       store.dispatch(ActionFactory.leaveBoard());
     };
-  }, [props.match.params.id]);
+  }, [boardId]);
 
   if (boardStatus === "accepted" || boardStatus === "ready") {
     return <Board />;
@@ -32,7 +30,7 @@ export const BoardGuard = (props: BoardGuardProps) => {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {
-          store.dispatch(ActionFactory.joinBoard(boardId, passphrase));
+          store.dispatch(ActionFactory.joinBoard(boardId!, passphrase));
         }}
       />
     );
