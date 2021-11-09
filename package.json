@@ -13,7 +13,7 @@
     "avataaars": "^2.0.0",
     "classnames": "^2.3.1",
     "file-saver": "^2.0.5",
-    "googleapis": "^89.0.0",
+    "googleapis": "^91.0.0",
     "json2csv": "^5.0.6",
     "lodash": "^4.17.20",
     "marked": "3.0.8",
