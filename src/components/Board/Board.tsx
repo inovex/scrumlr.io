@@ -21,6 +21,11 @@ export interface BoardState {
   showPreviousButton: boolean;
 }
 
+export interface StableBoardState {
+  firstVisibleColumnIndex: number;
+  lastVisibleColumnIndex: number;
+}
+
 export const BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState>({
     firstVisibleColumnIndex: 0,
@@ -28,6 +33,12 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     showNextButton: false,
     showPreviousButton: false,
   });
+
+  const [stableState, setStableState] = useState<StableBoardState>({
+    firstVisibleColumnIndex: 0,
+    lastVisibleColumnIndex: React.Children.count(children),
+  });
+
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
@@ -60,16 +71,26 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
           columnVisibilityStates[index] = entry.isIntersecting;
         });
 
-        const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
-        const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
+        let firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
+        let lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
+
+        if (firstVisibleColumnIndex === -1 && lastVisibleColumnIndex === -1) {
+          firstVisibleColumnIndex = stableState.firstVisibleColumnIndex - 1;
+          lastVisibleColumnIndex = stableState.firstVisibleColumnIndex;
+        }
 
         document.getElementById("root")!.setAttribute("column-visibility", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0 ? "collapsed" : "visible");
 
         setState({
           firstVisibleColumnIndex,
           lastVisibleColumnIndex,
-          showNextButton: lastVisibleColumnIndex < columnsCount - 1,
-          showPreviousButton: firstVisibleColumnIndex > 0,
+          showNextButton: lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex === -1,
+          showPreviousButton: firstVisibleColumnIndex > 0 || lastVisibleColumnIndex === -1,
+        });
+
+        setStableState({
+          firstVisibleColumnIndex,
+          lastVisibleColumnIndex,
         });
       };
       const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -104,11 +125,17 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     );
   }
 
-  const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
+  const {firstVisibleColumnIndex, lastVisibleColumnIndex} = stableState;
   const columnColors = React.Children.map(children, (child) => child.props.color);
+
+  console.log("UPDATE");
+  console.log(`${firstVisibleColumnIndex  } : ${  lastVisibleColumnIndex}`);
 
   const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
+
+  console.log(`index:${  previousColumnIndex  } : ${  nextColumnIndex}`);
+  console.log("");
 
   const handlePreviousClick = () => {
     boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
