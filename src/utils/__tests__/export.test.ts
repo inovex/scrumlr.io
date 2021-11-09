@@ -57,9 +57,11 @@ const createState = (
               updatedAt: new Date(123456),
               admin: false,
               online: true,
+              ready: true,
             },
           ]
         : [],
+      usersMarkedReady: [],
     },
   } as ExportProps);
 

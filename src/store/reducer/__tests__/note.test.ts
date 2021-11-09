@@ -22,6 +22,7 @@ const createServerNote = (id: string, text: string = NOTE_TEXT): NoteClientModel
   createdAt: new Date(),
   updatedAt: new Date(),
   dirty: false,
+  focus: false,
 });
 
 describe("note reducer", () => {
