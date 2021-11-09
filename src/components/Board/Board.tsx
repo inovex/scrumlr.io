@@ -89,7 +89,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
   }, [children]);
 
   if (!children || columnsCount === 0) {
-    document.getElementById("root")!.setAttribute("column-visibility", "visible");
+    document.getElementById("root")?.setAttribute("column-visibility", "visible");
     // Empty board
     return (
       <div className="board--empty">
