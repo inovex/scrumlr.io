@@ -43,7 +43,7 @@
     "headerLegendAdmin": "Admin"
   },
   "DeleteBoardOption": {
-    "warning": "Bist du dir sicher dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "button": "Sitzung löschen"
   },
   "ExportBoardOption": {
