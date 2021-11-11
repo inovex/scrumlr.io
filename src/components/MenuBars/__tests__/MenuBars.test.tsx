@@ -4,6 +4,7 @@ import {User} from "parse";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import {mocked} from "ts-jest/utils";
+import {BrowserRouter} from "react-router-dom";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
@@ -13,7 +14,9 @@ const createMenuBars = (state: Record<string, unknown>) => {
 
   return (
     <Provider store={store}>
-      <MenuBars />
+      <BrowserRouter>
+        <MenuBars />
+      </BrowserRouter>
     </Provider>
   );
 };

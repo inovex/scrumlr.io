@@ -13,10 +13,11 @@ import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
+import {Link} from "react-router-dom";
+import {TabIndex} from "constants/tabIndex";
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
-import {TabIndex} from "constants/tabIndex";
 
 export function MenuBars() {
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -70,7 +71,9 @@ export function MenuBars() {
             onToggle={toggleReadyState}
           />
           <MenuButton tabIndex={TabIndex.UserMenu + 1} disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
+          <Link to="/">
+            <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label="Return to Homepage" icon={AddStickerIcon} onClick={() => null} />
+          </Link>
           <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>
