@@ -2,11 +2,14 @@ import {render} from "testUtils";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {BoardUsers} from "components/BoardUsers";
-import Parse from "parse";
+import {User} from "parse";
 import {getRandomName} from "constants/name";
-import {ApplicationState} from "types/store";
+import {ApplicationState, BoardStatus} from "types/store";
+import {mocked} from "ts-jest/utils";
+import {UserClientModel} from "types/user";
 
 const mockStore = configureStore();
+const mockedUser = mocked(User, true);
 
 const createBoardUsers = (state: ApplicationState) => {
   const store = mockStore(state);
@@ -20,8 +23,7 @@ const createBoardUsers = (state: ApplicationState) => {
 
 describe("users", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: "@_online"}));
-    Parse.User.current = mockCurrentUser;
+    mockedUser.current = jest.fn(() => ({id: "@_online"} as never));
   });
 
   const currentUser = {
@@ -29,6 +31,9 @@ describe("users", () => {
     displayName: "Admin Mustermann",
     admin: true,
     online: true,
+    createdAt: new Date(1234567),
+    updatedAt: new Date(1234567),
+    ready: false,
   };
 
   const otherOnlineUsers = [...new Array(9)].map((_, i) => ({
@@ -36,6 +41,9 @@ describe("users", () => {
     displayName: getRandomName(),
     admin: i % 2 === 0,
     online: true,
+    createdAt: new Date(1234567),
+    updatedAt: new Date(1234567),
+    ready: false,
   }));
 
   const adminWithOtherOnlineUsers = [currentUser, ...otherOnlineUsers];
@@ -45,14 +53,33 @@ describe("users", () => {
     displayName: getRandomName(),
     admin: i % 2 !== 0,
     online: false,
+    createdAt: new Date(1234567),
+    updatedAt: new Date(1234567),
+    ready: false,
   }));
 
+  const getDefaultState = (first: UserClientModel[], second: UserClientModel[]) => ({
+    users: {
+      all: [...first, ...second],
+      usersMarkedReady: [],
+      admins: [],
+      basic: [],
+    },
+    board: {status: "unknown" as BoardStatus},
+    notes: [],
+    votes: [],
+    voteConfiguration: {
+      boardId: "test-board",
+      votingIteration: 1,
+      voteLimit: 5,
+      allowMultipleVotesPerNote: false,
+      showVotesOfOtherUsers: false,
+    },
+    joinRequests: [],
+  });
+
   test("only online users are shown & their names are used as tooltips", () => {
-    const state = {
-      users: {
-        all: [...offlineUsers, ...adminWithOtherOnlineUsers],
-      },
-    };
+    const state = getDefaultState(offlineUsers, adminWithOtherOnlineUsers);
 
     const {container} = render(createBoardUsers(state));
 
@@ -65,36 +92,18 @@ describe("users", () => {
 
   test("correct number of online users & count of rest users", () => {
     // 4 online users -> display 4
-    const state = {
-      users: {
-        all: [...offlineUsers, ...adminWithOtherOnlineUsers.slice(0, 4)],
-      },
-    };
+    const state = getDefaultState(offlineUsers, adminWithOtherOnlineUsers.slice(0, 4));
 
     const boardUsers = render(createBoardUsers(state));
     expect(boardUsers.container.querySelectorAll(".user-avatar")).toHaveLength(4);
 
     // 5 online users -> display 5
-    const newState1 = {
-      users: {
-        all: [
-          ...offlineUsers,
-          ...adminWithOtherOnlineUsers.slice(0, 5), // +1 additional online user
-        ],
-      },
-    };
+    const newState1 = getDefaultState(offlineUsers, adminWithOtherOnlineUsers.slice(0, 5));
     const newBoardUsers1 = render(createBoardUsers(newState1));
     expect(newBoardUsers1.container.querySelectorAll(".user-avatar")).toHaveLength(5);
 
     // 6 online users -> display 4 & rest user count of 2
-    const newState2 = {
-      users: {
-        all: [
-          ...offlineUsers,
-          ...adminWithOtherOnlineUsers.slice(0, 6), // +1 additional online user
-        ],
-      },
-    };
+    const newState2 = getDefaultState(offlineUsers, adminWithOtherOnlineUsers.slice(0, 6));
     const newBoardUsers2 = render(createBoardUsers(newState2));
     expect(newBoardUsers2.container.querySelectorAll(".user-avatar")).toHaveLength(4);
     expect(newBoardUsers2.container.querySelector(".rest-users__count")).toHaveTextContent("2");

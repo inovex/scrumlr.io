@@ -1,7 +1,10 @@
 import {AuthAPI} from "api/auth";
 import {callAPI} from "api/callApi";
+import {mocked} from "ts-jest/utils";
 
 jest.mock("api/callApi");
+
+const mockedCallAPI = mocked(callAPI);
 
 describe("auth api", () => {
   beforeEach(() => {
@@ -14,7 +17,7 @@ describe("auth api", () => {
 
   test("verification returns user", async () => {
     sessionStorage.setItem("state", "123");
-    callAPI.mockResolvedValue({name: "John Doe"});
+    mockedCallAPI.mockResolvedValue({name: "John Doe"});
 
     const result = await AuthAPI.verifySignIn("code", "state", "provider");
     expect(result).toEqual({
@@ -27,7 +30,7 @@ describe("auth api", () => {
 
   test("verification returns correct state URL", async () => {
     sessionStorage.setItem("state", "456");
-    callAPI.mockResolvedValue({name: "John Doe"});
+    mockedCallAPI.mockResolvedValue({name: "John Doe"});
 
     const result = await AuthAPI.verifySignIn("code", "state", "provider");
     expect(result.redirectURL).toEqual("456");

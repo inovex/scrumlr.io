@@ -28,6 +28,7 @@ describe("ParticipantsList", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       online: true,
+      ready: false,
     };
     const userParticipant: UserClientModel = {
       id: "1",
@@ -36,6 +37,7 @@ describe("ParticipantsList", () => {
       createdAt: new Date(),
       updatedAt: new Date(),
       online: true,
+      ready: false,
     };
     const users = [userAdmin, userParticipant];
 
