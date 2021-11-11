@@ -8,6 +8,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {Link} from "react-router-dom";
 import "./BoardHeader.scss";
+import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
 export interface BoardHeaderProps {
@@ -17,6 +18,8 @@ export interface BoardHeaderProps {
 }
 
 export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
+  const {t} = useTranslation();
+
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -51,8 +54,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
       </div>
 
       <button
+        aria-label={t("BoardHeader.showParticipants")}
         tabIndex={TabIndex.BoardHeader + 2}
-        aria-label="Show participants"
         aria-haspopup
         aria-pressed={showParticipants}
         className="board-header__users"

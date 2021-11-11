@@ -1,5 +1,6 @@
-import {render, fireEvent} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {ToggleButton} from "components/ToggleButton";
+import {render} from "testUtils";
 
 describe("ToggleButton", () => {
   const createToggleButton = (props: {value?: string; className?: string; disabled?: boolean; onToggle?: (value: string) => void; onLeft?: () => void; onRight?: () => void}) => (

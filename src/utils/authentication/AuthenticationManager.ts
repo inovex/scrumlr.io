@@ -1,6 +1,7 @@
 import Parse from "parse";
 import {Toast} from "utils/Toast";
 import {API} from "api";
+import i18n from "i18next";
 
 /**
  * Sign in anonymously.
@@ -17,7 +18,7 @@ const signInAnonymously = async (displayName?: string, photoURL?: string) => {
     user.set("photoURL", photoURL);
     return await user.linkWith("anonymous", {authData: undefined});
   } catch (err) {
-    Toast.error("There occurred a problem while signing you in");
+    Toast.error(i18n.t("Toast.authenticationError"));
     return null;
   }
 };

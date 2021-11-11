@@ -1,5 +1,6 @@
-import {render, fireEvent} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {DotButton} from "components/DotButton";
+import {render} from "testUtils";
 
 describe("DotButton", () => {
   test("should render correctly", () => {

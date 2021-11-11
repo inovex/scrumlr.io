@@ -4,9 +4,11 @@ import {AuthenticationManager} from "utils/authentication/AuthenticationManager"
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
+import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 
 export function LoginBoard() {
+  const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,7 +20,7 @@ export function LoginBoard() {
     try {
       navigate(location.state.from.pathname);
     } catch (err) {
-      Toast.error("An error occured while redirecting you");
+      Toast.error(t("LoginBoard.errorOnRedirect"));
     }
   }
 
@@ -36,7 +38,7 @@ export function LoginBoard() {
         }}
         maxLength={20}
       />
-      <button onClick={handleLogin}>Join Board Anonymously</button>
+      <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
       <LoginProviders originURL={location.state.from.pathname} />
     </div>
   );
