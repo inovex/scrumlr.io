@@ -1,8 +1,9 @@
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {Column} from "components/Column";
+import {render} from "testUtils";
 
 jest.mock("store", () => ({
   dispatch: jest.fn(),

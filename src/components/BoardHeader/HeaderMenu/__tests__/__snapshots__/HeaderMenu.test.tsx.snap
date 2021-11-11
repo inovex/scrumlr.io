@@ -170,14 +170,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <label
                   class="delete-board-option__warning-label"
                 >
-                  <b>
-                    Are you absolutely sure that you want to delete the board?
-                  </b>
-                   This action 
-                  <b>
-                    cannot
-                  </b>
-                   be undone.
+                  Are you absolutely sure that you want to delete the board? This action cannot be undone.
                 </label>
                 <button
                   class="delete-board-option__delete-board"

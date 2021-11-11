@@ -1,4 +1,4 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
@@ -7,6 +7,7 @@ import {NoteDialog} from "components/NoteDialog";
 import {mocked} from "ts-jest/utils";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {render} from "testUtils";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
