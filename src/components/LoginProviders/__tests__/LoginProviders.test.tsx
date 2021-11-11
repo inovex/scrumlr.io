@@ -1,6 +1,7 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {LoginProviders} from "components/LoginProviders";
+import {render} from "testUtils";
 
 describe("check for all provider buttons", () => {
   test("root element", () => {
@@ -9,18 +10,18 @@ describe("check for all provider buttons", () => {
   });
 
   test("google sign in", () => {
-    render(<LoginProviders />);
-    expect(screen.getByText(/Sign in with Google/i)).toBeInTheDocument();
+    const {container} = render(<LoginProviders />);
+    expect(container.querySelector("#google")).toBeInTheDocument();
   });
 
   test("github sign in", () => {
-    render(<LoginProviders />);
-    expect(screen.getByText(/Sign in with Github/i)).toBeInTheDocument();
+    const {container} = render(<LoginProviders />);
+    expect(container.querySelector("#github")).toBeInTheDocument();
   });
 
   test("microsoft sign in", () => {
-    render(<LoginProviders />);
-    expect(screen.getByText(/Sign in with Microsoft/i)).toBeInTheDocument();
+    const {container} = render(<LoginProviders />);
+    expect(container.querySelector("#microsoft")).toBeInTheDocument();
   });
 
   describe("click-handler", () => {

@@ -1,12 +1,15 @@
 import {FC, useState} from "react";
 import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {useTranslation} from "react-i18next";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
 }
 
 export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
+  const {t} = useTranslation();
+
   const [passphrase, setPassphrase] = useState<string>("");
   const [visiblePassphrase, setVisiblePassphrase] = useState(false);
 
@@ -24,20 +27,20 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
       <div className="passphrase-dialog" onSubmit={handleSubmit}>
         <form className="passphrase-dialog__form">
           <label htmlFor="passphrase" className="passphrase-dialog__input-label">
-            Enter the passphrase to access this board
+            {t("PassphraseDialog.passphraseInputLabel")}
           </label>
           <input id="passphrase" type={visiblePassphrase ? "text" : "password"} value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />
 
           <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
-            Toggle passphrase visibility
+            {t("PassphraseDialog.togglePassphraseVisibility")}
           </button>
           <button type="submit" className="passphrase-dialog__submit-button" disabled={!passphrase}>
-            Submit
+            {t("PassphraseDialog.submit")}
           </button>
         </form>
       </div>
 
-      <span className="passphrase-dialog__hint">Collaborative session. By continuing you&apos;re accepting our privacy policy.</span>
+      <span className="passphrase-dialog__hint">{t("PassphraseDialog.hint")}</span>
     </div>
   );
 };

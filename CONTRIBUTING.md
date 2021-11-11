@@ -21,3 +21,14 @@ Here's our definition done, which we agreed on.
 * All existing tests are (still) passing
 * New tests were introduced for new features
 * Someone reviewed the code before it got merged into our `main` branch
+
+## FAQ
+
+<details>
+  <summary>How can I add the support for another language?</summary>
+
+  Just copy the base configuration `public/locales/en/translation.json` into a new
+  directory with your language code `public/locales/{language code}/translation.json`
+  and translate all values of the JSON properly. Once you're done you can open a pull
+  request and we will try to review your translation by a few samples.
+</details>

@@ -1,4 +1,4 @@
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {Note} from "components/Note";
 import {User} from "parse";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
@@ -8,6 +8,7 @@ import store from "store";
 import {ActionFactory} from "store/action";
 import {mocked} from "ts-jest/utils";
 import {VoteClientModel} from "types/vote";
+import {render} from "testUtils";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);

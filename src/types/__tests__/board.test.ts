@@ -13,14 +13,14 @@ const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
     objectId: "test_objectId",
     name: "test_name",
     columns: {
-      "test_id": {
+      test_id: {
         name: "test_name",
         color: "backlog-blue",
         hidden: false,
       },
     },
     userConfigurations: {
-      "test_id": {
+      test_id: {
         showHiddenColumns: true,
       },
     },
