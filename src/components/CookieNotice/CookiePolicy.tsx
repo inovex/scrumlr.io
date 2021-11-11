@@ -1,6 +1,6 @@
 import "./CookiePolicy.scss";
 import {Portal} from "components/Portal";
-import marked from "marked";
+import {marked} from "marked";
 import {useTranslation} from "react-i18next";
 
 interface CookiePolicyProps {
@@ -18,7 +18,7 @@ export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: C
     return null;
   }
 
-  const body = marked(t("CookiePolicy.body"));
+  const body = marked.parse(t("CookiePolicy.body"));
 
   return (
     <Portal onClose={onClose} darkBackground={darkBackground}>

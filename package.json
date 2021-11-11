@@ -48,7 +48,7 @@
     "@types/jest": "^27.0.2",
     "@types/json2csv": "^5.0.3",
     "@types/lodash": "^4.14.176",
-    "@types/marked": "^3.0.2",
+    "@types/marked": "^4.0.0",
     "@types/node": "^16.11.7",
     "@types/parse": "^2.18.13",
     "@types/qrcode.react": "^1.0.2",
