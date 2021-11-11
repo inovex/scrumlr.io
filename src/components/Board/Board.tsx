@@ -15,19 +15,28 @@ export interface BoardProps {
 }
 
 export interface BoardState {
-  firstVisibleColumnIndex: number;
-  lastVisibleColumnIndex: number;
   showNextButton: boolean;
   showPreviousButton: boolean;
 }
 
+export interface ColumnState {
+  firstVisibleColumnIndex: number;
+  lastVisibleColumnIndex: number;
+}
+
 export const BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
-  const [state, setState] = useState<BoardState>({
+  const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
     showNextButton: false,
     showPreviousButton: false,
   });
+
+  const [columnState, setColumnState] = useState<ColumnState>({
+    firstVisibleColumnIndex: 0,
+    lastVisibleColumnIndex: React.Children.count(children),
+  });
+
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
@@ -65,11 +74,9 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
 
         document.getElementById("root")!.setAttribute("column-visibility", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0 ? "collapsed" : "visible");
 
-        setState({
+        setColumnState({
           firstVisibleColumnIndex,
           lastVisibleColumnIndex,
-          showNextButton: lastVisibleColumnIndex < columnsCount - 1,
-          showPreviousButton: firstVisibleColumnIndex > 0,
         });
       };
       const observer = new IntersectionObserver(observerCallback, observerOptions);
@@ -88,7 +95,28 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     return undefined;
   }, [children]);
 
+  useEffect(() => {
+    let firstVisibleColumnIndex;
+    let lastVisibleColumnIndex;
+
+    if (columnState.firstVisibleColumnIndex === -1 && columnState.lastVisibleColumnIndex === -1) {
+      firstVisibleColumnIndex = state.firstVisibleColumnIndex;
+      lastVisibleColumnIndex = state.firstVisibleColumnIndex - 1;
+    } else {
+      firstVisibleColumnIndex = columnState.firstVisibleColumnIndex;
+      lastVisibleColumnIndex = columnState.lastVisibleColumnIndex;
+    }
+
+    setState({
+      firstVisibleColumnIndex,
+      lastVisibleColumnIndex,
+      showNextButton: lastVisibleColumnIndex < columnsCount - 1,
+      showPreviousButton: firstVisibleColumnIndex > 0,
+    });
+  }, [columnState]);
+
   if (!children || columnsCount === 0) {
+    document.getElementById("root")?.setAttribute("column-visibility", "visible");
     // Empty board
     return (
       <div className="board--empty">
@@ -139,7 +167,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
 
       {state.showNextButton && (
         <button
-          className={`board__navigation board__navigation-next ${getColorClassName(columnColors[(lastVisibleColumnIndex + 1) % columnColors.length])}`}
+          className={`board__navigation board__navigation-next ${getColorClassName(columnColors[Math.min(nextColumnIndex, columnColors.length - 1)])}`}
           onClick={handleNextClick}
           aria-hidden
         >
