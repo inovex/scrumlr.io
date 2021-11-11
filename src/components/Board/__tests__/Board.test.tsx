@@ -1,4 +1,4 @@
-import {act, render, fireEvent} from "@testing-library/react";
+import {act, fireEvent} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {Color} from "constants/colors";
@@ -7,6 +7,7 @@ import {Provider} from "react-redux";
 import Parse, {User} from "parse";
 import {BoardComponent} from "components/Board";
 import {BrowserRouter} from "react-router-dom";
+import {render} from "testUtils";
 import {mocked} from "ts-jest/utils";
 
 const mockStore = configureStore();

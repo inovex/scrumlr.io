@@ -1,8 +1,8 @@
 import "./CookiePolicy.scss";
-import {useEffect, useState} from "react";
 import {Portal} from "components/Portal";
-import marked from "marked";
-import policyText from "components/CookieNotice/CookiePolicyText.md";
+import {useTranslation} from "react-i18next";
+
+const marked = require("marked");
 
 interface CookiePolicyProps {
   decline: () => void;
@@ -13,31 +13,27 @@ interface CookiePolicyProps {
 }
 
 export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
-  const [policy, setPolicy] = useState({markdown: ""});
-
-  useEffect(() => {
-    fetch(policyText)
-      .then((response) => response.text())
-      .then((text) => setPolicy({markdown: marked(text)}));
-  });
+  const {t} = useTranslation();
 
   if (!show) {
     return null;
   }
 
+  const body = marked.parse(t("CookiePolicy.body") as string);
+
   return (
     <Portal onClose={onClose} darkBackground={darkBackground}>
       <div className="cookie-policy">
         <div className="cookie-policy__title">
-          <h1>Cookie Policy of scrumlr.io</h1>
+          <h1>{t("CookiePolicy.title")}</h1>
         </div>
-        <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: policy.markdown}} />
+        <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: body}} />
         <div className="cookie-policy__footer">
           <button className="cookie-policy__button-decline" type="button" onClick={decline}>
-            Decline
+            {t("CookiePolicy.decline")}
           </button>
           <button className="cookie-policy__button-accept" type="button" onClick={accept}>
-            Accept
+            {t("CookiePolicy.accept")}
           </button>
         </div>
       </div>

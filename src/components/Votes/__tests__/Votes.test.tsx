@@ -1,4 +1,4 @@
-import {fireEvent, render} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import store from "store";
 import {ActionFactory} from "store/action";
 import configureStore from "redux-mock-store";
@@ -8,6 +8,7 @@ import {VoteClientModel} from "types/vote";
 import {User} from "parse";
 import {Votes} from "components/Votes";
 import {mocked} from "ts-jest/utils";
+import {render} from "testUtils";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);

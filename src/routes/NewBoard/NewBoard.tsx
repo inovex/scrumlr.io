@@ -10,10 +10,12 @@ import {LoginProviders} from "components/LoginProviders";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {AppInfo} from "components/AppInfo";
+import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
 
 export function NewBoard() {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
@@ -40,7 +42,7 @@ export function NewBoard() {
       );
       navigate(`/board/${boardId}`);
     } else {
-      Toast.error("You must be logged in to create a board. Reload the page and try again");
+      Toast.error(t("NewBoard.createBoardError"));
     }
   }
 
@@ -65,7 +67,9 @@ export function NewBoard() {
   if (Parse.User.current()) {
     return (
       <div>
-        <p>User: {displayName}</p>
+        <p>
+          {t("NewBoard.user")}: {displayName}
+        </p>
         <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
 
         <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
@@ -76,10 +80,9 @@ export function NewBoard() {
           ))}
         </select>
         <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
-          Create new Board
+          {t("NewBoard.createNewBoard")}
         </button>
-        <button onClick={onLogout}>Logout</button>
-
+        <button onClick={onLogout}>{t("NewBoard.logout")}</button>
         <AppInfo />
       </div>
     );
@@ -104,7 +107,7 @@ export function NewBoard() {
         }}
         disabled={isCreatedBoardDisabled}
       >
-        Create new board anonymously
+        {t("NewBoard.createNewBoardAnonymous")}
       </button>
       <LoginProviders />
 

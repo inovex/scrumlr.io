@@ -4,6 +4,7 @@ import {AccessPolicyType} from "types/board";
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types/store";
 import {ActionFactory} from "store/action";
+import {useTranslation} from "react-i18next";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
@@ -16,6 +17,8 @@ export type BoardSettingsProps = {
 };
 
 export const BoardSettings = (props: BoardSettingsProps) => {
+  const {t} = useTranslation();
+
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));
@@ -51,7 +54,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
 
         {props.currentUserIsModerator && (
           <button type="submit" className="board-settings__edit-button">
-            {props.activeEditMode ? "save" : "edit"}
+            {props.activeEditMode ? t("BoardSettings.save") : t("BoardSettings.edit")}
           </button>
         )}
       </form>

@@ -6,9 +6,11 @@ import {Board} from "./Board";
 import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
+import {useTranslation} from "react-i18next";
 
 export const BoardGuard = () => {
   const {boardId} = useParams<"boardId">();
+  const {t} = useTranslation();
 
   const boardStatus = useAppSelector((state) => state.board.status);
 
@@ -37,9 +39,9 @@ export const BoardGuard = () => {
   if (boardStatus === "incorrect_passphrase") {
     return (
       <div className="board-guard">
-        <p className="board-guard__info">Incorrect passphrase used.</p>
+        <p className="board-guard__info">{t("BoardGuard.incorrectPassphrase")}</p>
         <a href="/" className="board-guard__denied-link">
-          Return to homepage
+          {t("BoardGuard.returnToHomepage")}
         </a>
       </div>
     );
@@ -48,19 +50,18 @@ export const BoardGuard = () => {
   if (boardStatus === "rejected") {
     return (
       <div className="board-guard">
-        <p className="board-guard__info">You have been rejected.</p>
+        <p className="board-guard__info">{t("BoardGuard.reject")}</p>
         <a href="/" className="board-guard__denied-link">
-          Return to homepage
+          {t("BoardGuard.returnToHomepage")}
         </a>
       </div>
     );
   }
 
-  // TODO add PassphraseDialog here if password is enabled
   return (
     <div className="board-guard">
       <LoadingIndicator />
-      <p className="board-guard__info">Waiting for approval.</p>
+      <p className="board-guard__info">{t("BoardGuard.waitingForApproval")}</p>
     </div>
   );
 };
