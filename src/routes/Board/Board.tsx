@@ -46,7 +46,12 @@ export function Board() {
     return (
       <>
         {joinRequestComponent}
-        <Infobar endTime={state.board.data!.timerUTCEndTime} />
+        <Infobar
+          endTime={state.board.data!.timerUTCEndTime}
+          activeVoting={state.board.data?.voting === "active"}
+          usedVotes={state.votes.filter((vote) => vote.user === Parse.User.current()?.id).length}
+          possibleVotes={state.voteConfiguration.voteLimit}
+        />
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board
             .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))

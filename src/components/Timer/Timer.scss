@@ -2,12 +2,12 @@
 
 .timer {
   position: relative;
-  width: 130px;
+  width: auto;
 }
 
 .timer > * {
   color: white;
-  background-color: #0057ff;
+  background-color: $color-backlog-blue;
   vertical-align: bottom;
 }
 @include collapsedColumns(".timer > *") {
@@ -16,7 +16,7 @@
 
 @media (prefers-color-scheme: dark) {
   .timer > * {
-    background-color: #ff0069;
+    background-color: $color-planning-pink;
   }
   @include collapsedColumns(".timer > *") {
     box-shadow: 0 8px 16px #ff006925;

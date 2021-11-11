@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Timer should render correctly 1`] = `
-<aside
+<div
   class="timer"
   id="timer"
 >
@@ -17,5 +17,5 @@ exports[`Timer should render correctly 1`] = `
       icon-close.svg
     </svg>
   </button>
-</aside>
+</div>
 `;

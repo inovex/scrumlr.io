@@ -9,10 +9,14 @@
   left: 50%;
   transform: translateX(-50%);
   width: 270px;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 @include collapsedColumns(".infobar") {
   bottom: auto;
   top: 98px;
+}
+
+.infobar > *:not(:last-child) {
+  margin-right: 20px;
 }
