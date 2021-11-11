@@ -1,16 +1,10 @@
 @import "constants/style.scss";
 
 .timer {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 300;
+  position: relative;
+  width: 130px;
 }
-@include collapsedColumns(".timer") {
-  bottom: auto;
-  top: 98px;
-}
+
 .timer > * {
   color: white;
   background-color: #0057ff;
@@ -19,6 +13,7 @@
 @include collapsedColumns(".timer > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
+
 @media (prefers-color-scheme: dark) {
   .timer > * {
     background-color: #ff0069;

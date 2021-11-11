@@ -1,0 +1,18 @@
+@import "constants/style.scss";
+
+.infobar {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  z-index: 300;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 270px;
+  justify-content: space-between;
+}
+
+@include collapsedColumns(".infobar") {
+  bottom: auto;
+  top: 98px;
+}
