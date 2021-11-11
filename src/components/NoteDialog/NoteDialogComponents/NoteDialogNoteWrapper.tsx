@@ -2,9 +2,7 @@ import classNames from "classnames";
 import {FC, useEffect} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
-type NoteDialogNoteWrapperProps = Record<string, never>;
-
-export const NoteDialogNoteWrapper: FC<NoteDialogNoteWrapperProps> = ({children}) => {
+export const NoteDialogNoteWrapper: FC = ({children}) => {
   const handleScroll = (scrollbar: Element) => {
     const notes = scrollbar.querySelectorAll(".note-dialog__note");
     const scrollbarHeight = scrollbar.clientHeight;
