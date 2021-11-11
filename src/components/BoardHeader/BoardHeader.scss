@@ -183,4 +183,9 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   .board-header__settings-icon {
     display: inline;
   }
+
+  .board-header__name-container {
+    min-height: 40px;
+    min-width: 240px;
+  }
 }
