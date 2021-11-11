@@ -31,7 +31,7 @@
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
-    "passphraseValidationError": "Ein Passwort muss gesetzt sein"
+    "passphraseValidationError": "Ein Passwort muss gesetzt sein!"
   },
   "BoardHeader": {
     "showParticipants": "Zeige Teilnehmer"
