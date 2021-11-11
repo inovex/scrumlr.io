@@ -46,24 +46,28 @@ describe("column tests", () => {
     const testColumn: AddColumnRequest = {name: "test_column_2", hidden: false, color: "backlog-blue"};
     const newState = boardReducer(initialState, ActionFactory.addColumn(testColumn));
 
-    expect(newState.data.columns.length).toEqual(2);
-    expect(newState.data.columns[1]).toEqual(testColumn);
+    expect(newState.data).toBeDefined();
+    expect(newState.data!.columns.length).toEqual(2);
+    expect(newState.data!.columns[1]).toEqual(testColumn);
   });
 
   test("remove column", () => {
     const newState = boardReducer(initialState, ActionFactory.deleteColumn("test_column_1"));
-    expect(newState.data.columns.length).toEqual(0);
+    expect(newState.data).toBeDefined();
+    expect(newState.data!.columns.length).toEqual(0);
   });
 
   test("edit column (full)", () => {
     const editRequest: EditColumnRequest = {columnId: "test_column_1", name: "New name", color: "planning-pink", hidden: true};
     const newState = boardReducer(initialState, ActionFactory.editColumn({columnId: "test_column_1", name: "New name", color: "planning-pink", hidden: true}));
-    expect(newState.data.columns[0]).toEqual(editRequest);
+    expect(newState.data).toBeDefined();
+    expect(newState.data!.columns[0]).toEqual(editRequest);
   });
 
   test("edit column (partial)", () => {
     const editRequest: EditColumnRequest = {columnId: "test_column_1", name: "New name"};
     const newState = boardReducer(initialState, ActionFactory.editColumn(editRequest));
-    expect(newState.data.columns[0].name).toEqual("New name");
+    expect(newState.data).toBeDefined();
+    expect(newState.data!.columns[0].name).toEqual("New name");
   });
 });
