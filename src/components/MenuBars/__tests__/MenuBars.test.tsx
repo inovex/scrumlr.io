@@ -1,4 +1,4 @@
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
 import {MenuBars} from "components/MenuBars";
 import {User} from "parse";
 import {Provider} from "react-redux";

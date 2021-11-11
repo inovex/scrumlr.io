@@ -1,7 +1,8 @@
-import {render, fireEvent, getByText} from "@testing-library/react";
+import {fireEvent, getByText} from "@testing-library/react";
 import {JoinRequest} from "components/JoinRequest";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {render} from "testUtils";
 
 jest.mock("store", () => ({
   dispatch: jest.fn(),
