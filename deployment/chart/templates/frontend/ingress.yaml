@@ -49,6 +49,15 @@ spec:
             name: {{ include "scrumlr-fullname" .Values.frontend }}
             port:
               number: 80 
+      {{- if .Values.oauthroute.enabled}}
+      - path: /board/
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "scrumlr-fullname" .Values.frontend }}
+            port:
+              number: 80 
+      {{- end}}
   {{- if .Values.hostname}}
     host: {{ .Values.hostname }} 
   {{- end}}

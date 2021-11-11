@@ -1,12 +1,17 @@
+# enable lets encrypt certs 
+# use prod to change lets encrypt cluster issuer, false=lets-encrypt-staging , true=lets-encrypt-prod
 cert:
   enabled: false
+  prod: false
   name:
 hostname: 
-
+#
 cache:
   name: cache
   replicas: 
-  
+
+oauthroute:
+  enabled: true
 dashboard:
   name: dashboard
   image: scrumlr-dashboard
