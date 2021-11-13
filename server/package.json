@@ -23,7 +23,7 @@
     "@types/http-proxy-middleware": "^1.0.0",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/parse": "^2.18.13",
-    "eslint": "^7.32.0",
+    "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
