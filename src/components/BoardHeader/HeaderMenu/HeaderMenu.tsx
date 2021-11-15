@@ -15,14 +15,13 @@ type HeaderMenuProps = {
 
 type ExpandableOptions = "share" | "delete" | "export";
 
-const HeaderMenu = (props: HeaderMenuProps) => {
+const HeaderMenu = function(props: HeaderMenuProps) {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
     user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
     userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
-  const [boardName, setBoardName] = useState(state.board!.name);
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [accessPolicy, setAccessPolicy] = useState(state.board!.accessPolicy);
   const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
@@ -44,7 +43,6 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       onClose={() => {
         setActiveEditMode(false);
         setExpandedOption(undefined);
-        setBoardName(state.board!.name);
         setAccessPolicy(state.board!.accessPolicy);
         props.onClose();
       }}
@@ -54,10 +52,8 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         <BoardSettings
           activeEditMode={activeEditMode}
           accessPolicy={accessPolicy}
-          boardName={boardName}
           currentUserIsModerator={props.currentUserIsModerator}
           setActiveEditMode={setActiveEditMode}
-          setBoardName={setBoardName}
           setAccessPolicy={setAccessPolicy}
         />
         {props.currentUserIsModerator && (
@@ -73,6 +69,6 @@ const HeaderMenu = (props: HeaderMenuProps) => {
       </ul>
     </Portal>
   );
-};
+}
 
 export {HeaderMenu};
