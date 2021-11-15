@@ -20,7 +20,7 @@ exports[`<InfoBar /> timer and voting snapshot test 1`] = `
       00
     </span>
     <button
-      title="Stop timer"
+      title="Timer.stopTimer"
     >
       <svg>
         icon-close.svg
@@ -54,7 +54,7 @@ exports[`<InfoBar /> timer snapshot test 1`] = `
       00
     </span>
     <button
-      title="Stop timer"
+      title="Timer.stopTimer"
     >
       <svg>
         icon-close.svg
