@@ -6,11 +6,10 @@ import {Note} from "components/Note";
 import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
 import {Infobar} from "components/Infobar";
-import {Timer} from "components/Timer";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
-export function Board() {
+export var Board = function() {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState) => ({
