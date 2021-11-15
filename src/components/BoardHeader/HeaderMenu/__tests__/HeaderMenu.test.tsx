@@ -95,7 +95,7 @@ describe("<HeaderMenu/>", () => {
 
     test("count of menu items for basic users", () => {
       const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(2);
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(3);
     });
 
     test("tests count of menu items for moderators", () => {

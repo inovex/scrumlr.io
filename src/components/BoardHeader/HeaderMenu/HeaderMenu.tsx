@@ -15,7 +15,7 @@ type HeaderMenuProps = {
 
 type ExpandableOptions = "share" | "delete" | "export";
 
-const HeaderMenu = (props: HeaderMenuProps) => {
+const HeaderMenu = function(props: HeaderMenuProps) {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
     user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
@@ -65,14 +65,14 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
-            <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
             <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
           </>
         )}
+        <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
         <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
       </ul>
     </Portal>
   );
-};
+}
 
 export {HeaderMenu};
