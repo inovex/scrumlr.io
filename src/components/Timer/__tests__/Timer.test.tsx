@@ -1,4 +1,5 @@
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
+import * as store from "store";
 import {Timer} from "components/Timer";
 import {mocked} from "ts-jest/utils";
 import {useAppSelector} from "store";

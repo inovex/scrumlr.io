@@ -1,0 +1,152 @@
+{
+  "NewBoard": {
+    "createNewBoard": "Erstelle eine Sitzung",
+    "createNewBoardAnonymous": "Erstelle anonym eine Sitzung",
+    "createBoardError": "Du musst eingloggt sein um eine neue Sitzung erstellen zu können.",
+    "logout": "Ausloggen",
+    "user": "Anwender"
+  },
+  "LoginBoard": {
+    "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
+    "joinAnonymous": "Nehme anonym an der Sitzung teil"
+  },
+  "Board": {
+    "publicSession": "Öffentlich",
+    "privateSession": "Privat"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "Falsches Passwort.",
+    "reject": "Du wurdest zu der Sitzung nicht zugelassen.",
+    "returnToHomepage": "Zur Homepage zurückkehren.",
+    "waitingForApproval": "Warte auf Bestätigung zur Teilnahme."
+  },
+  "AuthRedirect": {
+    "error": "Oops! Der Login hat nicht funktioniert. Bitte versuche es nochmal."
+  },
+  "AccessPolicySelection": {
+    "title": "Zugriffsberechtigung",
+    "passphrase": "Passwort",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt.",
+    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
+    "generatePassphrase": "Erstelle zufälliges Passwort",
+    "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
+    "passphraseValidationError": "Ein Passwort muss gesetzt sein!"
+  },
+  "BoardHeader": {
+    "showParticipants": "Zeige Teilnehmer"
+  },
+  "ParticipantsList": {
+    "title": "Teilnehmer",
+    "search": "Suche",
+    "headerLegendName": "Name",
+    "headerLegendAdmin": "Admin"
+  },
+  "DeleteBoardOption": {
+    "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "button": "Sitzung löschen"
+  },
+  "ExportBoardOption": {
+    "button": "Sitzung exportieren",
+    "exportAsJson": "JSON exportieren",
+    "exportAsCSV": "CSV exportieren"
+  },
+  "ShareQrCodeOption": {
+    "button": "Sitzung teilen",
+    "copyInviteURL": "URL kopieren"
+  },
+  "ShowAuthorOption": {
+    "show": "Zeige Ersteller der Kärtchen",
+    "hide": "Blende Ersteller der Kärtchen aus"
+  },
+  "ShowHiddenColumnsOption": {
+    "show": "Zeige alle Spalten",
+    "hide": "Blende versteckte Spalten aus"
+  },
+  "ShowOtherUsersNotesOption": {
+    "show": "Zeige Kärtchen anderer Teilnehmer",
+    "hide": "Blende Kärtchen anderer Teilnehmer aus"
+  },
+  "ErrorPage": {
+    "navigateHome": "Startseite",
+    "navigateBack": "Gehe zurück"
+  },
+  "JoinRequest": {
+    "title": "Jemand möchte der Sitzung beitreten",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen",
+    "acceptAll": "Alle akzeptieren",
+    "rejectAll": "Alle ablehnen"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Einloggen mit Google",
+    "signInWithGitHub": "Einloggen mit Github",
+    "signInWithMicrosoft": "Einloggen mit Microsoft"
+  },
+  "NoteInput": {
+    "placeholder": "Füge ein Kärtchen hinzu..."
+  },
+  "PassphraseDialog": {
+    "passphraseInputLabel": "Gib das Passwort ein um der Sitzung beizutreten",
+    "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
+    "submit": "Absenden",
+    "hint": "Kollaborative Sitzung. Beim Beitritt stimmts du der AGB zu."
+  },
+  "Timer": {
+    "stopTimer": "Stoppe Alarm"
+  },
+  "CookieNotice": {
+    "description": "Wir und ausgewählte Partner verwenden Cookies oder ähnliche Technologien, wie in der Cookie-Richtlinie angegeben. Sie können der Verwendung solcher Technologien zustimmen, indem Sie diesen Hinweis schließen, mit einem Link oder einer Schaltfläche außerhalb dieses Hinweises interagieren oder auf andere Weise weitersurfen.",
+    "learnMore": "Erfahre mehr über die Datenschutzrichtlinien",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren"
+  },
+  "CookiePolicy": {
+    "title": "Cookie Richtlinien von scrumlr.io",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren",
+    "body": "Dieses Dokument informiert die Nutzer über die Technologien, die scrumlr.io helfen, die unten beschriebenen Zwecke zu erreichen.\nDiese Technologien ermöglichen es dem Eigentümer, auf Informationen zuzugreifen und diese zu speichern (z.B. durch die Verwendung eines Cookies) oder Ressourcen auf dem Gerät eines Nutzers zu nutzen\n(z.B. durch die Ausführung eines Skripts), wenn dieser mit scrumlr.io interagiert.\n\nDer Einfachheit halber werden alle diese Technologien in diesem Dokument als \"Tracker\" definiert - es sei denn, es gibt einen\nGrund zur Unterscheidung. Zum Beispiel können Cookies sowohl in Web- als auch in mobilen Browsern verwendet werden, aber es wäre ungenau\nvon Cookies im Zusammenhang mit mobilen Anwendungen zu sprechen, da es sich um einen browserbasierten Tracker handelt. Aus diesem Grund wird der Begriff Cookies in diesem Dokument nur dann verwendet, wenn er speziell für diese Art von Tracker gedacht ist.\nArt von Tracker.\n\nEinige der Zwecke, für die Tracker verwendet werden, können auch die Zustimmung des Nutzers erfordern. Wenn die Zustimmung erteilt wird,\nkann sie jederzeit frei widerrufen werden, indem die in diesem Dokument enthaltenen Anweisungen befolgt werden.\n\nScrumlr.io verwendet nur Tracker, die direkt vom Eigentümer verwaltet werden (sogenannte \"First-Party\"-Tracker). Die Gültigkeits- und Ablaufzeiten von First-Party-Cookies und anderen ähnlichen Trackern können je nach der vom Eigentümer festgelegten Lebensdauer variieren.\nEigentümer. Einige von ihnen verfallen bei Beendigung der Browsersitzung des Nutzers.\n\n## Aktivitäten, die für den Betrieb von scrumlr.io und die Bereitstellung des Dienstes unbedingt erforderlich sind\n\nScrumlr.io verwendet sogenannte \"technische\" Cookies und andere ähnliche Tracker, um Aktivitäten durchzuführen, die für den Betrieb oder die Bereitstellung des Dienstes unbedingt erforderlich sind.\n\n## Wie Sie Ihre Einstellungen verwalten und Ihre Zustimmung erteilen oder widerrufen können\n\nEs gibt verschiedene Möglichkeiten, Präferenzen in Bezug auf Tracker zu verwalten und ggf. die Zustimmung zu erteilen oder zu widerrufen:\nDie Nutzer können ihre Präferenzen in Bezug auf Tracker direkt in ihren eigenen Geräteeinstellungen verwalten, indem sie zum Beispiel\ndie Verwendung oder Speicherung von Trackern verhindern. Wenn die Verwendung von Trackern auf einer Einwilligung beruht, können die Nutzer außerdem\neine solche Einwilligung erteilen oder widerrufen, indem sie ihre Präferenzen im Cookie-Hinweis festlegen oder diese Präferenzen aktualisieren\nüber das entsprechende Widget für die Einwilligungseinstellungen, falls vorhanden.\n\nEs ist auch möglich, über entsprechende Browser- oder Gerätefunktionen zuvor gespeicherte Tracker zu löschen, einschließlich derer\ndie zur Erinnerung an die ursprüngliche Einwilligung des Nutzers verwendet wurden. Andere Tracker im lokalen Speicher des Browsers können durch Löschen des\ndes Browserverlaufs gelöscht werden.\n\n## Auffinden von Tracker-Einstellungen\n\nInformationen über die Verwaltung von Cookies in den gebräuchlichsten Browsern finden die Nutzer beispielsweise unter folgenden Adressen\nAdressen:\n\n- Google Chrome\n- Mozilla Firefox\n- Apple Safari\n- Microsoft Internet Explorer\n- Microsoft Edge\n- Mutig\n- Opera\n\nBenutzer können auch bestimmte Kategorien von Trackern, die in mobilen Anwendungen verwendet werden, verwalten, indem sie sich über die entsprechenden Geräteeinstellungen abmelden,\nwie z. B. die Einstellungen für die Gerätewerbung für mobile Geräte oder die Tracking-Einstellungen im Allgemeinen (Nutzer können die Geräteeinstellungen\nEinstellungen öffnen und nach der entsprechenden Einstellung suchen).\n\nEigentümer und Datenverantwortlicher\ninovex GmbH\n\nKarlsruher Straße 71\n\n75179 Pforzheim\n\nDeutschland\n\nKontakt-E-Mail des Inhabers: info@scrumlr.io\n\nIn Anbetracht der objektiven Komplexität, die Tracking-Technologien umgeben, werden die Nutzer aufgefordert, den Eigentümer zu kontaktieren, wenn sie\nden Eigentümer zu kontaktieren, wenn sie weitere Informationen über die Verwendung solcher Technologien durch scrumlr.io erhalten möchten."
+  },
+  "MenuBars": {
+    "markAsDone": "Als fertig markieren",
+    "unmarkAsDone": "Als nicht fertig markieren",
+    "addImage": "Füge Bild hinzu",
+    "addSticker": "Füge Sticker hinzu",
+    "settings": "Einstellungen",
+    "editColumns": "Bearbeite Spalten",
+    "stopEditingColumns": "Beende Spaltenbearbeitung",
+    "startVoting": "Starte Abstimmung",
+    "stopVoting": "Beende Abstimmung",
+    "startFocusMode": "Starte Fokus-Modus",
+    "stopFocusMode": "Beende Fokus-Modus"
+  },
+  "TimerToggleButton": {
+    "label": "Alarm",
+    "1min": "1 Minute",
+    "3min": "3 Minuten",
+    "5min": "5 Minuten",
+    "customTime": "Manuelle Zeit",
+    "cancelTimer": "Alarm beenden"
+  },
+  "BoardSettings": {
+    "save": "speichern",
+    "edit": "bearbeiten"
+  },
+  "AppInfo": {
+    "version": "Anwendungsversion: <0>{{version}}</0>"
+  },
+  "Toast": {
+    "authenticationError": "Ein Fehler trat beim Einloggen auf",
+    "votingStarted": "Du hast eine Abstimmung gestartet!",
+    "votingFinished": "Du hast die Abstimmung beendet!",
+    "focusModeStart": "Du hast die Moderation gestartet!",
+    "focusModeFinished": "Du hast die Moderation beendet!",
+    "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
+    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weitere Stimmen werden gezählt!",
+    "moderationStarted": "Der Moderator wird nun Inhalte teilen!",
+    "moderationEnded": "Die Moderation wurde beendet!",
+    "timerStarted": "Ein Alarm wurde gesetzt!",
+    "timerEnded": "Der Alarm ist beendet!",
+    "timerCancelled": "Der Alarm wurde abgebrochen!"
+  }
+}

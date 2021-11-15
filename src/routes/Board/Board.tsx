@@ -6,9 +6,13 @@ import {Note} from "components/Note";
 import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
 import {Infobar} from "components/Infobar";
+import {Timer} from "components/Timer";
+import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
 export function Board() {
+  const {t} = useTranslation();
+
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
@@ -32,10 +36,10 @@ export function Board() {
       joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
     }
   }
-  let boardstatus = "Public Session";
+  let boardstatus = t("Board.publicSession");
   const accessPolicy = state.board.data?.accessPolicy;
   if (accessPolicy !== "Public") {
-    boardstatus = "Private Session";
+    boardstatus = t("Board.privateSession");
   }
 
   if (state.board.status === "pending") {

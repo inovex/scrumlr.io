@@ -25,7 +25,7 @@ $header-menu-button-width: 24px;
   top: 20px;
   left: 20px;
   height: 19px;
-  width: 180px;
+  width: 160px;
   color: $color-white;
   font-size: 18px;
   font-weight: bold;
@@ -48,7 +48,6 @@ $header-menu-button-width: 24px;
 .board-settings__edit-button {
   position: absolute;
   height: $header-menu-button-height;
-  width: 50px;
   box-shadow: 0 0 0 0.1em #f9fafb;
   border-color: transparent;
   border-radius: 32px;
@@ -56,7 +55,7 @@ $header-menu-button-width: 24px;
   color: $color-white;
   cursor: pointer;
   top: 18px;
-  left: 212px;
+  right: 16px;
   transition: scale 0.1s ease-in-out;
 }
 .board-settings__edit-button:focus {

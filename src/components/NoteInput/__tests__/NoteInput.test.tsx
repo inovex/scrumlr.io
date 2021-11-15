@@ -1,4 +1,4 @@
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
 import {NoteInput} from "components/NoteInput";
 
 const createNoteInput = (columnId: string) => <NoteInput columnId={columnId} />;

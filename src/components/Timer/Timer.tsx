@@ -5,6 +5,7 @@ import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
+import {useTranslation} from "react-i18next";
 
 type TimerProps = {
   endTime: Date;
@@ -24,6 +25,8 @@ const usePrevious = (value: any) => {
 };
 
 export const Timer = (props: TimerProps) => {
+  const {t} = useTranslation();
+
   const calculateTime = () => {
     const difference = +props.endTime - +new Date();
     // In this object the remaining time is calculated
@@ -87,7 +90,7 @@ export const Timer = (props: TimerProps) => {
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
       {isModerator && (
-        <button onClick={() => store.dispatch(ActionFactory.cancelTimer())} title="Stop timer">
+        <button onClick={() => store.dispatch(ActionFactory.cancelTimer())} title={t("Timer.stopTimer")}>
           <CloseIcon />
         </button>
       )}
