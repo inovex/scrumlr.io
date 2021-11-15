@@ -6531,10 +6531,10 @@ i18next-browser-languagedetector@^6.1.2:
   dependencies:
     "@babel/runtime" "^7.14.6"
 
-i18next-fs-backend@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-1.1.3.tgz#a7f15b01f11990e7f53703f2ea40ce4161df6f6d"
-  integrity sha512-5P3WL1GEdNuFW9tZPpYBNVLaAX0gYjVCtiXtRo6UBL0L70dqQpnyrSfadugaxZR+UiIn+uYhGz/fsHJIK3RXNQ==
+i18next-fs-backend@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-1.1.4.tgz#d0e9b9ed2fa7a0f11002d82b9fa69c3c3d6482da"
+  integrity sha512-/MfAGMP0jHonV966uFf9PkWWuDjPYLIcsipnSO3NxpNtAgRUKLTwvm85fEmsF6hGeu0zbZiCQ3W74jwO6K9uXA==
 
 i18next-http-backend@^1.3.1:
   version "1.3.1"
