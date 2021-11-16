@@ -57,13 +57,24 @@ export const initializeNoteFunctions = () => {
     if (request.note.parentId) {
       if (request.note.parentId === "unstack") note.unset("parent");
       else {
-        note.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
-        childNotes.forEach(
+        const parent = await query.get(request.note.parentId, {useMasterKey: true});
+
+        const childNotesParentQuery = new Parse.Query("Note");
+        childNotesParentQuery.equalTo("parent", parent);
+        const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
+
+        parent.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+        childNotesParent.forEach(
           (childNote) => {
-            childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.parentId));
+            childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
           },
           {useMasterKey: true}
         );
+
+        if (childNotesParent.length != 0) {
+          await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
+        }
+        await parent.save(null, {useMasterKey: true});
       }
     }
 
@@ -93,7 +104,6 @@ export const initializeNoteFunctions = () => {
     if (request.note.focus != undefined) {
       note.set("focus", request.note.focus);
     }
-
     await note.save(null, {useMasterKey: true});
     return true;
   });
