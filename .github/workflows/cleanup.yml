@@ -13,5 +13,5 @@ jobs:
       - name: scrumlr
         run: |
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          helm uninstall scrumlr $PR_NUMBER -n scrumlr-$PR_NUMBER
+          helm uninstall scrumlr-$PR_NUMBER -n scrumlr-$PR_NUMBER
           kubectl delete ns scrumlr-$PR_NUMBER
