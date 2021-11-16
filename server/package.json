@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/jsonwebtoken": "^8.5.5",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/parse": "^2.18.13",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.0",
