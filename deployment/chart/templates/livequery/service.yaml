@@ -7,8 +7,8 @@ metadata:
     {{- include "labels" . | nindent 6 }}
 spec:
   ports:
-    - port: {{ .Values.livequery.port }}
-      targetPort: {{ .Values.livequery.hostPort }}
+    - port: 4000 
+      targetPort: 4000 
       protocol: TCP
   selector:
     {{- include "selectorLabels" .Values.livequery | nindent 6 }}

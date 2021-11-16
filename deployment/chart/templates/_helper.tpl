@@ -8,6 +8,7 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 {{- define "selectorLabels" -}}
 app.kubernetes.io/name: {{ include "scrumlr-fullname" .}}
 app.kubernetes.io/components: {{ .name }}
+app: {{ include "scrumlr-fullname" .}}
 {{- end -}}
 {{- define "scrumlr-fullname" -}}
 {{- printf "%s-%s" "scrumlr" .name | trunc 63 | trimSuffix "-" -}}
