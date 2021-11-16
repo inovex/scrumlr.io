@@ -1,4 +1,4 @@
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {BoardUsers} from "components/BoardUsers";

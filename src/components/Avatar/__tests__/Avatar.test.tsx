@@ -1,4 +1,4 @@
-import {render} from "@testing-library/react";
+import {render} from "testUtils";
 import {Avatar} from "../Avatar";
 
 describe.only("Avatar", () => {

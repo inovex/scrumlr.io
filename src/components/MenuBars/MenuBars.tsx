@@ -16,9 +16,12 @@ import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.s
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
+import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
 export function MenuBars() {
+  const {t} = useTranslation();
+
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -61,17 +64,17 @@ export function MenuBars() {
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         <div className="menu__items">
           <MenuToggle
-            tabIndex={TabIndex.UserMenu}
             direction="right"
             value={isReady}
-            toggleStartLabel="Mark me as done"
-            toggleStopLabel="Unmark me as done"
+            toggleStartLabel={t("MenuBars.markAsDone")}
+            toggleStopLabel={t("MenuBars.unmarkAsDone")}
             icon={CheckIcon}
             onToggle={toggleReadyState}
+            tabIndex={TabIndex.UserMenu}
           />
-          <MenuButton tabIndex={TabIndex.UserMenu + 1} disabled direction="right" label="Add image or giphy" icon={AddImageIcon} onClick={() => null} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} disabled direction="right" label="Add sticker" icon={AddStickerIcon} onClick={() => null} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label="Settings" icon={SettingsIcon} onClick={() => null} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 1} disabled direction="right" label={t("MenuBars.addImage")} icon={AddImageIcon} onClick={() => null} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 2} disabled direction="right" label={t("MenuBars.addSticker")} icon={AddStickerIcon} onClick={() => null} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>
       {isAdmin && (
@@ -81,8 +84,8 @@ export function MenuBars() {
               tabIndex={TabIndex.AdminMenu}
               disabled
               direction="left"
-              toggleStartLabel="Start column mode"
-              toggleStopLabel="End column mode"
+              toggleStartLabel={t("MenuBars.editColumns")}
+              toggleStopLabel={t("MenuBars.stopEditingColumns")}
               icon={ColumnIcon}
               onToggle={() => null}
             />
@@ -90,8 +93,8 @@ export function MenuBars() {
             <MenuToggle
               value={state.voting === "active"}
               direction="left"
-              toggleStartLabel="Start voting phase"
-              toggleStopLabel="End voting phase"
+              toggleStartLabel={t("MenuBars.startVoting")}
+              toggleStopLabel={t("MenuBars.stopVoting")}
               icon={VoteIcon}
               onToggle={toggleVoting}
               tabIndex={TabIndex.AdminMenu + 10}
@@ -99,8 +102,8 @@ export function MenuBars() {
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
-              toggleStartLabel="Start focused mode"
-              toggleStopLabel="End focused mode"
+              toggleStartLabel={t("MenuBars.startFocusMode")}
+              toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
               tabIndex={TabIndex.AdminMenu + 11}
