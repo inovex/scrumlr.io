@@ -129,7 +129,7 @@ jobs:
         with:
           driver: docker
        
-      - name: Build and push Frontend
+      - name: Build and push Server
         uses: docker/build-push-action@v2
         with:
           context: ./server
@@ -156,7 +156,7 @@ jobs:
         with:
           driver: docker
        
-      - name: Build and push Frontend
+      - name: Build and push Dashboard
         uses: docker/build-push-action@v2
         with:
           push: true
