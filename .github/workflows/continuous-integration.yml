@@ -133,6 +133,7 @@ jobs:
   
   build-dashboard:
     runs-on: self-hosted
+    needs: test
     if: ${{ github.event == 'pull_request' }}
     steps:
       - name: Checkout repository
