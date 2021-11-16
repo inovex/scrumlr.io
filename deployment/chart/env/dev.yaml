@@ -6,10 +6,14 @@ cert:
 
 frontend:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
+  imagePullPolicy: Always 
 livequery:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
+  imagePullPolicy: Always
 server:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
+  imagePullPolicy: Always
 dashboard:
   image: ghcr.io/inovex/scrumlr.io/scrumlr-dashboard:latest
+  AimagePullPolicy: Always
 
