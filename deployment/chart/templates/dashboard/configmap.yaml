@@ -5,7 +5,8 @@ metadata:
   labels:
     {{- include "selectorLabels" .Values.dashboard | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
-{{- if .Values.dashboard.config }}
 data:
-{{ toYaml .Values.dashboard.config | indent 2 }}
-{{- end }}
+  SERVER_URL: "/api"
+  APP_ID: "Scrumlr"
+  APP_NAME: "Scrumlr" 
+  DASHBOARD_DEFAULT_USER: "scrumlr" 
