@@ -31,7 +31,7 @@ interface NoteProps {
   tabIndex?: number;
 }
 
-export const Note = (props: NoteProps) => {
+export var Note = function(props: NoteProps) {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
@@ -84,7 +84,7 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        store.dispatch(ActionFactory.editNote({id: item.id, parentId: props.noteId, columnId: props.columnId}));
+        store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
@@ -129,4 +129,4 @@ export const Note = (props: NoteProps) => {
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
-};
+}

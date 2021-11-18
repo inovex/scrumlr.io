@@ -8,11 +8,8 @@ interface AddNoteRequest {
 }
 
 type EditableNoteAttributes = {
-  columnId: string;
-  parentId: string;
   text: string;
   focus: boolean;
-  positionInStack: number;
 };
 
 interface UnstackNoteRequest {
@@ -20,6 +17,15 @@ interface UnstackNoteRequest {
   note: {
     id: string;
     parentId: string;
+  };
+}
+
+interface DragNoteRequest {
+  boardId: string;
+  note: {
+    id: string;
+    dragOnId: string;
+    columnId: string;
   };
 }
 
@@ -57,58 +63,6 @@ export const initializeNoteFunctions = () => {
 
     if (!note) {
       return false;
-    }
-
-    // Find all notes with the edited note as parent
-    const childNotesQuery = new Parse.Query("Note");
-    childNotesQuery.equalTo("parent", note);
-    const childNotes = await childNotesQuery.findAll({useMasterKey: true});
-
-    if (request.note.parentId) {
-      // Set note as new parent
-      note.set("positionInStack", 0);
-
-      const parent = await query.get(request.note.parentId, {useMasterKey: true});
-
-      // Get all children of the old parent
-      const childNotesParentQuery = new Parse.Query("Note");
-      childNotesParentQuery.equalTo("parent", parent);
-      const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
-
-      // Update position of old parent and children
-      parent.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
-      parent.set("positionInStack", childNotes.length + 1);
-      childNotesParent
-        .sort((a, b) => a.get("positionInStack") - b.get("positionInStack"))
-        .forEach(
-          (childNote, index) => {
-            childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
-            childNote.set("positionInStack", index + childNotes.length + 2);
-          },
-          {useMasterKey: true}
-        );
-
-      // Save old parent first -> old children are not visible during updates
-      await parent.save(null, {useMasterKey: true});
-
-      if (childNotesParent.length != 0) {
-        await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
-      }
-    }
-
-    if (request.note.columnId) {
-      note.set("columnId", request.note.columnId);
-      childNotes.forEach(
-        (childNote) => {
-          childNote.set("columnId", request.note.columnId);
-        },
-        {useMasterKey: true}
-      );
-    }
-
-    // Avoid updating the children if there is no need for
-    if (request.note.columnId || request.note.parentId) {
-      await Parse.Object.saveAll(childNotes, {useMasterKey: true});
     }
 
     if (request.note.text) {
@@ -162,6 +116,68 @@ export const initializeNoteFunctions = () => {
       if (childNotesParent.length != 0) {
         await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
       }
+    }
+
+    await note.save(null, {useMasterKey: true});
+    return true;
+  });
+
+  api<DragNoteRequest, boolean>("dragNote", async (user, request) => {
+    await requireValidBoardMember(user, request.boardId);
+    const query = new Parse.Query(Parse.Object.extend("Note"));
+    const note = await query.get(request.note.id, {useMasterKey: true});
+
+    if (!note) {
+      return false;
+    }
+
+    console.log(request);
+
+    // Find all notes with the edited note as parent
+    const childNotesQuery = new Parse.Query("Note");
+    childNotesQuery.equalTo("parent", note);
+    const childNotes = await childNotesQuery.findAll({useMasterKey: true});
+
+    if (request.note.dragOnId) {
+      // Set note as new parent
+      note.set("positionInStack", 0);
+
+      // Get the note to which the note is dragged
+      const dragedOn = await query.get(request.note.dragOnId, {useMasterKey: true});
+
+      const childNotesDragedOnQuery = new Parse.Query("Note");
+      childNotesDragedOnQuery.equalTo("parent", dragedOn);
+      const childNotesDragedOn = await childNotesDragedOnQuery.findAll({useMasterKey: true});
+
+      // Update childes of dragedOn note
+      dragedOn.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+      dragedOn.set("positionInStack", childNotes.length + 1);
+      childNotesDragedOn
+        .sort((a, b) => a.get("positionInStack") - b.get("positionInStack"))
+        .forEach(
+          (childNote, index) => {
+            childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+            childNote.set("positionInStack", index + childNotes.length + 2);
+          },
+          {useMasterKey: true}
+        );
+
+      // Save old parent first -> old children are not visible during updates
+      await dragedOn.save(null, {useMasterKey: true});
+
+      if (childNotesDragedOn.length != 0) {
+        await Parse.Object.saveAll(childNotesDragedOn, {useMasterKey: true});
+      }
+    }
+
+    if (request.note.columnId) {
+      note.set("columnId", request.note.columnId);
+      childNotes.forEach(
+        (childNote) => {
+          childNote.set("columnId", request.note.columnId);
+        },
+        {useMasterKey: true}
+      );
     }
 
     await note.save(null, {useMasterKey: true});

@@ -55,8 +55,6 @@ export interface NoteClientModel {
 }
 
 type EditableNoteAttributes = {
-  columnId: string;
-  parentId: string;
   text: string;
   focus: boolean;
 };
@@ -66,6 +64,12 @@ export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 export type UnstackNoteRequest = {
   id: string;
   parentId: string;
+};
+
+export type DragNoteRequest = {
+  id: string;
+  dragOnId?: string;
+  columnId?: string;
 };
 
 export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientModel => ({

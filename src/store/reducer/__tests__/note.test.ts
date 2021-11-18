@@ -73,7 +73,7 @@ describe("note reducer", () => {
 
   test("edit note", () => {
     const newState = noteReducer(initialState, ActionFactory.editNote({id: "1", text: "New text"}));
-    expect(newState.length).toEqual(2);
+    expect(newState.length).toEqual(1);
     expect(newState.find((note) => note.text === "New text")).toBeDefined();
   });
 

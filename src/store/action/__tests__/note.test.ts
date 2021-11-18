@@ -75,6 +75,28 @@ describe("note actions", () => {
     });
   });
 
+  describe("drag note", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof NoteActionFactory.dragNote>, NoteReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof NoteActionFactory.dragNote>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = NoteActionFactory.dragNote({id: "noteId", dragOnId: "parentId"});
+      expect(action).toEqual({
+        type: "@@SCRUMLR/dragNote",
+        note: {id: "noteId", dragOnId: "parentId"},
+      });
+    });
+  });
+
   describe("created note", () => {
     test("type is listed in users redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript
