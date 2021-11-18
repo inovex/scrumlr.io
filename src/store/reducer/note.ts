@@ -12,6 +12,7 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
         author: Parse.User.current()!.id,
         focus: false,
         dirty: true,
+        positionInStack: -1,
       };
       return [...state, localNote];
     }

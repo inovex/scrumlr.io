@@ -8,6 +8,7 @@ jest.mock("api", () => ({
     addNote: jest.fn(),
     editNote: jest.fn(),
     deleteNote: jest.fn(),
+    unstackNote: jest.fn(),
   },
 }));
 
@@ -15,6 +16,7 @@ beforeEach(() => {
   (API.addNote as jest.Mock).mockClear();
   (API.editNote as jest.Mock).mockClear();
   (API.deleteNote as jest.Mock).mockClear();
+  (API.unstackNote as jest.Mock).mockClear();
 });
 
 const stateAPI = {
@@ -42,5 +44,10 @@ describe("note middleware", () => {
   test("delete note", () => {
     passNoteMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.deleteNote("noteId"));
     expect(API.deleteNote).toHaveBeenCalledWith("noteId");
+  });
+
+  test("unstack note", () => {
+    passNoteMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.unstackNote({id: "noteId", parentId: "parentId"}));
+    expect(API.unstackNote).toHaveBeenCalledWith({id: "noteId", parentId: "parentId"}, "boardId");
   });
 });

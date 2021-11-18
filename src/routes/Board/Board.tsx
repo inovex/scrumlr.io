@@ -9,7 +9,7 @@ import {Timer} from "components/Timer";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
-export function Board() {
+export var Board = function() {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState) => ({
@@ -80,6 +80,7 @@ export function Board() {
                       columnColor={column.color}
                       childrenNotes={state.notes
                         .filter((n) => note.id && note.id === n.parentId)
+                        .sort((a, b) => a.positionInStack - b.positionInStack)
                         .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                         .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                       votes={state.votes.filter((vote) => vote.note === note.id)}

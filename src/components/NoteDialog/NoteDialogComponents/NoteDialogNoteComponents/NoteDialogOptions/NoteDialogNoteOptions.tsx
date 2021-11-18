@@ -7,12 +7,13 @@ import "./NoteDialogNoteOptions.scss";
 type NoteDialogNoteOptionsProps = {
   showUnstackButton: boolean;
   noteId?: string;
+  parentId?: string;
   authorId: string;
   onDeleteOfParent: () => void;
   onClose: () => void;
 };
 
-export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
+export var NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = function(props: NoteDialogNoteOptionsProps) {
   const showDeleteButton = props.authorId === Parse.User.current()?.id;
   return (
     <ul className="note-dialog__note-options">
@@ -28,4 +29,4 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       )}
     </ul>
   );
-};
+}

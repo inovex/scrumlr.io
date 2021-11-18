@@ -12,7 +12,16 @@ type EditableNoteAttributes = {
   parentId: string;
   text: string;
   focus: boolean;
+  positionInStack: number;
 };
+
+interface UnstackNoteRequest {
+  boardId: string;
+  note: {
+    id: string;
+    parentId: string;
+  };
+}
 
 type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
@@ -31,6 +40,7 @@ export const initializeNoteFunctions = () => {
         board: Parse.Object.extend("Board").createWithoutData(request.boardId),
         columnId: request.columnId,
         focus: false,
+        positionInStack: -1,
       },
       {
         readRoles: [getMemberRoleName(request.boardId), getAdminRoleName(request.boardId)],
@@ -55,26 +65,34 @@ export const initializeNoteFunctions = () => {
     const childNotes = await childNotesQuery.findAll({useMasterKey: true});
 
     if (request.note.parentId) {
-      if (request.note.parentId === "unstack") note.unset("parent");
-      else {
-        const parent = await query.get(request.note.parentId, {useMasterKey: true});
+      // Set note as new parent
+      note.set("positionInStack", 0);
 
-        const childNotesParentQuery = new Parse.Query("Note");
-        childNotesParentQuery.equalTo("parent", parent);
-        const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
+      const parent = await query.get(request.note.parentId, {useMasterKey: true});
 
-        parent.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
-        childNotesParent.forEach(
-          (childNote) => {
+      // Get all children of the old parent
+      const childNotesParentQuery = new Parse.Query("Note");
+      childNotesParentQuery.equalTo("parent", parent);
+      const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
+
+      // Update position of old parent and children
+      parent.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+      parent.set("positionInStack", childNotes.length + 1);
+      childNotesParent
+        .sort((a, b) => a.get("positionInStack") - b.get("positionInStack"))
+        .forEach(
+          (childNote, index) => {
             childNote.set("parent", Parse.Object.extend("Note").createWithoutData(request.note.id));
+            childNote.set("positionInStack", index + childNotes.length + 2);
           },
           {useMasterKey: true}
         );
 
-        if (childNotesParent.length != 0) {
-          await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
-        }
-        await parent.save(null, {useMasterKey: true});
+      // Save old parent first -> old children are not visible during updates
+      await parent.save(null, {useMasterKey: true});
+
+      if (childNotesParent.length != 0) {
+        await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
       }
     }
 
@@ -108,6 +126,48 @@ export const initializeNoteFunctions = () => {
     return true;
   });
 
+  api<UnstackNoteRequest, boolean>("unstackNote", async (user, request) => {
+    await requireValidBoardMember(user, request.boardId);
+    const query = new Parse.Query(Parse.Object.extend("Note"));
+    const note = await query.get(request.note.id, {useMasterKey: true});
+
+    if (!note) {
+      return false;
+    }
+
+    if (request.note.parentId) {
+      const parent = await query.get(request.note.parentId, {useMasterKey: true});
+
+      // Get all notes of parent
+      const childNotesParentQuery = new Parse.Query("Note");
+      childNotesParentQuery.equalTo("parent", parent);
+      const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
+
+      // Remove note from stack and set position to -1
+      note.unset("parent");
+      note.set("positionInStack", -1);
+
+      // Update position of children
+      childNotesParent
+        .filter((childNote) => childNote != note)
+        .sort((a, b) => a.get("positionInStack") - b.get("positionInStack"))
+        .forEach(
+          (childNote, index) => {
+            childNote.set("positionInStack", index + 1);
+          },
+          {useMasterKey: true}
+        );
+
+      // Save updates for children
+      if (childNotesParent.length != 0) {
+        await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
+      }
+    }
+
+    await note.save(null, {useMasterKey: true});
+    return true;
+  });
+
   api<DeleteNoteRequest, boolean>("deleteNote", async (user, request) => {
     const query = new Parse.Query(Parse.Object.extend("Note"));
     const note = await query.get(request.noteId, {useMasterKey: true});
@@ -120,11 +180,13 @@ export const initializeNoteFunctions = () => {
         childNotes.forEach(
           (childNote) => {
             childNote.unset("parent");
+            childNote.set("positionInStack", -1);
           },
           {useMasterKey: true}
         );
         await Parse.Object.saveAll(childNotes, {useMasterKey: true});
       });
+
       // Find and delete all votes of this note including the note itself
       const voteQuery = new Parse.Query("Vote");
       voteQuery.equalTo("note", note);

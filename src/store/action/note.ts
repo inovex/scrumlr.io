@@ -1,4 +1,4 @@
-import {EditNoteRequest, NoteClientModel} from "types/note";
+import {EditNoteRequest, NoteClientModel, UnstackNoteRequest} from "types/note";
 
 /** This object lists note object specific internal Redux Action types. */
 export const NoteActionType = {
@@ -9,6 +9,7 @@ export const NoteActionType = {
    */
   AddNote: "@@SCRUMLR/addNote" as const,
   EditNote: "@@SCRUMLR/editNote" as const,
+  UnstackNote: "@@SCRUMLR/unstackNote" as const,
   CreatedNote: "@@SCRUMLR/createdNote" as const,
   DeleteNote: "@@SCRUMLR/deleteNote" as const,
   UpdatedNote: "@@SCRUMLR/updatedNote" as const,
@@ -42,6 +43,14 @@ export const NoteActionFactory = {
    */
   editNote: (note: EditNoteRequest) => ({
     type: NoteActionType.EditNote,
+    note,
+  }),
+  /**
+   * Creates an action which should be dispatched when the user edits a note.
+   * @param note contains the noteId and the parentId
+   */
+  unstackNote: (note: UnstackNoteRequest) => ({
+    type: NoteActionType.UnstackNote,
     note,
   }),
   /**
@@ -86,6 +95,7 @@ export const NoteActionFactory = {
 export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.addNote>
   | ReturnType<typeof NoteActionFactory.editNote>
+  | ReturnType<typeof NoteActionFactory.unstackNote>
   | ReturnType<typeof NoteActionFactory.createdNote>
   | ReturnType<typeof NoteActionFactory.deleteNote>
   | ReturnType<typeof NoteActionFactory.initializeNotes>
