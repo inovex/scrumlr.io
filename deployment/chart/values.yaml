@@ -1,134 +1,51 @@
+# enable lets encrypt certs 
+# use prod to change lets encrypt cluster issuer, false=lets-encrypt-staging , true=lets-encrypt-prod
+cert:
+  enabled: false
+  prod: false
+  name:
+hostname: 
+#
 cache:
   name: cache
-  hostPort: 6379
-  portName: redis
-  image: redis:6.2.4-alpine
-  imagePullPolicy: IfNotPresent
-  restartPolicy: Always
-  port: 6379
-  livenessProbe:
-    tcpSocket:
-      port: 6379
-    initialDelaySeconds: 10
-    periodSeconds: 20
-  readinessProbe:
-    exec:
-      command:
-      - redis-cli
-      - ping  
-    initialDelaySeconds: 5
-    periodSeconds: 10
+  replicas: 
+
+oauthroute:
+  enabled: true
 dashboard:
   name: dashboard
   image: scrumlr-dashboard
-  imagePullPolicy: IfNotPresent
-  restartPolicy: Always
-  hostPort: 4040
-  portName: dashboard
-  port: 4040
-  path: /dashboard
-  livenessProbe:
-    httpGet:
-      path: /dashboard
-      port: 4040
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-  # readinessProbe:
-  config:
-    SERVER_URL: "http://localhost/api"
-    APP_ID: "Scrumlr"
-    APP_NAME: "Scrumlr" 
-    DASHBOARD_DEFAULT_USER: "scrumlr" 
-  secrets:
-    MASTER_KEY: bWFzdGVyS2V5
-    DASHBOARD_DEFAULT_PASSWORD: JDJhJDEyJFFKcjZGUG1LU2hLNTFGekt3RkJnMnVabEpCV3IuOEpULkRwT1RCOXlIT3N1c2VPREY0amU2
+  imagePullPolicy: 
+  replicas: 
+   # bcrypt and base64 encoded, login defaults to scrumlr (user and pw) 
+  password:  
+
+
 frontend:
   name: frontend
   image: scrumlr-frontend
-  hostPort: 80
-  portName: frontendport
-  port: 80
-  path: /
-  imagePullPolicy: IfNotPresent
-  restartPolicy: Always
-  livenessProbe:
-    httpGet:
-      path: /
-      port: 80
-    initialDelaySeconds: 5
-    periodSeconds: 3
-  readinessProbe:
-    httpGet:
-      path: /
-      port: 80
-    initialDelaySeconds: 3
-    periodSeconds: 3
+  imagePullPolicy: 
+  replicas:
+
+
 livequery:
   name: livequery
-  image: scrumlr-parse
-  imagePullPolicy: Never
-  restartPolicy: Always
-  hostPort: 4000
-  portName: livequeryport
-  port: 4000
-  path: /ws
-  livenessProbe:
-    tcpSocket:
-      port: livequeryport
-    initialDelaySeconds: 10
-    periodSeconds: 20
-  readinessProbe:
-    tcpSocket:
-      port: livequeryport
-    initialDelaySeconds: 10
-    periodSeconds: 10
-  config:
-    SCRUMLR_OPERATION_MODE: "livequery"
-    SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
-    SCRUMLR_API_HOST: "scrumlr-server"
-    SCRUMLR_API_PORT: "4000"
-    SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
-    SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"
-  secrets:
-    SCRUMLR_API_MASTER_KEY: bWFzdGVyS2V5
+  image: scrumlr-server
+  imagePullPolicy: 
+  replicas: 
+
 server:
   name: server
-  image: scrumlr-parse
-  imagePullPolicy: Never
-  restartPolicy: Always
-  hostPort: 4000
-  portName: serverport
-  port: 4000
-  path: /api
-  config:
-    SCRUMLR_OPERATION_MODE: "server"
-    SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
-    SCRUMLR_API_HOST: "localhost"
-    SCRUMLR_API_PORT: "4000"
-    SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
-    SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"
-  secrets:
-    SCRUMLR_API_MASTER_KEY: bWFzdGVyS2V5
-  livenessProbe:
-    httpGet:
-      path: /api/health
-      port: 4000
-    initialDelaySeconds: 30
-    periodSeconds: 10
-    timeoutSeconds: 5
-  readinessProbe:
-    httpGet:
-      path: /api/users
-      port: 4000
-      httpHeaders:
-                - name: X-Parse-Application-Id
-                  value: Scrumlr
-    initialDelaySeconds: 10
-    periodSeconds: 5
-    timeoutSeconds: 5
+  image: scrumlr-server
+  imagePullPolicy: 
+  replicas: 
+
 mongodb:
   fullnameOverride: scrumlr-database
+  image:
+    pullPolicy: IfNotPresent
+  persistence:
+    enabled: false
   auth:
     enabled: false
   labels: { 
