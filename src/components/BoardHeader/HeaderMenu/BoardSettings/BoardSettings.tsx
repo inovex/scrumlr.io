@@ -1,5 +1,5 @@
 import "./BoardSettings.scss";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {AccessPolicyType} from "types/board";
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types/store";
@@ -9,23 +9,26 @@ import {useTranslation} from "react-i18next";
 export type BoardSettingsProps = {
   activeEditMode: boolean;
   accessPolicy: AccessPolicyType;
-  boardName: string;
   currentUserIsModerator: boolean;
   setActiveEditMode: Dispatch<SetStateAction<boolean>>;
-  setBoardName: Dispatch<SetStateAction<string>>;
   setAccessPolicy: Dispatch<SetStateAction<AccessPolicyType>>;
 };
 
-export const BoardSettings = (props: BoardSettingsProps) => {
+export var BoardSettings = function(props: BoardSettingsProps) {
   const {t} = useTranslation();
-
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
   }));
 
+  const [boardName, setBoardName] = useState(state.board.name);
+
+  useEffect(() => {
+    setBoardName(state.board.name);
+  }, [state.board.name]);
+
   const onSubmit = () => {
-    if (props.activeEditMode && state.board!.name !== props.boardName) {
-      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: props.boardName}));
+    if (props.activeEditMode && state.board!.name !== boardName) {
+      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
     }
     props.setActiveEditMode(!props.activeEditMode);
   };
@@ -43,9 +46,9 @@ export const BoardSettings = (props: BoardSettingsProps) => {
       >
         <input
           className="board-settings__board-name"
-          value={props.boardName}
+          value={boardName}
           disabled={!props.activeEditMode}
-          onChange={(e) => props.setBoardName(e.target.value)}
+          onChange={(e) => setBoardName(e.target.value)}
           ref={(input) => {
             if (!input?.disabled) input?.focus();
           }}
@@ -60,4 +63,4 @@ export const BoardSettings = (props: BoardSettingsProps) => {
       </form>
     </li>
   );
-};
+}

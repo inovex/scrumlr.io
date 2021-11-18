@@ -6,7 +6,7 @@ metadata:
     {{- include "selectorLabels" .Values.livequery | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.livequery.replicas | default 1 }} 
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.livequery | nindent 6 }}
@@ -18,21 +18,23 @@ spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.livequery }}
           image: {{ .Values.livequery.image }}
-          imagePullPolicy:  {{ .Values.livequery.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.livequery.imagePullPolicy | default "IfNotPresent" }} 
           envFrom:
             - configMapRef: 
                 name: {{ include "scrumlr-fullname" .Values.livequery }}
             - secretRef:
                 name: {{ include "scrumlr-fullname" .Values.livequery }}
           ports:
-            - name: {{ .Values.livequery.portName }}
-              containerPort: {{.Values.livequery.hostPort }}
-          {{- if .Values.livequery.livenessProbe }}
+            - name: livequery 
+              containerPort: 4000 
           livenessProbe:
-          {{- toYaml .Values.livequery.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.livequery.readinessProbe }}
+            tcpSocket:
+              port: livequery 
+            initialDelaySeconds: 40
+            periodSeconds: 20
           readinessProbe: 
-          {{- toYaml .Values.livequery.readinessProbe | nindent 12 }}
-          {{- end }}
-      restartPolicy:  {{ .Values.livequery.restartPolicy }}
+            tcpSocket:
+              port: livequery 
+            initialDelaySeconds: 10 
+            periodSeconds: 10
+      restartPolicy: Always 
