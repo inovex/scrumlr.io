@@ -1929,10 +1929,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.176.tgz#641150fc1cda36fbfa329de603bbb175d7ee20c0"
   integrity sha512-xZmuPTa3rlZoIbtDUyJKZQimJV3bxCmzMIO2c9Pz9afyDro6kr7R79GwcB6mRhuoPmV2p1Vb66WOJH7F886WKQ==
 
-"@types/marked@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.0.tgz#2e7036d348adc7f5916946349596194b99eb4673"
-  integrity sha512-Zuz0vlQDfPuop4aFFWFdFTTpVmFqkwAQJ4Onxmgc2ZMxhgaO0UxEwWpz23uHXd9QhwsFB1BJBmWNjheZmqdBuQ==
+"@types/marked@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.1.tgz#d588a7bbc4d6551c5e75249bc106ffda96ae33c5"
+  integrity sha512-ZigEmCWdNUU7IjZEuQ/iaimYdDHWHfTe3kg8ORfKjyGYd9RWumPoOJRQXB0bO+XLkNwzCthW3wUIQtANaEZ1ag==
 
 "@types/minimatch@*":
   version "3.0.5"
