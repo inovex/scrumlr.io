@@ -18,7 +18,9 @@
   .board-users {
     margin-right: 8px;
   }
+}
 
+@media screen and (max-width: 500px) {
   .board-users li:not(:last-child) {
     display: none;
   }
