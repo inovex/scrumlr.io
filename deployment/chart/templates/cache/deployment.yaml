@@ -6,7 +6,7 @@ metadata:
         {{- include "selectorLabels" .Values.cache | nindent 6 }}
         {{- include "labels" . | nindent 6 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.cache.replicas | default 1 }}
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.cache  | nindent 6 }}
@@ -17,17 +17,21 @@ spec:
     spec:
       containers:
         - name: {{ include "scrumlr-fullname" .Values.cache }} 
-          image: {{ .Values.cache.image }}
-          imagePullPolicy: {{ .Values.cache.imagePullPolicy }}
+          image: redis:6.2.4-alpine
+          imagePullPolicy: IfNotPresent 
           ports:
-            - name: {{ .Values.cache.portName }}
-              containerPort: {{ .Values.cache.hostPort }}
-          {{- if .Values.cache.livenessProbe }}
+          - name: redis
+            containerPort: 6379
           livenessProbe:
-          {{- toYaml .Values.cache.livenessProbe | nindent 12 }}
-          {{- end }}
-          {{- if .Values.cache.readinessProbe }}
+            tcpSocket:
+              port: 6379
+            initialDelaySeconds: 10
+            periodSeconds: 20
           readinessProbe:
-             {{- toYaml .Values.cache.readinessProbe | nindent 12 }}
-          {{- end }}
-      restartPolicy: {{ .Values.cache.restartPolicy }}
+            exec:
+              command:
+              - redis-cli
+              - ping  
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      restartPolicy: Always 

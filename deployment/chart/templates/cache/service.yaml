@@ -7,8 +7,8 @@ metadata:
     {{- include "labels" . | nindent 6 }}
 spec:
   ports:
-    - port: {{ .Values.cache.port }}
-      targetPort: {{ .Values.cache.hostPort }}
+    - port: 6379 
+      targetPort: redis 
       protocol: TCP
   selector:
     {{- include "selectorLabels" .Values.cache | nindent 6 }}
