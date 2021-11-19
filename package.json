@@ -45,7 +45,7 @@
     "@types/file-saver": "^2.0.4",
     "@types/history": "^4.7.9",
     "@types/i18next-fs-backend": "^1.1.2",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/json2csv": "^5.0.3",
     "@types/lodash": "^4.14.177",
     "@types/marked": "^4.0.1",
