@@ -5,7 +5,10 @@ metadata:
   labels: 
     {{- include "selectorLabels" .Values.livequery | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
-{{- if .Values.livequery.config }}
 data:
-{{ toYaml .Values.livequery.config | indent 2 }}
-{{- end }}
+  SCRUMLR_OPERATION_MODE: "livequery"
+  SCRUMLR_DATABASE_URI: "mongodb://scrumlr-database:27017/dev"
+  SCRUMLR_API_HOST: "scrumlr-server"
+  SCRUMLR_API_PORT: "4000"
+  SCRUMLR_SERVE_PRODUCTION_WEBAPP: "false"
+  SCRUMLR_CACHE_URL: "redis://scrumlr-cache:6379"

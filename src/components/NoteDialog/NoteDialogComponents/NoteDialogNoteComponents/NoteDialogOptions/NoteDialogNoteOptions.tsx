@@ -8,12 +8,13 @@ type NoteDialogNoteOptionsProps = {
   showUnstackButton: boolean;
   noteId?: string;
   authorId: string;
+  currentUserIsModerator: boolean;
   onDeleteOfParent: () => void;
   onClose: () => void;
 };
 
-export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
-  const showDeleteButton = props.authorId === Parse.User.current()?.id;
+export var NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = function(props: NoteDialogNoteOptionsProps) {
+  const showDeleteButton = props.authorId === Parse.User.current()?.id || props.currentUserIsModerator;
   return (
     <ul className="note-dialog__note-options">
       {showDeleteButton && (
@@ -28,4 +29,4 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       )}
     </ul>
   );
-};
+}
