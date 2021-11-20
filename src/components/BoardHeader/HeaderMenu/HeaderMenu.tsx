@@ -61,10 +61,10 @@ const HeaderMenu = function(props: HeaderMenuProps) {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
-            <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
             <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
           </>
         )}
+        <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
         <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
       </ul>
     </Portal>
