@@ -7,16 +7,27 @@ metadata:
     {{- include "labels" . | nindent 6 }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-  annotations:
     kubernetes.io/ingress.class: "nginx"
+    {{- if .Values.cert.enabled }}
+    cert-manager.io/cluster-issuer: {{if .Values.cert.prod}}"letsencrypt-prod"{{ else }}"letsencrypt-staging"{{ end }}
+    {{- end }}
 spec:
+  {{- if and .Values.cert.enabled .Values.hostname}}
+  tls:
+  - hosts:
+    - {{ .Values.hostname }}
+    secretName:  {{ .Values.cert.name }}
+ {{- end }}
   rules:
   - http:
       paths:
-      - path:  {{ .Values.livequery.path }}
+      - path: /ws 
         pathType: Prefix
         backend:
           service:
             name: {{ include "scrumlr-fullname" .Values.livequery }}
             port:
-              number: {{ .Values.livequery.port }}
+              number: 4000 
+  {{- if .Values.hostname }} 
+    host: {{ .Values.hostname }}
+  {{- end}}
