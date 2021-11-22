@@ -71,7 +71,6 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
 
       if (action.note.columnId) {
         note!.columnId = action.note.columnId;
-        console.log(childNotes);
         childNotes.forEach((childNote) => {
           childNote.columnId = action.note.columnId!;
         });

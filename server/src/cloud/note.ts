@@ -134,8 +134,6 @@ export const initializeNoteFunctions = () => {
       return false;
     }
 
-    console.log(request);
-
     // Find all notes with the edited note as parent
     const childNotesQuery = new Parse.Query("Note");
     childNotesQuery.equalTo("parent", note);
