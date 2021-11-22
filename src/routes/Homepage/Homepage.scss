@@ -1,0 +1,87 @@
+@import "constants/style";
+
+.homepage {
+  background: $color-white;
+  min-height: 100vh;
+}
+
+.homepage__header {
+  padding: $padding--default;
+}
+
+.homepage__hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  min-width: 480px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $padding--default;
+}
+
+.homepage__hero > * {
+  flex: 1 1 0;
+}
+
+.homepage__hero-title-team {
+  color: $color-backlog-blue;
+}
+
+.homepage__hero-title-retrospective {
+  color: $color-planning-pink;
+}
+
+.homepage__illustration {
+  order: -1;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  // set max rows to display
+  grid-template-rows: repeat(4, 1fr);
+  // set height of invisible rows
+  grid-auto-rows: 0;
+  // disable overflow
+  overflow-y: hidden;
+}
+
+.homepage__footer {
+  display: flex;
+  justify-content: space-between;
+
+  text-align: right;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.homepage__footer-links {
+  list-style-type: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .homepage {
+    background: $color-dark-mode;
+  }
+
+  .homepage__hero-title {
+    color: $color-white;
+  }
+
+  .homepage__hero-text {
+    color: $color-white;
+  }
+}
+
+@media #{$tablet} {
+  .homepage__header {
+    padding: $padding--large;
+  }
+
+  .homepage__hero {
+    flex-direction: row;
+  }
+
+  .homepage__illustration {
+    order: initial;
+  }
+}

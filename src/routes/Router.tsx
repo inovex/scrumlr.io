@@ -5,11 +5,13 @@ import {BoardGuard} from "routes/Board";
 import RequireAuthentication from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
+import {Homepage} from "./Homepage";
 
-const Router = () => (
-  <BrowserRouter>
+const Router = function() {
+  return <BrowserRouter>
     <Routes>
-      <Route path="/" element={<NewBoard />} />
+      <Route path="/" element={<Homepage />} />
+      <Route path="/new" element={<NewBoard />} />
       <Route path="/login" element={<LoginBoard />} />
       <Route path="/auth/redirect" element={<AuthRedirect />} />
       <Route
@@ -22,6 +24,6 @@ const Router = () => (
       />
     </Routes>
   </BrowserRouter>
-);
+}
 
 export default Router;

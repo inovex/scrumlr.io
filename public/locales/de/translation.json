@@ -148,5 +148,12 @@
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!"
+  },
+  "Homepage": {
+    "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
+    "teaserText": "Starte mit einem Klick deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
+    "startButton": "Jetzt loslegen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "terms": "AGB"
   }
 }

@@ -148,5 +148,12 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!"
+  },
+  "Homepage": {
+    "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
+    "teaserText": "Starte mit einem Klick deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
+    "startButton": "Jetzt loslegen",
+    "privacyPolicy": "Privacy policy",
+    "terms": "Terms & conditions"
   }
 }
