@@ -14,7 +14,7 @@ jest.mock("parse", () => ({
   },
 }));
 
-const createServerNote = (id: string, text: string = NOTE_TEXT): NoteClientModel => ({
+const createServerNote = (id: string, text: string = NOTE_TEXT, parent?: string, posInStack?: number): NoteClientModel => ({
   id,
   columnId: COLUMN_ID,
   text,
@@ -23,7 +23,8 @@ const createServerNote = (id: string, text: string = NOTE_TEXT): NoteClientModel
   updatedAt: new Date(),
   dirty: false,
   focus: false,
-  positionInStack: 5,
+  positionInStack: posInStack ?? -1,
+  parentId: parent,
 });
 
 describe("note reducer", () => {
@@ -78,9 +79,28 @@ describe("note reducer", () => {
   });
 
   test("unstack note", () => {
-    const newState = noteReducer(initialState, ActionFactory.unstackNote({id: "1", parentId: "2"}));
+    const newState = noteReducer([createServerNote("1", "test", "2", 1), createServerNote("2", "test", undefined, 0)], ActionFactory.unstackNote({id: "1", parentId: "2"}));
     expect(newState.find((note) => note.id === "1")).toBeDefined();
     expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(-1);
+    expect(newState.find((note) => note.id === "2")?.positionInStack).toBe(-1);
+  });
+
+  test("drag note", () => {
+    const newState = noteReducer([createServerNote("1", "test", undefined, -1), createServerNote("2", "test", undefined, -1)], ActionFactory.dragNote({id: "1", dragOnId: "2"}));
+    expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(0);
+    expect(newState.find((note) => note.id === "2")?.positionInStack).toBe(1);
+    expect(newState.find((note) => note.id === "2")?.parentId).toBe("1");
+  });
+
+  test("drag note in other column", () => {
+    const newState = noteReducer(
+      [createServerNote("1", "test", undefined, -1), createServerNote("2", "test", undefined, -1)],
+      ActionFactory.dragNote({id: "1", dragOnId: "2", columnId: "test-column"})
+    );
+    expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(0);
+    expect(newState.find((note) => note.id === "2")?.positionInStack).toBe(1);
+    expect(newState.find((note) => note.id === "2")?.parentId).toBe("1");
+    expect(newState.find((note) => note.id === "1")?.columnId).toBe("test-column");
   });
 
   describe("sync server note with edited local note", () => {

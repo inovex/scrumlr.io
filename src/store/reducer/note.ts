@@ -65,6 +65,8 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
             child.parentId = action.note.id;
             child.positionInStack = index + childNotes.length + 2;
           });
+
+        note!.positionInStack = 0;
       }
 
       if (action.note.columnId) {
@@ -80,6 +82,13 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       const unstack = state.find((note) => note.id == action.note.id);
       unstack!.parentId = undefined;
       unstack!.positionInStack = -1;
+
+      const childNotes = (state.filter((note) => note.parentId == action.note.parentId) as NoteClientModel[]) ?? [];
+      if (childNotes.length === 0) {
+        const parent = state.find((note) => note.id == action.note.parentId);
+        parent!.positionInStack = -1;
+      }
+
       return state;
     }
     case ActionType.InitializeNotes: {
