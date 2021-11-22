@@ -1,0 +1,31 @@
+@import "constants/style.scss";
+
+.badge {
+  position: absolute;
+  width: 52px; // 28px with of avatar + 2 * 12 padding of avatar
+  min-width: 52px;
+  cursor: default;
+  align-items: center;
+  display: inline-flex;
+  margin-top: 25px;
+}
+
+.badge > span {
+  min-width: 30px;
+  text-align: center;
+  margin: auto;
+  background-color: $color-backlog-blue;
+  border-radius: 4px;
+  font-size: 8px;
+  color: $color-white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .badge > span {
+    background-color: $color-planning-pink;
+  }
+}
