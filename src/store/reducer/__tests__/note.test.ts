@@ -77,6 +77,12 @@ describe("note reducer", () => {
     expect(newState.find((note) => note.text === "New text")).toBeDefined();
   });
 
+  test("unstack note", () => {
+    const newState = noteReducer(initialState, ActionFactory.unstackNote({id: "1", parentId: "2"}));
+    expect(newState.find((note) => note.id === "1")).toBeDefined();
+    expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(-1);
+  });
+
   describe("sync server note with edited local note", () => {
     test("edited note synced locally", () => {
       const editedState = noteReducer(initialState, ActionFactory.editNote({id: "1", text: "New text"}));
