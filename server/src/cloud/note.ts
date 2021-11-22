@@ -95,6 +95,7 @@ export const initializeNoteFunctions = () => {
       // Get all notes of parent
       const childNotesParentQuery = new Parse.Query("Note");
       childNotesParentQuery.equalTo("parent", parent);
+      childNotesParentQuery.notEqualTo("objectId", note.get("objectId"));
       const childNotesParent = await childNotesParentQuery.findAll({useMasterKey: true});
 
       // Remove note from stack and set position to -1
@@ -103,7 +104,6 @@ export const initializeNoteFunctions = () => {
 
       // Update position of children
       childNotesParent
-        .filter((childNote) => childNote != note)
         .sort((a, b) => a.get("positionInStack") - b.get("positionInStack"))
         .forEach(
           (childNote, index) => {
@@ -115,6 +115,9 @@ export const initializeNoteFunctions = () => {
       // Save updates for children
       if (childNotesParent.length != 0) {
         await Parse.Object.saveAll(childNotesParent, {useMasterKey: true});
+      } else {
+        parent.set("positionInStack", -1);
+        parent.save(null, {useMasterKey: true});
       }
     }
 

@@ -49,6 +49,39 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       }
       return state;
     }
+    case ActionType.DragNote: {
+      const dragedOn = state.find((note) => note.id == action.note.dragOnId);
+      const note = state.find((note) => note.id == action.note.id);
+      const childNotes = (state.filter((note) => note.parentId == action.note.id) as NoteClientModel[]) ?? [];
+      if (dragedOn) {
+        const childNotesDragedOn = (state.filter((note) => note.parentId == action.note.dragOnId) as NoteClientModel[]) ?? [];
+
+        dragedOn!.parentId = action.note.id;
+        dragedOn!.positionInStack = childNotes.length + 1;
+
+        childNotesDragedOn
+          .sort((a, b) => a.positionInStack - b.positionInStack)
+          .forEach((child, index) => {
+            child.parentId = action.note.id;
+            child.positionInStack = index + childNotes.length + 2;
+          });
+      }
+
+      if (action.note.columnId) {
+        note!.columnId = action.note.columnId;
+        console.log(childNotes);
+        childNotes.forEach((childNote) => {
+          childNote.columnId = action.note.columnId!;
+        });
+      }
+      return state;
+    }
+    case ActionType.UnstackNote: {
+      const unstack = state.find((note) => note.id == action.note.id);
+      unstack!.parentId = undefined;
+      unstack!.positionInStack = -1;
+      return state;
+    }
     case ActionType.InitializeNotes: {
       return [...action.notes];
     }
