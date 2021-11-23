@@ -12,7 +12,7 @@ interface CookiePolicyProps {
   darkBackground: boolean;
 }
 
-export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
+export var CookiePolicy = function({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) {
   const {t} = useTranslation();
 
   if (!show) {
@@ -39,4 +39,4 @@ export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: C
       </div>
     </Portal>
   );
-};
+}

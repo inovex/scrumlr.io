@@ -11,7 +11,7 @@ export interface AccessPolicySelectionProps {
   onPassphraseChange: (passphrase: string) => void;
 }
 
-export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
+export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) {
   const {t} = useTranslation();
 
   const handlePolicyChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,4 +62,4 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       {AdditionalAccessPolicySettings && <div className="access-policy-selection__additional-settings">{AdditionalAccessPolicySettings}</div>}
     </div>
   );
-};
+}

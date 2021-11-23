@@ -8,7 +8,7 @@ import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 
-export const ShowHiddenColumnsOption = () => {
+export var ShowHiddenColumnsOption = function() {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({
@@ -29,4 +29,4 @@ export const ShowHiddenColumnsOption = () => {
       </BoardOptionButton>
     </BoardOption>
   );
-};
+}

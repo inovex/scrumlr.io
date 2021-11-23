@@ -5,7 +5,9 @@ import i18n from "./i18nTest";
 
 export type AssertTypeEqual<T, Expected> = T extends Expected ? (Expected extends T ? true : never) : never;
 
-const AllTheProviders = ({children}: any) => <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
+const AllTheProviders = function({children}: any) {
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+}
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions & {container: Element}, "wrapper">) => render(ui, {wrapper: AllTheProviders, ...options});
 
