@@ -118,7 +118,8 @@
     "startVoting": "Start voting phase",
     "stopVoting": "End voting phase",
     "startFocusMode": "Start focused mode",
-    "stopFocusMode": "End focused mode"
+    "stopFocusMode": "End focused mode",
+    "returnToHomepage": "Return to Homepage"
   },
   "TimerToggleButton": {
     "label": "Timer",

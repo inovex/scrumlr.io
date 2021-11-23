@@ -11,7 +11,7 @@ export interface NoteInputProps {
   tabIndex?: number;
 }
 
-export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
+export var NoteInput = function({columnId, tabIndex}: NoteInputProps) {
   const {t} = useTranslation();
   const [value, setValue] = React.useState("");
 
@@ -42,4 +42,4 @@ export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
       <PlusIcon onClick={onAddNote} className="note-input__icon" />
     </div>
   );
-};
+}

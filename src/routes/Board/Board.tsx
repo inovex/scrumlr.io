@@ -9,7 +9,7 @@ import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
-export var Board = function() {
+export var Board = function () {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState) => ({
@@ -71,7 +71,7 @@ export var Board = function() {
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
-                  .sort((a, b) => b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime())
+                  .sort((a, b) => (b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
                   .map((note, noteIndex) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
@@ -102,4 +102,4 @@ export var Board = function() {
     );
   }
   return <LoadingScreen />;
-}
+};
