@@ -46,7 +46,7 @@ export const Homepage = withTranslation()(() => {
             <Trans i18nKey="Homepage.teaserText" />
           </p>
 
-          <Link to="/new">
+          <Link to="/new" className="homepage__start-link">
             <Trans i18nKey="Homepage.startButton" />
           </Link>
         </main>
@@ -96,12 +96,17 @@ export const Homepage = withTranslation()(() => {
 
         <ul className="homepage__footer-links">
           <li className="homepage__footer-link">
-            <Link to="">
+            <Link to="/legal/privacyPolicy">
               <Trans i18nKey="Homepage.privacyPolicy" />
             </Link>
           </li>
           <li className="homepage__footer-link">
-            <Link to="">
+            <Link to="/legal/cookiePolicy">
+              <Trans i18nKey="Homepage.cookiePolicy" />
+            </Link>
+          </li>
+          <li className="homepage__footer-link">
+            <Link to="/legal/termsAndConditions">
               <Trans i18nKey="Homepage.terms" />
             </Link>
           </li>

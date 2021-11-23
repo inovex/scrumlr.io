@@ -58,6 +58,20 @@
   color: $color-planning-pink;
 }
 
+.homepage__hero-text {
+  margin-bottom: 3em;
+}
+
+.homepage__start-link {
+  background: $color-planning-pink;
+  padding: 8px 16px;
+  border-radius: 2em;
+
+  text-decoration: none;
+  color: $color-white;
+  font-weight: bold;
+}
+
 .homepage__illustration {
   order: -1;
 

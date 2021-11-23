@@ -6,24 +6,30 @@ import RequireAuthentication from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
 import {Homepage} from "./Homepage";
+import {Legal} from "./Legal";
 
-const Router = function() {
-  return <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/new" element={<NewBoard />} />
-      <Route path="/login" element={<LoginBoard />} />
-      <Route path="/auth/redirect" element={<AuthRedirect />} />
-      <Route
-        path="/board/:boardId"
-        element={
-          <RequireAuthentication>
-            <BoardGuard />
-          </RequireAuthentication>
-        }
-      />
-    </Routes>
-  </BrowserRouter>
-}
+const Router = function () {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
+        <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
+        <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        <Route path="/new" element={<NewBoard />} />
+        <Route path="/login" element={<LoginBoard />} />
+        <Route path="/auth/redirect" element={<AuthRedirect />} />
+        <Route
+          path="/board/:boardId"
+          element={
+            <RequireAuthentication>
+              <BoardGuard />
+            </RequireAuthentication>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default Router;
