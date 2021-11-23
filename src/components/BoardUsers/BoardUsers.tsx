@@ -1,12 +1,38 @@
 import "./BoardUsers.scss";
 import Parse from "parse";
 import {useAppSelector} from "store";
+import {useEffect, useState} from "react";
 import {UserAvatar} from "./UserAvatar";
 
-// it might be a good idea to set this number dynamically (e.g., according to the device: desktop vs. mobile)
-const NUM_OF_DISPLAYED_USERS = 4;
+const getWindowDimensions = () => {
+  const {innerWidth: width, innerHeight: height} = window;
+  return {
+    width,
+    height,
+  };
+};
 
-export const BoardUsers = () => {
+export var BoardUsers = function () {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  let NUM_OF_DISPLAYED_USERS;
+  if (windowDimensions.width < 768) {
+    NUM_OF_DISPLAYED_USERS = 1;
+  } else if (windowDimensions.width < 1024) {
+    NUM_OF_DISPLAYED_USERS = 2;
+  } else {
+    NUM_OF_DISPLAYED_USERS = 4;
+  }
+
   const users = useAppSelector((state) => state.users.all);
   const currentUser = Parse.User.current();
 

@@ -1,4 +1,4 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
@@ -9,6 +9,7 @@ import {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {mocked} from "ts-jest/utils";
+import {render} from "testUtils";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
@@ -94,7 +95,7 @@ describe("<HeaderMenu/>", () => {
 
     test("count of menu items for basic users", () => {
       const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(2);
+      expect(container.querySelector(".header-menu")?.children.length).toEqual(3);
     });
 
     test("tests count of menu items for moderators", () => {

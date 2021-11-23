@@ -31,7 +31,7 @@ interface NoteProps {
   tabIndex?: number;
 }
 
-export const Note = (props: NoteProps) => {
+export var Note = function (props: NoteProps) {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
@@ -88,7 +88,7 @@ export const Note = (props: NoteProps) => {
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
-    canDrop: (item: {id: string; columnId: string}) => item.id !== props.noteId,
+    canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
 
   drag(noteRef);

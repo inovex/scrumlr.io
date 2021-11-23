@@ -5,6 +5,7 @@ import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
 import Parse from "parse";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
+import {useTranslation} from "react-i18next";
 import {Participant} from "./Participant";
 
 type ParticipantsListProps = {
@@ -14,7 +15,9 @@ type ParticipantsListProps = {
   currentUserIsModerator: boolean;
 };
 
-export const ParticipantsList = (props: ParticipantsListProps) => {
+export var ParticipantsList = function(props: ParticipantsListProps) {
+  const {t} = useTranslation();
+
   const [searchString, setSearchString] = useState("");
   const boardOwner = useAppSelector((state) => state.board.data?.owner);
 
@@ -34,17 +37,17 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
         <div className="participants__header">
           <div className="participants__header-title">
             <h4 className="participants__header-text">
-              <span>Participants</span>
+              <span>{t("ParticipantsList.title")}</span>
               <span className="participants__header-number">{props.participants.length} </span>
             </h4>
           </div>
           <SearchIcon className="header__icon" />
-          <input className="participants__header-input" placeholder="Search" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+          <input className="participants__header-input" placeholder={t("ParticipantsList.search")} onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
         </div>
         <ul className="participants__list">
           <div className="list__header">
-            <label>Name</label>
-            {props.currentUserIsModerator && <label>Admin</label>}
+            <label>{t("ParticipantsList.headerLegendName")}</label>
+            {props.currentUserIsModerator && <label>{t("ParticipantsList.headerLegendAdmin")}</label>}
           </div>
           {showMe && <Participant key={me!.id} participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />}
           {them.length > 0 &&
@@ -56,4 +59,4 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
       </aside>
     </Portal>
   );
-};
+}

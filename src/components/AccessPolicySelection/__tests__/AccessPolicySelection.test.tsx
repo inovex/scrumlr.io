@@ -1,6 +1,7 @@
-import {fireEvent, render, waitFor} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
 import {AccessPolicySelection} from "components/AccessPolicySelection/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
+import {render} from "testUtils";
 
 describe("AccessPolicySelection", () => {
   test("dont show passphrase input on default state", () => {

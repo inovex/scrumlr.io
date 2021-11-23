@@ -3,9 +3,12 @@ import {ActionFactory} from "store/action";
 
 import {JoinRequestClientModel} from "types/joinRequest";
 import "./JoinRequest.scss";
+import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../BoardUsers";
 
-export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+export var JoinRequest = function({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+  const {t} = useTranslation();
+
   const handleAccept = (boardId: string, userIds: string[]) => () => {
     store.dispatch(ActionFactory.acceptJoinRequests(boardId, userIds));
   };
@@ -16,7 +19,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
 
   return (
     <div className="join-request">
-      <div className="join-request__header">Someone requests to participate</div>
+      <div className="join-request__header">{t("JoinRequest.title")}</div>
 
       <div className="join-request__main">
         <ul className="join-request__requests">
@@ -29,10 +32,10 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
 
               <div>
                 <button className="join-request__button" onClick={handleReject(joinRequest.boardId, [joinRequest.userId])}>
-                  Reject
+                  {t("JoinRequest.reject")}
                 </button>
                 <button className="join-request__button" onClick={handleAccept(joinRequest.boardId, [joinRequest.userId])}>
-                  Accept
+                  {t("JoinRequest.accept")}
                 </button>
               </div>
             </li>
@@ -49,7 +52,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
               joinRequests.map((joinRequest) => joinRequest.userId)
             )}
           >
-            Reject all
+            {t("JoinRequest.rejectAll")}
           </button>
           <button
             className="join-request__button"
@@ -58,7 +61,7 @@ export function JoinRequest({joinRequests}: {joinRequests: JoinRequestClientMode
               joinRequests.map((joinRequest) => joinRequest.userId)
             )}
           >
-            Accept all
+            {t("JoinRequest.acceptAll")}
           </button>
         </div>
       )}

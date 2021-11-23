@@ -1,25 +1,42 @@
-import {render, fireEvent} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {UserClientModel} from "types/user";
-import {useAppSelector} from "store";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {ActionFactory} from "store/action";
 import {mocked} from "ts-jest/utils";
 import {User} from "parse";
-import * as store from "store";
+import store from "store";
+import {render} from "testUtils";
+import {wrapWithTestBackend} from "react-dnd-test-utils";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
 
-jest.mock("store");
+jest.mock("store", () => ({
+  ...jest.requireActual("store"),
+  dispatch: jest.fn(),
+}));
+
 jest.mock("parse");
 
-const mockedStore = mocked(store);
-const mockedUseAppSelector = mocked(useAppSelector);
+const mockStore = configureStore();
+
 const mockedUser = mocked(User, true);
 
 describe("ParticipantsList", () => {
-  beforeAll(() => {
-    mockedUseAppSelector.mockResolvedValue({} as never);
-  });
-
   const createParticipantsList = (props: {open: boolean; onClose?: () => void; currentUserIsModerator: boolean; currentUserId: string}) => {
+    const initialState = {
+      board: {
+        data: {
+          owner: "owner",
+        },
+      },
+      users: {
+        admins: [],
+        basic: [],
+        all: [],
+      },
+    };
+    const mockedStore = mockStore(initialState);
+    const [ParticipantsListContext] = wrapWithTestBackend(ParticipantsList);
     const userAdmin: UserClientModel = {
       id: "0",
       displayName: "Adam Admin",
@@ -42,7 +59,11 @@ describe("ParticipantsList", () => {
 
     mockedUser.current = jest.fn(() => ({id: props.currentUserId} as never));
 
-    return <ParticipantsList open={props.open} onClose={() => props.onClose?.()} currentUserIsModerator={props.currentUserIsModerator} participants={users} />;
+    return (
+      <Provider store={mockedStore}>
+        <ParticipantsListContext open={props.open} onClose={() => props.onClose?.()} currentUserIsModerator={props.currentUserIsModerator} participants={users} />
+      </Provider>
+    );
   };
 
   test("Show nothing because portal is closed", () => {
@@ -117,9 +138,6 @@ describe("ParticipantsList", () => {
   });
 
   test("Permission toggle calls store.dispatch", () => {
-    store.default.dispatch = jest.fn();
-    mockedStore.default.dispatch = jest.fn();
-
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
     global.document.querySelector("body")!.appendChild(portal);
@@ -127,7 +145,7 @@ describe("ParticipantsList", () => {
       container: global.document.querySelector("#portal")!,
     });
     fireEvent.click(container.getElementsByClassName("participant__permission-toggle")[1]);
-    expect(mockedStore.default.dispatch).toHaveBeenCalled();
-    expect(mockedStore.default.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("1", true));
+    expect(store.dispatch).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("1", true));
   });
 });

@@ -113,6 +113,40 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
             </li>
             <li
               class="board-option"
+              data-testid="delete"
+            >
+              <button
+                class="board-option-button board-option-button--expandable"
+              >
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-delete.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Delete board
+                </span>
+              </button>
+              <div
+                class="delete-board-option__container"
+              >
+                <label
+                  class="delete-board-option__warning-label"
+                >
+                  Are you absolutely sure that you want to delete the board? This action cannot be undone.
+                </label>
+                <button
+                  class="delete-board-option__delete-board"
+                  tabindex="-1"
+                >
+                  Delete board
+                </button>
+              </div>
+            </li>
+            <li
+              class="board-option"
               data-testid="qrcode"
             >
               <button
@@ -143,47 +177,6 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   tabindex="-1"
                 >
                   Copy Invite URL
-                </button>
-              </div>
-            </li>
-            <li
-              class="board-option"
-              data-testid="delete"
-            >
-              <button
-                class="board-option-button board-option-button--expandable"
-              >
-                <svg
-                  class="board-option-button__icon"
-                >
-                  icon-delete.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Delete board
-                </span>
-              </button>
-              <div
-                class="delete-board-option__container"
-              >
-                <label
-                  class="delete-board-option__warning-label"
-                >
-                  <b>
-                    Are you absolutely sure that you want to delete the board?
-                  </b>
-                   This action 
-                  <b>
-                    cannot
-                  </b>
-                   be undone.
-                </label>
-                <button
-                  class="delete-board-option__delete-board"
-                  tabindex="-1"
-                >
-                  Delete board
                 </button>
               </div>
             </li>
@@ -296,6 +289,41 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   value="board"
                 />
               </form>
+            </li>
+            <li
+              class="board-option"
+              data-testid="qrcode"
+            >
+              <button
+                class="board-option-button board-option-button--expandable"
+              >
+                <svg
+                  class="board-option-button__icon"
+                >
+                  icon-share.svg
+                </svg>
+                <span
+                  class="board-option-button__label"
+                >
+                  Share board
+                </span>
+              </button>
+              <div
+                class="share-qr-code-option__container"
+              >
+                <canvas
+                  class="share-qr-code-option__qrcode"
+                  height="260"
+                  style="height: 260px; width: 260px;"
+                  width="260"
+                />
+                <button
+                  class="share-qr-code-option__copy-to-clipboard"
+                  tabindex="-1"
+                >
+                  Copy Invite URL
+                </button>
+              </div>
             </li>
             <li
               class="board-option"

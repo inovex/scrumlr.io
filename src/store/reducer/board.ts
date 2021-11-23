@@ -3,6 +3,7 @@ import isEqual from "lodash/isEqual";
 import {BoardState} from "types/store";
 import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
+import i18n from "i18next";
 
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
@@ -16,11 +17,11 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     case ActionType.EditBoard: {
       // Moderator started voting phase - notification to moderator (user who started the voting)
       if (action.board.voting) {
-        Toast.success(`You ${action.board.voting === "active" ? "started" : "ended"} the voting phase!`);
+        Toast.success(i18n.t(action.board.voting === "active" ? "Toast.votingStarted" : "Toast.votingFinished"));
       }
       // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
       if (action.board.moderation) {
-        Toast.success(`You ${action.board.moderation.status === "active" ? "started" : "ended"} the moderation phase!`);
+        Toast.success(i18n.t(action.board.moderation.status === "active" ? "Toast.focusModeStart" : "Toast.focusModeFinished"));
       }
 
       return {
@@ -34,7 +35,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
     case ActionType.DeleteBoard: {
-      // document.location.pathname = "/new";
+      document.location.pathname = "/";
       return state;
     }
     case ActionType.AddColumn: {
@@ -90,29 +91,29 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       // Voting notification
       if (state.data?.voting !== action.board.voting) {
         if (action.board.voting === "active") {
-          Toast.success("Voting phase started! You can vote now!");
+          Toast.success(i18n.t("Toast.votingPhaseStarted"));
         } else {
-          Toast.error("Voting phase ended! You can't vote anymore!");
+          Toast.error(i18n.t("Toast.votingPhaseEnded"));
         }
       }
 
       // Moderation notification
       if (state.data?.moderation.status !== action.board.moderation.status) {
         if (action.board.moderation.status === "active") {
-          Toast.success("Moderation phase started!");
+          Toast.success(i18n.t("Toast.moderationStarted"));
         } else {
-          Toast.error("Moderation phase ended!");
+          Toast.error(i18n.t("Toast.moderationEnded"));
         }
       }
 
       // Timer notification
       if (state.data?.timerUTCEndTime?.getTime() !== action.board.timerUTCEndTime?.getTime()) {
         if (action.board.timerUTCEndTime) {
-          Toast.success("Timer started!");
+          Toast.success(i18n.t("Toast.timerStarted"));
         } else if (state.data!.timerUTCEndTime!.getTime() <= new Date().getTime()) {
-          Toast.error("Timer ended!");
+          Toast.error(i18n.t("Toast.timerEnded"));
         } else {
-          Toast.error("Timer canceled!");
+          Toast.error(i18n.t("Toast.timerCancelled"));
         }
       }
 

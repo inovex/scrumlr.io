@@ -1,9 +1,9 @@
 import {API} from "api";
 import {Attributes, User} from "parse";
-import {render, waitFor} from "@testing-library/react";
-
+import {waitFor} from "@testing-library/react";
 import {MemoryRouter} from "react-router";
 import {AuthRedirect} from "routes/AuthRedirect";
+import {render} from "testUtils";
 import {mocked} from "ts-jest/utils";
 
 jest.mock("api");
@@ -11,7 +11,7 @@ jest.mock("parse");
 
 const mockedVerifySignIn = mocked(API.verifySignIn);
 const mockedUser = mocked(User, true);
-        
+
 describe("routing tests", () => {
   test("missing params on page visit -> ErrorPage", () => {
     const {container} = render(

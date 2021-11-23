@@ -3,6 +3,7 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import store from "store";
 import {ActionFactory} from "store/action";
+import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
 export interface NoteInputProps {
@@ -10,7 +11,8 @@ export interface NoteInputProps {
   tabIndex?: number;
 }
 
-export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
+export var NoteInput = function({columnId, tabIndex}: NoteInputProps) {
+  const {t} = useTranslation();
   const [value, setValue] = React.useState("");
 
   const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +28,7 @@ export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
     <div className="note-input">
       <input
         className="note-input__input"
-        placeholder="Add your note..."
+        placeholder={t("NoteInput.placeholder")}
         type="text"
         value={value}
         onChange={handleChangeNotetext}
@@ -40,4 +42,4 @@ export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
       <PlusIcon onClick={onAddNote} className="note-input__icon" />
     </div>
   );
-};
+}
