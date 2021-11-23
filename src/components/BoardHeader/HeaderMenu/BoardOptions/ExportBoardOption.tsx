@@ -16,7 +16,7 @@ export type ExportProps = {
   expand: boolean;
 };
 
-export const ExportBoardOption = (props: ExportProps) => {
+export var ExportBoardOption = function(props: ExportProps) {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({
@@ -53,4 +53,4 @@ export const ExportBoardOption = (props: ExportProps) => {
       </div>
     </BoardOption>
   );
-};
+}

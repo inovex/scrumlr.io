@@ -8,7 +8,7 @@ import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 
-export const BoardGuard = () => {
+export var BoardGuard = function() {
   const {boardId} = useParams<"boardId">();
   const {t} = useTranslation();
 
@@ -64,4 +64,4 @@ export const BoardGuard = () => {
       <p className="board-guard__info">{t("BoardGuard.waitingForApproval")}</p>
     </div>
   );
-};
+}
