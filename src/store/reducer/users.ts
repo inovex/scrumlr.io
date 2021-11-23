@@ -1,5 +1,4 @@
 import {UsersState} from "types/store";
-import {UserClientModel} from "types/user";
 import Parse from "parse";
 import union from "lodash/union";
 import without from "lodash/without";
@@ -37,7 +36,7 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
       const newState = {
         admins: state.admins,
         basic: state.basic,
-        all: [] as UserClientModel[],
+        all: state.all,
       };
 
       if (action.admin) {
@@ -46,12 +45,26 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         newState.basic = action.users;
       }
 
-      newState.all = [...newState.admins];
+      // Update state and keep order
       newState.basic.forEach((member) => {
-        if (!newState.admins.find((admin) => admin.id === member.id)) {
+        if (newState.all.find((user) => user.id === member.id)) {
+          newState.all.find((user) => user.id === member.id)!.admin = false;
+        } else {
           newState.all.push(member);
         }
       });
+
+      // Update state and keep order
+      newState.admins.forEach((member) => {
+        if (newState.all.find((admin) => admin.id === member.id)) {
+          newState.all.find((admin) => admin.id === member.id)!.admin = true;
+        } else {
+          newState.all.push(member);
+        }
+      });
+
+      // Remove outdated user
+      newState.all = newState.all.filter((member) => newState.admins.find((admin) => admin.id === member.id) || newState.basic.find((user) => user.id === member.id));
 
       return mapReadyState(state.usersMarkedReady, newState);
     }

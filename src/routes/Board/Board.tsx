@@ -71,6 +71,7 @@ export var Board = function() {
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
+                  .sort((a, b) => b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime())
                   .map((note, noteIndex) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
