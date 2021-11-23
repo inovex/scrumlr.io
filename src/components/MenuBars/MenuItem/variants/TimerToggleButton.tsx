@@ -12,7 +12,7 @@ type TimerToggleButtonProps = {
   tabIndex?: number;
 };
 
-export const TimerToggleButton = (props: TimerToggleButtonProps) => {
+export var TimerToggleButton = function (props: TimerToggleButtonProps) {
   const {t} = useTranslation();
 
   const timer = useAppSelector((state) => state.board.data?.timerUTCEndTime);

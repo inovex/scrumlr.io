@@ -1,6 +1,6 @@
 import {Trans} from "react-i18next";
 
-export const AppInfo = () => {
+export var AppInfo = function () {
   const version = <a href="https://github.com/inovex/scrumlr.io/releases" />;
 
   return (

@@ -6,7 +6,7 @@ export interface LoginProvidersProps {
 }
 
 // TODO: Include after deployment: <button onClick={() => AuthenticationManager.signInWithAuthProvider("apple")}>Sign in with Apple</button>
-export const LoginProviders = ({originURL = window.location.href}) => {
+export var LoginProviders = function ({originURL = window.location.href}) {
   const {t} = useTranslation();
 
   return (

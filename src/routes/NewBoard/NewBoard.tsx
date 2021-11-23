@@ -14,7 +14,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
 
-export function NewBoard() {
+export var NewBoard = function () {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState(getRandomName());
@@ -114,4 +114,4 @@ export function NewBoard() {
       <AppInfo />
     </div>
   );
-}
+};

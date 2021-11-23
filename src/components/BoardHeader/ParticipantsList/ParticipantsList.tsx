@@ -15,7 +15,7 @@ type ParticipantsListProps = {
   currentUserIsModerator: boolean;
 };
 
-export const ParticipantsList = (props: ParticipantsListProps) => {
+export var ParticipantsList = function (props: ParticipantsListProps) {
   const {t} = useTranslation();
 
   const [searchString, setSearchString] = useState("");

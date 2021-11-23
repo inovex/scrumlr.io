@@ -13,7 +13,7 @@ export type QRCodeProps = {
   expand: boolean;
 };
 
-export const ShareQrCodeOption = (props: QRCodeProps) => {
+export var ShareQrCodeOption = function (props: QRCodeProps) {
   const {t} = useTranslation();
 
   return (

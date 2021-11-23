@@ -7,7 +7,7 @@ import {LoginProviders} from "components/LoginProviders";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 
-export function LoginBoard() {
+export var LoginBoard = function () {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -42,4 +42,4 @@ export function LoginBoard() {
       <LoginProviders originURL={location.state.from.pathname} />
     </div>
   );
-}
+};

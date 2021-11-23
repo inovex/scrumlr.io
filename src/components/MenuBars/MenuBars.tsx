@@ -13,13 +13,14 @@ import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
+import {Link} from "react-router-dom";
+import {TabIndex} from "constants/tabIndex";
+import {useTranslation} from "react-i18next";
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
-import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 
-export function MenuBars() {
+export var MenuBars = function () {
   const {t} = useTranslation();
 
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -73,7 +74,9 @@ export function MenuBars() {
             tabIndex={TabIndex.UserMenu}
           />
           <MenuButton tabIndex={TabIndex.UserMenu + 1} disabled direction="right" label={t("MenuBars.addImage")} icon={AddImageIcon} onClick={() => null} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} disabled direction="right" label={t("MenuBars.addSticker")} icon={AddStickerIcon} onClick={() => null} />
+          <Link to="/">
+            <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => null} />
+          </Link>
           <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>
@@ -125,4 +128,4 @@ export function MenuBars() {
       )}
     </aside>
   );
-}
+};
