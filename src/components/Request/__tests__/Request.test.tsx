@@ -1,5 +1,5 @@
 import {fireEvent, getByText} from "@testing-library/react";
-import {JoinRequest} from "components/JoinRequest";
+import {Request} from "components/Request";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {render} from "testUtils";
@@ -20,7 +20,7 @@ describe("JoinRequest", () => {
         status: "pending" as const,
       });
     }
-    return <JoinRequest joinRequests={joinRequests} />;
+    return <Request joinRequests={joinRequests} />;
   };
 
   describe("should render correctly", () => {

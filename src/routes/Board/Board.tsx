@@ -3,7 +3,7 @@ import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import Parse from "parse";
 import {Note} from "components/Note";
-import {JoinRequest} from "components/JoinRequest";
+import {Request} from "components/Request";
 import {useAppSelector} from "store";
 import {Timer} from "components/Timer";
 import {useTranslation} from "react-i18next";
@@ -28,13 +28,6 @@ export var Board = function () {
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
-  let joinRequestComponent;
-  if (currentUserIsModerator) {
-    const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
-    if (pendingJoinRequests && pendingJoinRequests.length > 0) {
-      joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
-    }
-  }
   let boardstatus = t("Board.publicSession");
   const accessPolicy = state.board.data?.accessPolicy;
   if (accessPolicy !== "Public") {
@@ -48,7 +41,7 @@ export var Board = function () {
   if (state.board.status === "ready") {
     return (
       <>
-        {joinRequestComponent}
+        <Request joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")} />
         {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board

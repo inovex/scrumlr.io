@@ -2,11 +2,15 @@ import store from "store";
 import {ActionFactory} from "store/action";
 
 import {JoinRequestClientModel} from "types/joinRequest";
-import "./JoinRequest.scss";
+import "./Request.scss";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../BoardUsers";
 
-export var JoinRequest = function({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+export var Request = function ({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+  if (joinRequests.length == 0) {
+    return null;
+  }
+
   const {t} = useTranslation();
 
   const handleAccept = (boardId: string, userIds: string[]) => () => {
@@ -67,4 +71,4 @@ export var JoinRequest = function({joinRequests}: {joinRequests: JoinRequestClie
       )}
     </div>
   );
-}
+};
