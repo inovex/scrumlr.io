@@ -1,62 +1,112 @@
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 import "./Homepage.scss";
-import {Trans, withTranslation} from "react-i18next";
+import {Trans, useTranslation, withTranslation} from "react-i18next";
+import {ReactComponent as German} from "assets/flags/DE.svg";
+import {ReactComponent as English} from "assets/flags/US.svg";
+import {Link} from "react-router-dom";
 import {AppInfo} from "../../components/AppInfo";
 
-export const Homepage = withTranslation()(() => (
-  <div className="homepage">
-    <header className="homepage__header">
-      <ScrumlrLogo className="homepage__logo" />
-    </header>
+export const Homepage = withTranslation()(() => {
+  const {i18n} = useTranslation();
 
-    <div className="homepage__hero">
-      <main className="homepage__main">
-        <h1 className="homepage__hero-title">
-          <Trans
-            i18nKey="Homepage.teaserTitle"
-            components={{team: <span className="homepage__hero-title-team" />, retrospective: <span className="homepage__hero-title-retrospective" />}}
-          />
-        </h1>
-        <p className="homepage__hero-text">
-          <Trans i18nKey="Homepage.teaserText" />
-        </p>
+  const changeLanguage = (language: string) => () => {
+    i18n.changeLanguage(language).then(() => {
+      location.reload();
+    });
+  };
 
-        <button>
-          <Trans i18nKey="Homepage.startButton" />
-        </button>
-      </main>
+  return (
+    <div className="homepage">
+      <header className="homepage__header">
+        <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--pink"]} />
 
-      <aside className="homepage__illustration">
-        <div>A</div>
-        <div>B</div>
-        <div>C</div>
-        <div>D</div>
-        <div>E</div>
-        <div>F</div>
-        <div>G</div>
-        <div>H</div>
-        <div>I</div>
-        <div>J</div>
-        <div>K</div>
-        <div>L</div>
-      </aside>
+        <ul className="homepage__settings">
+          <li>
+            <button onClick={changeLanguage("de")}>
+              <German className="homepage__language" />
+            </button>
+
+            <button onClick={changeLanguage("en")}>
+              <English className="homepage__language" />
+            </button>
+          </li>
+          <li>Logout</li>
+        </ul>
+      </header>
+
+      <div className="homepage__hero">
+        <main className="homepage__main">
+          <h1 className="homepage__hero-title">
+            <Trans
+              i18nKey="Homepage.teaserTitle"
+              components={{team: <span className="homepage__hero-title-team" />, retrospective: <span className="homepage__hero-title-retrospective" />}}
+            />
+          </h1>
+          <p className="homepage__hero-text">
+            <Trans i18nKey="Homepage.teaserText" />
+          </p>
+
+          <Link to="/new">
+            <Trans i18nKey="Homepage.startButton" />
+          </Link>
+        </main>
+
+        <aside className="homepage__illustration">
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <German className="homepage__illustration-tile-image" />
+          </div>
+          <div className="homepage__illustration-tile">
+            <English className="homepage__illustration-tile-image" />
+          </div>
+        </aside>
+      </div>
+
+      <footer className="homepage__footer">
+        <AppInfo className="homepage__app-info" />
+
+        <ul className="homepage__footer-links">
+          <li className="homepage__footer-link">
+            <Link to="">
+              <Trans i18nKey="Homepage.privacyPolicy" />
+            </Link>
+          </li>
+          <li className="homepage__footer-link">
+            <Link to="">
+              <Trans i18nKey="Homepage.terms" />
+            </Link>
+          </li>
+        </ul>
+      </footer>
     </div>
-
-    <footer className="homepage__footer">
-      <AppInfo />
-
-      <ul className="homepage__footer-links">
-        <li>
-          <a href="">
-            <Trans i18nKey="Homepage.privacyPolicy" />
-          </a>
-        </li>
-        <li>
-          <a href="">
-            <Trans i18nKey="Homepage.terms" />
-          </a>
-        </li>
-      </ul>
-    </footer>
-  </div>
-));
+  );
+});
