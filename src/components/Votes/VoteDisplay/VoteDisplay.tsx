@@ -6,10 +6,10 @@ type VoteDisplayProps = {
   possibleVotes: number;
 };
 
-export const VoteDisplay = (props: VoteDisplayProps) => (
-    <div id="voteDisplay" className={classNames("voteDisplay")}>
-      <span>
-        {props.possibleVotes} / {props.usedVotes}
-      </span>
-    </div>
-  );
+export var VoteDisplay = function(props: VoteDisplayProps) {
+  return <div id="voteDisplay" className={classNames("voteDisplay")}>
+    <span>
+      {props.usedVotes} / {props.possibleVotes}
+    </span>
+  </div>
+}

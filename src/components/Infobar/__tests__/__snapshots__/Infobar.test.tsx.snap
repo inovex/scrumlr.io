@@ -32,9 +32,9 @@ exports[`<InfoBar /> timer and voting snapshot test 1`] = `
     id="voteDisplay"
   >
     <span>
-      10
-       / 
       5
+       / 
+      10
     </span>
   </div>
 </aside>
@@ -73,9 +73,9 @@ exports[`<InfoBar /> voting snapshot test 1`] = `
     id="voteDisplay"
   >
     <span>
-      10
-       / 
       5
+       / 
+      10
     </span>
   </div>
 </aside>
