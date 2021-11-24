@@ -5,6 +5,7 @@ import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
 import {Link} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
+import Parse from "parse";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
@@ -13,6 +14,11 @@ export const Homepage = withTranslation()(() => {
     i18n.changeLanguage(language).then(() => {
       location.reload();
     });
+  };
+
+  const onLogout = async () => {
+    await Parse.User.logOut();
+    location.reload();
   };
 
   return (
@@ -31,7 +37,12 @@ export const Homepage = withTranslation()(() => {
                 <English className="homepage__language" />
               </button>
             </li>
-            <li>Logout</li>
+
+            {Parse.User.current() && (
+              <li>
+                <button onClick={onLogout}>Logout</button>
+              </li>
+            )}
           </ul>
         </header>
 
@@ -100,17 +111,17 @@ export const Homepage = withTranslation()(() => {
 
         <ul className="homepage__footer-links">
           <li className="homepage__footer-link">
-            <Link to="/legal/privacyPolicy">
+            <Link to="/legal/privacyPolicy" target="_blank">
               <Trans i18nKey="Homepage.privacyPolicy" />
             </Link>
           </li>
           <li className="homepage__footer-link">
-            <Link to="/legal/cookiePolicy">
+            <Link to="/legal/cookiePolicy" target="_blank">
               <Trans i18nKey="Homepage.cookiePolicy" />
             </Link>
           </li>
           <li className="homepage__footer-link">
-            <Link to="/legal/termsAndConditions">
+            <Link to="/legal/termsAndConditions" target="_blank">
               <Trans i18nKey="Homepage.terms" />
             </Link>
           </li>

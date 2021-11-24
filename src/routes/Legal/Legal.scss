@@ -1,0 +1,18 @@
+@import "constants/style";
+
+.legal {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: $padding--default;
+}
+
+.legal__text {
+  text-align: justify;
+}
+
+@media #{$tablet} {
+  .legal {
+    padding: $padding--large;
+  }
+}

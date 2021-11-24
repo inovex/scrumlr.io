@@ -1,23 +1,17 @@
-import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
-import {getRandomName} from "constants/name";
-
 import Parse from "parse";
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
-import {useEffect, useState} from "react";
-import {LoginProviders} from "components/LoginProviders";
+import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
-import {AppInfo} from "components/AppInfo";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
 
-export function NewBoard() {
+export var NewBoard = function() {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState(getRandomName());
   const [boardName, setBoardName] = useState("Board Name");
   const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
   const [accessPolicy, setAccessPolicy] = useState(0);
@@ -46,72 +40,22 @@ export function NewBoard() {
     }
   }
 
-  async function onAnonymousLogin() {
-    await AuthenticationManager.signInAnonymously(displayName);
-    await onCreateBoard();
-  }
-
-  async function onLogout() {
-    await Parse.User.logOut();
-    navigate("/");
-  }
-
   const isCreatedBoardDisabled = accessPolicy === AccessPolicy.ByPassphrase && !passphrase;
 
-  useEffect(() => {
-    if (localStorage.getItem("Parse/Scrumlr/currentUser")) {
-      setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
-    }
-  }, []);
-
-  if (Parse.User.current()) {
-    return (
-      <div>
-        <p>
-          {t("NewBoard.user")}: {displayName}
-        </p>
-        <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-
-        <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
-
-        <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
-          {Object.keys(columnTemplates).map((key) => (
-            <option value={key}>{key}</option>
-          ))}
-        </select>
-        <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
-          {t("NewBoard.createNewBoard")}
-        </button>
-        <button onClick={onLogout}>{t("NewBoard.logout")}</button>
-        <AppInfo />
-      </div>
-    );
-  }
-
   return (
-    <div className="new-board">
-      {!Parse.User.current() && <input className="new-board__input" defaultValue={displayName} type="text" onChange={(e) => setDisplayName(e.target.value)} maxLength={20} />}
+    <div>
       <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
+
       <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
 
       <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
         {Object.keys(columnTemplates).map((key) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
+          <option value={key}>{key}</option>
         ))}
       </select>
-      <button
-        onClick={async () => {
-          if (!Parse.User.current()) await onAnonymousLogin();
-        }}
-        disabled={isCreatedBoardDisabled}
-      >
-        {t("NewBoard.createNewBoardAnonymous")}
+      <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
+        {t("NewBoard.createNewBoard")}
       </button>
-      <LoginProviders />
-
-      <AppInfo />
     </div>
   );
 }

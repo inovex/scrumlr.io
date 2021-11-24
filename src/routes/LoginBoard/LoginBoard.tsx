@@ -7,14 +7,15 @@ import {LoginProviders} from "components/LoginProviders";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 
-export function LoginBoard() {
+export var LoginBoard = function() {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(getRandomName());
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // anonymous sign in and redirection to boardpath that is in history
+  // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
     await AuthenticationManager.signInAnonymously(displayName);
     try {
@@ -24,22 +25,36 @@ export function LoginBoard() {
     }
   }
 
+  // TODO https://dribbble.com/shots/7757250-Sign-up-revamp
+  // TODO https://dribbble.com/shots/11879454-Sign-Up-Form
   return (
     <div className="login-board">
-      <input
-        className="login-board__input"
-        defaultValue={displayName}
-        type="text"
-        onChange={(e) => setDisplayName(e.target.value)}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key === "Enter") {
-            handleLogin();
-          }
-        }}
-        maxLength={20}
-      />
-      <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+      <h1>Sign in to scrumlr.io</h1>
+
       <LoginProviders originURL={location.state.from.pathname} />
+
+      <label>
+        <span>Username</span>
+        <input
+          className="login-board__input"
+          defaultValue={displayName}
+          type="text"
+          onChange={(e) => setDisplayName(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === "Enter") {
+              handleLogin();
+            }
+          }}
+          maxLength={20}
+        />
+      </label>
+
+      <label>
+        <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+        <span>I agree to the terms and privacy policy</span>
+      </label>
+
+      <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
     </div>
   );
 }

@@ -3,8 +3,7 @@
     "createNewBoard": "Create new Board",
     "createNewBoardAnonymous": "Create new board anonymously",
     "createBoardError": "You must be logged in to create a board. Reload the page and try again",
-    "logout": "Logout",
-    "user": "User"
+    "logout": "Logout"
   },
   "LoginBoard": {
     "errorOnRedirect": "An error occurred while redirecting you",
