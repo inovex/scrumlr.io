@@ -1,15 +1,23 @@
 @import "constants/style";
 
 .homepage {
+  background: $color-light-gray;
+}
+
+.homepage__hero {
   background: $color-white;
   min-height: 100vh;
 }
 
 .homepage__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: $padding--default;
+
   display: flex;
   justify-content: space-between;
-
-  padding: $padding--default;
 }
 
 .homepage__settings {
@@ -31,23 +39,32 @@
   margin-left: 12px;
 }
 
-.homepage__hero {
+.homepage__hero-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100vw;
+  min-height: 100vh;
+  padding-top: 86px;
+  padding-bottom: $padding--large;
+}
+
+.homepage__hero-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 64px;
-  min-width: 480px;
   max-width: 1280px;
-  margin: 0 auto;
   padding: 0 $padding--default;
 }
 
-.homepage__hero > * {
+.homepage__hero-content > * {
   flex: 1 1 0;
 }
 
 .homepage__hero-title {
-  font-size: clamp(18px, 4vw, 64px);
+  font-size: clamp(36px, 4vw, 64px);
 }
 
 .homepage__hero-title-team {
@@ -102,7 +119,8 @@
 
   text-align: right;
   max-width: 1280px;
-  margin: 64px auto 0;
+  margin: 0 auto;
+  padding: $padding--large;
 }
 
 .homepage__footer-links {
@@ -123,6 +141,10 @@
 
 @media (prefers-color-scheme: dark) {
   .homepage {
+    background: $color-dark-one;
+  }
+
+  .homepage__hero {
     background: $color-dark-mode;
   }
 
@@ -140,7 +162,7 @@
     padding: $padding--large;
   }
 
-  .homepage__hero {
+  .homepage__hero-content {
     flex-direction: row;
   }
 

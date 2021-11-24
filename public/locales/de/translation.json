@@ -133,7 +133,7 @@
     "edit": "bearbeiten"
   },
   "AppInfo": {
-    "version": "Anwendungsversion: <0>{{version}}</0>"
+    "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },
   "Toast": {
     "authenticationError": "Ein Fehler trat beim Einloggen auf",

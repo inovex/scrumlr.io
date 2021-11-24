@@ -133,7 +133,7 @@
     "edit": "edit"
   },
   "AppInfo": {
-    "version": "App version: <0>{{version}}</0>"
+    "version": "Link to list of releases on GitHub"
   },
   "Toast": {
     "authenticationError": "There occurred a problem while signing you in",

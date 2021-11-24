@@ -1,10 +1,10 @@
-import {ScrumlrLogo} from "../../components/ScrumlrLogo";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
 import {Link} from "react-router-dom";
-import {AppInfo} from "../../components/AppInfo";
+import {AppInfo} from "components/AppInfo";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
@@ -17,78 +17,82 @@ export const Homepage = withTranslation()(() => {
 
   return (
     <div className="homepage">
-      <header className="homepage__header">
-        <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--pink"]} />
-
-        <ul className="homepage__settings">
-          <li>
-            <button onClick={changeLanguage("de")}>
-              <German className="homepage__language" />
-            </button>
-
-            <button onClick={changeLanguage("en")}>
-              <English className="homepage__language" />
-            </button>
-          </li>
-          <li>Logout</li>
-        </ul>
-      </header>
-
       <div className="homepage__hero">
-        <main className="homepage__main">
-          <h1 className="homepage__hero-title">
-            <Trans
-              i18nKey="Homepage.teaserTitle"
-              components={{team: <span className="homepage__hero-title-team" />, retrospective: <span className="homepage__hero-title-retrospective" />}}
-            />
-          </h1>
-          <p className="homepage__hero-text">
-            <Trans i18nKey="Homepage.teaserText" />
-          </p>
+        <header className="homepage__header">
+          <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--pink"]} />
 
-          <Link to="/new" className="homepage__start-link">
-            <Trans i18nKey="Homepage.startButton" />
-          </Link>
-        </main>
+          <ul className="homepage__settings">
+            <li>
+              <button onClick={changeLanguage("de")}>
+                <German className="homepage__language" />
+              </button>
 
-        <aside className="homepage__illustration">
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
+              <button onClick={changeLanguage("en")}>
+                <English className="homepage__language" />
+              </button>
+            </li>
+            <li>Logout</li>
+          </ul>
+        </header>
+
+        <div className="homepage__hero-content-wrapper">
+          <div className="homepage__hero-content">
+            <main className="homepage__main">
+              <h1 className="homepage__hero-title">
+                <Trans
+                  i18nKey="Homepage.teaserTitle"
+                  components={{team: <span className="homepage__hero-title-team" />, retrospective: <span className="homepage__hero-title-retrospective" />}}
+                />
+              </h1>
+              <p className="homepage__hero-text">
+                <Trans i18nKey="Homepage.teaserText" />
+              </p>
+
+              <Link to="/new" className="homepage__start-link">
+                <Trans i18nKey="Homepage.startButton" />
+              </Link>
+            </main>
+
+            <aside className="homepage__illustration">
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <German className="homepage__illustration-tile-image" />
+              </div>
+              <div className="homepage__illustration-tile">
+                <English className="homepage__illustration-tile-image" />
+              </div>
+            </aside>
           </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <German className="homepage__illustration-tile-image" />
-          </div>
-          <div className="homepage__illustration-tile">
-            <English className="homepage__illustration-tile-image" />
-          </div>
-        </aside>
+        </div>
       </div>
 
       <footer className="homepage__footer">
