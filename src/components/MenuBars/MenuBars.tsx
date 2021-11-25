@@ -38,6 +38,7 @@ export var MenuBars = function () {
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
   const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
+  const raisedHand = state.allUsers.find((user) => user.id === currentUser!.id)?.raisedHand;
 
   const toggleVoting = (active: boolean) => {
     if (active) {
@@ -84,6 +85,7 @@ export var MenuBars = function () {
             toggleStopLabel={t("MenuBars.lowerHand")}
             icon={AddImageIcon}
             onToggle={toggleRaiseHand}
+            value={raisedHand}
           />
           <Link to="/">
             <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => null} />
