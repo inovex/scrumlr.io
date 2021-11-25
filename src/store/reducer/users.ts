@@ -18,9 +18,9 @@ const mapReadyState = (readyUsers: string[] = [], state: Omit<UsersState, "users
 
 const mapRaisedHandState = (raisedHandUsers: string[] = [], state: Omit<UsersState, "usersRaisedHands">) => {
   const newState = {
-    admins: state.admins.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
-    basic: state.basic.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
-    all: state.all.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    admins: state.admins.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    basic: state.basic.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    all: state.all.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
     usersRaisedHands: raisedHandUsers,
     usersMarkedReady: state.usersMarkedReady,
   };
@@ -55,7 +55,8 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
       return state;
     case ActionType.InitializeBoard:
     case ActionType.UpdatedBoard:
-      return mapReadyState(action.board.usersMarkedReady, state);
+      const newState = mapReadyState(action.board.usersMarkedReady, state);
+      return mapRaisedHandState(action.board.usersRaisedHands, newState);
     case ActionType.SetUsers: {
       const newState = {
         admins: state.admins,
@@ -92,7 +93,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
       // Remove outdated user
       newState.all = newState.all.filter((member) => newState.admins.find((admin) => admin.id === member.id) || newState.basic.find((user) => user.id === member.id));
 
-      return mapReadyState(state.usersMarkedReady, newState);
+      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
     }
     case ActionType.SetUserStatus: {
       const newState = {
@@ -108,7 +109,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
         user.online = action.status;
       }
 
-      return mapReadyState(state.usersMarkedReady, newState);
+      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
     }
     case ActionType.UpdateUser: {
       const newState = {
@@ -119,13 +120,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
         usersRaisedHands: state.usersRaisedHands,
       };
 
-      // FIXME no updates here, this should be implemented
-      const user = newState.all.find((member) => member.id === action.user.objectId);
-      if (user) {
-        // if needed
-      }
-
-      return mapReadyState(state.usersMarkedReady, newState);
+      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
     }
     default: {
       return state;
