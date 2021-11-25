@@ -8,6 +8,7 @@ import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
+import {Timer} from "components/Timer";
 
 export var Board = function () {
   const {t} = useTranslation();
