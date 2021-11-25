@@ -20,7 +20,7 @@ import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
 
-export var MenuBars = function() {
+export var MenuBars = function () {
   const {t} = useTranslation();
 
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -60,6 +60,10 @@ export var MenuBars = function() {
     }
   };
 
+  const toggleRaiseHand = (active: boolean) => {
+    store.dispatch(ActionFactory.editUserConfiguration({raisedHand: active}));
+  };
+
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
@@ -73,7 +77,14 @@ export var MenuBars = function() {
             onToggle={toggleReadyState}
             tabIndex={TabIndex.UserMenu}
           />
-          <MenuButton tabIndex={TabIndex.UserMenu + 1} disabled direction="right" label={t("MenuBars.addImage")} icon={AddImageIcon} onClick={() => null} />
+          <MenuToggle
+            tabIndex={TabIndex.UserMenu + 1}
+            direction="right"
+            toggleStartLabel={t("MenuBars.raiseHand")}
+            toggleStopLabel={t("MenuBars.lowerHand")}
+            icon={AddImageIcon}
+            onToggle={toggleRaiseHand}
+          />
           <Link to="/">
             <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => null} />
           </Link>
@@ -128,4 +139,4 @@ export var MenuBars = function() {
       )}
     </aside>
   );
-}
+};

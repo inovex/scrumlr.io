@@ -9,7 +9,9 @@ import {api} from "./util";
 type EditUserConfigurationRequest = {
   boardId: string;
   userConfiguration: {
+    userId?: string;
     showHiddenColumns?: boolean;
+    raisedHand?: boolean;
   };
 };
 
@@ -31,10 +33,16 @@ export const initializeUserFunctions = () => {
       return {status: "Error", description: `Board '${request.boardId}' does not exist`};
     }
 
+    const id = request.userConfiguration.userId ?? user.id;
+
     const userConfigurations: UserConfigurations = await board.get("userConfigurations");
 
     if (request.userConfiguration.showHiddenColumns != undefined) {
-      userConfigurations[user.id] = {...userConfigurations[user.id], showHiddenColumns: request.userConfiguration.showHiddenColumns};
+      userConfigurations[id] = {...userConfigurations[id], showHiddenColumns: request.userConfiguration.showHiddenColumns};
+    }
+
+    if (request.userConfiguration.raisedHand != undefined) {
+      userConfigurations[id] = {...userConfigurations[id], raisedHand: request.userConfiguration.raisedHand};
     }
 
     board.set("userConfigurations", userConfigurations);

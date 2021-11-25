@@ -17,20 +17,23 @@ export interface UserClientModel {
 
 type EditableUserConfiguration = {
   showHiddenColumns: boolean;
+  raisedHand: boolean;
 };
 
 export type UserConfigurationServerModel = {
   [userId: string]: {
     showHiddenColumns: boolean;
+    raisedHand: boolean;
   };
 };
 
 export type UserConfigurationClientModel = {
   id: string;
   showHiddenColumns: boolean;
+  raisedHand: boolean;
 };
 
-export type EditUserConfigurationRequest = Partial<EditableUserConfiguration>;
+export type EditUserConfigurationRequest = {userId?: string} & Partial<EditableUserConfiguration>;
 
 export const mapUserServerToClientModel = (user: UserServerModel, {admin, online}: {admin: boolean; online: boolean}): UserClientModel => ({
   id: user.objectId,

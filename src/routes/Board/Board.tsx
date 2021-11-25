@@ -1,13 +1,13 @@
 import {LoadingScreen} from "components/LoadingScreen";
 import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
-import Parse from "parse";
 import {Note} from "components/Note";
 import {Request} from "components/Request";
 import {useAppSelector} from "store";
 import {Timer} from "components/Timer";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
+import Parse from "parse";
 
 export var Board = function () {
   const {t} = useTranslation();
@@ -41,7 +41,19 @@ export var Board = function () {
   if (state.board.status === "ready") {
     return (
       <>
-        <Request joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")} />
+        {currentUserIsModerator && (
+          <Request
+            joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
+            users={state.users.all}
+            raisedHands={
+              state.board.data?.userConfigurations
+                .filter((user) => user.raisedHand)
+                .map((user) => user.id)
+                .filter((id) => id !== Parse.User.current()!.id) ?? []
+            }
+            boardId={state.board.data!.id}
+          />
+        )}
         {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board

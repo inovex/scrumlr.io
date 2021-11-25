@@ -78,6 +78,13 @@
     "acceptAll": "Alle akzeptieren",
     "rejectAll": "Alle ablehnen"
   },
+  "RaiseRequest": {
+    "title": "Jemand hebt seine/ihre Hand",
+    "lower": "Senke die Hand"
+  },
+  "Request":{
+    "title": "Jemand möchte der Sitzung beitreten und/oder jemand hebt seine Hand"
+  },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Einloggen mit Github",
@@ -119,7 +126,9 @@
     "stopVoting": "Beende Abstimmung",
     "startFocusMode": "Starte Fokus-Modus",
     "stopFocusMode": "Beende Fokus-Modus",
-    "returnToHomepage": "Kehre zur Homepage zurück"
+    "returnToHomepage": "Kehre zur Homepage zurück",
+    "raiseHand": "Hebe deine Hand",
+    "lowerHand": "Senke deine Hand"
   },
   "TimerToggleButton": {
     "label": "Alarm",

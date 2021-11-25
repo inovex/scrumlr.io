@@ -1,16 +1,22 @@
 import store from "store";
 import {ActionFactory} from "store/action";
-
 import {JoinRequestClientModel} from "types/joinRequest";
 import "./Request.scss";
 import {useTranslation} from "react-i18next";
+import {UserClientModel} from "types/user";
 import {UserAvatar} from "../BoardUsers";
 
-export var Request = function ({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
-  if (joinRequests.length == 0) {
-    return null;
-  }
-
+export var Request = function ({
+  joinRequests,
+  users,
+  raisedHands,
+  boardId,
+}: {
+  joinRequests: JoinRequestClientModel[];
+  users: UserClientModel[];
+  raisedHands: string[];
+  boardId: string;
+}) {
   const {t} = useTranslation();
 
   const handleAccept = (boardId: string, userIds: string[]) => () => {
@@ -21,52 +27,79 @@ export var Request = function ({joinRequests}: {joinRequests: JoinRequestClientM
     store.dispatch(ActionFactory.rejectJoinRequests(boardId, userIds));
   };
 
+  const lowerHand = (userId: string) => () => {
+    store.dispatch(ActionFactory.editUserConfiguration({userId, raisedHand: false}));
+  };
+
+  let title = "";
+  if (joinRequests.length != 0 && raisedHands.length != 0) title = t("Request.title");
+  else if (joinRequests.length == 0) title = t("RaiseRequest.title");
+  else if (raisedHands.length == 0) title = t("JoinRequest.title");
+
   return (
-    <div className="join-request">
-      <div className="join-request__header">{t("JoinRequest.title")}</div>
+    <div>
+      {(joinRequests.length != 0 || raisedHands.length != 0) && (
+        <div className="join-request">
+          <div className="request__header">{title}</div>
 
-      <div className="join-request__main">
-        <ul className="join-request__requests">
-          {joinRequests.map((joinRequest) => (
-            <li key={joinRequest.id} className="join-request__unique-request-container">
-              <figure className="join-request__request-figure">
-                <UserAvatar id={joinRequest.userId} name={joinRequest.displayName} />
-                <figcaption className="join-request__request-display-name">{joinRequest.displayName}</figcaption>
-              </figure>
+          <div className="request__main">
+            <ul className="request__requests">
+              {joinRequests.map((joinRequest) => (
+                <li key={joinRequest.id} className="join-request__unique-request-container">
+                  <figure className="join-request__request-figure">
+                    <UserAvatar id={joinRequest.userId} name={joinRequest.displayName} />
+                    <figcaption className="join-request__request-display-name">{joinRequest.displayName}</figcaption>
+                  </figure>
 
-              <div>
-                <button className="join-request__button" onClick={handleReject(joinRequest.boardId, [joinRequest.userId])}>
-                  {t("JoinRequest.reject")}
-                </button>
-                <button className="join-request__button" onClick={handleAccept(joinRequest.boardId, [joinRequest.userId])}>
-                  {t("JoinRequest.accept")}
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
+                  <div>
+                    <button className="request__button" onClick={handleReject(boardId, [joinRequest.userId])}>
+                      {t("JoinRequest.reject")}
+                    </button>
+                    <button className="request__button" onClick={handleAccept(boardId, [joinRequest.userId])}>
+                      {t("JoinRequest.accept")}
+                    </button>
+                  </div>
+                </li>
+              ))}
+              {raisedHands.map((userId) => (
+                <li key={userId} className="join-request__unique-request-container">
+                  <figure className="join-request__request-figure">
+                    <UserAvatar id={userId} name={users.find((user) => user.id === userId)!.displayName} />
+                    <figcaption className="join-request__request-display-name">{users.find((user) => user.id === userId)!.displayName}</figcaption>
+                  </figure>
 
-      {joinRequests.length > 1 && (
-        <div className="join-request__footer">
-          <button
-            className="join-request__button"
-            onClick={handleReject(
-              joinRequests[0].boardId,
-              joinRequests.map((joinRequest) => joinRequest.userId)
-            )}
-          >
-            {t("JoinRequest.rejectAll")}
-          </button>
-          <button
-            className="join-request__button"
-            onClick={handleAccept(
-              joinRequests[0].boardId,
-              joinRequests.map((joinRequest) => joinRequest.userId)
-            )}
-          >
-            {t("JoinRequest.acceptAll")}
-          </button>
+                  <div>
+                    <button className="request__button" onClick={lowerHand(userId)}>
+                      {t("RaiseRequest.lower")}
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {joinRequests.length > 1 && (
+            <div className="join-request__footer">
+              <button
+                className="request__button"
+                onClick={handleReject(
+                  joinRequests[0].boardId,
+                  joinRequests.map((joinRequest) => joinRequest.userId)
+                )}
+              >
+                {t("JoinRequest.rejectAll")}
+              </button>
+              <button
+                className="request__button"
+                onClick={handleAccept(
+                  joinRequests[0].boardId,
+                  joinRequests.map((joinRequest) => joinRequest.userId)
+                )}
+              >
+                {t("JoinRequest.acceptAll")}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

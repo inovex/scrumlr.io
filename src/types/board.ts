@@ -93,6 +93,7 @@ export const mapBoardServerToClientModel = async (board: BoardServerModel): Prom
         ({
           id,
           showHiddenColumns: board.userConfigurations[id].showHiddenColumns,
+          raisedHand: board.userConfigurations[id].raisedHand,
         } as UserConfigurationClientModel)
     ),
     accessCode: board.accessCode,
