@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<InfoBar /> empty snapshot test 1`] = `
+<aside
+  class="infobar"
+/>
+`;
+
+exports[`<InfoBar /> timer and voting snapshot test 1`] = `
+<aside
+  class="infobar"
+>
+  <div
+    class="timer timer--expired"
+    id="timer"
+  >
+    <span>
+      00
+      :
+      00
+    </span>
+    <button
+      title="Timer.stopTimer"
+    >
+      <svg>
+        icon-close.svg
+      </svg>
+    </button>
+  </div>
+  <div
+    class="voteDisplay"
+    id="voteDisplay"
+  >
+    <span>
+      5
+       / 
+      10
+    </span>
+  </div>
+</aside>
+`;
+
+exports[`<InfoBar /> timer snapshot test 1`] = `
+<aside
+  class="infobar"
+>
+  <div
+    class="timer timer--expired"
+    id="timer"
+  >
+    <span>
+      00
+      :
+      00
+    </span>
+    <button
+      title="Timer.stopTimer"
+    >
+      <svg>
+        icon-close.svg
+      </svg>
+    </button>
+  </div>
+</aside>
+`;
+
+exports[`<InfoBar /> voting snapshot test 1`] = `
+<aside
+  class="infobar"
+>
+  <div
+    class="voteDisplay"
+    id="voteDisplay"
+  >
+    <span>
+      5
+       / 
+      10
+    </span>
+  </div>
+</aside>
+`;
