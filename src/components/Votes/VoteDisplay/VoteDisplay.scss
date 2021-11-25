@@ -1,0 +1,33 @@
+@import "constants/style.scss";
+
+.voteDisplay {
+  position: relative;
+  width: 85px;
+}
+
+.voteDisplay > * {
+  color: white;
+  background-color: $color-backlog-blue;
+  vertical-align: bottom;
+}
+@include collapsedColumns(".voteDisplay > *") {
+  box-shadow: 0 8px 16px #0057ff25;
+}
+
+@media (prefers-color-scheme: dark) {
+  .voteDisplay > * {
+    background-color: $color-planning-pink;
+  }
+  @include collapsedColumns(".voteDisplay > *") {
+    box-shadow: 0 8px 16px #ff006925;
+  }
+}
+.voteDisplay > span {
+  display: inline-block;
+  border-radius: 18px;
+  width: 84px;
+  cursor: default;
+  font-weight: bold;
+  line-height: 36px;
+  text-align: center;
+}
