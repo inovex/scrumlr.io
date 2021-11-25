@@ -17,6 +17,7 @@ jest.mock("api", () => ({
   API: {
     editUserConfiguration: jest.fn(),
     setReadyStatus: jest.fn(),
+    setRaisedHandStatus: jest.fn(),
   },
 }));
 
@@ -37,5 +38,10 @@ describe("users middleware", () => {
   test("set user ready status", () => {
     passUsersMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.setUserReadyStatus(true));
     expect(API.setReadyStatus).toHaveBeenCalledWith("boardId", true);
+  });
+
+  test("set raised hand status", () => {
+    passUsersMiddleware(stateAPI as MiddlewareAPI, jest.fn(), ActionFactory.setRaisedHandStatus({userId: [], raisedHand: false}));
+    expect(API.setRaisedHandStatus).toHaveBeenCalledWith("boardId", {userId: [], raisedHand: false});
   });
 });

@@ -80,10 +80,11 @@
   },
   "RaiseRequest": {
     "title": "Jemand hebt seine/ihre Hand",
-    "lower": "Senke die Hand"
+    "lower": "Senke die Hand",
+    "lowerAll": "Alle Hände senken"
   },
   "Request":{
-    "title": "Jemand möchte der Sitzung beitreten und/oder jemand hebt seine Hand"
+    "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",

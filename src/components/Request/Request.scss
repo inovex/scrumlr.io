@@ -69,7 +69,7 @@
   padding-left: 15px;
   color: $color-white;
   background-color: $color-backlog-blue;
-  text-overflow: ellipsis;
+  overflow-wrap: break-word;
   white-space: nowrap;
 }
 
@@ -241,7 +241,7 @@
   }
 }
 
-.join-request__footer {
+.request__footer {
   display: flex;
   justify-content: flex-end;
   padding: 0 16px;
@@ -251,7 +251,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  .join-request__footer {
+  .request__footer {
     background-color: $color-dark-mode-note;
   }
 }

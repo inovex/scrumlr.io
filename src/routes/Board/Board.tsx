@@ -45,12 +45,7 @@ export var Board = function () {
           <Request
             joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
             users={state.users.all}
-            raisedHands={
-              state.board.data?.userConfigurations
-                .filter((user) => user.raisedHand)
-                .map((user) => user.id)
-                .filter((id) => id !== Parse.User.current()!.id) ?? []
-            }
+            raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
             boardId={state.board.data!.id}
           />
         )}

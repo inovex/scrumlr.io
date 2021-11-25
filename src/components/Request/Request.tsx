@@ -27,8 +27,8 @@ export var Request = function ({
     store.dispatch(ActionFactory.rejectJoinRequests(boardId, userIds));
   };
 
-  const lowerHand = (userId: string) => () => {
-    store.dispatch(ActionFactory.editUserConfiguration({userId, raisedHand: false}));
+  const lowerHand = (userId: string[]) => {
+    store.dispatch(ActionFactory.setRaisedHandStatus({userId, raisedHand: false}));
   };
 
   let title = "";
@@ -41,7 +41,6 @@ export var Request = function ({
       {(joinRequests.length != 0 || raisedHands.length != 0) && (
         <div className="join-request">
           <div className="request__header">{title}</div>
-
           <div className="request__main">
             <ul className="request__requests">
               {joinRequests.map((joinRequest) => (
@@ -61,6 +60,7 @@ export var Request = function ({
                   </div>
                 </li>
               ))}
+
               {raisedHands.map((userId) => (
                 <li key={userId} className="join-request__unique-request-container">
                   <figure className="join-request__request-figure">
@@ -69,7 +69,7 @@ export var Request = function ({
                   </figure>
 
                   <div>
-                    <button className="request__button" onClick={lowerHand(userId)}>
+                    <button className="request__button" onClick={() => lowerHand([userId])}>
                       {t("RaiseRequest.lower")}
                     </button>
                   </div>
@@ -78,26 +78,35 @@ export var Request = function ({
             </ul>
           </div>
 
-          {joinRequests.length > 1 && (
-            <div className="join-request__footer">
-              <button
-                className="request__button"
-                onClick={handleReject(
-                  joinRequests[0].boardId,
-                  joinRequests.map((joinRequest) => joinRequest.userId)
-                )}
-              >
-                {t("JoinRequest.rejectAll")}
-              </button>
-              <button
-                className="request__button"
-                onClick={handleAccept(
-                  joinRequests[0].boardId,
-                  joinRequests.map((joinRequest) => joinRequest.userId)
-                )}
-              >
-                {t("JoinRequest.acceptAll")}
-              </button>
+          {(joinRequests.length > 1 || raisedHands.length > 1) && (
+            <div className="request__footer">
+              {raisedHands.length > 1 && (
+                <button className="request__button" onClick={() => lowerHand(raisedHands)}>
+                  {t("RaiseRequest.lowerAll")}
+                </button>
+              )}
+              {joinRequests.length > 1 && (
+                <>
+                  <button
+                    className="request__button"
+                    onClick={handleReject(
+                      joinRequests[0].boardId,
+                      joinRequests.map((joinRequest) => joinRequest.userId)
+                    )}
+                  >
+                    {t("JoinRequest.rejectAll")}
+                  </button>
+                  <button
+                    className="request__button"
+                    onClick={handleAccept(
+                      joinRequests[0].boardId,
+                      joinRequests.map((joinRequest) => joinRequest.userId)
+                    )}
+                  >
+                    {t("JoinRequest.acceptAll")}
+                  </button>{" "}
+                </>
+              )}
             </div>
           )}
         </div>

@@ -80,10 +80,11 @@
   },
   "RaiseRequest": {
     "title": "Someone raises their hand",
-    "lower": "Lower hand"
+    "lower": "Lower hand",
+    "lowerAll": "Lower all hands"
   },
   "Request":{
-    "title": "Someone requests to participate and/or someone raised their hand"
+    "title": "Someone requests to participate/raised their hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Sign in with Google",

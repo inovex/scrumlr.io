@@ -11,13 +11,20 @@ type EditUserConfigurationRequest = {
   userConfiguration: {
     userId?: string;
     showHiddenColumns?: boolean;
-    raisedHand?: boolean;
   };
 };
 
 type SetUserReadyStateRequest = {
   boardId: string;
   ready: boolean;
+};
+
+type SetUsersRaisedHandRequest = {
+  boardId: string;
+  configuration: {
+    userId: string[];
+    raisedHand: boolean;
+  };
 };
 
 export const initializeUserFunctions = () => {
@@ -39,10 +46,6 @@ export const initializeUserFunctions = () => {
 
     if (request.userConfiguration.showHiddenColumns != undefined) {
       userConfigurations[id] = {...userConfigurations[id], showHiddenColumns: request.userConfiguration.showHiddenColumns};
-    }
-
-    if (request.userConfiguration.raisedHand != undefined) {
-      userConfigurations[id] = {...userConfigurations[id], raisedHand: request.userConfiguration.raisedHand};
     }
 
     board.set("userConfigurations", userConfigurations);
@@ -67,5 +70,28 @@ export const initializeUserFunctions = () => {
 
     await board.save(null, {useMasterKey: true});
     return {status: "Success", description: "User ready state set."};
+  });
+
+  api<SetUsersRaisedHandRequest, StatusResponse>("setRaisedHandStatus", async (user, request) => {
+    await requireValidBoardMember(user, request.boardId);
+
+    const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
+    // Check if the board exists
+    if (!board) {
+      return {status: "Error", description: `Board '${request.boardId}' does not exist`};
+    }
+
+    if (request.configuration.raisedHand) {
+      request.configuration.userId.forEach((id) => {
+        board.addUnique("usersRaisedHands", id);
+      });
+    } else {
+      request.configuration.userId.forEach((id) => {
+        board.remove("usersRaisedHands", id);
+      });
+    }
+
+    await board.save(null, {useMasterKey: true});
+    return {status: "Success", description: "User raised hand state set."};
   });
 };

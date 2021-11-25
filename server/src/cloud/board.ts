@@ -159,7 +159,7 @@ export const initializeBoardFunctions = () => {
     }, {});
 
     const userConfigurations: UserConfigurations = {};
-    userConfigurations[user.id] = {showHiddenColumns: false, raisedHand: false};
+    userConfigurations[user.id] = {showHiddenColumns: false};
 
     let {accessPolicy} = request;
     if (accessPolicy.type === AccessPolicyType.ByPassphrase) {
@@ -292,7 +292,7 @@ export const initializeBoardFunctions = () => {
     }
 
     const userConfigurations: UserConfigurations = await board.get("userConfigurations");
-    userConfigurations[user.id] = {showHiddenColumns: false, raisedHand: false};
+    userConfigurations[user.id] = {showHiddenColumns: false};
     board.set("userConfigurations", userConfigurations);
     await board.save(null, {useMasterKey: true});
 

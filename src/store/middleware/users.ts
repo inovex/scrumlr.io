@@ -18,4 +18,9 @@ export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
     const boardId = stateAPI.getState().board.data!.id;
     API.setReadyStatus(boardId, action.ready);
   }
+
+  if (action.type === ActionType.SetRaisedHandStatus) {
+    const boardId = stateAPI.getState().board.data!.id;
+    API.setRaisedHandStatus(boardId, action.configuration);
+  }
 };

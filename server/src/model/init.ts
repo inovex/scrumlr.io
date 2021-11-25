@@ -16,6 +16,7 @@ const addInitialBoardSchema = async () => {
   schema.addBoolean("showNotesOfOtherUsers", {defaultValue: true});
   schema.addObject("userConfigurations", {defaultValue: {}});
   schema.addArray("usersMarkedReady", {required: false, defaultValue: []});
+  schema.addArray("usersRaisedHands", {required: false, defaultValue: []});
   schema.addNumber("schemaVersion", {required: true, defaultValue: 1});
   return schema.save();
 };

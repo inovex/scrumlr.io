@@ -10,12 +10,25 @@ const mapReadyState = (readyUsers: string[] = [], state: Omit<UsersState, "users
     basic: state.basic.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
     all: state.all.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
     usersMarkedReady: readyUsers,
+    usersRaisedHands: state.usersRaisedHands,
   };
 
   return newState;
 };
 
-export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
+const mapRaisedHandState = (raisedHandUsers: string[] = [], state: Omit<UsersState, "usersRaisedHands">) => {
+  const newState = {
+    admins: state.admins.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    basic: state.basic.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    all: state.all.map((current) => ({...current, ready: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+    usersRaisedHands: raisedHandUsers,
+    usersMarkedReady: state.usersMarkedReady,
+  };
+
+  return newState;
+};
+
+export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
     case ActionType.SetUserReadyStatus:
       let {usersMarkedReady} = state;
@@ -29,6 +42,17 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         return mapReadyState(usersMarkedReady, state);
       }
       return state;
+    case ActionType.SetRaisedHandStatus:
+      let {usersRaisedHands} = state;
+      if (usersRaisedHands !== undefined) {
+        if (action.configuration.raisedHand) {
+          usersRaisedHands = union(usersRaisedHands, action.configuration.userId);
+        } else {
+          usersRaisedHands = usersRaisedHands.filter((id) => action.configuration.userId.find((user) => user === id) == undefined);
+        }
+        return mapRaisedHandState(usersRaisedHands, state);
+      }
+      return state;
     case ActionType.InitializeBoard:
     case ActionType.UpdatedBoard:
       return mapReadyState(action.board.usersMarkedReady, state);
@@ -37,6 +61,8 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         admins: state.admins,
         basic: state.basic,
         all: state.all,
+        usersMarkedReady: state.usersMarkedReady,
+        usersRaisedHands: state.usersRaisedHands,
       };
 
       if (action.admin) {
@@ -73,6 +99,8 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         admins: state.admins,
         basic: state.basic,
         all: state.all,
+        usersMarkedReady: state.usersMarkedReady,
+        usersRaisedHands: state.usersRaisedHands,
       };
 
       const user = newState.all.find((member) => member.id === action.userId);
@@ -87,6 +115,8 @@ export const usersReducer = (state: UsersState = {usersMarkedReady: [], admins: 
         admins: state.admins,
         basic: state.basic,
         all: state.all,
+        usersMarkedReady: state.usersMarkedReady,
+        usersRaisedHands: state.usersRaisedHands,
       };
 
       // FIXME no updates here, this should be implemented

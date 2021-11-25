@@ -61,7 +61,7 @@ export var MenuBars = function () {
   };
 
   const toggleRaiseHand = (active: boolean) => {
-    store.dispatch(ActionFactory.editUserConfiguration({raisedHand: active}));
+    store.dispatch(ActionFactory.setRaisedHandStatus({userId: [Parse.User.current()!.id], raisedHand: active}));
   };
 
   return (
