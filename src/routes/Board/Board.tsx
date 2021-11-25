@@ -8,7 +8,6 @@ import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
-import {Timer} from "components/Timer";
 
 export var Board = function () {
   const {t} = useTranslation();
@@ -50,7 +49,6 @@ export var Board = function () {
             boardId={state.board.data!.id}
           />
         )}
-        {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
         <Infobar
           endTime={state.board.data!.timerUTCEndTime}
           activeVoting={state.board.data?.voting === "active"}
