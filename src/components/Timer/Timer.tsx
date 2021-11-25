@@ -1,4 +1,3 @@
-import ReactDOM from "react-dom";
 import {useEffect, useRef, useState} from "react";
 import Parse from "parse";
 import classNames from "classnames";
@@ -85,8 +84,8 @@ export const Timer = (props: TimerProps) => {
     }
   }, [timeLeft]);
 
-  return ReactDOM.createPortal(
-    <aside id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+  return (
+    <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
@@ -95,7 +94,6 @@ export const Timer = (props: TimerProps) => {
           <CloseIcon />
         </button>
       )}
-    </aside>,
-    document.getElementById("root")!
+    </div>
   );
 };
