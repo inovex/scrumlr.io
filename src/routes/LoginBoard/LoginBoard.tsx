@@ -11,7 +11,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
 
-export var LoginBoard = function () {
+export var LoginBoard = function() {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,4 +94,4 @@ export var LoginBoard = function () {
       </div>
     </div>
   );
-};
+}

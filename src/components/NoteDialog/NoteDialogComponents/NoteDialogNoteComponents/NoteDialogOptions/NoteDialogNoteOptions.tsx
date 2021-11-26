@@ -13,7 +13,7 @@ type NoteDialogNoteOptionsProps = {
   onClose: () => void;
 };
 
-export var NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = function(props: NoteDialogNoteOptionsProps) {
+export var NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = function (props: NoteDialogNoteOptionsProps) {
   const showDeleteButton = props.authorId === Parse.User.current()?.id || props.currentUserIsModerator;
   return (
     <ul className="note-dialog__note-options">
@@ -29,4 +29,4 @@ export var NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = function(prop
       )}
     </ul>
   );
-}
+};

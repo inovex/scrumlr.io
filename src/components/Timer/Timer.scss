@@ -1,27 +1,22 @@
 @import "constants/style.scss";
 
 .timer {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 300;
+  position: relative;
+  width: auto;
 }
-@include collapsedColumns(".timer") {
-  bottom: auto;
-  top: 98px;
-}
+
 .timer > * {
   color: white;
-  background-color: #0057ff;
+  background-color: $color-backlog-blue;
   vertical-align: bottom;
 }
 @include collapsedColumns(".timer > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
+
 @media (prefers-color-scheme: dark) {
   .timer > * {
-    background-color: #ff0069;
+    background-color: $color-planning-pink;
   }
   @include collapsedColumns(".timer > *") {
     box-shadow: 0 8px 16px #ff006925;

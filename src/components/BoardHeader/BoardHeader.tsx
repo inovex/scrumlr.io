@@ -17,7 +17,7 @@ export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
 }
 
-export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
+export var BoardHeader: VFC<BoardHeaderProps> = function (props) {
   const {t} = useTranslation();
 
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));

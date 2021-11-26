@@ -14,7 +14,7 @@ interface ParticipantProps {
   boardOwner: string;
 }
 
-export var Participant = function({participant, currentUserIsModerator, boardOwner}: ParticipantProps) {
+export var Participant = function ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) {
   const state = useAppSelector((applicationState) => ({
     users: applicationState.users,
   }));
@@ -53,4 +53,4 @@ export var Participant = function({participant, currentUserIsModerator, boardOwn
       )}
     </li>
   );
-}
+};

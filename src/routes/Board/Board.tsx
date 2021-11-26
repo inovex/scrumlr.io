@@ -5,11 +5,11 @@ import Parse from "parse";
 import {Note} from "components/Note";
 import {JoinRequest} from "components/JoinRequest";
 import {useAppSelector} from "store";
-import {Timer} from "components/Timer";
+import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
-export var Board = function() {
+export var Board = function () {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState) => ({
@@ -49,7 +49,12 @@ export var Board = function() {
     return (
       <>
         {joinRequestComponent}
-        {state.board.data?.timerUTCEndTime && <Timer endTime={state.board.data.timerUTCEndTime} />}
+        <Infobar
+          endTime={state.board.data!.timerUTCEndTime}
+          activeVoting={state.board.data?.voting === "active"}
+          usedVotes={state.votes.filter((vote) => vote.user === Parse.User.current()?.id).length}
+          possibleVotes={state.voteConfiguration.voteLimit}
+        />
         <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
           {state.board
             .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
@@ -66,7 +71,7 @@ export var Board = function() {
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
-                  .sort((a, b) => b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime())
+                  .sort((a, b) => (b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
                   .map((note, noteIndex) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
@@ -97,4 +102,4 @@ export var Board = function() {
     );
   }
   return <LoadingScreen />;
-}
+};

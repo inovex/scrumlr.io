@@ -31,7 +31,7 @@ interface NoteProps {
   tabIndex?: number;
 }
 
-export var Note = function(props: NoteProps) {
+export var Note = function (props: NoteProps) {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
@@ -129,4 +129,4 @@ export var Note = function(props: NoteProps) {
       {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
-}
+};

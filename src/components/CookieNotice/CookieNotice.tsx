@@ -6,7 +6,7 @@ import {CookiePolicy} from "./CookiePolicy";
 
 const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 
-export const CookieNotice = () => {
+export var CookieNotice = function () {
   const {t} = useTranslation();
 
   const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
