@@ -6,6 +6,7 @@ import {ReactComponent as English} from "assets/flags/US.svg";
 import {Link} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import Parse from "parse";
+import {HeroIllustration} from "components/HeroIllustration";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
@@ -64,44 +65,7 @@ export const Homepage = withTranslation()(() => {
               </Link>
             </main>
 
-            <aside className="homepage__illustration">
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <German className="homepage__illustration-tile-image" />
-              </div>
-              <div className="homepage__illustration-tile">
-                <English className="homepage__illustration-tile-image" />
-              </div>
-            </aside>
+            <HeroIllustration className="homepage__illustration" />
           </div>
         </div>
       </div>

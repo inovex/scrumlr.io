@@ -1,0 +1,24 @@
+@import "constants/style";
+
+.login-board {
+  display: flex;
+  gap: 32px;
+}
+
+.login-board > * {
+  flex: 1 1 0;
+}
+
+.login-board__illustration {
+  display: none;
+}
+
+.login-board__form-element {
+  display: block;
+}
+
+@media #{$tablet} {
+  .login-board__illustration {
+    display: grid;
+  }
+}

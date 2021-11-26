@@ -6,8 +6,11 @@ import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
+import {HeroIllustration} from "components/HeroIllustration";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
+import "./LoginBoard.scss";
 
-export var LoginBoard = function() {
+export var LoginBoard = function () {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,32 +32,44 @@ export var LoginBoard = function() {
   // TODO https://dribbble.com/shots/11879454-Sign-Up-Form
   return (
     <div className="login-board">
-      <h1>Sign in to scrumlr.io</h1>
+      <HeroIllustration className="login-board__illustration" />
 
-      <LoginProviders originURL={location.state.from.pathname} />
+      <div>
+        <ScrumlrLogo accentColorClassNames={["accent-color--pink"]} />
 
-      <label>
-        <span>Username</span>
-        <input
-          className="login-board__input"
-          defaultValue={displayName}
-          type="text"
-          onChange={(e) => setDisplayName(e.target.value)}
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === "Enter") {
-              handleLogin();
-            }
-          }}
-          maxLength={20}
-        />
-      </label>
+        <h1>Sign in to scrumlr.io</h1>
 
-      <label>
-        <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
-        <span>I agree to the terms and privacy policy</span>
-      </label>
+        <LoginProviders originURL={location.state.from.pathname} />
 
-      <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+        <span>or</span>
+
+        <fieldset>
+          <legend>Anonymous login</legend>
+
+          <label className="login-board__form-element">
+            <span>Username</span>
+            <input
+              className="login-board__input"
+              defaultValue={displayName}
+              type="text"
+              onChange={(e) => setDisplayName(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "Enter") {
+                  handleLogin();
+                }
+              }}
+              maxLength={20}
+            />
+          </label>
+
+          <label>
+            <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+            <span>I agree to the terms and privacy policy</span>
+          </label>
+        </fieldset>
+
+        <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+      </div>
     </div>
   );
-}
+};
