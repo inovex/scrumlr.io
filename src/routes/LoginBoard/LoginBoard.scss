@@ -33,13 +33,106 @@
   background: $color-white;
 }
 
+.login-board__fieldset {
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+.login-board__fieldset-legend {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .login-board__form-element {
   display: block;
+}
+
+.login-board__username {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.login-board__username .login-board__form-element {
+  flex: 1 1 100%;
+}
+
+.login-board__username .login-board__randomize-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex: 0 0 calc(1em + 16px);
+  width: calc(1em + 16px);
+  height: calc(1em + 16px);
+  border-radius: 100%;
+  border: none;
+  outline: none;
+
+  background: $color-backlog-blue;
+}
+
+.login-board__randomize-icon {
+  height: 16px;
+  width: 16px;
+  color: $color-white;
 }
 
 .login-board__input-label {
   display: block;
   width: 100%;
+
+  margin-left: 6px;
+  margin-bottom: 4px;
+
+  font-weight: bold;
+}
+
+.login-board__input {
+  border-radius: 2em;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  outline: none;
+  width: 100%;
+
+  background: $color-white-two;
+  box-shadow: 0 0 0 rgba($color-white, 0);
+  transition: box-shadow 0.25s ease, background-color 0.15s ease;
+}
+
+.login-board__input[value=""] {
+  background: $color-light-gray;
+  border: 1px solid $color-retro-red;
+}
+
+.login-board__input:focus,
+.login-board__input:hover {
+  background: $color-white;
+  border: 1px solid $color-backlog-blue;
+}
+
+.login-board__input:hover {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+}
+
+.login-board__input:focus {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+}
+
+.login-board__error-message {
+  font-size: 0.8em;
+  color: $color-retro-red;
+  margin-left: 6px;
+}
+
+.login-board__terms {
+  margin-top: 0.8em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -70,6 +163,9 @@
 
   .login-board__dialog {
     display: flex;
+    justify-content: center;
+    align-items: center;
+
     gap: 84px;
     max-width: 1080px;
 

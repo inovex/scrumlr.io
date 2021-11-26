@@ -8,6 +8,7 @@ import {Trans, useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
 
 export var LoginBoard = function () {
@@ -44,27 +45,37 @@ export var LoginBoard = function () {
 
           <hr className="login-board__divider" data-label="or" />
 
-          <fieldset>
-            <legend>Anonymous login</legend>
+          <fieldset className="login-board__fieldset">
+            <legend className="login-board__fieldset-legend">Sign in without registration</legend>
 
-            <label className="login-board__form-element">
-              <span className="login-board__input-label">Username</span>
-              <input
-                className="login-board__input"
-                defaultValue={displayName}
-                type="text"
-                onChange={(e) => setDisplayName(e.target.value)}
-                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (e.key === "Enter") {
-                    handleLogin();
-                  }
-                }}
-                maxLength={20}
-              />
-            </label>
-            <button>Generate random name</button>
+            <div className="login-board__username">
+              <label className="login-board__form-element">
+                <span className="login-board__input-label">Username</span>
+                <input
+                  className="login-board__input"
+                  value={displayName}
+                  type="text"
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
+                  maxLength={20}
+                  aria-invalid={!displayName}
+                />
+              </label>
+              <button className="login-board__randomize-button" onClick={() => setDisplayName(getRandomName())}>
+                <RefreshIcon className="login-board__randomize-icon" />
+              </button>
+            </div>
+            {!displayName && (
+              <span role="alert" className="login-board__error-message">
+                Username may not be empty
+              </span>
+            )}
 
-            <label className="login-board__form-element">
+            <label className="login-board__form-element login-board__terms">
               <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
               <span>
                 <Trans
