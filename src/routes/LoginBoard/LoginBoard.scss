@@ -1,11 +1,11 @@
 @import "constants/style";
 
-.login-board {
-  display: flex;
-  gap: 32px;
+.login-board__dialog {
+  padding: 48px;
+  color: $color-black;
 }
 
-.login-board > * {
+.login-board__dialog > * {
   flex: 1 1 0;
 }
 
@@ -13,11 +13,72 @@
   display: none;
 }
 
+.login-board__divider {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 0;
+  overflow: visible;
+  border: none;
+  border-top: 1px solid $color-darkest-gray;
+  color: $color-darkest-gray;
+  text-align: center;
+}
+
+.login-board__divider::after {
+  content: attr(data-label);
+  display: inline-block;
+  position: relative;
+  top: -0.625em;
+  padding: 0 16px;
+  background: $color-white;
+}
+
 .login-board__form-element {
   display: block;
 }
 
+.login-board__input-label {
+  display: block;
+  width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-board__dialog {
+    color: $color-white;
+    background: $color-dark-one;
+  }
+
+  .login-board__divider {
+    border-color: $color-middle-gray;
+    color: $color-middle-gray;
+  }
+
+  .login-board__divider::after {
+    color: $color-middle-gray;
+    background: $color-dark-one;
+  }
+}
+
 @media #{$tablet} {
+  .login-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+  }
+
+  .login-board__dialog {
+    display: flex;
+    gap: 84px;
+    max-width: 1080px;
+
+    padding: 48px;
+    border-radius: 48px;
+
+    box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
+  }
+
   .login-board__illustration {
     display: grid;
   }

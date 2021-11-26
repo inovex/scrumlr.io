@@ -1,10 +1,10 @@
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {getRandomName} from "constants/name";
 import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
-import {useTranslation} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 import {useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -32,43 +32,54 @@ export var LoginBoard = function () {
   // TODO https://dribbble.com/shots/11879454-Sign-Up-Form
   return (
     <div className="login-board">
-      <HeroIllustration className="login-board__illustration" />
+      <div className="login-board__dialog">
+        <HeroIllustration className="login-board__illustration" />
 
-      <div>
-        <ScrumlrLogo accentColorClassNames={["accent-color--pink"]} />
+        <div>
+          <ScrumlrLogo accentColorClassNames={["accent-color--pink"]} />
 
-        <h1>Sign in to scrumlr.io</h1>
+          <h1>Sign in to scrumlr.io</h1>
 
-        <LoginProviders originURL={location.state.from.pathname} />
+          <LoginProviders originURL={location.state.from.pathname} />
 
-        <span>or</span>
+          <hr className="login-board__divider" data-label="or" />
 
-        <fieldset>
-          <legend>Anonymous login</legend>
+          <fieldset>
+            <legend>Anonymous login</legend>
 
-          <label className="login-board__form-element">
-            <span>Username</span>
-            <input
-              className="login-board__input"
-              defaultValue={displayName}
-              type="text"
-              onChange={(e) => setDisplayName(e.target.value)}
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "Enter") {
-                  handleLogin();
-                }
-              }}
-              maxLength={20}
-            />
-          </label>
+            <label className="login-board__form-element">
+              <span className="login-board__input-label">Username</span>
+              <input
+                className="login-board__input"
+                defaultValue={displayName}
+                type="text"
+                onChange={(e) => setDisplayName(e.target.value)}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }}
+                maxLength={20}
+              />
+            </label>
+            <button>Generate random name</button>
 
-          <label>
-            <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
-            <span>I agree to the terms and privacy policy</span>
-          </label>
-        </fieldset>
+            <label className="login-board__form-element">
+              <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+              <span>
+                <Trans
+                  i18nKey="LoginBoard.acceptTerms"
+                  components={{
+                    terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+                    privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+                  }}
+                />
+              </span>
+            </label>
+          </fieldset>
 
-        <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+          <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+        </div>
       </div>
     </div>
   );

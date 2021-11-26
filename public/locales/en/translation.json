@@ -7,7 +7,8 @@
   },
   "LoginBoard": {
     "errorOnRedirect": "An error occurred while redirecting you",
-    "joinAnonymous": "Join board anonymously"
+    "joinAnonymous": "Join board anonymously",
+    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>"
   },
   "Board": {
     "publicSession": "Public Session",

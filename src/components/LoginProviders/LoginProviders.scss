@@ -1,0 +1,60 @@
+@import "constants/style";
+
+.login-providers {
+  display: flex;
+  gap: 8px;
+}
+
+.login-providers__button {
+  display: flex;
+  gap: 8px;
+
+  background: $color-dark-gray;
+  border-radius: 2em;
+  border: 0;
+  padding: 16px;
+
+  color: $color-white;
+  font-weight: bold;
+
+  transition: background-color 0.15s ease-in-out;
+}
+
+.login-providers .login-providers__button:focus,
+.login-providers .login-providers__button:hover {
+  background: $color-planning-pink;
+}
+
+.login-providers__icon {
+  color: $color-darkest-gray;
+  width: 16px;
+  height: auto;
+
+  flex: 0 0 16px;
+  align-self: center;
+}
+
+.login-providers__icon path {
+  fill: $color-darkest-gray;
+}
+
+.login-providers__label {
+  display: none;
+}
+
+.login-providers__button:first-child {
+  flex-grow: 1;
+  background: $color-backlog-blue;
+}
+
+.login-providers__button:first-child .login-providers__label {
+  display: initial;
+}
+
+.login-providers__button:first-child .login-providers__icon {
+  color: $color-white;
+}
+
+.login-providers__button:first-child .login-providers__icon path {
+  fill: $color-white;
+}
