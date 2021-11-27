@@ -3,13 +3,15 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
-import {Link} from "react-router-dom";
+import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import Parse from "parse";
 import {HeroIllustration} from "components/HeroIllustration";
+import {Button} from "../../components/Button";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
+  const newHref = useHref("/new");
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -60,9 +62,9 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Link to="/new" className="homepage__start-link">
+              <Button href={newHref} className="homepage__start-link">
                 <Trans i18nKey="Homepage.startButton" />
-              </Link>
+              </Button>
             </main>
 
             <HeroIllustration className="homepage__illustration" />

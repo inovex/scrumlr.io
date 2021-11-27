@@ -5,52 +5,20 @@
   gap: 8px;
 }
 
-.login-providers__button {
-  display: flex;
-  gap: 8px;
-
-  background: $color-dark-gray;
-  border-radius: 2em;
-  border: 0;
-  padding: 16px;
-
-  color: $color-white;
-  font-weight: bold;
-
-  transition: box-shadow 0.15s ease-in-out;
-  box-shadow: 0 0 0 0 rgba($color-black, 0.2);
-  cursor: pointer;
-}
-
-.login-providers .login-providers__button:focus,
-.login-providers .login-providers__button:hover {
-  box-shadow: 0 2px 16px 8px rgba($color-black, 0.4);
-}
-
 .login-providers__icon {
   color: $color-darkest-gray;
-  width: 16px;
-  height: auto;
-
-  flex: 0 0 16px;
-  align-self: center;
 }
 
 .login-providers__icon path {
   fill: $color-darkest-gray;
 }
 
-.login-providers__label {
-  display: none;
-}
-
 .login-providers__button:first-child {
-  flex-grow: 1;
-  background: $color-backlog-blue;
+  flex: 1 1 auto;
 }
 
-.login-providers__button:first-child .login-providers__label {
-  display: initial;
+.login-providers__button:not(:first-child) {
+  background: $color-middle-gray;
 }
 
 .login-providers__button:first-child .login-providers__icon {
