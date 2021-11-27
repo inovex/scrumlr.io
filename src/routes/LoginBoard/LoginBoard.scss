@@ -1,12 +1,15 @@
 @import "constants/style";
 
 .login-board__dialog {
-  padding: 64px;
   color: $color-black;
 }
 
 .login-board__illustration {
   display: none;
+}
+
+.login-board__form-wrapper {
+  padding: $padding--default;
 }
 
 .login-board__logo {
@@ -215,7 +218,6 @@
 @media (prefers-color-scheme: dark) {
   .login-board__dialog {
     color: $color-white;
-    background: $color-dark-one;
   }
 
   .login-board__divider {
@@ -239,27 +241,38 @@
   }
 
   .login-board__dialog {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-board__illustration {
+    flex: 0 1 540px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0;
+
+    padding: 64px;
+  }
+
+  .login-board__form-wrapper {
+    height: 100vh;
+    background: $color-dark-two;
+    padding: 64px;
+
     display: flex;
     justify-content: center;
     align-items: center;
 
-    gap: 64px;
-    max-width: 1080px;
-
-    padding: 48px;
-    border-radius: 48px;
-
+    flex: 1 1 100%;
     box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
   }
 
-  .login-board__dialog > * {
-    flex: 1 1 0;
-  }
-
-  .login-board__illustration {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 0;
+  .login-board__form {
+    max-width: 640px;
   }
 }

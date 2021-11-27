@@ -40,67 +40,69 @@ export var LoginBoard = function () {
       <div className="login-board__dialog">
         <HeroIllustration className="login-board__illustration" />
 
-        <div>
-          <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--pink"]} />
+        <div className="login-board__form-wrapper">
+          <div className="login-board__form">
+            <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--pink"]} />
 
-          <h1>Sign in to scrumlr.io</h1>
+            <h1>Sign in to scrumlr.io</h1>
 
-          <LoginProviders originURL={location.state.from.pathname} />
+            <LoginProviders originURL={location.state.from.pathname} />
 
-          <hr className="login-board__divider" data-label="or" />
+            <hr className="login-board__divider" data-label="or" />
 
-          <fieldset className="login-board__fieldset">
-            <legend className="login-board__fieldset-legend">Sign in without registration</legend>
+            <fieldset className="login-board__fieldset">
+              <legend className="login-board__fieldset-legend">Sign in without registration</legend>
 
-            <div className="login-board__username">
-              <label className="login-board__form-element">
-                <span className="login-board__input-label">Username</span>
-                <input
-                  className="login-board__input"
-                  value={displayName}
-                  type="text"
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (e.key === "Enter") {
-                      handleLogin();
-                    }
-                  }}
-                  maxLength={20}
-                  aria-invalid={!displayName}
-                />
+              <div className="login-board__username">
+                <label className="login-board__form-element">
+                  <span className="login-board__input-label">Username</span>
+                  <input
+                    className="login-board__input"
+                    value={displayName}
+                    type="text"
+                    onChange={(e) => setDisplayName(e.target.value)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                      if (e.key === "Enter") {
+                        handleLogin();
+                      }
+                    }}
+                    maxLength={20}
+                    aria-invalid={!displayName}
+                  />
+                </label>
+                <button className="login-board__randomize-button" onClick={() => setDisplayName(getRandomName())}>
+                  <RefreshIcon className="login-board__randomize-icon" />
+                </button>
+              </div>
+              {!displayName && (
+                <span role="alert" className="login-board__error-message">
+                  Username may not be empty
+                </span>
+              )}
+
+              <label className="login-board__form-element login-board__terms">
+                <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+                <span className="login-board__terms-label">
+                  <Trans
+                    i18nKey="LoginBoard.acceptTerms"
+                    components={{
+                      terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+                      privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+                    }}
+                  />
+                </span>
               </label>
-              <button className="login-board__randomize-button" onClick={() => setDisplayName(getRandomName())}>
-                <RefreshIcon className="login-board__randomize-icon" />
-              </button>
-            </div>
-            {!displayName && (
+            </fieldset>
+            {submitted && !termsAccepted && (
               <span role="alert" className="login-board__error-message">
-                Username may not be empty
+                You must accept the terms and privacy policy
               </span>
             )}
 
-            <label className="login-board__form-element login-board__terms">
-              <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
-              <span className="login-board__terms-label">
-                <Trans
-                  i18nKey="LoginBoard.acceptTerms"
-                  components={{
-                    terms: <Link to="/legal/termsAndConditions" target="_blank" />,
-                    privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
-                  }}
-                />
-              </span>
-            </label>
-          </fieldset>
-          {submitted && !termsAccepted && (
-            <span role="alert" className="login-board__error-message">
-              You must accept the terms and privacy policy
-            </span>
-          )}
-
-          <button className="login-board__anonymous-login-button" onClick={handleLogin}>
-            {t("LoginBoard.joinAnonymous")}
-          </button>
+            <button className="login-board__anonymous-login-button" onClick={handleLogin}>
+              {t("LoginBoard.joinAnonymous")}
+            </button>
+          </div>
         </div>
       </div>
     </div>
