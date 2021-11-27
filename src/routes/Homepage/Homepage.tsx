@@ -62,7 +62,7 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} className="homepage__start-link">
+              <Button href={newHref} color="primary">
                 <Trans i18nKey="Homepage.startButton" />
               </Button>
             </main>

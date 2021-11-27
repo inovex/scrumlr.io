@@ -211,25 +211,7 @@
 }
 
 .login-board__anonymous-login-button {
-  display: block;
   margin-top: 2em;
-
-  background: $color-planning-pink;
-  border-radius: 2em;
-  border: 0;
-  padding: 16px;
-
-  color: $color-white;
-  font-weight: bold;
-
-  transition: box-shadow 0.15s ease-in-out;
-  box-shadow: 0 0 0 0 rgba($color-black, 0.2);
-  cursor: pointer;
-}
-
-.login-board__anonymous-login-button:focus,
-.login-board__anonymous-login-button:hover {
-  box-shadow: 0 2px 16px 8px rgba($color-black, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {

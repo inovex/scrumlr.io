@@ -3,13 +3,14 @@ import classNames from "classnames";
 import "./Button.scss";
 
 export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
+  color?: "primary" | "secondary";
   leftIcon?: ReactElement<any, any>;
   rightIcon?: ReactElement<any, any>;
   hideLabel?: boolean;
   block?: boolean;
 }
 
-export var Button: FC<ButtonProps> = function({className, leftIcon, rightIcon, block = false, hideLabel, children, ...other}) {
+export var Button: FC<ButtonProps> = function ({className, color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) {
   const labelRef = useRef<HTMLSpanElement>(null);
   const [label, setLabel] = useState<string>("");
 
@@ -35,7 +36,7 @@ export var Button: FC<ButtonProps> = function({className, leftIcon, rightIcon, b
   }
 
   return (
-    <Component className={classNames("button", {"button--block": block}, className)} {...other} {...labelProps}>
+    <Component className={classNames("button", `button--${color}`, {"button--block": block}, className)} {...other} {...labelProps}>
       {leftIcon}
       <span ref={labelRef} className={classNames("button__label", {"button__label--hidden": hideLabel})}>
         {children}
@@ -43,4 +44,4 @@ export var Button: FC<ButtonProps> = function({className, leftIcon, rightIcon, b
       {rightIcon}
     </Component>
   );
-}
+};

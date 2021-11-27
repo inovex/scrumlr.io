@@ -10,6 +10,7 @@ import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
+import {Button} from "../../components/Button";
 
 export var LoginBoard = function () {
   const {t} = useTranslation();
@@ -97,9 +98,9 @@ export var LoginBoard = function () {
               </span>
             )}
 
-            <button className="login-board__anonymous-login-button" onClick={handleLogin}>
+            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
               {t("LoginBoard.joinAnonymous")}
-            </button>
+            </Button>
           </div>
         </div>
 
