@@ -1,21 +1,21 @@
 @import "constants/style";
 
 .login-board__dialog {
-  padding: 48px;
+  padding: 64px;
   color: $color-black;
-}
-
-.login-board__dialog > * {
-  flex: 1 1 0;
 }
 
 .login-board__illustration {
   display: none;
 }
 
+.login-board__logo {
+  margin-bottom: 1.5em;
+}
+
 .login-board__divider {
-  margin-top: 20px;
-  margin-bottom: 10px;
+  margin-top: 32px;
+  margin-bottom: 16px;
   padding: 0;
   overflow: visible;
   border: none;
@@ -131,8 +131,85 @@
   margin-left: 6px;
 }
 
-.login-board__terms {
-  margin-top: 0.8em;
+.login-board__checkbox {
+  opacity: 0;
+  z-index: -1;
+  height: 1px;
+  width: 1px;
+}
+
+.login-board__terms a {
+  color: $color-planning-pink;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-board__terms-label {
+  position: relative;
+  display: block;
+  padding-left: 1.5em;
+}
+
+// checkbox border
+.login-board__checkbox + .login-board__terms-label::before {
+  display: block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  border: 1px solid $color-backlog-blue;
+  background: $color-white;
+  cursor: pointer;
+  border-radius: 100%;
+  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+}
+
+.login-board__terms:hover .login-board__terms-label::before {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+}
+
+.login-board__terms:focus .login-board__terms-label::before {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+}
+
+// checkbox checkmark
+.login-board__checkbox + .login-board__terms-label::after {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  position: absolute;
+  top: 0.25em;
+  left: 0.25em;
+  bottom: 0;
+  right: 0;
+  background-color: rgba($color-backlog-blue, 0.75);
+  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+  transform: scale(0);
+  border-radius: 100%;
+}
+
+.login-board__checkbox:checked + .login-board__terms-label::after {
+  transform: scale(1);
+}
+
+.login-board__anonymous-login-button {
+  display: block;
+  margin-top: 2em;
+
+  background: $color-planning-pink;
+  border-radius: 2em;
+  border: 0;
+  padding: 16px;
+
+  color: $color-white;
+  font-weight: bold;
+
+  transition: background-color 0.15s ease-in-out;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -166,7 +243,7 @@
     justify-content: center;
     align-items: center;
 
-    gap: 84px;
+    gap: 64px;
     max-width: 1080px;
 
     padding: 48px;
@@ -175,7 +252,14 @@
     box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
   }
 
+  .login-board__dialog > * {
+    flex: 1 1 0;
+  }
+
   .login-board__illustration {
     display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0;
   }
 }

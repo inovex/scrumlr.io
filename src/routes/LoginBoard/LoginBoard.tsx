@@ -11,22 +11,26 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
 
-export var LoginBoard = function() {
+export var LoginBoard = function () {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(getRandomName());
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
-    await AuthenticationManager.signInAnonymously(displayName);
-    try {
-      navigate(location.state.from.pathname);
-    } catch (err) {
-      Toast.error(t("LoginBoard.errorOnRedirect"));
+    if (termsAccepted) {
+      await AuthenticationManager.signInAnonymously(displayName);
+      try {
+        navigate(location.state.from.pathname);
+      } catch (err) {
+        Toast.error(t("LoginBoard.errorOnRedirect"));
+      }
     }
+    setSubmitted(true);
   }
 
   // TODO https://dribbble.com/shots/7757250-Sign-up-revamp
@@ -37,7 +41,7 @@ export var LoginBoard = function() {
         <HeroIllustration className="login-board__illustration" />
 
         <div>
-          <ScrumlrLogo accentColorClassNames={["accent-color--pink"]} />
+          <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--pink"]} />
 
           <h1>Sign in to scrumlr.io</h1>
 
@@ -76,8 +80,8 @@ export var LoginBoard = function() {
             )}
 
             <label className="login-board__form-element login-board__terms">
-              <input type="checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
-              <span>
+              <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+              <span className="login-board__terms-label">
                 <Trans
                   i18nKey="LoginBoard.acceptTerms"
                   components={{
@@ -88,10 +92,17 @@ export var LoginBoard = function() {
               </span>
             </label>
           </fieldset>
+          {submitted && !termsAccepted && (
+            <span role="alert" className="login-board__error-message">
+              You must accept the terms and privacy policy
+            </span>
+          )}
 
-          <button onClick={handleLogin}>{t("LoginBoard.joinAnonymous")}</button>
+          <button className="login-board__anonymous-login-button" onClick={handleLogin}>
+            {t("LoginBoard.joinAnonymous")}
+          </button>
         </div>
       </div>
     </div>
   );
-}
+};
