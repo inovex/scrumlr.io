@@ -32,18 +32,19 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <button onClick={changeLanguage("de")}>
-                <German className="homepage__language" />
-              </button>
-
-              <button onClick={changeLanguage("en")}>
-                <English className="homepage__language" />
-              </button>
+              <Button leftIcon={<German />} hideLabel onClick={changeLanguage("de")}>
+                Deutsch
+              </Button>
+            </li>
+            <li>
+              <Button leftIcon={<English />} hideLabel onClick={changeLanguage("en")}>
+                English
+              </Button>
             </li>
 
             {Parse.User.current() && (
               <li>
-                <button onClick={onLogout}>Logout</button>
+                <Button onClick={onLogout}>Logout</Button>
               </li>
             )}
           </ul>
