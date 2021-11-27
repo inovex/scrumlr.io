@@ -229,6 +229,12 @@
     color: $color-middle-gray;
     background: $color-dark-two;
   }
+
+  @media #{$tablet} {
+    .login-board__form-wrapper {
+      background: $color-dark-two;
+    }
+  }
 }
 
 @media #{$tablet} {
@@ -241,12 +247,14 @@
   }
 
   .login-board__dialog {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
 
     display: flex;
     justify-content: center;
     align-items: center;
+
+    overflow: hidden;
   }
 
   .login-board__illustration {
@@ -258,7 +266,6 @@
 
   .login-board__form-wrapper {
     height: 100vh;
-    background: $color-dark-two;
     padding: 64px;
 
     display: flex;
@@ -267,6 +274,7 @@
 
     flex: 1 1 100%;
     box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
+    overflow: auto;
   }
 
   .login-board__form {

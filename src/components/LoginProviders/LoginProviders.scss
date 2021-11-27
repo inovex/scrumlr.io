@@ -18,7 +18,7 @@
 }
 
 .login-providers__button:not(:first-child) {
-  background: $color-middle-gray;
+  background: $color-light-gray;
 }
 
 .login-providers__button:first-child .login-providers__icon {
@@ -27,4 +27,10 @@
 
 .login-providers__button:first-child .login-providers__icon path {
   fill: $color-white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-providers__button:not(:first-child) {
+    background: $color-middle-gray;
+  }
 }

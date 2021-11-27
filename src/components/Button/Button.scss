@@ -21,11 +21,12 @@
   padding: 8px 16px;
 
   transition: box-shadow 0.15s ease-in-out;
-  box-shadow: 0 0 0 0 rgba($color-black, 0.2);
+  box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
 }
 
 .button--primary {
   background: $color-planning-pink;
+  box-shadow: 0 0 0 0 rgba($color-planning-pink, 0.2);
 }
 
 .button--secondary {
@@ -37,11 +38,19 @@
 }
 
 .button:hover {
-  box-shadow: 0 2px 12px 6px rgba($color-black, 0.3);
+  box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
+}
+
+.button.button--primary:hover {
+  box-shadow: 0 2px 12px 6px rgba($color-planning-pink, 0.3);
 }
 
 .button:focus {
-  box-shadow: 0 2px 16px 8px rgba($color-black, 0.4);
+  box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
+}
+
+.button.button--primary:focus {
+  box-shadow: 0 2px 16px 8px rgba($color-planning-pink, 0.4);
 }
 
 .button__label {
