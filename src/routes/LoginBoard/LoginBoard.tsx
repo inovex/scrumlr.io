@@ -38,8 +38,6 @@ export var LoginBoard = function () {
   return (
     <div className="login-board">
       <div className="login-board__dialog">
-        <HeroIllustration className="login-board__illustration" />
-
         <div className="login-board__form-wrapper">
           <div className="login-board__form">
             <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--pink"]} />
@@ -104,6 +102,8 @@ export var LoginBoard = function () {
             </button>
           </div>
         </div>
+
+        <HeroIllustration className="login-board__illustration" />
       </div>
     </div>
   );
