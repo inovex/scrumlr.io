@@ -79,6 +79,14 @@
   outline: none;
 
   background: $color-backlog-blue;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  box-shadow: 0 0 0 0 rgba($color-black, 0.4);
+}
+
+.login-board__username .login-board__randomize-button:focus,
+.login-board__username .login-board__randomize-button:hover {
+  box-shadow: 0 2px 8px 4px rgba($color-black, 0.4);
 }
 
 .login-board__randomize-icon {
@@ -212,7 +220,14 @@
   color: $color-white;
   font-weight: bold;
 
-  transition: background-color 0.15s ease-in-out;
+  transition: box-shadow 0.15s ease-in-out;
+  box-shadow: 0 0 0 0 rgba($color-black, 0.2);
+  cursor: pointer;
+}
+
+.login-board__anonymous-login-button:focus,
+.login-board__anonymous-login-button:hover {
+  box-shadow: 0 2px 16px 8px rgba($color-black, 0.4);
 }
 
 @media (prefers-color-scheme: dark) {

@@ -17,12 +17,14 @@
   color: $color-white;
   font-weight: bold;
 
-  transition: background-color 0.15s ease-in-out;
+  transition: box-shadow 0.15s ease-in-out;
+  box-shadow: 0 0 0 0 rgba($color-black, 0.2);
+  cursor: pointer;
 }
 
 .login-providers .login-providers__button:focus,
 .login-providers .login-providers__button:hover {
-  background: $color-planning-pink;
+  box-shadow: 0 2px 16px 8px rgba($color-black, 0.4);
 }
 
 .login-providers__icon {
