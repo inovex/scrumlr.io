@@ -1,10 +1,19 @@
 @import "constants/style";
 
 .hero-illustration {
+  --hero-iilustration-rows: 2;
+  --hero-illustration-columns: 3;
+}
+
+.hero-illustration__position-anchor {
+  position: relative;
+}
+
+.hero-illustration__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(var(--hero-illustration-columns), 1fr);
   // set max rows to display
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(var(--hero-iilustration-rows), 1fr);
   // set height of invisible rows
   grid-auto-rows: 0;
   // disable overflow
@@ -22,8 +31,31 @@
   height: 100%;
 }
 
+.hero-illustration__actionbar-user,
+.hero-illustration__actionbar-moderator {
+  display: none;
+}
+
 @media #{$tablet} {
-  .hero-illustration {
-    grid-template-rows: repeat(4, 1fr);
+  .hero-illustration__grid {
+    --hero-iilustration-rows: 4;
+  }
+
+  .hero-illustration__actionbar-user {
+    display: initial;
+
+    position: absolute;
+    width: 32%;
+    top: 25%;
+    left: -18%;
+  }
+
+  .hero-illustration__actionbar-moderator {
+    display: initial;
+
+    position: absolute;
+    width: 32%;
+    top: 10%;
+    right: -18%;
   }
 }

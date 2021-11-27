@@ -268,11 +268,8 @@
   }
 
   .login-board__illustration {
+    display: initial;
     flex: 0 1 540px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    gap: 0;
 
     padding: 64px;
   }

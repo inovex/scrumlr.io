@@ -54,7 +54,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 128px;
+  gap: 0;
   max-width: 1080px;
   padding: 0 $padding--default;
 }
@@ -142,8 +142,14 @@
     padding: $padding--large;
   }
 
+  .homepage__hero {
+    padding-left: 76px;
+    padding-right: 76px;
+  }
+
   .homepage__hero-content {
     flex-direction: row;
+    gap: 128px;
   }
 
   .homepage__illustration {
