@@ -11,6 +11,8 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
 import {Button} from "../../components/Button";
+import {TextInput} from "../../components/TextInput";
+import {TextInputLabel} from "../../components/TextInputLabel";
 
 export var LoginBoard = function () {
   const {t} = useTranslation();
@@ -53,12 +55,9 @@ export var LoginBoard = function () {
               <legend className="login-board__fieldset-legend">Sign in without registration</legend>
 
               <div className="login-board__username">
-                <label className="login-board__form-element">
-                  <span className="login-board__input-label">Username</span>
-                  <input
-                    className="login-board__input"
+                <TextInputLabel label="Username" className="login-board__form-element">
+                  <TextInput
                     value={displayName}
-                    type="text"
                     onChange={(e) => setDisplayName(e.target.value)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                       if (e.key === "Enter") {
@@ -68,7 +67,7 @@ export var LoginBoard = function () {
                     maxLength={20}
                     aria-invalid={!displayName}
                   />
-                </label>
+                </TextInputLabel>
                 <button className="login-board__randomize-button" onClick={() => setDisplayName(getRandomName())}>
                   <RefreshIcon className="login-board__randomize-icon" />
                 </button>
