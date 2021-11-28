@@ -64,10 +64,16 @@
 
 .homepage__hero-title-team {
   color: $color-backlog-blue;
+  background: linear-gradient(to right, #1955e5, #6592f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .homepage__hero-title-retrospective {
   color: $color-planning-pink;
+  background: linear-gradient(to right, #ea346b, #b32651);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .homepage__hero-text {
