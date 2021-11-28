@@ -20,8 +20,18 @@
   height: 48px;
   padding: 8px 16px;
 
-  transition: box-shadow 0.15s ease-in-out;
+  transition: box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
   box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
+}
+
+.button.button--outlined {
+  background: none;
+  border: 1px solid $color-backlog-blue;
+  box-shadow: none;
+}
+
+.button.button--primary.button--outlined {
+  border-color: $color-planning-pink;
 }
 
 .button--primary {
@@ -33,23 +43,32 @@
   background: $color-backlog-blue;
 }
 
+.button:disabled {
+  background: $color-middle-gray;
+}
+
+.button.button--outlined:disabled {
+  background: none;
+  border: 1px solid $color-middle-gray;
+}
+
 .button--block {
   display: flex;
 }
 
-.button:hover {
+.button:not(.button--outlined):not(:disabled):hover {
   box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
 }
 
-.button.button--primary:hover {
+.button:not(.button--outlined):not(:disabled).button--primary:hover {
   box-shadow: 0 2px 12px 6px rgba($color-planning-pink, 0.3);
 }
 
-.button:focus {
+.button:not(.button--outlined):not(:disabled):focus {
   box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
 }
 
-.button.button--primary:focus {
+.button:not(.button--outlined):not(:disabled).button--primary:focus {
   box-shadow: 0 2px 16px 8px rgba($color-planning-pink, 0.4);
 }
 

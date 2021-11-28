@@ -1,9 +1,7 @@
 {
   "NewBoard": {
-    "createNewBoard": "Create new Board",
-    "createNewBoardAnonymous": "Create new board anonymously",
-    "createBoardError": "You must be logged in to create a board. Reload the page and try again",
-    "logout": "Logout"
+    "boardName": "Board name",
+    "createNewBoard": "Create new Board"
   },
   "LoginBoard": {
     "errorOnRedirect": "An error occurred while redirecting you",
@@ -24,11 +22,13 @@
     "error": "Oops! Sign-in failed, please try again."
   },
   "AccessPolicySelection": {
-    "title": "Access policy",
+    "publicTitle": "Open",
+    "byPassphraseTitle": "Password protected",
+    "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
-    "public": "Access by URL without further verification.",
-    "byPassphrase": "Access by URL and passphrase.",
-    "manualVerification": "Admins of board can manually verify or reject each access request individually.",
+    "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
+    "byPassphrase": "Access by URL and passphrase. If you intend to write sensitive data and you won't collaborate simultaneously this will fit the best.",
+    "manualVerification": "Admins of board can manually verify or reject each user access request individually. This policy is the safest, since the admin can deny any unapproved access.",
     "generatePassphrase": "Generate random passphrase",
     "copyPassphraseToClipboard": "Copy passphrase to clipboard",
     "passphraseValidationError": "A passphrase must be set"

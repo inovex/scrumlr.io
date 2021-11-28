@@ -8,14 +8,19 @@ import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
+import {TextInputLabel} from "../../components/TextInputLabel";
+import {TextInput} from "../../components/TextInput";
+import {Button} from "../../components/Button";
+import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
-export var NewBoard = function() {
+export var NewBoard = function () {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const [boardName, setBoardName] = useState("Board Name");
-  const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
+  const [boardName, setBoardName] = useState<string | undefined>();
+  const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
+  const [extendedConfiguration, setExtendedConfiguration] = useState(false);
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
@@ -26,36 +31,78 @@ export var NewBoard = function() {
         };
       }
 
-      const boardId = await API.createBoard(
-        boardName,
-        {
-          type: AccessPolicy[accessPolicy],
-          ...additionalAccessPolicyOptions,
-        },
-        columnTemplates[columnTemplate]
-      );
-      navigate(`/board/${boardId}`);
+      if (columnTemplate) {
+        const boardId = await API.createBoard(
+          boardName,
+          {
+            type: AccessPolicy[accessPolicy],
+            ...additionalAccessPolicyOptions,
+          },
+          columnTemplates[columnTemplate].columns
+        );
+        navigate(`/board/${boardId}`);
+      }
     } else {
       Toast.error(t("NewBoard.createBoardError"));
     }
   }
 
-  const isCreatedBoardDisabled = accessPolicy === AccessPolicy.ByPassphrase && !passphrase;
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.ByPassphrase && !passphrase);
 
   return (
-    <div>
-      <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
+    <div className="new-board__wrapper">
+      <div className="new-board">
+        <div>
+          <ScrumlrLogo />
 
-      <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
+          {!extendedConfiguration && (
+            <div>
+              <h1>Choose a template</h1>
 
-      <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
-        {Object.keys(columnTemplates).map((key) => (
-          <option value={key}>{key}</option>
-        ))}
-      </select>
-      <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
-        {t("NewBoard.createNewBoard")}
-      </button>
+              <div className="new-board__mode-selection">
+                {Object.keys(columnTemplates).map((key) => (
+                  <label key={key} className="new-board__mode">
+                    <input className="new-board__mode-input" type="radio" name="mode" value={key} onChange={(e) => setColumnTemplate(e.target.value)} />
+                    <div className="new-board__mode-label">
+                      <div>
+                        <div className="new-board__mode-name">{columnTemplates[key].name}</div>
+                        <div className="new-board__mode-description">{columnTemplates[key].description}</div>
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {extendedConfiguration && (
+            <div>
+              <h1>Choose extended options</h1>
+
+              <TextInputLabel label={t("NewBoard.boardName")}>
+                <TextInput onChange={(e) => setBoardName(e.target.value)} />
+              </TextInputLabel>
+              <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
+            </div>
+          )}
+        </div>
+
+        <div className="new-board__actions">
+          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+            {t("NewBoard.createNewBoard")}
+          </Button>
+          {!extendedConfiguration && (
+            <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(true)}>
+              Extended configuration
+            </Button>
+          )}
+          {extendedConfiguration && (
+            <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+              Template selection
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
-}
+};

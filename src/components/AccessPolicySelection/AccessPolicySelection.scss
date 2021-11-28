@@ -1,8 +1,20 @@
 .access-policy-selection {
+  gap: 8px;
+
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
 .access-policy-selection__additional-settings {
   margin-top: 1em;
+}
+
+.access-policy-selection__access-policy + .access-policy-selection__access-policy {
+  margin-left: 8px;
+}
+
+.access-policy__details {
+  margin-top: 1em;
+  min-height: 160px;
+  max-width: 480px;
 }

@@ -1,9 +1,7 @@
 {
   "NewBoard": {
-    "createNewBoard": "Erstelle eine Sitzung",
-    "createNewBoardAnonymous": "Erstelle anonym eine Sitzung",
-    "createBoardError": "Du musst eingloggt sein um eine neue Sitzung erstellen zu können.",
-    "logout": "Ausloggen"
+    "boardName": "Sitzungsname",
+    "createNewBoard": "Erstelle eine Sitzung"
   },
   "LoginBoard": {
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
@@ -24,11 +22,13 @@
     "error": "Oops! Der Login hat nicht funktioniert. Bitte versuche es nochmal."
   },
   "AccessPolicySelection": {
-    "title": "Zugriffsberechtigung",
+    "publicTitle": "Offen",
+    "byPassphraseTitle": "Passwortgeschützt",
+    "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
-    "public": "Zugriff für alle Teilnehmer über die URL möglich.",
-    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt.",
-    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fälle sicher genug sein, da die URLs schwer zu erraten sind.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt. Dies ist gut geeignet, wenn man mit einer Gruppe nicht gleichzeitig zusammenarbeitet und Benutzer jederzeit beitreten können.",
+    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
     "passphraseValidationError": "Ein Passwort muss gesetzt sein!"
