@@ -58,14 +58,28 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
 
   return (
     <div className="access-policy-selection">
-      <div>
-        <Button className="access-policy-selection__access-policy" onClick={() => handlePolicyChange(AccessPolicy.Public)}>
+      <h2 className="access-policy-selection__title">Access policy</h2>
+
+      <div className="access-policy-selection__tabs">
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.Public ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.Public)}
+        >
           {t("AccessPolicySelection.publicTitle")}
         </Button>
-        <Button className="access-policy-selection__access-policy" onClick={() => handlePolicyChange(AccessPolicy.ByPassphrase)}>
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.ByPassphrase ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.ByPassphrase)}
+        >
           {t("AccessPolicySelection.byPassphraseTitle")}
         </Button>
-        <Button className="access-policy-selection__access-policy" onClick={() => handlePolicyChange(AccessPolicy.ManualVerification)}>
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.ManualVerification ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.ManualVerification)}
+        >
           {t("AccessPolicySelection.manualVerificationTitle")}
         </Button>
       </div>

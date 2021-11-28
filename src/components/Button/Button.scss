@@ -29,11 +29,13 @@
 
 .button.button--outlined {
   background: none;
+  color: $color-backlog-blue;
   border: 1px solid $color-backlog-blue;
   box-shadow: none;
 }
 
 .button.button--primary.button--outlined {
+  color: $color-planning-pink;
   border-color: $color-planning-pink;
 }
 
@@ -52,6 +54,7 @@
 
 .button.button--outlined:disabled {
   background: none;
+  color: $color-middle-gray;
   border: 1px solid $color-middle-gray;
 }
 
@@ -88,4 +91,14 @@
 
   width: 16px;
   height: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button.button--outlined {
+    color: $color-white;
+  }
+
+  .button.button--primary.button--outlined {
+    color: $color-white;
+  }
 }

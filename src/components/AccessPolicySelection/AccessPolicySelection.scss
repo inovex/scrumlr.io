@@ -2,9 +2,15 @@
 
 .access-policy-selection {
   gap: 8px;
-
-  margin-top: 2em;
   margin-bottom: 1em;
+}
+
+.access-policy-selection__title {
+  margin-top: 1.5em;
+}
+
+.access-policy-selection__tabs {
+  display: flex;
 }
 
 .access-policy-selection__additional-settings {
@@ -18,10 +24,14 @@
 .access-policy__details {
   margin-top: 1em;
   min-height: 182px;
+  width: 100%;
   max-width: 480px;
+  font-size: 14px;
+  line-height: 1.4em;
 
   padding: 16px;
   border-radius: 24px;
 
-  border: 1px solid $color-middle-gray;
+  background: $color-dark-mode-note;
+  box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
 }

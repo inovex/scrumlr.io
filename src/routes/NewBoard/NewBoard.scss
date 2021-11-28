@@ -6,17 +6,18 @@
   align-items: center;
 
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .new-board {
   position: relative;
   color: $color-black;
+  padding: $padding--default;
 }
 
 .new-board__mode-selection {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: auto;
   gap: 16px;
 
@@ -52,10 +53,12 @@
   align-items: center;
   cursor: pointer;
 
-  background: $color-dark-mode-note;
+  color: $color-black;
+  background: $color-white;
   border-radius: 16px;
   border: 1px solid transparent;
 
+  width: 100%;
   max-width: 320px;
   min-height: 76px;
 
@@ -64,6 +67,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+
+  box-shadow: 0 2px 6px 4px rgba($color-black, 0.1);
 }
 
 .new-board__mode-name {
@@ -84,6 +89,7 @@
 }
 
 .new-board__actions {
+  display: flex;
   margin-top: 2em;
 }
 
@@ -94,5 +100,17 @@
 @media (prefers-color-scheme: dark) {
   .new-board {
     color: $color-white;
+  }
+
+  .new-board__mode-label {
+    color: $color-white;
+    background: $color-dark-mode-note;
+    box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
+}
+
+@media #{$tablet} {
+  .new-board__mode-selection {
+    grid-template-columns: 1fr 1fr;
   }
 }

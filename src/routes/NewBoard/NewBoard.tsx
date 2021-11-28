@@ -82,6 +82,7 @@ export var NewBoard = function () {
               <TextInputLabel label={t("NewBoard.boardName")}>
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
               </TextInputLabel>
+
               <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
             </div>
           )}
