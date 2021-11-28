@@ -1,7 +1,9 @@
+@import "constants/style";
+
 .access-policy-selection {
   gap: 8px;
 
-  margin-top: 1em;
+  margin-top: 2em;
   margin-bottom: 1em;
 }
 
@@ -15,6 +17,11 @@
 
 .access-policy__details {
   margin-top: 1em;
-  min-height: 160px;
+  min-height: 182px;
   max-width: 480px;
+
+  padding: 16px;
+  border-radius: 24px;
+
+  border: 1px solid $color-middle-gray;
 }
