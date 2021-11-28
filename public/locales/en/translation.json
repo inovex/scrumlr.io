@@ -1,7 +1,11 @@
 {
   "NewBoard": {
     "boardName": "Board name",
-    "createNewBoard": "Create new Board"
+    "createNewBoard": "Create new Board",
+    "extendedConfigurationButton": "Extended configuration",
+    "basicConfigurationButton": "Template selection",
+    "extendedConfigurationTitle": "Extended configuration",
+    "basicConfigurationTitle": "Choose a template"
   },
   "LoginBoard": {
     "errorOnRedirect": "An error occurred while redirecting you",
@@ -22,6 +26,7 @@
     "error": "Oops! Sign-in failed, please try again."
   },
   "AccessPolicySelection": {
+    "title": "Access policy",
     "publicTitle": "Open",
     "byPassphraseTitle": "Password protected",
     "manualVerificationTitle": "Manual approval",

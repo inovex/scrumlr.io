@@ -58,7 +58,7 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
 
   return (
     <div className="access-policy-selection">
-      <h2 className="access-policy-selection__title">Access policy</h2>
+      <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
         <Button

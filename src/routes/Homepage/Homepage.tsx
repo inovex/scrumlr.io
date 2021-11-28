@@ -28,7 +28,7 @@ export const Homepage = withTranslation()(() => {
     <div className="homepage">
       <div className="homepage__hero">
         <header className="homepage__header">
-          <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--pink"]} />
+          <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
 
           <ul className="homepage__settings">
             <li>

@@ -32,6 +32,15 @@
   padding: 16px;
   border-radius: 24px;
 
-  background: $color-dark-mode-note;
-  box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  color: $color-black;
+  background: $color-white;
+  box-shadow: 0 2px 6px 4px rgba($color-black, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .access-policy__details {
+    color: $color-white;
+    background: $color-dark-mode-note;
+    box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
 }

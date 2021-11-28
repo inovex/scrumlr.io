@@ -37,14 +37,13 @@ export var LoginBoard = function () {
     setSubmitted(true);
   }
 
-  // TODO https://dribbble.com/shots/7757250-Sign-up-revamp
-  // TODO https://dribbble.com/shots/11879454-Sign-Up-Form
+  // https://dribbble.com/shots/7757250-Sign-up-revamp
   return (
     <div className="login-board">
       <div className="login-board__dialog">
         <div className="login-board__form-wrapper">
           <div className="login-board__form">
-            <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--pink"]} />
+            <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
 
             <h1>Sign in to scrumlr.io</h1>
 

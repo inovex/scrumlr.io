@@ -53,11 +53,11 @@ export var NewBoard = function () {
     <div className="new-board__wrapper">
       <div className="new-board">
         <div>
-          <ScrumlrLogo />
+          <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
 
           {!extendedConfiguration && (
             <div>
-              <h1>Choose a template</h1>
+              <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
 
               <div className="new-board__mode-selection">
                 {Object.keys(columnTemplates).map((key) => (
@@ -77,7 +77,7 @@ export var NewBoard = function () {
 
           {extendedConfiguration && (
             <div>
-              <h1>Choose extended options</h1>
+              <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
 
               <TextInputLabel label={t("NewBoard.boardName")}>
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
@@ -94,12 +94,12 @@ export var NewBoard = function () {
           </Button>
           {!extendedConfiguration && (
             <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
-              Extended configuration
+              {t("NewBoard.extendedConfigurationButton")}
             </Button>
           )}
           {extendedConfiguration && (
             <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
-              Template selection
+              {t("NewBoard.basicConfigurationButton")}
             </Button>
           )}
         </div>
