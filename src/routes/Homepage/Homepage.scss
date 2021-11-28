@@ -1,0 +1,202 @@
+@import "constants/style";
+
+.homepage {
+  background: $color-light-gray;
+}
+
+.homepage__hero {
+  background: $color-white;
+  min-height: 100vh;
+}
+
+.homepage__header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: $padding--default;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.homepage__settings {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage__settings > li {
+  display: inline;
+}
+
+.homepage__settings > li + li {
+  margin-left: 4px;
+}
+
+.homepage__hero-content-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100%;
+  min-height: 100vh;
+  padding-top: 86px;
+  padding-bottom: $padding--large;
+}
+
+.homepage__hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  max-width: 1080px;
+  padding: 0 $padding--default;
+}
+
+.homepage__hero-content > * {
+  flex: 1 1 0;
+}
+
+.homepage__hero-title {
+  font-size: clamp(36px, 4vw, 64px);
+}
+
+.homepage__hero-title-team {
+  color: $color-backlog-blue;
+  background: linear-gradient(to right, #1955e5, #6592f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.homepage__hero-title-retrospective {
+  color: $color-planning-pink;
+  background: linear-gradient(to right, #ea346b, #b32651);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.homepage__hero-text {
+  margin-bottom: 3em;
+}
+
+.homepage__illustration {
+  order: -1;
+}
+
+.homepage__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  text-align: left;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: $padding--large;
+}
+
+.homepage__footer > * {
+  flex: 1 1 auto;
+}
+
+.homepage__app-info {
+  order: 1;
+}
+
+.homepage__footer-developers {
+  flex: 2 2 auto;
+  color: $color-dark-gray;
+  font-size: 12px;
+  order: -1;
+}
+
+.homepage__footer-links {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.homepage__footer-link {
+  display: block;
+  color: $color-dark-gray;
+  font-size: 12px;
+}
+
+.homepage__footer-link a {
+  color: currentColor;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .homepage {
+    background: $color-dark-one;
+  }
+
+  .homepage__hero {
+    background: $color-dark-mode;
+  }
+
+  .homepage__hero-title {
+    color: $color-white;
+  }
+
+  .homepage__hero-text {
+    color: $color-white;
+  }
+
+  .homepage__footer-link {
+    color: $color-middle-gray;
+  }
+
+  .homepage__footer-developers {
+    color: $color-middle-gray;
+  }
+}
+
+@media #{$tablet} {
+  .homepage__header {
+    padding: $padding--large;
+  }
+
+  .homepage__hero {
+    padding-left: 76px;
+    padding-right: 76px;
+  }
+
+  .homepage__hero-content {
+    flex-direction: row;
+    gap: 128px;
+  }
+
+  .homepage__illustration {
+    order: initial;
+  }
+
+  .homepage__hero-content-wrapper {
+    padding-top: 0;
+  }
+
+  .homepage__footer {
+    flex-direction: row;
+    text-align: right;
+  }
+
+  .homepage__app-info {
+    order: initial;
+  }
+
+  .homepage__footer-developers {
+    text-align: center;
+    order: initial;
+  }
+
+  .homepage__footer-link {
+    display: inline;
+  }
+
+  .homepage__footer-link + .homepage__footer-link::before {
+    content: "|";
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}

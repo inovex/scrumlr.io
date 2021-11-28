@@ -6,7 +6,7 @@ import "./JoinRequest.scss";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../BoardUsers";
 
-export var JoinRequest = function({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
+export var JoinRequest = function ({joinRequests}: {joinRequests: JoinRequestClientModel[]}) {
   const {t} = useTranslation();
 
   const handleAccept = (boardId: string, userIds: string[]) => () => {
@@ -67,4 +67,4 @@ export var JoinRequest = function({joinRequests}: {joinRequests: JoinRequestClie
       )}
     </div>
   );
-}
+};

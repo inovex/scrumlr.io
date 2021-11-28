@@ -13,7 +13,7 @@ interface IAuthData {
   id_token?: string;
 }
 
-export var AuthRedirect = function() {
+export var AuthRedirect = function () {
   const {t} = useTranslation();
 
   const [status, setStatus] = useState<{error?: string; redirect?: string}>({});
@@ -71,4 +71,4 @@ export var AuthRedirect = function() {
   }
 
   return <LoadingScreen />;
-}
+};

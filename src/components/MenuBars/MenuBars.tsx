@@ -20,7 +20,7 @@ import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 
 import "./MenuBars.scss";
 
-export var MenuBars = function() {
+export var MenuBars = function () {
   const {t} = useTranslation();
 
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -128,4 +128,4 @@ export var MenuBars = function() {
       )}
     </aside>
   );
-}
+};
