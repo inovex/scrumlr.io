@@ -10,17 +10,17 @@ import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as ColumnIcon} from "assets/icon-column.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
-import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {Link} from "react-router-dom";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
+import {VoteConfigurationButton} from "./MenuItem/variants/VoteConfigurationButton";
 
 import "./MenuBars.scss";
 
-export var MenuBars = function() {
+export var MenuBars = function () {
   const {t} = useTranslation();
 
   const [showAdminMenu, toggleMenus] = useState(false);
@@ -38,13 +38,6 @@ export var MenuBars = function() {
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
   const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
-
-  const toggleVoting = (active: boolean) => {
-    if (active) {
-      store.dispatch(ActionFactory.addVoteConfiguration({boardId: state.boardId, voteLimit: 5, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true}));
-    }
-    store.dispatch(ActionFactory.editBoard({id: state.boardId, voting: active ? "active" : "disabled"}));
-  };
 
   const toggleModeration = (active: boolean) => {
     store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
@@ -93,15 +86,7 @@ export var MenuBars = function() {
               onToggle={() => null}
             />
             <TimerToggleButton tabIndex={TabIndex.AdminMenu + 1} />
-            <MenuToggle
-              value={state.voting === "active"}
-              direction="left"
-              toggleStartLabel={t("MenuBars.startVoting")}
-              toggleStopLabel={t("MenuBars.stopVoting")}
-              icon={VoteIcon}
-              onToggle={toggleVoting}
-              tabIndex={TabIndex.AdminMenu + 10}
-            />
+            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 2} />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
@@ -128,4 +113,4 @@ export var MenuBars = function() {
       )}
     </aside>
   );
-}
+};
