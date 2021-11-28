@@ -1,9 +1,116 @@
-.new-board__input {
-  border: none;
-  border-bottom: 1px solid #adadad;
-  font-size: 16px;
+@import "constants/style";
+
+.new-board__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  min-height: 100vh;
 }
 
-.new-board > * {
-  margin: 10px;
+.new-board {
+  position: relative;
+  color: $color-black;
+  padding: $padding--default;
+}
+
+.new-board__mode-selection {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  gap: 16px;
+
+  margin-top: 1em;
+}
+
+.new-board__mode-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  opacity: 0;
+  z-index: -1;
+  height: 1px;
+  width: 1px;
+}
+
+.new-board__mode-input:checked + .new-board__mode-label {
+  border: 1px solid $color-backlog-blue;
+}
+
+.new-board__mode-input + .new-board__mode-label:hover {
+  box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
+}
+
+.new-board__mode-input + .new-board__mode-label:focus {
+  box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
+}
+
+.new-board__mode-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  color: $color-black;
+  background: $color-white;
+  border-radius: 16px;
+  border: 1px solid transparent;
+
+  width: 100%;
+  max-width: 320px;
+  min-height: 76px;
+
+  padding: $padding--default;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 6px 4px rgba($color-black, 0.1);
+}
+
+.new-board__mode-name {
+  font-weight: bold;
+  text-align: center;
+}
+
+.new-board__mode-description {
+  margin-top: 0.4em;
+
+  font-size: 0.8em;
+  text-align: center;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 292px;
+}
+
+.new-board__actions {
+  display: flex;
+  margin-top: 2em;
+}
+
+.new-board__action + .new-board__action {
+  margin-left: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .new-board {
+    color: $color-white;
+  }
+
+  .new-board__mode-label {
+    color: $color-white;
+    background: $color-dark-mode-note;
+    box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
+}
+
+@media #{$tablet} {
+  .new-board__mode-selection {
+    grid-template-columns: 1fr 1fr;
+  }
 }

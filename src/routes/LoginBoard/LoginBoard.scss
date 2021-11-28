@@ -1,0 +1,230 @@
+@import "constants/style";
+
+.login-board__dialog {
+  color: $color-black;
+}
+
+.login-board__illustration {
+  display: none;
+}
+
+.login-board__form-wrapper {
+  padding: $padding--default;
+}
+
+.login-board__logo {
+  margin-bottom: 1.5em;
+}
+
+.login-board__divider {
+  margin-top: 32px;
+  margin-bottom: 16px;
+  padding: 0;
+  overflow: visible;
+  border: none;
+  border-top: 1px solid $color-middle-gray;
+  color: $color-middle-gray;
+  text-align: center;
+}
+
+.login-board__divider::after {
+  content: attr(data-label);
+  display: inline-block;
+  position: relative;
+  top: -0.625em;
+  padding: 0 16px;
+  background: $color-white;
+}
+
+.login-board__fieldset {
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+
+.login-board__fieldset-legend {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.login-board__username {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.login-board__username .login-board__form-element {
+  flex: 1 1 100%;
+}
+
+.login-board__username .login-board__randomize-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex: 0 0 calc(1em + 16px);
+  width: calc(1em + 16px);
+  height: calc(1em + 16px);
+  border-radius: 100%;
+  border: none;
+  outline: none;
+
+  background: $color-backlog-blue;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+  box-shadow: 0 0 0 0 rgba($color-black, 0.4);
+}
+
+.login-board__username .login-board__randomize-button:focus,
+.login-board__username .login-board__randomize-button:hover {
+  box-shadow: 0 2px 8px 4px rgba($color-black, 0.4);
+}
+
+.login-board__randomize-icon {
+  height: 16px;
+  width: 16px;
+  color: $color-white;
+}
+
+.login-board__checkbox {
+  opacity: 0;
+  z-index: -1;
+  height: 1px;
+  width: 1px;
+}
+
+.login-board__terms a {
+  color: $color-planning-pink;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.login-board__terms-label {
+  position: relative;
+  display: block;
+  padding-left: 1.5em;
+}
+
+// checkbox border
+.login-board__checkbox + .login-board__terms-label::before {
+  display: block;
+  content: "";
+  width: 1em;
+  height: 1em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  border: 1px solid $color-backlog-blue;
+  background: $color-white;
+  cursor: pointer;
+  border-radius: 100%;
+  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+}
+
+.login-board__terms:hover .login-board__terms-label::before {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+}
+
+.login-board__terms:focus .login-board__terms-label::before {
+  box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+}
+
+// checkbox checkmark
+.login-board__checkbox + .login-board__terms-label::after {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  position: absolute;
+  top: 0.25em;
+  left: 0.25em;
+  bottom: 0;
+  right: 0;
+  background-color: rgba($color-backlog-blue, 0.75);
+  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+  transform: scale(0);
+  border-radius: 100%;
+}
+
+.login-board__checkbox:checked + .login-board__terms-label::after {
+  transform: scale(1);
+}
+
+.login-board__anonymous-login-button {
+  margin-top: 2em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-board__dialog {
+    color: $color-white;
+    background: #1a2232;
+  }
+
+  .login-board__divider {
+    border-color: $color-middle-gray;
+    color: $color-middle-gray;
+  }
+
+  .login-board__divider::after {
+    color: $color-middle-gray;
+    background: $color-dark-two;
+  }
+
+  @media #{$tablet} {
+    .login-board__form-wrapper {
+      background: $color-dark-two;
+    }
+  }
+}
+
+@media #{$tablet} {
+  .login-board {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+  }
+
+  .login-board__dialog {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+  }
+
+  .login-board__illustration {
+    display: initial;
+    flex: 0 1 640px;
+
+    padding: 64px;
+  }
+
+  .login-board__form-wrapper {
+    height: 100vh;
+    padding: 64px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex: 1 1 100%;
+    box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
+    overflow: auto;
+  }
+
+  .login-board__form {
+    max-width: 640px;
+  }
+}

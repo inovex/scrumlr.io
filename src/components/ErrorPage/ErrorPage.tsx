@@ -7,7 +7,7 @@ export interface ErrorPageProps {
   originURL: string;
 }
 
-export var ErrorPage = function({errorMessage, originURL}: ErrorPageProps) {
+export var ErrorPage = function ({errorMessage, originURL}: ErrorPageProps) {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
@@ -16,13 +16,13 @@ export var ErrorPage = function({errorMessage, originURL}: ErrorPageProps) {
   };
   return (
     <section className="error-page">
-        <span>{errorMessage}</span>
-        <button data-testid="home-button" onClick={redirect("/")}>
-          {t("ErrorPage.navigateHome")}
-        </button>
-        <button data-testid="back-button" onClick={redirect(originURL)}>
-          {t("ErrorPage.navigateBack")}
-        </button>
-      </section>
+      <span>{errorMessage}</span>
+      <button data-testid="home-button" onClick={redirect("/")}>
+        {t("ErrorPage.navigateHome")}
+      </button>
+      <button data-testid="back-button" onClick={redirect(originURL)}>
+        {t("ErrorPage.navigateBack")}
+      </button>
+    </section>
   );
-}
+};

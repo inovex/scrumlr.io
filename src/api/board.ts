@@ -12,8 +12,8 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: (name: string, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
-    callAPI<{columns: {name: string; hidden: boolean}[]; name: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
+  createBoard: (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
+    callAPI<{columns: {name: string; hidden: boolean}[]; name?: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
 
   /**
    * Edits the board with the specified parameters.
