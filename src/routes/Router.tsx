@@ -14,10 +14,11 @@ const Router = function () {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
-        <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
-        <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        <Route path="/" element={<Homepage />}>
+          <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
+          <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
+          <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        </Route>
         <Route
           path="/new"
           element={

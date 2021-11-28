@@ -9,7 +9,7 @@ import "./Portal.scss";
 export interface PortalProps {
   children: React.ReactNode;
   onClose?: () => void;
-  darkBackground: boolean;
+  darkBackground?: boolean;
   hiddenOverflow?: boolean;
   centered?: boolean;
   disabledPadding?: boolean;
@@ -18,7 +18,7 @@ export interface PortalProps {
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal = ({onClose, children, darkBackground, hiddenOverflow, centered, disabledPadding}: PortalProps) => {
+export const Portal = ({onClose, children, darkBackground = false, hiddenOverflow, centered, disabledPadding}: PortalProps) => {
   const closeable = Boolean(onClose);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
