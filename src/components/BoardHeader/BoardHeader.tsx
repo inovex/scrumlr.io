@@ -47,7 +47,7 @@ export var BoardHeader: VFC<BoardHeaderProps> = function (props) {
             <span>{props.boardstatus}</span>
           </div>
           <div className="board-header__name-container">
-            <h1 className="board-header__name">{props.name}</h1>
+            <h1 className="board-header__name">{props.name || "scrumlr.io"}</h1>
             <SettingsIcon className="board-header__settings-icon" />
           </div>
         </button>
