@@ -1,8 +1,17 @@
 @import "constants/style";
 
 .legal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  overflow: scroll;
+
   width: 100%;
   max-width: 960px;
+  margin: 0 auto;
 
   background: $color-dark-mode-note--hover;
   border-radius: 16px;

@@ -56,8 +56,10 @@
 }
 
 .portal__content {
-  height: fit-content;
-  width: fit-content;
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
 }
 
 .portal__frame--hiddenOverflow {
