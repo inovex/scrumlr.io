@@ -2,6 +2,8 @@ import {useTranslation, withTranslation} from "react-i18next";
 import {FC, useEffect, useState} from "react";
 import "./Legal.scss";
 import {generatePath} from "react-router";
+import {Link} from "react-router-dom";
+import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
 const marked = require("marked");
 
@@ -9,7 +11,7 @@ export interface LegalProps {
   document: "privacyPolicy" | "termsAndConditions" | "cookiePolicy";
 }
 
-const LegalWithoutTranslation: FC<LegalProps> = function({document}) {
+const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
   const {i18n} = useTranslation();
   const [text, setText] = useState<string>("");
 
@@ -29,9 +31,12 @@ const LegalWithoutTranslation: FC<LegalProps> = function({document}) {
 
   return (
     <div className="legal">
+      <Link to="/">
+        <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+      </Link>
       <div className="legal__text" dangerouslySetInnerHTML={{__html: markdownText}} />
     </div>
   );
-}
+};
 
 export const Legal = withTranslation()(LegalWithoutTranslation);

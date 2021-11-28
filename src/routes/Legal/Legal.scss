@@ -7,8 +7,18 @@
   padding: $padding--default;
 }
 
+.legal a {
+  color: $color-planning-pink;
+}
+
 .legal__text {
   text-align: justify;
+}
+
+@media (prefers-color-scheme: dark) {
+  .legal {
+    color: $color-white;
+  }
 }
 
 @media #{$tablet} {
