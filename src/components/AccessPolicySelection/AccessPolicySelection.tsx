@@ -6,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
+import {ValidationError} from "../ValidationError";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -36,13 +37,17 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
           <TextInputLabel label={t("AccessPolicySelection.passphrase")}>
             <TextInput data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
           </TextInputLabel>
-          <Button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
-            {t("AccessPolicySelection.generatePassphrase")}
-          </Button>
-          <Button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
-            {t("AccessPolicySelection.copyPassphraseToClipboard")}
-          </Button>
-          {!passphrase && <div>{t("AccessPolicySelection.passphraseValidationError")}</div>}
+          {3 > 5 && (
+            <>
+              <Button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
+                {t("AccessPolicySelection.generatePassphrase")}
+              </Button>
+              <Button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
+                {t("AccessPolicySelection.copyPassphraseToClipboard")}
+              </Button>
+            </>
+          )}
+          {!passphrase && <ValidationError>{t("AccessPolicySelection.passphraseValidationError")}</ValidationError>}
         </>
       );
       break;

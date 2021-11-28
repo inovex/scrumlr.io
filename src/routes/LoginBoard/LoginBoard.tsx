@@ -13,6 +13,7 @@ import "./LoginBoard.scss";
 import {Button} from "../../components/Button";
 import {TextInput} from "../../components/TextInput";
 import {TextInputLabel} from "../../components/TextInputLabel";
+import {ValidationError} from "../../components/ValidationError";
 
 export var LoginBoard = function () {
   const {t} = useTranslation();
@@ -72,11 +73,7 @@ export var LoginBoard = function () {
                   <RefreshIcon className="login-board__randomize-icon" />
                 </button>
               </div>
-              {!displayName && (
-                <span role="alert" className="login-board__error-message">
-                  Username may not be empty
-                </span>
-              )}
+              {!displayName && <ValidationError>Username may not be empty</ValidationError>}
 
               <label className="login-board__form-element login-board__terms">
                 <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
@@ -91,11 +88,7 @@ export var LoginBoard = function () {
                 </span>
               </label>
             </fieldset>
-            {submitted && !termsAccepted && (
-              <span role="alert" className="login-board__error-message">
-                You must accept the terms and privacy policy
-              </span>
-            )}
+            {submitted && !termsAccepted && <ValidationError>You must accept the terms and privacy policy</ValidationError>}
 
             <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
               {t("LoginBoard.joinAnonymous")}
