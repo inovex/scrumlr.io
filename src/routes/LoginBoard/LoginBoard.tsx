@@ -43,16 +43,18 @@ export var LoginBoard = function () {
       <div className="login-board__dialog">
         <div className="login-board__form-wrapper">
           <div className="login-board__form">
-            <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+            <Link to="/">
+              <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+            </Link>
 
-            <h1>Sign in to scrumlr.io</h1>
+            <h1>{t("LoginBoard.title")}</h1>
 
             <LoginProviders originURL={location.state.from.pathname} />
 
             <hr className="login-board__divider" data-label="or" />
 
             <fieldset className="login-board__fieldset">
-              <legend className="login-board__fieldset-legend">Sign in without registration</legend>
+              <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
 
               <div className="login-board__username">
                 <TextInputLabel label="Username" className="login-board__form-element">
@@ -72,7 +74,7 @@ export var LoginBoard = function () {
                   <RefreshIcon className="login-board__randomize-icon" />
                 </button>
               </div>
-              {!displayName && <ValidationError>Username may not be empty</ValidationError>}
+              {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
 
               <label className="login-board__form-element login-board__terms">
                 <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
@@ -87,10 +89,10 @@ export var LoginBoard = function () {
                 </span>
               </label>
             </fieldset>
-            {submitted && !termsAccepted && <ValidationError>You must accept the terms and privacy policy</ValidationError>}
+            {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
             <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
-              {t("LoginBoard.joinAnonymous")}
+              {t("LoginBoard.login")}
             </Button>
           </div>
         </div>

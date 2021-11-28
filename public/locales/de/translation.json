@@ -8,8 +8,12 @@
     "basicConfigurationTitle": "Wähle eine Vorlage"
   },
   "LoginBoard": {
+    "title": "Registrierung bei scrumlr.io",
+    "anonymousLogin": "Nehme anonym an der Sitzung teil",
+    "usernameValidationError": "Der Benutzername darf nicht leer sein",
+    "termsValidationError": "Du musst den AGBs und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "joinAnonymous": "Nehme anonym an der Sitzung teil",
+    "login": "Registrieren",
     "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu"
   },
   "Board": {
@@ -156,6 +160,7 @@
     "timerCancelled": "Der Alarm wurde abgebrochen!"
   },
   "Homepage": {
+    "developers": "© 2021, mit ❤️von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte mit einem Klick deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",

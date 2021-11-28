@@ -8,6 +8,7 @@ import {AppInfo} from "components/AppInfo";
 import Parse from "parse";
 import {HeroIllustration} from "components/HeroIllustration";
 import {Button} from "../../components/Button";
+import {InovexAnchor} from "./InovexAnchor";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
@@ -75,6 +76,15 @@ export const Homepage = withTranslation()(() => {
 
       <footer className="homepage__footer">
         <AppInfo className="homepage__app-info" />
+
+        <div className="homepage__footer-developers">
+          <Trans
+            i18nKey="Homepage.developers"
+            components={{
+              inovex: <InovexAnchor />,
+            }}
+          />
+        </div>
 
         <ul className="homepage__footer-links">
           <li className="homepage__footer-link">

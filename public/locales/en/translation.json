@@ -8,8 +8,12 @@
     "basicConfigurationTitle": "Choose a template"
   },
   "LoginBoard": {
+    "title": "Sign in to scrumlr.io",
+    "anonymousLogin": "Join board anonymously",
+    "usernameValidationError": "Username may not be empty",
+    "termsValidationError": "You must accept the terms and privacy policy",
     "errorOnRedirect": "An error occurred while redirecting you",
-    "joinAnonymous": "Join board anonymously",
+    "login": "Sign in",
     "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>"
   },
   "Board": {
@@ -156,6 +160,7 @@
     "timerCancelled": "Timer cancelled!"
   },
   "Homepage": {
+    "developers": "© 2021, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first session with just one click - no registration required and completely free.",
     "startButton": "Start now",
