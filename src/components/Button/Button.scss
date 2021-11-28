@@ -4,8 +4,7 @@
   display: inline-flex;
   gap: 8px;
   align-items: center;
-
-  cursor: pointer;
+  cursor: initial;
 
   background: $color-backlog-blue;
 
@@ -22,6 +21,10 @@
 
   transition: box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
   box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
+}
+
+.button:not(:disabled) {
+  cursor: pointer;
 }
 
 .button.button--outlined {
@@ -56,19 +59,19 @@
   display: flex;
 }
 
-.button:not(.button--outlined):not(:disabled):hover {
+.button:not(:disabled):hover {
   box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
 }
 
-.button:not(.button--outlined):not(:disabled).button--primary:hover {
+.button:not(:disabled).button--primary:hover {
   box-shadow: 0 2px 12px 6px rgba($color-planning-pink, 0.3);
 }
 
-.button:not(.button--outlined):not(:disabled):focus {
+.button:not(:disabled):focus {
   box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
 }
 
-.button:not(.button--outlined):not(:disabled).button--primary:focus {
+.button:not(:disabled).button--primary:focus {
   box-shadow: 0 2px 16px 8px rgba($color-planning-pink, 0.4);
 }
 

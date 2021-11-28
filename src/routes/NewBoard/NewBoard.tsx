@@ -92,7 +92,7 @@ export var NewBoard = function () {
             {t("NewBoard.createNewBoard")}
           </Button>
           {!extendedConfiguration && (
-            <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(true)}>
+            <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
               Extended configuration
             </Button>
           )}
