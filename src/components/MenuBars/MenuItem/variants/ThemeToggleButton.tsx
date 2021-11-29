@@ -4,6 +4,7 @@ import "../MenuItem.scss";
 import {TabIndex} from "constants/tabIndex";
 import {ReactComponent as LightMode} from "assets/icon-lightmode.svg";
 import {ReactComponent as DarkMode} from "assets/icon-darkmode.svg";
+import {useTranslation} from "react-i18next";
 
 type ThemeToggleButtonProps = {
   direction: "left" | "right";
@@ -11,9 +12,10 @@ type ThemeToggleButtonProps = {
   tabIndex?: number;
 };
 
-export var ThemeToggleButton = function(props: ThemeToggleButtonProps) {
+export var ThemeToggleButton = function (props: ThemeToggleButtonProps) {
   const [touchHover, setTouchHover] = useState(false);
   const [theme, setTheme] = useState(document.documentElement.getAttribute("theme"));
+  const {t} = useTranslation();
 
   useEffect(() => {
     document.documentElement.setAttribute("theme", theme!);
@@ -46,10 +48,10 @@ export var ThemeToggleButton = function(props: ThemeToggleButtonProps) {
       tabIndex={props.tabIndex ?? TabIndex.default}
     >
       <div className="menu-item__tooltip">
-        <span className="tooltip__text">{theme === "light" ? "Change to dark mode" : "Change to light mode"}</span>
+        <span className="tooltip__text">{t("MenuBars.themeToggle")}</span>
       </div>
       {theme === "light" && <DarkMode className="menu-item__icon" />}
       {theme === "dark" && <LightMode className="menu-item__icon" />}
     </button>
   );
-}
+};
