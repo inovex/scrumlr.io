@@ -4,6 +4,7 @@ import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as IconRefresh} from "assets/icon-refresh.svg";
+import {ReactComponent as IconClipboard} from "assets/icon-clipboard.svg";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
@@ -55,7 +56,7 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
             }
             actions={
               <TextInputAction onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase} title={t("AccessPolicySelection.copyPassphraseToClipboard")}>
-                <IconRefresh />
+                <IconClipboard />
               </TextInputAction>
             }
           />
