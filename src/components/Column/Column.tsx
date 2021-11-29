@@ -21,13 +21,13 @@ export interface ColumnProps {
   tabIndex?: number;
 }
 
-export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) => {
+export var Column = function({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string; columnId: string}, monitor) => {
       if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(ActionFactory.editNote({id: item.id, columnId: id}));
+        store.dispatch(ActionFactory.dragNote({id: item.id, columnId: id}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
@@ -70,4 +70,4 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
       </div>
     </section>
   );
-};
+}

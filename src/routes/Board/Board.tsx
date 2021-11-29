@@ -71,6 +71,7 @@ export var Board = function () {
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
+                  .filter((note) => note.positionInStack == -1 || note.positionInStack == 0)
                   .sort((a, b) => (b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
                   .map((note, noteIndex) => (
                     <Note
@@ -86,6 +87,7 @@ export var Board = function () {
                       columnColor={column.color}
                       childrenNotes={state.notes
                         .filter((n) => note.id && note.id === n.parentId)
+                        .sort((a, b) => a.positionInStack - b.positionInStack)
                         .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                         .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                       votes={state.votes.filter((vote) => vote.note === note.id)}

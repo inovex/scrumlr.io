@@ -11,6 +11,7 @@ type NoteDialogNoteFooterProps = {
   authorId: string;
   authorName: string;
   noteId?: string;
+  parentId?: string;
   votes: VoteClientModel[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
@@ -20,7 +21,7 @@ type NoteDialogNoteFooterProps = {
   showUnstackButton: boolean;
 };
 
-export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
+export var NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = function(props: NoteDialogNoteFooterProps) {
   const showOptions = !props.activeModeration.status || props.currentUserIsModerator;
 
   return (
@@ -37,4 +38,4 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
       </div>
     </div>
   );
-};
+}
