@@ -4,7 +4,6 @@ import {Provider} from "react-redux";
 import {DndProvider} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import "index.scss";
-import {ToastContainer} from "react-toastify";
 import Parse from "parse";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
@@ -23,7 +22,6 @@ ReactDOM.render(
       <Provider store={store}>
         <DndProvider backend={HTML5Backend}>
           <Router />
-          <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
           <CookieNotice />
         </DndProvider>
       </Provider>
