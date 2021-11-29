@@ -3,12 +3,14 @@ name: Cleanup Feature Branch Deployment
 on:
   pull_request:
     branches: [main]
-    types: [closed]
-
+    types: [closed,unlabeled]
+env:
+  LABEL: 'Action: Deploy PR'
 jobs:
   cluster-cleanup:
     name: Clean Up Cluster Resources
     runs-on: self-hosted
+    if: ${{ github.event.action  == 'closed' || github.event.label.name == env.LABEL}}
     steps:
       - name: scrumlr
         run: |
