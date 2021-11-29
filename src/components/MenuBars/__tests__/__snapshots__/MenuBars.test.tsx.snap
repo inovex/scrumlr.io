@@ -341,8 +341,8 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </menu>
       </button>
       <button
-        class="menu-item menu-item--disabled menu-item--left"
-        tabindex="410"
+        class="menu-item menu-item--left"
+        tabindex="402"
       >
         <div
           class="menu-item__tooltip"
@@ -350,7 +350,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Start voting phase
+            Voting
           </span>
         </div>
         <svg
@@ -358,11 +358,89 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         >
           icon-vote.svg
         </svg>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
+        <menu
+          class="dropdown vote-dropdown"
         >
-          icon-close.svg
-        </svg>
+          <div
+            class="dropdown__main"
+          >
+            <ul>
+              <li
+                class="dropdown__item-button vote-dropdown__item-button"
+              >
+                <button
+                  tabindex="-1"
+                >
+                  <label>
+                    Allow cumulative voting
+                  </label>
+                  <div>
+                    Yes
+                  </div>
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button vote-dropdown__item-button"
+              >
+                <button
+                  tabindex="-1"
+                >
+                  <label>
+                    Anonymous voting
+                  </label>
+                  <div>
+                    Yes
+                  </div>
+                </button>
+              </li>
+              <li
+                class="dropdown__item-button vote-dropdown__item-button"
+              >
+                <button
+                  tabindex="-1"
+                >
+                  <label>
+                    Number of votes
+                  </label>
+                  <button
+                    class="vote-dropdown__vote-button"
+                    tabindex="-1"
+                  >
+                    +
+                  </button>
+                  <input
+                    disabled=""
+                    tabindex="-1"
+                    value="5"
+                  />
+                  <button
+                    class="vote-dropdown__vote-button"
+                    tabindex="-1"
+                  >
+                    -
+                  </button>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="dropdown__footer"
+          >
+            <ul>
+              <li
+                class="dropdown__item-button vote-dropdown__item-button"
+              >
+                <button
+                  tabindex="-1"
+                >
+                  <label>
+                    Start voting phase
+                  </label>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </menu>
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"

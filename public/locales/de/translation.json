@@ -132,13 +132,22 @@
     "settings": "Einstellungen",
     "editColumns": "Bearbeite Spalten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
-    "startVoting": "Starte Abstimmung",
-    "stopVoting": "Beende Abstimmung",
     "startFocusMode": "Starte Fokus-Modus",
     "stopFocusMode": "Beende Fokus-Modus",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand"
+  },
+  "VoteConfigurationButton": {
+    "label": "Abstimmung",
+    "showVotesOfOthers": "Anonyme Abstimmung",
+    "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
+    "numberOfVotes": "Anzahl Stimmen",
+    "startTimer": "Abstimmung starten",
+    "cancelTimer": "Abstimmung abbrechen",
+    "stopTimer": "Abstimmung beenden",
+    "yes": "Ja",
+    "no": "Nein"
   },
   "TimerToggleButton": {
     "label": "Alarm",
