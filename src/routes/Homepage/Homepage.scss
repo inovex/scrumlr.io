@@ -80,6 +80,16 @@
   margin-bottom: 3em;
 }
 
+.homepage__start-button {
+  padding-left: 20px;
+}
+
+.homepage__start-button .homepage__proceed-icon {
+  flex: 0 0 24px;
+  height: 24px;
+  width: 24px;
+}
+
 .homepage__illustration {
   order: -1;
 }

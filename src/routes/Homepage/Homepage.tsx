@@ -3,6 +3,7 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
+import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import Parse from "parse";
@@ -64,7 +65,7 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} color="primary">
+              <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
                 <Trans i18nKey="Homepage.startButton" />
               </Button>
             </main>
