@@ -62,6 +62,8 @@
   font-size: clamp(36px, 4vw, 64px);
   font-weight: 800;
   line-height: 1.125em;
+  letter-spacing: 0.015625em;
+  margin-bottom: 0.5em;
 }
 
 .homepage__hero-title-team {
@@ -79,7 +81,8 @@
 }
 
 .homepage__hero-text {
-  margin-bottom: 3em;
+  margin-bottom: 2.2em;
+  font-size: clamp(16px, 1vw, 18px);
   line-height: 1.375em;
 }
 
