@@ -41,12 +41,12 @@
 
 .board__spacer-left:nth-child(odd),
 .board__spacer-right:nth-child(odd) {
-  background-color: $color-white-one;
+  background-color: $color-white-two;
 }
 
 .board__spacer-left:nth-child(even),
 .board__spacer-right:nth-child(even) {
-  background-color: $color-white-two;
+  background-color: $color-white-one;
 }
 
 @media (prefers-color-scheme: dark) {
