@@ -26,6 +26,7 @@ const addInitialNoteSchema = async () => {
   schema.addPointer("board", "Board", {required: true});
   schema.addPointer("parent", "Note", {required: false});
   schema.addString("columnId", {required: true});
+  schema.addNumber("positionInStack", {required: true, defaultValue: -1});
   schema.addPointer("author", "_User", {required: true});
   schema.addBoolean("focus", {required: true, defaultValue: false});
   schema.addString("text", {required: true});

@@ -8,18 +8,19 @@ import {TabIndex} from "constants/tabIndex";
 
 type NoteDialogUnstackNoteProps = {
   noteId?: string;
+  parentId?: string;
   onClose: () => void;
 };
 
-export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, onClose}: NoteDialogUnstackNoteProps) => {
-  const onUnstack = (id: string) => {
-    store.dispatch(ActionFactory.editNote({id, parentId: "unstack"}));
+export var NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = function({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) {
+  const onUnstack = (id: string, parentId: string) => {
+    store.dispatch(ActionFactory.unstackNote({id, parentId}));
   };
 
   return (
     <DotButton
       onClick={() => {
-        onUnstack(noteId!);
+        onUnstack(noteId!, parentId!);
         onClose();
       }}
       className="note-dialog__note-option__unstack"
@@ -28,4 +29,4 @@ export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({not
       <UnstackIcon className="note-dialog__note-option__unstack-icon" />
     </DotButton>
   );
-};
+}
