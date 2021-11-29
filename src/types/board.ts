@@ -37,6 +37,7 @@ export interface BoardServerModel {
     objectId: string;
   };
   usersMarkedReady: string[];
+  usersRaisedHands: string[];
 }
 
 export type EditableBoardAttributes = {
@@ -65,6 +66,7 @@ export interface BoardClientModel extends Omit<EditableBoardAttributes, "accessP
   createdAt: Date;
   updatedAt: Date;
   usersMarkedReady: string[];
+  usersRaisedHands: string[];
   dirty: boolean;
   owner: string;
 }
@@ -109,5 +111,6 @@ export const mapBoardServerToClientModel = async (board: BoardServerModel): Prom
     owner: board.owner.objectId,
     moderation: board.moderation,
     usersMarkedReady: board.usersMarkedReady,
+    usersRaisedHands: board.usersRaisedHands,
   };
 };

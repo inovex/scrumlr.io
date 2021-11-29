@@ -1,5 +1,5 @@
 /** This object lists board users object specific internal Redux Action types. */
-import {UserClientModel, EditUserConfigurationRequest, UserServerModel} from "types/user";
+import {UserClientModel, EditUserConfigurationRequest, UserServerModel, RaisedHandRequest} from "types/user";
 
 /** This object lists board users object specific internal Redux Action types. */
 export const UsersActionType = {
@@ -11,6 +11,7 @@ export const UsersActionType = {
   SetUsers: "@@SCRUMLR/setUsers" as const,
   SetUserStatus: "@@SCRUMLR/setUserStatus" as const,
   SetUserReadyStatus: "@@SCRUMLR/setUserReadyStatus" as const,
+  SetRaisedHandStatus: "@@SCRUMLR/setRaisedHandStatus" as const,
   UpdateUser: "@@SCRUMLR/updateUser" as const,
   ChangePermission: "@@SCRUMLR/changePermission" as const,
   EditUserConfiguration: "@@SCRUMLR/editUserConfiguration" as const,
@@ -61,6 +62,17 @@ export const UsersActionFactory = {
   }),
 
   /**
+   * Sets the raised hand status of a user by the given value. It will be applied immediately on the local
+   * client and send to the server via the middleware and an API request.
+   *
+   * @param configuration contains the user list and the raised hand status
+   */
+  setRaisedHandStatus: (configuration: RaisedHandRequest) => ({
+    type: UsersActionType.SetRaisedHandStatus,
+    configuration,
+  }),
+
+  /**
    * Creates an action that should be dispatched when the server notifies about a changed user configuration
    *
    * @param user the updated user
@@ -97,6 +109,7 @@ export type UsersReduxAction =
   | ReturnType<typeof UsersActionFactory.setUsers>
   | ReturnType<typeof UsersActionFactory.setUserStatus>
   | ReturnType<typeof UsersActionFactory.setUserReadyStatus>
+  | ReturnType<typeof UsersActionFactory.setRaisedHandStatus>
   | ReturnType<typeof UsersActionFactory.changePermission>
   | ReturnType<typeof UsersActionFactory.editUserConfiguration>
   | ReturnType<typeof UsersActionFactory.updateUser>;

@@ -1,5 +1,5 @@
 import {fireEvent, getByText} from "@testing-library/react";
-import {JoinRequest} from "components/JoinRequest";
+import {Request} from "components/Request";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {render} from "testUtils";
@@ -20,7 +20,7 @@ describe("JoinRequest", () => {
         status: "pending" as const,
       });
     }
-    return <JoinRequest joinRequests={joinRequests} />;
+    return <Request joinRequests={joinRequests} raisedHands={[]} users={[]} boardId="boardId" />;
   };
 
   describe("should render correctly", () => {
@@ -39,13 +39,13 @@ describe("JoinRequest", () => {
     test("single join request should call rejectJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Reject"));
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0"]));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId", ["userId-0"]));
     });
 
     test("single join request should call acceptJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Accept"));
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0"]));
+      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId", ["userId-0"]));
     });
 
     test("multiple join request should call acceptJoinRequests correctly", () => {

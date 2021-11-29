@@ -17,6 +17,7 @@ const createUser = (id: string, name: string, admin: boolean, ready = false): Us
   updatedAt: new Date(),
   ready,
   online: true,
+  raisedHand: false,
 });
 
 describe("users reducer", () => {
