@@ -104,6 +104,7 @@ $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
 $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
+$infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 
 // responsive
 $smartphone: "screen and (max-width: 767px)";
