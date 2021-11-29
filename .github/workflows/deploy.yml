@@ -2,13 +2,105 @@ name: Deployment
 on:
   workflow_run:
     workflows: ["Continuous Integration"]
-    types: 
-      - completed
+    types: [completed]
+  pull_request:
+    types: [labeled]
+env:
+  REGISTRY: ghcr.io
+  LABEL: 'Action: Deploy PR'
 jobs:
+  build-frontend:
+    runs-on: self-hosted
+    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            registry.kube.com/scrumlr-frontend
+          tags: |
+            type=ref,event=pr
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1 
+        with:
+          driver: docker
+       
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=registry,ref=registry.kube.com/scrumlr-frontend:latest
+          cache-to: type=inline
+
+  build-server:
+    runs-on: self-hosted
+    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            registry.kube.com/scrumlr-server
+          tags: |
+            type=ref,event=pr
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver: docker
+       
+      - name: Build and push Server
+        uses: docker/build-push-action@v2
+        with:
+          context: ./server
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=registry,ref=registry.kube.com/scrumlr-server:latest
+          cache-to: type=inline
+
+  
+  build-dashboard:
+    runs-on: self-hosted
+    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            registry.kube.com/scrumlr-dashboard
+          tags: |
+            type=ref,event=pr
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          driver: docker
+       
+      - name: Build and push Dashboard
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: ./dashboard
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=registry,ref=registry.kube.com/scrumlr-dashboard:latest
+          cache-to: type=inline
+
+
   deploy-pr:
     name: Deploy Feature Branch
     runs-on: self-hosted
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'}}
+    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    needs: [ build-frontend, build-server, build-dashboard ]
     steps:
 
       - name: checkout repository
@@ -49,8 +141,7 @@ jobs:
     steps:
       - name: deploy main
         run: |
-          helm uninstall scrumlr-main --namespace scrumlr-main
-          kubectl wait --for=delete namespace/scrumlr-main --timeout=60s
+          helm uninstall scrumlr-main --namespace scrumlr-main --wait
           helm dep up deployment/chart/
-          helm install scrumlr-main ./deployment/chart -f ./deployment/chart/env/dev.yaml --namespace scrumlr-main --create-namespace
+          helm install scrumlr-main ./deployment/chart -f ./deployment/chart/env/dev.yaml --namespace scrumlr-main
  
