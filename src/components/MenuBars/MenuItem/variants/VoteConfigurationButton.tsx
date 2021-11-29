@@ -125,7 +125,7 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               >
                 +
               </button>
-              <input tabIndex={focusOnTab(5)} value={numberOfVotes} onClick={(e) => e.stopPropagation()} />
+              <input tabIndex={focusOnTab(5)} value={numberOfVotes} onClick={(e) => e.stopPropagation()} onChange={(e) => setNumberOfVotes(parseInt(e.target.value, 10))} />
               <button
                 onClick={(e) => {
                   e.stopPropagation();
