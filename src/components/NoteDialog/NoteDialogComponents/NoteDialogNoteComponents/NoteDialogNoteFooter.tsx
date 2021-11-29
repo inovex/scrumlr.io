@@ -21,8 +21,8 @@ type NoteDialogNoteFooterProps = {
   showUnstackButton: boolean;
 };
 
-export var NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = function(props: NoteDialogNoteFooterProps) {
-  const showOptions = !props.activeModeration.status || props.currentUserIsModerator;
+export var NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = function (props: NoteDialogNoteFooterProps) {
+  const showOptions = !props.activeModeration.status || Parse.User.current()?.id === props.activeModeration.userId;
 
   return (
     <div className="note-dialog__note-footer">
@@ -38,4 +38,4 @@ export var NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = function(props:
       </div>
     </div>
   );
-}
+};

@@ -242,6 +242,7 @@ describe("<NoteDialog/>", () => {
       });
 
       test("moderation: last note-dialog__options note is present", () => {
+        mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
         const {container} = render(createNoteDialog({activeModeration: {userId: "test-user-1", status: true}, authorId: "test-user-1", currentUserIsModerator: true}), {
           container: global.document.querySelector("#portal")!,
         });
