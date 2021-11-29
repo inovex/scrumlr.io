@@ -9,9 +9,11 @@ export interface TextInputLabelProps {
   children: ReactElement<typeof TextInput>;
 }
 
-export var TextInputLabel: FC<TextInputLabelProps> = function({className, label, children}) {
-  return <label className={classNames("text-input-label", className)}>
-    <span className="text-input-label__label">{label}</span>
-    {children}
-  </label>
-}
+export var TextInputLabel: FC<TextInputLabelProps> = function ({className, label, children}) {
+  return (
+    <label className={classNames("text-input-label", className)}>
+      <span className="text-input-label__label">{label}</span>
+      {children}
+    </label>
+  );
+};

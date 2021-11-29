@@ -24,7 +24,7 @@ interface NoteDialogProps {
   currentUserIsModerator: boolean;
 }
 
-export const NoteDialog = (props: NoteDialogProps) => {
+export var NoteDialog = function(props: NoteDialogProps) {
   if (!props.show) {
     return null;
   }
@@ -42,10 +42,10 @@ export const NoteDialog = (props: NoteDialogProps) => {
         <NoteDialogComponents.Wrapper>
           <NoteDialogComponents.Note {...props} showUnstackButton={false} />
           {props.childrenNotes.map((note) => (
-            <NoteDialogComponents.Note {...props} {...note} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
+            <NoteDialogComponents.Note {...props} {...note} parentId={props.noteId} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
     </Portal>
   );
-};
+}

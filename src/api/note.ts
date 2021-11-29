@@ -1,4 +1,4 @@
-import {EditNoteRequest} from "types/note";
+import {DragNoteRequest, EditNoteRequest, UnstackNoteRequest} from "types/note";
 import {callAPI} from "api/callApi";
 
 export const NoteAPI = {
@@ -13,6 +13,20 @@ export const NoteAPI = {
    */
   addNote: (boardId: string, columnId: string, text: string) => callAPI<{boardId: string; columnId: string; text: string}, boolean>("addNote", {boardId, columnId, text}),
   /**
+   * Unstacks a note.
+   * @param note contains noteId and parentId
+   *
+   * @returns `true` if the operation succeeded or throws an error otherwise
+   */
+  unstackNote: (note: UnstackNoteRequest, boardId: string) => callAPI("unstackNote", {note, boardId}),
+  /**
+   * Drag and drop a note.
+   * @param note contains noteId and parentId and optional a columnId
+   *
+   * @returns `true` if the operation succeeded or throws an error otherwise
+   */
+  dragNote: (note: DragNoteRequest, boardId: string) => callAPI("dragNote", {note, boardId}),
+  /**
    * Deletes a note with the specified id.
    *
    * @param noteId the note id
@@ -22,7 +36,6 @@ export const NoteAPI = {
   deleteNote: (noteId: string) => callAPI<{noteId: string}, boolean>("deleteNote", {noteId}),
   /**
    * Edit a note with the specified id.
-   *
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
