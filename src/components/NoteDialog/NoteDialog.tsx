@@ -4,6 +4,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
 import {VoteClientModel} from "types/vote";
 import "./NoteDialog.scss";
+import Parse from "parse";
 import {NoteDialogComponents} from "./NoteDialogComponents";
 
 interface NoteDialogProps {
@@ -24,7 +25,7 @@ interface NoteDialogProps {
   currentUserIsModerator: boolean;
 }
 
-export var NoteDialog = function(props: NoteDialogProps) {
+export var NoteDialog = function (props: NoteDialogProps) {
   if (!props.show) {
     return null;
   }
@@ -34,8 +35,8 @@ export var NoteDialog = function(props: NoteDialogProps) {
         className={classNames(
           "note-dialog",
           getColorClassName(props.columnColor as Color),
-          {"note-dialog__pointer-moderator": props.currentUserIsModerator && props.activeModeration.status},
-          {"note-dialog__disabled-pointer": !props.currentUserIsModerator && props.activeModeration.status}
+          {"note-dialog__pointer-moderator": props.activeModeration.userId === Parse.User.current()?.id && props.activeModeration.status},
+          {"note-dialog__disabled-pointer": props.activeModeration.userId !== Parse.User.current()?.id && props.activeModeration.status}
         )}
       >
         <NoteDialogComponents.Header columnName={props.columnName} />
@@ -48,4 +49,4 @@ export var NoteDialog = function(props: NoteDialogProps) {
       </div>
     </Portal>
   );
-}
+};

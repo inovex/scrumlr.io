@@ -76,7 +76,7 @@ $board__navigation-button-icon-dimension: 24px;
   height: $board__navigation-button-dimension;
 
   background-color: var(--accent-color);
-  opacity: 50%;
+  opacity: 0.5;
   transition: opacity 0.15s ease-in-out;
 
   border: none;
@@ -92,7 +92,7 @@ $board__navigation-button-icon-dimension: 24px;
 }
 
 .board__navigation:hover {
-  opacity: 100%;
+  opacity: 1;
 }
 
 .board__navigation-prev {

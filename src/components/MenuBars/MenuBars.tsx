@@ -4,7 +4,7 @@ import store, {useAppSelector} from "store";
 import Parse from "parse";
 import classNames from "classnames";
 import {MenuButton, MenuToggle} from "components/MenuBars/MenuItem";
-import {ReactComponent as AddImageIcon} from "assets/icon-addimage.svg";
+import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as AddStickerIcon} from "assets/icon-addsticker.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
@@ -85,7 +85,7 @@ export var MenuBars = function () {
             direction="right"
             toggleStartLabel={t("MenuBars.raiseHand")}
             toggleStopLabel={t("MenuBars.lowerHand")}
-            icon={AddImageIcon}
+            icon={RaiseHand}
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
@@ -106,7 +106,7 @@ export var MenuBars = function () {
               onToggle={() => null}
             />
             <TimerToggleButton tabIndex={TabIndex.AdminMenu + 1} />
-            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 2} />
+            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 9} />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
@@ -114,7 +114,7 @@ export var MenuBars = function () {
               toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 11}
+              tabIndex={TabIndex.AdminMenu + 16}
             />
           </div>
         </section>
