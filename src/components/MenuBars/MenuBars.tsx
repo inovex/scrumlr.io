@@ -3,11 +3,9 @@ import {ActionFactory} from "store/action";
 import store, {useAppSelector} from "store";
 import Parse from "parse";
 import classNames from "classnames";
-import {MenuButton, MenuToggle} from "components/MenuBars/MenuItem";
+import {MenuToggle} from "components/MenuBars/MenuItem";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as LightMode} from "assets/icon-lightmode.svg";
-import {ReactComponent as DarkMode} from "assets/icon-darkmode.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
@@ -15,6 +13,7 @@ import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 import {VoteConfigurationButton} from "./MenuItem/variants/VoteConfigurationButton";
+import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 
 import "./MenuBars.scss";
 
@@ -56,16 +55,6 @@ export var MenuBars = function () {
     store.dispatch(ActionFactory.setRaisedHandStatus({userId: [Parse.User.current()!.id], raisedHand: active}));
   };
 
-  const toggleTheme = () => {
-    if (document.documentElement.getAttribute("theme") === "light") {
-      document.documentElement.setAttribute("theme", "dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.setAttribute("theme", "light");
-      localStorage.setItem("theme", "light");
-    }
-  };
-
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
@@ -88,13 +77,7 @@ export var MenuBars = function () {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <MenuButton
-            tabIndex={TabIndex.UserMenu + 2}
-            direction="right"
-            label={t("MenuBars.settings")}
-            icon={document.documentElement.getAttribute("theme") === "dark" ? LightMode : DarkMode}
-            onClick={() => toggleTheme()}
-          />
+          <ThemeToggleButton tabIndex={TabIndex.UserMenu + 2} direction="right" />
         </div>
       </section>
       {isAdmin && (
