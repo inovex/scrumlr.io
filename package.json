@@ -34,7 +34,7 @@
     "react-router-dom": "^6.0.2",
     "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.0"
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.11.1",
