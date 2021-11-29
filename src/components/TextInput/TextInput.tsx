@@ -10,6 +10,10 @@ export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HT
 }
 
 export var TextInput: FC<TextInputProps> = function ({className, leftAdornment, rightAdornment, actions, type = "text", ...other}) {
+  if (!(leftAdornment || rightAdornment || actions)) {
+    return <input className={classNames("text-input", className)} type={type} {...other} />;
+  }
+
   if (leftAdornment) {
     const iconProps = Children.only(leftAdornment)?.props as any;
     leftAdornment = cloneElement(leftAdornment!, {className: classNames(iconProps?.className, "text-input__adornment", "text-input__adornment--left")});
