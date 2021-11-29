@@ -6,9 +6,8 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store from "store";
 import {ActionFactory} from "store/action";
-// need to replace icon-unstack.svg with icon-visible.svg/icon-hidden.svg
-import {ReactComponent as visibleIcon} from "assets/icon-unstack.svg";
-import {ReactComponent as hiddenIcon} from "assets/icon-unstack.svg";
+import {ReactComponent as visibleIcon} from "assets/icon-visible.svg";
+import {ReactComponent as hiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
 
 export interface ColumnProps {
@@ -21,7 +20,7 @@ export interface ColumnProps {
   tabIndex?: number;
 }
 
-export var Column = function({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) {
+export var Column = function ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -70,4 +69,4 @@ export var Column = function({id, name, color, hidden, currentUserIsModerator, t
       </div>
     </section>
   );
-}
+};
