@@ -97,6 +97,32 @@ describe("users actions", () => {
     });
   });
 
+  describe("set raised hand status", () => {
+    test("type is listed in users redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setRaisedHandStatus>, UsersReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("type is listed in general redux actions", () => {
+      // testing type equality here will not report an error at runtime but cause problems with typescript
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setRaisedHandStatus>, ReduxAction> = true;
+      expect(assertion).toBe(true);
+    });
+
+    test("created action", () => {
+      const action = UsersActionFactory.setRaisedHandStatus({userId: ["1234"], raisedHand: true});
+
+      expect(action).toEqual({
+        type: "@@SCRUMLR/setRaisedHandStatus",
+        configuration: {
+          userId: ["1234"],
+          raisedHand: true,
+        },
+      });
+    });
+  });
+
   describe("update user", () => {
     test("type is listed in users redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript

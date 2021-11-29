@@ -87,6 +87,14 @@
     "acceptAll": "Accept all",
     "rejectAll": "Reject all"
   },
+  "RaiseRequest": {
+    "title": "Someone raised their hand",
+    "lower": "Lower hand",
+    "lowerAll": "Lower all hands"
+  },
+  "Request":{
+    "title": "Someone requests to participate/raised their hand"
+  },
   "LoginProviders": {
     "signInWithGoogle": "Sign in with Google",
     "signInWithGitHub": "Sign in with Github",
@@ -128,7 +136,9 @@
     "stopVoting": "End voting phase",
     "startFocusMode": "Start focused mode",
     "stopFocusMode": "End focused mode",
-    "returnToHomepage": "Return to Homepage"
+    "returnToHomepage": "Return to Homepage",
+    "raiseHand": "Raise your hand",
+    "lowerHand": "Lower your hand"
   },
   "TimerToggleButton": {
     "label": "Timer",
