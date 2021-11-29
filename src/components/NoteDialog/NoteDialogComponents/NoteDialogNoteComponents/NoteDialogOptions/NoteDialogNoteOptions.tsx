@@ -7,6 +7,7 @@ import "./NoteDialogNoteOptions.scss";
 type NoteDialogNoteOptionsProps = {
   showUnstackButton: boolean;
   noteId?: string;
+  parentId?: string;
   authorId: string;
   currentUserIsModerator: boolean;
   onDeleteOfParent: () => void;

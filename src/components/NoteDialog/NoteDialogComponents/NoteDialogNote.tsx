@@ -7,6 +7,7 @@ import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
   noteId?: string;
+  parentId?: string;
   text: string;
   authorId: string;
   authorName: string;
@@ -20,9 +21,9 @@ export type NoteDialogNoteProps = {
   showUnstackButton: boolean;
 };
 
-export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
-  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
+export var NoteDialogNote: FC<NoteDialogNoteProps> = function(props: NoteDialogNoteProps) {
+  return <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
     <NoteDialogNoteComponents.Content {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
   </div>
-);
+}

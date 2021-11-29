@@ -4,11 +4,6 @@ import {LoginProviders} from "components/LoginProviders";
 import {render} from "testUtils";
 
 describe("check for all provider buttons", () => {
-  test("root element", () => {
-    const {container} = render(<LoginProviders />);
-    expect(container.firstChild).toHaveClass("login-control");
-  });
-
   test("google sign in", () => {
     const {container} = render(<LoginProviders />);
     expect(container.querySelector("#google")).toBeInTheDocument();

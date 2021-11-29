@@ -1,0 +1,36 @@
+@import "constants/style";
+
+.login-providers {
+  display: flex;
+  gap: 8px;
+}
+
+.login-providers__icon {
+  color: $color-darkest-gray;
+}
+
+.login-providers__icon path {
+  fill: $color-darkest-gray;
+}
+
+.login-providers__button:first-child {
+  flex: 1 1 auto;
+}
+
+.login-providers__button:not(:first-child) {
+  background: $color-light-gray;
+}
+
+.login-providers__button:first-child .login-providers__icon {
+  color: $color-white;
+}
+
+.login-providers__button:first-child .login-providers__icon path {
+  fill: $color-white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .login-providers__button:not(:first-child) {
+    background: $color-middle-gray;
+  }
+}

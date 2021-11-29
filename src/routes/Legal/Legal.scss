@@ -1,0 +1,28 @@
+@import "constants/style";
+
+.legal {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: $padding--default;
+}
+
+.legal a {
+  color: $color-planning-pink;
+}
+
+.legal__text {
+  text-align: justify;
+}
+
+@media (prefers-color-scheme: dark) {
+  .legal {
+    color: $color-white;
+  }
+}
+
+@media #{$tablet} {
+  .legal {
+    padding: $padding--large;
+  }
+}
