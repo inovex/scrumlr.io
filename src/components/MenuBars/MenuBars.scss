@@ -5,6 +5,47 @@
   z-index: $menu-z-index;
 }
 
+[theme="light"] {
+  .menu-bars--admin {
+    .menu-bars__switch {
+      background-color: $color-white;
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $menu-color-regular--primary;
+    }
+  }
+  .menu-bars--user {
+    .menu-bars__switch {
+      background-color: $color-white;
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $menu-color-admin--primary;
+    }
+  }
+}
+[theme="dark"] {
+  .menu-bars--admin {
+    .menu-bars__switch {
+      background-color: $menu-color-regular--primary;
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: #ffffff;
+    }
+  }
+  .menu-bars--user {
+    .menu-bars__switch {
+      background-color: $menu-color-admin--primary;
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $color-white;
+    }
+  }
+}
+
 @include collapsedColumns(".menu-bars") {
   &.menu-bars {
     position: fixed;
@@ -14,26 +55,6 @@
   }
   &.menu-bars--isAdmin {
     left: calc(50% - 168px);
-  }
-  &.menu-bars--user {
-    [theme="light"] {
-      .menu-bars__switch {
-        background-color: $color-white;
-        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $menu-color-admin--primary;
-      }
-    }
-    [theme="dark"] {
-      .menu-bars__switch {
-        background-color: $menu-color-admin--primary;
-        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $color-white;
-      }
-    }
   }
   &.menu-bars--user > .user-menu {
     visibility: visible;
@@ -51,26 +72,6 @@
     transform: rotate(360deg);
   }
 
-  &.menu-bars--admin {
-    [theme="light"] {
-      .menu-bars__switch {
-        background-color: $color-white;
-        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $menu-color-regular--primary;
-      }
-    }
-    [theme="dark"] {
-      .menu-bars__switch {
-        background-color: $menu-color-regular--primary;
-        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: #ffffff;
-      }
-    }
-  }
   &.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
