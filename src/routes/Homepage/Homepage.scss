@@ -83,6 +83,16 @@
   line-height: 1.375em;
 }
 
+.homepage__start-button {
+  padding-left: 20px;
+}
+
+.homepage__start-button .homepage__proceed-icon {
+  flex: 0 0 20px;
+  height: 20px;
+  width: 20px;
+}
+
 .homepage__illustration {
   order: -1;
 }
