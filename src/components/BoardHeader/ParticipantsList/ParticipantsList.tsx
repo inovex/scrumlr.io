@@ -32,7 +32,13 @@ export var ParticipantsList = function (props: ParticipantsListProps) {
   const showMe = searchString.split(" ").every((substr) => me!.displayName.toLowerCase().includes(substr));
 
   return (
-    <Portal onClose={props.onClose} darkBackground={false}>
+    <Portal
+      onClose={() => {
+        props.onClose();
+        setSearchString("");
+      }}
+      darkBackground={false}
+    >
       <aside className="participants">
         <div className="participants__header">
           <div className="participants__header-title">
