@@ -19,8 +19,17 @@ $vote-dropdown__color-dark: $color-white;
     color: $vote-dropdown__color-dark;
   }
 }
+.vote-dropdown__item-button div {
+  position: absolute;
+  top: 14px;
+  right: 16px;
 
-.vote-dropdown__item-button div,
+  color: var(--primaryColor);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
 .vote-dropdown__item-button > button > button {
   display: inline-block;
   height: 24px;

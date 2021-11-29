@@ -6,12 +6,14 @@ import store, {useAppSelector} from "store";
 import Dropdown from "components/Dropdown";
 import "./VoteConfigurationButton.scss";
 import {ActionFactory} from "store/action";
+import {useTranslation} from "react-i18next";
 
 type VoteConfigurationButtonProps = {
   tabIndex?: number;
 };
 
-export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function(props) {
+export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function (props) {
+  const {t} = useTranslation();
   const [tabable, setTabable] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);
   const [allowMultipleVotesPerNote, setAllowMultipleVotesPerNote] = useState(true);
@@ -34,9 +36,12 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
   const stopVoting = () => {
     store.dispatch(ActionFactory.editBoard({id: state.boardId!, voting: "disabled"}));
   };
+  const cancelVoting = () => {
+    store.dispatch(ActionFactory.cancelVoting(state.boardId!));
+  };
 
   return (
-    <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label="Voting" icon={VoteIcon}>
+    <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label={t("VoteConfigurationButton.label")} icon={VoteIcon}>
       {state.activeVoting && (
         <Dropdown className="vote-dropdown">
           <Dropdown.Main>
@@ -46,7 +51,15 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                 stopVoting();
               }}
             >
-              <label>Stop Voting</label>
+              <label>{t("VoteConfigurationButton.stopTimer")}</label>
+            </Dropdown.ItemButton>
+            <Dropdown.ItemButton
+              className="vote-dropdown__item-button"
+              onClick={(_) => {
+                cancelVoting();
+              }}
+            >
+              <label>{t("VoteConfigurationButton.cancelTimer")}</label>
             </Dropdown.ItemButton>
           </Dropdown.Main>
         </Dropdown>
@@ -61,8 +74,8 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                 setAllowMultipleVotesPerNote((prev) => !prev);
               }}
             >
-              <label>Multiple votes</label>
-              <div>{allowMultipleVotesPerNote.toString()}</div>
+              <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
+              <div>{allowMultipleVotesPerNote ? t("VoteConfigurationButton.yes") : t("VoteConfigurationButton.no")}</div>
             </Dropdown.ItemButton>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
@@ -71,12 +84,18 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                 setShowVotesOfOthers((prev) => !prev);
               }}
             >
-              <label>Show votes of others</label>
-              <div>{showVotesOfOthers.toString()}</div>
+              <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
+              <div>{!showVotesOfOthers ? t("VoteConfigurationButton.yes") : t("VoteConfigurationButton.no")}</div>
             </Dropdown.ItemButton>
 
-            <Dropdown.ItemButton tabIndex={focusOnTab(4)} className="vote-dropdown__item-button">
-              <label>Number of votes</label>
+            <Dropdown.ItemButton
+              tabIndex={focusOnTab(4)}
+              className="vote-dropdown__item-button"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -107,11 +126,11 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                 startVoting();
               }}
             >
-              <label>Start Voting</label>
+              <label>{t("VoteConfigurationButton.startTimer")}</label>
             </Dropdown.ItemButton>
           </Dropdown.Footer>
         </Dropdown>
       )}
     </DropdownToggleButton>
   );
-}
+};

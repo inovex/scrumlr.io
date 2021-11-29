@@ -130,6 +130,17 @@
     "stopFocusMode": "Beende Fokus-Modus",
     "returnToHomepage": "Kehre zur Homepage zurück"
   },
+  "VoteConfigurationButton": {
+    "label": "Abstimmung",
+    "showVotesOfOthers": "Anonyme Abstimmung",
+    "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
+    "numberOfVotes": "Anzahl Stimmen",
+    "startTimer": "Abstimmung starten",
+    "cancelTimer": "Abstimmung abbrechen",
+    "stopTimer": "Abstimmung beenden",
+    "yes": "Ja",
+    "no": "Nein"
+  },
   "TimerToggleButton": {
     "label": "Alarm",
     "1min": "1 Minute",
