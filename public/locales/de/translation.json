@@ -104,10 +104,9 @@
     "placeholder": "Füge ein Kärtchen hinzu..."
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein um der Sitzung beizutreten",
+    "passphraseInputLabel": "Gib das Passwort ein um beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
-    "submit": "Absenden",
-    "hint": "Kollaborative Sitzung. Beim Beitritt stimmts du der AGB zu."
+    "submit": "Absenden"
   },
   "Timer": {
     "stopTimer": "Stoppe Alarm"

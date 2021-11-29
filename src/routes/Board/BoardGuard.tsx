@@ -7,6 +7,7 @@ import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
+import {Button} from "../../components/Button";
 
 export var BoardGuard = function () {
   const {boardId} = useParams<"boardId">();
@@ -40,9 +41,7 @@ export var BoardGuard = function () {
     return (
       <div className="board-guard">
         <p className="board-guard__info">{t("BoardGuard.incorrectPassphrase")}</p>
-        <a href="/" className="board-guard__denied-link">
-          {t("BoardGuard.returnToHomepage")}
-        </a>
+        <Button href="/">{t("BoardGuard.returnToHomepage")}</Button>
       </div>
     );
   }
