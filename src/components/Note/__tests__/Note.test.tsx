@@ -259,6 +259,7 @@ describe("Note", () => {
     });
 
     test("Note should be focused", () => {
+      mockedUser.current = jest.fn(() => ({id: "Test Author"} as never));
       const {container} = render(createNote({showAuthors: true, focus: false, moderation: {userId: "Test Author", status: true}, currentUserIsModerator: true}));
       fireEvent.click(container.querySelector(".note__root")!);
       expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editNote({id: "0", focus: true}));
