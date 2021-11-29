@@ -1,27 +1,27 @@
-import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
-import {getRandomName} from "constants/name";
-
 import Parse from "parse";
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import {Toast} from "utils/Toast";
-import {useEffect, useState} from "react";
-import {LoginProviders} from "components/LoginProviders";
+import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
-import {AppInfo} from "components/AppInfo";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
+import {Link} from "react-router-dom";
 import {columnTemplates} from "./columnTemplates";
+import {TextInputLabel} from "../../components/TextInputLabel";
+import {TextInput} from "../../components/TextInput";
+import {Button} from "../../components/Button";
+import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
 export var NewBoard = function () {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const [displayName, setDisplayName] = useState(getRandomName());
-  const [boardName, setBoardName] = useState("Board Name");
-  const [columnTemplate, setColumnTemplate] = useState("Lean Coffee");
+  const [boardName, setBoardName] = useState<string | undefined>();
+  const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
+  const [extendedConfiguration, setExtendedConfiguration] = useState(false);
 
   async function onCreateBoard() {
     if (Parse.User.current()) {
@@ -32,86 +32,81 @@ export var NewBoard = function () {
         };
       }
 
-      const boardId = await API.createBoard(
-        boardName,
-        {
-          type: AccessPolicy[accessPolicy],
-          ...additionalAccessPolicyOptions,
-        },
-        columnTemplates[columnTemplate]
-      );
-      navigate(`/board/${boardId}`);
+      if (columnTemplate) {
+        const boardId = await API.createBoard(
+          boardName,
+          {
+            type: AccessPolicy[accessPolicy],
+            ...additionalAccessPolicyOptions,
+          },
+          columnTemplates[columnTemplate].columns
+        );
+        navigate(`/board/${boardId}`);
+      }
     } else {
       Toast.error(t("NewBoard.createBoardError"));
     }
   }
 
-  async function onAnonymousLogin() {
-    await AuthenticationManager.signInAnonymously(displayName);
-    await onCreateBoard();
-  }
-
-  async function onLogout() {
-    await Parse.User.logOut();
-    navigate("/");
-  }
-
-  const isCreatedBoardDisabled = accessPolicy === AccessPolicy.ByPassphrase && !passphrase;
-
-  useEffect(() => {
-    if (localStorage.getItem("Parse/Scrumlr/currentUser")) {
-      setDisplayName(JSON.parse(localStorage.getItem("Parse/Scrumlr/currentUser")!).displayName);
-    }
-  }, []);
-
-  if (Parse.User.current()) {
-    return (
-      <div>
-        <p>
-          {t("NewBoard.user")}: {displayName}
-        </p>
-        <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-
-        <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
-
-        <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
-          {Object.keys(columnTemplates).map((key) => (
-            <option value={key}>{key}</option>
-          ))}
-        </select>
-        <button onClick={onCreateBoard} disabled={isCreatedBoardDisabled}>
-          {t("NewBoard.createNewBoard")}
-        </button>
-        <button onClick={onLogout}>{t("NewBoard.logout")}</button>
-        <AppInfo />
-      </div>
-    );
-  }
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.ByPassphrase && !passphrase);
 
   return (
-    <div className="new-board">
-      {!Parse.User.current() && <input className="new-board__input" defaultValue={displayName} type="text" onChange={(e) => setDisplayName(e.target.value)} maxLength={20} />}
-      <input className="new-board__input" defaultValue={boardName} type="text" onChange={(e) => setBoardName(e.target.value)} />
-      <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
+    <div className="new-board__wrapper">
+      <div className="new-board">
+        <div>
+          <Link to="/">
+            <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          </Link>
 
-      <select onChange={(e) => setColumnTemplate(e.target.value)} defaultValue={columnTemplate}>
-        {Object.keys(columnTemplates).map((key) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
-      </select>
-      <button
-        onClick={async () => {
-          if (!Parse.User.current()) await onAnonymousLogin();
-        }}
-        disabled={isCreatedBoardDisabled}
-      >
-        {t("NewBoard.createNewBoardAnonymous")}
-      </button>
-      <LoginProviders />
+          {!extendedConfiguration && (
+            <div>
+              <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
 
-      <AppInfo />
+              <div className="new-board__mode-selection">
+                {Object.keys(columnTemplates).map((key) => (
+                  <label key={key} className="new-board__mode">
+                    <input className="new-board__mode-input" type="radio" name="mode" value={key} onChange={(e) => setColumnTemplate(e.target.value)} />
+                    <div className="new-board__mode-label">
+                      <div>
+                        <div className="new-board__mode-name">{columnTemplates[key].name}</div>
+                        <div className="new-board__mode-description">{columnTemplates[key].description}</div>
+                      </div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {extendedConfiguration && (
+            <div>
+              <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
+
+              <TextInputLabel label={t("NewBoard.boardName")}>
+                <TextInput onChange={(e) => setBoardName(e.target.value)} />
+              </TextInputLabel>
+
+              <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
+            </div>
+          )}
+        </div>
+
+        <div className="new-board__actions">
+          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+            {t("NewBoard.createNewBoard")}
+          </Button>
+          {!extendedConfiguration && (
+            <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+              {t("NewBoard.extendedConfigurationButton")}
+            </Button>
+          )}
+          {extendedConfiguration && (
+            <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+              {t("NewBoard.basicConfigurationButton")}
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

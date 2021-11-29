@@ -1,14 +1,20 @@
 {
   "NewBoard": {
+    "boardName": "Board name",
     "createNewBoard": "Create new Board",
-    "createNewBoardAnonymous": "Create new board anonymously",
-    "createBoardError": "You must be logged in to create a board. Reload the page and try again",
-    "logout": "Logout",
-    "user": "User"
+    "extendedConfigurationButton": "Extended configuration",
+    "basicConfigurationButton": "Template selection",
+    "extendedConfigurationTitle": "Extended configuration",
+    "basicConfigurationTitle": "Choose a template"
   },
   "LoginBoard": {
+    "title": "Sign in to scrumlr.io",
+    "anonymousLogin": "Join board anonymously",
+    "usernameValidationError": "Username may not be empty",
+    "termsValidationError": "You must accept the terms and privacy policy",
     "errorOnRedirect": "An error occurred while redirecting you",
-    "joinAnonymous": "Join board anonymously"
+    "login": "Sign in",
+    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>"
   },
   "Board": {
     "publicSession": "Public Session",
@@ -25,10 +31,13 @@
   },
   "AccessPolicySelection": {
     "title": "Access policy",
+    "publicTitle": "Open",
+    "byPassphraseTitle": "Password protected",
+    "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
-    "public": "Access by URL without further verification.",
-    "byPassphrase": "Access by URL and passphrase.",
-    "manualVerification": "Admins of board can manually verify or reject each access request individually.",
+    "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
+    "byPassphrase": "Access by URL and passphrase. If you intend to write sensitive data and you won't collaborate simultaneously this will fit the best.",
+    "manualVerification": "Admins of board can manually verify or reject each user access request individually. This policy is the safest, since the admin can deny any unapproved access.",
     "generatePassphrase": "Generate random passphrase",
     "copyPassphraseToClipboard": "Copy passphrase to clipboard",
     "passphraseValidationError": "A passphrase must be set"
@@ -134,7 +143,7 @@
     "edit": "edit"
   },
   "AppInfo": {
-    "version": "App version: <0>{{version}}</0>"
+    "version": "Link to list of releases on GitHub"
   },
   "Toast": {
     "authenticationError": "There occurred a problem while signing you in",
@@ -149,5 +158,14 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!"
+  },
+  "Homepage": {
+    "developers": "© 2021, provided by <inovex>inovex</inovex> with ❤️",
+    "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
+    "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
+    "startButton": "Start now",
+    "privacyPolicy": "Privacy policy",
+    "cookiePolicy": "Cookie policy",
+    "terms": "Terms & conditions"
   }
 }

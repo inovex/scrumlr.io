@@ -1,8 +1,46 @@
+@import "constants/style";
+
 .access-policy-selection {
-  margin-top: 1em;
+  gap: 8px;
   margin-bottom: 1em;
+}
+
+.access-policy-selection__title {
+  margin-top: 1.5em;
+}
+
+.access-policy-selection__tabs {
+  display: flex;
 }
 
 .access-policy-selection__additional-settings {
   margin-top: 1em;
+}
+
+.access-policy-selection__access-policy + .access-policy-selection__access-policy {
+  margin-left: 8px;
+}
+
+.access-policy__details {
+  margin-top: 1em;
+  min-height: 182px;
+  width: 100%;
+  max-width: 480px;
+  font-size: 14px;
+  line-height: 1.4em;
+
+  padding: 16px;
+  border-radius: 24px;
+
+  color: $color-black;
+  background: $color-white;
+  box-shadow: 0 2px 6px 4px rgba($color-black, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .access-policy__details {
+    color: $color-white;
+    background: $color-dark-mode-note;
+    box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
 }

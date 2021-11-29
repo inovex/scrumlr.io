@@ -1,8 +1,12 @@
-import {ChangeEvent, FC} from "react";
+import {FC} from "react";
 import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
+import {TextInputLabel} from "../TextInputLabel";
+import {TextInput} from "../TextInput";
+import {Button} from "../Button";
+import {ValidationError} from "../ValidationError";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -14,9 +18,7 @@ export interface AccessPolicySelectionProps {
 export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) {
   const {t} = useTranslation();
 
-  const handlePolicyChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const accessPolicy = Number.parseInt(e.target.value);
-
+  const handlePolicyChange = (accessPolicy: AccessPolicy) => {
     if (accessPolicy >= 0 && accessPolicy <= 2) {
       onAccessPolicyChange(accessPolicy);
     }
@@ -26,40 +28,66 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
     case AccessPolicy.Public:
-      AccessPolicyDescription = <div>{t("AccessPolicySelection.public")}</div>;
+      AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
       break;
     case AccessPolicy.ByPassphrase:
-      AccessPolicyDescription = <div>{t("AccessPolicySelection.byPassphrase")}</div>;
+      AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
-          <label>
-            <div>{t("AccessPolicySelection.passphrase")}</div>
-            <input data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
-          </label>
-          <button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
-            {t("AccessPolicySelection.generatePassphrase")}
-          </button>
-          <button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
-            {t("AccessPolicySelection.copyPassphraseToClipboard")}
-          </button>
-          {!passphrase && <div>{t("AccessPolicySelection.passphraseValidationError")}</div>}
+          <TextInputLabel label={t("AccessPolicySelection.passphrase")}>
+            <TextInput data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
+          </TextInputLabel>
+          {3 > 5 && (
+            <>
+              <Button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
+                {t("AccessPolicySelection.generatePassphrase")}
+              </Button>
+              <Button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
+                {t("AccessPolicySelection.copyPassphraseToClipboard")}
+              </Button>
+            </>
+          )}
+          {!passphrase && <ValidationError>{t("AccessPolicySelection.passphraseValidationError")}</ValidationError>}
         </>
       );
       break;
     case AccessPolicy.ManualVerification:
-      AccessPolicyDescription = <div>{t("AccessPolicySelection.manualVerification")}</div>;
+      AccessPolicyDescription = <span>{t("AccessPolicySelection.manualVerification")}</span>;
       break;
   }
 
   return (
     <div className="access-policy-selection">
-      <label>
-        <div>{t("AccessPolicySelection.title")}</div>
-        <input type="range" min={0} max={3} step={1} value={accessPolicy} onChange={handlePolicyChange} />
-      </label>
-      {AccessPolicyDescription}
+      <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
-      {AdditionalAccessPolicySettings && <div className="access-policy-selection__additional-settings">{AdditionalAccessPolicySettings}</div>}
+      <div className="access-policy-selection__tabs">
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.Public ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.Public)}
+        >
+          {t("AccessPolicySelection.publicTitle")}
+        </Button>
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.ByPassphrase ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.ByPassphrase)}
+        >
+          {t("AccessPolicySelection.byPassphraseTitle")}
+        </Button>
+        <Button
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === AccessPolicy.ManualVerification ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.ManualVerification)}
+        >
+          {t("AccessPolicySelection.manualVerificationTitle")}
+        </Button>
+      </div>
+
+      <div className="access-policy__details">
+        {AccessPolicyDescription}
+        {AdditionalAccessPolicySettings && <div className="access-policy-selection__additional-settings">{AdditionalAccessPolicySettings}</div>}
+      </div>
     </div>
   );
 };
