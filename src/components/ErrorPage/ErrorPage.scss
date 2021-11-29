@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .error-page {
     background-color: $color-dark-one;
   }

@@ -27,7 +27,7 @@
     animation: fly-in-right 0.5s ease-out;
   }
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request {
     box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   }
@@ -51,7 +51,7 @@
   margin-left: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .request__button {
     color: $color-planning-pink;
   }
@@ -73,7 +73,7 @@
   white-space: nowrap;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .request__header {
     background-color: $color-planning-pink;
   }
@@ -92,7 +92,7 @@
   border-radius: 0;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .request__main {
     background-color: $color-dark-mode-note;
   }
@@ -125,7 +125,7 @@
   letter-spacing: 0.15px;
   line-height: 18px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request__request-name {
     color: $color-white;
   }
@@ -151,7 +151,7 @@
   letter-spacing: 0.15px;
   margin: 0 12px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request__preview-names {
     color: $color-white;
   }
@@ -164,7 +164,7 @@
   position: relative;
   top: 9px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request__preview-image {
     border-color: $color-dark-mode-note;
   }
@@ -193,7 +193,7 @@
   font-size: 16px;
   color: #111111;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request__preview-rest {
     outline-color: $color-dark-mode-note;
     border-color: $color-white;
@@ -210,7 +210,7 @@
   max-height: 130px;
   overflow-y: auto;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .request__requests {
     border-color: rgba(212, 217, 221, 0.2);
   }
@@ -235,7 +235,7 @@
     width: 96px;
   }
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .join-request__request-display-name {
     color: $color-white;
   }
@@ -250,7 +250,7 @@
   height: 48px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .request__footer {
     background-color: $color-dark-mode-note;
   }

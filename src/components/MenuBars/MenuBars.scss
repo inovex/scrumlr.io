@@ -5,45 +5,66 @@
   z-index: $menu-z-index;
 }
 
+[theme="light"] {
+  .menu-bars--admin {
+    .menu-bars__switch {
+      background-color: $color-white;
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $menu-color-regular--primary;
+    }
+  }
+  .menu-bars--user {
+    .menu-bars__switch {
+      background-color: $color-white;
+      box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $menu-color-admin--primary;
+    }
+  }
+}
+[theme="dark"] {
+  .menu-bars--admin {
+    .menu-bars__switch {
+      background-color: $menu-color-regular--primary;
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: #ffffff;
+    }
+  }
+  .menu-bars--user {
+    .menu-bars__switch {
+      background-color: $menu-color-admin--primary;
+      box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
+    }
+    .menu-bars__switch > .switch__icon {
+      color: $color-white;
+    }
+  }
+}
+
 @include collapsedColumns(".menu-bars") {
   &.menu-bars {
     position: fixed;
-    left: calc(50% - 134px);
+    left: calc(50% - 105px);
     bottom: 8px;
     -webkit-touch-callout: none;
   }
   &.menu-bars--isAdmin {
-    left: calc(50% - 168px);
-  }
-  &.menu-bars--user {
-    @media (prefers-color-scheme: light) {
-      .menu-bars__switch {
-        background-color: $color-white;
-        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $menu-color-admin--primary;
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      .menu-bars__switch {
-        background-color: $menu-color-admin--primary;
-        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $color-white;
-      }
-    }
+    left: calc(50% - 141px);
   }
   &.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 8px;
+    bottom: 0;
   }
   &.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: 72px;
+    bottom: 64px;
   }
   &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
@@ -51,35 +72,15 @@
     transform: rotate(360deg);
   }
 
-  &.menu-bars--admin {
-    @media (prefers-color-scheme: light) {
-      .menu-bars__switch {
-        background-color: $color-white;
-        box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: $menu-color-regular--primary;
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      .menu-bars__switch {
-        background-color: $menu-color-regular--primary;
-        box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
-      }
-      .menu-bars__switch > .switch__icon {
-        color: #ffffff;
-      }
-    }
-  }
   &.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 8px;
+    bottom: 0;
   }
   &.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: -56px;
+    bottom: -64px;
   }
   &.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
     visibility: hidden;
@@ -93,7 +94,7 @@
     border: 0;
     border-radius: 100%;
     transition: background-color 0.25s ease-in-out;
-    margin-left: 272px;
+    margin-left: 214px;
     position: relative;
   }
   .menu-bars__switch:focus {
@@ -124,11 +125,10 @@
     border-radius: 35px;
     height: 64px;
     // overflow: hidden;
-    width: 268px;
+    width: 210px;
     visibility: hidden;
     opacity: 0;
-    position: fixed;
-    margin-right: 64px;
+    position: absolute;
   }
 
   .menu-animation {
@@ -170,8 +170,9 @@
 
   .menu {
     border-radius: 35px;
-    height: 268px;
-    top: calc(50% - 134px);
+    height: 210px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 64px;
     overflow: visible;
     position: fixed;
@@ -189,14 +190,14 @@
   }
 }
 
-@media (prefers-color-scheme: light) {
+[theme="light"] {
   .menu {
     background-color: $color-white;
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   }
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .menu {
     box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   }

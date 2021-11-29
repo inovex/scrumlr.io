@@ -31,7 +31,7 @@
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .text-input:hover {
     box-shadow: 0 0 0 4px rgba($color-white, 0.2);
   }

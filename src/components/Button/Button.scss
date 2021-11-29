@@ -111,7 +111,7 @@
   height: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .button.button--outlined,
   .button.button--text-link,
   .button.button--primary.button--outlined {

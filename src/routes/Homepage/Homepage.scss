@@ -140,7 +140,7 @@
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .homepage {
     background: $color-dark-one;
   }

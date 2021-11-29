@@ -65,7 +65,7 @@ $header-menu-button-width: 24px;
   scale: 0.95;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .header-menu {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }

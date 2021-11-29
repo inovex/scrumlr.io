@@ -17,7 +17,7 @@ $header-menu-button-height: 24px;
   height: 120px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .delete-board-option__container {
     background-color: $color-dark-mode-note;
   }
