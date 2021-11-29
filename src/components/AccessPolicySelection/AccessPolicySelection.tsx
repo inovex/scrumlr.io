@@ -3,10 +3,13 @@ import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
+import {ReactComponent as IconRefresh} from "assets/icon-refresh.svg";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
 import {ValidationError} from "../ValidationError";
+import {TextInputAdornment} from "../TextInputAdornment";
+import {TextInputAction} from "../TextInputAction";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -34,19 +37,29 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
-          <TextInputLabel label={t("AccessPolicySelection.passphrase")}>
-            <TextInput data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
-          </TextInputLabel>
-          {3 > 5 && (
-            <>
-              <Button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
-                {t("AccessPolicySelection.generatePassphrase")}
-              </Button>
-              <Button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
-                {t("AccessPolicySelection.copyPassphraseToClipboard")}
-              </Button>
-            </>
-          )}
+          <TextInputLabel label={t("AccessPolicySelection.passphrase")} htmlFor="access-policy-selection__password" />
+          <TextInput
+            id="access-policy-selection__password"
+            data-testid="passphrase-input"
+            type="text"
+            value={passphrase}
+            onChange={(e) => onPassphraseChange(e.target.value)}
+            rightAdornment={
+              <TextInputAdornment
+                data-testid="random-passwort-generator"
+                onClick={() => onPassphraseChange(generateRandomString())}
+                title={t("AccessPolicySelection.generatePassphrase")}
+              >
+                <IconRefresh />
+              </TextInputAdornment>
+            }
+            actions={
+              <TextInputAction onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase} title={t("AccessPolicySelection.copyPassphraseToClipboard")}>
+                <IconRefresh />
+              </TextInputAction>
+            }
+          />
+
           {!passphrase && <ValidationError>{t("AccessPolicySelection.passphraseValidationError")}</ValidationError>}
         </>
       );
