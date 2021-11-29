@@ -41,8 +41,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           subscription.unsubscribe();
         });
 
-        subscription.on("open", () => {
-          joinRequestQuery.find().then((results) => {
+        subscription.on("open", async () => {
+          joinRequestQuery.findAll({batchSize: await joinRequestQuery.count()}).then((results) => {
             dispatch(ActionFactory.initializeJoinRequests((results as JoinRequestServerModel[]).map(mapJoinRequestServerToClientModel)));
           });
         });
@@ -130,8 +130,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           updateUsers(object as Parse.Role);
         });
 
-        subscription.on("open", () => {
-          usersQuery.find().then((results) => {
+        subscription.on("open", async () => {
+          usersQuery.findAll({batchSize: await usersQuery.count()}).then((results) => {
             for (let i = 0; i < results.length; i += 1) {
               updateUsers(results[i] as Parse.Role);
             }
@@ -172,8 +172,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         subscription.on("delete", (object) => {
           dispatch(ActionFactory.deleteNote(object.id));
         });
-        subscription.on("open", () => {
-          noteQuery.find().then((results) => {
+        subscription.on("open", async () => {
+          noteQuery.findAll({batchSize: await noteQuery.count()}).then((results) => {
             dispatch(ActionFactory.initializeNotes((results as NoteServerModel[]).map(mapNoteServerToClientModel)));
           });
         });
@@ -195,8 +195,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           dispatch(ActionFactory.deletedVote(object.id));
         });
         // subscription.on("delete", () => {});
-        subscription.on("open", () => {
-          voteQuery.find().then((results) => {
+        subscription.on("open", async () => {
+          voteQuery.findAll({batchSize: await voteQuery.count()}).then((results) => {
             dispatch(ActionFactory.initializeVotes((results as VoteServerModel[]).map(mapVoteServerToClientModel)));
           });
         });
