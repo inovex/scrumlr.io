@@ -132,13 +132,22 @@
     "settings": "Settings",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
-    "startVoting": "Start voting phase",
-    "stopVoting": "End voting phase",
     "startFocusMode": "Start focused mode",
     "stopFocusMode": "End focused mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand"
+  },
+  "VoteConfigurationButton": {
+    "label": "Voting",
+    "showVotesOfOthers": "Anonymous voting",
+    "allowMultipleVotesPerNote": "Allow cumulative voting",
+    "numberOfVotes": "Number of votes",
+    "startTimer": "Start voting phase",
+    "cancelTimer": "Cancel voting phase",
+    "stopTimer": "End voting phase",
+    "yes": "Yes",
+    "no": "No"
   },
   "TimerToggleButton": {
     "label": "Timer",
