@@ -68,7 +68,6 @@ export var Board = function () {
                 currentUserIsModerator={currentUserIsModerator}
                 color={column.color}
               >
-                {console.log(state.notes)}
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
