@@ -29,22 +29,27 @@ export var TimerToggleButton = function (props: TimerToggleButtonProps) {
     <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label={t("TimerToggleButton.label")} icon={TimerIcon}>
       <Dropdown className="timer__dropdown">
         <Dropdown.Main>
-          <Dropdown.ItemButton tabIndex={focusOnTab(1)} className="timer-dropdown__item-button" onClick={() => onClick(1)}>
+          <Dropdown.ItemButton tabIndex={focusOnTab(1)} className="timer-dropdown__item-button" onClick={() => onClick(1)} onTouchEnd={() => onClick(1)}>
             <label>{t("TimerToggleButton.1min")}</label>
             <div>1</div>
           </Dropdown.ItemButton>
-          <Dropdown.ItemButton tabIndex={focusOnTab(2)} className="timer-dropdown__item-button" onClick={() => onClick(3)}>
+          <Dropdown.ItemButton tabIndex={focusOnTab(2)} className="timer-dropdown__item-button" onClick={() => onClick(3)} onTouchEnd={() => onClick(3)}>
             <label>{t("TimerToggleButton.3min")}</label>
             <div>3</div>
           </Dropdown.ItemButton>
-          <Dropdown.ItemButton tabIndex={focusOnTab(3)} className="timer-dropdown__item-button" onClick={() => onClick(5)}>
+          <Dropdown.ItemButton tabIndex={focusOnTab(3)} className="timer-dropdown__item-button" onClick={() => onClick(5)} onTouchEnd={() => onClick(5)}>
             <label>{t("TimerToggleButton.5min")}</label>
             <div>5</div>
           </Dropdown.ItemButton>
-          <Dropdown.ItemButton tabIndex={focusOnTab(4)} className="timer-dropdown__item-button" onClick={() => onClick(customTime)}>
+          <Dropdown.ItemButton tabIndex={focusOnTab(4)} className="timer-dropdown__item-button" onClick={() => onClick(customTime)} onTouchEnd={() => onClick(customTime)}>
             <label>{t("TimerToggleButton.customTime")}</label>
             <button
               onClick={(e) => {
+                e.stopPropagation();
+                setCustomTime((prev) => Math.min(++prev, 59));
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 setCustomTime((prev) => Math.min(++prev, 59));
               }}
@@ -59,6 +64,11 @@ export var TimerToggleButton = function (props: TimerToggleButtonProps) {
                 e.stopPropagation();
                 setCustomTime((prev) => Math.max(--prev, 0));
               }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setCustomTime((prev) => Math.max(--prev, 0));
+              }}
               tabIndex={focusOnTab(5)}
               className="timer-dropdown__time-button"
             >
@@ -68,7 +78,12 @@ export var TimerToggleButton = function (props: TimerToggleButtonProps) {
         </Dropdown.Main>
         {timer != null && (
           <Dropdown.Footer>
-            <Dropdown.ItemButton tabIndex={focusOnTab(8)} className="timer-dropdown__item-button" onClick={() => store.dispatch(ActionFactory.cancelTimer())}>
+            <Dropdown.ItemButton
+              tabIndex={focusOnTab(8)}
+              className="timer-dropdown__item-button"
+              onClick={() => store.dispatch(ActionFactory.cancelTimer())}
+              onTouchEnd={() => store.dispatch(ActionFactory.cancelTimer())}
+            >
               <label>{t("TimerToggleButton.cancelTimer")}</label>
               <div>x</div>
             </Dropdown.ItemButton>
