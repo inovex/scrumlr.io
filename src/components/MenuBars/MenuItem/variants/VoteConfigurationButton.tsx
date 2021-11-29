@@ -50,12 +50,18 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               onClick={(_) => {
                 stopVoting();
               }}
+              onTouchEnd={(_) => {
+                stopVoting();
+              }}
             >
               <label>{t("VoteConfigurationButton.stopTimer")}</label>
             </Dropdown.ItemButton>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
               onClick={(_) => {
+                cancelVoting();
+              }}
+              onTouchEnd={(_) => {
                 cancelVoting();
               }}
             >
@@ -73,6 +79,9 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                 e.stopPropagation();
                 setAllowMultipleVotesPerNote((prev) => !prev);
               }}
+              onTouchEnd={() => {
+                setAllowMultipleVotesPerNote((prev) => !prev);
+              }}
             >
               <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
               <div>{allowMultipleVotesPerNote ? t("VoteConfigurationButton.yes") : t("VoteConfigurationButton.no")}</div>
@@ -81,6 +90,9 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               className="vote-dropdown__item-button"
               onClick={(e) => {
                 e.stopPropagation();
+                setShowVotesOfOthers((prev) => !prev);
+              }}
+              onTouchEnd={() => {
                 setShowVotesOfOthers((prev) => !prev);
               }}
             >
@@ -101,6 +113,9 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
                   e.stopPropagation();
                   setNumberOfVotes((prev) => Math.min(++prev, 99));
                 }}
+                onTouchEnd={() => {
+                  setNumberOfVotes((prev) => Math.min(++prev, 99));
+                }}
                 tabIndex={focusOnTab(7)}
                 className="vote-dropdown__vote-button"
               >
@@ -110,6 +125,9 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  setNumberOfVotes((prev) => Math.max(--prev, 0));
+                }}
+                onTouchEnd={() => {
                   setNumberOfVotes((prev) => Math.max(--prev, 0));
                 }}
                 tabIndex={focusOnTab(5)}
@@ -123,6 +141,9 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
               onClick={(_) => {
+                startVoting();
+              }}
+              onTouchEnd={() => {
                 startVoting();
               }}
             >
