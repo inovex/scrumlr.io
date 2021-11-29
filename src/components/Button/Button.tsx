@@ -4,7 +4,7 @@ import "./Button.scss";
 
 export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
   color?: "primary" | "secondary";
-  variant?: "contained" | "outlined";
+  variant?: "contained" | "outlined" | "text-link";
   leftIcon?: ReactElement<any, any>;
   rightIcon?: ReactElement<any, any>;
   hideLabel?: boolean;

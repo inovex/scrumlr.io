@@ -21,17 +21,17 @@
 }
 
 .homepage__settings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-.homepage__settings > li {
-  display: inline;
-}
-
-.homepage__settings > li + li {
-  margin-left: 4px;
+.homepage__logout-button {
+  margin-left: 6px;
 }
 
 .homepage__hero-content-wrapper {

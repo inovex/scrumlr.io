@@ -7,6 +7,7 @@ import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import Parse from "parse";
 import {HeroIllustration} from "components/HeroIllustration";
+import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
 import {Button} from "../../components/Button";
 import {InovexAnchor} from "./InovexAnchor";
 
@@ -45,7 +46,9 @@ export const Homepage = withTranslation()(() => {
 
             {Parse.User.current() && (
               <li>
-                <Button onClick={onLogout}>Logout</Button>
+                <Button variant="text-link" onClick={onLogout} rightIcon={<LogoutIcon />} className="homepage__logout-button">
+                  Logout
+                </Button>
               </li>
             )}
           </ul>
