@@ -49,22 +49,22 @@
 @include collapsedColumns(".menu-bars") {
   &.menu-bars {
     position: fixed;
-    left: calc(50% - 134px);
+    left: calc(50% - 105px);
     bottom: 8px;
     -webkit-touch-callout: none;
   }
   &.menu-bars--isAdmin {
-    left: calc(50% - 168px);
+    left: calc(50% - 141px);
   }
   &.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 8px;
+    bottom: 0;
   }
   &.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: 72px;
+    bottom: 64px;
   }
   &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
@@ -75,12 +75,12 @@
   &.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 8px;
+    bottom: 0;
   }
   &.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: -56px;
+    bottom: -64px;
   }
   &.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
     visibility: hidden;
@@ -94,7 +94,7 @@
     border: 0;
     border-radius: 100%;
     transition: background-color 0.25s ease-in-out;
-    margin-left: 272px;
+    margin-left: 214px;
     position: relative;
   }
   .menu-bars__switch:focus {
@@ -125,11 +125,10 @@
     border-radius: 35px;
     height: 64px;
     // overflow: hidden;
-    width: 268px;
+    width: 210px;
     visibility: hidden;
     opacity: 0;
-    position: fixed;
-    margin-right: 64px;
+    position: absolute;
   }
 
   .menu-animation {
@@ -171,8 +170,9 @@
 
   .menu {
     border-radius: 35px;
-    height: 268px;
-    top: calc(50% - 134px);
+    height: 210px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 64px;
     overflow: visible;
     position: fixed;

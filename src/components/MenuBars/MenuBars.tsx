@@ -5,10 +5,9 @@ import Parse from "parse";
 import classNames from "classnames";
 import {MenuButton, MenuToggle} from "components/MenuBars/MenuItem";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
-import {ReactComponent as AddStickerIcon} from "assets/icon-addsticker.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
-import {ReactComponent as ColumnIcon} from "assets/icon-column.svg";
+import {ReactComponent as LightMode} from "assets/icon-lightmode.svg";
+import {ReactComponent as DarkMode} from "assets/icon-darkmode.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
@@ -89,24 +88,20 @@ export var MenuBars = function () {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => (location.href = "/")} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 3} direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => toggleTheme()} />
+          <MenuButton
+            tabIndex={TabIndex.UserMenu + 2}
+            direction="right"
+            label={t("MenuBars.settings")}
+            icon={document.documentElement.getAttribute("theme") === "dark" ? LightMode : DarkMode}
+            onClick={() => toggleTheme()}
+          />
         </div>
       </section>
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <MenuToggle
-              tabIndex={TabIndex.AdminMenu}
-              disabled
-              direction="left"
-              toggleStartLabel={t("MenuBars.editColumns")}
-              toggleStopLabel={t("MenuBars.stopEditingColumns")}
-              icon={ColumnIcon}
-              onToggle={() => null}
-            />
-            <TimerToggleButton tabIndex={TabIndex.AdminMenu + 1} />
-            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 9} />
+            <TimerToggleButton tabIndex={TabIndex.AdminMenu} />
+            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 8} />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
@@ -114,7 +109,7 @@ export var MenuBars = function () {
               toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 16}
+              tabIndex={TabIndex.AdminMenu + 15}
             />
           </div>
         </section>
