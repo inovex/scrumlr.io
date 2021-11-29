@@ -59,29 +59,25 @@ exports[`Menu should only render add-menu for participants 1`] = `
           icon-close.svg
         </svg>
       </button>
-      <a
-        href="/"
+      <button
+        class="menu-item menu-item--right"
+        tabindex="302"
       >
-        <button
-          class="menu-item menu-item--right"
-          tabindex="302"
+        <div
+          class="menu-item__tooltip"
         >
-          <div
-            class="menu-item__tooltip"
+          <span
+            class="tooltip__text"
           >
-            <span
-              class="tooltip__text"
-            >
-              Return to Homepage
-            </span>
-          </div>
-          <svg
-            class="menu-item__icon menu-item__icon--start"
-          >
-            icon-addsticker.svg
-          </svg>
-        </button>
-      </a>
+            Return to Homepage
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addsticker.svg
+        </svg>
+      </button>
       <button
         class="menu-item menu-item--right"
         disabled=""
@@ -166,29 +162,25 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           icon-close.svg
         </svg>
       </button>
-      <a
-        href="/"
+      <button
+        class="menu-item menu-item--right"
+        tabindex="302"
       >
-        <button
-          class="menu-item menu-item--right"
-          tabindex="302"
+        <div
+          class="menu-item__tooltip"
         >
-          <div
-            class="menu-item__tooltip"
+          <span
+            class="tooltip__text"
           >
-            <span
-              class="tooltip__text"
-            >
-              Return to Homepage
-            </span>
-          </div>
-          <svg
-            class="menu-item__icon menu-item__icon--start"
-          >
-            icon-addsticker.svg
-          </svg>
-        </button>
-      </a>
+            Return to Homepage
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-addsticker.svg
+        </svg>
+      </button>
       <button
         class="menu-item menu-item--right"
         disabled=""

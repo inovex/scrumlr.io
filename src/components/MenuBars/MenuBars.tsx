@@ -12,7 +12,6 @@ import {ReactComponent as ColumnIcon} from "assets/icon-column.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
-import {Link} from "react-router-dom";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
@@ -80,9 +79,7 @@ export var MenuBars = function () {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <Link to="/">
-            <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => null} />
-          </Link>
+          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => (location.href = "/")} />
           <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => null} />
         </div>
       </section>
