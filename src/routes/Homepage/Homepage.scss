@@ -60,6 +60,8 @@
 
 .homepage__hero-title {
   font-size: clamp(36px, 4vw, 64px);
+  font-weight: 800;
+  line-height: 1.125em;
 }
 
 .homepage__hero-title-team {
@@ -78,6 +80,7 @@
 
 .homepage__hero-text {
   margin-bottom: 3em;
+  line-height: 1.375em;
 }
 
 .homepage__illustration {
