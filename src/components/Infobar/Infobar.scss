@@ -9,6 +9,7 @@
   transform: translateX(-50%);
   width: 270px;
   justify-content: center;
+  z-index: $infobar-z-index;
 }
 
 @include collapsedColumns(".infobar") {
