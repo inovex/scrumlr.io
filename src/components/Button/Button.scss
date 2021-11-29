@@ -93,7 +93,7 @@
   height: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .button.button--outlined {
     color: $color-white;
   }

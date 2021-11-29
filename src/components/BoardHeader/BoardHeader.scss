@@ -31,7 +31,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   background-color: rgba(0, 87, 255, 0.06);
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-header__link:focus,
   .board-header__link:hover {
     background-color: rgba(255, 0, 105, 0.15);
@@ -64,7 +64,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   background-color: rgba(0, 87, 255, 0.06);
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-header__users:focus,
   .board-header__users:hover {
     background-color: rgba(255, 0, 105, 0.15);
@@ -94,7 +94,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   background-color: rgba(0, 87, 255, 0.06);
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-header_name-and-settings-button:focus,
   .board-header_name-and-settings-button:hover {
     background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
@@ -131,7 +131,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   max-width: 28vw;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-header__name {
     color: $color-white;
   }

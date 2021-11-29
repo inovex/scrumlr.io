@@ -41,7 +41,7 @@
   color: $color-grooming-green;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .user__initials,
   .rest-users__count {
     color: white;

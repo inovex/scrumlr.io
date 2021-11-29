@@ -14,7 +14,7 @@ $timer-dropdown__color-dark: $color-white;
   top: 16px;
   outline: 0;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .timer-dropdown__item-button label {
     color: $timer-dropdown__color-dark;
   }
@@ -60,7 +60,7 @@ $timer-dropdown__color-dark: $color-white;
   top: 12px;
   right: 44px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .timer-dropdown__item-button > * > input {
     color: $timer-dropdown__color-dark;
     border-bottom: 2px solid $timer-dropdown__color-dark;

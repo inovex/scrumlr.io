@@ -15,7 +15,7 @@
   width: calc(100vw - 36px);
   max-width: 380px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .note-dialog__note {
     background-color: $color-dark-mode-note;
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;

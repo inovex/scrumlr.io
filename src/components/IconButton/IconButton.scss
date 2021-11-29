@@ -16,7 +16,7 @@
 .icon-button:hover {
   background-color: $color-white;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .icon-button:hover {
     background-color: $color-white;
   }

@@ -161,7 +161,7 @@
   margin-top: 2em;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .login-board__dialog {
     color: $color-white;
     background: #1a2232;

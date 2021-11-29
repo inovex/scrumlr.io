@@ -15,7 +15,7 @@
   height: 24px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .app-info {
     color: $color-middle-gray;
   }

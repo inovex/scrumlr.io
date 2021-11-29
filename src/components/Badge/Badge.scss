@@ -24,7 +24,7 @@
   padding-right: 5px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .badge > span {
     background-color: $color-planning-pink;
   }

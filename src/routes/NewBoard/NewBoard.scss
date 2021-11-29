@@ -97,7 +97,7 @@
   margin-left: 8px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .new-board {
     color: $color-white;
   }

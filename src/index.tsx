@@ -17,6 +17,8 @@ Parse.initialize("Scrumlr");
 Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || `/api`;
 Parse.liveQueryServerURL = process.env.REACT_APP_LIVEQUERY_URL || `wss://${window.location.hostname}/ws`;
 
+document.documentElement.setAttribute("theme", localStorage.getItem("theme") ?? "dark");
+
 ReactDOM.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>

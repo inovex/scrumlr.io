@@ -57,7 +57,7 @@ $header-menu-border-bottom-color: #efefef;
   background-color: $header-menu-hover-color--light;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-option-button {
     background-color: $color-dark-mode-note;
   }

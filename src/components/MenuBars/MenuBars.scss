@@ -16,7 +16,7 @@
     left: calc(50% - 168px);
   }
   &.menu-bars--user {
-    @media (prefers-color-scheme: light) {
+    [theme="light"] {
       .menu-bars__switch {
         background-color: $color-white;
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
@@ -25,7 +25,7 @@
         color: $menu-color-admin--primary;
       }
     }
-    @media (prefers-color-scheme: dark) {
+    [theme="dark"] {
       .menu-bars__switch {
         background-color: $menu-color-admin--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
@@ -52,7 +52,7 @@
   }
 
   &.menu-bars--admin {
-    @media (prefers-color-scheme: light) {
+    [theme="light"] {
       .menu-bars__switch {
         background-color: $color-white;
         box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
@@ -61,7 +61,7 @@
         color: $menu-color-regular--primary;
       }
     }
-    @media (prefers-color-scheme: dark) {
+    [theme="dark"] {
       .menu-bars__switch {
         background-color: $menu-color-regular--primary;
         box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
@@ -189,14 +189,14 @@
   }
 }
 
-@media (prefers-color-scheme: light) {
+[theme="light"] {
   .menu {
     background-color: $color-white;
     box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
   }
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .menu {
     box-shadow: 0 6px 9px 0 rgba(0, 0, 0, 0.2);
   }

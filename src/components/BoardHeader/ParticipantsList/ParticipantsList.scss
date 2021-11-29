@@ -128,7 +128,7 @@ $header-left_distance: 24px;
   left: 244px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .participants {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }

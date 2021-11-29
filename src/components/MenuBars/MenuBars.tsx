@@ -57,6 +57,16 @@ export var MenuBars = function () {
     store.dispatch(ActionFactory.setRaisedHandStatus({userId: [Parse.User.current()!.id], raisedHand: active}));
   };
 
+  const toggleTheme = () => {
+    if (document.documentElement.getAttribute("theme") === "light") {
+      document.documentElement.setAttribute("theme", "dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.setAttribute("theme", "light");
+      localStorage.setItem("theme", "light");
+    }
+  };
+
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
@@ -80,7 +90,7 @@ export var MenuBars = function () {
             value={raisedHand}
           />
           <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.returnToHomepage")} icon={AddStickerIcon} onClick={() => (location.href = "/")} />
-          <MenuButton tabIndex={TabIndex.UserMenu + 3} disabled direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => null} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 3} direction="right" label={t("MenuBars.settings")} icon={SettingsIcon} onClick={() => toggleTheme()} />
         </div>
       </section>
       {isAdmin && (
