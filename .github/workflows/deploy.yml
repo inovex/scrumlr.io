@@ -5,8 +5,6 @@ on:
     types: [completed]
   pull_request:
     types: [labeled]
-env:
-  REGISTRY: ghcr.io
 jobs:
   build-frontend:
     runs-on: self-hosted
