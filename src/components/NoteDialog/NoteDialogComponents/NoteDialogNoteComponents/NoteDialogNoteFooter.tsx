@@ -13,6 +13,7 @@ type NoteDialogNoteFooterProps = {
   noteId?: string;
   parentId?: string;
   votes: VoteClientModel[];
+  allVotesOfUser: VoteClientModel[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;
@@ -33,7 +34,9 @@ export var NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = function (props
         </figure>
       )}
       <div className="note-dialog__note-footer__options-and-votes">
-        {(props.activeVoting || props.votes.length != 0) && <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} />}
+        {(props.activeVoting || props.votes.length != 0) && (
+          <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} usedVotesAsUser={props.allVotesOfUser.length} />
+        )}
         {showOptions && <NoteDialogNoteComponents.Options {...props} />}
       </div>
     </div>
