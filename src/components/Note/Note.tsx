@@ -24,6 +24,7 @@ interface NoteProps {
   showAuthors: boolean;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
+  allVotesOfUser: VoteClientModel[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   focus: boolean;
@@ -122,7 +123,13 @@ export var Note = function (props: NoteProps) {
               <figcaption className="note__author-name">{props.authorName}</figcaption>
             </figure>
           )}
-          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))} activeVoting={props.activeVoting} />
+          <Votes
+            tabIndex={props.tabIndex}
+            noteId={props.noteId!}
+            votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))}
+            activeVoting={props.activeVoting}
+            usedVotesAsUser={props.allVotesOfUser.length}
+          />
         </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
       </div>

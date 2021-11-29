@@ -9,16 +9,17 @@ import {FC} from "react";
 type AddVoteProps = {
   noteId: string;
   tabIndex: number;
+  disabled: boolean;
 };
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex}) => {
+export var AddVoteButton: FC<AddVoteProps> = function({noteId, tabIndex, disabled}) {
   const addVote = () => {
     store.dispatch(ActionFactory.addVote(noteId));
   };
 
   return (
-    <DotButton tabIndex={tabIndex} className="vote-button-add" onClick={addVote}>
+    <DotButton tabIndex={tabIndex} className="vote-button-add" onClick={addVote} disabled={disabled}>
       <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );
-};
+}

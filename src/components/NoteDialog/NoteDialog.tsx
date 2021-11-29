@@ -20,6 +20,7 @@ interface NoteDialogProps {
   onDeleteOfParent: () => void;
   childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
   votes: VoteClientModel[];
+  allVotesOfUser: VoteClientModel[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;
