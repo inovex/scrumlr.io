@@ -6,8 +6,10 @@ export interface TextInputAdornmentProps extends DetailedHTMLProps<ButtonHTMLAtt
   title: string;
 }
 
-export var TextInputAdornment: FC<TextInputAdornmentProps> = function({title, className, children, ...other}) {
-  return <button className={classNames("text-input-adornment", className)} aria-label={title} title={title} {...other}>
-    {children}
-  </button>
-}
+export var TextInputAdornment: FC<TextInputAdornmentProps> = function ({title, className, children, ...other}) {
+  return (
+    <button type="button" className={classNames("text-input-adornment", className)} aria-label={title} title={title} {...other}>
+      {children}
+    </button>
+  );
+};

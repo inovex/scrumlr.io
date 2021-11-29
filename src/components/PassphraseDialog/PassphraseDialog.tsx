@@ -3,9 +3,12 @@ import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
+import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
+import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
+import {TextInputAdornment} from "../TextInputAdornment";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
@@ -33,15 +36,19 @@ export var PassphraseDialog: FC<PassphraseDialogProps> = function ({onSubmit}) {
         </Link>
 
         <form className="passphrase-dialog__form" onSubmit={handleSubmit}>
-          <TextInputLabel label={t("PassphraseDialog.passphraseInputLabel")}>
-            <TextInput type={visiblePassphrase ? "text" : "password"} value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />
-          </TextInputLabel>
-
-          {3 > 5 && (
-            <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
-              {t("PassphraseDialog.togglePassphraseVisibility")}
-            </button>
-          )}
+          <TextInputLabel label={t("PassphraseDialog.passphraseInputLabel")} htmlFor="password-dialog__password" />
+          <TextInput
+            id="password-dialog__password"
+            type={visiblePassphrase ? "text" : "password"}
+            rightAdornment={
+              <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
+                {visiblePassphrase && <VisibleIcon />}
+                {!visiblePassphrase && <HiddenIcon />}
+              </TextInputAdornment>
+            }
+            value={passphrase}
+            onChange={(e) => setPassphrase(e.target.value)}
+          />
 
           <Button type="submit" color="primary" className="passphrase-dialog__submit-button" disabled={!passphrase}>
             {t("PassphraseDialog.submit")}
