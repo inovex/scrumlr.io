@@ -77,7 +77,7 @@ export var Note = function (props: NoteProps) {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    canDrag: () => !props.activeModeration.status || props.currentUserIsModerator,
+    canDrag: () => !props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id,
   });
 
   const [{isOver, canDrop}, drop] = useDrop(() => ({
@@ -96,9 +96,9 @@ export var Note = function (props: NoteProps) {
 
   return (
     <li
-      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && !props.currentUserIsModerator})}
-      onClick={!props.activeModeration.status || props.currentUserIsModerator ? handleShowDialog : () => {}}
-      onKeyPress={(!props.activeModeration.status || props.currentUserIsModerator) && !showDialog ? handleShowDialog : () => {}}
+      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId != Parse.User.current()?.id})}
+      onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
+      onKeyPress={(!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) && !showDialog ? handleShowDialog : () => {}}
       ref={noteRef}
     >
       <div
@@ -107,7 +107,7 @@ export var Note = function (props: NoteProps) {
           {"note--own-card": Parse.User.current()?.id === props.authorId},
           {"note--isDragging": isDragging},
           {"note--isOver": isOver && canDrop},
-          {"note__disabled-click": props.activeModeration.status && !props.currentUserIsModerator}
+          {"note__disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id}
         )}
         tabIndex={props.tabIndex ?? TabIndex.default}
       >
