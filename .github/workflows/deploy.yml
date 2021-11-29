@@ -7,11 +7,10 @@ on:
     types: [labeled]
 env:
   REGISTRY: ghcr.io
-  LABEL: 'Action: Deploy PR'
 jobs:
   build-frontend:
     runs-on: self-hosted
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -40,7 +39,7 @@ jobs:
 
   build-server:
     runs-on: self-hosted
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -69,7 +68,7 @@ jobs:
   
   build-dashboard:
     runs-on: self-hosted
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -99,7 +98,7 @@ jobs:
   deploy-pr:
     name: Deploy Feature Branch
     runs-on: self-hosted
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == env.LABEL) || (github.event.action == 'labeled' && github.event.label.name == env.LABEL)}}
+    if: "${{ (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request'  && github.event.label.name == 'Action: Deploy PR') || (github.event.action == 'labeled' && github.event.label.name == 'Action: Deploy PR')}}"
     needs: [ build-frontend, build-server, build-dashboard ]
     steps:
 
