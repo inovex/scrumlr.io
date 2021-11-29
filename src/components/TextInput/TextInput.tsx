@@ -6,6 +6,6 @@ export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HT
   type?: "text" | "password";
 }
 
-export var TextInput: FC<TextInputProps> = function({className, type = "text", ...other}) {
-  return <input className={classNames("text-input", className)} type={type} {...other} />
-}
+export var TextInput: FC<TextInputProps> = function ({className, type = "text", ...other}) {
+  return <input className={classNames("text-input", className)} type={type} {...other} />;
+};

@@ -36,8 +36,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item--right"
-        disabled=""
+        class="menu-item menu-item--disabled menu-item--right"
         tabindex="301"
       >
         <div
@@ -46,13 +45,18 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            Add image or giphy
+            Raise your hand
           </span>
         </div>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-addimage.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
         </svg>
       </button>
       <a
@@ -139,8 +143,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         </svg>
       </button>
       <button
-        class="menu-item menu-item--right"
-        disabled=""
+        class="menu-item menu-item--disabled menu-item--right"
         tabindex="301"
       >
         <div
@@ -149,13 +152,18 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Add image or giphy
+            Raise your hand
           </span>
         </div>
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
           icon-addimage.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
         </svg>
       </button>
       <a

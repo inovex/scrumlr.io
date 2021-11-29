@@ -7,15 +7,14 @@ export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
   if (action.type === ActionType.ChangePermission) {
     const boardId = stateAPI.getState().board.data!.id;
     API.changePermission(action.userId, boardId, action.moderator);
-  }
-
-  if (action.type === ActionType.EditUserConfiguration) {
+  } else if (action.type === ActionType.EditUserConfiguration) {
     const boardId = stateAPI.getState().board.data!.id;
     API.editUserConfiguration(boardId, action.userConfigurationRequest);
-  }
-
-  if (action.type === ActionType.SetUserReadyStatus) {
+  } else if (action.type === ActionType.SetUserReadyStatus) {
     const boardId = stateAPI.getState().board.data!.id;
     API.setReadyStatus(boardId, action.ready);
+  } else if (action.type === ActionType.SetRaisedHandStatus) {
+    const boardId = stateAPI.getState().board.data!.id;
+    API.setRaisedHandStatus(boardId, action.configuration);
   }
 };

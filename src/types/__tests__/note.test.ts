@@ -6,6 +6,7 @@ describe("Note types", () => {
       author: {id: "5"} as unknown as Parse.Object,
       parent: {id: "5"} as unknown as Parse.Object,
       columnId: "test_columnId",
+      positionInStack: 5,
       text: "test_text",
       focus: false,
       createdAt: new Date(1234),
@@ -27,6 +28,7 @@ describe("Note types", () => {
     expect(clientModel.updatedAt).toEqual(serverModel.get("updatedAt"));
     expect(clientModel.author).toEqual(serverModel.get("author").id);
     expect(clientModel.parentId).toEqual(serverModel.get("parent").id);
+    expect(clientModel.positionInStack).toEqual(serverModel.get("positionInStack"));
     expect(clientModel.dirty).toEqual(false);
   });
 });

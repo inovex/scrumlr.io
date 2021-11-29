@@ -1,4 +1,4 @@
-import {EditUserConfigurationRequest} from "types/user";
+import {EditUserConfigurationRequest, RaisedHandRequest} from "types/user";
 import {callAPI} from "api/callApi";
 
 export const UserAPI = {
@@ -29,4 +29,13 @@ export const UserAPI = {
    * @returns a {status, description} object
    */
   setReadyStatus: (boardId: string, ready: boolean) => callAPI("setReadyStatus", {boardId, ready}),
+
+  /**
+   * Set the raised hand state of a user
+   *
+   * @param boardId the identifier of the board
+   * @param configuration contains a list of users and updates the raisedHand status
+   * @returns a {status, description} object
+   */
+  setRaisedHandStatus: (boardId: string, configuration: RaisedHandRequest) => callAPI("setRaisedHandStatus", {boardId, configuration}),
 };

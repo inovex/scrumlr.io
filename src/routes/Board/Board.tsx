@@ -1,13 +1,13 @@
 import {LoadingScreen} from "components/LoadingScreen";
 import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
-import Parse from "parse";
 import {Note} from "components/Note";
-import {JoinRequest} from "components/JoinRequest";
+import {Request} from "components/Request";
 import {useAppSelector} from "store";
 import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
+import Parse from "parse";
 
 export var Board = function () {
   const {t} = useTranslation();
@@ -28,13 +28,6 @@ export var Board = function () {
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
-  let joinRequestComponent;
-  if (currentUserIsModerator) {
-    const pendingJoinRequests = state.joinRequests.filter((joinRequest) => joinRequest.status === "pending");
-    if (pendingJoinRequests && pendingJoinRequests.length > 0) {
-      joinRequestComponent = <JoinRequest joinRequests={pendingJoinRequests} />;
-    }
-  }
   let boardstatus = t("Board.publicSession");
   const accessPolicy = state.board.data?.accessPolicy;
   if (accessPolicy !== "Public") {
@@ -48,7 +41,14 @@ export var Board = function () {
   if (state.board.status === "ready") {
     return (
       <>
-        {joinRequestComponent}
+        {currentUserIsModerator && (
+          <Request
+            joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
+            users={state.users.all}
+            raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
+            boardId={state.board.data!.id}
+          />
+        )}
         <Infobar
           endTime={state.board.data!.timerUTCEndTime}
           activeVoting={state.board.data?.voting === "active"}
@@ -71,6 +71,7 @@ export var Board = function () {
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
+                  .filter((note) => note.positionInStack == -1 || note.positionInStack == 0)
                   .sort((a, b) => (b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
                   .map((note, noteIndex) => (
                     <Note
@@ -86,6 +87,7 @@ export var Board = function () {
                       columnColor={column.color}
                       childrenNotes={state.notes
                         .filter((n) => note.id && note.id === n.parentId)
+                        .sort((a, b) => a.positionInStack - b.positionInStack)
                         .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                         .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                       votes={state.votes.filter((vote) => vote.note === note.id)}

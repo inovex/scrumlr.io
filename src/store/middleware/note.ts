@@ -19,4 +19,16 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, 
     // TODO retry mechanism
     API.editNote(action.note);
   }
+
+  if (action.type === ActionType.UnstackNote) {
+    // TODO retry mechanism
+    const boardId = stateAPI.getState().board.data!.id;
+    API.unstackNote(action.note, boardId);
+  }
+
+  if (action.type === ActionType.DragNote) {
+    // TODO retry mechanism
+    const boardId = stateAPI.getState().board.data!.id;
+    API.dragNote(action.note, boardId);
+  }
 };

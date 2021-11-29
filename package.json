@@ -34,7 +34,7 @@
     "react-router-dom": "^6.0.2",
     "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.0"
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.11.1",
@@ -78,7 +78,7 @@
     "i18next-fs-backend": "^1.1.4",
     "lint-staged": "^12.1.2",
     "node-sass": "^6.0.1",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "react-dnd-test-backend": "^14.0.1",
     "react-dnd-test-utils": "^14.0.2",
     "react-scripts": "^4.0.3",

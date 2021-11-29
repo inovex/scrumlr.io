@@ -49,7 +49,8 @@ const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
     owner: {
       objectId: "test_objectId",
     },
-    usersMarkedReady: [],
+    usersMarkedReady: ["test"],
+    usersRaisedHands: ["test"],
   };
 
   const clientModel: BoardClientModel = await mapBoardServerToClientModel(serverModel);
@@ -70,6 +71,7 @@ const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
   expect(clientModel.owner).toEqual(serverModel.owner.objectId);
   expect(clientModel.moderation).toEqual(serverModel.moderation);
   expect(clientModel.usersMarkedReady).toEqual(serverModel.usersMarkedReady);
+  expect(clientModel.usersRaisedHands).toEqual(serverModel.usersRaisedHands);
   if (serverModel.timerUTCEndTime == null) {
     expect(clientModel.timerUTCEndTime).toEqual(undefined);
   } else {
