@@ -13,17 +13,20 @@ type VotesProps = {
   votes: VoteClientModel[];
   activeVoting: boolean;
   tabIndex?: number;
+  usedVotesAsUser: number;
 };
 
-export const Votes: FC<VotesProps> = (props) => {
+export var Votes: FC<VotesProps> = function(props) {
   const voteConfiguration = useAppSelector((state) => state.voteConfiguration);
-  const ownVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
-  const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownVotes.length == 0));
+  const ownNoteVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
+  const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownNoteVotes.length == 0));
 
   return (
     <div className={classNames("votes", props.className)}>
-      {props.votes.length > 0 && <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={ownVotes} />}
-      {showAddVoteButton && <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} />}
+      {props.votes.length > 0 && <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={ownNoteVotes} />}
+      {showAddVoteButton && (
+        <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={props.usedVotesAsUser === voteConfiguration.voteLimit} />
+      )}
     </div>
   );
-};
+}
