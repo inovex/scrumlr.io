@@ -7,7 +7,7 @@ import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 
-export var ShowOtherUsersNotesOption = function() {
+export var ShowOtherUsersNotesOption = function () {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({
@@ -26,4 +26,4 @@ export var ShowOtherUsersNotesOption = function() {
       </BoardOptionButton>
     </BoardOption>
   );
-}
+};

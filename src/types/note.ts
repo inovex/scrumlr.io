@@ -6,6 +6,7 @@ import Parse from "parse";
 export interface NoteServerModel extends Parse.Object {
   columnId: string;
   text: string;
+  positionInStack: number;
   author: Parse.Object;
   parent?: Parse.Object;
   focus: boolean;
@@ -22,6 +23,9 @@ export interface NoteClientModel {
 
   /** The column id of the column in which this note should be displayed. */
   columnId: string;
+
+  /** The position of the note in the stack. */
+  positionInStack: number;
 
   /** The text of the note. */
   text: string;
@@ -51,17 +55,27 @@ export interface NoteClientModel {
 }
 
 type EditableNoteAttributes = {
-  columnId: string;
-  parentId: string;
   text: string;
   focus: boolean;
 };
 
 export type EditNoteRequest = {id: string} & Partial<EditableNoteAttributes>;
 
+export type UnstackNoteRequest = {
+  id: string;
+  parentId: string;
+};
+
+export type DragNoteRequest = {
+  id: string;
+  dragOnId?: string;
+  columnId?: string;
+};
+
 export const mapNoteServerToClientModel = (note: NoteServerModel): NoteClientModel => ({
   id: note.id,
   columnId: note.get("columnId"),
+  positionInStack: note.get("positionInStack"),
   text: note.get("text"),
   author: note.get("author").id,
   parentId: note.get("parent")?.id,

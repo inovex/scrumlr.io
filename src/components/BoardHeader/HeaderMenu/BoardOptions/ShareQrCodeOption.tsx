@@ -13,7 +13,7 @@ export type QRCodeProps = {
   expand: boolean;
 };
 
-export var ShareQrCodeOption = function(props: QRCodeProps) {
+export var ShareQrCodeOption = function (props: QRCodeProps) {
   const {t} = useTranslation();
 
   return (
@@ -31,4 +31,4 @@ export var ShareQrCodeOption = function(props: QRCodeProps) {
       </div>
     </BoardOption>
   );
-}
+};

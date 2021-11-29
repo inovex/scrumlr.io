@@ -6,6 +6,8 @@ body,
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+
+  background: $color-white;
 }
 *,
 *:before,
@@ -49,5 +51,11 @@ code {
   .toast-container__container .toast-container__toast {
     background: $color-dark-mode-note;
     color: $color-white;
+  }
+
+  html,
+  body,
+  #root {
+    background: $color-dark-mode;
   }
 }
