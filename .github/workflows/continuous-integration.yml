@@ -5,8 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-env:
-  REGISTRY: ghcr.io
+
 jobs:
   test:
     name: Build and Test
@@ -82,84 +81,4 @@ jobs:
           push: true
           tags: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
 
-  build-frontend:
-    runs-on: self-hosted
-    needs: test
-    if: ${{ github.event_name  == 'pull_request' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            registry.kube.com/scrumlr-frontend
-          tags: |
-            type=ref,event=pr
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1 
-        with:
-          driver: docker
-       
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-  build-server:
-    runs-on: self-hosted
-    needs: test
-    if: ${{ github.event_name == 'pull_request' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            registry.kube.com/scrumlr-server
-          tags: |
-            type=ref,event=pr
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-        with:
-          driver: docker
-       
-      - name: Build and push Server
-        uses: docker/build-push-action@v2
-        with:
-          context: ./server
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
   
-  build-dashboard:
-    runs-on: self-hosted
-    needs: test
-    if: ${{ github.event_name == 'pull_request' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: |
-            registry.kube.com/scrumlr-dashboard
-          tags: |
-            type=ref,event=pr
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-        with:
-          driver: docker
-       
-      - name: Build and push Dashboard
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          context: ./dashboard
-          tags: ${{ steps.meta.outputs.tags }}
-
