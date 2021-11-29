@@ -25,8 +25,6 @@ if (localStorage.getItem("theme")) {
   document.documentElement.setAttribute("theme", "light");
 }
 
-document.documentElement.setAttribute("theme", localStorage.getItem("theme") ?? "dark");
-
 ReactDOM.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
