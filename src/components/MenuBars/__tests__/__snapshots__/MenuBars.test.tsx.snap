@@ -88,7 +88,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            Settings
+            Change color scheme
           </span>
         </div>
         <svg
@@ -190,7 +190,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Settings
+            Change color scheme
           </span>
         </div>
         <svg
