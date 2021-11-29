@@ -28,7 +28,7 @@
   border-color: #adadad;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .note-dialog__note-content__text {
     color: $color-white;
   }

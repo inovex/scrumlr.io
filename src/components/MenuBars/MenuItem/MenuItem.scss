@@ -68,7 +68,7 @@ $number-of-menu-items: 4;
   color: var(--primaryColor);
   background: $color-white;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .menu-item__icon {
     color: $color-white;
     background: var(--primaryColor);

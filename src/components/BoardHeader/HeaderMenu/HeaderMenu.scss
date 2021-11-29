@@ -15,7 +15,7 @@ $header-menu__item-height: 48px;
   list-style-type: none;
   padding: 0;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .header-menu {
     background-color: $header-menu-color--dark;
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);

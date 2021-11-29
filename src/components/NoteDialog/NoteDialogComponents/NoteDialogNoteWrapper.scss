@@ -35,7 +35,7 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
   background-color: $color-middle-gray;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .note-dialog__scrollbar::-webkit-scrollbar-track {
     background-color: $color-dark-mode-note;
   }

@@ -28,7 +28,7 @@
   stop-color: #0057ff;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .scrumlr-logo__paths {
     fill: white;
   }

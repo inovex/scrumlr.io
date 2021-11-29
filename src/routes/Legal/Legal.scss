@@ -15,7 +15,7 @@
   text-align: justify;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .legal {
     color: $color-white;
   }

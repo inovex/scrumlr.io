@@ -38,7 +38,7 @@ $note-input__input-right: 40px;
 .note-input:focus-within {
   box-shadow: 0 6px 9px 0 rgba(0, 87, 255, 0.16);
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .note-input {
     background-color: #4c5566;
   }

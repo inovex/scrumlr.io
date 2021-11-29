@@ -67,7 +67,7 @@
   transform: scale(1.2);
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .participant {
     background-color: $color-dark-mode-note;
   }

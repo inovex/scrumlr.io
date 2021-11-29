@@ -21,7 +21,7 @@
   border: 1px solid black;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .board-guard {
     background-color: $color-dark-one;
   }

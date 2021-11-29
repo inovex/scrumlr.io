@@ -69,34 +69,9 @@ exports[`Menu should only render add-menu for participants 1`] = `
           <span
             class="tooltip__text"
           >
-            Return to Homepage
+            Change color scheme
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-addsticker.svg
-        </svg>
-      </button>
-      <button
-        class="menu-item menu-item--right"
-        disabled=""
-        tabindex="303"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Settings
-          </span>
-        </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-settings.svg
-        </svg>
       </button>
     </div>
   </section>
@@ -172,34 +147,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Return to Homepage
+            Change color scheme
           </span>
         </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-addsticker.svg
-        </svg>
-      </button>
-      <button
-        class="menu-item menu-item--right"
-        disabled=""
-        tabindex="303"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Settings
-          </span>
-        </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-settings.svg
-        </svg>
       </button>
     </div>
   </section>
@@ -210,33 +160,8 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       class="menu__items"
     >
       <button
-        class="menu-item menu-item--disabled menu-item--left"
-        disabled=""
-        tabindex="400"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Start column mode
-          </span>
-        </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-column.svg
-        </svg>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
         class="menu-item menu-item--left"
-        tabindex="401"
+        tabindex="400"
       >
         <div
           class="menu-item__tooltip"
@@ -334,7 +259,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--left"
-        tabindex="409"
+        tabindex="408"
       >
         <div
           class="menu-item__tooltip"
@@ -435,7 +360,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"
-        tabindex="416"
+        tabindex="415"
       >
         <div
           class="menu-item__tooltip"
