@@ -11,7 +11,7 @@ exports[`Column Test behavior of hidden columns Snapshot: Hide button should be 
     <svg
       class="column__header-toggle-button-icon"
     >
-      icon-unstack.svg
+      icon-visible.svg
     </svg>
   </button>
 </div>

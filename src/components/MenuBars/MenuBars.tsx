@@ -4,7 +4,7 @@ import store, {useAppSelector} from "store";
 import Parse from "parse";
 import classNames from "classnames";
 import {MenuButton, MenuToggle} from "components/MenuBars/MenuItem";
-import {ReactComponent as AddImageIcon} from "assets/icon-addimage.svg";
+import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as AddStickerIcon} from "assets/icon-addsticker.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
@@ -75,7 +75,7 @@ export var MenuBars = function () {
             direction="right"
             toggleStartLabel={t("MenuBars.raiseHand")}
             toggleStopLabel={t("MenuBars.lowerHand")}
-            icon={AddImageIcon}
+            icon={RaiseHand}
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
