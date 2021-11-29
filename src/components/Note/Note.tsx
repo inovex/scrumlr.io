@@ -36,7 +36,7 @@ export var Note = function (props: NoteProps) {
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
-      if (props.noteId && props.currentUserIsModerator) {
+      if (props.noteId && props.activeModeration.userId === Parse.User.current()?.id) {
         store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
