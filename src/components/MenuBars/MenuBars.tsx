@@ -106,7 +106,7 @@ export var MenuBars = function () {
               onToggle={() => null}
             />
             <TimerToggleButton tabIndex={TabIndex.AdminMenu + 1} />
-            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 2} />
+            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 9} />
             <MenuToggle
               value={state.moderation === "active"}
               direction="left"
@@ -114,7 +114,7 @@ export var MenuBars = function () {
               toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 11}
+              tabIndex={TabIndex.AdminMenu + 16}
             />
           </div>
         </section>
