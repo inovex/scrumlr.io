@@ -68,11 +68,12 @@ export var Board = function () {
                 currentUserIsModerator={currentUserIsModerator}
                 color={column.color}
               >
+                {console.log(state.notes)}
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
                   .filter((note) => note.positionInStack == -1 || note.positionInStack == 0)
-                  .sort((a, b) => (b.createdAt === undefined ? -1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
+                  .sort((a, b) => (a.createdAt === undefined || b.createdAt === undefined ? 1 : b.createdAt!.getTime() - a.createdAt!.getTime()))
                   .map((note, noteIndex) => (
                     <Note
                       showAuthors={state.board.data!.showAuthors}
