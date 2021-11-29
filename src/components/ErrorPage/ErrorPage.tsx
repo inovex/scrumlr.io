@@ -1,6 +1,7 @@
 import "./ErrorPage.scss";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {Button} from "components/Button";
 
 export interface ErrorPageProps {
   errorMessage: string;
@@ -17,9 +18,9 @@ export var ErrorPage = function ({errorMessage, originURL}: ErrorPageProps) {
   return (
     <section className="error-page">
       <span>{errorMessage}</span>
-      <button data-testid="home-button" onClick={redirect("/")}>
+      <Button data-testid="home-button" onClick={redirect("/")}>
         {t("ErrorPage.navigateHome")}
-      </button>
+      </Button>
       <button data-testid="back-button" onClick={redirect(originURL)}>
         {t("ErrorPage.navigateBack")}
       </button>

@@ -2,6 +2,10 @@ import {FC, useState} from "react";
 import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useTranslation} from "react-i18next";
+import {Link} from "react-router-dom";
+import {TextInputLabel} from "../TextInputLabel";
+import {TextInput} from "../TextInput";
+import {Button} from "../Button";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
@@ -22,25 +26,28 @@ export var PassphraseDialog: FC<PassphraseDialogProps> = function ({onSubmit}) {
   };
 
   return (
-    <div className="loading-screen">
-      <ScrumlrLogo className="passphrase-dialog__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-      <div className="passphrase-dialog" onSubmit={handleSubmit}>
-        <form className="passphrase-dialog__form">
-          <label htmlFor="passphrase" className="passphrase-dialog__input-label">
-            {t("PassphraseDialog.passphraseInputLabel")}
-          </label>
-          <input id="passphrase" type={visiblePassphrase ? "text" : "password"} value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />
+    <div className="passphrase-dialog__wrapper">
+      <div className="passphrase-dialog">
+        <Link to="/">
+          <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+        </Link>
 
-          <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
-            {t("PassphraseDialog.togglePassphraseVisibility")}
-          </button>
-          <button type="submit" className="passphrase-dialog__submit-button" disabled={!passphrase}>
+        <form className="passphrase-dialog__form" onSubmit={handleSubmit}>
+          <TextInputLabel label={t("PassphraseDialog.passphraseInputLabel")}>
+            <TextInput type={visiblePassphrase ? "text" : "password"} value={passphrase} onChange={(e) => setPassphrase(e.target.value)} />
+          </TextInputLabel>
+
+          {3 > 5 && (
+            <button type="button" aria-label="Toggle passphrase visibility" aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
+              {t("PassphraseDialog.togglePassphraseVisibility")}
+            </button>
+          )}
+
+          <Button type="submit" color="primary" className="passphrase-dialog__submit-button" disabled={!passphrase}>
             {t("PassphraseDialog.submit")}
-          </button>
+          </Button>
         </form>
       </div>
-
-      <span className="passphrase-dialog__hint">{t("PassphraseDialog.hint")}</span>
     </div>
   );
 };
