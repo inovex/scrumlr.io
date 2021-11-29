@@ -1,0 +1,22 @@
+@import "constants/style";
+
+.app-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+
+  text-decoration: none;
+  color: $color-dark-gray;
+}
+
+.app-info__icon {
+  width: 24px;
+  height: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .app-info {
+    color: $color-middle-gray;
+  }
+}

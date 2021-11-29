@@ -1,14 +1,20 @@
 {
   "NewBoard": {
+    "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
-    "createNewBoardAnonymous": "Erstelle anonym eine Sitzung",
-    "createBoardError": "Du musst eingloggt sein um eine neue Sitzung erstellen zu können.",
-    "logout": "Ausloggen",
-    "user": "Anwender"
+    "extendedConfigurationButton": "Erweiterte Einstellungen",
+    "basicConfigurationButton": "Vorlagenauswahl",
+    "extendedConfigurationTitle": "Erweiterte Einstellungen",
+    "basicConfigurationTitle": "Wähle eine Vorlage"
   },
   "LoginBoard": {
+    "title": "Registrierung bei scrumlr.io",
+    "anonymousLogin": "Nehme anonym an der Sitzung teil",
+    "usernameValidationError": "Der Benutzername darf nicht leer sein",
+    "termsValidationError": "Du musst den AGBs und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "joinAnonymous": "Nehme anonym an der Sitzung teil"
+    "login": "Registrieren",
+    "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu"
   },
   "Board": {
     "publicSession": "Öffentlich",
@@ -24,11 +30,14 @@
     "error": "Oops! Der Login hat nicht funktioniert. Bitte versuche es nochmal."
   },
   "AccessPolicySelection": {
-    "title": "Zugriffsberechtigung",
+    "title": "Zugriffseinstellung",
+    "publicTitle": "Offen",
+    "byPassphraseTitle": "Passwortgeschützt",
+    "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
-    "public": "Zugriff für alle Teilnehmer über die URL möglich.",
-    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt.",
-    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten.",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fälle sicher genug sein, da die URLs schwer zu erraten sind.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt. Dies ist gut geeignet, wenn man mit einer Gruppe nicht gleichzeitig zusammenarbeitet und Benutzer jederzeit beitreten können.",
+    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
     "passphraseValidationError": "Ein Passwort muss gesetzt sein!"
@@ -144,7 +153,7 @@
     "edit": "bearbeiten"
   },
   "AppInfo": {
-    "version": "Anwendungsversion: <0>{{version}}</0>"
+    "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },
   "Toast": {
     "authenticationError": "Ein Fehler trat beim Einloggen auf",
@@ -159,5 +168,14 @@
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!"
+  },
+  "Homepage": {
+    "developers": "© 2021, mit ❤️von <inovex>inovex</inovex>",
+    "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
+    "teaserText": "Starte in kürzester Zeit deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
+    "startButton": "Jetzt loslegen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "cookiePolicy": "Cookie Richtlinien",
+    "terms": "AGB"
   }
 }
