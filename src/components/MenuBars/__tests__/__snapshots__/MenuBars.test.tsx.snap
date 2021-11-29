@@ -51,7 +51,7 @@ exports[`Menu should only render add-menu for participants 1`] = `
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
-          icon-addimage.svg
+          icon-hand.svg
         </svg>
         <svg
           class="menu-item__icon menu-item__icon--end"
@@ -154,7 +154,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         <svg
           class="menu-item__icon menu-item__icon--start"
         >
-          icon-addimage.svg
+          icon-hand.svg
         </svg>
         <svg
           class="menu-item__icon menu-item__icon--end"
