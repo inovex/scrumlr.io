@@ -49,7 +49,7 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
             value={passphrase}
             onChange={(e) => onPassphraseChange(e.target.value)}
             rightAdornment={
-              <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
+              <TextInputAdornment title={t("AccessPolicySelection.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
                 {visiblePassphrase && <VisibleIcon />}
                 {!visiblePassphrase && <HiddenIcon />}
               </TextInputAdornment>

@@ -58,7 +58,7 @@ export var LoginBoard = function () {
               <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
 
               <div className="login-board__username">
-                <TextInputLabel label="Username" htmlFor="login-board__username" />
+                <TextInputLabel label={t("LoginBoard.username")} htmlFor="login-board__username" />
                 <TextInput
                   id="login-board__username"
                   value={displayName}
@@ -71,7 +71,7 @@ export var LoginBoard = function () {
                   maxLength={20}
                   aria-invalid={!displayName}
                   actions={
-                    <TextInputAction title="Generate" onClick={() => setDisplayName(getRandomName())}>
+                    <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
                       <RefreshIcon />
                     </TextInputAction>
                   }

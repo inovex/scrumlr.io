@@ -14,7 +14,9 @@
     "termsValidationError": "You must accept the terms and privacy policy",
     "errorOnRedirect": "An error occurred while redirecting you",
     "login": "Sign in",
-    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>"
+    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
+    "generateRandomName": "Generate random name",
+    "username": "Username"
   },
   "Board": {
     "publicSession": "Public Session",
@@ -40,7 +42,8 @@
     "manualVerification": "Admins of board can manually verify or reject each user access request individually. This policy is the safest, since the admin can deny any unapproved access.",
     "generatePassphrase": "Generate random passphrase",
     "copyPassphraseToClipboard": "Copy passphrase to clipboard",
-    "passphraseValidationError": "A passphrase must be set"
+    "passphraseValidationError": "A passphrase must be set",
+    "togglePassphraseVisibility": "Toggle passphrase visibility"
   },
   "BoardHeader": {
     "showParticipants": "Show participants"
