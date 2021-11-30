@@ -1,6 +1,8 @@
 import {AnyAction, Dispatch, MiddlewareAPI} from "redux";
 import {ApplicationState} from "types/store";
 import {API} from "api";
+import Parse from "parse";
+import {Toast} from "utils/Toast";
 import {ActionType, ReduxAction} from "../action";
 
 export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
@@ -16,5 +18,13 @@ export const passUsersMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>,
   } else if (action.type === ActionType.SetRaisedHandStatus) {
     const boardId = stateAPI.getState().board.data!.id;
     API.setRaisedHandStatus(boardId, action.configuration);
+  } else if (action.type === ActionType.UpdatedBoard) {
+    const onlineUsers = stateAPI.getState().users.all.filter((user) => user.online === true);
+    if (onlineUsers.length > 1) {
+      const unreadyUsers = onlineUsers.filter((user) => user.ready === false);
+      if (unreadyUsers.length === 1 && unreadyUsers[0].id === Parse.User.current()!.id) {
+        Toast.error(`You are the last one not ready yet, hurry-up!`);
+      }
+    }
   }
 };
