@@ -5,13 +5,14 @@ import "./TextInputLabel.scss";
 
 export interface TextInputLabelProps {
   className?: string;
+  htmlFor?: string;
   label: ReactNode;
-  children: ReactElement<typeof TextInput>;
+  children?: ReactElement<typeof TextInput>;
 }
 
-export var TextInputLabel: FC<TextInputLabelProps> = function ({className, label, children}) {
+export var TextInputLabel: FC<TextInputLabelProps> = function ({className, label, htmlFor, children}) {
   return (
-    <label className={classNames("text-input-label", className)}>
+    <label className={classNames("text-input-label", className)} htmlFor={htmlFor}>
       <span className="text-input-label__label">{label}</span>
       {children}
     </label>

@@ -16,7 +16,7 @@ type VotesProps = {
   usedVotesAsUser: number;
 };
 
-export var Votes: FC<VotesProps> = function(props) {
+export var Votes: FC<VotesProps> = function (props) {
   const voteConfiguration = useAppSelector((state) => state.voteConfiguration);
   const ownNoteVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
   const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownNoteVotes.length == 0));
@@ -29,4 +29,4 @@ export var Votes: FC<VotesProps> = function(props) {
       )}
     </div>
   );
-}
+};

@@ -1,0 +1,26 @@
+@import "constants/style";
+
+.text-input-adornment {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+
+  color: $color-black;
+  transition: color 0.15s ease;
+}
+
+.text-input-adornment:focus,
+.text-input-adornment:hover {
+  color: $color-backlog-blue;
+}
+
+.text-input-adornment > * {
+  width: 18px;
+  height: 18px;
+}

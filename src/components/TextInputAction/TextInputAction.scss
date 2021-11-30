@@ -1,0 +1,31 @@
+@import "constants/style";
+
+.text-input-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border: none;
+  border-radius: 15px;
+  outline: none;
+  background: $color-backlog-blue;
+  cursor: pointer;
+
+  color: $color-white;
+  box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0);
+  transition: color 0.15s ease;
+}
+
+.text-input-action:hover {
+  box-shadow: 0 2px 8px 6px rgba($color-backlog-blue, 0.3);
+}
+
+.text-input-action:focus {
+  box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.4);
+}
+
+.text-input-action > * {
+  width: 16px;
+  height: 16px;
+}

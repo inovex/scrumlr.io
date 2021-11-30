@@ -14,7 +14,9 @@
     "termsValidationError": "Du musst den AGBs und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
     "login": "Registrieren",
-    "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu"
+    "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
+    "generateRandomName": "Zufälligen Namen erstellen",
+    "username": "Benutzername"
   },
   "Board": {
     "publicSession": "Öffentlich",
@@ -40,7 +42,8 @@
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
     "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
-    "passphraseValidationError": "Ein Passwort muss gesetzt sein!"
+    "passphraseValidationError": "Ein Passwort muss gesetzt sein!",
+    "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
     "showParticipants": "Zeige Teilnehmer"
@@ -104,10 +107,9 @@
     "placeholder": "Füge ein Kärtchen hinzu..."
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein um der Sitzung beizutreten",
+    "passphraseInputLabel": "Gib das Passwort ein um beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
-    "submit": "Absenden",
-    "hint": "Kollaborative Sitzung. Beim Beitritt stimmts du der AGB zu."
+    "submit": "Absenden"
   },
   "Timer": {
     "stopTimer": "Stoppe Alarm"
