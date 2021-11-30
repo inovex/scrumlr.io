@@ -28,10 +28,11 @@ exports[`<InfoBar /> timer and voting snapshot test 1`] = `
     </button>
   </div>
   <div
-    class="voteDisplay"
-    id="voteDisplay"
+    class="vote-display"
   >
-    <span>
+    <span
+      title="VoteDisplay.tooltip"
+    >
       5
        / 
       10
@@ -69,10 +70,11 @@ exports[`<InfoBar /> voting snapshot test 1`] = `
   class="infobar"
 >
   <div
-    class="voteDisplay"
-    id="voteDisplay"
+    class="vote-display"
   >
-    <span>
+    <span
+      title="VoteDisplay.tooltip"
+    >
       5
        / 
       10

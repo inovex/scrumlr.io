@@ -1,28 +1,28 @@
 @import "constants/style.scss";
 
-.voteDisplay {
+.vote-display {
   position: relative;
   width: 85px;
 }
 
-.voteDisplay > * {
+.vote-display > * {
   color: white;
   background-color: $color-backlog-blue;
   vertical-align: bottom;
 }
-@include collapsedColumns(".voteDisplay > *") {
+@include collapsedColumns(".vote-display > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
 
 [theme="dark"] {
-  .voteDisplay > * {
+  .vote-display > * {
     background-color: $color-planning-pink;
   }
-  @include collapsedColumns(".voteDisplay > *") {
+  @include collapsedColumns(".vote-display > *") {
     box-shadow: 0 8px 16px #ff006925;
   }
 }
-.voteDisplay > span {
+.vote-display > span {
   display: inline-block;
   border-radius: 18px;
   width: 84px;
