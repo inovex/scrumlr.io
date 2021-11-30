@@ -2,12 +2,11 @@
 
 .badge {
   position: absolute;
-  width: 52px; // 28px width of avatar + 2 * 12 padding of avatar
-  min-width: 52px;
+  left: 0;
+  bottom: -6px;
   cursor: default;
   align-items: center;
   display: inline-flex;
-  margin-top: 25px;
 }
 
 .badge > span {
