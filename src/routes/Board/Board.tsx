@@ -3,21 +3,43 @@ import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import {Note} from "components/Note";
 import {Request} from "components/Request";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
 import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
+import {ActionFactory} from "store/action";
 
 export var Board = function () {
   const {t} = useTranslation();
 
-  useEffect(() => () => {
+  useEffect(
+    () => () => {
       toast.clearWaitingQueue();
       toast.dismiss();
-    }, []);
+    },
+    []
+  );
+
+  useEffect(() => {
+    window.addEventListener(
+      "beforeunload",
+      (e) => {
+        store.dispatch(ActionFactory.leaveBoard());
+      },
+      false
+    );
+
+    window.addEventListener(
+      "onunload",
+      (e) => {
+        store.dispatch(ActionFactory.leaveBoard());
+      },
+      false
+    );
+  }, []);
 
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
