@@ -8,10 +8,16 @@ import {Infobar} from "components/Infobar";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
-import {ToastContainer} from "react-toastify";
+import {useEffect} from "react";
+import {toast} from "react-toastify";
 
 export var Board = function () {
   const {t} = useTranslation();
+
+  useEffect(() => () => {
+      toast.clearWaitingQueue();
+      toast.dismiss();
+    }, []);
 
   const state = useAppSelector((applicationState) => ({
     board: applicationState.board,
@@ -42,7 +48,6 @@ export var Board = function () {
   if (state.board.status === "ready") {
     return (
       <>
-        <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
         {currentUserIsModerator && (
           <Request
             joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
