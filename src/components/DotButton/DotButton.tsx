@@ -8,10 +8,11 @@ type DotButtonProps = {
   onClick?: () => void;
   children?: ReactElement | ReactElement[];
   tabIndex: number;
+  title?: string;
 };
 
-export const DotButton = (props: DotButtonProps) => (
-  <button
+export var DotButton = function(props: DotButtonProps) {
+  return <button
     className={classNames("dot-button", props.className)}
     disabled={props.disabled}
     onClick={(e) => {
@@ -19,7 +20,8 @@ export const DotButton = (props: DotButtonProps) => (
       props.onClick?.();
     }}
     tabIndex={props.tabIndex}
+    title={props.title}
   >
     {props.children}
   </button>
-);
+}

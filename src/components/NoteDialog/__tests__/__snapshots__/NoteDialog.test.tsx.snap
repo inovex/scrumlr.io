@@ -958,6 +958,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                 <button
                   class="dot-button note-dialog__note-option__unstack"
                   tabindex="0"
+                  title="Remove this note from stack"
                 >
                   <svg
                     class="note-dialog__note-option__unstack-icon"
@@ -1400,6 +1401,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                 <button
                   class="dot-button note-dialog__note-option__unstack"
                   tabindex="0"
+                  title="Remove this note from stack"
                 >
                   <svg
                     class="note-dialog__note-option__unstack-icon"

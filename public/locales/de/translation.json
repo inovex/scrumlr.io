@@ -191,5 +191,11 @@
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
     "terms": "AGB"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Diese Notiz löschen"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Diese Notiz aus dem Stapel herausnehmen"
   }
 }
