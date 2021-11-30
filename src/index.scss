@@ -53,9 +53,12 @@ code {
     color: $color-white;
   }
 
-  html,
   body,
   #root {
     background: $color-dark-mode;
   }
+}
+
+html[theme="dark"] {
+  background: $color-dark-mode;
 }
