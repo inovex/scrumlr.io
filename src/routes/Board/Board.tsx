@@ -51,6 +51,15 @@ export var Board = function () {
         vote.votingIteration === applicationState.board.data?.votingIteration &&
         (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
     ),
+    completedVotes: applicationState.votes.filter((vote) => {
+      if (applicationState.board.data?.voting === "disabled") {
+        // map on vote results of the last voting iteration
+        return vote.votingIteration === applicationState.board.data?.votingIteration;
+      }
+      // map on vote results of the previous, completed voting iteration
+      // FIXME we'll have to keep track of cancelled voting iterations here since they'll be included in the results
+      return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
+    }),
     voteConfiguration: applicationState.voteConfiguration,
     userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
@@ -101,11 +110,16 @@ export var Board = function () {
                   .filter((note) => note.columnId === column.columnId)
                   .filter((note) => note.parentId == null)
                   .filter((note) => note.positionInStack == -1 || note.positionInStack == 0)
+                  .map((note) => ({...note, votes: state.completedVotes.filter((vote) => vote.note === note.id).length}))
                   // It seems that Firefox and Chrome have different orders of notes in the array. Therefore, we need to distinguish between the undefined states.
                   .sort((a, b) => {
                     if (a.createdAt === undefined) return -1;
                     if (b.createdAt === undefined) return 1;
-                    return b.createdAt!.getTime() - a.createdAt!.getTime();
+                    const voteDiff = b.votes - a.votes;
+                    if (voteDiff === 0) {
+                      return b.createdAt!.getTime() - a.createdAt!.getTime();
+                    }
+                    return voteDiff;
                   })
                   .map((note, noteIndex) => (
                     <Note
