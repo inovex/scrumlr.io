@@ -92,6 +92,14 @@ export var Note = function (props: NoteProps) {
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key == "Enter" && !showDialog) {
+      if (!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) {
+        handleShowDialog();
+      }
+    }
+  };
+
   drag(noteRef);
   drop(noteRef);
 
@@ -99,7 +107,7 @@ export var Note = function (props: NoteProps) {
     <li
       className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId != Parse.User.current()?.id})}
       onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
-      onKeyPress={(!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) && !showDialog ? handleShowDialog : () => {}}
+      onKeyPress={handleKeyPress}
       ref={noteRef}
     >
       <div
