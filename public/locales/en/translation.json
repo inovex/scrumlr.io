@@ -191,5 +191,11 @@
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
     "terms": "Terms & conditions"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Delete this note"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Remove this note from stack"
   }
 }
