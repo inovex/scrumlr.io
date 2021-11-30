@@ -17,6 +17,11 @@ let closeSubscriptions: (() => void)[] = [];
 
 export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
+    const currentUser = Parse.User.current()!;
+    const boardId = stateAPI.getState().board.data!.id;
+    currentUser.remove("boards", boardId);
+    currentUser.save();
+
     closeSubscriptions.forEach((closeCallback) => closeCallback());
     closeSubscriptions = [];
   }
@@ -24,7 +29,10 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
   if (action.type === ActionType.PermittedBoardAccess) {
     const currentUser = Parse.User.current()!;
 
-    const isOnline = (user: Parse.User, boardId: string) => (user.get("boards") as string[])?.indexOf(boardId) >= 0;
+    const isOnline = (user: Parse.User, boardId: string) => {
+      const boards = (user.get("boards") as string[]) ?? [];
+      return boards.length > 0 && boards.filter((board) => board === boardId).length === 1;
+    };
 
     const goOnline = (boardId: string) => {
       currentUser.add("boards", boardId);
