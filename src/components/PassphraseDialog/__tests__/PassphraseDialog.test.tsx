@@ -16,7 +16,7 @@ describe("<PassphraseDialog />", () => {
 
     test("submit is available if passphrase is set", async () => {
       const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      fireEvent.change(container.querySelector("#passphrase")!, {target: {value: "1234"}});
+      fireEvent.change(container.querySelector("#password-dialog__password")!, {target: {value: "1234"}});
 
       await waitFor(() => {
         expect(container.querySelector(".passphrase-dialog__submit-button")!.hasAttribute("disabled")).toBeFalsy();
@@ -27,27 +27,14 @@ describe("<PassphraseDialog />", () => {
   describe("visibility toggle", () => {
     test("passphrase is not visible in default state", () => {
       const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector("#passphrase")!.getAttribute("type")).toEqual("password");
+      expect(container.querySelector("#password-dialog__password")!.getAttribute("type")).toEqual("password");
     });
 
     test("passphrase is visible on visibility toggle", async () => {
       const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
       fireEvent.click(container.querySelector('button[aria-label="Toggle passphrase visibility"]')!);
       await waitFor(() => {
-        expect(container.querySelector("#passphrase")!.getAttribute("type")).toEqual("text");
-      });
-    });
-
-    test("aria pressed state is correct on visibility toggle", async () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      const toggleButton = container.querySelector('button[aria-label="Toggle passphrase visibility"]')!;
-
-      expect(toggleButton.getAttribute("aria-pressed")).toEqual("false");
-
-      fireEvent.click(toggleButton);
-
-      await waitFor(() => {
-        expect(toggleButton.getAttribute("aria-pressed")).toEqual("true");
+        expect(container.querySelector("#password-dialog__password")!.getAttribute("type")).toEqual("text");
       });
     });
   });

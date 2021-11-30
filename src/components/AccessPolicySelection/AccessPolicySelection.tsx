@@ -1,12 +1,18 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
+import {ReactComponent as IconRefresh} from "assets/icon-refresh.svg";
+import {ReactComponent as IconClipboard} from "assets/icon-clipboard.svg";
+import {TextInputAdornment} from "components/TextInputAdornment";
+import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
+import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
 import {ValidationError} from "../ValidationError";
+import {TextInputAction} from "../TextInputAction";
 
 export interface AccessPolicySelectionProps {
   accessPolicy: AccessPolicy;
@@ -17,6 +23,7 @@ export interface AccessPolicySelectionProps {
 
 export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) {
   const {t} = useTranslation();
+  const [visiblePassphrase, setVisiblePassphrase] = useState(true);
 
   const handlePolicyChange = (accessPolicy: AccessPolicy) => {
     if (accessPolicy >= 0 && accessPolicy <= 2) {
@@ -34,19 +41,35 @@ export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({ac
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
-          <TextInputLabel label={t("AccessPolicySelection.passphrase")}>
-            <TextInput data-testid="passphrase-input" type="text" value={passphrase} onChange={(e) => onPassphraseChange(e.target.value)} />
-          </TextInputLabel>
-          {3 > 5 && (
-            <>
-              <Button data-testid="random-passwort-generator" onClick={() => onPassphraseChange(generateRandomString())}>
-                {t("AccessPolicySelection.generatePassphrase")}
-              </Button>
-              <Button onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase}>
-                {t("AccessPolicySelection.copyPassphraseToClipboard")}
-              </Button>
-            </>
-          )}
+          <TextInputLabel label={t("AccessPolicySelection.passphrase")} htmlFor="access-policy-selection__password" />
+          <TextInput
+            id="access-policy-selection__password"
+            data-testid="passphrase-input"
+            type={visiblePassphrase ? "text" : "password"}
+            value={passphrase}
+            onChange={(e) => onPassphraseChange(e.target.value)}
+            rightAdornment={
+              <TextInputAdornment title={t("AccessPolicySelection.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
+                {visiblePassphrase && <VisibleIcon />}
+                {!visiblePassphrase && <HiddenIcon />}
+              </TextInputAdornment>
+            }
+            actions={
+              <>
+                <TextInputAction
+                  data-testid="random-passwort-generator"
+                  onClick={() => onPassphraseChange(generateRandomString())}
+                  title={t("AccessPolicySelection.generatePassphrase")}
+                >
+                  <IconRefresh />
+                </TextInputAction>
+                <TextInputAction onClick={() => navigator.clipboard.writeText(passphrase)} disabled={!passphrase} title={t("AccessPolicySelection.copyPassphraseToClipboard")}>
+                  <IconClipboard />
+                </TextInputAction>
+              </>
+            }
+          />
+
           {!passphrase && <ValidationError>{t("AccessPolicySelection.passphraseValidationError")}</ValidationError>}
         </>
       );

@@ -9,7 +9,7 @@
   height: $vote-button-height;
   width: $vote-button-width;
 
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  background-color: rgba(var(--accent-color-rgb), 0.1);
   color: var(--accent-color);
 }
 
@@ -25,5 +25,15 @@
 
   .vote-button-add__icon {
     color: $color-white;
+  }
+}
+
+[theme="dark"] {
+  .vote-button-add {
+    background-color: rgba(var(--accent-color-rgb), 0.25);
+  }
+
+  .vote-button-add__icon {
+    filter: brightness(1.7);
   }
 }

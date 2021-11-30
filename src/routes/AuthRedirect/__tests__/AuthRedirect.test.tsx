@@ -3,7 +3,7 @@ import {Attributes, User} from "parse";
 import {waitFor} from "@testing-library/react";
 import {MemoryRouter} from "react-router";
 import {AuthRedirect} from "routes/AuthRedirect";
-import {render} from "testUtils";
+import {render, renderWithoutRouter} from "testUtils";
 import {mocked} from "ts-jest/utils";
 
 jest.mock("api");
@@ -14,16 +14,12 @@ const mockedUser = mocked(User, true);
 
 describe("routing tests", () => {
   test("missing params on page visit -> ErrorPage", () => {
-    const {container} = render(
-      <MemoryRouter>
-        <AuthRedirect />
-      </MemoryRouter>
-    );
+    const {container} = render(<AuthRedirect />);
     expect(container.firstChild).toHaveClass("error-page");
   });
 
   test("error in params -> ErrorPage", () => {
-    const {container} = render(
+    const {container} = renderWithoutRouter(
       <MemoryRouter initialEntries={["?error=params_error"]}>
         <AuthRedirect />
       </MemoryRouter>
@@ -32,7 +28,7 @@ describe("routing tests", () => {
   });
 
   test("correct params are set -> LoadingScreen", () => {
-    const {container} = render(
+    const {container} = renderWithoutRouter(
       <MemoryRouter initialEntries={["?code=test_code&state=test_state"]}>
         <AuthRedirect />
       </MemoryRouter>
@@ -77,7 +73,7 @@ describe("routing tests", () => {
 
       mockedUser.mockImplementation(() => user as unknown as User<Attributes>);
 
-      render(
+      renderWithoutRouter(
         <MemoryRouter initialEntries={["?code=test_code&state=google-test"]}>
           <AuthRedirect />
         </MemoryRouter>

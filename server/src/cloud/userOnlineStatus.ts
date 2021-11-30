@@ -7,7 +7,7 @@ export const initializeUserOnlineStatus = () => {
       query.first({useMasterKey: true}).then((session) => {
         if (session) {
           const user = session.get("user");
-          user.unset("boards");
+          user.remove("boards", session.id);
           user.save(null, {useMasterKey: true});
         }
       });

@@ -24,7 +24,7 @@ $note__author-margin-left: 10px;
   border-radius: $note__border-radius;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
   z-index: $note-z-index;
 }
 
@@ -121,7 +121,7 @@ $note__author-margin-left: 10px;
   width: 20px;
   align-self: end;
   opacity: 0;
-  transition: opacity 500ms ease-out;
+  transition: opacity 100ms ease-out;
   display: inline;
   color: $color-dark-gray;
 }

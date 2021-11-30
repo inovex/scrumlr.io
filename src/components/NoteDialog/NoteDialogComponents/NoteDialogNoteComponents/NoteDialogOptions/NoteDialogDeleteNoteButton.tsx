@@ -5,13 +5,16 @@ import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";
 import "./NoteDialogDeleteNoteButton.scss";
+import {useTranslation} from "react-i18next";
 
 type NoteDialogDeleteNoteProps = {
   noteId?: string;
   onDeleteOfParent: () => void;
 };
 
-export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteId, onDeleteOfParent}: NoteDialogDeleteNoteProps) => {
+export var NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = function({noteId, onDeleteOfParent}: NoteDialogDeleteNoteProps) {
+  const {t} = useTranslation();
+
   const onDelete = (id: string) => {
     store.dispatch(ActionFactory.deleteNote(id));
   };
@@ -24,8 +27,9 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
       }}
       className="note-dialog__note-option__remove"
       tabIndex={TabIndex.default}
+      title={t("NoteDialogDeleteNoteButton.title")}
     >
       <DeleteIcon className="note-dialog__note-option__remove-icon" />
     </DotButton>
   );
-};
+}

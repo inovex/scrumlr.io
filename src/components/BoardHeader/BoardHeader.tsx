@@ -2,7 +2,7 @@ import {VFC, useState} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import "./BoardHeader.scss";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
+import {ActionFactory} from "store/action";
 
 export interface BoardHeaderProps {
   boardstatus: string;
@@ -27,7 +28,7 @@ export var BoardHeader: VFC<BoardHeaderProps> = function (props) {
   return (
     <header className="board-header">
       <Link to="/" aria-label="Return to homepage">
-        <button tabIndex={TabIndex.BoardHeader} className="board-header__link">
+        <button tabIndex={TabIndex.BoardHeader} className="board-header__link" onClick={() => store.dispatch(ActionFactory.leaveBoard())}>
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
       </Link>
