@@ -6,7 +6,6 @@ import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import "./Participant.scss";
 import {TabIndex} from "constants/tabIndex";
-import {Badge} from "components/Badge";
 
 interface ParticipantProps {
   participant: UserClientModel;
@@ -19,12 +18,16 @@ export var Participant = function ({participant, currentUserIsModerator, boardOw
     users: applicationState.users,
   }));
 
-  let text = "";
-
-  if (Parse.User.current()?.id === participant!.id) text = "me";
-  else if (participant!.id === boardOwner) text = "owner";
-  else if (state.users.admins.find((user) => user.id === participant!.id) !== undefined) text = "admin";
-  else text = "user";
+  let badgeText = "";
+  if (Parse.User.current()?.id === participant!.id) {
+    badgeText = "me";
+  } else if (participant!.id === boardOwner) {
+    badgeText = "owner";
+  } else if (state.users.admins.find((user) => user.id === participant!.id) !== undefined) {
+    badgeText = "admin";
+  } else {
+    badgeText = "user";
+  }
 
   return (
     <li tabIndex={TabIndex.default} className="participant">
@@ -35,9 +38,9 @@ export var Participant = function ({participant, currentUserIsModerator, boardOw
           name={participant.displayName}
           className="participant__user-avatar-wrapper"
           avatarClassName="participant__user-avatar"
+          badgeText={badgeText}
         />
         <figcaption className="participant__name">{participant.displayName}</figcaption>
-        <Badge text={text} />
       </figure>
       {currentUserIsModerator && (
         <ToggleButton
