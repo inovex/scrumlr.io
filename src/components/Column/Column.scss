@@ -15,7 +15,7 @@
 .column:nth-child(even) {
   background-color: $color-white-two;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .column:nth-child(even) {
     background-color: $color-dark-one;
   }
@@ -120,7 +120,7 @@
   color: $color-black;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .column__header-text {
     color: $color-white;
   }

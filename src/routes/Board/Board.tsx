@@ -103,6 +103,7 @@ export var Board = function () {
                         .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
                         .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                       votes={state.votes.filter((vote) => vote.note === note.id)}
+                      allVotesOfUser={state.votes.filter((vote) => vote.user === Parse.User.current()?.id)}
                       activeVoting={state.board.data?.voting === "active"}
                       activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
                       focus={note.focus}

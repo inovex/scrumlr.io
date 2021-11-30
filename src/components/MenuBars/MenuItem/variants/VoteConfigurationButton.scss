@@ -14,7 +14,7 @@ $vote-dropdown__color-dark: $color-white;
   top: 16px;
   outline: 0;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .vote-dropdown__item-button label {
     color: $vote-dropdown__color-dark;
   }
@@ -69,7 +69,7 @@ $vote-dropdown__color-dark: $color-white;
   top: 12px;
   right: 44px;
 }
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .vote-dropdown__item-button > * > input {
     color: $vote-dropdown__color-dark;
     border-bottom: 2px solid $vote-dropdown__color-dark;

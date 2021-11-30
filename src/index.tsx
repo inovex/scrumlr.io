@@ -17,6 +17,14 @@ Parse.initialize("Scrumlr");
 Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || `/api`;
 Parse.liveQueryServerURL = process.env.REACT_APP_LIVEQUERY_URL || `wss://${window.location.hostname}/ws`;
 
+if (localStorage.getItem("theme")) {
+  document.documentElement.setAttribute("theme", localStorage.getItem("theme")!);
+} else if (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches) {
+  document.documentElement.setAttribute("theme", "dark");
+} else {
+  document.documentElement.setAttribute("theme", "light");
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>

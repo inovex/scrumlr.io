@@ -47,7 +47,7 @@ code {
   margin-top: 8px;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .toast-container__container .toast-container__toast {
     background: $color-dark-mode-note;
     color: $color-white;

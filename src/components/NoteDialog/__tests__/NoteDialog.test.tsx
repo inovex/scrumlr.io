@@ -55,6 +55,9 @@ const createNoteDialog = (
       basic: [],
       all: [],
     },
+    voteConfiguration: {
+      voteLimit: 10,
+    },
   };
   const store = mockStore(initialState);
   const [NoteDialogContext] = wrapWithTestBackend(NoteDialog);
@@ -79,6 +82,7 @@ const createNoteDialog = (
             votingIteration: 1,
           },
         ]}
+        allVotesOfUser={[]}
         childrenNotes={[
           {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false},
           {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false},

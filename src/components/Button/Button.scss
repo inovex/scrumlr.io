@@ -34,6 +34,20 @@
   box-shadow: none;
 }
 
+.button.button--text-link {
+  border: none;
+  box-shadow: none;
+  background: none;
+  padding: 0;
+  height: auto;
+  color: $color-black;
+}
+
+.button.button--text-link:focus,
+.button.button--text-link:hover {
+  text-decoration: underline;
+}
+
 .button.button--primary.button--outlined {
   color: $color-planning-pink;
   border-color: $color-planning-pink;
@@ -48,7 +62,11 @@
   background: $color-backlog-blue;
 }
 
-.button:disabled {
+.button.button--text-link:disabled {
+  color: $color-middle-gray;
+}
+
+.button:not(.button--text-link):disabled {
   background: $color-middle-gray;
 }
 
@@ -62,19 +80,19 @@
   display: flex;
 }
 
-.button:not(:disabled):hover {
+.button:not(:disabled):not(.button--text-link):hover {
   box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
 }
 
-.button:not(:disabled).button--primary:hover {
+.button:not(:disabled):not(.button--text-link).button--primary:hover {
   box-shadow: 0 2px 12px 6px rgba($color-planning-pink, 0.3);
 }
 
-.button:not(:disabled):focus {
+.button:not(:disabled):not(.button--text-link):focus {
   box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
 }
 
-.button:not(:disabled).button--primary:focus {
+.button:not(:disabled):not(.button--text-link).button--primary:focus {
   box-shadow: 0 2px 16px 8px rgba($color-planning-pink, 0.4);
 }
 
@@ -93,11 +111,9 @@
   height: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .button.button--outlined {
-    color: $color-white;
-  }
-
+[theme="dark"] {
+  .button.button--outlined,
+  .button.button--text-link,
   .button.button--primary.button--outlined {
     color: $color-white;
   }

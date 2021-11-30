@@ -14,7 +14,7 @@
   box-shadow: 0 8px 16px #0057ff25;
 }
 
-@media (prefers-color-scheme: dark) {
+[theme="dark"] {
   .timer > * {
     background-color: $color-planning-pink;
   }
