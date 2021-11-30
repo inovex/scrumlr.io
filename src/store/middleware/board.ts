@@ -238,7 +238,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       });
 
       subscription.on("update", async (object) => {
-        dispatch(ActionFactory.updatedBoard(await mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
+        stateAPI.dispatch(ActionFactory.updatedBoard(await mapBoardServerToClientModel(object.toJSON() as unknown as BoardServerModel)));
       });
 
       subscription.on("delete", (object) => {
