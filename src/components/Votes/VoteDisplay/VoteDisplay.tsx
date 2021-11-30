@@ -1,17 +1,20 @@
-import classNames from "classnames";
 import "./VoteDisplay.scss";
+import {useTranslation} from "react-i18next";
+import {FC} from "react";
 
 type VoteDisplayProps = {
   usedVotes: number;
   possibleVotes: number;
 };
 
-export var VoteDisplay = function (props: VoteDisplayProps) {
+export var VoteDisplay: FC<VoteDisplayProps> = function({usedVotes, possibleVotes}) {
+  const {t} = useTranslation();
+
   return (
-    <div id="voteDisplay" className={classNames("voteDisplay")}>
-      <span>
-        {props.usedVotes} / {props.possibleVotes}
+    <div className="vote-display">
+      <span title={t("VoteDisplay.tooltip", {remaining: possibleVotes - usedVotes, total: possibleVotes})}>
+        {usedVotes} / {possibleVotes}
       </span>
     </div>
   );
-};
+}

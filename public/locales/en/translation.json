@@ -151,6 +151,9 @@
     "yes": "Yes",
     "no": "No"
   },
+  "VoteDisplay": {
+    "tooltip": "{{remaining}} of {{total}} votes remaining"
+  },
   "TimerToggleButton": {
     "label": "Timer",
     "1min": "1 minute",
