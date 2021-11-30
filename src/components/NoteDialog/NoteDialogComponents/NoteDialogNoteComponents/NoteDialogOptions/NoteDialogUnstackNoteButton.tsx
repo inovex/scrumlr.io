@@ -12,7 +12,7 @@ type NoteDialogUnstackNoteProps = {
   onClose: () => void;
 };
 
-export var NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = function({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) {
+export var NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = function ({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) {
   const onUnstack = (id: string, parentId: string) => {
     store.dispatch(ActionFactory.unstackNote({id, parentId}));
   };
@@ -29,4 +29,4 @@ export var NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = functio
       <UnstackIcon className="note-dialog__note-option__unstack-icon" />
     </DotButton>
   );
-}
+};

@@ -1,5 +1,19 @@
 @import "constants/style";
 
+$text-input__gap: 6px;
+$text-input__adornment-margin: 4px;
+$text-input__adornment-padding: 36px;
+
+.text-input__container {
+  display: flex;
+  gap: $text-input__gap;
+}
+
+.text-input__input-wrapper {
+  position: relative;
+  flex: 1 1 auto;
+}
+
 .text-input {
   border-radius: 2em;
   padding: 6px 12px;
@@ -10,6 +24,10 @@
   background: $color-white-two;
   box-shadow: 0 0 0 rgba($color-white, 0);
   transition: box-shadow 0.25s ease, background-color 0.15s ease;
+}
+
+.text-input[type="password"] {
+  -webkit-text-security: disc !important;
 }
 
 .text-input[value=""] {
@@ -29,6 +47,33 @@
 
 .text-input:focus {
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
+}
+
+.text-input__adornment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+}
+
+.text-input__adornment--left {
+  left: $text-input__adornment-margin;
+}
+
+.text-input__adornment--right {
+  right: $text-input__adornment-margin;
+}
+
+.text-input--adornment-left {
+  padding-left: $text-input__adornment-padding;
+}
+
+.text-input--adornment-right {
+  padding-right: $text-input__adornment-padding;
+}
+
+.text-input__actions {
+  display: flex;
+  gap: $text-input__gap;
 }
 
 [theme="dark"] {

@@ -1,39 +1,22 @@
 import {screen} from "@testing-library/react";
 import {ErrorPage} from "components/ErrorPage";
-import {MemoryRouter} from "react-router";
 import {render} from "testUtils";
 
 describe("error page renders all elements", () => {
   test("root element", () => {
-    const {container} = render(
-      <MemoryRouter>
-        <ErrorPage errorMessage="test" originURL="/" />
-      </MemoryRouter>
-    );
+    const {container} = render(<ErrorPage errorMessage="test" originURL="/" />);
     expect(container.firstChild).toHaveClass("error-page");
   });
   test("error message", () => {
-    render(
-      <MemoryRouter>
-        <ErrorPage errorMessage="test-message" originURL="/" />
-      </MemoryRouter>
-    );
+    render(<ErrorPage errorMessage="test-message" originURL="/" />);
     expect(screen.getByText(/test-message/i)).toBeInTheDocument();
   });
   test("Home button", () => {
-    const {getByTestId} = render(
-      <MemoryRouter>
-        <ErrorPage errorMessage="test" originURL="/" />
-      </MemoryRouter>
-    );
+    const {getByTestId} = render(<ErrorPage errorMessage="test" originURL="/" />);
     expect(getByTestId("home-button")).toBeInTheDocument();
   });
   test("Back button", () => {
-    const {getByTestId} = render(
-      <MemoryRouter>
-        <ErrorPage errorMessage="test" originURL="/" />
-      </MemoryRouter>
-    );
+    const {getByTestId} = render(<ErrorPage errorMessage="test" originURL="/" />);
     expect(getByTestId("back-button")).toBeInTheDocument();
   });
 });

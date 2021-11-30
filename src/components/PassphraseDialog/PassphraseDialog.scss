@@ -1,54 +1,32 @@
 @import "constants/style";
 
-.passphrase-dialog__logo {
-  margin-bottom: 2em;
+.passphrase-dialog__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 100vw;
+  min-height: 100vh;
 }
 
 .passphrase-dialog {
-  margin: $margin--default;
-  padding: $padding--large;
-
   width: 100%;
   max-width: 420px;
 
-  height: 100%;
-  max-height: 240px;
-
-  border-radius: $margin--default;
-
-  background: $color-dark-two;
+  padding: $padding--default;
+  color: $color-black;
 }
 
-.passphrase-dialog__input-label {
-  display: block;
-
-  color: $color-white;
-  font-size: clamp(16px, 4vw, 24px);
-  font-weight: bolder;
-
-  text-align: center;
-  margin-bottom: 0.5em;
+.passphrase-dialog__form {
+  margin-top: 1.5em;
 }
 
-.passphrase-dialog__error {
-  display: block;
-
-  color: $color-retro-red;
-  font-size: clamp(12px, 1vw, 14px);
-
-  text-align: center;
-  margin-top: 0.5em;
-}
-
-.passphrase-dialog__hint {
+.passphrase-dialog__submit-button {
   margin-top: 1em;
+}
 
-  display: block;
-  text-align: justify;
-
-  width: 66%;
-  max-width: 280px;
-
-  color: $color-white;
-  font-size: $text-size;
+[theme="dark"] {
+  .passphrase-dialog {
+    color: $color-white;
+  }
 }
