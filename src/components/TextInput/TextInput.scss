@@ -1,8 +1,12 @@
 @import "constants/style";
 
+$text-input__gap: 6px;
+$text-input__adornment-margin: 4px;
+$text-input__adornment-padding: 36px;
+
 .text-input__container {
   display: flex;
-  gap: 4px;
+  gap: $text-input__gap;
 }
 
 .text-input__input-wrapper {
@@ -52,19 +56,24 @@
 }
 
 .text-input__adornment--left {
-  left: 4px;
+  left: $text-input__adornment-margin;
 }
 
 .text-input__adornment--right {
-  right: 4px;
+  right: $text-input__adornment-margin;
 }
 
 .text-input--adornment-left {
-  padding-left: 36px;
+  padding-left: $text-input__adornment-padding;
 }
 
 .text-input--adornment-right {
-  padding-right: 36px;
+  padding-right: $text-input__adornment-padding;
+}
+
+.text-input__actions {
+  display: flex;
+  gap: $text-input__gap;
 }
 
 [theme="dark"] {

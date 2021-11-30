@@ -4,7 +4,6 @@ import configureStore from "redux-mock-store";
 import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
 import {mocked} from "ts-jest/utils";
-import {BrowserRouter} from "react-router-dom";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
@@ -33,11 +32,9 @@ const createBoardHeader = (name: string, boardstatus: string) => {
   const store = mockStore(initialState);
 
   return (
-    <BrowserRouter>
-      <Provider store={store}>
-        <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
-      </Provider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
+    </Provider>
   );
 };
 

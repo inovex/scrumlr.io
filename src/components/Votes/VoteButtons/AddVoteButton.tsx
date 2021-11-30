@@ -12,7 +12,7 @@ type AddVoteProps = {
   disabled: boolean;
 };
 
-export var AddVoteButton: FC<AddVoteProps> = function({noteId, tabIndex, disabled}) {
+export var AddVoteButton: FC<AddVoteProps> = function ({noteId, tabIndex, disabled}) {
   const addVote = () => {
     store.dispatch(ActionFactory.addVote(noteId));
   };
@@ -22,4 +22,4 @@ export var AddVoteButton: FC<AddVoteProps> = function({noteId, tabIndex, disable
       <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );
-}
+};

@@ -41,9 +41,9 @@ export var PassphraseDialog: FC<PassphraseDialogProps> = function ({onSubmit}) {
             id="password-dialog__password"
             type={visiblePassphrase ? "text" : "password"}
             rightAdornment={
-              <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} aria-pressed={visiblePassphrase} onClick={togglePassphraseVisibility}>
-                {!visiblePassphrase && <VisibleIcon />}
-                {visiblePassphrase && <HiddenIcon />}
+              <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} onClick={togglePassphraseVisibility}>
+                {visiblePassphrase && <VisibleIcon />}
+                {!visiblePassphrase && <HiddenIcon />}
               </TextInputAdornment>
             }
             value={passphrase}

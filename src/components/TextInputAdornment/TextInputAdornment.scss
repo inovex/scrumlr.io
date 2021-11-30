@@ -11,13 +11,13 @@
   background: none;
   cursor: pointer;
 
-  color: rgba($color-black, 0.5);
+  color: $color-black;
   transition: color 0.15s ease;
 }
 
 .text-input-adornment:focus,
 .text-input-adornment:hover {
-  color: $color-black;
+  color: $color-backlog-blue;
 }
 
 .text-input-adornment > * {

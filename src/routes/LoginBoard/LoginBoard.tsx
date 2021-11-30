@@ -10,6 +10,7 @@ import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
+import {TextInputAction} from "components/TextInputAction";
 import {Button} from "../../components/Button";
 import {TextInput} from "../../components/TextInput";
 import {TextInputLabel} from "../../components/TextInputLabel";
@@ -57,22 +58,24 @@ export var LoginBoard = function () {
               <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
 
               <div className="login-board__username">
-                <TextInputLabel label="Username" className="login-board__form-element">
-                  <TextInput
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                      if (e.key === "Enter") {
-                        handleLogin();
-                      }
-                    }}
-                    maxLength={20}
-                    aria-invalid={!displayName}
-                  />
-                </TextInputLabel>
-                <button className="login-board__randomize-button" onClick={() => setDisplayName(getRandomName())}>
-                  <RefreshIcon className="login-board__randomize-icon" />
-                </button>
+                <TextInputLabel label="Username" htmlFor="login-board__username" />
+                <TextInput
+                  id="login-board__username"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") {
+                      handleLogin();
+                    }
+                  }}
+                  maxLength={20}
+                  aria-invalid={!displayName}
+                  actions={
+                    <TextInputAction title="Generate" onClick={() => setDisplayName(getRandomName())}>
+                      <RefreshIcon />
+                    </TextInputAction>
+                  }
+                />
               </div>
               {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
 

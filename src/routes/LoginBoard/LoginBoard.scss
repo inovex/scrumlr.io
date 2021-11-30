@@ -52,45 +52,6 @@
   overflow: hidden;
 }
 
-.login-board__username {
-  display: flex;
-  gap: 6px;
-  align-items: flex-end;
-}
-
-.login-board__username .login-board__form-element {
-  flex: 1 1 100%;
-}
-
-.login-board__username .login-board__randomize-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex: 0 0 calc(1em + 16px);
-  width: calc(1em + 16px);
-  height: calc(1em + 16px);
-  border-radius: 100%;
-  border: none;
-  outline: none;
-
-  background: $color-backlog-blue;
-  cursor: pointer;
-  transition: box-shadow 0.2s ease;
-  box-shadow: 0 0 0 0 rgba($color-black, 0.4);
-}
-
-.login-board__username .login-board__randomize-button:focus,
-.login-board__username .login-board__randomize-button:hover {
-  box-shadow: 0 2px 8px 4px rgba($color-black, 0.4);
-}
-
-.login-board__randomize-icon {
-  height: 16px;
-  width: 16px;
-  color: $color-white;
-}
-
 .login-board__checkbox {
   opacity: 0;
   z-index: -1;
