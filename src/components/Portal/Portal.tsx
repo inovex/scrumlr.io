@@ -19,7 +19,7 @@ export interface PortalProps {
  * Portal for modals adds backdrop and locks focus within portal content.
  */
 export const Portal = ({onClose, children, darkBackground, hiddenOverflow, centered, disabledPadding}: PortalProps) => {
-  const closeable = Boolean(onClose);
+  const closeable = useState(onClose !== undefined);
 
   const [hasNext, setHasNext] = useState(document.getElementsByClassName("board__navigation-next").length !== 0);
   const [hasPrev, setHasPrev] = useState(document.getElementsByClassName("board__navigation-prev").length !== 0);
@@ -42,7 +42,11 @@ export const Portal = ({onClose, children, darkBackground, hiddenOverflow, cente
       }
     };
     window.addEventListener("keydown", handleKeydown);
-  }, [closeable, onClose]);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+    };
+  }, [closeable]);
 
   // mount backdrop into separate located DOM node 'portal'
   const portal: HTMLElement = document.getElementById("portal")!;
