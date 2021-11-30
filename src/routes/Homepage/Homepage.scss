@@ -52,6 +52,8 @@
   gap: 0;
   max-width: 1080px;
   padding: 0 $padding--default;
+  margin-top: 48px;
+  margin-bottom: 48px;
 }
 
 .homepage__hero-content > * {
@@ -182,6 +184,8 @@
   .homepage__hero-content {
     flex-direction: row;
     gap: 128px;
+    margin-top: 112px;
+    margin-bottom: 112px;
   }
 
   .homepage__illustration {
