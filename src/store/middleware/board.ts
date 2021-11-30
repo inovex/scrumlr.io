@@ -148,7 +148,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       });
 
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.equalTo("boards", action.boardId);
+      userQuery.contains("boards", action.boardId);
       userQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
