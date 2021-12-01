@@ -291,9 +291,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <label>
                     Allow cumulative voting
                   </label>
-                  <div>
-                    Yes
-                  </div>
+                  <div
+                    class="toggle toggle--active"
+                  />
                 </button>
               </li>
               <li
@@ -305,9 +305,9 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
                   <label>
                     Anonymous voting
                   </label>
-                  <div>
-                    Yes
-                  </div>
+                  <div
+                    class="toggle toggle--active"
+                  />
                 </button>
               </li>
               <li
