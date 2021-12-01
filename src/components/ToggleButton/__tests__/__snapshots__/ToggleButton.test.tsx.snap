@@ -2,7 +2,12 @@
 
 exports[`ToggleButton should render correctly 1`] = `
 <button
-  class="toggle-button toggle-button--left"
+  aria-pressed="false"
+  class="toggle-button"
   tabindex="-1"
-/>
+>
+  <div
+    class="toggle"
+  />
+</button>
 `;
