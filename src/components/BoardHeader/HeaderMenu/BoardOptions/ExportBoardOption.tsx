@@ -1,7 +1,10 @@
 import {useAppSelector} from "store";
 import {exportAsCSV, exportAsJSON} from "utils/export";
 import {ApplicationState} from "types/store";
-import {ReactComponent as ExportIcon} from "assets/icon-share.svg";
+import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
+import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
+import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
+// import {ReactComponent as ExportPDF} from "assets/icon-export.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import {TabIndex} from "constants/tabIndex";
@@ -32,7 +35,7 @@ export var ExportBoardOption = function (props: ExportProps) {
       <div className={classNames("export-board-option__container", {"export-board-option__container--visible": props.expand})}>
         <BoardOptionButton
           label={t("ExportBoardOption.exportAsJson")}
-          icon={ExportIcon}
+          icon={ExportJSON}
           onClick={() => {
             exportAsJSON(state);
             props.onClose();
@@ -42,7 +45,7 @@ export var ExportBoardOption = function (props: ExportProps) {
         />
         <BoardOptionButton
           label={t("ExportBoardOption.exportAsCSV")}
-          icon={ExportIcon}
+          icon={ExportCSV}
           onClick={() => {
             exportAsCSV(state);
             props.onClose();
