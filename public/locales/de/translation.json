@@ -147,9 +147,7 @@
     "numberOfVotes": "Anzahl Stimmen",
     "startTimer": "Abstimmung starten",
     "cancelTimer": "Abstimmung abbrechen",
-    "stopTimer": "Abstimmung beenden",
-    "yes": "Ja",
-    "no": "Nein"
+    "stopTimer": "Abstimmung beenden"
   },
   "VoteDisplay": {
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"

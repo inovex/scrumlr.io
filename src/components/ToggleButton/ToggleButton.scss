@@ -1,55 +1,15 @@
 @import "constants/style";
 
 .toggle-button {
+  position: absolute;
   width: 40px;
   height: 24px;
   background-color: transparent;
   border: none;
-  position: absolute;
   cursor: pointer;
   padding: 0;
 }
 
 .toggle-button:disabled {
   cursor: not-allowed;
-}
-
-.toggle-button::before {
-  content: "";
-  position: absolute;
-  height: 8px;
-  width: 100%;
-  top: 8px;
-  left: 0;
-  background: #edeff2 0% 0% no-repeat padding-box;
-  border-radius: 4px;
-}
-.toggle-button::after {
-  content: "";
-  position: absolute;
-  height: 24px;
-  width: 24px;
-  border-radius: 100%;
-  transition: all 0.2s linear;
-  top: 0;
-}
-.toggle-button--left::after {
-  left: 0;
-  background-color: #a3a6aa;
-}
-.toggle-button--right::after {
-  left: 16px;
-  background-color: #0057ff;
-  box-shadow: 0px 4px 8px #0057ff29;
-}
-[theme="dark"] {
-  .toggle-button--right::after {
-    background-color: #ff0069;
-    box-shadow: 0px 4px 8px #ff006929;
-  }
-}
-
-.toggle-button:disabled::after {
-  background-color: #a3a6aa;
-  box-shadow: none;
 }

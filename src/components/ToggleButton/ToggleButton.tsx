@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {TabIndex} from "constants/tabIndex";
 import "./ToggleButton.scss";
+import {Toggle} from "../Toggle";
 
 type ToggleButtonProps<T> = {
   /**
@@ -40,7 +41,7 @@ type ToggleButtonProps<T> = {
   tabIndex?: number;
 };
 
-export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
+export var ToggleButton = function<T,>(props: ToggleButtonProps<T>) {
   const onClick = () => {
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
     props.onToggle?.(newValue);
@@ -51,12 +52,17 @@ export const ToggleButton = <T,>(props: ToggleButtonProps<T>) => {
     }
   };
 
+  const isActive = props.value === props.values[1];
+
   return (
     <button
       disabled={props.disabled}
       onClick={onClick}
-      className={classNames("toggle-button", {"toggle-button--left": props.value === props.values[0]}, {"toggle-button--right": props.value === props.values[1]}, props.className)}
+      className={classNames("toggle-button", props.className)}
+      aria-pressed={isActive}
       tabIndex={props.tabIndex ?? TabIndex.disabled}
-    />
+    >
+      <Toggle active={isActive} disabled={props.disabled} />
+    </button>
   );
-};
+}

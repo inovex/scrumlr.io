@@ -88,7 +88,7 @@ describe("ParticipantsList", () => {
     const {container} = render(createParticipantsList({open: true, currentUserIsModerator: true, currentUserId: "0"}), {
       container: global.document.querySelector("#portal")!,
     });
-    expect(container.querySelector(".participant")!.childNodes[1]).toHaveClass("toggle-button toggle-button--right participant__permission-toggle");
+    expect(container.querySelector(".toggle")).toHaveClass("toggle--active");
   });
 
   test("Don't show toggleButton as participant without moderator rights", () => {

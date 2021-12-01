@@ -7,6 +7,7 @@ import Dropdown from "components/Dropdown";
 import "./VoteConfigurationButton.scss";
 import {ActionFactory} from "store/action";
 import {useTranslation} from "react-i18next";
+import {Toggle} from "../../../Toggle";
 
 type VoteConfigurationButtonProps = {
   tabIndex?: number;
@@ -87,7 +88,7 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               tabIndex={focusOnTab(1)}
             >
               <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
-              <div>{allowMultipleVotesPerNote ? t("VoteConfigurationButton.yes") : t("VoteConfigurationButton.no")}</div>
+              <Toggle active={allowMultipleVotesPerNote} />
             </Dropdown.ItemButton>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
@@ -101,7 +102,7 @@ export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function
               tabIndex={focusOnTab(2)}
             >
               <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
-              <div>{!showVotesOfOthers ? t("VoteConfigurationButton.yes") : t("VoteConfigurationButton.no")}</div>
+              <Toggle active={!showVotesOfOthers} />
             </Dropdown.ItemButton>
 
             <Dropdown.ItemButton
