@@ -41,6 +41,12 @@ $header-menu-button-width: 24px;
   outline: 0;
   transition: border-color 0.1s linear;
 }
+
+.board-settings__board-name::placeholder {
+  color: $color-white;
+  opacity: 0.85;
+}
+
 .board-settings__board-name:disabled {
   border-color: transparent;
 }

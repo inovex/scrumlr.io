@@ -11,17 +11,19 @@ type DotButtonProps = {
   title?: string;
 };
 
-export var DotButton = function(props: DotButtonProps) {
-  return <button
-    className={classNames("dot-button", props.className)}
-    disabled={props.disabled}
-    onClick={(e) => {
-      e.stopPropagation();
-      props.onClick?.();
-    }}
-    tabIndex={props.tabIndex}
-    title={props.title}
-  >
-    {props.children}
-  </button>
-}
+export var DotButton = function (props: DotButtonProps) {
+  return (
+    <button
+      className={classNames("dot-button", props.className)}
+      disabled={props.disabled}
+      onClick={(e) => {
+        e.stopPropagation();
+        props.onClick?.();
+      }}
+      tabIndex={props.tabIndex}
+      title={props.title}
+    >
+      {props.children}
+    </button>
+  );
+};
