@@ -32,7 +32,7 @@ $header-menu-border-bottom-color: #efefef;
   padding: 0;
   height: 30px;
   width: 80%;
-  border: $header-menu__item-border-width solid $color-black;
+  border: $header-menu__item-border-width solid #dde4ed;
   border-radius: 32px;
   color: $color-black;
   cursor: pointer;
@@ -44,6 +44,10 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 [theme="dark"] {
+  .export-board-option__container > .board-option-button {
+    border-color: #4b515c;
+  }
+
   .export-board-option__container > .board-option-button:focus,
   .export-board-option__container > .board-option-button:hover {
     background-color: $header-menu-hover-color--dark;
