@@ -47,6 +47,7 @@ export var BoardSettings = function (props: BoardSettingsProps) {
         <input
           className="board-settings__board-name"
           value={boardName}
+          placeholder="scrumlr.io"
           disabled={!props.activeEditMode}
           onChange={(e) => setBoardName(e.target.value)}
           ref={(input) => {
