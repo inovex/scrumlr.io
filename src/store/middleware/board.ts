@@ -172,12 +172,10 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
         });
 
         subscription.on("enter", (object) => {
-          console.log("enter");
           dispatch(ActionFactory.setUserStatus(object.id, true));
         });
 
         subscription.on("leave", (object) => {
-          console.log("leav");
           dispatch(ActionFactory.setUserStatus(object.id, false));
         });
       });
