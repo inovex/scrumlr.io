@@ -77,7 +77,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
 
       // Subscription to detect changes in the user configuration
       const updateQuery = new Parse.Query(Parse.User);
-      updateQuery.contains("boards", action.boardId);
+      updateQuery.equalTo("boards", action.boardId);
       updateQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
@@ -148,17 +148,36 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       });
 
       const userQuery = new Parse.Query(Parse.User);
-      userQuery.contains("boards", action.boardId);
+      userQuery.equalTo("boards", action.boardId);
+
       userQuery.subscribe().then((subscription) => {
         closeSubscriptions.push(() => {
           subscription.unsubscribe();
         });
 
+        subscription.on("update", (object) => {
+          // FIXME -> current solution for demo on friday to solve this issue with same users on multiple boards (login/logoff/..)
+          const userSingleQuery = new Parse.Query(Parse.User);
+          userSingleQuery
+            .equalTo("objectId", object.id)
+            .first()
+            .then((user) => {
+              const boards = user!.get("boards");
+              if (boards.includes(action.boardId)) {
+                dispatch(ActionFactory.setUserStatus(object.id, true));
+              } else {
+                dispatch(ActionFactory.setUserStatus(object.id, false));
+              }
+            });
+        });
+
         subscription.on("enter", (object) => {
+          console.log("enter");
           dispatch(ActionFactory.setUserStatus(object.id, true));
         });
 
         subscription.on("leave", (object) => {
+          console.log("leav");
           dispatch(ActionFactory.setUserStatus(object.id, false));
         });
       });
