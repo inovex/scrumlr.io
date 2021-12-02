@@ -12,7 +12,7 @@ type MenuButtonProps = {
   tabIndex?: number;
 };
 
-export function MenuButton(props: MenuButtonProps) {
+export var MenuButton = function(props: MenuButtonProps) {
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
@@ -31,6 +31,11 @@ export function MenuButton(props: MenuButtonProps) {
           e.preventDefault();
           setTouchHover(false);
           props.onClick();
+        }
+      }}
+      onBlur={() => {
+        if (touchHover) {
+          setTouchHover(false);
         }
       }}
       tabIndex={props.tabIndex ?? TabIndex.default}

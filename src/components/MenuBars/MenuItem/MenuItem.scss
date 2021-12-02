@@ -109,7 +109,6 @@ $number-of-menu-items: 4;
 // Columns partly hidden, no touch screen device
 @include collapsedColumns(".menu-bars") {
   .menu-item--touch-hover,
-  .menu-item:enabled:focus,
   .menu-item:enabled:hover {
     .menu-item__tooltip {
       max-width: 264px;
@@ -176,7 +175,6 @@ $number-of-menu-items: 4;
 // *****************************
 @include visibleColumns(".menu-bars") {
   .menu-item--touch-hover:enabled > .menu-item__tooltip,
-  .menu-item:enabled:focus > .menu-item__tooltip,
   .menu-item:enabled:hover > .menu-item__tooltip {
     width: auto;
     max-width: 384px;
