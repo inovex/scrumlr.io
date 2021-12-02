@@ -4,8 +4,8 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
   leanCoffee: {
     name: "Lean Coffee",
     columns: [
-      {name: "Lean Coffee", hidden: false, color: "grooming-green"},
-      {name: "Actions", hidden: true, color: "backlog-blue"},
+      {name: "Lean Coffee", hidden: false, color: "backlog-blue"},
+      {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
   positiveNegative: {
@@ -19,16 +19,16 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
   startStopContinue: {
     name: "Start/Stop/Continue",
     columns: [
-      {name: "Start", hidden: false, color: "grooming-green"},
-      {name: "Stop", hidden: false, color: "retro-red"},
-      {name: "Continue", hidden: false, color: "backlog-blue"},
+      {name: "Start", hidden: false, color: "backlog-blue"},
+      {name: "Stop", hidden: false, color: "grooming-green"},
+      {name: "Continue", hidden: false, color: "planning-pink"},
     ],
   },
   madSadGlad: {
     name: "Mad/Sad/Glad",
     columns: [
-      {name: "Mad", hidden: false, color: "online-orange"},
-      {name: "Sad", hidden: false, color: "retro-red"},
+      {name: "Mad", hidden: false, color: "backlog-blue"},
+      {name: "Sad", hidden: false, color: "online-orange"},
       {name: "Glad", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
@@ -36,9 +36,9 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
   kalm: {
     name: "Keep/Add/Less/More",
     columns: [
-      {name: "Keep", hidden: false, color: "grooming-green"},
+      {name: "Keep", hidden: false, color: "backlog-blue"},
       {name: "Add", hidden: false, color: "retro-red"},
-      {name: "Less", hidden: false, color: "backlog-blue"},
+      {name: "Less", hidden: false, color: "grooming-green"},
       {name: "More", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
@@ -55,9 +55,9 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "4L",
     description: "Liked, Learned, Lacked, Longed for",
     columns: [
-      {name: "Liked", hidden: false, color: "grooming-green"},
+      {name: "Liked", hidden: false, color: "backlog-blue"},
       {name: "Learned", hidden: false, color: "retro-red"},
-      {name: "Lacked", hidden: false, color: "backlog-blue"},
+      {name: "Lacked", hidden: false, color: "lean-lilac"},
       {name: "Longed for", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
