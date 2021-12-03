@@ -17,6 +17,7 @@
   height: $vote-button-icon-height;
   width: $vote-button-icon-width;
   color: var(--accent-color);
+  pointer-events: none;
 }
 
 .vote-button-add:not([disabled]):focus,
