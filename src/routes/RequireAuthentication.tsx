@@ -4,7 +4,7 @@ import {useLocation} from "react-router";
 import {useEffect, useState, FC} from "react";
 import {LoadingScreen} from "../components/LoadingScreen";
 
-const RequireAuthentication: FC = ({children}) => {
+export const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
 
   const [verifiedSession, setVerifiedSession] = useState<boolean | undefined>(undefined);
