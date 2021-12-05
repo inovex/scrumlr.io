@@ -8,7 +8,7 @@ type IconButtonProps = {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
-export function IconButton(props: IconButtonProps) {
+export const IconButton = (props: IconButtonProps) => {
   const Icon = props.icon;
 
   return (
@@ -19,4 +19,4 @@ export function IconButton(props: IconButtonProps) {
       <Icon className="icon-button__icon icon-button__icon--start" />
     </button>
   );
-}
+};

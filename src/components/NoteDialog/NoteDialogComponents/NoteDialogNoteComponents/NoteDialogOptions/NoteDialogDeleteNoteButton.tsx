@@ -12,7 +12,7 @@ type NoteDialogDeleteNoteProps = {
   onDeleteOfParent: () => void;
 };
 
-export var NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = function({noteId, onDeleteOfParent}: NoteDialogDeleteNoteProps) {
+export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteId, onDeleteOfParent}: NoteDialogDeleteNoteProps) => {
   const {t} = useTranslation();
 
   const onDelete = (id: string) => {
@@ -32,4 +32,4 @@ export var NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = function(
       <DeleteIcon className="note-dialog__note-option__remove-icon" />
     </DotButton>
   );
-}
+};

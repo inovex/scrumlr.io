@@ -20,52 +20,50 @@ export interface HeroIllustrationProps {
   className?: string;
 }
 
-export var HeroIllustration: FC<HeroIllustrationProps> = function ({className}) {
-  return (
-    <aside className={classNames("hero-illustration", className)} aria-hidden>
-      <div className="hero-illustration__position-anchor">
-        <div className="hero-illustration__grid">
-          <img src={ActionbarUser} className="hero-illustration__actionbar-user" />
-          <img src={ActionbarModerator} className="hero-illustration__actionbar-moderator" />
+export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
+  <aside className={classNames("hero-illustration", className)} aria-hidden>
+    <div className="hero-illustration__position-anchor">
+      <div className="hero-illustration__grid">
+        <img src={ActionbarUser} className="hero-illustration__actionbar-user" alt="" />
+        <img src={ActionbarModerator} className="hero-illustration__actionbar-moderator" alt="" />
 
-          <div className="hero-illustration__tile">
-            <img src={Panel01} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel02} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel03} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel04} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel05} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel06} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel07} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel08} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel09} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel10} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel11} className="hero-illustration__tile-image" />
-          </div>
-          <div className="hero-illustration__tile">
-            <img src={Panel12} className="hero-illustration__tile-image" />
-          </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel01} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel02} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel03} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel04} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel05} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel06} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel07} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel08} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel09} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel10} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel11} className="hero-illustration__tile-image" alt="" />
+        </div>
+        <div className="hero-illustration__tile">
+          <img src={Panel12} className="hero-illustration__tile-image" alt="" />
         </div>
       </div>
-    </aside>
-  );
-};
+    </div>
+  </aside>
+);

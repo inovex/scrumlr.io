@@ -15,7 +15,7 @@ type HeaderMenuProps = {
 
 type ExpandableOptions = "share" | "delete" | "export";
 
-const HeaderMenu = function (props: HeaderMenuProps) {
+const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
     user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),

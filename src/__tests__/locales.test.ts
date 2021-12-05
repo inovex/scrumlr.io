@@ -2,12 +2,12 @@ import fs from "fs";
 import {join} from "path";
 
 describe("locales", () => {
-  const translation = JSON.parse(fs.readFileSync(join(__dirname, "../../public/locales/en/translation.json")) as any);
+  const translation = JSON.parse(fs.readFileSync(join(__dirname, "../../public/locales/en/translation.json")).toString());
 
   fs.readdirSync(join(__dirname, "../../public/locales/"))
     .filter((dir) => dir !== "en")
     .forEach((languageCode) => {
-      const anotherTranslation = JSON.parse(fs.readFileSync(join(__dirname, "../../public/locales/", languageCode, "translation.json")) as any);
+      const anotherTranslation = JSON.parse(fs.readFileSync(join(__dirname, "../../public/locales/", languageCode, "translation.json")).toString());
 
       const keys = Object.keys(translation);
       keys.forEach((key) => {

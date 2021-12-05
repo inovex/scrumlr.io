@@ -10,7 +10,7 @@ describe("vote configuration reducer", () => {
     initialState = {
       voteConfiguration: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
       board: {status: "unknown"},
-      users: {admins: [], basic: [], all: [], usersMarkedReady: []},
+      users: {admins: [], basic: [], all: [], usersMarkedReady: [], usersRaisedHands: []},
       notes: [],
       votes: [],
       joinRequests: [],

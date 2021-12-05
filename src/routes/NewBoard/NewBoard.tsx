@@ -14,7 +14,7 @@ import {TextInput} from "../../components/TextInput";
 import {Button} from "../../components/Button";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
-export var NewBoard = function () {
+export const NewBoard = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();

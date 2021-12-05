@@ -12,7 +12,7 @@ import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {ActionFactory} from "store/action";
 
-export var Board = function () {
+export const Board = () => {
   const {t} = useTranslation();
 
   useEffect(
@@ -26,7 +26,7 @@ export var Board = function () {
   useEffect(() => {
     window.addEventListener(
       "beforeunload",
-      (e) => {
+      () => {
         store.dispatch(ActionFactory.leaveBoard());
       },
       false
@@ -34,7 +34,7 @@ export var Board = function () {
 
     window.addEventListener(
       "onunload",
-      (e) => {
+      () => {
         store.dispatch(ActionFactory.leaveBoard());
       },
       false
@@ -108,8 +108,8 @@ export var Board = function () {
               >
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
-                  .filter((note) => note.parentId == null)
-                  .filter((note) => note.positionInStack == -1 || note.positionInStack == 0)
+                  .filter((note) => note.parentId === undefined)
+                  .filter((note) => note.positionInStack === -1 || note.positionInStack === 0)
                   .map((note) => ({...note, votes: state.completedVotes.filter((vote) => vote.note === note.id).length}))
                   // It seems that Firefox and Chrome have different orders of notes in the array. Therefore, we need to distinguish between the undefined states.
                   .sort((a, b) => {

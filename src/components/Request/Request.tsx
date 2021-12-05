@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {UserClientModel} from "types/user";
 import {UserAvatar} from "../BoardUsers";
 
-export var Request = function ({
+export const Request = ({
   joinRequests,
   users,
   raisedHands,
@@ -16,15 +16,15 @@ export var Request = function ({
   users: UserClientModel[];
   raisedHands: string[];
   boardId: string;
-}) {
+}) => {
   const {t} = useTranslation();
 
-  const handleAccept = (boardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.acceptJoinRequests(boardId, userIds));
+  const handleAccept = (requestedBoardId: string, userIds: string[]) => () => {
+    store.dispatch(ActionFactory.acceptJoinRequests(requestedBoardId, userIds));
   };
 
-  const handleReject = (boardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.rejectJoinRequests(boardId, userIds));
+  const handleReject = (requestedBoardId: string, userIds: string[]) => () => {
+    store.dispatch(ActionFactory.rejectJoinRequests(requestedBoardId, userIds));
   };
 
   const lowerHand = (userId: string[]) => {
@@ -32,13 +32,13 @@ export var Request = function ({
   };
 
   let title = "";
-  if (joinRequests.length != 0 && raisedHands.length != 0) title = t("Request.title");
-  else if (joinRequests.length == 0) title = t("RaiseRequest.title");
-  else if (raisedHands.length == 0) title = t("JoinRequest.title");
+  if (joinRequests.length !== 0 && raisedHands.length !== 0) title = t("Request.title");
+  else if (joinRequests.length === 0) title = t("RaiseRequest.title");
+  else if (raisedHands.length === 0) title = t("JoinRequest.title");
 
   return (
     <div>
-      {(joinRequests.length != 0 || raisedHands.length != 0) && (
+      {(joinRequests.length !== 0 || raisedHands.length !== 0) && (
         <div className="join-request">
           <div className="request__header">{title}</div>
           <div className="request__main">

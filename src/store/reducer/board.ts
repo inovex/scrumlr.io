@@ -5,6 +5,7 @@ import {ActionType, ReduxAction} from "store/action";
 import {Toast} from "utils/Toast";
 import i18n from "i18next";
 
+// eslint-disable-next-line default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
     case ActionType.InitializeBoard: {

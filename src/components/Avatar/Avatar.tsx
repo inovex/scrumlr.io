@@ -53,12 +53,13 @@ export interface AvatarProps {
  * @param s the string to hash
  * @returns the hash code
  */
-const hashCode = function (s: string) {
+const hashCode = (s: string) => {
   let hash = 0;
   const stringLength = s.length;
   let i = 0;
   if (stringLength > 0) {
     while (i < stringLength) {
+      // eslint-disable-next-line no-bitwise
       hash = ((hash << 5) - hash + s.charCodeAt(i++)) | 0;
     }
   }
