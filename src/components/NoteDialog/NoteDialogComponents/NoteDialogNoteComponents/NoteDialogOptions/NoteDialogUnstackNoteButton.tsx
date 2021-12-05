@@ -16,8 +16,8 @@ type NoteDialogUnstackNoteProps = {
 export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) => {
   const {t} = useTranslation();
 
-  const onUnstack = (id: string, parentId: string) => {
-    store.dispatch(ActionFactory.unstackNote({id, parentId}));
+  const onUnstack = (id: string, parentNoteId: string) => {
+    store.dispatch(ActionFactory.unstackNote({id, parentId: parentNoteId}));
   };
 
   return (

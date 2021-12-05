@@ -27,7 +27,11 @@ export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: C
         <div className="cookie-policy__title">
           <h1>{t("CookiePolicy.title")}</h1>
         </div>
-        <div className="cookie-policy__body" dangerouslySetInnerHTML={{__html: body}} />
+        <div
+          className="cookie-policy__body"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{__html: body}}
+        />
         <div className="cookie-policy__footer">
           <button className="cookie-policy__button-decline" type="button" onClick={decline}>
             {t("CookiePolicy.decline")}

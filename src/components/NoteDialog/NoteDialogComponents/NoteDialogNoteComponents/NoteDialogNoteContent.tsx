@@ -17,7 +17,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const editable = (editorId: string) => (Parse.User.current()?.id === editorId || currentUserIsModerator) && !activeModeration.status;
 
   const onEdit = (id: string, editorId: string, newText: string) => {
-    if (editable(editorId) && newText != text) {
+    if (editable(editorId) && newText !== text) {
       store.dispatch(ActionFactory.editNote({id, text: newText}));
     }
   };

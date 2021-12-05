@@ -5,13 +5,13 @@ import "./Button.scss";
 export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
   color?: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text-link";
-  leftIcon?: ReactElement<any, any>;
-  rightIcon?: ReactElement<any, any>;
+  leftIcon?: ReactElement;
+  rightIcon?: ReactElement;
   hideLabel?: boolean;
   block?: boolean;
 }
 
-export var Button: FC<ButtonProps> = ({className, variant = "contained", color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) => {
+export const Button: FC<ButtonProps> = ({className, variant = "contained", color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) => {
   const labelRef = useRef<HTMLSpanElement>(null);
   const [label, setLabel] = useState<string>("");
 
@@ -22,12 +22,12 @@ export var Button: FC<ButtonProps> = ({className, variant = "contained", color =
   const labelProps = hideLabel ? {"aria-label": label} : {};
 
   if (leftIcon) {
-    const iconProps = Children.only(leftIcon)?.props as any;
+    const iconProps = Children.only(leftIcon)?.props;
     leftIcon = cloneElement(leftIcon!, {className: classNames(iconProps?.className, "button__icon", "button__left-icon")});
   }
 
   if (rightIcon) {
-    const iconProps = Children.only(rightIcon)?.props as any;
+    const iconProps = Children.only(rightIcon)?.props;
     rightIcon = cloneElement(rightIcon!, {className: classNames(iconProps?.className, "button__icon", "button__right-icon")});
   }
 

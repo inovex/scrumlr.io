@@ -93,6 +93,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
       };
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
 
   useEffect(() => {
@@ -113,6 +114,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
       showNextButton: lastVisibleColumnIndex < columnsCount - 1,
       showPreviousButton: firstVisibleColumnIndex > 0,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnState]);
 
   if (!children || columnsCount === 0) {

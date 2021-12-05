@@ -25,6 +25,7 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
           setText(fetchedText);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const markdownText = marked.parse(text);
@@ -34,7 +35,12 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
       <Link to="/">
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
-      <div className="legal__text" dangerouslySetInnerHTML={{__html: markdownText}} />
+
+      <div
+        className="legal__text"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{__html: markdownText}}
+      />
     </div>
   );
 };

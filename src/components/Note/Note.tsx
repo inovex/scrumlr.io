@@ -62,6 +62,7 @@ export const Note = (props: NoteProps) => {
       // Disable dialog for all other users
       setShowDialog(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.activeModeration.status]);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export const Note = (props: NoteProps) => {
         setShowDialog(props.focus);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.focus]);
 
   const [{isDragging}, drag] = useDrag({
@@ -93,7 +95,7 @@ export const Note = (props: NoteProps) => {
   }));
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key == "Enter" && !showDialog) {
+    if (e.key === "Enter" && !showDialog) {
       if (!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) {
         handleShowDialog();
       }

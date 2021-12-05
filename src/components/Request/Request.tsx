@@ -19,12 +19,12 @@ export const Request = ({
 }) => {
   const {t} = useTranslation();
 
-  const handleAccept = (boardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.acceptJoinRequests(boardId, userIds));
+  const handleAccept = (requestedBoardId: string, userIds: string[]) => () => {
+    store.dispatch(ActionFactory.acceptJoinRequests(requestedBoardId, userIds));
   };
 
-  const handleReject = (boardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.rejectJoinRequests(boardId, userIds));
+  const handleReject = (requestedBoardId: string, userIds: string[]) => () => {
+    store.dispatch(ActionFactory.rejectJoinRequests(requestedBoardId, userIds));
   };
 
   const lowerHand = (userId: string[]) => {
@@ -32,9 +32,9 @@ export const Request = ({
   };
 
   let title = "";
-  if (joinRequests.length != 0 && raisedHands.length != 0) title = t("Request.title");
-  else if (joinRequests.length == 0) title = t("RaiseRequest.title");
-  else if (raisedHands.length == 0) title = t("JoinRequest.title");
+  if (joinRequests.length !== 0 && raisedHands.length !== 0) title = t("Request.title");
+  else if (joinRequests.length === 0) title = t("RaiseRequest.title");
+  else if (raisedHands.length === 0) title = t("JoinRequest.title");
 
   return (
     <div>

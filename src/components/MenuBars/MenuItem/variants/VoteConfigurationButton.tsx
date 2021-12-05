@@ -19,7 +19,7 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
   const [numberOfVotes, setNumberOfVotes] = useState(5);
   const [allowMultipleVotesPerNote, setAllowMultipleVotesPerNote] = useState(true);
   const [showVotesOfOthers, setShowVotesOfOthers] = useState(false);
-  const state = useAppSelector((state) => ({activeVoting: state.board.data?.voting === "active", boardId: state.board.data?.id}));
+  const state = useAppSelector((rootState) => ({activeVoting: rootState.board.data?.voting === "active", boardId: rootState.board.data?.id}));
 
   const focusOnTab = (tabIndex: number) => (tabable ? (props.tabIndex ? props.tabIndex + tabIndex : TabIndex.default) : TabIndex.disabled);
 
@@ -48,10 +48,10 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
           <Dropdown.Main>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
-              onClick={(_) => {
+              onClick={() => {
                 stopVoting();
               }}
-              onTouchEnd={(_) => {
+              onTouchEnd={() => {
                 stopVoting();
               }}
               tabIndex={focusOnTab(1)}
@@ -60,10 +60,10 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
             </Dropdown.ItemButton>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
-              onClick={(_) => {
+              onClick={() => {
                 cancelVoting();
               }}
-              onTouchEnd={(_) => {
+              onTouchEnd={() => {
                 cancelVoting();
               }}
               tabIndex={focusOnTab(2)}
@@ -145,7 +145,7 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
           <Dropdown.Footer>
             <Dropdown.ItemButton
               className="vote-dropdown__item-button"
-              onClick={(_) => {
+              onClick={() => {
                 startVoting();
               }}
               onTouchEnd={() => {

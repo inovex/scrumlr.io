@@ -34,9 +34,6 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   let AccessPolicyDescription;
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
-    case AccessPolicy.Public:
-      AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
-      break;
     case AccessPolicy.ByPassphrase:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
@@ -76,6 +73,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       break;
     case AccessPolicy.ManualVerification:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.manualVerification")}</span>;
+      break;
+    case AccessPolicy.Public:
+    default:
+      AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
       break;
   }
 

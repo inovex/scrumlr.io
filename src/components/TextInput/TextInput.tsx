@@ -4,8 +4,8 @@ import "./TextInput.scss";
 
 export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   type?: "text" | "password";
-  rightAdornment?: ReactElement<any, any>;
-  leftAdornment?: ReactElement<any, any>;
+  rightAdornment?: ReactElement;
+  leftAdornment?: ReactElement;
   actions?: ReactNode;
 }
 
@@ -15,12 +15,12 @@ export const TextInput: FC<TextInputProps> = ({className, leftAdornment, rightAd
   }
 
   if (leftAdornment) {
-    const iconProps = Children.only(leftAdornment)?.props as any;
+    const iconProps = Children.only(leftAdornment)?.props;
     leftAdornment = cloneElement(leftAdornment!, {className: classNames(iconProps?.className, "text-input__adornment", "text-input__adornment--left")});
   }
 
   if (rightAdornment) {
-    const iconProps = Children.only(rightAdornment)?.props as any;
+    const iconProps = Children.only(rightAdornment)?.props;
     rightAdornment = cloneElement(rightAdornment!, {className: classNames(iconProps?.className, "text-input__adornment", "text-input__adornment--right")});
   }
 
