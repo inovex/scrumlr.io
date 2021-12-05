@@ -5,10 +5,12 @@ import classNames from "classnames";
 export interface BoardOptionButtonProps {
   label: string;
   icon?: ElementType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick: (...args: any) => any;
   className?: string;
   isExpandable?: boolean;
   children?: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

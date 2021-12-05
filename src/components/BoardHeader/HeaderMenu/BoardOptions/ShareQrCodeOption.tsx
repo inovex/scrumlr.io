@@ -2,18 +2,18 @@ import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
 import QRCode from "qrcode.react";
+import {useTranslation} from "react-i18next";
+import {TabIndex} from "constants/tabIndex";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import "./ShareQrCodeOption.scss";
-import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 
 export type QRCodeProps = {
   onClick: () => void;
   expand: boolean;
 };
 
-export var ShareQrCodeOption = (props: QRCodeProps) => {
+export const ShareQrCodeOption = (props: QRCodeProps) => {
   const {t} = useTranslation();
 
   return (

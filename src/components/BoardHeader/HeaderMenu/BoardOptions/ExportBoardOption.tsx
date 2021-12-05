@@ -19,7 +19,7 @@ export type ExportProps = {
   expand: boolean;
 };
 
-export var ExportBoardOption = (props: ExportProps) => {
+export const ExportBoardOption = (props: ExportProps) => {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({

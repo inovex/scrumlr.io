@@ -15,7 +15,7 @@ export type DeleteProps = {
   expand: boolean;
 };
 
-export var DeleteBoardOption = (props: DeleteProps) => {
+export const DeleteBoardOption = (props: DeleteProps) => {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({

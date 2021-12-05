@@ -21,13 +21,13 @@ export interface AccessPolicySelectionProps {
   onPassphraseChange: (passphrase: string) => void;
 }
 
-export var AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
+export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
   const {t} = useTranslation();
   const [visiblePassphrase, setVisiblePassphrase] = useState(true);
 
-  const handlePolicyChange = (accessPolicy: AccessPolicy) => {
-    if (accessPolicy >= 0 && accessPolicy <= 2) {
-      onAccessPolicyChange(accessPolicy);
+  const handlePolicyChange = (newAccessPolicy: AccessPolicy) => {
+    if (newAccessPolicy >= 0 && newAccessPolicy <= 2) {
+      onAccessPolicyChange(newAccessPolicy);
     }
   };
 
