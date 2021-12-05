@@ -41,7 +41,7 @@ type ToggleButtonProps<T> = {
   tabIndex?: number;
 };
 
-export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
+export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<any>) => {
   const onClick = () => {
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
     props.onToggle?.(newValue);
