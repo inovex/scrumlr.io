@@ -2,14 +2,14 @@ import {useEffect} from "react";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import {LoadingIndicator} from "components/LoadingIndicator";
-import {Board} from "./Board";
 import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
-import {Button} from "../../components/Button";
+import {Button} from "components/Button";
+import {Board} from "./Board";
 
-export var BoardGuard = function () {
+export const BoardGuard = () => {
   const {boardId} = useParams<"boardId">();
   const {t} = useTranslation();
 

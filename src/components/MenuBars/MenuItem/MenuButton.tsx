@@ -12,7 +12,7 @@ type MenuButtonProps = {
   tabIndex?: number;
 };
 
-export var MenuButton = function(props: MenuButtonProps) {
+export const MenuButton = (props: MenuButtonProps) => {
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
@@ -46,4 +46,4 @@ export var MenuButton = function(props: MenuButtonProps) {
       <Icon className="menu-item__icon menu-item__icon--start" />
     </button>
   );
-}
+};

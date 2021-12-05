@@ -18,12 +18,14 @@ export const Homepage = withTranslation()(() => {
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
+      // eslint-disable-next-line no-restricted-globals
       location.reload();
     });
   };
 
   const onLogout = async () => {
     await Parse.User.logOut();
+    // eslint-disable-next-line no-restricted-globals
     location.reload();
   };
 

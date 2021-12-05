@@ -4,6 +4,7 @@ import {ActionFactory} from "store/action";
 import {UserClientModel} from "types/user";
 import {User} from "parse";
 import {mocked} from "ts-jest/utils";
+import {BoardClientModel} from "../../../types/board";
 
 jest.mock("parse");
 
@@ -29,6 +30,7 @@ describe("users reducer", () => {
       basic: [],
       all: [],
       usersMarkedReady: [],
+      usersRaisedHands: [],
     };
   });
 
@@ -99,7 +101,7 @@ describe("users reducer", () => {
         state1,
         ActionFactory.updatedBoard({
           usersMarkedReady: ["1"],
-        } as any)
+        } as BoardClientModel)
       );
       expect(state2.usersMarkedReady).toHaveLength(1);
       expect(state2.all[0].ready).toBeTruthy();

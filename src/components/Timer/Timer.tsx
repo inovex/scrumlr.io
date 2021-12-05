@@ -16,15 +16,15 @@ const stopAudio = (audio: HTMLAudioElement) => {
   audio.currentTime = 0;
 };
 
-const usePrevious = (value: any) => {
-  const ref = useRef();
+const usePrevious = (value: boolean) => {
+  const ref = useRef<boolean>();
   useEffect(() => {
     ref.current = value;
   });
   return ref.current;
 };
 
-export var Timer = function (props: TimerProps) {
+export const Timer = (props: TimerProps) => {
   const {t} = useTranslation();
 
   const calculateTime = () => {
@@ -62,6 +62,7 @@ export var Timer = function (props: TimerProps) {
       };
     }
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playCountdown]);
 
   useEffect(() => {
@@ -72,6 +73,7 @@ export var Timer = function (props: TimerProps) {
       };
     }
     return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playTimesUp]);
 
   useEffect(() => {
@@ -82,6 +84,7 @@ export var Timer = function (props: TimerProps) {
         setPlayTimesUp(true);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
   return (

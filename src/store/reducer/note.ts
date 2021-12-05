@@ -2,6 +2,7 @@ import Parse from "parse";
 import {NoteClientModel} from "types/note";
 import {ActionType, ReduxAction} from "store/action";
 
+// eslint-disable-next-line default-param-last
 export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction): NoteClientModel[] => {
   switch (action.type) {
     case ActionType.AddNote: {
@@ -50,11 +51,11 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       return state;
     }
     case ActionType.DragNote: {
-      const dragedOn = state.find((note) => note.id == action.note.dragOnId);
-      const note = state.find((note) => note.id == action.note.id);
-      const childNotes = (state.filter((note) => note.parentId == action.note.id) as NoteClientModel[]) ?? [];
+      const dragedOn = state.find((note) => note.id === action.note.dragOnId);
+      const note = state.find((noteInList) => noteInList.id === action.note.id);
+      const childNotes = (state.filter((noteInList) => noteInList.parentId === action.note.id) as NoteClientModel[]) ?? [];
       if (dragedOn) {
-        const childNotesDragedOn = (state.filter((note) => note.parentId == action.note.dragOnId) as NoteClientModel[]) ?? [];
+        const childNotesDragedOn = (state.filter((noteInList) => noteInList.parentId === action.note.dragOnId) as NoteClientModel[]) ?? [];
 
         dragedOn!.parentId = action.note.id;
         dragedOn!.positionInStack = childNotes.length + 1;
@@ -78,13 +79,13 @@ export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction):
       return state;
     }
     case ActionType.UnstackNote: {
-      const unstack = state.find((note) => note.id == action.note.id);
+      const unstack = state.find((note) => note.id === action.note.id);
       unstack!.parentId = undefined;
       unstack!.positionInStack = -1;
 
-      const childNotes = (state.filter((note) => note.parentId == action.note.parentId) as NoteClientModel[]) ?? [];
+      const childNotes = (state.filter((note) => note.parentId === action.note.parentId) as NoteClientModel[]) ?? [];
       if (childNotes.length === 0) {
-        const parent = state.find((note) => note.id == action.note.parentId);
+        const parent = state.find((note) => note.id === action.note.parentId);
         parent!.positionInStack = -1;
       }
 

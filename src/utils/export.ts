@@ -26,15 +26,6 @@ export type ExportFormat = {
   votes: number;
 };
 
-export const generateCSV = (state: ExportProps) => {
-  const fields = ["noteId", "author", "text", "column", "timestamp", "parent", "votes"];
-  for (let i = 1; i <= state.board.votingIteration; ++i) {
-    fields.push(`voting_iteration_${i}`);
-  }
-  const csv = parse(mapToExport(state), {quote: "", fields});
-  return csv;
-};
-
 export const mapToExport = (state: ExportProps) =>
   state.notes.map((note) => {
     const votes = state.votes.filter((vote) => vote.note === note.id);
@@ -42,7 +33,7 @@ export const mapToExport = (state: ExportProps) =>
       noteId: note.id || "-",
       author: state.users.all.find((user) => user.id === note.author)?.displayName || note.author,
       text: note.text,
-      column: state.board.columns.find((column) => column.columnId === note.columnId)?.name!,
+      column: state.board.columns.find((column) => column.columnId === note.columnId)!.name,
       timestamp: note.createdAt?.toUTCString().replace(",", "") || "-",
       parent: note.parentId || "-",
       votes: votes.length,
@@ -53,6 +44,14 @@ export const mapToExport = (state: ExportProps) =>
     }
     return {...result, ...votingIterations};
   });
+
+export const generateCSV = (state: ExportProps) => {
+  const fields = ["noteId", "author", "text", "column", "timestamp", "parent", "votes"];
+  for (let i = 1; i <= state.board.votingIteration; ++i) {
+    fields.push(`voting_iteration_${i}`);
+  }
+  return parse(mapToExport(state), {quote: "", fields});
+};
 
 export const fileName = (state: ExportProps) => {
   const date = new Date().toJSON().slice(0, 10);

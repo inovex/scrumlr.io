@@ -14,10 +14,10 @@ export interface UserAvatarProps {
   badgeText?: string;
 }
 
-export var UserAvatar = function({name, badgeText, id, ready, avatar, className, avatarClassName}: UserAvatarProps) {
-  return <div className={classNames("user-avatar", className)} title={name}>
+export const UserAvatar = ({name, badgeText, id, ready, avatar, className, avatarClassName}: UserAvatarProps) => (
+  <div className={classNames("user-avatar", className)} title={name}>
     {avatar ? <img src={avatar} className={avatarClassName} alt={name} /> : <Avatar seed={id} className={avatarClassName} />}
     {ready && <IconCheck className="user-avatar__ready" />}
     {badgeText && <Badge text={badgeText} />}
   </div>
-}
+);

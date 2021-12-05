@@ -6,6 +6,7 @@ import {ActionType, ReduxAction} from "store/action";
  */
 const defaultVoteConfiguration = {boardId: "Empty", votingIteration: 0, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true};
 
+// eslint-disable-next-line default-param-last
 export const voteConfigurationReducer = (state: VoteConfigurationClientModel = defaultVoteConfiguration, action: ReduxAction): VoteConfigurationClientModel => {
   switch (action.type) {
     /**

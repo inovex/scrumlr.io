@@ -1,7 +1,8 @@
 import classNames from "classnames";
 import "./Toggle.scss";
+import {FC} from "react";
 
-type ToggleProps<T> = {
+type ToggleProps = {
   /**
    * Additional CSS classes.
    */
@@ -15,6 +16,4 @@ type ToggleProps<T> = {
   active: boolean;
 };
 
-export var Toggle = function<T,>(props: ToggleProps<T>) {
-  return <div className={classNames("toggle", {"toggle--active": props.active, "toggle--disabled": props.disabled}, props.className)} />;
-}
+export const Toggle: FC<ToggleProps> = (props) => <div className={classNames("toggle", {"toggle--active": props.active, "toggle--disabled": props.disabled}, props.className)} />;

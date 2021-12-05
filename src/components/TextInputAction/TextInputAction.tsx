@@ -6,10 +6,8 @@ export interface TextInputActionProps extends DetailedHTMLProps<ButtonHTMLAttrib
   title: string;
 }
 
-export var TextInputAction: FC<TextInputActionProps> = function ({title, className, children, ...other}) {
-  return (
-    <button type="button" className={classNames("text-input-action", className)} aria-label={title} title={title} {...other}>
-      {children}
-    </button>
-  );
-};
+export const TextInputAction: FC<TextInputActionProps> = ({title, className, children, ...other}) => (
+  <button type="button" className={classNames("text-input-action", className)} aria-label={title} title={title} {...other}>
+    {children}
+  </button>
+);

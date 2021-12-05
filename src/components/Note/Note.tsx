@@ -32,7 +32,7 @@ interface NoteProps {
   tabIndex?: number;
 }
 
-export var Note = function (props: NoteProps) {
+export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
@@ -62,6 +62,7 @@ export var Note = function (props: NoteProps) {
       // Disable dialog for all other users
       setShowDialog(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.activeModeration.status]);
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export var Note = function (props: NoteProps) {
         setShowDialog(props.focus);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.focus]);
 
   const [{isDragging}, drag] = useDrag({
@@ -93,7 +95,7 @@ export var Note = function (props: NoteProps) {
   }));
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key == "Enter" && !showDialog) {
+    if (e.key === "Enter" && !showDialog) {
       if (!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) {
         handleShowDialog();
       }
@@ -105,7 +107,7 @@ export var Note = function (props: NoteProps) {
 
   return (
     <li
-      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId != Parse.User.current()?.id})}
+      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id})}
       onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
       onKeyPress={handleKeyPress}
       ref={noteRef}

@@ -1,10 +1,10 @@
 import {Navigate} from "react-router-dom";
 import Parse from "parse";
 import {useLocation} from "react-router";
-import {ReactNode, useEffect, useState} from "react";
+import {useEffect, useState, FC} from "react";
 import {LoadingScreen} from "../components/LoadingScreen";
 
-const RequireAuthentication = function({children}: {children: ReactNode}) {
+const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
 
   const [verifiedSession, setVerifiedSession] = useState<boolean | undefined>(undefined);
@@ -25,9 +25,10 @@ const RequireAuthentication = function({children}: {children: ReactNode}) {
   }
 
   if (verifiedSession) {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>;
   }
   return <Navigate to="/login" state={{from: location}} />;
-}
+};
 
 export default RequireAuthentication;

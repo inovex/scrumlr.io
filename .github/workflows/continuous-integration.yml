@@ -38,6 +38,9 @@ jobs:
           yarn install
           CI=false yarn build
 
+      - name: Lint code
+        run: yarn lint --max-warnings 0
+
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
 
@@ -61,13 +64,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-       
+
       - name: Build and push Frontend
         uses: docker/build-push-action@v2
         with:
           push: true
           tags: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
-      
+
       - name: Build and push Dashboard
         uses: docker/build-push-action@v2
         with:
@@ -82,4 +85,4 @@ jobs:
           push: true
           tags: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
 
-  
+
