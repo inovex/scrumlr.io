@@ -3,7 +3,7 @@ import {Votes} from "components/Votes";
 import Parse from "parse";
 import {FC} from "react";
 import {VoteClientModel} from "types/vote";
-import {NoteDialogNoteComponents} from ".";
+import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
 
 type NoteDialogNoteFooterProps = {
@@ -37,7 +37,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
         {(props.activeVoting || props.votes.length !== 0) && (
           <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} usedVotesAsUser={props.allVotesOfUser.length} />
         )}
-        {showOptions && <NoteDialogNoteComponents.Options {...props} />}
+        {showOptions && <NoteDialogNoteOptions {...props} />}
       </div>
     </div>
   );

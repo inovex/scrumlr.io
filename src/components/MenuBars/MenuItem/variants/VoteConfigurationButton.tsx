@@ -21,7 +21,12 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
   const [showVotesOfOthers, setShowVotesOfOthers] = useState(false);
   const state = useAppSelector((rootState) => ({activeVoting: rootState.board.data?.voting === "active", boardId: rootState.board.data?.id}));
 
-  const focusOnTab = (tabIndex: number) => (tabable ? (props.tabIndex ? props.tabIndex + tabIndex : TabIndex.default) : TabIndex.disabled);
+  const focusOnTab = (tabIndex: number) => {
+    if (tabable) {
+      return props.tabIndex ? props.tabIndex + tabIndex : TabIndex.default;
+    }
+    return TabIndex.disabled;
+  };
 
   const startVoting = () => {
     store.dispatch(

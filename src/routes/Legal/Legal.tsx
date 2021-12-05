@@ -3,9 +3,8 @@ import {FC, useEffect, useState} from "react";
 import "./Legal.scss";
 import {generatePath} from "react-router";
 import {Link} from "react-router-dom";
+import {marked} from "marked";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
-
-const marked = require("marked");
 
 export interface LegalProps {
   document: "privacyPolicy" | "termsAndConditions" | "cookiePolicy";

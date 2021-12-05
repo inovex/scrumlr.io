@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import {TabIndex} from "constants/tabIndex";
-import {FC} from "react";
 import "./ToggleButton.scss";
 import {Toggle} from "../Toggle";
 
@@ -42,7 +41,7 @@ type ToggleButtonProps<T> = {
   tabIndex?: number;
 };
 
-export const ToggleButton: FC<ToggleButtonProps<any>> = (props) => {
+export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
   const onClick = () => {
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
     props.onToggle?.(newValue);

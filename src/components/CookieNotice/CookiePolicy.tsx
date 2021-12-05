@@ -1,8 +1,7 @@
 import "./CookiePolicy.scss";
 import {Portal} from "components/Portal";
 import {useTranslation} from "react-i18next";
-
-const marked = require("marked");
+import {marked} from "marked";
 
 interface CookiePolicyProps {
   decline: () => void;

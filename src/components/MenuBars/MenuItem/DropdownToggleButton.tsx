@@ -45,6 +45,7 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
         }
       }}
       tabIndex={props.tabIndex ?? TabIndex.default}
+      disabled={props.disabled}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>
