@@ -108,7 +108,7 @@ export const Board = () => {
               >
                 {state.notes
                   .filter((note) => note.columnId === column.columnId)
-                  .filter((note) => note.parentId === null)
+                  .filter((note) => note.parentId === undefined)
                   .filter((note) => note.positionInStack === -1 || note.positionInStack === 0)
                   .map((note) => ({...note, votes: state.completedVotes.filter((vote) => vote.note === note.id).length}))
                   // It seems that Firefox and Chrome have different orders of notes in the array. Therefore, we need to distinguish between the undefined states.
