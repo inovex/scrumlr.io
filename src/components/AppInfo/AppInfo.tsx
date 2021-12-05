@@ -8,7 +8,7 @@ export interface AppInfoProps {
   className?: string;
 }
 
-export const AppInfo: FC<AppInfoProps> = function ({className}) {
+export const AppInfo: FC<AppInfoProps> = ({className}) => {
   const {t} = useTranslation();
 
   return (

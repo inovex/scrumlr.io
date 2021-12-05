@@ -46,6 +46,7 @@ export const Portal = ({onClose, children, darkBackground, hiddenOverflow, cente
     return () => {
       window.removeEventListener("keydown", handleKeydown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closeable]);
 
   // mount backdrop into separate located DOM node 'portal'

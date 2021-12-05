@@ -13,7 +13,7 @@ interface ParticipantProps {
   boardOwner: string;
 }
 
-export var Participant = function ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) {
+export const Participant = ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) => {
   const state = useAppSelector((applicationState) => ({
     users: applicationState.users,
   }));

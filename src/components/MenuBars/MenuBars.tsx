@@ -17,7 +17,7 @@ import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 
 import "./MenuBars.scss";
 
-export var MenuBars = function () {
+export const MenuBars = () => {
   const {t} = useTranslation();
 
   const [showAdminMenu, toggleMenus] = useState(false);

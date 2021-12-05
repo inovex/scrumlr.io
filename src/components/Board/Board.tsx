@@ -24,7 +24,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export var BoardComponent = function ({children, name, boardstatus, currentUserIsModerator}: BoardProps) {
+export const BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -93,6 +93,7 @@ export var BoardComponent = function ({children, name, boardstatus, currentUserI
       };
     }
     return undefined;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
 
   useEffect(() => {
@@ -113,6 +114,7 @@ export var BoardComponent = function ({children, name, boardstatus, currentUserI
       showNextButton: lastVisibleColumnIndex < columnsCount - 1,
       showPreviousButton: firstVisibleColumnIndex > 0,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnState]);
 
   if (!children || columnsCount === 0) {

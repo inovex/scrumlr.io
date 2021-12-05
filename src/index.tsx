@@ -9,8 +9,8 @@ import {CookieNotice} from "components/CookieNotice";
 import store from "store";
 import Router from "routes/Router";
 import {I18nextProvider} from "react-i18next";
-import i18n from "./i18n";
 import {ToastContainer} from "react-toastify";
+import i18n from "./i18n";
 
 Parse.initialize("Scrumlr");
 

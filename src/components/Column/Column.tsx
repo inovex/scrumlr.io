@@ -20,7 +20,7 @@ export interface ColumnProps {
   tabIndex?: number;
 }
 
-export var Column = function ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) {
+export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],

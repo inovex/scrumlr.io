@@ -22,11 +22,9 @@ export type NoteDialogNoteProps = {
   showUnstackButton: boolean;
 };
 
-export var NoteDialogNote: FC<NoteDialogNoteProps> = function (props: NoteDialogNoteProps) {
-  return (
-    <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
-      <NoteDialogNoteComponents.Content {...props} />
-      <NoteDialogNoteComponents.Footer {...props} />
-    </div>
-  );
-};
+export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
+  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
+    <NoteDialogNoteComponents.Content {...props} />
+    <NoteDialogNoteComponents.Footer {...props} />
+  </div>
+);

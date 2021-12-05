@@ -3,15 +3,14 @@ import {FC, useEffect, useState} from "react";
 import "./Legal.scss";
 import {generatePath} from "react-router";
 import {Link} from "react-router-dom";
+import {marked} from "marked";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
-
-const marked = require("marked");
 
 export interface LegalProps {
   document: "privacyPolicy" | "termsAndConditions" | "cookiePolicy";
 }
 
-const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
+const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
   const {i18n} = useTranslation();
   const [text, setText] = useState<string>("");
 
@@ -21,10 +20,11 @@ const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
 
       fetch(legalDocument)
         .then((response) => response.text())
-        .then((text) => {
-          setText(text);
+        .then((fetchedText) => {
+          setText(fetchedText);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
   const markdownText = marked.parse(text);
@@ -34,7 +34,12 @@ const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
       <Link to="/">
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
-      <div className="legal__text" dangerouslySetInnerHTML={{__html: markdownText}} />
+
+      <div
+        className="legal__text"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{__html: markdownText}}
+      />
     </div>
   );
 };

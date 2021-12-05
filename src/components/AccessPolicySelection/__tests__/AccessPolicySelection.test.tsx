@@ -27,7 +27,6 @@ describe("AccessPolicySelection", () => {
     });
   });
 
-  /* FIXME
   test("trigger on password change when random generator is clicked", async () => {
     const onChangeOfPassphrase = jest.fn();
     const {container} = render(
@@ -40,5 +39,4 @@ describe("AccessPolicySelection", () => {
       expect(onChangeOfPassphrase).toHaveBeenCalled();
     });
   });
-  */
 });

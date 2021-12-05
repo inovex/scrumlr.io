@@ -1,15 +1,16 @@
 import {Navigate} from "react-router-dom";
 import Parse from "parse";
 import {useLocation} from "react-router";
-import {ReactNode} from "react";
+import {FC} from "react";
 
-function RequireAuthentication({children}: {children: ReactNode}) {
+export const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
   const currentUser = Parse.User.current();
   if (currentUser) {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>;
   }
   return <Navigate to="/login" state={{from: location}} />;
-}
+};
 
 export default RequireAuthentication;

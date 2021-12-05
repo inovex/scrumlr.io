@@ -1,6 +1,6 @@
 import {fireEvent, waitFor} from "@testing-library/react";
 import {render} from "testUtils";
-import PassphraseDialog from "../PassphraseDialog";
+import {PassphraseDialog} from "../PassphraseDialog";
 
 describe("<PassphraseDialog />", () => {
   test("snapshot test", () => {
