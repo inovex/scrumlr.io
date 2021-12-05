@@ -11,7 +11,7 @@ export interface NoteInputProps {
   tabIndex?: number;
 }
 
-export var NoteInput = function ({columnId, tabIndex}: NoteInputProps) {
+export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
   const {t} = useTranslation();
   const [value, setValue] = React.useState("");
 

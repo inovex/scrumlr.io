@@ -15,7 +15,7 @@ type MenuToggleProps = {
   tabIndex?: number;
 };
 
-export function MenuToggle(props: MenuToggleProps) {
+export const MenuToggle = (props: MenuToggleProps) => {
   const [value, setValue] = useState(props.value ?? false);
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
@@ -61,4 +61,4 @@ export function MenuToggle(props: MenuToggleProps) {
       <CloseIcon className="menu-item__icon menu-item__icon--end" />
     </button>
   );
-}
+};

@@ -21,7 +21,7 @@ export interface AccessPolicySelectionProps {
   onPassphraseChange: (passphrase: string) => void;
 }
 
-export var AccessPolicySelection: FC<AccessPolicySelectionProps> = function ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) {
+export var AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
   const {t} = useTranslation();
   const [visiblePassphrase, setVisiblePassphrase] = useState(true);
 

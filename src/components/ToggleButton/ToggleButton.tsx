@@ -41,7 +41,7 @@ type ToggleButtonProps<T> = {
   tabIndex?: number;
 };
 
-export var ToggleButton = function<T,>(props: ToggleButtonProps<T>) {
+export const ToggleButton = function <T>(props: ToggleButtonProps<T>) {
   const onClick = () => {
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
     props.onToggle?.(newValue);
@@ -65,4 +65,4 @@ export var ToggleButton = function<T,>(props: ToggleButtonProps<T>) {
       <Toggle active={isActive} disabled={props.disabled} />
     </button>
   );
-}
+};

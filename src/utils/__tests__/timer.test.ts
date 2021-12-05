@@ -8,7 +8,7 @@ const mockedCallApi = mocked(callAPI);
 
 describe("Timer", () => {
   test("getBrowserServerTimeDifference", async () => {
-    mockedCallApi.mockImplementation((endpoint: string, request: {}) => new Date(1234).toUTCString());
+    mockedCallApi.mockImplementation(() => new Date(1234).toUTCString());
     const value = await getBrowserServerTimeDifference();
 
     expect(value).toBe(Date.parse(new Date().toUTCString()) - Date.parse(new Date(1234).toUTCString()));

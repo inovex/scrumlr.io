@@ -12,7 +12,7 @@ type ThemeToggleButtonProps = {
   tabIndex?: number;
 };
 
-export var ThemeToggleButton = function (props: ThemeToggleButtonProps) {
+export const ThemeToggleButton = (props: ThemeToggleButtonProps) => {
   const [touchHover, setTouchHover] = useState(false);
   const [theme, setTheme] = useState(document.documentElement.getAttribute("theme"));
   const {t} = useTranslation();

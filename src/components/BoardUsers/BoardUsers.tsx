@@ -12,7 +12,7 @@ const getWindowDimensions = () => {
   };
 };
 
-export var BoardUsers = function () {
+export var BoardUsers = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
   useEffect(() => {

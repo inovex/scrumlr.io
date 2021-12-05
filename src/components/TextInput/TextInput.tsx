@@ -9,7 +9,7 @@ export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HT
   actions?: ReactNode;
 }
 
-export var TextInput: FC<TextInputProps> = function ({className, leftAdornment, rightAdornment, actions, type = "text", ...other}) {
+export const TextInput: FC<TextInputProps> = ({className, leftAdornment, rightAdornment, actions, type = "text", ...other}) => {
   if (!(leftAdornment || rightAdornment || actions)) {
     return <input className={classNames("text-input", className)} type={type} {...other} />;
   }

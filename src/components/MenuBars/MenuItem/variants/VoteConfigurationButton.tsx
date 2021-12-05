@@ -13,7 +13,7 @@ type VoteConfigurationButtonProps = {
   tabIndex?: number;
 };
 
-export var VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = function (props) {
+export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props) => {
   const {t} = useTranslation();
   const [tabable, setTabable] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);

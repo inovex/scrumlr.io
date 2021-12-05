@@ -3,13 +3,13 @@ import Parse from "parse";
 import {useLocation} from "react-router";
 import {ReactNode} from "react";
 
-function RequireAuthentication({children}: {children: ReactNode}) {
+export const RequireAuthentication = ({children}: {children: ReactNode}) => {
   const location = useLocation();
   const currentUser = Parse.User.current();
   if (currentUser) {
-    return <>{children}</>;
+    return children;
   }
   return <Navigate to="/login" state={{from: location}} />;
-}
+};
 
 export default RequireAuthentication;

@@ -7,7 +7,7 @@ import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 
-export var ShowAuthorOption = function () {
+export var ShowAuthorOption = () => {
   const {t} = useTranslation();
 
   const state = useAppSelector((applicationState: ApplicationState) => ({

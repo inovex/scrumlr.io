@@ -14,7 +14,7 @@ export type BoardSettingsProps = {
   setAccessPolicy: Dispatch<SetStateAction<AccessPolicyType>>;
 };
 
-export var BoardSettings = function (props: BoardSettingsProps) {
+export var BoardSettings = (props: BoardSettingsProps) => {
   const {t} = useTranslation();
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,

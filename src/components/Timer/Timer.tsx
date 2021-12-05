@@ -24,7 +24,7 @@ const usePrevious = (value: any) => {
   return ref.current;
 };
 
-export var Timer = function (props: TimerProps) {
+export const Timer = (props: TimerProps) => {
   const {t} = useTranslation();
 
   const calculateTime = () => {

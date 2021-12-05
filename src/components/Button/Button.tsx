@@ -11,7 +11,7 @@ export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTML
   block?: boolean;
 }
 
-export var Button: FC<ButtonProps> = function ({className, variant = "contained", color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) {
+export var Button: FC<ButtonProps> = ({className, variant = "contained", color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) => {
   const labelRef = useRef<HTMLSpanElement>(null);
   const [label, setLabel] = useState<string>("");
 

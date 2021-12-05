@@ -16,7 +16,7 @@ import {TextInput} from "../../components/TextInput";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {ValidationError} from "../../components/ValidationError";
 
-export var LoginBoard = function () {
+export const LoginBoard = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();

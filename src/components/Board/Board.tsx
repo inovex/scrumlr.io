@@ -24,7 +24,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export var BoardComponent = function ({children, name, boardstatus, currentUserIsModerator}: BoardProps) {
+export var BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),

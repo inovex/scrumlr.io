@@ -49,10 +49,12 @@
     "react/jsx-props-no-spreading": "off",
     "react/destructuring-assignment": "off",
     "react/button-has-type": "off",
+    "react/function-component-definition": ["warn", { "namedComponents": "arrow-function", "unnamedComponents": "arrow-function" }],
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "no-plusplus": "off"
   },
   "settings": {
     "import/resolver": {

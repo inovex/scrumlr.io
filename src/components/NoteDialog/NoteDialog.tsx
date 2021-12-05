@@ -26,7 +26,7 @@ interface NoteDialogProps {
   currentUserIsModerator: boolean;
 }
 
-export var NoteDialog = function (props: NoteDialogProps) {
+export const NoteDialog = (props: NoteDialogProps) => {
   if (!props.show) {
     return null;
   }

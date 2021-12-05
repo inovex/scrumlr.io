@@ -11,7 +11,7 @@ export interface LegalProps {
   document: "privacyPolicy" | "termsAndConditions" | "cookiePolicy";
 }
 
-const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
+const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
   const {i18n} = useTranslation();
   const [text, setText] = useState<string>("");
 
@@ -21,8 +21,8 @@ const LegalWithoutTranslation: FC<LegalProps> = function ({document}) {
 
       fetch(legalDocument)
         .then((response) => response.text())
-        .then((text) => {
-          setText(text);
+        .then((fetchedText) => {
+          setText(fetchedText);
         });
     }
   }, [i18n.language]);

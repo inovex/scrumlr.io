@@ -4,10 +4,8 @@ type BadgeProps = {
   text: string;
 };
 
-export var Badge = function ({text}: BadgeProps) {
-  return (
-    <div className="badge">
-      <span>{text}</span>
-    </div>
-  );
-};
+export var Badge = ({text}: BadgeProps) => (
+  <div className="badge">
+    <span>{text}</span>
+  </div>
+);

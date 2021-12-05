@@ -24,7 +24,7 @@ export interface BoardServerModel {
   };
   encryptedContent: boolean;
   showAuthors: boolean;
-  timerUTCEndTime: {
+  timerUTCEndTime?: {
     iso: string;
   };
   voting: "active" | "disabled";

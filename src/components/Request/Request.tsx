@@ -6,7 +6,7 @@ import {useTranslation} from "react-i18next";
 import {UserClientModel} from "types/user";
 import {UserAvatar} from "../BoardUsers";
 
-export var Request = function ({
+export const Request = ({
   joinRequests,
   users,
   raisedHands,
@@ -16,7 +16,7 @@ export var Request = function ({
   users: UserClientModel[];
   raisedHands: string[];
   boardId: string;
-}) {
+}) => {
   const {t} = useTranslation();
 
   const handleAccept = (boardId: string, userIds: string[]) => () => {
@@ -38,7 +38,7 @@ export var Request = function ({
 
   return (
     <div>
-      {(joinRequests.length != 0 || raisedHands.length != 0) && (
+      {(joinRequests.length !== 0 || raisedHands.length !== 0) && (
         <div className="join-request">
           <div className="request__header">{title}</div>
           <div className="request__main">

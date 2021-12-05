@@ -32,7 +32,7 @@ interface NoteProps {
   tabIndex?: number;
 }
 
-export var Note = function (props: NoteProps) {
+export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
   const handleShowDialog = () => {
@@ -105,7 +105,7 @@ export var Note = function (props: NoteProps) {
 
   return (
     <li
-      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId != Parse.User.current()?.id})}
+      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id})}
       onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
       onKeyPress={handleKeyPress}
       ref={noteRef}
