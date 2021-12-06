@@ -11,6 +11,7 @@ type DropdownButtonProps = {
   disabled?: boolean;
   setTabable: React.Dispatch<React.SetStateAction<boolean>>;
   tabIndex?: number;
+  active?: boolean;
 };
 
 export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
@@ -50,7 +51,7 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>
       </div>
-      <Icon className="menu-item__icon menu-item__icon--start" />
+      <Icon className={classNames("menu-item__icon", "menu-item__icon--start", {"menu-item-active": props.active})} />
       {props.children}
     </button>
   );

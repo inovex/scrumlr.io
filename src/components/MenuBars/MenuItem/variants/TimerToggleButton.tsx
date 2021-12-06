@@ -31,7 +31,14 @@ export const TimerToggleButton = (props: TimerToggleButtonProps) => {
   };
 
   return (
-    <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label={t("TimerToggleButton.label")} icon={TimerIcon}>
+    <DropdownToggleButton
+      active={timer !== undefined}
+      tabIndex={props.tabIndex ?? TabIndex.default}
+      setTabable={setTabable}
+      direction="left"
+      label={t("TimerToggleButton.label")}
+      icon={TimerIcon}
+    >
       <Dropdown className="timer__dropdown">
         <Dropdown.Main>
           <Dropdown.ItemButton tabIndex={focusOnTab(1)} className="timer-dropdown__item-button" onClick={() => onClick(1)} onTouchEnd={() => onClick(1)}>
