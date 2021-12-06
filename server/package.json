@@ -45,7 +45,7 @@
     "jsonwebtoken": "^8.5.1",
     "parse": "^3.4.0",
     "parse-server": "^4.10.4",
-    "qs": "^6.10.1"
+    "qs": "^6.10.2"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
