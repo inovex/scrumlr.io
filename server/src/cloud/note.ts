@@ -1,6 +1,8 @@
 import {getAdminRoleName, getMemberRoleName, isAdmin, requireValidBoardMember} from "./permission";
 import {api, newObject} from "./util";
 
+const MAX_NOTE_LENGTH = 1024;
+
 interface AddNoteRequest {
   boardId: string;
   columnId: string;
@@ -38,6 +40,10 @@ interface DeleteNoteRequest {
 export const initializeNoteFunctions = () => {
   api<AddNoteRequest, boolean>("addNote", async (user, request) => {
     await requireValidBoardMember(user, request.boardId);
+
+    // We want to avoid long messages also on server side
+    if (request.text.length > MAX_NOTE_LENGTH) return false;
+
     const note = newObject(
       "Note",
       {

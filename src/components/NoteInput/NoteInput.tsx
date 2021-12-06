@@ -6,6 +6,8 @@ import {ActionFactory} from "store/action";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 
+const MAX_NOTE_LENGTH = 1024;
+
 export interface NoteInputProps {
   columnId: string;
   tabIndex?: number;
@@ -16,7 +18,10 @@ export const NoteInput = ({columnId, tabIndex}: NoteInputProps) => {
   const [value, setValue] = React.useState("");
 
   const handleChangeNotetext = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    // Avoid long messages
+    if (e.target.value.length <= MAX_NOTE_LENGTH) {
+      setValue(e.target.value);
+    }
   };
   const onAddNote = () => {
     if (value) {
