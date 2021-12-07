@@ -34,8 +34,10 @@ export const initializeVoteFunctions = () => {
     voteConfigurationQuery.equalTo("board", board);
     const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
 
+    const count = await voteQuery.count({useMasterKey: true});
+    const limit = await voteConfiguration.get("voteLimit");
     // Check if user exceeds his vote limit
-    if ((await voteQuery.count({useMasterKey: true})) >= (await voteConfiguration.get("voteLimit"))) {
+    if (count >= limit) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
 
