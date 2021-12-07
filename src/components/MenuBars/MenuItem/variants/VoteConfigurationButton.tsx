@@ -47,7 +47,14 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
   };
 
   return (
-    <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label={t("VoteConfigurationButton.label")} icon={VoteIcon}>
+    <DropdownToggleButton
+      active={state.activeVoting}
+      tabIndex={props.tabIndex ?? TabIndex.default}
+      setTabable={setTabable}
+      direction="left"
+      label={t("VoteConfigurationButton.label")}
+      icon={VoteIcon}
+    >
       {state.activeVoting && (
         <Dropdown className="vote-dropdown">
           <Dropdown.Main>
