@@ -24,7 +24,7 @@ export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyActi
   if (action.type === ActionType.DeleteVote) {
     const user = Parse.User.current()?.id!;
     const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
-    if (length != 0) {
+    if (length !== 0) {
       const boardId = stateAPI.getState().board.data!.id;
       API.deleteVote(boardId, action.note);
     }
