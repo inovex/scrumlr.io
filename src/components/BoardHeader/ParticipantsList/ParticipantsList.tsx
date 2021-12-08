@@ -1,6 +1,5 @@
 import {Portal} from "components/Portal";
-import {useState} from "react";
-import {UserClientModel} from "types/user";
+import {VFC, useState} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
 import Parse from "parse";

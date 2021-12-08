@@ -5,7 +5,6 @@ import {Note} from "components/Note";
 import {Request} from "components/Request";
 import store, {useAppSelector} from "store";
 import {Infobar} from "components/Infobar";
-import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
 import {useEffect} from "react";
@@ -13,8 +12,6 @@ import {toast} from "react-toastify";
 import {ActionFactory} from "store/action";
 
 export const Board = () => {
-  const {t} = useTranslation();
-
   useEffect(
     () => () => {
       toast.clearWaitingQueue();
@@ -42,11 +39,7 @@ export const Board = () => {
   }, []);
 
   const state = useAppSelector((applicationState) => ({
-    board: {
-      status: applicationState.board.status,
-      columns: applicationState.board.data?.columns,
-      id: applicationState.board.data?.id,
-    },
+    board: applicationState.board,
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
@@ -70,12 +63,6 @@ export const Board = () => {
 
   const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
 
-  let boardstatus = t("Board.publicSession");
-  const accessPolicy = state.board.data?.accessPolicy;
-  if (accessPolicy !== "Public") {
-    boardstatus = t("Board.privateSession");
-  }
-
   if (state.board.status === "pending") {
     return <LoadingScreen />;
   }
@@ -88,7 +75,7 @@ export const Board = () => {
             joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
             users={state.users.all}
             raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
-            boardId={state.board.id!}
+            boardId={state.board.data!.id}
           />
         )}
         <Infobar />
