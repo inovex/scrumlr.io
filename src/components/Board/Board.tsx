@@ -9,8 +9,6 @@ import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
-  name: string;
-  boardstatus: string;
   currentUserIsModerator: boolean;
 }
 
@@ -24,7 +22,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export const BoardComponent = ({children, name, boardstatus, currentUserIsModerator}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -123,7 +121,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     return (
       <div className="board--empty">
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
-        <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
+        <BoardHeader currentUserIsModerator={currentUserIsModerator} />
         <MenuBars />
         <main className="board" ref={boardRef}>
           {/* Fixed color - can also be dynamic */}
@@ -152,7 +150,7 @@ export const BoardComponent = ({children, name, boardstatus, currentUserIsModera
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
 
-      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator} />
+      <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
 
       {state.showPreviousButton && (

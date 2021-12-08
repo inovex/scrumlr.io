@@ -42,7 +42,11 @@ export const Board = () => {
   }, []);
 
   const state = useAppSelector((applicationState) => ({
-    board: applicationState.board,
+    board: {
+      status: applicationState.board.status,
+      columns: applicationState.board.data?.columns,
+      id: applicationState.board.data?.id,
+    },
     notes: applicationState.notes.filter((note) => applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author),
     joinRequests: applicationState.joinRequests,
     users: applicationState.users,
@@ -84,16 +88,11 @@ export const Board = () => {
             joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
             users={state.users.all}
             raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
-            boardId={state.board.data!.id}
+            boardId={state.board.id!}
           />
         )}
-        <Infobar
-          endTime={state.board.data!.timerUTCEndTime}
-          activeVoting={state.board.data?.voting === "active"}
-          usedVotes={state.votes.filter((vote) => vote.user === Parse.User.current()?.id).length}
-          possibleVotes={state.voteConfiguration.voteLimit}
-        />
-        <BoardComponent name={state.board.data!.name} boardstatus={boardstatus} currentUserIsModerator={currentUserIsModerator}>
+        <Infobar />
+        <BoardComponent currentUserIsModerator={currentUserIsModerator}>
           {state.board
             .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
             .map((column, columnIndex) => (

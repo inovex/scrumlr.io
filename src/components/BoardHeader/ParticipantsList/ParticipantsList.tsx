@@ -11,21 +11,22 @@ import {Participant} from "./Participant";
 type ParticipantsListProps = {
   open: boolean;
   onClose: () => void;
-  participants: Array<UserClientModel>;
   currentUserIsModerator: boolean;
 };
 
-export const ParticipantsList = (props: ParticipantsListProps) => {
+export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
   const {t} = useTranslation();
 
-  const [searchString, setSearchString] = useState("");
-  const boardOwner = useAppSelector((state) => state.board.data?.owner);
-
   const currentUser = Parse.User.current();
-  const me = props.participants.find((participant) => participant.id === currentUser!.id);
-  const them = props.participants.filter((participant) => participant.id !== currentUser!.id && participant.online);
 
-  if (!props.open) {
+  const participants = useAppSelector((rootState) => rootState.users.all.filter((u) => u.online));
+  const boardOwner = useAppSelector((state) => state.board.data?.owner);
+  const me = participants.find((participant) => participant.id === currentUser!.id);
+  const them = participants.filter((participant) => participant.id !== currentUser!.id && participant.online);
+
+  const [searchString, setSearchString] = useState("");
+
+  if (!props.open || participants.length < 0) {
     return null;
   }
 
@@ -44,7 +45,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
           <div className="participants__header-title">
             <h4 className="participants__header-text">
               <span>{t("ParticipantsList.title")}</span>
-              <span className="participants__header-number">{props.participants.length} </span>
+              <span className="participants__header-number">{participants.length} </span>
             </h4>
           </div>
           <SearchIcon className="header__icon" />

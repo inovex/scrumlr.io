@@ -10,6 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "@types/underscore": "^1.11.4",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.1",
     "file-saver": "^2.0.5",
@@ -34,7 +35,8 @@
     "react-router-dom": "^6.0.2",
     "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.11.1",

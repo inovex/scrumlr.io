@@ -13,15 +13,16 @@ import {TabIndex} from "constants/tabIndex";
 import {ActionFactory} from "store/action";
 
 export interface BoardHeaderProps {
-  boardstatus: string;
-  name: string;
   currentUserIsModerator: boolean;
 }
 
 export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const {t} = useTranslation();
+  const state = useAppSelector((rootState) => ({
+    name: rootState.board.data?.name,
+    accessPolicy: rootState.board.data?.accessPolicy === "Public" ? t("Board.publicSession") : t("Board.privateSession"),
+  }));
 
-  const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
 
@@ -44,11 +45,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           tabIndex={TabIndex.BoardHeader + 1}
         >
           <div className="board-header__access-policy-status">
-            <LockIcon className="board-header__access-policy-status-icon" title={props.boardstatus} />
-            <span>{props.boardstatus}</span>
+            <LockIcon className="board-header__access-policy-status-icon" title={state.accessPolicy} />
+            <span>{state.accessPolicy}</span>
           </div>
           <div className="board-header__name-container">
-            <h1 className="board-header__name">{props.name || "scrumlr.io"}</h1>
+            <h1 className="board-header__name">{state.name || "scrumlr.io"}</h1>
             <SettingsIcon className="board-header__settings-icon" />
           </div>
         </button>
@@ -67,9 +68,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
       <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
       {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
-      {users.length > 0 && (
-        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} participants={users} currentUserIsModerator={props.currentUserIsModerator} />
-      )}
+
+      <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} currentUserIsModerator={props.currentUserIsModerator} />
     </header>
   );
 };

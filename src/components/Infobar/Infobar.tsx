@@ -2,19 +2,22 @@ import {Timer} from "components/Timer";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
 import ReactDOM from "react-dom";
 import "./Infobar.scss";
+import {useAppSelector} from "../../store";
 
-type InfobarProps = {
-  endTime?: Date;
-  activeVoting: boolean;
-  usedVotes: number;
-  possibleVotes: number;
-};
+export const Infobar = () => {
+  const state = useAppSelector((applicationState) => ({
+    endTime: applicationState.board.data?.timerUTCEndTime,
+    activeVoting: applicationState.board.data?.voting === "active",
+    possibleVotes: applicationState.voteConfiguration.voteLimit,
+    usedVotes: applicationState.votes.filter((vote) => vote.votingIteration === applicationState.voteConfiguration.votingIteration && vote.user === Parse.User.current()?.id)
+      .length,
+  }));
 
-export const Infobar = (props: InfobarProps) =>
-  ReactDOM.createPortal(
+  return ReactDOM.createPortal(
     <aside className="infobar">
-      {props.endTime && <Timer endTime={props.endTime} />}
-      {props.activeVoting && <VoteDisplay usedVotes={props.usedVotes} possibleVotes={props.possibleVotes} />}
+      {state.endTime && <Timer endTime={state.endTime} />}
+      {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes} />}
     </aside>,
     document.getElementById("root")!
   );
+};
