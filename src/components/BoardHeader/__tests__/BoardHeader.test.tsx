@@ -13,6 +13,8 @@ const createBoardHeader = (name: string, boardstatus: string) => {
   const initialState = {
     board: {
       data: {
+        name,
+        accessPolicy: boardstatus,
         columns: [],
         userConfigurations: [
           {
@@ -33,7 +35,7 @@ const createBoardHeader = (name: string, boardstatus: string) => {
 
   return (
     <Provider store={store}>
-      <BoardHeader name={name} boardstatus={boardstatus} currentUserIsModerator={false} />
+      <BoardHeader currentUserIsModerator={false} />
     </Provider>
   );
 };
@@ -52,40 +54,40 @@ describe("Board Header", () => {
   });
 
   test("show boardheader", () => {
-    const {container} = render(createBoardHeader("Title", "Private Session"));
+    const {container} = render(createBoardHeader("Title", "Privat"));
     expect(container.firstChild).toHaveClass("board-header");
   });
 
   describe("show board-header-components", () => {
     test("show board-header__logo", () => {
-      const {container} = render(createBoardHeader("Title", "Private Session"));
+      const {container} = render(createBoardHeader("Title", "Privat"));
       expect(container.querySelector(".board-header__logo")).toBeDefined();
     });
 
     test("show board-header__infos", () => {
-      const {container} = render(createBoardHeader("Title", "Private Session"));
+      const {container} = render(createBoardHeader("Title", "Privat"));
       expect(container.querySelector(".board-header__name-and-settings")).toBeDefined();
     });
 
     test("show board-header__users", () => {
-      const {container} = render(createBoardHeader("Title", "Private Session"));
+      const {container} = render(createBoardHeader("Title", "Privat"));
       expect(container.querySelector(".board-header__users")).toBeDefined();
     });
   });
 
   describe("show title and boardstatus", () => {
     test("show title", () => {
-      const {container} = render(createBoardHeader("Title", "Private Session"));
+      const {container} = render(createBoardHeader("Title", "Privat"));
       expect(container.querySelector(".board-header__name")).toHaveTextContent("Title");
     });
 
     test("show boardstatus private", () => {
-      const {container} = render(createBoardHeader("Title", "Private Session"));
+      const {container} = render(createBoardHeader("Title", "Privat"));
       expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Private Session");
     });
 
     test("show boardstatus public", () => {
-      const {container} = render(createBoardHeader("Title", "Public Session"));
+      const {container} = render(createBoardHeader("Title", "Public"));
       expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
     });
   });
