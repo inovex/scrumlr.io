@@ -40,7 +40,11 @@ export const Board = () => {
 
   const state = useAppSelector(
     (applicationState) => ({
-      board: applicationState.board,
+      board: {
+        id: applicationState.board.data?.id,
+        columns: applicationState.board.data?.columns,
+        status: applicationState.board.status,
+      },
       joinRequests: applicationState.joinRequests,
       users: applicationState.users,
       userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
@@ -62,13 +66,13 @@ export const Board = () => {
             joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
             users={state.users.all}
             raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
-            boardId={state.board.data!.id}
+            boardId={state.board.id!}
           />
         )}
         <Infobar />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
           {state.board
-            .data!.columns.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
+            .columns!.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
             .map((column, columnIndex) => (
               <Column
                 tabIndex={TabIndex.Column + columnIndex}

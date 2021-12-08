@@ -45,7 +45,11 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
         return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
       }),
       users: applicationState.users,
-      board: applicationState.board,
+      board: {
+        showAuthors: applicationState.board.data?.showAuthors,
+        voting: applicationState.board.data?.voting,
+        moderation: applicationState.board.data?.moderation,
+      },
     }),
     _.isEqual
   );
@@ -109,7 +113,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
               })
               .map((note, noteIndex) => (
                 <Note
-                  showAuthors={state.board.data!.showAuthors}
+                  showAuthors={state.board.showAuthors!}
                   currentUserIsModerator={currentUserIsModerator}
                   key={note.id}
                   noteId={note.id}
@@ -126,8 +130,8 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
                     .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
                   votes={state.votes.filter((vote) => vote.note === note.id)}
                   allVotesOfUser={state.votes.filter((vote) => vote.user === Parse.User.current()?.id)}
-                  activeVoting={state.board.data?.voting === "active"}
-                  activeModeration={{userId: state.board.data?.moderation.userId, status: state.board.data?.moderation.status === "active"}}
+                  activeVoting={state.board.voting! === "active"}
+                  activeModeration={{userId: state.board.moderation!.userId, status: state.board.moderation!.status === "active"}}
                   focus={note.focus}
                   tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
                 />
