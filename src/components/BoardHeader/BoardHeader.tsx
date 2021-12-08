@@ -11,6 +11,7 @@ import "./BoardHeader.scss";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import {ActionFactory} from "store/action";
+import {shallowEqual} from "react-redux";
 
 export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
@@ -18,10 +19,13 @@ export interface BoardHeaderProps {
 
 export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const {t} = useTranslation();
-  const state = useAppSelector((rootState) => ({
-    name: rootState.board.data?.name,
-    accessPolicy: rootState.board.data?.accessPolicy === "Public" ? t("Board.publicSession") : t("Board.privateSession"),
-  }));
+  const state = useAppSelector(
+    (rootState) => ({
+      name: rootState.board.data?.name,
+      accessPolicy: rootState.board.data?.accessPolicy === "Public" ? t("Board.publicSession") : t("Board.privateSession"),
+    }),
+    shallowEqual
+  );
 
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
