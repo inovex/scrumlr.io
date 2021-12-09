@@ -12,7 +12,7 @@ export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyActi
     const user = Parse.User.current()!.id;
     const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
     const allowed = stateAPI.getState().voteConfiguration.voteLimit;
-    if (length < allowed) {
+    if (length <= allowed) {
       const response = (await API.addVote(boardId, action.note)) as StatusResponse;
       stateAPI.getState().votes.filter((v) => v.user === user);
       if (response.status === "Error") {
@@ -24,7 +24,7 @@ export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyActi
   if (action.type === ActionType.DeleteVote) {
     const user = Parse.User.current()!.id;
     const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
-    if (length !== 0) {
+    if (length >= 1) {
       const boardId = stateAPI.getState().board.data!.id;
       API.deleteVote(boardId, action.note);
     }

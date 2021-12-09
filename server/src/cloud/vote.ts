@@ -63,19 +63,23 @@ export const initializeVoteFunctions = () => {
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("note", note);
     voteQuery.equalTo("user", user);
-    const vote = await voteQuery.limit(1).first({useMasterKey: true});
 
-    // Check if vote exists
-    if (!vote) {
-      return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
-    }
-    // Check if 'voting' is active
-    if (board.get("voting") === "disabled") {
-      return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
-    }
-    // Delete corresponding vote
-    await vote.destroy({useMasterKey: true});
+    const votes = await voteQuery.find({useMasterKey: true});
+    if (votes.length > 0) {
+      const vote = votes[0];
 
-    return {status: "Success", description: "Your vote was withdrawn"};
+      // Check if vote exists
+      if (!vote) {
+        return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
+      }
+      // Check if 'voting' is active
+      if (board.get("voting") === "disabled") {
+        return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
+      }
+      // Delete corresponding vote
+      await vote.destroy({useMasterKey: true});
+
+      return {status: "Success", description: "Your vote was withdrawn"};
+    }
   });
 };
