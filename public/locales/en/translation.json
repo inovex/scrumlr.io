@@ -48,6 +48,11 @@
   "BoardHeader": {
     "showParticipants": "Show participants"
   },
+  "ConfirmationDialog": {
+    "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",
+    "yes": "Yes",
+    "no": "No"
+  },
   "ParticipantsList": {
     "title": "Participants",
     "search": "Search",

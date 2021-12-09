@@ -1,0 +1,34 @@
+@import "constants/style";
+
+.confirmation-dialog__wrapper {
+  position: fixed;
+  min-width: 100vw;
+  min-height: 100vh;
+  z-index: 1000; //???
+  background: $color-white;
+}
+.confirmation-dialog {
+  position: fixed;
+  top: 30vh; //?? flex?
+  left: 40vw; //?? flex?
+  max-width: 420px;
+  color: $color-black;
+}
+
+.confirmation-dialog__button {
+  min-width: 80px;
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.confirmation-dialog__link {
+  text-decoration-line: none;
+}
+[theme="dark"] {
+  .confirmation-dialog__wrapper {
+    background: $color-black;
+  }
+  .confirmation-dialog {
+    color: $color-white;
+  }
+}
