@@ -64,22 +64,22 @@ export const initializeVoteFunctions = () => {
     voteQuery.equalTo("note", note);
     voteQuery.equalTo("user", user);
 
-    const votes = await voteQuery.find({useMasterKey: true});
-    if (votes.length > 0) {
-      const vote = votes[0];
+    // Delete corresponding vote
+    while (true) {
+      try {
+        const vote = await voteQuery.first({useMasterKey: true});
+        // Check if vote exists
+        if (!vote) {
+          return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
+        }
+        // Check if 'voting' is active
+        if (board.get("voting") === "disabled") {
+          return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
+        }
 
-      // Check if vote exists
-      if (!vote) {
-        return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
-      }
-      // Check if 'voting' is active
-      if (board.get("voting") === "disabled") {
-        return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
-      }
-      // Delete corresponding vote
-      await vote.destroy({useMasterKey: true});
-
-      return {status: "Success", description: "Your vote was withdrawn"};
+        await vote.destroy({useMasterKey: true});
+        return {status: "Success", description: "Your vote was withdrawn"};
+      } catch (e) {}
     }
   });
 };
