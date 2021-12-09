@@ -6,11 +6,11 @@ import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
-import "./BoardHeader.scss";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import {ActionFactory} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
   boardstatus: string;

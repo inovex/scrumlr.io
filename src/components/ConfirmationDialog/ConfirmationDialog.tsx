@@ -12,8 +12,7 @@ export interface ConfirmationDialogProps {
   onDecline: () => void;
 }
 
-export var ConfirmationDialog = function({headline, acceptMessage, onAccept, declineMessage, onDecline, linkTo}: ConfirmationDialogProps) {
-  return (
+export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, linkTo}: ConfirmationDialogProps) => (
     <div className="confirmation-dialog__wrapper">
       <div className="confirmation-dialog">
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
@@ -29,6 +28,5 @@ export var ConfirmationDialog = function({headline, acceptMessage, onAccept, dec
       </div>
     </div>
   );
-}
 
 export default ConfirmationDialog;
