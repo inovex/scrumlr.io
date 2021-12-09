@@ -8,6 +8,7 @@ import {ActionType, ReduxAction} from "../action";
 
 export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.AddVote) {
+    // Check client side if we reached the limit
     const boardId = stateAPI.getState().board.data!.id;
     const user = Parse.User.current()!.id;
     const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
@@ -22,11 +23,7 @@ export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyActi
   }
 
   if (action.type === ActionType.DeleteVote) {
-    const user = Parse.User.current()!.id;
-    const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
-    if (length >= 1) {
-      const boardId = stateAPI.getState().board.data!.id;
-      API.deleteVote(boardId, action.note);
-    }
+    const boardId = stateAPI.getState().board.data!.id;
+    API.deleteVote(boardId, action.note);
   }
 };
