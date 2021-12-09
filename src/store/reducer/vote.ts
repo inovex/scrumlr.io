@@ -21,7 +21,7 @@ export const voteReducer = (state: VoteClientModel[] = [], action: ReduxAction):
       const localVote: VoteClientModel = {
         note: action.note,
         board: action.boardId,
-        user: Parse.User.current()?.id!,
+        user: Parse.User.current()!.id,
         votingIteration: action.votingIteration,
       };
       return [...state, localVote];
