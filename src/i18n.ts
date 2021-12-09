@@ -8,6 +8,9 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    backend: {
+      queryStringParams: {v: "1.0.0"},
+    },
     detection: {
       lookupLocalStorage: "Scrumlr/locale",
       order: ["localStorage"],

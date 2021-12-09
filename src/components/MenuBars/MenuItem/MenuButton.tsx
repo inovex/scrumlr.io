@@ -12,7 +12,7 @@ type MenuButtonProps = {
   tabIndex?: number;
 };
 
-export function MenuButton(props: MenuButtonProps) {
+export const MenuButton = (props: MenuButtonProps) => {
   const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
@@ -33,6 +33,11 @@ export function MenuButton(props: MenuButtonProps) {
           props.onClick();
         }
       }}
+      onBlur={() => {
+        if (touchHover) {
+          setTouchHover(false);
+        }
+      }}
       tabIndex={props.tabIndex ?? TabIndex.default}
     >
       <div className="menu-item__tooltip">
@@ -41,4 +46,4 @@ export function MenuButton(props: MenuButtonProps) {
       <Icon className="menu-item__icon menu-item__icon--start" />
     </button>
   );
-}
+};

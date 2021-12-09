@@ -1,0 +1,49 @@
+@import "constants/style";
+
+.toggle {
+  position: relative;
+  width: 40px;
+  height: 24px;
+}
+
+.toggle::before {
+  content: "";
+  position: absolute;
+  height: 8px;
+  width: 100%;
+  top: 8px;
+  left: 0;
+  background: #edeff2 0 0 no-repeat padding-box;
+  border-radius: 4px;
+}
+
+.toggle::after {
+  content: "";
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  border-radius: 100%;
+  transition: all 0.2s linear;
+  top: 0;
+
+  left: 0;
+  background-color: #a3a6aa;
+}
+
+.toggle--active::after {
+  left: 16px;
+  background-color: #0057ff;
+  box-shadow: 0 4px 8px #0057ff29;
+}
+
+[theme="dark"] {
+  .toggle--active::after {
+    background-color: #ff0069;
+    box-shadow: 0 4px 8px #ff006929;
+  }
+}
+
+.toggle.toggle--disabled::after {
+  background-color: #a3a6aa;
+  box-shadow: none;
+}

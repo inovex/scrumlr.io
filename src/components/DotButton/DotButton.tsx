@@ -11,8 +11,8 @@ type DotButtonProps = {
   title?: string;
 };
 
-export var DotButton = function(props: DotButtonProps) {
-  return <button
+export const DotButton = (props: DotButtonProps) => (
+  <button
     className={classNames("dot-button", props.className)}
     disabled={props.disabled}
     onClick={(e) => {
@@ -24,4 +24,4 @@ export var DotButton = function(props: DotButtonProps) {
   >
     {props.children}
   </button>
-}
+);

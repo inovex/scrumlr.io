@@ -11,6 +11,7 @@ type DropdownButtonProps = {
   disabled?: boolean;
   setTabable: React.Dispatch<React.SetStateAction<boolean>>;
   tabIndex?: number;
+  active?: boolean;
 };
 
 export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
@@ -23,6 +24,7 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
       window.addEventListener("click", () => setShowDropdown(false), {once: true});
     }
     props.setTabable(showDropdown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDropdown]);
 
   return (
@@ -44,11 +46,12 @@ export const DropdownToggleButton: React.FC<DropdownButtonProps> = (props) => {
         }
       }}
       tabIndex={props.tabIndex ?? TabIndex.default}
+      disabled={props.disabled}
     >
       <div className="menu-item__tooltip">
         <span className="tooltip__text">{props.label}</span>
       </div>
-      <Icon className="menu-item__icon menu-item__icon--start" />
+      <Icon className={classNames("menu-item__icon", "menu-item__icon--start", {"menu-item-active": props.active})} />
       {props.children}
     </button>
   );

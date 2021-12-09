@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 export interface BoardOptionProps {
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

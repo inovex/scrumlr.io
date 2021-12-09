@@ -7,7 +7,7 @@ type VoteDisplayProps = {
   possibleVotes: number;
 };
 
-export var VoteDisplay: FC<VoteDisplayProps> = function({usedVotes, possibleVotes}) {
+export const VoteDisplay: FC<VoteDisplayProps> = ({usedVotes, possibleVotes}) => {
   const {t} = useTranslation();
 
   return (
@@ -17,4 +17,4 @@ export var VoteDisplay: FC<VoteDisplayProps> = function({usedVotes, possibleVote
       </span>
     </div>
   );
-}
+};

@@ -1,6 +1,7 @@
 import {JoinRequestClientModel} from "types/joinRequest";
 import {ActionType, ReduxAction} from "../action";
 
+// eslint-disable-next-line default-param-last
 export const joinRequestReducer = (state: JoinRequestClientModel[] = [], action: ReduxAction): JoinRequestClientModel[] => {
   switch (action.type) {
     case ActionType.CreateJoinRequest: {

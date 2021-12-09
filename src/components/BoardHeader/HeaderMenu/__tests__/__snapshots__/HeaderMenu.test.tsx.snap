@@ -38,6 +38,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <input
                   class="board-settings__board-name"
                   disabled=""
+                  placeholder="scrumlr.io"
                   value="board"
                 />
                 <button
@@ -190,7 +191,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 <svg
                   class="board-option-button__icon"
                 >
-                  icon-share.svg
+                  icon-export.svg
                 </svg>
                 <span
                   class="board-option-button__label"
@@ -209,7 +210,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   <svg
                     class="board-option-button__icon"
                   >
-                    icon-share.svg
+                    icon-export-json.svg
                   </svg>
                   <span
                     class="board-option-button__label"
@@ -225,7 +226,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   <svg
                     class="board-option-button__icon"
                   >
-                    icon-share.svg
+                    icon-export-csv.svg
                   </svg>
                   <span
                     class="board-option-button__label"
@@ -286,6 +287,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 <input
                   class="board-settings__board-name"
                   disabled=""
+                  placeholder="scrumlr.io"
                   value="board"
                 />
               </form>
@@ -335,7 +337,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 <svg
                   class="board-option-button__icon"
                 >
-                  icon-share.svg
+                  icon-export.svg
                 </svg>
                 <span
                   class="board-option-button__label"
@@ -354,7 +356,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   <svg
                     class="board-option-button__icon"
                   >
-                    icon-share.svg
+                    icon-export-json.svg
                   </svg>
                   <span
                     class="board-option-button__label"
@@ -370,7 +372,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   <svg
                     class="board-option-button__icon"
                   >
-                    icon-share.svg
+                    icon-export-csv.svg
                   </svg>
                   <span
                     class="board-option-button__label"

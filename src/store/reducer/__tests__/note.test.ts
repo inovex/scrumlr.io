@@ -14,7 +14,7 @@ jest.mock("parse", () => ({
   },
 }));
 
-const createServerNote = (id: string, text: string = NOTE_TEXT, parent?: string, posInStack?: number): NoteClientModel => ({
+const createServerNote = (id: string, parent?: string, posInStack?: number, text: string = NOTE_TEXT): NoteClientModel => ({
   id,
   columnId: COLUMN_ID,
   text,
@@ -79,14 +79,14 @@ describe("note reducer", () => {
   });
 
   test("unstack note", () => {
-    const newState = noteReducer([createServerNote("1", "test", "2", 1), createServerNote("2", "test", undefined, 0)], ActionFactory.unstackNote({id: "1", parentId: "2"}));
+    const newState = noteReducer([createServerNote("1", "2", 1, "test"), createServerNote("2", undefined, 0, "test")], ActionFactory.unstackNote({id: "1", parentId: "2"}));
     expect(newState.find((note) => note.id === "1")).toBeDefined();
     expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(-1);
     expect(newState.find((note) => note.id === "2")?.positionInStack).toBe(-1);
   });
 
   test("drag note", () => {
-    const newState = noteReducer([createServerNote("1", "test", undefined, -1), createServerNote("2", "test", undefined, -1)], ActionFactory.dragNote({id: "1", dragOnId: "2"}));
+    const newState = noteReducer([createServerNote("1", undefined, -1, "test"), createServerNote("2", undefined, -1, "test")], ActionFactory.dragNote({id: "1", dragOnId: "2"}));
     expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(0);
     expect(newState.find((note) => note.id === "2")?.positionInStack).toBe(1);
     expect(newState.find((note) => note.id === "2")?.parentId).toBe("1");
@@ -94,7 +94,7 @@ describe("note reducer", () => {
 
   test("drag note in other column", () => {
     const newState = noteReducer(
-      [createServerNote("1", "test", undefined, -1), createServerNote("2", "test", undefined, -1)],
+      [createServerNote("1", undefined, -1, "test"), createServerNote("2", undefined, -1, "test")],
       ActionFactory.dragNote({id: "1", dragOnId: "2", columnId: "test-column"})
     );
     expect(newState.find((note) => note.id === "1")?.positionInStack).toBe(0);
@@ -106,7 +106,7 @@ describe("note reducer", () => {
   describe("sync server note with edited local note", () => {
     test("edited note synced locally", () => {
       const editedState = noteReducer(initialState, ActionFactory.editNote({id: "1", text: "New text"}));
-      const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", "New text")));
+      const newState = noteReducer(editedState, ActionFactory.updatedNote(createServerNote("1", undefined, undefined, "New text")));
       const note = newState.find((n) => n.id === "1");
       expect(note?.dirty).toBe(false);
     });

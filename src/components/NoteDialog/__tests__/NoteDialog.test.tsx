@@ -59,10 +59,10 @@ const createNoteDialog = (
       voteLimit: 10,
     },
   };
-  const store = mockStore(initialState);
+  const mockedStore = mockStore(initialState);
   const [NoteDialogContext] = wrapWithTestBackend(NoteDialog);
   return (
-    <Provider store={store}>
+    <Provider store={mockedStore}>
       <NoteDialogContext
         noteId="0"
         text={text}

@@ -152,9 +152,7 @@
     "numberOfVotes": "Number of votes",
     "startTimer": "Start voting phase",
     "cancelTimer": "Cancel voting phase",
-    "stopTimer": "End voting phase",
-    "yes": "Yes",
-    "no": "No"
+    "stopTimer": "End voting phase"
   },
   "VoteDisplay": {
     "tooltip": "{{remaining}} of {{total}} votes remaining"

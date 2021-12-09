@@ -2,6 +2,7 @@
 
 $dropdown__width: 245px;
 $dropdown__item-height: 48px;
+$dropdown__border-color--dark: #4b515c;
 
 .dropdown {
   box-sizing: border-box;
@@ -48,6 +49,12 @@ $dropdown__item-height: 48px;
   margin-bottom: 10px;
 }
 
+[theme="dark"] {
+  .dropdown__footer {
+    border-color: $dropdown__border-color--dark;
+  }
+}
+
 .dropdown__item,
 .dropdown__item-button {
   height: $dropdown__item-height;
@@ -89,5 +96,12 @@ $dropdown__item-height: 48px;
     bottom: 1px solid;
     top: 0;
     image: linear-gradient(to right, transparent 0px, transparent 49px, $color-light-gray 50px, $color-light-gray 240px) 1;
+  }
+}
+
+[theme="dark"] {
+  .dropdown__item:not(:last-child),
+  .dropdown__item-button:not(:last-child) {
+    border-image: linear-gradient(to right, transparent 0px, transparent 49px, $dropdown__border-color--dark 50px, $dropdown__border-color--dark 240px) 1;
   }
 }

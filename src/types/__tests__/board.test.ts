@@ -6,10 +6,15 @@ jest.mock("utils/timer");
 
 const mockedTimer = mocked(getBrowserServerTimeDifference);
 
-const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
-  mockedTimer.mockImplementation(() => 0);
+const getServerModel = async (timerUTCEndTimeNotNull: boolean): Promise<BoardServerModel> => {
+  mockedTimer.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        resolve(0);
+      })
+  );
 
-  const serverModel: BoardServerModel = {
+  return {
     objectId: "test_objectId",
     name: "test_name",
     columns: {
@@ -36,7 +41,7 @@ const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
       ? {
           iso: new Date(0).toString(),
         }
-      : null,
+      : undefined,
     voting: "active",
     moderation: {
       userId: "test_userId",
@@ -52,39 +57,43 @@ const testWrapper = async (timerUTCEndTimeNotNull: boolean) => {
     usersMarkedReady: ["test"],
     usersRaisedHands: ["test"],
   };
-
-  const clientModel: BoardClientModel = await mapBoardServerToClientModel(serverModel);
-
-  expect(clientModel.id).toEqual(serverModel.objectId);
-  expect(clientModel.name).toEqual(serverModel.name);
-  expect(clientModel.columns).toEqual([{columnId: "test_id", name: "test_name", color: "backlog-blue", hidden: false}]);
-  expect(clientModel.userConfigurations).toEqual([{id: "test_id", showHiddenColumns: true}]);
-  expect(clientModel.accessCode).toEqual(serverModel.accessCode);
-  expect(clientModel.accessPolicy).toEqual(serverModel.accessPolicy.type);
-  expect(clientModel.encryptedContent).toEqual(serverModel.encryptedContent);
-  expect(clientModel.voting).toEqual(serverModel.voting);
-  expect(clientModel.votingIteration).toEqual(serverModel.votingIteration);
-  expect(clientModel.showNotesOfOtherUsers).toEqual(serverModel.showNotesOfOtherUsers);
-  expect(clientModel.createdAt).toEqual(new Date(serverModel.createdAt));
-  expect(clientModel.updatedAt).toEqual(new Date(serverModel.updatedAt));
-  expect(clientModel.dirty).toEqual(false);
-  expect(clientModel.owner).toEqual(serverModel.owner.objectId);
-  expect(clientModel.moderation).toEqual(serverModel.moderation);
-  expect(clientModel.usersMarkedReady).toEqual(serverModel.usersMarkedReady);
-  expect(clientModel.usersRaisedHands).toEqual(serverModel.usersRaisedHands);
-  if (serverModel.timerUTCEndTime == null) {
-    expect(clientModel.timerUTCEndTime).toEqual(undefined);
-  } else {
-    expect(clientModel.timerUTCEndTime).toEqual(new Date(0));
-  }
 };
 
 describe("Board types", () => {
+  test("mapping of attributes except timer", async () => {
+    const serverModel: BoardServerModel = await getServerModel(true);
+    const clientModel: BoardClientModel = await mapBoardServerToClientModel(serverModel);
+
+    expect(clientModel.id).toEqual(serverModel.objectId);
+    expect(clientModel.name).toEqual(serverModel.name);
+    expect(clientModel.columns).toEqual([{columnId: "test_id", name: "test_name", color: "backlog-blue", hidden: false}]);
+    expect(clientModel.userConfigurations).toEqual([{id: "test_id", showHiddenColumns: true}]);
+    expect(clientModel.accessCode).toEqual(serverModel.accessCode);
+    expect(clientModel.accessPolicy).toEqual(serverModel.accessPolicy.type);
+    expect(clientModel.encryptedContent).toEqual(serverModel.encryptedContent);
+    expect(clientModel.voting).toEqual(serverModel.voting);
+    expect(clientModel.votingIteration).toEqual(serverModel.votingIteration);
+    expect(clientModel.showNotesOfOtherUsers).toEqual(serverModel.showNotesOfOtherUsers);
+    expect(clientModel.createdAt).toEqual(new Date(serverModel.createdAt));
+    expect(clientModel.updatedAt).toEqual(new Date(serverModel.updatedAt));
+    expect(clientModel.dirty).toEqual(false);
+    expect(clientModel.owner).toEqual(serverModel.owner.objectId);
+    expect(clientModel.moderation).toEqual(serverModel.moderation);
+    expect(clientModel.usersMarkedReady).toEqual(serverModel.usersMarkedReady);
+    expect(clientModel.usersRaisedHands).toEqual(serverModel.usersRaisedHands);
+  });
+
   test("timerUTCEndTime is available", async () => {
-    await testWrapper(true);
+    const serverModel: BoardServerModel = await getServerModel(true);
+    const clientModel: BoardClientModel = await mapBoardServerToClientModel(serverModel);
+
+    expect(clientModel.timerUTCEndTime).toEqual(new Date(0));
   });
 
   test("timerUTCEndTime isn't available", async () => {
-    await testWrapper(false);
+    const serverModel: BoardServerModel = await getServerModel(false);
+    const clientModel: BoardClientModel = await mapBoardServerToClientModel(serverModel);
+
+    expect(clientModel.timerUTCEndTime).toEqual(undefined);
   });
 });

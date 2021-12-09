@@ -8,7 +8,7 @@ export interface ErrorPageProps {
   originURL: string;
 }
 
-export var ErrorPage = function ({errorMessage, originURL}: ErrorPageProps) {
+export const ErrorPage = ({errorMessage, originURL}: ErrorPageProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 

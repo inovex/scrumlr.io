@@ -12,7 +12,7 @@ type TimerToggleButtonProps = {
   tabIndex?: number;
 };
 
-export var TimerToggleButton = function (props: TimerToggleButtonProps) {
+export const TimerToggleButton = (props: TimerToggleButtonProps) => {
   const {t} = useTranslation();
 
   const timer = useAppSelector((state) => state.board.data?.timerUTCEndTime);
@@ -23,10 +23,22 @@ export var TimerToggleButton = function (props: TimerToggleButtonProps) {
     store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
   };
 
-  const focusOnTab = (tabIndex: number) => (tabable ? (props.tabIndex ? props.tabIndex + tabIndex : TabIndex.default) : TabIndex.disabled);
+  const focusOnTab = (tabIndex: number) => {
+    if (tabable) {
+      return props.tabIndex ? props.tabIndex + tabIndex : TabIndex.default;
+    }
+    return TabIndex.disabled;
+  };
 
   return (
-    <DropdownToggleButton tabIndex={props.tabIndex ?? TabIndex.default} setTabable={setTabable} direction="left" label={t("TimerToggleButton.label")} icon={TimerIcon}>
+    <DropdownToggleButton
+      active={timer !== undefined}
+      tabIndex={props.tabIndex ?? TabIndex.default}
+      setTabable={setTabable}
+      direction="left"
+      label={t("TimerToggleButton.label")}
+      icon={TimerIcon}
+    >
       <Dropdown className="timer__dropdown">
         <Dropdown.Main>
           <Dropdown.ItemButton tabIndex={focusOnTab(1)} className="timer-dropdown__item-button" onClick={() => onClick(1)} onTouchEnd={() => onClick(1)}>

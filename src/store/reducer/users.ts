@@ -4,33 +4,26 @@ import union from "lodash/union";
 import without from "lodash/without";
 import {ActionType, ReduxAction} from "../action";
 
-const mapReadyState = (readyUsers: string[] = [], state: Omit<UsersState, "usersMarkedReady">) => {
-  const newState = {
-    admins: state.admins.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
-    basic: state.basic.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
-    all: state.all.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
-    usersMarkedReady: readyUsers,
-    usersRaisedHands: state.usersRaisedHands,
-  };
+const mapReadyState = (state: Omit<UsersState, "usersMarkedReady">, readyUsers: string[] = []) => ({
+  admins: state.admins.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+  basic: state.basic.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+  all: state.all.map((current) => ({...current, ready: Boolean(readyUsers.find((user) => user === current.id))})),
+  usersMarkedReady: readyUsers,
+  usersRaisedHands: state.usersRaisedHands,
+});
 
-  return newState;
-};
+const mapRaisedHandState = (state: Omit<UsersState, "usersRaisedHands">, raisedHandUsers: string[] = []) => ({
+  admins: state.admins.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+  basic: state.basic.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+  all: state.all.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
+  usersRaisedHands: raisedHandUsers,
+  usersMarkedReady: state.usersMarkedReady,
+});
 
-const mapRaisedHandState = (raisedHandUsers: string[] = [], state: Omit<UsersState, "usersRaisedHands">) => {
-  const newState = {
-    admins: state.admins.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
-    basic: state.basic.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
-    all: state.all.map((current) => ({...current, raisedHand: Boolean(raisedHandUsers.find((user) => user === current.id))})),
-    usersRaisedHands: raisedHandUsers,
-    usersMarkedReady: state.usersMarkedReady,
-  };
-
-  return newState;
-};
-
+// eslint-disable-next-line default-param-last
 export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
-    case ActionType.SetUserReadyStatus:
+    case ActionType.SetUserReadyStatus: {
       let {usersMarkedReady} = state;
       if (usersMarkedReady !== undefined) {
         const userId = Parse.User.current()!.id;
@@ -39,24 +32,27 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
         } else {
           usersMarkedReady = without(usersMarkedReady, userId);
         }
-        return mapReadyState(usersMarkedReady, state);
+        return mapReadyState(state, usersMarkedReady);
       }
       return state;
-    case ActionType.SetRaisedHandStatus:
+    }
+    case ActionType.SetRaisedHandStatus: {
       let {usersRaisedHands} = state;
       if (usersRaisedHands !== undefined) {
         if (action.configuration.raisedHand) {
           usersRaisedHands = union(usersRaisedHands, action.configuration.userId);
         } else {
-          usersRaisedHands = usersRaisedHands.filter((id) => action.configuration.userId.find((user) => user === id) == undefined);
+          usersRaisedHands = usersRaisedHands.filter((id) => action.configuration.userId.find((user) => user === id) === undefined);
         }
-        return mapRaisedHandState(usersRaisedHands, state);
+        return mapRaisedHandState(state, usersRaisedHands);
       }
       return state;
+    }
     case ActionType.InitializeBoard:
-    case ActionType.UpdatedBoard:
-      const newState = mapReadyState(action.board.usersMarkedReady, state);
-      return mapRaisedHandState(action.board.usersRaisedHands, newState);
+    case ActionType.UpdatedBoard: {
+      const newState = mapReadyState(state, action.board.usersMarkedReady);
+      return mapRaisedHandState(newState, action.board.usersRaisedHands);
+    }
     case ActionType.SetUsers: {
       const newState = {
         admins: state.admins,
@@ -93,7 +89,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
       // Remove outdated user
       newState.all = newState.all.filter((member) => newState.admins.find((admin) => admin.id === member.id) || newState.basic.find((user) => user.id === member.id));
 
-      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
+      return mapRaisedHandState(mapReadyState(newState, state.usersMarkedReady), state.usersRaisedHands);
     }
     case ActionType.SetUserStatus: {
       const newState = {
@@ -109,7 +105,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
         user.online = action.status;
       }
 
-      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
+      return mapRaisedHandState(mapReadyState(newState, state.usersMarkedReady), state.usersRaisedHands);
     }
     case ActionType.UpdateUser: {
       const newState = {
@@ -120,7 +116,7 @@ export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMar
         usersRaisedHands: state.usersRaisedHands,
       };
 
-      return mapRaisedHandState(state.usersRaisedHands, mapReadyState(state.usersMarkedReady, newState));
+      return mapRaisedHandState(mapReadyState(newState, state.usersMarkedReady), state.usersRaisedHands);
     }
     default: {
       return state;

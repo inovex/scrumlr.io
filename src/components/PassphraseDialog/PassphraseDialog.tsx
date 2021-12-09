@@ -14,7 +14,7 @@ export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
 }
 
-export var PassphraseDialog: FC<PassphraseDialogProps> = function ({onSubmit}) {
+export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
   const {t} = useTranslation();
 
   const [passphrase, setPassphrase] = useState<string>("");

@@ -10,6 +10,8 @@ import {ReactComponent as visibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as hiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
 
+const MAX_NOTE_LENGTH = 1024;
+
 export interface ColumnProps {
   id: string;
   name: string;
@@ -20,7 +22,7 @@ export interface ColumnProps {
   tabIndex?: number;
 }
 
-export var Column = function ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) {
+export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex, children}: ColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
   const [{isOver, canDrop}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
@@ -61,7 +63,7 @@ export var Column = function ({id, name, color, hidden, currentUserIsModerator, 
               </div>
             )}
           </div>
-          <NoteInput columnId={id} tabIndex={tabIndex} />
+          <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
         </div>
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">{children}</ul>

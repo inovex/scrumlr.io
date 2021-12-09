@@ -8,6 +8,12 @@
   border-top: 1px solid #efefef;
 }
 
+[theme="dark"] {
+  .board-option + .board-option {
+    border-color: #4b515c;
+  }
+}
+
 .board-option:focus,
 .board-option:hover {
   background: $color-dark-mode-note--hover;
