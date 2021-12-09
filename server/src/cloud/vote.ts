@@ -79,7 +79,9 @@ export const initializeVoteFunctions = () => {
 
         await vote.destroy({useMasterKey: true});
         return {status: "Success", description: "Your vote was withdrawn"};
-      } catch (e) {}
+      } catch (e) {
+        // Since we cannot synchronize, it is possible that Parse is trying to delte a non-existent object.
+      }
     }
   });
 };
