@@ -1,5 +1,4 @@
 import {fireEvent} from "@testing-library/react";
-import {UserClientModel} from "types/user";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {ActionFactory} from "store/action";
 import {mocked} from "ts-jest/utils";
@@ -30,38 +29,58 @@ describe("ParticipantsList", () => {
         },
       },
       users: {
-        admins: [],
-        basic: [],
-        all: [],
+        admins: [
+          {
+            id: "0",
+            displayName: "Adam Admin",
+            admin: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            online: true,
+            ready: false,
+          },
+        ],
+        basic: [
+          {
+            id: "1",
+            displayName: "Patty Participant",
+            admin: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            online: true,
+            ready: false,
+          },
+        ],
+        all: [
+          {
+            id: "0",
+            displayName: "Adam Admin",
+            admin: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            online: true,
+            ready: false,
+          },
+          {
+            id: "1",
+            displayName: "Patty Participant",
+            admin: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            online: true,
+            ready: false,
+          },
+        ],
       },
     };
     const mockedStore = mockStore(initialState);
     const [ParticipantsListContext] = wrapWithTestBackend(ParticipantsList);
-    const userAdmin: UserClientModel = {
-      id: "0",
-      displayName: "Adam Admin",
-      admin: true,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      online: true,
-      ready: false,
-    };
-    const userParticipant: UserClientModel = {
-      id: "1",
-      displayName: "Patty Participant",
-      admin: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      online: true,
-      ready: false,
-    };
-    const users = [userAdmin, userParticipant];
 
     mockedUser.current = jest.fn(() => ({id: props.currentUserId} as never));
 
     return (
       <Provider store={mockedStore}>
-        <ParticipantsListContext open={props.open} onClose={() => props.onClose?.()} currentUserIsModerator={props.currentUserIsModerator} participants={users} />
+        <ParticipantsListContext open={props.open} onClose={() => props.onClose?.()} currentUserIsModerator={props.currentUserIsModerator} />
       </Provider>
     );
   };
