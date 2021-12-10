@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import {ActionFactory} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {useNavigate} from "react-router-dom";
 import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
@@ -21,6 +22,8 @@ export interface BoardHeaderProps {
 export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const {t} = useTranslation();
 
+  const navigate = useNavigate();
+
   const users = useAppSelector((state) => state.users.all.filter((user) => user.online));
   const [showMenu, setShowMenu] = useState(false);
   const [showParticipants, setShowParticipants] = useState(false);
@@ -31,9 +34,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
       {showConfirmationDialog && (
         <ConfirmationDialog
           headline={t("ConfirmationDialog.returnToHomepage")}
-          linkTo="/"
           acceptMessage={t("ConfirmationDialog.yes")}
-          onAccept={() => store.dispatch(ActionFactory.leaveBoard())}
+          onAccept={() => {
+            navigate("/");
+            store.dispatch(ActionFactory.leaveBoard());
+          }}
           declineMessage={t("ConfirmationDialog.no")}
           onDecline={() => setShowConfirmationDialog(false)}
         />

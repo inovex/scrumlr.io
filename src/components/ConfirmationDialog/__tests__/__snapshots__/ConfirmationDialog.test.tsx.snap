@@ -88,23 +88,18 @@ exports[`<ConfirmationDialog /> snapshot test 1`] = `
     <h2>
       headline
     </h2>
-    <a
-      class="confirmation-dialog__link"
-      href="/"
-    >
-      <button
-        class="button button--primary button--contained confirmation-dialog__button"
-        type="submit"
-      >
-        <span
-          class="button__label"
-        >
-          accept
-        </span>
-      </button>
-    </a>
     <button
-      class="button button--primary button--outlined confirmation-dialog__button"
+      class="button button--primary button--contained button__label--shown confirmation-dialog__button"
+      type="submit"
+    >
+      <span
+        class="button__label"
+      >
+        accept
+      </span>
+    </button>
+    <button
+      class="button button--primary button--outlined button__label--shown confirmation-dialog__button"
       type="submit"
     >
       <span

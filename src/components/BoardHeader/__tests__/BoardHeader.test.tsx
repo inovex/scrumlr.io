@@ -90,7 +90,7 @@ describe("Board Header", () => {
       expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
     });
 
-    test("show confirmation-dialog after clicking Scrumlr Logo", () => {
+    test("show confirmation-dialog after clicking scrumlr logo", () => {
       const {container} = render(createBoardHeader("Title", "Public Session"));
       fireEvent.click(container.querySelector(".board-header__link") as HTMLElement);
       expect(container.querySelector(".confirmation-dialog")).toBeInTheDocument();
