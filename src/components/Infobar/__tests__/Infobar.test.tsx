@@ -1,37 +1,60 @@
 import {render} from "@testing-library/react";
-import {mocked} from "ts-jest/utils";
-import {useAppSelector} from "store";
+import configureStore from "redux-mock-store";
+import {Provider} from "react-redux";
 import {Infobar} from "../Infobar";
 
-jest.mock("store");
-const mockedUseAppSelector = mocked(useAppSelector);
+const mockStore = configureStore();
+const createInfoBar = (activeVoting: boolean, activeTimer: boolean) => {
+  const initialState = {
+    board: {
+      data: {
+        timerUTCEndTime: activeTimer ? new Date(12345) : undefined,
+        voting: activeVoting ? "active" : "disabled",
+      },
+    },
+    voteConfiguration: {
+      voteLimit: 5,
+    },
+    votes: [],
+    users: {
+      admins: [],
+      basic: [],
+      all: [],
+    },
+  };
+  return (
+    <Provider store={mockStore(initialState)}>
+      <Infobar />
+    </Provider>
+  );
+};
 
-describe("<InfoBar />", () => {
+describe("InfoBar", () => {
   beforeEach(() => {
     const root = global.document.createElement("div");
     root.setAttribute("id", "root");
-    global.document.querySelector("body")!.appendChild(root);
+    global.document.body.appendChild(root);
   });
 
-  test("empty snapshot test", () => {
-    const {container} = render(<Infobar activeVoting={false} usedVotes={5} possibleVotes={10} />, {container: document.getElementById("root")!});
-    expect(container.firstChild).toMatchSnapshot();
-  });
+  describe("should render correctly", () => {
+    test("with disabled voting and timer", () => {
+      const {container} = render(createInfoBar(false, false), {container: document.getElementById("root")!});
+      expect(container).toMatchSnapshot();
+    });
 
-  test("voting snapshot test", () => {
-    const {container} = render(<Infobar activeVoting usedVotes={5} possibleVotes={10} />, {container: document.getElementById("root")!});
-    expect(container.firstChild).toMatchSnapshot();
-  });
+    test("with disabled voting and active timer", () => {
+      const {container} = render(createInfoBar(false, true), {container: document.getElementById("root")!});
+      expect(container).toMatchSnapshot();
+    });
 
-  test("timer snapshot test", () => {
-    mockedUseAppSelector.mockResolvedValue({} as never);
-    const {container} = render(<Infobar endTime={new Date(12345)} activeVoting={false} usedVotes={5} possibleVotes={10} />, {container: document.getElementById("root")!});
-    expect(container.firstChild).toMatchSnapshot();
-  });
+    test("with active voting and disabled timer", () => {
+      const {container} = render(createInfoBar(true, false), {container: document.getElementById("root")!});
+      expect(container).toMatchSnapshot();
+    });
 
-  test("timer and voting snapshot test", () => {
-    mockedUseAppSelector.mockResolvedValue({} as never);
-    const {container} = render(<Infobar endTime={new Date(12345)} activeVoting usedVotes={5} possibleVotes={10} />, {container: document.getElementById("root")!});
-    expect(container.firstChild).toMatchSnapshot();
+    test("with active voting and timer", () => {
+      const {container} = render(createInfoBar(true, true), {container: document.getElementById("root")!});
+      expect(container).toMatchSnapshot();
+    });
   });
 });

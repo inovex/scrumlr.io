@@ -1,5 +1,5 @@
 import Avataar from "avataaars";
-import {FC} from "react";
+import React from "react";
 import "./Avatar.scss";
 import classNames from "classnames";
 import {getColorClassName, getColorForIndex} from "../../constants/colors";
@@ -122,43 +122,46 @@ const generateRandomProps = (seed: string) => {
  * @param eyeType the eye type
  * @param mouthType the mouth type
  */
-export const Avatar: FC<AvatarProps> = ({
-  seed,
-  className,
-  skinColor,
-  topType,
-  clotheColor,
-  graphicType,
-  clotheType,
-  hairColor,
-  facialHairColor,
-  facialHairType,
-  accessoriesType,
-  eyebrowType,
-  eyeType,
-  mouthType,
-}) => {
-  if (seed) {
-    const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
-    return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
-  }
+export const Avatar = React.memo(
+  ({
+    seed,
+    className,
+    skinColor,
+    topType,
+    clotheColor,
+    graphicType,
+    clotheType,
+    hairColor,
+    facialHairColor,
+    facialHairType,
+    accessoriesType,
+    eyebrowType,
+    eyeType,
+    mouthType,
+  }: AvatarProps) => {
+    if (seed) {
+      const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
+      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
+    }
 
-  return (
-    <Avataar
-      className={classNames("avatar", className)}
-      avatarStyle="Circle"
-      topType={topType}
-      accessoriesType={accessoriesType}
-      hairColor={hairColor}
-      facialHairType={facialHairType}
-      facialHairColor={facialHairColor}
-      clotheType={clotheType}
-      clotheColor={clotheColor}
-      graphicType={graphicType}
-      eyeType={eyeType}
-      eyebrowType={eyebrowType}
-      mouthType={mouthType}
-      skinColor={skinColor}
-    />
-  );
-};
+    return (
+      <Avataar
+        className={classNames("avatar", className)}
+        avatarStyle="Circle"
+        topType={topType}
+        accessoriesType={accessoriesType}
+        hairColor={hairColor}
+        facialHairType={facialHairType}
+        facialHairColor={facialHairColor}
+        clotheType={clotheType}
+        clotheColor={clotheColor}
+        graphicType={graphicType}
+        eyeType={eyeType}
+        eyebrowType={eyebrowType}
+        mouthType={mouthType}
+        skinColor={skinColor}
+      />
+    );
+  },
+  (prev, next) => prev.seed === next.seed
+);
