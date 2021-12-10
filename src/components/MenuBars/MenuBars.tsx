@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {ActionFactory} from "store/action";
 import store, {useAppSelector} from "store";
 import Parse from "parse";
+import _ from "underscore";
 import classNames from "classnames";
 import {MenuToggle} from "components/MenuBars/MenuItem";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
@@ -24,14 +25,17 @@ export const MenuBars = () => {
   const [animate, setAnimate] = useState(false);
 
   const currentUser = Parse.User.current();
-  const state = useAppSelector((rootState) => ({
-    admins: rootState.users.admins,
-    allUsers: rootState.users.all,
-    boardId: rootState.board.data!.id,
-    timer: rootState.board.data?.timerUTCEndTime,
-    voting: rootState.board.data?.voting,
-    moderation: rootState.board.data?.moderation.status,
-  }));
+  const state = useAppSelector(
+    (rootState) => ({
+      admins: rootState.users.admins,
+      allUsers: rootState.users.all,
+      boardId: rootState.board.data!.id,
+      timer: rootState.board.data?.timerUTCEndTime,
+      voting: rootState.board.data?.voting,
+      moderation: rootState.board.data?.moderation.status,
+    }),
+    _.isEqual
+  );
 
   const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
   const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
