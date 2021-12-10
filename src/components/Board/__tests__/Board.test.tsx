@@ -31,13 +31,14 @@ const createBoardWithColumns = (...colors: Color[]) => {
       basic: [],
       all: [],
     },
+    votes: [],
   };
   const store = mockStore(initialState);
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
 
   return (
     <Provider store={store}>
-      <BoardContext name="" boardstatus="" currentUserIsModerator>
+      <BoardContext currentUserIsModerator>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
         ))}
@@ -122,8 +123,7 @@ describe("basic", () => {
 
 describe("navigation", () => {
   beforeEach(() => {
-    const mockCurrentUser = jest.fn(() => ({id: "testId"}));
-    Parse.User.current = mockCurrentUser;
+    Parse.User.current = jest.fn(() => ({id: "testId"}));
     window.IntersectionObserver = jest.fn(
       () =>
         ({

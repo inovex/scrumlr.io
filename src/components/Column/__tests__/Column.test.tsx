@@ -1,18 +1,25 @@
-import {fireEvent} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
-import store from "store";
-import {ActionFactory} from "store/action";
 import {Column} from "components/Column";
 import {render} from "testUtils";
+import {Provider} from "react-redux";
+import configureStore from "redux-mock-store";
 
-jest.mock("store", () => ({
-  dispatch: jest.fn(),
-}));
+const mockStore = configureStore();
 
 const [ColumnContext] = wrapWithTestBackend(Column);
-const createColumn = (currentUserIsModerator = false) => (
-  <ColumnContext id="TestID" name="Testheader" color="planning-pink" hidden={false} currentUserIsModerator={currentUserIsModerator} />
-);
+const createColumn = (currentUserIsModerator = false) => {
+  const initialState = {
+    board: {},
+    notes: [],
+    votes: [],
+    users: [],
+  };
+  return (
+    <Provider store={mockStore(initialState)}>
+      <ColumnContext id="TestID" name="Testheader" color="planning-pink" hidden={false} currentUserIsModerator={currentUserIsModerator} />
+    </Provider>
+  );
+};
 
 describe("Column", () => {
   describe("should render correctly", () => {
@@ -73,12 +80,6 @@ describe("Column", () => {
     test("Snapshot: Hide button should be visible", () => {
       const {container} = render(createColumn(true));
       expect(container.querySelector(".column__header-title")?.lastChild).toMatchSnapshot();
-    });
-
-    test("Hide button clicked", () => {
-      const {container} = render(createColumn(true));
-      fireEvent.click(container.querySelector(".column__header-toggle")!.firstChild!);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editColumn({columnId: "TestID", hidden: true}));
     });
   });
 });
