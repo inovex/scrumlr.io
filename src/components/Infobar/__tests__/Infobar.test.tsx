@@ -1,7 +1,7 @@
 import {render} from "@testing-library/react";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
-import {Infobar} from "../Infobar";
+import {InfoBar} from "../Infobar";
 
 const mockStore = configureStore();
 const createInfoBar = (activeVoting: boolean, activeTimer: boolean) => {
@@ -24,7 +24,7 @@ const createInfoBar = (activeVoting: boolean, activeTimer: boolean) => {
   };
   return (
     <Provider store={mockStore(initialState)}>
-      <Infobar />
+      <InfoBar />
     </Provider>
   );
 };

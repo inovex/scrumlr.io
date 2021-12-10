@@ -5,7 +5,7 @@ exports[`InfoBar should render correctly with active voting and disabled timer 1
   id="root"
 >
   <aside
-    class="infobar"
+    class="info-bar"
   >
     <div
       class="vote-display"
@@ -27,7 +27,7 @@ exports[`InfoBar should render correctly with active voting and timer 1`] = `
   id="root"
 >
   <aside
-    class="infobar"
+    class="info-bar"
   >
     <div
       class="timer timer--expired"
@@ -59,7 +59,7 @@ exports[`InfoBar should render correctly with disabled voting and active timer 1
   id="root"
 >
   <aside
-    class="infobar"
+    class="info-bar"
   >
     <div
       class="timer timer--expired"
@@ -80,7 +80,7 @@ exports[`InfoBar should render correctly with disabled voting and timer 1`] = `
   id="root"
 >
   <aside
-    class="infobar"
+    class="info-bar"
   />
 </div>
 `;
