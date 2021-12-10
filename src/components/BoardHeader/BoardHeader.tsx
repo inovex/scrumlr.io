@@ -36,8 +36,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           headline={t("ConfirmationDialog.returnToHomepage")}
           acceptMessage={t("ConfirmationDialog.yes")}
           onAccept={() => {
-            navigate("/");
             store.dispatch(ActionFactory.leaveBoard());
+            navigate("/");
           }}
           declineMessage={t("ConfirmationDialog.no")}
           onDecline={() => setShowConfirmationDialog(false)}
