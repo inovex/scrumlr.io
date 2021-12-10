@@ -4,8 +4,9 @@ import ReactDOM from "react-dom";
 import "./Infobar.scss";
 import _ from "underscore";
 import {useAppSelector} from "store";
+import Parse from "parse";
 
-export const Infobar = () => {
+export const InfoBar = () => {
   const state = useAppSelector(
     (applicationState) => ({
       endTime: applicationState.board.data?.timerUTCEndTime,
@@ -18,7 +19,7 @@ export const Infobar = () => {
   );
 
   return ReactDOM.createPortal(
-    <aside className="infobar">
+    <aside className="info-bar">
       {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes} />}
     </aside>,

@@ -1,6 +1,6 @@
 @import "constants/style.scss";
 
-.infobar {
+.info-bar {
   position: fixed;
   display: flex;
   align-items: center;
@@ -12,11 +12,11 @@
   z-index: $infobar-z-index;
 }
 
-@include collapsedColumns(".infobar") {
+@include collapsedColumns(".info-bar") {
   bottom: auto;
   top: 98px;
 }
 
-.infobar > *:not(:last-child) {
+.info-bar > *:not(:last-child) {
   margin-right: 20px;
 }

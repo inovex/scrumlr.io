@@ -3,7 +3,7 @@ import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import {Request} from "components/Request";
 import store, {useAppSelector} from "store";
-import {Infobar} from "components/Infobar";
+import {InfoBar} from "components/Infobar";
 import {TabIndex} from "constants/tabIndex";
 import Parse from "parse";
 import {useEffect} from "react";
@@ -69,7 +69,7 @@ export const Board = () => {
             boardId={state.board.id!}
           />
         )}
-        <Infobar />
+        <InfoBar />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
           {state.board
             .columns!.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
