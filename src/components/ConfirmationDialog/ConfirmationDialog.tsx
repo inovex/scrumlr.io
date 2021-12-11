@@ -24,3 +24,5 @@ export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMe
     </div>
   </div>
 );
+
+export default ConfirmationDialog;

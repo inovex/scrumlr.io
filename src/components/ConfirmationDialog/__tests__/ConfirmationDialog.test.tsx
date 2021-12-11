@@ -1,5 +1,5 @@
 import {render} from "testUtils";
-import ConfirmationDialog from "../ConfirmationDialog";
+import {ConfirmationDialog} from "../ConfirmationDialog";
 
 describe("<ConfirmationDialog />", () => {
   test("snapshot test", () => {
