@@ -27,9 +27,7 @@ export interface ColumnProps {
 export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex}: ColumnProps) => {
   const state = useAppSelector(
     (applicationState) => ({
-      notes: applicationState.notes.filter(
-        (note) => (applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author) && note.columnId === id && note.parentId == null
-      ),
+      notes: applicationState.notes.filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author) && note.columnId === id),
       votes: applicationState.votes.filter(
         (vote) =>
           vote.votingIteration === applicationState.board.data?.votingIteration &&
