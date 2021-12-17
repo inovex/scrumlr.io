@@ -35,7 +35,7 @@
     "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.2"
   },
   "devDependencies": {
     "@types/underscore": "^1.11.4",
