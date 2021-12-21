@@ -86,7 +86,7 @@
     "react-scripts": "^4.0.3",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
-    "ts-jest": "^27.1.1",
+    "ts-jest": "^27.1.2",
     "typescript": "^4.5.3"
   },
   "scripts": {
