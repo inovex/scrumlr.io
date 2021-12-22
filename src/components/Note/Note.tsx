@@ -87,11 +87,10 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        // "Expected to find a valid target error" without the setTimeout func
-        setTimeout(() => store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId})), 4); // Workaround
+        store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
       }
     },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: !!(monitor.getItemType() === "NOTE" || monitor.getItemType() === "STACK")}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
 
