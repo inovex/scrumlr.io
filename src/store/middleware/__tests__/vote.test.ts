@@ -2,6 +2,10 @@ import {passVoteMiddlware} from "store/middleware/vote";
 import {ActionFactory} from "store/action";
 import {API} from "api";
 import {MiddlewareAPI} from "redux";
+import {mocked} from "ts-jest/utils";
+import {User} from "parse";
+
+const mockedUser = mocked(User, true);
 
 jest.mock("api", () => ({
   API: {
@@ -13,6 +17,7 @@ jest.mock("api", () => ({
 beforeEach(() => {
   (API.addVote as jest.Mock).mockClear();
   (API.addVote as jest.Mock).mockReturnValue({status: "Success"});
+  mockedUser.current = jest.fn(() => ({id: "testId"} as never));
 });
 
 const stateAPI = {
@@ -21,6 +26,10 @@ const stateAPI = {
       data: {
         id: "boardId",
       },
+    },
+    votes: [{user: "testId"}],
+    voteConfiguration: {
+      voteLimit: 5,
     },
   }),
 };
