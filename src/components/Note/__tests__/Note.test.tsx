@@ -95,8 +95,8 @@ const createNote = (props: Partial<TestProps>) => {
         votes={props.votes || defaultVotes}
         allVotesOfUser={[]}
         childrenNotes={[
-          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false},
-          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false},
+          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false, positionInStack: 0},
+          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false, positionInStack: 0},
         ]}
         authorName=""
         activeModeration={props.moderation || {userId: "Test Author", status: false}}
