@@ -7,7 +7,7 @@ type DotButtonProps = {
   disabled?: boolean;
   onClick?: () => void;
   children?: ReactElement | ReactElement[];
-  tabIndex: number;
+  tabIndex?: number;
   title?: string;
 };
 

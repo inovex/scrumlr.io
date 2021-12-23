@@ -27,35 +27,29 @@ $color-retro-red: #ea434b;
 $color-warning-red: #e5534b;
 
 @mixin rgb($color) {
+  --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
 }
 
 .accent-color__backlog-blue {
-  --accent-color: #{$color-backlog-blue};
   @include rgb($color-backlog-blue);
 }
 .accent-color__grooming-green {
-  --accent-color: #{$color-grooming-green};
   @include rgb($color-grooming-green);
 }
 .accent-color__lean-lilac {
-  --accent-color: #{$color-lean-lilac};
   @include rgb($color-lean-lilac);
 }
 .accent-color__online-orange {
-  --accent-color: #{$color-online-orange};
   @include rgb($color-online-orange);
 }
 .accent-color__planning-pink {
-  --accent-color: #{$color-planning-pink};
   @include rgb($color-planning-pink);
 }
 .accent-color__poker-purple {
-  --accent-color: #{$color-poker-purple};
   @include rgb($color-poker-purple);
 }
 .accent-color__retro-red {
-  --accent-color: #{$color-retro-red};
   @include rgb($color-retro-red);
 }
 
@@ -66,7 +60,6 @@ $menu-color-admin--primary: $color-planning-pink;
 $menu-color-admin--secondary: #7c123e;
 
 // hover colors
-
 $hover-background-light: #efefef;
 $hover-background-dark: #414959;
 
