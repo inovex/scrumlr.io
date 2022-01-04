@@ -7,20 +7,22 @@ i18n
   .use(Backend)
   .use(LanguageDetector)
   .use(initReactI18next)
-  .init({
-    backend: {
-      queryStringParams: {v: "1.0.0"},
+  .init(
+    {
+      backend: {
+        queryStringParams: {v: "1.0.0"},
+      },
+      detection: {
+        lookupLocalStorage: "Scrumlr/locale",
+        order: ["localStorage"],
+        caches: ["localStorage"],
+      },
+      fallbackLng: "en",
+      react: {
+        useSuspense: false,
+      },
     },
-    detection: {
-      lookupLocalStorage: "Scrumlr/locale",
-      order: ["localStorage"],
-      caches: ["localStorage"],
-    },
-    fallbackLng: "en",
-    react: {
-      useSuspense: false,
-      wait: false,
-    },
-  });
+    undefined
+  );
 
 export default i18n;

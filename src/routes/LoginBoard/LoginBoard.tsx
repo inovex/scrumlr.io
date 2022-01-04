@@ -30,7 +30,7 @@ export const LoginBoard = () => {
     if (termsAccepted) {
       await AuthenticationManager.signInAnonymously(displayName);
       try {
-        navigate(location.state.from.pathname);
+        navigate((location.state as {from: {pathname: string}}).from.pathname);
       } catch (err) {
         Toast.error(t("LoginBoard.errorOnRedirect"));
       }
@@ -50,7 +50,7 @@ export const LoginBoard = () => {
 
             <h1>{t("LoginBoard.title")}</h1>
 
-            <LoginProviders originURL={location.state.from.pathname} />
+            <LoginProviders originURL={(location.state as {from: {pathname: string}}).from.pathname} />
 
             <hr className="login-board__divider" data-label="or" />
 

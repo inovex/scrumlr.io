@@ -6,17 +6,19 @@ import Backend from "i18next-fs-backend";
 i18n
   .use(Backend)
   .use(initReactI18next)
-  .init({
-    backend: {
-      loadPath: join(__dirname, "../public/locales/en/translation.json"),
+  .init(
+    {
+      backend: {
+        loadPath: join(__dirname, "../public/locales/en/translation.json"),
+      },
+      initImmediate: false,
+      lng: "en",
+      debug: false,
+      react: {
+        useSuspense: false,
+      },
     },
-    initImmediate: false,
-    lng: "en",
-    debug: false,
-    react: {
-      useSuspense: false,
-      wait: false,
-    },
-  });
+    undefined
+  );
 
 export default i18n;
