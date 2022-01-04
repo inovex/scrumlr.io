@@ -6577,10 +6577,12 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   dependencies:
     postcss "^7.0.14"
 
-idb-keyval@5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-5.0.6.tgz#62fe4a6703fb5ec86661f41330c94fda65e6d0e6"
-  integrity sha512-6lJuVbwyo82mKSH6Wq2eHkt9LcbwHAelMIcMe0tP4p20Pod7tTxq9zf0ge2n/YDfMOpDryerfmmYyuQiaFaKOg==
+idb-keyval@6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-6.0.3.tgz#e47246a15e55d0fff9fa204fd9ca06f90ff30c52"
+  integrity sha512-yh8V7CnE6EQMu9YDwQXhRxwZh4nv+8xm/HV4ZqK4IiYFJBWYGjJuykADJbSP+F/GDXUBwCSSNn/14IpGL81TuA==
+  dependencies:
+    safari-14-idb-fix "^3.0.0"
 
 identity-obj-proxy@3.0.0:
   version "3.0.0"
@@ -9140,14 +9142,14 @@ parse5@6.0.1:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
 
-parse@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/parse/-/parse-3.4.0.tgz#de39edd0918ae77baed9c249793d4a09bb734d14"
-  integrity sha512-FMZLxPW6PvrBgxkXc9AmnYsFKvPwiS4G2n9OI4mdfiSoNzIVLc+bXzlUdJ+I7hiqHsBTP0BrdQczw2/cnVkJ6w==
+parse@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/parse/-/parse-3.4.1.tgz#b10a622ac64dc406cd97dd47756e65b7a7291643"
+  integrity sha512-XTMaHfcOwAOiWLraNtPbCzR8o94ZWjOfaZDMM2jZ1ZDB5twtK1B82lPa+N197efZhcQ+QFbW/eDJsBybD48aSQ==
   dependencies:
     "@babel/runtime" "7.15.4"
     "@babel/runtime-corejs3" "7.14.7"
-    idb-keyval "5.0.6"
+    idb-keyval "6.0.3"
     react-native-crypto-js "1.0.0"
     uuid "3.4.0"
     ws "7.5.1"
@@ -11007,6 +11009,11 @@ rxjs@^7.4.0:
   integrity sha512-7SQDi7xeTMCJpqViXh8gL/lebcwlp3d831F05+9B44A4B0WfsEwUQHR64gsH1kvJ+Ep/J9K2+n1hVl1CsGN23w==
   dependencies:
     tslib "~2.1.0"
+
+safari-14-idb-fix@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/safari-14-idb-fix/-/safari-14-idb-fix-3.0.0.tgz#450fc049b996ec7f3fd9ca2f89d32e0761583440"
+  integrity sha512-eBNFLob4PMq8JA1dGyFn6G97q3/WzNtFK4RnzT1fnLq+9RyrGknzYiM/9B12MnKAxuj1IXr7UKYtTNtjyKMBog==
 
 safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
