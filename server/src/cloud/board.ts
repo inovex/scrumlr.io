@@ -436,10 +436,7 @@ export const initializeBoardFunctions = () => {
     return {status: "Success", description: "User was successfully removed from the list of moderators"};
   });
 
-  /**
-   * Cancel voting
-   */
-  api<{boardId: string}, StatusResponse>("cancelVoting", async (user, request) => {
+  api<{boardId: string; votingStatus: string}, StatusResponse>("endVoting", async (user, request) => {
     await requireValidBoardAdmin(user, request.boardId);
     const board = await new Parse.Query("Board").get(request.boardId, {useMasterKey: true});
 
@@ -455,23 +452,25 @@ export const initializeBoardFunctions = () => {
 
     const votingIteration = await board.get("votingIteration");
 
-    const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
-    voteConfigurationQuery.equalTo("board", board);
-    // Voting iteraion already incremented
-    const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
-    await voteConfiguration.destroy({useMasterKey: true});
+    if (request.votingStatus === "canceled") {
+      const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+      voteConfigurationQuery.equalTo("board", board);
+      // Voting iteraion already incremented
+      const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
+      await voteConfiguration.destroy({useMasterKey: true});
 
-    const voteQuery = new Parse.Query("Vote");
-    voteQuery.equalTo("board", board);
-    voteQuery.equalTo("votingIteration", votingIteration);
-    const votes = await voteQuery.findAll({useMasterKey: true});
-    await Parse.Object.destroyAll(votes, {useMasterKey: true});
+      const voteQuery = new Parse.Query("Vote");
+      voteQuery.equalTo("board", board);
+      voteQuery.equalTo("votingIteration", votingIteration);
+      const votes = await voteQuery.findAll({useMasterKey: true});
+      await Parse.Object.destroyAll(votes, {useMasterKey: true});
+    }
 
-    // add new value canceled?
+    board.add("votingIterations", {iteration: votingIteration, status: request.votingStatus});
     board.set("voting", "disabled");
     await board.save(null, {useMasterKey: true});
 
-    return {status: "Success", description: "Current voting phase was canceled"};
+    return {status: "Success", description: `Current voting phase was ${request.votingStatus}`};
   });
 
   api<{endDate: Date; boardId: string}, StatusResponse>("setTimer", async (user, request) => {

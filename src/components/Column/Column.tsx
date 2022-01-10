@@ -36,13 +36,20 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
           (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
       ),
       completedVotes: applicationState.votes.filter((vote) => {
-        if (applicationState.board.data?.voting === "disabled") {
-          // map on vote results of the last voting iteration
-          return vote.votingIteration === applicationState.board.data?.votingIteration;
+        const boardState = applicationState.board.data;
+        const lastVotingIteration = boardState?.votingIterations.find((VotingIteration) => VotingIteration.iteration === boardState?.votingIteration);
+        const lastCompletedVotingIteration = boardState?.votingIterations
+          ?.slice()
+          .reverse()
+          .find((VotingIteration) => VotingIteration.status === "completed");
+
+        if (boardState?.voting === "disabled") {
+          if (lastVotingIteration?.status === "canceled") {
+            return vote.votingIteration === lastCompletedVotingIteration?.iteration;
+          }
+          return vote.votingIteration === lastVotingIteration?.iteration;
         }
-        // map on vote results of the previous, completed voting iteration
-        // FIXME we'll have to keep track of cancelled voting iterations here since they'll be included in the results
-        return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
+        return vote.votingIteration === lastCompletedVotingIteration?.iteration;
       }),
       users: applicationState.users,
       board: {

@@ -18,7 +18,7 @@ export const BoardActionType = {
   PendingBoardAccessConfirmation: "@@SCRUMLR/pendingBoardAccessConfirmation" as const,
   PassphraseChallengeRequired: "@@SCRUMLR/passphraseChallengeRequired" as const,
   IncorrectPassphrase: "@@SCRUMLR/incorrectPassphrase" as const,
-  CancelVoting: "@@SCRUMLR/cancelVoting" as const,
+  EndVoting: "@@SCRUMLR/endVoting" as const,
   SetTimer: "@@SCRUMLR/setTimer" as const,
   CancelTimer: "@@SCRUMLR/cancelTimer" as const,
 };
@@ -108,15 +108,18 @@ export const BoardActionFactory = {
     type: BoardActionType.IncorrectPassphrase,
   }),
   /**
-   * Creates an action which should be dispatched when the current voting phase was canceled.
+   * Creates an action which should be dispatched when the current voting phase was ended.
    *
    * @param boardId
+   * @param votingStatus
    */
-  cancelVoting: (boardId: string) => ({
-    type: BoardActionType.CancelVoting,
+  endVoting: (boardId: string, votingStatus: string) => ({
+    type: BoardActionType.EndVoting,
     boardId,
+    votingStatus,
   }),
-  /** Creates an action which should be dispatched when a moderator wants to set a timer.
+  /**
+   *  Creates an action which should be dispatched when a moderator wants to set a timer.
    *
    * @param endDate the date where the timer ends
    */
@@ -142,7 +145,7 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
   | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
-  | ReturnType<typeof BoardActionFactory.cancelVoting>
+  | ReturnType<typeof BoardActionFactory.endVoting>
   | ReturnType<typeof BoardActionFactory.setTimer>
   | ReturnType<typeof BoardActionFactory.cancelTimer>
   | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>

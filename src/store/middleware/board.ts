@@ -305,8 +305,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
       document.location.pathname = "/";
     }
   }
-  if (action.type === ActionType.CancelVoting) {
-    const response = (await API.cancelVoting(action.boardId)) as StatusResponse;
+  if (action.type === ActionType.EndVoting) {
+    const response = (await API.endVoting(action.boardId, action.votingStatus)) as StatusResponse;
     if (response.status === "Error") {
       Toast.error(response.description);
     }

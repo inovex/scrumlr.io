@@ -50,12 +50,14 @@ export const BoardAPI = {
    */
   deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
   /**
-   * Cancel the current voting phase.
+   * End the current voting phase.
    *
    * @param boardId the board id
+   * @param votingStatus the status (canceled | completed) of the ending voting phase
+   *
    * @returns a {status, description} object
    */
-  cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
+  endVoting: (boardId: string, votingStatus: string) => callAPI("endVoting", {boardId, votingStatus}),
 
   /** Sets the date where the timer of the board ends.
    *

@@ -30,6 +30,7 @@ export interface BoardServerModel {
   voting: "active" | "disabled";
   moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
+  votingIterations: {iteration: number; status: string}[];
   showNotesOfOtherUsers: boolean;
   createdAt: string;
   updatedAt: string;
@@ -53,6 +54,7 @@ export type EditableBoardAttributes = {
   voting: "active" | "disabled";
   moderation: {userId?: string; status: "active" | "disabled"};
   votingIteration: number;
+  votingIterations: {iteration: number; status: string}[];
   showNotesOfOtherUsers: boolean;
 };
 
@@ -104,6 +106,7 @@ export const mapBoardServerToClientModel = async (board: BoardServerModel): Prom
     timerUTCEndTime,
     voting: board.voting,
     votingIteration: board.votingIteration,
+    votingIterations: board.votingIterations,
     showNotesOfOtherUsers: board.showNotesOfOtherUsers,
     createdAt: new Date(board.createdAt),
     updatedAt: new Date(board.updatedAt),

@@ -40,10 +40,10 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
     store.dispatch(ActionFactory.editBoard({id: state.boardId!, voting: "active"}));
   };
   const stopVoting = () => {
-    store.dispatch(ActionFactory.editBoard({id: state.boardId!, voting: "disabled"}));
+    store.dispatch(ActionFactory.endVoting(state.boardId!, "completed"));
   };
   const cancelVoting = () => {
-    store.dispatch(ActionFactory.cancelVoting(state.boardId!));
+    store.dispatch(ActionFactory.endVoting(state.boardId!, "canceled"));
   };
 
   return (
