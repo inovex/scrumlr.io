@@ -9,9 +9,11 @@ export const VoteActionType = {
 };
 
 export const VoteActionFactory = {
-  addVote: (note: string) => ({
+  addVote: (note: string, boardId: string, votingIteration: number) => ({
     type: VoteActionType.AddVote,
     note,
+    boardId,
+    votingIteration,
   }),
   deleteVote: (note: string) => ({
     type: VoteActionType.DeleteVote,
