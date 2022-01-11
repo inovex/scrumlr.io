@@ -35,6 +35,11 @@ const createVotes = (
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: false,
     },
+    board: {
+      data: {
+        id: "test-board",
+      },
+    },
   };
   const mockedStore = mockStore(initialState);
   const [VoteContext] = wrapWithTestBackend(Votes);
@@ -75,7 +80,7 @@ describe("Votes", () => {
     test("addVote", () => {
       const votes = render(createVotes(true, true));
       fireEvent.click(votes.container.getElementsByClassName("dot-button")[1]);
-      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.addVote("test-id"));
+      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.addVote("test-id", "test-board", 1));
     });
 
     test("deleteVote", () => {
