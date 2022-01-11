@@ -1,3 +1,4 @@
+import {fireEvent} from "@testing-library/react";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
@@ -89,6 +90,12 @@ describe("Board Header", () => {
     test("show boardstatus public", () => {
       const {container} = render(createBoardHeader("Title", "Public"));
       expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
+    });
+
+    test("show confirmation-dialog after clicking scrumlr logo", () => {
+      const {container} = render(createBoardHeader("Title", "Public Session"));
+      fireEvent.click(container.querySelector(".board-header__link") as HTMLElement);
+      expect(container.querySelector(".confirmation-dialog")).toBeInTheDocument();
     });
   });
 });
