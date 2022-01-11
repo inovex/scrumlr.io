@@ -37,7 +37,11 @@ export const Button: FC<ButtonProps> = ({className, variant = "contained", color
   }
 
   return (
-    <Component className={classNames("button", `button--${color}`, `button--${variant}`, {"button--block": block}, className)} {...other} {...labelProps}>
+    <Component
+      className={classNames("button", `button--${color}`, `button--${variant}`, {"button--block": block}, {"button__label--shown": !hideLabel}, className)}
+      {...other}
+      {...labelProps}
+    >
       {leftIcon}
       <span ref={labelRef} className={classNames("button__label", {"button__label--hidden": hideLabel})}>
         {children}

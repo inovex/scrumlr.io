@@ -34,8 +34,10 @@ export const initializeVoteFunctions = () => {
     voteConfigurationQuery.equalTo("board", board);
     const voteConfiguration = await voteConfigurationQuery.equalTo("votingIteration", votingIteration).first({useMasterKey: true});
 
+    const count = await voteQuery.count({useMasterKey: true});
+    const limit = await voteConfiguration.get("voteLimit");
     // Check if user exceeds his vote limit
-    if ((await voteQuery.count({useMasterKey: true})) >= (await voteConfiguration.get("voteLimit"))) {
+    if (count >= limit) {
       return {status: "Error", description: "You have already cast all your votes"};
     }
 
@@ -61,19 +63,25 @@ export const initializeVoteFunctions = () => {
     const voteQuery = new Parse.Query("Vote");
     voteQuery.equalTo("note", note);
     voteQuery.equalTo("user", user);
-    const vote = await voteQuery.limit(1).first({useMasterKey: true});
 
-    // Check if vote exists
-    if (!vote) {
-      return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
-    }
-    // Check if 'voting' is active
-    if (board.get("voting") === "disabled") {
-      return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
-    }
     // Delete corresponding vote
-    await vote.destroy({useMasterKey: true});
+    while (true) {
+      try {
+        const vote = await voteQuery.first({useMasterKey: true});
+        // Check if vote exists
+        if (!vote) {
+          return {status: "Error", description: `No votes for user '${user.id}' exist on note '${request.noteId}'`};
+        }
+        // Check if 'voting' is active
+        if (board.get("voting") === "disabled") {
+          return {status: "Error", description: "You cannot withdraw a vote while voting is disabled"};
+        }
 
-    return {status: "Success", description: "Your vote was withdrawn"};
+        await vote.destroy({useMasterKey: true});
+        return {status: "Success", description: "Your vote was withdrawn"};
+      } catch (e) {
+        // Since we cannot synchronize, it is possible that Parse is trying to delte a non-existent object.
+      }
+    }
   });
 };
