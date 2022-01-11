@@ -130,7 +130,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         />
       </div>
       <button
-        class="button button--primary button--contained passphrase-dialog__submit-button"
+        class="button button--primary button--contained button__label--shown passphrase-dialog__submit-button"
         disabled=""
         type="submit"
       >
