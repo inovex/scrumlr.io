@@ -83,14 +83,14 @@ export const Note = (props: NoteProps) => {
     canDrag: () => !props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id,
   });
 
-  const [{isOver, canDrop}, drop] = useDrop(() => ({
+  const [{isOver}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
         store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
       }
     },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}), canDrop: monitor.canDrop()}),
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
 
@@ -117,7 +117,7 @@ export const Note = (props: NoteProps) => {
           "note",
           {"note--own-card": Parse.User.current()?.id === props.authorId},
           {"note--isDragging": isDragging},
-          {"note--isOver": isOver && canDrop},
+          {"note--isOver": isOver},
           {"note__disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id}
         )}
         tabIndex={props.tabIndex ?? TabIndex.default}
