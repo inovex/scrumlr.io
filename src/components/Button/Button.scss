@@ -111,6 +111,10 @@
   height: 16px;
 }
 
+.button__label--shown {
+  min-width: 80px;
+}
+
 [theme="dark"] {
   .button.button--outlined,
   .button.button--text-link,

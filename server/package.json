@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/http-proxy-middleware": "^1.0.0",
-    "@types/jsonwebtoken": "^8.5.6",
+    "@types/jsonwebtoken": "^8.5.7",
     "@types/parse": "^2.18.13",
     "eslint": "^8.6.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -29,7 +29,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-only-warn": "^1.0.3",
-    "lint-staged": "^12.1.5",
+    "lint-staged": "^12.1.7",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "ts-node": "^9.0.0",
@@ -38,14 +38,14 @@
   "dependencies": {
     "axios": "^0.24.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^10.0.0",
+    "dotenv": "^11.0.0",
     "express": "^4.17.2",
     "googleapis": "^92.0.0",
     "http-proxy-middleware": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
     "parse": "^3.4.1",
     "parse-server": "^4.10.4",
-    "qs": "^6.10.2"
+    "qs": "^6.10.3"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",

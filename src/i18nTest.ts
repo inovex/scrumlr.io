@@ -15,7 +15,6 @@ i18n
     debug: false,
     react: {
       useSuspense: false,
-      wait: false,
     },
   });
 
