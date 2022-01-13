@@ -19,7 +19,6 @@ i18n
     fallbackLng: "en",
     react: {
       useSuspense: false,
-      wait: false,
     },
   });
 
