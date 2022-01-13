@@ -12,6 +12,7 @@ import {API} from "api";
 import {Toast} from "utils/Toast";
 import {getBrowserServerTimeDifference} from "utils/timer";
 import {StatusResponse} from "types";
+import i18n from "i18next";
 
 let closeSubscriptions: (() => void)[] = [];
 
@@ -309,6 +310,8 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
     const response = (await API.endVoting(action.boardId, action.votingStatus)) as StatusResponse;
     if (response.status === "Error") {
       Toast.error(response.description);
+    } else {
+      Toast.success(i18n.t("Toast.votingFinished"));
     }
   }
   if (action.type === ActionType.SetTimer) {

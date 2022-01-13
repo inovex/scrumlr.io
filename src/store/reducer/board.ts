@@ -17,8 +17,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
 
     case ActionType.EditBoard: {
       // Moderator started voting phase - notification to moderator (user who started the voting)
-      if (action.board.voting) {
-        Toast.success(i18n.t(action.board.voting === "active" ? "Toast.votingStarted" : "Toast.votingFinished"));
+      if (action.board.voting === "active") {
+        Toast.success(i18n.t("Toast.votingStarted"));
       }
       // Moderator started moderation phase - notification to moderator (user who started the moderation phase)
       if (action.board.moderation) {
@@ -174,6 +174,15 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     case ActionType.IncorrectPassphrase: {
       return {
         status: "incorrect_passphrase",
+      };
+    }
+    case ActionType.EndVoting: {
+      return {
+        status: state.status,
+        data: {
+          ...state.data!,
+          voting: "disabled",
+        },
       };
     }
     default: {
