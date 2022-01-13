@@ -11,10 +11,14 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import "./LoginBoard.scss";
 import {TextInputAction} from "components/TextInputAction";
-import {Button} from "../../components/Button";
-import {TextInput} from "../../components/TextInput";
-import {TextInputLabel} from "../../components/TextInputLabel";
-import {ValidationError} from "../../components/ValidationError";
+import {Button} from "components/Button";
+import {TextInput} from "components/TextInput";
+import {TextInputLabel} from "components/TextInputLabel";
+import {ValidationError} from "components/ValidationError";
+
+interface State {
+  from: {pathname: string};
+}
 
 export const LoginBoard = () => {
   const {t} = useTranslation();
@@ -30,7 +34,7 @@ export const LoginBoard = () => {
     if (termsAccepted) {
       await AuthenticationManager.signInAnonymously(displayName);
       try {
-        navigate(location.state.from.pathname);
+        navigate((location.state as State).from.pathname);
       } catch (err) {
         Toast.error(t("LoginBoard.errorOnRedirect"));
       }
@@ -50,7 +54,7 @@ export const LoginBoard = () => {
 
             <h1>{t("LoginBoard.title")}</h1>
 
-            <LoginProviders originURL={location.state.from.pathname} />
+            <LoginProviders originURL={(location.state as State).from.pathname} />
 
             <hr className="login-board__divider" data-label="or" />
 
