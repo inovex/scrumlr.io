@@ -36,7 +36,15 @@ const Router = () => (
           </RequireAuthentication>
         }
       >
-        <Route path="settings" element={<SettingsDialog />} />
+        <Route path="settings" element={<SettingsDialog />}>
+          <Route path="" element={<div>Board Settings</div>} />
+          <Route path="participants" element={<div>Participants</div>} />
+          <Route path="appearance" element={<div>Appearance</div>} />
+          <Route path="share" element={<div>Share Session</div>} />
+          <Route path="export" element={<div>Export Board</div>} />
+          <Route path="feedback" element={<div>Feedback</div>} />
+          <Route path="profile" element={<div>Change your Profile</div>} />
+        </Route>
       </Route>
     </Routes>
   </BrowserRouter>
