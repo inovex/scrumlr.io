@@ -44,6 +44,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   Name, Access Policy
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -55,6 +60,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   User List, User Rrole
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -66,6 +76,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   Notifications, Language, UI
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -77,6 +92,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   QR Code, URL
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -88,6 +108,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   Share the board
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -99,6 +124,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   We love to hear from you
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
               <a
                 class="navigation__item"
@@ -110,6 +140,11 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <p>
                   Edit Profile
                 </p>
+                <svg
+                  class="navigation-item__icon"
+                >
+                  icon-settings.svg
+                </svg>
               </a>
             </nav>
             <article
