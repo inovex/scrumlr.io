@@ -13,7 +13,6 @@ const options: InitOptions = {
   },
   initImmediate: false,
   lng: "en",
-  fallbackLng: "en",
   debug: true,
   react: {
     useSuspense: false,
