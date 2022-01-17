@@ -1,3 +1,5 @@
+@import "constants/style";
+
 .settings-dialog {
   position: fixed;
   width: 862px;
@@ -55,7 +57,7 @@
 .navigation__item:hover,
 .navigation__item--active {
   outline: none;
-  background: #0057ff 0% 0% no-repeat padding-box;
+  background: var(--accent-color);
   color: white;
 }
 .navigation-item__icon {
@@ -65,7 +67,7 @@
   width: 40px;
   height: 40px;
   border-radius: 20px;
-  background: #0057ff;
+  background: var(--accent-color);
   color: white;
 }
 
