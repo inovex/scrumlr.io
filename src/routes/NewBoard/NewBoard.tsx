@@ -58,7 +58,7 @@ export const NewBoard = () => {
             <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </Link>
 
-          {!extendedConfiguration && (
+          {!extendedConfiguration ? (
             <div>
               <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
 
@@ -76,9 +76,7 @@ export const NewBoard = () => {
                 ))}
               </div>
             </div>
-          )}
-
-          {extendedConfiguration && (
+          ) : (
             <div>
               <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
 
@@ -95,12 +93,11 @@ export const NewBoard = () => {
           <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
             {t("NewBoard.createNewBoard")}
           </Button>
-          {!extendedConfiguration && (
+          {!extendedConfiguration ? (
             <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
               {t("NewBoard.extendedConfigurationButton")}
             </Button>
-          )}
-          {extendedConfiguration && (
+          ) : (
             <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
               {t("NewBoard.basicConfigurationButton")}
             </Button>

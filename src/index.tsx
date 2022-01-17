@@ -28,17 +28,17 @@ if (localStorage.getItem("theme")) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense fallback={<LoadingScreen />}>
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <DndProvider backend={HTML5Backend}>
+    <I18nextProvider i18n={i18n}>
+      <Provider store={store}>
+        <DndProvider backend={HTML5Backend}>
+          <Suspense fallback={<LoadingScreen />}>
             <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
             <Router />
             <CookieNotice />
-          </DndProvider>
-        </Provider>
-      </I18nextProvider>
-    </Suspense>
+          </Suspense>
+        </DndProvider>
+      </Provider>
+    </I18nextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

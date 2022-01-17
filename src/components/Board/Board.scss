@@ -127,7 +127,7 @@ $board__navigation-button-icon-dimension: 24px;
   margin-right: 3px;
 }
 
-@media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
+@media screen and (max-width: calc($column__min-width + 2 * $board__side-panel-width)) {
   .board {
     grid-template-columns:
       $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width * 2}))
@@ -137,7 +137,7 @@ $board__navigation-button-icon-dimension: 24px;
 }
 
 @for $i from 1 through 16 {
-  @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
+  @media screen and (min-width: calc($i * ($column__min-width + 2*$board__side-panel-width))) {
     .board {
       --n: #{$i};
     }

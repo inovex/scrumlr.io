@@ -20,22 +20,19 @@ export const Board = () => {
     []
   );
 
-  useEffect(() => {
-    window.addEventListener(
-      "beforeunload",
-      () => {
-        store.dispatch(ActionFactory.leaveBoard());
-      },
-      false
-    );
+  const leaveBorad = () => {
+    store.dispatch(ActionFactory.leaveBoard());
+  };
 
-    window.addEventListener(
-      "onunload",
-      () => {
-        store.dispatch(ActionFactory.leaveBoard());
-      },
-      false
-    );
+  useEffect(() => {
+    window.addEventListener("beforeunload", leaveBorad);
+
+    window.addEventListener("onunload", leaveBorad);
+
+    return () => {
+      window.removeEventListener("beforeunload", leaveBorad);
+      window.removeEventListener("onunload", leaveBorad);
+    };
   }, []);
 
   const state = useAppSelector(
