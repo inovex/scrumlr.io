@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
+import {Link} from "react-router-dom";
 import {BoardOption} from "./BoardOptions";
 import {BoardSettings} from "./BoardSettings";
 
@@ -12,8 +13,6 @@ type HeaderMenuProps = {
   onClose: () => void;
   currentUserIsModerator: boolean;
 };
-
-type ExpandableOptions = "share" | "delete" | "export";
 
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
@@ -24,25 +23,15 @@ const HeaderMenu = (props: HeaderMenuProps) => {
 
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [accessPolicy, setAccessPolicy] = useState(state.board!.accessPolicy);
-  const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
 
   if (!props.open) {
     return null;
   }
 
-  const onExpand = (option: ExpandableOptions) => () => {
-    if (option === expandedOption) {
-      setExpandedOption(undefined);
-    } else {
-      setExpandedOption(option);
-    }
-  };
-
   return (
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setExpandedOption(undefined);
         setAccessPolicy(state.board!.accessPolicy);
         props.onClose();
       }}
@@ -61,11 +50,11 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
-            <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
           </>
         )}
-        <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
-        <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
+        <li className="board-option">
+          <Link to="settings">Show all Board Settings</Link>
+        </li>
       </ul>
     </Portal>
   );

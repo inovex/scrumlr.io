@@ -51,8 +51,20 @@
   top: 30px;
   opacity: 50%;
 }
-.navigation__item:hover {
+.navigation__item:hover,
+.navigation__item:focus {
+  outline: none;
   background: #0057ff 0% 0% no-repeat padding-box;
+  color: white;
+}
+.navigation-item__icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: #0057ff;
   color: white;
 }
 
