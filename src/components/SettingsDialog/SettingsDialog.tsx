@@ -8,62 +8,66 @@ import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import classNames from "classnames";
+import Parse from "parse";
+import {Avatar} from "components/Avatar";
 
 export const SettingsDialog: React.VFC = () => {
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  console.log(window.location.pathname);
+  const displayName = useAppSelector((state) => state.users.all.filter((user) => user.id === Parse.User.current()!.id)[0].displayName);
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
       <aside className="settings-dialog">
-        <nav className="settings-dialog__navigation">
-          <ScrumlrLogo />
-          <Link to="" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings")})}>
-            <p>Board Settings</p>
-            <p>Name, Access Policy</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link
-            to="participants"
-            className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/settings/participants")})}
-          >
-            <p>Participants</p>
-            <p>User List, User Rrole</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link
-            to="appearance"
-            className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
-          >
-            <p>Appearance</p>
-            <p>Notifications, Language, UI</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link to="share" className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}>
-            <p>Share Session</p>
-            <p>QR Code, URL</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link to="export" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}>
-            <p>Export Board</p>
-            <p>Share the board</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link
-            to="feedback"
-            className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
-          >
-            <p>Feedback</p>
-            <p>We love to hear from you</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-          <Link to="profile" className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}>
-            <p>TODO Displayname</p>
-            <p>Edit Profile</p>
-            <SettingsIcon className="navigation-item__icon" />
-          </Link>
-        </nav>
+        <div className="settings-dialog__sidebar">
+          <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
+          <nav className="settings-dialog__navigation">
+            <Link to="" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings")})}>
+              <p>Board Settings</p>
+              <p>Name, Access Policy</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link
+              to="participants"
+              className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/settings/participants")})}
+            >
+              <p>Participants</p>
+              <p>User List, User Rrole</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link
+              to="appearance"
+              className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
+            >
+              <p>Appearance</p>
+              <p>Notifications, Language, UI</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link to="share" className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}>
+              <p>Share Session</p>
+              <p>QR Code, URL</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link to="export" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}>
+              <p>Export Board</p>
+              <p>Share the board</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link
+              to="feedback"
+              className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
+            >
+              <p>Feedback</p>
+              <p>We love to hear from you</p>
+              <SettingsIcon className="navigation-item__icon" />
+            </Link>
+            <Link to="profile" className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}>
+              <p>{displayName}</p>
+              <p>Edit Profile</p>
+              <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
+            </Link>
+          </nav>
+        </div>
         <article className="settings-dialog__content">
           <Outlet />
         </article>
