@@ -1,15 +1,11 @@
-import i18n, {InitOptions} from "i18next";
+import i18n from "i18next";
 import Backend from "i18next-fs-backend";
 import {initReactI18next} from "react-i18next";
 
-const options: InitOptions = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const options: any = {
   backend: {
-    backendOptions: [
-      {
-        loadPath: "locales/en/translation.json",
-      },
-    ],
-    backends: [Backend],
+    loadPath: "locales/en/translation.json",
   },
   initImmediate: false,
   lng: "en",
