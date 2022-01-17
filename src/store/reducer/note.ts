@@ -2,7 +2,7 @@ import Parse from "parse";
 import {NoteClientModel} from "types/note";
 import {ActionType, ReduxAction} from "store/action";
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line default-param-last, @typescript-eslint/default-param-last
 export const noteReducer = (state: NoteClientModel[] = [], action: ReduxAction): NoteClientModel[] => {
   switch (action.type) {
     case ActionType.AddNote: {

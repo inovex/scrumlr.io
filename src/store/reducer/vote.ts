@@ -2,7 +2,7 @@ import {VoteClientModel} from "types/vote";
 import {ActionType, ReduxAction} from "store/action";
 import Parse from "parse";
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line default-param-last, @typescript-eslint/default-param-last
 export const voteReducer = (state: VoteClientModel[] = [], action: ReduxAction): VoteClientModel[] => {
   switch (action.type) {
     case ActionType.CreatedVote: {

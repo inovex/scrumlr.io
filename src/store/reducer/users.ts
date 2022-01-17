@@ -20,7 +20,7 @@ const mapRaisedHandState = (state: Omit<UsersState, "usersRaisedHands">, raisedH
   usersMarkedReady: state.usersMarkedReady,
 });
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line default-param-last, @typescript-eslint/default-param-last
 export const usersReducer = (state: UsersState = {usersRaisedHands: [], usersMarkedReady: [], admins: [], basic: [], all: []}, action: ReduxAction): UsersState => {
   switch (action.type) {
     case ActionType.SetUserReadyStatus: {
