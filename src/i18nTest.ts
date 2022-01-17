@@ -10,7 +10,7 @@ const options: any = {
   },
   initImmediate: false,
   lng: "en",
-  debug: true,
+  debug: false,
   react: {
     useSuspense: false,
   },
