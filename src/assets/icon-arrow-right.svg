@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 4.5 18 14.85"><path d="M20 11.925H4M13.95 5.5L20 11.927l-6.05 6.427" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" /></svg>
+<svg viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke-linecap="square">
+<g stroke="currentColor" stroke-width="3">
+<line x1="2.5" x2="25.5" y1="17.5" y2="17.5"/>
+<path d="m19.033 10.025 7.3223 6.7365c0.40644 0.37393 0.4328 1.0065 0.058877 1.413-0.018299 0.019891-0.037397 0.039031-0.057247 0.057374l-7.324 6.7681"/>
+</g>
+</g>
+</svg>
