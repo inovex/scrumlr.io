@@ -6,9 +6,10 @@ const options: InitOptions = {
   backend: {
     backendOptions: [
       {
-        loadPath: "public/locales/en/translation.json",
+        loadPath: "locales/en/translation.json",
       },
     ],
+    backends: [Backend],
   },
   initImmediate: false,
   lng: "en",
