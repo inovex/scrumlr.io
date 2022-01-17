@@ -7,6 +7,7 @@ import i18n from "./i18nTest";
 export type AssertTypeEqual<T, Expected> = T extends Expected ? (Expected extends T ? true : never) : never;
 
 const AllTheProvidersWithoutRouter: FC = ({children}) => {
+  // eslint-ignore-next-line no-console
   console.log(i18n);
 
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
