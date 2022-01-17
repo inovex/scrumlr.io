@@ -30,11 +30,30 @@
   height: 56px;
   width: 252px;
   margin: 8px 32px;
-  background: #0057ff 0% 0% no-repeat padding-box;
-  color: white;
   border-radius: 28px;
   text-align: center;
   text-decoration: none;
+  color: black;
+  position: relative;
+}
+.navigation__item > p {
+  margin: 0;
+  position: absolute;
+  left: 64px;
+}
+.navigation__item > p:first-child {
+  font-size: 14px;
+  font-weight: 600;
+  top: 12px;
+}
+.navigation__item > p:nth-child(2) {
+  font-size: 12px;
+  top: 30px;
+  opacity: 50%;
+}
+.navigation__item:hover {
+  background: #0057ff 0% 0% no-repeat padding-box;
+  color: white;
 }
 
 .settings-dialog__close-button {
@@ -46,4 +65,13 @@
   background: #fff 0% 0% no-repeat padding-box;
   border-radius: 22px;
   box-shadow: 0px 16px 32px #0057ff3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-button__icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
