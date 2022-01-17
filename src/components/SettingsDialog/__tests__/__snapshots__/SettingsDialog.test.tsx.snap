@@ -35,67 +35,81 @@ exports[`SettingsDialog should render correctly 1`] = `
               class="settings-dialog__navigation"
             >
               <a
+                class="navigation__item"
                 href="/"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Board Settings
-                </div>
+                </p>
+                <p>
+                  Name, Access Policy
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/participants"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Participants
-                </div>
+                </p>
+                <p>
+                  User List, User Rrole
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/appearance"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Appearance
-                </div>
+                </p>
+                <p>
+                  Notifications, Language, UI
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/share"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Share Session
-                </div>
+                </p>
+                <p>
+                  QR Code, URL
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/export"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Export Board
-                </div>
+                </p>
+                <p>
+                  Share the board
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/feedback"
               >
-                <div
-                  class="navigation__item"
-                >
+                <p>
                   Feedback
-                </div>
+                </p>
+                <p>
+                  We love to hear from you
+                </p>
               </a>
               <a
+                class="navigation__item"
                 href="/profile"
               >
-                <div
-                  class="navigation__item"
-                >
-                  Change your profile
-                </div>
+                <p>
+                  TODO Displayname
+                </p>
+                <p>
+                  Edit Profile
+                </p>
               </a>
             </nav>
             <article
@@ -105,7 +119,11 @@ exports[`SettingsDialog should render correctly 1`] = `
               class="settings-dialog__close-button"
               href="/board/boardId"
             >
-              X
+              <svg
+                class="close-button__icon"
+              >
+                icon-close.svg
+              </svg>
             </a>
           </aside>
         </div>
