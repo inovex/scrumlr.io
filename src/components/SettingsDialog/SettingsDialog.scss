@@ -53,7 +53,7 @@
   opacity: 50%;
 }
 .navigation__item:hover,
-.navigation__item:focus {
+.navigation__item--active {
   outline: none;
   background: #0057ff 0% 0% no-repeat padding-box;
   color: white;
