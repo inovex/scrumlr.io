@@ -4,6 +4,7 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
+import {Link} from "react-router-dom";
 import {BoardOption} from "./BoardOptions";
 import {BoardSettings} from "./BoardSettings";
 
@@ -56,6 +57,9 @@ const HeaderMenu = (props: HeaderMenuProps) => {
           setActiveEditMode={setActiveEditMode}
           setAccessPolicy={setAccessPolicy}
         />
+        <Link to={`/board/${state.board!.id}/settings`}>
+          <button>Test</button>
+        </Link>
         {props.currentUserIsModerator && (
           <>
             <BoardOption.ShowAuthorOption />
