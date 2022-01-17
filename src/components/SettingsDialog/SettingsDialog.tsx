@@ -6,6 +6,7 @@ import "./SettingsDialog.scss";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 
 export const SettingsDialog: React.VFC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const SettingsDialog: React.VFC = () => {
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
       <aside className="settings-dialog">
         <nav className="settings-dialog__navigation">
+          <ScrumlrLogo />
           <Link to="" className="navigation__item">
             <p>Board Settings</p>
             <p>Name, Access Policy</p>
