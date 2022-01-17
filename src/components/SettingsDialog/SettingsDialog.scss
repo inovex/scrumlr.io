@@ -17,6 +17,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .settings-dialog__content {
@@ -29,7 +30,7 @@
 .navigation__item {
   height: 56px;
   width: 252px;
-  margin: 8px 32px;
+  margin: 0 32px;
   border-radius: 28px;
   text-align: center;
   text-decoration: none;
