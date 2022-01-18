@@ -4,7 +4,6 @@ import {useState} from "react";
 import {useSelector} from "react-redux";
 import {ApplicationState} from "types/store";
 import "./HeaderMenu.scss";
-import {Link} from "react-router-dom";
 import {BoardOption} from "./BoardOptions";
 import {BoardSettings} from "./BoardSettings";
 
@@ -52,9 +51,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowHiddenColumnsOption />
           </>
         )}
-        <li className="board-option">
-          <Link to="settings">Show all Board Settings</Link>
-        </li>
+        <BoardOption.ShowAllBoardSettings />
       </ul>
     </Portal>
   );

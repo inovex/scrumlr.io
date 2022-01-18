@@ -1,0 +1,18 @@
+.board-option-link {
+  text-decoration: none;
+}
+.board-option-link > p:focus,
+.board-option-link > p:hover {
+  background-color: #f3f3f3;
+}
+
+.board-option-link > p {
+  background-color: white;
+  height: 48px;
+  margin: 0;
+  color: black;
+  text-align: center;
+  line-height: 48px;
+  color: #0057ff;
+  font-weight: 600;
+}

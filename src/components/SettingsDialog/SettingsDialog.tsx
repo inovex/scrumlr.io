@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect, VFC} from "react";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import {useAppSelector} from "store";
@@ -11,10 +11,18 @@ import classNames from "classnames";
 import Parse from "parse";
 import {Avatar} from "components/Avatar";
 
-export const SettingsDialog: React.VFC = () => {
+export const SettingsDialog: VFC = () => {
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const displayName = useAppSelector((state) => state.users.all.filter((user) => user.id === Parse.User.current()!.id)[0].displayName);
+
+  useEffect(() => {
+    // If the window is large enough the show the whole dialog, automatically select the
+    // first navigatin item to show
+    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 882) {
+      navigate("board");
+    }
+  }, []);
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
@@ -22,7 +30,10 @@ export const SettingsDialog: React.VFC = () => {
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
           <nav className="settings-dialog__navigation">
-            <Link to="" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings")})}>
+            <Link
+              to="board"
+              className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
+            >
               <p>Board Settings</p>
               <p>Name, Access Policy</p>
               <SettingsIcon className="navigation-item__icon" />

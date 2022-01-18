@@ -2,7 +2,6 @@
 
 .settings-dialog {
   position: fixed;
-  width: 862px;
   height: 616px;
   left: 50%;
   top: 50%;
@@ -28,8 +27,7 @@
 
 .settings-dialog__content {
   width: 544px;
-  height: 100%;
-  background: #f9fafb 0% 0% no-repeat padding-box;
+  background: #f9fafb;
   border-radius: 0px 8px 8px 0px;
 }
 
@@ -42,6 +40,7 @@
   text-decoration: none;
   color: black;
   position: relative;
+  outline: none;
 }
 .navigation__item > p {
   margin: 0;

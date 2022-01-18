@@ -37,7 +37,7 @@ const Router = () => (
         }
       >
         <Route path="settings" element={<SettingsDialog />}>
-          <Route path="" element={<div>Board Settings</div>} />
+          <Route path="board" element={<div>Board Settings</div>} />
           <Route path="participants" element={<div>Participants</div>} />
           <Route path="appearance" element={<div>Appearance</div>} />
           <Route path="share" element={<div>Share Session</div>} />
