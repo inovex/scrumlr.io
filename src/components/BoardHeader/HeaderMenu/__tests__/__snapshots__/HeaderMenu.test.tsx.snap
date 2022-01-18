@@ -114,11 +114,15 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
             </li>
             <li
               class="board-option"
+              data-testid="allSettings"
             >
               <a
+                class="board-option-link"
                 href="/settings"
               >
-                Show all Board Settings
+                <p>
+                  Show all board settings
+                </p>
               </a>
             </li>
           </ul>
@@ -179,11 +183,15 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
             </li>
             <li
               class="board-option"
+              data-testid="allSettings"
             >
               <a
+                class="board-option-link"
                 href="/settings"
               >
-                Show all Board Settings
+                <p>
+                  Show all board settings
+                </p>
               </a>
             </li>
           </ul>
