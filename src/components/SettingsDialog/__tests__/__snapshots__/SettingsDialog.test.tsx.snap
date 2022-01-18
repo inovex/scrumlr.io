@@ -88,7 +88,7 @@ exports[`SettingsDialog should render correctly 1`] = `
               >
                 <a
                   class="navigation__item accent-color__backlog-blue"
-                  href="/"
+                  href="/board"
                 >
                   <p>
                     Board Settings
