@@ -22,7 +22,7 @@ export const SettingsDialog: VFC = () => {
     if (window.location.pathname.endsWith("/settings") && window.innerWidth > 882) {
       navigate("board");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
