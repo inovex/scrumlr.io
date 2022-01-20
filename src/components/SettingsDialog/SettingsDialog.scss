@@ -96,3 +96,58 @@
   height: 32px;
   cursor: pointer;
 }
+
+.settings-dialog__header {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.settings-dialog__container {
+  margin: 0 92px;
+}
+
+.settings-dialog__header-text {
+  border-bottom: solid 3px var(--accent-color);
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+.settings-dialog__group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.settings-dialog__seperator {
+  margin: 0;
+  margin-left: 5%;
+  width: 90%;
+  border: 0;
+  border-top: 0.5px solid #eee;
+}
+
+[theme="dark"] {
+  .settings-dialog,
+  .settings-dialog__close-button {
+    background-color: $color-dark-one;
+    color: $color-white;
+  }
+
+  .settings-dialog__content {
+    background-color: $color-dark-two;
+  }
+
+  .navigation__item {
+    color: $color-white;
+  }
+
+  .settings-dialog__seperator {
+    border-top: 0.5px solid $color-dark-one;
+  }
+
+  .settings-dialog__group {
+    background-color: $color-dark-mode-note;
+  }
+}

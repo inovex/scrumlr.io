@@ -64,13 +64,16 @@
     "button": "Delete board"
   },
   "ExportBoardOption": {
+    "title": "Export board",
     "button": "Export board",
     "exportAsJson": "Export as json",
     "exportAsCSV": "Export as csv"
   },
   "ShareQrCodeOption": {
+    "title": "Share Session",
     "button": "Share board",
-    "copyInviteURL": "Copy Invite URL"
+    "copyInviteURL": "Copy Invite URL",
+    "inviteUrlCopied": "Invite URL Copied"
   },
   "ShowAuthorOption": {
     "show": "Show authors of card",
