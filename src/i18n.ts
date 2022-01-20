@@ -17,9 +17,6 @@ i18n
       caches: ["localStorage"],
     },
     fallbackLng: "en",
-    react: {
-      useSuspense: false,
-    },
   });
 
 export default i18n;
