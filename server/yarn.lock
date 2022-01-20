@@ -3492,10 +3492,10 @@ limiter@^1.1.5:
   resolved "https://registry.yarnpkg.com/limiter/-/limiter-1.1.5.tgz#8f92a25b3b16c6131293a0cc834b4a838a2aa7c2"
   integrity sha512-FWWMIEOxz3GwUI4Ts/IvgVy6LPvoMPgjMdQ185nN6psJyBJ4yOpzqm695/h5umdLJg2vW3GR5iG11MAkR2AzJA==
 
-lint-staged@^12.1.7:
-  version "12.1.7"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-12.1.7.tgz#fe9137992ac18a456422bb8484dd30be0140629f"
-  integrity sha512-bltv/ejiLWtowExpjU+s5z8j1Byjg9AlmaAjMmqNbIicY69u6sYIwXGg0dCn0TlkrrY2CphtHIXAkbZ+1VoWQQ==
+lint-staged@^12.2.1:
+  version "12.2.1"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-12.2.1.tgz#e37b5a81deaabf5823f43b3aa903a70c15c9d0b3"
+  integrity sha512-VCVcA9C2Vt5HHxSR4EZVZFJcQRJH984CGBeY+cJ/xed4mBd+JidbM/xbKcCq5ASaygAV0iITtdsCTnID7h/1OQ==
   dependencies:
     cli-truncate "^3.1.0"
     colorette "^2.0.16"
