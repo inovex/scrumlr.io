@@ -4,10 +4,10 @@ import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {User} from "parse";
 import {NoteDialog} from "components/NoteDialog";
-import {mocked} from "ts-jest/utils";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {render} from "testUtils";
+import {mocked} from "jest-mock";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
@@ -170,7 +170,8 @@ describe("<NoteDialog/>", () => {
       });
 
       test("click on NoteContent as author", async () => {
-        mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
+        mockedUser.become({id: "test-user-2"} as never);
+
         const {container} = render(createNoteDialog({authorId: "test-user-2"}), {container: global.document.querySelector("#portal")!});
         const noteContentText = container.querySelector(".note-dialog__note-content__text")!;
         fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
@@ -181,7 +182,7 @@ describe("<NoteDialog/>", () => {
       });
 
       test("click on NoteContent as moderator", async () => {
-        mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
+        mockedUser.become({id: "test-user-2"} as never);
         const {container} = render(createNoteDialog({currentUserIsModerator: true}), {container: global.document.querySelector("#portal")!});
         const noteContentText = container.querySelector(".note-dialog__note-content__text")!;
         fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
@@ -192,7 +193,7 @@ describe("<NoteDialog/>", () => {
       });
 
       test("click on NoteContent as other user", async () => {
-        mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
+        mockedUser.become({id: "test-user-2"} as never);
         const {container} = render(createNoteDialog(), {container: global.document.querySelector("#portal")!});
         const noteContentText = container.querySelector(".note-dialog__note-content__text")!;
         fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
@@ -215,7 +216,7 @@ describe("<NoteDialog/>", () => {
 
     describe("Moderation phase", () => {
       beforeEach(() => {
-        mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
+        mockedUser.become({id: "test-user-2"} as never);
       });
 
       test("three note-dialog__note present during moderation phase", () => {
@@ -246,7 +247,7 @@ describe("<NoteDialog/>", () => {
       });
 
       test("moderation: last note-dialog__options note is present", () => {
-        mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
+        mockedUser.become({id: "test-user-1"} as never);
         const {container} = render(createNoteDialog({activeModeration: {userId: "test-user-1", status: true}, authorId: "test-user-1", currentUserIsModerator: true}), {
           container: global.document.querySelector("#portal")!,
         });
