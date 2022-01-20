@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-  <g fill="none">
-    <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M20.6621349,11.453615 C19.8293388,11.1598308 18.9333346,11 18,11 C13.581722,11 10,14.581722 10,19 C10,23.418278 13.581722,27 18,27 C22.418278,27 26,23.418278 26,19 C26,16.8875412 25.1812293,14.9663165 23.8437244,13.5363626 L25.5606602,12"/>
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.6621349,11.453615 C19.8293388,11.1598308 18.9333346,11 18,11 C13.581722,11 10,14.581722 10,19 C10,23.418278 13.581722,27 18,27 C22.418278,27 26,23.418278 26,19 C26,16.8875412 25.1812293,14.9663165 23.8437244,13.5363626"/>
-    <path stroke="currentColor" stroke-linecap="square" stroke-width="1.5" d="M15.5,8.53881836 L15.5,8.5 C15.5,7.94771525 15.9477153,7.5 16.5,7.5 L19.5,7.5 C20.0522847,7.5 20.5,7.94771525 20.5,8.5 L20.5,8.58129883"/>
-    <line x1="18" x2="18" y1="19.5" y2="15.5" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" opacity=".7"/>
-  </g>
+<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="currentColor">
+<path d="m20.662 11.454c-0.8328-0.29378-1.7288-0.45362-2.6621-0.45362-4.4183 0-8 3.5817-8 8s3.5817 8 8 8 8-3.5817 8-8c0-2.1125-0.81877-4.0337-2.1563-5.4636l1.7169-1.5364" stroke-linejoin="round" stroke-width="2"/>
+<path d="m20.662 11.454c-0.8328-0.29378-1.7288-0.45362-2.6621-0.45362-4.4183 0-8 3.5817-8 8s3.5817 8 8 8 8-3.5817 8-8c0-2.1125-0.81877-4.0337-2.1563-5.4636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+<path d="m15.5 8.5388v-0.038818c0-0.55228 0.44772-1 1-1h3c0.55228 0 1 0.44772 1 1v0.081299" stroke-linecap="square" stroke-width="1.5"/>
+<line x1="18" x2="18" y1="19.5" y2="15.5" opacity=".7" stroke-linecap="round" stroke-width="1.5"/>
+</g>
 </svg>

@@ -42,8 +42,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
             type={visiblePassphrase ? "text" : "password"}
             rightAdornment={
               <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} onClick={togglePassphraseVisibility}>
-                {visiblePassphrase && <VisibleIcon />}
-                {!visiblePassphrase && <HiddenIcon />}
+                {visiblePassphrase ? <VisibleIcon /> : <HiddenIcon />}
               </TextInputAdornment>
             }
             value={passphrase}
