@@ -9,7 +9,7 @@ export type BoardOptionLinkProps = {
 };
 
 export const BoardOptionLink: VFC<BoardOptionLinkProps> = (props) => (
-    <Link to={props.to} className={classNames("board-option-link")}>
-      <p>{props.label}</p>
-    </Link>
-  );
+  <Link to={props.to} className={classNames("board-option-link")}>
+    <p className="board-option-link__label">{props.label}</p>
+  </Link>
+);
