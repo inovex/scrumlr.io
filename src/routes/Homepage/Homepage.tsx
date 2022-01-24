@@ -49,7 +49,7 @@ export const Homepage = withTranslation()(() => {
 
             {Parse.User.current() && (
               <li>
-                <Button variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon />} className="homepage__logout-button">
+                <Button variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout
                 </Button>
               </li>

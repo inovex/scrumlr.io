@@ -103,8 +103,8 @@
 
   .switch__icon {
     position: absolute;
-    top: calc(50% - 18px);
-    left: calc(50% - 18px);
+    top: 0;
+    left: 0;
     transform: rotate(0deg);
     transition: opacity 0.5s, visibility 0.5s, transform 1s;
   }
