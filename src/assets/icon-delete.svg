@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-  <g fill="none">
-    <rect width="24" height="24" />
-    <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" transform="translate(4 2.75)">
-      <path stroke-width="2" d="M0,3.25 L16,3.25 M4.92307692,2.4 L4.92307692,1.17 C4.92307692,0.523826843 5.46033522,0 6.12307692,0 L9.87692308,0 C10.5396648,0 11.0769231,0.523826843 11.0769231,1.17 L11.0769231,2.4" fill="none" />
-      <path stroke-width="2" d="M14.2050115,4.25 L13.3127038,16.9307692 C13.2963465,17.6533487 12.6308166,18.2356873 11.8050115,18.25 L3.98962689,18.25 C3.16382174,18.2356873 2.49829193,17.6533487 2.48193458,16.9307692 C2.241437,13.5130084 2.06106382,10.9496878 1.94081503,9.24080737 C1.92747562,9.05123829 1.85223673,7.98200286 1.80000019,7.23965857" transform="matrix(-1 0 0 1 16.005 0)" fill="none" />
-      <g stroke-width="1.5" opacity=".5" transform="translate(5 7.75)">
-        <line x1="1" x2="1" y2="6" />
-        <line x1="5" x2="5" y2="6" />
-      </g>
-    </g>
-  </g>
+<svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<g fill="none">
+<rect width="24" height="24"/>
+<g transform="translate(4 2.75)" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+<path d="m0 3.25h16m-11.077-0.85v-1.23c0-0.64617 0.53726-1.17 1.2-1.17h3.7538c0.66274 0 1.2 0.52383 1.2 1.17v1.23" fill="none" stroke-width="2"/>
+<path transform="matrix(-1 0 0 1 16.005 0)" d="m14.205 4.25-0.89231 12.681c-0.016357 0.72258-0.68189 1.3049-1.5077 1.3192h-7.8154c-0.82581-0.014313-1.4913-0.59665-1.5077-1.3192-0.2405-3.4178-0.42087-5.9811-0.54112-7.69-0.013339-0.18957-0.088578-1.2588-0.14081-2.0011" fill="none" stroke-width="2"/>
+<g transform="translate(5 7.75)" opacity=".5" stroke-width="1.5">
+<line x1="1" x2="1" y2="6"/>
+<line x1="5" x2="5" y2="6"/>
+</g>
+</g>
+</g>
 </svg>
