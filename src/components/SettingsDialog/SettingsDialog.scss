@@ -2,47 +2,72 @@
 
 .settings-dialog {
   position: fixed;
-  height: 616px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 8px;
-  box-shadow: 0 16px 32px #0057ff29;
-  background: #ffffff;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
 }
-.content__back-link {
-  visibility: hidden;
-}
-
-@media screen and (max-width: 920px) {
-  .content__back-link {
-    visibility: visible;
-  }
-  .settings-dialog__content {
-    display: none;
-  }
-
-  .settings-dialog--selected {
-    .settings-dialog__scrumlr-logo {
-      display: none;
-    }
-    .settings-dialog__navigation {
-      display: none;
-    }
-    .settings-dialog__content {
-      border-radius: 8px;
-      display: block;
-      width: 318px;
-    }
-  }
-}
-
-@media screen and (max-width: 450px) {
+@media screen and (min-width: 450px) {
   .settings-dialog {
-    height: 100%;
-    width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 616px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: 0 16px 32px #0057ff29;
+  }
+}
+
+.settings-dialog__content {
+  display: none;
+  background: #f9fafb;
+  width: 100%;
+}
+[theme="dark"] .settings-dialog__content {
+  background: #272f41;
+}
+.settings-dialog--selected .settings-dialog__content {
+  display: block;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__content {
+    border-radius: 8px;
+    width: 318px;
+  }
+}
+@media screen and (min-width: 920px) {
+  .settings-dialog__content {
+    display: block;
+    width: 544px;
+    border-radius: 0px 8px 8px 0px;
+  }
+}
+
+.settings-dialog__sidebar {
+  width: 100%;
+  background: #fff;
+}
+[theme="dark"] .settings-dialog__sidebar {
+  background: #242c3d;
+}
+.settings-dialog--selected .settings-dialog__sidebar {
+  display: none;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__sidebar {
+    width: 318px;
+    border-radius: 8px;
+  }
+}
+@media screen and (min-width: 920px) {
+  .settings-dialog--selected .settings-dialog__sidebar {
+    display: block;
+  }
+  .settings-dialog__sidebar {
+    border-radius: 8px 0 0 8px;
   }
 }
 
@@ -50,18 +75,54 @@
   height: 40px;
   margin: 40px;
 }
+[theme="light"] .settings-dialog__scrumlr-logo--dark {
+  display: none;
+}
+[theme="dark"] .settings-dialog__scrumlr-logo--light {
+  display: none;
+}
 
 .settings-dialog__navigation {
-  width: 318px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.settings-dialog__content {
-  width: 544px;
-  background: #f9fafb;
-  border-radius: 0px 8px 8px 0px;
+.settings-dialog__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #0057ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__close-button {
+    top: -22px;
+    right: -22px;
+    background: #fff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 16px 32px #0057ff3d;
+  }
+}
+
+.close-button__icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.settings-dialog__back-link {
+  display: none;
+}
+
+@media screen and (max-width: 920px) {
+  .settings-dialog__back-link {
+    display: inline;
+  }
 }
 
 .navigation__item {
@@ -74,6 +135,9 @@
   color: black;
   position: relative;
   outline: none;
+}
+[theme="dark"] .navigation__item {
+  color: white;
 }
 .navigation__item > p {
   margin: 0;
@@ -108,24 +172,4 @@
   border-radius: 20px;
   background: var(--accent-color);
   color: white;
-}
-
-.settings-dialog__close-button {
-  position: absolute;
-  top: -22px;
-  right: -22px;
-  width: 44px;
-  height: 44px;
-  background: #fff 0% 0% no-repeat padding-box;
-  border-radius: 22px;
-  box-shadow: 0px 16px 32px #0057ff3d;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.close-button__icon {
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
 }

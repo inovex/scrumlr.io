@@ -1,20 +1,24 @@
 import {useEffect, VFC} from "react";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
-import {useAppSelector} from "store";
-import "./SettingsDialog.scss";
-import {Portal} from "components/Portal";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
-import {ScrumlrLogo} from "components/ScrumlrLogo";
 import classNames from "classnames";
 import Parse from "parse";
+
 import {Avatar} from "components/Avatar";
+import {Portal} from "components/Portal";
+
+import {useAppSelector} from "store";
+
+import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
+import {ReactComponent as ScrumlrLogoDark} from "assets/scrumlr-logo-dark.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
+
+import "./SettingsDialog.scss";
 
 export const SettingsDialog: VFC = () => {
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  const displayName = useAppSelector((state) => state.users.all.filter((user) => user.id === Parse.User.current()!.id)[0].displayName);
 
   useEffect(() => {
     // If the window is large enough the show the whole dialog, automatically select the
@@ -28,7 +32,8 @@ export const SettingsDialog: VFC = () => {
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
       <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
-          <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
+          <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
+          <ScrumlrLogoDark className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
           <nav className="settings-dialog__navigation">
             <Link
               to="board"
@@ -73,14 +78,14 @@ export const SettingsDialog: VFC = () => {
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             <Link to="profile" className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}>
-              <p>{displayName}</p>
+              <p>{Parse.User.current()!.get("displayName")}</p>
               <p>Edit Profile</p>
               <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
             </Link>
           </nav>
         </div>
         <article className="settings-dialog__content">
-          <Link to="" className="content__back-link">
+          <Link to="" className="settings-dialog__back-link">
             Go back
           </Link>
           <Outlet />
