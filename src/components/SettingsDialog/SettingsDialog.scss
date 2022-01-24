@@ -23,11 +23,12 @@
 
 .settings-dialog__content {
   display: none;
-  background: #f9fafb;
+  background: $color-white-one;
   width: 100%;
+  padding-top: 50px;
 }
 [theme="dark"] .settings-dialog__content {
-  background: #272f41;
+  background: $color-dark-one;
 }
 .settings-dialog--selected .settings-dialog__content {
   display: block;
@@ -43,15 +44,16 @@
     display: block;
     width: 544px;
     border-radius: 0px 8px 8px 0px;
+    padding-top: 0;
   }
 }
 
 .settings-dialog__sidebar {
   width: 100%;
-  background: #fff;
+  background: $color-white;
 }
 [theme="dark"] .settings-dialog__sidebar {
-  background: #242c3d;
+  background: $color-dark-mode;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -92,7 +94,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  color: #0057ff;
+  color: $color-backlog-blue;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,11 +106,15 @@
   .settings-dialog__close-button {
     top: -22px;
     right: -22px;
-    background: #fff 0% 0% no-repeat padding-box;
+    background-color: $color-white;
     box-shadow: 0px 16px 32px #0057ff3d;
   }
+  [theme="dark"] .settings-dialog__close-button {
+    color: $color-planning-pink;
+    background-color: $color-dark-one;
+    box-shadow: none;
+  }
 }
-
 .close-button__icon {
   width: 32px;
   height: 32px;
@@ -118,10 +124,24 @@
 .settings-dialog__back-link {
   display: none;
 }
-
 @media screen and (max-width: 920px) {
   .settings-dialog__back-link {
     display: inline;
+  }
+  .settings-dialog__back-link > svg {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    color: $color-backlog-blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 22px;
+  }
+  [theme="dark"] .settings-dialog__back-link > svg {
+    color: $color-planning-pink;
   }
 }
 
@@ -132,12 +152,12 @@
   border-radius: 28px;
   text-align: center;
   text-decoration: none;
-  color: black;
+  color: $color-black;
   position: relative;
   outline: none;
 }
 [theme="dark"] .navigation__item {
-  color: white;
+  color: $color-white;
 }
 .navigation__item > p {
   margin: 0;
@@ -152,7 +172,7 @@
 .navigation__item > p:nth-child(2) {
   font-size: 12px;
   top: 30px;
-  opacity: 50%;
+  opacity: 65%;
 }
 .navigation__item:hover {
   background: rgba(var(--accent-color-rgb), 0.8);
@@ -161,7 +181,7 @@
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
-  color: white;
+  color: $color-white;
 }
 .navigation-item__icon {
   position: absolute;

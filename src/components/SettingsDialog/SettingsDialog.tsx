@@ -12,6 +12,7 @@ import {useAppSelector} from "store";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import {ReactComponent as ScrumlrLogoDark} from "assets/scrumlr-logo-dark.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {ReactComponent as PreviousArrow} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 
 import "./SettingsDialog.scss";
@@ -86,7 +87,7 @@ export const SettingsDialog: VFC = () => {
         </div>
         <article className="settings-dialog__content">
           <Link to="" className="settings-dialog__back-link">
-            Go back
+            <PreviousArrow />
           </Link>
           <Outlet />
         </article>
