@@ -12,6 +12,39 @@
   display: flex;
   flex-direction: row;
 }
+.content__back-link {
+  visibility: hidden;
+}
+
+@media screen and (max-width: 920px) {
+  .content__back-link {
+    visibility: visible;
+  }
+  .settings-dialog__content {
+    display: none;
+  }
+
+  .settings-dialog--selected {
+    .settings-dialog__scrumlr-logo {
+      display: none;
+    }
+    .settings-dialog__navigation {
+      display: none;
+    }
+    .settings-dialog__content {
+      border-radius: 8px;
+      display: block;
+      width: 318px;
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .settings-dialog {
+    height: 100%;
+    width: 100%;
+  }
+}
 
 .settings-dialog__scrumlr-logo {
   height: 40px;

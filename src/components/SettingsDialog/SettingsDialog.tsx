@@ -19,14 +19,14 @@ export const SettingsDialog: VFC = () => {
   useEffect(() => {
     // If the window is large enough the show the whole dialog, automatically select the
     // first navigatin item to show
-    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 882) {
+    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
       navigate("board");
     }
   }, [navigate]);
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
-      <aside className="settings-dialog">
+      <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
           <nav className="settings-dialog__navigation">
@@ -80,6 +80,9 @@ export const SettingsDialog: VFC = () => {
           </nav>
         </div>
         <article className="settings-dialog__content">
+          <Link to="" className="content__back-link">
+            Go back
+          </Link>
           <Outlet />
         </article>
         <Link to={`/board/${boardId}`} className="settings-dialog__close-button">
