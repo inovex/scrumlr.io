@@ -120,7 +120,9 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                 class="board-option-link"
                 href="/settings"
               >
-                <p>
+                <p
+                  class="board-option-link__label"
+                >
                   Show all board settings
                 </p>
               </a>
@@ -189,7 +191,9 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                 class="board-option-link"
                 href="/settings"
               >
-                <p>
+                <p
+                  class="board-option-link__label"
+                >
                   Show all board settings
                 </p>
               </a>
