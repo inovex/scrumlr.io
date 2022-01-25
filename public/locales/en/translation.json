@@ -46,7 +46,8 @@
     "togglePassphraseVisibility": "Toggle passphrase visibility"
   },
   "BoardHeader": {
-    "showParticipants": "Show participants"
+    "showParticipants": "Show participants",
+    "showAllBoardSettings": "Show all board settings"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",
@@ -203,5 +204,20 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Settings",
+    "BoardSettingsDescription": "Name, Access Policy",
+    "Participants": "Participants",
+    "ParticipantsDescription": "User List, User Role",
+    "Appearance": "Appearance",
+    "AppearanceDescription": "Notifications, Language, UI",
+    "ShareSession": "Share Session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Export Board",
+    "ExportBoardDescription": "Share the board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "We love to hear from you",
+    "ProfileDescription": "Edit profile"
   }
 }

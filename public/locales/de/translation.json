@@ -46,7 +46,8 @@
     "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
-    "showParticipants": "Zeige Teilnehmer"
+    "showParticipants": "Zeige Teilnehmer",
+    "showAllBoardSettings": "Zeige alle Einstellungen"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
@@ -203,5 +204,20 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Einstellungen",
+    "BoardSettingsDescription": "Name, Zugriffseinstellungen",
+    "Participants": "Teilnehmer",
+    "ParticipantsDescription": "Teilnehmerliste, Moderation",
+    "Appearance": "Darstellung",
+    "AppearanceDescription": "Mitteilungen, Sprache, UI",
+    "ShareSession": "Teile die Session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Export",
+    "ExportBoardDescription": "Exportiere das Board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "Wir würden gerne von dir hören",
+    "ProfileDescription": "Profil bearbeiten"
   }
 }

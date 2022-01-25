@@ -1,18 +1,36 @@
+@import "constants/style";
+$header-menu-hover-color--light: #f3f3f3;
+$header-menu__item-height: 48px;
+
 .board-option-link {
+  display: block;
+  width: 100%;
+  background: $color-white;
   text-decoration: none;
+  height: $header-menu__item-height;
 }
-.board-option-link > p:focus,
-.board-option-link > p:hover {
-  background-color: #f3f3f3;
+.board-option-link:focus,
+.board-option-link:hover {
+  background-color: $header-menu-hover-color--light;
+}
+[theme="dark"] {
+  .board-option-link {
+    background-color: $color-dark-mode-note;
+  }
+
+  .board-option-link:focus,
+  .board-option-link:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
 }
 
-.board-option-link > p {
-  background-color: white;
-  height: 48px;
+.board-option-link__label {
   margin: 0;
-  color: black;
   text-align: center;
-  line-height: 48px;
-  color: #0057ff;
+  line-height: $header-menu__item-height;
+  color: $color-backlog-blue;
   font-weight: 600;
+}
+[theme="dark"] .board-option-link__label {
+  color: $color-planning-pink;
 }

@@ -7,7 +7,7 @@ import {SettingsDialog} from "..";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
-mockedUser.current = jest.fn(() => ({id: "test-id"} as never));
+mockedUser.current = jest.fn(() => ({id: "test-id"}));
 
 const initialState = {
   board: {
@@ -16,12 +16,7 @@ const initialState = {
     },
   },
   users: {
-    all: [
-      {
-        id: "test-id",
-        displayName: "Max Mustermann",
-      },
-    ],
+    all: [{id: "test-id", displayName: "John Doe"}],
   },
 };
 
