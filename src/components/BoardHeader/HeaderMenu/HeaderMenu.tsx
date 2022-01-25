@@ -51,7 +51,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowHiddenColumnsOption />
           </>
         )}
-        <BoardOption.ShowAllBoardSettings />
+        <BoardOption.ShowAllBoardSettings onClose={props.onClose} />
       </ul>
     </Portal>
   );

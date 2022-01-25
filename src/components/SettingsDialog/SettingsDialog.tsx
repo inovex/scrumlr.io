@@ -21,6 +21,12 @@ import "./SettingsDialog.scss";
 export const SettingsDialog: VFC = () => {
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
+  const displayName = useAppSelector((applicationState) => {
+    if (applicationState.users.all.length !== 0) {
+      return applicationState.users.all.filter((user) => user.id === Parse.User.current()!.id)[0].displayName;
+    }
+    return undefined;
+  });
 
   useEffect(() => {
     // If the window is large enough the show the whole dialog, automatically select the
@@ -79,11 +85,16 @@ export const SettingsDialog: VFC = () => {
               <p>We love to hear from you</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
-            <Link to="profile" className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}>
-              <p>{Parse.User.current()!.get("displayName")}</p>
-              <p>Edit Profile</p>
-              <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
-            </Link>
+            {displayName && (
+              <Link
+                to="profile"
+                className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
+              >
+                <p>{displayName}</p>
+                <p>Edit Profile</p>
+                <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
+              </Link>
+            )}
           </nav>
         </div>
         <article className="settings-dialog__content">
