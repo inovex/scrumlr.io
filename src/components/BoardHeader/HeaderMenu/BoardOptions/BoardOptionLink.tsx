@@ -6,6 +6,7 @@ import "./BoardOptionLink.scss";
 export type BoardOptionLinkProps = {
   to: string;
   label: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: (...args: any) => any;
 };
 
