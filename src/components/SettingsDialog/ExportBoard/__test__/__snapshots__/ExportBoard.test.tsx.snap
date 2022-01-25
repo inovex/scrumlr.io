@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Export Boad Tests render ExportBoard correctly 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="settings-dialog__container"
+        data-testid="export"
+      >
+        <div
+          class="settings-dialog__header"
+        >
+          <h2
+            class="settings-dialog__header-text accent-color__backlog-blue"
+          >
+             
+            ExportBoardOption.title
+          </h2>
+        </div>
+        <div
+          class="settings-dialog__group accent-color__backlog-blue"
+        >
+          <button
+            class="settings-option-button"
+            data-testid="export-json"
+          >
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-export-json.svg
+            </svg>
+            <span
+              class="settings-option-button__label"
+            >
+              ExportBoardOption.exportAsJson
+            </span>
+          </button>
+          <hr
+            class="settings-dialog__seperator"
+          />
+          <button
+            class="settings-option-button"
+            data-testid="export-csv"
+          >
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-export-csv.svg
+            </svg>
+            <span
+              class="settings-option-button__label"
+            >
+              ExportBoardOption.exportAsCSV
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="settings-dialog__container"
+      data-testid="export"
+    >
+      <div
+        class="settings-dialog__header"
+      >
+        <h2
+          class="settings-dialog__header-text accent-color__backlog-blue"
+        >
+           
+          ExportBoardOption.title
+        </h2>
+      </div>
+      <div
+        class="settings-dialog__group accent-color__backlog-blue"
+      >
+        <button
+          class="settings-option-button"
+          data-testid="export-json"
+        >
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-export-json.svg
+          </svg>
+          <span
+            class="settings-option-button__label"
+          >
+            ExportBoardOption.exportAsJson
+          </span>
+        </button>
+        <hr
+          class="settings-dialog__seperator"
+        />
+        <button
+          class="settings-option-button"
+          data-testid="export-csv"
+        >
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-export-csv.svg
+          </svg>
+          <span
+            class="settings-option-button__label"
+          >
+            ExportBoardOption.exportAsCSV
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

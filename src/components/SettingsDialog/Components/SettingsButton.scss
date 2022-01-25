@@ -1,0 +1,78 @@
+@import "constants/style";
+
+$header-menu__item-border-width: 1px;
+$header-menu-hover-color--light: #f3f3f3;
+$header-menu-button-height: 24px;
+$header-menu-icon-width: 79px;
+$header-menu-icon-height: 24px;
+$settings__item-height: 48px;
+$header-menu-border-bottom-color: #efefef;
+
+.settings-option-button {
+  display: flex;
+  align-items: center;
+
+  background-color: $color-white;
+  border-radius: 8px;
+  border: none;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-option-button:focus,
+.settings-option-button:hover {
+  background-color: rgba(var(--accent-color-rgb), 0.1);
+}
+
+.settings-option-button__label {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: $color-black;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 16px;
+}
+
+.settings-option-button__icon {
+  width: $header-menu-icon-width;
+  height: $header-menu-icon-height;
+  color: var(--accent-color);
+  vertical-align: middle;
+  border-bottom: none !important;
+}
+
+.settings-option-button:focus,
+.settings-option-button--expandable:focus,
+.settings-option-button--expandable:hover {
+  background-color: var(--accent-color);
+}
+
+[theme="dark"] {
+  .settings-option-button {
+    background-color: $color-dark-mode-note;
+  }
+
+  .settings-option-button:focus,
+  .settings-option-button:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
+
+  .settings-option-button__label {
+    color: $color-white;
+  }
+
+  .settings-option-button--expandable {
+    background-color: $color-dark-mode-note;
+  }
+
+  .settings-option-button:focus,
+  .settings-option-button--expandable:focus,
+  .settings-option-button--expandable:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
+}

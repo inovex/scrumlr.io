@@ -65,13 +65,16 @@
     "button": "Sitzung löschen"
   },
   "ExportBoardOption": {
+    "title": "Sitzung exportieren",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren"
   },
   "ShareQrCodeOption": {
+    "title": "Sitzung teilen",
     "button": "Sitzung teilen",
-    "copyInviteURL": "URL kopieren"
+    "copyInviteURL": "URL kopieren",
+    "inviteUrlCopied": "URL wurde kopiert"
   },
   "ShowAuthorOption": {
     "show": "Zeige Ersteller der Kärtchen",
