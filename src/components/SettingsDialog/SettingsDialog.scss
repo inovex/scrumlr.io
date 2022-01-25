@@ -19,6 +19,9 @@
     border-radius: 8px;
     box-shadow: 0 16px 32px #0057ff29;
   }
+  [theme="dark"] .settings-dialog {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
 }
 
 .settings-dialog__content {
@@ -104,7 +107,6 @@
 }
 [theme="dark"] .settings-dialog__close-button {
   color: $color-planning-pink;
-  background-color: $color-dark-one;
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__close-button {
@@ -114,7 +116,8 @@
     box-shadow: 0px 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
-    box-shadow: none;
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+    background: $color-dark-mode;
   }
 }
 .close-button__icon {
