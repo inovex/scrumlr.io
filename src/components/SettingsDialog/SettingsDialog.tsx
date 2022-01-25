@@ -3,6 +3,7 @@ import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
 import Parse from "parse";
+import {useTranslation} from "react-i18next";
 
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
@@ -19,6 +20,7 @@ import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import "./SettingsDialog.scss";
 
 export const SettingsDialog: VFC = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const displayName = useAppSelector((applicationState) => {
@@ -47,42 +49,42 @@ export const SettingsDialog: VFC = () => {
               to="board"
               className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
             >
-              <p>Board Settings</p>
-              <p>Name, Access Policy</p>
+              <p>{t("SettingsDialog.BoardSettings")}</p>
+              <p>{t("SettingsDialog.BoardSettingsDescription")}</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             <Link
               to="participants"
               className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/settings/participants")})}
             >
-              <p>Participants</p>
-              <p>User List, User Rrole</p>
+              <p>{t("SettingsDialog.Participants")}</p>
+              <p>{t("SettingsDialog.ParticipantsDescription")}</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             <Link
               to="appearance"
               className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
             >
-              <p>Appearance</p>
-              <p>Notifications, Language, UI</p>
+              <p>{t("SettingsDialog.Appearance")}</p>
+              <p>{t("SettingsDialog.AppearanceDescription")}</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             <Link to="share" className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}>
-              <p>Share Session</p>
-              <p>QR Code, URL</p>
+              <p>{t("SettingsDialog.ShareSession")}</p>
+              <p>{t("SettingsDialog.ShareSessionDescription")}</p>
               <ShareIcon className="navigation-item__icon" />
             </Link>
             <Link to="export" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}>
-              <p>Export Board</p>
-              <p>Share the board</p>
+              <p>{t("SettingsDialog.ExportBoard")}</p>
+              <p>{t("SettingsDialog.ExportBoardDescription")}</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             <Link
               to="feedback"
               className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
             >
-              <p>Feedback</p>
-              <p>We love to hear from you</p>
+              <p>{t("SettingsDialog.Feedback")}</p>
+              <p>{t("SettingsDialog.FeedbackDescription")}</p>
               <SettingsIcon className="navigation-item__icon" />
             </Link>
             {displayName && (
@@ -91,7 +93,7 @@ export const SettingsDialog: VFC = () => {
                 className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
               >
                 <p>{displayName}</p>
-                <p>Edit Profile</p>
+                <p>{t("SettingsDialog.ProfileDescription")}</p>
                 <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
               </Link>
             )}

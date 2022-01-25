@@ -71,7 +71,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     Participants
                   </p>
                   <p>
-                    User List, User Rrole
+                    User List, User Role
                   </p>
                   <svg
                     class="navigation-item__icon"
@@ -151,7 +151,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     John Doe
                   </p>
                   <p>
-                    Edit Profile
+                    Edit profile
                   </p>
                   <svg
                     class="avatar navigation-item__icon accent-color__planning-pink"

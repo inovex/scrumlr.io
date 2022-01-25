@@ -200,5 +200,20 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Einstellungen",
+    "BoardSettingsDescription": "Name, Zugriffseinstellungen",
+    "Participants": "Teilnehmer",
+    "ParticipantsDescription": "Teilnehmerliste, Moderation",
+    "Appearance": "Darstellung",
+    "AppearanceDescription": "Mitteilungen, Sprache, UI",
+    "ShareSession": "Teile die Session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Export",
+    "ExportBoardDescription": "Exportiere das Board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "Wir würden gerne von dir hören",
+    "ProfileDescription": "Profil bearbeiten"
   }
 }
