@@ -46,7 +46,8 @@
     "togglePassphraseVisibility": "Toggle passphrase visibility"
   },
   "BoardHeader": {
-    "showParticipants": "Show participants"
+    "showParticipants": "Show participants",
+    "showAllBoardSettings": "Show all board settings"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",

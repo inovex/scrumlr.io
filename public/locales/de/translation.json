@@ -46,7 +46,8 @@
     "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
-    "showParticipants": "Zeige Teilnehmer"
+    "showParticipants": "Zeige Teilnehmer",
+    "showAllBoardSettings": "Zeige alle Einstellungen"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
