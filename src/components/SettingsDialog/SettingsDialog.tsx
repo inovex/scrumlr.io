@@ -16,6 +16,10 @@ import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as PreviousArrow} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {ReactComponent as ParticipantsIcon} from "assets/icon-participants.svg";
+import {ReactComponent as AppearanceIcon} from "assets/icon-appearance.svg";
+import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
+import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 
 import "./SettingsDialog.scss";
 
@@ -59,7 +63,7 @@ export const SettingsDialog: VFC = () => {
             >
               <p>{t("SettingsDialog.Participants")}</p>
               <p>{t("SettingsDialog.ParticipantsDescription")}</p>
-              <SettingsIcon className="navigation-item__icon" />
+              <ParticipantsIcon className="navigation-item__icon" />
             </Link>
             <Link
               to="appearance"
@@ -67,7 +71,7 @@ export const SettingsDialog: VFC = () => {
             >
               <p>{t("SettingsDialog.Appearance")}</p>
               <p>{t("SettingsDialog.AppearanceDescription")}</p>
-              <SettingsIcon className="navigation-item__icon" />
+              <AppearanceIcon className="navigation-item__icon" />
             </Link>
             <Link to="share" className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}>
               <p>{t("SettingsDialog.ShareSession")}</p>
@@ -77,7 +81,7 @@ export const SettingsDialog: VFC = () => {
             <Link to="export" className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}>
               <p>{t("SettingsDialog.ExportBoard")}</p>
               <p>{t("SettingsDialog.ExportBoardDescription")}</p>
-              <SettingsIcon className="navigation-item__icon" />
+              <ExportIcon className="navigation-item__icon" />
             </Link>
             <Link
               to="feedback"
@@ -85,7 +89,7 @@ export const SettingsDialog: VFC = () => {
             >
               <p>{t("SettingsDialog.Feedback")}</p>
               <p>{t("SettingsDialog.FeedbackDescription")}</p>
-              <SettingsIcon className="navigation-item__icon" />
+              <FeedbackIcon className="navigation-item__icon" />
             </Link>
             {displayName && (
               <Link

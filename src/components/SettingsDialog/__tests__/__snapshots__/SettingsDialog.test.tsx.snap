@@ -76,7 +76,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   <svg
                     class="navigation-item__icon"
                   >
-                    icon-settings.svg
+                    icon-participants.svg
                   </svg>
                 </a>
                 <a
@@ -92,7 +92,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   <svg
                     class="navigation-item__icon"
                   >
-                    icon-settings.svg
+                    icon-appearance.svg
                   </svg>
                 </a>
                 <a
@@ -124,7 +124,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   <svg
                     class="navigation-item__icon"
                   >
-                    icon-settings.svg
+                    icon-export.svg
                   </svg>
                 </a>
                 <a
@@ -140,7 +140,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   <svg
                     class="navigation-item__icon"
                   >
-                    icon-settings.svg
+                    icon-feedback.svg
                   </svg>
                 </a>
                 <a
