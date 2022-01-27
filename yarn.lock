@@ -6293,10 +6293,10 @@ i18next-http-backend@^1.3.2:
   dependencies:
     cross-fetch "3.1.5"
 
-i18next@^21.0.1, i18next@^21.6.9:
-  version "21.6.9"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.6.9.tgz#854bbcf8a3f47e4af9a5a92e0df6a546f4370841"
-  integrity sha512-oS82WMEwBFLGzq18RGwm7XRkRUMngXr92LqOjC1Z1txfueotPBPcN2bU2GWC3010fgjdhsQMFqrEqEf8a+R/oQ==
+i18next@^21.0.1, i18next@^21.6.10:
+  version "21.6.10"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.6.10.tgz#aa503831d42213ae2f05eaede29ca07c2d6fbb6f"
+  integrity sha512-Xw+tEGQ61BF6SXtBlFffhM/YhJKHZf2cyDrcNK/l2dE6yVbkPkSasC3VhkAsHXX30vUJ0yG04WIUtf7UvwjOxg==
   dependencies:
     "@babel/runtime" "^7.12.0"
 
@@ -7633,10 +7633,10 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@^12.3.1:
-  version "12.3.1"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-12.3.1.tgz#d475b0c0d0a12d91dde58a429ac6268dea485f06"
-  integrity sha512-Ocht/eT+4/siWOZDJpNUKcKX2UeWW/pDbohJ4gRsrafAjBi79JK8kiNVk2ciIVNKdw0Q4ABptl2nr6uQAlRImw==
+lint-staged@^12.3.2:
+  version "12.3.2"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-12.3.2.tgz#c87fe59dca475b7d1cb56863c5faa03c145e1446"
+  integrity sha512-gtw4Cbj01SuVSfAOXC6ivd/7VKHTj51yj5xV8TgktFmYNMsZzXuSd5/brqJEA93v63wL7R6iDlunMANOechC0A==
   dependencies:
     cli-truncate "^3.1.0"
     colorette "^2.0.16"
@@ -7884,10 +7884,10 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-marked@4.0.10:
-  version "4.0.10"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.10.tgz#423e295385cc0c3a70fa495e0df68b007b879423"
-  integrity sha512-+QvuFj0nGgO970fySghXGmuw+Fd0gD2x3+MqCWLIPf5oxdv1Ka6b2q+z9RP01P/IaKPMEramy+7cNy/Lw8c3hw==
+marked@4.0.12:
+  version "4.0.12"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.12.tgz#2262a4e6fd1afd2f13557726238b69a48b982f7d"
+  integrity sha512-hgibXWrEDNBWgGiK18j/4lkS6ihTe9sxtV4Q1OQppb/0zzyPSzoFANBa5MfsG/zgsWklmNnhm0XACZOH/0HBiQ==
 
 md5.js@^1.3.4:
   version "1.3.5"
