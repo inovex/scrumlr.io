@@ -46,7 +46,8 @@
     "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
-    "showParticipants": "Zeige Teilnehmer"
+    "showParticipants": "Zeige Teilnehmer",
+    "showAllBoardSettings": "Zeige alle Einstellungen"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
@@ -64,13 +65,16 @@
     "button": "Sitzung löschen"
   },
   "ExportBoardOption": {
+    "title": "Sitzung exportieren",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren"
   },
   "ShareQrCodeOption": {
+    "title": "Sitzung teilen",
     "button": "Sitzung teilen",
-    "copyInviteURL": "URL kopieren"
+    "copyInviteURL": "URL kopieren",
+    "inviteUrlCopied": "URL wurde kopiert"
   },
   "ShowAuthorOption": {
     "show": "Zeige Ersteller der Kärtchen",
@@ -200,5 +204,20 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Einstellungen",
+    "BoardSettingsDescription": "Name, Zugriffseinstellungen",
+    "Participants": "Teilnehmer",
+    "ParticipantsDescription": "Teilnehmerliste, Moderation",
+    "Appearance": "Darstellung",
+    "AppearanceDescription": "Mitteilungen, Sprache, UI",
+    "ShareSession": "Sitzung teilen",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Sitzung exportieren",
+    "ExportBoardDescription": "Exportiere das Board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "Wir würden gerne von dir hören",
+    "ProfileDescription": "Profil bearbeiten"
   }
 }

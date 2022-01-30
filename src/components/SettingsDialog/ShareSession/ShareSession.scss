@@ -1,0 +1,47 @@
+@import "constants/style";
+
+$header-menu__item-border-width: 1px;
+$header-menu-border-bottom-color: #efefef;
+$header-menu-button-height: 40px;
+
+.share-qr-code-option__qrcode {
+  top: 13px;
+  left: 13px;
+  margin-top: 24px;
+  background-color: $color-white;
+}
+
+.share-session__background {
+  height: 260px;
+  width: 260px;
+}
+
+.share-qr-code-option__copy-to-clipboard {
+  height: $header-menu-button-height;
+  margin-top: 48px;
+  width: 260px;
+  border: none;
+  border-radius: 32px;
+  background-color: var(--accent-color);
+  color: $color-white;
+  font-weight: bold;
+  cursor: pointer;
+
+  &.--copied {
+    background-color: transparent;
+    border: solid 2px var(--accent-color);
+    color: var(--accent-color);
+    cursor: default;
+  }
+}
+
+.share-qr-code-option__copy-to-clipboard:active {
+  scale: 0.95;
+}
+
+.share-session__container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 8px;
+}

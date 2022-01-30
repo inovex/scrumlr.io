@@ -5,6 +5,9 @@ import {BoardGuard} from "routes/Board";
 import {RequireAuthentication} from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
+import {SettingsDialog} from "components/SettingsDialog";
+import {ExportBoard} from "components/SettingsDialog/ExportBoard";
+import {ShareSession} from "components/SettingsDialog/ShareSession";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import ScrollToTop from "./ScrollToTop";
@@ -34,7 +37,17 @@ const Router = () => (
             <BoardGuard />
           </RequireAuthentication>
         }
-      />
+      >
+        <Route path="settings" element={<SettingsDialog />}>
+          <Route path="board" element={<div>Board Settings</div>} />
+          <Route path="participants" element={<div>Participants</div>} />
+          <Route path="appearance" element={<div>Appearance</div>} />
+          <Route path="share" element={<ShareSession />} />
+          <Route path="export" element={<ExportBoard />} />
+          <Route path="feedback" element={<div>Feedback</div>} />
+          <Route path="profile" element={<div>Change your Profile</div>} />
+        </Route>
+      </Route>
     </Routes>
   </BrowserRouter>
 );
