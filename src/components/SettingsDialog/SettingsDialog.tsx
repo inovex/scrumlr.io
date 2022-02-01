@@ -11,7 +11,7 @@ import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
-import {ReactComponent as ScrumlrLogoDark} from "assets/scrumlr-logo-dark.svg";
+import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as PreviousArrow} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
@@ -47,7 +47,7 @@ export const SettingsDialog: VFC = () => {
       <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
-          <ScrumlrLogoDark className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
+          <img src={ScrumlrLogoDark} className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
           <nav className="settings-dialog__navigation">
             <Link
               to="board"
