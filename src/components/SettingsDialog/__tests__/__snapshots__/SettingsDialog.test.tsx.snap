@@ -39,11 +39,10 @@ exports[`SettingsDialog should render correctly 1`] = `
               >
                 scrumlr-logo-light.svg
               </svg>
-              <svg
+              <img
                 class="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark"
-              >
-                scrumlr-logo-dark.svg
-              </svg>
+                src="scrumlr-logo-dark.png"
+              />
               <nav
                 class="settings-dialog__navigation"
               >
