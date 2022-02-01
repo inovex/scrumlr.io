@@ -40,6 +40,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                 scrumlr-logo-light.svg
               </svg>
               <img
+                alt="Scrumlr Logo"
                 class="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark"
                 src="scrumlr-logo-dark.png"
               />

@@ -47,7 +47,7 @@ export const SettingsDialog: VFC = () => {
       <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
-          <img src={ScrumlrLogoDark} className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
+          <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
           <nav className="settings-dialog__navigation">
             <Link
               to="board"
