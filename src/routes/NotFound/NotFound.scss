@@ -1,0 +1,20 @@
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
+}
+
+.not-found__logo {
+  height: 60px;
+}
+
+.not-found__text {
+  font-size: 1.5em;
+}
+[theme="dark"] .not-found__text {
+  color: white;
+}
