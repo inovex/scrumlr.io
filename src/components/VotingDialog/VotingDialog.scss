@@ -69,6 +69,9 @@
   background: $color-white;
   cursor: pointer;
 }
+.voting-dialog__button:focus {
+  outline: none;
+}
 .voting-dialog__button > label {
   font-size: 14px;
   color: $color-black;

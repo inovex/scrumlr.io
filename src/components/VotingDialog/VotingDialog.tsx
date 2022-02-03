@@ -2,8 +2,9 @@ import {VFC, useState} from "react";
 import {useNavigate} from "react-router";
 import {Portal} from "components/Portal";
 import {Toggle} from "components/Toggle";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
 import {Link} from "react-router-dom";
+import {ActionFactory} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./VotingDialog.scss";
 
@@ -12,6 +13,18 @@ export const VotingDialog: VFC = () => {
   const boardId = useAppSelector((state) => state.board.data!.id);
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
   const [anonymousVoting, setAnonymousVoting] = useState(false);
+
+  const startVoting = () => {
+    store.dispatch(
+      ActionFactory.addVoteConfiguration({
+        boardId,
+        voteLimit: 5,
+        showVotesOfOtherUsers: !anonymousVoting,
+        allowMultipleVotesPerNote: allowCumulativeVoting,
+      })
+    );
+    store.dispatch(ActionFactory.editBoard({id: boardId, voting: "active"}));
+  };
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
@@ -29,7 +42,7 @@ export const VotingDialog: VFC = () => {
           <button className="voting-dialog__button">
             <label>Number of votes</label>
           </button>
-          <button className="voting-dialog__start-button">
+          <button className="voting-dialog__start-button" onClick={() => startVoting()}>
             <label>Start voting phase</label>
           </button>
         </article>
