@@ -5,6 +5,7 @@ import {BoardGuard} from "routes/Board";
 import {RequireAuthentication} from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
+import {VotingDialog} from "components/VotingDialog";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import ScrollToTop from "./ScrollToTop";
@@ -34,7 +35,9 @@ const Router = () => (
             <BoardGuard />
           </RequireAuthentication>
         }
-      />
+      >
+        <Route path="voting" element={<VotingDialog />} />
+      </Route>
     </Routes>
   </BrowserRouter>
 );

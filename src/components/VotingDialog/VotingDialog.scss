@@ -1,0 +1,94 @@
+@import "constants/style";
+
+.voting-dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 16px 32px #0057ff29;
+  background: $color-white-one;
+}
+[theme="dark"] .voting-dialog {
+  box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  background: $color-dark-one;
+}
+
+.voting-dialog__content {
+  margin: 40px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.voting-dialog__close-button {
+  position: absolute;
+  top: -22px;
+  right: -22px;
+  color: $color-planning-pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: $color-white;
+  box-shadow: 0px 16px 32px #0057ff3d;
+}
+[theme="dark"] .voting-dialog__close-button {
+  color: $color-planning-pink;
+  box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  background: $color-dark-mode;
+}
+.close-button__icon {
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.voting-dialog__header-text {
+  border-bottom: solid 3px $color-planning-pink;
+  padding-bottom: 8px;
+  margin: 0;
+}
+[theme="dark"] {
+  .settings-dialog__header-text {
+    color: $color-white;
+  }
+}
+
+.voting-dialog__button {
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  height: 48px;
+  width: 80%;
+  background: $color-white;
+  cursor: pointer;
+}
+.voting-dialog__button > label {
+  font-size: 14px;
+  color: $color-black;
+  letter-spacing: 0.49px;
+  position: absolute;
+  left: 24px;
+  top: 16px;
+}
+
+.voting-dialog__start-button {
+  border: none;
+  border-radius: 8px;
+  height: 48px;
+  width: 80%;
+  background: $color-planning-pink;
+  cursor: pointer;
+}
+.voting-dialog__start-button > label {
+  font-weight: bold;
+  font-size: 14px;
+  color: $color-white;
+  letter-spacing: 0.49px;
+}
