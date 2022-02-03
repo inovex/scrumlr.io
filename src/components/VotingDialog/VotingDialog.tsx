@@ -1,6 +1,7 @@
-import {VFC} from "react";
+import {VFC, useState} from "react";
 import {useNavigate} from "react-router";
 import {Portal} from "components/Portal";
+import {Toggle} from "components/Toggle";
 import {useAppSelector} from "store";
 import {Link} from "react-router-dom";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
@@ -9,17 +10,21 @@ import "./VotingDialog.scss";
 export const VotingDialog: VFC = () => {
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
+  const [anonymousVoting, setAnonymousVoting] = useState(false);
 
   return (
     <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
       <aside className="voting-dialog">
         <article className="voting-dialog__content">
           <h2 className="voting-dialog__header-text">Voting</h2>
-          <button className="voting-dialog__button">
+          <button className="voting-dialog__button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>Allow cumulative voting</label>
+            <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
-          <button className="voting-dialog__button">
+          <button className="voting-dialog__button" onClick={() => setAnonymousVoting((state) => !state)}>
             <label>Anonymous voting</label>
+            <Toggle active={anonymousVoting} className="voting-dialog__toggle" />
           </button>
           <button className="voting-dialog__button">
             <label>Number of votes</label>
