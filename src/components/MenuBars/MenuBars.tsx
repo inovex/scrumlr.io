@@ -5,8 +5,9 @@ import store, {useAppSelector} from "store";
 import Parse from "parse";
 import _ from "underscore";
 import classNames from "classnames";
-import {MenuToggle,MenuButton} from "components/MenuBars/MenuItem";
+import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
+import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
@@ -14,7 +15,6 @@ import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-setti
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
-import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
 import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 
 import "./MenuBars.scss";
@@ -89,7 +89,7 @@ export const MenuBars = () => {
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <TimerToggleButton tabIndex={TabIndex.AdminMenu} />
+            <MenuButton direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
             <MenuButton direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
             <MenuToggle
               value={state.moderation === "active"}
