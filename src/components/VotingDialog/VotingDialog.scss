@@ -72,7 +72,7 @@
 .voting-dialog__button:focus {
   outline: none;
 }
-.voting-dialog__button > label {
+.voting-dialog__button > label:first-of-type {
   font-size: 14px;
   color: $color-black;
   letter-spacing: 0.49px;
@@ -113,4 +113,33 @@
   position: absolute;
   top: 12px;
   right: 24px;
+}
+
+.voting-dialog__vote-button {
+  height: 24px;
+  width: 24px;
+  border: 2px solid $color-planning-pink;
+  border-radius: 12px;
+  background-color: transparent;
+  color: $color-white;
+  line-height: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  position: absolute;
+  top: 12px;
+}
+.voting-dialog__vote-button:first-of-type {
+  right: 72px;
+}
+.voting-dialog__vote-button:last-of-type {
+  right: 24px;
+}
+.voting-dialog__vote-label {
+  position: absolute;
+  top: 12px;
+  right: 48px;
+  height: 24px;
+  width: 24px;
+  text-align: center;
+  line-height: 24px;
 }
