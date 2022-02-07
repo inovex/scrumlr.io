@@ -81,7 +81,7 @@
     "i18next-fs-backend": "^1.1.4",
     "lint-staged": "^12.3.3",
     "prettier": "^2.5.1",
-    "react-dnd-test-backend": "^14.0.1",
+    "react-dnd-test-backend": "^15.1.0",
     "react-dnd-test-utils": "^14.1.0",
     "react-scripts": "^4.0.3",
     "redux-devtools-extension": "^2.13.9",
