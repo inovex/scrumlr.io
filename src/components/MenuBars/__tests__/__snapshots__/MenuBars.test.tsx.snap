@@ -161,7 +161,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
     >
       <button
         class="menu-item menu-item--left"
-        tabindex="400"
+        tabindex="0"
       >
         <div
           class="menu-item__tooltip"
@@ -177,85 +177,6 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
         >
           icon-timer.svg
         </svg>
-        <menu
-          class="dropdown timer__dropdown"
-        >
-          <div
-            class="dropdown__main"
-          >
-            <ul>
-              <li
-                class="dropdown__item-button timer-dropdown__item-button"
-              >
-                <button
-                  tabindex="-1"
-                >
-                  <label>
-                    1 minute
-                  </label>
-                  <div>
-                    1
-                  </div>
-                </button>
-              </li>
-              <li
-                class="dropdown__item-button timer-dropdown__item-button"
-              >
-                <button
-                  tabindex="-1"
-                >
-                  <label>
-                    3 minute
-                  </label>
-                  <div>
-                    3
-                  </div>
-                </button>
-              </li>
-              <li
-                class="dropdown__item-button timer-dropdown__item-button"
-              >
-                <button
-                  tabindex="-1"
-                >
-                  <label>
-                    5 minute
-                  </label>
-                  <div>
-                    5
-                  </div>
-                </button>
-              </li>
-              <li
-                class="dropdown__item-button timer-dropdown__item-button"
-              >
-                <button
-                  tabindex="-1"
-                >
-                  <label>
-                    Custom time
-                  </label>
-                  <button
-                    class="timer-dropdown__time-button"
-                    tabindex="-1"
-                  >
-                    +
-                  </button>
-                  <input
-                    tabindex="-1"
-                    value="10"
-                  />
-                  <button
-                    class="timer-dropdown__time-button"
-                    tabindex="-1"
-                  >
-                    -
-                  </button>
-                </button>
-              </li>
-            </ul>
-          </div>
-        </menu>
       </button>
       <button
         class="menu-item menu-item--left"
