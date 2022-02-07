@@ -22,7 +22,7 @@
     "marked": "4.0.12",
     "parse": "^3.4.0",
     "qrcode.react": "^1.0.1",
-    "query-string": "^7.1.0",
+    "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dnd": "^15.1.0",
     "react-dnd-html5-backend": "^15.1.1",
