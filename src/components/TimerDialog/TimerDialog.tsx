@@ -1,4 +1,4 @@
-import {VFC, useState} from "react";
+import {VFC, useState, useEffect} from "react";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router";
 import store, {useAppSelector} from "store";
@@ -14,6 +14,27 @@ export const TimerDialog: VFC = () => {
     store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
     navigate(`/board/${boardId}`);
   };
+
+  const [startPositionX, setStartPositionX] = useState(0);
+
+  useEffect(() => {
+    const onUpdate = (e: MouseEvent) => {
+      if (startPositionX) {
+        setCustomTime(Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10))));
+      }
+    };
+
+    const onEnd = () => {
+      setStartPositionX(0);
+    };
+
+    document.addEventListener("mousemove", onUpdate);
+    document.addEventListener("mouseup", onEnd);
+    return () => {
+      document.removeEventListener("mousemove", onUpdate);
+      document.removeEventListener("mouseup", onEnd);
+    };
+  }, [startPositionX]);
 
   return (
     <Dialog title="Timer" onClose={() => navigate(`/board/${boardId}`)}>
@@ -37,7 +58,9 @@ export const TimerDialog: VFC = () => {
         >
           +
         </button>
-        <label className="timer-dialog__time-label">{customTime}</label>
+        <label className="timer-dialog__time-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
+          {customTime}
+        </label>
         <button
           onClick={(e) => {
             e.stopPropagation();

@@ -49,4 +49,8 @@
   width: 24px;
   text-align: center;
   line-height: 24px;
+  cursor: col-resize;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webit-user-select: none;
 }

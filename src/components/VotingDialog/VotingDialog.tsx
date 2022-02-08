@@ -1,4 +1,4 @@
-import {VFC, useState} from "react";
+import {VFC, useState, useEffect} from "react";
 import {useNavigate} from "react-router";
 import {Toggle} from "components/Toggle";
 import store, {useAppSelector} from "store";
@@ -13,6 +13,26 @@ export const VotingDialog: VFC = () => {
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
   const [anonymousVoting, setAnonymousVoting] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);
+  const [startPositionX, setStartPositionX] = useState(0);
+
+  useEffect(() => {
+    const onUpdate = (e: MouseEvent) => {
+      if (startPositionX) {
+        setNumberOfVotes(Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10))));
+      }
+    };
+
+    const onEnd = () => {
+      setStartPositionX(0);
+    };
+
+    document.addEventListener("mousemove", onUpdate);
+    document.addEventListener("mouseup", onEnd);
+    return () => {
+      document.removeEventListener("mousemove", onUpdate);
+      document.removeEventListener("mouseup", onEnd);
+    };
+  }, [startPositionX]);
 
   const startVoting = () => {
     store.dispatch(
@@ -62,7 +82,9 @@ export const VotingDialog: VFC = () => {
             <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button">
               +
             </button>
-            <label className="voting-dialog__vote-label">{numberOfVotes}</label>
+            <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
+              {numberOfVotes}
+            </label>
             <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button">
               -
             </button>
