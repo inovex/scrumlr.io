@@ -5,6 +5,8 @@ import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
+import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
+import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 
 export const VotingDialog: VFC = () => {
   const navigate = useNavigate();
@@ -79,14 +81,14 @@ export const VotingDialog: VFC = () => {
           </button>
           <div className="dialog__button">
             <label>Number of votes</label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button">
-              +
+            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button">
+              <MinusIcon />
             </button>
             <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
               {numberOfVotes}
             </label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button">
-              -
+            <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button">
+              <PlusIcon />
             </button>
           </div>
           <button className="voting-dialog__start-button" onClick={() => startVoting()}>

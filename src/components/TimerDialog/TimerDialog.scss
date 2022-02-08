@@ -1,34 +1,38 @@
 @import "constants/style";
 
 .timer-dialog__time-button {
-  height: 24px;
-  width: 24px;
-  border: 2px solid $color-planning-pink;
-  border-radius: 12px;
+  height: 32px;
+  width: 32px;
+  border: none;
+  border-radius: 16px;
   background-color: transparent;
-  color: $color-white;
-  line-height: 20px;
   cursor: pointer;
-  font-size: 20px;
   position: absolute;
-  top: 12px;
+  top: 8px;
+  padding: 0;
 }
 .timer-dialog__time-button:first-of-type {
-  right: 72px;
+  right: 80px;
 }
 .timer-dialog__time-button:last-of-type {
   right: 24px;
 }
 .timer-dialog__time-label {
   position: absolute;
-  top: 12px;
-  right: 48px;
-  height: 24px;
+  top: 8px;
+  right: 56px;
+  height: 32px;
   width: 24px;
   text-align: center;
-  line-height: 24px;
+  line-height: 32px;
   cursor: col-resize;
   user-select: none;
   -webkit-touch-callout: none;
   -webit-user-select: none;
+}
+
+.timer-dialog__button-icon {
+  position: absolute;
+  top: 8px;
+  right: 24px;
 }
