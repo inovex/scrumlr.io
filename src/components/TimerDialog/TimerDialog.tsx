@@ -1,4 +1,5 @@
 import {VFC, useState, useEffect} from "react";
+import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router";
 import store, {useAppSelector} from "store";
@@ -11,6 +12,7 @@ import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
 
 export const TimerDialog: VFC = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
   const [customTime, setCustomTime] = useState(10);
@@ -42,21 +44,21 @@ export const TimerDialog: VFC = () => {
   }, [startPositionX]);
 
   return (
-    <Dialog title="Timer" onClose={() => navigate(`/board/${boardId}`)}>
+    <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate(`/board/${boardId}`)}>
       <button className="dialog__button" onClick={() => startTimer(1)}>
-        <label>1 minute</label>
+        <label>{t("TimerToggleButton.1min")}</label>
         <OneIcon className="timer-dialog__button-icon" />
       </button>
       <button className="dialog__button" onClick={() => startTimer(3)}>
-        <label>3 minute</label>
+        <label>{t("TimerToggleButton.3min")}</label>
         <ThreeIcon className="timer-dialog__button-icon" />
       </button>
       <button className="dialog__button" onClick={() => startTimer(5)}>
-        <label>5 minute</label>
+        <label>{t("TimerToggleButton.5min")}</label>
         <FiveIcon className="timer-dialog__button-icon" />
       </button>
       <button className="dialog__button" onClick={() => startTimer(customTime)}>
-        <label>Custom time</label>
+        <label>{t("TimerToggleButton.customTime")}</label>
         <button
           onClick={(e) => {
             e.stopPropagation();

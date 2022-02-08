@@ -3,12 +3,14 @@ import {useNavigate} from "react-router";
 import {Toggle} from "components/Toggle";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
+import {useTranslation} from "react-i18next";
 import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 
 export const VotingDialog: VFC = () => {
+  const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
   const activeVoting = useAppSelector((state) => state.board.data!.voting === "active");
@@ -59,28 +61,28 @@ export const VotingDialog: VFC = () => {
   };
 
   return (
-    <Dialog title="Voting" onClose={() => navigate(`/board/${boardId}`)}>
+    <Dialog title={t("VoteConfigurationButton.label")} onClose={() => navigate(`/board/${boardId}`)}>
       {activeVoting ? (
         <>
           <button className="voting-dialog__start-button" onClick={() => cancelVoting()}>
-            <label>Cancel voting phase</label>
+            <label>{t("VoteConfigurationButton.cancelVoting")}</label>
           </button>
           <button className="voting-dialog__start-button" onClick={() => stopVoting()}>
-            <label>End voting phase</label>
+            <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
         </>
       ) : (
         <>
           <button className="dialog__button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
-            <label>Allow cumulative voting</label>
+            <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
           <button className="dialog__button" onClick={() => setAnonymousVoting((state) => !state)}>
-            <label>Anonymous voting</label>
+            <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
             <Toggle active={anonymousVoting} className="voting-dialog__toggle" />
           </button>
           <div className="dialog__button">
-            <label>Number of votes</label>
+            <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
             <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button">
               <MinusIcon />
             </button>
@@ -92,7 +94,7 @@ export const VotingDialog: VFC = () => {
             </button>
           </div>
           <button className="voting-dialog__start-button" onClick={() => startVoting()}>
-            <label>Start voting phase</label>
+            <label>{t("VoteConfigurationButton.startVoting")}</label>
           </button>
         </>
       )}
