@@ -49,15 +49,15 @@ export const VotingDialog: VFC = () => {
         </>
       ) : (
         <>
-          <button className="voting-dialog__button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
+          <button className="dialog__button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>Allow cumulative voting</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
-          <button className="voting-dialog__button" onClick={() => setAnonymousVoting((state) => !state)}>
+          <button className="dialog__button" onClick={() => setAnonymousVoting((state) => !state)}>
             <label>Anonymous voting</label>
             <Toggle active={anonymousVoting} className="voting-dialog__toggle" />
           </button>
-          <div className="voting-dialog__button">
+          <div className="dialog__button">
             <label>Number of votes</label>
             <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button">
               +

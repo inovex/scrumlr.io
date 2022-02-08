@@ -60,3 +60,36 @@
     color: $color-white;
   }
 }
+
+.dialog__button {
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  height: 48px;
+  width: 80%;
+  background: $color-white;
+  cursor: pointer;
+}
+.dialog__button:focus {
+  outline: none;
+}
+.dialog__button > label:first-of-type {
+  font-size: 14px;
+  color: $color-black;
+  letter-spacing: 0.49px;
+  position: absolute;
+  left: 24px;
+  top: 16px;
+  cursor: pointer;
+}
+[theme="dark"] {
+  .dialog__button {
+    background-color: $color-dark-mode-note;
+  }
+  .dialog__button:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
+  .dialog__button > label {
+    color: white;
+  }
+}
