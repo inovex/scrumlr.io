@@ -5,6 +5,7 @@ import {User} from "parse";
 import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom";
 import store from "store";
+import {ActionFactory} from "store/action";
 import {TimerDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
@@ -17,6 +18,8 @@ jest.mock("react-router-dom", () => ({
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
+
+jest.useFakeTimers("modern").setSystemTime(new Date(123456789).getTime());
 
 const createTimerDialog = () => {
   const initialState = {
@@ -59,12 +62,32 @@ describe("TimerDialog", () => {
     expect(mockedUsedNavigate).toHaveBeenCalledWith("..");
   });
 
-  it("should dispatch to store on button click", () => {
+  it("should dispatch to store correctly on one minute button click", () => {
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__1-minute-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 1 * 60 * 1000)));
+  });
+
+  it("should dispatch to store correctly on three minute button click", () => {
+    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__3-minute-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 3 * 60 * 1000)));
+  });
+
+  it("should dispatch to store correctly on five minute button click", () => {
+    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__5-minute-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 5 * 60 * 1000)));
+  });
+
+  it("should dispatch to store correctly after custom time change", () => {
+    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("timer-dialog__minus-button"));
     fireEvent.click(screen.getByTestId("timer-dialog__custom-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledTimes(4);
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 9 * 60 * 1000)));
+    fireEvent.click(screen.getByTestId("timer-dialog__plus-button"));
+    fireEvent.click(screen.getByTestId("timer-dialog__plus-button"));
+    fireEvent.click(screen.getByTestId("timer-dialog__custom-minute-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 11 * 60 * 1000)));
   });
 });
