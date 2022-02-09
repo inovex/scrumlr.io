@@ -73,36 +73,36 @@ export const VotingDialog: VFC = () => {
     <Dialog title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
       {activeVoting ? (
         <>
-          <button className="voting-dialog__start-button" onClick={() => cancelVoting()}>
+          <button className="voting-dialog__start-button" data-testid="voting-dialog__cancel-button" onClick={() => cancelVoting()}>
             <label>{t("VoteConfigurationButton.cancelVoting")}</label>
           </button>
-          <button className="voting-dialog__start-button" onClick={() => stopVoting()}>
+          <button className="voting-dialog__start-button" data-testid="voting-dialog__stop-button" onClick={() => stopVoting()}>
             <label>{t("VoteConfigurationButton.stopVoting")}</label>
           </button>
         </>
       ) : (
         <>
-          <button className="dialog__button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
+          <button className="dialog__button" data-testid="voting-dialog__cumulative-voting-button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
-          <button className="dialog__button" onClick={() => setAnonymousVoting((state) => !state)}>
+          <button className="dialog__button" data-testid="voting-dialog__anonymous-voting-button" onClick={() => setAnonymousVoting((state) => !state)}>
             <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
             <Toggle active={anonymousVoting} className="voting-dialog__toggle" />
           </button>
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button">
+            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
               <MinusIcon />
             </button>
             <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
               {numberOfVotes}
             </label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button">
+            <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button" data-testid="voting-dialog__plus-button">
               <PlusIcon />
             </button>
           </div>
-          <button className="voting-dialog__start-button" onClick={() => startVoting()}>
+          <button className="voting-dialog__start-button" data-testid="voting-dialog__start-button" onClick={() => startVoting()}>
             <label>{t("VoteConfigurationButton.startVoting")}</label>
           </button>
         </>

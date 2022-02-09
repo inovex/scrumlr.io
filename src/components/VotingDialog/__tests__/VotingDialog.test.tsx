@@ -4,6 +4,8 @@ import {mocked} from "ts-jest/utils";
 import {User} from "parse";
 import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom";
+import {ActionFactory} from "store/action";
+import store from "store";
 import {VotingDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
@@ -12,6 +14,8 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockedUsedNavigate,
 }));
+
+const storeDispatchSpy = jest.spyOn(store, "dispatch");
 
 describe("VotingDialog", () => {
   const mockStore = configureStore();
@@ -66,5 +70,37 @@ describe("VotingDialog", () => {
     mockedUser.current = jest.fn(() => ({id: "something-else"} as never));
     render(createVotingDialog(true), {container: global.document.querySelector("#portal")!});
     expect(mockedUsedNavigate).toHaveBeenCalledWith("..");
+  });
+
+  it("should dispatch to store correctly on start voting button click", () => {
+    render(createVotingDialog(false), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("voting-dialog__start-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(
+      ActionFactory.addVoteConfiguration({boardId: "test-board-id", voteLimit: 5, showVotesOfOtherUsers: true, allowMultipleVotesPerNote: false})
+    );
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.editBoard({id: "test-board-id", voting: "active"}));
+  });
+
+  it("should dispatch to store correctly on start voting button click with custom vote configuration", () => {
+    render(createVotingDialog(false), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("voting-dialog__cumulative-voting-button"));
+    fireEvent.click(screen.getByTestId("voting-dialog__anonymous-voting-button"));
+    fireEvent.click(screen.getByTestId("voting-dialog__plus-button"));
+    fireEvent.click(screen.getByTestId("voting-dialog__start-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(
+      ActionFactory.addVoteConfiguration({boardId: "test-board-id", voteLimit: 6, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true})
+    );
+  });
+
+  it("should dispatch to store correctly on cancel voting button click", () => {
+    render(createVotingDialog(true), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("voting-dialog__cancel-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.cancelVoting("test-board-id"));
+  });
+
+  it("should dispatch to store correctly on stop voting button click", () => {
+    render(createVotingDialog(true), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("voting-dialog__stop-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.editBoard({id: "test-board-id", voting: "disabled"}));
   });
 });

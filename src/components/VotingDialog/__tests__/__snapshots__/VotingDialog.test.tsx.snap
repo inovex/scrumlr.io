@@ -38,6 +38,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
             </h2>
             <button
               class="voting-dialog__start-button"
+              data-testid="voting-dialog__cancel-button"
             >
               <label>
                 VoteConfigurationButton.cancelVoting
@@ -45,6 +46,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
             </button>
             <button
               class="voting-dialog__start-button"
+              data-testid="voting-dialog__stop-button"
             >
               <label>
                 VoteConfigurationButton.stopVoting
@@ -111,6 +113,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             </h2>
             <button
               class="dialog__button"
+              data-testid="voting-dialog__cumulative-voting-button"
             >
               <label>
                 VoteConfigurationButton.allowMultipleVotesPerNote
@@ -121,6 +124,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             </button>
             <button
               class="dialog__button"
+              data-testid="voting-dialog__anonymous-voting-button"
             >
               <label>
                 VoteConfigurationButton.showVotesOfOthers
@@ -137,6 +141,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
               </label>
               <button
                 class="voting-dialog__vote-button"
+                data-testid="voting-dialog__minus-button"
               >
                 <svg>
                   icon-minus.svg
@@ -149,6 +154,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
               </label>
               <button
                 class="voting-dialog__vote-button"
+                data-testid="voting-dialog__plus-button"
               >
                 <svg>
                   icon-plus.svg
@@ -157,6 +163,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             </div>
             <button
               class="voting-dialog__start-button"
+              data-testid="voting-dialog__start-button"
             >
               <label>
                 VoteConfigurationButton.startVoting
