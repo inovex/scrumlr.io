@@ -8,11 +8,13 @@ import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
+import Parse from "parse";
 
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const adminUsers = useAppSelector((state) => state.users.admins);
   const activeVoting = useAppSelector((state) => state.board.data!.voting === "active");
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
   const [anonymousVoting, setAnonymousVoting] = useState(false);
@@ -37,6 +39,13 @@ export const VotingDialog: VFC = () => {
       document.removeEventListener("mouseup", onEnd);
     };
   }, [startPositionX]);
+
+  if (adminUsers == null || adminUsers.length === 0) {
+    return null;
+  }
+  if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
+    navigate(`/board/${boardId}`);
+  }
 
   const startVoting = () => {
     store.dispatch(

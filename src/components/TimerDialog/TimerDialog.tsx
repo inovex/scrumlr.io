@@ -10,11 +10,13 @@ import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {ReactComponent as OneIcon} from "assets/icon-one.svg";
 import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
+import Parse from "parse";
 
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const adminUsers = useAppSelector((state) => state.users.admins);
   const [customTime, setCustomTime] = useState(10);
 
   const startTimer = (minutes: number) => {
@@ -42,6 +44,13 @@ export const TimerDialog: VFC = () => {
       document.removeEventListener("mouseup", onEnd);
     };
   }, [startPositionX]);
+
+  if (adminUsers == null || adminUsers.length === 0) {
+    return null;
+  }
+  if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
+    navigate(`/board/${boardId}`);
+  }
 
   return (
     <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate(`/board/${boardId}`)}>
