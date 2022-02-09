@@ -53,19 +53,19 @@ export const TimerDialog: VFC = () => {
 
   return (
     <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate("..")}>
-      <button className="dialog__button" onClick={() => startTimer(1)}>
+      <button className="dialog__button" onClick={() => startTimer(1)} data-testid="timer-dialog__1-minute-button">
         <label>{t("TimerToggleButton.1min")}</label>
         <OneIcon className="timer-dialog__button-icon" />
       </button>
-      <button className="dialog__button" onClick={() => startTimer(3)}>
+      <button className="dialog__button" onClick={() => startTimer(3)} data-testid="timer-dialog__3-minute-button">
         <label>{t("TimerToggleButton.3min")}</label>
         <ThreeIcon className="timer-dialog__button-icon" />
       </button>
-      <button className="dialog__button" onClick={() => startTimer(5)}>
+      <button className="dialog__button" onClick={() => startTimer(5)} data-testid="timer-dialog__5-minute-button">
         <label>{t("TimerToggleButton.5min")}</label>
         <FiveIcon className="timer-dialog__button-icon" />
       </button>
-      <button className="dialog__button" onClick={() => startTimer(customTime)}>
+      <button className="dialog__button" onClick={() => startTimer(customTime)} data-testid="timer-dialog__custom-minute-button">
         <label>{t("TimerToggleButton.customTime")}</label>
         <button
           onClick={(e) => {
@@ -73,6 +73,7 @@ export const TimerDialog: VFC = () => {
             setCustomTime((prev) => Math.max(--prev, 1));
           }}
           className="timer-dialog__time-button"
+          data-testid="timer-dialog__minus-button"
         >
           <MinusIcon />
         </button>
@@ -85,6 +86,7 @@ export const TimerDialog: VFC = () => {
             setCustomTime((prev) => Math.min(++prev, 99));
           }}
           className="timer-dialog__time-button"
+          data-testid="timer-dialog__plus-button"
         >
           <PlusIcon />
         </button>

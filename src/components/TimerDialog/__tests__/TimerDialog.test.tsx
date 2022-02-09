@@ -4,35 +4,37 @@ import {mocked} from "ts-jest/utils";
 import {User} from "parse";
 import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom";
+import store from "store";
 import {TimerDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
+const storeDispatchSpy = jest.spyOn(store, "dispatch");
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useNavigate: () => mockedUsedNavigate,
 }));
 
-describe("TimerDialog", () => {
-  const mockStore = configureStore();
-  const mockedUser = mocked(User, true);
+const mockStore = configureStore();
+const mockedUser = mocked(User, true);
 
-  const createTimerDialog = () => {
-    const initialState = {
-      users: {
-        admins: [{id: "test-id"}],
-      },
-    };
-    const mockedStore = mockStore(initialState);
-    return (
-      <BrowserRouter>
-        <Provider store={mockedStore}>
-          <TimerDialog />
-        </Provider>
-      </BrowserRouter>
-    );
+const createTimerDialog = () => {
+  const initialState = {
+    users: {
+      admins: [{id: "test-id"}],
+    },
   };
+  const mockedStore = mockStore(initialState);
+  return (
+    <BrowserRouter>
+      <Provider store={mockedStore}>
+        <TimerDialog />
+      </Provider>
+    </BrowserRouter>
+  );
+};
 
+describe("TimerDialog", () => {
   beforeEach(() => {
     mockedUser.current = jest.fn(() => ({id: "test"} as never));
     const portal = global.document.createElement("div");
@@ -55,5 +57,14 @@ describe("TimerDialog", () => {
     mockedUser.current = jest.fn(() => ({id: "something-else"} as never));
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     expect(mockedUsedNavigate).toHaveBeenCalledWith("..");
+  });
+
+  it("should dispatch to store on button click", () => {
+    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
+    fireEvent.click(screen.getByTestId("timer-dialog__1-minute-button"));
+    fireEvent.click(screen.getByTestId("timer-dialog__3-minute-button"));
+    fireEvent.click(screen.getByTestId("timer-dialog__5-minute-button"));
+    fireEvent.click(screen.getByTestId("timer-dialog__custom-minute-button"));
+    expect(storeDispatchSpy).toHaveBeenCalledTimes(4);
   });
 });
