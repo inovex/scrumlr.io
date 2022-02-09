@@ -1,7 +1,7 @@
 import {VFC, useState, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
 import "./TimerDialog.scss";
@@ -15,13 +15,12 @@ import Parse from "parse";
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const boardId = useAppSelector((state) => state.board.data!.id);
   const adminUsers = useAppSelector((state) => state.users.admins);
   const [customTime, setCustomTime] = useState(10);
 
   const startTimer = (minutes: number) => {
     store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
-    navigate(`/board/${boardId}`);
+    navigate("..");
   };
 
   const [startPositionX, setStartPositionX] = useState(0);
@@ -49,11 +48,11 @@ export const TimerDialog: VFC = () => {
     return null;
   }
   if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
-    navigate(`/board/${boardId}`);
+    navigate("..");
   }
 
   return (
-    <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate(`/board/${boardId}`)}>
+    <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate("..")}>
       <button className="dialog__button" onClick={() => startTimer(1)}>
         <label>{t("TimerToggleButton.1min")}</label>
         <OneIcon className="timer-dialog__button-icon" />

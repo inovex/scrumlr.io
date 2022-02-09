@@ -16,7 +16,7 @@ export const Dialog: FC<DialogProps> = (props) => (
       <article className="dialog__content">
         <h2 className="dialog__header-text">{props.title}</h2>
         {props.children}
-        <button onClick={() => props.onClose?.()} className="dialog__close-button">
+        <button onClick={() => props.onClose?.()} className="dialog__close-button" data-testid="dialog__close-button">
           <CloseIcon className="close-button__icon" />
         </button>
       </article>

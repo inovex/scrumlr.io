@@ -100,6 +100,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
             </button>
             <button
               class="dialog__close-button"
+              data-testid="dialog__close-button"
             >
               <svg
                 class="close-button__icon"

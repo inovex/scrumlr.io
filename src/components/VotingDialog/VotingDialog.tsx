@@ -1,5 +1,5 @@
 import {VFC, useState, useEffect} from "react";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 import {Toggle} from "components/Toggle";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
@@ -44,7 +44,7 @@ export const VotingDialog: VFC = () => {
     return null;
   }
   if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
-    navigate(`/board/${boardId}`);
+    navigate("..");
   }
 
   const startVoting = () => {
@@ -57,20 +57,20 @@ export const VotingDialog: VFC = () => {
       })
     );
     store.dispatch(ActionFactory.editBoard({id: boardId, voting: "active"}));
-    navigate(`/board/${boardId}`);
+    navigate("..");
   };
 
   const stopVoting = () => {
     store.dispatch(ActionFactory.editBoard({id: boardId, voting: "disabled"}));
-    navigate(`/board/${boardId}`);
+    navigate("..");
   };
   const cancelVoting = () => {
     store.dispatch(ActionFactory.cancelVoting(boardId));
-    navigate(`/board/${boardId}`);
+    navigate("..");
   };
 
   return (
-    <Dialog title={t("VoteConfigurationButton.label")} onClose={() => navigate(`/board/${boardId}`)}>
+    <Dialog title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
       {activeVoting ? (
         <>
           <button className="voting-dialog__start-button" onClick={() => cancelVoting()}>
