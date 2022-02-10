@@ -2,7 +2,7 @@
 
 exports[`VotingDialog should match the snapshot with active voting 1`] = `
 <div
-  class="portal portal--darkBackground"
+  class="portal"
   role="dialog"
 >
   <div
@@ -26,7 +26,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
         role="dialog"
       >
         <aside
-          class="dialog"
+          class="dialog voting-dialog"
         >
           <article
             class="dialog__content"
@@ -52,16 +52,6 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
                 VoteConfigurationButton.stopVoting
               </label>
             </button>
-            <button
-              class="dialog__close-button"
-              data-testid="dialog__close-button"
-            >
-              <svg
-                class="close-button__icon"
-              >
-                icon-close.svg
-              </svg>
-            </button>
           </article>
         </aside>
       </div>
@@ -77,7 +67,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
 
 exports[`VotingDialog should match the snapshot with no active voting 1`] = `
 <div
-  class="portal portal--darkBackground"
+  class="portal"
   role="dialog"
 >
   <div
@@ -101,7 +91,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
         role="dialog"
       >
         <aside
-          class="dialog"
+          class="dialog voting-dialog"
         >
           <article
             class="dialog__content"
@@ -168,16 +158,6 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
               <label>
                 VoteConfigurationButton.startVoting
               </label>
-            </button>
-            <button
-              class="dialog__close-button"
-              data-testid="dialog__close-button"
-            >
-              <svg
-                class="close-button__icon"
-              >
-                icon-close.svg
-              </svg>
             </button>
           </article>
         </aside>

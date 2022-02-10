@@ -70,7 +70,7 @@ export const VotingDialog: VFC = () => {
   };
 
   return (
-    <Dialog title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
+    <Dialog className="voting-dialog" title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
       {activeVoting ? (
         <>
           <button className="voting-dialog__start-button" data-testid="voting-dialog__cancel-button" onClick={() => cancelVoting()}>

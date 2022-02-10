@@ -1,5 +1,66 @@
 @import "constants/style";
 
+#root[column-visibility="visible"] + #portal {
+  .voting-dialog {
+    top: calc(50% - 25px);
+    right: 100px;
+  }
+  .voting-dialog::before {
+    content: " ";
+    position: absolute;
+    left: 100%;
+    top: 10px;
+    border-width: 15px;
+    border-style: solid;
+    border-color: transparent transparent transparent $color-planning-pink;
+  }
+  .voting-dialog::after {
+    content: " ";
+    position: absolute;
+    left: 100%;
+    top: 15px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent $color-white-one;
+  }
+}
+
+[theme="dark"] #root[column-visibility="visible"] + #portal {
+  .voting-dialog::after {
+    border-color: transparent transparent transparent $color-dark-mode;
+  }
+}
+
+#root[column-visibility="collapsed"] + #portal {
+  .voting-dialog {
+    left: calc(50% - 139px + 86px + 18px - 200px);
+    bottom: 100px;
+  }
+  .voting-dialog::before {
+    content: " ";
+    position: absolute;
+    left: calc(50% - 15px);
+    top: 100%;
+    border-width: 15px;
+    border-style: solid;
+    border-color: $color-planning-pink transparent transparent transparent;
+  }
+  .voting-dialog::after {
+    content: " ";
+    position: absolute;
+    left: calc(50% - 11px);
+    top: 100%;
+    border-width: 11px;
+    border-style: solid;
+    border-color: $color-white-one transparent transparent transparent;
+  }
+}
+[theme="dark"] #root[column-visibility="collapsed"] + #portal {
+  .voting-dialog::after {
+    border-color: $color-dark-mode transparent transparent transparent;
+  }
+}
+
 .voting-dialog__start-button {
   border: none;
   border-radius: 8px;

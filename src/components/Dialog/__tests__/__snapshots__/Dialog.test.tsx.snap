@@ -2,7 +2,7 @@
 
 exports[`Dialog should match snapshot 1`] = `
 <div
-  class="portal portal--darkBackground"
+  class="portal"
   role="dialog"
 >
   <div
@@ -36,16 +36,6 @@ exports[`Dialog should match snapshot 1`] = `
             >
               Test-Dialog
             </h2>
-            <button
-              class="dialog__close-button"
-              data-testid="dialog__close-button"
-            >
-              <svg
-                class="close-button__icon"
-              >
-                icon-close.svg
-              </svg>
-            </button>
           </article>
         </aside>
       </div>

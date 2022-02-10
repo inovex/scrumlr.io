@@ -50,12 +50,6 @@ describe("TimerDialog", () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  it("should redirect on close button click", () => {
-    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
-    fireEvent.click(screen.getByTestId("dialog__close-button"));
-    expect(mockedUsedNavigate).toHaveBeenCalledWith("..");
-  });
-
   it("should redirect if the current user isn't a moderator", () => {
     mockedUser.current = jest.fn(() => ({id: "something-else"} as never));
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});

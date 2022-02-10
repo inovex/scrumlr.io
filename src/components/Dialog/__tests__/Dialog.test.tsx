@@ -1,4 +1,4 @@
-import {fireEvent, render, screen} from "@testing-library/react";
+import {fireEvent, render} from "@testing-library/react";
 import {Dialog} from "..";
 
 describe("Dialog", () => {
@@ -26,13 +26,6 @@ describe("Dialog", () => {
       {container: global.document.querySelector("#portal")!}
     );
     expect(container.getElementsByClassName("test-child")).toHaveLength(1);
-  });
-
-  it("should run the onClose function on button click", () => {
-    const mockOnClose = jest.fn();
-    render(<Dialog title="Test-Dialog" onClose={mockOnClose} />, {container: global.document.querySelector("#portal")!});
-    fireEvent.click(screen.getByTestId("dialog__close-button"));
-    expect(mockOnClose).toHaveBeenCalled();
   });
 
   it("should run the onClose function on ESC key press", () => {
