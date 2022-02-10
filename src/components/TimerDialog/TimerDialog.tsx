@@ -52,7 +52,7 @@ export const TimerDialog: VFC = () => {
   }
 
   return (
-    <Dialog title={t("TimerToggleButton.label")} onClose={() => navigate("..")}>
+    <Dialog className="timer-dialog" title={t("TimerToggleButton.label")} onClose={() => navigate("..")}>
       <button className="dialog__button" onClick={() => startTimer(1)} data-testid="timer-dialog__1-minute-button">
         <label>{t("TimerToggleButton.1min")}</label>
         <OneIcon className="timer-dialog__button-icon" />
