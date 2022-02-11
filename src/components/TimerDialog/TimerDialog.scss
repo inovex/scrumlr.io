@@ -5,6 +5,9 @@
     .timer-dialog {
       top: calc(50% - 105px - 25px + 46px);
       right: 100px;
+      left: auto;
+      bottom: auto;
+      height: auto;
     }
     .timer-dialog::before {
       content: " ";
@@ -36,6 +39,9 @@
     .timer-dialog {
       left: calc(50% - 139px + 28px + 18px - 200px);
       bottom: 100px;
+      top: auto;
+      right: auto;
+      height: auto;
     }
     .timer-dialog::before {
       content: " ";

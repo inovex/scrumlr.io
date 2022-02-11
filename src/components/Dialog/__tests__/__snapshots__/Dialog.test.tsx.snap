@@ -37,6 +37,15 @@ exports[`Dialog should match snapshot 1`] = `
               Test-Dialog
             </h2>
           </article>
+          <button
+            class="dialog__close-button"
+          >
+            <svg
+              class="close-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </button>
         </aside>
       </div>
     </div>

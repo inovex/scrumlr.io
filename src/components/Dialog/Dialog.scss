@@ -8,7 +8,6 @@
   box-sizing: border-box;
   position: fixed;
   border: 3px solid $color-planning-pink;
-  border-radius: 8px;
   box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.25);
   background: $color-white-one;
   box-shadow: 2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02), 6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028), 12.5px 12.5px 10px rgba(0, 0, 0, 0.035), 22.3px 22.3px 17.9px rgba(0, 0, 0, 0.042),
@@ -20,6 +19,7 @@
 @media screen and (min-width: 450px) {
   .dialog {
     width: 400px;
+    border-radius: 8px;
   }
 }
 
@@ -41,6 +41,31 @@
   .dialog__header-text {
     color: $color-white;
   }
+}
+
+.dialog__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: $color-planning-pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+@media screen and (min-width: 450px) {
+  .dialog__close-button {
+    display: none;
+  }
+}
+.close-button__icon {
+  width: 44px;
+  height: 44px;
 }
 
 .dialog__button {
