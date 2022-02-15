@@ -1,0 +1,208 @@
+@import "constants/style";
+
+.board-settings__container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.board-settings__board-name-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  cursor: text;
+}
+
+.board-settings__board-name-button span {
+  cursor: inherit;
+}
+
+.board-settings__board-name-button_input {
+  background-color: transparent;
+  border: none;
+  padding: 16px 24px 16px 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  text-align: right;
+  cursor: inherit;
+}
+
+.board-settings__board-name-button_input:focus {
+  outline: none;
+}
+
+.board-settings__board-name-button_input::placeholder {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .board-settings__board-name-button_input,
+  .board-settings__board-name-button_input::placeholder {
+    color: $color-white;
+  }
+}
+
+.board-settings__group-and-button {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.board-settings__policy-button {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.board-settings__policy-button span {
+  cursor: inherit;
+}
+
+.board-settings__policy-button_value {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-settings__policy-button_value span {
+  padding: 16px 24px 16px 8px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+[theme="dark"] {
+  .board-settings__policy-button_value span {
+    color: $color-white;
+  }
+}
+
+.board-settings__policy-button_value svg {
+  width: 30px;
+  height: 25px;
+}
+
+.board-settings__password-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.board-settings__password-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+  position: relative;
+  cursor: text;
+}
+
+.board-settings__password-button span {
+  cursor: inherit;
+}
+
+.board-settings__password-button_value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-settings__password-button_value svg {
+  width: 30px;
+  height: 25px;
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.board-settings__password-button_value-input {
+  background-color: transparent;
+  border: none;
+  padding: 16px 16px 16px 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  text-align: right;
+}
+
+[theme="dark"] {
+  .board-settings__password-button_value-input {
+    color: $color-white;
+  }
+}
+
+.board-settings__password-button_value-input:focus {
+  outline: none;
+}
+
+.board-settings__password-button-extension {
+  position: absolute;
+  right: -40px;
+  width: 30px;
+  height: 25px;
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.board-settings__set-policy-button {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background-color: inherit;
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.board-settings__set-policy-button svg {
+  width: 30px;
+  height: 25px;
+}
+
+.board-settings__set-policy-button span {
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.board-settings__show-author-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__show-notes-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__show-columns-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__delete-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__delete-button span {
+  color: #df1313;
+  font-weight: bold;
+}
+
+.board-settings__delete-button svg {
+  color: #df1313;
+  width: 30px;
+  height: 25px;
+}
+
+.board-settings__confirmation-dialog {
+  z-index: 0;
+}

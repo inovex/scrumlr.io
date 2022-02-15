@@ -22,7 +22,7 @@ $header-menu-border-bottom-color: #efefef;
   cursor: pointer;
 }
 
-.settings-option-button:focus,
+// .settings-option-button:focus,
 .settings-option-button:hover {
   background-color: rgba(var(--accent-color-rgb), 0.1);
 }
@@ -38,6 +38,12 @@ $header-menu-border-bottom-color: #efefef;
   padding: 16px;
 }
 
+// @media screen and (max-width: 920px) {
+//   .settings-option-button__label {
+//     font-size: 1rem;
+//   }
+// }
+
 .settings-option-button__icon {
   width: $header-menu-icon-width;
   height: $header-menu-icon-height;
@@ -46,10 +52,19 @@ $header-menu-border-bottom-color: #efefef;
   border-bottom: none !important;
 }
 
-.settings-option-button:focus,
-.settings-option-button--expandable:focus,
-.settings-option-button--expandable:hover {
-  background-color: var(--accent-color);
+// .settings-option-button:focus,
+// .settings-option-button--expandable:focus,
+// .settings-option-button--expandable:hover {
+//   background-color: var(--accent-color);
+// }
+
+.settings-option-button--disabled {
+  cursor: default;
+}
+
+.settings-option-button--disabled:hover {
+  cursor: default;
+  background-color: $color-white;
 }
 
 [theme="dark"] {
@@ -57,7 +72,7 @@ $header-menu-border-bottom-color: #efefef;
     background-color: $color-dark-mode-note;
   }
 
-  .settings-option-button:focus,
+  // .settings-option-button:focus,
   .settings-option-button:hover {
     background-color: $color-dark-mode-note--hover;
   }
@@ -66,13 +81,17 @@ $header-menu-border-bottom-color: #efefef;
     color: $color-white;
   }
 
+  .settings-option-button--disabled:hover {
+    background-color: $color-dark-mode-note;
+  }
+
   .settings-option-button--expandable {
     background-color: $color-dark-mode-note;
   }
 
-  .settings-option-button:focus,
-  .settings-option-button--expandable:focus,
-  .settings-option-button--expandable:hover {
-    background-color: $color-dark-mode-note--hover;
-  }
+  // .settings-option-button:focus,
+  // .settings-option-button--expandable:focus,
+  // .settings-option-button--expandable:hover {
+  //   background-color: $color-dark-mode-note--hover;
+  // }
 }

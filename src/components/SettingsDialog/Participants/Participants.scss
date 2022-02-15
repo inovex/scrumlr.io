@@ -1,0 +1,65 @@
+@import "constants/style";
+
+.participants__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.participants__search-and-filter {
+  color: black;
+}
+
+[theme="dark"] {
+  .participants__search-and-filter {
+    color: $color-white;
+  }
+}
+
+.participants__user-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 8px;
+  // background-color: #fff; // ?
+}
+
+.participants__list-item {
+  position: relative;
+}
+
+.participants__list-item svg {
+  height: 26px;
+  width: 26px;
+  order: 1;
+}
+
+.participants__list-item span {
+  order: 2;
+}
+
+.participants__list-item div {
+  order: 3;
+}
+
+.participant__online-mark {
+  position: absolute;
+  top: 30px;
+  left: 18px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: green;
+}
+
+.participant__offline-mark {
+  position: absolute;
+  top: 30px;
+  left: 18px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: red;
+}

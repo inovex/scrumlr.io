@@ -199,18 +199,28 @@
   color: white;
 }
 
-.settings-dialog__header {
-  display: flex;
-  justify-content: center;
-  margin: 40px 0;
-}
-
 .settings-dialog__container {
   margin: 0 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
 @media screen and (min-width: 920px) {
   .settings-dialog__container {
     margin: 0 92px;
+  }
+}
+
+.settings-dialog__header {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+@media screen and (min-width: 920px) {
+  .settings-dialog__header {
+    margin: 40px 0;
   }
 }
 
@@ -220,19 +230,19 @@
   margin: 0;
 }
 
-.settings-dialog__group {
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
 .settings-dialog__seperator {
   margin: 0;
   margin-left: 5%;
   width: 90%;
   border: 0;
   border-top: 0.5px solid #eee;
+}
+
+.settings-dialog__group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 [theme="dark"] {

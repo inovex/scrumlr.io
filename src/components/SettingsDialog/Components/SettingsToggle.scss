@@ -1,0 +1,53 @@
+@import "constants/style";
+
+$header-menu-icon-width: 79px;
+$header-menu__item-height: 48px;
+
+$header-menu-button-height: 24px;
+$header-menu-button-width: 24px;
+$header-menu-toggle-button-height: 20px; //ball
+$header-menu-toggle-button-width: 20px;
+$header-menu-toggle-height: 8px; //strichdicke
+$header-menu-toggle-background-color: #c8c8c8;
+
+.settings-toggle {
+  width: $header-menu-icon-width;
+  min-width: $header-menu-icon-width;
+  height: $header-menu__item-height;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+.settings-toggle__switch {
+  //   width: $header-menu-button-width;
+  //   height: $header-menu-button-height;
+  position: relative;
+  display: inline-block;
+}
+.settings-toggle__switch::after {
+  content: "";
+  height: $header-menu-toggle-button-height;
+  width: $header-menu-toggle-button-width;
+  position: absolute;
+  border-radius: 100%;
+  top: calc(50% - #{$header-menu-toggle-button-height} / 2);
+  transition: all 0.25s linear;
+}
+.settings-toggle__switch::before {
+  content: "";
+  height: $header-menu-toggle-height;
+  width: 40px;
+  background-color: $header-menu-toggle-background-color;
+  position: absolute;
+  border-radius: $header-menu-toggle-height;
+  top: calc(50% - #{$header-menu-toggle-height} / 2);
+}
+.settings-toggle__switch--left::after {
+  left: -1px;
+  background-color: $color-middle-gray;
+}
+.settings-toggle__switch--right::after {
+  left: $header-menu-toggle-button-width;
+  background-color: var(--accent-color);
+}

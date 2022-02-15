@@ -1,0 +1,31 @@
+.appearance-container {
+  display: flex;
+  flex-direction: column;
+  gap: 192px;
+}
+
+.appearance-settings {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.appearance-settings_sync-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.appearance-settings_notifications-button {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.appearance-language-dropdown {
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding-right: 24px;
+}
