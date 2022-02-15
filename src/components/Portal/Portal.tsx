@@ -2,9 +2,7 @@ import {FC} from "react";
 import FocusLock from "react-focus-lock";
 import ReactDOM from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
-
 import classNames from "classnames";
-
 import "./Portal.scss";
 
 export interface PortalProps {
@@ -21,6 +19,12 @@ export interface PortalProps {
  * Portal for modals adds backdrop and locks focus within portal content.
  */
 export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disabledPadding, children, className, ...otherProps}) => {
+  // Check existence of portal node
+  const portal: HTMLElement | null = document.getElementById("portal");
+  if (portal == null) {
+    throw new Error("Portal HTML Element doesn't exist!");
+  }
+
   useWindowEvent("keydown", (event) => {
     console.log("keydown");
     if (event.key !== "Escape") return;
@@ -28,12 +32,6 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
     event.stopPropagation();
     onClose?.();
   });
-
-  // mount backdrop into separate located DOM node 'portal'
-  const portal: HTMLElement = document.getElementById("portal")!;
-  if (!portal) {
-    throw new Error("portal element does not exist");
-  }
 
   return ReactDOM.createPortal(
     <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>

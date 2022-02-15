@@ -16,21 +16,6 @@
   height: 100%;
 }
 
-//@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-//  .portal {
-//    background-color: #0057ff80;
-//    backdrop-filter: blur(10px);
-//    -webkit-backdrop-filter: blur(10px);
-//  }
-//}
-//
-///* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
-//@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-//  .portal {
-//    background-color: #0057ff80;
-//  }
-//}
-
 .portal__frame {
   position: absolute;
   width: calc(100vw - 24px);
