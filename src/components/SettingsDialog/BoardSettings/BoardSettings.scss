@@ -3,11 +3,10 @@
 .board-settings__container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 32px;
 }
 
 .board-settings__board-name-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   cursor: text;
 }
@@ -24,6 +23,7 @@
   letter-spacing: 0.5px;
   font-size: 14px;
   text-align: right;
+  max-width: 150px;
   cursor: inherit;
 }
 
@@ -53,7 +53,6 @@
 
 .board-settings__policy-button {
   display: flex;
-  flex-direction: row-reverse;
   justify-content: space-between;
 }
 
@@ -69,10 +68,17 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: 16px 24px 16px 8px;
+  padding: 16px 24px 16px 4px;
   font-weight: bold;
   letter-spacing: 0.5px;
   font-size: 14px;
+}
+
+@media screen and (max-width: 920px) {
+  .board-settings__policy-button_value span {
+    max-width: min-content;
+    text-align: right;
+  }
 }
 
 [theme="dark"] {
@@ -82,8 +88,9 @@
 }
 
 .board-settings__policy-button_value svg {
-  width: 30px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
+  stroke: var(--accent-color);
 }
 
 .board-settings__password-button-wrapper {
@@ -94,7 +101,6 @@
 }
 
 .board-settings__password-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   padding-right: 24px;
   position: relative;
@@ -113,7 +119,7 @@
 
 .board-settings__password-button_value svg {
   width: 30px;
-  height: 25px;
+  height: 30px;
   color: var(--accent-color);
   cursor: pointer;
 }
@@ -126,6 +132,7 @@
   letter-spacing: 0.5px;
   font-size: 14px;
   text-align: right;
+  max-width: 120px;
 }
 
 [theme="dark"] {
@@ -139,70 +146,98 @@
 }
 
 .board-settings__password-button-extension {
-  position: absolute;
-  right: -40px;
-  width: 30px;
-  height: 25px;
   color: var(--accent-color);
   cursor: pointer;
+  width: 30px;
+  height: 25px;
+}
+
+@media screen and (max-width: 920px) {
+  .board-settings__password-button-extension {
+    position: absolute;
+    right: 24px;
+    bottom: -35px;
+  }
+}
+
+@media screen and (min-width: 920px) {
+  .board-settings__password-button-extension {
+    position: absolute;
+    right: -40px;
+    bottom: 10px;
+  }
 }
 
 .board-settings__set-policy-button {
-  align-self: center;
   display: flex;
   align-items: center;
-  padding: 0;
+  padding: 0px 24px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
   cursor: pointer;
 }
 
+@media screen and (min-width: 920px) {
+  .board-settings__set-policy-button {
+    align-self: center;
+  }
+}
+
 .board-settings__set-policy-button svg {
-  width: 30px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
+  stroke: var(--accent-color);
 }
 
 .board-settings__set-policy-button span {
+  padding-left: 4px;
   font-weight: bold;
   font-size: 13px;
+  letter-spacing: 0.5px;
 }
 
 .board-settings__show-author-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   padding-right: 24px;
 }
 
 .board-settings__show-notes-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   padding-right: 24px;
 }
 
 .board-settings__show-columns-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   padding-right: 24px;
 }
 
 .board-settings__delete-button {
-  flex-direction: row-reverse;
   justify-content: space-between;
   padding-right: 24px;
 }
 
 .board-settings__delete-button span {
-  color: #df1313;
+  color: $color-retro-red;
   font-weight: bold;
 }
 
+[theme="dark"] {
+  .board-settings__delete-button span {
+    color: $color-retro-red;
+  }
+}
+
 .board-settings__delete-button svg {
-  color: #df1313;
+  color: $color-retro-red;
   width: 30px;
   height: 25px;
 }
 
 .board-settings__confirmation-dialog {
   z-index: 0;
+}
+
+.button--centered {
+  align-self: center;
 }

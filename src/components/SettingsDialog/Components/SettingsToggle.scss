@@ -5,9 +5,9 @@ $header-menu__item-height: 48px;
 
 $header-menu-button-height: 24px;
 $header-menu-button-width: 24px;
-$header-menu-toggle-button-height: 20px; //ball
+$header-menu-toggle-button-height: 20px;
 $header-menu-toggle-button-width: 20px;
-$header-menu-toggle-height: 8px; //strichdicke
+$header-menu-toggle-height: 8px;
 $header-menu-toggle-background-color: #c8c8c8;
 
 .settings-toggle {
@@ -20,8 +20,6 @@ $header-menu-toggle-background-color: #c8c8c8;
   vertical-align: middle;
 }
 .settings-toggle__switch {
-  //   width: $header-menu-button-width;
-  //   height: $header-menu-button-height;
   position: relative;
   display: inline-block;
 }

@@ -57,6 +57,7 @@
   "ParticipantsList": {
     "title": "Participants",
     "search": "Search",
+    "searchAndFilter": "Search and filter?",
     "headerLegendName": "Name",
     "headerLegendAdmin": "Admin"
   },
@@ -169,10 +170,6 @@
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
-  "BoardSettings": {
-    "save": "save",
-    "edit": "edit"
-  },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
   },
@@ -189,6 +186,10 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!"
+  },
+  "Language": {
+    "german": "German",
+    "english": "English"
   },
   "Homepage": {
     "developers": "© 2021, provided by <inovex>inovex</inovex> with ❤️",
@@ -219,5 +220,24 @@
     "Feedback": "Feedback",
     "FeedbackDescription": "We love to hear from you",
     "ProfileDescription": "Edit profile"
+  },
+  "BoardSettings": {
+    "BoardName": "Board Name",
+    "AccessPolicy": "Access Policy",
+    "Password": "Password",
+    "SetAccessPolicyOpen": "Set to open",
+    "SetAccessPolicyPasswordProtected": "Set to password protected",
+    "DeleteBoard": "Delete Board",
+    "save": "save",
+    "edit": "edit"
+  },
+  "Participants": {
+    "Owner": "Owner"
+  },
+  "Appearance": {
+    "SyncMode": "Sync Appearance Mode with System",
+    "SyncModeDescription": "Scrumlr will match the appearance mode (dark or light) with your active system settings",
+    "AllowNotifications": "Allow Notifications",
+    "Language": "Language"
   }
 }

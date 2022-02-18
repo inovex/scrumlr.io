@@ -9,7 +9,7 @@
 }
 
 .participants__search-and-filter {
-  color: black;
+  color: $color-black;
 }
 
 [theme="dark"] {
@@ -23,43 +23,69 @@
   flex-direction: column;
   width: 100%;
   border-radius: 8px;
-  // background-color: #fff; // ?
+  background-color: $color-white;
 }
 
-.participants__list-item {
+[theme="dark"] {
+  .participants__user-list {
+    background-color: $color-dark-mode-note;
+  }
+}
+
+//TODO
+// .participants__user-list {
+//   overflow-y: scroll;
+//   height: 390px;
+// }
+//
+.participants__user {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 24px;
+}
+
+.participants__user_avatar-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
   position: relative;
 }
 
-.participants__list-item svg {
+.participants__user_avatar {
   height: 26px;
   width: 26px;
-  order: 1;
 }
 
-.participants__list-item span {
-  order: 2;
+.participants__user-name {
+  color: $color-black;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
-.participants__list-item div {
-  order: 3;
+[theme="dark"] {
+  .participants__user-name {
+    color: $color-white;
+  }
 }
 
-.participant__online-mark {
+.participants__online-mark {
   position: absolute;
-  top: 30px;
-  left: 18px;
-  height: 10px;
-  width: 10px;
+  top: 18px;
+  left: 19px;
+  height: 8px;
+  width: 8px;
   border-radius: 50%;
-  background-color: green;
+  background-color: $color-grooming-green;
 }
 
-.participant__offline-mark {
+.participants__offline-mark {
   position: absolute;
-  top: 30px;
-  left: 18px;
-  height: 10px;
-  width: 10px;
+  top: 18px;
+  left: 19px;
+  height: 8px;
+  width: 8px;
   border-radius: 50%;
-  background-color: red;
+  background-color: $color-retro-red;
 }

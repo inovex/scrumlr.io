@@ -38,14 +38,16 @@
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__content {
+    width: 380px;
+    height: calc(100% + 50px);
     border-radius: 8px;
-    width: 318px;
   }
 }
 @media screen and (min-width: 920px) {
   .settings-dialog__content {
     display: block;
     width: 544px;
+    height: 100%;
     border-radius: 0px 8px 8px 0px;
     padding-top: 0;
   }
@@ -63,7 +65,8 @@
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__sidebar {
-    width: 318px;
+    width: 380px;
+    height: calc(100% + 50px);
     border-radius: 8px;
   }
 }
@@ -72,6 +75,8 @@
     display: block;
   }
   .settings-dialog__sidebar {
+    width: 318px;
+    height: 100%;
     border-radius: 8px 0 0 8px;
   }
 }
