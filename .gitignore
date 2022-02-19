@@ -24,7 +24,7 @@ yarn-error.log*
 server/logs
 
 # ide
-/.idea
+.idea
 debug.log
 ui-debug.log
 
@@ -33,3 +33,7 @@ ui-debug.log
 
 # env files
 server/.env
+
+# Server files
+go-server/src/main
+go-server/src/coverage.txt

@@ -18,6 +18,8 @@ import {passJoinRequestMiddleware} from "./middleware/joinRequest";
 import {passUsersMiddleware} from "./middleware/users";
 import {joinRequestReducer} from "./reducer/joinRequest";
 import {passVoteConfigurationMiddlware} from "./middleware/voteConfiguration";
+import {userReducer} from "./reducer/user";
+import {passUserMiddleware} from "./middleware/user";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
@@ -30,6 +32,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
     passJoinRequestMiddleware(stateAPI, dispatch, action);
+    passUserMiddleware(stateAPI, dispatch, action);
     passUsersMiddleware(stateAPI, dispatch, action);
   }
 };
@@ -37,6 +40,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
 const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
   notes: noteReducer,
+  user: userReducer,
   users: usersReducer,
   joinRequests: joinRequestReducer,
   votes: voteReducer,

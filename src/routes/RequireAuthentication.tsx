@@ -1,30 +1,13 @@
 import {Navigate} from "react-router-dom";
-import Parse from "parse";
 import {useLocation} from "react-router";
-import {useEffect, useState, FC} from "react";
-import {LoadingScreen} from "../components/LoadingScreen";
+import {FC} from "react";
+import {useAppSelector} from "../store";
 
 export const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
+  const {user} = useAppSelector((state) => state.user);
 
-  const [verifiedSession, setVerifiedSession] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    Parse.Session.current()
-      .then(() => {
-        setVerifiedSession(true);
-      })
-      .catch(() => {
-        setVerifiedSession(false);
-      });
-  }, []);
-
-  if (verifiedSession === undefined) {
-    // wait while session needs to be verified
-    return <LoadingScreen />;
-  }
-
-  if (verifiedSession) {
+  if (user) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>;
   }

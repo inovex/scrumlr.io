@@ -1,7 +1,8 @@
-import Parse from "parse";
 import {Toast} from "utils/Toast";
 import {API} from "api";
 import i18n from "i18next";
+import store from "../../store";
+import {ActionFactory} from "../../store/action";
 
 /**
  * Sign in anonymously.
@@ -11,12 +12,13 @@ import i18n from "i18next";
  *
  * @returns Promise with user credentials on successful sign in, null otherwise.
  */
-const signInAnonymously = async (displayName?: string, photoURL?: string) => {
+const signInAnonymously = async (displayName: string, photoURL?: string) => {
   try {
-    const user = new Parse.User();
-    user.set("displayName", displayName);
-    user.set("photoURL", photoURL);
-    return await user.linkWith("anonymous", {authData: undefined});
+    const user = await API.signInAnonymously(displayName);
+    if (user) {
+      store.dispatch(ActionFactory.signIn(user.id, user.name));
+    }
+    return true;
   } catch (err) {
     Toast.error(i18n.t("Toast.authenticationError"));
     return null;

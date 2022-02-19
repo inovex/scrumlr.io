@@ -12,6 +12,15 @@ export interface BoardState {
   data?: BoardClientModel;
 }
 
+export interface UserState {
+  user:
+    | {
+        id: string;
+        name: string;
+      }
+    | undefined;
+}
+
 export interface UsersState {
   usersMarkedReady: string[];
   usersRaisedHands: string[];
@@ -23,6 +32,7 @@ export interface UsersState {
 export interface ApplicationState {
   board: BoardState;
   notes: NoteClientModel[];
+  user: UserState;
   users: UsersState;
   joinRequests: JoinRequestClientModel[];
   votes: VoteClientModel[];

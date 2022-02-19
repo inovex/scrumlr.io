@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAIS SCRUMLR</title>
+</head>
+
+<body>
+
+  <h1>scrumlr.io</h1>
+
+  <div>Logged in: <span id="loggedInStatus"></span></div>
+
+  <button onclick="login()">Login</button>
+  <button onclick="createBoard('PUBLIC')">Create Board (PUBLIC)</button>
+  <button onclick="createBoard('BY_INVITE')">Create Board (BY_INVITE)</button>
+
+  <ul id="boards"></ul>
+
+  <script>
+    let sessionExists = false
+    const checkCookieExistence = () => {
+      sessionExists = document.cookie.indexOf('jwt=') >= 0;
+      document.getElementById("loggedInStatus").innerText = Boolean(sessionExists).toString()
+    }
+    checkCookieExistence()
+
+    const login = () => {
+      fetch("/login/anonymous", {method: "POST", body: JSON.stringify({ name: "John Doe" })}).then(() => {
+        checkCookieExistence()
+      })
+    }
+
+    const createBoard = (type) => {
+      fetch("/boards", {
+        method: "POST",
+        body: JSON.stringify({
+          name: "The board",
+          accessPolicy: type,
+          columns: [ { name: "Lean coffee", visible: true }]
+        })
+      }).then((response) => {
+        const url = response.headers.get('Location');
+        const boards = document.getElementById("boards");
+
+        const a = document.createElement("a");
+        a.href = url.replaceAll("boards", "debug");
+        a.innerText = url;
+
+        const li = document.createElement("li");
+        li.appendChild(a);
+
+        boards.append(li);
+      })
+    }
+  </script>
+
+</body>
+</html>

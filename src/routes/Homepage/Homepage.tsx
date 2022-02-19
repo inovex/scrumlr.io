@@ -6,15 +6,17 @@ import {ReactComponent as English} from "assets/flags/US.svg";
 import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
-import Parse from "parse";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
 import {Button} from "../../components/Button";
 import {InovexAnchor} from "./InovexAnchor";
+import store, {useAppSelector} from "../../store";
+import {ActionFactory} from "../../store/action";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
+  const {user} = useAppSelector((state) => state.user);
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -24,7 +26,7 @@ export const Homepage = withTranslation()(() => {
   };
 
   const onLogout = async () => {
-    await Parse.User.logOut();
+    store.dispatch(ActionFactory.signOut());
     // eslint-disable-next-line no-restricted-globals
     location.reload();
   };
@@ -47,7 +49,7 @@ export const Homepage = withTranslation()(() => {
               </Button>
             </li>
 
-            {Parse.User.current() && (
+            {!!user && (
               <li>
                 <Button variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout

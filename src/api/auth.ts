@@ -20,6 +20,23 @@ export interface IAppleUser {
  */
 
 export const AuthAPI = {
+  signInAnonymously: async (name: string) => {
+    const response = await fetch("http://localhost:8080/login/anonymous", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({name}),
+    });
+
+    if (response.status === 201) {
+      const body = await response.json();
+      return {
+        id: body.id,
+        name: body.name,
+      };
+    }
+    return undefined;
+  },
+
   /**
    * Sign in with authentication provider: google, github, microsoft or apple.
    *

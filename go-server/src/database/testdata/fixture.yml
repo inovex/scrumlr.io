@@ -1,0 +1,462 @@
+- model: User
+  rows:
+    - _id: john
+      id: "3113b096-986c-4e23-adf7-b3fa19224bd2"
+      name: John Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
+    - _id: jane
+      id: "3113b096-986c-4e23-adf7-b3fa19224bd3"
+      name: Jane Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
+    - _id: jennifer
+      id: "3113b096-986c-4e23-bdf7-b3fa19224bd3"
+      name: Jennifer Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
+    - _id: jack
+      id: "3113b096-986c-4e23-cdf7-b3fa19224bd3"
+      name: Jack Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
+    - _id: jay
+      id: "3113b096-986c-4e23-ddf7-b3fa19224bd3"
+      name: Jay Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
+
+- model: Board
+  rows:
+    - _id: columnsTestBoard
+      id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
+      name: John's board
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardSessionsTestBoard
+      id: "3113b096-986c-4e23-adf7-c3fa19224bd4"
+      name: BoardSession test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardSessionRequestsTestBoard
+      id: "4113b096-986c-4e23-adf7-c3fa19224bd4"
+      name: BoardSessionRequest test
+      access_policy: BY_INVITE
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardTestBoard
+      id: "5113b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Board test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: openMultipleVotesTestBoard
+      id: "7113b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Votes test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: openSingleVotesTestBoard
+      id: "7243b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Votes test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: closedVotesTestBoard
+      id: "7213b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Votes test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: abortedVotesTestBoard
+      id: "7313b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Votes test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: votingTestBoard
+      id: "6113b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Voting test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: notesTestBoard
+      id: "2813b096-986c-4e23-adf7-c3fa19224bd4"
+      name: Notes test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: columnsObserverTestBoard
+      id: "2813b096-986c-0000-0000-c3fa19224bd4"
+      name: Columns observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardsObserverTestBoard
+      id: "2813b096-986c-0000-0001-c3fa19224bd4"
+      name: Boards observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardSessionsObserverTestBoard
+      id: "2813b096-986c-0000-0002-c3fa19224bd4"
+      name: Board sessions observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: boardSessionRequestsObserverTestBoard
+      id: "2813b096-986c-0000-0003-c3fa19224bd4"
+      name: Board sessions observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: notesObserverTestBoard
+      id: "2813b096-986c-0000-0004-c3fa19224bd4"
+      name: Notes sessions observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+    - _id: votingObserverTestBoard
+      id: "2813b096-986c-0000-0005-c3fa19224bd4"
+      name: Voting observer test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
+
+- model: BoardSessionInsert
+  rows:
+    - _id: johnsSessionOnColumnsTestBoard
+      board: '{{ $.Board.columnsTestBoard.ID }}'
+      user: '{{ $.User.john.ID }}'
+      role: OWNER
+    - _id: janesSessionOnBoardSessionTestBoard
+      board: '{{ $.Board.boardSessionsTestBoard.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      role: OWNER
+    - _id: johnsSessionOnBoardSessionRequestsTestBoard
+      board: '{{ $.Board.boardSessionRequestsTestBoard.ID }}'
+      user: '{{ $.User.john.ID }}'
+      role: OWNER
+    - _id: johnsSessionOnOpenMultipleVotesTestBoard
+      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: johnsSessionOnOpenSingleVotesTestBoard
+      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: johnsSessionOnClosedVotesTestBoard
+      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: johnsSessionOnAbortedVotesTestBoard
+      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: jacksSessionOnVotingTestBoard
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: janesSessionOnVotingTestBoard
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      role: PARTICIPANT
+    - _id: jacksSessionOnNotesTestBoard
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: jacksSessionOnNotesObserverTestBoard
+      board: '{{ $.Board.notesObserverTestBoard.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      role: OWNER
+    - _id: jaysSessionOnBoardSessionsObserverTestBoard
+      board: '{{ $.Board.boardSessionsObserverTestBoard.ID }}'
+      user: '{{ $.User.jay.ID }}'
+      role: OWNER
+
+- model: Column
+  rows:
+    - _id: firstColumn
+      board: '{{ $.Board.columnsTestBoard.ID }}'
+      name: First column
+      visible: true
+      index: 0
+    - _id: secondColumn
+      board: '{{ $.Board.columnsTestBoard.ID }}'
+      name: Second column
+      visible: true
+      index: 1
+    - _id: thirdColumn
+      board: '{{ $.Board.columnsTestBoard.ID }}'
+      name: Third column
+      visible: true
+      index: 2
+    - _id: openMultipleVotesColumn
+      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      name: Vote here
+      visible: true
+      index: 0
+    - _id: openSingleVotesColumn
+      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      name: Vote here
+      visible: true
+      index: 0
+    - _id: closedVotesColumn
+      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      name: Vote here
+      visible: true
+      index: 0
+    - _id: abortedVotesColumn
+      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      name: Vote here
+      visible: true
+      index: 0
+    - _id: votingColumn
+      id: "3113b196-986c-5f23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      name: Voting column
+      visible: true
+      index: 0
+    - _id: notesColumnA
+      id: "3113b196-986c-2123-adf7-c3fa19224bd4"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      name: A
+      visible: true
+      index: 0
+    - _id: notesColumnB
+      id: "3113b196-986c-2923-adf7-c3fa19224bd4"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      name: B
+      visible: true
+      index: 0
+    - _id: notesObserverTestColumn
+      id: "3113b196-986c-2951-adf7-c3fa19224bd4"
+      board: '{{ $.Board.notesObserverTestBoard.ID }}'
+      name: B
+      visible: true
+      index: 0
+
+- model: Note
+  rows:
+    - _id: openMultipleVotesTestBoardNote
+      id: "3113b888-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.openMultipleVotesColumn.ID }}'
+      text: "Just some text"
+      stack: null
+      rank: 0
+    - _id: openSingleVotesTestBoardNote
+      id: "3113b878-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.openSingleVotesColumn.ID }}'
+      text: "Just some text"
+      stack: null
+      rank: 0
+    - _id: closedVotesTestBoardNote
+      id: "3113b889-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.closedVotesColumn.ID }}'
+      text: "Just some text"
+      stack: null
+      rank: 0
+    - _id: abortedVotesTestBoardNote
+      id: "3113b899-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.abortedVotesColumn.ID }}'
+      text: "Just some text"
+      stack: null
+      rank: 0
+    - _id: votingTestBoardParentNoteOfStack
+      id: "3113b296-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      author: '{{ $.User.jane.ID }}'
+      column: '{{ $.Column.votingColumn.ID }}'
+      text: "I'm the godfather"
+      stack: null
+      rank: 1
+    - _id: votingTestBoardChildOfStack
+      id: "3113b396-986c-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.votingColumn.ID }}'
+      text: "Just do it!"
+      stack: "3113b296-986c-4e23-adf7-c3fa19224bd4"
+      rank: 0
+    - _id: notesTestA1
+      id: "00000000-0000-0000-0000-0000000000a1"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnA.ID }}'
+      text: "Just do it!"
+      stack: null
+      rank: 2
+    - _id: notesTestA2
+      id: "00000000-0000-0000-0000-0000000000a2"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnA.ID }}'
+      text: "Just do it!"
+      stack: null
+      rank: 1
+    - _id: notesTestA3 # stacked on A2
+      id: "00000000-0000-0000-0000-0000000000a3"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnA.ID }}'
+      text: "Just do it!"
+      stack: "00000000-0000-0000-0000-0000000000a2"
+      rank: 0
+    - _id: notesTestA4
+      id: "00000000-0000-0000-0000-0000000000a4"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnA.ID }}'
+      text: "Just do it!"
+      stack: null
+      rank: 0
+    - _id: notesTestA5 # stacked on A4
+      id: "00000000-0000-0000-0000-0000000000a5"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnA.ID }}'
+      text: "Just do it!"
+      stack: "00000000-0000-0000-0000-0000000000a4"
+      rank: 0
+    - _id: notesTestB1
+      id: "00000000-0000-0000-0000-0000000000b1"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnB.ID }}'
+      text: "Just do it!"
+      stack: null
+      rank: 1
+    - _id: notesTestB2
+      id: "00000000-0000-0000-0000-0000000000b2"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnB.ID }}'
+      text: "Just do it!"
+      stack: null
+      rank: 0
+    - _id: notesTestB3 # stacked on B2
+      id: "00000000-0000-0000-0000-0000000000b3"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnB.ID }}'
+      text: "Just do it!"
+      stack: "00000000-0000-0000-0000-0000000000b2"
+      rank: 0
+
+- model: Voting
+  rows:
+    - _id: votingForOpenMultipleVotesTestBoard
+      id: "3113b396-2110-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      vote_limit: 2
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: OPEN
+    - _id: votingForOpenSingleVotesTestBoard
+      id: "3113b396-2118-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      vote_limit: 2
+      allow_multiple_votes: false
+      show_votes_of_others: true
+      status: OPEN
+    - _id: votingForClosedVotesTestBoard
+      id: "3113b396-2210-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      vote_limit: 2
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: CLOSED
+    - _id: votingForAbortedVotesTestBoard
+      id: "3113b396-2310-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      vote_limit: 2
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: ABORTED
+    - _id: votingTestBoardAbortedVoting
+      id: "3113b396-1110-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: ABORTED
+    - _id: votingTestBoardClosedVoting
+      id: "3113b396-1113-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: CLOSED
+    - _id: votingTestBoardClosedVotingHiddenUserVotes
+      id: "3113b396-1112-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: false
+      status: CLOSED
+    - _id: votingTestBoardOpenVoting
+      id: "3113b396-1114-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: OPEN
+
+- model: Vote
+  rows:
+    - _id: jacksVoteOnStack
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardClosedVoting.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+    - _id: jacksVoteOnChild
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardClosedVoting.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+    - _id: jacksVoteOnStackOpen
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+    - _id: jacksVoteOnChildOpen
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+    - _id: janesVoteOnStack
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+    - _id: janesVoteOnChild
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
