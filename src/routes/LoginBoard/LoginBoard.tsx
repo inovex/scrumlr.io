@@ -42,6 +42,8 @@ export const LoginBoard = () => {
     setSubmitted(true);
   }
 
+  console.log(location.state as State);
+
   // https://dribbble.com/shots/7757250-Sign-up-revamp
   return (
     <div className="login-board">
@@ -54,7 +56,7 @@ export const LoginBoard = () => {
 
             <h1>{t("LoginBoard.title")}</h1>
 
-            <LoginProviders originURL={(location.state as State).from.pathname} />
+            <LoginProviders originURL={`${window.location.origin}${(location.state as State).from.pathname}`} />
 
             <hr className="login-board__divider" data-label="or" />
 

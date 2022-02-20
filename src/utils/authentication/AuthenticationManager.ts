@@ -34,7 +34,7 @@ const signInAnonymously = async (displayName: string, photoURL?: string) => {
  * @param originURL origin URL
  */
 const signInWithAuthProvider = async (authProvider: string, originURL: string) => {
-  window.location.href = await API.signIn(authProvider, originURL);
+  window.location.href = `http://localhost:8080/login/${authProvider}?state=${encodeURIComponent(originURL)}`;
 };
 
 export const AuthenticationManager = {

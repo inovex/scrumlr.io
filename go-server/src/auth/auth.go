@@ -42,9 +42,9 @@ type AuthConfiguration struct {
 
 func NewAuthConfiguration(baseURL string, providers map[string]AuthProviderConfiguration, privateKey string) Auth {
 	a := new(AuthConfiguration)
-	a.initializeProviders(baseURL)
 	a.providers = providers
 	a.privateKey = privateKey
+	a.initializeProviders(baseURL)
 	a.initializeJWTAuth()
 
 	return a
