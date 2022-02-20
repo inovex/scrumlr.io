@@ -20,6 +20,14 @@ export interface IAppleUser {
  */
 
 export const AuthAPI = {
+  signOut: async () => {
+    await fetch("http://localhost:8080/login", {
+      method: "DELETE",
+      credentials: "include",
+    });
+    return true;
+  },
+
   signInAnonymously: async (name: string) => {
     const response = await fetch("http://localhost:8080/login/anonymous", {
       method: "POST",

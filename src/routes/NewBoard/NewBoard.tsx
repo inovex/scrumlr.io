@@ -1,7 +1,5 @@
-import Parse from "parse";
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
-import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
@@ -24,31 +22,27 @@ export const NewBoard = () => {
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
 
   async function onCreateBoard() {
-    if (Parse.User.current()) {
-      let additionalAccessPolicyOptions = {};
-      if (accessPolicy === AccessPolicy.ByPassphrase && Boolean(passphrase)) {
-        additionalAccessPolicyOptions = {
-          passphrase,
-        };
-      }
+    let additionalAccessPolicyOptions = {};
+    if (accessPolicy === AccessPolicy.BY_PASSPHRASE && Boolean(passphrase)) {
+      additionalAccessPolicyOptions = {
+        passphrase,
+      };
+    }
 
-      if (columnTemplate) {
-        const boardId = await API.createBoard(
-          boardName,
-          {
-            type: AccessPolicy[accessPolicy],
-            ...additionalAccessPolicyOptions,
-          },
-          columnTemplates[columnTemplate].columns
-        );
-        navigate(`/board/${boardId}`);
-      }
-    } else {
-      Toast.error(t("NewBoard.createBoardError"));
+    if (columnTemplate) {
+      const boardId = await API.createBoard(
+        boardName,
+        {
+          type: AccessPolicy[accessPolicy],
+          ...additionalAccessPolicyOptions,
+        },
+        columnTemplates[columnTemplate].columns
+      );
+      navigate(`/board/${boardId}`);
     }
   }
 
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.ByPassphrase && !passphrase);
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
 
   return (
     <div className="new-board__wrapper">

@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/database"
+	"scrumlr.io/server/database/types"
 )
 
 // Column is the response for all column requests.
@@ -15,6 +16,9 @@ type Column struct {
 	// The column name.
 	Name string `json:"name"`
 
+	// The column color.
+	Color types.Color `json:"color"`
+
 	// The column visibility.
 	Visible bool `json:"visible"`
 
@@ -25,6 +29,7 @@ type Column struct {
 func (c *Column) From(column database.Column) *Column {
 	c.ID = column.ID
 	c.Name = column.Name
+	c.Color = column.Color
 	c.Visible = column.Visible
 	c.Index = column.Index
 	return c
@@ -52,6 +57,9 @@ type ColumnRequest struct {
 	// The column name to set.
 	Name string `json:"name"`
 
+	// The column color to set.
+	Color types.Color `json:"color"`
+
 	// Sets whether this column should be visible to regular participants.
 	//
 	// The default value on creation is 'false'.
@@ -69,6 +77,9 @@ type ColumnUpdateRequest struct {
 
 	// The column name to set.
 	Name string `json:"name"`
+
+	// The column color to set.
+	Color types.Color `json:"color"`
 
 	// Sets whether this column should be visible to regular participants.
 	Visible bool `json:"visible"`

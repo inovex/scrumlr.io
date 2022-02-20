@@ -34,6 +34,8 @@ if (localStorage.getItem("theme")) {
   if (response.status === 200) {
     const body = await response.json();
     store.dispatch(ActionFactory.signIn(body.id, body.name));
+  } else {
+    store.dispatch(ActionFactory.userCheckCompleted());
   }
 })();
 

@@ -12,8 +12,41 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
-    callAPI<{columns: {name: string; hidden: boolean}[]; name?: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
+  // createBoard: (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
+  //  callAPI<{columns: {name: string; hidden: boolean}[]; name?: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
+
+  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
+    const response = await fetch("http://localhost:8080/boards", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        name,
+        accessPolicy: accessPolicy.type,
+        passphrase: accessPolicy.passphrase,
+        columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
+      }),
+    });
+
+    if (response.status === 201) {
+      const body = await response.json();
+      return body.id;
+    }
+
+    return undefined;
+  },
+
+  /*
+  {
+    "name": "My board",
+    "accessPolicy": "PUBLIC",
+    "columns": [
+        { "name": "Lean coffee", "visible": true, "color": "backlog-blue" },
+        { "name": "Actions", "visible": false, "color": "lean-lilac" }
+    ]
+}
+
+return board id
+   */
 
   /**
    * Edits the board with the specified parameters.

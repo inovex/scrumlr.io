@@ -7,6 +7,7 @@ import (
 	"github.com/uptrace/bun"
 	"math"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
 )
 
 // Column the model for a column of a board
@@ -15,6 +16,7 @@ type Column struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Color         types.Color
 	Visible       bool
 	Index         int
 }
@@ -24,6 +26,7 @@ type ColumnInsert struct {
 	bun.BaseModel `bun:"table:columns"`
 	Board         uuid.UUID
 	Name          string
+	Color         types.Color
 	Visible       *bool
 	Index         *int
 }
@@ -34,6 +37,7 @@ type ColumnUpdate struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Color         types.Color
 	Visible       bool
 	Index         int
 }

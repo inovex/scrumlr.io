@@ -62,7 +62,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	columns := make([]database.ColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
 		var currentIndex = index
-		columns = append(columns, database.ColumnInsert{Name: value.Name, Visible: value.Visible, Index: &currentIndex})
+		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
 	}
 
 	// create the board

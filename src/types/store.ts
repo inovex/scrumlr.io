@@ -19,6 +19,7 @@ export interface UserState {
         name: string;
       }
     | undefined;
+  initialized: boolean;
 }
 
 export interface UsersState {

@@ -121,6 +121,7 @@ func (s *Server) publicRoutes(r *chi.Mux) chi.Router {
 		r.Get("/health", s.healthCheck)
 
 		r.Route("/login", func(r chi.Router) {
+			r.Delete("/", s.logout)
 			r.Post("/anonymous", s.signInAnonymously)
 
 			r.Get("/{provider}", s.beginAuthProviderVerification)

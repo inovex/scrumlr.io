@@ -2,10 +2,15 @@ import {Navigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import {FC} from "react";
 import {useAppSelector} from "../store";
+import {LoadingScreen} from "../components/LoadingScreen";
 
 export const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
-  const {user} = useAppSelector((state) => state.user);
+  const {user, initialized} = useAppSelector((state) => state.user);
+
+  if (!initialized) {
+    return <LoadingScreen />;
+  }
 
   if (user) {
     // eslint-disable-next-line react/jsx-no-useless-fragment

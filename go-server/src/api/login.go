@@ -53,6 +53,13 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, user)
 }
 
+func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
+	cookie := http.Cookie{Name: "jwt", Expires: time.UnixMilli(0)}
+	http.SetCookie(w, &cookie)
+	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, nil)
+}
+
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
 	gothic.BeginAuthHandler(w, r)
@@ -109,5 +116,5 @@ func (s *Server) sealCookie(cookie *http.Cookie) {
 	}
 	// FIXME cross origin none
 	// cookie.SameSite = http.SameSiteStrictMode
-	//cookie.HttpOnly = true
+	cookie.HttpOnly = true
 }

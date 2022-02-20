@@ -3,6 +3,7 @@ create type access_policy as enum ('PUBLIC', 'BY_PASSPHRASE', 'BY_INVITE');
 create type board_session_request_status as enum ('PENDING', 'ACCEPTED', 'REJECTED');
 create type session_role as enum ('OWNER', 'PARTICIPANT', 'MODERATOR');
 create type voting_status as enum ('OPEN', 'ABORTED', 'CLOSED');
+create type color as enum ('backlog-blue' , 'grooming-green' , 'lean-lilac' , 'online-orange' , 'planning-pink' , 'poker-purple' , 'retro-red');
 
 create table users
 (
@@ -64,6 +65,7 @@ create table columns
     "board"   uuid         not null references boards ON DELETE CASCADE,
     name      varchar(128) not null,
     check (name <> ''),
+    color   color not null default 'backlog-blue',
     "visible" boolean               DEFAULT false,
     "index"   int          not null DEFAULT 0
 );

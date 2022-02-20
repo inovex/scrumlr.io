@@ -31,7 +31,7 @@ const getServerModel = async (timerUTCEndTimeNotNull: boolean): Promise<BoardSer
     },
     accessCode: "test_accessCode",
     accessPolicy: {
-      type: "Public",
+      type: "PUBLIC",
       salt: "test_salt",
       passphrase: "test_passphrase",
     },

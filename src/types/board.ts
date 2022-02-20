@@ -4,9 +4,9 @@ import {getBrowserServerTimeDifference} from "utils/timer";
 import {UserConfigurationClientModel, UserConfigurationServerModel} from "./user";
 
 export enum AccessPolicy {
-  "Public" = 0,
-  "ByPassphrase" = 1,
-  "ManualVerification" = 2,
+  "PUBLIC" = 0,
+  "BY_PASSPHRASE" = 1,
+  "BY_INVITE" = 2,
 }
 
 export type AccessPolicyType = keyof typeof AccessPolicy;

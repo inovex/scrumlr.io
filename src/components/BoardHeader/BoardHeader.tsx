@@ -23,7 +23,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const state = useAppSelector(
     (rootState) => ({
       name: rootState.board.data?.name,
-      accessPolicy: rootState.board.data?.accessPolicy === "Public" ? t("Board.publicSession") : t("Board.privateSession"),
+      accessPolicy: rootState.board.data?.accessPolicy === "PUBLIC" ? t("Board.publicSession") : t("Board.privateSession"),
     }),
     shallowEqual
   );
