@@ -3,7 +3,6 @@ import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
 import {RequireAuthentication} from "routes/RequireAuthentication";
-import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
@@ -26,7 +25,6 @@ const Router = () => (
         }
       />
       <Route path="/login" element={<LoginBoard />} />
-      <Route path="/auth/redirect" element={<AuthRedirect />} />
       <Route
         path="/board/:boardId"
         element={
