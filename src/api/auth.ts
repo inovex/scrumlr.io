@@ -1,14 +1,3 @@
-/* TODO: use or delete after deployment
- * this is how user looks like in first apple response
-export interface IAppleUser {
-  name: {
-    firstName: string;
-    lastName: string;
-  };
-  email: string;
-}
- */
-
 export const AuthAPI = {
   signOut: async () => {
     await fetch("http://localhost:8080/login", {
