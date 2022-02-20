@@ -42,8 +42,6 @@ export const LoginBoard = () => {
     setSubmitted(true);
   }
 
-  console.log(location.state as State);
-
   // https://dribbble.com/shots/7757250-Sign-up-revamp
   return (
     <div className="login-board">
