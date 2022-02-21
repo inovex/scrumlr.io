@@ -2,7 +2,7 @@ import {useEffect, useRef} from "react";
 
 export function useWindowEvent<TType extends keyof WindowEventMap>(
   type: TType,
-  listener: (this: Window, ev: WindowEventMap[TType]) => any,
+  listener: (this: Window, ev: WindowEventMap[TType]) => unknown,
   options?: boolean | AddEventListenerOptions
 ) {
   const listenerRef = useRef(listener);
