@@ -1,19 +1,17 @@
-import {FC} from "react";
+import {FC, HTMLAttributes} from "react";
 import FocusLock from "react-focus-lock";
 import ReactDOM from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
 import classNames from "classnames";
 import "./Portal.scss";
 
-export interface PortalProps {
+export type PortalProps = {
   className?: string;
   onClose?: () => void;
   hiddenOverflow?: boolean;
   centered?: boolean;
   disabledPadding?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+} & HTMLAttributes<HTMLDivElement>;
 
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
@@ -26,7 +24,6 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
   }
 
   useWindowEvent("keydown", (event) => {
-    console.log("keydown");
     if (event.key !== "Escape") return;
     event.preventDefault();
     event.stopPropagation();

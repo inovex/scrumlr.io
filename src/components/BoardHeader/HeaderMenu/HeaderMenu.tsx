@@ -46,7 +46,6 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setAccessPolicy(state.board!.accessPolicy);
         props.onClose();
       }}
-      darkBackground={false}
     >
       <ul className="header-menu">
         <BoardSettings
