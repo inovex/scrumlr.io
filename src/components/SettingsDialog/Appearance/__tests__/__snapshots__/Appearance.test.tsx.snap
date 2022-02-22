@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Appearance should render all Settings correctly 1`] = `
+<div
+  class="settings-dialog__container accent-color__lean-lilac"
+>
+  <header
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text"
+    >
+      SettingsDialog.Appearance
+    </h2>
+  </header>
+  <div
+    class="appearance-container"
+  >
+    <div
+      class="appearance-settings"
+    >
+      <button
+        class="settings-option-button appearance-settings_sync-button"
+      >
+        <div
+          class="appearance-settings_sync-button_label"
+        >
+          <p>
+            Appearance.SyncMode
+          </p>
+          <p>
+            Appearance.SyncModeDescription
+          </p>
+        </div>
+        <div
+          class="settings-toggle"
+        >
+          <div
+            class="settings-toggle__switch settings-toggle__switch--left"
+          />
+        </div>
+      </button>
+      <button
+        class="settings-option-button appearance-settings_notifications-button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Appearance.AllowNotifications
+        </span>
+        <div
+          class="settings-toggle"
+        >
+          <div
+            class="settings-toggle__switch settings-toggle__switch--left"
+          />
+        </div>
+      </button>
+    </div>
+    <button
+      class="settings-option-button appearance-settings_language-dropdown"
+    >
+      <span
+        class="settings-option-button__label"
+      >
+        Appearance.Language
+      </span>
+      <div
+        class="settings-dropdown"
+      >
+        <div
+          class="settings-dropdown-flag"
+        >
+          <img
+            alt="English Flag"
+            src="US.svg"
+          />
+        </div>
+        <span
+          class="settings-dropdown-button"
+        >
+          Language.english
+        </span>
+        <svg
+          class="settings-dropdown-icon"
+        >
+          icon-arrow-next.svg
+        </svg>
+      </div>
+    </button>
+  </div>
+</div>
+`;

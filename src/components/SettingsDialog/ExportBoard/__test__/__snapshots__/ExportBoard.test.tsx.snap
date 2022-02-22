@@ -23,37 +23,37 @@ Object {
           class="settings-dialog__group accent-color__backlog-blue"
         >
           <button
-            class="settings-option-button"
+            class="settings-option-button export-board__button-reverse-order"
             data-testid="export-json"
           >
-            <svg
-              class="settings-option-button__icon"
-            >
-              icon-export-json.svg
-            </svg>
             <span
               class="settings-option-button__label"
             >
               ExportBoardOption.exportAsJson
             </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-export-json.svg
+            </svg>
           </button>
           <hr
             class="settings-dialog__seperator"
           />
           <button
-            class="settings-option-button"
+            class="settings-option-button export-board__button-reverse-order"
             data-testid="export-csv"
           >
-            <svg
-              class="settings-option-button__icon"
-            >
-              icon-export-csv.svg
-            </svg>
             <span
               class="settings-option-button__label"
             >
               ExportBoardOption.exportAsCSV
             </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-export-csv.svg
+            </svg>
           </button>
         </div>
       </div>
@@ -78,37 +78,37 @@ Object {
         class="settings-dialog__group accent-color__backlog-blue"
       >
         <button
-          class="settings-option-button"
+          class="settings-option-button export-board__button-reverse-order"
           data-testid="export-json"
         >
-          <svg
-            class="settings-option-button__icon"
-          >
-            icon-export-json.svg
-          </svg>
           <span
             class="settings-option-button__label"
           >
             ExportBoardOption.exportAsJson
           </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-export-json.svg
+          </svg>
         </button>
         <hr
           class="settings-dialog__seperator"
         />
         <button
-          class="settings-option-button"
+          class="settings-option-button export-board__button-reverse-order"
           data-testid="export-csv"
         >
-          <svg
-            class="settings-option-button__icon"
-          >
-            icon-export-csv.svg
-          </svg>
           <span
             class="settings-option-button__label"
           >
             ExportBoardOption.exportAsCSV
           </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-export-csv.svg
+          </svg>
         </button>
       </div>
     </div>

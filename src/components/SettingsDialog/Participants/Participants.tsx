@@ -25,9 +25,9 @@ export const Participants = () => {
   const me = state.participants.find((participant) => participant.id === currentUser!.id);
   const them = state.participants.filter((participant) => participant.id !== currentUser!.id);
 
-  for (let i = 0; i < 30; i++) {
-    them.push(me!);
-  }
+  // for (let i = 0; i < 30; i++) {
+  //   them.push(me!);
+  // }
   return (
     <div className={classNames("settings-dialog__container", "accent-color__poker-purple")}>
       <header className="settings-dialog__header">

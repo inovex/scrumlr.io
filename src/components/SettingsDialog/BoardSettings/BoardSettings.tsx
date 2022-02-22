@@ -116,6 +116,7 @@ export const BoardSettings = () => {
           <>
             <div className="settings-dialog__group">
               <SettingsButton
+                data-testid="author"
                 className="board-settings__show-author-button"
                 label={state.board.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
                 onClick={() => {
@@ -126,6 +127,7 @@ export const BoardSettings = () => {
               </SettingsButton>
               <hr className="settings-dialog__seperator" />
               <SettingsButton
+                data-testid="notes"
                 className="board-settings__show-notes-button"
                 label={state.board.showNotesOfOtherUsers ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
                 onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
@@ -134,6 +136,7 @@ export const BoardSettings = () => {
               </SettingsButton>
               <hr className="settings-dialog__seperator" />
               <SettingsButton
+                data-testid="columns"
                 className="board-settings__show-columns-button"
                 label={state.userConfiguration.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
                 onClick={() => store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration.showHiddenColumns}))}
