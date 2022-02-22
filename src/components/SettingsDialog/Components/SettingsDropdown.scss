@@ -45,11 +45,6 @@
   border-radius: 8px 8px 8px 8px;
 }
 
-.settings-dropdown-content li svg {
-  width: 20px;
-  height: 20px;
-}
-
 [theme="dark"] {
   .settings-dropdown-content li {
     background-color: $color-dark-mode-note;
@@ -72,9 +67,17 @@
 }
 
 .settings-dropdown-flag {
-  height: 20px;
+  display: inline-block;
+  position: relative;
   width: 20px;
+  height: 20px;
+  overflow: hidden;
   border-radius: 50%;
+}
+
+.settings-dropdown-flag img {
+  width: auto;
+  height: 100%;
 }
 
 .settings-dropdown-icon {

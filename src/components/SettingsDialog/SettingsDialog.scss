@@ -100,8 +100,8 @@
 
 .settings-dialog__close-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 6px;
+  right: 6px;
   color: $color-backlog-blue;
   display: flex;
   justify-content: center;
@@ -140,8 +140,8 @@
   }
   .settings-dialog__back-link > svg {
     position: absolute;
-    top: 6px;
-    left: 6px;
+    top: 12px;
+    left: 9px;
     color: $color-backlog-blue;
     display: flex;
     justify-content: center;

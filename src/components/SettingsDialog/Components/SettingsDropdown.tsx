@@ -1,8 +1,8 @@
 import {FC, useState} from "react";
 import "./SettingsDropdown.scss";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as GermanFlagIcon} from "assets/flags/DE.svg";
-import {ReactComponent as USFlagIcon} from "assets/flags/US.svg";
+import germanFlagIcon from "assets/flags/DE.svg";
+import usFlagIcon from "assets/flags/US.svg";
 import {useTranslation} from "react-i18next";
 import i18n from "i18n";
 
@@ -13,8 +13,10 @@ interface SettingsDropdownProps {
 export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
   const {t} = useTranslation();
 
+  // TODO changes HTML lang="" back to "en" after reload
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language).then(() => {
+      document.documentElement.lang = i18n.language;
       // eslint-disable-next-line no-restricted-globals
       location.reload();
     });
@@ -26,13 +28,17 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
     <div className="settings-dropdown">
       {currentlanguage === "de" ? (
         <>
-          <GermanFlagIcon className="settings-dropdown-flag" />
+          <div className="settings-dropdown-flag">
+            <img src={germanFlagIcon} alt="German Flag" />
+          </div>
           <span className="settings-dropdown-button">{t("Language.german")}</span>
           <DropdownIcon className="settings-dropdown-icon" />
         </>
       ) : (
         <>
-          <USFlagIcon className="settings-dropdown-flag" />
+          <div className="settings-dropdown-flag">
+            <img src={usFlagIcon} alt="English Flag" />
+          </div>
           <span className="settings-dropdown-button">{t("Language.english")}</span>
           <DropdownIcon className="settings-dropdown-icon" />
         </>
@@ -47,7 +53,9 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
                 setCurrentlanguage("en");
               }}
             >
-              <USFlagIcon />
+              <div className="settings-dropdown-flag">
+                <img src={usFlagIcon} alt="English Flag" />
+              </div>
               {t("Language.english")}
             </li>
           </ul>
@@ -59,7 +67,9 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
                 setCurrentlanguage("de");
               }}
             >
-              <GermanFlagIcon />
+              <div className="settings-dropdown-flag">
+                <img src={germanFlagIcon} alt="English Flag" />
+              </div>
               {t("Language.german")}
             </li>
           </ul>
