@@ -8,18 +8,9 @@ import "../SettingsDialog.scss";
 import "./Appearance.scss";
 
 export const Appearance = () => {
-  const [syncMode, setSyncMode] = useState<boolean>(false); // move to Redux
-  const [showNotifications, setshowNotifications] = useState<boolean>(false); // move to Redux
+  const [syncMode, setSyncMode] = useState<boolean>(false); // placeholder
+  const [showNotifications, setshowNotifications] = useState<boolean>(false); // placeholder
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
-
-  const sync = () => {
-    // default windows-moduls or default app-modus -> TODO
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      console.log("dark mode active");
-    } else {
-      console.log("light mode active");
-    }
-  };
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
@@ -33,7 +24,6 @@ export const Appearance = () => {
             className="appearance-settings_sync-button"
             onClick={() => {
               setSyncMode(!syncMode);
-              sync();
             }}
           >
             <div className="appearance-settings_sync-button_label">
