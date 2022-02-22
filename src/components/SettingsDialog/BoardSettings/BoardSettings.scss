@@ -154,9 +154,7 @@
 
 @media screen and (max-width: 920px) {
   .board-settings__password-button-extension {
-    position: absolute;
-    right: 24px;
-    bottom: -35px;
+    display: none;
   }
 }
 
@@ -176,12 +174,7 @@
   background-color: inherit;
   color: var(--accent-color);
   cursor: pointer;
-}
-
-@media screen and (min-width: 920px) {
-  .board-settings__set-policy-button {
-    align-self: center;
-  }
+  align-self: center;
 }
 
 .board-settings__set-policy-button svg {
@@ -191,6 +184,38 @@
 }
 
 .board-settings__set-policy-button span {
+  padding-left: 4px;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.board-settings__generate-password-button {
+  display: flex;
+  align-items: center;
+  padding: 0px 24px;
+  border: none;
+  background-color: inherit;
+  color: var(--accent-color);
+  cursor: pointer;
+  align-self: center;
+}
+
+@media screen and (min-width: 920px) {
+  .board-settings__generate-password-button {
+    display: none;
+  }
+}
+
+.board-settings__generate-password-button svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  margin-left: 3px;
+  color: var(--accent-color);
+}
+
+.board-settings__generate-password-button span {
   padding-left: 4px;
   font-weight: bold;
   font-size: 13px;

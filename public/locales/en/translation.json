@@ -228,6 +228,7 @@
     "SetAccessPolicyOpen": "Set to open",
     "SetAccessPolicyPasswordProtected": "Set to password protected",
     "DeleteBoard": "Delete Board",
+    "generatePassword": "Generate random password",
     "save": "save",
     "edit": "edit"
   },

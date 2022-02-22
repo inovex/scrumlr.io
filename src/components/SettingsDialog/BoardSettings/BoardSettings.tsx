@@ -100,10 +100,16 @@ export const BoardSettings = () => {
 
           {state.currentUserIsModerator &&
             (state.board.accessPolicy === "Public" ? (
-              <button className="board-settings__set-policy-button" onClick={() => handleSetPolicy("ByPassphrase")}>
-                <SetPolicyIcon />
-                <span>{t("BoardSettings.SetAccessPolicyPasswordProtected")}</span>
-              </button>
+              <>
+                <button className="board-settings__set-policy-button" onClick={() => handleSetPolicy("ByPassphrase")}>
+                  <SetPolicyIcon />
+                  <span>{t("BoardSettings.SetAccessPolicyPasswordProtected")}</span>
+                </button>
+                <button className="board-settings__generate-password-button" onClick={() => setPassword(generateRandomString())}>
+                  <RefreshIcon />
+                  <span>{t("BoardSettings.generatePassword")}</span>
+                </button>
+              </>
             ) : (
               <button className="board-settings__set-policy-button button--centered" onClick={() => handleSetPolicy("Public")}>
                 <SetPolicyIcon />
