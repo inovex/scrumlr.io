@@ -22,19 +22,20 @@ $header-menu-border-bottom-color: #efefef;
   cursor: pointer;
 }
 
+.settings-option-button:focus-within,
 .settings-option-button:hover {
   background-color: rgba(var(--accent-color-rgb), 0.1);
 }
 
 .settings-option-button__label {
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
   cursor: pointer;
   padding: 16px 24px;
+  hyphens: auto;
 }
 
 .settings-option-button__icon {
@@ -58,7 +59,7 @@ $header-menu-border-bottom-color: #efefef;
   .settings-option-button {
     background-color: $color-dark-mode-note;
   }
-
+  .settings-option-button:focus-within,
   .settings-option-button:hover {
     background-color: $color-dark-mode-note--hover;
   }

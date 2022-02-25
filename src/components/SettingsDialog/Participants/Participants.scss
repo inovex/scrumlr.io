@@ -3,13 +3,14 @@
 .participants__container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
 }
 
 .participants__search-and-filter {
   color: $color-black;
   margin-bottom: 25px;
+  align-self: center;
 }
 
 [theme="dark"] {
@@ -18,44 +19,47 @@
   }
 }
 
+.participants__user-list-wrapper {
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-right: -20px;
+  max-height: 400px;
+  // overflow-x: hidden; // firefox bug?
+
+  @include scrollbar();
+}
+
+@media screen and (min-width: 920px) {
+  .participants__user-list-wrapper {
+    padding-right: 20px;
+    margin-right: -30px;
+  }
+}
+
 .participants__user-list {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 400px;
+  max-width: calc(100vw - (2 * $settings-dialog-container--small));
   border-radius: 8px;
   background-color: $color-white;
-  overflow-y: auto;
 }
 
-*::-webkit-scrollbar {
-  display: block;
-  width: 4px;
+@media screen and (min-width: 450px) {
+  .participants__user-list {
+    max-width: calc(380px - (2 * $settings-dialog-container--small));
+  }
 }
 
-*::-webkit-scrollbar-button {
-  display: none;
-}
-
-*::-webkit-scrollbar-track {
-  background-color: inherit;
-}
-
-*::-webkit-scrollbar-track-piece {
-  background-color: inherit;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: $color-middle-gray;
-  border-radius: 24px;
+@media screen and (min-width: 920px) {
+  .participants__user-list {
+    max-width: calc(544px - (2 * $settings-dialog-container--large));
+  }
 }
 
 [theme="dark"] {
   .participants__user-list {
     background-color: $color-dark-mode-note;
-  }
-  *::-webkit-scrollbar-thumb {
-    background-color: $color-middle-gray;
   }
 }
 
@@ -110,3 +114,9 @@
   border-radius: 50%;
   background-color: $color-retro-red;
 }
+
+// @supports not (overflow: overlay) {
+//   .participants__user-list {
+//     overflow: auto;
+//   }
+// }

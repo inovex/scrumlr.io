@@ -36,38 +36,40 @@ export const Participants = () => {
 
       <div className="participants__container">
         <div className="participants__search-and-filter">{t("ParticipantsList.searchAndFilter")}</div>
-        <div className="participants__user-list">
-          <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(ActionFactory.changePermission(me!.id, !me!.admin))}>
-            <div className="participants__user_avatar-name-wrapper">
-              <Avatar className="participants__user_avatar" seed={me!.id} />
-              <span className="participants__user-name">
-                {me!.displayName} {me!.id === state.boardOwner && `(${t("Participants.Owner")})`}
-              </span>
-              <div className={me!.online ? "participants__online-mark" : "participants__offline-mark"} />
-            </div>
-            <SettingsToggle active={me!.admin} />
-          </SettingsButton>
-          {them.length > 0 && <hr className="settings-dialog__seperator" />}
-          {them.length > 0 &&
-            them.map((participant, index) => (
-              <>
-                <SettingsButton
-                  className="participants__user"
-                  disabled={participant!.id === state.boardOwner || !me!.admin}
-                  onClick={() => store.dispatch(ActionFactory.changePermission(participant?.id, !participant.admin))}
-                >
-                  <div className="participants__user_avatar-name-wrapper">
-                    <Avatar className="participants__user_avatar" seed={participant.id} />
-                    <span className="participants__user-name">
-                      {participant?.displayName} {participant!.id === state.boardOwner && `(${t("Participants.Owner")})`}
-                    </span>
-                    <div className={participant?.online ? "participants__online-mark" : "participants__offline-mark"} />
-                  </div>
-                  <SettingsToggle active={participant.admin} />
-                </SettingsButton>
-                {them[index + 1] && <hr className="settings-dialog__seperator" />}
-              </>
-            ))}
+        <div className="participants__user-list-wrapper">
+          <div className="participants__user-list">
+            <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(ActionFactory.changePermission(me!.id, !me!.admin))}>
+              <div className="participants__user_avatar-name-wrapper">
+                <Avatar className="participants__user_avatar" seed={me!.id} />
+                <span className="participants__user-name">
+                  {me!.displayName} {me!.id === state.boardOwner && `(${t("Participants.Owner")})`}
+                </span>
+                <div className={me!.online ? "participants__online-mark" : "participants__offline-mark"} />
+              </div>
+              <SettingsToggle active={me!.admin} />
+            </SettingsButton>
+            {them.length > 0 && <hr className="settings-dialog__seperator" />}
+            {them.length > 0 &&
+              them.map((participant, index) => (
+                <>
+                  <SettingsButton
+                    className="participants__user"
+                    disabled={participant!.id === state.boardOwner || !me!.admin}
+                    onClick={() => store.dispatch(ActionFactory.changePermission(participant?.id, !participant.admin))}
+                  >
+                    <div className="participants__user_avatar-name-wrapper">
+                      <Avatar className="participants__user_avatar" seed={participant.id} />
+                      <span className="participants__user-name">
+                        {participant?.displayName} {participant!.id === state.boardOwner && `(${t("Participants.Owner")})`}
+                      </span>
+                      <div className={participant?.online ? "participants__online-mark" : "participants__offline-mark"} />
+                    </div>
+                    <SettingsToggle active={participant.admin} />
+                  </SettingsButton>
+                  {them[index + 1] && <hr className="settings-dialog__seperator" />}
+                </>
+              ))}
+          </div>
         </div>
       </div>
     </div>

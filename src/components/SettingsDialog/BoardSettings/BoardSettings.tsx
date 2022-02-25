@@ -35,8 +35,12 @@ export const BoardSettings = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const handleSetPolicy = (AccessType: string) => {
-    if (AccessType === "ByPassphrase" && password.length > 0) {
-      store.dispatch(ActionFactory.editBoard({id: state.board.id, accessPolicy: {type: "ByPassphrase", passphrase: password}}));
+    if (AccessType === "ByPassphrase") {
+      if (password.length > 0) {
+        store.dispatch(ActionFactory.editBoard({id: state.board.id, accessPolicy: {type: "ByPassphrase", passphrase: password}}));
+      } else {
+        passwordInputRef.current?.focus();
+      }
     } else {
       store.dispatch(ActionFactory.editBoard({id: state.board.id, accessPolicy: {type: "Public"}}));
     }
@@ -61,8 +65,8 @@ export const BoardSettings = () => {
             value={boardName}
             placeholder="scrumlr.io"
             onChange={(e) => setBoardName(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
-            onBlur={() => store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
+            onKeyPress={(e) => e.key === "Enter" && boardName && store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
+            onBlur={() => boardName && store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
             disabled={!state.currentUserIsModerator}
           />
         </SettingsButton>
@@ -79,21 +83,18 @@ export const BoardSettings = () => {
             {state.currentUserIsModerator && state.board.accessPolicy === "Public" && (
               <>
                 <hr className="settings-dialog__seperator" />
-                <div className="board-settings__password-button-wrapper">
-                  <SettingsButton className="board-settings__password-button" label={t("BoardSettings.Password")} onClick={() => passwordInputRef.current?.focus()}>
-                    <div className="board-settings__password-button_value">
-                      <input
-                        ref={passwordInputRef}
-                        type={showPassword ? "text" : "password"}
-                        className="board-settings__password-button_value-input"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                      {showPassword ? <VisableIcon onClick={() => setShowPassword(!showPassword)} /> : <HiddenIcon onClick={() => setShowPassword(!showPassword)} />}
-                    </div>
-                  </SettingsButton>
-                  <RefreshIcon className="board-settings__password-button-extension" onClick={() => setPassword(generateRandomString())} />
-                </div>
+                <SettingsButton className="board-settings__password-button" label={t("BoardSettings.Password")} onClick={() => passwordInputRef.current?.focus()}>
+                  <div className="board-settings__password-button_value">
+                    <input
+                      ref={passwordInputRef}
+                      type={showPassword ? "text" : "password"}
+                      className="board-settings__password-button_value-input"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {showPassword ? <VisableIcon onClick={() => setShowPassword(!showPassword)} /> : <HiddenIcon onClick={() => setShowPassword(!showPassword)} />}
+                  </div>
+                </SettingsButton>
               </>
             )}
           </div>
@@ -101,13 +102,13 @@ export const BoardSettings = () => {
           {state.currentUserIsModerator &&
             (state.board.accessPolicy === "Public" ? (
               <>
-                <button className="board-settings__set-policy-button" onClick={() => handleSetPolicy("ByPassphrase")}>
-                  <SetPolicyIcon />
-                  <span>{t("BoardSettings.SetAccessPolicyPasswordProtected")}</span>
-                </button>
                 <button className="board-settings__generate-password-button" onClick={() => setPassword(generateRandomString())}>
                   <RefreshIcon />
                   <span>{t("BoardSettings.generatePassword")}</span>
+                </button>
+                <button className="board-settings__set-policy-button" onClick={() => handleSetPolicy("ByPassphrase")}>
+                  <SetPolicyIcon />
+                  <span>{t("BoardSettings.SetAccessPolicyPasswordProtected")}</span>
                 </button>
               </>
             ) : (

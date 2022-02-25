@@ -4,7 +4,18 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  // ?
+  overflow: overlay;
+  overflow-x: hidden;
+  margin-bottom: 48px;
 }
+
+// @supports not (overflow: overlay) {
+//   .participants__user-list {
+//     overflow-y: auto;
+//     overflow-x: hidden;
+//   }
+// }
 
 .board-settings__board-name-button {
   justify-content: space-between;
@@ -93,13 +104,6 @@
   color: var(--accent-color);
 }
 
-.board-settings__password-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
 .board-settings__password-button {
   justify-content: space-between;
   padding-right: 24px;
@@ -145,27 +149,6 @@
   outline: none;
 }
 
-.board-settings__password-button-extension {
-  color: var(--accent-color);
-  cursor: pointer;
-  width: 30px;
-  height: 25px;
-}
-
-@media screen and (max-width: 920px) {
-  .board-settings__password-button-extension {
-    display: none;
-  }
-}
-
-@media screen and (min-width: 920px) {
-  .board-settings__password-button-extension {
-    position: absolute;
-    right: -40px;
-    bottom: 10px;
-  }
-}
-
 .board-settings__set-policy-button {
   display: flex;
   align-items: center;
@@ -199,12 +182,7 @@
   color: var(--accent-color);
   cursor: pointer;
   align-self: center;
-}
-
-@media screen and (min-width: 920px) {
-  .board-settings__generate-password-button {
-    display: none;
-  }
+  margin-top: 3px;
 }
 
 .board-settings__generate-password-button svg {
