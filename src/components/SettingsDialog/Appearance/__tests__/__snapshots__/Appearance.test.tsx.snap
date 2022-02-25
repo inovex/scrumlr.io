@@ -16,47 +16,43 @@ exports[`Appearance should render all Settings correctly 1`] = `
   <div
     class="appearance-container"
   >
-    <div
-      class="appearance-settings"
+    <button
+      class="settings-option-button appearance-settings_sync-button"
     >
-      <button
-        class="settings-option-button appearance-settings_sync-button"
+      <div
+        class="appearance-settings_sync-button_label"
+      >
+        <p>
+          Appearance.SyncMode
+        </p>
+        <p>
+          Appearance.SyncModeDescription
+        </p>
+      </div>
+      <div
+        class="settings-toggle"
       >
         <div
-          class="appearance-settings_sync-button_label"
-        >
-          <p>
-            Appearance.SyncMode
-          </p>
-          <p>
-            Appearance.SyncModeDescription
-          </p>
-        </div>
-        <div
-          class="settings-toggle"
-        >
-          <div
-            class="settings-toggle__switch settings-toggle__switch--left"
-          />
-        </div>
-      </button>
-      <button
-        class="settings-option-button appearance-settings_notifications-button"
+          class="settings-toggle__switch settings-toggle__switch--left"
+        />
+      </div>
+    </button>
+    <button
+      class="settings-option-button appearance-settings_notifications-button"
+    >
+      <span
+        class="settings-option-button__label"
       >
-        <span
-          class="settings-option-button__label"
-        >
-          Appearance.AllowNotifications
-        </span>
+        Appearance.AllowNotifications
+      </span>
+      <div
+        class="settings-toggle"
+      >
         <div
-          class="settings-toggle"
-        >
-          <div
-            class="settings-toggle__switch settings-toggle__switch--left"
-          />
-        </div>
-      </button>
-    </div>
+          class="settings-toggle__switch settings-toggle__switch--left"
+        />
+      </div>
+    </button>
     <button
       class="settings-option-button appearance-settings_language-dropdown"
     >
@@ -68,14 +64,11 @@ exports[`Appearance should render all Settings correctly 1`] = `
       <div
         class="settings-dropdown"
       >
-        <div
+        <svg
           class="settings-dropdown-flag"
         >
-          <img
-            alt="English Flag"
-            src="US.svg"
-          />
-        </div>
+          US.svg
+        </svg>
         <span
           class="settings-dropdown-button"
         >

@@ -15,48 +15,52 @@ exports[`BoardSettings should only render BoardName and AccessPolicy for partici
     </h2>
   </header>
   <div
-    class="board-settings__container"
+    class="board-settings__container-wrapper"
   >
-    <button
-      class="settings-option-button settings-option-button--disabled board-settings__board-name-button"
-    >
-      <span
-        class="settings-option-button__label"
-      >
-        Board Name
-      </span>
-      <input
-        class="board-settings__board-name-button_input"
-        disabled=""
-        placeholder="scrumlr.io"
-        value="test-name"
-      />
-    </button>
     <div
-      class="board-settings__group-and-button"
+      class="board-settings__container"
     >
-      <div
-        class="settings-dialog__group"
+      <button
+        class="settings-option-button settings-option-button--disabled board-settings__board-name-button"
       >
-        <button
-          class="settings-option-button settings-option-button--disabled board-settings__policy-button"
+        <span
+          class="settings-option-button__label"
         >
-          <span
-            class="settings-option-button__label"
+          Board Name
+        </span>
+        <input
+          class="board-settings__board-name-button_input"
+          disabled=""
+          placeholder="scrumlr.io"
+          value="test-name"
+        />
+      </button>
+      <div
+        class="board-settings__group-and-button"
+      >
+        <div
+          class="settings-dialog__group"
+        >
+          <button
+            class="settings-option-button settings-option-button--disabled board-settings__policy-button"
           >
-            Access Policy
-          </span>
-          <div
-            class="board-settings__policy-button_value"
-          >
-            <span>
-              Password protected
+            <span
+              class="settings-option-button__label"
+            >
+              Access Policy
             </span>
-            <svg>
-              icon-lock.svg
-            </svg>
-          </div>
-        </button>
+            <div
+              class="board-settings__policy-button_value"
+            >
+              <span>
+                Password protected
+              </span>
+              <svg>
+                icon-lock.svg
+              </svg>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -78,132 +82,136 @@ exports[`BoardSettings should render all Settings for moderators 1`] = `
     </h2>
   </header>
   <div
-    class="board-settings__container"
+    class="board-settings__container-wrapper"
   >
-    <button
-      class="settings-option-button board-settings__board-name-button"
-    >
-      <span
-        class="settings-option-button__label"
-      >
-        Board Name
-      </span>
-      <input
-        class="board-settings__board-name-button_input"
-        placeholder="scrumlr.io"
-        value="test-name"
-      />
-    </button>
     <div
-      class="board-settings__group-and-button"
+      class="board-settings__container"
     >
+      <button
+        class="settings-option-button board-settings__board-name-button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Board Name
+        </span>
+        <input
+          class="board-settings__board-name-button_input"
+          placeholder="scrumlr.io"
+          value="test-name"
+        />
+      </button>
+      <div
+        class="board-settings__group-and-button"
+      >
+        <div
+          class="settings-dialog__group"
+        >
+          <button
+            class="settings-option-button settings-option-button--disabled board-settings__policy-button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              Access Policy
+            </span>
+            <div
+              class="board-settings__policy-button_value"
+            >
+              <span>
+                Password protected
+              </span>
+              <svg>
+                icon-lock.svg
+              </svg>
+            </div>
+          </button>
+        </div>
+        <button
+          class="board-settings__set-policy-button button--centered"
+        >
+          <svg>
+            icon-lock.svg
+          </svg>
+          <span>
+            Set to open
+          </span>
+        </button>
+      </div>
       <div
         class="settings-dialog__group"
       >
         <button
-          class="settings-option-button settings-option-button--disabled board-settings__policy-button"
+          class="settings-option-button board-settings__show-author-button"
+          data-testid="author"
         >
           <span
             class="settings-option-button__label"
           >
-            Access Policy
+            Show authors of card
           </span>
           <div
-            class="board-settings__policy-button_value"
+            class="settings-toggle"
           >
-            <span>
-              Password protected
-            </span>
-            <svg>
-              icon-lock.svg
-            </svg>
+            <div
+              class="settings-toggle__switch settings-toggle__switch--left"
+            />
+          </div>
+        </button>
+        <hr
+          class="settings-dialog__seperator"
+        />
+        <button
+          class="settings-option-button board-settings__show-notes-button"
+          data-testid="notes"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Show notes of other users
+          </span>
+          <div
+            class="settings-toggle"
+          >
+            <div
+              class="settings-toggle__switch settings-toggle__switch--left"
+            />
+          </div>
+        </button>
+        <hr
+          class="settings-dialog__seperator"
+        />
+        <button
+          class="settings-option-button board-settings__show-columns-button"
+          data-testid="columns"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Hide columns
+          </span>
+          <div
+            class="settings-toggle"
+          >
+            <div
+              class="settings-toggle__switch settings-toggle__switch--right"
+            />
           </div>
         </button>
       </div>
       <button
-        class="board-settings__set-policy-button button--centered"
+        class="settings-option-button board-settings__delete-button"
       >
+        <span
+          class="settings-option-button__label"
+        >
+          Delete Board
+        </span>
         <svg>
-          icon-lock.svg
+          icon-delete.svg
         </svg>
-        <span>
-          Set to open
-        </span>
       </button>
     </div>
-    <div
-      class="settings-dialog__group"
-    >
-      <button
-        class="settings-option-button board-settings__show-author-button"
-        data-testid="author"
-      >
-        <span
-          class="settings-option-button__label"
-        >
-          Show authors of card
-        </span>
-        <div
-          class="settings-toggle"
-        >
-          <div
-            class="settings-toggle__switch settings-toggle__switch--left"
-          />
-        </div>
-      </button>
-      <hr
-        class="settings-dialog__seperator"
-      />
-      <button
-        class="settings-option-button board-settings__show-notes-button"
-        data-testid="notes"
-      >
-        <span
-          class="settings-option-button__label"
-        >
-          Show notes of other users
-        </span>
-        <div
-          class="settings-toggle"
-        >
-          <div
-            class="settings-toggle__switch settings-toggle__switch--left"
-          />
-        </div>
-      </button>
-      <hr
-        class="settings-dialog__seperator"
-      />
-      <button
-        class="settings-option-button board-settings__show-columns-button"
-        data-testid="columns"
-      >
-        <span
-          class="settings-option-button__label"
-        >
-          Hide columns
-        </span>
-        <div
-          class="settings-toggle"
-        >
-          <div
-            class="settings-toggle__switch settings-toggle__switch--right"
-          />
-        </div>
-      </button>
-    </div>
-    <button
-      class="settings-option-button board-settings__delete-button"
-    >
-      <span
-        class="settings-option-button__label"
-      >
-        Delete Board
-      </span>
-      <svg>
-        icon-delete.svg
-      </svg>
-    </button>
   </div>
 </div>
 `;
