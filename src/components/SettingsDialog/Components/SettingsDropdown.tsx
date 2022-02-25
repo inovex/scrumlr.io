@@ -13,7 +13,6 @@ interface SettingsDropdownProps {
 export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
   const {t} = useTranslation();
 
-  // TODO changes HTML lang="" back to "en" after reload
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language).then(() => {
       document.documentElement.lang = i18n.language;

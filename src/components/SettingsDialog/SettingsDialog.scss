@@ -1,5 +1,10 @@
 @import "constants/style";
 
+// settings-dialog container
+$settings-dialog-container--sides-small: 32px;
+$settings-dialog-container--sides-large: 92px;
+$settings-dialog-container--bottom: 62px;
+
 .settings-dialog {
   position: fixed;
   top: 0;

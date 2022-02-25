@@ -1,11 +1,12 @@
 @import "constants/style";
+@import "../SettingsDialog";
 
 .appearance-container {
   display: flex;
   flex-direction: column;
   gap: 32px;
   height: 100%;
-  margin-bottom: 62px;
+  margin-bottom: $settings-dialog-container--bottom;
 }
 
 .appearance-container > :last-child {

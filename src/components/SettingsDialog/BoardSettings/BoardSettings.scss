@@ -1,10 +1,11 @@
 @import "constants/style";
+@import "../SettingsDialog";
 
 .board-settings__container-wrapper {
   overflow-y: auto;
   padding-right: 10px;
   margin-right: -20px;
-  margin-bottom: 62px;
+  margin-bottom: $settings-dialog-container--bottom;
 
   @include scrollbar();
 }

@@ -17,7 +17,7 @@ export const Participants = () => {
     participants: applicationState.users.all,
     board: applicationState.board.data!,
     boardOwner: applicationState.board.data!.owner,
-    currentUserIsModerator: applicationState.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined,
+    currentUserIsModerator: applicationState.users.admins.find((user) => user.id === Parse.User.current()?.id) !== undefined,
   }));
 
   const currentUser = Parse.User.current();
@@ -25,9 +25,6 @@ export const Participants = () => {
   const me = state.participants.find((participant) => participant.id === currentUser!.id);
   const them = state.participants.filter((participant) => participant.id !== currentUser!.id);
 
-  for (let i = 0; i < 30; i++) {
-    them.push(me!);
-  }
   return (
     <div className={classNames("settings-dialog__container", "accent-color__poker-purple")}>
       <header className="settings-dialog__header">
@@ -38,13 +35,13 @@ export const Participants = () => {
         <div className="participants__search-and-filter">{t("ParticipantsList.searchAndFilter")}</div>
         <div className="participants__user-list-wrapper">
           <div className="participants__user-list">
-            <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(ActionFactory.changePermission(me!.id, !me!.admin))}>
+            <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(ActionFactory.changePermission(me!.id, !me?.admin))}>
               <div className="participants__user_avatar-name-wrapper">
-                <Avatar className="participants__user_avatar" seed={me!.id} />
+                <Avatar className="participants__user_avatar" seed={me?.id} />
                 <span className="participants__user-name">
-                  {me!.displayName} {me!.id === state.boardOwner && `(${t("Participants.Owner")})`}
+                  {me?.displayName} {me?.id === state.boardOwner && `(${t("Participants.Owner")})`}
                 </span>
-                <div className={me!.online ? "participants__online-mark" : "participants__offline-mark"} />
+                <div className={me?.online ? "participants__online-mark" : "participants__offline-mark"} />
               </div>
               <SettingsToggle active={me!.admin} />
             </SettingsButton>
@@ -54,13 +51,13 @@ export const Participants = () => {
                 <>
                   <SettingsButton
                     className="participants__user"
-                    disabled={participant!.id === state.boardOwner || !me!.admin}
+                    disabled={participant?.id === state.boardOwner || !me?.admin}
                     onClick={() => store.dispatch(ActionFactory.changePermission(participant?.id, !participant.admin))}
                   >
                     <div className="participants__user_avatar-name-wrapper">
                       <Avatar className="participants__user_avatar" seed={participant.id} />
                       <span className="participants__user-name">
-                        {participant?.displayName} {participant!.id === state.boardOwner && `(${t("Participants.Owner")})`}
+                        {participant?.displayName} {participant?.id === state.boardOwner && `(${t("Participants.Owner")})`}
                       </span>
                       <div className={participant?.online ? "participants__online-mark" : "participants__offline-mark"} />
                     </div>
