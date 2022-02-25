@@ -19,23 +19,21 @@ export const Appearance = () => {
       </header>
 
       <div className="appearance-container">
-        <div className="appearance-settings">
-          <SettingsButton
-            className="appearance-settings_sync-button"
-            onClick={() => {
-              setSyncMode(!syncMode);
-            }}
-          >
-            <div className="appearance-settings_sync-button_label">
-              <p>{t("Appearance.SyncMode")}</p>
-              <p>{t("Appearance.SyncModeDescription")}</p>
-            </div>
-            <SettingsToggle active={syncMode} />
-          </SettingsButton>
-          <SettingsButton className="appearance-settings_notifications-button" label={t("Appearance.AllowNotifications")} onClick={() => setshowNotifications(!showNotifications)}>
-            <SettingsToggle active={showNotifications} />
-          </SettingsButton>
-        </div>
+        <SettingsButton
+          className="appearance-settings_sync-button"
+          onClick={() => {
+            setSyncMode(!syncMode);
+          }}
+        >
+          <div className="appearance-settings_sync-button_label">
+            <p>{t("Appearance.SyncMode")}</p>
+            <p>{t("Appearance.SyncModeDescription")}</p>
+          </div>
+          <SettingsToggle active={syncMode} />
+        </SettingsButton>
+        <SettingsButton className="appearance-settings_notifications-button" label={t("Appearance.AllowNotifications")} onClick={() => setshowNotifications(!showNotifications)}>
+          <SettingsToggle active={showNotifications} />
+        </SettingsButton>
         <SettingsButton
           className="appearance-settings_language-dropdown"
           label={t("Appearance.Language")}

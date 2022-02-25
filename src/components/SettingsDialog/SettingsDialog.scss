@@ -205,7 +205,7 @@
 }
 
 .settings-dialog__container {
-  margin: 0 $settings-dialog-container--small;
+  margin: 0 $settings-dialog-container--sides-small;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -213,7 +213,7 @@
 
 @media screen and (min-width: 920px) {
   .settings-dialog__container {
-    margin: 0 $settings-dialog-container--large;
+    margin: 0 $settings-dialog-container--sides-large;
   }
 }
 

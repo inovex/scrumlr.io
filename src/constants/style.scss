@@ -169,5 +169,6 @@ $menu-desktop: "screen and (min-width: 1344px)";
 }
 
 // settings-dialog container
-$settings-dialog-container--small: 32px;
-$settings-dialog-container--large: 92px;
+$settings-dialog-container--sides-small: 32px;
+$settings-dialog-container--sides-large: 92px;
+$settings-dialog-container--bottom: 62px;

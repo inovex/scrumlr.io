@@ -3,8 +3,8 @@
 .participants__container {
   display: flex;
   flex-direction: column;
-  // align-items: center;
-  justify-content: center;
+  height: 100%;
+  margin-bottom: 62px;
 }
 
 .participants__search-and-filter {
@@ -40,20 +40,20 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: calc(100vw - (2 * $settings-dialog-container--small));
+  max-width: calc(100vw - (2 * $settings-dialog-container--sides-small));
   border-radius: 8px;
   background-color: $color-white;
 }
 
 @media screen and (min-width: 450px) {
   .participants__user-list {
-    max-width: calc(380px - (2 * $settings-dialog-container--small));
+    max-width: calc(380px - (2 * $settings-dialog-container--sides-small));
   }
 }
 
 @media screen and (min-width: 920px) {
   .participants__user-list {
-    max-width: calc(544px - (2 * $settings-dialog-container--large));
+    max-width: calc(544px - (2 * $settings-dialog-container--sides-large));
   }
 }
 

@@ -3,15 +3,17 @@
 .appearance-container {
   display: flex;
   flex-direction: column;
-  gap: 162px;
+  gap: 32px;
+  height: 100%;
+  margin-bottom: 62px;
 }
 
-.appearance-settings {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 32px;
+.appearance-container > :last-child {
+  margin-top: auto;
+}
+
+.appearance-container > button {
+  flex: 0;
 }
 
 .appearance-settings_sync-button {
