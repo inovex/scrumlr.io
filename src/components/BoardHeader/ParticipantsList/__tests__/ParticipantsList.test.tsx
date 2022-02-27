@@ -28,7 +28,7 @@ describe("ParticipantsList", () => {
           owner: "owner",
         },
       },
-      users: {
+      participants: {
         admins: [
           {
             id: "0",

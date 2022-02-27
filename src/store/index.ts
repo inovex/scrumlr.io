@@ -7,19 +7,20 @@ import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {voteReducer} from "./reducer/vote";
-import {usersReducer} from "./reducer/users";
-import {voteConfigurationReducer} from "./reducer/voteConfiguration";
+import {usersReducer} from "./reducer/participants";
+import {votingReducer} from "./reducer/votings";
 import {passNoteMiddleware} from "./middleware/note";
 import {passVoteMiddlware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
 import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
 import {passColumnMiddleware} from "./middleware/column";
 import {passJoinRequestMiddleware} from "./middleware/joinRequest";
-import {passUsersMiddleware} from "./middleware/users";
+import {passUsersMiddleware} from "./middleware/participants";
 import {joinRequestReducer} from "./reducer/joinRequest";
-import {passVoteConfigurationMiddlware} from "./middleware/voteConfiguration";
+import {passVoteConfigurationMiddleware} from "./middleware/votings";
 import {userReducer} from "./reducer/user";
 import {passUserMiddleware} from "./middleware/user";
+import {columnsReducer} from "./reducer/columns";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
@@ -28,7 +29,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
     passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
     passBoardMiddleware(stateAPI, dispatch, action);
     passColumnMiddleware(stateAPI, dispatch, action);
-    passVoteConfigurationMiddlware(stateAPI, dispatch, action);
+    passVoteConfigurationMiddleware(stateAPI, dispatch, action);
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
     passJoinRequestMiddleware(stateAPI, dispatch, action);
@@ -39,12 +40,13 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, Applicatio
 
 const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
+  columns: columnsReducer,
   notes: noteReducer,
   user: userReducer,
-  users: usersReducer,
+  participants: usersReducer,
   joinRequests: joinRequestReducer,
   votes: voteReducer,
-  voteConfiguration: voteConfigurationReducer,
+  votings: votingReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));

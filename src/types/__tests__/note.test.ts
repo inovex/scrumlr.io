@@ -1,4 +1,4 @@
-import {mapNoteServerToClientModel, NoteClientModel, NoteServerModel} from "../note";
+import {mapNoteServerToClientModel, NoteClientModel, Note} from "../note";
 
 describe("Note types", () => {
   test("mapNoteServerToClientModel", async () => {
@@ -16,7 +16,7 @@ describe("Note types", () => {
     const serverModel = {
       id: "5",
       get: (s: string) => map[s],
-    } as unknown as NoteServerModel;
+    } as unknown as Note;
 
     const clientModel: NoteClientModel = mapNoteServerToClientModel(serverModel);
 

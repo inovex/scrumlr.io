@@ -12,9 +12,7 @@ import {ToastContainer} from "react-toastify";
 import i18n from "./i18n";
 import {LoadingScreen} from "./components/LoadingScreen";
 import {ActionFactory} from "./store/action";
-
-// Parse.serverURL = process.env.REACT_APP_SERVER_API_URL || `/api`;
-// Parse.liveQueryServerURL = process.env.REACT_APP_LIVEQUERY_URL || `wss://${window.location.hostname}/ws`;
+import {API} from "./api";
 
 if (localStorage.getItem("theme")) {
   document.documentElement.setAttribute("theme", localStorage.getItem("theme")!);
@@ -26,14 +24,9 @@ if (localStorage.getItem("theme")) {
 
 // init auth session
 (async () => {
-  const response = await fetch("http://localhost:8080/user", {
-    method: "GET",
-    credentials: "include",
-  });
-
-  if (response.status === 200) {
-    const body = await response.json();
-    store.dispatch(ActionFactory.signIn(body.id, body.name));
+  const user = await API.getCurrentUser();
+  if (user) {
+    store.dispatch(ActionFactory.signIn(user.id, user.name));
   } else {
     store.dispatch(ActionFactory.userCheckCompleted());
   }

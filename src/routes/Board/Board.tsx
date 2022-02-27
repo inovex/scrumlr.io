@@ -42,17 +42,16 @@ export const Board = () => {
     (applicationState) => ({
       board: {
         id: applicationState.board.data?.id,
-        columns: applicationState.board.data?.columns,
         status: applicationState.board.status,
       },
+      columns: applicationState.columns,
       joinRequests: applicationState.joinRequests,
-      users: applicationState.users,
-      userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
+      participants: applicationState.participants,
     }),
     _.isEqual
   );
 
-  const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
+  const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
 
   if (state.board.status === "pending") {
     return <LoadingScreen />;
@@ -71,15 +70,15 @@ export const Board = () => {
         )}
         <InfoBar />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
-          {state.board
-            .columns!.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
+          {state.columns
+            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (
               <Column
                 tabIndex={TabIndex.Column + columnIndex}
-                key={column.columnId}
-                id={column.columnId!}
+                key={column.id}
+                id={column.id}
                 name={column.name}
-                hidden={column.hidden}
+                hidden={!column.visible}
                 currentUserIsModerator={currentUserIsModerator}
                 color={column.color}
               />

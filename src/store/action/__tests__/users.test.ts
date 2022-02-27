@@ -1,23 +1,23 @@
-import {UsersActionFactory, UsersActionType, UsersReduxAction} from "store/action/users";
+import {UsersActionFactory, ParticipantsActionType, UsersReduxAction} from "store/action/participants";
 import {ReduxAction} from "store/action";
 import {EditUserConfigurationRequest, UserClientModel, UserServerModel} from "types/user";
 import {AssertTypeEqual} from "testUtils";
 
 describe("users actions", () => {
   test("equal number of action types and factory functions", () => {
-    expect(Object.keys(UsersActionType).length).toEqual(Object.keys(UsersActionFactory).length);
+    expect(Object.keys(ParticipantsActionType).length).toEqual(Object.keys(UsersActionFactory).length);
   });
 
   describe("set users", () => {
     test("type is listed in users redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript
-      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, UsersReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setParticipants>, UsersReduxAction> = true;
       expect(assertion).toBe(true);
     });
 
     test("type is listed in general redux actions", () => {
       // testing type equality here will not report an error at runtime but cause problems with typescript
-      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setUsers>, ReduxAction> = true;
+      const assertion: AssertTypeEqual<ReturnType<typeof UsersActionFactory.setParticipants>, ReduxAction> = true;
       expect(assertion).toBe(true);
     });
 
@@ -31,11 +31,11 @@ describe("users actions", () => {
         ready: true,
         online: false,
       };
-      const action = UsersActionFactory.setUsers([user], true);
+      const action = UsersActionFactory.setParticipants([user], true);
 
       expect(action).toEqual({
         type: "@@SCRUMLR/setUsers",
-        users: [user],
+        participants: [user],
         admin: true,
       });
     });

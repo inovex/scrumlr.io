@@ -8,9 +8,9 @@ describe("vote reducer", () => {
 
   beforeEach(() => {
     initialState = {
-      voteConfiguration: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
+      votings: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
       board: {status: "unknown"},
-      users: {admins: [], basic: [], all: [], usersMarkedReady: []},
+      participants: {moderators: [], basic: [], participants: [], ready: []},
       notes: [],
       votes: [],
       joinRequests: [],

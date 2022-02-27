@@ -1,4 +1,4 @@
-export interface VoteServerModel extends Parse.Object {
+export interface VoteServerModel {
   board: Parse.Object;
   note: Parse.Object;
   user: Parse.Object;
@@ -8,13 +8,9 @@ export interface VoteServerModel extends Parse.Object {
 export interface VoteClientModel {
   /** The id of the note or `undefined` if yet to be persisted. */
   id?: string;
-
   board: string;
-
   note: string;
-
   user: string;
-
   votingIteration: number;
 }
 

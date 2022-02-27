@@ -1,17 +1,17 @@
-import {passVoteConfigurationMiddlware} from "store/middleware/voteConfiguration";
+import {passVoteConfigurationMiddleware} from "store/middleware/votings";
 import {ActionFactory} from "store/action";
 import {API} from "api";
 import {MiddlewareAPI} from "redux";
 
 jest.mock("api", () => ({
   API: {
-    addVoteConfiguration: jest.fn(),
+    createVoting: jest.fn(),
   },
 }));
 
 beforeEach(() => {
-  (API.addVoteConfiguration as jest.Mock).mockClear();
-  (API.addVoteConfiguration as jest.Mock).mockReturnValue({status: "Success"});
+  (API.createVoting as jest.Mock).mockClear();
+  (API.createVoting as jest.Mock).mockReturnValue({status: "Success"});
 });
 
 const stateAPI = {
@@ -26,7 +26,7 @@ const stateAPI = {
 
 describe("voteConfiguration middleware", () => {
   test("add voteConfiguration", () => {
-    passVoteConfigurationMiddlware(
+    passVoteConfigurationMiddleware(
       stateAPI as MiddlewareAPI,
       jest.fn(),
       ActionFactory.addVoteConfiguration({
@@ -36,7 +36,7 @@ describe("voteConfiguration middleware", () => {
         showVotesOfOtherUsers: false,
       })
     );
-    expect(API.addVoteConfiguration).toHaveBeenCalledWith({
+    expect(API.createVoting).toHaveBeenCalledWith({
       boardId: "boardId",
       voteLimit: 5,
       allowMultipleVotesPerNote: true,

@@ -59,7 +59,7 @@ describe("users", () => {
   }));
 
   const getDefaultState = (first: UserClientModel[], second: UserClientModel[]) => ({
-    users: {
+    participants: {
       all: [...first, ...second],
       usersMarkedReady: [],
       admins: [],

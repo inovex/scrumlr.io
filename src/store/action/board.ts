@@ -1,4 +1,6 @@
 import {BoardClientModel, EditBoardRequest} from "types/board";
+import {Column} from "../../types/column";
+import {Participant} from "../../types/participant";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardActionType = {
@@ -50,10 +52,21 @@ export const BoardActionFactory = {
    * its result.
    *
    * @param board the board data
+   * @param columns the columns of the board
    */
-  initializeBoard: (board: BoardClientModel) => ({
+  initializeBoard: (board: BoardClientModel, columns: Column[], participants: Participant[]) => ({
     type: BoardActionType.InitializeBoard,
     board,
+    columns,
+    participants,
+
+    /* TODO
+    notes,
+    votings,
+    votes,
+    participants,
+    requests
+    */
   }),
   /**
    * Creates an action which should be dispatched when the user wants to edit the board.

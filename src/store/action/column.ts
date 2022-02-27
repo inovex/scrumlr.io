@@ -1,4 +1,4 @@
-import {AddColumnRequest, EditColumnRequest} from "types/column";
+import {AddColumnRequest, Column, EditColumnRequest} from "types/column";
 
 /** This object lists column object specific internal Redux Action types. */
 export const ColumnActionType = {
@@ -10,6 +10,7 @@ export const ColumnActionType = {
   AddColumn: "@@SCRUMLR/addColumn" as const,
   EditColumn: "@@SCRUMLR/editColumn" as const,
   DeleteColumn: "@@SCRUMLR/deleteColumn" as const,
+  UpdatedColumns: "@@SCRUMLR/updatedColumns" as const,
 };
 
 /** Factory or creator class of internal Redux column object specific actions. */
@@ -53,9 +54,15 @@ export const ColumnActionFactory = {
     type: ColumnActionType.DeleteColumn,
     columnId,
   }),
+
+  updateColumns: (columns: Column[]) => ({
+    type: ColumnActionType.UpdatedColumns,
+    columns,
+  }),
 };
 
 export type ColumnReduxAction =
   | ReturnType<typeof ColumnActionFactory.addColumn>
   | ReturnType<typeof ColumnActionFactory.editColumn>
-  | ReturnType<typeof ColumnActionFactory.deleteColumn>;
+  | ReturnType<typeof ColumnActionFactory.deleteColumn>
+  | ReturnType<typeof ColumnActionFactory.updateColumns>;

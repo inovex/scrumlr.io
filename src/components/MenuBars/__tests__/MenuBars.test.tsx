@@ -25,7 +25,7 @@ describe("Menu", () => {
 
   test("should render both add- and settings-menu for moderators", () => {
     const state = {
-      users: {
+      participants: {
         admins: [{id: "testId"}],
         all: [{id: "testId"}],
       },
@@ -42,7 +42,7 @@ describe("Menu", () => {
 
   test("should only render add-menu for participants", () => {
     const state = {
-      users: {
+      participants: {
         admins: [],
         all: [],
       },

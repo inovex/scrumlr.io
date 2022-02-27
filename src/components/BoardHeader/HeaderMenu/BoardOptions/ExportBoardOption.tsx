@@ -25,7 +25,7 @@ export const ExportBoardOption = (props: ExportProps) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
     notes: applicationState.notes,
-    users: applicationState.users,
+    participants: applicationState.participants,
     votes: applicationState.votes,
   }));
 

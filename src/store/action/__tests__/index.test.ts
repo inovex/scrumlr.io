@@ -1,4 +1,4 @@
-import {UsersActionFactory} from "../users";
+import {UsersActionFactory} from "../participants";
 import {ActionFactory} from "../index";
 import {NoteActionFactory} from "../note";
 import {ColumnActionFactory} from "../column";

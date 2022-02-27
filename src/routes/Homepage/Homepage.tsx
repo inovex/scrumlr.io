@@ -8,10 +8,10 @@ import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
-import {Button} from "../../components/Button";
+import {Button} from "components/Button";
+import store, {useAppSelector} from "store";
+import {ActionFactory} from "store/action";
 import {InovexAnchor} from "./InovexAnchor";
-import store, {useAppSelector} from "../../store";
-import {ActionFactory} from "../../store/action";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();

@@ -1,4 +1,4 @@
-import {VoteConfiguration, VoteConfigurationClientModel} from "types/voteConfiguration";
+import {Voting, VotingClientModel} from "types/voting";
 
 export const VoteConfigurationActionType = {
   AddVoteConfiguration: "@@SCRUMLR/addVoteConfiguration" as const,
@@ -13,7 +13,7 @@ export const VoteConfigurationActionFactory = {
    *
    * @param voteConfiguration the current vote configuration
    */
-  addVoteConfiguration: (voteConfiguration: VoteConfiguration) => ({
+  addVoteConfiguration: (voteConfiguration: Voting) => ({
     type: VoteConfigurationActionType.AddVoteConfiguration,
     voteConfiguration,
   }),
@@ -22,7 +22,7 @@ export const VoteConfigurationActionFactory = {
    *
    * @param voteConfiguration the vote configuration added on the server
    */
-  addedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+  addedVoteConfiguration: (voteConfiguration: VotingClientModel) => ({
     type: VoteConfigurationActionType.AddedVoteConfiguration,
     voteConfiguration,
   }),
@@ -31,7 +31,7 @@ export const VoteConfigurationActionFactory = {
    *
    * @param voteConfiguration the vote configuration added on the server
    */
-  removedVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+  removedVoteConfiguration: (voteConfiguration: VotingClientModel) => ({
     type: VoteConfigurationActionType.RemovedVoteConfiguration,
     voteConfiguration,
   }),
@@ -40,7 +40,7 @@ export const VoteConfigurationActionFactory = {
    *
    * @param voteConfiguration current vote configuration (e.g. a user can join during voting phase)
    */
-  initializeVoteConfiguration: (voteConfiguration: VoteConfigurationClientModel) => ({
+  initializeVoteConfiguration: (voteConfiguration: VotingClientModel) => ({
     type: VoteConfigurationActionType.InitializeVoteConfiguration,
     voteConfiguration,
   }),

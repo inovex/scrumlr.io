@@ -1,7 +1,24 @@
-import {EditUserConfigurationRequest, RaisedHandRequest} from "types/user";
 import {callAPI} from "api/callApi";
+import {SERVER_URL} from "../config";
 
 export const UserAPI = {
+  getCurrentUser: async () => {
+    try {
+      const response = await fetch(`${SERVER_URL}/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+    } catch (error) {
+      throw new Error(`unable to fetch current user: ${error}`);
+    }
+
+    return undefined;
+  },
+
   /**
    * Changes the permissions of a participant.
    *
@@ -11,31 +28,4 @@ export const UserAPI = {
    * @returns a {status, description} object
    */
   changePermission: (userId: string, boardId: string, moderator: boolean) => callAPI("changePermission", {userId, boardId, moderator}),
-
-  /**
-   * Changes the configuration of a user.
-   *
-   * @param boardId the identifier of the board
-   * @param userConfiguration user configuration which needs to be changed
-   * @returns a {status, description} object
-   */
-  editUserConfiguration: (boardId: string, userConfiguration: EditUserConfigurationRequest) => callAPI("editUserConfiguration", {boardId, userConfiguration}),
-
-  /**
-   * Set the ready state of a user
-   *
-   * @param boardId the identifier of the board
-   * @param ready the ready state of the user
-   * @returns a {status, description} object
-   */
-  setReadyStatus: (boardId: string, ready: boolean) => callAPI("setReadyStatus", {boardId, ready}),
-
-  /**
-   * Set the raised hand state of a user
-   *
-   * @param boardId the identifier of the board
-   * @param configuration contains a list of users and updates the raisedHand status
-   * @returns a {status, description} object
-   */
-  setRaisedHandStatus: (boardId: string, configuration: RaisedHandRequest) => callAPI("setRaisedHandStatus", {boardId, configuration}),
 };

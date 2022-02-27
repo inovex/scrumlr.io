@@ -9,6 +9,7 @@ export const VoteAPI = {
    * @returns a {status, description} object
    */
   addVote: (boardId: string, noteId: string) => callAPI("addVote", {boardId, noteId}),
+
   /**
    * Removes/Deletes a vote from a note.
    *

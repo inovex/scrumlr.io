@@ -16,7 +16,7 @@ const createInfoBar = (activeVoting: boolean, activeTimer: boolean) => {
       voteLimit: 5,
     },
     votes: [],
-    users: {
+    participants: {
       admins: [],
       basic: [],
       all: [],

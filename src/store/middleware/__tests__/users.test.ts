@@ -1,7 +1,7 @@
 import {ActionFactory} from "store/action";
 import {API} from "api";
 import {MiddlewareAPI} from "redux";
-import {passUsersMiddleware} from "store/middleware/users";
+import {passUsersMiddleware} from "store/middleware/participants";
 import {Toast} from "utils/Toast";
 import {BoardClientModel} from "types/board";
 import {User} from "parse";
@@ -14,7 +14,7 @@ const stateAPI = {
         id: "boardId",
       },
     },
-    users: {
+    participants: {
       all: [
         {
           id: "1",

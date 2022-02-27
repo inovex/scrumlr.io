@@ -42,7 +42,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
         // FIXME we'll have to keep track of cancelled voting iterations here since they'll be included in the results
         return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
       }),
-      users: applicationState.users,
+      participants: applicationState.users,
       board: {
         showAuthors: applicationState.board.data?.showAuthors,
         voting: applicationState.board.data?.voting,

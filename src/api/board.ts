@@ -1,52 +1,41 @@
 import {Color} from "constants/colors";
 import {EditBoardRequest} from "types/board";
 import {callAPI} from "api/callApi";
+import {SERVER_URL} from "../config";
 
 export const BoardAPI = {
   /**
    * Creates a board with the specified parameters and returns the board id.
    *
-   * @param columns the definition of the columns
-   * @param accessPolicy the access policy configuration of the board
    * @param name the board name
+   * @param accessPolicy the access policy configuration of the board
+   * @param columns the definition of the columns
    *
    * @returns the board id of the created board
    */
-  // createBoard: (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
-  //  callAPI<{columns: {name: string; hidden: boolean}[]; name?: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
-
   createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
-    const response = await fetch("http://localhost:8080/boards", {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify({
-        name,
-        accessPolicy: accessPolicy.type,
-        passphrase: accessPolicy.passphrase,
-        columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
-      }),
-    });
+    try {
+      const response = await fetch(`${SERVER_URL}/boards`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          name,
+          accessPolicy: accessPolicy.type,
+          passphrase: accessPolicy.passphrase,
+          columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
+        }),
+      });
 
-    if (response.status === 201) {
-      const body = await response.json();
-      return body.id;
+      if (response.status === 201) {
+        const body = await response.json();
+        return body.id;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
     }
-
-    return undefined;
   },
-
-  /*
-  {
-    "name": "My board",
-    "accessPolicy": "PUBLIC",
-    "columns": [
-        { "name": "Lean coffee", "visible": true, "color": "backlog-blue" },
-        { "name": "Actions", "visible": false, "color": "lean-lilac" }
-    ]
-}
-
-return board id
-   */
 
   /**
    * Edits the board with the specified parameters.
@@ -63,46 +52,53 @@ return board id
    * the reference on the join request state in the attribute `joinRequestReference`.
    *
    * @param boardId the board id
-   * @param passphrase optional passphrose for the join request
+   * @param passphrase optional passphrase for the join request
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  joinBoard: (boardId: string, passphrase?: string) =>
-    callAPI<{boardId: string; passphrase?: string}, {status: "accepted" | "rejected" | "pending" | "passphrase_required" | "incorrect_passphrase"; joinRequestReference?: string}>(
-      "joinBoard",
-      {boardId, passphrase}
-    ),
+  joinBoard: async (boardId: string, passphrase?: string) => {
+    const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants`, {
+      method: "POST",
+      credentials: "include",
+      redirect: "manual",
+      body: JSON.stringify({passphrase}),
+    });
 
-  acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
-  rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
+    if (response.type === "opaqueredirect") {
+      return {
+        status: "accepted",
+        joinRequestReference: "",
+      };
+    }
+
+    // FIXME
+    return {
+      status: "rejected",
+      joinRequestReference: "",
+    };
+  },
+
+  acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, participants: userIds}),
+  rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, participants: userIds}),
+
   /**
    * Deletes the board with the specified boardId.
    *
    * @param boardId identifies the board which will be deleted
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
-  deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
-  /**
-   * Cancel the current voting phase.
-   *
-   * @param boardId the board id
-   * @returns a {status, description} object
-   */
-  cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
+  deleteBoard: async (boardId: string) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${boardId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
-  /** Sets the date where the timer of the board ends.
-   *
-   * @param endDate the date/time where the timer ends
-   * @param boardId the board identifier
-   * @returns a {status, description} object
-   */
-  setTimer: (endDate: Date, boardId: string) => callAPI("setTimer", {endDate, boardId}),
-
-  /**
-   * Cancels the timer of the board.
-   *
-   * @param boardId the board identifier
-   * @returns a {status, description} object
-   */
-  cancelTimer: (boardId: string) => callAPI("cancelTimer", {boardId}),
+      if (response.status !== 204) {
+        throw new Error(`delete board request resulted in response status ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
+    }
+  },
 };

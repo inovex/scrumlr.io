@@ -41,7 +41,7 @@ const createNoteDialog = (
       },
     },
     notes: [],
-    users: {
+    participants: {
       admins: [
         {
           id: "jkKqOUgt3hEDvl7CWcBokVOGs6AzINon",

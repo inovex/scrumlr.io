@@ -12,7 +12,7 @@ const createColumn = (currentUserIsModerator = false) => {
     board: {},
     notes: [],
     votes: [],
-    users: [],
+    participants: [],
   };
   return (
     <Provider store={mockStore(initialState)}>

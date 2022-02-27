@@ -1,6 +1,6 @@
-import {mapVoteConfigurationServerToClientModel, VoteConfigurationServerModel, VoteConfigurationClientModel} from "../voteConfiguration";
+import {mapVotingServerToClientModel, Voting, VotingClientModel} from "../voting";
 
-describe("VoteConfiguration types", () => {
+describe("Voting types", () => {
   test("mapVoteConfigurationServerToClientModel", async () => {
     const map = {
       board: {id: "5"} as unknown as Parse.Object,
@@ -12,9 +12,9 @@ describe("VoteConfiguration types", () => {
 
     const serverModel = {
       get: (s: string) => map[s],
-    } as unknown as VoteConfigurationServerModel;
+    } as unknown as Voting;
 
-    const clientModel: VoteConfigurationClientModel = mapVoteConfigurationServerToClientModel(serverModel);
+    const clientModel: VotingClientModel = mapVotingServerToClientModel(serverModel);
 
     expect(clientModel.boardId).toEqual(serverModel.get("board").id);
     expect(clientModel.votingIteration).toEqual(serverModel.get("votingIteration"));

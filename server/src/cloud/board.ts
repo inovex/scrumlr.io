@@ -301,7 +301,7 @@ export const initializeBoardFunctions = () => {
   });
 
   api<JoinRequestResponse, boolean>("acceptUsers", async (user, request) => {
-    await respondToJoinRequest(user, request.users, request.board, (object) => {
+    await respondToJoinRequest(user, request.participants, request.board, (object) => {
       object.set("status", "accepted");
       // object.set('accessKey', params.accessKey);
     });
@@ -309,7 +309,7 @@ export const initializeBoardFunctions = () => {
   });
 
   api<JoinRequestResponse, boolean>("rejectUsers", async (user, request) => {
-    await respondToJoinRequest(user, request.users, request.board, (object) => {
+    await respondToJoinRequest(user, request.participants, request.board, (object) => {
       object.set("status", "rejected");
     });
     return true;

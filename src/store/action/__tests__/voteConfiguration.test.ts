@@ -1,7 +1,7 @@
 import {AssertTypeEqual} from "testUtils";
-import {VoteConfigurationClientModel} from "types/voteConfiguration";
+import {VotingClientModel} from "types/voting";
 import {ReduxAction} from "store/action";
-import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "store/action/voteConfiguration";
+import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "store/action/votings";
 
 describe("vote comfiguration actions", () => {
   test("equal number of action types and factory functions", () => {
@@ -55,7 +55,7 @@ describe("vote comfiguration actions", () => {
         voteLimit: 5,
         allowMultipleVotesPerNote: true,
         showVotesOfOtherUsers: true,
-      } as unknown as VoteConfigurationClientModel);
+      } as unknown as VotingClientModel);
       expect(action).toEqual({
         type: "@@SCRUMLR/initializeVoteConfiguration",
         voteConfiguration: {

@@ -26,7 +26,7 @@ const createBoardHeader = (name: string, boardstatus: string) => {
       },
     },
     notes: [],
-    users: {
+    participants: {
       admins: [],
       basic: [],
       all: [],

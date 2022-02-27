@@ -1,6 +1,6 @@
 import {ApplicationState} from "types/store";
-import {VoteConfigurationClientModel} from "types/voteConfiguration";
-import {voteConfigurationReducer} from "store/reducer/voteConfiguration";
+import {VotingClientModel} from "types/voting";
+import {votingReducer} from "store/reducer/votings";
 import {ActionFactory} from "store/action";
 
 describe("vote configuration reducer", () => {
@@ -8,9 +8,9 @@ describe("vote configuration reducer", () => {
 
   beforeEach(() => {
     initialState = {
-      voteConfiguration: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
+      votings: {boardId: "test_board", votingIteration: 0, voteLimit: 0, allowMultipleVotesPerNote: false, showVotesOfOtherUsers: true},
       board: {status: "unknown"},
-      users: {admins: [], basic: [], all: [], usersMarkedReady: [], usersRaisedHands: []},
+      participants: {moderators: [], basic: [], participants: [], ready: [], raisedHands: []},
       notes: [],
       votes: [],
       joinRequests: [],
@@ -24,8 +24,8 @@ describe("vote configuration reducer", () => {
       voteLimit: 5,
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: true,
-    } as VoteConfigurationClientModel;
-    const newState = voteConfigurationReducer(initialState.voteConfiguration, ActionFactory.addedVoteConfiguration(voteConfiguration));
+    } as VotingClientModel;
+    const newState = votingReducer(initialState.votings, ActionFactory.addedVoteConfiguration(voteConfiguration));
     expect(newState).toEqual(voteConfiguration);
   });
 });

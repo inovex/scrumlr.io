@@ -16,7 +16,7 @@ type AddVoteProps = {
 export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
     id: applicationState.board.data!.id,
-    votingIteration: applicationState.voteConfiguration.votingIteration,
+    votingIteration: applicationState.votings.votingIteration,
   }));
 
   const addVote = () => {

@@ -3,6 +3,7 @@ import {API} from "api";
 import i18n from "i18next";
 import store from "../../store";
 import {ActionFactory} from "../../store/action";
+import {SERVER_URL} from "../../config";
 
 /**
  * Sign in anonymously.
@@ -34,7 +35,7 @@ const signInAnonymously = async (displayName: string, photoURL?: string) => {
  * @param originURL origin URL
  */
 const signInWithAuthProvider = async (authProvider: string, originURL: string) => {
-  window.location.href = `http://localhost:8080/login/${authProvider}?state=${encodeURIComponent(originURL)}`;
+  window.location.href = `${SERVER_URL}/login/${authProvider}?state=${encodeURIComponent(originURL)}`;
 };
 
 export const AuthenticationManager = {

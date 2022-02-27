@@ -1,9 +1,11 @@
 import {BoardClientModel} from "./board";
-import {NoteClientModel} from "./note";
 import {VoteClientModel} from "./vote";
-import {UserClientModel} from "./user";
+import {UserState} from "./user";
 import {JoinRequestClientModel} from "./joinRequest";
-import {VoteConfigurationClientModel} from "./voteConfiguration";
+import {VotingState} from "./voting";
+import {Column} from "./column";
+import {ParticipantsState} from "./participant";
+import {Note} from "./note";
 
 export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
 
@@ -12,30 +14,13 @@ export interface BoardState {
   data?: BoardClientModel;
 }
 
-export interface UserState {
-  user:
-    | {
-        id: string;
-        name: string;
-      }
-    | undefined;
-  initialized: boolean;
-}
-
-export interface UsersState {
-  usersMarkedReady: string[];
-  usersRaisedHands: string[];
-  admins: UserClientModel[];
-  basic: UserClientModel[];
-  all: UserClientModel[];
-}
-
 export interface ApplicationState {
   board: BoardState;
-  notes: NoteClientModel[];
+  columns: Column[];
+  notes: Note[];
   user: UserState;
-  users: UsersState;
+  participants: ParticipantsState;
   joinRequests: JoinRequestClientModel[];
   votes: VoteClientModel[];
-  voteConfiguration: VoteConfigurationClientModel;
+  votings: VotingState;
 }

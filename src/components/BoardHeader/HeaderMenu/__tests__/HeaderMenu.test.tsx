@@ -50,7 +50,7 @@ const initialState = {
       ],
     },
   },
-  users: {
+  participants: {
     all: [
       {
         id: "test",

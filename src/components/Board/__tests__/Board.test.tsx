@@ -26,7 +26,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
       },
     },
     notes: [],
-    users: {
+    participants: {
       admins: [],
       basic: [],
       all: [],

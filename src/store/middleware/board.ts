@@ -1,33 +1,43 @@
-import {Dispatch, MiddlewareAPI, AnyAction} from "redux";
+import {Dispatch, MiddlewareAPI} from "redux";
 import {ApplicationState} from "types/store";
-import Parse from "parse";
-import {mapUserServerToClientModel, UserServerModel} from "types/user";
-import {mapNoteServerToClientModel, NoteServerModel} from "types/note";
-import {mapVoteServerToClientModel, VoteServerModel} from "types/vote";
-import {mapVoteConfigurationServerToClientModel, VoteConfigurationServerModel} from "types/voteConfiguration";
-import {BoardServerModel, mapBoardServerToClientModel} from "types/board";
-import {JoinRequestServerModel, mapJoinRequestServerToClientModel} from "types/joinRequest";
 import {ActionFactory, ActionType, ReduxAction} from "store/action";
 import {API} from "api";
 import {Toast} from "utils/Toast";
 import {getBrowserServerTimeDifference} from "utils/timer";
 import {StatusResponse} from "types";
+import Socket from "sockette";
+import {ServerEvent} from "../../types/websocket";
+import {mapBoardServerToClientModel} from "../../types/board";
 
-let closeSubscriptions: (() => void)[] = [];
+let socket: Socket | undefined;
 
-export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
+export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.LeaveBoard) {
-    const currentUser = Parse.User.current()!;
-    const boardId = stateAPI.getState().board.data!.id;
-    currentUser.remove("boards", boardId);
-    currentUser.save();
-
-    closeSubscriptions.forEach((closeCallback) => closeCallback());
-    closeSubscriptions = [];
+    socket?.close();
   }
 
   if (action.type === ActionType.PermittedBoardAccess) {
-    const currentUser = Parse.User.current()!;
+    // FIXME implement all event subscriptions
+    socket = new Socket(`ws://localhost:8080/boards/${action.boardId}`, {
+      timeout: 5000,
+      maxAttempts: 0,
+      onopen: (e: Event) => console.log("connected", e),
+      onerror: (e: Event) => console.log("error", e),
+      onmessage: async (evt: MessageEvent<ServerEvent>) => {
+        if (evt.data.type === "INIT") {
+          const {board, columns, participants} = evt.data.data;
+          dispatch(ActionFactory.initializeBoard(await mapBoardServerToClientModel(board), columns, participants));
+        }
+
+        if (evt.data.type === "COLUMNS_UPDATED") {
+          const columns = evt.data.data;
+          dispatch(ActionFactory.updateColumns(columns));
+        }
+      },
+      onclose: (e: CloseEvent) => console.log("closed", e),
+    });
+
+    /* const currentUser = Parse.User.current()!;
 
     const isOnline = (user: Parse.User, boardId: string) => {
       const boards = (user.get("boards") as string[]) ?? [];
@@ -229,7 +239,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
     };
 
     const createVoteConfigurationSubscription = () => {
-      const voteConfigurationQuery = new Parse.Query("VoteConfiguration");
+      const voteConfigurationQuery = new Parse.Query("Voting");
       const board = Parse.Object.extend("Board").createWithoutData(action.boardId);
       voteConfigurationQuery.equalTo("board", board);
       voteConfigurationQuery.subscribe().then((subscription) => {
@@ -294,7 +304,7 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch<AnyAc
           });
         }
       });
-    });
+    }); */
   }
   if (action.type === ActionType.EditBoard) {
     API.editBoard(action.board);

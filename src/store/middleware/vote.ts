@@ -12,7 +12,7 @@ export const passVoteMiddlware = async (stateAPI: MiddlewareAPI<Dispatch<AnyActi
     const boardId = stateAPI.getState().board.data!.id;
     const user = Parse.User.current()!.id;
     const {length} = stateAPI.getState().votes.filter((v) => v.user === user);
-    const allowed = stateAPI.getState().voteConfiguration.voteLimit;
+    const allowed = stateAPI.getState().votings.voteLimit;
     if (length <= allowed) {
       const response = (await API.addVote(boardId, action.note)) as StatusResponse;
       stateAPI.getState().votes.filter((v) => v.user === user);

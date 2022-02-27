@@ -14,6 +14,9 @@ type BoardSession struct {
 	// Flag indicates whether user is online and connected to the board.
 	Connected bool `json:"connected"`
 
+	// The configuration of visibility of columns.
+	ShowHiddenColumns *bool `json:"showHiddenColumns"`
+
 	// Flag indicates whether user is marked as ready.
 	Ready bool `json:"ready"`
 
@@ -60,6 +63,10 @@ func BoardSessions(sessions []database.BoardSession) []*BoardSession {
 
 // BoardSessionUpdateRequest represents the request to update a single participant.
 type BoardSessionUpdateRequest struct {
+
+	// The configuration of visibility of columns.
+	ShowHiddenColumns *bool `json:"showHiddenColumns"`
+
 	// The ready state of the participant.
 	Ready *bool `json:"ready"`
 
