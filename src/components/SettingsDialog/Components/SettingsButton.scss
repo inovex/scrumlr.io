@@ -22,6 +22,10 @@ $header-menu-border-bottom-color: #efefef;
   cursor: pointer;
 }
 
+.settings-option-button:focus-visible {
+  outline: none;
+}
+
 .settings-option-button:focus-within,
 .settings-option-button:hover {
   background-color: rgba(var(--accent-color-rgb), 0.1);
@@ -50,6 +54,7 @@ $header-menu-border-bottom-color: #efefef;
   cursor: default !important;
 }
 
+.settings-option-button--disabled:focus-within,
 .settings-option-button--disabled:hover {
   cursor: default;
   background-color: $color-white;
@@ -68,6 +73,7 @@ $header-menu-border-bottom-color: #efefef;
     color: $color-white;
   }
 
+  .settings-option-button--disabled:focus-within,
   .settings-option-button--disabled:hover {
     background-color: $color-dark-mode-note;
   }
