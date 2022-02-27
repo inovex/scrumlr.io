@@ -22,8 +22,8 @@ export const Participants = () => {
 
   const currentUser = Parse.User.current();
 
-  const me = state.participants.find((participant) => participant.id === currentUser!.id);
-  const them = state.participants.filter((participant) => participant.id !== currentUser!.id);
+  const me = state.participants.find((participant) => participant.id === currentUser?.id);
+  const them = state.participants.filter((participant) => participant.id !== currentUser?.id);
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__poker-purple")}>
@@ -43,7 +43,7 @@ export const Participants = () => {
                 </span>
                 <div className={me?.online ? "participants__online-mark" : "participants__offline-mark"} />
               </div>
-              <SettingsToggle active={me!.admin} />
+              <SettingsToggle active={me?.admin} />
             </SettingsButton>
             {them.length > 0 && <hr className="settings-dialog__seperator" />}
             {them.length > 0 &&

@@ -3,7 +3,7 @@ import classNames from "classnames";
 import "./SettingsToggle.scss";
 
 export interface SettingsToggleProps {
-  active: boolean;
+  active: boolean | undefined;
 }
 
 export const SettingsToggle: FC<SettingsToggleProps> = ({active}) => (
