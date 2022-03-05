@@ -1,6 +1,6 @@
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import "../BoardSettings/BoardSettings.scss";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
@@ -21,7 +21,7 @@ export const ShowHiddenColumnsOption = () => {
       <BoardOptionButton
         label={state.userConfiguration?.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
         onClick={() => {
-          store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
+          store.dispatch(Actions.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
         }}
       >
         <BoardOptionToggle active={Boolean(state.userConfiguration?.showHiddenColumns)} />

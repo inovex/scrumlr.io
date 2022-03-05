@@ -19,6 +19,7 @@ import {passVoteConfigurationMiddleware} from "./middleware/votings";
 import {authReducer} from "./reducer/auth";
 import {passAuthMiddleware} from "./middleware/auth";
 import {columnsReducer} from "./reducer/columns";
+import {viewReducer} from "./reducer/view";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
@@ -43,6 +44,7 @@ const rootReducer = combineReducers<ApplicationState>({
   requests: joinRequestReducer,
   votes: voteReducer,
   votings: votingReducer,
+  view: viewReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));

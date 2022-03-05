@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 import {useTranslation} from "react-i18next";
@@ -92,7 +92,7 @@ export const Timer = (props: TimerProps) => {
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
       {isModerator && (
-        <button onClick={() => store.dispatch(ActionFactory.cancelTimer())} title={t("Timer.stopTimer")}>
+        <button onClick={() => store.dispatch(Actions.cancelTimer())} title={t("Timer.stopTimer")}>
           <CloseIcon />
         </button>
       )}

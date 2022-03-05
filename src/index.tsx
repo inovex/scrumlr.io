@@ -11,7 +11,7 @@ import {I18nextProvider} from "react-i18next";
 import {ToastContainer} from "react-toastify";
 import i18n from "./i18n";
 import {LoadingScreen} from "./components/LoadingScreen";
-import {ActionFactory} from "./store/action";
+import {Actions} from "./store/action";
 import {API} from "./api";
 
 if (localStorage.getItem("theme")) {
@@ -26,9 +26,9 @@ if (localStorage.getItem("theme")) {
 (async () => {
   const user = await API.getCurrentUser();
   if (user) {
-    store.dispatch(ActionFactory.signIn(user.id, user.name));
+    store.dispatch(Actions.signIn(user.id, user.name));
   } else {
-    store.dispatch(ActionFactory.userCheckCompleted());
+    store.dispatch(Actions.userCheckCompleted());
   }
 })();
 

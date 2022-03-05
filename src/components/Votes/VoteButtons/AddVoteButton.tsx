@@ -1,5 +1,5 @@
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./AddVoteButton.scss";
 import "./VoteButton.scss";
@@ -21,7 +21,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) =>
 
   const addVote = () => {
     if (state.votingEnabled) {
-      store.dispatch(ActionFactory.addVote(noteId, state.id));
+      store.dispatch(Actions.addVote(noteId, state.id));
     }
   };
 

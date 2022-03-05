@@ -1,7 +1,7 @@
 import "./Note.scss";
 import classNames from "classnames";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import React, {useEffect, useRef} from "react";
 import {NoteDialog} from "components/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
@@ -37,7 +37,7 @@ export const Note = (props: NoteProps) => {
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.activeModeration.userId === Parse.User.current()?.id) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
+        store.dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
     } else {
@@ -53,7 +53,7 @@ export const Note = (props: NoteProps) => {
       }
       // Moderator has already one dialog open
       if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
+        store.dispatch(Actions.editNote({id: props.noteId, focus: true}));
       } else {
         setShowDialog(false);
       }
@@ -86,7 +86,7 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
+        store.dispatch(Actions.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),

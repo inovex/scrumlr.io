@@ -1,44 +1,44 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {BoardState} from "types/board";
-import {ActionType, ReduxAction} from "store/action";
+import {Action, ReduxAction} from "store/action";
 
 // eslint-disable-next-line default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
-    case ActionType.InitializeBoard: {
+    case Action.InitializeBoard: {
       return {
         status: "ready",
         data: action.board,
       };
     }
 
-    case ActionType.DeleteBoard: {
+    case Action.DeleteBoard: {
       document.location.pathname = "/";
       return state;
     }
 
-    case ActionType.PendingBoardAccessConfirmation:
-    case ActionType.JoinBoard: {
+    case Action.PendingBoardAccessConfirmation:
+    case Action.JoinBoard: {
       return {
         status: "pending",
       };
     }
-    case ActionType.PermittedBoardAccess: {
+    case Action.PermittedBoardAccess: {
       return {
         status: "accepted",
       };
     }
-    case ActionType.RejectedBoardAccess: {
+    case Action.RejectedBoardAccess: {
       return {
         status: "rejected",
       };
     }
-    case ActionType.PassphraseChallengeRequired: {
+    case Action.PassphraseChallengeRequired: {
       return {
         status: "passphrase_required",
       };
     }
-    case ActionType.IncorrectPassphrase: {
+    case Action.IncorrectPassphrase: {
       return {
         status: "incorrect_passphrase",
       };

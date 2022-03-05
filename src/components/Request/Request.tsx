@@ -1,5 +1,5 @@
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {Request as RequestModel} from "types/request";
 import "./Request.scss";
 import {useTranslation} from "react-i18next";
@@ -10,15 +10,15 @@ export const Request = ({joinRequests, users, raisedHands, boardId}: {joinReques
   const {t} = useTranslation();
 
   const handleAccept = (requestedBoardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.acceptJoinRequests(requestedBoardId, userIds));
+    store.dispatch(Actions.acceptJoinRequests(requestedBoardId, userIds));
   };
 
   const handleReject = (requestedBoardId: string, userIds: string[]) => () => {
-    store.dispatch(ActionFactory.rejectJoinRequests(requestedBoardId, userIds));
+    store.dispatch(Actions.rejectJoinRequests(requestedBoardId, userIds));
   };
 
   const lowerHand = (userId: string[]) => {
-    store.dispatch(ActionFactory.setRaisedHandStatus({userId, raisedHand: false}));
+    store.dispatch(Actions.setRaisedHandStatus({userId, raisedHand: false}));
   };
 
   let title = "";

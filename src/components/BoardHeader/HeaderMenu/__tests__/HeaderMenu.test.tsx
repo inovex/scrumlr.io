@@ -3,7 +3,7 @@ import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {exportAsCSV, exportAsJSON} from "utils/export";
 import {User} from "parse";
 import {screen} from "@testing-library/dom";
@@ -113,7 +113,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showAuthors: false}));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.editBoard({id: "boardId", showAuthors: false}));
         });
       });
 
@@ -137,7 +137,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
         });
       });
 
@@ -161,7 +161,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editUserConfiguration({showHiddenColumns: false}));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.editUserConfiguration({showHiddenColumns: false}));
         });
       });
 
@@ -243,7 +243,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.deleteBoard("boardId"));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.deleteBoard("boardId"));
         });
       });
 

@@ -17,8 +17,6 @@ type ExpandableOptions = "share" | "delete" | "export";
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
-    user: applicationState.participants.participants.find((user) => user.id === Parse.User.current()!.id),
-    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 
   const [activeEditMode, setActiveEditMode] = useState(false);

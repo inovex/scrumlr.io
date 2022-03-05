@@ -10,7 +10,7 @@ import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
 import {Button} from "components/Button";
 import {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {InovexAnchor} from "./InovexAnchor";
 
@@ -28,7 +28,7 @@ export const Homepage = withTranslation()(() => {
   };
 
   const onLogout = () => {
-    dispatch(ActionFactory.signOut());
+    dispatch(Actions.signOut());
   };
 
   return (

@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {FC} from "react";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 
 type NoteDialogNoteContentProps = {
@@ -17,7 +17,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const onEdit = (id: string, editorId: string, newText: string) => {
     if (editable(editorId) && newText !== text) {
-      store.dispatch(ActionFactory.editNote({id, text: newText}));
+      store.dispatch(Actions.editNote({id, text: newText}));
     }
   };
 

@@ -33,7 +33,7 @@ export const RequestActionFactory = {
   }),
 };
 
-export type JoinRequestReduxAction =
+export type RequestReduxAction =
   | ReturnType<typeof RequestActionFactory.acceptJoinRequests>
   | ReturnType<typeof RequestActionFactory.rejectJoinRequests>
   | ReturnType<typeof RequestActionFactory.initializeJoinRequests>

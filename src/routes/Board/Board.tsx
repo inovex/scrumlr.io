@@ -7,7 +7,7 @@ import {InfoBar} from "components/Infobar";
 import {TabIndex} from "constants/tabIndex";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import _ from "underscore";
 
 export const Board = () => {
@@ -23,7 +23,7 @@ export const Board = () => {
     window.addEventListener(
       "beforeunload",
       () => {
-        store.dispatch(ActionFactory.leaveBoard());
+        store.dispatch(Actions.leaveBoard());
       },
       false
     );
@@ -31,7 +31,7 @@ export const Board = () => {
     window.addEventListener(
       "onunload",
       () => {
-        store.dispatch(ActionFactory.leaveBoard());
+        store.dispatch(Actions.leaveBoard());
       },
       false
     );

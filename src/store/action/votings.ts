@@ -58,7 +58,7 @@ export const VotingActionFactory = {
   }),
 };
 
-export type VoteConfigurationReduxAction =
+export type VotingReduxAction =
   | ReturnType<typeof VotingActionFactory.createVoting>
   | ReturnType<typeof VotingActionFactory.closeVoting>
   | ReturnType<typeof VotingActionFactory.abortVoting>

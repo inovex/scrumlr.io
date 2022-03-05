@@ -1,14 +1,15 @@
 import {BoardActionFactory, BoardAction, BoardReduxAction} from "./board";
 import {NoteActionFactory, NoteAction, NoteReduxAction} from "./note";
 import {VoteActionFactory, VoteAction, VoteReduxAction} from "./vote";
-import {ParticipantAction, ParticipantActionFactory, UsersReduxAction} from "./participants";
+import {ParticipantAction, ParticipantActionFactory, ParticipantReduxAction} from "./participants";
 import {ColumnActionFactory, ColumnAction, ColumnReduxAction} from "./column";
-import {RequestActionFactory, RequestAction, JoinRequestReduxAction} from "./request";
-import {VotingActionFactory, VotingAction, VoteConfigurationReduxAction} from "./votings";
-import {AuthActionFactory, AuthAction, UserReduxAction} from "./auth";
+import {RequestActionFactory, RequestAction, RequestReduxAction} from "./request";
+import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
+import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
+import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
 
 /** This object lists all internal Redux Action types. */
-export const ActionType = {
+export const Action = {
   ...BoardAction,
   ...ColumnAction,
   ...NoteAction,
@@ -17,10 +18,11 @@ export const ActionType = {
   ...RequestAction,
   ...VoteAction,
   ...VotingAction,
+  ...ViewAction,
 };
 
 /** Factory or creator class of internal Redux actions. */
-export const ActionFactory = {
+export const Actions = {
   ...BoardActionFactory,
   ...ColumnActionFactory,
   ...NoteActionFactory,
@@ -29,6 +31,7 @@ export const ActionFactory = {
   ...RequestActionFactory,
   ...VoteActionFactory,
   ...VotingActionFactory,
+  ...ViewActionFactory,
 };
 
 /** The types of all application internal redux actions. */
@@ -36,8 +39,9 @@ export type ReduxAction =
   | BoardReduxAction
   | ColumnReduxAction
   | NoteReduxAction
-  | UserReduxAction
-  | UsersReduxAction
-  | JoinRequestReduxAction
+  | AuthReduxAction
+  | ParticipantReduxAction
+  | RequestReduxAction
   | VoteReduxAction
-  | VoteConfigurationReduxAction;
+  | VotingReduxAction
+  | ViewReduxAction;

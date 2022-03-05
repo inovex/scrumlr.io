@@ -1,5 +1,5 @@
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
@@ -16,7 +16,7 @@ type RemoveVoteProps = {
 
 export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes, tabIndex}) => {
   const deleteVote = () => {
-    store.dispatch(ActionFactory.deleteVote(noteId));
+    store.dispatch(Actions.deleteVote(noteId));
   };
 
   return (

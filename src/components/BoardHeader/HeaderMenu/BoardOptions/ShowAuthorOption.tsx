@@ -1,6 +1,6 @@
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import "../BoardSettings/BoardSettings.scss";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
@@ -19,7 +19,7 @@ export const ShowAuthorOption = () => {
       <BoardOptionButton
         label={state.board!.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
         onClick={() => {
-          store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
+          store.dispatch(Actions.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
         }}
       >
         <BoardOptionToggle active={state.board.showAuthors} />

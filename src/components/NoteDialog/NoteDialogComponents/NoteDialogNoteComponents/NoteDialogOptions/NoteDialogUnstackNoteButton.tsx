@@ -1,6 +1,6 @@
 import {FC} from "react";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
 import {DotButton} from "components/DotButton";
 import "./NoteDialogUnstackNoteButton.scss";
@@ -17,7 +17,7 @@ export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({not
   const {t} = useTranslation();
 
   const onUnstack = (id: string, parentNoteId: string) => {
-    store.dispatch(ActionFactory.unstackNote({id, parentId: parentNoteId}));
+    store.dispatch(Actions.unstackNote({id, parentId: parentNoteId}));
   };
 
   return (

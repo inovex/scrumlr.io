@@ -3,7 +3,7 @@ import {DotButton} from "components/DotButton";
 import {TabIndex} from "constants/tabIndex";
 import {FC} from "react";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import "./NoteDialogDeleteNoteButton.scss";
 import {useTranslation} from "react-i18next";
 
@@ -16,7 +16,7 @@ export const NoteDialogDeleteNoteButton: FC<NoteDialogDeleteNoteProps> = ({noteI
   const {t} = useTranslation();
 
   const onDelete = (id: string) => {
-    store.dispatch(ActionFactory.deleteNote(id));
+    store.dispatch(Actions.deleteNote(id));
   };
 
   return (

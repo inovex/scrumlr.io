@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
@@ -16,36 +16,33 @@ import {VoteConfigurationButton} from "./MenuItem/variants/VoteConfigurationButt
 import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 
 import "./MenuBars.scss";
+import {useDispatch} from "react-redux";
 
 export const MenuBars = () => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
-  const currentUser = Parse.User.current();
   const state = useAppSelector(
     (rootState) => ({
-      admins: rootState.users.admins,
-      allUsers: rootState.users.all,
-      boardId: rootState.board.data!.id,
-      timer: rootState.board.data?.timerUTCEndTime,
-      voting: rootState.board.data?.voting,
-      moderation: rootState.board.data?.moderation.status,
+      currentUser: rootState.participants!.self,
+      moderation: rootState.view.moderating,
     }),
     _.isEqual
   );
 
-  const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
-  const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
-  const raisedHand = state.allUsers.find((user) => user.id === currentUser!.id)?.raisedHand;
+  const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
+  const isReady = state.currentUser.ready;
+  const {raisedHand} = state.currentUser;
 
-  const toggleModeration = (active: boolean) => {
-    store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
+  const toggleModeration = () => {
+    dispatch(Actions.setModerating(!state.moderation));
   };
 
   const toggleReadyState = () => {
-    store.dispatch(ActionFactory.setUserReadyStatus(!isReady));
+    store.dispatch(Actions.setUserReadyStatus(!isReady));
   };
 
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
@@ -55,7 +52,7 @@ export const MenuBars = () => {
   };
 
   const toggleRaiseHand = (active: boolean) => {
-    store.dispatch(ActionFactory.setRaisedHandStatus({userId: [Parse.User.current()!.id], raisedHand: active}));
+    dispatch(Actions.setRaisedHand(!raisedHand));
   };
 
   return (
@@ -89,7 +86,7 @@ export const MenuBars = () => {
             <TimerToggleButton tabIndex={TabIndex.AdminMenu} />
             <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 8} />
             <MenuToggle
-              value={state.moderation === "active"}
+              value={state.moderation}
               direction="left"
               toggleStartLabel={t("MenuBars.startFocusMode")}
               toggleStopLabel={t("MenuBars.stopFocusMode")}

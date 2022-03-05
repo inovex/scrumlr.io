@@ -6,6 +6,7 @@ import {VotingsState} from "./voting";
 import {ColumnsState} from "./column";
 import {ParticipantsState} from "./participant";
 import {NotesState} from "./note";
+import {ViewState} from "./view";
 
 export interface ApplicationState {
   auth: AuthState;
@@ -16,4 +17,5 @@ export interface ApplicationState {
   notes: NotesState;
   votes: VotesState;
   votings: VotingsState;
+  view: ViewState;
 }

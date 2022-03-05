@@ -1,6 +1,6 @@
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import "../BoardSettings/BoardSettings.scss";
 import classNames from "classnames";
@@ -29,7 +29,7 @@ export const DeleteBoardOption = (props: DeleteProps) => {
         <label className="delete-board-option__warning-label">{t("DeleteBoardOption.warning")}</label>
         <button
           className="delete-board-option__delete-board"
-          onClick={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}
+          onClick={() => store.dispatch(Actions.deleteBoard(state.board!.id))}
           tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
         >
           {t("DeleteBoardOption.button")}

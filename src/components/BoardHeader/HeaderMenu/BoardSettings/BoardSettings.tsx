@@ -3,7 +3,7 @@ import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {AccessPolicyType} from "types/board";
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 
 export type BoardSettingsProps = {
@@ -28,7 +28,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
 
   const onSubmit = () => {
     if (props.activeEditMode && state.board!.name !== boardName) {
-      store.dispatch(ActionFactory.editBoard({id: state.board.id, name: boardName}));
+      store.dispatch(Actions.editBoard({id: state.board.id, name: boardName}));
     }
     props.setActiveEditMode(!props.activeEditMode);
   };

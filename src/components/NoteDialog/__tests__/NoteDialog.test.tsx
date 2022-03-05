@@ -6,7 +6,7 @@ import {User} from "parse";
 import {NoteDialog} from "components/NoteDialog";
 import {mocked} from "ts-jest/utils";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {render} from "testUtils";
 
 const mockStore = configureStore();
@@ -176,7 +176,7 @@ describe("<NoteDialog/>", () => {
         fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editNote({id: "0", text: "Changed Text"}));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.editNote({id: "0", text: "Changed Text"}));
         });
       });
 
@@ -187,7 +187,7 @@ describe("<NoteDialog/>", () => {
         fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editNote({id: "0", text: "Changed Text"}));
+          expect(store.dispatch).toHaveBeenCalledWith(Actions.editNote({id: "0", text: "Changed Text"}));
         });
       });
 

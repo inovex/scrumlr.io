@@ -5,7 +5,7 @@ import {useRef} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ReactComponent as visibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as hiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
@@ -26,7 +26,7 @@ export interface ColumnProps {
 export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex}: ColumnProps) => {
   const state = useAppSelector(
     (applicationState) => ({
-      notes: applicationState.notes.filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || Parse.User.current()?.id === note.author) && note.columnId === id),
+      notes: applicationState.notes.filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || state.auth.user.id === note.author) && note.position.column === id),
       votes: applicationState.votes.filter(
         (vote) =>
           vote.votingIteration === applicationState.board.data?.votingIteration &&
@@ -41,7 +41,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
         // FIXME we'll have to keep track of cancelled voting iterations here since they'll be included in the results
         return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
       }),
-      participants: applicationState.users,
+      participants: applicationState.participants?.participants,
       board: {
         showAuthors: applicationState.board.data?.showAuthors,
         voting: applicationState.board.data?.voting,
@@ -56,7 +56,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string; columnId: string}, monitor) => {
       if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(ActionFactory.dragNote({id: item.id, columnId: id}));
+        store.dispatch(Actions.dragNote({id: item.id, columnId: id}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
@@ -81,11 +81,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
             <span className="column__header-card-number">{state.notes.length}</span>
             {currentUserIsModerator && (
               <div className="column__header-toggle">
-                <button
-                  tabIndex={TabIndex.disabled}
-                  className="column__header-toggle-button"
-                  onClick={() => store.dispatch(ActionFactory.editColumn({columnId: id, hidden: !hidden}))}
-                >
+                <button tabIndex={TabIndex.disabled} className="column__header-toggle-button" onClick={() => store.dispatch(Actions.editColumn({columnId: id, hidden: !hidden}))}>
                   <Icon className="column__header-toggle-button-icon" />
                 </button>
               </div>

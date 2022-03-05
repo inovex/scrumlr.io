@@ -1,6 +1,6 @@
 import {fireEvent} from "@testing-library/react";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
@@ -79,13 +79,13 @@ describe("Votes", () => {
     test("addVote", () => {
       const votes = render(createVotes(true, true));
       fireEvent.click(votes.container.getElementsByClassName("dot-button")[1]);
-      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.addVote("test-id", "test-board", 1));
+      expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.addVote("test-id", "test-board", 1));
     });
 
     test("deleteVote", () => {
       const votes = render(createVotes(true, true));
       fireEvent.click(votes.container.getElementsByClassName("dot-button")[0]);
-      expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.deleteVote("test-id"));
+      expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.deleteVote("test-id"));
     });
   });
 

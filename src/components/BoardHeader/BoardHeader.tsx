@@ -8,7 +8,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
@@ -41,7 +41,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           headline={t("ConfirmationDialog.returnToHomepage")}
           acceptMessage={t("ConfirmationDialog.yes")}
           onAccept={() => {
-            store.dispatch(ActionFactory.leaveBoard());
+            store.dispatch(Actions.leaveBoard());
             navigate("/");
           }}
           declineMessage={t("ConfirmationDialog.no")}

@@ -1,7 +1,7 @@
 import {fireEvent, getByText} from "@testing-library/react";
 import {Request} from "components/Request";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {render} from "testUtils";
 
 jest.mock("store", () => ({
@@ -39,25 +39,25 @@ describe("JoinRequest", () => {
     test("single join request should call rejectJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Reject"));
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId", ["userId-0"]));
+      expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests("boardId", ["userId-0"]));
     });
 
     test("single join request should call acceptJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Accept"));
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId", ["userId-0"]));
+      expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests("boardId", ["userId-0"]));
     });
 
     test("multiple join request should call acceptJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(getByText(container, "Accept all")!);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
+      expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(getByText(container, "Reject all")!);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
+      expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
@@ -65,7 +65,7 @@ describe("JoinRequest", () => {
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[2]);
-        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.rejectJoinRequests(`boardId-${i}`, [`userId-${i}`]));
+        expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }
     });
 
@@ -74,7 +74,7 @@ describe("JoinRequest", () => {
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[3]);
-        expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.acceptJoinRequests(`boardId-${i}`, [`userId-${i}`]));
+        expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests(`boardId-${i}`, [`userId-${i}`]));
       }
     });
   });

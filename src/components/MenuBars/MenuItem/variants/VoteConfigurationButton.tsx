@@ -5,7 +5,7 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import store, {useAppSelector} from "store";
 import Dropdown from "components/Dropdown";
 import "./VoteConfigurationButton.scss";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {Toggle} from "../../../Toggle";
 
@@ -31,7 +31,7 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
 
   const startVoting = () => {
     store.dispatch(
-      ActionFactory.createVoting(state.boardId!, {
+      Actions.createVoting(state.boardId!, {
         voteLimit: numberOfVotes,
         showVotesOfOthers,
         allowMultipleVotes: allowMultipleVotesPerNote,
@@ -39,10 +39,10 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
     );
   };
   const stopVoting = () => {
-    store.dispatch(ActionFactory.closeVoting(state.boardId!, state.activeVoting!.id));
+    store.dispatch(Actions.closeVoting(state.boardId!, state.activeVoting!.id));
   };
   const cancelVoting = () => {
-    store.dispatch(ActionFactory.abortVoting(state.boardId!, state.activeVoting!.id));
+    store.dispatch(Actions.abortVoting(state.boardId!, state.activeVoting!.id));
   };
 
   return (

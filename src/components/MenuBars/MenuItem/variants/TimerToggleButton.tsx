@@ -1,6 +1,6 @@
 import {useState} from "react";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import Dropdown from "components/Dropdown";
 import {DropdownToggleButton} from "components/MenuBars/MenuItem/DropdownToggleButton";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
@@ -20,7 +20,7 @@ export const TimerToggleButton = (props: TimerToggleButtonProps) => {
   const [tabable, setTabable] = useState(false);
 
   const onClick = (minutes: number) => {
-    store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
+    store.dispatch(Actions.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
   };
 
   const focusOnTab = (tabIndex: number) => {
@@ -93,8 +93,8 @@ export const TimerToggleButton = (props: TimerToggleButtonProps) => {
             <Dropdown.ItemButton
               tabIndex={focusOnTab(8)}
               className="timer-dropdown__item-button"
-              onClick={() => store.dispatch(ActionFactory.cancelTimer())}
-              onTouchEnd={() => store.dispatch(ActionFactory.cancelTimer())}
+              onClick={() => store.dispatch(Actions.cancelTimer())}
+              onTouchEnd={() => store.dispatch(Actions.cancelTimer())}
             >
               <label>{t("TimerToggleButton.cancelTimer")}</label>
               <div>x</div>

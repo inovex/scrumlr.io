@@ -46,6 +46,11 @@ export const ParticipantActionFactory = {
     ready,
   }),
 
+  setRaisedHand: (raisedHand: boolean) => ({
+    type: ParticipantAction.SetRaisedHandStatus,
+    raisedHand,
+  }),
+
   /**
    * Creates an action that should be dispatch when a moderator changes the permissions of a participant
    *
@@ -59,7 +64,8 @@ export const ParticipantActionFactory = {
   }),
 };
 
-export type UsersReduxAction =
+export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setParticipants>
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
+  | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
   | ReturnType<typeof ParticipantActionFactory.changePermission>;

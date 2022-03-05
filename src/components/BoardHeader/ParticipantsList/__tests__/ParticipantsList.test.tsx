@@ -1,6 +1,6 @@
 import {fireEvent} from "@testing-library/react";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {mocked} from "ts-jest/utils";
 import {User} from "parse";
 import store from "store";
@@ -165,6 +165,6 @@ describe("ParticipantsList", () => {
     });
     fireEvent.click(container.getElementsByClassName("participant__permission-toggle")[1]);
     expect(store.dispatch).toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.changePermission("1", true));
+    expect(store.dispatch).toHaveBeenCalledWith(Actions.changePermission("1", true));
   });
 });

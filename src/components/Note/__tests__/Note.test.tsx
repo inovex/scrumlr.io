@@ -5,7 +5,7 @@ import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {mocked} from "ts-jest/utils";
 import {Vote} from "types/vote";
 import {render} from "testUtils";
@@ -266,7 +266,7 @@ describe("Note", () => {
       mockedUser.current = jest.fn(() => ({id: "Test Author"} as never));
       const {container} = render(createNote({showAuthors: true, focus: false, moderation: {userId: "Test Author", status: true}, currentUserIsModerator: true}));
       fireEvent.click(container.querySelector(".note__root")!);
-      expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.editNote({id: "0", focus: true}));
+      expect(store.dispatch).toHaveBeenCalledWith(Actions.editNote({id: "0", focus: true}));
     });
 
     test("Note shouldn't be focused", () => {

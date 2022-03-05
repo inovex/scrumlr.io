@@ -1,7 +1,7 @@
 import {fireEvent, render} from "testUtils";
 import {NoteInput} from "components/NoteInput";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 
 const createNoteInput = (columnId: string, maxNoteLength: number) => <NoteInput columnId={columnId} maxNoteLength={maxNoteLength} />;
 
@@ -32,16 +32,16 @@ describe("Note Input", () => {
     // less works as expected
     fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "1234"}});
     fireEvent.keyDown(container.querySelector(".note-input__input")!, {key: "Enter", code: "Enter", charCode: 13});
-    expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.addNote("TestID", "1234"));
+    expect(store.dispatch).toHaveBeenCalledWith(Actions.addNote("TestID", "1234"));
 
     // Exact works as expected
     fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "12345"}});
     fireEvent.keyDown(container.querySelector(".note-input__input")!, {key: "Enter", code: "Enter", charCode: 13});
-    expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.addNote("TestID", "12345"));
+    expect(store.dispatch).toHaveBeenCalledWith(Actions.addNote("TestID", "12345"));
 
     // More than the limit works as expected
     fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "123456"}});
     fireEvent.keyDown(container.querySelector(".note-input__input")!, {key: "Enter", code: "Enter", charCode: 13});
-    expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.addNote("TestID", "12345"));
+    expect(store.dispatch).toHaveBeenCalledWith(Actions.addNote("TestID", "12345"));
   });
 });
