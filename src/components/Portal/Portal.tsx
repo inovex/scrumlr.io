@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import FocusLock from "react-focus-lock";
 import ReactDOM from "react-dom";
 

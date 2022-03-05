@@ -1,4 +1,4 @@
-import {VFC, useState} from "react";
+import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";

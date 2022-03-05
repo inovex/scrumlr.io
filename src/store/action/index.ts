@@ -1,7 +1,7 @@
 import {BoardActionFactory, BoardActionType, BoardReduxAction} from "./board";
 import {NoteActionFactory, NoteActionType, NoteReduxAction} from "./note";
 import {VoteActionFactory, VoteActionType, VoteReduxAction} from "./vote";
-import {UsersActionFactory, ParticipantsActionType, UsersReduxAction} from "./participants";
+import {ParticipantsActionType, UsersActionFactory, UsersReduxAction} from "./participants";
 import {ColumnActionFactory, ColumnActionType, ColumnReduxAction} from "./column";
 import {JoinRequestActionFactory, JoinRequestActionType, JoinRequestReduxAction} from "./request";
 import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "./votings";

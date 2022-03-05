@@ -4,7 +4,7 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {exportAsJSON, exportAsCSV} from "utils/export";
+import {exportAsCSV, exportAsJSON} from "utils/export";
 import {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";

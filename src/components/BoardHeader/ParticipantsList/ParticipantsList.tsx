@@ -1,5 +1,5 @@
 import {Portal} from "components/Portal";
-import {VFC, useState} from "react";
+import {useState, VFC} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";

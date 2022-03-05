@@ -1,4 +1,4 @@
-import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI} from "redux";
+import {applyMiddleware, combineReducers, createStore, Dispatch, MiddlewareAPI} from "redux";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";

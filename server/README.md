@@ -4,7 +4,7 @@ This is the server application of [scrumlr.io](https://scrumlr.io) targeted by t
 
 The basic components of the server are visualized by the PlantUML `architecture.puml` or in this graphic:
 
-![Architecture](./architecture.png)
+![Architecture](architecture.png)
 
 ## Local development
 
@@ -25,7 +25,7 @@ each time.
 ## API
 
 The API is currently documented in the [Postman](https://www.postman.com/) collection `api.postman_collection.json`.
-Simply start Postman, import the collection, and you can immediately start to explore all 
+Simply start Postman, import the collection, and you can immediately start to explore all
 resources and take a look at our documentation.
 
 Currently, you can also just open your browser on [http://localhost:8080](http://localhost:8080)

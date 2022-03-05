@@ -36,7 +36,7 @@ export const ColumnAPI = {
    *  columnId: the column id
    *  name: new name to set (optional)
    *  color: new column color to set (optional)
-   *  hidden: flag to set whether this columns should be visible to all basic users (optional)
+   *  hidden: flag to set whether this column should be visible to all basic users (optional)
    *
    * @returns a {status, description} object
    */

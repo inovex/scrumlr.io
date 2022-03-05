@@ -17,7 +17,7 @@ export const Participant = ({participant, currentUserIsModerator, boardOwner}: P
     participants: applicationState.participants,
   }));
 
-  let badgeText = "";
+  let badgeText: string;
   if (state.participants?.self.user.id === participant.user.id) {
     badgeText = "me";
   } else if (participant.role === "OWNER") {
