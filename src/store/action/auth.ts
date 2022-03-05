@@ -1,22 +1,22 @@
-export const AuthActionType = {
-  SignIn: "@@SCRUMLR/signIn" as const,
-  SignOut: "@@SCRUMLR/signOut" as const,
-  UserCheckCompleted: "@@SCRUMLR/userCheckCompleted" as const,
+export const AuthAction = {
+  SignIn: "scrumlr.io/signIn" as const,
+  SignOut: "scrumlr.io/signOut" as const,
+  UserCheckCompleted: "scrumlr.io/userCheckCompleted" as const,
 };
 
 export const AuthActionFactory = {
   signIn: (id: string, name: string) => ({
-    type: AuthActionType.SignIn,
+    type: AuthAction.SignIn,
     id,
     name,
   }),
 
   signOut: () => ({
-    type: AuthActionType.SignOut,
+    type: AuthAction.SignOut,
   }),
 
   userCheckCompleted: () => ({
-    type: AuthActionType.UserCheckCompleted,
+    type: AuthAction.UserCheckCompleted,
   }),
 };
 

@@ -1,41 +1,41 @@
 import {Request} from "types/request";
 
-export const JoinRequestActionType = {
-  AcceptJoinRequests: "@@scrumlr/acceptJoinRequests" as const,
-  RejectJoinRequests: "@@scrumlr/rejectJoinRequests" as const,
-  InitializeJoinRequests: "@@scrumlr/initializeJoinRequests" as const,
-  CreateJoinRequest: "@@scrumlr/createJoinRequest" as const,
-  UpdateJoinRequest: "@@scrumlr/updateJoinRequest" as const,
+export const RequestAction = {
+  AcceptJoinRequests: "scrumlr.io/acceptJoinRequests" as const,
+  RejectJoinRequests: "scrumlr.io/rejectJoinRequests" as const,
+  InitializeJoinRequests: "scrumlr.io/initializeJoinRequests" as const,
+  CreateJoinRequest: "scrumlr.io/createJoinRequest" as const,
+  UpdateJoinRequest: "scrumlr.io/updateJoinRequest" as const,
 };
 
-export const JoinRequestActionFactory = {
+export const RequestActionFactory = {
   acceptJoinRequests: (boardId: string, userIds: string[]) => ({
-    type: JoinRequestActionType.AcceptJoinRequests,
+    type: RequestAction.AcceptJoinRequests,
     boardId,
     userIds,
   }),
   rejectJoinRequests: (boardId: string, userIds: string[]) => ({
-    type: JoinRequestActionType.RejectJoinRequests,
+    type: RequestAction.RejectJoinRequests,
     boardId,
     userIds,
   }),
   initializeJoinRequests: (requests: Request[]) => ({
-    type: JoinRequestActionType.InitializeJoinRequests,
+    type: RequestAction.InitializeJoinRequests,
     joinRequests: requests,
   }),
   createJoinRequest: (joinRequest: Request) => ({
-    type: JoinRequestActionType.CreateJoinRequest,
+    type: RequestAction.CreateJoinRequest,
     joinRequest,
   }),
   updateJoinRequest: (joinRequest: Request) => ({
-    type: JoinRequestActionType.UpdateJoinRequest,
+    type: RequestAction.UpdateJoinRequest,
     joinRequest,
   }),
 };
 
 export type JoinRequestReduxAction =
-  | ReturnType<typeof JoinRequestActionFactory.acceptJoinRequests>
-  | ReturnType<typeof JoinRequestActionFactory.rejectJoinRequests>
-  | ReturnType<typeof JoinRequestActionFactory.initializeJoinRequests>
-  | ReturnType<typeof JoinRequestActionFactory.createJoinRequest>
-  | ReturnType<typeof JoinRequestActionFactory.updateJoinRequest>;
+  | ReturnType<typeof RequestActionFactory.acceptJoinRequests>
+  | ReturnType<typeof RequestActionFactory.rejectJoinRequests>
+  | ReturnType<typeof RequestActionFactory.initializeJoinRequests>
+  | ReturnType<typeof RequestActionFactory.createJoinRequest>
+  | ReturnType<typeof RequestActionFactory.updateJoinRequest>;

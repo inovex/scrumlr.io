@@ -1,20 +1,20 @@
 import {Note} from "types/note";
 
 /** This object lists note object specific internal Redux Action types. */
-export const NoteActionType = {
+export const NoteAction = {
   /*
    * ATTENTION:
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
-  AddNote: "@@SCRUMLR/addNote" as const,
-  EditNote: "@@SCRUMLR/editNote" as const,
-  UnstackNote: "@@SCRUMLR/unstackNote" as const,
-  DragNote: "@@SCRUMLR/dragNote" as const,
-  CreatedNote: "@@SCRUMLR/createdNote" as const,
-  DeleteNote: "@@SCRUMLR/deleteNote" as const,
-  UpdatedNote: "@@SCRUMLR/updatedNote" as const,
-  InitializeNotes: "@@SCRUMLR/initNotes" as const,
+  AddNote: "scrumlr.io/addNote" as const,
+  EditNote: "scrumlr.io/editNote" as const,
+  UnstackNote: "scrumlr.io/unstackNote" as const,
+  DragNote: "scrumlr.io/dragNote" as const,
+  CreatedNote: "scrumlr.io/createdNote" as const,
+  DeleteNote: "scrumlr.io/deleteNote" as const,
+  UpdatedNote: "scrumlr.io/updatedNote" as const,
+  InitializeNotes: "scrumlr.io/initNotes" as const,
 };
 
 /** Factory or creator class of internal Redux note object specific actions. */
@@ -32,7 +32,7 @@ export const NoteActionFactory = {
    * @param text the text of the note
    */
   addNote: (columnId: string, text: string) => ({
-    type: NoteActionType.AddNote,
+    type: NoteAction.AddNote,
     columnId,
     text,
   }),
@@ -43,7 +43,7 @@ export const NoteActionFactory = {
    * @param text the edited text of the note
    */
   editNote: (note: Note) => ({
-    type: NoteActionType.EditNote,
+    type: NoteAction.EditNote,
     note,
   }),
   /**
@@ -51,7 +51,7 @@ export const NoteActionFactory = {
    * @param note contains the noteId and the parentId
    */
   unstackNote: (note: Note) => ({
-    type: NoteActionType.UnstackNote,
+    type: NoteAction.UnstackNote,
     note,
   }),
   /**
@@ -59,7 +59,7 @@ export const NoteActionFactory = {
    * @param note contains the noteId and the dragOnId and the columnId
    */
   dragNote: (note: Note) => ({
-    type: NoteActionType.DragNote,
+    type: NoteAction.DragNote,
     note,
   }),
   /**
@@ -68,7 +68,7 @@ export const NoteActionFactory = {
    * @param note the note
    */
   createdNote: (note: Note) => ({
-    type: NoteActionType.CreatedNote,
+    type: NoteAction.CreatedNote,
     note,
   }),
   /**
@@ -77,7 +77,7 @@ export const NoteActionFactory = {
    * @param noteId the note id
    */
   deleteNote: (noteId: string) => ({
-    type: NoteActionType.DeleteNote,
+    type: NoteAction.DeleteNote,
     noteId,
   }),
   /**
@@ -86,7 +86,7 @@ export const NoteActionFactory = {
    * @param note the note
    */
   updatedNote: (note: Note) => ({
-    type: NoteActionType.UpdatedNote,
+    type: NoteAction.UpdatedNote,
     note,
   }),
   /**
@@ -96,7 +96,7 @@ export const NoteActionFactory = {
    * @param notes the list of notes persisted on the server for the current board
    */
   initializeNotes: (notes: Note[]) => ({
-    type: NoteActionType.InitializeNotes,
+    type: NoteAction.InitializeNotes,
     notes,
   }),
 };

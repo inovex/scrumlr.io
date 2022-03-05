@@ -3,26 +3,26 @@ import {Column} from "../../types/column";
 import {Participant} from "../../types/participant";
 
 /** This object lists board object specific internal Redux Action types. */
-export const BoardActionType = {
+export const BoardAction = {
   /*
    * ATTENTION:
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
-  LeaveBoard: "@@SCRUMLR/leaveBoard" as const,
-  JoinBoard: "@@SCRUMLR/joinBoard" as const,
-  InitializeBoard: "@@SCRUMLR/initBoard" as const,
-  EditBoard: "@@SCRUMLR/editBoard" as const,
-  UpdatedBoard: "@@SCRUMLR/updatedBoard" as const,
-  DeleteBoard: "@@SCRUMLR/deleteBoard" as const,
-  PermittedBoardAccess: "@@SCRUMLR/permittedBoardAccess" as const,
-  RejectedBoardAccess: "@@SCRUMLR/rejectedBoardAccess" as const,
-  PendingBoardAccessConfirmation: "@@SCRUMLR/pendingBoardAccessConfirmation" as const,
-  PassphraseChallengeRequired: "@@SCRUMLR/passphraseChallengeRequired" as const,
-  IncorrectPassphrase: "@@SCRUMLR/incorrectPassphrase" as const,
-  CancelVoting: "@@SCRUMLR/cancelVoting" as const,
-  SetTimer: "@@SCRUMLR/setTimer" as const,
-  CancelTimer: "@@SCRUMLR/cancelTimer" as const,
+  LeaveBoard: "scrumlr.io/leaveBoard" as const,
+  JoinBoard: "scrumlr.io/joinBoard" as const,
+  InitializeBoard: "scrumlr.io/initBoard" as const,
+  EditBoard: "scrumlr.io/editBoard" as const,
+  UpdatedBoard: "scrumlr.io/updatedBoard" as const,
+  DeleteBoard: "scrumlr.io/deleteBoard" as const,
+  PermittedBoardAccess: "scrumlr.io/permittedBoardAccess" as const,
+  RejectedBoardAccess: "scrumlr.io/rejectedBoardAccess" as const,
+  PendingBoardAccessConfirmation: "scrumlr.io/pendingBoardAccessConfirmation" as const,
+  PassphraseChallengeRequired: "scrumlr.io/passphraseChallengeRequired" as const,
+  IncorrectPassphrase: "scrumlr.io/incorrectPassphrase" as const,
+  CancelVoting: "scrumlr.io/cancelVoting" as const,
+  SetTimer: "scrumlr.io/setTimer" as const,
+  CancelTimer: "scrumlr.io/cancelTimer" as const,
 };
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -34,7 +34,7 @@ export const BoardActionFactory = {
    */
   /** Creates an action which should be dispatched when the user leaves the current board. */
   leaveBoard: () => ({
-    type: BoardActionType.LeaveBoard,
+    type: BoardAction.LeaveBoard,
   }),
   /**
    * Creates an action which should be dispatched when the user tries to join a board.
@@ -43,7 +43,7 @@ export const BoardActionFactory = {
    * @param passphrase optional passphrase is board is protected by it
    */
   joinBoard: (boardId: string, passphrase?: string) => ({
-    type: BoardActionType.JoinBoard,
+    type: BoardAction.JoinBoard,
     boardId,
     passphrase,
   }),
@@ -55,7 +55,7 @@ export const BoardActionFactory = {
    * @param columns the columns of the board
    */
   initializeBoard: (board: Board, columns: Column[], participants: Participant[]) => ({
-    type: BoardActionType.InitializeBoard,
+    type: BoardAction.InitializeBoard,
     board,
     columns,
     participants,
@@ -74,7 +74,7 @@ export const BoardActionFactory = {
    * @param board the partial board model with the fields to update
    */
   editBoard: (board: EditBoardRequest) => ({
-    type: BoardActionType.EditBoard,
+    type: BoardAction.EditBoard,
     board,
   }),
   /**
@@ -83,12 +83,12 @@ export const BoardActionFactory = {
    * @param board the updated board
    */
   updatedBoard: (board: Board) => ({
-    type: BoardActionType.UpdatedBoard,
+    type: BoardAction.UpdatedBoard,
     board,
   }),
   /** Creates an action which should be dispatched when the user wants to delete the current board. */
   deleteBoard: (boardId: string) => ({
-    type: BoardActionType.DeleteBoard,
+    type: BoardAction.DeleteBoard,
     boardId,
   }),
   /**
@@ -98,12 +98,12 @@ export const BoardActionFactory = {
    * @param boardId the board id
    */
   permittedBoardAccess: (boardId: string) => ({
-    type: BoardActionType.PermittedBoardAccess,
+    type: BoardAction.PermittedBoardAccess,
     boardId,
   }),
   /** Creates an action which should be dispatched was rejected from a board. */
   rejectedBoardAccess: () => ({
-    type: BoardActionType.RejectedBoardAccess,
+    type: BoardAction.RejectedBoardAccess,
   }),
   /**
    * Creates an action which should be dispatched when the user access request to a board is pending.
@@ -111,14 +111,14 @@ export const BoardActionFactory = {
    * @param requestReference the reference id on the join request
    */
   pendingBoardAccessConfirmation: (requestReference: string) => ({
-    type: BoardActionType.PendingBoardAccessConfirmation,
+    type: BoardAction.PendingBoardAccessConfirmation,
     requestReference,
   }),
   requirePassphraseChallenge: () => ({
-    type: BoardActionType.PassphraseChallengeRequired,
+    type: BoardAction.PassphraseChallengeRequired,
   }),
   incorrectPassphrase: () => ({
-    type: BoardActionType.IncorrectPassphrase,
+    type: BoardAction.IncorrectPassphrase,
   }),
   /**
    * Creates an action which should be dispatched when the current voting phase was canceled.
@@ -126,7 +126,7 @@ export const BoardActionFactory = {
    * @param boardId
    */
   cancelVoting: (boardId: string) => ({
-    type: BoardActionType.CancelVoting,
+    type: BoardAction.CancelVoting,
     boardId,
   }),
   /** Creates an action which should be dispatched when a moderator wants to set a timer.
@@ -134,14 +134,14 @@ export const BoardActionFactory = {
    * @param endDate the date where the timer ends
    */
   setTimer: (endDate: Date) => ({
-    type: BoardActionType.SetTimer,
+    type: BoardAction.SetTimer,
     endDate,
   }),
   /**
    * Creates an action which should be dispatched when a moderator wants to cancel the timer.
    */
   cancelTimer: () => ({
-    type: BoardActionType.CancelTimer,
+    type: BoardAction.CancelTimer,
   }),
 };
 

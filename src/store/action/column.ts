@@ -1,16 +1,16 @@
 import {AddColumnRequest, Column, EditColumnRequest} from "types/column";
 
 /** This object lists column object specific internal Redux Action types. */
-export const ColumnActionType = {
+export const ColumnAction = {
   /*
    * ATTENTION:
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
-  AddColumn: "@@SCRUMLR/addColumn" as const,
-  EditColumn: "@@SCRUMLR/editColumn" as const,
-  DeleteColumn: "@@SCRUMLR/deleteColumn" as const,
-  UpdatedColumns: "@@SCRUMLR/updatedColumns" as const,
+  AddColumn: "scrumlr.io/addColumn" as const,
+  EditColumn: "scrumlr.io/editColumn" as const,
+  DeleteColumn: "scrumlr.io/deleteColumn" as const,
+  UpdatedColumns: "scrumlr.io/updatedColumns" as const,
 };
 
 /** Factory or creator class of internal Redux column object specific actions. */
@@ -29,7 +29,7 @@ export const ColumnActionFactory = {
    *  hidden: the flag which indicates whether this column should be visible to all basic users
    */
   addColumn: (column: AddColumnRequest) => ({
-    type: ColumnActionType.AddColumn,
+    type: ColumnAction.AddColumn,
     column,
   }),
   /**
@@ -42,7 +42,7 @@ export const ColumnActionFactory = {
    *  hidden: the new hidden state
    */
   editColumn: (column: EditColumnRequest) => ({
-    type: ColumnActionType.EditColumn,
+    type: ColumnAction.EditColumn,
     column,
   }),
   /**
@@ -51,12 +51,12 @@ export const ColumnActionFactory = {
    * @param columnId the column id
    */
   deleteColumn: (columnId: string) => ({
-    type: ColumnActionType.DeleteColumn,
+    type: ColumnAction.DeleteColumn,
     columnId,
   }),
 
   updateColumns: (columns: Column[]) => ({
-    type: ColumnActionType.UpdatedColumns,
+    type: ColumnAction.UpdatedColumns,
     columns,
   }),
 };

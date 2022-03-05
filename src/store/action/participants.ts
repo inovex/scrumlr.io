@@ -2,23 +2,23 @@
 import {Participant} from "../../types/participant";
 
 /** This object lists board users object specific internal Redux Action types. */
-export const ParticipantsActionType = {
+export const ParticipantAction = {
   /*
    * ATTENTION:
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
-  SetParticipants: "@@SCRUMLR/setParticipants" as const,
+  SetParticipants: "scrumlr.io/setParticipants" as const,
 
-  SetUserReadyStatus: "@@SCRUMLR/setUserReadyStatus" as const,
-  SetRaisedHandStatus: "@@SCRUMLR/setRaisedHandStatus" as const,
-  UpdateUser: "@@SCRUMLR/updateUser" as const,
-  ChangePermission: "@@SCRUMLR/changePermission" as const,
-  EditUserConfiguration: "@@SCRUMLR/editUserConfiguration" as const,
+  SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
+  SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
+  UpdateUser: "scrumlr.io/updateUser" as const,
+  ChangePermission: "scrumlr.io/changePermission" as const,
+  EditUserConfiguration: "scrumlr.io/editUserConfiguration" as const,
 };
 
 /** Factory or creator class of internal Redux board users object specific actions. */
-export const UsersActionFactory = {
+export const ParticipantActionFactory = {
   /*
    * ATTENTION:
    * Each action creator should be also listed in the type `UsersReduxAction`, because
@@ -31,7 +31,7 @@ export const UsersActionFactory = {
    * @param participants the list of users
    */
   setParticipants: (participants: Participant[]) => ({
-    type: ParticipantsActionType.SetParticipants,
+    type: ParticipantAction.SetParticipants,
     participants,
   }),
 
@@ -42,7 +42,7 @@ export const UsersActionFactory = {
    * @param ready the ready state to set
    */
   setUserReadyStatus: (ready: boolean) => ({
-    type: ParticipantsActionType.SetUserReadyStatus,
+    type: ParticipantAction.SetUserReadyStatus,
     ready,
   }),
 
@@ -53,13 +53,13 @@ export const UsersActionFactory = {
    * @param moderator the flag whether the user receives or loses moderator permissions
    */
   changePermission: (userId: string, moderator: boolean) => ({
-    type: ParticipantsActionType.ChangePermission,
+    type: ParticipantAction.ChangePermission,
     userId,
     moderator,
   }),
 };
 
 export type UsersReduxAction =
-  | ReturnType<typeof UsersActionFactory.setParticipants>
-  | ReturnType<typeof UsersActionFactory.setUserReadyStatus>
-  | ReturnType<typeof UsersActionFactory.changePermission>;
+  | ReturnType<typeof ParticipantActionFactory.setParticipants>
+  | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
+  | ReturnType<typeof ParticipantActionFactory.changePermission>;

@@ -1,9 +1,9 @@
 import {AuthState} from "types/auth";
 import {ReduxAction} from "../action";
-import {AuthActionType} from "../action/auth";
+import {AuthAction} from "../action/auth";
 
 export const authReducer = (state: AuthState = {user: undefined, initialized: false}, action: ReduxAction): AuthState => {
-  if (action.type === AuthActionType.SignOut) {
+  if (action.type === AuthAction.SignOut) {
     return {
       ...state,
       user: undefined,
@@ -11,7 +11,7 @@ export const authReducer = (state: AuthState = {user: undefined, initialized: fa
     };
   }
 
-  if (action.type === AuthActionType.SignIn) {
+  if (action.type === AuthAction.SignIn) {
     return {
       ...state,
       user: {
@@ -22,7 +22,7 @@ export const authReducer = (state: AuthState = {user: undefined, initialized: fa
     };
   }
 
-  if (action.type === AuthActionType.UserCheckCompleted) {
+  if (action.type === AuthAction.UserCheckCompleted) {
     return {
       ...state,
       initialized: true,

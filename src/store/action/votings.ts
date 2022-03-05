@@ -1,32 +1,32 @@
 import {CreateVotingRequest, Voting} from "types/voting";
 
-export const VoteConfigurationActionType = {
-  CreateVoting: "@@SCRUMLR/createVoting" as const,
-  CloseVoting: "@@SCRUMLR/closeVoting" as const,
-  AbortVoting: "@@SCRUMLR/abortVoting" as const,
-  AddedVoteConfiguration: "@@SCRUMLR/addedVoteConfiguration" as const,
-  RemovedVoteConfiguration: "@@SCRUMLR/removedVoteConfiguration" as const,
-  InitializeVoteConfiguration: "@@SCRUMLR/initializeVoteConfiguration" as const,
+export const VotingAction = {
+  CreateVoting: "scrumlr.io/createVoting" as const,
+  CloseVoting: "scrumlr.io/closeVoting" as const,
+  AbortVoting: "scrumlr.io/abortVoting" as const,
+  AddedVoteConfiguration: "scrumlr.io/addedVoteConfiguration" as const,
+  RemovedVoteConfiguration: "scrumlr.io/removedVoteConfiguration" as const,
+  InitializeVoteConfiguration: "scrumlr.io/initializeVoteConfiguration" as const,
 };
 
-export const VoteConfigurationActionFactory = {
+export const VotingActionFactory = {
   /**
    * Creates an action which should be dispatched when the user wants to add a vote configuration.
    *
    * @param voting the current vote configuration
    */
   createVoting: (board: string, voting: CreateVotingRequest) => ({
-    type: VoteConfigurationActionType.CreateVoting,
+    type: VotingAction.CreateVoting,
     board,
     voting,
   }),
 
   closeVoting: (board: string, voting: string) => ({
-    type: VoteConfigurationActionType.CloseVoting,
+    type: VotingAction.CloseVoting,
   }),
 
   abortVoting: (board: string, voting: string) => ({
-    type: VoteConfigurationActionType.AbortVoting,
+    type: VotingAction.AbortVoting,
   }),
 
   /**
@@ -35,7 +35,7 @@ export const VoteConfigurationActionFactory = {
    * @param voteConfiguration the vote configuration added on the server
    */
   addedVoteConfiguration: (voteConfiguration: Voting) => ({
-    type: VoteConfigurationActionType.AddedVoteConfiguration,
+    type: VotingAction.AddedVoteConfiguration,
     voteConfiguration,
   }),
   /**
@@ -44,7 +44,7 @@ export const VoteConfigurationActionFactory = {
    * @param voteConfiguration the vote configuration added on the server
    */
   removedVoteConfiguration: (voteConfiguration: Voting) => ({
-    type: VoteConfigurationActionType.RemovedVoteConfiguration,
+    type: VotingAction.RemovedVoteConfiguration,
     voteConfiguration,
   }),
   /**
@@ -53,15 +53,15 @@ export const VoteConfigurationActionFactory = {
    * @param voteConfiguration current vote configuration (e.g. a user can join during voting phase)
    */
   initializeVoteConfiguration: (voteConfiguration: Voting) => ({
-    type: VoteConfigurationActionType.InitializeVoteConfiguration,
+    type: VotingAction.InitializeVoteConfiguration,
     voteConfiguration,
   }),
 };
 
 export type VoteConfigurationReduxAction =
-  | ReturnType<typeof VoteConfigurationActionFactory.createVoting>
-  | ReturnType<typeof VoteConfigurationActionFactory.closeVoting>
-  | ReturnType<typeof VoteConfigurationActionFactory.abortVoting>
-  | ReturnType<typeof VoteConfigurationActionFactory.addedVoteConfiguration>
-  | ReturnType<typeof VoteConfigurationActionFactory.removedVoteConfiguration>
-  | ReturnType<typeof VoteConfigurationActionFactory.initializeVoteConfiguration>;
+  | ReturnType<typeof VotingActionFactory.createVoting>
+  | ReturnType<typeof VotingActionFactory.closeVoting>
+  | ReturnType<typeof VotingActionFactory.abortVoting>
+  | ReturnType<typeof VotingActionFactory.addedVoteConfiguration>
+  | ReturnType<typeof VotingActionFactory.removedVoteConfiguration>
+  | ReturnType<typeof VotingActionFactory.initializeVoteConfiguration>;

@@ -1,33 +1,33 @@
 import {Vote} from "types/vote";
 
-export const VoteActionType = {
-  AddVote: "@@SCRUMLR/addVote" as const,
-  CreatedVote: "@@SCRUMLR/createdVote" as const,
-  DeleteVote: "@@SCRUMLR/deleteVote" as const,
-  DeletedVote: "@@SCRUMLR/deletedVote" as const,
-  InitializeVotes: "@@SCRUMLR/initializeVotes" as const,
+export const VoteAction = {
+  AddVote: "scrumlr.io/addVote" as const,
+  CreatedVote: "scrumlr.io/createdVote" as const,
+  DeleteVote: "scrumlr.io/deleteVote" as const,
+  DeletedVote: "scrumlr.io/deletedVote" as const,
+  InitializeVotes: "scrumlr.io/initializeVotes" as const,
 };
 
 export const VoteActionFactory = {
   addVote: (note: string, boardId: string) => ({
-    type: VoteActionType.AddVote,
+    type: VoteAction.AddVote,
     note,
     boardId,
   }),
   deleteVote: (note: string) => ({
-    type: VoteActionType.DeleteVote,
+    type: VoteAction.DeleteVote,
     note,
   }),
   createdVote: (vote: Vote) => ({
-    type: VoteActionType.CreatedVote,
+    type: VoteAction.CreatedVote,
     vote,
   }),
   deletedVote: (voteId: string) => ({
-    type: VoteActionType.DeletedVote,
+    type: VoteAction.DeletedVote,
     voteId,
   }),
   initializeVotes: (votes: Vote[]) => ({
-    type: VoteActionType.InitializeVotes,
+    type: VoteAction.InitializeVotes,
     votes,
   }),
 };
