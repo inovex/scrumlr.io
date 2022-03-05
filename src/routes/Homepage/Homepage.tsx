@@ -9,14 +9,16 @@ import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
 import {Button} from "components/Button";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {ActionFactory} from "store/action";
+import {useDispatch} from "react-redux";
 import {InovexAnchor} from "./InovexAnchor";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
   const {user} = useAppSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -25,10 +27,8 @@ export const Homepage = withTranslation()(() => {
     });
   };
 
-  const onLogout = async () => {
-    store.dispatch(ActionFactory.signOut());
-    // eslint-disable-next-line no-restricted-globals
-    location.reload();
+  const onLogout = () => {
+    dispatch(ActionFactory.signOut());
   };
 
   return (

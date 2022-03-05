@@ -6,6 +6,13 @@ import {API} from "../../api";
 
 export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === AuthAction.SignOut) {
-    API.signOut();
+    API.signOut()
+      .then(() => {
+        // eslint-disable-next-line no-restricted-globals
+        location.reload();
+      })
+      .catch(() => {
+        // FIXME show error
+      });
   }
 };
