@@ -20,7 +20,7 @@ describe("JoinRequest", () => {
         status: "pending" as const,
       });
     }
-    return <Request joinRequests={joinRequests} raisedHands={[]} users={[]} boardId="boardId" />;
+    return <Request requests={joinRequests} raisedHands={[]} users={[]} boardId="boardId" />;
   };
 
   describe("should render correctly", () => {

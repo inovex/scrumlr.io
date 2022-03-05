@@ -11,6 +11,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
     case Action.LeaveBoard: {
       return INITIAL_VIEW_STATE;
     }
+
+    case Action.SetModerating: {
+      return {
+        ...state,
+        moderating: action.moderating,
+      };
+    }
   }
   return state;
 };

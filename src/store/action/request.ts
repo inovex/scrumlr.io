@@ -9,14 +9,12 @@ export const RequestAction = {
 };
 
 export const RequestActionFactory = {
-  acceptJoinRequests: (boardId: string, userIds: string[]) => ({
+  acceptJoinRequests: (userIds: string[]) => ({
     type: RequestAction.AcceptJoinRequests,
-    boardId,
     userIds,
   }),
-  rejectJoinRequests: (boardId: string, userIds: string[]) => ({
+  rejectJoinRequests: (userIds: string[]) => ({
     type: RequestAction.RejectJoinRequests,
-    boardId,
     userIds,
   }),
   initializeJoinRequests: (requests: Request[]) => ({

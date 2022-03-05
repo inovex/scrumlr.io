@@ -43,13 +43,15 @@ export const ParticipantActionFactory = {
    *
    * @param ready the ready state to set
    */
-  setUserReadyStatus: (ready: boolean) => ({
+  setUserReadyStatus: (user: string, ready: boolean) => ({
     type: ParticipantAction.SetUserReadyStatus,
+    user,
     ready,
   }),
 
-  setRaisedHand: (raisedHand: boolean) => ({
+  setRaisedHand: (user: string, raisedHand: boolean) => ({
     type: ParticipantAction.SetRaisedHandStatus,
+    user,
     raisedHand,
   }),
 

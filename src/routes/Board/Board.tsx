@@ -62,10 +62,8 @@ export const Board = () => {
       <>
         {currentUserIsModerator && (
           <Request
-            joinRequests={state.requests.filter((request) => request.status === "PENDING")}
-            users={state.participants}
-            raisedHands={state.participants.usersRaisedHands.filter((id) => id !== state.auth.user?.id)}
-            boardId={state.board.id!}
+            requests={state.requests.filter((request) => request.status === "PENDING")}
+            participantsWithRaisedHand={state.participants!.participants.filter((p) => p.raisedHand)}
           />
         )}
         <InfoBar />
