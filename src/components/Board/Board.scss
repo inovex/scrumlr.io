@@ -65,13 +65,13 @@ $board__navigation-button-icon-dimension: 24px;
 
 .board__navigation {
   position: fixed;
-  top: calc(50% - calc($board__navigation-button-dimension / 2));
+  top: calc(50% - #{$board__navigation-button-dimension / 2});
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  width: calc($board__navigation-button-dimension / 2);
+  width: $board__navigation-button-dimension / 2;
   height: $board__navigation-button-dimension;
 
   background-color: var(--accent-color);

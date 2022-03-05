@@ -2,7 +2,6 @@ import {fireEvent} from "@testing-library/react";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
-import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
 import {mocked} from "ts-jest/utils";
 

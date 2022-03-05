@@ -32,11 +32,10 @@ export const BoardUsers = () => {
     NUM_OF_DISPLAYED_USERS = 4;
   }
 
-  const users = useAppSelector((state) => state.users.all);
-  const currentUser = Parse.User.current();
-
-  const me = users.find((user) => user.id === currentUser!.id);
-  const them = users.filter((user) => user.id !== currentUser!.id && user.online);
+  const {me, them} = useAppSelector((state) => ({
+    them: state.participants!.participants,
+    me: state.participants!.self,
+  }));
 
   const usersToShow = them.splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
 
@@ -47,12 +46,12 @@ export const BoardUsers = () => {
           <div className="rest-users__count">{them.length}</div>
         </li>
       )}
-      {usersToShow.map((user) => (
-        <li key={user.id}>
-          <UserAvatar id={user.id} ready={user.ready} name={user.displayName} />
+      {usersToShow.map((participant) => (
+        <li key={participant.user.id}>
+          <UserAvatar id={participant.user.id} ready={participant.ready} name={participant.user.name} />
         </li>
       ))}
-      {!!me && <UserAvatar id={me.id} ready={me.ready} name={me.displayName} />}
+      {!!me && <UserAvatar id={me.user.id} ready={me.ready} name={me.user.name} />}
     </ul>
   );
 };

@@ -19,7 +19,8 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
   const [numberOfVotes, setNumberOfVotes] = useState(5);
   const [allowMultipleVotesPerNote, setAllowMultipleVotesPerNote] = useState(true);
   const [showVotesOfOthers, setShowVotesOfOthers] = useState(false);
-  const state = useAppSelector((rootState) => ({activeVoting: rootState.board.data?.voting === "active", boardId: rootState.board.data?.id}));
+
+  const state = useAppSelector((rootState) => ({activeVoting: rootState.votings.open, boardId: rootState.board.data?.id}));
 
   const focusOnTab = (tabIndex: number) => {
     if (tabable) {
@@ -30,25 +31,23 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
 
   const startVoting = () => {
     store.dispatch(
-      ActionFactory.addVoteConfiguration({
-        boardId: state.boardId!,
+      ActionFactory.createVoting(state.boardId!, {
         voteLimit: numberOfVotes,
-        showVotesOfOtherUsers: showVotesOfOthers,
-        allowMultipleVotesPerNote,
+        showVotesOfOthers,
+        allowMultipleVotes: allowMultipleVotesPerNote,
       })
     );
-    store.dispatch(ActionFactory.editBoard({id: state.boardId!, voting: "active"}));
   };
   const stopVoting = () => {
-    store.dispatch(ActionFactory.editBoard({id: state.boardId!, voting: "disabled"}));
+    store.dispatch(ActionFactory.closeVoting(state.boardId!, state.activeVoting!.id));
   };
   const cancelVoting = () => {
-    store.dispatch(ActionFactory.cancelVoting(state.boardId!));
+    store.dispatch(ActionFactory.abortVoting(state.boardId!, state.activeVoting!.id));
   };
 
   return (
     <DropdownToggleButton
-      active={state.activeVoting}
+      active={Boolean(state.activeVoting)}
       tabIndex={props.tabIndex ?? TabIndex.default}
       setTabable={setTabable}
       direction="left"

@@ -28,7 +28,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
 
   const onSubmit = () => {
     if (props.activeEditMode && state.board!.name !== boardName) {
-      store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}));
+      store.dispatch(ActionFactory.editBoard({id: state.board.id, name: boardName}));
     }
     props.setActiveEditMode(!props.activeEditMode);
   };

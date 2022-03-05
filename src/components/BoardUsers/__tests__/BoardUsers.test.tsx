@@ -70,7 +70,7 @@ describe("users", () => {
     votes: [],
     voteConfiguration: {
       boardId: "test-board",
-      votingIteration: 1,
+      votingEnabled: 1,
       voteLimit: 5,
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: false,

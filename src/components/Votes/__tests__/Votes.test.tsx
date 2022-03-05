@@ -5,7 +5,6 @@ import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Vote} from "types/vote";
-import {User} from "parse";
 import {Votes} from "components/Votes";
 import {mocked} from "ts-jest/utils";
 import {render} from "testUtils";
@@ -23,14 +22,14 @@ const createVotes = (
       board: "test-board",
       note: "test-note",
       user: "test-user",
-      votingIteration: 1,
+      votingEnabled: 1,
     },
   ]
 ) => {
   const initialState = {
     voteConfiguration: {
       board: "test-board",
-      votingIteration: 1,
+      votingEnabled: 1,
       voteLimit: 5,
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: false,
@@ -100,14 +99,14 @@ describe("Votes", () => {
           board: "test-board",
           note: "test-id",
           user: "test-user-1",
-          votingIteration: 1,
+          votingEnabled: 1,
         },
         {
           id: "test-vote-1",
           board: "test-board",
           note: "test-id",
           user: "test-user-2",
-          votingIteration: 1,
+          votingEnabled: 1,
         },
       ];
 

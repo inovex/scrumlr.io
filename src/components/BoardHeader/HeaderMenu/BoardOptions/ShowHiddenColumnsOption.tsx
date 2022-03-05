@@ -12,7 +12,7 @@ export const ShowHiddenColumnsOption = () => {
 
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
-    user: applicationState.participants.participants.find((user) => user.id === Parse.User.current()!.id),
+    user: applicationState.participants?.participants.find((user) => user.id === Parse.User.current()!.id),
     userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
   }));
 

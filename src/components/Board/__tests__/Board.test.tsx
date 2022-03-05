@@ -4,7 +4,6 @@ import {Column} from "components/Column";
 import {Color} from "constants/colors";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
-import Parse, {User} from "parse";
 import {BoardComponent} from "components/Board";
 import {render} from "testUtils";
 import {mocked} from "ts-jest/utils";

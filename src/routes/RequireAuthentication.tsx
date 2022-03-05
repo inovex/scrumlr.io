@@ -6,7 +6,7 @@ import {LoadingScreen} from "../components/LoadingScreen";
 
 export const RequireAuthentication: FC = ({children}) => {
   const location = useLocation();
-  const {user, initialized} = useAppSelector((state) => state.user);
+  const {user, initialized} = useAppSelector((state) => state.auth);
 
   if (!initialized) {
     return <LoadingScreen />;

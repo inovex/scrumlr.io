@@ -34,21 +34,21 @@ const defaultVotes = [
     board: "test-board",
     note: "test-id",
     user: "test-user-1",
-    votingIteration: 1,
+    votingEnabled: 1,
   },
   {
     id: "test-vote-1",
     board: "test-board",
     note: "test-id",
     user: "test-user-2",
-    votingIteration: 1,
+    votingEnabled: 1,
   },
   {
     id: "test-vote-2",
     board: "test-board",
     note: "test-id",
     user: "test-user-2",
-    votingIteration: 1,
+    votingEnabled: 1,
   },
 ];
 

@@ -79,7 +79,7 @@ const createNoteDialog = (
             board: "test-board",
             note: "0",
             user: "test-user",
-            votingIteration: 1,
+            votingEnabled: 1,
           },
         ]}
         allVotesOfUser={[]}
