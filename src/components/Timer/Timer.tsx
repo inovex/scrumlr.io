@@ -37,7 +37,7 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
-  const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
   const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
