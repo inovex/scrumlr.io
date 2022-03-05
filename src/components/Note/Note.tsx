@@ -26,48 +26,54 @@ interface NoteProps {
   votes: Vote[];
   allVotesOfUser: Vote[];
   activeVoting: boolean;
-  focus: boolean;
 
-  moderation: boolean;
+  focus: boolean;
+  moderating: boolean;
   viewer: Participant;
   tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-  const [showDialog, setShowDialog] = React.useState(props.focus && props.moderation);
+  const [showDialog, setShowDialog] = React.useState(props.focus);
   const dispatch = useDispatch();
 
   const handleShowDialog = () => {
-    if (props.moderation) {
-      dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
+    if (props.moderating && props.noteId) {
+      if (props.focus) {
+        dispatch(Actions.stopSharing());
+      } else {
+        dispatch(Actions.shareNote(props.noteId));
+      }
       setShowDialog(!props.focus);
     } else {
+      if ((props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR") && props.focus) {
+        dispatch(Actions.stopSharing());
+      }
       setShowDialog(!showDialog);
     }
   };
 
   useEffect(() => {
-    if (props.moderation) {
+    if (props.moderating) {
       // Nothing to update
       if (showDialog === props.focus) {
         return;
       }
+
       // Moderator has already one dialog open
       if (showDialog && !props.focus && props.noteId) {
-        dispatch(Actions.editNote({id: props.noteId, focus: true}));
+        dispatch(Actions.shareNote(props.noteId));
       } else {
         setShowDialog(false);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.moderation]);
+  }, [props.moderating]);
 
   useEffect(() => {
     if (showDialog !== props.focus) {
-      if (props.activeModeration.status || props.activeModeration.userId !== Parse.User.current()?.id) {
-        setShowDialog(props.focus);
-      }
+      setShowDialog(props.focus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.focus]);
@@ -78,14 +84,13 @@ export const Note = (props: NoteProps) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    canDrag: () => !props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id,
   });
 
   const [{isOver}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        dispatch(Actions.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
+        dispatch(Actions.dragNote({id: item.id, position: {stack: props.noteId!, column: props.columnId, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
@@ -102,20 +107,9 @@ export const Note = (props: NoteProps) => {
   drop(noteRef);
 
   return (
-    <li
-      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id})}
-      onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
-      onKeyPress={handleKeyPress}
-      ref={noteRef}
-    >
+    <li className={classNames("note__root")} onClick={handleShowDialog} onKeyPress={handleKeyPress} ref={noteRef}>
       <div
-        className={classNames(
-          "note",
-          {"note--own-card": props.viewer.user.id === props.authorId},
-          {"note--isDragging": isDragging},
-          {"note--isOver": isOver},
-          {"note__disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id}
-        )}
+        className={classNames("note", {"note--own-card": props.viewer.user.id === props.authorId}, {"note--isDragging": isDragging}, {"note--isOver": isOver})}
         tabIndex={props.tabIndex ?? TabIndex.default}
       >
         <div className="note__content">

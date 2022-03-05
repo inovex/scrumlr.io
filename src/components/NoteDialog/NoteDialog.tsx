@@ -1,10 +1,11 @@
 import classNames from "classnames";
 import {Portal} from "components/Portal";
 import {Color, getColorClassName} from "constants/colors";
-import {NoteClientModel} from "types/note";
+import {Note as NoteModel} from "types/note";
 import {Vote} from "types/vote";
 import "./NoteDialog.scss";
 import {NoteDialogComponents} from "./NoteDialogComponents";
+import {Participant} from "../../types/participant";
 
 interface NoteDialogProps {
   noteId?: string;
@@ -17,12 +18,12 @@ interface NoteDialogProps {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  childrenNotes: Array<NoteClientModel & {authorName: string; votes: Vote[]}>;
+  childrenNotes: Array<NoteModel & {authorName: string; votes: Vote[]}>;
   votes: Vote[];
   allVotesOfUser: Vote[];
   activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
-  currentUserIsModerator: boolean;
+
+  viewer: Participant;
 }
 
 export const NoteDialog = (props: NoteDialogProps) => {
@@ -35,8 +36,8 @@ export const NoteDialog = (props: NoteDialogProps) => {
         className={classNames(
           "note-dialog",
           getColorClassName(props.columnColor as Color),
-          {"note-dialog__pointer-moderator": props.activeModeration.userId === Parse.User.current()?.id && props.activeModeration.status},
-          {"note-dialog__disabled-pointer": props.activeModeration.userId !== Parse.User.current()?.id && props.activeModeration.status}
+          {"note-dialog__pointer-moderator": props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR"},
+          {"note-dialog__disabled-pointer": props.viewer.role === "PARTICIPANT"}
         )}
       >
         <NoteDialogComponents.Header columnName={props.columnName} />

@@ -15,19 +15,13 @@ type NoteDialogNoteFooterProps = {
   votes: Vote[];
   allVotesOfUser: Vote[];
   activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
-  currentUserIsModerator: boolean;
   onDeleteOfParent: () => void;
   onClose: () => void;
   showUnstackButton: boolean;
-
   viewer: Participant;
 };
 
-export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
-  const showOptions = !props.activeModeration.status || Parse.User.current()?.id === props.activeModeration.userId;
-
-  return (
+export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => (
     <div className="note-dialog__note-footer">
       {(props.showAuthors || props.viewer.user.id === props.authorId) && (
         <figure className="note-dialog__note-author">
@@ -39,8 +33,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
         {(props.activeVoting || props.votes.length !== 0) && (
           <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} usedVotesAsUser={props.allVotesOfUser.length} />
         )}
-        {showOptions && <NoteDialogNoteOptions {...props} />}
+        <NoteDialogNoteOptions {...props} />
       </div>
     </div>
   );
-};

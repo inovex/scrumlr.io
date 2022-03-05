@@ -8,6 +8,10 @@ export const NoteAction = {
    * won't work otherwise (e.g. in reducers).
    */
   AddNote: "scrumlr.io/addNote" as const,
+
+  ShareNote: "scrumlr.io/shareNote" as const,
+  StopSharing: "scrumlr.io/stopSharing" as const,
+
   EditNote: "scrumlr.io/editNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
   DragNote: "scrumlr.io/dragNote" as const,
@@ -36,6 +40,16 @@ export const NoteActionFactory = {
     columnId,
     text,
   }),
+
+  shareNote: (note: string) => ({
+    type: NoteAction.ShareNote,
+    note,
+  }),
+
+  stopSharing: () => ({
+    type: NoteAction.StopSharing,
+  }),
+
   /**
    * Creates an action which should be dispatched when the user edits a note.
    *
@@ -55,14 +69,16 @@ export const NoteActionFactory = {
     type: NoteAction.UnstackNote,
     note,
   }),
+
   /**
    * Creates an action which should be dispatched when the user drags and drops a note.
    * @param note contains the noteId and the dragOnId and the columnId
    */
-  dragNote: (note: Note) => ({
+  dragNote: (note: Partial<Note>) => ({
     type: NoteAction.DragNote,
     note,
   }),
+
   /**
    * Creates an action which should be dispatched when a new note was created on the server.
    *
@@ -104,6 +120,8 @@ export const NoteActionFactory = {
 
 export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.addNote>
+  | ReturnType<typeof NoteActionFactory.shareNote>
+  | ReturnType<typeof NoteActionFactory.stopSharing>
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
   | ReturnType<typeof NoteActionFactory.dragNote>

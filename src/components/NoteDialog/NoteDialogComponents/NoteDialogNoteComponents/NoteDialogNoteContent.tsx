@@ -8,19 +8,16 @@ import {Participant} from "../../../../types/participant";
 type NoteDialogNoteContentProps = {
   noteId?: string;
   authorId: string;
-  currentUserIsModerator: boolean;
-  activeModeration: {userId?: string; status: boolean};
   text: string;
-
   viewer: Participant;
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
   const dispatch = useDispatch();
-  const editable = (editorId: string) => (Parse.User.current()?.id === editorId || currentUserIsModerator) && !activeModeration.status;
+  const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
   const onEdit = (id: string, editorId: string, newText: string) => {
-    if (editable(editorId) && newText !== text) {
+    if (editable && newText !== text) {
       dispatch(Actions.editNote(id, newText));
     }
   };
@@ -28,8 +25,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   return (
     <div className="note-dialog__note-content">
       <blockquote
-        className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable(authorId)})}
-        contentEditable={editable(authorId)}
+        className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
+        contentEditable={editable}
         suppressContentEditableWarning
         onBlur={(e: React.FocusEvent<HTMLElement>) => {
           onEdit(noteId!, authorId, e.target.textContent as string);
