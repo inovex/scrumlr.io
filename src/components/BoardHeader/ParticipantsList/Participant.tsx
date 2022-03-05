@@ -1,10 +1,11 @@
 import {UserAvatar} from "components/BoardUsers";
 import {ToggleButton} from "components/ToggleButton";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./Participant.scss";
 import {TabIndex} from "constants/tabIndex";
 import {Participant as ParticipantModel} from "types/participant";
+import {useDispatch} from "react-redux";
 
 interface ParticipantProps {
   participant: ParticipantModel;
@@ -14,6 +15,7 @@ export const Participant = ({participant}: ParticipantProps) => {
   const state = useAppSelector((applicationState) => ({
     self: applicationState.participants!.self,
   }));
+  const dispatch = useDispatch();
 
   let badgeText: string;
   if (state.self.user.id === participant.user.id) {
@@ -46,7 +48,7 @@ export const Participant = ({participant}: ParticipantProps) => {
           values={["participant", "moderator"]}
           value={participant.role === "OWNER" || participant.role === "MODERATOR" ? "moderator" : "participant"}
           onToggle={(val: "participant" | "moderator") => {
-            store.dispatch(Actions.changePermission(participant!.id, val === "moderator"));
+            dispatch(Actions.changePermission(participant!.user.id, val === "moderator"));
           }}
           tabIndex={TabIndex.default}
         />

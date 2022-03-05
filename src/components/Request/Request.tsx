@@ -1,4 +1,3 @@
-import store from "store";
 import {Actions} from "store/action";
 import {Request as RequestModel} from "types/request";
 import "./Request.scss";
@@ -18,11 +17,11 @@ export const Request = ({requests, participantsWithRaisedHand}: RequestProps) =>
   const dispatch = useDispatch();
 
   const handleAccept = (userIds: string[]) => () => {
-    store.dispatch(Actions.acceptJoinRequests(userIds));
+    dispatch(Actions.acceptJoinRequests(userIds));
   };
 
   const handleReject = (userIds: string[]) => () => {
-    store.dispatch(Actions.rejectJoinRequests(userIds));
+    dispatch(Actions.rejectJoinRequests(userIds));
   };
 
   const lowerHand = (userId: string[]) => {

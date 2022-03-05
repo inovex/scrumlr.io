@@ -1,10 +1,10 @@
-import store from "store";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
 import {Vote} from "types/vote";
 import {FC} from "react";
+import {useDispatch} from "react-redux";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -15,8 +15,10 @@ type RemoveVoteProps = {
 };
 
 export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes, tabIndex}) => {
+  const dispatch = useDispatch();
+
   const deleteVote = () => {
-    store.dispatch(Actions.deleteVote(noteId));
+    dispatch(Actions.deleteVote(noteId));
   };
 
   return (

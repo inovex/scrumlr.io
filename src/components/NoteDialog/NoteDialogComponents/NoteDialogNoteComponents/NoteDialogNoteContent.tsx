@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import {FC} from "react";
-import store from "store";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
+import {useDispatch} from "react-redux";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -13,11 +13,12 @@ type NoteDialogNoteContentProps = {
 };
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogNoteContentProps) => {
+  const dispatch = useDispatch();
   const editable = (editorId: string) => (Parse.User.current()?.id === editorId || currentUserIsModerator) && !activeModeration.status;
 
   const onEdit = (id: string, editorId: string, newText: string) => {
     if (editable(editorId) && newText !== text) {
-      store.dispatch(Actions.editNote({id, text: newText}));
+      dispatch(Actions.editNote({id, text: newText}));
     }
   };
 

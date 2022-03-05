@@ -1,11 +1,11 @@
 import {FC} from "react";
-import store from "store";
 import {Actions} from "store/action";
 import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
 import {DotButton} from "components/DotButton";
 import "./NoteDialogUnstackNoteButton.scss";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
 
 type NoteDialogUnstackNoteProps = {
   noteId?: string;
@@ -15,9 +15,10 @@ type NoteDialogUnstackNoteProps = {
 
 export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
 
   const onUnstack = (id: string, parentNoteId: string) => {
-    store.dispatch(Actions.unstackNote({id, parentId: parentNoteId}));
+    dispatch(Actions.unstackNote({id, parentId: parentNoteId}));
   };
 
   return (

@@ -1,6 +1,5 @@
 import "./Note.scss";
 import classNames from "classnames";
-import store from "store";
 import {Actions} from "store/action";
 import React, {useEffect, useRef} from "react";
 import {NoteDialog} from "components/NoteDialog";
@@ -11,6 +10,7 @@ import {useDrag, useDrop} from "react-dnd";
 import {Note as NoteModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
 import {TabIndex} from "constants/tabIndex";
+import {useDispatch} from "react-redux";
 
 interface NoteProps {
   text: string;
@@ -34,10 +34,11 @@ interface NoteProps {
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
   const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
+  const dispatch = useDispatch();
   const handleShowDialog = () => {
     if (props.activeModeration.status) {
       if (props.noteId && props.activeModeration.userId === Parse.User.current()?.id) {
-        store.dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
+        dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
         setShowDialog(!props.focus);
       }
     } else {
@@ -53,7 +54,7 @@ export const Note = (props: NoteProps) => {
       }
       // Moderator has already one dialog open
       if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
-        store.dispatch(Actions.editNote({id: props.noteId, focus: true}));
+        dispatch(Actions.editNote({id: props.noteId, focus: true}));
       } else {
         setShowDialog(false);
       }
@@ -86,7 +87,7 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        store.dispatch(Actions.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
+        dispatch(Actions.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
