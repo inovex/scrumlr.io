@@ -12,6 +12,8 @@ export const ParticipantAction = {
 
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
+  SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
+
   UpdateUser: "scrumlr.io/updateUser" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
   EditUserConfiguration: "scrumlr.io/editUserConfiguration" as const,
@@ -51,6 +53,11 @@ export const ParticipantActionFactory = {
     raisedHand,
   }),
 
+  setShowHiddenColumns: (showHiddenColumns: boolean) => ({
+    type: ParticipantAction.SetShowHiddenColumns,
+    showHiddenColumns,
+  }),
+
   /**
    * Creates an action that should be dispatch when a moderator changes the permissions of a participant
    *
@@ -68,4 +75,5 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setParticipants>
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
+  | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>
   | ReturnType<typeof ParticipantActionFactory.changePermission>;
