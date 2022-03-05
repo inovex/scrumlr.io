@@ -16,15 +16,18 @@ type VotesProps = {
 };
 
 export const Votes: FC<VotesProps> = (props) => {
-  const voteConfiguration = useAppSelector((state) => state.voteConfiguration);
-  const ownNoteVotes = props.votes.filter((vote) => vote.user === Parse.User.current()?.id);
-  const showAddVoteButton = props.activeVoting && (voteConfiguration?.allowMultipleVotesPerNote || (!voteConfiguration?.allowMultipleVotesPerNote && ownNoteVotes.length === 0));
+  const state = useAppSelector((state) => ({
+    voting: state.votings.open,
+    votes: state.votes,
+  }));
+  const ownNoteVotes = state.votes;
+  const showAddVoteButton = props.activeVoting && (state.voting?.allowMultipleVotes || (!state.voting?.allowMultipleVotes && ownNoteVotes.length === 0));
 
   return (
     <div className={classNames("votes", props.className)}>
       {props.votes.length > 0 && <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={ownNoteVotes} />}
       {showAddVoteButton && (
-        <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={props.usedVotesAsUser === voteConfiguration.voteLimit} />
+        <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={props.usedVotesAsUser === state.voting?.voteLimit} />
       )}
     </div>
   );
