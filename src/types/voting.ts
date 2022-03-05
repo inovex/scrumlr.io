@@ -11,7 +11,7 @@ export interface Voting {
   status: VotingStatus;
   votes?: {
     total: number;
-    voterPerNote: {
+    votesPerNote: {
       [noteId: string]: {
         total: number;
         userVotes?: {

@@ -19,34 +19,23 @@ export interface ColumnProps {
   name: string;
   color: Color;
   hidden: boolean;
-  currentUserIsModerator: boolean;
   tabIndex?: number;
 }
 
-export const Column = ({id, name, color, hidden, currentUserIsModerator, tabIndex}: ColumnProps) => {
+export const Column = ({id, name, color, hidden, tabIndex}: ColumnProps) => {
   const state = useAppSelector(
     (applicationState) => ({
-      notes: applicationState.notes.filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || state.auth.user.id === note.author) && note.position.column === id),
-      votes: applicationState.votes.filter(
-        (vote) =>
-          vote.votingIteration === applicationState.board.data?.votingIteration &&
-          (applicationState.board.data?.voting === "disabled" || applicationState.voteConfiguration.showVotesOfOtherUsers || vote.user === Parse.User.current()?.id)
+      notes: applicationState.notes.filter(
+        (note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id
       ),
-      completedVotes: applicationState.votes.filter((vote) => {
-        if (applicationState.board.data?.voting === "disabled") {
-          // map on vote results of the last voting iteration
-          return vote.votingIteration === applicationState.board.data?.votingIteration;
-        }
-        // map on vote results of the previous, completed voting iteration
-        // FIXME we'll have to keep track of cancelled voting iterations here since they'll be included in the results
-        return vote.votingIteration === (applicationState.board.data?.votingIteration || 0) - 1;
-      }),
-      participants: applicationState.participants?.participants,
-      board: {
-        showAuthors: applicationState.board.data?.showAuthors,
-        voting: applicationState.board.data?.voting,
-        moderation: applicationState.board.data?.moderation,
-      },
+      showAuthors: applicationState.board.data!.showAuthors,
+      sharedNote: applicationState.board.data!.sharedNote,
+      moderating: applicationState.view.moderating,
+      viewer: applicationState.participants!.self,
+      activeVoting: applicationState.votings.open,
+      votingResults: applicationState.votings.past.find((v) => v.id === applicationState.board.data!.showVoting)?.votes,
+      votes: applicationState.votes,
+      participants: [...applicationState.participants!.participants, applicationState.participants!.self],
     }),
     _.isEqual
   );
@@ -56,7 +45,7 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string; columnId: string}, monitor) => {
       if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(Actions.dragNote({id: item.id, columnId: id}));
+        store.dispatch(Actions.dragNote({id: item.id, position: {column: id, stack: undefined, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
@@ -79,9 +68,9 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
           <div className="column__header-title">
             <h2 className="column__header-text">{name}</h2>
             <span className="column__header-card-number">{state.notes.length}</span>
-            {currentUserIsModerator && (
+            {(state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR") && (
               <div className="column__header-toggle">
-                <button tabIndex={TabIndex.disabled} className="column__header-toggle-button" onClick={() => store.dispatch(Actions.editColumn({columnId: id, hidden: !hidden}))}>
+                <button tabIndex={TabIndex.disabled} className="column__header-toggle-button" onClick={() => store.dispatch(Actions.editColumn({id, visible: !hidden}))}>
                   <Icon className="column__header-toggle-button-icon" />
                 </button>
               </div>
@@ -92,41 +81,30 @@ export const Column = ({id, name, color, hidden, currentUserIsModerator, tabInde
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
             {state.notes
-              .filter((note) => note.positionInStack === -1 || note.positionInStack === 0)
-              .map((note) => ({...note, votes: state.completedVotes.filter((vote) => vote.note === note.id).length}))
-              // It seems that Firefox and Chrome have different orders of notes in the array. Therefore, we need to distinguish between the undefined states.
-              .sort((a, b) => {
-                if (a.createdAt === undefined) return -1;
-                if (b.createdAt === undefined) return 1;
-                const voteDiff = b.votes - a.votes;
-                if (voteDiff === 0) {
-                  return b.createdAt!.getTime() - a.createdAt!.getTime();
-                }
-                return voteDiff;
-              })
+              .filter((note) => !note.position.stack)
+              .map((note) => ({...note, votes: state.votingResults?.votesPerNote[note.id].total}))
               .map((note, noteIndex) => (
                 <Note
-                  showAuthors={state.board.showAuthors!}
-                  currentUserIsModerator={currentUserIsModerator}
+                  showAuthors={state.showAuthors!}
                   key={note.id}
                   noteId={note.id}
                   text={note.text}
                   authorId={note.author}
-                  authorName={state.users.all.filter((user) => user.id === note.author)[0]?.displayName}
+                  authorName={state.participants.filter((p) => p.user.id === note.author)[0]?.user.name}
                   columnId={id}
                   columnName={name}
                   columnColor={color}
                   childrenNotes={state.notes
-                    .filter((n) => note.id && note.id === n.parentId)
-                    .sort((a, b) => a.positionInStack - b.positionInStack)
-                    .map((n) => ({...n, authorName: state.users.all.filter((user) => user.id === n.author)[0]?.displayName}))
-                    .map((n) => ({...n, votes: state.votes.filter((vote) => vote.note === n.id)}))}
+                    .filter((n) => note.id && note.id === n.position.stack)
+                    .map((n) => ({...n, authorName: state.participants.filter((p) => p.user.id === n.author)[0]?.user.name}))
+                    .map((n) => ({...n, votes: state.votes.filter((v) => v.note == n.id)}))}
                   votes={state.votes.filter((vote) => vote.note === note.id)}
-                  allVotesOfUser={state.votes.filter((vote) => vote.user === Parse.User.current()?.id)}
-                  activeVoting={state.board.voting! === "active"}
-                  activeModeration={{userId: state.board.moderation!.userId, status: state.board.moderation!.status === "active"}}
-                  focus={note.focus}
+                  allVotesOfUser={state.votes}
+                  activeVoting={Boolean(state.activeVoting)}
+                  focus={note.id === state.sharedNote}
                   tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
+                  moderating={state.moderating}
+                  viewer={state.viewer}
                 />
               ))}
           </ul>

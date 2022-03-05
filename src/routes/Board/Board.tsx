@@ -71,15 +71,7 @@ export const Board = () => {
           {state.columns
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (
-              <Column
-                tabIndex={TabIndex.Column + columnIndex}
-                key={column.id}
-                id={column.id}
-                name={column.name}
-                hidden={!column.visible}
-                currentUserIsModerator={currentUserIsModerator}
-                color={column.color}
-              />
+              <Column tabIndex={TabIndex.Column + columnIndex} key={column.id} id={column.id} name={column.name} hidden={!column.visible} color={column.color} />
             ))}
         </BoardComponent>
       </>
