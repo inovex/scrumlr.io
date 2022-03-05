@@ -42,15 +42,16 @@ export const NoteActionFactory = {
    * @param noteId the note id
    * @param text the edited text of the note
    */
-  editNote: (note: Note) => ({
+  editNote: (note: string, text: string) => ({
     type: NoteAction.EditNote,
     note,
+    text,
   }),
   /**
    * Creates an action which should be dispatched when the user unstacks a note.
    * @param note contains the noteId and the parentId
    */
-  unstackNote: (note: Note) => ({
+  unstackNote: (note: string) => ({
     type: NoteAction.UnstackNote,
     note,
   }),

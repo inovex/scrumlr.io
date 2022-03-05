@@ -9,22 +9,21 @@ import {useDispatch} from "react-redux";
 
 type NoteDialogUnstackNoteProps = {
   noteId?: string;
-  parentId?: string;
   onClose: () => void;
 };
 
-export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, parentId, onClose}: NoteDialogUnstackNoteProps) => {
+export const NoteDialogUnstackNoteButton: FC<NoteDialogUnstackNoteProps> = ({noteId, onClose}: NoteDialogUnstackNoteProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const onUnstack = (id: string, parentNoteId: string) => {
-    dispatch(Actions.unstackNote({id, parentId: parentNoteId}));
+  const onUnstack = (id: string) => {
+    dispatch(Actions.unstackNote(id));
   };
 
   return (
     <DotButton
       onClick={() => {
-        onUnstack(noteId!, parentId!);
+        onUnstack(noteId!);
         onClose();
       }}
       className="note-dialog__note-option__unstack"

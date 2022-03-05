@@ -1,8 +1,9 @@
 import classNames from "classnames";
-import {FC} from "react";
+import React, {FC} from "react";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
+import {Participant} from "../../../../types/participant";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -10,6 +11,8 @@ type NoteDialogNoteContentProps = {
   currentUserIsModerator: boolean;
   activeModeration: {userId?: string; status: boolean};
   text: string;
+
+  viewer: Participant;
 };
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, currentUserIsModerator, activeModeration, text}: NoteDialogNoteContentProps) => {
@@ -18,7 +21,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const onEdit = (id: string, editorId: string, newText: string) => {
     if (editable(editorId) && newText !== text) {
-      dispatch(Actions.editNote({id, text: newText}));
+      dispatch(Actions.editNote(id, newText));
     }
   };
 

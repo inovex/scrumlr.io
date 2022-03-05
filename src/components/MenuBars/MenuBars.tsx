@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Actions} from "store/action";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
 import {MenuToggle} from "components/MenuBars/MenuItem";
@@ -42,7 +42,7 @@ export const MenuBars = () => {
   };
 
   const toggleReadyState = () => {
-    store.dispatch(Actions.setUserReadyStatus(!isReady));
+    dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
   };
 
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
@@ -52,7 +52,7 @@ export const MenuBars = () => {
   };
 
   const toggleRaiseHand = (active: boolean) => {
-    dispatch(Actions.setRaisedHand(!raisedHand));
+    dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 
   return (

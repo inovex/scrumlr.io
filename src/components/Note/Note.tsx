@@ -11,6 +11,7 @@ import {Note as NoteModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
 import {TabIndex} from "constants/tabIndex";
 import {useDispatch} from "react-redux";
+import {Participant} from "../../types/participant";
 
 interface NoteProps {
   text: string;
@@ -25,45 +26,42 @@ interface NoteProps {
   votes: Vote[];
   allVotesOfUser: Vote[];
   activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
   focus: boolean;
-  currentUserIsModerator: boolean;
+
+  moderation: boolean;
+  viewer: Participant;
   tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-  const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
+  const [showDialog, setShowDialog] = React.useState(props.focus && props.moderation);
   const dispatch = useDispatch();
+
   const handleShowDialog = () => {
-    if (props.activeModeration.status) {
-      if (props.noteId && props.activeModeration.userId === Parse.User.current()?.id) {
-        dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
-        setShowDialog(!props.focus);
-      }
+    if (props.moderation) {
+      dispatch(Actions.editNote({id: props.noteId, focus: !props.focus}));
+      setShowDialog(!props.focus);
     } else {
       setShowDialog(!showDialog);
     }
   };
 
   useEffect(() => {
-    if (props.activeModeration.status) {
+    if (props.moderation) {
       // Nothing to update
       if (showDialog === props.focus) {
         return;
       }
       // Moderator has already one dialog open
-      if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
+      if (showDialog && !props.focus && props.noteId) {
         dispatch(Actions.editNote({id: props.noteId, focus: true}));
       } else {
         setShowDialog(false);
       }
-    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
-      // Disable dialog for all other users
-      setShowDialog(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.activeModeration.status]);
+  }, [props.moderation]);
 
   useEffect(() => {
     if (showDialog !== props.focus) {
@@ -96,9 +94,7 @@ export const Note = (props: NoteProps) => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !showDialog) {
-      if (!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) {
-        handleShowDialog();
-      }
+      handleShowDialog();
     }
   };
 
@@ -115,7 +111,7 @@ export const Note = (props: NoteProps) => {
       <div
         className={classNames(
           "note",
-          {"note--own-card": Parse.User.current()?.id === props.authorId},
+          {"note--own-card": props.viewer.user.id === props.authorId},
           {"note--isDragging": isDragging},
           {"note--isOver": isOver},
           {"note__disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id}
@@ -124,10 +120,10 @@ export const Note = (props: NoteProps) => {
       >
         <div className="note__content">
           <p className="note__text">{props.text}</p>
-          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === props.authorId})} />
         </div>
         <div className="note__footer">
-          {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
+          {(props.showAuthors || props.viewer.user.id === props.authorId) && (
             <figure className="note__author" aria-roledescription="author">
               <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{props.authorName}</figcaption>
