@@ -35,5 +35,5 @@ ui-debug.log
 server/.env
 
 # Server files
-go-server/src/main
-go-server/src/coverage.txt
+server/src/main
+server/src/coverage.txt

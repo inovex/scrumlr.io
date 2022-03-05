@@ -1,49 +1,32 @@
-# Scrumlr.io Server
+# scrumlr.io Server
 
-This is the backend for the [scrumlr.io](https://scrumlr.io) service.
-It is based on the [Parse Platform](https://parseplatform.org/).
+This is the server application of [scrumlr.io](https://scrumlr.io) targeted by the web client.
 
-## Prerequisites
+The basic components of the server are visualized by the PlantUML `architecture.puml` or in this graphic:
 
-You'll need a local Mongo database running on port `:27017` if you want
-to start this server by `yarn start` if you intend to use it without further
-configuration steps.
+![Architecture](./architecture.png)
 
-Otherwise you can setup quite a few environment variables to change the
-host, port, database URI and so on. These variables are listed in
-`src/index.ts`.
+## Local development
 
-## Run
+First you need to either call `make run-docker-dev` or `docker-compose --profile dev up`,
+so that the database and the nats instance come up.
 
-### Running node application with reload on change
+Afterwards you can start the server by executing:
 
-First of you'll need to start the database and optionally the Parse dashboard:
-
-```
-docker-compose up -d database dashboard
+```bash
+cd src/
+go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable"
 ```
 
-You'll be able to access those services on following ports and URLs:
+Or simply call `go run . -h` to see all available command line arguments. Many of those
+can also be set by environment variables so you don't have to worry about the run arguments
+each time.
 
-* Mongo database: `mongodb://localhost:27017` (use [Mongo Compass](https://www.mongodb.com/products/compass) to explore the data)
-* Parse dashboard: `http://localhost:4040`
+## API
 
-Next you can start serving the application by executing:
-```
-yarn install
-yarn serve
-```
+The API is currently documented in the [Postman](https://www.postman.com/) collection `api.postman_collection.json`.
+Simply start Postman, import the collection, and you can immediately start to explore all 
+resources and take a look at our documentation.
 
-This will open the server on `localhost:4000` and reload the application on every change.
-
-### Running everything via Docker
-
-Executing `docker-compose up` will start up the Mongo database, the server
-and the [Parse dashboard](https://www.npmjs.com/package/parse-dashboard) at
-once.
-
-You'll be able to access those services on following ports and URLs:
-
-* Mongo database: `mongodb://localhost:27017` (use [Mongo Compass](https://www.mongodb.com/products/compass) to explore the data)
-* scrumlr.io server: `http://localhost:4000`
-* Parse dashboard: `http://localhost:4040`
+Currently, you can also just open your browser on [http://localhost:8080](http://localhost:8080)
+to see our debug client. We'll disable it once everything got stable.
