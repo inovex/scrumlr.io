@@ -1,6 +1,5 @@
 import {Color} from "constants/colors";
 import {EditBoardRequest} from "types/board";
-import {callAPI} from "api/callApi";
 import {SERVER_URL} from "../config";
 
 export const BoardAPI = {
@@ -43,43 +42,23 @@ export const BoardAPI = {
    * @param board object with the board attributes that have to be changed
    * @returns 'true' if the operation succeeded or throws an error otherwise
    */
-  editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
+  editBoard: async (id: string, board: EditBoardRequest) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(board),
+      });
 
-  /**
-   * Create join request for a board session.
-   * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join
-   * request of the user was rejected by an admin) or `pending`. If the state is pending the response will include
-   * the reference on the join request state in the attribute `joinRequestReference`.
-   *
-   * @param boardId the board id
-   * @param passphrase optional passphrase for the join request
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
-   */
-  joinBoard: async (boardId: string, passphrase?: string) => {
-    const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants`, {
-      method: "POST",
-      credentials: "include",
-      redirect: "manual",
-      body: JSON.stringify({passphrase}),
-    });
+      if (response.status === 200) {
+        return await response.json();
+      }
 
-    if (response.type === "opaqueredirect") {
-      return {
-        status: "accepted",
-        joinRequestReference: "",
-      };
+      throw new Error(`unable to update board with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
     }
-
-    // FIXME
-    return {
-      status: "rejected",
-      joinRequestReference: "",
-    };
   },
-
-  acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, participants: userIds}),
-  rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, participants: userIds}),
 
   /**
    * Deletes the board with the specified boardId.
@@ -97,6 +76,26 @@ export const BoardAPI = {
       if (response.status !== 204) {
         throw new Error(`delete board request resulted in response status ${response.status}`);
       }
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
+    }
+  },
+
+  exportBoard: async (board: string, type: "text/csv" | "application/json") => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${board}/export`, {
+        method: "GET",
+        headers: {
+          Accept: type,
+        },
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return response;
+      }
+
+      throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to create board: ${error}`);
     }

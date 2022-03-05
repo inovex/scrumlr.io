@@ -4,7 +4,7 @@ import {ActionFactory} from "store/action";
 import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {User} from "parse";
 import {Votes} from "components/Votes";
 import {mocked} from "ts-jest/utils";
@@ -17,7 +17,7 @@ const createVotes = (
   withVotes: boolean,
   activeVoting: boolean,
   className?: string,
-  votes: VoteClientModel[] = [
+  votes: Vote[] = [
     {
       id: "test-id",
       board: "test-board",

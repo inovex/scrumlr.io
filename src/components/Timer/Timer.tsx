@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from "react";
-import Parse from "parse";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {ActionFactory} from "store/action";

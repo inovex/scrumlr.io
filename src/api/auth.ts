@@ -33,4 +33,21 @@ export const AuthAPI = {
       throw new Error(`unable to sign in with error: ${error}`);
     }
   },
+
+  getCurrentUser: async () => {
+    try {
+      const response = await fetch(`${SERVER_URL}/user`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+    } catch (error) {
+      throw new Error(`unable to fetch current user: ${error}`);
+    }
+
+    return undefined;
+  },
 };

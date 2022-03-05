@@ -5,7 +5,6 @@ import {Request} from "components/Request";
 import store, {useAppSelector} from "store";
 import {InfoBar} from "components/Infobar";
 import {TabIndex} from "constants/tabIndex";
-import Parse from "parse";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {ActionFactory} from "store/action";
@@ -45,8 +44,9 @@ export const Board = () => {
         status: applicationState.board.status,
       },
       columns: applicationState.columns,
-      joinRequests: applicationState.joinRequests,
+      requests: applicationState.requests,
       participants: applicationState.participants,
+      auth: applicationState.auth,
     }),
     _.isEqual
   );
@@ -62,9 +62,9 @@ export const Board = () => {
       <>
         {currentUserIsModerator && (
           <Request
-            joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
-            users={state.users.all}
-            raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
+            joinRequests={state.requests.filter((request) => request.status === "PENDING")}
+            users={state.participants}
+            raisedHands={state.participants.usersRaisedHands.filter((id) => id !== state.auth.user?.id)}
             boardId={state.board.id!}
           />
         )}

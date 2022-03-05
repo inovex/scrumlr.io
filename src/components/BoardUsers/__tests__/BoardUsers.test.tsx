@@ -4,9 +4,9 @@ import {Provider} from "react-redux";
 import {BoardUsers} from "components/BoardUsers";
 import {User} from "parse";
 import {getRandomName} from "constants/name";
-import {ApplicationState, BoardStatus} from "types/store";
+import {ApplicationState, BoardStatus} from "types";
 import {mocked} from "ts-jest/utils";
-import {UserClientModel} from "types/user";
+import {UserClientModel} from "types/auth";
 
 const mockStore = configureStore();
 const mockedUser = mocked(User, true);
@@ -75,7 +75,7 @@ describe("users", () => {
       allowMultipleVotesPerNote: false,
       showVotesOfOtherUsers: false,
     },
-    joinRequests: [],
+    requests: [],
   });
 
   test("only online users are shown & their names are used as tooltips", () => {

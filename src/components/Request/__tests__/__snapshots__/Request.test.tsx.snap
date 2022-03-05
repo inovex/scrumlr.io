@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`JoinRequest should render correctly on multiple join requests 1`] = `
+exports[`Request should render correctly on multiple join requests 1`] = `
 <div>
   <div
     class="join-request"
@@ -1312,13 +1312,13 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
       >
         Accept all
       </button>
-       
+
     </div>
   </div>
 </div>
 `;
 
-exports[`JoinRequest should render correctly on single join request 1`] = `
+exports[`Request should render correctly on single join request 1`] = `
 <div>
   <div
     class="join-request"

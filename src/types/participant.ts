@@ -1,10 +1,10 @@
-import {User} from "./user";
+import {Auth} from "./auth";
 import {Participant} from "../components/BoardHeader/ParticipantsList/Participant";
 
 export type ParticipantRole = "OWNER" | "MODERATOR" | "PARTICIPANT";
 
 export interface Participant {
-  user: User;
+  user: Auth;
   connected: boolean;
   ready: boolean;
   raisedHand: boolean;

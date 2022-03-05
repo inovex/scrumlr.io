@@ -1,4 +1,4 @@
-import {BoardClientModel, EditBoardRequest} from "types/board";
+import {Board, EditBoardRequest} from "types/board";
 import {Column} from "../../types/column";
 import {Participant} from "../../types/participant";
 
@@ -54,7 +54,7 @@ export const BoardActionFactory = {
    * @param board the board data
    * @param columns the columns of the board
    */
-  initializeBoard: (board: BoardClientModel, columns: Column[], participants: Participant[]) => ({
+  initializeBoard: (board: Board, columns: Column[], participants: Participant[]) => ({
     type: BoardActionType.InitializeBoard,
     board,
     columns,
@@ -82,7 +82,7 @@ export const BoardActionFactory = {
    *
    * @param board the updated board
    */
-  updatedBoard: (board: BoardClientModel) => ({
+  updatedBoard: (board: Board) => ({
     type: BoardActionType.UpdatedBoard,
     board,
   }),

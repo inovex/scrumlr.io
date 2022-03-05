@@ -1,4 +1,4 @@
-import {JoinRequestClientModel} from "types/joinRequest";
+import {Request} from "types/request";
 
 export const JoinRequestActionType = {
   AcceptJoinRequests: "@@scrumlr/acceptJoinRequests" as const,
@@ -19,15 +19,15 @@ export const JoinRequestActionFactory = {
     boardId,
     userIds,
   }),
-  initializeJoinRequests: (joinRequests: JoinRequestClientModel[]) => ({
+  initializeJoinRequests: (requests: Request[]) => ({
     type: JoinRequestActionType.InitializeJoinRequests,
-    joinRequests,
+    joinRequests: requests,
   }),
-  createJoinRequest: (joinRequest: JoinRequestClientModel) => ({
+  createJoinRequest: (joinRequest: Request) => ({
     type: JoinRequestActionType.CreateJoinRequest,
     joinRequest,
   }),
-  updateJoinRequest: (joinRequest: JoinRequestClientModel) => ({
+  updateJoinRequest: (joinRequest: Request) => ({
     type: JoinRequestActionType.UpdateJoinRequest,
     joinRequest,
   }),

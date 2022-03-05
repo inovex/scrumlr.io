@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {ActionFactory} from "store/action";
 import store, {useAppSelector} from "store";
-import Parse from "parse";
 import _ from "underscore";
 import classNames from "classnames";
 import {MenuToggle} from "components/MenuBars/MenuItem";

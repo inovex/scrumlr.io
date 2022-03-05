@@ -1,7 +1,6 @@
 import classNames from "classnames";
-import Parse from "parse";
 import {FC} from "react";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
 
@@ -14,8 +13,8 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
+  votes: Vote[];
+  allVotesOfUser: Vote[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;

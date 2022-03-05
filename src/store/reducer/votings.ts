@@ -1,13 +1,13 @@
-import {VotingClientModel} from "types/voting";
 import {ActionType, ReduxAction} from "store/action";
+import {VotingsState} from "types/voting";
 
 /**
  * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)
  */
-const defaultVoteConfiguration = {boardId: "Empty", votingIteration: 0, voteLimit: 10, showVotesOfOtherUsers: false, allowMultipleVotesPerNote: true};
+const defaultVotingState: VotingsState = {open: undefined, past: []};
 
 // eslint-disable-next-line default-param-last
-export const votingReducer = (state: VotingClientModel = defaultVoteConfiguration, action: ReduxAction): VotingClientModel => {
+export const votingReducer = (state: VotingsState = defaultVotingState, action: ReduxAction): VotingsState => {
   switch (action.type) {
     /**
      * If we receive a new vote configuration (e.g. we update the vote configuration or we receive the initial vote configuration), we need to update our state too.

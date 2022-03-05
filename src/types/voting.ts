@@ -29,7 +29,7 @@ export interface CreateVotingRequest {
   showVotesOfOthers: boolean;
 }
 
-export interface VotingState {
+export interface VotingsState {
   open?: Voting;
   past: Voting[];
 }

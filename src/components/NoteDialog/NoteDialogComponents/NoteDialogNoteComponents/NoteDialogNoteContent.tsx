@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import Parse from "parse";
 import {FC} from "react";
 import store from "store";
 import {ActionFactory} from "store/action";

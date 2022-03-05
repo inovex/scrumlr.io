@@ -2,7 +2,6 @@ import {Portal} from "components/Portal";
 import {VFC, useState} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
-import Parse from "parse";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import {useTranslation} from "react-i18next";
 import {Participant} from "./Participant";

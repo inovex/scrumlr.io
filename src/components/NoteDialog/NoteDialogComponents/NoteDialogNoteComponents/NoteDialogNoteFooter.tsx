@@ -1,8 +1,7 @@
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
-import Parse from "parse";
 import {FC} from "react";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
 
@@ -12,8 +11,8 @@ type NoteDialogNoteFooterProps = {
   authorName: string;
   noteId?: string;
   parentId?: string;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
+  votes: Vote[];
+  allVotesOfUser: Vote[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;

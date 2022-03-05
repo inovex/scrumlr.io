@@ -5,7 +5,7 @@ import "./AddVoteButton.scss";
 import "./VoteButton.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {FC} from "react";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 
 type AddVoteProps = {
   noteId: string;

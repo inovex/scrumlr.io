@@ -1,7 +1,7 @@
 import {ActionType, ReduxAction} from "../action";
-import {Column} from "../../types/column";
+import {ColumnsState} from "../../types/column";
 
-export const columnsReducer = (state: Column[] = [], action: ReduxAction): Column[] => {
+export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): ColumnsState => {
   if (action.type === ActionType.InitializeBoard || action.type === ActionType.UpdatedColumns) {
     return action.columns;
   }

@@ -17,3 +17,5 @@ export interface Column {
   visible: boolean;
   index: number;
 }
+
+export type ColumnsState = Column[];

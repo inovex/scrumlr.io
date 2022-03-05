@@ -1,5 +1,5 @@
 import store, {useAppSelector} from "store";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ActionFactory} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import "../BoardSettings/BoardSettings.scss";

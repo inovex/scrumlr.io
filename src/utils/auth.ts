@@ -1,19 +1,18 @@
 import {Toast} from "utils/Toast";
 import {API} from "api";
 import i18n from "i18next";
-import store from "../../store";
-import {ActionFactory} from "../../store/action";
-import {SERVER_URL} from "../../config";
+import store from "../store";
+import {ActionFactory} from "../store/action";
+import {SERVER_URL} from "../config";
 
 /**
  * Sign in anonymously.
  *
  * @param displayName Display name of the parse auth user.
- * @param photoURL Profile photo URL of the parse auth user.
  *
  * @returns Promise with user credentials on successful sign in, null otherwise.
  */
-const signInAnonymously = async (displayName: string, photoURL?: string) => {
+const signInAnonymously = async (displayName: string) => {
   try {
     const user = await API.signInAnonymously(displayName);
     if (user) {
@@ -38,7 +37,7 @@ const signInWithAuthProvider = async (authProvider: string, originURL: string) =
   window.location.href = `${SERVER_URL}/login/${authProvider}?state=${encodeURIComponent(originURL)}`;
 };
 
-export const AuthenticationManager = {
+export const Auth = {
   signInAnonymously,
   signInWithAuthProvider,
 };

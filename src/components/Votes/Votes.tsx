@@ -1,8 +1,7 @@
 import {useAppSelector} from "store";
 import "./Votes.scss";
 import classNames from "classnames";
-import {VoteClientModel} from "types/vote";
-import Parse from "parse";
+import {Vote} from "types/vote";
 import {FC} from "react";
 import {TabIndex} from "constants/tabIndex";
 import {VoteButtons} from "./VoteButtons";
@@ -10,7 +9,7 @@ import {VoteButtons} from "./VoteButtons";
 type VotesProps = {
   className?: string;
   noteId: string;
-  votes: VoteClientModel[];
+  votes: Vote[];
   activeVoting: boolean;
   tabIndex?: number;
   usedVotesAsUser: number;

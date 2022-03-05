@@ -1,4 +1,4 @@
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 
 export const VoteActionType = {
   AddVote: "@@SCRUMLR/addVote" as const,
@@ -19,7 +19,7 @@ export const VoteActionFactory = {
     type: VoteActionType.DeleteVote,
     note,
   }),
-  createdVote: (vote: VoteClientModel) => ({
+  createdVote: (vote: Vote) => ({
     type: VoteActionType.CreatedVote,
     vote,
   }),
@@ -27,7 +27,7 @@ export const VoteActionFactory = {
     type: VoteActionType.DeletedVote,
     voteId,
   }),
-  initializeVotes: (votes: VoteClientModel[]) => ({
+  initializeVotes: (votes: Vote[]) => ({
     type: VoteActionType.InitializeVotes,
     votes,
   }),

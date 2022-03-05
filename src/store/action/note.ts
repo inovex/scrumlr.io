@@ -1,4 +1,4 @@
-import {DragNoteRequest, EditNoteRequest, NoteClientModel, UnstackNoteRequest} from "types/note";
+import {Note} from "types/note";
 
 /** This object lists note object specific internal Redux Action types. */
 export const NoteActionType = {
@@ -42,7 +42,7 @@ export const NoteActionFactory = {
    * @param noteId the note id
    * @param text the edited text of the note
    */
-  editNote: (note: EditNoteRequest) => ({
+  editNote: (note: Note) => ({
     type: NoteActionType.EditNote,
     note,
   }),
@@ -50,7 +50,7 @@ export const NoteActionFactory = {
    * Creates an action which should be dispatched when the user unstacks a note.
    * @param note contains the noteId and the parentId
    */
-  unstackNote: (note: UnstackNoteRequest) => ({
+  unstackNote: (note: Note) => ({
     type: NoteActionType.UnstackNote,
     note,
   }),
@@ -58,7 +58,7 @@ export const NoteActionFactory = {
    * Creates an action which should be dispatched when the user drags and drops a note.
    * @param note contains the noteId and the dragOnId and the columnId
    */
-  dragNote: (note: DragNoteRequest) => ({
+  dragNote: (note: Note) => ({
     type: NoteActionType.DragNote,
     note,
   }),
@@ -67,7 +67,7 @@ export const NoteActionFactory = {
    *
    * @param note the note
    */
-  createdNote: (note: NoteClientModel) => ({
+  createdNote: (note: Note) => ({
     type: NoteActionType.CreatedNote,
     note,
   }),
@@ -85,7 +85,7 @@ export const NoteActionFactory = {
    *
    * @param note the note
    */
-  updatedNote: (note: NoteClientModel) => ({
+  updatedNote: (note: Note) => ({
     type: NoteActionType.UpdatedNote,
     note,
   }),
@@ -95,7 +95,7 @@ export const NoteActionFactory = {
    *
    * @param notes the list of notes persisted on the server for the current board
    */
-  initializeNotes: (notes: NoteClientModel[]) => ({
+  initializeNotes: (notes: Note[]) => ({
     type: NoteActionType.InitializeNotes,
     notes,
   }),

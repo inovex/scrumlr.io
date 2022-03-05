@@ -1,5 +1,4 @@
 import "./BoardUsers.scss";
-import Parse from "parse";
 import {useAppSelector} from "store";
 import {useEffect, useState} from "react";
 import {UserAvatar} from "./UserAvatar";

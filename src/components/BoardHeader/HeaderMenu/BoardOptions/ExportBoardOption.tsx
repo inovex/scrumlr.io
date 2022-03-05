@@ -1,6 +1,6 @@
 import {useAppSelector} from "store";
 import {exportAsCSV, exportAsJSON} from "utils/export";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
@@ -24,9 +24,6 @@ export const ExportBoardOption = (props: ExportProps) => {
 
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
-    notes: applicationState.notes,
-    participants: applicationState.participants,
-    votes: applicationState.votes,
   }));
 
   return (
@@ -37,7 +34,7 @@ export const ExportBoardOption = (props: ExportProps) => {
           label={t("ExportBoardOption.exportAsJson")}
           icon={ExportJSON}
           onClick={() => {
-            exportAsJSON(state);
+            exportAsJSON(state.board.id, state.board.name);
             props.onClose();
           }}
           data-testid="export-json"
@@ -47,7 +44,7 @@ export const ExportBoardOption = (props: ExportProps) => {
           label={t("ExportBoardOption.exportAsCSV")}
           icon={ExportCSV}
           onClick={() => {
-            exportAsCSV(state);
+            exportAsCSV(state.board.id, state.board.name);
             props.onClose();
           }}
           data-testid="export-csv"

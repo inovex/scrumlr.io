@@ -3,14 +3,14 @@ import {ActionFactory} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {FC} from "react";
 
 type RemoveVoteProps = {
   noteId: string;
   activeVoting: boolean;
-  votes: VoteClientModel[];
-  ownVotes: VoteClientModel[];
+  votes: Vote[];
+  ownVotes: Vote[];
   tabIndex: number;
 };
 

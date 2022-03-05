@@ -1,4 +1,3 @@
-import Parse from "parse";
 import {FC} from "react";
 import {NoteDialogDeleteNoteButton} from "./NoteDialogDeleteNoteButton";
 import {NoteDialogUnstackNoteButton} from "./NoteDialogUnstackNoteButton";

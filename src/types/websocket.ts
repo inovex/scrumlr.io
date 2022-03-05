@@ -1,4 +1,4 @@
-import {BoardServerModel} from "./board";
+import {Board} from "./board";
 import {Column} from "./column";
 import {Participant} from "./participant";
 import {Note} from "./note";
@@ -6,7 +6,7 @@ import {Note} from "./note";
 export interface BoardInitEvent {
   type: "INIT";
   data: {
-    board: BoardServerModel;
+    board: Board;
     columns: Column[];
     notes?: {}[];
     votings?: {}[];
@@ -18,7 +18,7 @@ export interface BoardInitEvent {
 
 export interface BoardUpdateEvent {
   type: "BOARD_UPDATED";
-  data: BoardServerModel;
+  data: Board;
 }
 
 export interface BoardDeletedEvent {

@@ -2,9 +2,8 @@ import classNames from "classnames";
 import {Portal} from "components/Portal";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteClientModel} from "types/note";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import "./NoteDialog.scss";
-import Parse from "parse";
 import {NoteDialogComponents} from "./NoteDialogComponents";
 
 interface NoteDialogProps {
@@ -18,9 +17,9 @@ interface NoteDialogProps {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
+  childrenNotes: Array<NoteClientModel & {authorName: string; votes: Vote[]}>;
+  votes: Vote[];
+  allVotesOfUser: Vote[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   currentUserIsModerator: boolean;

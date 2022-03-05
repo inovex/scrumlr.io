@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import {getRandomName} from "constants/name";
-import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
+import {Auth} from "utils/auth";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
@@ -32,7 +32,7 @@ export const LoginBoard = () => {
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
     if (termsAccepted) {
-      await AuthenticationManager.signInAnonymously(displayName);
+      await Auth.signInAnonymously(displayName);
       try {
         navigate((location.state as State).from.pathname);
       } catch (err) {

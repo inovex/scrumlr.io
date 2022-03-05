@@ -1,4 +1,4 @@
-import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
+import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as GoogleIcon} from "assets/icon-google.svg";
 import {ReactComponent as GitHubIcon} from "assets/icon-github.svg";
@@ -10,12 +10,12 @@ export interface LoginProvidersProps {
   originURL?: string;
 }
 
-// TODO: Include after deployment: <button onClick={() => AuthenticationManager.signInWithAuthProvider("apple")}>Sign in with Apple</button>
+// TODO: Include after deployment: <button onClick={() => Auth.signInWithAuthProvider("apple")}>Sign in with Apple</button>
 export const LoginProviders = ({originURL = window.location.href}) => {
   const {t} = useTranslation();
 
   const signIn = (provider: string) => async () => {
-    await AuthenticationManager.signInWithAuthProvider(provider, originURL);
+    await Auth.signInWithAuthProvider(provider, originURL);
   };
 
   return (

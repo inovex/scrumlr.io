@@ -1,15 +1,14 @@
 import "./Note.scss";
 import classNames from "classnames";
-import Parse from "parse";
 import store from "store";
 import {ActionFactory} from "store/action";
 import React, {useEffect, useRef} from "react";
 import {NoteDialog} from "components/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {Votes} from "components/Votes";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
-import {NoteClientModel} from "types/note";
+import {Note as NoteModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
 import {TabIndex} from "constants/tabIndex";
 
@@ -22,9 +21,9 @@ interface NoteProps {
   columnName: string;
   columnColor: string;
   showAuthors: boolean;
-  childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
+  childrenNotes: Array<NoteModel & {authorName: string; votes: Vote[]}>;
+  votes: Vote[];
+  allVotesOfUser: Vote[];
   activeVoting: boolean;
   activeModeration: {userId?: string; status: boolean};
   focus: boolean;

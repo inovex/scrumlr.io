@@ -9,7 +9,6 @@ import {ActionFactory} from "store/action";
 import {ReactComponent as visibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as hiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
-import Parse from "parse";
 import _ from "underscore";
 import {Note} from "../Note";
 

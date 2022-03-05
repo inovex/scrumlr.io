@@ -1,9 +1,9 @@
-import {AnyAction, Dispatch, MiddlewareAPI} from "redux";
-import {ApplicationState} from "types/store";
+import {Dispatch, MiddlewareAPI} from "redux";
+import {ApplicationState} from "types";
 import {ActionType, ReduxAction} from "store/action";
 import {API} from "api";
 
-export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
+export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ActionType.AddColumn) {
     const boardId = stateAPI.getState().board.data!.id;
     // TODO retry mechanism

@@ -1,5 +1,5 @@
 import {fireEvent} from "@testing-library/react";
-import {AuthenticationManager} from "utils/authentication/AuthenticationManager";
+import {Auth} from "utils/auth";
 import {LoginProviders} from "components/LoginProviders";
 import {render} from "testUtils";
 
@@ -20,7 +20,7 @@ describe("check for all provider buttons", () => {
   });
 
   describe("click-handler", () => {
-    const signInSpy = jest.spyOn(AuthenticationManager, "signInWithAuthProvider");
+    const signInSpy = jest.spyOn(Auth, "signInWithAuthProvider");
 
     test("google sign in", () => {
       const {container} = render(<LoginProviders />);

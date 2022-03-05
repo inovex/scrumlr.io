@@ -3,16 +3,16 @@ import {NoteActionFactory, NoteActionType, NoteReduxAction} from "./note";
 import {VoteActionFactory, VoteActionType, VoteReduxAction} from "./vote";
 import {UsersActionFactory, ParticipantsActionType, UsersReduxAction} from "./participants";
 import {ColumnActionFactory, ColumnActionType, ColumnReduxAction} from "./column";
-import {JoinRequestActionFactory, JoinRequestActionType, JoinRequestReduxAction} from "./joinRequest";
+import {JoinRequestActionFactory, JoinRequestActionType, JoinRequestReduxAction} from "./request";
 import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "./votings";
-import {UserActionFactory, UserActionType, UserReduxAction} from "./user";
+import {AuthActionFactory, AuthActionType, UserReduxAction} from "./auth";
 
 /** This object lists all internal Redux Action types. */
 export const ActionType = {
   ...BoardActionType,
   ...ColumnActionType,
   ...NoteActionType,
-  ...UserActionType,
+  ...AuthActionType,
   ...ParticipantsActionType,
   ...JoinRequestActionType,
   ...VoteActionType,
@@ -24,7 +24,7 @@ export const ActionFactory = {
   ...BoardActionFactory,
   ...ColumnActionFactory,
   ...NoteActionFactory,
-  ...UserActionFactory,
+  ...AuthActionFactory,
   ...UsersActionFactory,
   ...JoinRequestActionFactory,
   ...VoteActionFactory,

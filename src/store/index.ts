@@ -1,8 +1,8 @@
-import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI, AnyAction} from "redux";
+import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI} from "redux";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
@@ -12,28 +12,24 @@ import {votingReducer} from "./reducer/votings";
 import {passNoteMiddleware} from "./middleware/note";
 import {passVoteMiddlware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
-import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
 import {passColumnMiddleware} from "./middleware/column";
-import {passJoinRequestMiddleware} from "./middleware/joinRequest";
 import {passUsersMiddleware} from "./middleware/participants";
-import {joinRequestReducer} from "./reducer/joinRequest";
+import {joinRequestReducer} from "./reducer/requests";
 import {passVoteConfigurationMiddleware} from "./middleware/votings";
-import {userReducer} from "./reducer/user";
-import {passUserMiddleware} from "./middleware/user";
+import {authReducer} from "./reducer/auth";
+import {passAuthMiddleware} from "./middleware/auth";
 import {columnsReducer} from "./reducer/columns";
 
-const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   try {
     return dispatch(action);
   } finally {
-    passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
     passBoardMiddleware(stateAPI, dispatch, action);
     passColumnMiddleware(stateAPI, dispatch, action);
     passVoteConfigurationMiddleware(stateAPI, dispatch, action);
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddlware(stateAPI, dispatch, action);
-    passJoinRequestMiddleware(stateAPI, dispatch, action);
-    passUserMiddleware(stateAPI, dispatch, action);
+    passAuthMiddleware(stateAPI, dispatch, action);
     passUsersMiddleware(stateAPI, dispatch, action);
   }
 };
@@ -42,9 +38,9 @@ const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
   columns: columnsReducer,
   notes: noteReducer,
-  user: userReducer,
+  auth: authReducer,
   participants: usersReducer,
-  joinRequests: joinRequestReducer,
+  requests: joinRequestReducer,
   votes: voteReducer,
   votings: votingReducer,
 });

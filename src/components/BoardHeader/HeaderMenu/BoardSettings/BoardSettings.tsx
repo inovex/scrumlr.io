@@ -2,7 +2,7 @@ import "./BoardSettings.scss";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {AccessPolicyType} from "types/board";
 import store, {useAppSelector} from "store";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ActionFactory} from "store/action";
 import {useTranslation} from "react-i18next";
 

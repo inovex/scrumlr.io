@@ -1,8 +1,7 @@
 import {Portal} from "components/Portal";
-import Parse from "parse";
 import {useState} from "react";
 import {useSelector} from "react-redux";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import "./HeaderMenu.scss";
 import {BoardOption} from "./BoardOptions";
 import {BoardSettings} from "./BoardSettings";

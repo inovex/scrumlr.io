@@ -7,7 +7,7 @@ import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
 import {mocked} from "ts-jest/utils";
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 import {render} from "testUtils";
 
 const mockStore = configureStore();
@@ -22,7 +22,7 @@ type TestProps = {
   text: string;
   authorId: string;
   showAuthors: boolean;
-  votes: VoteClientModel[];
+  votes: Vote[];
   focus: boolean;
   moderation: {userId: string; status: boolean};
   currentUserIsModerator: boolean;

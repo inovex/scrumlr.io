@@ -1,8 +1,7 @@
 import store, {useAppSelector} from "store";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ActionFactory} from "store/action";
 import "../BoardSettings/BoardSettings.scss";
-import Parse from "parse";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";

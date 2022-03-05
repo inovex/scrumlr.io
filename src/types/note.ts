@@ -11,3 +11,5 @@ export interface Note {
     rank: number;
   };
 }
+
+export type NotesState = Note[];

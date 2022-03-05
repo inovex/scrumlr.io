@@ -1,22 +1,12 @@
 import store from "store";
 import {ActionFactory} from "store/action";
-import {JoinRequestClientModel} from "types/joinRequest";
+import {Request as RequestModel} from "types/request";
 import "./Request.scss";
 import {useTranslation} from "react-i18next";
-import {UserClientModel} from "types/user";
+import {UserClientModel} from "types/auth";
 import {UserAvatar} from "../BoardUsers";
 
-export const Request = ({
-  joinRequests,
-  users,
-  raisedHands,
-  boardId,
-}: {
-  joinRequests: JoinRequestClientModel[];
-  users: UserClientModel[];
-  raisedHands: string[];
-  boardId: string;
-}) => {
+export const Request = ({joinRequests, users, raisedHands, boardId}: {joinRequests: RequestModel[]; users: UserClientModel[]; raisedHands: string[]; boardId: string}) => {
   const {t} = useTranslation();
 
   const handleAccept = (requestedBoardId: string, userIds: string[]) => () => {

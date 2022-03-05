@@ -16,7 +16,7 @@ import {InovexAnchor} from "./InovexAnchor";
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
-  const {user} = useAppSelector((state) => state.user);
+  const {user} = useAppSelector((state) => state.auth);
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
