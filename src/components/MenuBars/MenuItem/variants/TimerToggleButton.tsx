@@ -15,7 +15,13 @@ type TimerToggleButtonProps = {
 export const TimerToggleButton = (props: TimerToggleButtonProps) => {
   const {t} = useTranslation();
 
-  const timer = useAppSelector((state) => state.board.data?.timerUTCEndTime);
+  const timer = useAppSelector((state) => {
+    const timerEnd = state.board.data?.timerEnd;
+    if (timerEnd) {
+      return new Date(new Date(timerEnd).getTime() + state.view.serverTimeOffset);
+    }
+    return undefined;
+  });
   const [customTime, setCustomTime] = useState(10);
   const [tabable, setTabable] = useState(false);
 

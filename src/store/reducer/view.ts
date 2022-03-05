@@ -1,8 +1,9 @@
 import {Action, ReduxAction} from "store/action";
 import {ViewState} from "../../types/view";
 
-const INITIAL_VIEW_STATE = {
+const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
+  serverTimeOffset: 0,
 };
 
 // eslint-disable-next-line default-param-last
