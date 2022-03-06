@@ -19,13 +19,13 @@ ReactDOM.render(
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
         <Html />
-        <DndProvider backend={HTML5Backend}>
-          <Suspense fallback={<LoadingScreen />}>
-            <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
+        <Suspense fallback={<LoadingScreen />}>
+          <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
+          <DndProvider backend={HTML5Backend}>
             <Router />
-            <CookieNotice />
-          </Suspense>
-        </DndProvider>
+          </DndProvider>
+          <CookieNotice />
+        </Suspense>
       </Provider>
     </I18nextProvider>
   </React.StrictMode>,
