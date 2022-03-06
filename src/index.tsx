@@ -12,8 +12,8 @@ import {ToastContainer} from "react-toastify";
 import i18n from "./i18n";
 import {LoadingScreen} from "./components/LoadingScreen";
 import {Actions} from "./store/action";
-import {API} from "./api";
 
+// TODO replace with react-helmet?
 if (localStorage.getItem("theme")) {
   document.documentElement.setAttribute("theme", localStorage.getItem("theme")!);
 } else if (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -21,16 +21,6 @@ if (localStorage.getItem("theme")) {
 } else {
   document.documentElement.setAttribute("theme", "light");
 }
-
-// init auth session
-(async () => {
-  const user = await API.getCurrentUser();
-  if (user) {
-    store.dispatch(Actions.signIn(user.id, user.name));
-  } else {
-    store.dispatch(Actions.userCheckCompleted());
-  }
-})();
 
 ReactDOM.render(
   <React.StrictMode>
@@ -48,3 +38,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+store.dispatch(Actions.initApplication());

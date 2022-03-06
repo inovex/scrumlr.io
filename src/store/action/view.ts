@@ -1,14 +1,17 @@
 export const ViewAction = {
+  InitApplication: "scrumlr.io/initApplication" as const,
   SetModerating: "scrumlr.io/setModerating" as const,
-  SignOut: "scrumlr.io/signOut" as const,
-  UserCheckCompleted: "scrumlr.io/userCheckCompleted" as const,
 };
 
 export const ViewActionFactory = {
+  initApplication: () => ({
+    type: ViewAction.InitApplication,
+  }),
+
   setModerating: (moderating: boolean) => ({
     type: ViewAction.SetModerating,
     moderating,
   }),
 };
 
-export type ViewReduxAction = ReturnType<typeof ViewActionFactory.setModerating>;
+export type ViewReduxAction = ReturnType<typeof ViewActionFactory.initApplication> | ReturnType<typeof ViewActionFactory.setModerating>;
