@@ -19,13 +19,15 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, Appl
       onopen: (e: Event) => console.log("connected", e),
       onerror: (e: Event) => console.log("error", e),
       onmessage: async (evt: MessageEvent<ServerEvent>) => {
-        if (evt.data.type === "INIT") {
-          const {board, columns, participants} = evt.data.data;
+        const message = evt.data;
+
+        if (message.type === "INIT") {
+          const {board, columns, participants} = message.data;
           dispatch(Actions.initializeBoard(board, columns, participants));
         }
 
-        if (evt.data.type === "COLUMNS_UPDATED") {
-          const columns = evt.data.data;
+        if (message.type === "COLUMNS_UPDATED") {
+          const columns = message.data;
           dispatch(Actions.updateColumns(columns));
         }
       },

@@ -5,6 +5,7 @@ import {AuthAction} from "store/action/auth";
 import {API} from "api";
 import {ViewAction} from "store/action/view";
 import {Toast} from "utils/Toast";
+import i18n from "i18next";
 
 export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ViewAction.InitApplication) {
@@ -17,8 +18,8 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         }
       })
       .catch(() => {
-        // TODO fix toast message and add retry mechanism
-        Toast.error("unable to connect to server");
+        // TODO add retry mechanism
+        Toast.error(i18n.t("Homepage.errorServerConnection"));
       });
   }
 

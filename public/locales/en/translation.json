@@ -193,7 +193,8 @@
     "startButton": "Start now",
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
-    "terms": "Terms & conditions"
+    "terms": "Terms & conditions",
+    "errorServerConnection": "The connection to the server could not be established. Please try to reload the page."
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"

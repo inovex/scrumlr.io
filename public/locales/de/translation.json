@@ -193,7 +193,8 @@
     "startButton": "Jetzt loslegen",
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
-    "terms": "AGB"
+    "terms": "AGB",
+    "errorServerConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden."
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"
