@@ -12,9 +12,7 @@ export interface Participant {
   role: ParticipantRole;
 }
 
-export type ParticipantsState =
-  | undefined
-  | {
-      participants: Participant[];
-      self: Participant;
-    };
+export type ParticipantsState = null | {
+  participants: Participant[];
+  self: Participant;
+};

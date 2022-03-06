@@ -3,7 +3,7 @@ import {ParticipantsState} from "../../types/participant";
 import store from "../index";
 
 // eslint-disable-next-line default-param-last
-export const usersReducer = (state: ParticipantsState = undefined, action: ReduxAction): ParticipantsState => {
+export const usersReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
   switch (action.type) {
     case Action.SetUserReadyStatus: {
       // TODO
