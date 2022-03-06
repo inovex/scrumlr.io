@@ -9,21 +9,14 @@ import store from "store";
 import Router from "routes/Router";
 import {I18nextProvider} from "react-i18next";
 import {ToastContainer} from "react-toastify";
+import {Helmet} from "react-helmet";
 import i18n from "./i18n";
 import {LoadingScreen} from "./components/LoadingScreen";
 import {Actions} from "./store/action";
 
-// TODO replace with react-helmet?
-if (localStorage.getItem("theme")) {
-  document.documentElement.setAttribute("theme", localStorage.getItem("theme")!);
-} else if (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches) {
-  document.documentElement.setAttribute("theme", "dark");
-} else {
-  document.documentElement.setAttribute("theme", "light");
-}
-
 ReactDOM.render(
   <React.StrictMode>
+    <Helmet htmlAttributes={{theme: localStorage.getItem("theme") || !window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"}} />
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
         <DndProvider backend={HTML5Backend}>
