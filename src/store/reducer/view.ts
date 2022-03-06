@@ -19,6 +19,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
         moderating: action.moderating,
       };
     }
+
+    case Action.SetLanguage: {
+      return {
+        ...state,
+        language: action.language,
+      };
+    }
   }
   return state;
 };

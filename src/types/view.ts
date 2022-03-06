@@ -8,6 +8,8 @@ export interface View {
    * FIXME: init server time
    */
   readonly serverTimeOffset: number;
+
+  readonly language?: string;
 }
 
 export type ViewState = View;
