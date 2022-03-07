@@ -1,3 +1,6 @@
+import {SERVER_URL} from "../config";
+import {Note} from "../types/note";
+
 export const NoteAPI = {
   /**
    * Adds a note to a board.
@@ -8,8 +11,25 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  addNote: (boardId: string, columnId: string, text: string) => {
-    // TODO
+  addNote: async (boardId: string, columnId: string, text: string) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${boardId}/notes`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          column: columnId,
+          text,
+        }),
+      });
+
+      if (response.status === 201) {
+        return (await response.json()) as Note;
+      }
+
+      throw new Error(`create note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create note with error: ${error}`);
+    }
   },
 
   /**

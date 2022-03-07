@@ -31,6 +31,11 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, Appl
           const columns = message.data;
           store.dispatch(Actions.updateColumns(columns));
         }
+
+        if (message.type === "NOTES_UPDATED") {
+          const notes = message.data;
+          store.dispatch(Actions.updatedNotes(notes));
+        }
       },
       onclose: (e: CloseEvent) => console.log("closed", e),
     });
