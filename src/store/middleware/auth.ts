@@ -20,6 +20,7 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
       .catch(() => {
         // TODO add retry mechanism
         Toast.error(i18n.t("Homepage.errorServerConnection"));
+        dispatch(Actions.initFailed());
       });
   }
 

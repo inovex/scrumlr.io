@@ -17,7 +17,7 @@ import {InovexAnchor} from "./InovexAnchor";
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
-  const {user} = useAppSelector((state) => state.auth);
+  const {user, ready} = useAppSelector((state) => ({user: state.auth.user, ready: state.view.initializationSucceeded}));
   const dispatch = useDispatch();
 
   const changeLanguage = (language: string) => () => {
@@ -72,7 +72,13 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
+              <Button
+                href={ready ? newHref : undefined}
+                color="primary"
+                className="homepage__start-button"
+                disabled={!ready}
+                rightIcon={<IconArrowRight className="homepage__proceed-icon" />}
+              >
                 <Trans i18nKey="Homepage.startButton" />
               </Button>
             </main>
