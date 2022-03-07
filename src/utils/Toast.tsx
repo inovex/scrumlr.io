@@ -1,9 +1,9 @@
 import {toast, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {ReactNode} from "react";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
-  autoClose: 3000,
   hideProgressBar: true,
   closeOnClick: true,
 };
@@ -11,19 +11,19 @@ const toastConfig: ToastOptions = {
 /**
  * Display success message via toast.
  *
- * @param text Success message.
+ * @param content Success message.
  */
-function success(text: string) {
-  toast.success(text, toastConfig);
+function success(content: ReactNode, autoClose: number | false = 3000) {
+  toast.success(content, {...toastConfig, autoClose});
 }
 
 /**
  * Display error message via toast.
  *
- * @param text Error message.
+ * @param content Error message.
  */
-function error(text: string) {
-  toast.error(text, toastConfig);
+function error(content: ReactNode, autoClose: number | false = 3000) {
+  toast.error(content, {...toastConfig, autoClose});
 }
 
 export const Toast = {

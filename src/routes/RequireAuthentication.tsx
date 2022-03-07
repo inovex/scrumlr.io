@@ -1,15 +1,24 @@
 import {Navigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import {FC} from "react";
+import {useTranslation} from "react-i18next";
 import {useAppSelector} from "../store";
 import {LoadingScreen} from "../components/LoadingScreen";
+import {ErrorPage} from "../components/ErrorPage";
 
 export const RequireAuthentication: FC = ({children}) => {
+  const {t} = useTranslation();
   const location = useLocation();
-  const {user, initialized} = useAppSelector((state) => state.auth);
+  const {user, initializationSucceeded} = useAppSelector((state) => state.auth);
 
-  if (!initialized) {
+  // wait until initialization is completed
+  if (initializationSucceeded === null) {
     return <LoadingScreen />;
+  }
+
+  // show error if initialization did fail
+  if (!initializationSucceeded) {
+    return <ErrorPage errorMessage={t("Homepage.errorServerConnection")} originURL={location.pathname} />;
   }
 
   if (user) {

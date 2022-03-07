@@ -9,8 +9,6 @@ export interface View {
    */
   readonly serverTimeOffset: number;
 
-  readonly initializationSucceeded: boolean | null;
-
   readonly language?: string;
 }
 

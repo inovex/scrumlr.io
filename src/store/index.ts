@@ -20,8 +20,13 @@ import {authReducer} from "./reducer/auth";
 import {passAuthMiddleware} from "./middleware/auth";
 import {columnsReducer} from "./reducer/columns";
 import {viewReducer} from "./reducer/view";
+import {passRequestMiddleware} from "./middleware/request";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+  action.session = {
+    user: stateAPI.getState().auth.user?.id,
+    board: stateAPI.getState().board.data?.id,
+  };
   try {
     return dispatch(action);
   } finally {
@@ -32,6 +37,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passVoteMiddlware(stateAPI, dispatch, action);
     passAuthMiddleware(stateAPI, dispatch, action);
     passUsersMiddleware(stateAPI, dispatch, action);
+    passRequestMiddleware(stateAPI, dispatch, action);
   }
 };
 

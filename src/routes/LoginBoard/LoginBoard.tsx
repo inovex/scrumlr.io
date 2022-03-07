@@ -32,8 +32,8 @@ export const LoginBoard = () => {
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
     if (termsAccepted) {
-      await Auth.signInAnonymously(displayName);
       try {
+        await Auth.signInAnonymously(displayName);
         navigate((location.state as State).from.pathname);
       } catch (err) {
         Toast.error(t("LoginBoard.errorOnRedirect"));

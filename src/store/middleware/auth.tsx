@@ -6,6 +6,8 @@ import {API} from "api";
 import {ViewAction} from "store/action/view";
 import {Toast} from "utils/Toast";
 import i18n from "i18next";
+import {Button} from "../../components/Button";
+import store from "../index";
 
 export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ViewAction.InitApplication) {
@@ -13,14 +15,18 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
       .then((user) => {
         if (user) {
           dispatch(Actions.signIn(user.id, user.name));
-        } else {
-          dispatch(Actions.userCheckCompleted());
         }
+        dispatch(Actions.userCheckCompleted(true));
       })
       .catch(() => {
-        // TODO add retry mechanism
-        Toast.error(i18n.t("Homepage.errorServerConnection"));
-        dispatch(Actions.initFailed());
+        Toast.error(
+          <div>
+            <div>{i18n.t("Homepage.errorServerConnection")}</div>
+            <Button onClick={() => store.dispatch(Actions.initApplication())}>{i18n.t("Homepage.retry")}</Button>
+          </div>,
+          false
+        );
+        dispatch(Actions.userCheckCompleted(false));
       });
   }
 

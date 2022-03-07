@@ -106,7 +106,8 @@
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Einloggen mit Github",
-    "signInWithMicrosoft": "Einloggen mit Microsoft"
+    "signInWithMicrosoft": "Einloggen mit Microsoft",
+    "signInWithApple": "Einloggen mit Apple"
   },
   "NoteInput": {
     "placeholder": "Füge ein Kärtchen hinzu..."
@@ -194,7 +195,8 @@
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
     "terms": "AGB",
-    "errorServerConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden."
+    "errorServerConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
+    "retry": "Wiederholen"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"

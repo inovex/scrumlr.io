@@ -5,5 +5,5 @@ export interface Auth {
 
 export interface AuthState {
   user: Auth | undefined;
-  initialized: boolean;
+  initializationSucceeded: boolean | null;
 }

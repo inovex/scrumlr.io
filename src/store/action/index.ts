@@ -35,7 +35,7 @@ export const Actions = {
 };
 
 /** The types of all application internal redux actions. */
-export type ReduxAction =
+export type ReduxAction = {session: {board?: string; user?: string}} & (
   | BoardReduxAction
   | ColumnReduxAction
   | NoteReduxAction
@@ -44,4 +44,5 @@ export type ReduxAction =
   | RequestReduxAction
   | VoteReduxAction
   | VotingReduxAction
-  | ViewReduxAction;
+  | ViewReduxAction
+);

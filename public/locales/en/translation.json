@@ -106,7 +106,8 @@
   "LoginProviders": {
     "signInWithGoogle": "Sign in with Google",
     "signInWithGitHub": "Sign in with Github",
-    "signInWithMicrosoft": "Sign in with Microsoft"
+    "signInWithMicrosoft": "Sign in with Microsoft",
+    "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {
     "placeholder": "Add your note..."
@@ -194,7 +195,8 @@
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
     "terms": "Terms & conditions",
-    "errorServerConnection": "The connection to the server could not be established. Please try to reload the page."
+    "errorServerConnection": "The connection to the server could not be established. Please try to reload the page.",
+    "retry": "Retry"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"

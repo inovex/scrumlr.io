@@ -2,12 +2,11 @@ import {AuthState} from "types/auth";
 import {ReduxAction} from "../action";
 import {AuthAction} from "../action/auth";
 
-export const authReducer = (state: AuthState = {user: undefined, initialized: false}, action: ReduxAction): AuthState => {
+export const authReducer = (state: AuthState = {user: undefined, initializationSucceeded: null}, action: ReduxAction): AuthState => {
   if (action.type === AuthAction.SignOut) {
     return {
       ...state,
       user: undefined,
-      initialized: true,
     };
   }
 
@@ -18,14 +17,13 @@ export const authReducer = (state: AuthState = {user: undefined, initialized: fa
         id: action.id,
         name: action.name,
       },
-      initialized: true,
     };
   }
 
   if (action.type === AuthAction.UserCheckCompleted) {
     return {
       ...state,
-      initialized: true,
+      initializationSucceeded: action.success,
     };
   }
 

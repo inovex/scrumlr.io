@@ -1,6 +1,5 @@
 export const ViewAction = {
   InitApplication: "scrumlr.io/initApplication" as const,
-  InitFailed: "scrumlr.io/initFailed" as const,
   SetModerating: "scrumlr.io/setModerating" as const,
   SetLanguage: "scrumlr.io/setLanguage" as const,
 };
@@ -8,10 +7,6 @@ export const ViewAction = {
 export const ViewActionFactory = {
   initApplication: () => ({
     type: ViewAction.InitApplication,
-  }),
-
-  initFailed: () => ({
-    type: ViewAction.InitFailed,
   }),
 
   setModerating: (moderating: boolean) => ({
@@ -27,6 +22,5 @@ export const ViewActionFactory = {
 
 export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.initApplication>
-  | ReturnType<typeof ViewActionFactory.initFailed>
   | ReturnType<typeof ViewActionFactory.setModerating>
   | ReturnType<typeof ViewActionFactory.setLanguage>;

@@ -15,8 +15,9 @@ export const AuthActionFactory = {
     type: AuthAction.SignOut,
   }),
 
-  userCheckCompleted: () => ({
+  userCheckCompleted: (success: boolean) => ({
     type: AuthAction.UserCheckCompleted,
+    success,
   }),
 };
 
