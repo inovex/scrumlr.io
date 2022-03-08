@@ -59,7 +59,6 @@ export const CookieNotice = () => {
         setShowCookieNotice(false);
         accept();
       }}
-      darkBackground={false}
     >
       <div className="cookie-notice">
         <div className="cookie-notice__header">
@@ -82,7 +81,7 @@ export const CookieNotice = () => {
             {t("CookieNotice.accept")}
           </button>
         </div>
-        <CookiePolicy accept={accept} decline={decline} onClose={toggleShowCookiePolicy} show={showCookiePolicy} darkBackground />
+        <CookiePolicy accept={accept} decline={decline} onClose={toggleShowCookiePolicy} show={showCookiePolicy} />
       </div>
     </Portal>
   );
