@@ -35,7 +35,6 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         setExpandedOption(undefined);
         props.onClose();
       }}
-      darkBackground={false}
     >
       <ul className="header-menu">
         <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={props.currentUserIsModerator} setActiveEditMode={setActiveEditMode} />

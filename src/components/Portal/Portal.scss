@@ -12,27 +12,8 @@
 
 .portal {
   position: fixed;
-  width: calc(100vw - 24px);
-  height: calc(100vh - 24px);
-  top: 12px;
-  left: 12px;
-}
-.portal--darkBackground {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.portal--hasNext {
-  width: calc(100vw - 12px);
-}
-
-.portal--hasPrev {
-  width: calc(100vw - 12px);
-  left: 0;
-}
-
-.portal--hasNext.portal--hasPrev {
-  left: 0;
-  width: 100vw;
+  width: 100%;
+  height: 100%;
 }
 
 .portal__frame {
