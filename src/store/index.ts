@@ -21,6 +21,7 @@ import {passAuthMiddleware} from "./middleware/auth";
 import {columnsReducer} from "./reducer/columns";
 import {viewReducer} from "./reducer/view";
 import {passRequestMiddleware} from "./middleware/request";
+import {passViewMiddleware} from "./middleware/view";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -30,6 +31,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
   try {
     return dispatch(action);
   } finally {
+    passViewMiddleware(stateAPI, dispatch, action);
     passAuthMiddleware(stateAPI, dispatch, action);
     passBoardMiddleware(stateAPI, dispatch, action);
     passParticipantsMiddleware(stateAPI, dispatch, action);

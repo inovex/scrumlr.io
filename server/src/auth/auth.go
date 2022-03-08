@@ -26,6 +26,7 @@ import (
 type Auth interface {
 	Sign(map[string]interface{}) (string, error)
 	Verifier() func(http.Handler) http.Handler
+	Exists(accountType types.AccountType) bool
 }
 
 type AuthProviderConfiguration struct {
@@ -123,6 +124,13 @@ func (a *AuthConfiguration) Sign(claims map[string]interface{}) (string, error) 
 
 func (a *AuthConfiguration) Verifier() func(http.Handler) http.Handler {
 	return jwtauth.Verifier(a.auth)
+}
+
+func (a *AuthConfiguration) Exists(accountType types.AccountType) bool {
+	if _, ok := a.providers[string(accountType)]; ok {
+		return true
+	}
+	return false
 }
 
 func (a *AuthConfiguration) initializeJWTAuth() {

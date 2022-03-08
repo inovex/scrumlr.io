@@ -4,6 +4,7 @@ import {ViewState} from "../../types/view";
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
   serverTimeOffset: 0,
+  enabledAuthProvider: [],
 };
 
 // eslint-disable-next-line default-param-last
@@ -27,6 +28,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       return {
         ...state,
         language: action.language,
+      };
+    }
+
+    case Action.SetEnabledAuthProvider: {
+      return {
+        ...state,
+        enabledAuthProvider: action.provider,
       };
     }
   }

@@ -9,6 +9,8 @@ export interface View {
    */
   readonly serverTimeOffset: number;
 
+  readonly enabledAuthProvider: string[];
+
   readonly language?: string;
 }
 

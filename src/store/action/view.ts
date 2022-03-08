@@ -2,6 +2,7 @@ export const ViewAction = {
   InitApplication: "scrumlr.io/initApplication" as const,
   SetModerating: "scrumlr.io/setModerating" as const,
   SetLanguage: "scrumlr.io/setLanguage" as const,
+  SetEnabledAuthProvider: "scrumlr.io/setEnabledAuthProvider" as const,
 };
 
 export const ViewActionFactory = {
@@ -18,9 +19,15 @@ export const ViewActionFactory = {
     type: ViewAction.SetLanguage,
     language,
   }),
+
+  setEnabledAuthProvider: (provider: string[]) => ({
+    type: ViewAction.SetEnabledAuthProvider,
+    provider,
+  }),
 };
 
 export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.initApplication>
   | ReturnType<typeof ViewActionFactory.setModerating>
-  | ReturnType<typeof ViewActionFactory.setLanguage>;
+  | ReturnType<typeof ViewActionFactory.setLanguage>
+  | ReturnType<typeof ViewActionFactory.setEnabledAuthProvider>;
