@@ -2,6 +2,7 @@ import {BrowserRouter, Routes} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
+import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
@@ -40,6 +41,7 @@ const Router = () => (
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
 );
