@@ -13,6 +13,6 @@ export interface Participant {
 }
 
 export type ParticipantsState = null | {
-  participants: Participant[];
+  others: Participant[];
   self: Participant;
 };

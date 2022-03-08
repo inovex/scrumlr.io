@@ -9,6 +9,8 @@ export const ParticipantAction = {
    * won't work otherwise (e.g. in reducers).
    */
   SetParticipants: "scrumlr.io/setParticipants" as const,
+  CreatedParticipant: "scrumlr.io/createdParticipant" as const,
+  UpdatedParticipant: "scrumlr.io/updatedParticipant" as const,
 
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
@@ -35,6 +37,16 @@ export const ParticipantActionFactory = {
   setParticipants: (participants: Participant[]) => ({
     type: ParticipantAction.SetParticipants,
     participants,
+  }),
+
+  createdParticipant: (participant: Participant) => ({
+    type: ParticipantAction.CreatedParticipant,
+    participant,
+  }),
+
+  updatedParticipant: (participant: Participant) => ({
+    type: ParticipantAction.UpdatedParticipant,
+    participant,
   }),
 
   /**
@@ -75,6 +87,8 @@ export const ParticipantActionFactory = {
 
 export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setParticipants>
+  | ReturnType<typeof ParticipantActionFactory.createdParticipant>
+  | ReturnType<typeof ParticipantActionFactory.updatedParticipant>
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
   | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>

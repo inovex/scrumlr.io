@@ -33,11 +33,11 @@ export const BoardUsers = () => {
   }
 
   const {me, them} = useAppSelector((state) => ({
-    them: state.participants!.participants,
+    them: state.participants!.others,
     me: state.participants!.self,
   }));
 
-  const usersToShow = them.splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
+  const usersToShow = them.slice().splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
 
   return (
     <ul className="board-users">

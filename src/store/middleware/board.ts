@@ -7,7 +7,7 @@ import store from "../index";
 
 let socket: Socket | undefined;
 
-export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
+export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.LeaveBoard) {
     socket?.close();
   }
@@ -19,12 +19,20 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, Appl
       maxAttempts: 0,
       onopen: (e: Event) => console.log("connected", e),
       onerror: (e: Event) => console.log("error", e),
+      onclose: (e: CloseEvent) => console.log("closed", e),
+      onreconnect: () => console.log("reconnect"),
+
       onmessage: async (evt: MessageEvent<string>) => {
         const message: ServerEvent = JSON.parse(evt.data);
 
         if (message.type === "INIT") {
-          const {board, columns, participants} = message.data;
-          store.dispatch(Actions.initializeBoard(board, columns, participants));
+          const {board, columns, participants, notes, votes, votings, requests} = message.data;
+          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || []));
+        }
+
+        if (message.type === "BOARD_DELETED") {
+          // FIXME board deleted event
+          store.dispatch(Actions.leaveBoard());
         }
 
         if (message.type === "COLUMNS_UPDATED") {
@@ -36,8 +44,22 @@ export const passBoardMiddleware = async (stateAPI: MiddlewareAPI<Dispatch, Appl
           const notes = message.data;
           store.dispatch(Actions.updatedNotes(notes));
         }
+
+        if (message.type === "PARTICIPANT_CREATED") {
+          store.dispatch(Actions.createdParticipant(message.data));
+        }
+        if (message.type === "PARTICIPANT_UPDATED") {
+          store.dispatch(Actions.updatedParticipant(message.data));
+        }
+        if (message.type === "PARTICIPANTS_UPDATED") {
+          store.dispatch(Actions.setParticipants(message.data));
+        }
+
+        if (message.type === "VOTING_CREATED") {
+        }
+        if (message.type === "VOTING_UPDATED") {
+        }
       },
-      onclose: (e: CloseEvent) => console.log("closed", e),
     });
   }
 };

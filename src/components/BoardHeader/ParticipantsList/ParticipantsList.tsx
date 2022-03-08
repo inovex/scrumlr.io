@@ -17,7 +17,7 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
 
   const {me, them} = useAppSelector((state) => ({
     me: state.participants!.self,
-    them: state.participants!.participants.filter((p) => p.connected),
+    them: state.participants!.others.filter((p) => p.connected),
   }));
 
   const [searchString, setSearchString] = useState("");

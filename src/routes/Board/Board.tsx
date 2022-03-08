@@ -63,7 +63,7 @@ export const Board = () => {
         {currentUserIsModerator && (
           <Request
             requests={state.requests.filter((request) => request.status === "PENDING")}
-            participantsWithRaisedHand={state.participants!.participants.filter((p) => p.raisedHand)}
+            participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
           />
         )}
         <InfoBar />

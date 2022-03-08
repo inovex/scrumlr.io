@@ -1,4 +1,5 @@
 import {SERVER_URL} from "../config";
+import {Participant} from "../types/participant";
 
 export const ParticipantsAPI = {
   /**
@@ -42,7 +43,21 @@ export const ParticipantsAPI = {
    * @param moderator the flag whether the user receives or loses moderator permissions
    * @returns a {status, description} object
    */
-  changePermission: (userId: string, boardId: string, moderator: boolean) => {
-    // TODO
+  editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<Participant, "user" | "connected">>) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants/${userId}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(participant),
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Participant;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update participant: ${error}`);
+    }
   },
 };

@@ -7,15 +7,15 @@ import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {voteReducer} from "./reducer/vote";
-import {usersReducer} from "./reducer/participants";
+import {participantsReducer} from "./reducer/participants";
 import {votingReducer} from "./reducer/votings";
 import {passNoteMiddleware} from "./middleware/note";
-import {passVoteMiddlware} from "./middleware/vote";
+import {passVoteMiddleware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
 import {passColumnMiddleware} from "./middleware/column";
-import {passUsersMiddleware} from "./middleware/participants";
+import {passParticipantsMiddleware} from "./middleware/participants";
 import {joinRequestReducer} from "./reducer/requests";
-import {passVoteConfigurationMiddleware} from "./middleware/votings";
+import {passVotingMiddleware} from "./middleware/votings";
 import {authReducer} from "./reducer/auth";
 import {passAuthMiddleware} from "./middleware/auth";
 import {columnsReducer} from "./reducer/columns";
@@ -23,21 +23,21 @@ import {viewReducer} from "./reducer/view";
 import {passRequestMiddleware} from "./middleware/request";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
-  action.session = {
+  action.context = {
     user: stateAPI.getState().auth.user?.id,
     board: stateAPI.getState().board.data?.id,
   };
   try {
     return dispatch(action);
   } finally {
-    passBoardMiddleware(stateAPI, dispatch, action);
-    passColumnMiddleware(stateAPI, dispatch, action);
-    passVoteConfigurationMiddleware(stateAPI, dispatch, action);
-    passNoteMiddleware(stateAPI, dispatch, action);
-    passVoteMiddlware(stateAPI, dispatch, action);
     passAuthMiddleware(stateAPI, dispatch, action);
-    passUsersMiddleware(stateAPI, dispatch, action);
+    passBoardMiddleware(stateAPI, dispatch, action);
+    passParticipantsMiddleware(stateAPI, dispatch, action);
     passRequestMiddleware(stateAPI, dispatch, action);
+    passColumnMiddleware(stateAPI, dispatch, action);
+    passNoteMiddleware(stateAPI, dispatch, action);
+    passVoteMiddleware(stateAPI, dispatch, action);
+    passVotingMiddleware(stateAPI, dispatch, action);
   }
 };
 
@@ -46,7 +46,7 @@ const rootReducer = combineReducers<ApplicationState>({
   columns: columnsReducer,
   notes: noteReducer,
   auth: authReducer,
-  participants: usersReducer,
+  participants: participantsReducer,
   requests: joinRequestReducer,
   votes: voteReducer,
   votings: votingReducer,

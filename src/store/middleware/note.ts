@@ -5,6 +5,6 @@ import {API} from "../../api";
 
 export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.AddNote) {
-    API.addNote(action.session.board!, action.columnId, action.text); // FIXME handling
+    API.addNote(action.context.board!, action.columnId, action.text); // FIXME handling
   }
 };

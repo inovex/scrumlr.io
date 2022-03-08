@@ -2,25 +2,47 @@ import {Action, ReduxAction} from "../action";
 import {ParticipantsState} from "../../types/participant";
 
 // eslint-disable-next-line default-param-last
-export const usersReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
+export const participantsReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
   switch (action.type) {
-    case Action.SetUserReadyStatus: {
-      // TODO
-      return state;
-    }
-
     case Action.InitializeBoard:
     case Action.SetParticipants: {
-      const ownUserId = action.session.user;
+      const ownUserId = action.context.user;
 
       const self = action.participants.find((p) => p.user.id === ownUserId)!;
       const others = action.participants.filter((p) => p.user.id !== ownUserId);
+
       return {
         ...state,
         self,
-        participants: others,
+        others,
       };
     }
+
+    case Action.CreatedParticipant: {
+      return {
+        ...state,
+        self: state!.self,
+        others: [action.participant, ...state!.others],
+      };
+    }
+
+    case Action.UpdatedParticipant: {
+      if (action.participant.user.id === state!.self.user.id) {
+        return {
+          ...state,
+          self: action.participant,
+          others: [...state!.others],
+        };
+      } 
+        const index = state!.others.findIndex((p) => p.user.id === action.participant.user.id);
+        return {
+          ...state,
+          self: state!.self,
+          others: state!.others.slice().splice(index, 1, action.participant),
+        };
+      
+    }
+
     default: {
       return state;
     }

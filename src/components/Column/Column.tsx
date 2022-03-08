@@ -35,7 +35,7 @@ export const Column = ({id, name, color, hidden, tabIndex}: ColumnProps) => {
       activeVoting: applicationState.votings.open,
       votingResults: applicationState.votings.past.find((v) => v.id === applicationState.board.data!.showVoting)?.votes,
       votes: applicationState.votes,
-      participants: [...applicationState.participants!.participants, applicationState.participants!.self],
+      participants: [...applicationState.participants!.others, applicationState.participants!.self],
     }),
     _.isEqual
   );
