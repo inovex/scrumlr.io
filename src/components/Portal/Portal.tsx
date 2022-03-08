@@ -6,7 +6,6 @@ import classNames from "classnames";
 import "./Portal.scss";
 
 export type PortalProps = {
-  className?: string;
   onClose?: () => void;
   hiddenOverflow?: boolean;
   centered?: boolean;
