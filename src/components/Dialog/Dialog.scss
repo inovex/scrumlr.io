@@ -16,9 +16,10 @@
 [theme="dark"] .dialog {
   background: $color-dark-one;
 }
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 600px) {
   .dialog {
     width: 400px;
+    height: auto;
     border-radius: 8px;
   }
 }
@@ -58,7 +59,7 @@
   padding: 0;
   background-color: transparent;
 }
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 600px) {
   .dialog__close-button {
     display: none;
   }

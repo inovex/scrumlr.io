@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, HTMLAttributes} from "react";
 import classNames from "classnames";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
@@ -6,11 +6,8 @@ import "./Dialog.scss";
 
 type DialogProps = {
   title: string;
-  className?: string;
   onClose?: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 export const Dialog: FC<DialogProps> = ({title, className, onClose, children, ...other}) => (
   <Portal onClose={() => onClose?.()}>

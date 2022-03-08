@@ -28,7 +28,7 @@ export const TimerDialog: VFC = () => {
   useEffect(() => {
     const onUpdate = (e: MouseEvent) => {
       if (startPositionX) {
-        setCustomTime(Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10))));
+        setCustomTime(Math.max(1, Math.min(59, Math.abs(Math.floor((e.clientX - startPositionX) / 10)))));
       }
     };
 
@@ -83,7 +83,7 @@ export const TimerDialog: VFC = () => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setCustomTime((prev) => Math.min(++prev, 99));
+            setCustomTime((prev) => Math.min(++prev, 59));
           }}
           className="timer-dialog__time-button"
           data-testid="timer-dialog__plus-button"

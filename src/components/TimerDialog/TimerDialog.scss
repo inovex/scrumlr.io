@@ -1,6 +1,6 @@
 @import "constants/style";
 
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 600px) {
   #root[column-visibility="visible"] + #portal {
     .timer-dialog {
       top: calc(50% - 105px - 25px + 46px);

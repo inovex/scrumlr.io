@@ -24,7 +24,7 @@ export const VotingDialog: VFC = () => {
   useEffect(() => {
     const onUpdate = (e: MouseEvent) => {
       if (startPositionX) {
-        setNumberOfVotes(Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10))));
+        setNumberOfVotes(Math.min(99, Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10)))));
       }
     };
 

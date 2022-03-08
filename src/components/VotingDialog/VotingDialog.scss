@@ -1,6 +1,6 @@
 @import "constants/style";
 
-@media screen and (min-width: 450px) {
+@media screen and (min-width: 600px) {
   #root[column-visibility="visible"] + #portal {
     .voting-dialog {
       top: calc(50% - 25px);
