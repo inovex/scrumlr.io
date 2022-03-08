@@ -27,11 +27,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.17'
+
       - name: Build server
-        working-directory: ./server
+        working-directory: ./server/src
         run: |
-          yarn install
-          yarn build
+          make test
+          make build-alpine
 
       - name: Build client
         run: |
