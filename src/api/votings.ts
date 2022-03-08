@@ -30,7 +30,7 @@ export const VotingAPI = {
   changeVotingStatus: async (board: string, voting: string, status: "CLOSED" | "ABORTED") => {
     try {
       const response = await fetch(`${SERVER_URL}/boards/${board}/votings/${voting}`, {
-        method: "POST",
+        method: "PUT",
         credentials: "include",
         body: JSON.stringify({status}),
       });

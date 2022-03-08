@@ -15,13 +15,12 @@ type AddVoteProps = {
 
 export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) => {
   const state = useAppSelector((applicationState: ApplicationState) => ({
-    id: applicationState.board.data!.id,
     votingEnabled: Boolean(applicationState.votings.open),
   }));
 
   const addVote = () => {
     if (state.votingEnabled) {
-      store.dispatch(Actions.addVote(noteId, state.id));
+      store.dispatch(Actions.addVote(noteId));
     }
   };
 

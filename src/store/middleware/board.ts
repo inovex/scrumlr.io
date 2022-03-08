@@ -56,8 +56,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         }
 
         if (message.type === "VOTING_CREATED") {
+          store.dispatch(Actions.createdVoting(message.data));
         }
         if (message.type === "VOTING_UPDATED") {
+          store.dispatch(Actions.updatedVoting(message.data));
         }
       },
     });

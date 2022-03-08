@@ -39,10 +39,10 @@ export const VoteConfigurationButton: VFC<VoteConfigurationButtonProps> = (props
     );
   };
   const stopVoting = () => {
-    store.dispatch(Actions.closeVoting(state.boardId!, state.activeVoting!.id));
+    store.dispatch(Actions.closeVoting(state.activeVoting!.id));
   };
   const cancelVoting = () => {
-    store.dispatch(Actions.abortVoting(state.boardId!, state.activeVoting!.id));
+    store.dispatch(Actions.abortVoting(state.activeVoting!.id));
   };
 
   return (
