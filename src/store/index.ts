@@ -27,6 +27,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
   action.context = {
     user: stateAPI.getState().auth.user?.id,
     board: stateAPI.getState().board.data?.id,
+    serverTimeOffset: stateAPI.getState().view.serverTimeOffset,
   };
   try {
     return dispatch(action);

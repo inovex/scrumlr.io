@@ -100,11 +100,12 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 	}
 
 	session, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
-		Board:      body.Board,
-		User:       body.User,
-		Ready:      body.Ready,
-		RaisedHand: body.RaisedHand,
-		Role:       body.Role,
+		Board:             body.Board,
+		User:              body.User,
+		Ready:             body.Ready,
+		RaisedHand:        body.RaisedHand,
+		ShowHiddenColumns: body.ShowHiddenColumns,
+		Role:              body.Role,
 	})
 	if err != nil {
 		return nil, err

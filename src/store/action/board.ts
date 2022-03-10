@@ -128,6 +128,7 @@ export const BoardActionFactory = {
     type: BoardAction.CancelVoting,
     boardId,
   }),
+
   /** Creates an action which should be dispatched when a moderator wants to set a timer.
    *
    * @param endDate the date where the timer ends

@@ -4,6 +4,7 @@ import {Actions, Action, ReduxAction} from "store/action";
 import Socket from "sockette";
 import {ServerEvent} from "../../types/websocket";
 import store from "../index";
+import {API} from "../../api";
 
 let socket: Socket | undefined;
 
@@ -28,6 +29,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         if (message.type === "INIT") {
           const {board, columns, participants, notes, votes, votings, requests} = message.data;
           store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || []));
+        }
+
+        if (message.type === "BOARD_UPDATED") {
+          store.dispatch(Actions.updatedBoard(message.data));
         }
 
         if (message.type === "BOARD_DELETED") {
@@ -62,6 +67,26 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updatedVoting(message.data));
         }
       },
+    });
+  }
+
+  if (action.type === Action.SetTimer) {
+    API.editBoard(action.context.board!, {
+      sharedNote: stateAPI.getState().board.data!.sharedNote,
+      showVoting: stateAPI.getState().board.data!.showVoting,
+      timerEnd: new Date(action.endDate.getTime() - action.context.serverTimeOffset).toISOString(),
+    }).catch(() => {
+      // TODO report error
+    });
+  }
+
+  if (action.type === Action.CancelTimer) {
+    API.editBoard(action.context.board!, {
+      sharedNote: stateAPI.getState().board.data!.sharedNote,
+      showVoting: stateAPI.getState().board.data!.showVoting,
+      timerEnd: undefined,
+    }).catch(() => {
+      // TODO report error
     });
   }
 };

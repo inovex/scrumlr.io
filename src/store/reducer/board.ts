@@ -5,7 +5,8 @@ import {Action, ReduxAction} from "store/action";
 // eslint-disable-next-line default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
   switch (action.type) {
-    case Action.InitializeBoard: {
+    case Action.InitializeBoard:
+    case Action.UpdatedBoard: {
       return {
         status: "ready",
         data: action.board,
