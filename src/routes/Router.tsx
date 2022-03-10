@@ -6,6 +6,8 @@ import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
 import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
+import {VotingDialog} from "components/VotingDialog";
+import {TimerDialog} from "components/TimerDialog";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import ScrollToTop from "./ScrollToTop";
@@ -35,7 +37,10 @@ const Router = () => (
             <BoardGuard />
           </RequireAuthentication>
         }
-      />
+      >
+        <Route path="voting" element={<VotingDialog />} />
+        <Route path="timer" element={<TimerDialog />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
