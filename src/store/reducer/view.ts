@@ -31,10 +31,11 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       };
     }
 
-    case Action.SetEnabledAuthProvider: {
+    case Action.SetServerInfo: {
       return {
         ...state,
-        enabledAuthProvider: action.provider,
+        enabledAuthProvider: action.enabledAuthProvider,
+        serverTimeOffset: new Date().getTime() - action.serverTime.getTime(),
       };
     }
   }

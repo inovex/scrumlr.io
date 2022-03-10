@@ -6,7 +6,7 @@ import {API} from "../../api";
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.InitApplication) {
     API.getServerInfo().then((r) => {
-      dispatch(Actions.setEnabledAuthProvider(r?.authProvider || []));
+      dispatch(Actions.setServerInfo(r.authProvider || [], new Date(r.serverTime)));
     });
   }
 };

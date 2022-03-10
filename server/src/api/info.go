@@ -4,10 +4,12 @@ import (
   "github.com/go-chi/render"
   "net/http"
   "scrumlr.io/server/database/types"
+  "time"
 )
 
 type Info struct {
   AuthProvider []types.AccountType `json:"authProvider"`
+  ServerTime   time.Time           `json:"serverTime"`
 }
 
 func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +28,8 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
   if s.auth.Exists(types.AccountTypeApple) {
     info.AuthProvider = append(info.AuthProvider, types.AccountTypeApple)
   }
+
+  info.ServerTime = time.Now()
 
   render.Status(r, http.StatusOK)
   render.Respond(w, r, info)

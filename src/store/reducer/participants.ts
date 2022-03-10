@@ -33,14 +33,18 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
           self: action.participant,
           others: [...state!.others],
         };
-      } 
-        const index = state!.others.findIndex((p) => p.user.id === action.participant.user.id);
-        return {
-          ...state,
-          self: state!.self,
-          others: state!.others.slice().splice(index, 1, action.participant),
-        };
-      
+      }
+
+      const index = state!.others.findIndex((p) => p.user.id === action.participant.user.id);
+
+      const newOthers = state!.others.slice();
+      newOthers.splice(index, 1, action.participant);
+
+      return {
+        ...state,
+        self: state!.self,
+        others: newOthers,
+      };
     }
 
     default: {
