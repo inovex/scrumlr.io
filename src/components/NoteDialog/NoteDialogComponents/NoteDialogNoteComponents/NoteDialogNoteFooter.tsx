@@ -12,7 +12,7 @@ type NoteDialogNoteFooterProps = {
   authorName: string;
   noteId?: string;
   parentId?: string;
-  votes: Vote[];
+  votes: number;
   allVotesOfUser: Vote[];
   activeVoting: boolean;
   onDeleteOfParent: () => void;
@@ -22,18 +22,16 @@ type NoteDialogNoteFooterProps = {
 };
 
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => (
-    <div className="note-dialog__note-footer">
-      {(props.showAuthors || props.viewer.user.id === props.authorId) && (
-        <figure className="note-dialog__note-author">
-          <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
-          <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
-        </figure>
-      )}
-      <div className="note-dialog__note-footer__options-and-votes">
-        {(props.activeVoting || props.votes.length !== 0) && (
-          <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} usedVotesAsUser={props.allVotesOfUser.length} />
-        )}
-        <NoteDialogNoteOptions {...props} />
-      </div>
+  <div className="note-dialog__note-footer">
+    {(props.showAuthors || props.viewer.user.id === props.authorId) && (
+      <figure className="note-dialog__note-author">
+        <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
+        <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
+      </figure>
+    )}
+    <div className="note-dialog__note-footer__options-and-votes">
+      {(props.activeVoting || props.votes !== 0) && <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} userVotes={props.allVotesOfUser} />}
+      <NoteDialogNoteOptions {...props} />
     </div>
-  );
+  </div>
+);

@@ -35,8 +35,9 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       viewer: applicationState.participants!.self,
 
       activeVoting: applicationState.votings.open,
-      votingResults: applicationState.votings.past.find((v) => v.id === applicationState.board.data!.showVoting)?.votes,
-      userVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id),
+
+      votes: applicationState.votings.past.find((v) => v.id === applicationState.board.data!.showVoting)?.votes,
+      userVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id || v.voting === applicationState.board.data?.showVoting),
 
       participants: [...applicationState.participants!.others, applicationState.participants!.self],
     }),
@@ -89,7 +90,6 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <ul className="column__note-list">
             {state.notes
               .filter((note) => !note.position.stack)
-              .map((note) => ({...note, votes: state.votingResults?.votesPerNote[note.id]?.total || 0}))
               .map((note, noteIndex) => (
                 <Note
                   showAuthors={state.showAuthors!}
@@ -104,9 +104,9 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
                   childrenNotes={state.notes
                     .filter((n) => note.id && note.id === n.position.stack)
                     .map((n) => ({...n, authorName: state.participants.filter((p) => p.user.id === n.author)[0]?.user.name}))
-                    .map((n) => ({...n, votes: state.userVotes.filter((v) => v.note == n.id)}))}
-                  votes={state.userVotes.filter((vote) => vote.note === note.id)}
-                  allVotesOfUser={state.userVotes}
+                    .map((n) => ({...n, votes: state.votes?.votesPerNote[n.id]?.total || 0}))}
+                  votes={state.votes?.votesPerNote[note.id]?.total || 0}
+                  allVotesOfUser={state.userVotes.filter((v) => v.note === note.id)}
                   activeVoting={Boolean(state.activeVoting)}
                   focus={note.id === state.sharedNote}
                   tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}

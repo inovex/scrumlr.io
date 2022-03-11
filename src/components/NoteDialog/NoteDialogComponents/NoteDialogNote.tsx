@@ -14,7 +14,7 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  votes: Vote[];
+  votes: number;
   allVotesOfUser: Vote[];
   activeVoting: boolean;
   showUnstackButton: boolean;

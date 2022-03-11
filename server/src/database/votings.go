@@ -93,6 +93,8 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
   if update.Status == types.VotingStatusClosed {
     updateBoard := d.db.NewUpdate().Model((*Board)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
 
+    // FIXME update notes when done
+
     err = d.db.NewSelect().
       With("updateQuery", updateQuery).
       With("updateBoard", updateBoard).

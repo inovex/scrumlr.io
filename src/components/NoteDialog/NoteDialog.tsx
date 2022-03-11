@@ -18,8 +18,8 @@ interface NoteDialogProps {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  childrenNotes: Array<NoteModel & {authorName: string; votes: Vote[]}>;
-  votes: Vote[];
+  childrenNotes: Array<NoteModel & {authorName: string; votes: number}>;
+  votes: number;
   allVotesOfUser: Vote[];
   activeVoting: boolean;
 

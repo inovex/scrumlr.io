@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 type RemoveVoteProps = {
   noteId: string;
   activeVoting: boolean;
-  votes: Vote[];
+  votes: number;
   ownVotes: Vote[];
   tabIndex: number;
 };
@@ -29,7 +29,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, vot
       onClick={deleteVote}
     >
       <span className="vote-button-remove__folded-corner" />
-      <span>{votes.length.toString()}</span>
+      <span>{activeVoting ? ownVotes.length : votes}</span>
     </DotButton>
   );
 };

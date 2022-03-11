@@ -22,8 +22,8 @@ interface NoteProps {
   columnName: string;
   columnColor: string;
   showAuthors: boolean;
-  childrenNotes: Array<NoteModel & {authorName: string; votes: Vote[]}>;
-  votes: Vote[];
+  childrenNotes: Array<NoteModel & {authorName: string; votes: number}>;
+  votes: number;
   allVotesOfUser: Vote[];
   activeVoting: boolean;
 
@@ -126,9 +126,9 @@ export const Note = (props: NoteProps) => {
           <Votes
             tabIndex={props.tabIndex}
             noteId={props.noteId!}
-            votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))}
+            votes={props.votes + props.childrenNotes.reduce((sum, curr) => sum + curr.votes, 0)}
             activeVoting={props.activeVoting}
-            usedVotesAsUser={props.allVotesOfUser.length}
+            userVotes={props.allVotesOfUser}
           />
         </div>
         <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
