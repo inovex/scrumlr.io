@@ -23,7 +23,6 @@ export const BoardAction = {
   PendingBoardAccessConfirmation: "scrumlr.io/pendingBoardAccessConfirmation" as const,
   PassphraseChallengeRequired: "scrumlr.io/passphraseChallengeRequired" as const,
   IncorrectPassphrase: "scrumlr.io/incorrectPassphrase" as const,
-  CancelVoting: "scrumlr.io/cancelVoting" as const,
   SetTimer: "scrumlr.io/setTimer" as const,
   CancelTimer: "scrumlr.io/cancelTimer" as const,
 };
@@ -119,15 +118,6 @@ export const BoardActionFactory = {
   incorrectPassphrase: () => ({
     type: BoardAction.IncorrectPassphrase,
   }),
-  /**
-   * Creates an action which should be dispatched when the current voting phase was canceled.
-   *
-   * @param boardId
-   */
-  cancelVoting: (boardId: string) => ({
-    type: BoardAction.CancelVoting,
-    boardId,
-  }),
 
   /** Creates an action which should be dispatched when a moderator wants to set a timer.
    *
@@ -155,7 +145,6 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
   | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
-  | ReturnType<typeof BoardActionFactory.cancelVoting>
   | ReturnType<typeof BoardActionFactory.setTimer>
   | ReturnType<typeof BoardActionFactory.cancelTimer>
   | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>

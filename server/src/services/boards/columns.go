@@ -23,7 +23,7 @@ func (s *BoardService) DeleteColumn(_ context.Context, board, columnID uuid.UUID
 }
 
 func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error) {
-	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name, Visible: body.Visible, Index: body.Index})
+	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
 	return new(dto.Column).From(column), err
 }
 

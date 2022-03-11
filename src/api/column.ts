@@ -1,4 +1,5 @@
 import {AddColumnRequest, EditColumnRequest} from "types/column";
+import {SERVER_URL} from "../config";
 
 export const ColumnAPI = {
   /**
@@ -40,7 +41,21 @@ export const ColumnAPI = {
    *
    * @returns a {status, description} object
    */
-  editColumn: (boardId: string, column: EditColumnRequest) => {
-    // TODO
+  editColumn: async (boardId: string, columnId: string, column: EditColumnRequest) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${boardId}/columns/${columnId}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(column),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update column with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update column: ${error}`);
+    }
   },
 };

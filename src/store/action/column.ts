@@ -41,8 +41,9 @@ export const ColumnActionFactory = {
    *  color: the new color of the column
    *  hidden: the new hidden state
    */
-  editColumn: (column: EditColumnRequest) => ({
+  editColumn: (id: string, column: EditColumnRequest) => ({
     type: ColumnAction.EditColumn,
+    id,
     column,
   }),
   /**

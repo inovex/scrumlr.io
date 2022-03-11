@@ -18,7 +18,8 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
 
   if (action.type === Action.EditColumn) {
     const boardId = stateAPI.getState().board.data!.id;
-    // TODO retry mechanism
-    API.editColumn(boardId, action.column);
+    API.editColumn(boardId, action.id, action.column).catch(() => {
+      // TODO report error
+    });
   }
 };

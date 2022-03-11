@@ -56,7 +56,7 @@ export const BoardAPI = {
 
       throw new Error(`unable to update board with response status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to create board: ${error}`);
+      throw new Error(`unable to update board: ${error}`);
     }
   },
 

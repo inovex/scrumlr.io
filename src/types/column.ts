@@ -7,7 +7,7 @@ export type EditableColumnAttributes = {
   index: number;
 };
 
-export type EditColumnRequest = {id: string} & Partial<EditableColumnAttributes>;
+export type EditColumnRequest = EditableColumnAttributes;
 export type AddColumnRequest = EditableColumnAttributes;
 
 export interface Column {
