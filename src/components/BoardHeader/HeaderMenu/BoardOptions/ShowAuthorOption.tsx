@@ -19,7 +19,7 @@ export const ShowAuthorOption = () => {
       <BoardOptionButton
         label={state.board!.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
         onClick={() => {
-          store.dispatch(Actions.editBoard({id: state.board!.id, showAuthors: !state.board!.showAuthors}));
+          store.dispatch(Actions.editBoard({showAuthors: !state.board!.showAuthors}));
         }}
       >
         <BoardOptionToggle active={state.board.showAuthors} />

@@ -39,7 +39,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
     <Provider store={store}>
       <BoardContext currentUserIsModerator>
         {colors.map((color, index) => (
-          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
+          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} currentUserIsModerator={false} />
         ))}
       </BoardContext>
     </Provider>

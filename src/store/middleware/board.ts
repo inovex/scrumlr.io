@@ -70,10 +70,28 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     });
   }
 
-  if (action.type === Action.SetTimer) {
+  if (action.type === Action.EditBoard) {
+    const currentState = stateAPI.getState().board.data!;
     API.editBoard(action.context.board!, {
-      sharedNote: stateAPI.getState().board.data!.sharedNote,
-      showVoting: stateAPI.getState().board.data!.showVoting,
+      sharedNote: currentState.sharedNote,
+      showVoting: currentState.showVoting,
+      timerEnd: currentState.timerEnd,
+      accessPolicy: action.board.accessPolicy,
+      passphrase: action.board.passphrase,
+      allowStacking: action.board.allowStacking,
+      showAuthors: action.board.showAuthors,
+      showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
+      name: action.board.name === undefined ? currentState.name : action.board.name,
+    }).catch(() => {
+      // TODO report error
+    });
+  }
+
+  if (action.type === Action.SetTimer) {
+    const currentState = stateAPI.getState().board.data!;
+    API.editBoard(action.context.board!, {
+      sharedNote: currentState.sharedNote,
+      showVoting: currentState.showVoting,
       timerEnd: new Date(action.endDate.getTime() - action.context.serverTimeOffset).toISOString(),
     }).catch(() => {
       // TODO report error
@@ -81,9 +99,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
   }
 
   if (action.type === Action.CancelTimer) {
+    const currentState = stateAPI.getState().board.data!;
     API.editBoard(action.context.board!, {
-      sharedNote: stateAPI.getState().board.data!.sharedNote,
-      showVoting: stateAPI.getState().board.data!.showVoting,
+      sharedNote: currentState.sharedNote,
+      showVoting: currentState.showVoting,
       timerEnd: undefined,
     }).catch(() => {
       // TODO report error

@@ -44,6 +44,32 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "incorrect_passphrase",
       };
     }
+
+    case Action.CreatedVoting: {
+      // reset show voting, since websocket messages won't trigger update of board
+      return {
+        status: state.status,
+        data: {
+          ...state.data!,
+          showVoting: undefined,
+        },
+      };
+    }
+
+    case Action.UpdatedVoting: {
+      // show new voting results, since websocket messages won't trigger update of board
+      if (action.voting.status === "CLOSED") {
+        return {
+          status: state.status,
+          data: {
+            ...state.data!,
+            showVoting: action.voting.id,
+          },
+        };
+      }
+      return state;
+    }
+
     default: {
       return state;
     }

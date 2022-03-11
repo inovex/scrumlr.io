@@ -35,7 +35,7 @@ export const Actions = {
 };
 
 /** The types of all application internal redux actions. */
-export type ReduxAction = {context: {board?: string; user?: string; serverTimeOffset: number}} & (
+export type ReduxAction = {context: {board?: string; user?: string; voting?: string; serverTimeOffset: number}} & (
   | BoardReduxAction
   | ColumnReduxAction
   | NoteReduxAction

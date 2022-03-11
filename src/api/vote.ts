@@ -1,4 +1,5 @@
 import {SERVER_URL} from "../config";
+import {Vote} from "../types/vote";
 
 export const VoteAPI = {
   /**
@@ -19,11 +20,7 @@ export const VoteAPI = {
       });
 
       if (response.status === 201) {
-        const body = await response.json();
-        return {
-          voting: body.voting,
-          note: body.note,
-        };
+        return (await response.json()) as Vote;
       }
 
       throw new Error(`add vote request resulted in status ${response.status}`);

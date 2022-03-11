@@ -17,14 +17,16 @@ export const VoteActionFactory = {
     type: VoteAction.DeleteVote,
     note,
   }),
+
   createdVote: (vote: Vote) => ({
     type: VoteAction.CreatedVote,
     vote,
   }),
-  deletedVote: (voteId: string) => ({
+  deletedVote: (vote: Vote) => ({
     type: VoteAction.DeletedVote,
-    voteId,
+    vote,
   }),
+
   initializeVotes: (votes: Vote[]) => ({
     type: VoteAction.InitializeVotes,
     votes,

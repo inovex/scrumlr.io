@@ -20,7 +20,7 @@ export interface Board {
   showVoting?: string;
 }
 
-export type EditBoardRequest = Partial<Board> & {passphrase?: string};
+export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 
 /* export const mapBoardServerToClientModel = async (board: Board): Promise<Board> => {
   if (board.timerEnd) {

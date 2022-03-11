@@ -19,7 +19,7 @@ export const ShowOtherUsersNotesOption = () => {
       <BoardOptionButton
         label={state.board!.showNotesOfOtherUsers ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
         onClick={() => {
-          store.dispatch(Actions.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
+          store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
         }}
       >
         <BoardOptionToggle active={state.board.showNotesOfOtherUsers} />
