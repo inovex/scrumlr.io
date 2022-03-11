@@ -9,9 +9,9 @@ export const InfoBar = () => {
   const state = useAppSelector(
     (applicationState) => ({
       endTime: applicationState.board.data?.timerEnd, // FIXME convert to date
-      activeVoting: applicationState.board.data?.showVoting,
+      activeVoting: Boolean(applicationState.votings.open),
       possibleVotes: applicationState.votings.open?.voteLimit,
-      usedVotes: applicationState.votes.length,
+      usedVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id).length,
     }),
     _.isEqual
   );

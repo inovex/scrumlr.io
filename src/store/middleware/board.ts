@@ -92,6 +92,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: currentState.sharedNote,
       showVoting: currentState.showVoting,
+      // FIXME move this to reducer instead of API call
       timerEnd: new Date(action.endDate.getTime() - action.context.serverTimeOffset).toISOString(),
     }).catch(() => {
       // TODO report error
