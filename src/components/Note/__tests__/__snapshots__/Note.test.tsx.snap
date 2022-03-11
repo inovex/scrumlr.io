@@ -533,7 +533,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
   id="portal"
 >
   <div
-    class="portal portal--darkBackground"
+    class="portal note-dialog__portal"
     role="dialog"
   >
     <div

@@ -8,10 +8,9 @@ interface CookiePolicyProps {
   accept: () => void;
   onClose: () => void;
   show: boolean;
-  darkBackground: boolean;
 }
 
-export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: CookiePolicyProps) => {
+export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onClose, show}) => {
   const {t} = useTranslation();
 
   if (!show) {
@@ -21,7 +20,7 @@ export const CookiePolicy = ({decline, accept, onClose, show, darkBackground}: C
   const body = marked.parse(t("CookiePolicy.body") as string);
 
   return (
-    <Portal onClose={onClose} darkBackground={darkBackground}>
+    <Portal onClose={onClose}>
       <div className="cookie-policy">
         <div className="cookie-policy__title">
           <h1>{t("CookiePolicy.title")}</h1>

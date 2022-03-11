@@ -1,0 +1,26 @@
+@import "constants/style.scss";
+
+$logo-height: 60px;
+$text-size: 24px;
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.not-found__logo {
+  height: $logo-height;
+}
+
+.not-found__text {
+  color: $color-black;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
+}
+[theme="dark"] .not-found__text {
+  color: $color-white;
+}
