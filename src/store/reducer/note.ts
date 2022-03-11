@@ -8,6 +8,12 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
     case Action.UpdatedNotes: {
       return action.notes;
     }
+    case Action.UpdatedVoting: {
+      if (action.notes) {
+        return action.notes;
+      }
+      return state;
+    }
   }
   return state;
 };

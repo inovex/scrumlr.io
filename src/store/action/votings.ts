@@ -1,4 +1,5 @@
 import {CreateVotingRequest, Voting} from "types/voting";
+import {Note} from "../../types/note";
 
 export const VotingAction = {
   CreateVoting: "scrumlr.io/createVoting" as const,
@@ -44,9 +45,10 @@ export const VotingActionFactory = {
    *
    * @param voting the vote configuration added on the server
    */
-  updatedVoting: (voting: Voting) => ({
+  updatedVoting: (voting: Voting, notes: Note[] | undefined) => ({
     type: VotingAction.UpdatedVoting,
     voting,
+    notes,
   }),
 };
 

@@ -69,7 +69,10 @@ export interface VotingCreatedEvent {
 
 export interface VotingUpdatedEvent {
   type: "VOTING_UPDATED";
-  data: Voting;
+  data: {
+    voting: Voting;
+    notes?: Note[];
+  };
 }
 
 export type ServerEvent =
