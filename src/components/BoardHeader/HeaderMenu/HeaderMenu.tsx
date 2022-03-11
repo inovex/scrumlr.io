@@ -20,11 +20,18 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     return null;
   }
 
+  const onExpand = (option: ExpandableOptions) => () => {
+    if (option === expandedOption) {
+      setExpandedOption(undefined);
+    } else {
+      setExpandedOption(option);
+    }
+  };
+
   return (
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setAccessPolicy(state.board!.accessPolicy);
         setExpandedOption(undefined);
         props.onClose();
       }}
