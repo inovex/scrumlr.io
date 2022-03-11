@@ -43,7 +43,7 @@ export const SettingsDialog: VFC = () => {
   }, [navigate]);
 
   return (
-    <Portal darkBackground onClose={() => navigate(`/board/${boardId}`)}>
+    <Portal onClose={() => navigate(`/board/${boardId}`)}>
       <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
