@@ -52,16 +52,16 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                   <circle
                     cx="120"
                     cy="120"
-                    id="react-path-576"
+                    id="react-path-535"
                     r="120"
                   />
                   <path
                     d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
-                    id="react-path-577"
+                    id="react-path-536"
                   />
                   <path
                     d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
-                    id="react-path-578"
+                    id="react-path-537"
                   />
                 </defs>
                 <g
@@ -86,21 +86,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       >
                         <mask
                           fill="white"
-                          id="react-mask-579"
+                          id="react-mask-538"
                         >
                           <use
-                            xlink:href="#react-path-576"
+                            xlink:href="#react-path-535"
                           />
                         </mask>
                         <use
                           fill="#E6E6E6"
                           id="Circle-Background"
-                          xlink:href="#react-path-576"
+                          xlink:href="#react-path-535"
                         />
                         <g
                           fill="#65C9FF"
                           id="Color/Palette/Blue-01"
-                          mask="url(#react-mask-579)"
+                          mask="url(#react-mask-538)"
                         >
                           <rect
                             height="240"
@@ -113,10 +113,10 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       </g>
                       <mask
                         fill="white"
-                        id="react-mask-580"
+                        id="react-mask-539"
                       >
                         <use
-                          xlink:href="#react-path-577"
+                          xlink:href="#react-path-536"
                         />
                       </mask>
                       <g
@@ -125,7 +125,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       <g
                         fill-rule="evenodd"
                         id="Avataaar"
-                        mask="url(#react-mask-580)"
+                        mask="url(#react-mask-539)"
                         stroke-width="1"
                       >
                         <g
@@ -134,20 +134,20 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                         >
                           <mask
                             fill="white"
-                            id="react-mask-581"
+                            id="react-mask-540"
                           >
                             <use
-                              xlink:href="#react-path-578"
+                              xlink:href="#react-path-537"
                             />
                           </mask>
                           <use
                             fill="#D0C6AC"
-                            xlink:href="#react-path-578"
+                            xlink:href="#react-path-537"
                           />
                           <g
                             fill="#D08B5B"
                             id="Skin/👶🏽-03-Brown"
-                            mask="url(#react-mask-581)"
+                            mask="url(#react-mask-540)"
                           >
                             <g
                               id="Color"
@@ -166,7 +166,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             fill="#000000"
                             fill-opacity="0.100000001"
                             id="Neck-Shadow"
-                            mask="url(#react-mask-581)"
+                            mask="url(#react-mask-540)"
                           />
                         </g>
                         <g
@@ -176,28 +176,28 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <path
                               d="M94,29.6883435 L94,74 L170,74 L170,29.6883435 C179.362956,30.9893126 188.149952,34.0907916 196.00002,38.6318143 L196,110 L187,110 L77,110 L68,110 L68,38.6318027 C75.8500482,34.0907916 84.6370437,30.9893126 94,29.6883435 Z"
-                              id="react-path-582"
+                              id="react-path-541"
                             />
                           </defs>
                           <mask
                             fill="white"
-                            id="react-mask-583"
+                            id="react-mask-542"
                           >
                             <use
-                              xlink:href="#react-path-582"
+                              xlink:href="#react-path-541"
                             />
                           </mask>
                           <use
                             fill="#B7C1DB"
                             fill-rule="evenodd"
                             id="Overall"
-                            xlink:href="#react-path-582"
+                            xlink:href="#react-path-541"
                           />
                           <g
                             fill="#A7FFC4"
                             fill-rule="evenodd"
                             id="Color/Palette/Gray-01"
-                            mask="url(#react-mask-583)"
+                            mask="url(#react-mask-542)"
                           >
                             <rect
                               height="110"
@@ -236,16 +236,16 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             <defs>
                               <path
                                 d="M34.0082051,12.6020819 C35.1280248,23.0929366 38.2345159,31.9944054 53.9961505,31.9999974 C69.757785,32.0055894 72.9169073,23.0424631 73.9942614,12.5047938 C74.0809675,11.6567158 73.1738581,10.9999965 72.0369872,10.9999965 C65.3505138,10.9999965 62.6703194,12.4951994 53.9894323,12.4999966 C45.3085452,12.5047938 40.7567994,10.9999965 36.0924943,10.9999965 C34.9490269,10.9999965 33.8961688,11.5524868 34.0082051,12.6020819 Z"
-                                id="react-path-584"
+                                id="react-path-543"
                               />
                               <path
                                 d="M59.9170416,36 L60,36 C60,39.3137085 62.6862915,42 66,42 C69.3137085,42 72,39.3137085 72,36 L72,35 L72,31 C72,27.6862915 69.3137085,25 66,25 L66,25 L42,25 L42,25 C38.6862915,25 36,27.6862915 36,31 L36,31 L36,35 L36,38 C36,41.3137085 38.6862915,44 42,44 C45.3137085,44 48,41.3137085 48,38 L48,36 L48.0829584,36 C48.5590365,33.1622867 51.0270037,31 54,31 C56.9729963,31 59.4409635,33.1622867 59.9170416,36 Z"
-                                id="react-path-585"
+                                id="react-path-544"
                               />
                               <filter
                                 filterUnits="objectBoundingBox"
                                 height="105.3%"
-                                id="react-filter-587"
+                                id="react-filter-546"
                                 width="102.8%"
                                 x="-1.4%"
                                 y="-2.6%"
@@ -273,11 +273,11 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             </defs>
                             <mask
                               fill="white"
-                              id="react-mask-586"
+                              id="react-mask-545"
                             >
                               <use
                                 transform="translate(54.000000, 21.499998) scale(1, -1) translate(-54.000000, -21.499998) "
-                                xlink:href="#react-path-584"
+                                xlink:href="#react-path-543"
                               />
                             </mask>
                             <use
@@ -286,14 +286,14 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               fill-rule="evenodd"
                               id="Mouth"
                               transform="translate(54.000000, 21.499998) scale(1, -1) translate(-54.000000, -21.499998) "
-                              xlink:href="#react-path-584"
+                              xlink:href="#react-path-543"
                             />
                             <rect
                               fill="#FFFFFF"
                               fill-rule="evenodd"
                               height="16"
                               id="Teeth"
-                              mask="url(#react-mask-586)"
+                              mask="url(#react-mask-545)"
                               rx="5"
                               width="31"
                               x="39"
@@ -305,13 +305,13 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               <use
                                 fill="#88C553"
                                 fill-rule="evenodd"
-                                xlink:href="#react-path-585"
+                                xlink:href="#react-path-544"
                               />
                               <use
                                 fill="black"
                                 fill-opacity="1"
-                                filter="url(#react-filter-587)"
-                                xlink:href="#react-path-585"
+                                filter="url(#react-filter-546)"
+                                xlink:href="#react-path-544"
                               />
                             </g>
                           </g>
@@ -381,7 +381,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <rect
                               height="280"
-                              id="react-path-590"
+                              id="react-path-549"
                               width="264"
                               x="0"
                               y="0"
@@ -389,7 +389,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             <filter
                               filterUnits="objectBoundingBox"
                               height="108.0%"
-                              id="react-filter-588"
+                              id="react-filter-547"
                               width="101.5%"
                               x="-0.8%"
                               y="-2.0%"
@@ -418,10 +418,10 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           </defs>
                           <mask
                             fill="white"
-                            id="react-mask-589"
+                            id="react-mask-548"
                           >
                             <use
-                              xlink:href="#react-path-590"
+                              xlink:href="#react-path-549"
                             />
                           </mask>
                           <g
@@ -429,7 +429,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           />
                           <g
                             id="Top/No-Hair"
-                            mask="url(#react-mask-589)"
+                            mask="url(#react-mask-548)"
                           >
                             <g
                               transform="translate(-1.000000, 0.000000)"
@@ -442,12 +442,12 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                                 <defs>
                                   <path
                                     d="M80.4646192,16.3941179 C84.3801509,8.45869677 92.552602,3 102,3 C110.919691,3 118.702887,7.86591082 122.839921,15.0880638 C123.050197,15.0306504 123.271519,15 123.5,15 L131.5,15 C132.880712,15 134,16.1192881 134,17.5 C134,18.8807119 132.880712,20 131.5,20 L124.963126,20 C125.637355,22.2145921 126,24.5649459 126,27 C126,40.254834 115.254834,51 102,51 C88.745166,51 78,40.254834 78,27 C78,25.5781066 78.1236513,24.1850936 78.3607874,22.8311273 C78.2762458,18.4553035 74.9135957,15 70.8624171,15 C67.1256697,15 63.9747186,17.9397535 63.4417635,21.8300629 C63.8073299,23.4951922 64,25.2250958 64,27 C64,40.254834 53.254834,51 40,51 C26.745166,51 16,40.254834 16,27 C16,24.5649459 16.3626451,22.2145921 17.0368738,20 L10.5,20 C9.11928813,20 8,18.8807119 8,17.5 C8,16.1192881 9.11928813,15 10.5,15 L10.5,15 L18.5,15 C18.728481,15 18.9498033,15.0306504 19.1600793,15.0880638 C23.2971127,7.86591082 31.0803092,3 40,3 C49.3521568,3 57.4549431,8.34919095 61.415666,16.15488 C63.4929212,13.0392725 66.9494432,11 70.8624171,11 C74.8746823,11 78.4070368,13.1440781 80.4646192,16.3941179 Z M40,47 C51.045695,47 60,38.045695 60,27 C60,15.954305 51.045695,7 40,7 C28.954305,7 20,15.954305 20,27 C20,38.045695 28.954305,47 40,47 Z M102,47 C113.045695,47 122,38.045695 122,27 C122,15.954305 113.045695,7 102,7 C90.954305,7 82,15.954305 82,27 C82,38.045695 90.954305,47 102,47 Z"
-                                    id="react-path-591"
+                                    id="react-path-550"
                                   />
                                   <filter
                                     filterUnits="objectBoundingBox"
                                     height="108.3%"
-                                    id="react-filter-592"
+                                    id="react-filter-551"
                                     width="101.6%"
                                     x="-0.8%"
                                     y="-2.1%"
@@ -471,13 +471,13 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                                   <use
                                     fill="black"
                                     fill-opacity="1"
-                                    filter="url(#react-filter-592)"
-                                    xlink:href="#react-path-591"
+                                    filter="url(#react-filter-551)"
+                                    xlink:href="#react-path-550"
                                   />
                                   <use
                                     fill="#252C2F"
                                     fill-rule="evenodd"
-                                    xlink:href="#react-path-591"
+                                    xlink:href="#react-path-550"
                                   />
                                 </g>
                               </g>
@@ -565,16 +565,16 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                   <circle
                     cx="120"
                     cy="120"
-                    id="react-path-593"
+                    id="react-path-552"
                     r="120"
                   />
                   <path
                     d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
-                    id="react-path-594"
+                    id="react-path-553"
                   />
                   <path
                     d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
-                    id="react-path-595"
+                    id="react-path-554"
                   />
                 </defs>
                 <g
@@ -599,21 +599,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       >
                         <mask
                           fill="white"
-                          id="react-mask-596"
+                          id="react-mask-555"
                         >
                           <use
-                            xlink:href="#react-path-593"
+                            xlink:href="#react-path-552"
                           />
                         </mask>
                         <use
                           fill="#E6E6E6"
                           id="Circle-Background"
-                          xlink:href="#react-path-593"
+                          xlink:href="#react-path-552"
                         />
                         <g
                           fill="#65C9FF"
                           id="Color/Palette/Blue-01"
-                          mask="url(#react-mask-596)"
+                          mask="url(#react-mask-555)"
                         >
                           <rect
                             height="240"
@@ -626,10 +626,10 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       </g>
                       <mask
                         fill="white"
-                        id="react-mask-597"
+                        id="react-mask-556"
                       >
                         <use
-                          xlink:href="#react-path-594"
+                          xlink:href="#react-path-553"
                         />
                       </mask>
                       <g
@@ -638,7 +638,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       <g
                         fill-rule="evenodd"
                         id="Avataaar"
-                        mask="url(#react-mask-597)"
+                        mask="url(#react-mask-556)"
                         stroke-width="1"
                       >
                         <g
@@ -647,20 +647,20 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                         >
                           <mask
                             fill="white"
-                            id="react-mask-598"
+                            id="react-mask-557"
                           >
                             <use
-                              xlink:href="#react-path-595"
+                              xlink:href="#react-path-554"
                             />
                           </mask>
                           <use
                             fill="#D0C6AC"
-                            xlink:href="#react-path-595"
+                            xlink:href="#react-path-554"
                           />
                           <g
                             fill="#EDB98A"
                             id="Skin/👶🏽-03-Brown"
-                            mask="url(#react-mask-598)"
+                            mask="url(#react-mask-557)"
                           >
                             <g
                               id="Color"
@@ -679,7 +679,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             fill="#000000"
                             fill-opacity="0.100000001"
                             id="Neck-Shadow"
-                            mask="url(#react-mask-598)"
+                            mask="url(#react-mask-557)"
                           />
                         </g>
                         <g
@@ -689,7 +689,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <path
                               d="M133.960472,0.294916112 C170.936473,3.32499816 200,34.2942856 200,72.0517235 L200,81 L0,81 L0,72.0517235 C1.22536245e-14,33.9525631 29.591985,2.76498122 67.0454063,0.219526408 C67.0152598,0.593114549 67,0.969227185 67,1.34762511 C67,13.2107177 81.9984609,22.8276544 100.5,22.8276544 C119.001539,22.8276544 134,13.2107177 134,1.34762511 C134,0.994669088 133.986723,0.64370138 133.960472,0.294916112 Z"
-                              id="react-path-599"
+                              id="react-path-558"
                             />
                           </defs>
                           <g
@@ -698,21 +698,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           >
                             <mask
                               fill="white"
-                              id="react-mask-600"
+                              id="react-mask-559"
                             >
                               <use
-                                xlink:href="#react-path-599"
+                                xlink:href="#react-path-558"
                               />
                             </mask>
                             <use
                               fill="#E6E6E6"
                               id="Clothes"
-                              xlink:href="#react-path-599"
+                              xlink:href="#react-path-558"
                             />
                             <g
                               fill="#262E33"
                               id="Color/Palette/Black"
-                              mask="url(#react-mask-600)"
+                              mask="url(#react-mask-559)"
                             >
                               <g
                                 id="🖍Color"
@@ -730,7 +730,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               fill="#000000"
                               fill-opacity="0.16"
                               id="Shadowy"
-                              mask="url(#react-mask-600)"
+                              mask="url(#react-mask-559)"
                               opacity="0.599999964"
                             >
                               <g
@@ -846,22 +846,22 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <rect
                               height="280"
-                              id="react-path-603"
+                              id="react-path-562"
                               width="264"
                               x="0"
                               y="0"
                             />
                             <path
                               d="M133.506381,81.3351151 C137.363649,83.3307002 140,87.3574737 140,92 L140,105 C140,111.018625 135.569129,116.002364 129.791419,116.867187 C128.048193,137.114792 115.530782,154.282984 98,162.610951 L98,162.610951 L98,181 L102,181 C119.490913,181 135.525121,187.236892 148,197.608051 L148,74 C148,53.5654643 139.717268,35.0654643 126.325902,21.6740982 C112.934536,8.28273213 94.4345357,-3.55271368e-15 74,0 C33.1309285,7.10542736e-15 -7.10542736e-15,33.1309285 0,74 L0,257.716445 C13.5691766,255.775526 24,244.105888 24,230 L24,184.423101 C30.9346808,182.200199 38.3271796,181 46,181 L50,181 L50,162.610951 C38.7726252,157.277407 29.6015372,148.317951 24,137.245847 L24,75.2659587 C33.1467898,72.2910056 42.777598,68.0170651 52.3415164,62.4953343 C67.7445474,53.6023901 80.4313947,42.9409152 89.0661426,32.3970356 C90.8310687,37.5951441 93.1752556,42.8009742 96.1104311,47.8848473 C104.877881,63.0705152 117.224186,74.2337047 130,79.9170491 L130,80.1659169 C130.400422,80.233095 130.794121,80.3201038 131.18005,80.4258987 C131.954509,80.7493055 132.730185,81.0524853 133.506381,81.3351151 Z"
-                              id="react-path-604"
+                              id="react-path-563"
                             />
                           </defs>
                           <mask
                             fill="white"
-                            id="react-mask-601"
+                            id="react-mask-560"
                           >
                             <use
-                              xlink:href="#react-path-603"
+                              xlink:href="#react-path-562"
                             />
                           </mask>
                           <g
@@ -869,7 +869,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           />
                           <g
                             id="Top/Long-Hair/Straight"
-                            mask="url(#react-mask-601)"
+                            mask="url(#react-mask-560)"
                           >
                             <g
                               transform="translate(-1.000000, 0.000000)"
@@ -883,21 +883,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               >
                                 <mask
                                   fill="white"
-                                  id="react-mask-602"
+                                  id="react-mask-561"
                                 >
                                   <use
-                                    xlink:href="#react-path-604"
+                                    xlink:href="#react-path-563"
                                   />
                                 </mask>
                                 <use
                                   fill="#944F23"
                                   id="Mask-Hair"
-                                  xlink:href="#react-path-604"
+                                  xlink:href="#react-path-563"
                                 />
                                 <g
                                   fill="#4A312C"
                                   id="Skin/👶🏽-03-Brown"
-                                  mask="url(#react-mask-602)"
+                                  mask="url(#react-mask-561)"
                                 >
                                   <g
                                     id="Color"
@@ -1008,16 +1008,16 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                   <circle
                     cx="120"
                     cy="120"
-                    id="react-path-605"
+                    id="react-path-564"
                     r="120"
                   />
                   <path
                     d="M12,160 C12,226.27417 65.72583,280 132,280 C198.27417,280 252,226.27417 252,160 L264,160 L264,-1.42108547e-14 L-3.19744231e-14,-1.42108547e-14 L-3.19744231e-14,160 L12,160 Z"
-                    id="react-path-606"
+                    id="react-path-565"
                   />
                   <path
                     d="M124,144.610951 L124,163 L128,163 L128,163 C167.764502,163 200,195.235498 200,235 L200,244 L0,244 L0,235 C-4.86974701e-15,195.235498 32.235498,163 72,163 L72,163 L76,163 L76,144.610951 C58.7626345,136.422372 46.3722246,119.687011 44.3051388,99.8812385 C38.4803105,99.0577866 34,94.0521096 34,88 L34,74 C34,68.0540074 38.3245733,63.1180731 44,62.1659169 L44,56 L44,56 C44,25.072054 69.072054,5.68137151e-15 100,0 L100,0 L100,0 C130.927946,-5.68137151e-15 156,25.072054 156,56 L156,62.1659169 C161.675427,63.1180731 166,68.0540074 166,74 L166,88 C166,94.0521096 161.51969,99.0577866 155.694861,99.8812385 C153.627775,119.687011 141.237365,136.422372 124,144.610951 Z"
-                    id="react-path-607"
+                    id="react-path-566"
                   />
                 </defs>
                 <g
@@ -1042,21 +1042,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       >
                         <mask
                           fill="white"
-                          id="react-mask-608"
+                          id="react-mask-567"
                         >
                           <use
-                            xlink:href="#react-path-605"
+                            xlink:href="#react-path-564"
                           />
                         </mask>
                         <use
                           fill="#E6E6E6"
                           id="Circle-Background"
-                          xlink:href="#react-path-605"
+                          xlink:href="#react-path-564"
                         />
                         <g
                           fill="#65C9FF"
                           id="Color/Palette/Blue-01"
-                          mask="url(#react-mask-608)"
+                          mask="url(#react-mask-567)"
                         >
                           <rect
                             height="240"
@@ -1069,10 +1069,10 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       </g>
                       <mask
                         fill="white"
-                        id="react-mask-609"
+                        id="react-mask-568"
                       >
                         <use
-                          xlink:href="#react-path-606"
+                          xlink:href="#react-path-565"
                         />
                       </mask>
                       <g
@@ -1081,7 +1081,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                       <g
                         fill-rule="evenodd"
                         id="Avataaar"
-                        mask="url(#react-mask-609)"
+                        mask="url(#react-mask-568)"
                         stroke-width="1"
                       >
                         <g
@@ -1090,20 +1090,20 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                         >
                           <mask
                             fill="white"
-                            id="react-mask-610"
+                            id="react-mask-569"
                           >
                             <use
-                              xlink:href="#react-path-607"
+                              xlink:href="#react-path-566"
                             />
                           </mask>
                           <use
                             fill="#D0C6AC"
-                            xlink:href="#react-path-607"
+                            xlink:href="#react-path-566"
                           />
                           <g
                             fill="#EDB98A"
                             id="Skin/👶🏽-03-Brown"
-                            mask="url(#react-mask-610)"
+                            mask="url(#react-mask-569)"
                           >
                             <g
                               id="Color"
@@ -1122,7 +1122,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                             fill="#000000"
                             fill-opacity="0.100000001"
                             id="Neck-Shadow"
-                            mask="url(#react-mask-610)"
+                            mask="url(#react-mask-569)"
                           />
                         </g>
                         <g
@@ -1132,7 +1132,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <path
                               d="M133.960472,0.294916112 C170.936473,3.32499816 200,34.2942856 200,72.0517235 L200,81 L0,81 L0,72.0517235 C1.22536245e-14,33.9525631 29.591985,2.76498122 67.0454063,0.219526408 C67.0152598,0.593114549 67,0.969227185 67,1.34762511 C67,13.2107177 81.9984609,22.8276544 100.5,22.8276544 C119.001539,22.8276544 134,13.2107177 134,1.34762511 C134,0.994669088 133.986723,0.64370138 133.960472,0.294916112 Z"
-                              id="react-path-611"
+                              id="react-path-570"
                             />
                           </defs>
                           <g
@@ -1141,21 +1141,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           >
                             <mask
                               fill="white"
-                              id="react-mask-612"
+                              id="react-mask-571"
                             >
                               <use
-                                xlink:href="#react-path-611"
+                                xlink:href="#react-path-570"
                               />
                             </mask>
                             <use
                               fill="#E6E6E6"
                               id="Clothes"
-                              xlink:href="#react-path-611"
+                              xlink:href="#react-path-570"
                             />
                             <g
                               fill="#262E33"
                               id="Color/Palette/Black"
-                              mask="url(#react-mask-612)"
+                              mask="url(#react-mask-571)"
                             >
                               <g
                                 id="🖍Color"
@@ -1173,7 +1173,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               fill="#000000"
                               fill-opacity="0.16"
                               id="Shadowy"
-                              mask="url(#react-mask-612)"
+                              mask="url(#react-mask-571)"
                               opacity="0.599999964"
                             >
                               <g
@@ -1289,22 +1289,22 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           <defs>
                             <rect
                               height="280"
-                              id="react-path-615"
+                              id="react-path-574"
                               width="264"
                               x="0"
                               y="0"
                             />
                             <path
                               d="M133.506381,81.3351151 C137.363649,83.3307002 140,87.3574737 140,92 L140,105 C140,111.018625 135.569129,116.002364 129.791419,116.867187 C128.048193,137.114792 115.530782,154.282984 98,162.610951 L98,162.610951 L98,181 L102,181 C119.490913,181 135.525121,187.236892 148,197.608051 L148,74 C148,53.5654643 139.717268,35.0654643 126.325902,21.6740982 C112.934536,8.28273213 94.4345357,-3.55271368e-15 74,0 C33.1309285,7.10542736e-15 -7.10542736e-15,33.1309285 0,74 L0,257.716445 C13.5691766,255.775526 24,244.105888 24,230 L24,184.423101 C30.9346808,182.200199 38.3271796,181 46,181 L50,181 L50,162.610951 C38.7726252,157.277407 29.6015372,148.317951 24,137.245847 L24,75.2659587 C33.1467898,72.2910056 42.777598,68.0170651 52.3415164,62.4953343 C67.7445474,53.6023901 80.4313947,42.9409152 89.0661426,32.3970356 C90.8310687,37.5951441 93.1752556,42.8009742 96.1104311,47.8848473 C104.877881,63.0705152 117.224186,74.2337047 130,79.9170491 L130,80.1659169 C130.400422,80.233095 130.794121,80.3201038 131.18005,80.4258987 C131.954509,80.7493055 132.730185,81.0524853 133.506381,81.3351151 Z"
-                              id="react-path-616"
+                              id="react-path-575"
                             />
                           </defs>
                           <mask
                             fill="white"
-                            id="react-mask-613"
+                            id="react-mask-572"
                           >
                             <use
-                              xlink:href="#react-path-615"
+                              xlink:href="#react-path-574"
                             />
                           </mask>
                           <g
@@ -1312,7 +1312,7 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                           />
                           <g
                             id="Top/Long-Hair/Straight"
-                            mask="url(#react-mask-613)"
+                            mask="url(#react-mask-572)"
                           >
                             <g
                               transform="translate(-1.000000, 0.000000)"
@@ -1326,21 +1326,21 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
                               >
                                 <mask
                                   fill="white"
-                                  id="react-mask-614"
+                                  id="react-mask-573"
                                 >
                                   <use
-                                    xlink:href="#react-path-616"
+                                    xlink:href="#react-path-575"
                                   />
                                 </mask>
                                 <use
                                   fill="#944F23"
                                   id="Mask-Hair"
-                                  xlink:href="#react-path-616"
+                                  xlink:href="#react-path-575"
                                 />
                                 <g
                                   fill="#4A312C"
                                   id="Skin/👶🏽-03-Brown"
-                                  mask="url(#react-mask-614)"
+                                  mask="url(#react-mask-573)"
                                 >
                                   <g
                                     id="Color"

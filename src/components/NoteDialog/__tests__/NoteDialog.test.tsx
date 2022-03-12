@@ -112,11 +112,6 @@ describe("<NoteDialog/>", () => {
   });
 
   describe("should render correctly", () => {
-    test("portal--darkBackground is present", () => {
-      const {container} = render(createNoteDialog(), {container: global.document.querySelector("#portal")!});
-      expect(container.firstChild).toHaveClass("portal--darkBackground");
-    });
-
     test("note-dialog is present", () => {
       const {container} = render(createNoteDialog(), {container: global.document.querySelector("#portal")!});
       expect(container.querySelector(".portal__content")?.firstChild).toHaveClass("note-dialog");

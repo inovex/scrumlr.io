@@ -31,7 +31,7 @@ export const NoteDialog = (props: NoteDialogProps) => {
     return null;
   }
   return (
-    <Portal onClose={props.onClose} darkBackground hiddenOverflow centered disabledPadding>
+    <Portal onClose={props.onClose} className="note-dialog__portal" hiddenOverflow centered disabledPadding>
       <div
         className={classNames(
           "note-dialog",

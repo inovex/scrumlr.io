@@ -1,9 +1,12 @@
 import React, {useState} from "react";
-import {Actions} from "store/action";
-import {useAppSelector} from "store";
+import {useNavigate} from "react-router";
+import {Actions, ActionFactory} from "store/action";
+import store, {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {MenuToggle} from "components/MenuBars/MenuItem";
+import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
+import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
+import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
@@ -11,8 +14,6 @@ import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-setti
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
-import {TimerToggleButton} from "./MenuItem/variants/TimerToggleButton";
-import {VoteConfigurationButton} from "./MenuItem/variants/VoteConfigurationButton";
 import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 
 import "./MenuBars.scss";
@@ -21,6 +22,7 @@ import {useDispatch} from "react-redux";
 export const MenuBars = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
@@ -83,8 +85,8 @@ export const MenuBars = () => {
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <TimerToggleButton tabIndex={TabIndex.AdminMenu} />
-            <VoteConfigurationButton tabIndex={TabIndex.AdminMenu + 8} />
+            <MenuButton direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
+            <MenuButton direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
             <MenuToggle
               value={state.moderation}
               direction="left"

@@ -34,7 +34,6 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
         props.onClose();
         setSearchString("");
       }}
-      darkBackground={false}
     >
       <aside className="participants">
         <div className="participants__header">

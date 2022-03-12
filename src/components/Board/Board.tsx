@@ -6,6 +6,7 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
+import {Outlet} from "react-router-dom";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -152,6 +153,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
+      <Outlet />
 
       {state.showPreviousButton && (
         <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden>
