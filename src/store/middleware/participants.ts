@@ -21,4 +21,12 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
       // TODO show error toast
     });
   }
+
+  if (action.type === Action.ChangePermission) {
+    API.editParticipant(action.context.board!, action.userId, {
+      role: action.moderator ? "MODERATOR" : "PARTICIPANT",
+    }).catch(() => {
+      // TODO show error toast
+    });
+  }
 };

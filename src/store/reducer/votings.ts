@@ -4,10 +4,10 @@ import {VotingsState} from "types/voting";
 /**
  * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)
  */
-const defaultVotingState: VotingsState = {open: undefined, past: []};
+const INITIAL_VOTING_STATE: VotingsState = {open: undefined, past: []};
 
 // eslint-disable-next-line default-param-last
-export const votingReducer = (state: VotingsState = defaultVotingState, action: ReduxAction): VotingsState => {
+export const votingReducer = (state: VotingsState = INITIAL_VOTING_STATE, action: ReduxAction): VotingsState => {
   if (action.type === Action.InitializeBoard) {
     return {
       ...state,
