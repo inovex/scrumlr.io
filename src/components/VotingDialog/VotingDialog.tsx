@@ -2,20 +2,19 @@ import {VFC, useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {Toggle} from "components/Toggle";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
 import {useTranslation} from "react-i18next";
 import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
-import Parse from "parse";
+import {Actions} from "../../store/action";
 
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((state) => state.board.data!.id);
-  const adminUsers = useAppSelector((state) => state.users.admins);
-  const activeVoting = useAppSelector((state) => state.board.data!.voting === "active");
+  const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+  const voting = useAppSelector((state) => state.votings.open?.id);
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
   const [anonymousVoting, setAnonymousVoting] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);
@@ -40,38 +39,33 @@ export const VotingDialog: VFC = () => {
     };
   }, [startPositionX]);
 
-  if (adminUsers == null || adminUsers.length === 0) {
-    return null;
-  }
-  if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
+  if (!isAdmin) {
     navigate("..");
   }
 
   const startVoting = () => {
     store.dispatch(
-      ActionFactory.addVoteConfiguration({
-        boardId,
+      Actions.createVoting(boardId, {
         voteLimit: numberOfVotes,
-        showVotesOfOtherUsers: !anonymousVoting,
-        allowMultipleVotesPerNote: allowCumulativeVoting,
+        showVotesOfOthers: !anonymousVoting,
+        allowMultipleVotes: allowCumulativeVoting,
       })
     );
-    store.dispatch(ActionFactory.editBoard({id: boardId, voting: "active"}));
     navigate("..");
   };
 
   const stopVoting = () => {
-    store.dispatch(ActionFactory.editBoard({id: boardId, voting: "disabled"}));
+    store.dispatch(Actions.closeVoting(voting!));
     navigate("..");
   };
   const cancelVoting = () => {
-    store.dispatch(ActionFactory.cancelVoting(boardId));
+    store.dispatch(Actions.abortVoting(voting!));
     navigate("..");
   };
 
   return (
     <Dialog className="voting-dialog" title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
-      {activeVoting ? (
+      {voting ? (
         <>
           <button className="voting-dialog__start-button" data-testid="voting-dialog__cancel-button" onClick={() => cancelVoting()}>
             <label>{t("VoteConfigurationButton.cancelVoting")}</label>

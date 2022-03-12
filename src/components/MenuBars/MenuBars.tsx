@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router";
-import {Actions, ActionFactory} from "store/action";
-import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
 import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
