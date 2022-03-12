@@ -108,8 +108,9 @@ export const BoardActionFactory = {
    *
    * @param requestReference the reference id on the join request
    */
-  pendingBoardAccessConfirmation: (requestReference: string) => ({
+  pendingBoardAccessConfirmation: (board: string, requestReference: string) => ({
     type: BoardAction.PendingBoardAccessConfirmation,
+    board,
     requestReference,
   }),
   requirePassphraseChallenge: () => ({

@@ -17,21 +17,33 @@ export const ParticipantsAPI = {
     const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants`, {
       method: "POST",
       credentials: "include",
-      redirect: "manual",
       body: JSON.stringify({passphrase}),
     });
 
-    if (response.type === "opaqueredirect") {
+    // accept user if session already exists or was created
+    if ((response.redirected && response.url.includes("/participants/")) || response.status === 201) {
       return {
-        status: "accepted",
-        joinRequestReference: "",
+        status: "ACCEPTED",
       };
     }
 
-    // FIXME
+    if (response.redirected && response.url.includes("/requests/")) {
+      const body = (await response.json()) as {user: string; status: "PENDING" | "ACCEPTED" | "REJECTED"};
+      return {
+        status: body.status,
+        joinRequestReference: response.url,
+      };
+    }
+
+    // wrong passphrase
+    if (response.status === 403) {
+      return {
+        status: "WRONG_PASSPHRASE",
+      };
+    }
+
     return {
-      status: "rejected",
-      joinRequestReference: "",
+      status: "REJECTED",
     };
   },
 

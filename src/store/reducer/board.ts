@@ -39,11 +39,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "passphrase_required",
       };
     }
-    case Action.IncorrectPassphrase: {
-      return {
-        status: "incorrect_passphrase",
-      };
-    }
 
     case Action.CreatedVoting: {
       // reset show voting, since websocket messages won't trigger update of board
