@@ -27,6 +27,7 @@ export const ParticipantsAPI = {
       };
     }
 
+    // if board is protected a join request will be created and will be handled by the moderators of the board
     if (response.redirected && response.url.includes("/requests/")) {
       const body = (await response.json()) as {user: string; status: "PENDING" | "ACCEPTED" | "REJECTED"};
       return {
