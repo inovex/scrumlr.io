@@ -138,4 +138,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       // TODO report error
     });
   }
+
+  if (action.type === Action.DeleteBoard) {
+    API.deleteBoard(action.context.board!)
+      .then(() => {
+        document.location.pathname = "/";
+      })
+      .catch(() => {
+        // TODO report error
+      });
+  }
 };

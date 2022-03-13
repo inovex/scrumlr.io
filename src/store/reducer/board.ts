@@ -13,11 +13,6 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       };
     }
 
-    case Action.DeleteBoard: {
-      document.location.pathname = "/";
-      return state;
-    }
-
     case Action.PendingBoardAccessConfirmation:
     case Action.JoinBoard: {
       return {

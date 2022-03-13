@@ -17,7 +17,6 @@ export const NoteAction = {
   UnstackNote: "scrumlr.io/unstackNote" as const,
 
   DeleteNote: "scrumlr.io/deleteNote" as const,
-  InitializeNotes: "scrumlr.io/initNotes" as const,
 };
 
 /** Factory or creator class of internal Redux note object specific actions. */
@@ -83,17 +82,6 @@ export const NoteActionFactory = {
     type: NoteAction.DeleteNote,
     noteId,
   }),
-
-  /**
-   * Creates an action which should be dispatched when the server returns the list of notes on the initial
-   * get request.
-   *
-   * @param notes the list of notes persisted on the server for the current board
-   */
-  initializeNotes: (notes: Note[]) => ({
-    type: NoteAction.InitializeNotes,
-    notes,
-  }),
 };
 
 export type NoteReduxAction =
@@ -103,5 +91,4 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.stopSharing>
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
-  | ReturnType<typeof NoteActionFactory.deleteNote>
-  | ReturnType<typeof NoteActionFactory.initializeNotes>;
+  | ReturnType<typeof NoteActionFactory.deleteNote>;

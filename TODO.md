@@ -19,3 +19,4 @@
 - [ ] Fix linter issues
 - [ ] Fix FIXME and TODOs
   - Display error toasts on failed API requests
+- [X] Fix deletion of boards

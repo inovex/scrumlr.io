@@ -15,10 +15,7 @@ export const ParticipantAction = {
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
-
-  UpdateUser: "scrumlr.io/updateUser" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
-  EditUserConfiguration: "scrumlr.io/editUserConfiguration" as const,
 };
 
 /** Factory or creator class of internal Redux board users object specific actions. */
