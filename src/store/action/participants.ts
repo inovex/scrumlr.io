@@ -1,5 +1,5 @@
 /** This object lists board users object specific internal Redux Action types. */
-import {Participant} from "../../types/participant";
+import {Participant} from "types/participant";
 
 /** This object lists board users object specific internal Redux Action types. */
 export const ParticipantAction = {

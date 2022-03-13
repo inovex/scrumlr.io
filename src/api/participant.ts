@@ -1,5 +1,5 @@
+import {Participant} from "types/participant";
 import {SERVER_URL} from "../config";
-import {Participant} from "../types/participant";
 
 export const ParticipantsAPI = {
   /**

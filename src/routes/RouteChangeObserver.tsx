@@ -1,7 +1,7 @@
 import {useLocation} from "react-router";
 import {useLayoutEffect} from "react";
 import {useDispatch} from "react-redux";
-import {Actions} from "../store/action";
+import {Actions} from "store/action";
 
 const RouteChangeObserver = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ const RouteChangeObserver = () => {
 
     // scroll to top on route change
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, [location.pathname, dispatch]);
 
   return null;
 };

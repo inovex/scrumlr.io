@@ -9,7 +9,7 @@ import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {ReactComponent as OneIcon} from "assets/icon-one.svg";
 import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
-import {Actions} from "../../store/action";
+import {Actions} from "store/action";
 
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();

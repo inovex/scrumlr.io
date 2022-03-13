@@ -1,8 +1,8 @@
 import {Toast} from "utils/Toast";
 import {API} from "api";
 import i18n from "i18next";
-import store from "../store";
-import {Actions} from "../store/action";
+import store from "store";
+import {Actions} from "store/action";
 import {SERVER_URL} from "../config";
 
 /**

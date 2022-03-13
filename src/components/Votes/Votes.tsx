@@ -16,8 +16,8 @@ type VotesProps = {
 };
 
 export const Votes: FC<VotesProps> = (props) => {
-  const state = useAppSelector((state) => ({
-    voting: state.votings.open,
+  const state = useAppSelector((s) => ({
+    voting: s.votings.open,
   }));
   const showAddVoteButton = props.activeVoting && (state.voting?.allowMultipleVotes || (!state.voting?.allowMultipleVotes && props.userVotes.length === 0));
 

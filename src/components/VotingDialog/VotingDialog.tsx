@@ -7,7 +7,7 @@ import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
-import {Actions} from "../../store/action";
+import {Actions} from "store/action";
 
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();

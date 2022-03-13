@@ -52,7 +52,7 @@ export const MenuBars = () => {
     }
   };
 
-  const toggleRaiseHand = (active: boolean) => {
+  const toggleRaiseHand = () => {
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 

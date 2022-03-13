@@ -2,7 +2,7 @@ import {Navigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import {FC} from "react";
 import {useTranslation} from "react-i18next";
-import {useAppSelector} from "../store";
+import {useAppSelector} from "store";
 import {LoadingScreen} from "../components/LoadingScreen";
 import {ErrorPage} from "../components/ErrorPage";
 
