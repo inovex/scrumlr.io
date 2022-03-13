@@ -12,7 +12,7 @@ export const joinRequestReducer = (state: RequestsState = [], action: ReduxActio
   }
 
   if (action.type === Action.UpdateJoinRequest) {
-    const index = state.findIndex((r) => r.user === action.joinRequest.user);
+    const index = state.findIndex((r) => r.user.id === action.joinRequest.user.id);
     if (index >= 0) {
       const newState = state.slice();
       newState.splice(index, 1, action.joinRequest);

@@ -25,8 +25,12 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   }
 
   if (action.type === Action.PendingBoardAccessConfirmation) {
+    // change protocol of url
+    const websocketURL = new URL(action.requestReference);
+    websocketURL.protocol = "ws";
+
     // FIXME close socket on route change
-    new Socket(action.requestReference, {
+    new Socket(websocketURL.toString(), {
       timeout: 5000,
       maxAttempts: 0,
       onopen: (e: Event) => console.log("connected", e),

@@ -66,6 +66,13 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         if (message.type === "VOTING_UPDATED") {
           store.dispatch(Actions.updatedVoting(message.data.voting, message.data.notes));
         }
+
+        if (message.type === "REQUEST_CREATED") {
+          store.dispatch(Actions.createJoinRequest(message.data));
+        }
+        if (message.type === "REQUEST_UPDATED") {
+          store.dispatch(Actions.updateJoinRequest(message.data));
+        }
       },
     });
   }
