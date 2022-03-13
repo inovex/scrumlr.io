@@ -15,7 +15,6 @@ export const NoteAction = {
 
   EditNote: "scrumlr.io/editNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
-  DragNote: "scrumlr.io/dragNote" as const,
 
   DeleteNote: "scrumlr.io/deleteNote" as const,
   InitializeNotes: "scrumlr.io/initNotes" as const,
@@ -76,15 +75,6 @@ export const NoteActionFactory = {
   }),
 
   /**
-   * Creates an action which should be dispatched when the user drags and drops a note.
-   * @param note contains the noteId and the dragOnId and the columnId
-   */
-  dragNote: (note: Partial<Note>) => ({
-    type: NoteAction.DragNote,
-    note,
-  }),
-
-  /**
    * Creates an action which should be dispatched when the user wants to delete a note.
    *
    * @param noteId the note id
@@ -113,6 +103,5 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.stopSharing>
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
-  | ReturnType<typeof NoteActionFactory.dragNote>
   | ReturnType<typeof NoteActionFactory.deleteNote>
   | ReturnType<typeof NoteActionFactory.initializeNotes>;

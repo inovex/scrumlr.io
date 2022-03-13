@@ -90,7 +90,7 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        dispatch(Actions.dragNote({id: item.id, position: {stack: props.noteId!, column: props.columnId, rank: 0}}));
+        dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: props.columnId, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
