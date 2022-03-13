@@ -38,6 +38,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
         serverTimeOffset: new Date().getTime() - action.serverTime.getTime(),
       };
     }
+
+    case Action.SetRoute: {
+      return {
+        ...state,
+        route: action.route,
+      };
+    }
   }
   return state;
 };

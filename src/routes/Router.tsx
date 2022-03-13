@@ -9,11 +9,11 @@ import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
-import ScrollToTop from "./ScrollToTop";
+import RouteChangeObserver from "./RouteChangeObserver";
 
 const Router = () => (
   <BrowserRouter>
-    <ScrollToTop />
+    <RouteChangeObserver />
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />

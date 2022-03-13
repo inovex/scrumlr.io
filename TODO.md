@@ -1,4 +1,5 @@
-- [ ] Confirmation of board join requests
+- [x] Confirmation of board join requests
+- [ ] Test join process in multiple sessions
 - [ ] Move stack leads to loss of notes in stack
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline

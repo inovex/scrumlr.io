@@ -10,6 +10,8 @@ export interface View {
   readonly enabledAuthProvider: string[];
 
   readonly language?: string;
+
+  readonly route?: string;
 }
 
 export type ViewState = View;

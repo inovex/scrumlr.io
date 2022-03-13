@@ -5,6 +5,8 @@ import {Action, Actions, ReduxAction} from "../action";
 import {API} from "../../api";
 import store from "../index";
 
+let socket: Socket | undefined;
+
 export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.JoinBoard) {
     API.joinBoard(action.boardId, action.passphrase)
@@ -24,13 +26,19 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
       });
   }
 
+  if (action.type === Action.SetRoute) {
+    if (socket) {
+      socket.close();
+      socket = undefined;
+    }
+  }
+
   if (action.type === Action.PendingBoardAccessConfirmation) {
     // change protocol of url
     const websocketURL = new URL(action.requestReference);
     websocketURL.protocol = "ws";
 
-    // FIXME close socket on route change
-    new Socket(websocketURL.toString(), {
+    socket = new Socket(websocketURL.toString(), {
       timeout: 5000,
       maxAttempts: 0,
       onopen: (e: Event) => console.log("connected", e),
@@ -39,7 +47,7 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
       onreconnect: () => console.log("reconnect"),
 
       onmessage: async (evt: MessageEvent<string>) => {
-        const message = evt.data;
+        const message = JSON.parse(evt.data);
         if (message === "SESSION_ACCEPTED") {
           store.dispatch(Actions.permittedBoardAccess(action.board));
         } else if (message === "SESSION_REJECTED") {
