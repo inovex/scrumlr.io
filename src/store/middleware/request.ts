@@ -44,4 +44,20 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
       },
     });
   }
+
+  if (action.type === Action.AcceptJoinRequests) {
+    action.userIds.forEach((userId) => {
+      API.acceptJoinRequest(action.context.board!, userId).catch(() => {
+        // FIXME error handling
+      });
+    });
+  }
+
+  if (action.type === Action.RejectJoinRequests) {
+    action.userIds.forEach((userId) => {
+      API.rejectJoinRequest(action.context.board!, userId).catch(() => {
+        // FIXME error handling
+      });
+    });
+  }
 };

@@ -4,6 +4,7 @@ import {Participant} from "./participant";
 import {Note} from "./note";
 import {Vote} from "./vote";
 import {Voting} from "./voting";
+import {Request} from "./request";
 
 export interface BoardInitEvent {
   type: "INIT";

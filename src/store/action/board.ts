@@ -4,6 +4,7 @@ import {Participant} from "../../types/participant";
 import {Note} from "../../types/note";
 import {Vote} from "../../types/vote";
 import {Voting} from "../../types/voting";
+import {Request} from "../../types/request";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardAction = {

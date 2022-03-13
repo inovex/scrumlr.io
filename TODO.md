@@ -1,0 +1,14 @@
+- [ ] Confirmation of board join requests
+- [ ] Move stack leads to loss of notes in stack
+- [ ] Adding notes split in online & Offline
+- [ ] Edit notes split in online & offline
+- [ ] Server time / timer sync
+- [ ] Offline users appear in participants list
+- [ ] Fix doc in code
+- [ ] Update Postman docs
+  - Add requests docs
+  - Add missing props
+  - ...
+- [ ] Fix unit tests
+- [ ] Fix deployment
+- [ ] Fix CI/CD pipeline
