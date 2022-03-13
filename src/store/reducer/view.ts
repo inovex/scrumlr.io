@@ -1,5 +1,5 @@
+import {ViewState} from "types/view";
 import {Action, ReduxAction} from "store/action";
-import {ViewState} from "../../types/view";
 
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
@@ -45,6 +45,8 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
         route: action.route,
       };
     }
+
+    default:
+      return state;
   }
-  return state;
 };

@@ -1,7 +1,7 @@
 import {Dispatch, MiddlewareAPI} from "redux";
 import {ApplicationState} from "types";
-import {Action, ReduxAction} from "../action";
-import {API} from "../../api";
+import {Action, ReduxAction} from "store/action";
+import {API} from "api";
 
 export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.SetRaisedHandStatus) {

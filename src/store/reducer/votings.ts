@@ -1,5 +1,5 @@
-import {Action, ReduxAction} from "store/action";
 import {VotingsState} from "types/voting";
+import {Action, ReduxAction} from "store/action";
 
 /**
  * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)

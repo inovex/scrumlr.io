@@ -1,6 +1,6 @@
 import {AuthState} from "types/auth";
-import {ReduxAction} from "../action";
-import {AuthAction} from "../action/auth";
+import {ReduxAction} from "store/action";
+import {AuthAction} from "store/action/auth";
 
 export const authReducer = (state: AuthState = {user: undefined, initializationSucceeded: null}, action: ReduxAction): AuthState => {
   if (action.type === AuthAction.SignOut) {

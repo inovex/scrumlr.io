@@ -1,5 +1,5 @@
-import {NotesState} from "types/note";
 import {Action, ReduxAction} from "store/action";
+import {NotesState} from "types/note";
 
 // eslint-disable-next-line default-param-last
 export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesState => {
@@ -14,6 +14,7 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       }
       return state;
     }
+    default:
+      return state;
   }
-  return state;
 };

@@ -1,5 +1,5 @@
 import {RequestsState} from "types/request";
-import {Action, ReduxAction} from "../action";
+import {Action, ReduxAction} from "store/action";
 
 // eslint-disable-next-line default-param-last
 export const joinRequestReducer = (state: RequestsState = [], action: ReduxAction): RequestsState => {

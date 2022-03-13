@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {BoardState} from "types/board";
 import {Action, ReduxAction} from "store/action";
+import {BoardState} from "types/board";
 
 // eslint-disable-next-line default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {

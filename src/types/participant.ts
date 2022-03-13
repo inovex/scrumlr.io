@@ -1,5 +1,4 @@
 import {Auth} from "./auth";
-import {Participant} from "../components/BoardHeader/ParticipantsList/Participant";
 
 export type ParticipantRole = "OWNER" | "MODERATOR" | "PARTICIPANT";
 

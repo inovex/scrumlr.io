@@ -1,9 +1,9 @@
 import {Dispatch, MiddlewareAPI} from "redux";
 import Socket from "sockette";
-import {ApplicationState} from "../../types";
-import {Action, Actions, ReduxAction} from "../action";
-import {API} from "../../api";
-import store from "../index";
+import {ApplicationState} from "types";
+import store from "store";
+import {Action, Actions, ReduxAction} from "store/action";
+import {API} from "api";
 
 let socket: Socket | undefined;
 

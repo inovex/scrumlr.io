@@ -39,8 +39,10 @@ export const BoardAPI = {
   /**
    * Edits the board with the specified parameters.
    *
-   * @param board object with the board attributes that have to be changed
-   * @returns 'true' if the operation succeeded or throws an error otherwise
+   * @param id the board id
+   * @param board object with the board attributes that should be changed
+   *
+   * @returns the updated board model
    */
   editBoard: async (id: string, board: EditBoardRequest) => {
     try {
@@ -61,14 +63,13 @@ export const BoardAPI = {
   },
 
   /**
-   * Deletes the board with the specified boardId.
+   * Deletes the board with the specified id.
    *
-   * @param boardId identifies the board which will be deleted
-   * @returns 'true' if the operation succeeded or throws an error otherwise
+   * @param board identifies the board which will be deleted
    */
-  deleteBoard: async (boardId: string) => {
+  deleteBoard: async (board: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}`, {
+      const response = await fetch(`${SERVER_URL}/boards/${board}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -81,6 +82,14 @@ export const BoardAPI = {
     }
   },
 
+  /**
+   * Exports the board by the specified id and MIME type.
+   *
+   * @param board the board id
+   * @param type the MIME type
+   *
+   * @returns the response of the fetch call
+   */
   exportBoard: async (board: string, type: "text/csv" | "application/json") => {
     try {
       const response = await fetch(`${SERVER_URL}/boards/${board}/export`, {
