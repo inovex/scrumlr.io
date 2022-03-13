@@ -148,6 +148,8 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 	updateWhenNewIsLower := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) < (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)").Where("rank < (SELECT rank FROM previous)").Where("stack IS NULL")
 	// shift notes within column if the new rank is higher than before
 	updateWhenNewIsHigher := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank-1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) > (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank <= (SELECT new_rank FROM rank_selection)").Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL")
+	// update column of child notes
+	updateChildNotes := d.db.NewUpdate().Model((*Note)(nil)).Set("\"column\" = ?", update.Position.Column).Where("stack = ?", update.ID)
 
 	query := d.db.NewUpdate().Model(&update).
 		With("previous", previous).
@@ -157,6 +159,7 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 		With("update_when_previously_stacked_or_in_other_column", updateWhenPreviouslyStackedOrInOtherColumn).
 		With("update_when_new_is_lower", updateWhenNewIsLower).
 		With("update_when_new_is_higher", updateWhenNewIsHigher).
+		With("update_child_notes", updateChildNotes).
 		Set("\"column\" = ?", update.Position.Column).
 		Set("stack = ?", update.Position.Stack).
 		Set("rank = (SELECT new_rank FROM rank_selection)").

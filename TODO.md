@@ -1,6 +1,7 @@
 - [x] Confirmation of board join requests
 - [ ] Test join process in multiple sessions
-- [ ] Move stack leads to loss of notes in stack
+- [X] Move stack leads to loss of notes in stack
+- [ ] Fix Voting of child notes
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
 - [ ] Server time / timer sync
