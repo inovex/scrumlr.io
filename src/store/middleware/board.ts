@@ -109,4 +109,26 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       // TODO report error
     });
   }
+
+  if (action.type === Action.ShareNote) {
+    const currentState = stateAPI.getState().board.data!;
+    API.editBoard(action.context.board!, {
+      sharedNote: action.note,
+      showVoting: currentState.showVoting,
+      timerEnd: currentState.timerEnd,
+    }).catch(() => {
+      // TODO report error
+    });
+  }
+
+  if (action.type === Action.StopSharing) {
+    const currentState = stateAPI.getState().board.data!;
+    API.editBoard(action.context.board!, {
+      sharedNote: undefined,
+      showVoting: currentState.showVoting,
+      timerEnd: currentState.timerEnd,
+    }).catch(() => {
+      // TODO report error
+    });
+  }
 };

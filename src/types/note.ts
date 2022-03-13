@@ -12,4 +12,6 @@ export interface Note {
   };
 }
 
+export type EditNote = Partial<Omit<Note, "id" | "author">>;
+
 export type NotesState = Note[];

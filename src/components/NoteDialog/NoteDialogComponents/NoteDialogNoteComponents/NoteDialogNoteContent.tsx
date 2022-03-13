@@ -18,7 +18,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const onEdit = (id: string, editorId: string, newText: string) => {
     if (editable && newText !== text) {
-      dispatch(Actions.editNote(id, newText));
+      dispatch(Actions.editNote(id, {text: newText}));
     }
   };
 

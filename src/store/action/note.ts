@@ -1,4 +1,4 @@
-import {Note} from "types/note";
+import {EditNote, Note} from "types/note";
 
 /** This object lists note object specific internal Redux Action types. */
 export const NoteAction = {
@@ -16,9 +16,8 @@ export const NoteAction = {
   EditNote: "scrumlr.io/editNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
   DragNote: "scrumlr.io/dragNote" as const,
-  CreatedNote: "scrumlr.io/createdNote" as const,
+
   DeleteNote: "scrumlr.io/deleteNote" as const,
-  UpdatedNote: "scrumlr.io/updatedNote" as const,
   InitializeNotes: "scrumlr.io/initNotes" as const,
 };
 
@@ -62,10 +61,10 @@ export const NoteActionFactory = {
    * @param noteId the note id
    * @param text the edited text of the note
    */
-  editNote: (note: string, text: string) => ({
+  editNote: (note: string, request: EditNote) => ({
     type: NoteAction.EditNote,
     note,
-    text,
+    request,
   }),
   /**
    * Creates an action which should be dispatched when the user unstacks a note.
@@ -86,15 +85,6 @@ export const NoteActionFactory = {
   }),
 
   /**
-   * Creates an action which should be dispatched when a new note was created on the server.
-   *
-   * @param note the note
-   */
-  createdNote: (note: Note) => ({
-    type: NoteAction.CreatedNote,
-    note,
-  }),
-  /**
    * Creates an action which should be dispatched when the user wants to delete a note.
    *
    * @param noteId the note id
@@ -103,15 +93,7 @@ export const NoteActionFactory = {
     type: NoteAction.DeleteNote,
     noteId,
   }),
-  /**
-   * Creates an action which should be dispatched when a note was updated on the server.
-   *
-   * @param note the note
-   */
-  updatedNote: (note: Note) => ({
-    type: NoteAction.UpdatedNote,
-    note,
-  }),
+
   /**
    * Creates an action which should be dispatched when the server returns the list of notes on the initial
    * get request.
@@ -132,7 +114,5 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
   | ReturnType<typeof NoteActionFactory.dragNote>
-  | ReturnType<typeof NoteActionFactory.createdNote>
   | ReturnType<typeof NoteActionFactory.deleteNote>
-  | ReturnType<typeof NoteActionFactory.initializeNotes>
-  | ReturnType<typeof NoteActionFactory.updatedNote>;
+  | ReturnType<typeof NoteActionFactory.initializeNotes>;

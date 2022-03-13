@@ -7,4 +7,16 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
   if (action.type === Action.AddNote) {
     API.addNote(action.context.board!, action.columnId, action.text); // FIXME handling
   }
+
+  if (action.type === Action.DeleteNote) {
+    API.deleteNote(action.context.board!, action.noteId).catch(() => {
+      // FIXME error handling
+    });
+  }
+
+  if (action.type === Action.EditNote) {
+    API.editNote(action.context.board!, action.note, action.request).catch(() => {
+      // FIXME error handling
+    });
+  }
 };

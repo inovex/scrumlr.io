@@ -1,5 +1,5 @@
 import {SERVER_URL} from "../config";
-import {Note} from "../types/note";
+import {EditNote, Note} from "../types/note";
 
 export const NoteAPI = {
   /**
@@ -33,34 +33,27 @@ export const NoteAPI = {
   },
 
   /**
-   * Unstacks a note.
-   * @param note contains noteId and parentId
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
-   */
-  unstackNote: (boardId: string) => {
-    // TODO
-  },
-
-  /**
-   * Drag and drop a note.
-   * @param note contains noteId and parentId and optional a columnId
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
-   */
-  dragNote: (boardId: string) => {
-    // TODO
-  },
-
-  /**
    * Deletes a note with the specified id.
    *
    * @param noteId the note id
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  deleteNote: (noteId: string) => {
-    // TODO
+  deleteNote: async (board: string, noteId: string) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${board}/notes/${noteId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 204) {
+        return;
+      }
+
+      throw new Error(`create note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create note with error: ${error}`);
+    }
   },
 
   /**
@@ -68,7 +61,21 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editNote: () => {
-    // TODO
+  editNote: async (board: string, note: string, request: EditNote) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${board}/notes/${note}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(request),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update note with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update note: ${error}`);
+    }
   },
 };
