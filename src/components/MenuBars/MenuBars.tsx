@@ -14,10 +14,9 @@ import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-setti
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
-import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
-
-import "./MenuBars.scss";
 import {useDispatch} from "react-redux";
+import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
+import "./MenuBars.scss";
 
 export const MenuBars = () => {
   const {t} = useTranslation();

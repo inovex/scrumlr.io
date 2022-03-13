@@ -1,10 +1,10 @@
 import {UserAvatar} from "components/BoardUsers";
 import {ToggleButton} from "components/ToggleButton";
-import {useAppSelector} from "store";
+import {Participant as ParticipantModel} from "types/participant";
 import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import "./Participant.scss";
 import {TabIndex} from "constants/tabIndex";
-import {Participant as ParticipantModel} from "types/participant";
 import {useDispatch} from "react-redux";
 
 interface ParticipantProps {
