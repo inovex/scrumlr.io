@@ -2,6 +2,7 @@
 - [ ] Test join process in multiple sessions
 - [X] Move stack leads to loss of notes in stack
 - [ ] Fix Voting of child notes
+- [ ] Fix position of votes when author visibility is disabled
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
 - [ ] Server time / timer sync
