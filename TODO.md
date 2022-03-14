@@ -6,7 +6,7 @@
 - [ ] Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
-- [ ] Server time / timer sync
+- [ ] (Manu) Server time / timer sync
 - [ ] Offline users appear in participants list
 - [ ] Fix doc in code
 - [ ] Update Postman docs
