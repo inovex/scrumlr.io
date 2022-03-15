@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
@@ -129,6 +130,41 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		return nil, err
 	}
 	return new(dto.Board).From(board), err
+}
+
+func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
+	timerEnd := time.Now().Local().Add(time.Minute * time.Duration(minutes))
+	update := database.BoardTimerUpdate{
+		ID:       id,
+		TimerEnd: &timerEnd,
+	}
+	board, err := s.database.UpdateBoardTimer(update)
+	if err != nil {
+		return nil, err
+	}
+	return new(dto.Board).From(board), err
+}
+
+func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
+	update := database.BoardTimerUpdate{
+		ID:       id,
+		TimerEnd: nil,
+	}
+	board, err := s.database.UpdateBoardTimer(update)
+	if err != nil {
+		return nil, err
+	}
+	return new(dto.Board).From(board), err
+}
+
+func (s *BoardService) UpdatedBoardTimer(board database.Board) {
+	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+		Type: realtime.BoardEventBoardTimerUpdated,
+		Data: new(dto.Board).From(board),
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated timer", "err", err)
+	}
 }
 
 func (s *BoardService) UpdatedBoard(board database.Board) {

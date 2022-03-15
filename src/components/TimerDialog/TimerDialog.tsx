@@ -18,7 +18,7 @@ export const TimerDialog: VFC = () => {
   const [customTime, setCustomTime] = useState(10);
 
   const startTimer = (minutes: number) => {
-    store.dispatch(Actions.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
+    store.dispatch(Actions.setTimer(minutes));
     navigate("..");
   };
 

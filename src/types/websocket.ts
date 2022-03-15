@@ -24,6 +24,11 @@ export interface BoardUpdateEvent {
   data: Board;
 }
 
+export interface BoardTimerUpdateEvent {
+  type: "BOARD_TIMER_UPDATED";
+  data: Board;
+}
+
 export interface BoardDeletedEvent {
   type: "BOARD_DELETED";
 }
@@ -79,6 +84,7 @@ export interface VotingUpdatedEvent {
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
+  | BoardTimerUpdateEvent
   | BoardDeletedEvent
   | UpdatedColumnsEvent
   | UpdatedNotesEvent

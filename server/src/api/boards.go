@@ -203,6 +203,36 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value("Board").(uuid.UUID)
+
+	var body dto.SetTimerRequest
+	if err := render.Decode(r, &body); err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	board, err := s.boards.SetTimer(r.Context(), boardId, body.Minutes)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, board)
+}
+
+func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value("Board").(uuid.UUID)
+	board, err := s.boards.DeleteTimer(r.Context(), boardId)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, board)
+}
+
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 

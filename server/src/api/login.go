@@ -45,7 +45,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/"}
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true}
 	s.sealCookie(&cookie)
 	http.SetCookie(w, &cookie)
 

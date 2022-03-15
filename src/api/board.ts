@@ -109,4 +109,37 @@ export const BoardAPI = {
       throw new Error(`unable to create board: ${error}`);
     }
   },
+  setTimer: async (id: string, minutes: number) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${id}/timer`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({minutes}),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update board timer with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update board timer: ${error}`);
+    }
+  },
+  deleteTimer: async (id: string) => {
+    try {
+      const response = await fetch(`${SERVER_URL}/boards/${id}/timer`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to delete board timer with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to delete board timer: ${error}`);
+    }
+  },
 };

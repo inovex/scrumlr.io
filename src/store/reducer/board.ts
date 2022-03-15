@@ -12,7 +12,12 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: action.board,
       };
     }
-
+    case Action.UpdatedBoardTimer: {
+      return {
+        status: "ready",
+        data: {...state.data!, timerEnd: action.board.timerEnd},
+      };
+    }
     case Action.PendingBoardAccessConfirmation:
     case Action.JoinBoard: {
       return {
