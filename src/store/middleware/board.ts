@@ -35,6 +35,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updatedBoard(message.data));
         }
 
+        if (message.type === "BOARD_TIMER_UPDATED") {
+          store.dispatch(Actions.updatedBoardTimer(message.data));
+        }
+
         if (message.type === "BOARD_DELETED") {
           // FIXME board deleted event
           store.dispatch(Actions.leaveBoard());
@@ -96,25 +100,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
   if (action.type === Action.SetTimer) {
     const currentState = stateAPI.getState().board.data!;
-    API.editBoard(action.context.board!, {
-      sharedNote: currentState.sharedNote,
-      showVoting: currentState.showVoting,
-      // FIXME move this to reducer instead of API call
-      timerEnd: new Date(action.endDate.getTime() - action.context.serverTimeOffset).toISOString(),
-    }).catch(() => {
-      // TODO report error
-    });
+    API.setTimer(currentState.id, action.minutes);
   }
 
   if (action.type === Action.CancelTimer) {
     const currentState = stateAPI.getState().board.data!;
-    API.editBoard(action.context.board!, {
-      sharedNote: currentState.sharedNote,
-      showVoting: currentState.showVoting,
-      timerEnd: undefined,
-    }).catch(() => {
-      // TODO report error
-    });
+    API.deleteTimer(currentState.id);
   }
 
   if (action.type === Action.ShareNote) {

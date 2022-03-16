@@ -29,6 +29,7 @@ type Board struct {
 	TimerEnd *time.Time `json:"timerEnd,omitempty"`
 
 	// The id of a note to share with other users.
+	// FIXME omitempty works only with nil in combination with pointers
 	SharedNote uuid.NullUUID `json:"sharedNote,omitempty"`
 
 	ShowVoting uuid.NullUUID `json:"showVoting,omitempty"`
@@ -70,6 +71,10 @@ type CreateBoardRequest struct {
 	Columns []ColumnRequest `json:"columns"`
 
 	Owner uuid.UUID `json:"-"`
+}
+
+type SetTimerRequest struct {
+	Minutes uint8 `json:"minutes"`
 }
 
 // BoardUpdateRequest represents the request to update a board.

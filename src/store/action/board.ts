@@ -18,6 +18,7 @@ export const BoardAction = {
   InitializeBoard: "scrumlr.io/initBoard" as const,
   EditBoard: "scrumlr.io/editBoard" as const,
   UpdatedBoard: "scrumlr.io/updatedBoard" as const,
+  UpdatedBoardTimer: "scrumlr.io/updatedBoardTimer" as const,
   DeleteBoard: "scrumlr.io/deleteBoard" as const,
   PermittedBoardAccess: "scrumlr.io/permittedBoardAccess" as const,
   RejectedBoardAccess: "scrumlr.io/rejectedBoardAccess" as const,
@@ -84,6 +85,10 @@ export const BoardActionFactory = {
     type: BoardAction.UpdatedBoard,
     board,
   }),
+  updatedBoardTimer: (board: Board) => ({
+    type: BoardAction.UpdatedBoardTimer,
+    board,
+  }),
   /** Creates an action which should be dispatched when the user wants to delete the current board. */
   deleteBoard: (boardId: string) => ({
     type: BoardAction.DeleteBoard,
@@ -117,13 +122,9 @@ export const BoardActionFactory = {
     type: BoardAction.PassphraseChallengeRequired,
   }),
 
-  /** Creates an action which should be dispatched when a moderator wants to set a timer.
-   *
-   * @param endDate the date where the timer ends
-   */
-  setTimer: (endDate: Date) => ({
+  setTimer: (minutes: number) => ({
     type: BoardAction.SetTimer,
-    endDate,
+    minutes,
   }),
   /**
    * Creates an action which should be dispatched when a moderator wants to cancel the timer.
@@ -139,6 +140,7 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.initializeBoard>
   | ReturnType<typeof BoardActionFactory.editBoard>
   | ReturnType<typeof BoardActionFactory.updatedBoard>
+  | ReturnType<typeof BoardActionFactory.updatedBoardTimer>
   | ReturnType<typeof BoardActionFactory.deleteBoard>
   | ReturnType<typeof BoardActionFactory.permittedBoardAccess>
   | ReturnType<typeof BoardActionFactory.rejectedBoardAccess>

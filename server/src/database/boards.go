@@ -34,6 +34,12 @@ type BoardInsert struct {
 	Salt          *string
 }
 
+type BoardTimerUpdate struct {
+	bun.BaseModel `bun:"table:boards"`
+	ID            uuid.UUID
+	TimerEnd      *time.Time
+}
+
 type BoardUpdate struct {
 	bun.BaseModel         `bun:"table:boards"`
 	ID                    uuid.UUID
@@ -83,9 +89,18 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	return b, err
 }
 
-func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
-	query := d.db.NewUpdate().Model(&update).Column("name", "timer_end", "shared_note")
+func (d *Database) UpdateBoardTimer(update BoardTimerUpdate) (Board, error) {
+	var board Board
+	_, err := d.db.NewUpdate().Model(&update).Column("timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+	return board, err
+}
 
+func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
+	query := d.db.NewUpdate().Model(&update).Column("timer_end", "shared_note")
+
+	if update.Name != nil {
+		query.Column("name")
+	}
 	if update.AccessPolicy != nil {
 		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
 			return Board{}, errors.New("passphrase and salt should be set when access policy is updated")

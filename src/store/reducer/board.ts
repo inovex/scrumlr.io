@@ -12,7 +12,16 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         data: action.board,
       };
     }
-
+    case Action.UpdatedBoardTimer: {
+      if (action.board.timerEnd) {
+        // @ts-ignore
+        return {...state, data: {...state.data!, timerEnd: new Date(new Date(action.board.timerEnd) - action.context.serverTimeOffset)}};
+      }
+      return {
+        status: "ready",
+        data: {...state.data!, timerEnd: action.board.timerEnd},
+      };
+    }
     case Action.PendingBoardAccessConfirmation:
     case Action.JoinBoard: {
       return {

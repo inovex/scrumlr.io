@@ -62,7 +62,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 		}
 
 		if !exists {
-			common.Throw(w, r, common.NotFoundError)
+			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
 			return
 		}
 
