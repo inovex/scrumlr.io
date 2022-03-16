@@ -77,9 +77,6 @@ type SetTimerRequest struct {
 	Minutes uint8 `json:"minutes"`
 }
 
-type DeleteTimerRequest struct {
-}
-
 // BoardUpdateRequest represents the request to update a board.
 type BoardUpdateRequest struct {
 	// The name of the board.
