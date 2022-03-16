@@ -8,7 +8,7 @@ import {useAppSelector} from "store";
 export const InfoBar = () => {
   const state = useAppSelector(
     (applicationState) => ({
-      endTime: applicationState.board.data?.timerEnd, // FIXME convert to date
+      endTime: applicationState.board.data?.timerEnd,
       activeVoting: Boolean(applicationState.votings.open),
       possibleVotes: applicationState.votings.open?.voteLimit,
       usedVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id).length,
@@ -18,7 +18,7 @@ export const InfoBar = () => {
 
   return ReactDOM.createPortal(
     <aside className="info-bar">
-      {state.endTime && <Timer endTime={new Date(state.endTime)} />}
+      {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
     </aside>,
     document.getElementById("root")!

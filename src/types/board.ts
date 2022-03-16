@@ -14,7 +14,7 @@ export interface Board {
   showAuthors: boolean;
   showNotesOfOtherUsers: boolean;
   allowStacking: boolean;
-  timerEnd?: string;
+  timerEnd?: Date;
 
   sharedNote?: string;
   showVoting?: string;
