@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next)
   .init({
     backend: {
-      queryStringParams: {v: "1.0.0"},
+      queryStringParams: {v: process.env.REACT_APP_LOCALES_HASH ?? "0000000000"},
     },
     detection: {
       lookupLocalStorage: "Scrumlr/locale",
