@@ -23,7 +23,7 @@
     "@types/http-proxy-middleware": "^1.0.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/parse": "^2.18.13",
-    "eslint": "^8.10.0",
+    "eslint": "^8.11.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.5.0",
@@ -41,10 +41,10 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "googleapis": "^96.0.0",
-    "http-proxy-middleware": "^2.0.3",
+    "http-proxy-middleware": "^2.0.4",
     "jsonwebtoken": "^8.5.1",
     "parse": "^3.4.1",
-    "parse-server": "^4.10.4",
+    "parse-server": "^4.10.7",
     "qs": "^6.10.3"
   },
   "lint-staged": {
