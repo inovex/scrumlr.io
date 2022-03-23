@@ -156,9 +156,9 @@
     "showVotesOfOthers": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
-    "startTimer": "Start voting phase",
-    "cancelTimer": "Cancel voting phase",
-    "stopTimer": "End voting phase"
+    "startVoting": "Start voting phase",
+    "cancelVoting": "Cancel voting phase",
+    "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
     "tooltip": "{{remaining}} of {{total}} votes remaining"

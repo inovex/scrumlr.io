@@ -5,7 +5,7 @@ exports[`SettingsDialog should render correctly 1`] = `
   id="portal"
 >
   <div
-    class="portal portal--darkBackground"
+    class="portal"
     role="dialog"
   >
     <div

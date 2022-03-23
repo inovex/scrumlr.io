@@ -1,0 +1,124 @@
+@import "constants/style";
+
+@media screen and (min-width: 600px) {
+  #root[column-visibility="visible"] + #portal {
+    .voting-dialog {
+      top: calc(50% - 25px);
+      right: 100px;
+      bottom: auto;
+      left: auto;
+      height: auto;
+    }
+    .voting-dialog::before {
+      content: " ";
+      position: absolute;
+      left: 100%;
+      top: 10px;
+      border-width: 15px;
+      border-style: solid;
+      border-color: transparent transparent transparent $color-planning-pink;
+    }
+    .voting-dialog::after {
+      content: " ";
+      position: absolute;
+      left: 100%;
+      top: 15px;
+      border-width: 10px;
+      border-style: solid;
+      border-color: transparent transparent transparent $color-white-one;
+    }
+  }
+
+  [theme="dark"] #root[column-visibility="visible"] + #portal {
+    .voting-dialog::after {
+      border-color: transparent transparent transparent $color-dark-mode;
+    }
+  }
+
+  #root[column-visibility="collapsed"] + #portal {
+    .voting-dialog {
+      left: calc(50% - 139px + 86px + 18px - 200px);
+      bottom: 100px;
+      right: auto;
+      top: auto;
+      height: auto;
+    }
+    .voting-dialog::before {
+      content: " ";
+      position: absolute;
+      left: calc(50% - 15px);
+      top: 100%;
+      border-width: 15px;
+      border-style: solid;
+      border-color: $color-planning-pink transparent transparent transparent;
+    }
+    .voting-dialog::after {
+      content: " ";
+      position: absolute;
+      left: calc(50% - 11px);
+      top: 100%;
+      border-width: 11px;
+      border-style: solid;
+      border-color: $color-white-one transparent transparent transparent;
+    }
+  }
+  [theme="dark"] #root[column-visibility="collapsed"] + #portal {
+    .voting-dialog::after {
+      border-color: $color-dark-mode transparent transparent transparent;
+    }
+  }
+}
+
+.voting-dialog__start-button {
+  border: none;
+  border-radius: 8px;
+  height: 48px;
+  width: 80%;
+  background: $color-planning-pink;
+  cursor: pointer;
+}
+.voting-dialog__start-button > label {
+  font-weight: bold;
+  font-size: 14px;
+  color: $color-white;
+  letter-spacing: 0.49px;
+  cursor: pointer;
+}
+
+.voting-dialog__toggle {
+  position: absolute;
+  top: 12px;
+  right: 24px;
+}
+
+.voting-dialog__vote-button {
+  height: 32px;
+  width: 32px;
+  border: none;
+  border-radius: 16px;
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  padding: 0;
+}
+.voting-dialog__vote-button:first-of-type {
+  right: 80px;
+}
+.voting-dialog__vote-button:last-of-type {
+  right: 24px;
+}
+.voting-dialog__vote-label {
+  position: absolute;
+  top: 8px;
+  right: 56px;
+  height: 32px;
+  width: 24px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 14px;
+  cursor: col-resize;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webit-user-select: none;
+}
