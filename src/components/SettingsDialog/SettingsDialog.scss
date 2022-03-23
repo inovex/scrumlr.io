@@ -1,5 +1,10 @@
 @import "constants/style";
 
+// settings-dialog container
+$settings-dialog-container--sides-small: 32px;
+$settings-dialog-container--sides-large: 92px;
+$settings-dialog-container--bottom: 62px;
+
 .settings-dialog {
   position: fixed;
   top: 0;
@@ -38,14 +43,16 @@
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__content {
+    width: 380px;
+    height: calc(100% + 50px);
     border-radius: 8px;
-    width: 318px;
   }
 }
 @media screen and (min-width: 920px) {
   .settings-dialog__content {
     display: block;
     width: 544px;
+    height: 100%;
     border-radius: 0px 8px 8px 0px;
     padding-top: 0;
   }
@@ -63,7 +70,8 @@
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__sidebar {
-    width: 318px;
+    width: 380px;
+    height: calc(100% + 50px);
     border-radius: 8px;
   }
 }
@@ -72,6 +80,8 @@
     display: block;
   }
   .settings-dialog__sidebar {
+    width: 318px;
+    height: 100%;
     border-radius: 8px 0 0 8px;
   }
 }
@@ -95,8 +105,8 @@
 
 .settings-dialog__close-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 6px;
+  right: 6px;
   color: $color-backlog-blue;
   display: flex;
   justify-content: center;
@@ -135,8 +145,8 @@
   }
   .settings-dialog__back-link > svg {
     position: absolute;
-    top: 6px;
-    left: 6px;
+    top: 12px;
+    left: 9px;
     color: $color-backlog-blue;
     display: flex;
     justify-content: center;
@@ -199,18 +209,28 @@
   color: white;
 }
 
+.settings-dialog__container {
+  margin: 0 $settings-dialog-container--sides-small;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@media screen and (min-width: 920px) {
+  .settings-dialog__container {
+    margin: 0 $settings-dialog-container--sides-large;
+  }
+}
+
 .settings-dialog__header {
   display: flex;
   justify-content: center;
-  margin: 40px 0;
+  margin: 30px 0;
 }
 
-.settings-dialog__container {
-  margin: 0 32px;
-}
 @media screen and (min-width: 920px) {
-  .settings-dialog__container {
-    margin: 0 92px;
+  .settings-dialog__header {
+    margin: 40px 0;
   }
 }
 
@@ -220,19 +240,19 @@
   margin: 0;
 }
 
-.settings-dialog__group {
-  display: flex;
-  flex-direction: column;
-  border-radius: 8px;
-  background-color: #fff;
-}
-
 .settings-dialog__seperator {
   margin: 0;
   margin-left: 5%;
   width: 90%;
   border: 0;
   border-top: 0.5px solid #eee;
+}
+
+.settings-dialog__group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 [theme="dark"] {

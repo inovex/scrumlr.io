@@ -29,7 +29,7 @@ export const SettingsDialog: VFC = () => {
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const displayName = useAppSelector((applicationState) => {
     if (applicationState.users.all.length !== 0) {
-      return applicationState.users.all.filter((user) => user.id === Parse.User.current()!.id)[0].displayName;
+      return applicationState.users.all.find((user) => user.id === Parse.User.current()?.id)?.displayName;
     }
     return undefined;
   });

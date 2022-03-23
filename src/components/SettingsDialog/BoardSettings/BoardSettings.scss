@@ -1,0 +1,266 @@
+@import "constants/style";
+@import "../SettingsDialog";
+
+.board-settings__container-wrapper {
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-right: -20px;
+  margin-bottom: $settings-dialog-container--bottom;
+
+  @include scrollbar();
+}
+
+@media screen and (min-width: 920px) {
+  .board-settings__container-wrapper {
+    padding-right: 20px;
+    margin-right: -30px;
+  }
+}
+
+.board-settings__container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: calc(100vw - (2 * $settings-dialog-container--sides-small));
+}
+
+@media screen and (min-width: 450px) {
+  .board-settings__container {
+    max-width: calc(380px - (2 * $settings-dialog-container--sides-small));
+  }
+}
+
+@media screen and (min-width: 920px) {
+  .board-settings__container {
+    max-width: calc(544px - (2 * $settings-dialog-container--sides-large));
+  }
+}
+
+.board-settings__board-name-button {
+  justify-content: space-between;
+  cursor: text;
+}
+
+.board-settings__board-name-button span {
+  cursor: inherit;
+}
+
+.board-settings__board-name-button_input {
+  background-color: transparent;
+  border: none;
+  padding: 16px 24px 16px 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  text-align: right;
+  max-width: 150px;
+  cursor: inherit;
+}
+
+.board-settings__board-name-button_input:focus {
+  outline: none;
+}
+
+.board-settings__board-name-button_input::placeholder {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .board-settings__board-name-button_input,
+  .board-settings__board-name-button_input::placeholder {
+    color: $color-white;
+  }
+}
+
+.board-settings__group-and-button {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.board-settings__policy-button {
+  display: flex;
+  justify-content: space-between;
+}
+
+.board-settings__policy-button span {
+  cursor: inherit;
+}
+
+.board-settings__policy-button_value {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-settings__policy-button_value span {
+  padding: 16px 24px 16px 4px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 920px) {
+  .board-settings__policy-button_value span {
+    max-width: min-content;
+    text-align: right;
+  }
+}
+
+[theme="dark"] {
+  .board-settings__policy-button_value span {
+    color: $color-white;
+  }
+}
+
+.board-settings__policy-button_value svg {
+  width: 22px;
+  height: 22px;
+  color: var(--accent-color);
+}
+
+.board-settings__password-button {
+  justify-content: space-between;
+  padding-right: 24px;
+  position: relative;
+  cursor: text;
+}
+
+.board-settings__password-button span {
+  cursor: inherit;
+}
+
+.board-settings__password-button_value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-settings__password-button_value svg {
+  width: 30px;
+  height: 30px;
+  color: var(--accent-color);
+  cursor: pointer;
+}
+
+.board-settings__password-button_value-input {
+  background-color: transparent;
+  border: none;
+  padding: 16px 16px 16px 16px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+  text-align: right;
+  max-width: 120px;
+}
+
+[theme="dark"] {
+  .board-settings__password-button_value-input {
+    color: $color-white;
+  }
+}
+
+.board-settings__password-button_value-input:focus {
+  outline: none;
+}
+
+.board-settings__set-policy-button {
+  display: flex;
+  align-items: center;
+  padding: 0px 24px;
+  border: none;
+  background-color: inherit;
+  color: var(--accent-color);
+  cursor: pointer;
+  align-self: center;
+}
+
+.board-settings__set-policy-button svg {
+  width: 22px;
+  height: 22px;
+  color: var(--accent-color);
+}
+
+.board-settings__set-policy-button span {
+  padding-left: 4px;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.board-settings__generate-password-button {
+  display: flex;
+  align-items: center;
+  padding: 0px 24px;
+  border: none;
+  background-color: inherit;
+  color: var(--accent-color);
+  cursor: pointer;
+  align-self: center;
+  margin-top: 3px;
+}
+
+.board-settings__generate-password-button svg {
+  width: 15px;
+  height: 15px;
+  margin-right: 4px;
+  margin-left: 3px;
+  color: var(--accent-color);
+}
+
+.board-settings__generate-password-button span {
+  padding-left: 4px;
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.board-settings__show-author-button {
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__show-notes-button {
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__show-columns-button {
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__delete-button {
+  justify-content: space-between;
+  padding-right: 24px;
+}
+
+.board-settings__delete-button span {
+  color: $color-retro-red;
+  font-weight: bold;
+}
+
+[theme="dark"] {
+  .board-settings__delete-button span {
+    color: $color-retro-red;
+  }
+}
+
+.board-settings__delete-button svg {
+  color: $color-retro-red;
+  width: 30px;
+  height: 25px;
+}
+
+.board-settings__confirmation-dialog {
+  z-index: 0;
+}
+
+.button--centered {
+  align-self: center;
+}

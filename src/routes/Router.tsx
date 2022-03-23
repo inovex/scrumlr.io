@@ -9,6 +9,9 @@ import {Route} from "react-router";
 import {SettingsDialog} from "components/SettingsDialog";
 import {ExportBoard} from "components/SettingsDialog/ExportBoard";
 import {ShareSession} from "components/SettingsDialog/ShareSession";
+import {BoardSettings} from "components/SettingsDialog/BoardSettings/BoardSettings";
+import {Appearance} from "components/SettingsDialog/Appearance/Appearance";
+import {Participants} from "components/SettingsDialog/Participants/Participants";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {Homepage} from "./Homepage";
@@ -42,9 +45,9 @@ const Router = () => (
         }
       >
         <Route path="settings" element={<SettingsDialog />}>
-          <Route path="board" element={<div>Board Settings</div>} />
-          <Route path="participants" element={<div>Participants</div>} />
-          <Route path="appearance" element={<div>Appearance</div>} />
+          <Route path="board" element={<BoardSettings />} />
+          <Route path="participants" element={<Participants />} />
+          <Route path="appearance" element={<Appearance />} />
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
           <Route path="feedback" element={<div>Feedback</div>} />

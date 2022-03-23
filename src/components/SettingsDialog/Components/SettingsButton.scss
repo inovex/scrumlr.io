@@ -22,20 +22,24 @@ $header-menu-border-bottom-color: #efefef;
   cursor: pointer;
 }
 
-.settings-option-button:focus,
+.settings-option-button:focus-visible {
+  outline: none;
+}
+
+.settings-option-button:focus-within,
 .settings-option-button:hover {
   background-color: rgba(var(--accent-color-rgb), 0.1);
 }
 
 .settings-option-button__label {
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
   cursor: pointer;
-  padding: 16px;
+  padding: 16px 24px;
+  hyphens: auto;
 }
 
 .settings-option-button__icon {
@@ -46,18 +50,21 @@ $header-menu-border-bottom-color: #efefef;
   border-bottom: none !important;
 }
 
-.settings-option-button:focus,
-.settings-option-button--expandable:focus,
-.settings-option-button--expandable:hover {
-  background-color: var(--accent-color);
+.settings-option-button--disabled {
+  cursor: default !important;
+}
+
+.settings-option-button--disabled:focus-within,
+.settings-option-button--disabled:hover {
+  cursor: default;
+  background-color: $color-white;
 }
 
 [theme="dark"] {
   .settings-option-button {
     background-color: $color-dark-mode-note;
   }
-
-  .settings-option-button:focus,
+  .settings-option-button:focus-within,
   .settings-option-button:hover {
     background-color: $color-dark-mode-note--hover;
   }
@@ -66,13 +73,12 @@ $header-menu-border-bottom-color: #efefef;
     color: $color-white;
   }
 
-  .settings-option-button--expandable {
+  .settings-option-button--disabled:focus-within,
+  .settings-option-button--disabled:hover {
     background-color: $color-dark-mode-note;
   }
 
-  .settings-option-button:focus,
-  .settings-option-button--expandable:focus,
-  .settings-option-button--expandable:hover {
-    background-color: $color-dark-mode-note--hover;
+  .settings-option-button--expandable {
+    background-color: $color-dark-mode-note;
   }
 }

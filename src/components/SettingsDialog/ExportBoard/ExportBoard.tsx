@@ -7,6 +7,7 @@ import {useAppSelector} from "../../../store";
 import {ApplicationState} from "../../../types/store";
 import {exportAsJSON, exportAsCSV} from "../../../utils/export";
 import {SettingsButton} from "../Components/SettingsButton";
+import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
 
 export const ExportBoard: VFC = () => {
@@ -29,6 +30,7 @@ export const ExportBoard: VFC = () => {
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
           icon={ExportJSON}
+          className="export-board__button-reverse-order"
           onClick={() => {
             exportAsJSON(state);
           }}
@@ -38,6 +40,7 @@ export const ExportBoard: VFC = () => {
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
           icon={ExportCSV}
+          className="export-board__button-reverse-order"
           onClick={() => {
             exportAsCSV(state);
           }}
