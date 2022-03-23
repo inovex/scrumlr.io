@@ -194,14 +194,40 @@
     "startButton": "Jetzt loslegen",
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
-    "terms": "AGB",
-    "errorServerConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
-    "retry": "Wiederholen"
+    "terms": "AGB"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "Error": {
+    "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
+    "shareNote": "Es tut uns leid, aber wir haben ein Problem beim Teilen des Kärtchens. Bitte versuche es erneut.",
+    "unshareNote": "Es tut uns leid, aber wir haben ein Problem das Teilen des Kärtchens zu stoppen. Bitte versuche es erneut.",
+    "deleteBoard": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Boards. Bitte versuche es erneut.",
+    "editColumn": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spalte. Bitte versuche es erneut.",
+    "addNote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen des Kärtchens. Bitte versuche es erneut.",
+    "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
+    "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
+    "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
+    "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
+    "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",
+    "setShowHiddenColumns": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spaltensichtbarkeit. Bitte versuche es erneut.",
+    "changePermission": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Berechtigungen. Bitte versuche es erneut.",
+    "logout": "Es tut uns leid, aber wir haben Probleme dich abzumelden.",
+    "serverConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
+    "retry": "Wiederholen",
+    "joinBoard": "Es tut uns leid, aber wir haben ein Problem beim Beitreten des Boards. Bitte versuche es erneut.",
+    "acceptJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Akzeptieren der Beitrittsanfragen. Bitte versuche es erneut.",
+    "rejectJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Ablehnen der Beitrittsanfragen. Bitte versuche es erneut.",
+    "initApplication": "Es tut uns leid, aber wir haben ein Problem beim Erreichen des Servers. Bitte versuche die Seite neu zu laden.",
+    "addVote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen der Stimme. Bitte versuche es erneut.",
+    "deleteVote": "Es tut uns leid, aber wir haben ein Problem beim Entfernen der Stimme. Bitte versuche es erneut.",
+    "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
+    "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
+    "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut."
+
   }
 }

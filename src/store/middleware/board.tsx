@@ -5,6 +5,9 @@ import Socket from "sockette";
 import {ServerEvent} from "types/websocket";
 import store from "store";
 import {API} from "api";
+import {Toast} from "../../utils/Toast";
+import i18n from "../../i18n";
+import {Button} from "../../components/Button";
 
 let socket: Socket | undefined;
 
@@ -94,7 +97,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
       name: action.board.name === undefined ? currentState.name : action.board.name,
     }).catch(() => {
-      // TODO report error
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.editBoard")}</div>
+          <Button onClick={() => store.dispatch(Actions.editBoard(action.board))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
     });
   }
 
@@ -115,7 +123,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showVoting: currentState.showVoting,
       timerEnd: currentState.timerEnd,
     }).catch(() => {
-      // TODO report error
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.shareNote")}</div>
+          <Button onClick={() => store.dispatch(Actions.shareNote(action.note))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
     });
   }
 
@@ -126,7 +139,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showVoting: currentState.showVoting,
       timerEnd: currentState.timerEnd,
     }).catch(() => {
-      // TODO report error
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.unshareNote")}</div>
+          <Button onClick={() => store.dispatch(Actions.stopSharing())}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
     });
   }
 
@@ -136,7 +154,12 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         document.location.pathname = "/";
       })
       .catch(() => {
-        // TODO report error
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.deleteBoard")}</div>
+            <Button onClick={() => store.dispatch(Actions.deleteBoard())}>{i18n.t("Error.retry")}</Button>
+          </div>
+        );
       });
   }
 };
