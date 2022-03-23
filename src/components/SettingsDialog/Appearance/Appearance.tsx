@@ -2,15 +2,15 @@ import classNames from "classnames";
 import {t} from "i18next";
 import {useState} from "react";
 import {SettingsButton} from "../Components/SettingsButton";
-import {SettingsDropdown} from "../Components/SettingsDropdown";
+import {LanguageSettingsDropdown} from "../Components/LanguageSettingsDropdown";
 import {SettingsToggle} from "../Components/SettingsToggle";
 import "../SettingsDialog.scss";
 import "./Appearance.scss";
 
 export const Appearance = () => {
-  const [syncMode, setSyncMode] = useState<boolean>(false); // placeholder
-  const [showNotifications, setshowNotifications] = useState<boolean>(false); // placeholder
-  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+  const [syncMode, setSyncMode] = useState(false); // Todo: Implement me
+  const [showNotifications, setshowNotifications] = useState(false); // Todo: Implement me
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
@@ -22,7 +22,7 @@ export const Appearance = () => {
         <SettingsButton
           className="appearance-settings_sync-button"
           onClick={() => {
-            setSyncMode(!syncMode);
+            setSyncMode((prevVal) => !prevVal);
           }}
         >
           <div className="appearance-settings_sync-button_label">
@@ -37,10 +37,10 @@ export const Appearance = () => {
         <SettingsButton
           className="appearance-settings_language-dropdown"
           label={t("Appearance.Language")}
-          onClick={() => setShowDropdown(!showDropdown)}
+          onClick={() => setShowDropdown((prevVal) => !prevVal)}
           onBlur={() => setShowDropdown(false)}
         >
-          <SettingsDropdown showDropdown={showDropdown} />
+          <LanguageSettingsDropdown showDropdown={showDropdown} />
         </SettingsButton>
       </div>
     </div>

@@ -160,7 +160,7 @@ export const BoardSettings = () => {
 
           {showConfirmationDialog && (
             <ConfirmationDialog
-              headline={t("ConfirmationDialog.returnToHomepage")}
+              headline={t("ConfirmationDialog.deleteBoard")}
               acceptMessage={t("ConfirmationDialog.yes")}
               onAccept={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}
               declineMessage={t("ConfirmationDialog.no")}

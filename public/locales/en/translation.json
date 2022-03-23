@@ -51,6 +51,7 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",
+    "deleteBoard": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "yes": "Yes",
     "no": "No"
   },

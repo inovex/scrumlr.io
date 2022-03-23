@@ -1,16 +1,16 @@
-import {FC, useState} from "react";
-import "./SettingsDropdown.scss";
+import {VFC, useState} from "react";
+import "./LanguageSettingsDropdown.scss";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
 import {useTranslation} from "react-i18next";
 import i18n from "i18n";
 
-interface SettingsDropdownProps {
+interface LanguageSettingsDropdownProps {
   showDropdown?: boolean;
 }
 
-export const SettingsDropdown: FC<SettingsDropdownProps> = ({showDropdown}) => {
+export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({showDropdown}) => {
   const {t} = useTranslation();
 
   const changeLanguage = (language: string) => {
