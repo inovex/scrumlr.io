@@ -1,8 +1,8 @@
 - [x] Confirmation of board join requests
 - [ ] Test join process in multiple sessions
 - [X] Move stack leads to loss of notes in stack
-- [ ] Fix Voting of child notes
-- [ ] Fix position of votes when author visibility is disabled
+- [ ] (Manu) Fix Voting of child notes
+- [ ] (Manu) Fix position of votes when author visibility is disabled
 - [ ] Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
@@ -18,5 +18,5 @@
 - [ ] Fix CI/CD pipeline
 - [ ] Fix linter issues
 - [ ] Fix FIXME and TODOs
-  - Display error toasts on failed API requests
+- [X] Display error toasts on failed API requests
 - [X] Fix deletion of boards
