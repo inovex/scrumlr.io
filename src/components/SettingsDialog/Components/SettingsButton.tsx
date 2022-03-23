@@ -10,7 +10,6 @@ export interface SettingsButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onBlur?: (...args: any) => any;
   className?: string;
-  children?: ReactNode;
   disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
