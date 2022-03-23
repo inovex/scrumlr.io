@@ -2,6 +2,10 @@ import {Dispatch, MiddlewareAPI} from "redux";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
+import i18n from "i18next";
+import {Toast} from "../../utils/Toast";
+import {Button} from "../../components/Button";
+import store from "../index";
 
 export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.AddVote) {
@@ -10,7 +14,13 @@ export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.createdVote(r));
       })
       .catch(() => {
-        // TODO show error
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.addVote")}</div>
+            <Button onClick={() => store.dispatch(Actions.addVote(action.note))}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
   }
 
@@ -20,7 +30,13 @@ export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.deletedVote({voting: action.context.voting!, note: action.note}));
       })
       .catch(() => {
-        // TODO show error
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.deleteVote")}</div>
+            <Button onClick={() => store.dispatch(Actions.deleteVote(action.note))}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
   }
 };

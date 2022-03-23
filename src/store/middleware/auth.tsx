@@ -21,8 +21,8 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
       .catch(() => {
         Toast.error(
           <div>
-            <div>{i18n.t("Homepage.errorServerConnection")}</div>
-            <Button onClick={() => store.dispatch(Actions.initApplication())}>{i18n.t("Homepage.retry")}</Button>
+            <div>{i18n.t("Error.serverConnection")}</div>
+            <Button onClick={() => store.dispatch(Actions.initApplication())}>{i18n.t("Error.retry")}</Button>
           </div>,
           false
         );
@@ -37,7 +37,13 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         location.reload();
       })
       .catch(() => {
-        // FIXME show error
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.logout")}</div>
+            <Button onClick={() => store.dispatch(Actions.signOut())}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
   }
 };

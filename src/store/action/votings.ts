@@ -15,9 +15,8 @@ export const VotingActionFactory = {
    *
    * @param voting the current vote configuration
    */
-  createVoting: (board: string, voting: CreateVotingRequest) => ({
+  createVoting: (voting: CreateVotingRequest) => ({
     type: VotingAction.CreateVoting,
-    board,
     voting,
   }),
 

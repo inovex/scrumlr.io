@@ -4,6 +4,9 @@ import {ApplicationState} from "types";
 import store from "store";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
+import i18n from "i18next";
+import {Toast} from "../../utils/Toast";
+import {Button} from "../../components/Button";
 
 let socket: Socket | undefined;
 
@@ -22,7 +25,13 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
         }
       })
       .catch(() => {
-        // FIXME show error
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.joinBoard")}</div>
+            <Button onClick={() => store.dispatch(Actions.joinBoard(action.boardId, action.passphrase))}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
   }
 
@@ -60,7 +69,13 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.AcceptJoinRequests) {
     action.userIds.forEach((userId) => {
       API.acceptJoinRequest(action.context.board!, userId).catch(() => {
-        // FIXME error handling
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.acceptJoinRequests")}</div>
+            <Button onClick={() => store.dispatch(Actions.acceptJoinRequests(action.userIds))}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
     });
   }
@@ -68,7 +83,13 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.RejectJoinRequests) {
     action.userIds.forEach((userId) => {
       API.rejectJoinRequest(action.context.board!, userId).catch(() => {
-        // FIXME error handling
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.rejectJoinRequest")}</div>
+            <Button onClick={() => store.dispatch(Actions.rejectJoinRequests(action.userIds))}>{i18n.t("Error.retry")}</Button>
+          </div>,
+          false
+        );
       });
     });
   }

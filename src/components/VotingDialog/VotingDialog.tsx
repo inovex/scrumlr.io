@@ -12,7 +12,6 @@ import {Actions} from "store/action";
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const boardId = useAppSelector((state) => state.board.data!.id);
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
@@ -45,7 +44,7 @@ export const VotingDialog: VFC = () => {
 
   const startVoting = () => {
     store.dispatch(
-      Actions.createVoting(boardId, {
+      Actions.createVoting({
         voteLimit: numberOfVotes,
         showVotesOfOthers: !anonymousVoting,
         allowMultipleVotes: allowCumulativeVoting,

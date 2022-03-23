@@ -1,5 +1,4 @@
-import store, {useAppSelector} from "store";
-import {ApplicationState} from "types";
+import store from "store";
 import {Actions} from "store/action";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import "../BoardSettings/BoardSettings.scss";
@@ -18,20 +17,12 @@ export type DeleteProps = {
 export const DeleteBoardOption = (props: DeleteProps) => {
   const {t} = useTranslation();
 
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-  }));
-
   return (
     <BoardOption data-testid="delete">
       <BoardOptionButton label={t("DeleteBoardOption.button")} icon={DeleteIcon} isExpandable onClick={props.onClick} />
       <div className={classNames("delete-board-option__container", {"delete-board-option__container--visible": props.expand})}>
         <label className="delete-board-option__warning-label">{t("DeleteBoardOption.warning")}</label>
-        <button
-          className="delete-board-option__delete-board"
-          onClick={() => store.dispatch(Actions.deleteBoard(state.board!.id))}
-          tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}
-        >
+        <button className="delete-board-option__delete-board" onClick={() => store.dispatch(Actions.deleteBoard())} tabIndex={props.expand ? TabIndex.default : TabIndex.disabled}>
           {t("DeleteBoardOption.button")}
         </button>
       </div>

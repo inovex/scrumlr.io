@@ -194,14 +194,39 @@
     "startButton": "Start now",
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
-    "terms": "Terms & conditions",
-    "errorServerConnection": "The connection to the server could not be established. Please try to reload the page.",
-    "retry": "Retry"
+    "terms": "Terms & conditions"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
+  },
+  "Error": {
+    "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
+    "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
+    "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
+    "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
+    "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
+    "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
+    "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
+    "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
+    "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
+    "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",
+    "setShowHiddenColumns": "Sorry, but we're having trouble changing the column visibility. Please try again.",
+    "changePermission": "Sorry, but we're having trouble updating the permissions. Please try again.",
+    "logout": "Sorry, but we're having trouble signing you out.",
+    "serverConnection": "The connection to the server could not be established. Please try to reload the page.",
+    "retry": "Retry",
+    "joinBoard": "Sorry, but we're having trouble joining the board. Please try again.",
+    "acceptJoinRequests": "Sorry, but we're having trouble accepting the requests. Please try again.",
+    "rejectJoinRequests": "Sorry, but we're having trouble rejecting the requests. Please try again.",
+    "initApplication": "Sorry, but we're having trouble reaching the server for information. Please try to reload the page.",
+    "addVote": "Sorry, but we're having trouble adding the vote. Please try again.",
+    "deleteVote": "Sorry, but we're having trouble deleting the vote. Please try again.",
+    "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
+    "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
+    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again."
   }
 }
