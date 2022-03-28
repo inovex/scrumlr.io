@@ -109,127 +109,18 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
             </li>
             <li
               class="board-option"
-              data-testid="delete"
+              data-testid="allSettings"
             >
-              <button
-                class="board-option-button board-option-button--expandable"
+              <a
+                class="board-option-link"
+                href="/settings"
               >
-                <svg
-                  class="board-option-button__icon"
+                <p
+                  class="board-option-link__label"
                 >
-                  icon-delete.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Delete board
-                </span>
-              </button>
-              <div
-                class="delete-board-option__container"
-              >
-                <label
-                  class="delete-board-option__warning-label"
-                >
-                  Are you absolutely sure that you want to delete the board? This action cannot be undone.
-                </label>
-                <button
-                  class="delete-board-option__delete-board"
-                  tabindex="-1"
-                >
-                  Delete board
-                </button>
-              </div>
-            </li>
-            <li
-              class="board-option"
-              data-testid="qrcode"
-            >
-              <button
-                class="board-option-button board-option-button--expandable"
-              >
-                <svg
-                  class="board-option-button__icon"
-                >
-                  icon-share.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Share board
-                </span>
-              </button>
-              <div
-                class="share-qr-code-option__container"
-              >
-                <canvas
-                  class="share-qr-code-option__qrcode"
-                  height="260"
-                  style="height: 260px; width: 260px;"
-                  width="260"
-                />
-                <button
-                  class="share-qr-code-option__copy-to-clipboard"
-                  tabindex="-1"
-                >
-                  Copy Invite URL
-                </button>
-              </div>
-            </li>
-            <li
-              class="board-option"
-              data-testid="export"
-            >
-              <button
-                class="board-option-button board-option-button--expandable"
-              >
-                <svg
-                  class="board-option-button__icon"
-                >
-                  icon-export.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Export board
-                </span>
-              </button>
-              <div
-                class="export-board-option__container"
-              >
-                <button
-                  class="board-option-button"
-                  data-testid="export-json"
-                  tabindex="-1"
-                >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-export-json.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Export as json
-                  </span>
-                </button>
-                <button
-                  class="board-option-button"
-                  data-testid="export-csv"
-                  tabindex="-1"
-                >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-export-csv.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Export as csv
-                  </span>
-                </button>
-              </div>
+                  Show all board settings
+                </p>
+              </a>
             </li>
           </ul>
         </div>
@@ -284,93 +175,18 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
             </li>
             <li
               class="board-option"
-              data-testid="qrcode"
+              data-testid="allSettings"
             >
-              <button
-                class="board-option-button board-option-button--expandable"
+              <a
+                class="board-option-link"
+                href="/settings"
               >
-                <svg
-                  class="board-option-button__icon"
+                <p
+                  class="board-option-link__label"
                 >
-                  icon-share.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Share board
-                </span>
-              </button>
-              <div
-                class="share-qr-code-option__container"
-              >
-                <canvas
-                  class="share-qr-code-option__qrcode"
-                  height="260"
-                  style="height: 260px; width: 260px;"
-                  width="260"
-                />
-                <button
-                  class="share-qr-code-option__copy-to-clipboard"
-                  tabindex="-1"
-                >
-                  Copy Invite URL
-                </button>
-              </div>
-            </li>
-            <li
-              class="board-option"
-              data-testid="export"
-            >
-              <button
-                class="board-option-button board-option-button--expandable"
-              >
-                <svg
-                  class="board-option-button__icon"
-                >
-                  icon-export.svg
-                </svg>
-                <span
-                  class="board-option-button__label"
-                >
-                  Export board
-                </span>
-              </button>
-              <div
-                class="export-board-option__container"
-              >
-                <button
-                  class="board-option-button"
-                  data-testid="export-json"
-                  tabindex="-1"
-                >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-export-json.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Export as json
-                  </span>
-                </button>
-                <button
-                  class="board-option-button"
-                  data-testid="export-csv"
-                  tabindex="-1"
-                >
-                  <svg
-                    class="board-option-button__icon"
-                  >
-                    icon-export-csv.svg
-                  </svg>
-                  <span
-                    class="board-option-button__label"
-                  >
-                    Export as csv
-                  </span>
-                </button>
-              </div>
+                  Show all board settings
+                </p>
+              </a>
             </li>
           </ul>
         </div>

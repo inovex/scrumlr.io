@@ -1,0 +1,275 @@
+@import "constants/style";
+
+.settings-dialog__portal {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+// settings-dialog container
+$settings-dialog-container--sides-small: 32px;
+$settings-dialog-container--sides-large: 92px;
+$settings-dialog-container--bottom: 62px;
+
+.settings-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 616px;
+    width: auto;
+    border-radius: 8px;
+    box-shadow: 0 16px 32px #0057ff29;
+  }
+  [theme="dark"] .settings-dialog {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+  }
+}
+
+.settings-dialog__content {
+  display: none;
+  background: $color-white-one;
+  width: 100%;
+  padding-top: 50px;
+}
+[theme="dark"] .settings-dialog__content {
+  background: $color-dark-one;
+}
+.settings-dialog--selected .settings-dialog__content {
+  display: block;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__content {
+    width: 380px;
+    height: calc(100% + 50px);
+    border-radius: 8px;
+  }
+}
+@media screen and (min-width: 920px) {
+  .settings-dialog__content {
+    display: block;
+    width: 544px;
+    height: 100%;
+    border-radius: 0px 8px 8px 0px;
+    padding-top: 0;
+  }
+}
+
+.settings-dialog__sidebar {
+  width: 100%;
+  background: $color-white;
+}
+[theme="dark"] .settings-dialog__sidebar {
+  background: $color-dark-mode;
+}
+.settings-dialog--selected .settings-dialog__sidebar {
+  display: none;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__sidebar {
+    width: 380px;
+    height: calc(100% + 50px);
+    border-radius: 8px;
+  }
+}
+@media screen and (min-width: 920px) {
+  .settings-dialog--selected .settings-dialog__sidebar {
+    display: block;
+  }
+  .settings-dialog__sidebar {
+    width: 318px;
+    height: 100%;
+    border-radius: 8px 0 0 8px;
+  }
+}
+
+.settings-dialog__scrumlr-logo {
+  height: 40px;
+  margin: 40px;
+}
+[theme="light"] .settings-dialog__scrumlr-logo--dark {
+  display: none;
+}
+[theme="dark"] .settings-dialog__scrumlr-logo--light {
+  display: none;
+}
+
+.settings-dialog__navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-dialog__close-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  color: $color-backlog-blue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+}
+[theme="dark"] .settings-dialog__close-button {
+  color: $color-planning-pink;
+}
+@media screen and (min-width: 450px) {
+  .settings-dialog__close-button {
+    top: -22px;
+    right: -22px;
+    background-color: $color-white;
+    box-shadow: 0px 16px 32px #0057ff3d;
+  }
+  [theme="dark"] .settings-dialog__close-button {
+    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+    background: $color-dark-mode;
+  }
+}
+.close-button__icon {
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.settings-dialog__back-link {
+  display: none;
+}
+@media screen and (max-width: 920px) {
+  .settings-dialog__back-link {
+    display: inline;
+  }
+  .settings-dialog__back-link > svg {
+    position: absolute;
+    top: 12px;
+    left: 9px;
+    color: $color-backlog-blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 22px;
+  }
+  [theme="dark"] .settings-dialog__back-link > svg {
+    color: $color-planning-pink;
+  }
+}
+
+.navigation__item {
+  height: 56px;
+  width: 252px;
+  margin: 0 32px;
+  border-radius: 28px;
+  text-align: center;
+  text-decoration: none;
+  color: $color-black;
+  position: relative;
+  outline: none;
+}
+[theme="dark"] .navigation__item {
+  color: $color-white;
+}
+.navigation__item > p {
+  margin: 0;
+  position: absolute;
+  left: 64px;
+}
+.navigation__item > p:first-child {
+  font-size: 14px;
+  font-weight: 600;
+  top: 12px;
+}
+.navigation__item > p:nth-child(2) {
+  font-size: 12px;
+  top: 30px;
+  opacity: 65%;
+}
+.navigation__item:hover {
+  background: rgba(var(--accent-color-rgb), 0.8);
+  color: white;
+}
+.navigation__item--active {
+  outline: none;
+  background: var(--accent-color);
+  color: $color-white;
+}
+.navigation-item__icon {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--accent-color);
+  color: white;
+}
+
+.settings-dialog__container {
+  margin: 0 $settings-dialog-container--sides-small;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@media screen and (min-width: 920px) {
+  .settings-dialog__container {
+    margin: 0 $settings-dialog-container--sides-large;
+  }
+}
+
+.settings-dialog__header {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+@media screen and (min-width: 920px) {
+  .settings-dialog__header {
+    margin: 40px 0;
+  }
+}
+
+.settings-dialog__header-text {
+  border-bottom: solid 3px var(--accent-color);
+  padding-bottom: 8px;
+  margin: 0;
+}
+
+.settings-dialog__seperator {
+  margin: 0;
+  margin-left: 5%;
+  width: 90%;
+  border: 0;
+  border-top: 0.5px solid #eee;
+}
+
+.settings-dialog__group {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+[theme="dark"] {
+  .settings-dialog__header-text {
+    color: $color-white;
+  }
+
+  .settings-dialog__seperator {
+    border-top: 0.5px solid $color-dark-one;
+  }
+
+  .settings-dialog__group {
+    background-color: $color-dark-mode-note;
+  }
+}

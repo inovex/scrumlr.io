@@ -46,16 +46,19 @@
     "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
-    "showParticipants": "Zeige Teilnehmer"
+    "showParticipants": "Zeige Teilnehmer",
+    "showAllBoardSettings": "Zeige alle Einstellungen"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
+    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein"
   },
   "ParticipantsList": {
     "title": "Teilnehmer",
     "search": "Suche",
+    "searchAndFilter": "Suche und Filter?",
     "headerLegendName": "Name",
     "headerLegendAdmin": "Admin"
   },
@@ -64,13 +67,16 @@
     "button": "Sitzung löschen"
   },
   "ExportBoardOption": {
+    "title": "Sitzung exportieren",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren"
   },
   "ShareQrCodeOption": {
+    "title": "Sitzung teilen",
     "button": "Sitzung teilen",
-    "copyInviteURL": "URL kopieren"
+    "copyInviteURL": "URL kopieren",
+    "inviteUrlCopied": "URL wurde kopiert"
   },
   "ShowAuthorOption": {
     "show": "Zeige Ersteller der Kärtchen",
@@ -165,10 +171,6 @@
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },
-  "BoardSettings": {
-    "save": "speichern",
-    "edit": "bearbeiten"
-  },
   "AppInfo": {
     "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },
@@ -186,6 +188,10 @@
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!"
   },
+  "Language": {
+    "german": "Deutsch",
+    "english": "Englisch"
+  },
   "Homepage": {
     "developers": "© 2021, mit ❤️von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
@@ -200,5 +206,40 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Einstellungen",
+    "BoardSettingsDescription": "Name, Zugriffseinstellungen",
+    "Participants": "Teilnehmer",
+    "ParticipantsDescription": "Teilnehmerliste, Moderation",
+    "Appearance": "Darstellung",
+    "AppearanceDescription": "Mitteilungen, Sprache, UI",
+    "ShareSession": "Sitzung teilen",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Sitzung exportieren",
+    "ExportBoardDescription": "Exportiere das Board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "Wir würden gerne von dir hören",
+    "ProfileDescription": "Profil bearbeiten"
+  },
+  "BoardSettings": {
+    "BoardName": "Sitzungsname",
+    "AccessPolicy": "Zugangsrichtlinien",
+    "Password": "Passwort",
+    "SetAccessPolicyOpen": "Sitzung veröffentlichen",
+    "SetAccessPolicyPasswordProtected": "Sitzung passwort sichern",
+    "DeleteBoard": "Sitzung löschen",
+    "generatePassword": "Erstelle zufälliges Passwort",
+    "save": "speichern",
+    "edit": "bearbeiten"
+  },
+  "Participants": {
+    "Owner": "Besitzer"
+  },
+  "Appearance": {
+    "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",
+    "SyncModeDescription": "Scrumlr passt den Darstellungsmodus (Dunkel oder Hell) deinen aktuellen Systemeinstellungen an",
+    "AllowNotifications": "Erlaube Notifikationen",
+    "Language": "Sprache"
   }
 }
