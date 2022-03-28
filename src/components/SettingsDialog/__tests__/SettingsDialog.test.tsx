@@ -1,13 +1,24 @@
 import {Provider} from "react-redux";
 import {render} from "testUtils";
 import configureStore from "redux-mock-store";
-import {User} from "parse";
-import {mocked} from "ts-jest/utils";
 import {SettingsDialog} from "..";
 
 const mockStore = configureStore();
-const mockedUser = mocked(User, true);
-mockedUser.current = jest.fn(() => ({id: "test-id"}));
+
+jest.mock(
+  "parse",
+  () => {
+    const originalModule = jest.requireActual("parse");
+    return {
+      ...originalModule,
+      User: {
+        ...originalModule.User,
+        current: jest.fn(() => ({id: "test-id"})),
+      },
+    };
+  },
+  {}
+);
 
 const initialState = {
   board: {
@@ -17,6 +28,7 @@ const initialState = {
   },
   users: {
     all: [{id: "test-id", displayName: "John Doe"}],
+    admins: [{id: "test-id", displayName: "John Doe"}],
   },
 };
 
@@ -31,7 +43,6 @@ const createSettingsDialog = () => {
 
 describe("SettingsDialog", () => {
   beforeEach(() => {
-    mockedUser.current = jest.fn(() => ({id: "test-id"} as never));
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
     global.document.querySelector("body")!.appendChild(portal);

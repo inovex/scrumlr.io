@@ -1,5 +1,10 @@
 @import "constants/style";
 
+.settings-dialog__portal {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
 // settings-dialog container
 $settings-dialog-container--sides-small: 32px;
 $settings-dialog-container--sides-large: 92px;

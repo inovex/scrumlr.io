@@ -4,12 +4,9 @@ import {Link} from "react-router-dom";
 import classNames from "classnames";
 import Parse from "parse";
 import {useTranslation} from "react-i18next";
-
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
-
 import {useAppSelector} from "store";
-
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
@@ -20,7 +17,6 @@ import {ReactComponent as ParticipantsIcon} from "assets/icon-participants.svg";
 import {ReactComponent as AppearanceIcon} from "assets/icon-appearance.svg";
 import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
-
 import "./SettingsDialog.scss";
 
 export const SettingsDialog: VFC = () => {
@@ -33,30 +29,37 @@ export const SettingsDialog: VFC = () => {
     }
     return undefined;
   });
+  const isBoardModerator = useAppSelector((state) => state.users.admins.find((user) => user.id === Parse.User.current()?.id));
 
   useEffect(() => {
+    // If user is not a moderator of the board, he shouldn't see the board settings
+    if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
+      navigate(`/board/${boardId}/settings/participants`);
+    }
     // If the window is large enough the show the whole dialog, automatically select the
-    // first navigatin item to show
+    // first navigation item to show
     if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
-      navigate("board");
+      navigate(isBoardModerator ? "board" : "participants");
     }
   }, [navigate]);
 
   return (
-    <Portal onClose={() => navigate(`/board/${boardId}`)}>
+    <Portal onClose={() => navigate(`/board/${boardId}`)} className="settings-dialog__portal">
       <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
           <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
           <nav className="settings-dialog__navigation">
-            <Link
-              to="board"
-              className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
-            >
-              <p>{t("SettingsDialog.BoardSettings")}</p>
-              <p>{t("SettingsDialog.BoardSettingsDescription")}</p>
-              <SettingsIcon className="navigation-item__icon" />
-            </Link>
+            {isBoardModerator && (
+              <Link
+                to="board"
+                className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
+              >
+                <p>{t("SettingsDialog.BoardSettings")}</p>
+                <p>{t("SettingsDialog.BoardSettingsDescription")}</p>
+                <SettingsIcon className="navigation-item__icon" />
+              </Link>
+            )}
             <Link
               to="participants"
               className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/settings/participants")})}
