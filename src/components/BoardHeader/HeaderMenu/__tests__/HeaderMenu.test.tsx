@@ -4,7 +4,6 @@ import {Provider} from "react-redux";
 import configureStore from "redux-mock-store";
 import store from "store";
 import {ActionFactory} from "store/action";
-import {exportAsJSON, exportAsCSV} from "utils/export";
 import {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
@@ -93,16 +92,6 @@ describe("<HeaderMenu/>", () => {
       expect(container).toMatchSnapshot();
     });
 
-    test("count of menu items for basic users", () => {
-      const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(3);
-    });
-
-    test("tests count of menu items for moderators", () => {
-      const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-      expect(container.querySelector(".header-menu")?.children.length).toEqual(7);
-    });
-
     describe("BoardOption.ShowAuthorOption", () => {
       test("Click on hide authors", async () => {
         render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
@@ -172,132 +161,6 @@ describe("<HeaderMenu/>", () => {
         const label = screen.getByTestId("column")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
         expect(label.innerHTML).toEqual("Hide columns");
-      });
-    });
-
-    describe("BoardOption.ShareQrCodeOption", () => {
-      test("Click on share board container", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("qrcode")).not.toBeNull();
-
-        const button = screen.getByTestId("qrcode")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(container.querySelector(".share-qr-code-option__container")).toHaveClass("share-qr-code-option__container--visible");
-        });
-      });
-
-      test("Click on copy share link", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("qrcode")).not.toBeNull();
-
-        let button = screen.getByTestId("qrcode")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(container.querySelector(".share-qr-code-option__container")).toHaveClass("share-qr-code-option__container--visible");
-        });
-
-        jest.spyOn(navigator.clipboard, "writeText");
-        button = screen.getByTestId("qrcode")!.querySelector(".share-qr-code-option__container--visible")!.querySelector("button")!;
-        expect(button).toHaveClass("share-qr-code-option__copy-to-clipboard");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(navigator.clipboard.writeText).toHaveBeenCalledWith(document.location.href);
-        });
-      });
-    });
-
-    describe("BoardOption.DeleteBoardOption", () => {
-      test("Click on delete board container", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("delete")).not.toBeNull();
-
-        const button = screen.getByTestId("delete")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(container.querySelector(".delete-board-option__container")).toHaveClass("delete-board-option__container--visible");
-        });
-      });
-
-      test("Click on delete button", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("delete")).not.toBeNull();
-
-        let button = screen.getByTestId("delete")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(container.querySelector(".delete-board-option__container")).toHaveClass("delete-board-option__container--visible");
-        });
-
-        button = screen.getByTestId("delete")!.querySelector(".delete-board-option__container--visible")!.querySelector("button")!;
-        expect(button).toHaveClass("delete-board-option__delete-board");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(ActionFactory.deleteBoard("boardId"));
-        });
-      });
-
-      test("Click on delete board", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("delete")).not.toBeNull();
-
-        const button = screen.getByTestId("delete")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(container.querySelector(".delete-board-option__container")).toHaveClass("delete-board-option__container--visible");
-        });
-      });
-    });
-
-    describe("BoardOption.ExportBoardOption", () => {
-      test("Click on export board container", async () => {
-        const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("export")).not.toBeNull();
-
-        const button = screen.getByTestId("export")!.querySelector("button")!;
-        expect(button).toHaveClass("board-option-button");
-        fireEvent.click(button);
-        await waitFor(() => {
-          expect(container.querySelector(".export-board-option__container")).toHaveClass("export-board-option__container--visible");
-        });
-      });
-    });
-
-    describe("blob download", () => {
-      test("json function called", async () => {
-        render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("export-json")).not.toBeNull();
-
-        const button = screen.getByTestId("export-json")!;
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(exportAsJSON).toBeCalled();
-        });
-      });
-
-      test("csv function called", async () => {
-        render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
-        expect(screen.getByTestId("export-csv")).not.toBeNull();
-
-        const button = screen.getByTestId("export-csv")!;
-        fireEvent.click(button);
-
-        await waitFor(() => {
-          expect(exportAsCSV).toBeCalled();
-        });
       });
     });
   });
