@@ -25,6 +25,7 @@ server/logs
 
 # ide
 /.idea
+**/.idea
 debug.log
 ui-debug.log
 
