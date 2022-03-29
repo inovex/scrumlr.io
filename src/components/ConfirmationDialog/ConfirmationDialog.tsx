@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./ConfirmationDialog.scss";
@@ -8,10 +9,11 @@ export interface ConfirmationDialogProps {
   declineMessage: string;
   onAccept: () => void;
   onDecline: () => void;
+  className?: string;
 }
 
-export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline}: ConfirmationDialogProps) => (
-  <div className="confirmation-dialog__wrapper">
+export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, className}: ConfirmationDialogProps) => (
+  <div className={classNames("confirmation-dialog__wrapper", className)}>
     <div className="confirmation-dialog">
       <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       <h2>{headline}</h2>
