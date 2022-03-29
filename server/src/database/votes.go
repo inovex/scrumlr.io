@@ -33,8 +33,9 @@ func (d *Database) AddVote(board, user, note uuid.UUID) (Vote, error) {
 
 	currentVotesOnNoteCount := d.db.NewSelect().
 		Model((*Vote)(nil)).
-		Table("openVotingQuery").
 		ColumnExpr("COUNT(*) as count").
+		Where("voting = (SELECT id FROM \"openVotingQuery\")").
+		Where("\"user\" = ?", user).
 		Where("note = ?", note)
 
 	values := d.db.NewSelect().
