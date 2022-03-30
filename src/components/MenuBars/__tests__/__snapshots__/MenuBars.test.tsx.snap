@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuBars should match snapshot 1`] = `
+<aside
+  class="menu-bars menu-bars--user menu-bars--isAdmin"
+  id="menu-bars"
+>
+  <section
+    class="menu user-menu"
+  >
+    <div
+      class="menu__items"
+    >
+      <button
+        class="menu-item menu-item--disabled menu-item--right"
+        tabindex="300"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            MenuBars.markAsDone
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-check.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--disabled menu-item--right"
+        tabindex="301"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            MenuBars.raiseHand
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-hand.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--right"
+        tabindex="302"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            MenuBars.themeToggle
+          </span>
+        </div>
+      </button>
+    </div>
+  </section>
+  <section
+    class="menu admin-menu"
+  >
+    <div
+      class="menu__items"
+    >
+      <button
+        class="menu-item menu-item--left"
+        tabindex="0"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Timer
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-timer.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--left"
+        tabindex="0"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            Voting
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-vote.svg
+        </svg>
+      </button>
+      <button
+        class="menu-item menu-item--disabled menu-item--left"
+        tabindex="415"
+      >
+        <div
+          class="menu-item__tooltip"
+        >
+          <span
+            class="tooltip__text"
+          >
+            MenuBars.startFocusMode
+          </span>
+        </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-focus.svg
+        </svg>
+        <svg
+          class="menu-item__icon menu-item__icon--end"
+        >
+          icon-close.svg
+        </svg>
+      </button>
+    </div>
+  </section>
+  <button
+    class="menu-bars__switch"
+  >
+    <svg
+      class="switch__icon switch__icon--add"
+    >
+      icon-toggle-add-menu.svg
+    </svg>
+    <svg
+      class="switch__icon switch__icon--settings"
+    >
+      icon-toggle-settings-menu.svg
+    </svg>
+  </button>
+</aside>
+`;
