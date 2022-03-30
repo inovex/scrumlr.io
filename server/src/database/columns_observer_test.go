@@ -42,7 +42,7 @@ func TestColumnsObserver(t *testing.T) {
 
 func testColumnsObserverOnCreate(t *testing.T) {
 	board := fixture.MustRow("Board.columnsObserverTestBoard").(*Board)
-	column, err := testDb.CreateColumn(ColumnInsert{Board: board.ID, Name: "Created column"})
+	column, err := testDb.CreateColumn(ColumnInsert{Board: board.ID, Name: "Created column", Color: "backlog-blue"})
 
 	assert.Nil(t, err)
 	assert.NotNil(t, columnsObserver.board)
@@ -59,6 +59,7 @@ func testColumnsObserverOnUpdate(t *testing.T) {
 		ID:      columnsObserverTestColumn.ID,
 		Board:   columnsObserverTestColumn.Board,
 		Name:    "A new name",
+		Color:   "backlog-blue",
 		Visible: true,
 		Index:   0,
 	})

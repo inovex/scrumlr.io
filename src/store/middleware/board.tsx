@@ -95,7 +95,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       allowStacking: action.board.allowStacking,
       showAuthors: action.board.showAuthors,
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
-      name: action.board.name === undefined ? currentState.name : action.board.name,
+      name: action.board.name == null ? currentState.name : action.board.name,
     }).catch(() => {
       Toast.error(
         <div>

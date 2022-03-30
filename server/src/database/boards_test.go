@@ -108,10 +108,12 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 		Salt:         nil,
 	}, []ColumnInsert{
 		{
-			Name: "A",
+			Name:  "A",
+			Color: "backlog-blue",
 		},
 		{
-			Name: "B",
+			Name:  "B",
+			Color: "backlog-blue",
 		},
 	})
 

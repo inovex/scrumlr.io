@@ -14,8 +14,6 @@ export const Participants = () => {
   const state = useAppSelector((applicationState) => ({
     me: applicationState.participants!.self,
     others: applicationState.participants!.others,
-    board: applicationState.board.data!,
-    currentUserIsModerator: applicationState.view.moderating,
   }));
 
   return (

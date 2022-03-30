@@ -1,5 +1,188 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`BoardSettings should match snapshot 1`] = `
+<div
+  class="settings-dialog__container accent-color__backlog-blue"
+>
+  <header
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text"
+    >
+       
+      SettingsDialog.BoardSettings
+    </h2>
+  </header>
+  <div
+    class="board-settings__container-wrapper"
+  >
+    <div
+      class="board-settings__container"
+    >
+      <button
+        class="settings-option-button board-settings__board-name-button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          BoardSettings.BoardName
+        </span>
+        <input
+          class="board-settings__board-name-button_input"
+          placeholder="scrumlr.io"
+          value="test-board-name"
+        />
+      </button>
+      <div
+        class="board-settings__group-and-button"
+      >
+        <div
+          class="settings-dialog__group"
+        >
+          <button
+            class="settings-option-button settings-option-button--disabled board-settings__policy-button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              BoardSettings.AccessPolicy
+            </span>
+            <div
+              class="board-settings__policy-button_value"
+            >
+              <span>
+                AccessPolicySelection.publicTitle
+              </span>
+              <svg>
+                icon-lock.svg
+              </svg>
+            </div>
+          </button>
+          <hr
+            class="settings-dialog__seperator"
+          />
+          <button
+            class="settings-option-button board-settings__password-button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              BoardSettings.Password
+            </span>
+            <div
+              class="board-settings__password-button_value"
+            >
+              <input
+                class="board-settings__password-button_value-input"
+                type="password"
+                value=""
+              />
+              <svg>
+                icon-hidden.svg
+              </svg>
+            </div>
+          </button>
+        </div>
+        <button
+          class="board-settings__generate-password-button"
+        >
+          <svg>
+            icon-refresh.svg
+          </svg>
+          <span>
+            BoardSettings.generatePassword
+          </span>
+        </button>
+        <button
+          class="board-settings__set-policy-button"
+        >
+          <svg>
+            icon-lock.svg
+          </svg>
+          <span>
+            BoardSettings.SetAccessPolicyPasswordProtected
+          </span>
+        </button>
+      </div>
+      <div
+        class="settings-dialog__group"
+      >
+        <button
+          class="settings-option-button board-settings__show-author-button"
+          data-testid="author"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            ShowAuthorOption.hide
+          </span>
+          <div
+            class="settings-toggle"
+          >
+            <div
+              class="settings-toggle__switch settings-toggle__switch--right"
+            />
+          </div>
+        </button>
+        <hr
+          class="settings-dialog__seperator"
+        />
+        <button
+          class="settings-option-button board-settings__show-notes-button"
+          data-testid="notes"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            ShowOtherUsersNotesOption.hide
+          </span>
+          <div
+            class="settings-toggle"
+          >
+            <div
+              class="settings-toggle__switch settings-toggle__switch--right"
+            />
+          </div>
+        </button>
+        <hr
+          class="settings-dialog__seperator"
+        />
+        <button
+          class="settings-option-button board-settings__show-columns-button"
+          data-testid="columns"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            ShowHiddenColumnsOption.show
+          </span>
+          <div
+            class="settings-toggle"
+          >
+            <div
+              class="settings-toggle__switch settings-toggle__switch--left"
+            />
+          </div>
+        </button>
+      </div>
+      <button
+        class="settings-option-button board-settings__delete-button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          BoardSettings.DeleteBoard
+        </span>
+        <svg>
+          icon-delete.svg
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`BoardSettings should only render BoardName and AccessPolicy for participants 1`] = `
 <div
   class="settings-dialog__container accent-color__backlog-blue"

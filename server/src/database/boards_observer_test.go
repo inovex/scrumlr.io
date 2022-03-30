@@ -31,7 +31,7 @@ func TestBoardsObserver(t *testing.T) {
 	t.Run("Test=1", testBoardsObserverOnUpdate)
 	t.Run("Test=2", testBoardsObserverOnDelete)
 
-	_, _ = testDb.DetachObserver(columnsObserver)
+	_, _ = testDb.DetachObserver(boardsObserver)
 }
 
 func testBoardsObserverOnUpdate(t *testing.T) {
