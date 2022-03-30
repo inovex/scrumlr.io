@@ -12,8 +12,6 @@ type HeaderMenuProps = {
   currentUserIsModerator: boolean;
 };
 
-type ExpandableOptions = "share" | "delete" | "export";
-
 const HeaderMenu = (props: HeaderMenuProps) => {
   const state = useSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data,
@@ -21,25 +19,15 @@ const HeaderMenu = (props: HeaderMenuProps) => {
 
   const [activeEditMode, setActiveEditMode] = useState(false);
   const [accessPolicy, setAccessPolicy] = useState(state.board!.accessPolicy);
-  const [expandedOption, setExpandedOption] = useState<ExpandableOptions | undefined>();
 
   if (!props.open) {
     return null;
   }
 
-  const onExpand = (option: ExpandableOptions) => () => {
-    if (option === expandedOption) {
-      setExpandedOption(undefined);
-    } else {
-      setExpandedOption(option);
-    }
-  };
-
   return (
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        setExpandedOption(undefined);
         setAccessPolicy(state.board!.accessPolicy);
         props.onClose();
       }}
@@ -57,11 +45,9 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
-            <BoardOption.DeleteBoardOption expand={expandedOption === "delete"} onClick={onExpand("delete")} />
           </>
         )}
-        <BoardOption.ShareQrCodeOption expand={expandedOption === "share"} onClick={onExpand("share")} />
-        <BoardOption.ExportBoardOption expand={expandedOption === "export"} onClose={props.onClose} onClick={onExpand("export")} />
+        <BoardOption.ShowAllBoardSettings onClose={props.onClose} />
       </ul>
     </Portal>
   );

@@ -46,16 +46,19 @@
     "togglePassphraseVisibility": "Toggle passphrase visibility"
   },
   "BoardHeader": {
-    "showParticipants": "Show participants"
+    "showParticipants": "Show participants",
+    "showAllBoardSettings": "Show all board settings"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",
+    "deleteBoard": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "yes": "Yes",
     "no": "No"
   },
   "ParticipantsList": {
     "title": "Participants",
     "search": "Search",
+    "searchAndFilter": "Search and filter?",
     "headerLegendName": "Name",
     "headerLegendAdmin": "Admin"
   },
@@ -64,13 +67,16 @@
     "button": "Delete board"
   },
   "ExportBoardOption": {
+    "title": "Export board",
     "button": "Export board",
     "exportAsJson": "Export as json",
     "exportAsCSV": "Export as csv"
   },
   "ShareQrCodeOption": {
+    "title": "Share Session",
     "button": "Share board",
-    "copyInviteURL": "Copy Invite URL"
+    "copyInviteURL": "Copy Invite URL",
+    "inviteUrlCopied": "Invite URL Copied"
   },
   "ShowAuthorOption": {
     "show": "Show authors of card",
@@ -166,10 +172,6 @@
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
-  "BoardSettings": {
-    "save": "save",
-    "edit": "edit"
-  },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
   },
@@ -187,6 +189,10 @@
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!"
   },
+  "Language": {
+    "german": "German",
+    "english": "English"
+  },
   "Homepage": {
     "developers": "© 2021, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
@@ -201,6 +207,41 @@
   },
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Settings",
+    "BoardSettingsDescription": "Name, Access Policy",
+    "Participants": "Participants",
+    "ParticipantsDescription": "User List, User Role",
+    "Appearance": "Appearance",
+    "AppearanceDescription": "Notifications, Language, UI",
+    "ShareSession": "Share Session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Export Board",
+    "ExportBoardDescription": "Share the board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "We love to hear from you",
+    "ProfileDescription": "Edit profile"
+  },
+  "BoardSettings": {
+    "BoardName": "Board Name",
+    "AccessPolicy": "Access Policy",
+    "Password": "Password",
+    "SetAccessPolicyOpen": "Set to open",
+    "SetAccessPolicyPasswordProtected": "Set to password protected",
+    "DeleteBoard": "Delete Board",
+    "generatePassword": "Generate random password",
+    "save": "save",
+    "edit": "edit"
+  },
+  "Participants": {
+    "Owner": "Owner"
+  },
+  "Appearance": {
+    "SyncMode": "Sync Appearance Mode with System",
+    "SyncModeDescription": "Scrumlr will match the appearance mode (dark or light) with your active system settings",
+    "AllowNotifications": "Allow Notifications",
+    "Language": "Language"
   },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",

@@ -1,15 +1,25 @@
 @import "constants/style";
 
 .confirmation-dialog__wrapper {
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 0;
   display: flex;
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
   align-items: center;
   justify-content: center;
   z-index: $backdrop-z-index;
   background: $color-white;
+  padding: 0px 2rem;
 }
+
+@media screen and (max-width: 920px) {
+  .confirmation-dialog__wrapper {
+    padding: 30px;
+  }
+}
+
 .confirmation-dialog {
   max-width: 420px;
   color: $color-black;

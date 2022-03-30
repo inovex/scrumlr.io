@@ -1,0 +1,117 @@
+@import "constants/style";
+@import "../SettingsDialog";
+
+.participants__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 62px;
+}
+
+.participants__search-and-filter {
+  color: $color-black;
+  margin-bottom: 25px;
+  align-self: center;
+}
+
+[theme="dark"] {
+  .participants__search-and-filter {
+    color: $color-white;
+  }
+}
+
+.participants__user-list-wrapper {
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-right: -20px;
+  max-height: 400px;
+  // overflow-x: hidden; // firefox bug?
+
+  @include scrollbar();
+}
+
+@media screen and (min-width: 920px) {
+  .participants__user-list-wrapper {
+    padding-right: 20px;
+    margin-right: -30px;
+  }
+}
+
+.participants__user-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: calc(100vw - (2 * $settings-dialog-container--sides-small));
+  border-radius: 8px;
+  background-color: $color-white;
+}
+
+@media screen and (min-width: 450px) {
+  .participants__user-list {
+    max-width: calc(380px - (2 * $settings-dialog-container--sides-small));
+  }
+}
+
+@media screen and (min-width: 920px) {
+  .participants__user-list {
+    max-width: calc(544px - (2 * $settings-dialog-container--sides-large));
+  }
+}
+
+[theme="dark"] {
+  .participants__user-list {
+    background-color: $color-dark-mode-note;
+  }
+}
+
+.participants__user {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 20px;
+}
+
+.participants__user_avatar-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.participants__user_avatar {
+  height: 26px;
+  width: 26px;
+}
+
+.participants__user-name {
+  color: $color-black;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+[theme="dark"] {
+  .participants__user-name {
+    color: $color-white;
+  }
+}
+
+.participants__online-mark {
+  position: absolute;
+  top: 18px;
+  left: 19px;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: $color-grooming-green;
+}
+
+.participants__offline-mark {
+  position: absolute;
+  top: 18px;
+  left: 19px;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: $color-retro-red;
+}
