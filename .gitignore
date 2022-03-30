@@ -37,3 +37,4 @@ server/.env
 # Server files
 server/src/main
 server/src/coverage.txt
+server/src/server
