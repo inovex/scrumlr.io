@@ -3,7 +3,7 @@
 - [X] Move stack leads to loss of notes in stack
 - [X] (Manu) Fix Voting (vote stacking disabled)
 - [X] (Manu) Fix Voting of child notes
-- [ ] (Manu) Fix position of votes when author visibility is disabled
+- [X] (Manu) Fix position of votes when author visibility is disabled
 - [ ] Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
