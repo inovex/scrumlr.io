@@ -104,7 +104,8 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
                   childrenNotes={state.notes
                     .filter((n) => note.id && note.id === n.position.stack)
                     .map((n) => ({...n, authorName: state.participants.filter((p) => p.user.id === n.author)[0]?.user.name}))
-                    .map((n) => ({...n, votes: state.votes?.votesPerNote[n.id]?.total || 0}))}
+                    .map((n) => ({...n, votes: state.votes?.votesPerNote[n.id]?.total || 0}))
+                    .map((n) => ({...n, allVotesOfUser: state.userVotes.filter((v) => v.note === n.id)}))}
                   votes={state.votes?.votesPerNote[note.id]?.total || 0}
                   allVotesOfUser={state.userVotes.filter((v) => v.note === note.id)}
                   activeVoting={Boolean(state.activeVoting)}

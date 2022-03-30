@@ -1,12 +1,13 @@
 - [x] Confirmation of board join requests
 - [ ] Test join process in multiple sessions
 - [X] Move stack leads to loss of notes in stack
-- [ ] (Manu) Fix Voting of child notes
+- [X] (Manu) Fix Voting (vote stacking disabled)
+- [X] (Manu) Fix Voting of child notes
 - [ ] (Manu) Fix position of votes when author visibility is disabled
 - [ ] Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
-- [ ] (Manu) Server time / timer sync
+- [X] (Manu) Server time / timer sync
 - [ ] Offline users appear in participants list
 - [ ] Fix doc in code
 - [ ] Update Postman docs

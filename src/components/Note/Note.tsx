@@ -22,7 +22,7 @@ interface NoteProps {
   columnName: string;
   columnColor: string;
   showAuthors: boolean;
-  childrenNotes: Array<NoteModel & {authorName: string; votes: number}>;
+  childrenNotes: Array<NoteModel & {authorName: string; votes: number; allVotesOfUser: Vote[]}>;
   votes: number;
   allVotesOfUser: Vote[];
   activeVoting: boolean;
