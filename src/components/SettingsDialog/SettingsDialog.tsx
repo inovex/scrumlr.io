@@ -2,7 +2,6 @@ import {useEffect, VFC} from "react";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
-import Parse from "parse";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
@@ -23,13 +22,8 @@ export const SettingsDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  const displayName = useAppSelector((applicationState) => {
-    if (applicationState.users.all.length !== 0) {
-      return applicationState.users.all.find((user) => user.id === Parse.User.current()?.id)?.displayName;
-    }
-    return undefined;
-  });
-  const isBoardModerator = useAppSelector((state) => state.users.admins.find((user) => user.id === Parse.User.current()?.id));
+  const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
+  const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
   useEffect(() => {
     // If user is not a moderator of the board, he shouldn't see the board settings
@@ -41,7 +35,7 @@ export const SettingsDialog: VFC = () => {
     if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
       navigate(isBoardModerator ? "board" : "participants");
     }
-  }, [navigate, isBoardModerator, boardId]);
+  }, [navigate, me, boardId]);
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="settings-dialog__portal">
@@ -94,14 +88,14 @@ export const SettingsDialog: VFC = () => {
               <p>{t("SettingsDialog.FeedbackDescription")}</p>
               <FeedbackIcon className="navigation-item__icon" />
             </Link>
-            {displayName && (
+            {me && (
               <Link
                 to="profile"
                 className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
               >
-                <p>{displayName}</p>
+                <p>{me.name}</p>
                 <p>{t("SettingsDialog.ProfileDescription")}</p>
-                <Avatar seed={Parse.User.current()!.id} className="navigation-item__icon" />
+                <Avatar seed={me.id} className="navigation-item__icon" />
               </Link>
             )}
           </nav>

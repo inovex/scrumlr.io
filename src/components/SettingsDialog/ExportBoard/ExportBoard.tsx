@@ -4,7 +4,6 @@ import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
 import {useAppSelector} from "../../../store";
-import {ApplicationState} from "../../../types/store";
 import {exportAsJSON, exportAsCSV} from "../../../utils/export";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ExportBoard.scss";
@@ -13,12 +12,7 @@ import "../SettingsDialog.scss";
 export const ExportBoard: VFC = () => {
   const {t} = useTranslation();
 
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-    notes: applicationState.notes,
-    users: applicationState.users,
-    votes: applicationState.votes,
-  }));
+  const boardId = useAppSelector((state) => state.board.data!.id);
 
   return (
     <div data-testid="export" className="settings-dialog__container">
@@ -32,7 +26,7 @@ export const ExportBoard: VFC = () => {
           icon={ExportJSON}
           className="export-board__button-reverse-order"
           onClick={() => {
-            exportAsJSON(state);
+            exportAsJSON(boardId);
           }}
           data-testid="export-json"
         />
@@ -42,7 +36,7 @@ export const ExportBoard: VFC = () => {
           icon={ExportCSV}
           className="export-board__button-reverse-order"
           onClick={() => {
-            exportAsCSV(state);
+            exportAsCSV(boardId);
           }}
           data-testid="export-csv"
         />
