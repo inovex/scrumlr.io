@@ -17,6 +17,9 @@ func (o *BoardsObserverForTests) UpdatedBoard(board Board) {
 	o.boardName = board.Name
 }
 
+func (o *BoardsObserverForTests) UpdatedBoardTimer(board Board) {
+}
+
 func (o *BoardsObserverForTests) DeletedBoard(board uuid.UUID) {
 	o.deleted = true
 	o.deletedBoard = &board
