@@ -106,7 +106,7 @@
     "lower": "Lower hand",
     "lowerAll": "Lower all hands"
   },
-  "Request":{
+  "Request": {
     "title": "Someone requests to participate/raised their hand"
   },
   "LoginProviders": {
@@ -150,7 +150,8 @@
     "stopFocusMode": "End focused mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
-    "lowerHand": "Lower your hand"
+    "lowerHand": "Lower your hand",
+    "settings": "Settings"
   },
   "VoteConfigurationButton": {
     "label": "Voting",

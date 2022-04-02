@@ -106,7 +106,7 @@
     "lower": "Senke die Hand",
     "lowerAll": "Alle Hände senken"
   },
-  "Request":{
+  "Request": {
     "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
   },
   "LoginProviders": {
@@ -150,7 +150,8 @@
     "stopFocusMode": "Beende Fokus-Modus",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
-    "lowerHand": "Senke deine Hand"
+    "lowerHand": "Senke deine Hand",
+    "settings": "Einstellungen"
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
