@@ -14,10 +14,10 @@
   - Add requests docs
   - Add missing props
   - ...
-- [ ] (Manu) Fix unit tests
+- [X] (Manu) Fix unit tests
 - [ ] Fix deployment
 - [ ] Fix CI/CD pipeline
-- [ ] (Manu) Fix linter issues
+- [X] (Manu) Fix linter issues
 - [ ] Fix FIXME and TODOs
 - [X] Display error toasts on failed API requests
 - [X] Fix deletion of boards
