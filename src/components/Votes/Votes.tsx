@@ -19,7 +19,7 @@ export const Votes: FC<VotesProps> = (props) => {
   const state = useAppSelector((s) => ({
     voting: s.votings.open,
   }));
-  const showAddVoteButton = props.activeVoting && (state.voting?.allowMultipleVotes || (!state.voting?.allowMultipleVotes && props.userVotes.length === 0));
+  const showAddVoteButton = props.activeVoting && (state.voting?.allowMultipleVotes || props.userVotes.length === 0);
 
   return (
     <div className={classNames("votes", props.className)}>

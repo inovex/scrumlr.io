@@ -1,22 +1,13 @@
 import {fireEvent} from "@testing-library/react";
 import {Note} from "components/Note";
-import {User} from "parse";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-import store from "store";
 import {Actions} from "store/action";
-import {mocked} from "ts-jest/utils";
 import {Vote} from "types/vote";
 import {render} from "testUtils";
-
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
-
-jest.mock("store", () => ({
-  ...jest.requireActual("store"),
-  dispatch: jest.fn(),
-}));
+import getTestStore from "utils/test/getTestStore";
+import getTestParticipant from "utils/test/getTestParticipant";
+import * as redux from "react-redux";
 
 type TestProps = {
   text: string;
@@ -24,7 +15,7 @@ type TestProps = {
   showAuthors: boolean;
   votes: Vote[];
   focus: boolean;
-  moderation: {userId: string; status: boolean};
+  moderating: boolean;
   currentUserIsModerator: boolean;
 };
 
@@ -53,35 +44,9 @@ const defaultVotes = [
 ];
 
 const createNote = (props: Partial<TestProps>) => {
-  const initialState = {
-    board: {
-      data: {
-        columns: [{id: "test_column", name: "test_header", hidden: false}],
-      },
-    },
-    notes: [],
-    participants: {
-      admins: [
-        {
-          id: "jkKqOUgt3hEDvl7CWcBokVOGs6AzINon",
-          displayName: "Kinetic Kobold",
-          admin: true,
-          createdAt: "2021-08-11T10:45:41.640Z",
-          updatedAt: "2021-08-11T10:52:21.558Z",
-          online: true,
-        },
-      ],
-      basic: [],
-      all: [],
-    },
-    voteConfiguration: {
-      voteLimit: 10,
-    },
-  };
-  const mockedStore = mockStore(initialState);
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
-    <Provider store={mockedStore}>
+    <Provider store={getTestStore()}>
       <NoteContext
         key=""
         noteId="0"
@@ -92,16 +57,16 @@ const createNote = (props: Partial<TestProps>) => {
         columnColor=""
         activeVoting
         showAuthors={props.showAuthors || false}
-        votes={props.votes || defaultVotes}
+        votes={props.votes?.length || defaultVotes.length}
         allVotesOfUser={[]}
         childrenNotes={[
-          {id: "1", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false, positionInStack: 0},
-          {id: "2", columnId: "test_column", text: "", author: "", parentId: "0", dirty: true, authorName: "", votes: [], focus: false, positionInStack: 0},
+          {id: "1", text: "", author: "", authorName: "", position: {column: "test-column", stack: "0", rank: 0}, votes: 0, allVotesOfUser: []},
+          {id: "2", text: "", author: "", authorName: "", position: {column: "test-column", stack: "0", rank: 1}, votes: 0, allVotesOfUser: []},
         ]}
         authorName=""
-        activeModeration={props.moderation || {userId: "Test Author", status: false}}
+        moderating={props.moderating || false}
         focus={props.focus || false}
-        currentUserIsModerator={props.currentUserIsModerator || false}
+        viewer={getTestParticipant(props.currentUserIsModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})}
       />
     </Provider>
   );
@@ -119,10 +84,6 @@ describe("Note", () => {
   });
 
   describe("should render correctly", () => {
-    beforeEach(() => {
-      mockedUser.current = jest.fn(() => ({id: "Test Author"} as never));
-    });
-
     test("note__root is present", () => {
       const {container} = render(createNote({showAuthors: true}));
       expect(container.firstChild).toHaveClass("note__root");
@@ -134,7 +95,7 @@ describe("Note", () => {
     });
 
     test("note--own-card is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
+      const {container} = render(createNote({showAuthors: true, authorId: "test-participant-id"}));
       expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note--own-card");
     });
 
@@ -193,32 +154,6 @@ describe("Note", () => {
     });
   });
 
-  describe("Test amount of visible votes", () => {
-    test("test-user-1 has one vote during vote phase", () => {
-      mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
-      const {container} = render(createNote({showAuthors: true, authorId: "test-user-1"}));
-      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
-    });
-
-    test("test-user-2 has two votes during vote phase", () => {
-      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
-      const {container} = render(createNote({showAuthors: true, authorId: "test-user-2"}));
-      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
-    });
-
-    test("test-user-1 can see three votes", () => {
-      mockedUser.current = jest.fn(() => ({id: "test-user-1"} as never));
-      const {container} = render(createNote({showAuthors: true, authorId: "test-user-1"}));
-      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
-    });
-
-    test("test-user-2 can see three votes", () => {
-      mockedUser.current = jest.fn(() => ({id: "test-user-2"} as never));
-      const {container} = render(createNote({showAuthors: true, authorId: "test-user-2"}));
-      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("3");
-    });
-  });
-
   describe("Test NoteDialog created/not created", () => {
     beforeEach(() => {
       const portal = global.document.createElement("div");
@@ -263,16 +198,21 @@ describe("Note", () => {
     });
 
     test("Note should be focused", () => {
-      mockedUser.current = jest.fn(() => ({id: "Test Author"} as never));
-      const {container} = render(createNote({showAuthors: true, focus: false, moderation: {userId: "Test Author", status: true}, currentUserIsModerator: true}));
+      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
+      const dispatchMock = jest.fn();
+      useDispatchSpy.mockReturnValue(dispatchMock);
+      const {container} = render(createNote({showAuthors: true, focus: false, moderating: true, currentUserIsModerator: true}));
       fireEvent.click(container.querySelector(".note__root")!);
-      expect(store.dispatch).toHaveBeenCalledWith(Actions.editNote({id: "0", focus: true}));
+      expect(dispatchMock).toHaveBeenCalledWith(Actions.shareNote("0"));
     });
 
     test("Note shouldn't be focused", () => {
-      const {container} = render(createNote({showAuthors: true, focus: true, moderation: {userId: "Test Author", status: true}, currentUserIsModerator: false}));
+      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
+      const dispatchMock = jest.fn();
+      useDispatchSpy.mockReturnValue(dispatchMock);
+      const {container} = render(createNote({showAuthors: true, focus: true, moderating: false, currentUserIsModerator: false}));
       fireEvent.click(container.querySelector(".note__root")!);
-      expect(store.dispatch).not.toBeCalled();
+      expect(dispatchMock).not.toBeCalled();
     });
   });
 });

@@ -1,29 +1,30 @@
 import {fireEvent, getByText} from "@testing-library/react";
 import {Request} from "components/Request";
-import store from "store";
 import {Actions} from "store/action";
 import {render} from "testUtils";
-
-jest.mock("store", () => ({
-  dispatch: jest.fn(),
-}));
+import * as redux from "react-redux";
+import {Dispatch, Action} from "redux";
 
 describe("JoinRequest", () => {
   const createJoinRequest = (numRequests: number) => {
     const joinRequests = [];
     for (let i = 0; i < numRequests; i += 1) {
       joinRequests.push({
-        id: `id-${i}`,
-        userId: `userId-${i}`,
-        displayName: `displayName-${i}`,
-        boardId: `boardId-${i}`,
-        status: "pending" as const,
+        user: {
+          id: `user-id-${i}`,
+          name: `user-name-${i}`,
+        },
+        status: "PENDING" as const,
       });
     }
-    return <Request requests={joinRequests} raisedHands={[]} users={[]} boardId="boardId" />;
+    return <Request requests={joinRequests} participantsWithRaisedHand={[]} />;
   };
 
   describe("should render correctly", () => {
+    const useDispatchSpy = jest.spyOn(redux, "useDispatch");
+    const mockDispatchFn = jest.fn();
+    useDispatchSpy.mockReturnValue(mockDispatchFn);
+
     test("on single join request", () => {
       const {container} = render(createJoinRequest(1));
       expect(container.firstChild).toMatchSnapshot();
@@ -35,29 +36,38 @@ describe("JoinRequest", () => {
     });
   });
 
-  describe("should call store.dispatch correctly", () => {
+  describe("should call dispatch correctly", () => {
+    let mockDispatchFn: jest.Mock<any, any> | Dispatch<Action<any>>;
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
+      mockDispatchFn = jest.fn();
+      useDispatchSpy.mockReturnValue(mockDispatchFn);
+    });
+
     test("single join request should call rejectJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Reject"));
-      expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests("boardId", ["userId-0"]));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.rejectJoinRequests(["user-id-0"]));
     });
 
     test("single join request should call acceptJoinRequest correctly", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Accept"));
-      expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests("boardId", ["userId-0"]));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0"]));
     });
 
     test("multiple join request should call acceptJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(getByText(container, "Accept all")!);
-      expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests correctly", () => {
       const {container} = render(createJoinRequest(3));
       fireEvent.click(getByText(container, "Reject all")!);
-      expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests("boardId-0", ["userId-0", "userId-1", "userId-2"]));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.rejectJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
@@ -65,7 +75,7 @@ describe("JoinRequest", () => {
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[2]);
-        expect(store.dispatch).toHaveBeenCalledWith(Actions.rejectJoinRequests(`boardId-${i}`, [`userId-${i}`]));
+        expect(mockDispatchFn).toHaveBeenCalledWith(Actions.rejectJoinRequests([`user-id-${i}`]));
       }
     });
 
@@ -74,7 +84,7 @@ describe("JoinRequest", () => {
       const figures = container.querySelectorAll(".join-request__requests-figure");
       for (let i = 0; i < figures.length; i += 1) {
         fireEvent.click(figures[i].children[3]);
-        expect(store.dispatch).toHaveBeenCalledWith(Actions.acceptJoinRequests(`boardId-${i}`, [`userId-${i}`]));
+        expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests([`user-id-${i}`]));
       }
     });
   });

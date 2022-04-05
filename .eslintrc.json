@@ -43,7 +43,7 @@
     //"import/no-relative-parent-imports": "error",
     "import/newline-after-import": ["error", { "count": 1 }],
     "import/prefer-default-export": "off",
-
+    "import/no-cycle": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     // Allow props spreading (e.g. {...props})
     "react/jsx-props-no-spreading": "off",

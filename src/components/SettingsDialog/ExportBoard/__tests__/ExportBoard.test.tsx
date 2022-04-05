@@ -1,26 +1,10 @@
 import {fireEvent, render, waitFor} from "@testing-library/react";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-import {exportAsJSON, exportAsCSV} from "../../../../utils/export";
+import {exportAsJSON, exportAsCSV} from "utils/export";
 import {ExportBoard} from "../ExportBoard";
-
-const mockStore = configureStore();
-
-const initialState = {
-  board: {
-    data: {
-      id: "boardId",
-    },
-  },
-  users: {
-    all: [
-      {
-        id: "test-id",
-        displayName: "Max Mustermann",
-      },
-    ],
-  },
-};
+import {I18nextProvider} from "react-i18next";
+import i18nTest from "i18nTest";
+import getTestStore from "utils/test/getTestStore";
 
 jest.mock("utils/export", () => ({
   ...jest.requireActual("utils/export"),
@@ -30,11 +14,12 @@ jest.mock("utils/export", () => ({
 }));
 
 const renderExportBoard = () => {
-  const mockedStore = mockStore(initialState);
   return render(
-    <Provider store={mockedStore}>
-      <ExportBoard />
-    </Provider>
+    <I18nextProvider i18n={i18nTest}>
+      <Provider store={getTestStore()}>
+        <ExportBoard />
+      </Provider>
+    </I18nextProvider>
   );
 };
 

@@ -1,31 +1,19 @@
 import {render} from "@testing-library/react";
-import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
 import {InfoBar} from "../Infobar";
+import {ApplicationState} from "types";
+import getTestStore from "utils/test/getTestStore";
+import {I18nextProvider} from "react-i18next";
+import i18nTest from "i18nTest";
 
-const mockStore = configureStore();
-const createInfoBar = (activeVoting: boolean, activeTimer: boolean) => {
-  const initialState = {
-    board: {
-      data: {
-        timerUTCEndTime: activeTimer ? new Date(12345) : undefined,
-        voting: activeVoting ? "active" : "disabled",
-      },
-    },
-    voteConfiguration: {
-      voteLimit: 5,
-    },
-    votes: [],
-    participants: {
-      admins: [],
-      basic: [],
-      all: [],
-    },
-  };
-  return (
-    <Provider store={mockStore(initialState)}>
-      <InfoBar />
-    </Provider>
+const renderInfoBar = (overwrite?: Partial<ApplicationState>) => {
+  return render(
+    <I18nextProvider i18n={i18nTest}>
+      <Provider store={getTestStore(overwrite)}>
+        <InfoBar />
+      </Provider>
+    </I18nextProvider>,
+    {container: document.getElementById("root")!}
   );
 };
 
@@ -38,22 +26,49 @@ describe("InfoBar", () => {
 
   describe("should render correctly", () => {
     test("with disabled voting and timer", () => {
-      const {container} = render(createInfoBar(false, false), {container: document.getElementById("root")!});
+      const {container} = renderInfoBar({votings: {open: undefined, past: []}});
       expect(container).toMatchSnapshot();
     });
 
     test("with disabled voting and active timer", () => {
-      const {container} = render(createInfoBar(false, true), {container: document.getElementById("root")!});
+      const {container} = renderInfoBar({
+        votings: {open: undefined, past: []},
+        board: {
+          status: "ready",
+          data: {
+            id: "test-board-id",
+            name: "test-board-name",
+            accessPolicy: "PUBLIC",
+            showAuthors: true,
+            showNotesOfOtherUsers: true,
+            allowStacking: true,
+            timerEnd: new Date(123456789),
+          },
+        },
+      });
       expect(container).toMatchSnapshot();
     });
 
     test("with active voting and disabled timer", () => {
-      const {container} = render(createInfoBar(true, false), {container: document.getElementById("root")!});
+      const {container} = renderInfoBar();
       expect(container).toMatchSnapshot();
     });
 
     test("with active voting and timer", () => {
-      const {container} = render(createInfoBar(true, true), {container: document.getElementById("root")!});
+      const {container} = renderInfoBar({
+        board: {
+          status: "ready",
+          data: {
+            id: "test-board-id",
+            name: "test-board-name",
+            accessPolicy: "PUBLIC",
+            showAuthors: true,
+            showNotesOfOtherUsers: true,
+            allowStacking: true,
+            timerEnd: new Date(123456789),
+          },
+        },
+      });
       expect(container).toMatchSnapshot();
     });
   });

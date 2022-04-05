@@ -1,10 +1,11 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import {Provider} from "react-redux";
-import {BrowserRouter as Router} from "react-router-dom";
 import store from "store";
 import {Actions} from "store/action";
 import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
+import i18nTest from "i18nTest";
+import {I18nextProvider} from "react-i18next";
 import {TimerDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
@@ -15,14 +16,12 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedUsedNavigate,
 }));
 
-jest.useFakeTimers("modern").setSystemTime(new Date(123456789).getTime());
-
 const createTimerDialog = (isParticipant?: boolean) => (
-  <Router>
+  <I18nextProvider i18n={i18nTest}>
     <Provider store={getTestStore({participants: {self: getTestParticipant({role: isParticipant ? "PARTICIPANT" : "MODERATOR"}), others: []}})}>
       <TimerDialog />
     </Provider>
-  </Router>
+  </I18nextProvider>
 );
 
 describe("TimerDialog", () => {

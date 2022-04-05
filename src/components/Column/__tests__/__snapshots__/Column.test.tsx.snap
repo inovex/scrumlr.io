@@ -11,7 +11,7 @@ exports[`Column Test behavior of hidden columns Snapshot: Hide button should be 
     <svg
       class="column__header-toggle-button-icon"
     >
-      icon-visible.svg
+      icon-hidden.svg
     </svg>
   </button>
 </div>
@@ -40,6 +40,20 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           0
         </span>
+        <div
+          class="column__header-toggle"
+        >
+          <button
+            class="column__header-toggle-button"
+            tabindex="-1"
+          >
+            <svg
+              class="column__header-toggle-button-icon"
+            >
+              icon-hidden.svg
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         class="note-input"

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<HeaderMenu/> should render correctly moderator 1`] = `
+exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
 <div
   id="portal"
 >
@@ -12,11 +12,6 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
       data-focus-guard="true"
       style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
       tabindex="0"
-    />
-    <div
-      data-focus-guard="true"
-      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-      tabindex="1"
     />
     <div
       data-focus-lock-disabled="false"
@@ -39,7 +34,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   class="board-settings__board-name"
                   disabled=""
                   placeholder="scrumlr.io"
-                  value="board"
+                  value="test-board-name"
                 />
                 <button
                   class="board-settings__edit-button"
@@ -81,13 +76,13 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   class="board-option-toggle"
                 >
                   <div
-                    class="board-option-toggle__switch board-option-toggle__switch--left"
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
                   />
                 </div>
                 <span
                   class="board-option-button__label"
                 >
-                  Show notes of other users
+                  Hide notes of other users
                 </span>
               </button>
             </li>
@@ -102,13 +97,13 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
                   class="board-option-toggle"
                 >
                   <div
-                    class="board-option-toggle__switch board-option-toggle__switch--right"
+                    class="board-option-toggle__switch board-option-toggle__switch--left"
                   />
                 </div>
                 <span
                   class="board-option-button__label"
                 >
-                  Hide columns
+                  Show columns
                 </span>
               </button>
             </li>
@@ -140,7 +135,7 @@ exports[`<HeaderMenu/> should render correctly moderator 1`] = `
 </div>
 `;
 
-exports[`<HeaderMenu/> should render correctly user 1`] = `
+exports[`<HeaderMenu/> should render correctly for participants 1`] = `
 <div
   id="portal"
 >
@@ -152,11 +147,6 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
       data-focus-guard="true"
       style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
       tabindex="0"
-    />
-    <div
-      data-focus-guard="true"
-      style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
-      tabindex="1"
     />
     <div
       data-focus-lock-disabled="false"
@@ -179,7 +169,7 @@ exports[`<HeaderMenu/> should render correctly user 1`] = `
                   class="board-settings__board-name"
                   disabled=""
                   placeholder="scrumlr.io"
-                  value="board"
+                  value="test-board-name"
                 />
               </form>
             </li>

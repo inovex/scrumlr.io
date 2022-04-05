@@ -21,11 +21,6 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     socket = new Socket(`ws://localhost:8080/boards/${action.boardId}`, {
       timeout: 5000,
       maxAttempts: 0,
-      onopen: (e: Event) => console.log("connected", e),
-      onerror: (e: Event) => console.log("error", e),
-      onclose: (e: CloseEvent) => console.log("closed", e),
-      onreconnect: () => console.log("reconnect"),
-
       onmessage: async (evt: MessageEvent<string>) => {
         const message: ServerEvent = JSON.parse(evt.data);
 

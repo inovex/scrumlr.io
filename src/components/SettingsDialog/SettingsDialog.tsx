@@ -35,7 +35,7 @@ export const SettingsDialog: VFC = () => {
     if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
       navigate(isBoardModerator ? "board" : "participants");
     }
-  }, [navigate, me, boardId]);
+  }, [navigate, me, boardId, isBoardModerator]);
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="settings-dialog__portal">

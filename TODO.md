@@ -1,10 +1,10 @@
 - [x] Confirmation of board join requests
-- [ ] Test join process in multiple sessions
+- [ ] (Manu) Test join process in multiple sessions
 - [X] Move stack leads to loss of notes in stack
 - [X] (Manu) Fix Voting when vote stacking is disabled
 - [X] (Manu) Fix Voting of child notes
 - [X] (Manu) Fix position of votes when author visibility is disabled
-- [ ] Enable auth providers by the server configuration
+- [ ] (Manu) Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
 - [X] (Manu) Server time / timer sync
@@ -14,10 +14,10 @@
   - Add requests docs
   - Add missing props
   - ...
-- [ ] Fix unit tests
+- [ ] (Manu) Fix unit tests
 - [ ] Fix deployment
 - [ ] Fix CI/CD pipeline
-- [ ] Fix linter issues
+- [ ] (Manu) Fix linter issues
 - [ ] Fix FIXME and TODOs
 - [X] Display error toasts on failed API requests
 - [X] Fix deletion of boards
