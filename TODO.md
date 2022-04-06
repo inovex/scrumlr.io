@@ -21,3 +21,4 @@
 - [ ] Fix FIXME and TODOs
 - [X] Display error toasts on failed API requests
 - [X] Fix deletion of boards
+- [X] (Manu) Fix theme toggle
