@@ -4,7 +4,7 @@
 - [X] (Manu) Fix Voting when vote stacking is disabled
 - [X] (Manu) Fix Voting of child notes
 - [X] (Manu) Fix position of votes when author visibility is disabled
-- [ ] (Manu) Enable auth providers by the server configuration
+- [X] (Manu) Enable auth providers by the server configuration
 - [ ] Adding notes split in online & Offline
 - [ ] Edit notes split in online & offline
 - [X] (Manu) Server time / timer sync

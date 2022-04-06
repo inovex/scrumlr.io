@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style";
 
 .login-board__dialog {
   color: $color-black;
@@ -17,6 +17,7 @@
 }
 
 .login-board__divider {
+  display: none;
   margin-top: 32px;
   margin-bottom: 16px;
   padding: 0;
@@ -25,6 +26,10 @@
   border-top: 1px solid $color-middle-gray;
   color: $color-middle-gray;
   text-align: center;
+}
+
+.login-providers + .login-board__divider {
+  display: block;
 }
 
 .login-board__divider::after {
