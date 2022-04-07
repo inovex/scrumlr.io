@@ -16,7 +16,6 @@ import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.s
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
-import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 import "./MenuBars.scss";
 
 export const MenuBars = () => {
