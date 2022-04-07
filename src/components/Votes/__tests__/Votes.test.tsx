@@ -6,12 +6,13 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import * as redux from "react-redux";
 import {Dispatch, Action} from "redux";
-import {Vote} from "types/vote";
+import {ApplicationState} from "types";
+import getTestVoting from "utils/test/getTestVoting";
 
-const createVotes = (overwrite?: {votes?: number; activeVoting?: boolean; userVotes?: Vote[]}) => {
+const createVotes = (overwrite?: Partial<ApplicationState>) => {
   return (
-    <Provider store={getTestStore()}>
-      <Votes noteId="test-id" votes={0} activeVoting={false} userVotes={[]} {...overwrite} />
+    <Provider store={getTestStore(overwrite)}>
+      <Votes noteId="test-notes-id-1" />
     </Provider>
   );
 };
@@ -19,19 +20,44 @@ const createVotes = (overwrite?: {votes?: number; activeVoting?: boolean; userVo
 describe("Votes", () => {
   describe("should render correctly", () => {
     test("with no votes and disabled voting", () => {
-      const votes = render(createVotes());
+      const votes = render(createVotes({votings: {open: undefined, past: []}, votes: []}));
       expect(votes.container).toMatchSnapshot();
     });
     test("with no votes and active voting", () => {
-      const votes = render(createVotes({activeVoting: true}));
+      const votes = render(createVotes({votes: []}));
       expect(votes.container).toMatchSnapshot();
     });
     test("with votes and disabled voting", () => {
-      const votes = render(createVotes({votes: 1, activeVoting: false}));
+      const votes = render(
+        createVotes({
+          votings: {
+            open: undefined,
+            past: [
+              getTestVoting({
+                status: "CLOSED",
+                votes: {
+                  total: 1,
+                  votesPerNote: {
+                    "test-notes-id-1": {
+                      total: 1,
+                      userVotes: [
+                        {
+                          id: "1",
+                          total: 1,
+                        },
+                      ],
+                    },
+                  },
+                },
+              }),
+            ],
+          },
+        })
+      );
       expect(votes.container).toMatchSnapshot();
     });
     test("with votes and active voting", () => {
-      const votes = render(createVotes({userVotes: [{voting: "test-id", note: "test-id"}], activeVoting: true}));
+      const votes = render(createVotes());
       expect(votes.container).toMatchSnapshot();
     });
   });
@@ -44,34 +70,26 @@ describe("Votes", () => {
       useDispatchSpy.mockReturnValue(mockDispatchFn);
     });
     test("addVote", () => {
-      const {container} = render(createVotes({activeVoting: true}));
+      const {container} = render(createVotes({votes: []}));
       fireEvent.click(container.getElementsByClassName("dot-button")[0]);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.addVote("test-id"));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.addVote("test-notes-id-1"));
     });
 
     test("deleteVote", () => {
-      const {container} = render(createVotes({userVotes: [{voting: "test-id", note: "test-id"}], activeVoting: true}));
+      const {container} = render(createVotes());
       fireEvent.click(container.getElementsByClassName("dot-button")[0]);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.deleteVote("test-id"));
+      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.deleteVote("test-notes-id-1"));
     });
   });
 
   describe("Test allowMultipleVotesPerNote works correctly", () => {
     test("allowMultipleVotesPerNote: false", () => {
-      const {container} = render(
-        createVotes({
-          activeVoting: true,
-          userVotes: [
-            {voting: "test-id", note: "test-id"},
-            {voting: "test-id", note: "test-id"},
-          ],
-        })
-      );
+      const {container} = render(createVotes());
       expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove");
       expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove--own-vote");
+      expect(container.querySelector(".vote-button-add")).toBeNull();
       expect(container.querySelector(".votes")?.childElementCount).toEqual(1);
       expect(container.querySelector(".vote-button-remove")?.firstChild).toHaveClass("vote-button-remove__folded-corner");
-      expect((container.querySelector(".dot-button")?.lastChild as HTMLSpanElement).innerHTML).toEqual("2");
     });
   });
 });
