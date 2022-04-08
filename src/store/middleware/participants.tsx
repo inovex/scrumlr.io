@@ -53,4 +53,15 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
       );
     });
   }
+
+  if (action.type === Action.EditParticipant) {
+    API.editParticipant(action.context.board!, action.participant.user.id, action.participant).catch(() => {
+      Toast.error(
+        <div>
+          <div>{/* {i18n.t("Error.editParticipant")} */}</div>
+          {/* <Button onClick={() => store.dispatch(Actions.changePermission(action.userId, action.moderator))}>{i18n.t("Error.retry")}</Button> */}
+        </div>
+      );
+    });
+  }
 };

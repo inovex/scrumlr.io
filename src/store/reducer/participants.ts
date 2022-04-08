@@ -47,6 +47,14 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
       };
     }
 
+    case Action.EditParticipant: {
+      return {
+        ...state,
+        self: action.participant,
+        others: [...state!.others],
+      };
+    }
+
     default: {
       return state;
     }

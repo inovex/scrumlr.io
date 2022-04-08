@@ -1,9 +1,7 @@
 import classNames from "classnames";
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-/* import {UserServerModel} from "types/user";
-import {ApplicationState} from "types/store"; */
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ProfileSettings.scss";
 
@@ -12,9 +10,7 @@ export const ProfileSettings = () => {
     participant: applicationState.participants!.self,
   }));
 
-  const [userName, setUserName] = useState<string | undefined>();
-
-  useEffect(() => setUserName(state.participant?.user.name), [state.participant?.user.name]);
+  const [userName, setUserName] = useState<string | undefined>(state.participant?.user.name);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,9 +31,9 @@ export const ProfileSettings = () => {
                 e.key === "Enter" &&
                 state.participant &&
                 userName &&
-                store.dispatch(Actions.updatedParticipant({...state.participant, user: {...state.participant.user, name: userName}}))
+                store.dispatch(Actions.editParticipant({...state.participant, user: {...state.participant.user, name: userName}}))
               }
-              onBlur={() => state.participant && userName && store.dispatch(Actions.updatedParticipant({...state.participant, user: {...state.participant.user, name: userName}}))}
+              onBlur={() => state.participant && userName && store.dispatch(Actions.editParticipant({...state.participant, user: {...state.participant.user, name: userName}}))}
             />
           </SettingsButton>
         )}

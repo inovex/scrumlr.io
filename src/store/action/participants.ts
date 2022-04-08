@@ -15,6 +15,7 @@ export const ParticipantAction = {
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
+  EditParticipant: "scrumlr.io/editParticipant" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
 };
 
@@ -70,6 +71,15 @@ export const ParticipantActionFactory = {
   }),
 
   /**
+   * Edits a user. It will be applied immediately on the local client and send to the server via the middleware and an API request.
+   * @param participant
+   */
+  editParticipant: (participant: Participant) => ({
+    type: ParticipantAction.EditParticipant,
+    participant,
+  }),
+
+  /**
    * Creates an action that should be dispatch when a moderator changes the permissions of a participant
    *
    * @param userId the identifier of the user whose permissions are being changed
@@ -89,4 +99,5 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
   | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>
+  | ReturnType<typeof ParticipantActionFactory.editParticipant>
   | ReturnType<typeof ParticipantActionFactory.changePermission>;
