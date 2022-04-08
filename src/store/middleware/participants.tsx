@@ -54,8 +54,8 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
     });
   }
 
-  if (action.type === Action.EditParticipant) {
-    API.editParticipant(action.context.board!, action.participant.user.id, action.participant).catch(() => {
+  if (action.type === Action.EditSelf) {
+    API.editUser(action.user).catch(() => {
       Toast.error(
         <div>
           <div>{/* {i18n.t("Error.editParticipant")} */}</div>

@@ -7,6 +7,7 @@ import {VotingAPI} from "api/votings";
 import {ParticipantsAPI} from "api/participant";
 import {RequestAPI} from "api/request";
 import {InfoAPI} from "api/info";
+import {UserAPI} from "api/user";
 
 /** This class lists all API functions of the server. */
 export const API = {
@@ -19,4 +20,5 @@ export const API = {
   ...NoteAPI,
   ...VoteAPI,
   ...VotingAPI,
+  ...UserAPI,
 };

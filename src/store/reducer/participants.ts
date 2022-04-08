@@ -47,10 +47,13 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
       };
     }
 
-    case Action.EditParticipant: {
+    case Action.EditSelf: {
       return {
         ...state,
-        self: action.participant,
+        self: {
+          ...state!.self,
+          user: action.user,
+        },
         others: [...state!.others],
       };
     }
