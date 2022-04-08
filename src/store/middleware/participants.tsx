@@ -58,8 +58,8 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
     API.editUser(action.user).catch(() => {
       Toast.error(
         <div>
-          <div>{/* {i18n.t("Error.editParticipant")} */}</div>
-          {/* <Button onClick={() => store.dispatch(Actions.changePermission(action.userId, action.moderator))}>{i18n.t("Error.retry")}</Button> */}
+          <div>{i18n.t("Error.editSelf")}</div>
+          <Button onClick={() => store.dispatch(Actions.editSelf(action.user))}>{i18n.t("Error.retry")}</Button>
         </div>
       );
     });

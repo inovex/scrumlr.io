@@ -244,6 +244,10 @@
     "AllowNotifications": "Erlaube Notifikationen",
     "Language": "Sprache"
   },
+  "ProfileSettings": {
+    "Profile": "Profil",
+    "UserName": "Nutzername"
+  },
   "Error": {
     "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
     "shareNote": "Es tut uns leid, aber wir haben ein Problem beim Teilen des Kärtchens. Bitte versuche es erneut.",
@@ -269,7 +273,7 @@
     "deleteVote": "Es tut uns leid, aber wir haben ein Problem beim Entfernen der Stimme. Bitte versuche es erneut.",
     "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
-    "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut."
-
+    "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
+    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
   }
 }

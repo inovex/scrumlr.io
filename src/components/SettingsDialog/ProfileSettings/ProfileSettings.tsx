@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import {useTranslation} from "react-i18next";
 import {useRef, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
@@ -6,6 +7,7 @@ import {SettingsButton} from "../Components/SettingsButton";
 import "./ProfileSettings.scss";
 
 export const ProfileSettings = () => {
+  const {t} = useTranslation();
   const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
   }));
@@ -17,11 +19,11 @@ export const ProfileSettings = () => {
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
       <header className="settings-dialog__header">
-        <h2 className="settings-dialog__header-text">Profile</h2>
+        <h2 className="settings-dialog__header-text">{t("ProfileSettings.Profile")}</h2>
       </header>
       <div className="profile-settings__container">
         {userName && (
-          <SettingsButton className="profile-settings__user-name-button" label="User Name" onClick={() => nameInputRef.current?.focus()}>
+          <SettingsButton className="profile-settings__user-name-button" label={t("ProfileSettings.UserName")} onClick={() => nameInputRef.current?.focus()}>
             <input
               ref={nameInputRef}
               className="profile-settings__user-name-button_input"

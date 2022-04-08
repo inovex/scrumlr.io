@@ -244,6 +244,10 @@
     "AllowNotifications": "Allow Notifications",
     "Language": "Language"
   },
+  "ProfileSettings": {
+    "Profile": "Profile",
+    "UserName": "User Name"
+  },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
     "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
@@ -269,6 +273,7 @@
     "deleteVote": "Sorry, but we're having trouble deleting the vote. Please try again.",
     "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
-    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again."
+    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
   }
 }
