@@ -69,7 +69,7 @@ exports[`MenuBars should match snapshot 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.themeToggle
+            MenuBars.settings
           </span>
         </div>
         <svg
