@@ -93,7 +93,7 @@ export const SettingsDialog: VFC = () => {
                 to="profile"
                 className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
               >
-                <p>{me.name}</p>
+                <p className="navigation-item__user-name">{me.name}</p>
                 <p>{t("SettingsDialog.ProfileDescription")}</p>
                 <Avatar seed={me.id} className="navigation-item__icon" />
               </Link>

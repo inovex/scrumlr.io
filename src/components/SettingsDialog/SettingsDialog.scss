@@ -175,6 +175,7 @@ $settings-dialog-container--bottom: 62px;
   color: $color-black;
   position: relative;
   outline: none;
+  overflow-x: hidden;
 }
 [theme="dark"] .navigation__item {
   color: $color-white;
@@ -212,6 +213,9 @@ $settings-dialog-container--bottom: 62px;
   border-radius: 20px;
   background: var(--accent-color);
   color: white;
+}
+.navigation-item__user-name {
+  white-space: nowrap;
 }
 
 .settings-dialog__container {
