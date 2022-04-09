@@ -8,6 +8,7 @@ import {API} from "api";
 import {Toast} from "../../utils/Toast";
 import i18n from "../../i18n";
 import {Button} from "../../components/Button";
+import {SERVER_WEBSOCKET_URL} from "../../config";
 
 let socket: Socket | undefined;
 
@@ -18,7 +19,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
   if (action.type === Action.PermittedBoardAccess) {
     // FIXME implement all event subscriptions
-    socket = new Socket(`ws://localhost:8080/boards/${action.boardId}`, {
+    socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${action.boardId}`, {
       timeout: 5000,
       maxAttempts: 0,
       onmessage: async (evt: MessageEvent<string>) => {
@@ -38,7 +39,6 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         }
 
         if (message.type === "BOARD_DELETED") {
-          // FIXME board deleted event
           store.dispatch(Actions.leaveBoard());
         }
 

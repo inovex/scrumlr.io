@@ -1,5 +1,5 @@
 import {Participant} from "types/participant";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const ParticipantsAPI = {
   /**
@@ -14,7 +14,7 @@ export const ParticipantsAPI = {
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
   joinBoard: async (boardId: string, passphrase?: string) => {
-    const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants`, {
+    const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({passphrase}),
@@ -58,7 +58,7 @@ export const ParticipantsAPI = {
    */
   editParticipant: async (boardId: string, userId: string, participant: Partial<Omit<Participant, "user" | "connected">>) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/participants/${userId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants/${userId}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(participant),

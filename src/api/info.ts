@@ -1,4 +1,4 @@
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 interface ServerInformation {
   authProvider: string[];
@@ -16,7 +16,7 @@ export const InfoAPI = {
    */
   getServerInfo: async () => {
     try {
-      const response = await fetch(`${SERVER_URL}/info`);
+      const response = await fetch(`${SERVER_HTTP_URL}/info`);
 
       if (response.status === 200) {
         return (await response.json()) as ServerInformation;

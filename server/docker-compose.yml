@@ -25,6 +25,7 @@ services:
 
   scrumlr:
     build: ./src
+    command: ./main --disable-check-origin -b http://localhost:8080
     ports:
       - "8080:8080"
     environment:

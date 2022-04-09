@@ -1,5 +1,5 @@
 import {CreateVotingRequest} from "types/voting";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const VotingAPI = {
   /**
@@ -11,7 +11,7 @@ export const VotingAPI = {
    */
   createVoting: async (board: string, voting: CreateVotingRequest) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}/votings`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(voting),
@@ -29,7 +29,7 @@ export const VotingAPI = {
 
   changeVotingStatus: async (board: string, voting: string, status: "CLOSED" | "ABORTED") => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}/votings/${voting}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/votings/${voting}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({status}),

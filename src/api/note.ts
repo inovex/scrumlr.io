@@ -1,4 +1,4 @@
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 import {EditNote, Note} from "../types/note";
 
 export const NoteAPI = {
@@ -13,7 +13,7 @@ export const NoteAPI = {
    */
   addNote: async (boardId: string, columnId: string, text: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/notes`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export const NoteAPI = {
    */
   deleteNote: async (board: string, noteId: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}/notes/${noteId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -63,7 +63,7 @@ export const NoteAPI = {
    */
   editNote: async (board: string, note: string, request: EditNote) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}/notes/${note}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${note}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(request),
