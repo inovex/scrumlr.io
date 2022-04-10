@@ -108,7 +108,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if exists {
-		http.Redirect(w, r, fmt.Sprintf("/boards/%s/participants/%s", board, user), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("%s/boards/%s/participants/%s", s.baseURL, board, user), http.StatusSeeOther)
 		return
 	}
 
