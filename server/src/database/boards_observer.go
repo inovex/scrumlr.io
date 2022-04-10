@@ -40,7 +40,6 @@ func (*BoardUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 	return nil
 }
 
-// TODO cleanup
 func (*BoardTimerUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 	if ctx.Value("Database") == nil {
 		return nil
