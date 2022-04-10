@@ -18,7 +18,6 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
   }
 
   if (action.type === Action.PermittedBoardAccess) {
-    // FIXME implement all event subscriptions
     socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${action.boardId}`, {
       timeout: 5000,
       maxAttempts: 0,
