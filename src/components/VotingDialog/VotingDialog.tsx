@@ -15,7 +15,7 @@ export const VotingDialog: VFC = () => {
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
-  const [anonymousVoting, setAnonymousVoting] = useState(false);
+  // const [anonymousVoting, setAnonymousVoting] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);
   const [startPositionX, setStartPositionX] = useState(0);
 
@@ -46,7 +46,7 @@ export const VotingDialog: VFC = () => {
     store.dispatch(
       Actions.createVoting({
         voteLimit: numberOfVotes,
-        showVotesOfOthers: !anonymousVoting,
+        showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
       })
     );
@@ -79,10 +79,10 @@ export const VotingDialog: VFC = () => {
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
-          <button className="dialog__button" data-testid="voting-dialog__anonymous-voting-button" onClick={() => setAnonymousVoting((state) => !state)}>
-            <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
-            <Toggle active={anonymousVoting} className="voting-dialog__toggle" />
-          </button>
+          {/* <button className="dialog__button" data-testid="voting-dialog__anonymous-voting-button" onClick={() => setAnonymousVoting((state) => !state)}> */}
+          {/*   <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label> */}
+          {/*   <Toggle active={anonymousVoting} className="voting-dialog__toggle" /> */}
+          {/* </button> */}
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
             <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">

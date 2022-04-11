@@ -86,6 +86,13 @@
     "show": "Zeige alle Spalten",
     "hide": "Blende versteckte Spalten aus"
   },
+  "Column": {
+    "editName": "Ändere den Spaltennamen",
+    "submitName": "Name bestätigen",
+    "resetName": "Name zurücksetzen",
+    "hideColumn": "Blende die Spalte für alle Teilnehmer aus",
+    "showColumn": "Blende die Spalte für alle Teilnehmer ein"
+  },
   "ShowOtherUsersNotesOption": {
     "show": "Zeige Kärtchen anderer Teilnehmer",
     "hide": "Blende Kärtchen anderer Teilnehmer aus"
