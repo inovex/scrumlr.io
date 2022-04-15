@@ -22,7 +22,7 @@
     "lodash": "^4.17.20",
     "marked": "4.0.12",
     "parse": "^3.4.0",
-    "qrcode.react": "^2.0.0",
+    "qrcode.react": "^3.0.1",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dnd": "^15.1.2",
