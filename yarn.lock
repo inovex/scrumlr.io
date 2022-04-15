@@ -10014,10 +10014,10 @@ react-dnd-test-backend@^15.1.2:
   dependencies:
     dnd-core "15.1.2"
 
-react-dnd-test-utils@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.yarnpkg.com/react-dnd-test-utils/-/react-dnd-test-utils-15.1.2.tgz#d10292a22c3dcf929986c9ec1f47c2b0f7f36d7e"
-  integrity sha512-H1hpWaPripsqPdKh+G/Cj4diK23AcqGawKDUEN8KNtKikKnQE/f1xoOOYtz2jt5gMZhuRBtg5+5HLFyt3bn8gQ==
+react-dnd-test-utils@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-test-utils/-/react-dnd-test-utils-16.0.0.tgz#918e96eb1f44b852857307922598d66289e646b3"
+  integrity sha512-lpTQPjpLud4spwCGrlOMfcM5KSio5uVNRwvhQv9NQX0JUJVc1oQAnZEcKl5AvZ9enRLZNiNpAuzCK4QfYbNFDA==
 
 react-dnd@*:
   version "15.1.1"
