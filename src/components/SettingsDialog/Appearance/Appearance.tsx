@@ -8,8 +8,8 @@ import "../SettingsDialog.scss";
 import "./Appearance.scss";
 
 export const Appearance = () => {
-  const [syncMode, setSyncMode] = useState(false); // Todo: Implement me
-  const [showNotifications, setshowNotifications] = useState(false); // Todo: Implement me
+  const [syncMode, setSyncMode] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -31,7 +31,7 @@ export const Appearance = () => {
           </div>
           <SettingsToggle active={syncMode} />
         </SettingsButton>
-        <SettingsButton className="appearance-settings_notifications-button" label={t("Appearance.AllowNotifications")} onClick={() => setshowNotifications(!showNotifications)}>
+        <SettingsButton className="appearance-settings_notifications-button" label={t("Appearance.AllowNotifications")} onClick={() => setShowNotifications(!showNotifications)}>
           <SettingsToggle active={showNotifications} />
         </SettingsButton>
         <SettingsButton

@@ -29,14 +29,14 @@ exports[`TimerDialog should match the snapshot 1`] = `
             <h2
               class="dialog__header-text"
             >
-              TimerToggleButton.label
+              Timer
             </h2>
             <button
               class="dialog__button"
               data-testid="timer-dialog__1-minute-button"
             >
               <label>
-                TimerToggleButton.1min
+                1 minute
               </label>
               <svg
                 class="timer-dialog__button-icon"
@@ -49,7 +49,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
               data-testid="timer-dialog__3-minute-button"
             >
               <label>
-                TimerToggleButton.3min
+                3 minute
               </label>
               <svg
                 class="timer-dialog__button-icon"
@@ -62,7 +62,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
               data-testid="timer-dialog__5-minute-button"
             >
               <label>
-                TimerToggleButton.5min
+                5 minute
               </label>
               <svg
                 class="timer-dialog__button-icon"
@@ -75,7 +75,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
               data-testid="timer-dialog__custom-minute-button"
             >
               <label>
-                TimerToggleButton.customTime
+                Custom time
               </label>
               <button
                 class="timer-dialog__time-button"

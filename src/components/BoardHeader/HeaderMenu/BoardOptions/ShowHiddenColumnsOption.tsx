@@ -1,31 +1,26 @@
-import store, {useAppSelector} from "store";
-import {ApplicationState} from "types/store";
-import {ActionFactory} from "store/action";
-import "../BoardSettings/BoardSettings.scss";
-import Parse from "parse";
+import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
+import "../BoardSettings/BoardSettings.scss";
 
 export const ShowHiddenColumnsOption = () => {
   const {t} = useTranslation();
-
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-    user: applicationState.users.all.find((user) => user.id === Parse.User.current()!.id),
-    userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
-  }));
+  const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
+  const dispatch = useDispatch();
 
   return (
     <BoardOption data-testid="column">
       <BoardOptionButton
-        label={state.userConfiguration?.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
+        label={showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
         onClick={() => {
-          store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration?.showHiddenColumns}));
+          dispatch(Actions.setShowHiddenColumns(!showHiddenColumns));
         }}
       >
-        <BoardOptionToggle active={Boolean(state.userConfiguration?.showHiddenColumns)} />
+        <BoardOptionToggle active={!!showHiddenColumns} />
       </BoardOptionButton>
     </BoardOption>
   );

@@ -1,59 +1,49 @@
 import {render} from "testUtils";
 import {MenuBars} from "components/MenuBars";
-import {User} from "parse";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-import {mocked} from "ts-jest/utils";
+import getTestStore from "utils/test/getTestStore";
+import {MockStoreEnhanced} from "redux-mock-store";
+import getTestParticipant from "../../../utils/test/getTestParticipant";
 
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
+const createMenuBars = (store: MockStoreEnhanced) => (
+  <Provider store={store}>
+    <MenuBars />
+  </Provider>
+);
 
-const createMenuBars = (state: Record<string, unknown>) => {
-  const store = mockStore(state);
-
-  return (
-    <Provider store={store}>
-      <MenuBars />
-    </Provider>
-  );
-};
-
-describe("Menu", () => {
-  beforeEach(() => {
-    mockedUser.current = jest.fn(() => ({id: "testId"} as never));
-  });
-
-  test("should render both add- and settings-menu for moderators", () => {
-    const state = {
-      users: {
-        admins: [{id: "testId"}],
-        all: [{id: "testId"}],
+describe("MenuBars", () => {
+  test("should match snapshot", () => {
+    const store = getTestStore({
+      participants: {
+        self: getTestParticipant({role: "MODERATOR"}),
+        others: [],
       },
-      board: {
-        data: {
-          id: "test-id",
-          moderation: {userId: "", status: "false"},
-        },
-      },
-    };
-    const {container} = render(createMenuBars(state));
+    });
+    const {container} = render(createMenuBars(store));
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test("should only render add-menu for participants", () => {
-    const state = {
-      users: {
-        admins: [],
-        all: [],
+  test("should render both user- and admin-menu for moderators", () => {
+    const store = getTestStore({
+      participants: {
+        self: getTestParticipant({role: "MODERATOR"}),
+        others: [],
       },
-      board: {
-        data: {
-          id: "test-id",
-          moderation: {userId: "", status: "active"},
-        },
+    });
+    const {container} = render(createMenuBars(store));
+    expect(container.getElementsByClassName("admin-menu").length).toBe(1);
+    expect(container.getElementsByClassName("user-menu").length).toBe(1);
+  });
+
+  test("should only render user-menu for participants", () => {
+    const store = getTestStore({
+      participants: {
+        self: getTestParticipant({role: "PARTICIPANT"}),
+        others: [],
       },
-    };
-    const {container} = render(createMenuBars(state));
-    expect(container.firstChild).toMatchSnapshot();
+    });
+    const {container} = render(createMenuBars(store));
+    expect(container.getElementsByClassName("admin-menu").length).toBe(0);
+    expect(container.getElementsByClassName("user-menu").length).toBe(1);
   });
 });

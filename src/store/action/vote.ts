@@ -1,35 +1,29 @@
-import {VoteClientModel} from "types/vote";
+import {Vote} from "types/vote";
 
-export const VoteActionType = {
-  AddVote: "@@SCRUMLR/addVote" as const,
-  CreatedVote: "@@SCRUMLR/createdVote" as const,
-  DeleteVote: "@@SCRUMLR/deleteVote" as const,
-  DeletedVote: "@@SCRUMLR/deletedVote" as const,
-  InitializeVotes: "@@SCRUMLR/initializeVotes" as const,
+export const VoteAction = {
+  AddVote: "scrumlr.io/addVote" as const,
+  CreatedVote: "scrumlr.io/createdVote" as const,
+  DeleteVote: "scrumlr.io/deleteVote" as const,
+  DeletedVote: "scrumlr.io/deletedVote" as const,
 };
 
 export const VoteActionFactory = {
-  addVote: (note: string, boardId: string, votingIteration: number) => ({
-    type: VoteActionType.AddVote,
+  addVote: (note: string) => ({
+    type: VoteAction.AddVote,
     note,
-    boardId,
-    votingIteration,
   }),
   deleteVote: (note: string) => ({
-    type: VoteActionType.DeleteVote,
+    type: VoteAction.DeleteVote,
     note,
   }),
-  createdVote: (vote: VoteClientModel) => ({
-    type: VoteActionType.CreatedVote,
+
+  createdVote: (vote: Vote) => ({
+    type: VoteAction.CreatedVote,
     vote,
   }),
-  deletedVote: (voteId: string) => ({
-    type: VoteActionType.DeletedVote,
-    voteId,
-  }),
-  initializeVotes: (votes: VoteClientModel[]) => ({
-    type: VoteActionType.InitializeVotes,
-    votes,
+  deletedVote: (vote: Vote) => ({
+    type: VoteAction.DeletedVote,
+    vote,
   }),
 };
 
@@ -37,5 +31,4 @@ export type VoteReduxAction =
   | ReturnType<typeof VoteActionFactory.addVote>
   | ReturnType<typeof VoteActionFactory.deleteVote>
   | ReturnType<typeof VoteActionFactory.createdVote>
-  | ReturnType<typeof VoteActionFactory.deletedVote>
-  | ReturnType<typeof VoteActionFactory.initializeVotes>;
+  | ReturnType<typeof VoteActionFactory.deletedVote>;

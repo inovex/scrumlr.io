@@ -4,7 +4,6 @@ import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
-import {AuthRedirect} from "routes/AuthRedirect";
 import {Route} from "react-router";
 import {SettingsDialog} from "components/SettingsDialog";
 import {ExportBoard} from "components/SettingsDialog/ExportBoard";
@@ -14,13 +13,14 @@ import {Appearance} from "components/SettingsDialog/Appearance/Appearance";
 import {Participants} from "components/SettingsDialog/Participants/Participants";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
+import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
-import ScrollToTop from "./ScrollToTop";
+import RouteChangeObserver from "./RouteChangeObserver";
 
 const Router = () => (
   <BrowserRouter>
-    <ScrollToTop />
+    <RouteChangeObserver />
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
@@ -35,7 +35,6 @@ const Router = () => (
         }
       />
       <Route path="/login" element={<LoginBoard />} />
-      <Route path="/auth/redirect" element={<AuthRedirect />} />
       <Route
         path="/board/:boardId"
         element={
@@ -50,8 +49,8 @@ const Router = () => (
           <Route path="appearance" element={<Appearance />} />
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
-          <Route path="feedback" element={<div>Feedback</div>} />
-          <Route path="profile" element={<div>Change your Profile</div>} />
+          {/* <Route path="feedback" element={<div>Feedback</div>} /> */}
+          <Route path="profile" element={<ProfileSettings />} />
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />

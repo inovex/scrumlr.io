@@ -2,45 +2,18 @@ import {act, fireEvent} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {Color} from "constants/colors";
-import configureStore from "redux-mock-store";
 import {Provider} from "react-redux";
-import Parse, {User} from "parse";
 import {BoardComponent} from "components/Board";
 import {render} from "testUtils";
-import {mocked} from "ts-jest/utils";
-
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
+import getTestStore from "utils/test/getTestStore";
 
 const createBoardWithColumns = (...colors: Color[]) => {
-  const initialState = {
-    board: {
-      data: {
-        columns: [
-          {id: "GG0fWzyCwd", name: "Positive", hidden: false, color: colors[0]},
-          {id: "RN1VQn6StI", name: "Negative", hidden: false, color: colors[1]},
-          {id: "YwPiaNxejW", name: "Actions", hidden: true, color: colors[2]},
-        ],
-        moderation: {userId: "", status: "active"},
-        userConfigurations: [{id: "testId", showHiddenColumns: true}],
-      },
-    },
-    notes: [],
-    users: {
-      admins: [],
-      basic: [],
-      all: [],
-    },
-    votes: [],
-  };
-  const store = mockStore(initialState);
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
-
   return (
-    <Provider store={store}>
+    <Provider store={getTestStore()}>
       <BoardContext currentUserIsModerator>
         {colors.map((color, index) => (
-          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" hidden={false} currentUserIsModerator={false} />
+          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
         ))}
       </BoardContext>
     </Provider>
@@ -49,7 +22,6 @@ const createBoardWithColumns = (...colors: Color[]) => {
 
 describe("basic", () => {
   beforeEach(() => {
-    mockedUser.current = jest.fn(() => ({id: "testId"} as never));
     window.IntersectionObserver = jest.fn(
       () =>
         ({
@@ -123,7 +95,6 @@ describe("basic", () => {
 
 describe("navigation", () => {
   beforeEach(() => {
-    Parse.User.current = jest.fn(() => ({id: "testId"}));
     window.IntersectionObserver = jest.fn(
       () =>
         ({

@@ -27,11 +27,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.17'
+
       - name: Build server
         working-directory: ./server
         run: |
-          yarn install
-          yarn build
+          make test
+          make build-alpine
 
       - name: Build client
         run: |
@@ -70,13 +74,6 @@ jobs:
         with:
           push: true
           tags: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
-
-      - name: Build and push Dashboard
-        uses: docker/build-push-action@v2
-        with:
-          context: ./dashboard
-          push: true
-          tags: ghcr.io/inovex/scrumlr.io/scrumlr-dashboard:latest
 
       - name: Build and push Server
         uses: docker/build-push-action@v2

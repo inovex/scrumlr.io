@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style";
 
 .login-providers {
   display: flex;
@@ -18,7 +18,11 @@
 }
 
 .login-providers__button:not(:first-child) {
+  min-width: auto;
   background: $color-light-gray;
+}
+.login-providers__button:not(:first-child) > span {
+  display: none;
 }
 
 .login-providers__button:first-child .login-providers__icon {

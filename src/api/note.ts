@@ -1,5 +1,5 @@
-import {DragNoteRequest, EditNoteRequest, UnstackNoteRequest} from "types/note";
-import {callAPI} from "api/callApi";
+import {SERVER_HTTP_URL} from "../config";
+import {EditNote, Note} from "../types/note";
 
 export const NoteAPI = {
   /**
@@ -11,21 +11,27 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  addNote: (boardId: string, columnId: string, text: string) => callAPI<{boardId: string; columnId: string; text: string}, boolean>("addNote", {boardId, columnId, text}),
-  /**
-   * Unstacks a note.
-   * @param note contains noteId and parentId
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
-   */
-  unstackNote: (note: UnstackNoteRequest, boardId: string) => callAPI("unstackNote", {note, boardId}),
-  /**
-   * Drag and drop a note.
-   * @param note contains noteId and parentId and optional a columnId
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
-   */
-  dragNote: (note: DragNoteRequest, boardId: string) => callAPI("dragNote", {note, boardId}),
+  addNote: async (boardId: string, columnId: string, text: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          column: columnId,
+          text,
+        }),
+      });
+
+      if (response.status === 201) {
+        return (await response.json()) as Note;
+      }
+
+      throw new Error(`create note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create note with error: ${error}`);
+    }
+  },
+
   /**
    * Deletes a note with the specified id.
    *
@@ -33,11 +39,43 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  deleteNote: (noteId: string) => callAPI<{noteId: string}, boolean>("deleteNote", {noteId}),
+  deleteNote: async (board: string, noteId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 204) {
+        return;
+      }
+
+      throw new Error(`create note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create note with error: ${error}`);
+    }
+  },
+
   /**
    * Edit a note with the specified id.
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  editNote: (note: EditNoteRequest) => callAPI("editNote", {note}),
+  editNote: async (board: string, note: string, request: EditNote) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${note}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(request),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update note with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update note: ${error}`);
+    }
+  },
 };

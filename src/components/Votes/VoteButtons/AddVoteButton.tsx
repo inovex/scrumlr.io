@@ -1,11 +1,12 @@
-import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./AddVoteButton.scss";
 import "./VoteButton.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {FC} from "react";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
+import {useDispatch} from "react-redux";
 
 type AddVoteProps = {
   noteId: string;
@@ -14,13 +15,15 @@ type AddVoteProps = {
 };
 
 export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) => {
+  const dispatch = useDispatch();
   const state = useAppSelector((applicationState: ApplicationState) => ({
-    id: applicationState.board.data!.id,
-    votingIteration: applicationState.voteConfiguration.votingIteration,
+    votingEnabled: !!applicationState.votings.open,
   }));
 
   const addVote = () => {
-    store.dispatch(ActionFactory.addVote(noteId, state.id, state.votingIteration));
+    if (state.votingEnabled) {
+      dispatch(Actions.addVote(noteId));
+    }
   };
 
   return (

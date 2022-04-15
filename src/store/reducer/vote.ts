@@ -1,39 +1,28 @@
-import {VoteClientModel} from "types/vote";
-import {ActionType, ReduxAction} from "store/action";
-import Parse from "parse";
+import {Action, ReduxAction} from "store/action";
+import {VotesState} from "types/vote";
 
 // eslint-disable-next-line default-param-last
-export const voteReducer = (state: VoteClientModel[] = [], action: ReduxAction): VoteClientModel[] => {
-  switch (action.type) {
-    case ActionType.CreatedVote: {
-      const newState = [...state];
-      const foundExistingVoteIndex = newState.findIndex(
-        (vote) => !vote.id && vote.note === action.vote.note && vote.user === action.vote.user && vote.votingIteration === action.vote.votingIteration
-      );
-      if (foundExistingVoteIndex >= 0) {
-        newState.splice(foundExistingVoteIndex, 1, action.vote);
-      } else {
-        newState.push(action.vote);
-      }
-      return newState;
-    }
-    case ActionType.AddVote: {
-      const localVote: VoteClientModel = {
-        note: action.note,
-        board: action.boardId,
-        user: Parse.User.current()!.id,
-        votingIteration: action.votingIteration,
-      };
-      return [...state, localVote];
-    }
-    case ActionType.DeletedVote: {
-      return state.filter((vote) => vote.id !== action.voteId);
-    }
-    case ActionType.InitializeVotes: {
-      return [...action.votes];
-    }
-    default: {
-      return state;
+export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesState => {
+  if (action.type === Action.InitializeBoard) {
+    return action.votes;
+  }
+
+  if (action.type === Action.CreatedVote) {
+    return [action.vote, ...state];
+  }
+
+  if (action.type === Action.DeletedVote) {
+    const newVotes = state.slice();
+    const index = newVotes.findIndex((v) => v.voting === action.vote.voting && v.note === action.vote.note);
+    if (index >= 0) {
+      newVotes.splice(index, 1);
+      return newVotes;
     }
   }
+
+  if (action.type === Action.AbortVoting) {
+    return state.filter((v) => v.voting !== action.voting);
+  }
+
+  return state;
 };

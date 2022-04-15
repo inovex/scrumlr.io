@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {useNavigate} from "react-router";
-import {ActionFactory} from "store/action";
-import store, {useAppSelector} from "store";
-import Parse from "parse";
+import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
 import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
@@ -10,45 +9,41 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
-import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
-
+import {useDispatch} from "react-redux";
 import "./MenuBars.scss";
 
 export const MenuBars = () => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
-  const currentUser = Parse.User.current();
   const state = useAppSelector(
     (rootState) => ({
-      admins: rootState.users.admins,
-      allUsers: rootState.users.all,
-      boardId: rootState.board.data!.id,
-      timer: rootState.board.data?.timerUTCEndTime,
-      voting: rootState.board.data?.voting,
-      moderation: rootState.board.data?.moderation.status,
+      currentUser: rootState.participants!.self,
+      moderation: rootState.view.moderating,
     }),
     _.isEqual
   );
 
-  const isAdmin = state.admins.map((admin) => admin.id).indexOf(currentUser!.id) !== -1;
-  const isReady = state.allUsers.find((user) => user.id === currentUser!.id)?.ready;
-  const raisedHand = state.allUsers.find((user) => user.id === currentUser!.id)?.raisedHand;
+  const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
+  const isReady = state.currentUser.ready;
+  const {raisedHand} = state.currentUser;
 
-  const toggleModeration = (active: boolean) => {
-    store.dispatch(ActionFactory.editBoard({id: state.boardId, moderation: {userId: Parse.User.current()?.id, status: active ? "active" : "disabled"}}));
+  const toggleModeration = () => {
+    dispatch(Actions.setModerating(!state.moderation));
   };
 
   const toggleReadyState = () => {
-    store.dispatch(ActionFactory.setUserReadyStatus(!isReady));
+    dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
   };
 
   const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
@@ -57,8 +52,8 @@ export const MenuBars = () => {
     }
   };
 
-  const toggleRaiseHand = (active: boolean) => {
-    store.dispatch(ActionFactory.setRaisedHandStatus({userId: [Parse.User.current()!.id], raisedHand: active}));
+  const toggleRaiseHand = () => {
+    dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 
   return (
@@ -83,7 +78,7 @@ export const MenuBars = () => {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <ThemeToggleButton tabIndex={TabIndex.UserMenu + 2} direction="right" />
+          <MenuButton direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
         </div>
       </section>
       {isAdmin && (
@@ -92,7 +87,7 @@ export const MenuBars = () => {
             <MenuButton direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
             <MenuButton direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
             <MenuToggle
-              value={state.moderation === "active"}
+              value={state.moderation}
               direction="left"
               toggleStartLabel={t("MenuBars.startFocusMode")}
               toggleStopLabel={t("MenuBars.stopFocusMode")}

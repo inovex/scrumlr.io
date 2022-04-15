@@ -1,4 +1,4 @@
-import {VFC, useState} from "react";
+import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";
@@ -8,7 +8,7 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
@@ -23,7 +23,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const state = useAppSelector(
     (rootState) => ({
       name: rootState.board.data?.name,
-      accessPolicy: rootState.board.data?.accessPolicy === "Public" ? t("Board.publicSession") : t("Board.privateSession"),
+      accessPolicy: rootState.board.data?.accessPolicy === "PUBLIC" ? t("Board.publicSession") : t("Board.privateSession"),
     }),
     shallowEqual
   );
@@ -41,7 +41,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           headline={t("ConfirmationDialog.returnToHomepage")}
           acceptMessage={t("ConfirmationDialog.yes")}
           onAccept={() => {
-            store.dispatch(ActionFactory.leaveBoard());
+            store.dispatch(Actions.leaveBoard());
             navigate("/");
           }}
           declineMessage={t("ConfirmationDialog.no")}
@@ -88,7 +88,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
         {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
 
-        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} currentUserIsModerator={props.currentUserIsModerator} />
+        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
       </header>
     </>
   );

@@ -1,9 +1,7 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {useRef, useState} from "react";
-import Parse from "parse";
-import {ApplicationState} from "types/store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
@@ -20,13 +18,13 @@ import "../SettingsDialog.scss";
 export const BoardSettings = () => {
   const {t} = useTranslation();
 
-  const state = useAppSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     board: applicationState.board.data!,
-    userConfiguration: applicationState.board.data!.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id)!,
-    currentUserIsModerator: applicationState.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined,
+    me: applicationState.participants?.self,
+    currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
   }));
 
-  const [boardName, setBoardName] = useState<string>(state.board.name);
+  const [boardName, setBoardName] = useState<string>(state.board.name ?? "");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
@@ -37,12 +35,12 @@ export const BoardSettings = () => {
   const handleSetPolicy = (AccessType: string) => {
     if (AccessType === "ByPassphrase") {
       if (password.length > 0) {
-        store.dispatch(ActionFactory.editBoard({id: state.board.id, accessPolicy: {type: "ByPassphrase", passphrase: password}}));
+        store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: password}));
       } else {
         passwordInputRef.current?.focus();
       }
     } else {
-      store.dispatch(ActionFactory.editBoard({id: state.board.id, accessPolicy: {type: "Public"}}));
+      store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
     }
   };
 
@@ -65,8 +63,8 @@ export const BoardSettings = () => {
               value={boardName}
               placeholder="scrumlr.io"
               onChange={(e) => setBoardName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && boardName && store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
-              onBlur={() => boardName && store.dispatch(ActionFactory.editBoard({id: state.board!.id, name: boardName}))}
+              onKeyPress={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
+              onBlur={() => boardName && store.dispatch(Actions.editBoard({name: boardName}))}
               disabled={!state.currentUserIsModerator}
             />
           </SettingsButton>
@@ -75,12 +73,12 @@ export const BoardSettings = () => {
             <div className="settings-dialog__group">
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
                 <div className="board-settings__policy-button_value">
-                  <span>{state.board.accessPolicy === "Public" ? t("AccessPolicySelection.publicTitle") : t("AccessPolicySelection.byPassphraseTitle")}</span>
+                  <span>{state.board.accessPolicy === "PUBLIC" ? t("AccessPolicySelection.publicTitle") : t("AccessPolicySelection.byPassphraseTitle")}</span>
                   <SetPolicyIcon />
                 </div>
               </SettingsButton>
 
-              {state.currentUserIsModerator && state.board.accessPolicy === "Public" && (
+              {state.currentUserIsModerator && state.board.accessPolicy === "PUBLIC" && (
                 <>
                   <hr className="settings-dialog__seperator" />
                   <SettingsButton className="board-settings__password-button" label={t("BoardSettings.Password")} onClick={() => passwordInputRef.current?.focus()}>
@@ -100,7 +98,7 @@ export const BoardSettings = () => {
             </div>
 
             {state.currentUserIsModerator &&
-              (state.board.accessPolicy === "Public" ? (
+              (state.board.accessPolicy === "PUBLIC" ? (
                 <>
                   <button className="board-settings__generate-password-button" onClick={() => setPassword(generateRandomString())}>
                     <RefreshIcon />
@@ -127,7 +125,7 @@ export const BoardSettings = () => {
                   className="board-settings__show-author-button"
                   label={state.board.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
                   onClick={() => {
-                    store.dispatch(ActionFactory.editBoard({id: state.board!.id, showAuthors: !state.board.showAuthors}));
+                    store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                 >
                   <SettingsToggle active={state.board.showAuthors} />
@@ -137,7 +135,7 @@ export const BoardSettings = () => {
                   data-testid="notes"
                   className="board-settings__show-notes-button"
                   label={state.board.showNotesOfOtherUsers ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
-                  onClick={() => store.dispatch(ActionFactory.editBoard({id: state.board!.id, showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
+                  onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
                   <SettingsToggle active={state.board.showNotesOfOtherUsers} />
                 </SettingsButton>
@@ -145,10 +143,10 @@ export const BoardSettings = () => {
                 <SettingsButton
                   data-testid="columns"
                   className="board-settings__show-columns-button"
-                  label={state.userConfiguration.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
-                  onClick={() => store.dispatch(ActionFactory.editUserConfiguration({showHiddenColumns: !state.userConfiguration.showHiddenColumns}))}
+                  label={state.me?.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
+                  onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
-                  <SettingsToggle active={state.userConfiguration.showHiddenColumns} />
+                  <SettingsToggle active={state.me?.showHiddenColumns} />
                 </SettingsButton>
               </div>
 
@@ -162,7 +160,7 @@ export const BoardSettings = () => {
             <ConfirmationDialog
               headline={t("ConfirmationDialog.deleteBoard")}
               acceptMessage={t("ConfirmationDialog.yes")}
-              onAccept={() => store.dispatch(ActionFactory.deleteBoard(state.board!.id))}
+              onAccept={() => store.dispatch(Actions.deleteBoard())}
               declineMessage={t("ConfirmationDialog.no")}
               onDecline={() => setShowConfirmationDialog(false)}
               className="board-settings__confirmation-dialog"

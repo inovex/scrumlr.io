@@ -34,7 +34,7 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   let AccessPolicyDescription;
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
-    case AccessPolicy.ByPassphrase:
+    case AccessPolicy.BY_PASSPHRASE:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
@@ -71,10 +71,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
         </>
       );
       break;
-    case AccessPolicy.ManualVerification:
+    case AccessPolicy.BY_INVITE:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.manualVerification")}</span>;
       break;
-    case AccessPolicy.Public:
+    case AccessPolicy.PUBLIC:
     default:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
       break;
@@ -87,22 +87,22 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <div className="access-policy-selection__tabs">
         <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.Public ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.Public)}
+          variant={accessPolicy === AccessPolicy.PUBLIC ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.PUBLIC)}
         >
           {t("AccessPolicySelection.publicTitle")}
         </Button>
         <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.ByPassphrase ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.ByPassphrase)}
+          variant={accessPolicy === AccessPolicy.BY_PASSPHRASE ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.BY_PASSPHRASE)}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
         </Button>
         <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.ManualVerification ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.ManualVerification)}
+          variant={accessPolicy === AccessPolicy.BY_INVITE ? "contained" : "outlined"}
+          onClick={() => handlePolicyChange(AccessPolicy.BY_INVITE)}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
         </Button>

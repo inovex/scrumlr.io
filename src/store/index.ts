@@ -1,46 +1,60 @@
-import {createStore, applyMiddleware, combineReducers, Dispatch, MiddlewareAPI, AnyAction} from "redux";
+import {applyMiddleware, combineReducers, createStore, Dispatch, MiddlewareAPI} from "redux";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
-import {ApplicationState} from "types/store";
+import {ApplicationState} from "types";
 import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
 import {noteReducer} from "./reducer/note";
 import {voteReducer} from "./reducer/vote";
-import {usersReducer} from "./reducer/users";
-import {voteConfigurationReducer} from "./reducer/voteConfiguration";
+import {participantsReducer} from "./reducer/participants";
+import {votingReducer} from "./reducer/votings";
 import {passNoteMiddleware} from "./middleware/note";
-import {passVoteMiddlware} from "./middleware/vote";
+import {passVoteMiddleware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
-import {passBoardJoinConfirmationMiddleware} from "./middleware/boardJoinConfirmation";
 import {passColumnMiddleware} from "./middleware/column";
-import {passJoinRequestMiddleware} from "./middleware/joinRequest";
-import {passUsersMiddleware} from "./middleware/users";
-import {joinRequestReducer} from "./reducer/joinRequest";
-import {passVoteConfigurationMiddlware} from "./middleware/voteConfiguration";
+import {passParticipantsMiddleware} from "./middleware/participants";
+import {joinRequestReducer} from "./reducer/requests";
+import {passVotingMiddleware} from "./middleware/votings";
+import {authReducer} from "./reducer/auth";
+import {passAuthMiddleware} from "./middleware/auth";
+import {columnsReducer} from "./reducer/columns";
+import {viewReducer} from "./reducer/view";
+import {passRequestMiddleware} from "./middleware/request";
+import {passViewMiddleware} from "./middleware/view";
 
-const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch<AnyAction>, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
+  action.context = {
+    user: stateAPI.getState().auth.user?.id,
+    board: stateAPI.getState().board.data?.id,
+    voting: stateAPI.getState().votings.open?.id,
+    serverTimeOffset: stateAPI.getState().view.serverTimeOffset,
+  };
   try {
     return dispatch(action);
   } finally {
-    passBoardJoinConfirmationMiddleware(stateAPI, dispatch, action);
+    passViewMiddleware(stateAPI, dispatch, action);
+    passAuthMiddleware(stateAPI, dispatch, action);
     passBoardMiddleware(stateAPI, dispatch, action);
+    passParticipantsMiddleware(stateAPI, dispatch, action);
+    passRequestMiddleware(stateAPI, dispatch, action);
     passColumnMiddleware(stateAPI, dispatch, action);
-    passVoteConfigurationMiddlware(stateAPI, dispatch, action);
     passNoteMiddleware(stateAPI, dispatch, action);
-    passVoteMiddlware(stateAPI, dispatch, action);
-    passJoinRequestMiddleware(stateAPI, dispatch, action);
-    passUsersMiddleware(stateAPI, dispatch, action);
+    passVoteMiddleware(stateAPI, dispatch, action);
+    passVotingMiddleware(stateAPI, dispatch, action);
   }
 };
 
 const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
+  columns: columnsReducer,
   notes: noteReducer,
-  users: usersReducer,
-  joinRequests: joinRequestReducer,
+  auth: authReducer,
+  participants: participantsReducer,
+  requests: joinRequestReducer,
   votes: voteReducer,
-  voteConfiguration: voteConfigurationReducer,
+  votings: votingReducer,
+  view: viewReducer,
 });
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware)));

@@ -17,10 +17,10 @@ updates:
       include: "scope"
 
   # Server
-  - package-ecosystem: "npm"
+  - package-ecosystem: "gomod"
     allow:
       - dependency-type: "direct"
-    directory: "/server"
+    directory: "/server/src"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -29,5 +29,5 @@ updates:
       - "Type: Dependencies"
     versioning-strategy: increase
     commit-message:
-      prefix: "yarn"
+      prefix: "go"
       include: "scope"

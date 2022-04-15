@@ -1,29 +1,7 @@
-import {StatusResponse} from "types";
-import {AddColumnRequest, EditColumnRequest} from "types/column";
-import {callAPI} from "api/callApi";
+import {EditColumnRequest} from "types/column";
+import {SERVER_HTTP_URL} from "../config";
 
 export const ColumnAPI = {
-  /**
-   * Adds a column with the specified name and configuration to a board.
-   *
-   * @param boardId the board id
-   * @param column contains
-   *  name: the column name
-   *  color: the column color
-   *  hidden: flag whether the column should be displayed to all users or hidden from basic users
-   *
-   * @returns status and (error-)description of request
-   */
-  addColumn: (boardId: string, column: AddColumnRequest) => callAPI<{boardId: string; column: AddColumnRequest}, StatusResponse>("addColumn", {boardId, column}),
-  /**
-   * Deletes a column with the specified id.
-   *
-   * @param boardId the board id
-   * @param columnId the column id
-   *
-   * @returns a {status, description} object
-   */
-  deleteColumn: (boardId: string, columnId: string) => callAPI<{boardId: string; columnId: string}, StatusResponse>("deleteColumn", {boardId, columnId}),
   /**
    * Edit a column with the specified id.
    *
@@ -32,9 +10,25 @@ export const ColumnAPI = {
    *  columnId: the column id
    *  name: new name to set (optional)
    *  color: new column color to set (optional)
-   *  hidden: flag to set whether this columns should be visible to all basic users (optional)
+   *  hidden: flag to set whether this column should be visible to all basic users (optional)
    *
    * @returns a {status, description} object
    */
-  editColumn: (boardId: string, column: EditColumnRequest) => callAPI<{boardId: string; column: EditColumnRequest}, StatusResponse>("editColumn", {boardId, column}),
+  editColumn: async (boardId: string, columnId: string, column: EditColumnRequest) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns/${columnId}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(column),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update column with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update column: ${error}`);
+    }
+  },
 };

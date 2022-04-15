@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {LoadingIndicator} from "components/LoadingIndicator";
 import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
@@ -16,10 +16,10 @@ export const BoardGuard = () => {
   const boardStatus = useAppSelector((state) => state.board.status);
 
   useEffect(() => {
-    store.dispatch(ActionFactory.joinBoard(boardId!));
+    store.dispatch(Actions.joinBoard(boardId!));
 
     return () => {
-      store.dispatch(ActionFactory.leaveBoard());
+      store.dispatch(Actions.leaveBoard());
     };
   }, [boardId]);
 
@@ -31,7 +31,7 @@ export const BoardGuard = () => {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {
-          store.dispatch(ActionFactory.joinBoard(boardId!, passphrase));
+          store.dispatch(Actions.joinBoard(boardId!, passphrase));
         }}
       />
     );

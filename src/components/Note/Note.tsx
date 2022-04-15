@@ -1,93 +1,104 @@
 import "./Note.scss";
 import classNames from "classnames";
-import Parse from "parse";
-import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import React, {useEffect, useRef} from "react";
 import {NoteDialog} from "components/NoteDialog";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {Votes} from "components/Votes";
-import {VoteClientModel} from "types/vote";
 import {useDrag, useDrop} from "react-dnd";
-import {NoteClientModel} from "types/note";
 import {UserAvatar} from "components/BoardUsers";
 import {TabIndex} from "constants/tabIndex";
+import {useDispatch} from "react-redux";
+import _ from "underscore";
+import {Participant} from "types/participant";
+import {useAppSelector} from "store";
 
 interface NoteProps {
-  text: string;
-  authorId: string;
-  authorName: string;
-  noteId: string | undefined;
+  noteId: string;
   columnId: string;
   columnName: string;
   columnColor: string;
   showAuthors: boolean;
-  childrenNotes: Array<NoteClientModel & {authorName: string; votes: VoteClientModel[]}>;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
-  activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
-  focus: boolean;
-  currentUserIsModerator: boolean;
+  moderating: boolean;
+  viewer: Participant;
   tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
-  const [showDialog, setShowDialog] = React.useState(props.focus && props.activeModeration.status);
+  const dispatch = useDispatch();
+
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
+  const noteIsShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
+  const childrenNotes = useAppSelector(
+    (state) =>
+      state.notes
+        .filter((n) => n.position.stack === note?.id)
+        .map((n) => ({
+          ...n,
+          authorName: state.participants?.others.find((p) => p.user.id === n.id)?.user.name ?? state.participants?.self.user.name ?? "",
+          votes: state.votings.past[0]?.votes?.votesPerNote[n.id].total ?? 0,
+          allVotesOfUser: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === n.id),
+        })),
+    _.isEqual
+  );
+  const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
+  const activeVoting = useAppSelector((state) => !!state.votings.open);
+  const [showDialog, setShowDialog] = React.useState(noteIsShared);
+
   const handleShowDialog = () => {
-    if (props.activeModeration.status) {
-      if (props.noteId && props.activeModeration.userId === Parse.User.current()?.id) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: !props.focus}));
-        setShowDialog(!props.focus);
+    if (props.moderating && props.noteId) {
+      if (noteIsShared) {
+        dispatch(Actions.stopSharing());
+      } else {
+        dispatch(Actions.shareNote(props.noteId));
       }
+      setShowDialog(!noteIsShared);
     } else {
+      if ((props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR") && noteIsShared) {
+        dispatch(Actions.stopSharing());
+      }
       setShowDialog(!showDialog);
     }
   };
 
   useEffect(() => {
-    if (props.activeModeration.status) {
+    if (props.moderating) {
       // Nothing to update
-      if (showDialog === props.focus) {
+      if (showDialog === noteIsShared) {
         return;
       }
+
       // Moderator has already one dialog open
-      if (showDialog && !props.focus && props.activeModeration.userId === Parse.User.current()?.id && props.noteId) {
-        store.dispatch(ActionFactory.editNote({id: props.noteId, focus: true}));
+      if (showDialog && !noteIsShared && props.noteId) {
+        dispatch(Actions.shareNote(props.noteId));
       } else {
         setShowDialog(false);
       }
-    } else if (props.activeModeration.userId !== Parse.User.current()?.id) {
-      // Disable dialog for all other users
-      setShowDialog(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.activeModeration.status]);
+  }, [props.moderating]);
 
   useEffect(() => {
-    if (showDialog !== props.focus) {
-      if (props.activeModeration.status || props.activeModeration.userId !== Parse.User.current()?.id) {
-        setShowDialog(props.focus);
-      }
+    if (showDialog !== noteIsShared) {
+      setShowDialog(noteIsShared);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.focus]);
+  }, [noteIsShared]);
 
   const [{isDragging}, drag] = useDrag({
-    type: props.childrenNotes.length > 0 ? "STACK" : "NOTE",
+    type: childrenNotes.length > 0 ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: props.columnId},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    canDrag: () => !props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id,
   });
 
   const [{isOver}, drop] = useDrop(() => ({
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        store.dispatch(ActionFactory.dragNote({id: item.id, dragOnId: props.noteId, columnId: props.columnId}));
+        dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: props.columnId, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
@@ -96,9 +107,7 @@ export const Note = (props: NoteProps) => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !showDialog) {
-      if (!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id) {
-        handleShowDialog();
-      }
+      handleShowDialog();
     }
   };
 
@@ -106,44 +115,37 @@ export const Note = (props: NoteProps) => {
   drop(noteRef);
 
   return (
-    <li
-      className={classNames("note__root", {"note__root-disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id})}
-      onClick={!props.activeModeration.status || props.activeModeration.userId === Parse.User.current()?.id ? handleShowDialog : () => {}}
-      onKeyPress={handleKeyPress}
-      ref={noteRef}
-    >
+    <li className={classNames("note__root")} onClick={handleShowDialog} onKeyPress={handleKeyPress} ref={noteRef}>
       <div
-        className={classNames(
-          "note",
-          {"note--own-card": Parse.User.current()?.id === props.authorId},
-          {"note--isDragging": isDragging},
-          {"note--isOver": isOver},
-          {"note__disabled-click": props.activeModeration.status && props.activeModeration.userId !== Parse.User.current()?.id}
-        )}
+        className={classNames("note", {"note--own-card": props.viewer.user.id === note?.author}, {"note--isDragging": isDragging}, {"note--isOver": isOver})}
         tabIndex={props.tabIndex ?? TabIndex.default}
       >
         <div className="note__content">
-          <p className="note__text">{props.text}</p>
-          <EditIcon className={classNames("note__edit", {"note__edit--own-card": Parse.User.current()?.id === props.authorId})} />
+          <p className="note__text">{note!.text}</p>
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === note?.author})} />
         </div>
         <div className="note__footer">
-          {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
+          {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={props.authorId} name={props.authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{props.authorName}</figcaption>
+              <UserAvatar id={note!.author} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{author!.user.name}</figcaption>
             </figure>
           )}
-          <Votes
-            tabIndex={props.tabIndex}
-            noteId={props.noteId!}
-            votes={props.votes.concat(props.childrenNotes.flatMap((n) => n.votes))}
-            activeVoting={props.activeVoting}
-            usedVotesAsUser={props.allVotesOfUser.length}
-          />
+          {activeVoting && <Votes tabIndex={props.tabIndex} noteId={props.noteId!} />}
         </div>
-        <NoteDialog {...props} onClose={handleShowDialog} show={showDialog} onDeleteOfParent={() => setShowDialog(false)} />
+        {showDialog && (
+          <NoteDialog
+            {...props}
+            text={note!.text}
+            authorId={note!.author}
+            authorName={author!.user.name}
+            childrenNotes={childrenNotes}
+            onClose={handleShowDialog}
+            onDeleteOfParent={() => setShowDialog(false)}
+          />
+        )}
       </div>
-      {props.childrenNotes.length > 0 && <div className="note__in-stack" />}
+      {childrenNotes.length > 0 && <div className="note__in-stack" />}
     </li>
   );
 };

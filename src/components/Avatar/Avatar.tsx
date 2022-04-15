@@ -104,15 +104,15 @@ const generateRandomProps = (seed: string) => {
 };
 
 /**
- * This components renders an avatar of a person. If the prop `seed` is set the
+ * This component renders an avatar of a person. If the prop `seed` is set the
  * properties for the look will be generated.
  *
- * @param seed The seed will define the define the set of properties if define.
+ * @param seed The seed will define the set of properties if define.
  * @param className Additional CSS classes
  * @param skinColor the skin color
  * @param topType the style for the top of the head (e.g. a hat or hair)
  * @param clotheColor the clothe color
- * @param graphicType the graphic if the clothe is a graphic shirt
+ * @param graphicType the graphic if the cloth is a graphic shirt
  * @param clotheType the clothe type
  * @param hairColor the hair color
  * @param facialHairColor the facial hair color
