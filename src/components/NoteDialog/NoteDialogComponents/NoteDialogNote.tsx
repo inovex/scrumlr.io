@@ -1,9 +1,8 @@
 import classNames from "classnames";
-import Parse from "parse";
 import {FC} from "react";
-import {VoteClientModel} from "types/vote";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
+import {Participant} from "../../../types/participant";
 
 export type NoteDialogNoteProps = {
   noteId?: string;
@@ -14,16 +13,13 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
-  activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
-  currentUserIsModerator: boolean;
   showUnstackButton: boolean;
+
+  viewer: Participant;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
-  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": Parse.User.current()?.id === props.authorId})}>
+  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId})}>
     <NoteDialogNoteComponents.Content {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
   </div>

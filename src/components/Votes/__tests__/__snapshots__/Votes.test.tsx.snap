@@ -1,13 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Votes should render correctly with additional classname 1`] = `
-<div>
-  <div
-    class="votes test-classname"
-  />
-</div>
-`;
-
 exports[`Votes should render correctly with no votes and active voting 1`] = `
 <div>
   <div
@@ -41,7 +33,7 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
     class="votes"
   >
     <button
-      class="dot-button vote-button-remove"
+      class="dot-button vote-button-remove vote-button-remove--own-vote"
       tabindex="0"
     >
       <span
@@ -50,16 +42,6 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
       <span>
         1
       </span>
-    </button>
-    <button
-      class="dot-button vote-button-add"
-      tabindex="0"
-    >
-      <svg
-        class="vote-button-add__icon"
-      >
-        icon-add.svg
-      </svg>
     </button>
   </div>
 </div>

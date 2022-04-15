@@ -5,10 +5,9 @@ import {Request} from "components/Request";
 import store, {useAppSelector} from "store";
 import {InfoBar} from "components/Infobar";
 import {TabIndex} from "constants/tabIndex";
-import Parse from "parse";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import _ from "underscore";
 
 export const Board = () => {
@@ -24,7 +23,7 @@ export const Board = () => {
     window.addEventListener(
       "beforeunload",
       () => {
-        store.dispatch(ActionFactory.leaveBoard());
+        store.dispatch(Actions.leaveBoard());
       },
       false
     );
@@ -32,7 +31,7 @@ export const Board = () => {
     window.addEventListener(
       "onunload",
       () => {
-        store.dispatch(ActionFactory.leaveBoard());
+        store.dispatch(Actions.leaveBoard());
       },
       false
     );
@@ -42,17 +41,17 @@ export const Board = () => {
     (applicationState) => ({
       board: {
         id: applicationState.board.data?.id,
-        columns: applicationState.board.data?.columns,
         status: applicationState.board.status,
       },
-      joinRequests: applicationState.joinRequests,
-      users: applicationState.users,
-      userConfiguration: applicationState.board.data?.userConfigurations.find((configuration) => configuration.id === Parse.User.current()!.id),
+      columns: applicationState.columns,
+      requests: applicationState.requests,
+      participants: applicationState.participants,
+      auth: applicationState.auth,
     }),
     _.isEqual
   );
 
-  const currentUserIsModerator = state.users.admins.find((user) => user.id === Parse.User.current()!.id) !== undefined;
+  const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
 
   if (state.board.status === "pending") {
     return <LoadingScreen />;
@@ -63,24 +62,22 @@ export const Board = () => {
       <>
         {currentUserIsModerator && (
           <Request
-            joinRequests={state.joinRequests.filter((joinRequest) => joinRequest.status === "pending")}
-            users={state.users.all}
-            raisedHands={state.users.usersRaisedHands.filter((id) => id !== Parse.User.current()?.id)}
-            boardId={state.board.id!}
+            requests={state.requests.filter((request) => request.status === "PENDING")}
+            participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
           />
         )}
         <InfoBar />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
-          {state.board
-            .columns!.filter((column) => !column.hidden || (currentUserIsModerator && state.userConfiguration?.showHiddenColumns))
+          {state.columns
+            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (
               <Column
                 tabIndex={TabIndex.Column + columnIndex}
-                key={column.columnId}
-                id={column.columnId!}
+                key={column.id}
+                id={column.id}
+                index={column.index}
                 name={column.name}
-                hidden={column.hidden}
-                currentUserIsModerator={currentUserIsModerator}
+                visible={column.visible}
                 color={column.color}
               />
             ))}

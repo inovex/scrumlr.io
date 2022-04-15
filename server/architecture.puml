@@ -1,0 +1,18 @@
+@startuml
+
+database "SQL database" as db
+queue nats.io as nats
+actor "Web-Client" as client
+collections "scrumlr.io server" as server
+usecase "Board on scrumlr.io" as board
+
+client -down-> board: participates on
+
+client -right-> server: API request changes
+client <- server: listen to websocket
+
+server -> db: write changes
+server --> nats: publish changes
+nats -> server: notifies changes
+
+@enduml

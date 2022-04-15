@@ -6,15 +6,19 @@ import {ReactComponent as English} from "assets/flags/US.svg";
 import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
-import Parse from "parse";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
-import {Button} from "../../components/Button";
+import {Button} from "components/Button";
+import {useAppSelector} from "store";
+import {Actions} from "store/action";
+import {useDispatch} from "react-redux";
 import {InovexAnchor} from "./InovexAnchor";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
+  const {user} = useAppSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -23,10 +27,8 @@ export const Homepage = withTranslation()(() => {
     });
   };
 
-  const onLogout = async () => {
-    await Parse.User.logOut();
-    // eslint-disable-next-line no-restricted-globals
-    location.reload();
+  const onLogout = () => {
+    dispatch(Actions.signOut());
   };
 
   return (
@@ -47,7 +49,7 @@ export const Homepage = withTranslation()(() => {
               </Button>
             </li>
 
-            {Parse.User.current() && (
+            {!!user && (
               <li>
                 <Button variant="text-link" onClick={onLogout} leftIcon={<LogoutIcon className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout

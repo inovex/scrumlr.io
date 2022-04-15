@@ -1,11 +1,11 @@
-@import "constants/style";
-@import "components/Note/Note.scss";
+@import "src/constants/style";
+@import "src/components/Note/Note.scss";
 
 .note-dialog__note-footer {
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   height: 26px;
 }
 
@@ -23,6 +23,7 @@
 .note-dialog__note-author {
   display: inline-flex;
   align-items: center;
+  flex-grow: 1;
   // reset css from figure-element:
   margin: 0;
   padding: 0;

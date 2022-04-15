@@ -1,4 +1,4 @@
-import {FC, ReactNode, ElementType} from "react";
+import {ElementType, FC, ReactNode} from "react";
 import "./BoardOptionButton.scss";
 import classNames from "classnames";
 

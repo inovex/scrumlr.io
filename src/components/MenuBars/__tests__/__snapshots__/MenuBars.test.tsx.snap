@@ -1,84 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Menu should only render add-menu for participants 1`] = `
-<aside
-  class="menu-bars menu-bars--user"
-  id="menu-bars"
->
-  <section
-    class="menu user-menu"
-  >
-    <div
-      class="menu__items"
-    >
-      <button
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="300"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Mark me as done
-          </span>
-        </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-check.svg
-        </svg>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="301"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Raise your hand
-          </span>
-        </div>
-        <svg
-          class="menu-item__icon menu-item__icon--start"
-        >
-          icon-hand.svg
-        </svg>
-        <svg
-          class="menu-item__icon menu-item__icon--end"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        class="menu-item menu-item--right"
-        tabindex="302"
-      >
-        <div
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
-          >
-            Change color scheme
-          </span>
-        </div>
-      </button>
-    </div>
-  </section>
-</aside>
-`;
-
-exports[`Menu should render both add- and settings-menu for moderators 1`] = `
+exports[`MenuBars should match snapshot 1`] = `
 <aside
   class="menu-bars menu-bars--user menu-bars--isAdmin"
   id="menu-bars"
@@ -99,7 +21,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Mark me as done
+            MenuBars.markAsDone
           </span>
         </div>
         <svg
@@ -123,7 +45,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Raise your hand
+            MenuBars.raiseHand
           </span>
         </div>
         <svg
@@ -139,7 +61,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
-        tabindex="302"
+        tabindex="0"
       >
         <div
           class="menu-item__tooltip"
@@ -147,9 +69,14 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Change color scheme
+            MenuBars.settings
           </span>
         </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-settings.svg
+        </svg>
       </button>
     </div>
   </section>
@@ -207,7 +134,7 @@ exports[`Menu should render both add- and settings-menu for moderators 1`] = `
           <span
             class="tooltip__text"
           >
-            Start focused mode
+            MenuBars.startFocusMode
           </span>
         </div>
         <svg

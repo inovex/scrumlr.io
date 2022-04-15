@@ -1,57 +1,40 @@
-# enable lets encrypt certs 
+# enable lets encrypt certs
 # use prod to change lets encrypt cluster issuer, false=lets-encrypt-staging , true=lets-encrypt-prod
 cert:
   enabled: false
   prod: false
   name:
-hostname: 
-#
-cache:
-  name: cache
-  replicas: 
+hostname:
 
 oauthroute:
   enabled: true
-dashboard:
-  name: dashboard
-  image: scrumlr-dashboard
-  imagePullPolicy: 
-  replicas: 
-   # bcrypt and base64 encoded, login defaults to scrumlr (user and pw) 
-  password:  
-
 
 frontend:
   name: frontend
   image: scrumlr-frontend
-  imagePullPolicy: 
+  imagePullPolicy:
   replicas:
-
-
-livequery:
-  name: livequery
-  image: scrumlr-server
-  imagePullPolicy: 
-  replicas: 
 
 server:
   name: server
   image: scrumlr-server
-  imagePullPolicy: 
-  replicas: 
+  imagePullPolicy:
+  replicas: 3
 
-mongodb:
-  fullnameOverride: scrumlr-database
-  image:
-    pullPolicy: IfNotPresent
-  persistence:
-    enabled: false
+nats:
+  fullnameOverride: scrumlr-cache
   auth:
     enabled: false
-  labels: { 
-    app.kubernetes.io/name: scrumlr-database,
-    app.kubernetes.io/components: database,
-    app.kubernetes.io/part-of: scrumlr
-  }
+    # username: admin
+    # password: password
 
-
+postgresql:
+  fullnameOverride: scrumlr-database
+  auth:
+    username: admin
+    password: password
+    database: scrumlr
+    postgresPassword: supersecret
+  persistence:
+    storageClass: cinder-csi
+    size: 256

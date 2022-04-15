@@ -1,10 +1,9 @@
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
-import Parse from "parse";
 import {FC} from "react";
-import {VoteClientModel} from "types/vote";
 import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
+import {Participant} from "../../../../types/participant";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
@@ -12,33 +11,23 @@ type NoteDialogNoteFooterProps = {
   authorName: string;
   noteId?: string;
   parentId?: string;
-  votes: VoteClientModel[];
-  allVotesOfUser: VoteClientModel[];
-  activeVoting: boolean;
-  activeModeration: {userId?: string; status: boolean};
-  currentUserIsModerator: boolean;
   onDeleteOfParent: () => void;
   onClose: () => void;
   showUnstackButton: boolean;
+  viewer: Participant;
 };
 
-export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
-  const showOptions = !props.activeModeration.status || Parse.User.current()?.id === props.activeModeration.userId;
-
-  return (
-    <div className="note-dialog__note-footer">
-      {(props.showAuthors || Parse.User.current()?.id === props.authorId) && (
-        <figure className="note-dialog__note-author">
-          <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
-          <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
-        </figure>
-      )}
-      <div className="note-dialog__note-footer__options-and-votes">
-        {(props.activeVoting || props.votes.length !== 0) && (
-          <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} usedVotesAsUser={props.allVotesOfUser.length} />
-        )}
-        {showOptions && <NoteDialogNoteOptions {...props} />}
-      </div>
+export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => (
+  <div className="note-dialog__note-footer">
+    {(props.showAuthors || props.viewer.user.id === props.authorId) && (
+      <figure className="note-dialog__note-author">
+        <UserAvatar id={props.authorId} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
+        <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
+      </figure>
+    )}
+    <div className="note-dialog__note-footer__options-and-votes">
+      <Votes noteId={props.noteId!} />
+      <NoteDialogNoteOptions {...props} />
     </div>
-  );
-};
+  </div>
+);

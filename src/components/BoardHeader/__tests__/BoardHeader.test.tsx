@@ -1,41 +1,13 @@
 import {fireEvent} from "@testing-library/react";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-import {User} from "parse";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
-import {mocked} from "ts-jest/utils";
+import getTestStore from "utils/test/getTestStore";
+import {ApplicationState} from "types";
 
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
-mockedUser.current = jest.fn(() => ({id: "test"} as never));
-
-const createBoardHeader = (name: string, boardstatus: string) => {
-  const initialState = {
-    board: {
-      data: {
-        name,
-        accessPolicy: boardstatus,
-        columns: [],
-        userConfigurations: [
-          {
-            id: "test",
-            showHiddenColumns: true,
-          },
-        ],
-      },
-    },
-    notes: [],
-    users: {
-      admins: [],
-      basic: [],
-      all: [],
-    },
-  };
-  const store = mockStore(initialState);
-
+const createBoardHeader = (overwrite?: Partial<ApplicationState>) => {
   return (
-    <Provider store={store}>
+    <Provider store={getTestStore(overwrite)}>
       <BoardHeader currentUserIsModerator={false} />
     </Provider>
   );
@@ -50,50 +22,62 @@ describe("Board Header", () => {
           disconnect: jest.fn(),
         } as unknown as IntersectionObserver)
     );
-
-    mockedUser.current = jest.fn(() => ({id: "test"} as never));
   });
 
-  test("show boardheader", () => {
-    const {container} = render(createBoardHeader("Title", "Privat"));
+  test("show board-header", () => {
+    const {container} = render(createBoardHeader());
     expect(container.firstChild).toHaveClass("board-header");
   });
 
   describe("show board-header-components", () => {
     test("show board-header__logo", () => {
-      const {container} = render(createBoardHeader("Title", "Privat"));
+      const {container} = render(createBoardHeader());
       expect(container.querySelector(".board-header__logo")).toBeDefined();
     });
 
-    test("show board-header__infos", () => {
-      const {container} = render(createBoardHeader("Title", "Privat"));
+    test("show board-header__name-and-settings", () => {
+      const {container} = render(createBoardHeader());
       expect(container.querySelector(".board-header__name-and-settings")).toBeDefined();
     });
 
     test("show board-header__users", () => {
-      const {container} = render(createBoardHeader("Title", "Privat"));
+      const {container} = render(createBoardHeader());
       expect(container.querySelector(".board-header__users")).toBeDefined();
     });
   });
 
-  describe("show title and boardstatus", () => {
+  describe("show title and access policy", () => {
     test("show title", () => {
-      const {container} = render(createBoardHeader("Title", "Privat"));
-      expect(container.querySelector(".board-header__name")).toHaveTextContent("Title");
+      const {container} = render(createBoardHeader());
+      expect(container.querySelector(".board-header__name")).toHaveTextContent("test-board-name");
     });
 
-    test("show boardstatus private", () => {
-      const {container} = render(createBoardHeader("Title", "Privat"));
-      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Private Session");
+    test("show access policy public", () => {
+      const {container} = render(createBoardHeader());
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("Board.publicSession");
     });
 
-    test("show boardstatus public", () => {
-      const {container} = render(createBoardHeader("Title", "Public"));
-      expect(container.querySelector(".board-header__access-policy-status")).toHaveTextContent("Public Session");
+    test("show access policy private", () => {
+      const {container} = render(
+        createBoardHeader({
+          board: {
+            status: "ready",
+            data: {
+              id: "test-board-id",
+              name: "test-board-name",
+              accessPolicy: "BY_PASSPHRASE",
+              showAuthors: true,
+              showNotesOfOtherUsers: true,
+              allowStacking: true,
+            },
+          },
+        })
+      );
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("Board.privateSession");
     });
 
     test("show confirmation-dialog after clicking scrumlr logo", () => {
-      const {container} = render(createBoardHeader("Title", "Public Session"));
+      const {container} = render(createBoardHeader());
       fireEvent.click(container.querySelector(".board-header__link") as HTMLElement);
       expect(container.querySelector(".confirmation-dialog")).toBeInTheDocument();
     });

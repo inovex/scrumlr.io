@@ -1,6 +1,6 @@
 <svg version="1.1" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg">
 <g fill="none" fill-rule="evenodd">
-<g transform="translate(9 11)" fill="currentColor" fill-rule="nonzero">
+<g transform="translate(9 11)" fill="currentColor">
 <polygon id="b" points="14.289 8.6243 14.289 14.624 12.789 14.624 12.789 8.6243"/>
 <polygon points="16.539 10.874 16.539 12.374 10.539 12.374 10.539 10.874"/>
 <path id="a" d="m13.539 5.2503c-3.5899 0-6.5 2.9101-6.5 6.5s2.9101 6.5 6.5 6.5 6.5-2.9101 6.5-6.5-2.9101-6.5-6.5-6.5zm0 1.5c2.7614 0 5 2.2386 5 5s-2.2386 5-5 5-5-2.2386-5-5 2.2386-5 5-5z"/>

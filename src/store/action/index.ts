@@ -1,32 +1,48 @@
-import {BoardActionFactory, BoardActionType, BoardReduxAction} from "./board";
-import {NoteActionFactory, NoteActionType, NoteReduxAction} from "./note";
-import {VoteActionFactory, VoteActionType, VoteReduxAction} from "./vote";
-import {UsersActionFactory, UsersActionType, UsersReduxAction} from "./users";
-import {ColumnActionFactory, ColumnActionType, ColumnReduxAction} from "./column";
-import {JoinRequestActionFactory, JoinRequestActionType, JoinRequestReduxAction} from "./joinRequest";
-import {VoteConfigurationActionFactory, VoteConfigurationActionType, VoteConfigurationReduxAction} from "./voteConfiguration";
+import {BoardActionFactory, BoardAction, BoardReduxAction} from "./board";
+import {NoteActionFactory, NoteAction, NoteReduxAction} from "./note";
+import {VoteActionFactory, VoteAction, VoteReduxAction} from "./vote";
+import {ParticipantAction, ParticipantActionFactory, ParticipantReduxAction} from "./participants";
+import {ColumnActionFactory, ColumnAction, ColumnReduxAction} from "./column";
+import {RequestActionFactory, RequestAction, RequestReduxAction} from "./request";
+import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
+import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
+import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
 
 /** This object lists all internal Redux Action types. */
-export const ActionType = {
-  ...BoardActionType,
-  ...ColumnActionType,
-  ...NoteActionType,
-  ...UsersActionType,
-  ...JoinRequestActionType,
-  ...VoteActionType,
-  ...VoteConfigurationActionType,
+export const Action = {
+  ...BoardAction,
+  ...ColumnAction,
+  ...NoteAction,
+  ...AuthAction,
+  ...ParticipantAction,
+  ...RequestAction,
+  ...VoteAction,
+  ...VotingAction,
+  ...ViewAction,
 };
 
 /** Factory or creator class of internal Redux actions. */
-export const ActionFactory = {
+export const Actions = {
   ...BoardActionFactory,
   ...ColumnActionFactory,
   ...NoteActionFactory,
-  ...UsersActionFactory,
-  ...JoinRequestActionFactory,
+  ...AuthActionFactory,
+  ...ParticipantActionFactory,
+  ...RequestActionFactory,
   ...VoteActionFactory,
-  ...VoteConfigurationActionFactory,
+  ...VotingActionFactory,
+  ...ViewActionFactory,
 };
 
 /** The types of all application internal redux actions. */
-export type ReduxAction = BoardReduxAction | ColumnReduxAction | NoteReduxAction | UsersReduxAction | JoinRequestReduxAction | VoteReduxAction | VoteConfigurationReduxAction;
+export type ReduxAction = {context: {board?: string; user?: string; voting?: string; serverTimeOffset: number}} & (
+  | BoardReduxAction
+  | ColumnReduxAction
+  | NoteReduxAction
+  | AuthReduxAction
+  | ParticipantReduxAction
+  | RequestReduxAction
+  | VoteReduxAction
+  | VotingReduxAction
+  | ViewReduxAction
+);

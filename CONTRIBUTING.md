@@ -30,5 +30,5 @@ Here's our definition done, which we agreed on.
   Just copy the base configuration `public/locales/en/translation.json` into a new
   directory with your language code `public/locales/{language code}/translation.json`
   and translate all values of the JSON properly. Once you're done you can open a pull
-  request and we will try to review your translation by a few samples.
+  request, and we will try to review your translation by a few samples.
 </details>

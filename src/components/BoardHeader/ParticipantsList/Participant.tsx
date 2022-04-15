@@ -1,29 +1,28 @@
-import {UserClientModel} from "types/user";
 import {UserAvatar} from "components/BoardUsers";
 import {ToggleButton} from "components/ToggleButton";
-import Parse from "parse";
-import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Participant as ParticipantModel} from "types/participant";
+import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import "./Participant.scss";
 import {TabIndex} from "constants/tabIndex";
+import {useDispatch} from "react-redux";
 
 interface ParticipantProps {
-  participant: UserClientModel;
-  currentUserIsModerator: boolean;
-  boardOwner: string;
+  participant: ParticipantModel;
 }
 
-export const Participant = ({participant, currentUserIsModerator, boardOwner}: ParticipantProps) => {
+export const Participant = ({participant}: ParticipantProps) => {
   const state = useAppSelector((applicationState) => ({
-    users: applicationState.users,
+    self: applicationState.participants!.self,
   }));
+  const dispatch = useDispatch();
 
-  let badgeText = "";
-  if (Parse.User.current()?.id === participant!.id) {
+  let badgeText: string;
+  if (state.self.user.id === participant.user.id) {
     badgeText = "me";
-  } else if (participant!.id === boardOwner) {
+  } else if (participant.role === "OWNER") {
     badgeText = "owner";
-  } else if (state.users.admins.find((user) => user.id === participant!.id) !== undefined) {
+  } else if (participant.role === "MODERATOR") {
     badgeText = "admin";
   } else {
     badgeText = "user";
@@ -34,22 +33,22 @@ export const Participant = ({participant, currentUserIsModerator, boardOwner}: P
       <figure className="participant__avatar-and-name" aria-roledescription="participant">
         <UserAvatar
           ready={participant.ready}
-          id={participant.id}
-          name={participant.displayName}
+          id={participant.user.id}
+          name={participant.user.name}
           className="participant__user-avatar-wrapper"
           avatarClassName="participant__user-avatar"
           badgeText={badgeText}
         />
-        <figcaption className="participant__name">{participant.displayName}</figcaption>
+        <figcaption className="participant__name">{participant.user.name}</figcaption>
       </figure>
-      {currentUserIsModerator && (
+      {(state.self.role === "OWNER" || state.self.role === "MODERATOR") && (
         <ToggleButton
           className="participant__permission-toggle"
-          disabled={Parse.User.current()?.id === participant!.id || participant!.id === boardOwner}
+          disabled={state.self.user.id === participant.user.id || participant.role === "OWNER"}
           values={["participant", "moderator"]}
-          value={participant!.admin ? "moderator" : "participant"}
+          value={participant.role === "OWNER" || participant.role === "MODERATOR" ? "moderator" : "participant"}
           onToggle={(val: "participant" | "moderator") => {
-            store.dispatch(ActionFactory.changePermission(participant!.id, val === "moderator"));
+            dispatch(Actions.changePermission(participant!.user.id, val === "moderator"));
           }}
           tabIndex={TabIndex.default}
         />

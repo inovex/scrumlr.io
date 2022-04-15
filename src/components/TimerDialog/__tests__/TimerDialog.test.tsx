@@ -1,11 +1,11 @@
 import {fireEvent, render, screen} from "@testing-library/react";
-import configureStore from "redux-mock-store";
-import {mocked} from "ts-jest/utils";
-import {User} from "parse";
 import {Provider} from "react-redux";
-import {BrowserRouter} from "react-router-dom";
 import store from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
+import getTestStore from "utils/test/getTestStore";
+import getTestParticipant from "utils/test/getTestParticipant";
+import i18nTest from "i18nTest";
+import {I18nextProvider} from "react-i18next";
 import {TimerDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
@@ -16,33 +16,19 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedUsedNavigate,
 }));
 
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
-
-jest.useFakeTimers("modern").setSystemTime(new Date(123456789).getTime());
-
-const createTimerDialog = () => {
-  const initialState = {
-    users: {
-      admins: [{id: "test-id"}],
-    },
-  };
-  const mockedStore = mockStore(initialState);
-  return (
-    <BrowserRouter>
-      <Provider store={mockedStore}>
-        <TimerDialog />
-      </Provider>
-    </BrowserRouter>
-  );
-};
+const createTimerDialog = (isParticipant?: boolean) => (
+  <I18nextProvider i18n={i18nTest}>
+    <Provider store={getTestStore({participants: {self: getTestParticipant({role: isParticipant ? "PARTICIPANT" : "MODERATOR"}), others: []}})}>
+      <TimerDialog />
+    </Provider>
+  </I18nextProvider>
+);
 
 describe("TimerDialog", () => {
   beforeEach(() => {
-    mockedUser.current = jest.fn(() => ({id: "test"} as never));
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
-    global.document.querySelector("body")!.appendChild(portal);
+    global.document.querySelector("body")?.appendChild(portal);
   });
 
   it("should match the snapshot", () => {
@@ -51,37 +37,36 @@ describe("TimerDialog", () => {
   });
 
   it("should redirect if the current user isn't a moderator", () => {
-    mockedUser.current = jest.fn(() => ({id: "something-else"} as never));
-    render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
+    render(createTimerDialog(true), {container: global.document.querySelector("#portal")!});
     expect(mockedUsedNavigate).toHaveBeenCalledWith("..");
   });
 
   it("should dispatch to store correctly on one minute button click", () => {
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__1-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 1 * 60 * 1000)));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.setTimer(1));
   });
 
   it("should dispatch to store correctly on three minute button click", () => {
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__3-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 3 * 60 * 1000)));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.setTimer(3));
   });
 
   it("should dispatch to store correctly on five minute button click", () => {
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__5-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 5 * 60 * 1000)));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.setTimer(5));
   });
 
   it("should dispatch to store correctly after custom time change", () => {
     render(createTimerDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("timer-dialog__minus-button"));
     fireEvent.click(screen.getByTestId("timer-dialog__custom-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 9 * 60 * 1000)));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.setTimer(9));
     fireEvent.click(screen.getByTestId("timer-dialog__plus-button"));
     fireEvent.click(screen.getByTestId("timer-dialog__plus-button"));
     fireEvent.click(screen.getByTestId("timer-dialog__custom-minute-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(ActionFactory.setTimer(new Date(new Date(123456789).getTime() + 11 * 60 * 1000)));
+    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.setTimer(11));
   });
 });

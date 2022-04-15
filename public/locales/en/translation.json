@@ -86,6 +86,13 @@
     "show": "Show columns",
     "hide": "Hide columns"
   },
+  "Column": {
+    "editName": "Change the column name",
+    "submitName": "Confirm name",
+    "resetName": "Reset name",
+    "hideColumn": "Hide the column for all participants",
+    "showColumn": "Show the column for all participants"
+  },
   "ShowOtherUsersNotesOption": {
     "show": "Show notes of other users",
     "hide": "Hide notes of other users"
@@ -106,13 +113,14 @@
     "lower": "Lower hand",
     "lowerAll": "Lower all hands"
   },
-  "Request":{
+  "Request": {
     "title": "Someone requests to participate/raised their hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Sign in with Google",
     "signInWithGitHub": "Sign in with Github",
-    "signInWithMicrosoft": "Sign in with Microsoft"
+    "signInWithMicrosoft": "Sign in with Microsoft",
+    "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {
     "placeholder": "Add your note..."
@@ -149,7 +157,8 @@
     "stopFocusMode": "End focused mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
-    "lowerHand": "Lower your hand"
+    "lowerHand": "Lower your hand",
+    "settings": "Settings"
   },
   "VoteConfigurationButton": {
     "label": "Voting",
@@ -241,5 +250,37 @@
     "SyncModeDescription": "Scrumlr will match the appearance mode (dark or light) with your active system settings",
     "AllowNotifications": "Allow Notifications",
     "Language": "Language"
+  },
+  "ProfileSettings": {
+    "Profile": "Profile",
+    "UserName": "User Name"
+  },
+  "Error": {
+    "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
+    "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
+    "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
+    "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
+    "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
+    "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
+    "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
+    "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
+    "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
+    "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",
+    "setShowHiddenColumns": "Sorry, but we're having trouble changing the column visibility. Please try again.",
+    "changePermission": "Sorry, but we're having trouble updating the permissions. Please try again.",
+    "logout": "Sorry, but we're having trouble signing you out.",
+    "serverConnection": "The connection to the server could not be established. Please try to reload the page.",
+    "retry": "Retry",
+    "joinBoard": "Sorry, but we're having trouble joining the board. Please try again.",
+    "acceptJoinRequests": "Sorry, but we're having trouble accepting the requests. Please try again.",
+    "rejectJoinRequests": "Sorry, but we're having trouble rejecting the requests. Please try again.",
+    "initApplication": "Sorry, but we're having trouble reaching the server for information. Please try to reload the page.",
+    "addVote": "Sorry, but we're having trouble adding the vote. Please try again.",
+    "deleteVote": "Sorry, but we're having trouble deleting the vote. Please try again.",
+    "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
+    "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
+    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
   }
 }

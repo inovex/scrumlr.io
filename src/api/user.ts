@@ -1,41 +1,28 @@
-import {EditUserConfigurationRequest, RaisedHandRequest} from "types/user";
-import {callAPI} from "api/callApi";
+import {Auth} from "types/auth";
+import {SERVER_HTTP_URL} from "../config";
 
 export const UserAPI = {
   /**
-   * Changes the permissions of a participant.
+   * Edits a user.
    *
-   * @param userId the identifier of the user whose permissions are being changed
-   * @param boardId the identifier of the board
-   * @param moderator the flag whether the user receives or loses moderator permissions
+   * @param user the updated user object
    * @returns a {status, description} object
    */
-  changePermission: (userId: string, boardId: string, moderator: boolean) => callAPI("changePermission", {userId, boardId, moderator}),
+  editUser: async (user: Auth) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(user),
+      });
 
-  /**
-   * Changes the configuration of a user.
-   *
-   * @param boardId the identifier of the board
-   * @param userConfiguration user configuration which needs to be changed
-   * @returns a {status, description} object
-   */
-  editUserConfiguration: (boardId: string, userConfiguration: EditUserConfigurationRequest) => callAPI("editUserConfiguration", {boardId, userConfiguration}),
+      if (response.status === 200) {
+        return (await response.json()) as Auth;
+      }
 
-  /**
-   * Set the ready state of a user
-   *
-   * @param boardId the identifier of the board
-   * @param ready the ready state of the user
-   * @returns a {status, description} object
-   */
-  setReadyStatus: (boardId: string, ready: boolean) => callAPI("setReadyStatus", {boardId, ready}),
-
-  /**
-   * Set the raised hand state of a user
-   *
-   * @param boardId the identifier of the board
-   * @param configuration contains a list of users and updates the raisedHand status
-   * @returns a {status, description} object
-   */
-  setRaisedHandStatus: (boardId: string, configuration: RaisedHandRequest) => callAPI("setRaisedHandStatus", {boardId, configuration}),
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update user: ${error}`);
+    }
+  },
 };

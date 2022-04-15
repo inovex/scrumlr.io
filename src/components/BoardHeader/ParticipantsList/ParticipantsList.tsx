@@ -1,8 +1,7 @@
 import {Portal} from "components/Portal";
-import {VFC, useState} from "react";
+import {useState, VFC} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
-import Parse from "parse";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import {useTranslation} from "react-i18next";
 import {Participant} from "./Participant";
@@ -10,26 +9,23 @@ import {Participant} from "./Participant";
 type ParticipantsListProps = {
   open: boolean;
   onClose: () => void;
-  currentUserIsModerator: boolean;
 };
 
 export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
   const {t} = useTranslation();
 
-  const currentUser = Parse.User.current();
-
-  const participants = useAppSelector((rootState) => rootState.users.all.filter((u) => u.online));
-  const boardOwner = useAppSelector((state) => state.board.data?.owner);
-  const me = participants.find((participant) => participant.id === currentUser!.id);
-  const them = participants.filter((participant) => participant.id !== currentUser!.id && participant.online);
+  const {me, them} = useAppSelector((state) => ({
+    me: state.participants!.self,
+    them: state.participants!.others.filter((p) => p.connected),
+  }));
 
   const [searchString, setSearchString] = useState("");
 
-  if (!props.open || participants.length < 0) {
+  if (!props.open || them.length < 0) {
     return null;
   }
 
-  const showMe = searchString.split(" ").every((substr) => me!.displayName.toLowerCase().includes(substr));
+  const showMe = searchString.split(" ").every((substr) => me.user.name.toLowerCase().includes(substr));
 
   return (
     <Portal
@@ -43,7 +39,7 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
           <div className="participants__header-title">
             <h4 className="participants__header-text">
               <span>{t("ParticipantsList.title")}</span>
-              <span className="participants__header-number">{participants.length} </span>
+              <span className="participants__header-number">{them.length + 1}</span>
             </h4>
           </div>
           <SearchIcon className="header__icon" />
@@ -52,14 +48,14 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
         <ul className="participants__list">
           <div className="list__header">
             <label>{t("ParticipantsList.headerLegendName")}</label>
-            {props.currentUserIsModerator && <label>{t("ParticipantsList.headerLegendAdmin")}</label>}
+            {(me.role === "MODERATOR" || me.role === "OWNER") && <label>{t("ParticipantsList.headerLegendAdmin")}</label>}
           </div>
-          {showMe && <Participant key={me!.id} participant={me!} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />}
+          {showMe && <Participant key={me.user.id} participant={me!} />}
           {them.length > 0 &&
             them
-              .sort((parA, parB) => parA.displayName.localeCompare(parB.displayName)) // Sort participants by name
-              .filter((participant) => searchString.split(" ").every((substr) => participant.displayName.toLowerCase().includes(substr)))
-              .map((participant) => <Participant key={participant.id} participant={participant} currentUserIsModerator={props.currentUserIsModerator} boardOwner={boardOwner!} />)}
+              .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name)) // Sort participants by name
+              .filter((participant) => searchString.split(" ").every((substr) => participant.user.name.toLowerCase().includes(substr)))
+              .map((participant) => <Participant key={participant.user.id} participant={participant} />)}
         </ul>
       </aside>
     </Portal>

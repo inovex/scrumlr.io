@@ -5,7 +5,11 @@ type: application
 version: 0.1.0
 appVersion: "0.0.1"
 dependencies:
-- name: mongodb
-  version: 10.23.*
+- name: nats
+  version: 7.1.15
   repository: https://charts.bitnami.com/bitnami
-  alias: mongodb
+  alias: nats
+- name: postgresql
+  version: 11.1.19
+  repository: https://charts.bitnami.com/bitnami
+  alias: postgresql

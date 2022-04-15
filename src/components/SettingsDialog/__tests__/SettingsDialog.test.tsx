@@ -1,45 +1,13 @@
 import {Provider} from "react-redux";
 import {render} from "testUtils";
-import configureStore from "redux-mock-store";
+import getTestStore from "utils/test/getTestStore";
 import {SettingsDialog} from "..";
 
-const mockStore = configureStore();
-
-jest.mock(
-  "parse",
-  () => {
-    const originalModule = jest.requireActual("parse");
-    return {
-      ...originalModule,
-      User: {
-        ...originalModule.User,
-        current: jest.fn(() => ({id: "test-id"})),
-      },
-    };
-  },
-  {}
+const createSettingsDialog = () => (
+  <Provider store={getTestStore()}>
+    <SettingsDialog />
+  </Provider>
 );
-
-const initialState = {
-  board: {
-    data: {
-      id: "boardId",
-    },
-  },
-  users: {
-    all: [{id: "test-id", displayName: "John Doe"}],
-    admins: [{id: "test-id", displayName: "John Doe"}],
-  },
-};
-
-const createSettingsDialog = () => {
-  const mockedStore = mockStore(initialState);
-  return (
-    <Provider store={mockedStore}>
-      <SettingsDialog />
-    </Provider>
-  );
-};
 
 describe("SettingsDialog", () => {
   beforeEach(() => {

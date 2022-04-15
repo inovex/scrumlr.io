@@ -1,8 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import Parse from "parse";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
+import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 import {useTranslation} from "react-i18next";
@@ -38,7 +37,7 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
-  const isModerator = useAppSelector((state) => state.users.admins.some((user) => user.id === Parse.User.current()?.id));
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
   const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
@@ -93,7 +92,7 @@ export const Timer = (props: TimerProps) => {
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
       {isModerator && (
-        <button onClick={() => store.dispatch(ActionFactory.cancelTimer())} title={t("Timer.stopTimer")}>
+        <button onClick={() => store.dispatch(Actions.cancelTimer())} title={t("Timer.stopTimer")}>
           <CloseIcon />
         </button>
       )}

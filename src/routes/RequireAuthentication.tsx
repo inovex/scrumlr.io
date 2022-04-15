@@ -1,30 +1,27 @@
 import {Navigate} from "react-router-dom";
-import Parse from "parse";
 import {useLocation} from "react-router";
-import {useEffect, useState, FC} from "react";
+import {FC} from "react";
+import {useTranslation} from "react-i18next";
+import {useAppSelector} from "store";
 import {LoadingScreen} from "../components/LoadingScreen";
+import {ErrorPage} from "../components/ErrorPage";
 
 export const RequireAuthentication: FC = ({children}) => {
+  const {t} = useTranslation();
   const location = useLocation();
+  const {user, initializationSucceeded} = useAppSelector((state) => state.auth);
 
-  const [verifiedSession, setVerifiedSession] = useState<boolean | undefined>(undefined);
-
-  useEffect(() => {
-    Parse.Session.current()
-      .then(() => {
-        setVerifiedSession(true);
-      })
-      .catch(() => {
-        setVerifiedSession(false);
-      });
-  }, []);
-
-  if (verifiedSession === undefined) {
-    // wait while session needs to be verified
+  // wait until initialization is completed
+  if (initializationSucceeded === null) {
     return <LoadingScreen />;
   }
 
-  if (verifiedSession) {
+  // show error if initialization did fail
+  if (!initializationSucceeded) {
+    return <ErrorPage errorMessage={t("Homepage.errorServerConnection")} originURL={location.pathname} />;
+  }
+
+  if (user) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>;
   }

@@ -1,75 +1,145 @@
 import {Color} from "constants/colors";
 import {EditBoardRequest} from "types/board";
-import {callAPI} from "api/callApi";
+import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
   /**
    * Creates a board with the specified parameters and returns the board id.
    *
-   * @param columns the definition of the columns
-   * @param accessPolicy the access policy configuration of the board
    * @param name the board name
+   * @param accessPolicy the access policy configuration of the board
+   * @param columns the definition of the columns
    *
    * @returns the board id of the created board
    */
-  createBoard: (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) =>
-    callAPI<{columns: {name: string; hidden: boolean}[]; name?: string; accessPolicy: {type: string; passphrase?: string}}, string>("createBoard", {columns, name, accessPolicy}),
+  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          name,
+          accessPolicy: accessPolicy.type,
+          passphrase: accessPolicy.passphrase,
+          columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
+        }),
+      });
+
+      if (response.status === 201) {
+        const body = await response.json();
+        return body.id;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
+    }
+  },
 
   /**
    * Edits the board with the specified parameters.
    *
-   * @param board object with the board attributes that have to be changed
-   * @returns 'true' if the operation succeeded or throws an error otherwise
+   * @param id the board id
+   * @param board object with the board attributes that should be changed
+   *
+   * @returns the updated board model
    */
-  editBoard: (board: EditBoardRequest) => callAPI("editBoard", {board}),
+  editBoard: async (id: string, board: EditBoardRequest) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify(board),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update board with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update board: ${error}`);
+    }
+  },
 
   /**
-   * Create join request for a board session.
-   * The return value might have the status `accepted` (user is permitted to join the board), `rejected` (the join
-   * request of the user was rejected by an admin) or `pending`. If the state is pending the response will include
-   * the reference on the join request state in the attribute `joinRequestReference`.
+   * Deletes the board with the specified id.
    *
-   * @param boardId the board id
-   * @param passphrase optional passphrose for the join request
-   *
-   * @returns `true` if the operation succeeded or throws an error otherwise
+   * @param board identifies the board which will be deleted
    */
-  joinBoard: (boardId: string, passphrase?: string) =>
-    callAPI<{boardId: string; passphrase?: string}, {status: "accepted" | "rejected" | "pending" | "passphrase_required" | "incorrect_passphrase"; joinRequestReference?: string}>(
-      "joinBoard",
-      {boardId, passphrase}
-    ),
+  deleteBoard: async (board: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
-  acceptJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("acceptUsers", {board: boardId, users: userIds}),
-  rejectJoinRequests: (boardId: string, userIds: string[]) => callAPI<{board: string; users: string[]}, boolean>("rejectUsers", {board: boardId, users: userIds}),
-  /**
-   * Deletes the board with the specified boardId.
-   *
-   * @param boardId identifies the board which will be deleted
-   * @returns 'true' if the operation succeeded or throws an error otherwise
-   */
-  deleteBoard: (boardId: string) => callAPI("deleteBoard", {boardId}),
-  /**
-   * Cancel the current voting phase.
-   *
-   * @param boardId the board id
-   * @returns a {status, description} object
-   */
-  cancelVoting: (boardId: string) => callAPI("cancelVoting", {boardId}),
-
-  /** Sets the date where the timer of the board ends.
-   *
-   * @param endDate the date/time where the timer ends
-   * @param boardId the board identifier
-   * @returns a {status, description} object
-   */
-  setTimer: (endDate: Date, boardId: string) => callAPI("setTimer", {endDate, boardId}),
+      if (response.status !== 204) {
+        throw new Error(`delete board request resulted in response status ${response.status}`);
+      }
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
+    }
+  },
 
   /**
-   * Cancels the timer of the board.
+   * Exports the board by the specified id and MIME type.
    *
-   * @param boardId the board identifier
-   * @returns a {status, description} object
+   * @param board the board id
+   * @param type the MIME type
+   *
+   * @returns the response of the fetch call
    */
-  cancelTimer: (boardId: string) => callAPI("cancelTimer", {boardId}),
+  exportBoard: async (board: string, type: "text/csv" | "application/json") => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/export`, {
+        method: "GET",
+        headers: {
+          Accept: type,
+        },
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return response;
+      }
+
+      throw new Error(`unable to update board with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create board: ${error}`);
+    }
+  },
+  setTimer: async (id: string, minutes: number) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({minutes}),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update board timer with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update board timer: ${error}`);
+    }
+  },
+  deleteTimer: async (id: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to delete board timer with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to delete board timer: ${error}`);
+    }
+  },
 };

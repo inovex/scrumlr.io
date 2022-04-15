@@ -1,25 +1,13 @@
 import {Color} from "constants/colors";
 
-export type EditableColumnAttributes = {
+export interface Column {
+  id: string;
   name: string;
   color: Color;
-  hidden: boolean;
-};
-
-export type EditColumnRequest = {columnId: string} & Partial<EditableColumnAttributes>;
-export type AddColumnRequest = EditableColumnAttributes;
-
-export interface ColumnServerModel {
-  [columnId: string]: {
-    name: string;
-    color: string;
-    hidden: boolean;
-  };
+  visible: boolean;
+  index: number;
 }
 
-export interface ColumnClientModel {
-  columnId?: string;
-  name: string;
-  color: Color;
-  hidden: boolean;
-}
+export type EditColumnRequest = Omit<Column, "id">;
+
+export type ColumnsState = Column[];

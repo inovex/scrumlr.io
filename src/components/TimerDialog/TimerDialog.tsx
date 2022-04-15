@@ -3,23 +3,22 @@ import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
 import store, {useAppSelector} from "store";
-import {ActionFactory} from "store/action";
 import "./TimerDialog.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {ReactComponent as OneIcon} from "assets/icon-one.svg";
 import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
-import Parse from "parse";
+import {Actions} from "store/action";
 
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const adminUsers = useAppSelector((state) => state.users.admins);
+  const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const [customTime, setCustomTime] = useState(10);
 
   const startTimer = (minutes: number) => {
-    store.dispatch(ActionFactory.setTimer(new Date(new Date().getTime() + minutes * 60 * 1000)));
+    store.dispatch(Actions.setTimer(minutes));
     navigate("..");
   };
 
@@ -44,10 +43,7 @@ export const TimerDialog: VFC = () => {
     };
   }, [startPositionX]);
 
-  if (adminUsers == null || adminUsers.length === 0) {
-    return null;
-  }
-  if (adminUsers.find((user) => user.id === Parse.User.current()!.id) == null) {
+  if (!isAdmin) {
     navigate("..");
   }
 
