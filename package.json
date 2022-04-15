@@ -10,6 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+
     "avataaars": "^2.0.0",
     "classnames": "^2.3.1",
     "file-saver": "^2.0.5",
@@ -33,6 +34,7 @@
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
     "sockette": "^2.0.6",
+    "smoothscroll-polyfill": "^0.4.4",
     "underscore": "^1.13.2"
   },
   "devDependencies": {
@@ -48,6 +50,7 @@
     "@types/marked": "^4.0.3",
     "@types/node": "^17.0.23",
     "@types/qrcode.react": "^1.0.2",
+    "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/react": "^17.0.43",
     "@types/react-dnd": "^3.0.2",
     "@types/react-dnd-html5-backend": "^3.0.2",
