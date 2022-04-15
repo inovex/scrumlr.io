@@ -43,7 +43,6 @@ export const Note = (props: NoteProps) => {
     _.isEqual
   );
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
-  const activeVoting = useAppSelector((state) => !!state.votings.open);
   const [showDialog, setShowDialog] = React.useState(noteIsShared);
 
   const handleShowDialog = () => {
@@ -131,7 +130,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{author!.user.name}</figcaption>
             </figure>
           )}
-          {activeVoting && <Votes tabIndex={props.tabIndex} noteId={props.noteId!} />}
+          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} />
         </div>
         {showDialog && (
           <NoteDialog
