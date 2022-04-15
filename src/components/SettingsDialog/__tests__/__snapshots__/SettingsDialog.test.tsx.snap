@@ -123,22 +123,6 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </svg>
                 </a>
                 <a
-                  class="navigation__item accent-color__poker-purple"
-                  href="/feedback"
-                >
-                  <p>
-                    SettingsDialog.Feedback
-                  </p>
-                  <p>
-                    SettingsDialog.FeedbackDescription
-                  </p>
-                  <svg
-                    class="navigation-item__icon"
-                  >
-                    icon-feedback.svg
-                  </svg>
-                </a>
-                <a
                   class="navigation__item accent-color__lean-lilac"
                   href="/profile"
                 >
