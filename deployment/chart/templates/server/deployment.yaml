@@ -27,21 +27,5 @@ spec:
                 name: {{ include "scrumlr-fullname" .Values.server }}
             - secretRef:
                 name: {{ include "scrumlr-fullname" .Values.server }}
-          livenessProbe:
-            httpGet:
-              path: /api/health
-              port: server
-            initialDelaySeconds: 40
-            periodSeconds: 10
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /api/health
-              port: server
-              httpHeaders:
-              - name: X-Parse-Application-Id
-                value: Scrumlr
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 5
+          
       restartPolicy: Always

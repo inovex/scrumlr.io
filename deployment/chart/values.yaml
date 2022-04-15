@@ -19,34 +19,22 @@ server:
   name: server
   image: scrumlr-server
   imagePullPolicy:
-  replicas:
+  replicas: 3
 
 nats:
   fullnameOverride: scrumlr-cache
-  image:
-    pullPolicy: IfNotPresent
-  persistence:
-    enabled: false
   auth:
     enabled: false
-  labels: {
-    app.kubernetes.io/name: scrumlr-cache,
-    app.kubernetes.io/components: cache,
-    app.kubernetes.io/part-of: scrumlr
-  }
+    # username: admin
+    # password: password
 
 postgresql:
   fullnameOverride: scrumlr-database
-  image:
-    pullPolicy: IfNotPresent
-  persistence:
-    enabled: false
   auth:
-    enabled: false
-  labels: {
-    app.kubernetes.io/name: scrumlr-database,
-    app.kubernetes.io/components: database,
-    app.kubernetes.io/part-of: scrumlr
-  }
-
-
+    username: admin
+    password: password
+    database: scrumlr
+    postgresPassword: supersecret
+  persistence:
+    storageClass: cinder-csi
+    size: 256

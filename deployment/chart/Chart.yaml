@@ -12,4 +12,4 @@ dependencies:
 - name: postgresql
   version: 11.1.19
   repository: https://charts.bitnami.com/bitnami
-  alias: postgres
+  alias: postgresql
