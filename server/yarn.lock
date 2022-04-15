@@ -629,10 +629,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.60.tgz#35f3d6213daed95da7f0f73e75bcc6980e90597b"
   integrity sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==
 
-"@types/parse@^2.18.13":
-  version "2.18.13"
-  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.13.tgz#692a1324adf06014ae35c2ce524de9d2f704ecd8"
-  integrity sha512-FtdfzurcGArAEHAraJUfkLz9IDeIIArPzReX4Z810A+RKkwPdNiUrwxbLJZSw0Ya5wu4jixCJR6BdxnFZ7Q6dA==
+"@types/parse@^2.18.14":
+  version "2.18.14"
+  resolved "https://registry.yarnpkg.com/@types/parse/-/parse-2.18.14.tgz#a3a5145ffc5555ca637536272f7b9980fe3c7180"
+  integrity sha512-/F+Oipp9j3/Xepe497r4yCDk6BtkuKKKOZlAoJNswRQ9M+i9LXos2NiDHHYOfNoBMcq5WGxVX8pGxmTXNjc6NQ==
   dependencies:
     "@types/node" "*"
 
