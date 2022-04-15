@@ -78,7 +78,7 @@ jobs:
       - name: Build and push Server
         uses: docker/build-push-action@v2
         with:
-          context: ./server
+          context: ./server/src
           push: true
           tags: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
 
