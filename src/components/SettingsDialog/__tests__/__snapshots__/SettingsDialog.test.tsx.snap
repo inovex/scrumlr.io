@@ -126,7 +126,9 @@ exports[`SettingsDialog should render correctly 1`] = `
                   class="navigation__item accent-color__lean-lilac"
                   href="/profile"
                 >
-                  <p>
+                  <p
+                    class="navigation-item__user-name"
+                  >
                     test-participants-self-user-name
                   </p>
                   <p>

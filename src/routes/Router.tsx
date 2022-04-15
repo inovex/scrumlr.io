@@ -13,6 +13,7 @@ import {Appearance} from "components/SettingsDialog/Appearance/Appearance";
 import {Participants} from "components/SettingsDialog/Participants/Participants";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
+import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import RouteChangeObserver from "./RouteChangeObserver";
@@ -49,7 +50,7 @@ const Router = () => (
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
           {/* <Route path="feedback" element={<div>Feedback</div>} /> */}
-          <Route path="profile" element={<div>Change your Profile</div>} />
+          <Route path="profile" element={<ProfileSettings />} />
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />

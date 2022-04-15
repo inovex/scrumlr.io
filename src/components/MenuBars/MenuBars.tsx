@@ -9,13 +9,13 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
-import {ThemeToggleButton} from "./MenuItem/variants/ThemeToggleButton";
 import "./MenuBars.scss";
 
 export const MenuBars = () => {
@@ -78,7 +78,7 @@ export const MenuBars = () => {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <ThemeToggleButton tabIndex={TabIndex.UserMenu + 2} direction="right" />
+          <MenuButton direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
         </div>
       </section>
       {isAdmin && (

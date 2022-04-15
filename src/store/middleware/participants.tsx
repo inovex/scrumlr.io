@@ -53,4 +53,15 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
       );
     });
   }
+
+  if (action.type === Action.EditSelf) {
+    API.editUser(action.user).catch(() => {
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.editSelf")}</div>
+          <Button onClick={() => store.dispatch(Actions.editSelf(action.user))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
+    });
+  }
 };

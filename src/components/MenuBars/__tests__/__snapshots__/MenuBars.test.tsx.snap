@@ -61,7 +61,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
-        tabindex="302"
+        tabindex="0"
       >
         <div
           class="menu-item__tooltip"
@@ -69,9 +69,14 @@ exports[`MenuBars should match snapshot 1`] = `
           <span
             class="tooltip__text"
           >
-            MenuBars.themeToggle
+            MenuBars.settings
           </span>
         </div>
+        <svg
+          class="menu-item__icon menu-item__icon--start"
+        >
+          icon-settings.svg
+        </svg>
       </button>
     </div>
   </section>
