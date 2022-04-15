@@ -1,5 +1,5 @@
 import {Auth} from "types/auth";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const UserAPI = {
   /**
@@ -10,7 +10,7 @@ export const UserAPI = {
    */
   editUser: async (user: Auth) => {
     try {
-      const response = await fetch(`${SERVER_URL}/user/`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/user/`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(user),
