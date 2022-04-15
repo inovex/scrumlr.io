@@ -1,7 +1,6 @@
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {FC} from "react";
-import {Vote} from "types/vote";
 import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
 import {Participant} from "../../../../types/participant";
@@ -12,9 +11,6 @@ type NoteDialogNoteFooterProps = {
   authorName: string;
   noteId?: string;
   parentId?: string;
-  votes: number;
-  allVotesOfUser: Vote[];
-  activeVoting: boolean;
   onDeleteOfParent: () => void;
   onClose: () => void;
   showUnstackButton: boolean;
@@ -30,7 +26,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
       </figure>
     )}
     <div className="note-dialog__note-footer__options-and-votes">
-      {(props.activeVoting || props.votes !== 0) && <Votes noteId={props.noteId!} votes={props.votes} activeVoting={props.activeVoting} userVotes={props.allVotesOfUser} />}
+      <Votes noteId={props.noteId!} />
       <NoteDialogNoteOptions {...props} />
     </div>
   </div>

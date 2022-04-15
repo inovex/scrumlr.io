@@ -27,7 +27,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("/boards/%s/votings/%s", board, voting.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/votings/%s", s.baseURL, board, voting.ID))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, voting)
 }

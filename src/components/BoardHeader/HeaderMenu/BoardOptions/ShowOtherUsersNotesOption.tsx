@@ -1,28 +1,26 @@
-import store, {useAppSelector} from "store";
-import {ApplicationState} from "types";
-import {Actions} from "store/action";
-import "../BoardSettings/BoardSettings.scss";
+import {useAppSelector} from "store";
+import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
+import {Actions} from "store/action";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
+import "../BoardSettings/BoardSettings.scss";
 
 export const ShowOtherUsersNotesOption = () => {
   const {t} = useTranslation();
-
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-  }));
+  const dispatch = useDispatch();
+  const showNotesOfOtherParticipants = useAppSelector((state) => state.board.data?.showNotesOfOtherUsers);
 
   return (
     <BoardOption data-testid="note">
       <BoardOptionButton
-        label={state.board!.showNotesOfOtherUsers ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
+        label={showNotesOfOtherParticipants ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
         onClick={() => {
-          store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board!.showNotesOfOtherUsers}));
+          dispatch(Actions.editBoard({showNotesOfOtherUsers: !showNotesOfOtherParticipants}));
         }}
       >
-        <BoardOptionToggle active={state.board.showNotesOfOtherUsers} />
+        <BoardOptionToggle active={!!showNotesOfOtherParticipants} />
       </BoardOptionButton>
     </BoardOption>
   );

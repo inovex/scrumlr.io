@@ -11,9 +11,9 @@ exports[`InfoBar should render correctly with active voting and disabled timer 1
       class="vote-display"
     >
       <span
-        title="VoteDisplay.tooltip"
+        title="4 of 5 votes remaining"
       >
-        0
+        1
          / 
         5
       </span>
@@ -38,14 +38,21 @@ exports[`InfoBar should render correctly with active voting and timer 1`] = `
         :
         00
       </span>
+      <button
+        title="Stop timer"
+      >
+        <svg>
+          icon-close.svg
+        </svg>
+      </button>
     </div>
     <div
       class="vote-display"
     >
       <span
-        title="VoteDisplay.tooltip"
+        title="4 of 5 votes remaining"
       >
-        0
+        1
          / 
         5
       </span>
@@ -70,6 +77,13 @@ exports[`InfoBar should render correctly with disabled voting and active timer 1
         :
         00
       </span>
+      <button
+        title="Stop timer"
+      >
+        <svg>
+          icon-close.svg
+        </svg>
+      </button>
     </div>
   </aside>
 </div>

@@ -1,35 +1,37 @@
 import {useAppSelector} from "store";
 import "./Votes.scss";
 import classNames from "classnames";
-import {FC} from "react";
+import {VFC} from "react";
 import {TabIndex} from "constants/tabIndex";
 import {VoteButtons} from "./VoteButtons";
-import {Vote} from "../../types/vote";
 
 type VotesProps = {
   className?: string;
   noteId: string;
-  votes: number;
-  activeVoting: boolean;
   tabIndex?: number;
-  userVotes: Vote[];
 };
 
-export const Votes: FC<VotesProps> = (props) => {
-  const state = useAppSelector((s) => ({
-    voting: s.votings.open,
-  }));
-  const showAddVoteButton = props.activeVoting && (state.voting?.allowMultipleVotes || (!state.voting?.allowMultipleVotes && props.userVotes.length === 0));
+export const Votes: VFC<VotesProps> = (props) => {
+  const voting = useAppSelector((state) => state.votings.open);
+  const currentUserVotes = useAppSelector(
+    (state) => state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length
+  );
+  const allPastVotes = useAppSelector(
+    (state) =>
+      (state.votings.past[0]?.votes?.votesPerNote[props.noteId]?.total ?? 0) +
+      state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
+  );
+  const showAddVoteButton = voting && (voting?.allowMultipleVotes || currentUserVotes === 0);
 
   return (
     <div className={classNames("votes", props.className)}>
-      {props.activeVoting && props.userVotes.length > 0 && (
-        <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={props.userVotes} />
+      {voting && currentUserVotes > 0 && (
+        <VoteButtons.Remove {...props} activeVoting={!!voting} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={currentUserVotes} votes={allPastVotes} />
       )}
-      {!props.activeVoting && props.votes > 0 && <VoteButtons.Remove {...props} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={props.userVotes} />}
-      {showAddVoteButton && (
-        <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={props.userVotes.length === state.voting?.voteLimit} />
+      {!voting && allPastVotes > 0 && (
+        <VoteButtons.Remove {...props} activeVoting={!!voting} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={currentUserVotes} votes={allPastVotes} />
       )}
+      {showAddVoteButton && <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={currentUserVotes === voting?.voteLimit} />}
     </div>
   );
 };

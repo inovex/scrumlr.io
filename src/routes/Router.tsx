@@ -49,7 +49,7 @@ const Router = () => (
           <Route path="appearance" element={<Appearance />} />
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
-          <Route path="feedback" element={<div>Feedback</div>} />
+          {/* <Route path="feedback" element={<div>Feedback</div>} /> */}
           <Route path="profile" element={<ProfileSettings />} />
         </Route>
         <Route path="voting" element={<VotingDialog />} />

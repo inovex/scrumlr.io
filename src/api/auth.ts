@@ -1,4 +1,4 @@
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 import {Auth} from "../types/auth";
 
 export const AuthAPI = {
@@ -10,7 +10,7 @@ export const AuthAPI = {
    */
   signOut: async () => {
     try {
-      await fetch(`${SERVER_URL}/login`, {
+      await fetch(`${SERVER_HTTP_URL}/login`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -26,7 +26,7 @@ export const AuthAPI = {
    */
   signInAnonymously: async (name: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/login/anonymous`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/login/anonymous`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({name}),
@@ -53,7 +53,7 @@ export const AuthAPI = {
    */
   getCurrentUser: async () => {
     try {
-      const response = await fetch(`${SERVER_URL}/user`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/user`, {
         method: "GET",
         credentials: "include",
       });

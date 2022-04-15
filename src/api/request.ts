@@ -1,10 +1,10 @@
 import {Request} from "types/request";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const RequestAPI = {
   acceptJoinRequest: async (boardId: string, userId: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/requests/${userId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/requests/${userId}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({status: "ACCEPTED"}),
@@ -22,7 +22,7 @@ export const RequestAPI = {
 
   rejectJoinRequest: async (boardId: string, userId: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/requests/${userId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/requests/${userId}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({status: "REJECTED"}),

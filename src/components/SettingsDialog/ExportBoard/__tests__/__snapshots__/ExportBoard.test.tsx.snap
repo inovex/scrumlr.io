@@ -16,7 +16,7 @@ Object {
             class="settings-dialog__header-text accent-color__backlog-blue"
           >
              
-            ExportBoardOption.title
+            Export board
           </h2>
         </div>
         <div
@@ -29,7 +29,7 @@ Object {
             <span
               class="settings-option-button__label"
             >
-              ExportBoardOption.exportAsJson
+              Export as json
             </span>
             <svg
               class="settings-option-button__icon"
@@ -47,7 +47,7 @@ Object {
             <span
               class="settings-option-button__label"
             >
-              ExportBoardOption.exportAsCSV
+              Export as csv
             </span>
             <svg
               class="settings-option-button__icon"
@@ -71,7 +71,7 @@ Object {
           class="settings-dialog__header-text accent-color__backlog-blue"
         >
            
-          ExportBoardOption.title
+          Export board
         </h2>
       </div>
       <div
@@ -84,7 +84,7 @@ Object {
           <span
             class="settings-option-button__label"
           >
-            ExportBoardOption.exportAsJson
+            Export as json
           </span>
           <svg
             class="settings-option-button__icon"
@@ -102,7 +102,7 @@ Object {
           <span
             class="settings-option-button__label"
           >
-            ExportBoardOption.exportAsCSV
+            Export as csv
           </span>
           <svg
             class="settings-option-button__icon"

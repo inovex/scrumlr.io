@@ -1,4 +1,4 @@
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 import {Vote} from "../types/vote";
 
 export const VoteAPI = {
@@ -11,7 +11,7 @@ export const VoteAPI = {
    */
   addVote: async (boardId: string, noteId: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/votes`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/votes`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -38,7 +38,7 @@ export const VoteAPI = {
    */
   deleteVote: async (boardId: string, noteId: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/votes`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/votes`, {
         method: "DELETE",
         credentials: "include",
         body: JSON.stringify({

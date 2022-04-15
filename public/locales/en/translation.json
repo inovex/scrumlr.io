@@ -86,6 +86,13 @@
     "show": "Show columns",
     "hide": "Hide columns"
   },
+  "Column": {
+    "editName": "Change the column name",
+    "submitName": "Confirm name",
+    "resetName": "Reset name",
+    "hideColumn": "Hide the column for all participants",
+    "showColumn": "Show the column for all participants"
+  },
   "ShowOtherUsersNotesOption": {
     "show": "Show notes of other users",
     "hide": "Hide notes of other users"

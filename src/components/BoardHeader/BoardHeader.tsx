@@ -88,7 +88,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
         {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
 
-        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} currentUserIsModerator={props.currentUserIsModerator} />
+        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
       </header>
     </>
   );

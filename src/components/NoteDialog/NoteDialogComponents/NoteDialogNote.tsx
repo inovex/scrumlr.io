@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import {FC} from "react";
-import {Vote} from "types/vote";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
 import {Participant} from "../../../types/participant";
@@ -14,9 +13,6 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  votes: number;
-  allVotesOfUser: Vote[];
-  activeVoting: boolean;
   showUnstackButton: boolean;
 
   viewer: Participant;

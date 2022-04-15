@@ -1,6 +1,6 @@
 import {Color} from "constants/colors";
 import {EditBoardRequest} from "types/board";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
   /**
@@ -14,7 +14,7 @@ export const BoardAPI = {
    */
   createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -46,7 +46,7 @@ export const BoardAPI = {
    */
   editBoard: async (id: string, board: EditBoardRequest) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${id}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(board),
@@ -69,7 +69,7 @@ export const BoardAPI = {
    */
   deleteBoard: async (board: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -92,7 +92,7 @@ export const BoardAPI = {
    */
   exportBoard: async (board: string, type: "text/csv" | "application/json") => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${board}/export`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/export`, {
         method: "GET",
         headers: {
           Accept: type,
@@ -111,7 +111,7 @@ export const BoardAPI = {
   },
   setTimer: async (id: string, minutes: number) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${id}/timer`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({minutes}),
@@ -128,7 +128,7 @@ export const BoardAPI = {
   },
   deleteTimer: async (id: string) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${id}/timer`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/timer`, {
         method: "DELETE",
         credentials: "include",
       });

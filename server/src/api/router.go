@@ -109,15 +109,22 @@ func New(
 		}
 	}
 
-	s.publicRoutes(r)
-	s.protectedRoutes(r)
+	url, _ := url.Parse(s.baseURL)
+	if url.Path == "" || url.Path == "/" {
+		s.publicRoutes(r)
+		s.protectedRoutes(r)
+	} else {
+		r.Route(url.Path, func(router chi.Router) {
+			s.publicRoutes(router)
+			s.protectedRoutes(router)
+		})
+	}
 
 	return r
 }
 
-func (s *Server) publicRoutes(r *chi.Mux) chi.Router {
+func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
-		r.Get("/", s.getDebugPage)
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
 
@@ -131,14 +138,11 @@ func (s *Server) publicRoutes(r *chi.Mux) chi.Router {
 	})
 }
 
-func (s *Server) protectedRoutes(r *chi.Mux) {
+func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
-
-		r.Get("/debug/{id}", s.getBoardDebugPage)
-		r.Get("/debug/request", s.getRequestPage)
 
 		r.Post("/boards", s.createBoard)
 

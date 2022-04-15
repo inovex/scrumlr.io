@@ -1,5 +1,5 @@
 import {EditColumnRequest} from "types/column";
-import {SERVER_URL} from "../config";
+import {SERVER_HTTP_URL} from "../config";
 
 export const ColumnAPI = {
   /**
@@ -16,7 +16,7 @@ export const ColumnAPI = {
    */
   editColumn: async (boardId: string, columnId: string, column: EditColumnRequest) => {
     try {
-      const response = await fetch(`${SERVER_URL}/boards/${boardId}/columns/${columnId}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns/${columnId}`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify(column),

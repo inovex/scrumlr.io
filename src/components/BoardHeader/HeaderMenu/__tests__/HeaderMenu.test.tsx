@@ -1,19 +1,13 @@
 import {fireEvent, waitFor} from "@testing-library/react";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-import store from "store";
 import {Actions} from "store/action";
-import {exportAsCSV, exportAsJSON} from "utils/export";
-import {User} from "parse";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
-import {mocked} from "ts-jest/utils";
 import {render} from "testUtils";
-
-const mockStore = configureStore();
-const mockedUser = mocked(User, true);
-mockedUser.current = jest.fn(() => ({id: "test"} as never));
+import getTestStore from "utils/test/getTestStore";
+import * as redux from "react-redux";
+import {Dispatch, Action} from "redux";
 
 Object.assign(navigator, {
   clipboard: {
@@ -35,60 +29,34 @@ jest.mock("utils/export", () => ({
 
 jest.mock("file-saver", () => ({saveAs: jest.fn()}));
 
-const initialState = {
-  board: {
-    data: {
-      name: "board",
-      showAuthors: true,
-      joinConfirmationRequired: true,
-      id: "boardId",
-      userConfigurations: [
-        {
-          id: "test",
-          showHiddenColumns: true,
-        },
-      ],
-    },
-  },
-  participants: {
-    all: [
-      {
-        id: "test",
-        displayName: "John Doe",
-        admin: false,
-        updatedAt: new Date("2020-11-30"),
-        createdAt: new Date("2020-11-30"),
-        online: false,
-      },
-    ],
-  },
-};
-
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
-  const mockedStore = mockStore(initialState);
   const [HeaderMenuContext] = wrapWithTestBackend(HeaderMenu);
   return (
-    <Provider store={mockedStore}>
+    <Provider store={getTestStore()}>
       <HeaderMenuContext open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
     </Provider>
   );
 };
 
 describe("<HeaderMenu/>", () => {
+  let mockDispatchFn: jest.Mock<any, any> | Dispatch<Action<any>>;
+
   beforeEach(() => {
-    mockedUser.current = jest.fn(() => ({id: "test"} as never));
     const portal = global.document.createElement("div");
     portal.setAttribute("id", "portal");
     global.document.querySelector("body")!.appendChild(portal);
+    const useDispatchSpy = jest.spyOn(redux, "useDispatch");
+    mockDispatchFn = jest.fn();
+    useDispatchSpy.mockReturnValue(mockDispatchFn);
   });
 
   describe("should render correctly", () => {
-    test("moderator", () => {
+    test("for moderator", () => {
       const {container} = render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
       expect(container).toMatchSnapshot();
     });
 
-    test("user", () => {
+    test("for participants", () => {
       const {container} = render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
       expect(container).toMatchSnapshot();
     });
@@ -103,7 +71,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(Actions.editBoard({id: "boardId", showAuthors: false}));
+          expect(mockDispatchFn).toHaveBeenCalledWith(Actions.editBoard({showAuthors: false}));
         });
       });
 
@@ -127,7 +95,7 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(Actions.editBoard({id: "boardId", showNotesOfOtherUsers: true}));
+          expect(mockDispatchFn).toHaveBeenCalledWith(Actions.editBoard({showNotesOfOtherUsers: false}));
         });
       });
 
@@ -137,12 +105,12 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("note")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Show notes of other users");
+        expect(label.innerHTML).toEqual("Hide notes of other users");
       });
     });
 
     describe("BoardOption.ShowHiddenColumnsOption", () => {
-      test("Click on hide columns", async () => {
+      test("Click on show columns", async () => {
         render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
         expect(screen.getByTestId("column")).not.toBeNull();
 
@@ -151,17 +119,17 @@ describe("<HeaderMenu/>", () => {
         fireEvent.click(button);
 
         await waitFor(() => {
-          expect(store.dispatch).toHaveBeenCalledWith(Actions.editUserConfiguration({showHiddenColumns: false}));
+          expect(mockDispatchFn).toHaveBeenCalledWith(Actions.setShowHiddenColumns(true));
         });
       });
 
-      test("Hide columns has correct label", () => {
+      test("Show columns has correct label", () => {
         render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
         expect(screen.getByTestId("column")).not.toBeNull();
 
         const label = screen.getByTestId("column")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Hide columns");
+        expect(label.innerHTML).toEqual("Show columns");
       });
     });
   });

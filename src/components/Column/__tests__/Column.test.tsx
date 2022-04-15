@@ -2,21 +2,15 @@ import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
-import configureStore from "redux-mock-store";
-
-const mockStore = configureStore();
+import getTestStore from "utils/test/getTestStore";
+import {ApplicationState} from "types";
+import getTestParticipant from "utils/test/getTestParticipant";
 
 const [ColumnContext] = wrapWithTestBackend(Column);
-const createColumn = (currentUserIsModerator = false) => {
-  const initialState = {
-    board: {},
-    notes: [],
-    votes: [],
-    participants: [],
-  };
+const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
-    <Provider store={mockStore(initialState)}>
-      <ColumnContext id="TestID" name="Testheader" color="planning-pink" hidden={false} currentUserIsModerator={currentUserIsModerator} />
+    <Provider store={getTestStore(overwrite)}>
+      <ColumnContext id="TestID" name="Testheader" color="planning-pink" visible={false} index={0} />
     </Provider>
   );
 };
@@ -68,17 +62,17 @@ describe("Column", () => {
 
   describe("Test behavior of hidden columns", () => {
     test("Hide button should be visible", () => {
-      const {container} = render(createColumn(true));
+      const {container} = render(createColumn());
       expect(container.querySelector(".column__header-title")?.lastChild).toHaveClass("column__header-toggle");
     });
 
     test("Hide button should not be visible", () => {
-      const {container} = render(createColumn(false));
+      const {container} = render(createColumn({participants: {self: getTestParticipant({role: "PARTICIPANT"}), others: []}}));
       expect(container.querySelector(".column__header-title")?.lastChild).not.toHaveClass("column__header-toggle");
     });
 
     test("Snapshot: Hide button should be visible", () => {
-      const {container} = render(createColumn(true));
+      const {container} = render(createColumn());
       expect(container.querySelector(".column__header-title")?.lastChild).toMatchSnapshot();
     });
   });

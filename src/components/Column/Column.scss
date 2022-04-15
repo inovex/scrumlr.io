@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style";
 
 .column {
   min-width: $column__min-width;
@@ -38,16 +38,38 @@
 
 .column__header-title {
   display: flex;
+  word-break: break-all;
 }
 
 .column__header-text {
-  font-size: 24px;
+  font-size: calc(18px + 0.4vw);
   color: $color-black;
   border-bottom: solid 3px var(--accent-color);
-  margin-right: 10px;
+  margin: 20px 10px 20px 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
+}
+.column__header-input {
+  display: inline-block;
+  border: none;
+  font-size: calc(18px + 0.4vw);
+  color: $color-black;
+  border-bottom: solid 3px var(--accent-color);
+  margin: 20px 10px 20px 0;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--large;
+  background-color: transparent;
+  padding: 0;
+  outline: none;
+  max-width: 300px;
+  width: 50%;
+}
+[theme="dark"] {
+  .column__header-input {
+    color: $color-white;
+  }
 }
 
 .column__header-card-number {
@@ -89,6 +111,8 @@
 .column__header-toggle {
   display: flex;
   align-items: center;
+}
+.column__header-toggle:first-of-type {
   margin-left: auto;
 }
 
@@ -107,6 +131,15 @@
 .column__header-toggle-button-icon {
   color: $color-black;
   width: 24px;
+}
+.column__edit-icon {
+  width: 20px;
+}
+.column__submit-icon {
+  width: 28px;
+}
+.column__reset-icon {
+  width: 32px;
 }
 
 [theme="dark"] {

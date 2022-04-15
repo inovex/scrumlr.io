@@ -2,10 +2,9 @@ import {Actions} from "store/action";
 import {Request as RequestModel} from "types/request";
 import "./Request.scss";
 import {useTranslation} from "react-i18next";
-
 import {useDispatch} from "react-redux";
+import {Participant} from "types/participant";
 import {UserAvatar} from "../BoardUsers";
-import {Participant} from "../../types/participant";
 
 export interface RequestProps {
   requests: RequestModel[];

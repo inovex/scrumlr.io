@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"net/url"
 	"scrumlr.io/server/common"
@@ -111,10 +112,16 @@ func (s *Server) sealCookie(cookie *http.Cookie) {
 		baseURL, _ := url.Parse(s.baseURL)
 		if baseURL.Scheme == "https" {
 			cookie.Secure = true
+			cookie.SameSite = http.SameSiteStrictMode
 		}
-		cookie.Domain = baseURL.Host
+
+		hostname, _, _ := net.SplitHostPort(baseURL.Host)
+		hostWithSubdomain := strings.Split(hostname, ".")
+		if len(hostWithSubdomain) == 3 {
+			cookie.Domain = fmt.Sprintf("%s.%s", hostWithSubdomain[1], hostWithSubdomain[2])
+		} else {
+			cookie.Domain = hostname
+		}
 	}
-	// FIXME cross origin none
-	// cookie.SameSite = http.SameSiteStrictMode
 	cookie.HttpOnly = true
 }

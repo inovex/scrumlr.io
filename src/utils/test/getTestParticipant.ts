@@ -1,4 +1,4 @@
-import {Participant} from "../../types/participant";
+import {Participant} from "types/participant";
 
 export default (overwrite?: Partial<Participant>): Participant => ({
   user: {

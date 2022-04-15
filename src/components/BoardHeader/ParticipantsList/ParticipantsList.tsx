@@ -9,7 +9,6 @@ import {Participant} from "./Participant";
 type ParticipantsListProps = {
   open: boolean;
   onClose: () => void;
-  currentUserIsModerator: boolean;
 };
 
 export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
@@ -49,7 +48,7 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
         <ul className="participants__list">
           <div className="list__header">
             <label>{t("ParticipantsList.headerLegendName")}</label>
-            {props.currentUserIsModerator && <label>{t("ParticipantsList.headerLegendAdmin")}</label>}
+            {(me.role === "MODERATOR" || me.role === "OWNER") && <label>{t("ParticipantsList.headerLegendAdmin")}</label>}
           </div>
           {showMe && <Participant key={me.user.id} participant={me!} />}
           {them.length > 0 &&

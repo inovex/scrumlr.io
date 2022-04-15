@@ -1,28 +1,26 @@
-import store, {useAppSelector} from "store";
-import {ApplicationState} from "types";
-import {Actions} from "store/action";
-import "../BoardSettings/BoardSettings.scss";
+import {useAppSelector} from "store";
+import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
+import {Actions} from "store/action";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
+import "../BoardSettings/BoardSettings.scss";
 
 export const ShowAuthorOption = () => {
   const {t} = useTranslation();
-
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-  }));
+  const dispatch = useDispatch();
+  const showAuthors = useAppSelector((state) => state.board.data?.showAuthors);
 
   return (
     <BoardOption data-testid="author">
       <BoardOptionButton
-        label={state.board!.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
+        label={showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
         onClick={() => {
-          store.dispatch(Actions.editBoard({showAuthors: !state.board!.showAuthors}));
+          dispatch(Actions.editBoard({showAuthors: !showAuthors}));
         }}
       >
-        <BoardOptionToggle active={state.board.showAuthors} />
+        <BoardOptionToggle active={!!showAuthors} />
       </BoardOptionButton>
     </BoardOption>
   );
