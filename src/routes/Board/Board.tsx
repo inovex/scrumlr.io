@@ -74,7 +74,7 @@ export const Board = () => {
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (
               <Column
-                tabIndex={TabIndex.Column + columnIndex}
+                tabIndex={TabIndex.Column + columnIndex * 17}
                 key={column.id}
                 id={column.id}
                 index={column.index}

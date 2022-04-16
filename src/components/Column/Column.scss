@@ -162,15 +162,18 @@
 }
 
 .column__header-edit-button {
-  //position: absolute;
-  //right: 0;
-  //top: 50%;
-  //transform: translateY(-50%);
+  height: 24px;
+  margin: auto 0;
   background-color: transparent;
   border: none;
   cursor: pointer;
   outline: none;
   padding: 0;
+  border-radius: 4px;
+  &:hover,
+  &:focus {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
 }
 .column__header-edit-button:first-of-type {
   margin-left: auto;
