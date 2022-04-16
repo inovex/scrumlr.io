@@ -254,7 +254,10 @@
     "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",
     "SyncModeDescription": "Scrumlr passt den Darstellungsmodus (Dunkel oder Hell) deinen aktuellen Systemeinstellungen an",
     "AllowNotifications": "Erlaube Notifikationen",
-    "Language": "Sprache"
+    "Language": "Sprache",
+    "colorScheme": "Farbschema",
+    "colorSchemeLight": "Hell",
+    "colorSchemeDark": "Dunkel"
   },
   "ProfileSettings": {
     "Profile": "Profil",

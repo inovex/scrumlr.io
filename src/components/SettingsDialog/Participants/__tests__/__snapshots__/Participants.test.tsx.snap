@@ -18,11 +18,6 @@ exports[`Participants should render filter and participants correctly 1`] = `
     class="participants__container"
   >
     <div
-      class="participants__search-and-filter"
-    >
-      ParticipantsList.searchAndFilter
-    </div>
-    <div
       class="participants__user-list-wrapper"
     >
       <div
@@ -521,7 +516,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
             class="settings-toggle"
           >
             <div
-              class="settings-toggle__switch settings-toggle__switch--left"
+              class="settings-toggle__switch settings-toggle__switch--right"
             />
           </div>
         </button>

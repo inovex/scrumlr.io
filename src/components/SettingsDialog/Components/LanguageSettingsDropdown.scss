@@ -4,6 +4,10 @@
   display: flex;
   position: relative;
   align-items: center;
+  color: $color-black;
+}
+[theme="dark"] .settings-dropdown {
+  color: $color-white;
 }
 
 .settings-dropdown-button {

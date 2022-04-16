@@ -23,10 +23,9 @@ export const Participants = () => {
       </header>
 
       <div className="participants__container">
-        <div className="participants__search-and-filter">{t("ParticipantsList.searchAndFilter")}</div>
         <div className="participants__user-list-wrapper">
           <div className="participants__user-list">
-            <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(Actions.changePermission(state.me.user.id, state.me.role === "PARTICIPANT"))}>
+            <SettingsButton className="participants__user" disabled>
               <div className="participants__user_avatar-name-wrapper">
                 <Avatar className="participants__user_avatar" seed={state.me.user.id} />
                 <span className="participants__user-name">
@@ -34,7 +33,7 @@ export const Participants = () => {
                 </span>
                 <div className={state.me.connected ? "participants__online-mark" : "participants__offline-mark"} />
               </div>
-              <SettingsToggle active={state.me.role === "MODERATOR"} />
+              <SettingsToggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} />
             </SettingsButton>
             {state.others.length > 0 && <hr className="settings-dialog__seperator" />}
             {state.others.length > 0 &&
