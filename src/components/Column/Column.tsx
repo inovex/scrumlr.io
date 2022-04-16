@@ -6,7 +6,7 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CloseIcon,ReactComponent as AbortIcon} from "assets/icon-close.svg";
+import {ReactComponent as CloseIcon, ReactComponent as AbortIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
@@ -124,7 +124,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
               strokeLinejoin="round"
               strokeWidth="2"
               d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-             />
+            />
           </svg>
         )}
       </button>
@@ -138,7 +138,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
-            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" />}
+            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} />}
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
