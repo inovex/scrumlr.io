@@ -4,7 +4,6 @@ import {render} from "testUtils";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "types";
-import getTestParticipant from "utils/test/getTestParticipant";
 
 const [ColumnContext] = wrapWithTestBackend(Column);
 const createColumn = (overwrite?: Partial<ApplicationState>) => {
@@ -57,23 +56,6 @@ describe("Column", () => {
     test("show column with correct style", () => {
       const {container} = render(createColumn());
       expect(container.firstChild).toMatchSnapshot();
-    });
-  });
-
-  describe("Test behavior of hidden columns", () => {
-    test("Hide button should be visible", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")?.lastChild).toHaveClass("column__header-toggle");
-    });
-
-    test("Hide button should not be visible", () => {
-      const {container} = render(createColumn({participants: {self: getTestParticipant({role: "PARTICIPANT"}), others: []}}));
-      expect(container.querySelector(".column__header-title")?.lastChild).not.toHaveClass("column__header-toggle");
-    });
-
-    test("Snapshot: Hide button should be visible", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")?.lastChild).toMatchSnapshot();
     });
   });
 });
