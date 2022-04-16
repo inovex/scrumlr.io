@@ -9,6 +9,7 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon, ReactComponent as AbortIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
+import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
 import {TabIndex} from "constants/tabIndex";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
@@ -115,18 +116,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         </>
       )}
       <button className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-        {openedColumnSettings ? (
-          <CloseIcon className="column__header-edit-button-icon" />
-        ) : (
-          <svg className="column__header-edit-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-            />
-          </svg>
-        )}
+        {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
       </button>
     </>
   );
