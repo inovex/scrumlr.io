@@ -87,11 +87,16 @@
     "hide": "Blende versteckte Spalten aus"
   },
   "Column": {
-    "editName": "Ändere den Spaltennamen",
+    "settings": "Einstellungen",
+    "editName": "Name ändern",
     "submitName": "Name bestätigen",
     "resetName": "Name zurücksetzen",
-    "hideColumn": "Blende die Spalte für alle Teilnehmer aus",
-    "showColumn": "Blende die Spalte für alle Teilnehmer ein"
+    "hideColumn": "Ausblenden",
+    "showColumn": "Einblenden",
+    "deleteColumn": "Löschen",
+    "addColumnLeft": "Links einfügen",
+    "addColumnRight": "Rechts einfügen",
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
   },
   "ShowOtherUsersNotesOption": {
     "show": "Zeige Kärtchen anderer Teilnehmer",
@@ -261,6 +266,8 @@
     "unshareNote": "Es tut uns leid, aber wir haben ein Problem das Teilen des Kärtchens zu stoppen. Bitte versuche es erneut.",
     "deleteBoard": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Boards. Bitte versuche es erneut.",
     "editColumn": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spalte. Bitte versuche es erneut.",
+    "createColumn": "Es tut uns leid, aber wir haben ein Problem beim Anlegen der Spalte. Bitte versuche es erneut.",
+    "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",
     "addNote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen des Kärtchens. Bitte versuche es erneut.",
     "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
     "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
