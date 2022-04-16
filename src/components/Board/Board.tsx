@@ -6,7 +6,6 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
-import {Outlet} from "react-router-dom";
 import smoothscroll from "smoothscroll-polyfill";
 
 // Need to polyfill smooth scroll for safari browsers.
@@ -161,7 +160,6 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
-      <Outlet />
 
       {state.showPreviousButton && (
         <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden>
