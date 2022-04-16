@@ -85,35 +85,46 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
         <li>
           <button
             aria-label="Backlog Blue"
+            title="Backlog Blue"
             className={getColorClassName("backlog-blue")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
           />
           <button
             aria-label="Grooming Green"
+            title="Grooming Green"
             className={getColorClassName("grooming-green")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "grooming-green", index, visible}))}
           />
           <button
             aria-label="Lean Lilac"
+            title="Lean Lilac"
             className={getColorClassName("lean-lilac")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "lean-lilac", index, visible}))}
           />
           <button
             aria-label="Online Orange"
+            title="Online Orange"
             className={getColorClassName("online-orange")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
           />
           <button
             aria-label="Planning Pink"
+            title="Planning Pink"
             className={getColorClassName("planning-pink")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
           />
           <button
             aria-label="Poker Purple"
+            title="Poker Purple"
             className={getColorClassName("poker-purple")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
           />
-          <button aria-label="Retro Red" className={getColorClassName("retro-red")} onClick={() => dispatch(Actions.editColumn(id, {name, color: "retro-red", index, visible}))} />
+          <button
+            aria-label="Retro Red"
+            title="Retro Red"
+            className={getColorClassName("retro-red")}
+            onClick={() => dispatch(Actions.editColumn(id, {name, color: "retro-red", index, visible}))}
+          />
         </li>
       </ul>
     </div>

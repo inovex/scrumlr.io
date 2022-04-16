@@ -87,6 +87,7 @@
     "hide": "Blende versteckte Spalten aus"
   },
   "Column": {
+    "settings": "Einstellungen",
     "editName": "Name ändern",
     "submitName": "Name bestätigen",
     "resetName": "Name zurücksetzen",

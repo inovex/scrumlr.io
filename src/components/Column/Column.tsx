@@ -115,7 +115,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           </button>
         </>
       )}
-      <button className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
+      <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
         {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
       </button>
     </>
