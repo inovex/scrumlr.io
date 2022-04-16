@@ -39,7 +39,9 @@ export const Appearance = () => {
         {/*   </div> */}
         {/*   <SettingsToggle active={syncMode} /> */}
         {/* </SettingsButton> */}
-        {/* <SettingsButton className="appearance-settings_notifications-button" label={t("Appearance.AllowNotifications")} onClick={() => setShowNotifications(!showNotifications)}> */}
+        {/* <SettingsButton  */}
+        {/*   className="appearance-settings_notifications-button"  */}
+        {/*   label={t("Appearance.AllowNotifications")} onClick={() => setShowNotifications(!showNotifications)}> */}
         {/*   <SettingsToggle active={showNotifications} /> */}
         {/* </SettingsButton> */}
         <SettingsButton
