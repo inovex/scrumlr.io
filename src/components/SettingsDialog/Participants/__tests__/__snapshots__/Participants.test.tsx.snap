@@ -25,6 +25,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
       >
         <button
           class="settings-option-button settings-option-button--disabled participants__user"
+          disabled=""
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -524,7 +525,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           class="settings-dialog__seperator"
         />
         <button
-          class="settings-option-button settings-option-button--disabled participants__user"
+          class="settings-option-button participants__user"
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -953,8 +954,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             <span
               class="participants__user-name"
             >
-              test-participants-others-user-name-1
                
+              test-participants-others-user-name-1
             </span>
             <div
               class="participants__online-mark"
@@ -972,7 +973,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           class="settings-dialog__seperator"
         />
         <button
-          class="settings-option-button settings-option-button--disabled participants__user"
+          class="settings-option-button participants__user"
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -1431,8 +1432,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             <span
               class="participants__user-name"
             >
-              test-participants-others-user-name-2
                
+              test-participants-others-user-name-2
             </span>
             <div
               class="participants__offline-mark"
