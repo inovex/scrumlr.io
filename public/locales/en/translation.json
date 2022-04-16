@@ -95,8 +95,7 @@
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
     "addColumnLeft": "Add column left",
-    "addColumnRight": "Add column right",
-    "c"
+    "addColumnRight": "Add column right"
   },
   "ShowOtherUsersNotesOption": {
     "show": "Show notes of other users",
