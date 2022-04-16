@@ -31,4 +31,37 @@ export const ColumnAPI = {
       throw new Error(`unable to update column: ${error}`);
     }
   },
+  deleteColumn: async (boardId: string, columnId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns/${columnId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update column with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update column: ${error}`);
+    }
+  },
+  createColumn: async (boardId: string, column: {name: string; color: string; visible: boolean; index: number}) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns`, {
+        method: "POSt",
+        credentials: "include",
+        body: JSON.stringify(column),
+      });
+
+      if (response.status === 201) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to create column with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create column: ${error}`);
+    }
+  },
 };

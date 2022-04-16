@@ -18,4 +18,24 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
       );
     });
   }
+  if (action.type === Action.CreateColumn) {
+    API.createColumn(action.context.board!, action.column).catch(() => {
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.createColumn")}</div>
+          <Button onClick={() => store.dispatch(Actions.createColumn(action.column))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
+    });
+  }
+  if (action.type === Action.DeleteColumn) {
+    API.deleteColumn(action.context.board!, action.id).catch(() => {
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.deleteColumn")}</div>
+          <Button onClick={() => store.dispatch(Actions.deleteColumn(action.id))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
+    });
+  }
 };

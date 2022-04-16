@@ -87,11 +87,16 @@
     "hide": "Hide columns"
   },
   "Column": {
-    "editName": "Change the column name",
+    "settings": "Settings",
+    "editName": "Change the name",
     "submitName": "Confirm name",
     "resetName": "Reset name",
-    "hideColumn": "Hide the column for all participants",
-    "showColumn": "Show the column for all participants"
+    "hideColumn": "Hide the column",
+    "showColumn": "Show the column",
+    "deleteColumn": "Delete column",
+    "addColumnLeft": "Add column left",
+    "addColumnRight": "Add column right",
+    "c"
   },
   "ShowOtherUsersNotesOption": {
     "show": "Show notes of other users",
@@ -261,6 +266,8 @@
     "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
     "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
     "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
+    "createColumn": "Sorry, but we're having trouble adding the column. Please try again.",
+    "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
     "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",

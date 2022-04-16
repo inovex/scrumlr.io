@@ -6,16 +6,15 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as visibleIcon} from "assets/icon-visible.svg";
-import {ReactComponent as hiddenIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
+import {ReactComponent as CloseIcon,ReactComponent as AbortIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
-import {ReactComponent as AbortIcon} from "assets/icon-close.svg";
+import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {TabIndex} from "constants/tabIndex";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {Note} from "../Note";
+import {ColumnSettings} from "./ColumnSettings";
 
 const MAX_NOTE_LENGTH = 1024;
 
@@ -46,6 +45,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   );
   const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
+  const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
@@ -68,7 +68,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     }
   }
 
-  const Icon = visible ? visibleIcon : hiddenIcon;
+  // const Icon = visible ? visibleIcon : hiddenIcon;
 
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
@@ -96,51 +96,38 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
 
   const renderColumnModifiers = () => (
     <>
-      {columnNameMode === "VIEW" ? (
-        <div className="column__header-toggle">
+      {columnNameMode === "EDIT" && (
+        <>
           <button
             tabIndex={TabIndex.disabled}
-            title={t("Column.editName")}
-            className="column__header-toggle-button"
+            title={t("Column.submitName")}
+            className="column__header-edit-button"
             onClick={() => {
-              setColumnNameMode("EDIT");
+              dispatch(Actions.editColumn(id, {name: inputRef.current?.value ?? "", color, visible, index}));
+              setColumnNameMode("VIEW");
             }}
           >
-            <EditIcon className="column__header-toggle-button-icon column__edit-icon" />
+            <SubmitIcon className="column__header-edit-button-icon" />
           </button>
-        </div>
-      ) : (
-        <>
-          <div className="column__header-toggle">
-            <button
-              tabIndex={TabIndex.disabled}
-              title={t("Column.submitName")}
-              className="column__header-toggle-button"
-              onClick={() => {
-                dispatch(Actions.editColumn(id, {name: inputRef.current?.value ?? "", color, visible, index}));
-                setColumnNameMode("VIEW");
-              }}
-            >
-              <SubmitIcon className="column__header-toggle-button-icon column__submit-icon" />
-            </button>
-          </div>
-          <div className="column__header-toggle">
-            <button tabIndex={TabIndex.disabled} title={t("Column.resetName")} className="column__header-toggle-button" onClick={() => setColumnNameMode("VIEW")}>
-              <AbortIcon className="column__header-toggle-button-icon column__reset-icon" />
-            </button>
-          </div>
+          <button tabIndex={TabIndex.disabled} title={t("Column.resetName")} className="column__header-edit-button" onClick={() => setColumnNameMode("VIEW")}>
+            <AbortIcon className="column__header-edit-button-icon" />
+          </button>
         </>
       )}
-      <div className="column__header-toggle">
-        <button
-          tabIndex={TabIndex.disabled}
-          title={visible ? t("Column.hideColumn") : t("Column.showColumn")}
-          className="column__header-toggle-button"
-          onClick={() => store.dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}))}
-        >
-          <Icon className="column__header-toggle-button-icon" />
-        </button>
-      </div>
+      <button className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
+        {openedColumnSettings ? (
+          <CloseIcon className="column__header-edit-button-icon" />
+        ) : (
+          <svg className="column__header-edit-button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+             />
+          </svg>
+        )}
+      </button>
     </>
   );
 
@@ -150,8 +137,20 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         <div className="column__header">
           <div className="column__header-title">
             {renderColumnName()}
-            <span className="column__header-card-number">{state.notes.length}</span>
+            {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
+            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" />}
             {isModerator && renderColumnModifiers()}
+            {openedColumnSettings && (
+              <ColumnSettings
+                id={id}
+                name={name}
+                color={color}
+                visible={visible}
+                index={index}
+                onClose={() => setOpenedColumnSettings(false)}
+                onNameEdit={() => setColumnNameMode("EDIT")}
+              />
+            )}
           </div>
           <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
         </div>

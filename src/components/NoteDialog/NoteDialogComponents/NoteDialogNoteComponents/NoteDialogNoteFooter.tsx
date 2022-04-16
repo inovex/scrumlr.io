@@ -3,7 +3,7 @@ import {Votes} from "components/Votes";
 import {FC} from "react";
 import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
-import {Participant} from "../../../../types/participant";
+import {Participant} from "types/participant";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;

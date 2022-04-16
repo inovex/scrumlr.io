@@ -1,4 +1,5 @@
 import {Column, EditColumnRequest} from "types/column";
+import {Color} from "../../constants/colors";
 
 /** This object lists column object specific internal Redux Action types. */
 export const ColumnAction = {
@@ -7,7 +8,9 @@ export const ColumnAction = {
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
+  CreateColumn: "scrumlr.io/createColumn" as const,
   EditColumn: "scrumlr.io/editColumn" as const,
+  DeleteColumn: "scrumlr.io/deleteColumn" as const,
   UpdatedColumns: "scrumlr.io/updatedColumns" as const,
 };
 
@@ -33,11 +36,22 @@ export const ColumnActionFactory = {
     id,
     column,
   }),
-
+  deleteColumn: (id: string) => ({
+    type: ColumnAction.DeleteColumn,
+    id,
+  }),
   updateColumns: (columns: Column[]) => ({
     type: ColumnAction.UpdatedColumns,
     columns,
   }),
+  createColumn: (column: {name: string; color: Color; visible: boolean; index: number}) => ({
+    type: ColumnAction.CreateColumn,
+    column,
+  }),
 };
 
-export type ColumnReduxAction = ReturnType<typeof ColumnActionFactory.editColumn> | ReturnType<typeof ColumnActionFactory.updateColumns>;
+export type ColumnReduxAction =
+  | ReturnType<typeof ColumnActionFactory.deleteColumn>
+  | ReturnType<typeof ColumnActionFactory.createColumn>
+  | ReturnType<typeof ColumnActionFactory.editColumn>
+  | ReturnType<typeof ColumnActionFactory.updateColumns>;
