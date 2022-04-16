@@ -9,6 +9,7 @@ import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
 import {Color, getColorClassName} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
+import "./ColumnSettings.scss";
 
 type ColumnSettingsProps = {
   tabIndex: number;
