@@ -14,7 +14,7 @@ import (
 )
 
 func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
-	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Visible: body.Visible, Index: body.Index})
+	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
 	return new(dto.Column).From(column), err
 }
 
