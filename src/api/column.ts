@@ -38,8 +38,9 @@ export const ColumnAPI = {
         credentials: "include",
       });
 
-      if (response.status === 200) {
-        return await response.json();
+      // HTTP Status No Content
+      if (response.status === 204) {
+        return;
       }
 
       throw new Error(`unable to update column with response status ${response.status}`);
