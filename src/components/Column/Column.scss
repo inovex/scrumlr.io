@@ -108,6 +108,9 @@
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
+[column-visibility="collapsed"] .column__note-list {
+  padding-bottom: 72px;
+}
 
 .column__header-toggle {
   display: flex;
