@@ -50,6 +50,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 0px 20px;
+  height: 48px;
 }
 
 .participants__user_avatar-name-wrapper {
@@ -68,6 +69,10 @@
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
+  width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 [theme="dark"] {

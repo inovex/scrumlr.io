@@ -19,7 +19,13 @@ export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, o
   const Icon = icon!;
 
   return (
-    <button className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, className)} onClick={onClick} onBlur={onBlur} {...other}>
+    <button
+      disabled={disabled}
+      className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, className)}
+      onClick={onClick}
+      onBlur={onBlur}
+      {...other}
+    >
       {label && <span className="settings-option-button__label">{label}</span>}
       {children}
       {icon && <Icon className="settings-option-button__icon" />}
