@@ -1,9 +1,9 @@
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {FC} from "react";
+import {Participant} from "types/participant";
 import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
-import {Participant} from "types/participant";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
