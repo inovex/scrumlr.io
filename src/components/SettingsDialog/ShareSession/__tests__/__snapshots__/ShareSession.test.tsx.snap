@@ -16,7 +16,7 @@ Object {
             class="settings-dialog__header-text accent-color__planning-pink"
           >
              
-            ShareQrCodeOption.title
+            Share Session
           </h2>
         </div>
         <div
@@ -35,7 +35,7 @@ Object {
           <button
             class="share-qr-code-option__copy-to-clipboard"
           >
-            ShareQrCodeOption.copyInviteURL
+            Copy Invite URL
           </button>
         </div>
       </div>
@@ -53,7 +53,7 @@ Object {
           class="settings-dialog__header-text accent-color__planning-pink"
         >
            
-          ShareQrCodeOption.title
+          Share Session
         </h2>
       </div>
       <div
@@ -72,7 +72,7 @@ Object {
         <button
           class="share-qr-code-option__copy-to-clipboard"
         >
-          ShareQrCodeOption.copyInviteURL
+          Copy Invite URL
         </button>
       </div>
     </div>
