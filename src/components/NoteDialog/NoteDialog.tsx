@@ -16,7 +16,7 @@ interface NoteDialogProps {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  childrenNotes: Array<NoteModel & {authorName: string; votes: number}>;
+  childrenNotes: Array<NoteModel & {authorName: string}>;
   viewer: Participant;
 }
 
