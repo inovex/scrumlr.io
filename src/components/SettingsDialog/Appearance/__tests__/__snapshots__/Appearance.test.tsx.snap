@@ -17,40 +17,31 @@ exports[`Appearance should render all Settings correctly 1`] = `
     class="appearance-container"
   >
     <button
-      class="settings-option-button appearance-settings_sync-button"
-    >
-      <div
-        class="appearance-settings_sync-button_label"
-      >
-        <p>
-          Appearance.SyncMode
-        </p>
-        <p>
-          Appearance.SyncModeDescription
-        </p>
-      </div>
-      <div
-        class="settings-toggle"
-      >
-        <div
-          class="settings-toggle__switch settings-toggle__switch--left"
-        />
-      </div>
-    </button>
-    <button
-      class="settings-option-button appearance-settings_notifications-button"
+      class="settings-option-button appearance-settings_language-dropdown"
     >
       <span
         class="settings-option-button__label"
       >
-        Appearance.AllowNotifications
+        Appearance.colorScheme
       </span>
       <div
-        class="settings-toggle"
+        class="settings-dropdown"
       >
-        <div
-          class="settings-toggle__switch settings-toggle__switch--left"
-        />
+        <svg
+          class="settings-dropdown-flag"
+        >
+          icon-lightmode.svg
+        </svg>
+        <span
+          class="settings-dropdown-button"
+        >
+          Appearance.colorSchemeLight
+        </span>
+        <svg
+          class="settings-dropdown-icon"
+        >
+          icon-arrow-next.svg
+        </svg>
       </div>
     </button>
     <button

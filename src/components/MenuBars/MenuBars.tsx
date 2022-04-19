@@ -78,14 +78,14 @@ export const MenuBars = () => {
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <MenuButton direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
         </div>
       </section>
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <MenuButton direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
-            <MenuButton direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
+            <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
+            <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
             <MenuToggle
               value={state.moderation}
               direction="left"
@@ -93,7 +93,7 @@ export const MenuBars = () => {
               toggleStopLabel={t("MenuBars.stopFocusMode")}
               icon={FocusIcon}
               onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 15}
+              tabIndex={TabIndex.AdminMenu + 2}
             />
           </div>
         </section>

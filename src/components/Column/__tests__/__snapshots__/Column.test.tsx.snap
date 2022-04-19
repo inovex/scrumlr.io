@@ -31,6 +31,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </svg>
         <button
           class="column__header-edit-button"
+          tabindex="NaN"
           title="Settings"
         >
           <svg

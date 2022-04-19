@@ -3,13 +3,13 @@ import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
 import store, {useAppSelector} from "store";
-import "./TimerDialog.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {ReactComponent as OneIcon} from "assets/icon-one.svg";
 import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
 import {Actions} from "store/action";
+import "./TimerDialog.scss";
 
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();

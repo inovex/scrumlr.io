@@ -108,6 +108,9 @@
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
+[column-visibility="collapsed"] .column__note-list {
+  padding-bottom: 72px;
+}
 
 .column__header-toggle {
   display: flex;
@@ -162,15 +165,18 @@
 }
 
 .column__header-edit-button {
-  //position: absolute;
-  //right: 0;
-  //top: 50%;
-  //transform: translateY(-50%);
+  height: 24px;
+  margin: auto 0;
   background-color: transparent;
   border: none;
   cursor: pointer;
   outline: none;
   padding: 0;
+  border-radius: 4px;
+  &:hover,
+  &:focus {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
 }
 .column__header-edit-button:first-of-type {
   margin-left: auto;
@@ -181,70 +187,4 @@
 }
 [theme="dark"] .column__header-edit-button-icon {
   color: $color-white;
-}
-.column__header-menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: 75%;
-  width: 180px;
-  background-color: $color-white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  font-size: 14px;
-  z-index: 150;
-}
-[theme="dark"] .column__header-menu-dropdown {
-  background-color: $color-dark-mode-note;
-}
-.column__header-menu-dropdown > ul {
-  list-style: none;
-  padding: 10px 0;
-  margin: 0;
-}
-.column__header-menu-dropdown > ul > li {
-  height: 32px;
-  padding: 0 16px;
-  &:hover {
-    background-color: $color-white-one;
-  }
-}
-[theme="dark"] .column__header-menu-dropdown > ul > li {
-  &:hover {
-    background-color: $color-dark-one;
-  }
-}
-.column__header-menu-dropdown > ul > li > button {
-  cursor: pointer;
-  border: 0;
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-[theme="dark"] .column__header-menu-dropdown > ul > li > button {
-  color: $color-white;
-}
-.column__header-menu-dropdown > ul > li > button > svg {
-  height: 24px;
-}
-.column__header-menu-dropdown > ul > li:last-of-type {
-  height: auto;
-  padding: 8px 16px;
-  display: flex;
-  justify-content: space-between;
-}
-.column__header-menu-dropdown > ul > li:last-child > button {
-  height: 18px;
-  width: 18px;
-  border-radius: 4px;
-  background-color: var(--accent-color);
-}
-
-// Hacky way to not show delete column button if it's the last column
-.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
-  display: none;
 }

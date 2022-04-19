@@ -1,13 +1,13 @@
 import {VFC, useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {Toggle} from "components/Toggle";
-import store, {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import "./VotingDialog.scss";
 import {Dialog} from "components/Dialog";
+import {useNavigate} from "react-router-dom";
+import store, {useAppSelector} from "store";
+import {Toggle} from "components/Toggle";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {Actions} from "store/action";
+import "./VotingDialog.scss";
 
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();
