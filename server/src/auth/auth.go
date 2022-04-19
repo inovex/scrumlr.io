@@ -41,24 +41,24 @@ type AuthConfiguration struct {
 	auth       *jwtauth.JWTAuth
 }
 
-func NewAuthConfiguration(baseURL string, providers map[string]AuthProviderConfiguration, privateKey string) Auth {
+func NewAuthConfiguration(basePath string, providers map[string]AuthProviderConfiguration, privateKey string) Auth {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.privateKey = privateKey
-	a.initializeProviders(baseURL)
+	a.initializeProviders(basePath)
 	a.initializeJWTAuth()
 
 	return a
 }
 
-func (a *AuthConfiguration) initializeProviders(baseURL string) {
-	if baseURL != "" {
+func (a *AuthConfiguration) initializeProviders(basePath string) {
+	if basePath != "" {
 		providers := []goth.Provider{}
 		if provider, ok := a.providers[(string)(types.AccountTypeGoogle)]; ok {
 			p := google.New(
 				provider.ClientId,
 				provider.ClientSecret,
-				fmt.Sprintf("%s/login/google/callback", baseURL),
+				fmt.Sprintf("%s/login/google/callback", basePath),
 				"openid",
 				"profile",
 			)
@@ -69,7 +69,7 @@ func (a *AuthConfiguration) initializeProviders(baseURL string) {
 			p := github.New(
 				provider.ClientId,
 				provider.ClientSecret,
-				fmt.Sprintf("%s/login/github/callback", baseURL), "user",
+				fmt.Sprintf("%s/login/github/callback", basePath), "user",
 			)
 			p.SetName(strings.ToLower((string)(types.AccountTypeGitHub)))
 			providers = append(providers, p)
@@ -78,7 +78,7 @@ func (a *AuthConfiguration) initializeProviders(baseURL string) {
 			p := microsoftonline.New(
 				provider.ClientId,
 				provider.ClientSecret,
-				fmt.Sprintf("%s/login/microsoft/callback", baseURL),
+				fmt.Sprintf("%s/login/microsoft/callback", basePath),
 				"User.Read",
 			)
 			p.SetName(strings.ToLower((string)(types.AccountTypeMicrosoft)))
@@ -89,7 +89,7 @@ func (a *AuthConfiguration) initializeProviders(baseURL string) {
 			providers = append(providers, apple.New(
 				provider.ClientId,
 				provider.ClientSecret,
-				fmt.Sprintf("%s/login/apple/callback", baseURL),
+				fmt.Sprintf("%s/login/apple/callback", basePath),
 				nil,
 				apple.ScopeName,
 				apple.ScopeEmail,

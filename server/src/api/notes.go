@@ -29,7 +29,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/notes/%s", s.baseURL, board, note.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/notes/%s", common.GetProtocol(r), r.URL.Host, s.basePath, board, note.ID))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, note)
 }
