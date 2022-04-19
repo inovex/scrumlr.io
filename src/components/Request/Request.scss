@@ -48,7 +48,7 @@
 }
 
 .request__button + .request__button {
-  margin-left: 16px;
+  margin-left: 10px;
 }
 
 [theme="dark"] {
@@ -100,9 +100,8 @@
 
 .join-request__unique-request-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 0 16px;
+  margin: 0 0 0 16px;
 }
 
 .join-request__unique-request-container + .join-request__unique-request-container {

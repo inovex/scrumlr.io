@@ -1,11 +1,13 @@
-@import "constants/style";
+@import "src/constants/style";
 @import "../SettingsDialog";
 
 .participants__container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
   margin-bottom: 62px;
+  overflow: auto;
+  flex-grow: 1;
 }
 
 .participants__search-and-filter {
@@ -21,41 +23,19 @@
 }
 
 .participants__user-list-wrapper {
-  overflow-y: auto;
-  padding-right: 10px;
-  margin-right: -20px;
-  max-height: 400px;
+  overflow: auto;
+  width: 100%;
   // overflow-x: hidden; // firefox bug?
 
   @include scrollbar();
-}
-
-@media screen and (min-width: 920px) {
-  .participants__user-list-wrapper {
-    padding-right: 20px;
-    margin-right: -30px;
-  }
 }
 
 .participants__user-list {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: calc(100vw - (2 * $settings-dialog-container--sides-small));
   border-radius: 8px;
   background-color: $color-white;
-}
-
-@media screen and (min-width: 450px) {
-  .participants__user-list {
-    max-width: calc(380px - (2 * $settings-dialog-container--sides-small));
-  }
-}
-
-@media screen and (min-width: 920px) {
-  .participants__user-list {
-    max-width: calc(544px - (2 * $settings-dialog-container--sides-large));
-  }
 }
 
 [theme="dark"] {
@@ -70,6 +50,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 0px 20px;
+  height: 48px;
 }
 
 .participants__user_avatar-name-wrapper {
@@ -88,6 +69,10 @@
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
+  width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 [theme="dark"] {

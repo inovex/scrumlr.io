@@ -3,14 +3,16 @@ import QRCode from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import "./ShareSession.scss";
 import {useState, VFC} from "react";
+import {useAppSelector} from "store";
 
 export const ShareSession: VFC = () => {
   const {t} = useTranslation();
+  const boardId = useAppSelector((state) => state.board.data?.id);
 
   const [urlInClipBoard, setUrlInClipBoard] = useState(false);
 
   const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(document.location.href);
+    navigator.clipboard.writeText(`${window.location.origin}/board/${boardId}`);
     setUrlInClipBoard(true);
   };
 
@@ -21,7 +23,7 @@ export const ShareSession: VFC = () => {
       </div>
       <div className={classNames("share-session__container", "accent-color__planning-pink")}>
         <div className="share-session__background">
-          <QRCode value={document.location.href} size={260} className="share-qr-code-option__qrcode" />
+          <QRCode value={`${window.location.origin}/board/${boardId}`} size={260} className="share-qr-code-option__qrcode" />
         </div>
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}

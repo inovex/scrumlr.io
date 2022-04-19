@@ -22,18 +22,16 @@ export const ProfileSettings = () => {
         <h2 className="settings-dialog__header-text">{t("ProfileSettings.Profile")}</h2>
       </header>
       <div className="profile-settings__container">
-        {userName && (
-          <SettingsButton className="profile-settings__user-name-button" label={t("ProfileSettings.UserName")} onClick={() => nameInputRef.current?.focus()}>
-            <input
-              ref={nameInputRef}
-              className="profile-settings__user-name-button_input"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
-              onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
-            />
-          </SettingsButton>
-        )}
+        <SettingsButton className="profile-settings__user-name-button" label={t("ProfileSettings.UserName")} onClick={() => nameInputRef.current?.focus()}>
+          <input
+            ref={nameInputRef}
+            className="profile-settings__user-name-button_input"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
+            onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
+          />
+        </SettingsButton>
       </div>
     </div>
   );
