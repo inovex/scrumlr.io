@@ -42,6 +42,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           <button
             class="settings-option-button settings-option-button--disabled board-settings__policy-button"
+            disabled=""
           >
             <span
               class="settings-option-button__label"

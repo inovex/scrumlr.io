@@ -23,10 +23,9 @@ export const Participants = () => {
       </header>
 
       <div className="participants__container">
-        <div className="participants__search-and-filter">{t("ParticipantsList.searchAndFilter")}</div>
         <div className="participants__user-list-wrapper">
           <div className="participants__user-list">
-            <SettingsButton className="participants__user" disabled onClick={() => store.dispatch(Actions.changePermission(state.me.user.id, state.me.role === "PARTICIPANT"))}>
+            <SettingsButton className="participants__user" disabled>
               <div className="participants__user_avatar-name-wrapper">
                 <Avatar className="participants__user_avatar" seed={state.me.user.id} />
                 <span className="participants__user-name">
@@ -34,7 +33,7 @@ export const Participants = () => {
                 </span>
                 <div className={state.me.connected ? "participants__online-mark" : "participants__offline-mark"} />
               </div>
-              <SettingsToggle active={state.me.role === "MODERATOR"} />
+              {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <SettingsToggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} />}
             </SettingsButton>
             {state.others.length > 0 && <hr className="settings-dialog__seperator" />}
             {state.others.length > 0 &&
@@ -42,17 +41,17 @@ export const Participants = () => {
                 <>
                   <SettingsButton
                     className="participants__user"
-                    disabled={participant.role === "OWNER" || state.me.role !== "MODERATOR"}
+                    disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
                     onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
                   >
                     <div className="participants__user_avatar-name-wrapper">
                       <Avatar className="participants__user_avatar" seed={participant.user.id} />
                       <span className="participants__user-name">
-                        {participant.user.name} {participant.role === "OWNER" && `(${t("Participants.Owner")})`}
+                        {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
                       </span>
                       <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
                     </div>
-                    <SettingsToggle active={participant.role === "MODERATOR"} />
+                    {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <SettingsToggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} />}
                   </SettingsButton>
                   {state.others[index + 1] && <hr className="settings-dialog__seperator" />}
                 </>

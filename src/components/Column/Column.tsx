@@ -76,6 +76,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       <h2 className="column__header-text">{name}</h2>
     ) : (
       <input
+        tabIndex={tabIndex}
         maxLength={32}
         className="column__header-input"
         defaultValue={name}
@@ -100,7 +101,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       {columnNameMode === "EDIT" && (
         <>
           <button
-            tabIndex={TabIndex.disabled}
+            tabIndex={tabIndex! + 1}
             title={t("Column.submitName")}
             className="column__header-edit-button"
             onClick={() => {
@@ -110,12 +111,12 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           >
             <SubmitIcon className="column__header-edit-button-icon" />
           </button>
-          <button tabIndex={TabIndex.disabled} title={t("Column.resetName")} className="column__header-edit-button" onClick={() => setColumnNameMode("VIEW")}>
+          <button tabIndex={tabIndex! + 2} title={t("Column.resetName")} className="column__header-edit-button" onClick={() => setColumnNameMode("VIEW")}>
             <AbortIcon className="column__header-edit-button-icon" />
           </button>
         </>
       )}
-      <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
+      <button tabIndex={tabIndex! + 3} title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
         {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
       </button>
     </>
@@ -132,6 +133,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
+                tabIndex={tabIndex! + 4}
                 id={id}
                 name={name}
                 color={color}

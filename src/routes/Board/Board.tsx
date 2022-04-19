@@ -9,6 +9,7 @@ import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {Actions} from "store/action";
 import _ from "underscore";
+import {Outlet} from "react-router-dom";
 
 export const Board = () => {
   useEffect(
@@ -67,12 +68,13 @@ export const Board = () => {
           />
         )}
         <InfoBar />
+        <Outlet />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
           {state.columns
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (
               <Column
-                tabIndex={TabIndex.Column + columnIndex}
+                tabIndex={TabIndex.Column + columnIndex * 17}
                 key={column.id}
                 id={column.id}
                 index={column.index}

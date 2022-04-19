@@ -61,7 +61,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </button>
       <button
         class="menu-item menu-item--right"
-        tabindex="0"
+        tabindex="302"
       >
         <div
           class="menu-item__tooltip"
@@ -88,7 +88,7 @@ exports[`MenuBars should match snapshot 1`] = `
     >
       <button
         class="menu-item menu-item--left"
-        tabindex="0"
+        tabindex="400"
       >
         <div
           class="menu-item__tooltip"
@@ -107,7 +107,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </button>
       <button
         class="menu-item menu-item--left"
-        tabindex="0"
+        tabindex="401"
       >
         <div
           class="menu-item__tooltip"
@@ -126,7 +126,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </button>
       <button
         class="menu-item menu-item--disabled menu-item--left"
-        tabindex="415"
+        tabindex="402"
       >
         <div
           class="menu-item__tooltip"

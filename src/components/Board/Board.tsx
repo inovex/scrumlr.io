@@ -6,15 +6,6 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
-import {Outlet} from "react-router-dom";
-import smoothscroll from "smoothscroll-polyfill";
-
-// Need to polyfill smooth scroll for safari browsers.
-// Due to safari 15.4 behavior it needs be forced to use
-// See Github issue https://github.com/iamdustan/smoothscroll/issues/177 for updates and reference
-smoothscroll.polyfill();
-// eslint-disable-next-line
-(window as any).__forceSmoothScrollPolyfill__ = true;
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -161,7 +152,6 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars />
-      <Outlet />
 
       {state.showPreviousButton && (
         <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden>
