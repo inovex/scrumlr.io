@@ -32,7 +32,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s/boards/%s/columns/%s", s.baseURL, board, column.ID))
+	w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/columns/%s", common.GetProtocol(r), r.URL.Host, s.basePath, board, column.ID))
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, column)
 }

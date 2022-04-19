@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"strings"
 
@@ -61,11 +60,12 @@ func main() {
 				Usage:   "the private key, used to sign the jwt's - needed in ES512 (ecdsa)",
 			},
 			&cli.StringFlag{
-				Name:     "base-url",
+				Name:     "base-path",
 				Aliases:  []string{"b"},
-				EnvVars:  []string{"SCRUMLR_BASE_URL"},
-				Usage:    "the base `url` of the application (e.g. https://scrumlr.io/api)",
+				EnvVars:  []string{"SCRUMLR_BASE_PATH"},
+				Usage:    "the base `path` of the application (e.g. '/api'); must start with '/'",
 				Required: false,
+				Value:    "/",
 			},
 			&cli.StringFlag{
 				Name:     "auth-google-client-id",
@@ -147,13 +147,16 @@ func run(c *cli.Context) error {
 
 	rt := realtime.New(c.String("nats"))
 
-	var baseUrl string
-	if c.IsSet("base-url") {
-		r := strings.TrimSuffix(c.String("base-url"), "/")
-		if _, err := url.Parse(r); err != nil {
-			return errors.Wrap(err, "invalid base url")
+	basePath := "/"
+	if c.IsSet("base-path") {
+		basePath = c.String("base-path")
+		if !strings.HasPrefix(basePath, "/") {
+			return errors.New("base path must start with '/'")
 		}
-		baseUrl = r
+
+		if len(basePath) > 1 {
+			basePath = strings.TrimSuffix(basePath, "/")
+		}
 	}
 
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
@@ -182,7 +185,7 @@ func run(c *cli.Context) error {
 		}
 	}
 
-	authConfig := auth.NewAuthConfiguration(baseUrl, providersMap, c.String("key"))
+	authConfig := auth.NewAuthConfiguration(basePath, providersMap, c.String("key"))
 
 	dbConnection := database.New(db, c.Bool("verbose"))
 	boardService := boards.NewBoardService(dbConnection, rt)
@@ -193,7 +196,7 @@ func run(c *cli.Context) error {
 	healthService := health.NewHealthService(dbConnection, rt)
 
 	s := api.New(
-		baseUrl,
+		basePath,
 		rt,
 		authConfig,
 		boardService,
@@ -207,6 +210,6 @@ func run(c *cli.Context) error {
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
-	logger.Get().Infow("starting server", "baseURL", baseUrl, "port", port)
+	logger.Get().Infow("starting server", "base-path", basePath, "port", port)
 	return http.ListenAndServe(port, s)
 }
