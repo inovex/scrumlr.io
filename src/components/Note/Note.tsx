@@ -37,8 +37,6 @@ export const Note = (props: NoteProps) => {
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.id)?.user.name ?? state.participants?.self.user.name ?? "",
-          votes: state.votings.past[0]?.votes?.votesPerNote[n.id].total ?? 0,
-          allVotesOfUser: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === n.id),
         })),
     _.isEqual
   );
