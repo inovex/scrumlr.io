@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"net/url"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"strings"
@@ -47,7 +46,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true}
-	s.sealCookie(&cookie)
+	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
 	render.Status(r, http.StatusCreated)
@@ -55,7 +54,8 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-	cookie := http.Cookie{Name: "jwt", Expires: time.UnixMilli(0)}
+	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
@@ -93,7 +93,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
-	s.sealCookie(&cookie)
+	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
 	state := gothic.GetState(r)
@@ -103,25 +103,23 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		w.WriteHeader(http.StatusSeeOther)
 	}
 
-	w.Header().Set("Location", fmt.Sprintf("%s/", s.baseURL))
+	w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.URL.Host, s.basePath))
 	w.WriteHeader(http.StatusSeeOther)
 }
 
-func (s *Server) sealCookie(cookie *http.Cookie) {
-	if s.baseURL != "" {
-		baseURL, _ := url.Parse(s.baseURL)
-		if baseURL.Scheme == "https" {
-			cookie.Secure = true
-			cookie.SameSite = http.SameSiteStrictMode
-		}
-
-		hostname, _, _ := net.SplitHostPort(baseURL.Host)
-		hostWithSubdomain := strings.Split(hostname, ".")
-		if len(hostWithSubdomain) == 3 {
-			cookie.Domain = fmt.Sprintf("%s.%s", hostWithSubdomain[1], hostWithSubdomain[2])
-		} else {
-			cookie.Domain = hostname
-		}
+func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
+	if common.GetProtocol(r) == "https" {
+		cookie.Secure = true
+		cookie.SameSite = http.SameSiteStrictMode
 	}
+
+	hostname, _, _ := net.SplitHostPort(r.Host)
+	hostWithSubdomain := strings.Split(hostname, ".")
+	if len(hostWithSubdomain) >= 2 {
+		cookie.Domain = fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
+	} else {
+		cookie.Domain = hostname
+	}
+
 	cookie.HttpOnly = true
 }
