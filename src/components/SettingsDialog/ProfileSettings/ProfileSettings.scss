@@ -1,4 +1,17 @@
+@import "src/constants/style";
 @import "../SettingsDialog";
+
+.profile-settings__container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100%;
+  margin-bottom: $settings-dialog-container--bottom;
+}
+
+.profile-settings__container > button {
+  flex: 0;
+}
 
 .profile-settings__user-name-button {
   justify-content: space-between;
@@ -17,7 +30,7 @@
   letter-spacing: 0.5px;
   font-size: 14px;
   text-align: right;
-  width: 60%;
+  max-width: 150px;
   cursor: inherit;
 }
 
@@ -32,9 +45,26 @@
   color: $color-black;
 }
 
+.profile-settings__avatar-icon {
+  height: 120px;
+  width: 100%;
+}
+
+.profile-settings__avatar-selection {
+  background-color: $color-white;
+  border-radius: 8px;
+
+  > *:not(:last-child) {
+    border-bottom: 1px solid $color-white;
+  }
+}
+
 [theme="dark"] {
   .profile-settings__user-name-button_input,
   .profile-settings__user-name-button_input::placeholder {
     color: $color-white;
+  }
+  .profile-settings__avatar-selection {
+    background-color: $color-dark-mode-note;
   }
 }
