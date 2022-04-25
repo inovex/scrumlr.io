@@ -56,7 +56,7 @@ export const AVATAR_CLOTHE_COLORS = [
   "Pink",
   "Red",
   "White",
-];
+] as const;
 export type AvatarClotheColor = typeof AVATAR_CLOTHE_COLORS[number];
 
 export const AVATAR_GRAPHIC_TYPES = ["Bat", "Cumbia", "Deer", "Diamond", "Hola", "Pizza", "Resist", "Selena", "Bear", "SkullOutline", "Skull"] as const;
