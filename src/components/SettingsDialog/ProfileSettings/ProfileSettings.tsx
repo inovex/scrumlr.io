@@ -5,6 +5,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ProfileSettings.scss";
+import {AvatarSettings} from "../Components/AvatarSettings";
 
 export const ProfileSettings = () => {
   const {t} = useTranslation();
@@ -13,6 +14,7 @@ export const ProfileSettings = () => {
   }));
 
   const [userName, setUserName] = useState<string | undefined>(state.participant?.user.name);
+  const [id] = useState<string | undefined>(state.participant?.user.id);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,6 +34,8 @@ export const ProfileSettings = () => {
             onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
           />
         </SettingsButton>
+
+        <AvatarSettings id={id} />
       </div>
     </div>
   );
