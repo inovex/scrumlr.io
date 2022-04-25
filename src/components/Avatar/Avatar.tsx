@@ -30,9 +30,7 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvatarProps {
-  seed?: string;
-  className?: string;
+export interface AvataarProps {
   skinColor?: AvatarSkinColor;
   topType?: AvatarTopType;
   clotheColor?: AvatarClotheColor;
@@ -45,6 +43,11 @@ export interface AvatarProps {
   eyeType?: AvatarEyeType;
   eyebrowType?: AvatarEyebrowType;
   mouthType?: AvatarMouthType;
+}
+
+export interface AvatarProps {
+  seed: string | AvataarProps;
+  className?: string;
 }
 
 /**
@@ -74,31 +77,35 @@ const hashCode = (s: string) => {
  */
 const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
-  const props: AvatarProps = {};
+  const avataarProps: AvataarProps = {};
+  const props: AvatarProps = {
+    seed: {},
+  };
 
-  props.skinColor = AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length];
-  props.topType = AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length];
-  props.clotheType = AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length];
-  props.clotheColor = AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length];
-  props.graphicType = AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length];
-  props.hairColor = AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length];
+  avataarProps.skinColor = AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length];
+  avataarProps.topType = AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length];
+  avataarProps.clotheType = AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length];
+  avataarProps.clotheColor = AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length];
+  avataarProps.graphicType = AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length];
+  avataarProps.hairColor = AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length];
 
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
   if (hasFacialHair) {
-    props.facialHairColor = AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length];
-    props.facialHairType = AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length];
+    avataarProps.facialHairColor = AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length];
+    avataarProps.facialHairType = AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length];
   }
 
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
   if (hasAccessories) {
-    props.accessoriesType = AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length];
+    avataarProps.accessoriesType = AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length];
   }
 
-  props.eyebrowType = AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length];
-  props.eyeType = AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length];
-  props.mouthType = AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length];
+  avataarProps.eyebrowType = AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length];
+  avataarProps.eyeType = AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length];
+  avataarProps.mouthType = AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length];
 
   props.className = getColorClassName(getColorForIndex(hash));
+  props.seed = avataarProps;
 
   return props;
 };
@@ -123,43 +130,28 @@ const generateRandomProps = (seed: string) => {
  * @param mouthType the mouth type
  */
 export const Avatar = React.memo(
-  ({
-    seed,
-    className,
-    skinColor,
-    topType,
-    clotheColor,
-    graphicType,
-    clotheType,
-    hairColor,
-    facialHairColor,
-    facialHairType,
-    accessoriesType,
-    eyebrowType,
-    eyeType,
-    mouthType,
-  }: AvatarProps) => {
-    if (seed) {
+  ({seed, className}: AvatarProps) => {
+    if (typeof seed === "string") {
       const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
-      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
+      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps.seed} />;
     }
 
     return (
       <Avataar
         className={classNames("avatar", className)}
         avatarStyle="Circle"
-        topType={topType}
-        accessoriesType={accessoriesType}
-        hairColor={hairColor}
-        facialHairType={facialHairType}
-        facialHairColor={facialHairColor}
-        clotheType={clotheType}
-        clotheColor={clotheColor}
-        graphicType={graphicType}
-        eyeType={eyeType}
-        eyebrowType={eyebrowType}
-        mouthType={mouthType}
-        skinColor={skinColor}
+        topType={seed.topType}
+        accessoriesType={seed.accessoriesType}
+        hairColor={seed.hairColor}
+        facialHairType={seed.facialHairType}
+        facialHairColor={seed.facialHairColor}
+        clotheType={seed.clotheType}
+        clotheColor={seed.clotheColor}
+        graphicType={seed.graphicType}
+        eyeType={seed.eyeType}
+        eyebrowType={seed.eyebrowType}
+        mouthType={seed.mouthType}
+        skinColor={seed.skinColor}
       />
     );
   },
