@@ -1,0 +1,41 @@
+@import "constants/style";
+
+.settings-carousel {
+  display: flex;
+  height: 32px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+
+  &__text {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  &__button {
+    display: flex;
+    background-color: unset;
+    justify-items: center;
+    align-items: center;
+    border: none;
+    color: var(--accent-color);
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+[theme="dark"] {
+  .settings-carousel {
+    &__text {
+      color: $color-white;
+    }
+
+    &__button {
+      color: var(--accent-color);
+    }
+  }
+}
