@@ -30,25 +30,43 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvataarProps {
-  skinColor?: AvatarSkinColor;
-  topType?: AvatarTopType;
-  clotheColor?: AvatarClotheColor;
-  graphicType?: AvatarGraphicType;
-  clotheType?: AvatarClotheType;
-  hairColor?: AvatarHairColor;
-  facialHairColor?: AvatarFacialHairColor;
-  facialHairType?: AvatarFacialHairType;
-  accessoriesType?: AvatarAccessoriesType;
-  eyeType?: AvatarEyeType;
-  eyebrowType?: AvatarEyebrowType;
-  mouthType?: AvatarMouthType;
-}
-
-export interface AvatarProps {
-  seed: string | AvataarProps;
+export interface AvatarBasics {
   className?: string;
 }
+
+export interface AvatarSeed extends AvatarBasics {
+  seed: string;
+  skinColor?: never;
+  topType?: never;
+  clotheColor?: never;
+  graphicType?: never;
+  clotheType?: never;
+  hairColor?: never;
+  facialHairColor?: never;
+  facialHairType?: never;
+  accessoriesType?: never;
+  eyeType?: never;
+  eyebrowType?: never;
+  mouthType?: never;
+}
+
+export interface AvataaarProps extends AvatarBasics {
+  seed?: never;
+  skinColor: AvatarSkinColor;
+  topType: AvatarTopType;
+  clotheColor: AvatarClotheColor;
+  graphicType: AvatarGraphicType;
+  clotheType: AvatarClotheType;
+  hairColor: AvatarHairColor;
+  facialHairColor: AvatarFacialHairColor;
+  facialHairType: AvatarFacialHairType;
+  accessoriesType: AvatarAccessoriesType;
+  eyeType: AvatarEyeType;
+  eyebrowType: AvatarEyebrowType;
+  mouthType: AvatarMouthType;
+}
+
+export type AvatarProps = AvataaarProps | AvatarSeed;
 
 /**
  * Generates a fixed hash number for any given string.
@@ -77,35 +95,25 @@ const hashCode = (s: string) => {
  */
 const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
-  const avataarProps: AvataarProps = {};
-  const props: AvatarProps = {
-    seed: {},
-  };
-
-  avataarProps.skinColor = AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length];
-  avataarProps.topType = AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length];
-  avataarProps.clotheType = AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length];
-  avataarProps.clotheColor = AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length];
-  avataarProps.graphicType = AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length];
-  avataarProps.hairColor = AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length];
 
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
-  if (hasFacialHair) {
-    avataarProps.facialHairColor = AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length];
-    avataarProps.facialHairType = AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length];
-  }
-
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
-  if (hasAccessories) {
-    avataarProps.accessoriesType = AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length];
-  }
 
-  avataarProps.eyebrowType = AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length];
-  avataarProps.eyeType = AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length];
-  avataarProps.mouthType = AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length];
-
-  props.className = getColorClassName(getColorForIndex(hash));
-  props.seed = avataarProps;
+  const props: AvatarProps = {
+    className: getColorClassName(getColorForIndex(hash)),
+    skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
+    topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
+    clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
+    graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
+    clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
+    hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
+    facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
+    facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
+    accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
+    eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
+    eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
+    mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
+  };
 
   return props;
 };
@@ -130,30 +138,30 @@ const generateRandomProps = (seed: string) => {
  * @param mouthType the mouth type
  */
 export const Avatar = React.memo(
-  ({seed, className}: AvatarProps) => {
-    if (typeof seed === "string") {
-      const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
-      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps.seed} />;
+  ({className, ...props}: AvatarProps) => {
+    if (props.seed) {
+      const {className: accentColorClass, ...avatarProps} = generateRandomProps(props.seed);
+      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
     }
 
     return (
       <Avataar
         className={classNames("avatar", className)}
         avatarStyle="Circle"
-        topType={seed.topType}
-        accessoriesType={seed.accessoriesType}
-        hairColor={seed.hairColor}
-        facialHairType={seed.facialHairType}
-        facialHairColor={seed.facialHairColor}
-        clotheType={seed.clotheType}
-        clotheColor={seed.clotheColor}
-        graphicType={seed.graphicType}
-        eyeType={seed.eyeType}
-        eyebrowType={seed.eyebrowType}
-        mouthType={seed.mouthType}
-        skinColor={seed.skinColor}
+        topType={props.topType}
+        accessoriesType={props.accessoriesType}
+        hairColor={props.hairColor}
+        facialHairType={props.facialHairType}
+        facialHairColor={props.facialHairColor}
+        clotheType={props.clotheType}
+        clotheColor={props.clotheColor}
+        graphicType={props.graphicType}
+        eyeType={props.eyeType}
+        eyebrowType={props.eyebrowType}
+        mouthType={props.mouthType}
+        skinColor={props.skinColor}
       />
     );
   },
-  (prev, next) => prev.seed === next.seed
+  (prev, next) => prev === next
 );

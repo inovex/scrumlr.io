@@ -1,4 +1,4 @@
-import {AvataarProps, Avatar} from "components/Avatar";
+import {AvatarProps, Avatar} from "components/Avatar";
 import {
   AvatarAccessoriesType,
   AvatarClotheColor,
@@ -34,7 +34,7 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
-  const [properties, setProperties] = useState<AvataarProps>({
+  const [properties, setProperties] = useState<AvatarProps>({
     accessoriesType: "Blank",
     clotheColor: "Blue03",
     clotheType: "GraphicShirt",
@@ -49,13 +49,13 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     topType: "Turban",
   });
 
-  const updateAvatar = <PropertyKey extends keyof AvataarProps>(property: PropertyKey, value: AvataarProps[PropertyKey]) => {
+  const updateAvatar = <PropertyKey extends keyof AvatarProps>(property: PropertyKey, value: AvatarProps[PropertyKey]) => {
     if (properties[property] !== value) setProperties({...properties, [property]: value});
   };
 
   return (
     <>
-      <Avatar className="profile-settings__avatar-icon" seed={properties} />
+      <Avatar className="profile-settings__avatar-icon" seed={id ?? ""} />
       <div className="profile-settings__avatar-selection">
         <SettingsAccordion label="Hair">
           <SettingsCarousel carouselItems={AVATAR_HAIR_COLORS} onValueChange={(value) => updateAvatar("hairColor", value as AvatarHairColor)} />
