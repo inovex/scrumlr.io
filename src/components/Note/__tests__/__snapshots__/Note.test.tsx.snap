@@ -466,6 +466,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
         </figure>
         <div
           class="votes"
+          role="none"
         >
           <button
             class="dot-button vote-button-remove"
@@ -989,6 +990,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     >
                       <div
                         class="votes"
+                        role="none"
                       >
                         <button
                           class="dot-button vote-button-remove"
@@ -1493,6 +1495,7 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
         </figure>
         <div
           class="votes"
+          role="none"
         >
           <button
             class="dot-button vote-button-remove"
@@ -1986,6 +1989,7 @@ exports[`Note should have correct style show note with correct style 1`] = `
       </figure>
       <div
         class="votes"
+        role="none"
       >
         <button
           class="dot-button vote-button-remove"
