@@ -128,7 +128,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{author!.user.name}</figcaption>
             </figure>
           )}
-          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} />
+          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
         </div>
         {showDialog && (
           <NoteDialog

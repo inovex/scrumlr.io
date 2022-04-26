@@ -5,7 +5,7 @@
   height: $option-height;
   width: $option-width;
   background-color: transparent;
-  color: rgba($color-backlog-blue, 0.4);
+  color: rgba(var(--accent-color-rgb), 0.4);
 }
 
 .note-dialog__note-option__remove-icon {
@@ -15,5 +15,5 @@
 
 .note-dialog__note-option__remove:focus,
 .note-dialog__note-option__remove:hover {
-  color: $color-backlog-blue;
+  color: var(--accent-color);
 }

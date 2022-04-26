@@ -14,7 +14,7 @@ export const VotingDialog: VFC = () => {
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
-  const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(false);
+  const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(true);
   // const [anonymousVoting, setAnonymousVoting] = useState(false);
   const [numberOfVotes, setNumberOfVotes] = useState(5);
   const [startPositionX, setStartPositionX] = useState(0);
