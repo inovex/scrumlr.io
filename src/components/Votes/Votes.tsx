@@ -32,7 +32,7 @@ export const Votes: VFC<VotesProps> = (props) => {
   );
 
   return (
-    <div className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
+    <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
         <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} disabled>
           {allPastVotes}
