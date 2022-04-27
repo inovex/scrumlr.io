@@ -81,15 +81,4 @@ describe("Votes", () => {
       expect(mockDispatchFn).toHaveBeenCalledWith(Actions.deleteVote("test-notes-id-1"));
     });
   });
-
-  describe("Test allowMultipleVotesPerNote works correctly", () => {
-    test("allowMultipleVotesPerNote: false", () => {
-      const {container} = render(createVotes());
-      expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove");
-      expect(container.querySelector(".votes")?.firstChild).toHaveClass("vote-button-remove--own-vote");
-      expect(container.querySelector(".vote-button-add")).toBeNull();
-      expect(container.querySelector(".votes")?.childElementCount).toEqual(1);
-      expect(container.querySelector(".vote-button-remove")?.firstChild).toHaveClass("vote-button-remove__folded-corner");
-    });
-  });
 });

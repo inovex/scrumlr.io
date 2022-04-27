@@ -9,19 +9,19 @@
   color: var(--accent-color);
 }
 
-.vote-button-remove--own-vote {
+.vote-button-remove:not([disabled]) {
   background-color: var(--accent-color);
   color: $color-white;
 }
 
-.vote-button-remove.vote-button-remove--own-vote:not([disabled]):focus > .vote-button-remove__folded-corner,
-.vote-button-remove.vote-button-remove--own-vote:not([disabled]):hover > .vote-button-remove__folded-corner {
+.vote-button-remove:not([disabled]):focus > .vote-button-remove__folded-corner,
+.vote-button-remove:not([disabled]):hover > .vote-button-remove__folded-corner {
   border-width: 12px 0 0 12px;
 }
-.vote-button-remove:not(.vote-button-remove--own-vote):not([disabled]):active {
+.vote-button-remove:not([disabled]):active {
   transform: none;
 }
-.vote-button-remove:not(.vote-button-remove--own-vote) {
+.vote-button-remove:disabled {
   cursor: default;
 }
 

@@ -22,6 +22,7 @@
   scrollbar-width: none;
 
   overflow: hidden;
+  overflow-x: scroll;
 }
 .board::-webkit-scrollbar {
   display: none;

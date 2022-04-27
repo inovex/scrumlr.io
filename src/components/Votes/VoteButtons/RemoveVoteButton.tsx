@@ -1,19 +1,16 @@
+import {FC} from "react";
+import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
-import classNames from "classnames";
-import {FC} from "react";
-import {useDispatch} from "react-redux";
 
 type RemoveVoteProps = {
   noteId: string;
-  activeVoting: boolean;
-  votes: number;
-  ownVotes: number;
   tabIndex: number;
+  disabled?: boolean;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, votes, ownVotes, tabIndex}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, tabIndex, disabled, children}) => {
   const dispatch = useDispatch();
 
   const deleteVote = () => {
@@ -21,9 +18,9 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, activeVoting, vot
   };
 
   return (
-    <DotButton tabIndex={tabIndex} className={classNames("vote-button-remove", {"vote-button-remove--own-vote": ownVotes > 0})} disabled={!activeVoting} onClick={deleteVote}>
+    <DotButton tabIndex={tabIndex} className="vote-button-remove" disabled={disabled} onClick={deleteVote}>
       <span className="vote-button-remove__folded-corner" />
-      <span>{activeVoting ? ownVotes : votes}</span>
+      <span>{children}</span>
     </DotButton>
   );
 };

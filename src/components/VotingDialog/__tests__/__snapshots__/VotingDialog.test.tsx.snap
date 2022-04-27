@@ -108,7 +108,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
                 Allow cumulative voting
               </label>
               <div
-                class="toggle voting-dialog__toggle"
+                class="toggle toggle--active voting-dialog__toggle"
               />
             </button>
             <div

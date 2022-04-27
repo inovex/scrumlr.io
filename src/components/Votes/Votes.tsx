@@ -1,37 +1,55 @@
-import {useAppSelector} from "store";
-import "./Votes.scss";
-import classNames from "classnames";
 import {VFC} from "react";
+import classNames from "classnames";
+import _ from "underscore";
 import {TabIndex} from "constants/tabIndex";
+import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
+import "./Votes.scss";
 
 type VotesProps = {
   className?: string;
   noteId: string;
+  // Aggregate the votes of the child notes
+  aggregateVotes?: boolean;
   tabIndex?: number;
 };
 
 export const Votes: VFC<VotesProps> = (props) => {
   const voting = useAppSelector((state) => state.votings.open);
-  const currentUserVotes = useAppSelector(
-    (state) => state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length
+  const ongoingVotes = useAppSelector(
+    (state) => ({
+      note: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length,
+      total: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).length,
+    }),
+    _.isEqual
   );
   const allPastVotes = useAppSelector(
     (state) =>
       (state.votings.past[0]?.votes?.votesPerNote[props.noteId]?.total ?? 0) +
-      state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
+      (props.aggregateVotes
+        ? state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
+        : 0)
   );
-  const showAddVoteButton = voting && (voting?.allowMultipleVotes || currentUserVotes === 0);
 
   return (
-    <div className={classNames("votes", props.className)}>
-      {voting && currentUserVotes > 0 && (
-        <VoteButtons.Remove {...props} activeVoting={!!voting} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={currentUserVotes} votes={allPastVotes} />
-      )}
+    <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
-        <VoteButtons.Remove {...props} activeVoting={!!voting} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} ownVotes={currentUserVotes} votes={allPastVotes} />
+        <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} disabled>
+          {allPastVotes}
+        </VoteButtons.Remove>
       )}
-      {showAddVoteButton && <VoteButtons.Add {...props} tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default} disabled={currentUserVotes === voting?.voteLimit} />}
+      {voting && ongoingVotes.note > 0 && (
+        <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default}>
+          {ongoingVotes.note}
+        </VoteButtons.Remove>
+      )}
+      {voting && (
+        <VoteButtons.Add
+          noteId={props.noteId}
+          tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default}
+          disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)}
+        />
+      )}
     </div>
   );
 };
