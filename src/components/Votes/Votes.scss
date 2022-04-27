@@ -3,6 +3,9 @@
 .votes {
   display: inline-flex;
   position: relative;
+  width: 60px;
+  height: 28px;
+  justify-content: end;
 }
 
 .votes > * + * {

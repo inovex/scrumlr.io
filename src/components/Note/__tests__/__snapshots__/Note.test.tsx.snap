@@ -466,9 +466,10 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
         </figure>
         <div
           class="votes"
+          role="none"
         >
           <button
-            class="dot-button vote-button-remove vote-button-remove--own-vote"
+            class="dot-button vote-button-remove"
             tabindex="0"
           >
             <span
@@ -477,6 +478,17 @@ exports[`Note Test NoteDialog created/not created NoteDialog is not present: sna
             <span>
               1
             </span>
+          </button>
+          <button
+            class="dot-button vote-button-add"
+            disabled=""
+            tabindex="0"
+          >
+            <svg
+              class="vote-button-add__icon"
+            >
+              icon-add.svg
+            </svg>
           </button>
         </div>
       </div>
@@ -978,9 +990,10 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                     >
                       <div
                         class="votes"
+                        role="none"
                       >
                         <button
-                          class="dot-button vote-button-remove vote-button-remove--own-vote"
+                          class="dot-button vote-button-remove"
                           tabindex="0"
                         >
                           <span
@@ -989,6 +1002,17 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                           <span>
                             1
                           </span>
+                        </button>
+                        <button
+                          class="dot-button vote-button-add"
+                          disabled=""
+                          tabindex="0"
+                        >
+                          <svg
+                            class="vote-button-add__icon"
+                          >
+                            icon-add.svg
+                          </svg>
                         </button>
                       </div>
                       <ul
@@ -1471,9 +1495,10 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
         </figure>
         <div
           class="votes"
+          role="none"
         >
           <button
-            class="dot-button vote-button-remove vote-button-remove--own-vote"
+            class="dot-button vote-button-remove"
             tabindex="0"
           >
             <span
@@ -1482,6 +1507,17 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
             <span>
               1
             </span>
+          </button>
+          <button
+            class="dot-button vote-button-add"
+            disabled=""
+            tabindex="0"
+          >
+            <svg
+              class="vote-button-add__icon"
+            >
+              icon-add.svg
+            </svg>
           </button>
         </div>
       </div>
@@ -1953,9 +1989,10 @@ exports[`Note should have correct style show note with correct style 1`] = `
       </figure>
       <div
         class="votes"
+        role="none"
       >
         <button
-          class="dot-button vote-button-remove vote-button-remove--own-vote"
+          class="dot-button vote-button-remove"
           tabindex="0"
         >
           <span
@@ -1964,6 +2001,17 @@ exports[`Note should have correct style show note with correct style 1`] = `
           <span>
             1
           </span>
+        </button>
+        <button
+          class="dot-button vote-button-add"
+          disabled=""
+          tabindex="0"
+        >
+          <svg
+            class="vote-button-add__icon"
+          >
+            icon-add.svg
+          </svg>
         </button>
       </div>
     </div>
