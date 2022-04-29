@@ -91,7 +91,7 @@ const hashCode = (s: string) => {
  * @param seed the seed will be hashed by the `hashCode` function and define the outcome
  * @returns a set of properties for the `<Avatar />` component
  */
-const generateRandomProps = (seed: string) => {
+export const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
 
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;

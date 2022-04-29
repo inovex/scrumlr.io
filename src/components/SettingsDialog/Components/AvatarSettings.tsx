@@ -1,4 +1,4 @@
-import {AvatarProps, Avatar} from "components/Avatar";
+import {Avatar, generateRandomProps, AvataaarProps} from "components/Avatar";
 import {
   AvatarAccessoriesType,
   AvatarClotheColor,
@@ -26,6 +26,7 @@ import {
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
 import {FC, useState} from "react";
+import {useAppSelector} from "store";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
@@ -34,28 +35,27 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
-  const [properties, setProperties] = useState<AvatarProps>({
-    accessoriesType: "Blank",
-    clotheColor: "Blue03",
-    clotheType: "GraphicShirt",
-    eyeType: "EyeRoll",
-    eyebrowType: "Angry",
-    facialHairColor: "Blonde",
-    facialHairType: "BeardMajestic",
-    graphicType: "Diamond",
-    hairColor: "Red",
-    mouthType: "Concerned",
-    skinColor: "Tanned",
-    topType: "Turban",
-  });
+  const state = useAppSelector((applicationState) => ({
+    participant: applicationState.participants?.self,
+  }));
 
-  const updateAvatar = <PropertyKey extends keyof AvatarProps>(property: PropertyKey, value: AvatarProps[PropertyKey]) => {
-    if (properties[property] !== value) setProperties({...properties, [property]: value});
+  let initialState = state.participant?.user.avatar;
+  if (typeof initialState === "undefined") {
+    const {className, ...props} = generateRandomProps(id ?? "");
+    initialState = JSON.stringify(props);
+  }
+  const [properties, setProperties] = useState<string>(initialState);
+
+  const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
+    const avatarProps = JSON.parse(properties);
+    avatarProps[key] = value;
+    const avatarString = JSON.stringify(avatarProps);
+    if (properties !== avatarString) setProperties(avatarString);
   };
 
   return (
     <>
-      <Avatar className="profile-settings__avatar-icon" seed={id ?? ""} />
+      <Avatar {...JSON.parse(properties)} className="profile-settings__avatar-icon" />
       <div className="profile-settings__avatar-selection">
         <SettingsAccordion label="Hair">
           <SettingsCarousel carouselItems={AVATAR_HAIR_COLORS} onValueChange={(value) => updateAvatar("hairColor", value as AvatarHairColor)} />
