@@ -30,8 +30,8 @@ export const ProfileSettings = () => {
             className="profile-settings__user-name-button_input"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
-            onKeyPress={(e) => e.key === "Enter" && state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
-            onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
+            onKeyPress={(e) => e.key === "Enter" && state.participant && userName && store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
+            onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
           />
         </SettingsButton>
 
