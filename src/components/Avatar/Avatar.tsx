@@ -30,11 +30,7 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvatarBasics {
-  className?: string;
-}
-
-export interface AvatarSeed extends AvatarBasics {
+export interface AvatarSeed {
   seed: string;
   skinColor?: never;
   topType?: never;
@@ -50,7 +46,7 @@ export interface AvatarSeed extends AvatarBasics {
   mouthType?: never;
 }
 
-export interface AvataaarProps extends AvatarBasics {
+export interface AvataaarProps {
   seed?: never;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
@@ -66,7 +62,9 @@ export interface AvataaarProps extends AvatarBasics {
   mouthType: AvatarMouthType;
 }
 
-export type AvatarProps = AvataaarProps | AvatarSeed;
+export type AvatarProps = (AvataaarProps | AvatarSeed) & {
+  className?: string;
+};
 
 /**
  * Generates a fixed hash number for any given string.
