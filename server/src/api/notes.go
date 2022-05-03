@@ -28,8 +28,11 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, err)
 		return
 	}
-
-	w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/notes/%s", common.GetProtocol(r), r.URL.Host, s.basePath, board, note.ID))
+	if s.basePath == "/" {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/notes/%s", common.GetProtocol(r), r.Host, board, note.ID))
+	} else {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/boards/%s/notes/%s", common.GetProtocol(r), r.Host, s.basePath, board, note.ID))
+	}
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, note)
 }

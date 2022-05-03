@@ -32,6 +32,7 @@ type Auth interface {
 type AuthProviderConfiguration struct {
 	ClientId     string
 	ClientSecret string
+	RedirectUri  string
 }
 
 type AuthConfiguration struct {
@@ -41,62 +42,61 @@ type AuthConfiguration struct {
 	auth       *jwtauth.JWTAuth
 }
 
-func NewAuthConfiguration(basePath string, providers map[string]AuthProviderConfiguration, privateKey string) Auth {
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, privateKey string) Auth {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.privateKey = privateKey
-	a.initializeProviders(basePath)
+	a.initializeProviders()
 	a.initializeJWTAuth()
 
 	return a
 }
 
-func (a *AuthConfiguration) initializeProviders(basePath string) {
-	if basePath != "" {
-		providers := []goth.Provider{}
-		if provider, ok := a.providers[(string)(types.AccountTypeGoogle)]; ok {
-			p := google.New(
-				provider.ClientId,
-				provider.ClientSecret,
-				fmt.Sprintf("%s/login/google/callback", basePath),
-				"openid",
-				"profile",
-			)
-			p.SetName(strings.ToLower((string)(types.AccountTypeGoogle)))
-			providers = append(providers, p)
-		}
-		if provider, ok := a.providers[(string)(types.AccountTypeGitHub)]; ok {
-			p := github.New(
-				provider.ClientId,
-				provider.ClientSecret,
-				fmt.Sprintf("%s/login/github/callback", basePath), "user",
-			)
-			p.SetName(strings.ToLower((string)(types.AccountTypeGitHub)))
-			providers = append(providers, p)
-		}
-		if provider, ok := a.providers[(string)(types.AccountTypeMicrosoft)]; ok {
-			p := microsoftonline.New(
-				provider.ClientId,
-				provider.ClientSecret,
-				fmt.Sprintf("%s/login/microsoft/callback", basePath),
-				"User.Read",
-			)
-			p.SetName(strings.ToLower((string)(types.AccountTypeMicrosoft)))
-			providers = append(providers, p)
-		}
-
-		if provider, ok := a.providers[(string)(types.AccountTypeApple)]; ok {
-			providers = append(providers, apple.New(
-				provider.ClientId,
-				provider.ClientSecret,
-				fmt.Sprintf("%s/login/apple/callback", basePath),
-				nil,
-				apple.ScopeName,
-				apple.ScopeEmail,
-			))
-		}
-		goth.UseProviders(providers...)
+func (a *AuthConfiguration) initializeProviders() {
+	providers := []goth.Provider{}
+	if provider, ok := a.providers[(string)(types.AccountTypeGoogle)]; ok {
+		p := google.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			"openid",
+			"profile",
+		)
+		p.SetName(strings.ToLower((string)(types.AccountTypeGoogle)))
+		providers = append(providers, p)
 	}
+	if provider, ok := a.providers[(string)(types.AccountTypeGitHub)]; ok {
+		p := github.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			"user",
+		)
+		p.SetName(strings.ToLower((string)(types.AccountTypeGitHub)))
+		providers = append(providers, p)
+	}
+	if provider, ok := a.providers[(string)(types.AccountTypeMicrosoft)]; ok {
+		p := microsoftonline.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			"User.Read",
+		)
+		p.SetName(strings.ToLower((string)(types.AccountTypeMicrosoft)))
+		providers = append(providers, p)
+	}
+
+	if provider, ok := a.providers[(string)(types.AccountTypeApple)]; ok {
+		providers = append(providers, apple.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			nil,
+			apple.ScopeName,
+			apple.ScopeEmail,
+		))
+	}
+	goth.UseProviders(providers...)
 	gothic.GetProviderName = func(r *http.Request) (string, error) {
 		return chi.URLParam(r, "provider"), nil
 	}
