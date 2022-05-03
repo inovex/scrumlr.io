@@ -102,8 +102,11 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		w.Header().Set("Location", stateSplit[1])
 		w.WriteHeader(http.StatusSeeOther)
 	}
-
-	w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.URL.Host, s.basePath))
+	if s.basePath == "/" {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
+	} else {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
+	}
 	w.WriteHeader(http.StatusSeeOther)
 }
 
