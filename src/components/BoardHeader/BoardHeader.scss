@@ -1,6 +1,5 @@
 @import "constants/style";
 
-$board-header__settings-icon-size: 36px;
 $board-header__hover-padding-top-bottom: 5px;
 $board-header__hover-padding-side: 20px;
 $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-header__hover-padding-side;
@@ -135,10 +134,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   .board-header__name {
     color: $color-white;
   }
-
-  .board-header__settings-icon {
-    color: #313949;
-  }
 }
 
 .board-header__access-policy-status-icon {
@@ -155,33 +150,10 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   color: $color-middle-gray;
 }
 
-.board-header__settings-icon {
-  display: none;
-
-  width: $board-header__settings-icon-size;
-  height: $board-header__settings-icon-size;
-
-  position: absolute;
-  right: -8px;
-  bottom: 4px;
-
-  vertical-align: bottom;
-  color: #7585a4;
-}
-
 @media #{$tablet} {
   .board-header {
     left: 60px;
     right: 60px;
-  }
-
-  .board-header__name {
-    // horizontally center board name and push settings icon to the right
-    padding: 0 $board-header__settings-icon-size;
-  }
-
-  .board-header__settings-icon {
-    display: inline;
   }
 
   .board-header__name-container {
