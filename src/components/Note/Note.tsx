@@ -36,7 +36,7 @@ export const Note = (props: NoteProps) => {
         .filter((n) => n.position.stack === note?.id)
         .map((n) => ({
           ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.id)?.user.name ?? state.participants?.self.user.name ?? "",
+          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? state.participants?.self.user.name ?? "",
         })),
     _.isEqual
   );
