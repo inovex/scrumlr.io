@@ -166,7 +166,7 @@
 
 .column__header-edit-button {
   height: 24px;
-  margin: auto 0;
+  margin: auto calc(#{$margin--default} - 2px) auto 0; // Align with note-input__icon
   background-color: transparent;
   border: none;
   cursor: pointer;
