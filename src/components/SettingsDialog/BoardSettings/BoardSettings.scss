@@ -70,7 +70,9 @@
 }
 
 [theme="dark"] {
-  .board-settings__board-name-button_input,
+  .board-settings__board-name-button_input {
+    color: $color-white;
+  }
   .board-settings__board-name-button_input::placeholder {
     color: $color-placeholder-dark;
   }
