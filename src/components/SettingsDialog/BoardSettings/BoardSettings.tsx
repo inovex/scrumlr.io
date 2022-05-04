@@ -14,6 +14,7 @@ import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsToggle} from "../Components/SettingsToggle";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
+import {DEFAULT_BOARD_NAME} from "../../../constants/misc";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -61,10 +62,18 @@ export const BoardSettings = () => {
               ref={boardInputRef}
               className="board-settings__board-name-button_input"
               value={boardName}
-              placeholder="scrumlr.io"
+              placeholder={DEFAULT_BOARD_NAME}
               onChange={(e) => setBoardName(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
-              onBlur={() => boardName && store.dispatch(Actions.editBoard({name: boardName}))}
+              onBlur={(e) => {
+                e.target.placeholder = DEFAULT_BOARD_NAME;
+                if (boardName) {
+                  store.dispatch(Actions.editBoard({name: boardName}));
+                }
+              }}
+              onFocus={(e) => {
+                e.target.placeholder = "";
+              }}
               disabled={!state.currentUserIsModerator}
             />
           </SettingsButton>
