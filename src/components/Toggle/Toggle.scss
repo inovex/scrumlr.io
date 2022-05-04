@@ -27,7 +27,7 @@
   top: 0;
 
   left: 0;
-  background-color: #a3a6aa;
+  background-color: $color-middle-gray;
 }
 
 .toggle--active::after {
@@ -38,12 +38,11 @@
 
 [theme="dark"] {
   .toggle--active::after {
-    background-color: #ff0069;
     box-shadow: 0 4px 8px #ff006929;
   }
 }
 
 .toggle.toggle--disabled::after {
-  background-color: #a3a6aa;
+  background-color: $color-middle-gray;
   box-shadow: none;
 }

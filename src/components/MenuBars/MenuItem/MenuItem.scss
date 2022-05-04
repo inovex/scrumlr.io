@@ -7,7 +7,7 @@ $number-of-menu-items: 4;
   cursor: not-allowed;
 }
 .menu-item:disabled .menu-item__icon {
-  color: #a3a6aa;
+  color: $color-dark-gray;
   background: transparent;
 }
 

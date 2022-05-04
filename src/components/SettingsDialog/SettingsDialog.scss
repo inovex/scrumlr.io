@@ -197,7 +197,7 @@ $settings-dialog-container--bottom: 62px;
 }
 .navigation__item:hover {
   background: rgba(var(--accent-color-rgb), 0.8);
-  color: white;
+  color: $color-white;
 }
 .navigation__item--active {
   outline: none;
@@ -212,7 +212,7 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   border-radius: 20px;
   background: var(--accent-color);
-  color: white;
+  color: $color-white;
 }
 .navigation-item__user-name {
   white-space: nowrap;
@@ -254,14 +254,14 @@ $settings-dialog-container--bottom: 62px;
   margin-left: 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid #eee;
+  border-top: 0.5px solid $color-light-gray;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 [theme="dark"] {

@@ -73,7 +73,7 @@
   }
   .participant:focus,
   .participant:hover {
-    background-color: #3d4555;
+    background-color: $color-dark-one;
   }
   .participant:not(:last-child)::after {
     background-color: rgba(125, 125, 125, 0.1);

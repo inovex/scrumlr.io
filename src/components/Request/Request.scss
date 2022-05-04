@@ -145,7 +145,7 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #111111;
+  color: $color-black;
   font-size: 13px;
   letter-spacing: 0.15px;
   margin: 0 12px;
@@ -190,7 +190,7 @@
   text-align: center;
   line-height: 37px;
   font-size: 16px;
-  color: #111111;
+  color: $color-black;
 }
 [theme="dark"] {
   .join-request__preview-rest {
@@ -204,8 +204,6 @@
   list-style-type: none;
   margin: 0;
   padding: 10px 0;
-  border-top: 1px solid #d4d9dd;
-  border-bottom: 1px solid #d4d9dd;
   max-height: 130px;
   overflow-y: auto;
 }

@@ -20,7 +20,7 @@ $header-left_distance: 24px;
 }
 
 .participants__header {
-  color: white;
+  color: $color-white;
   height: 86px;
   position: relative;
   background-color: $color-backlog-blue;
@@ -63,13 +63,13 @@ $header-left_distance: 24px;
 
   &::placeholder {
     opacity: 1;
-    color: white;
+    color: $color-white;
   }
 }
 
 .participants__header > input:focus {
   outline: none;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid $color-white;
 }
 
 .header__icon {
@@ -101,7 +101,7 @@ $header-left_distance: 24px;
 
 .list__header > label {
   letter-spacing: 0.18px;
-  color: #a3a6aa;
+  color: $color-darkest-gray;
   opacity: 0.8;
   font-size: 12px;
   position: absolute;
@@ -130,5 +130,8 @@ $header-left_distance: 24px;
   }
   .list__header {
     background: $color-dark-mode-note;
+    > label {
+      color: $color-middle-gray;
+    }
   }
 }

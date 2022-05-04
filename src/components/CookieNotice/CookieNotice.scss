@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 .cookie-notice {
-  background: $color-light-gray;
+  background: $color-white;
   color: $color-black;
   position: fixed;
   bottom: 0;
@@ -27,14 +27,14 @@
   }
   &-decline {
     @extend .cookie-notice__button;
-    background: #dadada;
-    color: #4d4d4d;
+    background: $color-light-gray;
+    color: $color-darkest-gray;
     margin: 0 0 $margin--default $margin--default;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
-    background: #dadada;
-    color: #4d4d4d;
+    background: $color-light-gray;
+    color: $color-darkest-gray;
     margin: 0 auto $margin--default 0;
   }
 }
