@@ -203,7 +203,7 @@
 .request__requests {
   list-style-type: none;
   margin: 0;
-  padding: 10px 0;
+  padding: $padding--default 0 0 0;
   max-height: 130px;
   overflow-y: auto;
 }
@@ -241,7 +241,7 @@
 .request__footer {
   display: flex;
   justify-content: flex-end;
-  padding: 0 16px;
+  padding: 0 $padding--default;
 
   background-color: $color-white;
   height: 48px;

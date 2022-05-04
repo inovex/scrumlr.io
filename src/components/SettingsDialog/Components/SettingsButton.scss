@@ -38,7 +38,7 @@ $header-menu-border-bottom-color: #efefef;
   font-size: 14px;
   letter-spacing: 0.5px;
   cursor: pointer;
-  padding: 16px 24px;
+  padding: $padding--default $padding--medium;
   hyphens: auto;
   white-space: nowrap;
   width: 290px;

@@ -16,7 +16,7 @@
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
   margin-bottom: $note__text-margin-bottom;
-  padding: 5px;
+  padding: $padding--small;
   border: 1px dashed transparent;
   border-radius: 5px;
   transition: border-color 0.5s ease-in-out;

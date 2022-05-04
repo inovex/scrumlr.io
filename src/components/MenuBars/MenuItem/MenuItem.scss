@@ -181,7 +181,7 @@ $number-of-menu-items: 4;
 
   .tooltip__text {
     width: 100%;
-    padding: 0 16px;
+    padding: 0 $padding--default;
     white-space: nowrap;
   }
 }
@@ -239,7 +239,7 @@ $number-of-menu-items: 4;
   .tooltip__text {
     color: $color-white;
     transition: all 0.5s ease-out;
-    padding: 16px;
+    padding: $padding--default;
   }
   .menu-item--right .tooltip__text {
     padding-left: 30px;

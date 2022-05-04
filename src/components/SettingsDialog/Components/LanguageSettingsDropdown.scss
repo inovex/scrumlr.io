@@ -17,7 +17,7 @@
   font-weight: bold;
   border: none;
   cursor: inherit;
-  padding: 16px 12px 16px 10px;
+  padding: $padding--default $padding--default $padding--default $padding--small;
 }
 
 [theme="dark"] {
@@ -41,7 +41,7 @@
   align-items: center;
   width: 100%;
   color: $color-black;
-  padding: 16px 10px 16px 16px;
+  padding: $padding--default $padding--medium $padding--default $padding--default;
   font-size: 14px;
   font-weight: bold;
   background-color: $color-white;
