@@ -51,7 +51,12 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           ref={(input) => {
             if (!input?.disabled) input?.focus();
           }}
-          onFocus={(e) => e.target.select()}
+          onFocus={(e) => {
+            e.target.placeholder = "";
+          }}
+          onBlur={(e) => {
+            e.target.placeholder = boardName || DEFAULT_BOARD_NAME;
+          }}
         />
 
         {props.currentUserIsModerator && (
