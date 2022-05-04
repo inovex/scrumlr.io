@@ -66,9 +66,7 @@ export const BoardSettings = () => {
               onChange={(e) => setBoardName(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
               onBlur={(e) => {
-                if (!boardName) {
-                  e.target.placeholder = DEFAULT_BOARD_NAME;
-                }
+                e.target.placeholder = boardName || DEFAULT_BOARD_NAME;
                 store.dispatch(Actions.editBoard({name: boardName}));
               }}
               onFocus={(e) => {
