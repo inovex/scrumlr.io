@@ -53,9 +53,12 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           }}
           onFocus={(e) => {
             e.target.placeholder = "";
+            if (boardName !== "") {
+              e.target.select();
+            }
           }}
           onBlur={(e) => {
-            e.target.placeholder = boardName || DEFAULT_BOARD_NAME;
+            e.target.placeholder = DEFAULT_BOARD_NAME;
           }}
         />
 
