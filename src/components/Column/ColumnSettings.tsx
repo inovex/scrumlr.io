@@ -1,4 +1,4 @@
-import {VFC} from "react";
+import {useEffect, useRef, VFC} from "react";
 import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
@@ -25,8 +25,20 @@ type ColumnSettingsProps = {
 export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, color, visible, index, onClose, onNameEdit}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const columnSettingsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (!columnSettingsRef.current?.contains(event.target)) {
+        onClose?.();
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  });
+
   return (
-    <div className="column__header-menu-dropdown">
+    <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
       <ul>
         <li>
           <button
