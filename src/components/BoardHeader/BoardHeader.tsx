@@ -12,6 +12,7 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
+import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
@@ -67,7 +68,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               <span>{state.accessPolicy}</span>
             </div>
             <div className="board-header__name-container">
-              <h1 className="board-header__name">{state.name || "scrumlr.io"}</h1>
+              <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
             </div>
           </button>
         </div>
