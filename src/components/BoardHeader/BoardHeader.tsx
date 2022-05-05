@@ -1,6 +1,5 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -70,7 +69,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             </div>
             <div className="board-header__name-container">
               <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
-              <SettingsIcon className="board-header__settings-icon" />
             </div>
           </button>
         </div>
