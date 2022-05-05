@@ -4,6 +4,7 @@ import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
+import {DEFAULT_BOARD_NAME} from "../../../../constants/misc";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
@@ -44,13 +45,21 @@ export const BoardSettings = (props: BoardSettingsProps) => {
         <input
           className="board-settings__board-name"
           value={boardName}
-          placeholder="scrumlr.io"
+          placeholder={DEFAULT_BOARD_NAME}
           disabled={!props.activeEditMode}
           onChange={(e) => setBoardName(e.target.value)}
           ref={(input) => {
             if (!input?.disabled) input?.focus();
           }}
-          onFocus={(e) => e.target.select()}
+          onFocus={(e) => {
+            e.target.placeholder = "";
+            if (boardName !== "") {
+              e.target.select();
+            }
+          }}
+          onBlur={(e) => {
+            e.target.placeholder = DEFAULT_BOARD_NAME;
+          }}
         />
 
         {props.currentUserIsModerator && (
