@@ -4,9 +4,10 @@ $note-input__input-left: 20px;
 $note-input__input-right: 40px;
 
 .note-input {
+  display: flex;
+  justify-content: space-between;
   height: 40px;
   width: 100%;
-  position: relative;
   margin-bottom: 16px;
   background-color: #edeff2;
   border-radius: 20px;
@@ -14,7 +15,6 @@ $note-input__input-right: 40px;
 }
 
 .note-input__input {
-  position: absolute;
   left: $note-input__input-left;
   right: $note-input__input-right;
   color: black;
@@ -26,7 +26,7 @@ $note-input__input-right: 40px;
   font-family: Raleway, sans-serif;
   background-color: transparent;
   border: none;
-  margin: 0;
+  margin-left: $margin--default;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
 }
 
@@ -52,9 +52,7 @@ $note-input__input-right: 40px;
 }
 
 .note-input__icon {
-  position: absolute;
-  top: 10px;
-  right: 18px;
+  margin-right: $margin--default;
   width: 20px;
   height: 20px;
   color: var(--accent-color);
