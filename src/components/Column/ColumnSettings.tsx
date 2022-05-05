@@ -35,7 +35,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  });
+  }, [columnSettingsRef]);
 
   return (
     <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
