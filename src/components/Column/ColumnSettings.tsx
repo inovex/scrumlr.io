@@ -28,14 +28,14 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
   const columnSettingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (!columnSettingsRef.current?.contains(event.target)) {
+    const handleClickOutside = ({target}: MouseEvent) => {
+      if (!columnSettingsRef.current?.contains(target as Node)) {
         onClose?.();
       }
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, [columnSettingsRef]);
+  }, [columnSettingsRef, onClose]);
 
   return (
     <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
