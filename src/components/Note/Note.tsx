@@ -139,6 +139,7 @@ export const Note = (props: NoteProps) => {
             childrenNotes={childrenNotes}
             onClose={handleShowDialog}
             onDeleteOfParent={() => setShowDialog(false)}
+            moderating={props.moderating}
           />
         )}
       </div>
