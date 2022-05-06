@@ -192,7 +192,7 @@
     "authenticationError": "Ein Fehler trat beim Einloggen auf",
     "votingStarted": "Du hast eine Abstimmung gestartet!",
     "votingFinished": "Du hast die Abstimmung beendet!",
-    "focusModeStart": "Du hast die Moderation gestartet!",
+    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert.",
     "focusModeFinished": "Du hast die Moderation beendet!",
     "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
     "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weitere Stimmen werden gezählt!",
