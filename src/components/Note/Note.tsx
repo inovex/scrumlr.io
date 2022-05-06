@@ -18,6 +18,7 @@ interface NoteProps {
   columnId: string;
   columnName: string;
   columnColor: string;
+  columnVisible: boolean;
   showAuthors: boolean;
   moderating: boolean;
   viewer: Participant;
@@ -140,6 +141,7 @@ export const Note = (props: NoteProps) => {
             onClose={handleShowDialog}
             onDeleteOfParent={() => setShowDialog(false)}
             moderating={props.moderating}
+            columnVisible={props.columnVisible}
           />
         )}
       </div>
