@@ -5566,10 +5566,10 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^21.6.16:
-  version "21.6.16"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.6.16.tgz#8cff8c3ba2ffaf8438a8c83fe284083f15cf3941"
-  integrity sha512-xJlzrVxG9CyAGsbMP1aKuiNr1Ed2m36KiTB7hjGMG2Zo4idfw3p9THUEu+GjBwIgEZ7F11ZbCzJcfv4uyfKNuw==
+i18next@^21.7.1:
+  version "21.7.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-21.7.1.tgz#3b63390fa7c2eb22440f80ef8c7f4d7e4f8187e8"
+  integrity sha512-uNt0BM+HV7wgWrrTE+Z4qinQFTONB21hK3I5V/LayhquPv78WchnO4hjF2PWY/OZocahHBDbzbe0/o1rp/RcWQ==
   dependencies:
     "@babel/runtime" "^7.17.2"
 
@@ -8223,10 +8223,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-i18next@^11.16.7:
-  version "11.16.7"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.16.7.tgz#8d0680b7f4c8e43f59996336b7183ad576a28df7"
-  integrity sha512-7yotILJLnKfvUfrl/nt9eK9vFpVFjZPLWAwBzWL6XppSZZEvlmlKk0GBGDCAPfLfs8oND7WAbry8wGzdoiW5Nw==
+react-i18next@^11.16.8:
+  version "11.16.8"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-11.16.8.tgz#e71621c16f8f77152e85795a88ba6a371e46687d"
+  integrity sha512-uuhSuwY0iMOPV9HUsN1OC4cGCrATPvzZ1O8UfvLR+imz/XjPmfDgZM1e4dPS0Suc2+aCQqJ0FmWP891lUkB2Cg==
   dependencies:
     "@babel/runtime" "^7.14.5"
     html-escaper "^2.0.2"

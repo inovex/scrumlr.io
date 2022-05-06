@@ -51,6 +51,7 @@
     "react/button-has-type": "off",
     "react/function-component-definition": ["warn", { "namedComponents": "arrow-function", "unnamedComponents": "arrow-function" }],
     "react/jsx-no-bind": "off",
+    "react/require-default-props": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-noninteractive-element-interactions": "off",
