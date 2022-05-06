@@ -24,7 +24,7 @@
 }
 
 .dialog__content {
-  margin: 40px 0;
+  padding: $margin--large;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
   border: none;
   border-radius: 8px;
   height: 48px;
-  width: 80%;
+  width: 100%;
   background: $color-white;
   cursor: pointer;
 }

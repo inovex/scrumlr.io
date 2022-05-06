@@ -38,7 +38,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
 }
 
 .board-header__name-and-settings {
-  margin: 18px auto 0;
+  margin: $margin--default auto 0;
 }
 
 .board-header__users {
@@ -143,7 +143,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   width: 20px;
   height: 20px;
   align-self: center;
-  margin-right: 4px;
+  margin-right: $margin--small;
 }
 
 .board-header__access-policy-status-icon * {

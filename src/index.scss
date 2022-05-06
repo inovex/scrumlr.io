@@ -44,7 +44,7 @@ code {
 }
 
 .toast-container__container .toast-container__toast + .toast-container__toast {
-  margin-top: 8px;
+  margin-top: $margin--small;
 }
 
 [theme="dark"] {

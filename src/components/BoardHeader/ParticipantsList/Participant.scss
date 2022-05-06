@@ -34,7 +34,7 @@
 }
 
 .participant .participant__user-avatar-wrapper {
-  margin: 0 12px 0 12px;
+  margin: 0 $margin--default 0 $margin--default;
   height: 28px;
   width: 28px;
 }
@@ -58,7 +58,7 @@
 .participant .participant__permission-toggle {
   position: relative;
   flex: 0 0 40px;
-  margin-right: 16px;
+  margin-right: $margin--default;
   outline: none;
 }
 

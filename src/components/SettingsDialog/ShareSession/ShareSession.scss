@@ -7,7 +7,6 @@ $header-menu-button-height: 40px;
 .share-qr-code-option__qrcode {
   top: 13px;
   left: 13px;
-  margin-top: 24px;
   background-color: $color-white;
 }
 
@@ -18,7 +17,7 @@ $header-menu-button-height: 40px;
 
 .share-qr-code-option__copy-to-clipboard {
   height: $header-menu-button-height;
-  margin-top: 48px;
+  margin-top: $margin--large;
   width: 260px;
   border: none;
   border-radius: 32px;
@@ -43,5 +42,6 @@ $header-menu-button-height: 40px;
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: space-between;
   border-radius: 8px;
 }

@@ -48,7 +48,7 @@
 }
 
 .request__button + .request__button {
-  margin-left: 10px;
+  margin-left: $margin--small;
 }
 
 [theme="dark"] {
@@ -101,7 +101,7 @@
 .join-request__unique-request-container {
   display: flex;
   align-items: center;
-  margin: 0 0 0 16px;
+  margin: 0 0 0 $margin--default;
 }
 
 .join-request__unique-request-container + .join-request__unique-request-container {
@@ -118,7 +118,7 @@
 }
 
 .join-request__request-name {
-  margin-left: 12px;
+  margin-left: $margin--default;
   color: $color-black;
   font-size: 13px;
   letter-spacing: 0.15px;
@@ -148,7 +148,7 @@
   color: $color-black;
   font-size: 13px;
   letter-spacing: 0.15px;
-  margin: 0 12px;
+  margin: 0 $margin--default;
 }
 [theme="dark"] {
   .join-request__preview-names {
@@ -170,7 +170,7 @@
 }
 .join-request__preview-image:first-child {
   z-index: 7;
-  margin-left: 14px;
+  margin-left: $margin--default;
 }
 .join-request__preview-image:nth-child(2) {
   z-index: 6;
@@ -184,7 +184,7 @@
   outline: 2px solid $color-white;
   border: 1px solid $color-black;
   border-radius: 100%;
-  margin-top: 12px;
+  margin-top: $margin--default;
   position: relative;
   margin-left: -8px;
   text-align: center;
@@ -203,7 +203,7 @@
 .request__requests {
   list-style-type: none;
   margin: 0;
-  padding: $padding--default 0 0 0;
+  padding: $padding--default 0;
   max-height: 130px;
   overflow-y: auto;
 }
@@ -220,12 +220,12 @@
   letter-spacing: 0.15px;
   line-height: 18px;
   width: 144px;
-  margin-right: 16px;
+  margin-right: $margin--default;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  margin-left: 8px;
+  margin-left: $margin--small;
 }
 @media screen and (max-width: 375px) {
   .join-request__request-display-name {

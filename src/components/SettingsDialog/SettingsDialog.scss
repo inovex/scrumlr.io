@@ -93,7 +93,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__scrumlr-logo {
   height: 40px;
-  margin: 40px;
+  margin: $margin--large;
 }
 [theme="light"] .settings-dialog__scrumlr-logo--dark {
   display: none;
@@ -168,7 +168,7 @@ $settings-dialog-container--bottom: 62px;
 .navigation__item {
   height: 56px;
   width: 252px;
-  margin: 0 32px;
+  margin: 0 $margin--large;
   border-radius: 28px;
   text-align: center;
   text-decoration: none;
@@ -234,12 +234,12 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__header {
   display: flex;
   justify-content: center;
-  margin: 30px 0;
+  margin: $margin--large 0;
 }
 
 @media screen and (min-width: 920px) {
   .settings-dialog__header {
-    margin: 40px 0;
+    margin: $margin--large 0;
   }
 }
 

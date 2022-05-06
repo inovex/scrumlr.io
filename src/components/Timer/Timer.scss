@@ -32,7 +32,7 @@
   text-align: center;
 }
 .timer > span:not(:only-child) {
-  margin-right: 10px;
+  margin-right: $margin--small;
 }
 .timer > button {
   border: none;

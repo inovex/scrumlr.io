@@ -1,7 +1,6 @@
 @import "src/constants/style.scss";
 
 $note__border-radius: 16px;
-$note__text-margin-bottom: 9px;
 $note__box-shadow-color: rgba(0, 87, 255, 0.16);
 $note__box-shadow-color-dark-mode: rgba(0, 0, 0, 0.2);
 
@@ -10,7 +9,6 @@ $note__indicator-width: 3px;
 
 $note__author-name-size: 12px;
 $note__author-image-size: 26px;
-$note__author-margin-left: 10px;
 
 .note__root {
   list-style-type: none;
@@ -92,7 +90,8 @@ $note__author-margin-left: 10px;
 
 .note__text {
   margin: 0;
-  margin-right: 5px;
+  margin-right: $margin--small;
+  margin-bottom: $margin--small;
   min-height: 3 * $line-height--medium;
   width: calc(100% - 20px);
   color: $color-black;
@@ -104,7 +103,6 @@ $note__author-margin-left: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  margin-bottom: $note__text-margin-bottom;
   word-break: keep-all;
 }
 [theme="dark"] {
@@ -162,7 +160,7 @@ $note__author-margin-left: 10px;
 }
 
 .note__author-name {
-  margin-left: $note__author-margin-left;
+  margin-left: $margin--default;
   color: $color-dark-gray;
   font-size: $note__author-name-size;
   letter-spacing: $letter-spacing--small;

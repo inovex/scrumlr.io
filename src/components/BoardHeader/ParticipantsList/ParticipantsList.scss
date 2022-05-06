@@ -97,6 +97,9 @@ $header-left_distance: 24px;
 .list__header {
   height: 32px;
   position: relative;
+  display: flex;
+  padding: $margin--default;
+  justify-content: space-between;
 }
 
 .list__header > label {
@@ -104,17 +107,6 @@ $header-left_distance: 24px;
   color: $color-darkest-gray;
   opacity: 0.8;
   font-size: 12px;
-  position: absolute;
-  top: 16px;
-}
-
-.list__header > label:nth-child(1) {
-  text-align: left;
-  left: 12px;
-}
-.list__header > label:nth-child(2) {
-  text-align: right;
-  left: 244px;
 }
 
 [theme="dark"] {
