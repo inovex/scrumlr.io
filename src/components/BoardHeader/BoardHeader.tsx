@@ -1,6 +1,5 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -13,6 +12,7 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
+import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
@@ -68,8 +68,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               <span>{state.accessPolicy}</span>
             </div>
             <div className="board-header__name-container">
-              <h1 className="board-header__name">{state.name || "scrumlr.io"}</h1>
-              <SettingsIcon className="board-header__settings-icon" />
+              <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
             </div>
           </button>
         </div>

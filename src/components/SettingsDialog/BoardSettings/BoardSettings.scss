@@ -22,18 +22,18 @@
   flex-direction: column;
   gap: 32px;
   width: 100%;
-  max-width: calc(100vw - (2 * $settings-dialog-container--sides-small));
+  max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
 }
 
 @media screen and (min-width: 450px) {
   .board-settings__container {
-    max-width: calc(380px - (2 * $settings-dialog-container--sides-small));
+    max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
   }
 }
 
 @media screen and (min-width: 920px) {
   .board-settings__container {
-    max-width: calc(544px - (2 * $settings-dialog-container--sides-large));
+    max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
   }
 }
 
@@ -56,6 +56,7 @@
   text-align: right;
   max-width: 150px;
   cursor: inherit;
+  text-overflow: ellipsis;
 }
 
 .board-settings__board-name-button_input:focus {
@@ -66,13 +67,15 @@
   font-weight: bold;
   letter-spacing: 0.5px;
   font-size: 14px;
-  color: $color-black;
+  color: $color-placeholder;
 }
 
 [theme="dark"] {
-  .board-settings__board-name-button_input,
-  .board-settings__board-name-button_input::placeholder {
+  .board-settings__board-name-button_input {
     color: $color-white;
+  }
+  .board-settings__board-name-button_input::placeholder {
+    color: $color-placeholder-dark;
   }
 }
 
@@ -114,7 +117,7 @@
 
 [theme="dark"] {
   .board-settings__policy-button_value span {
-    color: $color-white;
+    color: $color-placeholder-dark;
   }
 }
 
@@ -172,7 +175,7 @@
 .board-settings__set-policy-button {
   display: flex;
   align-items: center;
-  padding: 0px 24px;
+  padding: 0 24px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
@@ -196,7 +199,7 @@
 .board-settings__generate-password-button {
   display: flex;
   align-items: center;
-  padding: 0px 24px;
+  padding: 0 24px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
