@@ -123,7 +123,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   );
 
   return (
-    <section className={`column ${isModerator && state.moderating && "column__moderation-isActive"} ${getColorClassName(color)}`} ref={columnRef}>
+    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
           <div className="column__header-title">
