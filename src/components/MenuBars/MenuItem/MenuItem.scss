@@ -80,7 +80,6 @@ $number-of-menu-items: 4;
     background: $color-grooming-green;
   }
 }
-.menu-item:enabled:focus,
 .menu-item--touch-hover,
 .menu-item:enabled:hover {
   .menu-item__icon {
@@ -105,13 +104,11 @@ $number-of-menu-items: 4;
 
 .menu-item--active.menu-item--touch-hover > .menu-item__icon--end,
 .menu-item--active:enabled:hover > .menu-item__icon--end,
-.menu-item--active:enabled:focus > .menu-item__icon--end,
 .menu-item--active:enabled:active > .menu-item__icon--end {
   visibility: visible;
 }
 
 .menu-item--active.menu-item--touch-hover > .menu-item__icon--start,
-.menu-item--active:enabled:focus > .menu-item__icon--start,
 .menu-item--active:enabled:hover > .menu-item__icon--start,
 .menu-item--active:enabled:active > .menu-item__icon--start {
   visibility: hidden;
