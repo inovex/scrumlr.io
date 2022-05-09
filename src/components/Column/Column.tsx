@@ -156,6 +156,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
                 columnId={id}
                 columnName={name}
                 columnColor={color}
+                columnVisible={visible}
                 tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
                 moderating={state.moderating}
                 viewer={state.viewer}
