@@ -47,6 +47,43 @@ export const BoardSettings = () => {
     }
   };
 
+  const getPasswordManagementButton = () => {
+    if (isProtected) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
+          onClick={() => {
+            setPassword("");
+            handleSetPassword("");
+          }}
+        >
+          <SetPolicyIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
+        </button>
+      );
+    }
+    if (!password) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__generate-password-button"
+          onClick={() => {
+            const pw = generateRandomString();
+            setPassword(pw);
+            handleSetPassword(pw);
+          }}
+        >
+          <RefreshIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
+        </button>
+      );
+    }
+    return (
+      <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
+        {t("BoardSettings.SecurePasswordHint")}
+      </span>
+    );
+  };
+
   return (
     <div className={classNames("settings-dialog__container", "accent-color__backlog-blue")}>
       <header className="settings-dialog__header">
@@ -135,35 +172,7 @@ export const BoardSettings = () => {
               )}
             </div>
 
-            {state.currentUserIsModerator &&
-              (!isProtected && !password ? (
-                <button
-                  className="board-settings__password-management-button board-settings__generate-password-button"
-                  onClick={() => {
-                    const pw = generateRandomString();
-                    setPassword(pw);
-                    handleSetPassword(pw);
-                  }}
-                >
-                  <RefreshIcon />
-                  <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
-                </button>
-              ) : isProtected ? (
-                <button
-                  className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
-                  onClick={() => {
-                    setPassword("");
-                    handleSetPassword("");
-                  }}
-                >
-                  <SetPolicyIcon />
-                  <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
-                </button>
-              ) : (
-                <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
-                  {t("BoardSettings.SecurePasswordHint")}
-                </span>
-              ))}
+            {state.currentUserIsModerator && getPasswordManagementButton()}
           </div>
 
           {state.currentUserIsModerator && (
