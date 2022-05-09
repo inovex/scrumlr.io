@@ -30,24 +30,7 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvatarSeed {
-  seed: string;
-  skinColor?: never;
-  topType?: never;
-  clotheColor?: never;
-  graphicType?: never;
-  clotheType?: never;
-  hairColor?: never;
-  facialHairColor?: never;
-  facialHairType?: never;
-  accessoriesType?: never;
-  eyeType?: never;
-  eyebrowType?: never;
-  mouthType?: never;
-}
-
 export interface AvataaarProps {
-  seed?: never;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
   clotheColor: AvatarClotheColor;
@@ -62,7 +45,8 @@ export interface AvataaarProps {
   mouthType: AvatarMouthType;
 }
 
-export type AvatarProps = (AvataaarProps | AvatarSeed) & {
+export type AvatarProps = Partial<AvataaarProps> & {
+  seed: string;
   className?: string;
 };
 
@@ -97,7 +81,7 @@ export const generateRandomProps = (seed: string) => {
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
 
-  const props: AvatarProps = {
+  const props: Omit<AvatarProps, "seed"> = {
     className: getColorClassName(getColorForIndex(hash)),
     skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
     topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
