@@ -122,7 +122,7 @@
   color: $color-black;
   font-size: $text-size;
   letter-spacing: $letter-spacing--small;
-  line-height: 18px;
+  line-height: $line-height--medium;
 }
 [theme="dark"] {
   .join-request__request-name {
@@ -218,7 +218,7 @@
   color: $color-black;
   font-size: $text-size;
   letter-spacing: $letter-spacing--small;
-  line-height: 18px;
+  line-height: $line-height--medium;
   width: 144px;
   margin-right: $margin--default;
   text-overflow: ellipsis;

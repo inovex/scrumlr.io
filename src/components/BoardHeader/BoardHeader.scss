@@ -105,7 +105,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   font-size: $text-size;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
-  line-height: 16px;
+  line-height: $line-height--small;
   margin: auto;
   text-align: center;
 }

@@ -30,7 +30,7 @@ $header-menu-button-width: 24px;
   font-size: 18px;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
-  line-height: 18px;
+  line-height: $line-height--medium;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

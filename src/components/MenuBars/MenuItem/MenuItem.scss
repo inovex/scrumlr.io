@@ -57,7 +57,7 @@ $number-of-menu-items: 4;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: $letter-spacing--large;
-  line-height: 16px;
+  line-height: $line-height--small;
   color: $color-white;
 }
 
