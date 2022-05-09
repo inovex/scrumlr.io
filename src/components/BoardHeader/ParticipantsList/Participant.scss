@@ -47,7 +47,7 @@
 .participant__name {
   display: inline-block;
   font-size: 14px;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--small;
   font-weight: 300;
   overflow: hidden;
   text-overflow: ellipsis;

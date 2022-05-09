@@ -29,7 +29,7 @@ $header-menu-button-width: 24px;
   color: $color-white;
   font-size: 18px;
   font-weight: bold;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   line-height: 18px;
   overflow: hidden;
   text-overflow: ellipsis;

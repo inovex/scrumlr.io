@@ -38,14 +38,14 @@
 
 .appearance-settings_sync-button_label p:first-child {
   font-size: 14px;
-  letter-spacing: 0.5px;
-  padding-top: 16px;
+  letter-spacing: $letter-spacing--small;
+  padding-top: $padding--default;
   margin-bottom: $margin--small;
 }
 
 .appearance-settings_sync-button_label p:last-child {
   font-size: 10px;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   color: $color-middle-gray;
   padding-bottom: 16px;
 }

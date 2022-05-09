@@ -36,7 +36,7 @@
 .request__button {
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.23px;
+  letter-spacing: $letter-spacing--small;
   line-height: 24px;
   border: none;
   outline: none;
@@ -62,10 +62,10 @@
 
   font-size: 12px;
   line-height: 24px;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   font-weight: 600;
   position: relative;
-  padding-top: 9px;
+  padding-top: $padding--small;
   padding-left: 15px;
   color: $color-white;
   background-color: $color-backlog-blue;
@@ -121,7 +121,7 @@
   margin-left: $margin--default;
   color: $color-black;
   font-size: 13px;
-  letter-spacing: 0.15px;
+  letter-spacing: $letter-spacing--small;
   line-height: 18px;
 }
 [theme="dark"] {
@@ -147,7 +147,7 @@
   text-overflow: ellipsis;
   color: $color-black;
   font-size: 13px;
-  letter-spacing: 0.15px;
+  letter-spacing: $letter-spacing--small;
   margin: 0 $margin--default;
 }
 [theme="dark"] {
@@ -217,7 +217,7 @@
   height: 18px;
   color: $color-black;
   font-size: 13px;
-  letter-spacing: 0.15px;
+  letter-spacing: $letter-spacing--small;
   line-height: 18px;
   width: 144px;
   margin-right: $margin--default;

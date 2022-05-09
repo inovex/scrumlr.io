@@ -83,7 +83,7 @@
 .dialog__button > label:first-of-type {
   font-size: 14px;
   color: $color-black;
-  letter-spacing: 0.49px;
+  letter-spacing: $letter-spacing--medium;
   position: absolute;
   left: 24px;
   top: 16px;

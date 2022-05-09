@@ -51,7 +51,7 @@
   border: none;
   padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
   font-size: 14px;
   text-align: right;
   max-width: 150px;
@@ -65,7 +65,7 @@
 
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
   font-size: 14px;
   color: $color-placeholder;
 }
@@ -104,7 +104,7 @@
 .board-settings__policy-button_value span {
   padding: $padding--default $padding--medium $padding--default 4px;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
   font-size: 14px;
 }
 
@@ -156,7 +156,7 @@
   border: none;
   padding: $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
   font-size: 14px;
   text-align: right;
   max-width: 120px;
@@ -193,7 +193,7 @@
   padding-left: 4px;
   font-weight: bold;
   font-size: 13px;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
 }
 
 .board-settings__generate-password-button {
@@ -220,7 +220,7 @@
   padding-left: 4px;
   font-weight: bold;
   font-size: 13px;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
 }
 
 .board-settings__show-author-button {

@@ -32,7 +32,7 @@ $header-menu-border-bottom-color: #efefef;
   text-overflow: ellipsis;
   color: $color-black;
   font-size: 14px;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--medium;
   cursor: pointer;
   padding-right: 16px;
 }

@@ -104,7 +104,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   color: $color-middle-gray;
   font-size: 12px;
   font-weight: bold;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   line-height: 16px;
   margin: auto;
   text-align: center;
@@ -120,7 +120,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
   color: $color-black;
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--large;
   line-height: 40px;
   margin: 0;
 

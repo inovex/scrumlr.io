@@ -31,7 +31,7 @@ $header-left_distance: 24px;
   font-weight: bold;
   font-size: 18px;
   line-height: 18px;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   position: absolute;
   top: 24px;
   left: $header-left_distance;
@@ -42,7 +42,7 @@ $header-left_distance: 24px;
   font-weight: bold;
   font-size: 12px;
   line-height: 18px;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   position: absolute;
   top: -12px;
   right: -12px;
@@ -52,7 +52,7 @@ $header-left_distance: 24px;
   background-color: transparent;
   color: $color-white;
   font-size: 13px;
-  letter-spacing: 0.27px;
+  letter-spacing: $letter-spacing--small;
   border: none;
   border-bottom: 1px solid transparent;
   position: absolute;
@@ -103,7 +103,7 @@ $header-left_distance: 24px;
 }
 
 .list__header > label {
-  letter-spacing: 0.18px;
+  letter-spacing: $letter-spacing--small;
   color: $color-darkest-gray;
   opacity: 0.8;
   font-size: 12px;
