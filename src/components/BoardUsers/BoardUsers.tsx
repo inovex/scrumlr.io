@@ -48,10 +48,10 @@ export const BoardUsers = () => {
       )}
       {usersToShow.map((participant) => (
         <li key={participant.user.id}>
-          <UserAvatar id={participant.user.id} ready={participant.ready} name={participant.user.name} />
+          <UserAvatar id={participant.user.id} customAvatar={participant.user.avatar} ready={participant.ready} name={participant.user.name} />
         </li>
       ))}
-      {!!me && <UserAvatar id={me.user.id} ready={me.ready} name={me.user.name} />}
+      {!!me && <UserAvatar id={me.user.id} customAvatar={me.user.avatar} ready={me.ready} name={me.user.name} />}
     </ul>
   );
 };
