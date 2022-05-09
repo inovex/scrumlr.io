@@ -39,6 +39,7 @@ export const BoardSettings = () => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
       store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
       setIsProtected(true);
+      navigator.clipboard.writeText(newPassword).then();
     } else {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnOpen(false);
