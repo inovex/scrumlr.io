@@ -37,19 +37,20 @@ export const BoardSettings = () => {
   const boardInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const notifyClipboard = () =>
-    Toast.success(
-      <div>
-        <div>{i18n.t("Toast.copiedToClipboard")}</div>
-      </div>,
-      1000
-    );
-
   const handleSetPassword = (newPassword: string) => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
+      if (!isProtected) {
+        store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
+        navigator.clipboard.writeText(newPassword).then(() =>
+          Toast.success(
+            <div>
+              <div>{i18n.t("Toast.copiedToClipboard")}</div>
+            </div>,
+            1000
+          )
+        );
+      }
       setIsProtected(true);
-      navigator.clipboard.writeText(newPassword).then();
     } else {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnOpen(false);
@@ -80,7 +81,6 @@ export const BoardSettings = () => {
             const pw = generateRandomString();
             setPassword(pw);
             handleSetPassword(pw);
-            notifyClipboard();
           }}
         >
           <RefreshIcon />
@@ -113,6 +113,7 @@ export const BoardSettings = () => {
               className="board-settings__board-name-button_input"
               value={boardName}
               placeholder={DEFAULT_BOARD_NAME}
+              autoComplete="off"
               onChange={(e) => setBoardName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
               onBlur={(e) => {
