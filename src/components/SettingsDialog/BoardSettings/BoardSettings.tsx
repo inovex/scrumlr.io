@@ -137,7 +137,7 @@ export const BoardSettings = () => {
             {state.currentUserIsModerator &&
               (!isProtected && !password ? (
                 <button
-                  className="board-settings__generate-password-button"
+                  className="board-settings__password-management-button board-settings__generate-password-button"
                   onClick={() => {
                     const pw = generateRandomString();
                     setPassword(pw);
@@ -145,23 +145,23 @@ export const BoardSettings = () => {
                   }}
                 >
                   <RefreshIcon />
-                  <span>{t("BoardSettings.generatePassword")}</span>
+                  <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
                 </button>
               ) : isProtected ? (
                 <button
-                  className="board-settings__remove-protection-button button--centered"
+                  className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
                   onClick={() => {
                     setPassword("");
                     handleSetPassword("");
                   }}
                 >
                   <SetPolicyIcon />
-                  <span>{t("BoardSettings.SetAccessPolicyOpen")}</span>
+                  <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
                 </button>
               ) : (
-                <button className="board-settings__remove-protection-button button--centered">
-                  <span className="board-settings__remove-protection-button button--centered">{t("BoardSettings.SecurePasswordHint")}</span>
-                </button>
+                <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
+                  {t("BoardSettings.SecurePasswordHint")}
+                </span>
               ))}
           </div>
 
