@@ -26,7 +26,6 @@ import {
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
 import {FC, useState} from "react";
-import {useAppSelector} from "store";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
@@ -35,11 +34,7 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
-  const state = useAppSelector((applicationState) => ({
-    participant: applicationState.participants?.self,
-  }));
-
-  let initialState = state.participant?.user.avatar;
+  let initialState = "";
   if (typeof initialState === "undefined") {
     const {className, ...props} = generateRandomProps(id ?? "");
     initialState = JSON.stringify(props);
