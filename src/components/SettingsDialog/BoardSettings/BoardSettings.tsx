@@ -107,6 +107,7 @@ export const BoardSettings = () => {
                         className="board-settings__password-button_value-input"
                         value={password}
                         readOnly={isProtected}
+                        disabled={isProtectedOnOpen}
                         placeholder={isProtected ? "••••••••••" : ""}
                         autoComplete="off"
                         onChange={(e) => {
