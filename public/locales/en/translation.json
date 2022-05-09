@@ -34,7 +34,7 @@
   "AccessPolicySelection": {
     "title": "Access policy",
     "publicTitle": "Open",
-    "byPassphraseTitle": "Password protected",
+    "byPassphraseTitle": "Protected",
     "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
     "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
@@ -240,10 +240,9 @@
     "BoardName": "Board Name",
     "AccessPolicy": "Access Policy",
     "Password": "Password",
-    "SetAccessPolicyOpen": "Set to open",
-    "SetAccessPolicyPasswordProtected": "Set to password protected",
+    "SetAccessPolicyOpen": "Remove password protection",
     "DeleteBoard": "Delete Board",
-    "generatePassword": "Generate random password",
+    "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },
