@@ -52,7 +52,7 @@
   padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: 14px;
+  font-size: $text-size;
   text-align: right;
   max-width: 150px;
   cursor: inherit;
@@ -66,7 +66,7 @@
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: 14px;
+  font-size: $text-size;
   color: $color-placeholder;
 }
 
@@ -105,7 +105,7 @@
   padding: $padding--default $padding--medium $padding--default 4px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: 14px;
+  font-size: $text-size;
 }
 
 @media screen and (max-width: 920px) {
@@ -157,7 +157,7 @@
   padding: $padding--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: 14px;
+  font-size: $text-size;
   text-align: right;
   max-width: 120px;
 }
@@ -192,7 +192,7 @@
 .board-settings__set-policy-button span {
   padding-left: 4px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
 }
 
@@ -219,7 +219,7 @@
 .board-settings__generate-password-button span {
   padding-left: 4px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
 }
 

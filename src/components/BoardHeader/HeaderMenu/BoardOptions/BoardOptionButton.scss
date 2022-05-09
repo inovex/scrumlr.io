@@ -31,7 +31,7 @@ $header-menu-border-bottom-color: #efefef;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $color-black;
-  font-size: 14px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
   padding-right: 16px;

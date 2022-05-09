@@ -34,7 +34,7 @@
 }
 
 .request__button {
-  font-size: 13px;
+  font-size: $text-size;
   font-weight: 600;
   letter-spacing: $letter-spacing--small;
   line-height: 24px;
@@ -60,7 +60,7 @@
 .request__header {
   height: 42px;
 
-  font-size: 12px;
+  font-size: $text-size;
   line-height: 24px;
   letter-spacing: $letter-spacing--small;
   font-weight: 600;
@@ -81,7 +81,7 @@
 
 @media screen and (min-width: 375px) {
   .request__header {
-    font-size: 14px;
+    font-size: $text-size;
   }
 }
 
@@ -120,7 +120,7 @@
 .join-request__request-name {
   margin-left: $margin--default;
   color: $color-black;
-  font-size: 13px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--small;
   line-height: 18px;
 }
@@ -146,7 +146,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $color-black;
-  font-size: 13px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--small;
   margin: 0 $margin--default;
 }
@@ -216,7 +216,7 @@
 .join-request__request-display-name {
   height: 18px;
   color: $color-black;
-  font-size: 13px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--small;
   line-height: 18px;
   width: 144px;

@@ -53,7 +53,7 @@ $number-of-menu-items: 4;
 }
 
 .tooltip__text {
-  font-size: 14px;
+  font-size: $text-size;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: $letter-spacing--large;

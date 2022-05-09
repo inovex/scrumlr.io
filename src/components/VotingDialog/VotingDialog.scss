@@ -109,7 +109,7 @@
 }
 .voting-dialog__start-button > label {
   font-weight: bold;
-  font-size: 14px;
+  font-size: $text-size;
   color: $color-white;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
@@ -146,7 +146,7 @@
   width: 24px;
   text-align: center;
   line-height: 32px;
-  font-size: 14px;
+  font-size: $text-size;
   cursor: col-resize;
   user-select: none;
   -webkit-touch-callout: none;

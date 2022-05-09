@@ -150,10 +150,15 @@ html:not([theme="dark"]) {
 }
 
 .homepage__footer-developers {
+  display: flex;
   flex: 2 2 auto;
+  gap: 2px;
   color: $color-dark-gray;
-  font-size: 12px;
+  font-size: $text-size;
+  line-height: $line-height--small;
   order: -1;
+  justify-content: center;
+  align-items: center;
 }
 
 .homepage__footer-links {
@@ -165,7 +170,7 @@ html:not([theme="dark"]) {
 .homepage__footer-link {
   display: block;
   color: $color-dark-gray;
-  font-size: 12px;
+  font-size: $text-size;
 }
 
 .homepage__footer-link a {

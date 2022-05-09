@@ -46,7 +46,7 @@
 
 .participant__name {
   display: inline-block;
-  font-size: 14px;
+  font-size: $text-size;
   letter-spacing: $letter-spacing--small;
   font-weight: 300;
   overflow: hidden;

@@ -102,7 +102,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $board-hea
 
 .board-header__access-policy-status {
   color: $color-middle-gray;
-  font-size: 12px;
+  font-size: $text-size;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
   line-height: 16px;
