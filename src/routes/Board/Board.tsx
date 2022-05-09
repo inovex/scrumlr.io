@@ -48,6 +48,7 @@ export const Board = () => {
       requests: applicationState.requests,
       participants: applicationState.participants,
       auth: applicationState.auth,
+      view: applicationState.view,
     }),
     _.isEqual
   );
@@ -69,7 +70,7 @@ export const Board = () => {
         )}
         <InfoBar />
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator}>
+        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
           {state.columns
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column, columnIndex) => (

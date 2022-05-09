@@ -9,6 +9,9 @@
   height: 100vh;
   display: flex;
 }
+.column__moderation-isActive {
+  @include inset-border($top: true, $bottom: true, $color: $color-grooming-green);
+}
 .column:nth-child(odd) {
   background-color: $color-white-one;
 }
