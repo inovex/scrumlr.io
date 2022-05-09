@@ -200,7 +200,8 @@
     "moderationEnded": "Die Moderation wurde beendet!",
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
-    "timerCancelled": "Der Alarm wurde abgebrochen!"
+    "timerCancelled": "Der Alarm wurde abgebrochen!",
+    "copiedToClipboard": "Kopiert!"
   },
   "Language": {
     "german": "Deutsch",
@@ -240,10 +241,10 @@
     "BoardName": "Sitzungsname",
     "AccessPolicy": "Zugangsrichtlinien",
     "Password": "Passwort",
-    "SetAccessPolicyOpen": "Sitzung veröffentlichen",
+    "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
-    "generatePassword": "Erstelle zufälliges Passwort",
+    "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
   },

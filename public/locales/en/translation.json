@@ -200,7 +200,8 @@
     "moderationEnded": "Moderation phase ended!",
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
-    "timerCancelled": "Timer cancelled!"
+    "timerCancelled": "Timer cancelled!",
+    "copiedToClipboard": "Copied!"
   },
   "Language": {
     "german": "German",

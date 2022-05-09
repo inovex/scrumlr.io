@@ -1,3 +1,4 @@
+import i18n from "i18next";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {useRef, useState} from "react";
@@ -15,6 +16,7 @@ import {SettingsToggle} from "../Components/SettingsToggle";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH} from "../../../constants/misc";
+import {Toast} from "../../../utils/Toast";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -34,6 +36,14 @@ export const BoardSettings = () => {
 
   const boardInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  const notifyClipboard = () =>
+    Toast.success(
+      <div>
+        <div>{i18n.t("Toast.copiedToClipboard")}</div>
+      </div>,
+      1000
+    );
 
   const handleSetPassword = (newPassword: string) => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
@@ -70,6 +80,7 @@ export const BoardSettings = () => {
             const pw = generateRandomString();
             setPassword(pw);
             handleSetPassword(pw);
+            notifyClipboard();
           }}
         >
           <RefreshIcon />
