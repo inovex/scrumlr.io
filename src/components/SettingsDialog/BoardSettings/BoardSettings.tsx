@@ -135,7 +135,7 @@ export const BoardSettings = () => {
             </div>
 
             {state.currentUserIsModerator &&
-              (!isProtected ? (
+              (!isProtected && !password ? (
                 <button
                   className="board-settings__generate-password-button"
                   onClick={() => {
@@ -147,9 +147,9 @@ export const BoardSettings = () => {
                   <RefreshIcon />
                   <span>{t("BoardSettings.generatePassword")}</span>
                 </button>
-              ) : (
+              ) : isProtected ? (
                 <button
-                  className="board-settings__set-policy-button button--centered"
+                  className="board-settings__remove-protection-button button--centered"
                   onClick={() => {
                     setPassword("");
                     handleSetPassword("");
@@ -157,6 +157,10 @@ export const BoardSettings = () => {
                 >
                   <SetPolicyIcon />
                   <span>{t("BoardSettings.SetAccessPolicyOpen")}</span>
+                </button>
+              ) : (
+                <button className="board-settings__remove-protection-button button--centered">
+                  <span className="board-settings__remove-protection-button button--centered">{t("BoardSettings.SecurePasswordHint")}</span>
                 </button>
               ))}
           </div>

@@ -241,6 +241,7 @@
     "AccessPolicy": "Access Policy",
     "Password": "Password",
     "SetAccessPolicyOpen": "Remove password protection",
+    "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
     "generatePassword": "Generate password and protect",
     "save": "save",

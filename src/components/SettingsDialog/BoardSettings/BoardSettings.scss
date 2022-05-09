@@ -172,10 +172,11 @@
   outline: none;
 }
 
-.board-settings__set-policy-button {
+.board-settings__remove-protection-button {
   display: flex;
   align-items: center;
   padding: 0 24px;
+  height: 30px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
@@ -183,13 +184,13 @@
   align-self: center;
 }
 
-.board-settings__set-policy-button svg {
+.board-settings__remove-protection-button svg {
   width: 22px;
   height: 22px;
   color: var(--accent-color);
 }
 
-.board-settings__set-policy-button span {
+.board-settings__remove-protection-button span {
   padding-left: 4px;
   font-weight: bold;
   font-size: 13px;
@@ -200,19 +201,18 @@
   display: flex;
   align-items: center;
   padding: 0 24px;
+  height: 30px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
   cursor: pointer;
   align-self: center;
-  margin-top: 3px;
 }
 
 .board-settings__generate-password-button svg {
   width: 15px;
   height: 15px;
-  margin-right: 4px;
-  margin-left: 3px;
+  margin: 0 4px 2px 3px;
   color: var(--accent-color);
 }
 

@@ -241,7 +241,7 @@
     "AccessPolicy": "Zugangsrichtlinien",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Sitzung veröffentlichen",
-    "SetAccessPolicyPasswordProtected": "Sitzung passwort sichern",
+    "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
     "generatePassword": "Erstelle zufälliges Passwort",
     "save": "speichern",
