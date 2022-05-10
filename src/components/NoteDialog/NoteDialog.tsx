@@ -12,16 +12,26 @@ interface NoteDialogProps {
   authorId: string;
   columnName: string;
   columnColor: string;
+  columnVisible: boolean;
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
   childrenNotes: Array<NoteModel & {authorName: string}>;
   viewer: Participant;
+  moderating: boolean;
 }
 
 export const NoteDialog = (props: NoteDialogProps) => (
-  <Portal onClose={props.onClose} className="note-dialog__portal" hiddenOverflow centered disabledPadding>
+  <Portal
+    onClose={props.onClose}
+    className={classNames("note-dialog__portal", {
+      "note-dialog__portal-moderation-visible": (props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR") && props.moderating && props.columnVisible,
+    })}
+    hiddenOverflow
+    centered
+    disabledPadding
+  >
     <div
       className={classNames(
         "note-dialog",
