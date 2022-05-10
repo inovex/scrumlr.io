@@ -25,7 +25,7 @@ import {
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {SettingsAccordion} from "./SettingsAccordion";
@@ -41,23 +41,26 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   }));
 
   let initialState = state.participant.user.avatar;
-  if (typeof initialState === "undefined") {
+  if (initialState === null || initialState === undefined) {
     const {className, ...props} = generateRandomProps(id ?? "");
     initialState = props as AvataaarProps;
   }
 
-  const [properties, setProperties] = useState<AvataaarProps>(initialState);
+  const [properties, setProperties] = useState<AvataaarProps>(initialState!);
 
   const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
-    if (properties[key] !== value) {
+    if (properties && properties[key] !== value) {
       setProperties({...properties, [key]: value});
-      store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
     }
   };
 
+  useEffect(() => {
+    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
+  }, [properties]);
+
   return (
     <>
-      <Avatar seed={id ?? ""} {...properties} className="profile-settings__avatar-icon" />
+      <Avatar seed={id ?? ""} avatar={properties} className="profile-settings__avatar-icon" />
       <div className="profile-settings__avatar-selection">
         <SettingsAccordion label="Hair">
           <SettingsCarousel carouselItems={AVATAR_HAIR_COLORS} onValueChange={(value) => updateAvatar("hairColor", value as AvatarHairColor)} />

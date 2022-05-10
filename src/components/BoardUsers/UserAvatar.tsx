@@ -17,7 +17,7 @@ export interface UserAvatarProps {
 
 export const UserAvatar = ({name, badgeText, id, ready, avatar, className, avatarClassName, customAvatar}: UserAvatarProps) => (
   <div className={classNames("user-avatar", className)} title={name}>
-    {avatar ? <img src={avatar} className={avatarClassName} alt={name} /> : <Avatar seed={id} {...customAvatar} className={avatarClassName} />}
+    {avatar ? <img src={avatar} className={avatarClassName} alt={name} /> : <Avatar seed={id} avatar={customAvatar} className={avatarClassName} />}
     {ready && <IconCheck className="user-avatar__ready" />}
     {badgeText && <Badge text={badgeText} />}
   </div>

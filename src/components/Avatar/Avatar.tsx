@@ -45,9 +45,10 @@ export interface AvataaarProps {
   mouthType: AvatarMouthType;
 }
 
-export type AvatarProps = Partial<AvataaarProps> & {
+export type AvatarProps = {
   seed: string;
   className?: string;
+  avatar?: AvataaarProps;
 };
 
 /**
@@ -83,18 +84,20 @@ export const generateRandomProps = (seed: string) => {
 
   const props: Omit<AvatarProps, "seed"> = {
     className: getColorClassName(getColorForIndex(hash)),
-    skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
-    topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
-    clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
-    graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
-    clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
-    hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
-    facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
-    facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
-    accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
-    eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
-    eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
-    mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
+    avatar: {
+      skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
+      topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
+      clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
+      graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
+      clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
+      hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
+      facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
+      facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
+      accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
+      eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
+      eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
+      mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
+    },
   };
 
   return props;
@@ -120,28 +123,28 @@ export const generateRandomProps = (seed: string) => {
  * @param mouthType the mouth type
  */
 export const Avatar = React.memo(
-  ({className, ...props}: AvatarProps) => {
-    if (props.seed) {
-      const {className: accentColorClass, ...avatarProps} = generateRandomProps(props.seed);
-      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
+  ({className, seed, avatar}: AvatarProps) => {
+    if (!avatar) {
+      const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
+      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps.avatar} />;
     }
 
     return (
       <Avataar
         className={classNames("avatar", className)}
         avatarStyle="Circle"
-        topType={props.topType}
-        accessoriesType={props.accessoriesType}
-        hairColor={props.hairColor}
-        facialHairType={props.facialHairType}
-        facialHairColor={props.facialHairColor}
-        clotheType={props.clotheType}
-        clotheColor={props.clotheColor}
-        graphicType={props.graphicType}
-        eyeType={props.eyeType}
-        eyebrowType={props.eyebrowType}
-        mouthType={props.mouthType}
-        skinColor={props.skinColor}
+        topType={avatar.topType}
+        accessoriesType={avatar.accessoriesType}
+        hairColor={avatar.hairColor}
+        facialHairType={avatar.facialHairType}
+        facialHairColor={avatar.facialHairColor}
+        clotheType={avatar.clotheType}
+        clotheColor={avatar.clotheColor}
+        graphicType={avatar.graphicType}
+        eyeType={avatar.eyeType}
+        eyebrowType={avatar.eyebrowType}
+        mouthType={avatar.mouthType}
+        skinColor={avatar.skinColor}
       />
     );
   },
