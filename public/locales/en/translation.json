@@ -201,7 +201,7 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!",
-    "copiedToClipboard": "Copied!"
+    "passwordCopied": "Password copied!"
   },
   "Language": {
     "german": "German",

@@ -201,7 +201,7 @@
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!",
-    "copiedToClipboard": "Kopiert!"
+    "passwordCopied": "Passwort kopiert!"
   },
   "Language": {
     "german": "Deutsch",
