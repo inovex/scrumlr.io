@@ -2,20 +2,23 @@ package database
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
-	"strings"
-	"time"
 )
 
 // User model of the application
 type User struct {
 	bun.BaseModel `bun:"table:users"`
-	ID            uuid.UUID `bun:"type:uuid"`
+	ID            uuid.UUID       `bun:"type:uuid"`
+	Avatar        json.RawMessage `bun:"type:jsonb"`
 	Name          string
 	AccountType   types.AccountType
 	CreatedAt     time.Time
@@ -32,6 +35,7 @@ type UserUpdate struct {
 	bun.BaseModel `bun:"table:users"`
 	ID            uuid.UUID `bun:"type:uuid"`
 	Name          string
+	Avatar        json.RawMessage `bun:"type:jsonb"`
 }
 
 // CreateAnonymousUser creates a new anonymous user by the specified name

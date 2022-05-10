@@ -1,8 +1,10 @@
 package dto
 
 import (
-	"github.com/google/uuid"
+	"encoding/json"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 )
 
@@ -13,11 +15,15 @@ type User struct {
 
 	// The user's display name
 	Name string `json:"name"`
+
+	// The user's avatar configuration
+	Avatar json.RawMessage `json:"avatar"`
 }
 
 func (u *User) From(user database.User) *User {
 	u.ID = user.ID
 	u.Name = user.Name
+	u.Avatar = user.Avatar
 	return u
 }
 
@@ -26,6 +32,7 @@ func (*User) Render(_ http.ResponseWriter, _ *http.Request) error {
 }
 
 type UserUpdateRequest struct {
-	ID   uuid.UUID `json:"-"`
-	Name string    `json:"name"`
+	ID     uuid.UUID       `json:"-"`
+	Name   string          `json:"name"`
+	Avatar json.RawMessage `json:"avatar"`
 }
