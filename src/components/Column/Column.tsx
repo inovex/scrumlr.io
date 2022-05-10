@@ -123,7 +123,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   );
 
   return (
-    <section className={`column ${getColorClassName(color)}`} ref={columnRef}>
+    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
           <div className="column__header-title">
@@ -156,6 +156,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
                 columnId={id}
                 columnName={name}
                 columnColor={color}
+                columnVisible={visible}
                 tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
                 moderating={state.moderating}
                 viewer={state.viewer}
