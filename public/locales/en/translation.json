@@ -180,7 +180,7 @@
     "authenticationError": "There occurred a problem while signing you in",
     "votingStarted": "You started the voting phase!",
     "votingFinished": "You ended the voting phase!",
-    "focusModeStart": "You started the moderation phase!",
+    "focusModeStart": "You started the moderation phase! The cards you select will be presented to all users",
     "focusModeFinished": "You ended the moderation phase",
     "votingPhaseStarted": "Voting phase started! You can vote now!",
     "votingPhaseEnded": "Voting phase ended! You can't vote anymore!",

@@ -10,6 +10,7 @@ import "./Board.scss";
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
+  moderating: boolean;
 }
 
 export interface BoardState {
@@ -22,7 +23,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -160,9 +161,11 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       )}
 
       <main className="board" ref={boardRef}>
-        <div className={`board__spacer-left ${getColorClassName(columnColors[0])}`} />
+        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__grooming-green" : getColorClassName(columnColors[0])}`} />
         {children}
-        <div className={`board__spacer-right ${getColorClassName(columnColors[columnColors.length - 1])}`} />
+        <div
+          className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__grooming-green" : getColorClassName(columnColors[columnColors.length - 1])}`}
+        />
       </main>
 
       {state.showNextButton && (
