@@ -166,15 +166,13 @@ export const BoardSettings = () => {
                         onBlur={() => handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
                       />
                       {!isProtectedOnOpen && showPassword && isProtected ? (
-                        <VisibleIcon onClick={() => setShowPassword(!showPassword)} />
+                        <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(!showPassword)} />
                       ) : (
-                        !isProtectedOnOpen &&
                         !showPassword &&
                         isProtected && (
                           <HiddenIcon
-                            onClick={() => {
-                              setShowPassword(!showPassword);
-                            }}
+                            className={!isProtectedOnOpen ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
+                            onClick={() => !isProtectedOnOpen && setShowPassword(!showPassword)}
                           />
                         )
                       )}

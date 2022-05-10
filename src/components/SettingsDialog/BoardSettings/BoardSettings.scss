@@ -147,8 +147,23 @@
 .board-settings__password-button_value svg {
   width: 30px;
   height: 30px;
-  color: var(--accent-color);
   cursor: pointer;
+}
+
+.board-settings__show-password-button--enabled {
+  color: var(--accent-color);
+}
+
+.board-settings__show-password-button--disabled {
+  color: $color-placeholder;
+  cursor: default;
+}
+
+[theme="dark"] {
+  .board-settings__show-password-button--disabled {
+    color: $color-placeholder-dark;
+    cursor: default;
+  }
 }
 
 .board-settings__password-button_value-input {
