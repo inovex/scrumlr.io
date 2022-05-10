@@ -1,17 +1,15 @@
-import {ElementType, FC, ReactNode} from "react";
+import {ElementType, FC, MouseEventHandler, ReactNode} from "react";
 import "./BoardOptionButton.scss";
 import classNames from "classnames";
 
 export interface BoardOptionButtonProps {
   label: string;
   icon?: ElementType;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onClick: (...args: any) => any;
+  onClick: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   isExpandable?: boolean;
   children?: ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export const BoardOptionButton: FC<BoardOptionButtonProps> = ({label, icon, onClick, isExpandable = false, className, children, ...other}) => {

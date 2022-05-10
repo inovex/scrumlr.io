@@ -23,6 +23,7 @@ $number-of-menu-items: 4;
   padding: 0;
   position: relative;
   width: 36px;
+  cursor: pointer;
 }
 
 @include collapsedColumns(".menu-bars") {
