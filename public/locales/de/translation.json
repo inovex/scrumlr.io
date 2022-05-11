@@ -232,9 +232,9 @@
     "SetAccessPolicyOpen": "Sitzung veröffentlichen",
     "SetAccessPolicyPasswordProtected": "Sitzung passwort sichern",
     "DeleteBoard": "Sitzung löschen",
-    "ShowAuthorOption": "Ersteller der Kärtchen anzeigen",
-    "ShowHiddenColumnsOption": "Ausgeblendete Spalten anzeigen",
-    "ShowOtherUsersNotesOption": "Kärtchen anderer Teilnehmer anzeigen",
+    "ShowAuthorOption": "Kartenautoren anzeigen",
+    "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
+    "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
     "generatePassword": "Erstelle zufälliges Passwort",
     "save": "speichern",
     "edit": "bearbeiten"

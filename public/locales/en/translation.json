@@ -232,7 +232,7 @@
     "SetAccessPolicyPasswordProtected": "Set to password protected",
     "DeleteBoard": "Delete Board",
     "ShowAuthorOption": "Show authors of cards",
-    "ShowHiddenColumnsOption": "Show hidden columns",
+    "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show cards of other users",
     "generatePassword": "Generate random password",
     "save": "save",

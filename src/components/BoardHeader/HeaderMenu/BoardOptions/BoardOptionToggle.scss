@@ -1,6 +1,5 @@
 @import "constants/style";
 
-$header-menu-icon-width: 79px;
 $header-menu__item-height: 48px;
 
 $header-menu-button-height: 24px;
@@ -11,8 +10,8 @@ $header-menu-toggle-height: 3px;
 $header-menu-toggle-background-color: #c8c8c8;
 
 .board-option-toggle {
-  width: $header-menu-icon-width;
-  min-width: $header-menu-icon-width;
+  margin-left: 20px;
+  margin-right: 20px;
   height: $header-menu__item-height;
   display: inline-flex;
   justify-content: center;
@@ -46,9 +45,12 @@ $header-menu-toggle-background-color: #c8c8c8;
 }
 .board-option-toggle__switch--left::after {
   left: 0;
-  background-color: $color-backlog-blue;
+  background-color: $color-middle-gray;
 }
 .board-option-toggle__switch--right::after {
   left: $header-menu-toggle-button-width;
+  background-color: $color-backlog-blue;
+}
+[theme="dark"] .board-option-toggle__switch--right::after {
   background-color: $color-planning-pink;
 }
