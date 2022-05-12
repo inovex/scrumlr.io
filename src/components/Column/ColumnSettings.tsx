@@ -11,8 +11,8 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import i18n from "i18next";
-import {useAppSelector} from "../../store";
-import {Toast} from "../../utils/Toast";
+import {useAppSelector} from "store";
+import {Toast} from "utils/Toast";
 
 type ColumnSettingsProps = {
   tabIndex: number;
