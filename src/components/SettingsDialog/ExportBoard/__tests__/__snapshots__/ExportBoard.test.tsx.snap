@@ -38,7 +38,7 @@ Object {
             </svg>
           </button>
           <hr
-            class="settings-dialog__seperator"
+            class="settings-dialog__separator"
           />
           <button
             class="settings-option-button export-board__button-reverse-order"
@@ -93,7 +93,7 @@ Object {
           </svg>
         </button>
         <hr
-          class="settings-dialog__seperator"
+          class="settings-dialog__separator"
         />
         <button
           class="settings-option-button export-board__button-reverse-order"
