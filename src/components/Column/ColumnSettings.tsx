@@ -10,6 +10,9 @@ import {Color, getColorClassName} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
+import i18n from "i18next";
+import {useAppSelector} from "../../store";
+import {Toast} from "../../utils/Toast";
 
 type ColumnSettingsProps = {
   tabIndex: number;
@@ -24,6 +27,7 @@ type ColumnSettingsProps = {
 
 export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, color, visible, index, onClose, onNameEdit}) => {
   const {t} = useTranslation();
+  const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
   const columnSettingsRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +40,19 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [columnSettingsRef, onClose]);
+
+  const addColumn = (columnIndex: number) => {
+    if (!showHiddenColumns) {
+      dispatch(Actions.setShowHiddenColumns(true));
+      Toast.success(
+        <div>
+          <div>{i18n.t("Toast.hiddenColumnsVisible")}</div>
+        </div>,
+        3000
+      );
+    }
+    dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index: columnIndex}));
+  };
 
   return (
     <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
@@ -70,7 +87,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 2}
             onClick={() => {
               onClose?.();
-              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index}));
+              addColumn(index);
             }}
           >
             <PreviousIcon />
@@ -82,7 +99,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 3}
             onClick={() => {
               onClose?.();
-              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index: index + 1}));
+              addColumn(index + 1);
             }}
           >
             <NextIcon />
