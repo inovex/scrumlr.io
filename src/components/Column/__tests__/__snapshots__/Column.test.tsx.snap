@@ -14,7 +14,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
         class="column__header-title"
       >
         <h2
-          class="column__header-text"
+          class="column__header-text column__header-text--hidden"
         >
           Testheader
         </h2>
