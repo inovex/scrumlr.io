@@ -10,7 +10,7 @@
   display: flex;
 }
 .column__moderation-isActive {
-  @include inset-border($top: true, $bottom: true, $color: $color-grooming-green);
+  @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
 }
 .column:nth-child(odd) {
   background-color: $color-white-one;
