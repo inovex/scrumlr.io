@@ -63,8 +63,9 @@ $number-of-menu-items: 4;
 
 .menu-item__icon {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   height: 36px;
   border-radius: 100%;
   color: var(--primaryColor);
