@@ -97,6 +97,11 @@ $number-of-menu-items: 4;
   color: $color-white;
 }
 
+.menu-item__focus-mode-toggle--active .menu-item__icon {
+  background-color: $color-goal-green;
+  color: $color-white;
+}
+
 .menu-item-active {
   color: $color-white;
   background: $color-grooming-green;

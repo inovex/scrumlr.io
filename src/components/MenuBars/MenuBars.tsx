@@ -94,6 +94,7 @@ export const MenuBars = () => {
               icon={FocusIcon}
               onToggle={toggleModeration}
               tabIndex={TabIndex.AdminMenu + 2}
+              isFocusModeToggle
             />
           </div>
         </section>
