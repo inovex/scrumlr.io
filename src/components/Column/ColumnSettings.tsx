@@ -70,7 +70,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 2}
             onClick={() => {
               onClose?.();
-              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: true, index}));
+              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index}));
             }}
           >
             <PreviousIcon />
@@ -82,7 +82,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 3}
             onClick={() => {
               onClose?.();
-              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: true, index: index + 1}));
+              dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index: index + 1}));
             }}
           >
             <NextIcon />
