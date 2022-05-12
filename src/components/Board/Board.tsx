@@ -161,11 +161,9 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       )}
 
       <main className="board" ref={boardRef}>
-        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__grooming-green" : getColorClassName(columnColors[0])}`} />
+        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
-        <div
-          className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__grooming-green" : getColorClassName(columnColors[columnColors.length - 1])}`}
-        />
+        <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
       </main>
 
       {state.showNextButton && (
