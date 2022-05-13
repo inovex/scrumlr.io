@@ -44,7 +44,7 @@ export const BoardSettings = () => {
         navigator.clipboard.writeText(newPassword).then(() =>
           Toast.success(
             <div>
-              <div>{i18n.t("Toast.passwordCopied")}</div>
+              <div>{t("Toast.passwordCopied")}</div>
             </div>,
             1500
           )
