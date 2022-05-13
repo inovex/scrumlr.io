@@ -1,4 +1,3 @@
-import i18n from "i18next";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {useRef, useState} from "react";
