@@ -39,6 +39,9 @@
 .portal__content {
   height: fit-content;
   width: fit-content;
+  ::selection {
+    background-color: rgba(var(--accent-color-rgb), 0.5);
+  }
 }
 
 .portal__frame--hiddenOverflow {

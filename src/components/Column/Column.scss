@@ -33,6 +33,9 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  ::selection {
+    background-color: rgba(var(--accent-color-rgb), 0.5);
+  }
 }
 
 .column__header {
