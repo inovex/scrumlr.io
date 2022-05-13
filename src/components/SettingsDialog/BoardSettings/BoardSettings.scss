@@ -142,12 +142,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .board-settings__password-button_value svg {
   width: 30px;
   height: 30px;
-  cursor: pointer;
 }
 
 .board-settings__show-password-button--enabled {
@@ -162,7 +162,6 @@
 [theme="dark"] {
   .board-settings__show-password-button--disabled {
     color: $color-placeholder-dark;
-    cursor: default;
   }
 }
 
