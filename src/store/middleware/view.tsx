@@ -23,15 +23,4 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         );
       });
   }
-
-  if (action.type === Action.UpdatedParticipant) {
-    API.getCurrentUser().then((user) => {
-      if (user?.id === action.participant.user.id && action.participant.role === "PARTICIPANT") {
-        const currentState = stateAPI.getState();
-        if (currentState.view.moderating === true) {
-          dispatch(Actions.setModerating(false));
-        }
-      }
-    });
-  }
 };
