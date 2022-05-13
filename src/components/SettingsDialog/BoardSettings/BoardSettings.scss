@@ -160,8 +160,19 @@
   height: $icon--medium;
 }
 
-.board-settings__show-password-button {
+.board-settings__show-password-button--enabled {
   color: var(--accent-color);
+}
+
+.board-settings__show-password-button--disabled {
+  color: $color-placeholder;
+  cursor: default;
+}
+
+[theme="dark"] {
+  .board-settings__show-password-button--disabled {
+    color: $color-placeholder-dark;
+  }
 }
 
 .board-settings__password-button_value-input {

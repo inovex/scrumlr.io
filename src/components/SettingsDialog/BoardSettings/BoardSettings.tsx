@@ -51,9 +51,14 @@ export const BoardSettings = () => {
             1500
           )
         );
+        if (activeEditMode) {
+          setIsProtectedOnOpen(false);
+          setActiveEditMode(false);
+        }
+        if (!isProtected) {
+          setIsProtected(true);
+        }
       }
-      setIsProtected(true);
-      setActiveEditMode(false);
     } else if (!activeEditMode) {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnOpen(false);
@@ -110,33 +115,32 @@ export const BoardSettings = () => {
     );
   };
 
-  const getPasswordStatusButton = () => {
-    if (isProtectedOnOpen) {
-      return activeEditMode ? (
-        <CheckIcon
-          className="board-settings__edit-password-button"
-          onClick={() => {
-            setActiveEditMode(false);
-          }}
-        />
-      ) : (
-        <EditIcon
-          className="board-settings__edit-password-button"
-          onClick={() => {
-            setActiveEditMode(true);
-          }}
-        />
-      );
-    }
-    if (isProtected) {
-      return showPassword ? (
-        <VisibleIcon className="board-settings__show-password-button" onClick={() => setShowPassword(false)} />
-      ) : (
-        <HiddenIcon className="board-settings__show-password-button" onClick={() => setShowPassword(true)} />
-      );
-    }
-    return "";
-  };
+  const getPasswordVisibilityButton = () =>
+    showPassword ? (
+      <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
+    ) : (
+      <HiddenIcon
+        className={!isProtectedOnOpen || activeEditMode ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
+        onClick={() => !isProtectedOnOpen && setShowPassword(true)}
+      />
+    );
+
+  const getPasswordStatusButton = () =>
+    activeEditMode ? (
+      <CheckIcon
+        className="board-settings__edit-password-button"
+        onClick={() => {
+          setActiveEditMode(false);
+        }}
+      />
+    ) : (
+      <EditIcon
+        className="board-settings__edit-password-button"
+        onClick={() => {
+          setActiveEditMode(true);
+        }}
+      />
+    );
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__backlog-blue")}>
@@ -208,7 +212,9 @@ export const BoardSettings = () => {
                         onKeyDown={(e) => e.key === "Enter" && handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
                         onBlur={() => handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
                       />
-                      {getPasswordStatusButton()}
+                      {!isProtected && !activeEditMode && password !== "" && <CheckIcon className="board-settings__edit-password-button" />}
+                      {isProtected && getPasswordVisibilityButton()}
+                      {isProtected && getPasswordStatusButton()}
                     </div>
                   </SettingsButton>
                 </>
