@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -8,14 +8,16 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
+import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
+import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsToggle} from "../Components/SettingsToggle";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH} from "../../../constants/misc";
-import {Toast} from "../../../utils/Toast";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -32,13 +34,14 @@ export const BoardSettings = () => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const [isProtectedOnOpen, setIsProtectedOnOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
+  const [activeEditMode, setActiveEditMode] = useState(false);
 
   const boardInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const handleSetPassword = (newPassword: string) => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      if (!isProtected) {
+      if (!isProtected || activeEditMode) {
         store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
         navigator.clipboard.writeText(newPassword).then(() =>
           Toast.success(
@@ -50,48 +53,89 @@ export const BoardSettings = () => {
         );
       }
       setIsProtected(true);
-    } else {
+      setActiveEditMode(false);
+    } else if (!activeEditMode) {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnOpen(false);
       setIsProtected(false);
+    } else {
+      setActiveEditMode(false);
+      if (passwordInputRef.current) passwordInputRef.current.placeholder = PLACEHOLDER_PASSWORD;
     }
   };
 
-  const getPasswordManagementButton = () => {
-    if (isProtected) {
-      return (
-        <button
-          className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
-          onClick={() => {
-            setPassword("");
-            handleSetPassword("");
-          }}
-        >
-          <SetPolicyIcon />
-          <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
-        </button>
-      );
+  useEffect(() => {
+    if (activeEditMode) {
+      passwordInputRef.current?.focus();
+      passwordInputRef.current?.select();
     }
-    if (!password) {
-      return (
-        <button
-          className="board-settings__password-management-button board-settings__generate-password-button"
-          onClick={() => {
-            const pw = generateRandomString();
-            setPassword(pw);
-            handleSetPassword(pw);
-          }}
-        >
-          <RefreshIcon />
-          <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
-        </button>
-      );
+  }, [activeEditMode]);
+
+  const getPasswordManagementButton = () => {
+    if (!activeEditMode) {
+      if (isProtected) {
+        return (
+          <button
+            className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
+            onClick={() => {
+              setPassword("");
+              handleSetPassword("");
+            }}
+          >
+            <SetPolicyIcon />
+            <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
+          </button>
+        );
+      }
+      if (!password) {
+        return (
+          <button
+            className="board-settings__password-management-button board-settings__generate-password-button"
+            onClick={() => {
+              const pw = generateRandomString();
+              setPassword(pw);
+              handleSetPassword(pw);
+            }}
+          >
+            <RefreshIcon />
+            <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
+          </button>
+        );
+      }
     }
     return (
       <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
         {t("BoardSettings.SecurePasswordHint")}
       </span>
     );
+  };
+
+  const getPasswordStatusButton = () => {
+    if (isProtectedOnOpen) {
+      return activeEditMode ? (
+        <CheckIcon
+          className="board-settings__edit-password-button"
+          onClick={() => {
+            setActiveEditMode(false);
+          }}
+        />
+      ) : (
+        <EditIcon
+          className="board-settings__edit-password-button"
+          onClick={() => {
+            setActiveEditMode(true);
+          }}
+        />
+      );
+    }
+    if (isProtected) {
+      return showPassword ? (
+        <VisibleIcon className="board-settings__show-password-button" onClick={() => setShowPassword(false)} />
+      ) : (
+        <HiddenIcon className="board-settings__show-password-button" onClick={() => setShowPassword(true)} />
+      );
+    }
+    return "";
   };
 
   return (
@@ -154,9 +198,9 @@ export const BoardSettings = () => {
                         type={showPassword ? "text" : "password"}
                         className="board-settings__password-button_value-input"
                         value={password}
-                        readOnly={isProtected}
-                        disabled={isProtectedOnOpen}
-                        placeholder={isProtected ? "••••••••••" : ""}
+                        readOnly={isProtected && !activeEditMode}
+                        disabled={isProtectedOnOpen && !activeEditMode}
+                        placeholder={!isProtected || (isProtected && activeEditMode) ? "" : PLACEHOLDER_PASSWORD}
                         autoComplete="off"
                         onChange={(e) => {
                           setPassword(e.target.value);
@@ -164,17 +208,7 @@ export const BoardSettings = () => {
                         onKeyDown={(e) => e.key === "Enter" && handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
                         onBlur={() => handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
                       />
-                      {!isProtectedOnOpen && showPassword && isProtected ? (
-                        <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(!showPassword)} />
-                      ) : (
-                        !showPassword &&
-                        isProtected && (
-                          <HiddenIcon
-                            className={!isProtectedOnOpen ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
-                            onClick={() => !isProtectedOnOpen && setShowPassword(!showPassword)}
-                          />
-                        )
-                      )}
+                      {getPasswordStatusButton()}
                     </div>
                   </SettingsButton>
                 </>

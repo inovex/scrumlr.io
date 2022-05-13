@@ -122,8 +122,8 @@
 }
 
 .board-settings__policy-button_value svg {
-  width: 22px;
-  height: 22px;
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
 }
 
@@ -146,23 +146,22 @@
 }
 
 .board-settings__password-button_value svg {
-  width: 30px;
-  height: 30px;
+  width: $icon--medium;
+  height: $icon--medium;
 }
 
-.board-settings__show-password-button--enabled {
+.board-settings__edit-password-button {
   color: var(--accent-color);
+  cursor: pointer;
 }
 
-.board-settings__show-password-button--disabled {
-  color: $color-placeholder;
-  cursor: default;
+.board-settings__edit-password-button svg {
+  width: $icon--medium;
+  height: $icon--medium;
 }
 
-[theme="dark"] {
-  .board-settings__show-password-button--disabled {
-    color: $color-placeholder-dark;
-  }
+.board-settings__show-password-button {
+  color: var(--accent-color);
 }
 
 .board-settings__password-button_value-input {
@@ -199,14 +198,14 @@
 }
 
 .board-settings__remove-protection-button svg {
-  width: 22px;
-  height: 22px;
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
 }
 
 .board-settings__generate-password-button svg {
-  width: 15px;
-  height: 15px;
+  width: $icon--small;
+  height: $icon--small;
   margin: 0 4px 2px 3px;
   color: var(--accent-color);
 }
@@ -256,8 +255,8 @@
 
 .board-settings__delete-button svg {
   color: $color-retro-red;
-  width: 30px;
-  height: 25px;
+  width: $icon--medium;
+  height: $icon--medium;
 }
 
 .board-settings__confirmation-dialog {
