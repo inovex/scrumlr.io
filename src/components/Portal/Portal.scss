@@ -18,8 +18,8 @@
 
 .portal__frame {
   position: absolute;
-  width: calc(100vw - 24px);
-  height: calc(100vh - 24px);
+  width: 100vw;
+  height: 100vh;
   padding-top: $header__height;
 
   // enable scroll of content
