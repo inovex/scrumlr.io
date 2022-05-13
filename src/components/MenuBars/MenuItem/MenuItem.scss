@@ -23,6 +23,7 @@ $number-of-menu-items: 4;
   padding: 0;
   position: relative;
   width: 36px;
+  cursor: pointer;
 }
 
 @include collapsedColumns(".menu-bars") {
@@ -62,8 +63,10 @@ $number-of-menu-items: 4;
 
 .menu-item__icon {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
   height: 36px;
   border-radius: 100%;
   color: var(--primaryColor);
@@ -90,6 +93,11 @@ $number-of-menu-items: 4;
 
 .menu-item--active .menu-item__icon {
   background-color: $color-grooming-green;
+  color: $color-white;
+}
+
+.menu-item__focus-mode-toggle--active .menu-item__icon {
+  background-color: $color-goal-green;
   color: $color-white;
 }
 
