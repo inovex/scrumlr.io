@@ -59,13 +59,20 @@ export const BoardSettings = () => {
           setIsProtected(true);
         }
       }
-    } else if (!activeEditMode) {
-      store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
-      setIsProtectedOnOpen(false);
-      setIsProtected(false);
-    } else {
-      setActiveEditMode(false);
-      if (passwordInputRef.current) passwordInputRef.current.placeholder = PLACEHOLDER_PASSWORD;
+    } else if (isProtected || isProtectedOnOpen) {
+      if (!activeEditMode) {
+        store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
+        setIsProtectedOnOpen(false);
+        setIsProtected(false);
+        Toast.info(
+          <div>
+            <div>{t("Toast.boardPublic")}</div>
+          </div>
+        );
+      } else {
+        setActiveEditMode(false);
+        if (passwordInputRef.current) passwordInputRef.current.placeholder = PLACEHOLDER_PASSWORD;
+      }
     }
   };
 

@@ -201,7 +201,8 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!",
-    "passwordCopied": "Password copied!"
+    "passwordCopied": "Password copied!",
+    "boardPublic": "The board is now public!"
   },
   "Language": {
     "german": "German",
