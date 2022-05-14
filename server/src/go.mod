@@ -16,7 +16,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.1
 	github.com/uptrace/bun v1.1.5
-	github.com/uptrace/bun/dbfixture v1.0.20
+	github.com/uptrace/bun/dbfixture v1.1.5
 	github.com/uptrace/bun/dialect/pgdialect v1.1.5
 	github.com/uptrace/bun/extra/bundebug v1.1.5
 	github.com/urfave/cli/v2 v2.6.0
