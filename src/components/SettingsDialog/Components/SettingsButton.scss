@@ -32,15 +32,12 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .settings-option-button__label {
-  overflow: hidden;
-  text-overflow: ellipsis;
   color: $color-black;
   font-size: 14px;
   letter-spacing: 0.5px;
   cursor: pointer;
   padding: 16px 24px;
   hyphens: auto;
-  white-space: nowrap;
   width: 290px;
 }
 

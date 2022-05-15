@@ -15,7 +15,7 @@ export const ShowAuthorOption = () => {
   return (
     <BoardOption data-testid="author">
       <BoardOptionButton
-        label={showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
+        label={t("BoardSettings.ShowAuthorOption")}
         onClick={() => {
           dispatch(Actions.editBoard({showAuthors: !showAuthors}));
         }}
