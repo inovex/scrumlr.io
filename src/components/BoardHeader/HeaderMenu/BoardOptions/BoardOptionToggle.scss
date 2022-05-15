@@ -10,8 +10,8 @@ $header-menu-toggle-height: 3px;
 $header-menu-toggle-background-color: #c8c8c8;
 
 .board-option-toggle {
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: $margin--default;
+  margin-right: $margin--default;
   height: $header-menu__item-height;
   display: inline-flex;
   justify-content: center;
