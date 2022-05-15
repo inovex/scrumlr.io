@@ -19,12 +19,13 @@ $color-dark-mode-note--hover: #3d4555;
 // theme colors
 $color-backlog-blue: #0057ff;
 $color-grooming-green: #18d8ab;
+$color-goal-green: #70e000;
 $color-lean-lilac: #c000ff;
-$color-online-orange: #cf7317;
+$color-online-orange: #ffaa5a;
 $color-planning-pink: #ff0069;
 $color-poker-purple: #5e00ff;
 $color-retro-red: #ea434b;
-$color-warning-red: #e5534b;
+$color-warning-red: #eb625b;
 
 @mixin rgb($color) {
   --accent-color: #{$color};
@@ -36,6 +37,9 @@ $color-warning-red: #e5534b;
 }
 .accent-color__grooming-green {
   @include rgb($color-grooming-green);
+}
+.accent-color__goal-green {
+  @include rgb($color-goal-green);
 }
 .accent-color__lean-lilac {
   @include rgb($color-lean-lilac);

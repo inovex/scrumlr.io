@@ -1,10 +1,13 @@
 package common
 
-import "net/http"
+import (
+  "net/http"
+  "strings"
+)
 
 func GetProtocol(r *http.Request) string {
-	if r.TLS == nil {
-		return "http"
-	}
-	return "https"
+  if strings.HasPrefix(r.Header.Get("Origin"), "https") {
+    return "https"
+  }
+  return "http"
 }
