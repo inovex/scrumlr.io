@@ -116,7 +116,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            ShowAuthorOption.hide
+            BoardSettings.ShowAuthorOption
           </span>
           <div
             class="settings-toggle"
@@ -136,7 +136,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            ShowOtherUsersNotesOption.hide
+            BoardSettings.ShowOtherUsersNotesOption
           </span>
           <div
             class="settings-toggle"
@@ -156,7 +156,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            ShowHiddenColumnsOption.show
+            BoardSettings.ShowHiddenColumnsOption
           </span>
           <div
             class="settings-toggle"
