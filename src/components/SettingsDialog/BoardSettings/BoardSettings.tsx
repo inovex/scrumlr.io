@@ -132,15 +132,19 @@ export const BoardSettings = () => {
       />
     );
 
+  const submitPasswordButton = (
+    <CheckIcon
+      className="board-settings__edit-password-button"
+      onClick={() => {
+        setActiveEditMode(false);
+        handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
+      }}
+    />
+  );
+
   const getPasswordStatusButton = () =>
     activeEditMode ? (
-      <CheckIcon
-        className="board-settings__edit-password-button"
-        onClick={() => {
-          setActiveEditMode(false);
-          handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
-        }}
-      />
+      submitPasswordButton
     ) : (
       <EditIcon
         className="board-settings__edit-password-button"
@@ -229,7 +233,7 @@ export const BoardSettings = () => {
                           }
                         }}
                       />
-                      {!isProtected && !activeEditMode && password !== "" && <CheckIcon className="board-settings__edit-password-button" />}
+                      {!isProtected && !activeEditMode && password !== "" && submitPasswordButton}
                       {isProtected && getPasswordVisibilityButton()}
                       {isProtected && getPasswordStatusButton()}
                     </div>
