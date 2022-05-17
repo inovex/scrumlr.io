@@ -1,5 +1,5 @@
 import {Portal} from "components/Portal";
-import {useEffect, useState, VFC} from "react";
+import {useState, VFC} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
@@ -13,9 +13,6 @@ type ParticipantsListProps = {
 
 export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
   const {t} = useTranslation();
-  const [theme, setTheme] = useState(document.documentElement.getAttribute("theme") ?? "light");
-
-  useEffect(() => setTheme(document.documentElement.getAttribute("theme") ?? "light"), [props.open]);
 
   const {me, them} = useAppSelector((state) => ({
     me: state.participants!.self,
@@ -37,7 +34,7 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
         setSearchString("");
       }}
     >
-      <aside className={`participants ${theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink"}`}>
+      <aside className="participants">
         <div className="participants__header">
           <div className="participants__header-title">
             <h4 className="participants__header-text">
