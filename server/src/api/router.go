@@ -118,7 +118,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
-
+		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
 			r.Post("/anonymous", s.signInAnonymously)

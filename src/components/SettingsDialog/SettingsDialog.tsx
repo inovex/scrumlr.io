@@ -15,7 +15,7 @@ import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import {ReactComponent as ParticipantsIcon} from "assets/icon-participants.svg";
 import {ReactComponent as AppearanceIcon} from "assets/icon-appearance.svg";
 import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
-// import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
+import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 import "./SettingsDialog.scss";
 
 export const SettingsDialog: VFC = () => {
@@ -80,14 +80,14 @@ export const SettingsDialog: VFC = () => {
               <p>{t("SettingsDialog.ExportBoardDescription")}</p>
               <ExportIcon className="navigation-item__icon" />
             </Link>
-            {/* <Link */}
-            {/*   to="feedback" */}
-            {/*   className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})} */}
-            {/* > */}
-            {/*   <p>{t("SettingsDialog.Feedback")}</p> */}
-            {/*   <p>{t("SettingsDialog.FeedbackDescription")}</p> */}
-            {/*   <FeedbackIcon className="navigation-item__icon" /> */}
-            {/* </Link> */}
+            <Link
+              to="feedback"
+              className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
+            >
+              <p>{t("SettingsDialog.Feedback")}</p>
+              <p>{t("SettingsDialog.FeedbackDescription")}</p>
+              <FeedbackIcon className="navigation-item__icon" />
+            </Link>
             {me && (
               <Link
                 to="profile"
