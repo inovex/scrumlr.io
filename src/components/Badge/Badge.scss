@@ -14,7 +14,7 @@
   min-width: 30px;
   text-align: center;
   margin: auto;
-  background-color: $color-backlog-blue;
+  background-color: var(--accent-color);
   border-radius: 4px;
   font-size: 8px;
   color: $color-white;
@@ -22,10 +22,4 @@
   text-transform: uppercase;
   padding-left: 5px;
   padding-right: 5px;
-}
-
-[theme="dark"] {
-  .badge > span {
-    background-color: $color-planning-pink;
-  }
 }
