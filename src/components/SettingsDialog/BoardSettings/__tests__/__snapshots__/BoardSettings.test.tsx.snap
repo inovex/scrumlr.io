@@ -63,6 +63,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           />
           <button
             class="settings-option-button board-settings__password-button"
+            id="password-input-section"
           >
             <span
               class="settings-option-button__label"
