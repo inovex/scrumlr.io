@@ -138,6 +138,7 @@ export const BoardSettings = () => {
         className="board-settings__edit-password-button"
         onClick={() => {
           setActiveEditMode(false);
+          handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
         }}
       />
     ) : (
@@ -202,7 +203,12 @@ export const BoardSettings = () => {
               {state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
-                  <SettingsButton className="board-settings__password-button" label={t("BoardSettings.Password")} onClick={() => passwordInputRef.current?.focus()}>
+                  <SettingsButton
+                    id="password-input-section"
+                    className="board-settings__password-button"
+                    label={t("BoardSettings.Password")}
+                    onClick={() => passwordInputRef.current?.focus()}
+                  >
                     <div className="board-settings__password-button_value">
                       <input
                         ref={passwordInputRef}
@@ -217,7 +223,11 @@ export const BoardSettings = () => {
                           setPassword(e.target.value);
                         }}
                         onKeyDown={(e) => e.key === "Enter" && handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
-                        onBlur={() => handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
+                        onBlur={(e) => {
+                          if (e.relatedTarget?.id !== "password-input-section") {
+                            handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
+                          }
+                        }}
                       />
                       {!isProtected && !activeEditMode && password !== "" && <CheckIcon className="board-settings__edit-password-button" />}
                       {isProtected && getPasswordVisibilityButton()}
