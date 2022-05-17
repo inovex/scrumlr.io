@@ -1,0 +1,11 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  package:
+    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+
+
