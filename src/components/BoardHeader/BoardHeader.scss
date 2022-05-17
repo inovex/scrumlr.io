@@ -107,9 +107,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   line-height: 16px;
   margin: auto;
   text-align: center;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: end;
 }
 
 .board-header__name-container {
@@ -141,7 +138,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 .board-header__access-policy-status-icon {
   display: inline;
   vertical-align: bottom;
-  justify-self: end;
 
   width: 20px;
   height: 20px;

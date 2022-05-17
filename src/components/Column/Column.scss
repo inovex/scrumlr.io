@@ -51,7 +51,7 @@
 .column__header-text {
   font-size: calc(18px + 0.4vw);
   border-bottom: solid 3px var(--accent-color);
-  margin: 20px 10px 20px 0;
+  margin: 20px 10px 20px $margin--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
