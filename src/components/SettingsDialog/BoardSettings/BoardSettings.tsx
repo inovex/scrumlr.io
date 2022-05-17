@@ -237,7 +237,7 @@ export const BoardSettings = () => {
                 <SettingsButton
                   data-testid="author"
                   className="board-settings__show-author-button"
-                  label={state.board.showAuthors ? t("ShowAuthorOption.hide") : t("ShowAuthorOption.show")}
+                  label={t("BoardSettings.ShowAuthorOption")}
                   onClick={() => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
@@ -248,7 +248,7 @@ export const BoardSettings = () => {
                 <SettingsButton
                   data-testid="notes"
                   className="board-settings__show-notes-button"
-                  label={state.board.showNotesOfOtherUsers ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
+                  label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
                   <SettingsToggle active={state.board.showNotesOfOtherUsers} />
@@ -257,7 +257,7 @@ export const BoardSettings = () => {
                 <SettingsButton
                   data-testid="columns"
                   className="board-settings__show-columns-button"
-                  label={state.me?.showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
+                  label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
                   <SettingsToggle active={state.me?.showHiddenColumns} />

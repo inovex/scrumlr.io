@@ -34,7 +34,7 @@
   "AccessPolicySelection": {
     "title": "Access policy",
     "publicTitle": "Open",
-    "byPassphraseTitle": "Protected",
+    "byPassphraseTitle": "Password protected",
     "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
     "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
@@ -77,14 +77,6 @@
     "button": "Share board",
     "copyInviteURL": "Copy Invite URL",
     "inviteUrlCopied": "Invite URL Copied"
-  },
-  "ShowAuthorOption": {
-    "show": "Show authors of card",
-    "hide": "Hide authors of card"
-  },
-  "ShowHiddenColumnsOption": {
-    "show": "Show columns",
-    "hide": "Hide columns"
   },
   "Column": {
     "settings": "Settings",
@@ -202,7 +194,8 @@
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!",
     "passwordCopied": "Password copied!",
-    "boardPublic": "The board is now public!"
+    "boardPublic": "The board is now public!",
+    "hiddenColumnsVisible": "Hidden columns are now visible to you!"
   },
   "Language": {
     "german": "German",
@@ -246,6 +239,9 @@
     "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
     "generatePassword": "Generate password and protect",
+    "ShowAuthorOption": "Show authors of cards",
+    "ShowHiddenColumnsOption": "Show hidden columns for me",
+    "ShowOtherUsersNotesOption": "Show cards of other users",
     "save": "save",
     "edit": "edit"
   },

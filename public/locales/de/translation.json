@@ -78,14 +78,6 @@
     "copyInviteURL": "URL kopieren",
     "inviteUrlCopied": "URL wurde kopiert"
   },
-  "ShowAuthorOption": {
-    "show": "Zeige Ersteller der Kärtchen",
-    "hide": "Blende Ersteller der Kärtchen aus"
-  },
-  "ShowHiddenColumnsOption": {
-    "show": "Zeige alle Spalten",
-    "hide": "Blende versteckte Spalten aus"
-  },
   "Column": {
     "settings": "Einstellungen",
     "editName": "Name ändern",
@@ -98,10 +90,7 @@
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
   },
-  "ShowOtherUsersNotesOption": {
-    "show": "Zeige Kärtchen anderer Teilnehmer",
-    "hide": "Blende Kärtchen anderer Teilnehmer aus"
-  },
+
   "ErrorPage": {
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
@@ -201,6 +190,7 @@
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!",
+    "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Passwort kopiert!",
     "boardPublic": "Das Board ist nun öffentlich!"
   },
@@ -245,6 +235,9 @@
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
+    "ShowAuthorOption": "Kartenautoren anzeigen",
+    "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
+    "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
