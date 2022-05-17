@@ -34,7 +34,7 @@
   "AccessPolicySelection": {
     "title": "Access policy",
     "publicTitle": "Open",
-    "byPassphraseTitle": "Password protected",
+    "byPassphraseTitle": "Protected",
     "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
     "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
@@ -89,10 +89,6 @@
     "addColumnLeft": "Add column left",
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants"
-  },
-  "ShowOtherUsersNotesOption": {
-    "show": "Show notes of other users",
-    "hide": "Hide notes of other users"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -193,9 +189,9 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!",
+    "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Password copied!",
-    "boardPublic": "The board is now public!",
-    "hiddenColumnsVisible": "Hidden columns are now visible to you!"
+    "boardMadePublic": "The board is now public!"
   },
   "Language": {
     "german": "German",
@@ -238,10 +234,10 @@
     "SetAccessPolicyOpen": "Remove password protection",
     "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
-    "generatePassword": "Generate password and protect",
     "ShowAuthorOption": "Show authors of cards",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show cards of other users",
+    "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },

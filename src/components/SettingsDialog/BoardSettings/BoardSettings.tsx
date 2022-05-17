@@ -66,7 +66,7 @@ export const BoardSettings = () => {
         setIsProtected(false);
         Toast.info(
           <div>
-            <div>{t("Toast.boardPublic")}</div>
+            <div>{t("Toast.boardMadePublic")}</div>
           </div>
         );
       } else {

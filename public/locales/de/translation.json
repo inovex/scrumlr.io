@@ -192,7 +192,7 @@
     "timerCancelled": "Der Alarm wurde abgebrochen!",
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Passwort kopiert!",
-    "boardPublic": "Das Board ist nun öffentlich!"
+    "boardMadePublic": "Das Board ist nun öffentlich!"
   },
   "Language": {
     "german": "Deutsch",
