@@ -16,7 +16,7 @@
     "i18next": "^21.8.2",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.0",
-    "marked": "4.0.15",
+    "marked": "4.0.16",
     "qrcode.react": "^2.0.0",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
