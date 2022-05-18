@@ -1,3 +1,4 @@
+import {useTranslation} from "react-i18next";
 import {Avatar, generateRandomProps, AvataaarProps} from "components/Avatar";
 import {
   AVATAR_ACCESSORIES_TYPES,
@@ -25,6 +26,7 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
+  const {t} = useTranslation();
   const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
   }));
@@ -83,6 +85,8 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                       initialValue={properties[element.key]}
                       onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
                       key={element.key}
+                      localizationPath={`Avatar.${element.key}.`}
+                      label={t(`Avatar.${element.key}.label`)}
                       className="avatar-settings__settings-group-item"
                     />
                     {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
