@@ -1,10 +1,9 @@
 import {render} from "testUtils";
 import {Timer} from "components/Timer";
-import {mocked} from "ts-jest/utils";
 import {useAppSelector} from "store";
 
 jest.mock("store");
-const mockedUseAppSelector = mocked(useAppSelector);
+const mockedUseAppSelector = jest.mocked(useAppSelector);
 
 describe("Timer", () => {
   test("should render correctly", () => {

@@ -189,7 +189,8 @@
     "moderationEnded": "Die Moderation wurde beendet!",
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
-    "timerCancelled": "Der Alarm wurde abgebrochen!"
+    "timerCancelled": "Der Alarm wurde abgebrochen!",
+    "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!"
   },
   "Language": {
     "german": "Deutsch",
