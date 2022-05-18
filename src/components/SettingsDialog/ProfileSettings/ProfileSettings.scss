@@ -1,12 +1,25 @@
 @import "src/constants/style";
-@import "../SettingsDialog";
 
 .profile-settings__container {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: $margin--large;
   height: 100%;
-  margin-bottom: $settings-dialog-container--bottom;
+
+  &-wrapper {
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-right: -20px;
+    margin-bottom: $margin--large;
+
+    @include scrollbar();
+
+    @media screen and (min-width: 920px) {
+      padding-right: 20px;
+      margin-right: -30px;
+      margin-bottom: $margin--large;
+    }
+  }
 }
 
 .profile-settings__container > button {
@@ -48,6 +61,7 @@
 .profile-settings__avatar-icon {
   height: 120px;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .profile-settings__avatar-selection {
