@@ -98,13 +98,13 @@ $header-left_distance: 24px;
   height: 32px;
   position: relative;
   display: flex;
-  padding: $margin--default;
+  padding: $padding--default;
   justify-content: space-between;
 }
 
 .list__header > label {
   letter-spacing: $letter-spacing--small;
-  color: $color-darkest-gray;
+  color: $color-darker-gray;
   opacity: 0.8;
   font-size: $text-size;
 }

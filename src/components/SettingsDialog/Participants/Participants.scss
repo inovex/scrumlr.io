@@ -10,18 +10,6 @@
   flex-grow: 1;
 }
 
-.participants__search-and-filter {
-  color: $color-black;
-  margin-bottom: $margin--default;
-  align-self: center;
-}
-
-[theme="dark"] {
-  .participants__search-and-filter {
-    color: $color-white;
-  }
-}
-
 .participants__user-list-wrapper {
   overflow: auto;
   width: 100%;
