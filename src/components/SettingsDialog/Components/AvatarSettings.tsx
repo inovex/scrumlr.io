@@ -18,6 +18,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
+import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
   id?: string;
@@ -68,18 +69,25 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   return (
     <>
-      <Avatar seed={id ?? ""} avatar={properties} className="profile-settings__avatar-icon" />
-      <div className="profile-settings__avatar-selection">
+      <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+      <div className="avatar-settings__settings">
         {Object.entries(settingGroups).map(([label, props]) => (
-          <SettingsAccordion label={label} key={label}>
-            {props.map((element) => (
-              <SettingsCarousel
-                carouselItems={element.values}
-                initialValue={properties[element.key]}
-                onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                key={element.key}
-              />
-            ))}
+          <SettingsAccordion label={label} key={label} className="avatar-settings__settings-group">
+            <hr className="avatar-settings__settings-group-seperator" />
+            <>
+              {props.map((element) => (
+                <>
+                  <SettingsCarousel
+                    carouselItems={element.values}
+                    initialValue={properties[element.key]}
+                    onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
+                    key={element.key}
+                    className="avatar-settings__settings-group-item"
+                  />
+                  <hr className="avatar-settings__settings-group-seperator" />
+                </>
+              ))}
+            </>
           </SettingsAccordion>
         ))}
       </div>

@@ -6,13 +6,14 @@ import "./SettingsAccordion.scss";
 export interface SettingsAccordionProps {
   children: ReactElement | ReactElement[];
   label?: string;
+  className?: string;
 }
 
-export const SettingsAccordion: FC<SettingsAccordionProps> = ({label, children}) => {
+export const SettingsAccordion: FC<SettingsAccordionProps> = ({label, children, className}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="accordion-item">
+    <div className={classNames("accordion-item", className)}>
       <button className="accordion-item__header" onClick={() => setIsOpen(!isOpen)}>
         {label}
         <DropdownIcon className={classNames("accordion-item__header-icon", {"accordion-item__header-icon--open": isOpen})} />

@@ -58,27 +58,9 @@
   color: $color-black;
 }
 
-.profile-settings__avatar-icon {
-  height: 120px;
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.profile-settings__avatar-selection {
-  background-color: $color-white;
-  border-radius: 8px;
-
-  > *:not(:last-child) {
-    border-bottom: 1px solid $color-white;
-  }
-}
-
 [theme="dark"] {
   .profile-settings__user-name-button_input,
   .profile-settings__user-name-button_input::placeholder {
     color: $color-white;
-  }
-  .profile-settings__avatar-selection {
-    background-color: $color-dark-mode-note;
   }
 }

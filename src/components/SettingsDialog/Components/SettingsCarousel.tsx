@@ -2,6 +2,7 @@ import {useEffect, useState, VFC} from "react";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./SettingsCarousel.scss";
+import classNames from "classnames";
 
 export interface SettingsCarouselProps<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,7 +30,7 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
   };
 
   return (
-    <div className="settings-carousel">
+    <div className={classNames("settings-carousel", className)}>
       <button className="settings-carousel__button settings-carousel__button--left" onClick={() => handleClick(true)}>
         <LeftArrowIcon />
       </button>
