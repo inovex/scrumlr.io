@@ -1,61 +1,73 @@
 @import "src/constants/style";
+@import "../SettingsDialog";
 
-.profile-settings__container {
-  display: flex;
-  flex-direction: column;
-  gap: $margin--large;
-  height: 100%;
+.profile-settings {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $margin--large;
+    height: 100%;
+    width: 100%;
+    max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
 
-  &-wrapper {
-    overflow-y: auto;
-    padding-right: 10px;
-    margin-right: -20px;
-    margin-bottom: $margin--large;
-
-    @include scrollbar();
+    @media screen and (min-width: 450px) {
+      max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+    }
 
     @media screen and (min-width: 920px) {
-      padding-right: 20px;
-      margin-right: -30px;
-      margin-bottom: $margin--large;
+      max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+    }
+
+    &-wrapper {
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-right: -20px;
+      margin-bottom: $settings-dialog-container--bottom;
+
+      @include scrollbar();
+
+      @media screen and (min-width: 920px) {
+        padding-right: 20px;
+        margin-right: -30px;
+      }
+    }
+
+    > button {
+      flex: 0;
     }
   }
-}
 
-.profile-settings__container > button {
-  flex: 0;
-}
+  &__user-name-button {
+    justify-content: space-between;
+    cursor: text;
 
-.profile-settings__user-name-button {
-  justify-content: space-between;
-  cursor: text;
-}
+    span {
+      cursor: inherit;
+    }
 
-.profile-settings__user-name-button span {
-  cursor: inherit;
-}
+    &_input {
+      background-color: transparent;
+      border: none;
+      padding: 16px 24px 16px 16px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      font-size: 14px;
+      text-align: right;
+      max-width: 150px;
+      cursor: inherit;
 
-.profile-settings__user-name-button_input {
-  background-color: transparent;
-  border: none;
-  padding: 16px 24px 16px 16px;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
-  text-align: right;
-  max-width: 150px;
-  cursor: inherit;
-}
+      &::placeholder {
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        font-size: 14px;
+        color: $color-black;
+      }
 
-.profile-settings__user-name-button_input:focus {
-  outline: none;
-}
-
-.profile-settings__user-name-button_input::placeholder {
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
-  color: $color-black;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }
 
 [theme="dark"] {
