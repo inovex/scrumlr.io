@@ -35,6 +35,7 @@
     "title": "Access policy",
     "publicTitle": "Open",
     "byPassphraseTitle": "Protected",
+    "byInviteTitle": "By Invite",
     "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
     "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
@@ -237,6 +238,7 @@
     "ShowAuthorOption": "Show authors of cards",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show cards of other users",
+    "ToggleByInviteOption": "Only by invite",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
