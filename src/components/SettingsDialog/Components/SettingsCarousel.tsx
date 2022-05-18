@@ -34,7 +34,10 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
       <button className="settings-carousel__button settings-carousel__button--left" onClick={() => handleClick(true)}>
         <LeftArrowIcon />
       </button>
-      <span className="settings-carousel__text">{carouselItems[selection]}</span>
+      <div className="settings-carousel__text">
+        {label && <span className="settings-carousel__text-label">{label}</span>}
+        <span className="settings-carousel__text-value">{carouselItems[selection]}</span>
+      </div>
       <button className="settings-carousel__button settings-carousel__button--right" onClick={() => handleClick()}>
         <RightArrowIcon />
       </button>

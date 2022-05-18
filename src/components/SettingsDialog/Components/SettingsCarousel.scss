@@ -8,8 +8,19 @@
   border-radius: 8px;
 
   &__text {
-    font-size: 14px;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba($color-black, 0.5);
+    }
+    &-value {
+      font-size: 14px;
+      font-weight: bold;
+    }
   }
 
   &__button {
