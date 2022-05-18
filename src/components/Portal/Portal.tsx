@@ -22,6 +22,8 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
     throw new Error("Portal HTML Element doesn't exist!");
   }
 
+  const theme = document.documentElement.getAttribute("theme") ?? "light";
+
   useWindowEvent("keydown", (event) => {
     if (event.key !== "Escape") return;
     event.preventDefault();
@@ -37,7 +39,8 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
             "portal__frame",
             {"portal__frame--hiddenOverflow": hiddenOverflow},
             {"portal__frame--centered": centered},
-            {"portal__frame--disabledPadding": disabledPadding}
+            {"portal__frame--disabledPadding": disabledPadding},
+            theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink"
           )}
         >
           <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
