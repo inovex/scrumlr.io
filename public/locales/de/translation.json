@@ -35,7 +35,6 @@
     "title": "Zugriffseinstellung",
     "publicTitle": "Offen",
     "byPassphraseTitle": "Passwortgeschützt",
-    "byInviteTitle": "Auf Einladung",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
     "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fälle sicher genug sein, da die URLs schwer zu erraten sind.",
@@ -239,7 +238,6 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
-    "ToggleByInviteOption": "Nur mit Einladung",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
