@@ -16,14 +16,6 @@ $note-dialog-spacing-side: 15px;
   margin-top: $note-dialog-top-margin;
 }
 
-.note-dialog__pointer-moderator {
-  cursor: pointer;
-}
-
-.note-dialog__disabled-pointer {
-  cursor: not-allowed;
-}
-
 .note-dialog__disabled-click {
   pointer-events: none;
 }
