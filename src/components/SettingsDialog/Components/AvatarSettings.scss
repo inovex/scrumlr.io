@@ -12,15 +12,34 @@
     border-radius: 8px;
 
     &-group {
-      &:not(:last-child) {
-        border-bottom: 0.5px solid $color-white-one;
+      &:last-child {
+        padding: $padding--small / 2 0;
+      }
+
+      &-header {
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(var(--accent-color-rgb), 0.1);
+        }
       }
 
       &-item {
         padding: $padding--extra-small 0;
+        width: 90%;
+        margin: 0 auto;
 
         &:hover {
-          background-color: $color-white-one;
+          background-color: rgba(var(--accent-color-rgb), 0.1);
+        }
+
+        &-seperator {
+          margin: 0;
+          margin-left: 10%;
+          width: 80%;
+          border: 0;
+          border-top: 0.5px solid $color-light-gray;
         }
       }
 
@@ -29,11 +48,7 @@
         margin-left: 5%;
         width: 90%;
         border: 0;
-        border-top: 0.5px solid $color-white-one;
-
-        &:last-child {
-          display: none;
-        }
+        border-top: 0.5px solid $color-light-gray;
       }
     }
   }
@@ -45,12 +60,20 @@
       background-color: $color-dark-mode-note;
 
       &-group {
-        &:not(:last-child) {
-          border-bottom: 0.5px solid $color-dark-one;
+        &-header {
+          &:hover {
+            background-color: $color-dark-mode-note--hover;
+          }
         }
 
-        &-item:hover {
-          background-color: $color-dark-one;
+        &-item {
+          &:hover {
+            background-color: $color-dark-mode-note--hover;
+          }
+
+          &-seperator {
+            border-top: 0.5px solid $color-dark-one;
+          }
         }
 
         &-seperator {

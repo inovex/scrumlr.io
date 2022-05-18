@@ -2,8 +2,6 @@
 
 .accordion-item {
   width: 100%;
-  // background-color: $color-white;
-  // border-radius: 8px;
 
   &__header {
     width: 100%;
@@ -29,7 +27,6 @@
 
   &__body {
     width: 100%;
-    padding: 0 $padding--medium;
     max-height: 0;
     overflow: hidden;
     transition: max-height 500ms ease-in-out;

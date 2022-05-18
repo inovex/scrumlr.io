@@ -71,24 +71,27 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     <>
       <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
       <div className="avatar-settings__settings">
-        {Object.entries(settingGroups).map(([label, props]) => (
-          <SettingsAccordion label={label} key={label} className="avatar-settings__settings-group">
-            <hr className="avatar-settings__settings-group-seperator" />
-            <>
-              {props.map((element) => (
-                <>
-                  <SettingsCarousel
-                    carouselItems={element.values}
-                    initialValue={properties[element.key]}
-                    onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                    key={element.key}
-                    className="avatar-settings__settings-group-item"
-                  />
-                  <hr className="avatar-settings__settings-group-seperator" />
-                </>
-              ))}
-            </>
-          </SettingsAccordion>
+        {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
+          <>
+            <SettingsAccordion label={label} key={label} headerClassName="avatar-settings__settings-group-header">
+              <hr className="avatar-settings__settings-group-seperator" />
+              <div className="avatar-settings__settings-group">
+                {props.map((element, index) => (
+                  <>
+                    <SettingsCarousel
+                      carouselItems={element.values}
+                      initialValue={properties[element.key]}
+                      onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
+                      key={element.key}
+                      className="avatar-settings__settings-group-item"
+                    />
+                    {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
+                  </>
+                ))}
+              </div>
+            </SettingsAccordion>
+            {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
+          </>
         ))}
       </div>
     </>
