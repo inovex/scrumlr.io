@@ -287,6 +287,11 @@
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
   },
   "Avatar": {
+    "groups": {
+      "hair": "Hüte und Haare",
+      "facialFeatures": "Rund ums Gesicht",
+      "clothing": "Bekleidung und Accessoires"
+    },
     "hairColor": {
       "label": "Haarfarbe",
       "Auburn": "Rotbraun",

@@ -49,22 +49,22 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   }, [properties]);
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps}[]} = {
-    Hair: [
+    hair: [
+      {values: AVATAR_TOP_TYPES, key: "topType"},
       {values: AVATAR_HAIR_COLORS, key: "hairColor"},
-      {values: AVATAR_EYEBROW_TYPES, key: "eyebrowType"},
-      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor"},
       {values: AVATAR_FACIAL_HAIR_TYPES, key: "facialHairType"},
+      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor"},
     ],
-    "Facial Features": [
+    facialFeatures: [
       {values: AVATAR_SKIN_COLORS, key: "skinColor"},
+      {values: AVATAR_EYEBROW_TYPES, key: "eyebrowType"},
       {values: AVATAR_EYE_TYPES, key: "eyeType"},
       {values: AVATAR_MOUTH_TYPES, key: "mouthType"},
     ],
-    Clothes: [
-      {values: AVATAR_TOP_TYPES, key: "topType"},
+    clothing: [
       {values: AVATAR_ACCESSORIES_TYPES, key: "accessoriesType"},
-      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor"},
       {values: AVATAR_CLOTHE_TYPES, key: "clotheType"},
+      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor"},
       {values: AVATAR_GRAPHIC_TYPES, key: "graphicType"},
     ],
   };
@@ -75,7 +75,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       <div className="avatar-settings__settings">
         {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
           <>
-            <SettingsAccordion label={label} key={label} headerClassName="avatar-settings__settings-group-header">
+            <SettingsAccordion label={t(`Avatar.groups.${label}`)} key={label} headerClassName="avatar-settings__settings-group-header">
               <hr className="avatar-settings__settings-group-seperator" />
               <div className="avatar-settings__settings-group">
                 {props.map((element, index) => (
