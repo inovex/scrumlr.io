@@ -42,8 +42,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   let initialState = state.participant.user.avatar;
   if (initialState === null || initialState === undefined) {
-    const {className, ...props} = generateRandomProps(id ?? "");
-    initialState = props as AvataaarProps;
+    initialState = generateRandomProps(id ?? "");
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
@@ -63,22 +62,50 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       <Avatar seed={id ?? ""} avatar={properties} className="profile-settings__avatar-icon" />
       <div className="profile-settings__avatar-selection">
         <SettingsAccordion label="Hair">
-          <SettingsCarousel carouselItems={AVATAR_HAIR_COLORS} onValueChange={(value) => updateAvatar("hairColor", value as AvatarHairColor)} />
-          <SettingsCarousel carouselItems={AVATAR_EYEBROW_TYPES} onValueChange={(value) => updateAvatar("eyebrowType", value as AvatarEyebrowType)} />
-          <SettingsCarousel carouselItems={AVATAR_FACIAL_HAIR_COLORS} onValueChange={(value) => updateAvatar("facialHairColor", value as AvatarFacialHairColor)} />
-          <SettingsCarousel carouselItems={AVATAR_FACIAL_HAIR_TYPES} onValueChange={(value) => updateAvatar("facialHairType", value as AvatarFacialHairType)} />
+          <SettingsCarousel carouselItems={AVATAR_HAIR_COLORS} initialValue={properties.hairColor} onValueChange={(value) => updateAvatar("hairColor", value as AvatarHairColor)} />
+          <SettingsCarousel
+            carouselItems={AVATAR_EYEBROW_TYPES}
+            initialValue={properties.eyebrowType}
+            onValueChange={(value) => updateAvatar("eyebrowType", value as AvatarEyebrowType)}
+          />
+          <SettingsCarousel
+            carouselItems={AVATAR_FACIAL_HAIR_COLORS}
+            initialValue={properties.facialHairColor}
+            onValueChange={(value) => updateAvatar("facialHairColor", value as AvatarFacialHairColor)}
+          />
+          <SettingsCarousel
+            carouselItems={AVATAR_FACIAL_HAIR_TYPES}
+            initialValue={properties.facialHairType}
+            onValueChange={(value) => updateAvatar("facialHairType", value as AvatarFacialHairType)}
+          />
         </SettingsAccordion>
         <SettingsAccordion label="Facial Features">
-          <SettingsCarousel carouselItems={AVATAR_SKIN_COLORS} onValueChange={(value) => updateAvatar("skinColor", value as AvatarSkinColor)} />
-          <SettingsCarousel carouselItems={AVATAR_EYE_TYPES} onValueChange={(value) => updateAvatar("eyeType", value as AvatarEyeType)} />
-          <SettingsCarousel carouselItems={AVATAR_MOUTH_TYPES} onValueChange={(value) => updateAvatar("mouthType", value as AvatarMouthType)} />
+          <SettingsCarousel carouselItems={AVATAR_SKIN_COLORS} initialValue={properties.skinColor} onValueChange={(value) => updateAvatar("skinColor", value as AvatarSkinColor)} />
+          <SettingsCarousel carouselItems={AVATAR_EYE_TYPES} initialValue={properties.eyeType} onValueChange={(value) => updateAvatar("eyeType", value as AvatarEyeType)} />
+          <SettingsCarousel carouselItems={AVATAR_MOUTH_TYPES} initialValue={properties.mouthType} onValueChange={(value) => updateAvatar("mouthType", value as AvatarMouthType)} />
         </SettingsAccordion>
         <SettingsAccordion label="Clothes">
-          <SettingsCarousel carouselItems={AVATAR_TOP_TYPES} onValueChange={(value) => updateAvatar("topType", value as AvatarTopType)} />
-          <SettingsCarousel carouselItems={AVATAR_ACCESSORIES_TYPES} onValueChange={(value) => updateAvatar("accessoriesType", value as AvatarAccessoriesType)} />
-          <SettingsCarousel carouselItems={AVATAR_CLOTHE_COLORS} onValueChange={(value) => updateAvatar("clotheColor", value as AvatarClotheColor)} />
-          <SettingsCarousel carouselItems={AVATAR_CLOTHE_TYPES} onValueChange={(value) => updateAvatar("clotheType", value as AvatarClotheType)} />
-          <SettingsCarousel carouselItems={AVATAR_GRAPHIC_TYPES} onValueChange={(value) => updateAvatar("graphicType", value as AvatarGraphicType)} />
+          <SettingsCarousel carouselItems={AVATAR_TOP_TYPES} initialValue={properties.topType} onValueChange={(value) => updateAvatar("topType", value as AvatarTopType)} />
+          <SettingsCarousel
+            carouselItems={AVATAR_ACCESSORIES_TYPES}
+            initialValue={properties.accessoriesType}
+            onValueChange={(value) => updateAvatar("accessoriesType", value as AvatarAccessoriesType)}
+          />
+          <SettingsCarousel
+            carouselItems={AVATAR_CLOTHE_COLORS}
+            initialValue={properties.clotheColor}
+            onValueChange={(value) => updateAvatar("clotheColor", value as AvatarClotheColor)}
+          />
+          <SettingsCarousel
+            carouselItems={AVATAR_CLOTHE_TYPES}
+            initialValue={properties.clotheType}
+            onValueChange={(value) => updateAvatar("clotheType", value as AvatarClotheType)}
+          />
+          <SettingsCarousel
+            carouselItems={AVATAR_GRAPHIC_TYPES}
+            initialValue={properties.graphicType}
+            onValueChange={(value) => updateAvatar("graphicType", value as AvatarGraphicType)}
+          />
         </SettingsAccordion>
       </div>
     </>

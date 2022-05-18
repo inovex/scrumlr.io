@@ -5,14 +5,16 @@ import "./SettingsCarousel.scss";
 
 export interface SettingsCarouselProps<T> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onValueChange?: (value: T) => any;
+  onValueChange?: (value: T) => unknown;
   carouselItems: readonly T[];
+  initialValue?: T;
   label?: string;
   className?: string;
 }
 
-export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, onValueChange, label, className}) => {
-  const [selection, setSelection] = useState(0);
+export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, initialValue, onValueChange, label, className}) => {
+  const index = carouselItems.indexOf(initialValue ?? "");
+  const [selection, setSelection] = useState(index >= 0 ? index : 0);
 
   useEffect(() => {
     if (onValueChange) onValueChange(carouselItems[selection]);

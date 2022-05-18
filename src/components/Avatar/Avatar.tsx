@@ -31,6 +31,7 @@ import {
 } from "./types";
 
 export interface AvataaarProps {
+  accentColorClass: string;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
   clotheColor: AvatarClotheColor;
@@ -82,25 +83,21 @@ export const generateRandomProps = (seed: string) => {
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
 
-  const props: Omit<AvatarProps, "seed"> = {
-    className: getColorClassName(getColorForIndex(hash)),
-    avatar: {
-      skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
-      topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
-      clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
-      graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
-      clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
-      hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
-      facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
-      facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
-      accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
-      eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
-      eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
-      mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
-    },
-  };
-
-  return props;
+  return {
+    accentColorClass: getColorClassName(getColorForIndex(hash)),
+    skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
+    topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
+    clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
+    graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
+    clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
+    hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
+    facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
+    facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
+    accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
+    eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
+    eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
+    mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
+  } as AvataaarProps;
 };
 
 /**
@@ -125,13 +122,13 @@ export const generateRandomProps = (seed: string) => {
 export const Avatar = React.memo(
   ({className, seed, avatar}: AvatarProps) => {
     if (!avatar) {
-      const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
-      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps.avatar} />;
+      const {accentColorClass, ...avatarProps} = generateRandomProps(seed);
+      return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
     }
 
     return (
       <Avataar
-        className={classNames("avatar", className)}
+        className={classNames("avatar", className, avatar.accentColorClass)}
         avatarStyle="Circle"
         topType={avatar.topType}
         accessoriesType={avatar.accessoriesType}
