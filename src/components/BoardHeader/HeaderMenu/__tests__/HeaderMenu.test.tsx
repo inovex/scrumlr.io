@@ -81,7 +81,7 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("author")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Hide authors of card");
+        expect(label.innerHTML).toEqual("Show authors of cards");
       });
     });
 
@@ -105,7 +105,7 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("note")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Hide notes of other users");
+        expect(label.innerHTML).toEqual("Show cards of other users");
       });
     });
 
@@ -129,7 +129,7 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("column")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Show columns");
+        expect(label.innerHTML).toEqual("Show hidden columns for me");
       });
     });
   });

@@ -69,11 +69,9 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     }
   }
 
-  // const Icon = visible ? visibleIcon : hiddenIcon;
-
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
-      <h2 className="column__header-text">{name}</h2>
+      <h2 className={classNames("column__header-text", visible ? "column__header-text--visible" : "column__header-text--hidden")}>{name}</h2>
     ) : (
       <input
         tabIndex={tabIndex}
