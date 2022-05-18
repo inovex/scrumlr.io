@@ -522,7 +522,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           </div>
         </button>
         <hr
-          class="settings-dialog__seperator"
+          class="settings-dialog__separator"
         />
         <button
           class="settings-option-button participants__user"
@@ -970,7 +970,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           </div>
         </button>
         <hr
-          class="settings-dialog__seperator"
+          class="settings-dialog__separator"
         />
         <button
           class="settings-option-button participants__user"

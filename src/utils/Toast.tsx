@@ -26,7 +26,17 @@ function error(content: ReactNode, autoClose: number | false = 3000) {
   toast.error(content, {...toastConfig, autoClose});
 }
 
+/**
+ * Display info message via toast.
+ *
+ * @param content Info message.
+ */
+function info(content: ReactNode, autoClose: number | false = 3000) {
+  toast.info(content, {...toastConfig, autoClose});
+}
+
 export const Toast = {
   success,
   error,
+  info,
 };
