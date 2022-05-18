@@ -42,7 +42,7 @@
 
   align-self: center;
 
-  padding: $large-padding;
+  padding: $large-padding $large-padding 64px;
 }
 
 .welcome-area__promotion-text > p {
@@ -143,4 +143,55 @@
   }
 }
 
+.welcome-area__migration {
+  background: #ffebee;
+  border-radius: 6px;
+  border: 1px solid red;
+  padding: 16px 16px 42px;
+
+  position: relative;
+}
+
+.welcome-area__migration-disclaimer {
+  font-weight: bold;
+}
+
+.welcome-area__gimme-beta {
+  position: absolute;
+  bottom: -32px;
+  min-width: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+
+  padding: 16px 32px;
+  background: #d03d3d;
+  color: white;
+  border: none;
+  font-weight: 900;
+  border-radius: 6px;
+
+  text-align: center;
+  text-decoration: none;
+
+  transition: background-color 0.1s ease-in-out;
+}
+
+.welcome-area__gimme-beta:hover,
+.welcome-area__gimme-beta:focus, {
+  background: #ff0000;
+}
+
+.welcome-area__gimme-beta-icon {
+  margin-left: 16px;
+}
+
+.welcome-area__gimme-beta-icon * {
+  fill: #ffffff;
+}
 

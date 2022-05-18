@@ -11,14 +11,22 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
         <div className="welcome-area__promotion-text">
           <h2>Progress is impossible without change</h2>
 
-          <p>
-            Take a seat and let us guide you and your team through your first
-            online retrospective. Start your first session within seconds -
-            completely for free, no registration or payment details required.
-            Put your thoughts and your feedback on cards and share them
-            instantly on a collaborative virtual board. Vote on the topics that
-            really matter. Learn and grow as a team.
-          </p>
+          <div className="welcome-area__migration">
+            <p>
+              Like George Bernard Show we really believe that "progress is impossible without change".
+              Consequently Scrumlr has to change too and we are happy to announce that from now on you can start exploring
+              our new iteration of the application on <a href="https://beta.scrumlr.io">beta.scrumlr.io</a>. Checkout our
+              {" "}<a href="https://github.com/inovex/scrumlr.io/wiki/Release-announcement">release announcement</a>{" "}
+              for further information.
+            </p>
+
+            <p className="welcome-area__migration-disclaimer">
+              We expect to enroll the new version on 1st August 2022 without a data migration and further notice. Please
+              make sure that you export all of your boards and save the results of your sessions by that time.
+            </p>
+
+            <a href="https://beta.scrumlr.io" className="welcome-area__gimme-beta">GIMME THE BETA <Icon className="welcome-area__gimme-beta-icon" name="circle-arrow-right" /> </a>
+          </div>
         </div>
       </div>
     </div>
