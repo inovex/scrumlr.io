@@ -32,12 +32,14 @@ export const BoardSettings = () => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
-  const [isProtectedOnOpen, setIsProtectedOnOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
+  const [isProtectedOnInitialSettingsOpen, setIsProtectedOnInitialSettingsOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [activeEditMode, setActiveEditMode] = useState(false);
 
   const boardInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  const isByInvite = state.board.accessPolicy === "BY_INVITE";
 
   const handleSetPassword = (newPassword: string) => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
@@ -52,17 +54,17 @@ export const BoardSettings = () => {
           )
         );
         if (activeEditMode) {
-          setIsProtectedOnOpen(false);
+          setIsProtectedOnInitialSettingsOpen(false);
           setActiveEditMode(false);
         }
         if (!isProtected) {
           setIsProtected(true);
         }
       }
-    } else if (isProtected || isProtectedOnOpen) {
+    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
       if (!activeEditMode) {
         store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
-        setIsProtectedOnOpen(false);
+        setIsProtectedOnInitialSettingsOpen(false);
         setIsProtected(false);
         Toast.info(
           <div>
@@ -127,8 +129,8 @@ export const BoardSettings = () => {
       <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
     ) : (
       <HiddenIcon
-        className={!isProtectedOnOpen || activeEditMode ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
-        onClick={() => !isProtectedOnOpen && setShowPassword(true)}
+        className={!isProtectedOnInitialSettingsOpen || activeEditMode ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
+        onClick={() => !isProtectedOnInitialSettingsOpen && setShowPassword(true)}
       />
     );
 
@@ -153,6 +155,24 @@ export const BoardSettings = () => {
         }}
       />
     );
+
+  const getAccessPolicyTitle = () => {
+    if (isByInvite)
+      return (
+        <>
+          <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
+          <SetPolicyIcon />
+        </>
+      );
+    return !isProtected ? (
+      <span>{t("AccessPolicySelection.publicTitle")}</span>
+    ) : (
+      <>
+        <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
+        <SetPolicyIcon />
+      </>
+    );
+  };
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__backlog-blue")}>
@@ -192,19 +212,10 @@ export const BoardSettings = () => {
           <div className="board-settings__group-and-button">
             <div className="settings-dialog__group">
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
-                <div className="board-settings__policy-button_value">
-                  {!isProtected ? (
-                    <span>{t("AccessPolicySelection.publicTitle")}</span>
-                  ) : (
-                    <>
-                      <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-                      <SetPolicyIcon />
-                    </>
-                  )}
-                </div>
+                <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
               </SettingsButton>
 
-              {state.currentUserIsModerator && (
+              {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
                   <SettingsButton
@@ -220,7 +231,7 @@ export const BoardSettings = () => {
                         className="board-settings__password-button_value-input"
                         value={password}
                         readOnly={isProtected && !activeEditMode}
-                        disabled={isProtectedOnOpen && !activeEditMode}
+                        disabled={isProtectedOnInitialSettingsOpen && !activeEditMode}
                         placeholder={!isProtected || (isProtected && activeEditMode) ? "" : PLACEHOLDER_PASSWORD}
                         autoComplete="off"
                         onChange={(e) => {
@@ -242,7 +253,7 @@ export const BoardSettings = () => {
               )}
             </div>
 
-            {state.currentUserIsModerator && getPasswordManagementButton()}
+            {!isByInvite && state.currentUserIsModerator && getPasswordManagementButton()}
           </div>
 
           {state.currentUserIsModerator && (

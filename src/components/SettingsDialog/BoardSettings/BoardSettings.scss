@@ -92,6 +92,7 @@
 
 .board-settings__policy-button span {
   cursor: inherit;
+  flex: 1;
 }
 
 .board-settings__policy-button_value {
@@ -106,6 +107,7 @@
   font-weight: bold;
   letter-spacing: 0.5px;
   font-size: 14px;
+  color: $color-placeholder;
 }
 
 @media screen and (max-width: 920px) {
