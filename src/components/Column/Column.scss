@@ -10,7 +10,7 @@
   display: flex;
 }
 .column__moderation-isActive {
-  @include inset-border($top: true, $bottom: true, $color: $color-grooming-green);
+  @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
 }
 .column:nth-child(odd) {
   background-color: $color-white-one;
@@ -47,13 +47,21 @@
 
 .column__header-text {
   font-size: calc(18px + 0.4vw);
-  color: $color-black;
   border-bottom: solid 3px var(--accent-color);
   margin: 20px 10px 20px $margin--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
 }
+
+.column__header-text--visible {
+  color: $color-black;
+}
+
+.column__header-text--hidden {
+  color: $color-middle-gray;
+}
+
 .column__header-input {
   display: inline-block;
   border: none;
@@ -150,7 +158,7 @@
 }
 
 [theme="dark"] {
-  .column__header-text {
+  .column__header-text--visible {
     color: $color-white;
   }
   .column__header-toggle-button-icon {

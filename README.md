@@ -8,7 +8,7 @@
   </p>
   <p>
     <a href="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml">
-      <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg"/>
+      <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg?branch=main"/>
     </a>
   </p>
 </div>
