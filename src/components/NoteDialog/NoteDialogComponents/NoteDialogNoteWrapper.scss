@@ -14,7 +14,7 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
 }
 
 .note-dialog__note-wrapper {
-  padding-right: calc(2 * #{$note-dialog-spacing-side});
+  padding-right: #{$note-dialog-spacing-side};
 }
 
 .note-dialog__note-wrapper .note-dialog__note:last-child {

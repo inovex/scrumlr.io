@@ -1,8 +1,7 @@
 @import "constants/style";
 
 $board-header__hover-padding-top-bottom: 5px;
-$board-header__hover-padding-side: 20px;
-$board-header__hover-padding: $board-header__hover-padding-top-bottom $board-header__hover-padding-side;
+$board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--large;
 
 .board-header {
   position: fixed;
