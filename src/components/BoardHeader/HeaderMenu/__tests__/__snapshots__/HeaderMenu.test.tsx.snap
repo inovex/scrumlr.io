@@ -17,7 +17,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
       data-focus-lock-disabled="false"
     >
       <div
-        class="portal__frame"
+        class="portal__frame accent-color__backlog-blue"
       >
         <div
           class="portal__content"
@@ -152,7 +152,7 @@ exports[`<HeaderMenu/> should render correctly for participants 1`] = `
       data-focus-lock-disabled="false"
     >
       <div
-        class="portal__frame"
+        class="portal__frame accent-color__backlog-blue"
       >
         <div
           class="portal__content"

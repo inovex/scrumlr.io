@@ -6,7 +6,7 @@
     "url": "https://github.com/inovex/scrumlr.io/issues",
     "email": "info@scrumlr.io"
   },
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "license": "MIT",
   "dependencies": {
@@ -17,7 +17,7 @@
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.0",
     "marked": "4.0.16",
-    "qrcode.react": "^2.0.0",
+    "qrcode.react": "^3.0.2",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dnd": "^15.1.2",

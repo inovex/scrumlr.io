@@ -23,6 +23,7 @@
   }
 }
 .timer > span {
+  grid-column: 2;
   display: inline-block;
   border-radius: 18px;
   width: 84px;
@@ -31,10 +32,8 @@
   line-height: 36px;
   text-align: center;
 }
-.timer > span:not(:only-child) {
-  margin-right: 10px;
-}
 .timer > button {
+  margin-left: $margin--small;
   border: none;
   display: inline-block;
   height: 36px;
