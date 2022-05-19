@@ -13,8 +13,8 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
 
           <div className="welcome-area__migration">
             <p>
-              Like George Bernard Shaw we really believe that "progress is impossible without change".
-              Consequently, Scrumlr has to change too and we are happy to announce that from now on you can start exploring
+              Like George Bernard Shaw, we really believe that "progress is impossible without change".
+              Consequently, Scrumlr has to change too, and we are happy to announce that from now on you can start exploring
               our new iteration of the application on <a href="https://beta.scrumlr.io">beta.scrumlr.io</a>. Check out our
               {" "}<a href="https://github.com/inovex/scrumlr.io/wiki/Release-announcement">release announcement</a>{" "}
               for further information.
