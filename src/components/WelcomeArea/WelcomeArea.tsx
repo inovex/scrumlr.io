@@ -13,7 +13,7 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
 
           <div className="welcome-area__migration">
             <p>
-              Like George Bernard Show we really believe that "progress is impossible without change".
+              Like George Bernard Shaw we really believe that "progress is impossible without change".
               Consequently Scrumlr has to change too and we are happy to announce that from now on you can start exploring
               our new iteration of the application on <a href="https://beta.scrumlr.io">beta.scrumlr.io</a>. Checkout our
               {" "}<a href="https://github.com/inovex/scrumlr.io/wiki/Release-announcement">release announcement</a>{" "}
@@ -21,8 +21,8 @@ export const WelcomeArea: React.SFC<{}> = ({ children }) => (
             </p>
 
             <p className="welcome-area__migration-disclaimer">
-              We expect to enroll the new version on 1st August 2022 without a data migration and further notice. Please
-              make sure that you export all of your boards and save the results of your sessions by that time.
+              We expect to roll out the new version without further notice on August 1st, 2022, and we won't migrate any pre-existing
+              user accounts or boards. Please make sure to export and save all your boards to keep the results of your sessions.
             </p>
 
             <a href="https://beta.scrumlr.io" className="welcome-area__gimme-beta">GIMME THE BETA <Icon className="welcome-area__gimme-beta-icon" name="circle-arrow-right" /> </a>
