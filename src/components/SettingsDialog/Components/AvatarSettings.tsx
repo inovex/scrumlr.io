@@ -1,5 +1,5 @@
-import {useTranslation} from "react-i18next";
-import {Avatar, generateRandomProps, AvataaarProps} from "components/Avatar";
+import {ReactComponent as IconShuffle} from "assets/icon-shuffle.svg";
+import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
 import {
   AVATAR_ACCESSORIES_TYPES,
   AVATAR_CLOTHE_COLORS,
@@ -15,11 +15,12 @@ import {
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
 import {FC, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
+import "./AvatarSettings.scss";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
-import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
   id?: string;
@@ -72,7 +73,12 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   return (
     <>
-      <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+      <div className="avatar-settings__avatar">
+        <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))}>
+          <IconShuffle />
+        </button>
+      </div>
       <div className="avatar-settings__settings">
         {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
           <>

@@ -1,10 +1,37 @@
 @import "constants/style";
 
 .avatar-settings {
-  &__avatar-icon {
-    height: 120px;
-    width: 100%;
-    flex-shrink: 0;
+  &__avatar {
+    position: relative;
+    margin: 0 auto;
+
+    &-icon {
+      height: 120px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+
+    &-shuffle {
+      position: absolute;
+      cursor: pointer;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      width: 40px;
+      height: 40px;
+      padding: 4px;
+      border: 0;
+      border-radius: 20px;
+      background-color: $color-white;
+      box-shadow: 0 16px 32px rgba($color-lean-lilac, 0.16);
+      align-items: center;
+      justify-content: center;
+
+      > svg {
+        width: $icon--large;
+        height: $icon--large;
+      }
+    }
   }
 
   &__settings {
@@ -13,7 +40,7 @@
 
     &-group {
       &:last-child {
-        padding: $padding--small / 2 0;
+        padding: calc($padding--small / 2) 0;
       }
 
       &-header {
