@@ -89,7 +89,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                   <>
                     <SettingsCarousel
                       carouselItems={element.values}
-                      initialValue={properties[element.key]}
+                      currentValue={properties[element.key]}
                       onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
                       key={element.key}
                       localizationPath={`Avatar.${element.key}.`}

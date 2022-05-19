@@ -1,4 +1,4 @@
-import {useEffect, useState, VFC} from "react";
+import {VFC} from "react";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./SettingsCarousel.scss";
@@ -10,28 +10,22 @@ export interface SettingsCarouselProps<T> {
   onValueChange?: (value: T) => unknown;
   carouselItems: readonly T[];
   localizationPath?: string;
-  initialValue?: T;
+  currentValue?: T;
   label?: string;
   className?: string;
 }
 
-export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, initialValue, onValueChange, localizationPath, label, className}) => {
+export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, currentValue, onValueChange, localizationPath, label, className}) => {
   const {t} = useTranslation();
 
-  const index = carouselItems.indexOf(initialValue ?? "");
-  const [selection, setSelection] = useState(index >= 0 ? index : 0);
-
-  useEffect(() => {
-    if (onValueChange) onValueChange(carouselItems[selection]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selection, carouselItems]);
-
   const handleClick = (left = false) => {
+    if (!onValueChange) return;
+    const currentIndex = carouselItems.indexOf(currentValue ?? carouselItems[0]);
     if (left) {
-      if (selection <= 0) setSelection(carouselItems.length - 1);
-      else setSelection(selection - 1);
-    } else if (selection >= carouselItems.length - 1) setSelection(0);
-    else setSelection(selection + 1);
+      if (currentIndex <= 0) onValueChange(carouselItems[carouselItems.length - 1]);
+      else onValueChange(carouselItems[currentIndex - 1]);
+    } else if (currentIndex >= carouselItems.length - 1) onValueChange(carouselItems[0]);
+    else onValueChange(carouselItems[currentIndex + 1]);
   };
 
   return (
@@ -41,7 +35,7 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
-        <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${carouselItems[selection]}`) : carouselItems[selection]}</span>
+        <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${currentValue}`) : currentValue}</span>
       </div>
       <button className="settings-carousel__button settings-carousel__button--right" onClick={() => handleClick()}>
         <RightArrowIcon />
