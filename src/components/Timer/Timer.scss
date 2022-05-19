@@ -22,7 +22,9 @@
     box-shadow: 0 8px 16px #ff006925;
   }
 }
+
 .timer > span {
+  grid-column: 2;
   display: inline-block;
   border-radius: 18px;
   width: 84px;
@@ -31,10 +33,9 @@
   line-height: 36px;
   text-align: center;
 }
-.timer > span:not(:only-child) {
-  margin-right: $margin--small;
-}
+
 .timer > button {
+  margin-left: $margin--small;
   border: none;
   display: inline-block;
   height: 36px;

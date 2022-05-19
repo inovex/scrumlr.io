@@ -32,7 +32,7 @@
 
 .toggle--active::after {
   left: 16px;
-  background-color: $color-planning-pink;
+  background-color: var(--accent-color);
   box-shadow: 0 4px 8px #0057ff29;
 }
 

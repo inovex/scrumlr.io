@@ -15,7 +15,7 @@ export const ShowHiddenColumnsOption = () => {
   return (
     <BoardOption data-testid="column">
       <BoardOptionButton
-        label={showHiddenColumns ? t("ShowHiddenColumnsOption.hide") : t("ShowHiddenColumnsOption.show")}
+        label={t("BoardSettings.ShowHiddenColumnsOption")}
         onClick={() => {
           dispatch(Actions.setShowHiddenColumns(!showHiddenColumns));
         }}

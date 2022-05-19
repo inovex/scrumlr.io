@@ -15,7 +15,7 @@ export const ShowOtherUsersNotesOption = () => {
   return (
     <BoardOption data-testid="note">
       <BoardOptionButton
-        label={showNotesOfOtherParticipants ? t("ShowOtherUsersNotesOption.hide") : t("ShowOtherUsersNotesOption.show")}
+        label={t("BoardSettings.ShowOtherUsersNotesOption")}
         onClick={() => {
           dispatch(Actions.editBoard({showNotesOfOtherUsers: !showNotesOfOtherParticipants}));
         }}

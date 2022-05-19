@@ -27,9 +27,6 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .board-option-button__label {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   color: $color-black;
   font-size: $text-size;
   letter-spacing: $letter-spacing--medium;

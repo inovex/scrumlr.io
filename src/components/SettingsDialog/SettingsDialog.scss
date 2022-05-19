@@ -58,7 +58,7 @@ $settings-dialog-container--bottom: 62px;
     display: block;
     width: 544px;
     height: 100%;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 0 8px 8px 0;
     padding-top: 0;
   }
 }
@@ -128,7 +128,7 @@ $settings-dialog-container--bottom: 62px;
     top: -22px;
     right: -22px;
     background-color: $color-white;
-    box-shadow: 0px 16px 32px #0057ff3d;
+    box-shadow: 0 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
@@ -249,7 +249,7 @@ $settings-dialog-container--bottom: 62px;
   margin: 0;
 }
 
-.settings-dialog__seperator {
+.settings-dialog__separator {
   margin: 0;
   margin-left: 5%;
   width: 90%;
@@ -269,7 +269,7 @@ $settings-dialog-container--bottom: 62px;
     color: $color-white;
   }
 
-  .settings-dialog__seperator {
+  .settings-dialog__separator {
     border-top: 0.5px solid $color-dark-one;
   }
 

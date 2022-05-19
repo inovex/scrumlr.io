@@ -85,7 +85,7 @@ create table board_sessions
 (
     "user"       uuid         not null references users ON DELETE CASCADE,
     "board"      uuid         not null references boards ON DELETE CASCADE,
-    "show_hidden_columns" boolean not null DEFAULT false,
+    "show_hidden_columns" boolean not null DEFAULT true,
     "connected"  boolean      not null DEFAULT false,
     "ready"      boolean      not null DEFAULT false,
     raised_hand  boolean      not null DEFAULT false,

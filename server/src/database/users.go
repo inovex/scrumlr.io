@@ -69,7 +69,7 @@ func (d *Database) createExternalUser(id, name, avatarUrl string, accountType ty
 	existingUser := d.db.NewSelect().TableExpr(table).ColumnExpr("*").Where("id = ?", id)
 	existsCheck := d.db.NewSelect().ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
 	updateName := d.db.NewUpdate().Model((*User)(nil)).Column("name").Set("name = ?", name).Where("(SELECT user_exists FROM exists_check)").Where("id=(SELECT \"user\" FROM \"existing_user\")").Where("name=(SELECT name FROM \"existing_user\")")
-	createNewUser := d.db.NewInsert().Model((*User)(nil)).ColumnExpr("name, account_type").TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query", accountType), name).Where("(SELECT NOT user_exists FROM exists_check)").Returning("id")
+	createNewUser := d.db.NewInsert().Model((*User)(nil)).ColumnExpr("name, account_type").TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).Returning("id")
 	selectUser := d.db.NewSelect().ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
 	insertExternalUser := d.db.NewInsert().TableExpr(table).ColumnExpr("\"user\", id, name, avatar_url").TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
 	selectExistingUser := d.db.NewSelect().Model((*User)(nil)).Where("id=(SELECT id FROM select_user)")
