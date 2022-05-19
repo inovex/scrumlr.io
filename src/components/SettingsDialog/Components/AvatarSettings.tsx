@@ -46,6 +46,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   useEffect(() => {
     store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps}[]} = {

@@ -23,6 +23,7 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
 
   useEffect(() => {
     if (onValueChange) onValueChange(carouselItems[selection]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selection, carouselItems]);
 
   const handleClick = (left = false) => {
