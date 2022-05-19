@@ -33,7 +33,7 @@ $dropdown__border-color--dark: #4b515c;
   padding: 0;
 }
 .dropdown__main {
-  margin: 10px 0;
+  margin: $margin--small 0;
 }
 .dropdown__main:not(:last-child) {
   margin-bottom: 0;
@@ -46,7 +46,7 @@ $dropdown__border-color--dark: #4b515c;
     bottom: 0;
     color: $color-light-gray;
   }
-  margin-bottom: 10px;
+  margin-bottom: $margin--small;
 }
 
 [theme="dark"] {

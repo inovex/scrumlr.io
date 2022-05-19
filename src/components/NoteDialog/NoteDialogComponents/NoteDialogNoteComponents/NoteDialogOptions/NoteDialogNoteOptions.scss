@@ -1,3 +1,5 @@
+@import "src/constants/style";
+
 $option-height: 22px;
 $option-width: 22px;
 
@@ -6,11 +8,12 @@ $option-width: 22px;
   position: relative;
   display: inline-flex;
   height: 26px;
-  width: calc(2 * #{$option-width});
+  width: fit-content;
   padding: 0;
   margin: 0;
   justify-content: space-between;
   align-items: flex-end;
+  gap: $margin--default;
 }
 
 .note-dialog__note-option {

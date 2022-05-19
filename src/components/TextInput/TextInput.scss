@@ -6,6 +6,7 @@ $text-input__adornment-padding: 36px;
 
 .text-input__container {
   display: flex;
+  align-items: center;
   gap: $text-input__gap;
 }
 
@@ -16,7 +17,7 @@ $text-input__adornment-padding: 36px;
 
 .text-input {
   border-radius: 2em;
-  padding: 6px 12px;
+  padding: $padding--small $padding--default;
   border: 1px solid transparent;
   outline: none;
   width: 100%;

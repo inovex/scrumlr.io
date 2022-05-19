@@ -18,8 +18,8 @@
 
 .login-board__divider {
   display: none;
-  margin-top: 32px;
-  margin-bottom: 16px;
+  margin-top: $margin--large;
+  margin-bottom: $margin--default;
   padding: 0;
   overflow: visible;
   border: none;
@@ -37,7 +37,7 @@
   display: inline-block;
   position: relative;
   top: -0.625em;
-  padding: 0 16px;
+  padding: 0 $padding--default;
   background: $color-white;
 }
 

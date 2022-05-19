@@ -33,10 +33,10 @@ $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button__label {
   color: $color-black;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
   cursor: pointer;
-  padding: 16px 24px;
+  padding: $padding--default $padding--medium;
   hyphens: auto;
   width: 290px;
 }

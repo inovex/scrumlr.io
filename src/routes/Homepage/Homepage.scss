@@ -55,7 +55,7 @@ html:not([theme="dark"]) {
 }
 
 .homepage__logout-button {
-  margin-left: 6px;
+  margin-left: $margin--small;
 }
 
 .homepage__hero-content-wrapper {
@@ -123,7 +123,7 @@ html:not([theme="dark"]) {
 }
 
 .homepage__proceed-icon {
-  margin-left: 20px;
+  margin-left: $margin--default;
 }
 
 .homepage__illustration {
@@ -150,10 +150,15 @@ html:not([theme="dark"]) {
 }
 
 .homepage__footer-developers {
+  display: flex;
   flex: 2 2 auto;
+  gap: 2px;
   color: $color-dark-gray;
-  font-size: 12px;
+  font-size: $text-size;
+  line-height: $line-height--small;
   order: -1;
+  justify-content: center;
+  align-items: center;
 }
 
 .homepage__footer-links {
@@ -165,7 +170,7 @@ html:not([theme="dark"]) {
 .homepage__footer-link {
   display: block;
   color: $color-dark-gray;
-  font-size: 12px;
+  font-size: $text-size;
 }
 
 .homepage__footer-link a {
@@ -244,7 +249,7 @@ html:not([theme="dark"]) {
 
   .homepage__footer-link + .homepage__footer-link::before {
     content: "|";
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: $margin--small;
+    margin-right: $margin--small;
   }
 }

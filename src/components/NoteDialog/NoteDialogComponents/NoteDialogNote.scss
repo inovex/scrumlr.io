@@ -2,7 +2,7 @@
 @import "src/components/Note/Note.scss";
 
 .note-dialog__note {
-  margin-bottom: 25px;
+  margin-bottom: $margin--default;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;

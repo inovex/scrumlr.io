@@ -10,18 +10,6 @@
   flex-grow: 1;
 }
 
-.participants__search-and-filter {
-  color: $color-black;
-  margin-bottom: 25px;
-  align-self: center;
-}
-
-[theme="dark"] {
-  .participants__search-and-filter {
-    color: $color-white;
-  }
-}
-
 .participants__user-list-wrapper {
   overflow: auto;
   width: 100%;
@@ -49,7 +37,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px 20px;
+  padding: 0px $padding--medium;
   height: 48px;
 }
 
@@ -67,8 +55,8 @@
 
 .participants__user-name {
   color: $color-black;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
   width: 170px;
   overflow: hidden;
   text-overflow: ellipsis;

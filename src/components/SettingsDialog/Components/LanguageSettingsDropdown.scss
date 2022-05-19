@@ -13,11 +13,11 @@
 .settings-dropdown-button {
   background-color: inherit;
   color: inherit;
-  font-size: 14px;
+  font-size: $text-size;
   font-weight: bold;
   border: none;
   cursor: inherit;
-  padding: 16px 12px 16px 10px;
+  padding: $padding--default $padding--default $padding--default $padding--small;
 }
 
 [theme="dark"] {
@@ -41,10 +41,10 @@
   align-items: center;
   width: 100%;
   color: $color-black;
-  padding: 16px 10px 16px 16px;
-  font-size: 14px;
+  padding: $padding--default $padding--medium $padding--default $padding--default;
+  font-size: $text-size;
   font-weight: bold;
-  background-color: #ffffff;
+  background-color: $color-white;
   gap: 12px;
   border-radius: 8px 8px 8px 8px;
 }

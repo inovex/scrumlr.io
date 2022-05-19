@@ -94,7 +94,7 @@
 }
 
 .new-board__action + .new-board__action {
-  margin-left: 8px;
+  margin-left: $margin--default;
 }
 
 [theme="dark"] {

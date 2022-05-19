@@ -28,8 +28,8 @@ $header-menu-border-bottom-color: #efefef;
 
 .board-option-button__label {
   color: $color-black;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
   cursor: pointer;
   padding-right: 16px;
 }

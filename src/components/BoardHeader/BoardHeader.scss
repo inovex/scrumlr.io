@@ -37,7 +37,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 }
 
 .board-header__name-and-settings {
-  margin: 18px auto 0;
+  margin: $margin--default auto 0;
 }
 
 .board-header__users {
@@ -101,10 +101,10 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header__access-policy-status {
   color: $color-middle-gray;
-  font-size: 12px;
+  font-size: $text-size;
   font-weight: bold;
-  letter-spacing: 0.25px;
-  line-height: 16px;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--small;
   margin: auto;
   text-align: center;
 }
@@ -119,7 +119,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   color: $color-black;
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: 0.5px;
+  letter-spacing: $letter-spacing--large;
   line-height: 40px;
   margin: 0;
 
@@ -142,7 +142,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   width: 20px;
   height: 20px;
   align-self: center;
-  margin-right: 4px;
+  margin-right: 2px;
 }
 
 .board-header__access-policy-status-icon * {
