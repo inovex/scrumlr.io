@@ -13,7 +13,7 @@
   width: 100%;
   top: 8px;
   left: 0;
-  background: #edeff2 0 0 no-repeat padding-box;
+  background: $color-light-gray 0 0 no-repeat padding-box;
   border-radius: 4px;
 }
 
@@ -27,7 +27,7 @@
   top: 0;
 
   left: 0;
-  background-color: #a3a6aa;
+  background-color: $color-middle-gray;
 }
 
 .toggle--active::after {
@@ -43,6 +43,6 @@
 }
 
 .toggle.toggle--disabled::after {
-  background-color: #a3a6aa;
+  background-color: $color-middle-gray;
   box-shadow: none;
 }

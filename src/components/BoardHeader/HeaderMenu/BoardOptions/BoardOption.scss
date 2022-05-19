@@ -5,12 +5,12 @@
 }
 
 .board-option + .board-option {
-  border-top: 1px solid #efefef;
+  border-top: 1px solid $color-light-gray;
 }
 
 [theme="dark"] {
   .board-option + .board-option {
-    border-color: #4b515c;
+    border-color: $color-dark-one;
   }
 }
 

@@ -93,7 +93,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__scrumlr-logo {
   height: 40px;
-  margin: 40px;
+  margin: $margin--large;
 }
 [theme="light"] .settings-dialog__scrumlr-logo--dark {
   display: none;
@@ -168,7 +168,7 @@ $settings-dialog-container--bottom: 62px;
 .navigation__item {
   height: 56px;
   width: 252px;
-  margin: 0 32px;
+  margin: 0 $margin--large;
   border-radius: 28px;
   text-align: center;
   text-decoration: none;
@@ -186,18 +186,18 @@ $settings-dialog-container--bottom: 62px;
   left: 64px;
 }
 .navigation__item > p:first-child {
-  font-size: 14px;
+  font-size: calc($text-size + 1px);
   font-weight: 600;
   top: 12px;
 }
 .navigation__item > p:nth-child(2) {
-  font-size: 12px;
+  font-size: calc($text-size - 1px);
   top: 30px;
   opacity: 0.65;
 }
 .navigation__item:hover {
   background: rgba(var(--accent-color-rgb), 0.8);
-  color: white;
+  color: $color-white;
 }
 .navigation__item--active {
   outline: none;
@@ -212,7 +212,7 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   border-radius: 20px;
   background: var(--accent-color);
-  color: white;
+  color: $color-white;
 }
 .navigation-item__user-name {
   white-space: nowrap;
@@ -234,12 +234,12 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__header {
   display: flex;
   justify-content: center;
-  margin: 30px 0;
+  margin: $margin--large 0;
 }
 
 @media screen and (min-width: 920px) {
   .settings-dialog__header {
-    margin: 40px 0;
+    margin: $margin--large 0;
   }
 }
 
@@ -254,14 +254,14 @@ $settings-dialog-container--bottom: 62px;
   margin-left: 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid #eee;
+  border-top: 0.5px solid $color-light-gray;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: $color-white;
 }
 
 [theme="dark"] {

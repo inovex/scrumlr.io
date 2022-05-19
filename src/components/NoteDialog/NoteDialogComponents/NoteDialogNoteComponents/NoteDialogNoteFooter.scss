@@ -14,10 +14,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .votes + .note-dialog__note-options {
-  margin-left: 20px;
+  margin-left: $margin--default;
 }
 
 .note-dialog__note-author {
@@ -39,7 +40,7 @@
 }
 
 .note-dialog__note-author-name {
-  margin-left: $note__author-margin-left;
+  margin-left: $margin--default;
   color: $color-dark-gray;
   font-size: $note__author-name-size;
   letter-spacing: $letter-spacing--small;
