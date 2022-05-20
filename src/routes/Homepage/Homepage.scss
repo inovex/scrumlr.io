@@ -162,11 +162,6 @@ html:not([theme="dark"]) {
   padding: 0;
 }
 
-.homepage__footer > .homepage__footer-developers:last-child   {
-  flex: 1 1 auto;
-  text-align: right;
-}
-
 .homepage__footer-link {
   display: block;
   color: $color-dark-gray;
