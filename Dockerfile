@@ -1,5 +1,5 @@
-# Docker Image 
-FROM node:14-alpine as build-stage 
+# Docker Image
+FROM node:14-alpine as build-stage
 
 # Directory within the virtualizied Docker environment
 WORKDIR /usr/src/app
@@ -11,10 +11,20 @@ COPY package.json yarn.lock ./
 RUN yarn install
 
 # Copies everything over to the Docker environment
-COPY . .
+COPY src/ .
+COPY public/ .
+COPY scripts/ .
+COPY tsconfig.json .
+COPY .prettierrc .
+COPY .eslintignore .
+COPY .eslintrc.json .
+COPY .env .
 
 RUN yarn build
 
 FROM nginx:alpine
 
+COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+
+USER nginx
