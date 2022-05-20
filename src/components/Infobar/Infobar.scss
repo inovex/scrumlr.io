@@ -18,5 +18,10 @@
 }
 
 .info-bar > *:not(:last-child) {
-  margin-right: 20px;
+  margin-right: $margin--default;
+}
+
+.info-bar > *:only-child {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
 }

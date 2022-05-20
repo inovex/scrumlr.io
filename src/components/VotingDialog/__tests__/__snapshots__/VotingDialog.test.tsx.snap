@@ -14,14 +14,14 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
     data-focus-lock-disabled="false"
   >
     <div
-      class="portal__frame"
+      class="portal__frame accent-color__backlog-blue"
     >
       <div
         class="portal__content"
         role="dialog"
       >
         <aside
-          class="dialog voting-dialog"
+          class="dialog voting-dialog accent-color__planning-pink"
         >
           <article
             class="dialog__content"
@@ -83,14 +83,14 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
     data-focus-lock-disabled="false"
   >
     <div
-      class="portal__frame"
+      class="portal__frame accent-color__backlog-blue"
     >
       <div
         class="portal__content"
         role="dialog"
       >
         <aside
-          class="dialog voting-dialog"
+          class="dialog voting-dialog accent-color__planning-pink"
         >
           <article
             class="dialog__content"

@@ -24,7 +24,7 @@
 }
 
 .dialog__content {
-  margin: 40px 0;
+  padding: $margin--large;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
   border: none;
   border-radius: 8px;
   height: 48px;
-  width: 80%;
+  width: 100%;
   background: $color-white;
   cursor: pointer;
 }
@@ -81,9 +81,9 @@
   outline: none;
 }
 .dialog__button > label:first-of-type {
-  font-size: 14px;
+  font-size: $text-size;
   color: $color-black;
-  letter-spacing: 0.49px;
+  letter-spacing: $letter-spacing--medium;
   position: absolute;
   left: 24px;
   top: 16px;
@@ -97,6 +97,6 @@
     background-color: $color-dark-mode-note--hover;
   }
   .dialog__button > label {
-    color: white;
+    color: $color-white;
   }
 }

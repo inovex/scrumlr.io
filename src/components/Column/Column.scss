@@ -33,6 +33,9 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  ::selection {
+    background-color: rgba(var(--accent-color-rgb), 0.5);
+  }
 }
 
 .column__header {
@@ -48,7 +51,7 @@
 .column__header-text {
   font-size: calc(18px + 0.4vw);
   border-bottom: solid 3px var(--accent-color);
-  margin: 20px 10px 20px $margin--default;
+  margin: $margin--default $margin--small $margin--default $margin--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -68,7 +71,7 @@
   font-size: calc(18px + 0.4vw);
   color: $color-black;
   border-bottom: solid 3px var(--accent-color);
-  margin: 20px 10px 20px 0;
+  margin: $margin--default $margin--small $margin--default 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -98,7 +101,7 @@
   border: 2px dashed transparent;
   transition: all 0.25s ease-in-out;
   flex: 1;
-  margin-top: 10px;
+  margin-top: $margin--small;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray $color-white;
 
@@ -171,7 +174,7 @@
 
 .column__header-hidden-icon {
   height: 20px;
-  margin: 4px 0 0 4px;
+  margin: 4px 0 0 $margin--small;
   color: $color-middle-gray;
 }
 

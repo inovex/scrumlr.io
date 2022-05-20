@@ -34,7 +34,7 @@
   "AccessPolicySelection": {
     "title": "Access policy",
     "publicTitle": "Open",
-    "byPassphraseTitle": "Password protected",
+    "byPassphraseTitle": "Protected",
     "manualVerificationTitle": "Manual approval",
     "passphrase": "Passphrase",
     "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
@@ -189,7 +189,9 @@
     "timerStarted": "Timer started!",
     "timerEnded": "Timer ended!",
     "timerCancelled": "Timer cancelled!",
-    "hiddenColumnsVisible": "Hidden columns are now visible to you!"
+    "hiddenColumnsVisible": "Hidden columns are now visible to you!",
+    "passwordCopied": "Board protected and password copied!",
+    "boardMadePublic": "The board is now public!"
   },
   "Language": {
     "german": "German",
@@ -229,13 +231,13 @@
     "BoardName": "Board Name",
     "AccessPolicy": "Access Policy",
     "Password": "Password",
-    "SetAccessPolicyOpen": "Set to open",
-    "SetAccessPolicyPasswordProtected": "Set to password protected",
+    "SetAccessPolicyOpen": "Remove password protection",
+    "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
     "ShowAuthorOption": "Show authors of cards",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show cards of other users",
-    "generatePassword": "Generate random password",
+    "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },
