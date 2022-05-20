@@ -17,5 +17,5 @@ RUN yarn build
 
 FROM nginxinc/nginx-unprivileged:1.21-alpine
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/scrumlr.io.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
