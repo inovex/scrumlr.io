@@ -38,7 +38,7 @@ export const Participants = () => {
             {state.others.length > 0 && <hr className="settings-dialog__separator" />}
             {state.others.length > 0 &&
               state.others.map((participant, index) => (
-                <>
+                <div key={index}>
                   <SettingsButton
                     className="participants__user"
                     disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
@@ -54,7 +54,7 @@ export const Participants = () => {
                     {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <SettingsToggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} />}
                   </SettingsButton>
                   {state.others[index + 1] && <hr className="settings-dialog__separator" />}
-                </>
+                </div>
               ))}
           </div>
         </div>
