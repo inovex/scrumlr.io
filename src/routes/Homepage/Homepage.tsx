@@ -94,23 +94,26 @@ export const Homepage = withTranslation()(() => {
           />
         </div>
 
-        <ul className="homepage__footer-links">
-          <li className="homepage__footer-link">
-            <Link to="/legal/privacyPolicy" target="_blank">
-              <Trans i18nKey="Homepage.privacyPolicy" />
-            </Link>
-          </li>
-          <li className="homepage__footer-link">
-            <Link to="/legal/cookiePolicy" target="_blank">
-              <Trans i18nKey="Homepage.cookiePolicy" />
-            </Link>
-          </li>
-          <li className="homepage__footer-link">
-            <Link to="/legal/termsAndConditions" target="_blank">
-              <Trans i18nKey="Homepage.terms" />
-            </Link>
-          </li>
-        </ul>
+        { !(process.env.REACT_APP_HIDE_LEGAL && process.env.REACT_APP_HIDE_LEGAL.toLowerCase() === "true") && (
+          <ul className="homepage__footer-links">
+            <li className="homepage__footer-link">
+              <Link to="/legal/privacyPolicy" target="_blank">
+                <Trans i18nKey="Homepage.privacyPolicy" />
+              </Link>
+            </li>
+            <li className="homepage__footer-link">
+              <Link to="/legal/cookiePolicy" target="_blank">
+                <Trans i18nKey="Homepage.cookiePolicy" />
+              </Link>
+            </li>
+            <li className="homepage__footer-link">
+              <Link to="/legal/termsAndConditions" target="_blank">
+                <Trans i18nKey="Homepage.terms" />
+              </Link>
+            </li>
+          </ul>
+        )}
+
       </footer>
     </div>
   );
