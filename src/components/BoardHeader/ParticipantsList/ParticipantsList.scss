@@ -40,7 +40,7 @@ $header-left_distance: 24px;
 .participants__header-number {
   margin-top: 0;
   font-weight: bold;
-  font-size: $text-size;
+  font-size: $text-size--default;
   line-height: $line-height--medium;
   letter-spacing: $letter-spacing--small;
   position: absolute;
@@ -51,7 +51,7 @@ $header-left_distance: 24px;
 .participants__header-input {
   background-color: transparent;
   color: $color-white;
-  font-size: $text-size;
+  font-size: $text-size--default;
   letter-spacing: $letter-spacing--small;
   border: none;
   border-bottom: 1px solid transparent;
@@ -106,7 +106,7 @@ $header-left_distance: 24px;
   letter-spacing: $letter-spacing--small;
   color: $color-darker-gray;
   opacity: 0.8;
-  font-size: $text-size;
+  font-size: $text-size--default;
 }
 
 [theme="dark"] {

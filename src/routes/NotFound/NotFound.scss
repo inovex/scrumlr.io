@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 $logo-height: 60px;
-$text-size: 24px;
+$text-size--default: 24px;
 
 .not-found {
   display: flex;
@@ -18,7 +18,7 @@ $text-size: 24px;
 
 .not-found__text {
   color: $color-black;
-  font-size: $text-size;
+  font-size: $text-size--default;
   letter-spacing: $letter-spacing--medium;
 }
 [theme="dark"] .not-found__text {
