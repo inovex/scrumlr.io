@@ -94,7 +94,7 @@ export const Homepage = withTranslation()(() => {
           />
         </div>
 
-        { !(process.env.REACT_APP_HIDE_LEGAL && process.env.REACT_APP_HIDE_LEGAL.toLowerCase() === "true") && (
+        {!(process.env.REACT_APP_HIDE_LEGAL && String(process.env.REACT_APP_HIDE_LEGAL).toLowerCase() === "true") && (
           <ul className="homepage__footer-links">
             <li className="homepage__footer-link">
               <Link to="/legal/privacyPolicy" target="_blank">
