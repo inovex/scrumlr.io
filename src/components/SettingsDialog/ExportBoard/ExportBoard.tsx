@@ -30,7 +30,7 @@ export const ExportBoard: VFC = () => {
           }}
           data-testid="export-json"
         />
-        <hr className="settings-dialog__seperator" />
+        <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
           icon={ExportCSV}

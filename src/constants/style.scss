@@ -10,6 +10,7 @@ $color-dark-two: #272f41;
 $color-light-gray: #edeff2;
 $color-middle-gray: #a3a6aa;
 $color-dark-gray: #859093;
+$color-darker-gray: #4f5253;
 $color-darkest-gray: #232323;
 $color-black: #111111;
 $color-dark-mode: #272f41;
@@ -78,13 +79,18 @@ $column__min-width: 300px;
 $column__max-width: 960px;
 $column__border-width: 12px;
 
+// icons
+$icon--small: 16px;
+$icon--medium: 22px;
+$icon--large: 32px;
+
 // margin and padding
 $margin--small: 8px;
 $margin--default: 16px;
 $margin--large: 32px;
-$padding--small: 16px;
+$padding--small: 8px;
 $padding--default: 16px;
-$padding--medium: 20px;
+$padding--medium: 24px;
 $padding--large: 32px;
 
 // font

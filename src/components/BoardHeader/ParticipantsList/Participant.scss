@@ -27,14 +27,14 @@
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0 12px 0 0;
+  padding: 0 $padding--default 0 0;
   margin: 0;
   flex: 1 1 100%;
   overflow: hidden;
 }
 
 .participant .participant__user-avatar-wrapper {
-  margin: 0 12px 0 12px;
+  margin: 0 $margin--default 0 $margin--default;
   height: 28px;
   width: 28px;
 }
@@ -46,8 +46,8 @@
 
 .participant__name {
   display: inline-block;
-  font-size: 14px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--small;
   font-weight: 300;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -58,7 +58,7 @@
 .participant .participant__permission-toggle {
   position: relative;
   flex: 0 0 40px;
-  margin-right: 16px;
+  margin-right: $margin--default;
   outline: none;
 }
 
@@ -73,7 +73,7 @@
   }
   .participant:focus,
   .participant:hover {
-    background-color: #3d4555;
+    background-color: $color-dark-one;
   }
   .participant:not(:last-child)::after {
     background-color: rgba(125, 125, 125, 0.1);

@@ -1,3 +1,5 @@
+@import "constants/style.scss";
+
 .board-users {
   list-style-type: none;
   align-self: center;
@@ -16,7 +18,7 @@
 
 @media screen and (max-width: 768px) {
   .board-users {
-    margin-right: 8px;
+    margin-right: $margin--small;
   }
 }
 

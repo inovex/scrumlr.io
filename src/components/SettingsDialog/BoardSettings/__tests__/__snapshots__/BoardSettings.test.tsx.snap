@@ -29,6 +29,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           BoardSettings.BoardName
         </span>
         <input
+          autocomplete="off"
           class="board-settings__board-name-button_input"
           placeholder="scrumlr.io"
           value="test-board-name"
@@ -55,16 +56,14 @@ exports[`BoardSettings should match snapshot 1`] = `
               <span>
                 AccessPolicySelection.publicTitle
               </span>
-              <svg>
-                icon-lock.svg
-              </svg>
             </div>
           </button>
           <hr
-            class="settings-dialog__seperator"
+            class="settings-dialog__separator"
           />
           <button
             class="settings-option-button board-settings__password-button"
+            id="password-input-section"
           >
             <span
               class="settings-option-button__label"
@@ -75,34 +74,25 @@ exports[`BoardSettings should match snapshot 1`] = `
               class="board-settings__password-button_value"
             >
               <input
+                autocomplete="off"
                 class="board-settings__password-button_value-input"
+                placeholder=""
                 type="password"
                 value=""
               />
-              <svg>
-                icon-hidden.svg
-              </svg>
             </div>
           </button>
         </div>
         <button
-          class="board-settings__generate-password-button"
+          class="board-settings__password-management-button board-settings__generate-password-button"
         >
           <svg>
             icon-refresh.svg
           </svg>
-          <span>
+          <span
+            class="board-settings__password-management-text"
+          >
             BoardSettings.generatePassword
-          </span>
-        </button>
-        <button
-          class="board-settings__set-policy-button"
-        >
-          <svg>
-            icon-lock.svg
-          </svg>
-          <span>
-            BoardSettings.SetAccessPolicyPasswordProtected
           </span>
         </button>
       </div>
@@ -127,7 +117,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           </div>
         </button>
         <hr
-          class="settings-dialog__seperator"
+          class="settings-dialog__separator"
         />
         <button
           class="settings-option-button board-settings__show-notes-button"
@@ -147,7 +137,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           </div>
         </button>
         <hr
-          class="settings-dialog__seperator"
+          class="settings-dialog__separator"
         />
         <button
           class="settings-option-button board-settings__show-columns-button"

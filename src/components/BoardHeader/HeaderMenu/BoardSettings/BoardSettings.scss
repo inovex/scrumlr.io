@@ -1,7 +1,5 @@
 @import "constants/style";
 
-$header-menu-color--light: $color-backlog-blue;
-$header-menu-color--dark: $color-planning-pink;
 $header-menu__item-height: 48px;
 $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
@@ -17,7 +15,7 @@ $header-menu-button-width: 24px;
 .board-settings {
   position: relative;
   height: 64px;
-  background-color: $header-menu-color--light;
+  background-color: var(--accent-color);
 }
 
 .board-settings__board-name {
@@ -29,8 +27,8 @@ $header-menu-button-width: 24px;
   color: $color-white;
   font-size: 18px;
   font-weight: bold;
-  letter-spacing: 0.25px;
-  line-height: 18px;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--medium;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -73,8 +71,5 @@ $header-menu-button-width: 24px;
 [theme="dark"] {
   .header-menu {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-  }
-  .board-settings {
-    background-color: $header-menu-color--dark;
   }
 }
