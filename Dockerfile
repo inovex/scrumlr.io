@@ -1,20 +1,30 @@
-# Docker Image 
-FROM node:14-alpine as build-stage 
+FROM node:16-alpine as build-stage
 
-# Directory within the virtualizied Docker environment
 WORKDIR /usr/src/app
 
-# Copies package.json and yarn.lock to Docker environment
 COPY package.json yarn.lock ./
-
-#Install all node packages
 RUN yarn install
 
-# Copies everything over to the Docker environment
-COPY . .
+COPY src/ src/
+COPY public/ public/
+COPY tsconfig.json .
+COPY .prettierrc .
+COPY .eslintignore .
+COPY .eslintrc.json .
+COPY .env .
 
 RUN yarn build
 
-FROM nginx:alpine
+FROM nginxinc/nginx-unprivileged:1.21-alpine
 
+# Toggle visibility of cookie policy, privacy policy, and terms & conditions
+ENV SCRUMLR_SHOW_LEGAL_DOCUMENTS=''
+
+# Override the server address for API calls
+ENV SCRUMLR_SERVER_URL=''
+
+# Override the websocket address for API calls
+ENV SCRUMLR_WEBSOCKET_URL=''
+
+COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html

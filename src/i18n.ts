@@ -15,7 +15,7 @@ i18n
     },
     detection: {
       lookupLocalStorage: "Scrumlr/locale",
-      order: ["localStorage"],
+      order: ["localStorage", "navigator"],
       caches: ["localStorage"],
     },
     fallbackLng: "en",

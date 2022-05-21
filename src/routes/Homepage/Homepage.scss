@@ -243,6 +243,11 @@ html:not([theme="dark"]) {
     order: initial;
   }
 
+  .homepage__footer-developers:last-child {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+  }
+
   .homepage__footer-link {
     display: inline;
   }
