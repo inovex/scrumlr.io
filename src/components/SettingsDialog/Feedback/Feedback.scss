@@ -1,9 +1,11 @@
+@import "src/constants/style";
+
 .settings-dialog__feedback-options {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 24px;
-  background-color: #242c3d;
+  gap: $padding--medium;
+  background-color: $color-dark-one;
   height: 96px;
 }
 
@@ -22,12 +24,12 @@
   height: 96px;
   width: 80px;
   border-radius: 16px;
-  color: white;
+  color: $color-white;
   cursor: pointer;
   text-align: center;
-  font-size: 12px;
+  font-size: $text-size;
   font-weight: 500;
-  background-color: #313949;
+  background-color: $color-dark-mode-note;
   position: relative;
   top: -19px;
 }
@@ -39,16 +41,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: $padding--medium;
   background-color: #242c3d;
 }
 
 .feedback-form__submit-button {
-  padding: 8px 24px;
+  padding: $padding--small $padding--medium;
   height: 32px;
   border-radius: 32px;
   background-color: var(--accent-color);
-  color: white;
+  color: $color-white;
   border: none;
   width: max-content;
   font-weight: 700;
@@ -62,7 +64,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: $padding--small;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
@@ -102,8 +104,8 @@
 }
 
 .settings-dialog__error-message {
-  margin-top: 16px;
-  color: red;
+  margin-top: $margin--default;
+  color: $color-warning-red;
   width: 100%;
   text-align: center;
 }
