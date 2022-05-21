@@ -17,5 +17,14 @@ RUN yarn build
 
 FROM nginxinc/nginx-unprivileged:1.21-alpine
 
-COPY ./nginx.conf /etc/nginx/conf.d/scrumlr.io.conf
+# Toggle visibility of cookie policy, privacy policy, and terms & conditions
+ENV SCRUMLR_SHOW_LEGAL_DOCUMENTS=''
+
+# Override the server address for API calls
+ENV SCRUMLR_SERVER_URL=''
+
+# Override the websocket address for API calls
+ENV SCRUMLR_WEBSOCKET_URL=''
+
+COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html

@@ -13,6 +13,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {InovexAnchor} from "./InovexAnchor";
+import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
@@ -94,23 +95,25 @@ export const Homepage = withTranslation()(() => {
           />
         </div>
 
-        <ul className="homepage__footer-links">
-          <li className="homepage__footer-link">
-            <Link to="/legal/privacyPolicy" target="_blank">
-              <Trans i18nKey="Homepage.privacyPolicy" />
-            </Link>
-          </li>
-          <li className="homepage__footer-link">
-            <Link to="/legal/cookiePolicy" target="_blank">
-              <Trans i18nKey="Homepage.cookiePolicy" />
-            </Link>
-          </li>
-          <li className="homepage__footer-link">
-            <Link to="/legal/termsAndConditions" target="_blank">
-              <Trans i18nKey="Homepage.terms" />
-            </Link>
-          </li>
-        </ul>
+        {SHOW_LEGAL_DOCUMENTS && (
+          <ul className="homepage__footer-links">
+            <li className="homepage__footer-link">
+              <Link to="/legal/privacyPolicy" target="_blank">
+                <Trans i18nKey="Homepage.privacyPolicy" />
+              </Link>
+            </li>
+            <li className="homepage__footer-link">
+              <Link to="/legal/cookiePolicy" target="_blank">
+                <Trans i18nKey="Homepage.cookiePolicy" />
+              </Link>
+            </li>
+            <li className="homepage__footer-link">
+              <Link to="/legal/termsAndConditions" target="_blank">
+                <Trans i18nKey="Homepage.terms" />
+              </Link>
+            </li>
+          </ul>
+        )}
       </footer>
     </div>
   );
