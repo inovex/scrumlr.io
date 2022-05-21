@@ -55,7 +55,7 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if body.Contact == nil {
+	if body.Contact == nil || *body.Contact == "" {
 		str := "Unbekannt"
 		body.Contact = &str
 	}
