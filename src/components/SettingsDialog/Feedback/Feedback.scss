@@ -1,0 +1,52 @@
+.settings-dialog__feedback-options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 24px;
+  background-color: #242c3d;
+}
+
+.settings-dialog__feedback-option > input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.settings-dialog__feedback-option > label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 96px;
+  width: 80px;
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: #313949;
+}
+.feedback-option__input:checked + .feedback-option__label {
+  border: 2px solid var(--accent-color);
+}
+
+.settings-dialog__feedback-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  background-color: #242c3d;
+}
+
+.feedback-form__submit-button {
+  padding: 8px 24px;
+  height: 32px;
+  border-radius: 32px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  width: max-content;
+  font-weight: 700;
+}
