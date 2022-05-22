@@ -171,6 +171,7 @@ html:not([theme="dark"]) {
   display: block;
   color: $color-dark-gray;
   font-size: $text-size;
+  line-height: $line-height--large;
 }
 
 .homepage__footer-link a {
