@@ -34,9 +34,9 @@
 }
 
 .request__button {
-  font-size: 13px;
+  font-size: $text-size;
   font-weight: 600;
-  letter-spacing: 0.23px;
+  letter-spacing: $letter-spacing--small;
   line-height: 24px;
   border: none;
   outline: none;
@@ -48,7 +48,7 @@
 }
 
 .request__button + .request__button {
-  margin-left: 10px;
+  margin-left: $margin--small;
 }
 
 [theme="dark"] {
@@ -60,12 +60,12 @@
 .request__header {
   height: 42px;
 
-  font-size: 12px;
+  font-size: $text-size;
   line-height: 24px;
-  letter-spacing: 0.25px;
+  letter-spacing: $letter-spacing--small;
   font-weight: 600;
   position: relative;
-  padding-top: 9px;
+  padding-top: $padding--small;
   padding-left: 15px;
   color: $color-white;
   background-color: $color-backlog-blue;
@@ -81,7 +81,7 @@
 
 @media screen and (min-width: 375px) {
   .request__header {
-    font-size: 14px;
+    font-size: $text-size;
   }
 }
 
@@ -101,7 +101,7 @@
 .join-request__unique-request-container {
   display: flex;
   align-items: center;
-  margin: 0 0 0 16px;
+  margin: 0 0 0 $margin--default;
 }
 
 .join-request__unique-request-container + .join-request__unique-request-container {
@@ -118,11 +118,11 @@
 }
 
 .join-request__request-name {
-  margin-left: 12px;
+  margin-left: $margin--default;
   color: $color-black;
-  font-size: 13px;
-  letter-spacing: 0.15px;
-  line-height: 18px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--medium;
 }
 [theme="dark"] {
   .join-request__request-name {
@@ -145,10 +145,10 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #111111;
-  font-size: 13px;
-  letter-spacing: 0.15px;
-  margin: 0 12px;
+  color: $color-black;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--small;
+  margin: 0 $margin--default;
 }
 [theme="dark"] {
   .join-request__preview-names {
@@ -170,7 +170,7 @@
 }
 .join-request__preview-image:first-child {
   z-index: 7;
-  margin-left: 14px;
+  margin-left: $margin--default;
 }
 .join-request__preview-image:nth-child(2) {
   z-index: 6;
@@ -184,13 +184,13 @@
   outline: 2px solid $color-white;
   border: 1px solid $color-black;
   border-radius: 100%;
-  margin-top: 12px;
+  margin-top: $margin--default;
   position: relative;
   margin-left: -8px;
   text-align: center;
   line-height: 37px;
   font-size: 16px;
-  color: #111111;
+  color: $color-black;
 }
 [theme="dark"] {
   .join-request__preview-rest {
@@ -203,9 +203,7 @@
 .request__requests {
   list-style-type: none;
   margin: 0;
-  padding: 10px 0;
-  border-top: 1px solid #d4d9dd;
-  border-bottom: 1px solid #d4d9dd;
+  padding: $padding--default 0;
   max-height: 130px;
   overflow-y: auto;
 }
@@ -218,16 +216,16 @@
 .join-request__request-display-name {
   height: 18px;
   color: $color-black;
-  font-size: 13px;
-  letter-spacing: 0.15px;
-  line-height: 18px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--medium;
   width: 144px;
-  margin-right: 16px;
+  margin-right: $margin--default;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  margin-left: 8px;
+  margin-left: $margin--small;
 }
 @media screen and (max-width: 375px) {
   .join-request__request-display-name {
@@ -243,7 +241,7 @@
 .request__footer {
   display: flex;
   justify-content: flex-end;
-  padding: 0 16px;
+  padding: 0 $padding--default;
 
   background-color: $color-white;
   height: 48px;

@@ -49,10 +49,10 @@
 .board-settings__board-name-button_input {
   background-color: transparent;
   border: none;
-  padding: 16px 24px 16px 16px;
+  padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   text-align: right;
   max-width: 150px;
   cursor: inherit;
@@ -65,8 +65,8 @@
 
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   color: $color-placeholder;
 }
 
@@ -92,6 +92,7 @@
 
 .board-settings__policy-button span {
   cursor: inherit;
+  flex: 1;
 }
 
 .board-settings__policy-button_value {
@@ -102,10 +103,12 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: 16px 24px 16px 4px;
+  padding: $padding--default $padding--medium $padding--default 4px;
   font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   letter-spacing: 0.5px;
-  font-size: 14px;
+  color: $color-placeholder;
 }
 
 @media screen and (max-width: 920px) {
@@ -122,8 +125,8 @@
 }
 
 .board-settings__policy-button_value svg {
-  width: 22px;
-  height: 22px;
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
 }
 
@@ -142,22 +145,47 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .board-settings__password-button_value svg {
-  width: 30px;
-  height: 30px;
+  width: $icon--medium;
+  height: $icon--medium;
+}
+
+.board-settings__edit-password-button {
   color: var(--accent-color);
   cursor: pointer;
+  margin-left: 4px;
+}
+
+.board-settings__edit-password-button svg {
+  width: $icon--medium;
+  height: $icon--medium;
+}
+
+.board-settings__show-password-button--enabled {
+  color: var(--accent-color);
+}
+
+.board-settings__show-password-button--disabled {
+  color: $color-placeholder;
+  cursor: default;
+}
+
+[theme="dark"] {
+  .board-settings__show-password-button--disabled {
+    color: $color-placeholder-dark;
+  }
 }
 
 .board-settings__password-button_value-input {
   background-color: transparent;
   border: none;
-  padding: 16px 16px 16px 16px;
+  padding: $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   text-align: right;
   max-width: 120px;
 }
@@ -172,10 +200,11 @@
   outline: none;
 }
 
-.board-settings__set-policy-button {
+.board-settings__password-management-button {
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 $padding--medium;
+  height: 30px;
   border: none;
   background-color: inherit;
   color: var(--accent-color);
@@ -183,44 +212,29 @@
   align-self: center;
 }
 
-.board-settings__set-policy-button svg {
-  width: 22px;
-  height: 22px;
+.board-settings__remove-protection-button svg {
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
-}
-
-.board-settings__set-policy-button span {
-  padding-left: 4px;
-  font-weight: bold;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-}
-
-.board-settings__generate-password-button {
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  border: none;
-  background-color: inherit;
-  color: var(--accent-color);
-  cursor: pointer;
-  align-self: center;
-  margin-top: 3px;
 }
 
 .board-settings__generate-password-button svg {
-  width: 15px;
-  height: 15px;
-  margin-right: 4px;
-  margin-left: 3px;
+  width: $icon--small;
+  height: $icon--small;
+  margin: 0 4px 2px 3px;
   color: var(--accent-color);
 }
 
-.board-settings__generate-password-button span {
+.board-settings__password-input-hint {
+  cursor: default;
+  align-self: center;
+}
+
+.board-settings__password-management-text {
   padding-left: 4px;
   font-weight: bold;
-  font-size: 13px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
 }
 
 .board-settings__show-author-button {
@@ -256,8 +270,8 @@
 
 .board-settings__delete-button svg {
   color: $color-retro-red;
-  width: 30px;
-  height: 25px;
+  width: $icon--medium;
+  height: $icon--medium;
 }
 
 .board-settings__confirmation-dialog {

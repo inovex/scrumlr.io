@@ -17,7 +17,7 @@ Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://sc
 Read our ['Welcome' wiki page](https://github.com/inovex/scrumlr.io/wiki/Welcome) to learn more
 about the history and the vision of this tool.
 
-This project is written in [React](https://reactjs.org/) on top of the [Parse Platform](https://parseplatform.org/).
+We developed the client with the help of [React](https://reactjs.org/) while our server is implemented in [Go](https://go.dev/).
 
 # Getting Started
 
@@ -41,7 +41,7 @@ $ cd scrumlr.io
 1. run the server (backend) with docker
 
     ```bash
-    $ docker compose --project-directory server/ up -d
+    $ docker compose --project-directory server/ --profile build up -d
     ```
 
     *If server code has been changed make sure to run it with the `--build` option.

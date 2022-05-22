@@ -15,8 +15,8 @@
   font-size: $text-size;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
-  margin-bottom: $note__text-margin-bottom;
-  padding: 5px;
+  margin-bottom: $margin--small;
+  padding: $padding--small;
   border: 1px dashed transparent;
   border-radius: 5px;
   transition: border-color 0.5s ease-in-out;
@@ -25,7 +25,7 @@
 
 .note-dialog__note-content__text-hover:hover,
 .note-dialog__note-content__text-hover:focus {
-  border-color: #adadad;
+  border-color: $color-middle-gray;
 }
 
 [theme="dark"] {

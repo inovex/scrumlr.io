@@ -190,14 +190,16 @@
     "timerStarted": "Ein Alarm wurde gesetzt!",
     "timerEnded": "Der Alarm ist beendet!",
     "timerCancelled": "Der Alarm wurde abgebrochen!",
-    "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!"
+    "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
+    "passwordCopied": "Board geschützt und Passwort kopiert!",
+    "boardMadePublic": "Das Board ist nun öffentlich!"
   },
   "Language": {
     "german": "Deutsch",
     "english": "Englisch"
   },
   "Homepage": {
-    "developers": "© 2021, mit ❤️von <inovex>inovex</inovex>",
+    "developers": "© 2021-2022, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte in kürzester Zeit deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
@@ -230,13 +232,13 @@
     "BoardName": "Sitzungsname",
     "AccessPolicy": "Zugangsrichtlinien",
     "Password": "Passwort",
-    "SetAccessPolicyOpen": "Sitzung veröffentlichen",
-    "SetAccessPolicyPasswordProtected": "Sitzung passwort sichern",
+    "SetAccessPolicyOpen": "Passwortschutz entfernen",
+    "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
     "DeleteBoard": "Sitzung löschen",
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
-    "generatePassword": "Erstelle zufälliges Passwort",
+    "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
   },

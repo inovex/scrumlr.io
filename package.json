@@ -6,7 +6,7 @@
     "url": "https://github.com/inovex/scrumlr.io/issues",
     "email": "info@scrumlr.io"
   },
-  "version": "2.1.0",
+  "version": "2.1.2",
   "private": true,
   "license": "MIT",
   "dependencies": {
@@ -16,8 +16,9 @@
     "i18next": "^21.8.3",
     "i18next-browser-languagedetector": "^6.1.4",
     "i18next-http-backend": "^1.4.0",
+    "js-cookie": "^3.0.1",
     "marked": "4.0.16",
-    "qrcode.react": "^2.0.0",
+    "qrcode.react": "^3.0.2",
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-dnd": "^15.1.2",
@@ -45,8 +46,9 @@
     "@types/history": "^5.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
     "@types/jest": "^27.5.1",
+    "@types/js-cookie": "^3.0.2",
     "@types/marked": "^4.0.3",
-    "@types/node": "^17.0.34",
+    "@types/node": "^17.0.35",
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^17.0.43",
     "@types/react-dnd": "^3.0.2",
@@ -71,8 +73,9 @@
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "7.29.4",
+    "eslint-plugin-react": "7.30.0",
     "eslint-plugin-react-hooks": "4.5.0",
+    "hash-files": "^1.1.1",
     "husky": "^8.0.1",
     "i18next-fs-backend": "^1.1.4",
     "lint-staged": "^12.4.1",
@@ -82,7 +85,7 @@
     "react-scripts": "^5.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
-    "sass": "^1.51.0",
+    "sass": "^1.52.0",
     "ts-jest": "^28.0.2",
     "typescript": "^4.6.4"
   },
@@ -95,7 +98,7 @@
     "lint:fix": "eslint --fix src/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "prepare": "husky install",
-    "hash": "REACT_APP_LOCALES_HASH=$(scripts/hash-locales.sh)"
+    "hash": "REACT_APP_LOCALES_HASH=$(hash-files --algorithm md5 public/locales/**)"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
