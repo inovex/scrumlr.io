@@ -23,7 +23,7 @@ export const ShareSession: VFC = () => {
       </div>
       <div className={classNames("share-session__container", "accent-color__planning-pink")}>
         <div className="share-session__background">
-          <QRCode value={`${window.location.origin}/board/${boardId}`} size={260} className="share-qr-code-option__qrcode" />
+          <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="svg" className="share-qr-code-option__qrcode" />
         </div>
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}

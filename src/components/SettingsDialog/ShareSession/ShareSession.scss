@@ -5,14 +5,25 @@ $header-menu-border-bottom-color: #efefef;
 $header-menu-button-height: 40px;
 
 .share-qr-code-option__qrcode {
-  top: 13px;
-  left: 13px;
-  background-color: $color-white;
+  height: 100%;
+  width: 100%;
+}
+
+.share-qr-code-option__qrcode path:first-child {
+  fill: $color-white-one;
+}
+
+.share-qr-code-option__qrcode path:last-child {
+  fill: $color-darkest-gray;
 }
 
 .share-session__background {
-  height: 260px;
-  width: 260px;
+  height: 100%;
+  width: 100%;
+  min-height: 260px;
+  min-width: 260px;
+  max-height: 320px;
+  max-width: 320px;
 }
 
 .share-qr-code-option__copy-to-clipboard {
@@ -43,4 +54,14 @@ $header-menu-button-height: 40px;
   align-items: center;
   flex-direction: column;
   border-radius: 8px;
+}
+
+[theme="dark"] {
+  .share-qr-code-option__qrcode path:first-child {
+    fill: $color-dark-one;
+  }
+
+  .share-qr-code-option__qrcode path:last-child {
+    fill: $color-white-one;
+  }
 }
