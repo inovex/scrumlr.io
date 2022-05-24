@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -17,8 +16,8 @@ import (
 // User model of the application
 type User struct {
 	bun.BaseModel `bun:"table:users"`
-	ID            uuid.UUID       `bun:"type:uuid"`
-	Avatar        json.RawMessage `bun:"type:jsonb"`
+	ID            uuid.UUID     `bun:"type:uuid"`
+	Avatar        *types.Avatar `bun:"type:jsonb,nullzero"`
 	Name          string
 	AccountType   types.AccountType
 	CreatedAt     time.Time
@@ -35,7 +34,7 @@ type UserUpdate struct {
 	bun.BaseModel `bun:"table:users"`
 	ID            uuid.UUID `bun:"type:uuid"`
 	Name          string
-	Avatar        json.RawMessage `bun:"type:jsonb"`
+	Avatar        *types.Avatar `bun:"type:jsonb,nullzero"`
 }
 
 // CreateAnonymousUser creates a new anonymous user by the specified name

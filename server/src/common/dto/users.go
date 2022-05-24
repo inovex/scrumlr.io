@@ -1,11 +1,11 @@
 package dto
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
+	"scrumlr.io/server/database/types"
 )
 
 // User is the response for all user requests.
@@ -17,7 +17,7 @@ type User struct {
 	Name string `json:"name"`
 
 	// The user's avatar configuration
-	Avatar json.RawMessage `json:"avatar"`
+	Avatar *types.Avatar `json:"avatar,omitempty"`
 }
 
 func (u *User) From(user database.User) *User {
@@ -32,7 +32,7 @@ func (*User) Render(_ http.ResponseWriter, _ *http.Request) error {
 }
 
 type UserUpdateRequest struct {
-	ID     uuid.UUID       `json:"-"`
-	Name   string          `json:"name"`
-	Avatar json.RawMessage `json:"avatar"`
+	ID     uuid.UUID     `json:"-"`
+	Name   string        `json:"name"`
+	Avatar *types.Avatar `json:"avatar,omitempty"`
 }

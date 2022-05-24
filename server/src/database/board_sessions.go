@@ -2,7 +2,6 @@ package database
 
 import (
   "context"
-  "encoding/json"
   "errors"
   "net/url"
   "strconv"
@@ -20,7 +19,7 @@ type BoardSession struct {
   bun.BaseModel     `bun:"table:board_sessions"`
   Board             uuid.UUID
   User              uuid.UUID
-  Avatar            json.RawMessage
+  Avatar            *types.Avatar
   Name              string
   ShowHiddenColumns bool
   Connected         bool
