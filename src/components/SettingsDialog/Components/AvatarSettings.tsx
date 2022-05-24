@@ -38,11 +38,17 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
+  const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
   const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
     if (properties && properties[key] !== value) {
       setProperties({...properties, [key]: value});
     }
+  };
+
+  const handleAccordionOpen = (index: number) => {
+    if (openAccordionIndex === index) setOpenAccordionIndex(-1);
+    else setOpenAccordionIndex(index);
   };
 
   useEffect(() => {
@@ -82,7 +88,13 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       <div className="avatar-settings__settings">
         {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
           <>
-            <SettingsAccordion label={t(`Avatar.groups.${label}`)} key={label} headerClassName="avatar-settings__settings-group-header">
+            <SettingsAccordion
+              label={t(`Avatar.groups.${label}`)}
+              isOpen={groupIndex === openAccordionIndex}
+              onClick={() => handleAccordionOpen(groupIndex)}
+              key={label}
+              headerClassName="avatar-settings__settings-group-header"
+            >
               <hr className="avatar-settings__settings-group-seperator" />
               <div className="avatar-settings__settings-group">
                 {props.map((element, index) => (
