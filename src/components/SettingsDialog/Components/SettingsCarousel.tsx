@@ -6,6 +6,7 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 
 export interface SettingsCarouselProps<T> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValueChange?: (value: T) => unknown;
   carouselItems: readonly T[];
   localizationPath?: string;
