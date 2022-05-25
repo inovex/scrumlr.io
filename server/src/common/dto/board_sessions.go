@@ -1,9 +1,8 @@
 package dto
 
 import (
-	"net/http"
-
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
