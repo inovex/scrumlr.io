@@ -85,37 +85,39 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
           <IconShuffle />
         </button>
       </div>
-      <div className="avatar-settings__settings">
-        {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
-          <>
-            <SettingsAccordion
-              label={t(`Avatar.groups.${label}`)}
-              isOpen={groupIndex === openAccordionIndex}
-              onClick={() => handleAccordionOpen(groupIndex)}
-              key={label}
-              headerClassName="avatar-settings__settings-group-header"
-            >
-              <hr className="avatar-settings__settings-group-seperator" />
-              <div className="avatar-settings__settings-group">
-                {props.map((element, index) => (
-                  <>
-                    <SettingsCarousel
-                      carouselItems={element.values}
-                      currentValue={properties[element.key]}
-                      onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                      key={element.key}
-                      localizationPath={`Avatar.${element.key}.`}
-                      label={t(`Avatar.${element.key}.label`)}
-                      className="avatar-settings__settings-group-item"
-                    />
-                    {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                  </>
-                ))}
-              </div>
-            </SettingsAccordion>
-            {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
-          </>
-        ))}
+      <div className="avatar-settings__settings-wrapper">
+        <div className="avatar-settings__settings">
+          {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
+            <>
+              <SettingsAccordion
+                label={t(`Avatar.groups.${label}`)}
+                isOpen={groupIndex === openAccordionIndex}
+                onClick={() => handleAccordionOpen(groupIndex)}
+                key={label}
+                headerClassName="avatar-settings__settings-group-header"
+              >
+                <hr className="avatar-settings__settings-group-seperator" />
+                <div className="avatar-settings__settings-group">
+                  {props.map((element, index) => (
+                    <>
+                      <SettingsCarousel
+                        carouselItems={element.values}
+                        currentValue={properties[element.key]}
+                        onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
+                        key={element.key}
+                        localizationPath={`Avatar.${element.key}.`}
+                        label={t(`Avatar.${element.key}.label`)}
+                        className="avatar-settings__settings-group-item"
+                      />
+                      {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
+                    </>
+                  ))}
+                </div>
+              </SettingsAccordion>
+              {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
+            </>
+          ))}
+        </div>
       </div>
     </>
   );

@@ -49,6 +49,19 @@
     background-color: $color-white;
     border-radius: 8px;
 
+    &-wrapper {
+      overflow-y: auto;
+      padding-right: 10px;
+      margin-right: -20px;
+
+      @include scrollbar();
+
+      @media screen and (min-width: 920px) {
+        padding-right: 20px;
+        margin-right: -30px;
+      }
+    }
+
     &-group {
       &:last-child {
         padding: calc($padding--small / 2) 0;
