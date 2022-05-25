@@ -18,7 +18,7 @@
 }
 
 .access-policy-selection__access-policy + .access-policy-selection__access-policy {
-  margin-left: 8px;
+  margin-left: $margin--small;
 }
 
 .access-policy__details {
@@ -26,10 +26,10 @@
   min-height: 182px;
   width: 100%;
   max-width: 480px;
-  font-size: 14px;
+  font-size: $text-size;
   line-height: 1.4em;
 
-  padding: 16px;
+  padding: $padding--default;
   border-radius: 24px;
 
   color: $color-black;

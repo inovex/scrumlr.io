@@ -48,18 +48,18 @@
     &_input {
       background-color: transparent;
       border: none;
-      padding: 16px 24px 16px 16px;
+      padding: $padding--default $padding--medium $padding--default $padding--default;
       font-weight: bold;
-      letter-spacing: 0.5px;
-      font-size: 14px;
+      letter-spacing: $letter-spacing--medium;
+      font-size: $text-size;
       text-align: right;
       max-width: 150px;
       cursor: inherit;
 
       &::placeholder {
         font-weight: bold;
-        letter-spacing: 0.5px;
-        font-size: 14px;
+        letter-spacing: $letter-spacing--medium;
+        font-size: $text-size;
         color: $color-black;
       }
 

@@ -6,7 +6,7 @@
 }
 
 .timer > * {
-  color: white;
+  color: $color-white;
   background-color: $color-backlog-blue;
   vertical-align: bottom;
 }
@@ -22,6 +22,7 @@
     box-shadow: 0 8px 16px #ff006925;
   }
 }
+
 .timer > span {
   grid-column: 2;
   display: inline-block;
@@ -32,6 +33,7 @@
   line-height: 36px;
   text-align: center;
 }
+
 .timer > button {
   margin-left: $margin--small;
   border: none;

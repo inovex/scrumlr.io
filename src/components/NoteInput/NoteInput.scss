@@ -8,8 +8,9 @@ $note-input__input-right: 40px;
   justify-content: space-between;
   height: 40px;
   width: 100%;
-  margin-bottom: 16px;
-  background-color: #edeff2;
+  position: relative;
+  margin-bottom: $margin--default;
+  background-color: $color-light-gray;
   border-radius: 20px;
   transition: box-shadow 0.2s ease-in-out;
 }
@@ -17,12 +18,12 @@ $note-input__input-right: 40px;
 .note-input__input {
   left: $note-input__input-left;
   right: $note-input__input-right;
-  color: black;
-  font-size: 14px;
+  color: $color-black;
+  font-size: $text-size;
   font-weight: bold;
   line-height: 24px;
-  letter-spacing: 0.25px;
-  padding: 8px 0;
+  letter-spacing: $letter-spacing--small;
+  padding: $padding--small 0;
   font-family: Raleway, sans-serif;
   background-color: transparent;
   border: none;
@@ -41,10 +42,10 @@ $note-input__input-right: 40px;
 }
 [theme="dark"] {
   .note-input {
-    background-color: #4c5566;
+    background-color: $color-dark-mode-note;
   }
   .note-input__input {
-    color: white;
+    color: $color-white;
   }
   .note-input:hover,
   .note-input:focus-within {

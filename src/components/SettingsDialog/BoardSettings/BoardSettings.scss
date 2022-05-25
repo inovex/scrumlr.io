@@ -49,10 +49,10 @@
 .board-settings__board-name-button_input {
   background-color: transparent;
   border: none;
-  padding: 16px 24px 16px 16px;
+  padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   text-align: right;
   max-width: 150px;
   cursor: inherit;
@@ -65,8 +65,8 @@
 
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   color: $color-placeholder;
 }
 
@@ -103,10 +103,11 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: 16px 24px 16px 4px;
+  padding: $padding--default $padding--medium $padding--default 4px;
   font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   letter-spacing: 0.5px;
-  font-size: 14px;
   color: $color-placeholder;
 }
 
@@ -181,10 +182,10 @@
 .board-settings__password-button_value-input {
   background-color: transparent;
   border: none;
-  padding: 16px 16px 16px 16px;
+  padding: $padding--default;
   font-weight: bold;
-  letter-spacing: 0.5px;
-  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  font-size: $text-size;
   text-align: right;
   max-width: 120px;
 }
@@ -202,7 +203,7 @@
 .board-settings__password-management-button {
   display: flex;
   align-items: center;
-  padding: 0 24px;
+  padding: 0 $padding--medium;
   height: 30px;
   border: none;
   background-color: inherit;
@@ -232,8 +233,8 @@
 .board-settings__password-management-text {
   padding-left: 4px;
   font-weight: bold;
-  font-size: 13px;
-  letter-spacing: 0.5px;
+  font-size: $text-size;
+  letter-spacing: $letter-spacing--medium;
 }
 
 .board-settings__show-author-button {

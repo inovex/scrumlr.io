@@ -17,7 +17,7 @@
 }
 
 .scrumlr-logo__paths {
-  fill: #0057ff;
+  fill: $color-backlog-blue;
 }
 
 .scrumlr-logo {
@@ -25,12 +25,12 @@
 }
 
 .scrumlr-logo__stop {
-  stop-color: #0057ff;
+  stop-color: $color-backlog-blue;
 }
 
 [theme="dark"] {
   .scrumlr-logo__paths {
-    fill: white;
+    fill: $color-white;
   }
 
   .scrumlr-logo__stop {

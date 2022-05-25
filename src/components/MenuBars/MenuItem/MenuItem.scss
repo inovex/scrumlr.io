@@ -7,7 +7,7 @@ $number-of-menu-items: 4;
   cursor: not-allowed;
 }
 .menu-item:disabled .menu-item__icon {
-  color: #a3a6aa;
+  color: $color-dark-gray;
   background: transparent;
 }
 
@@ -53,11 +53,11 @@ $number-of-menu-items: 4;
 }
 
 .tooltip__text {
-  font-size: 14px;
+  font-size: $text-size;
   font-weight: bold;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  line-height: 16px;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--small;
   color: $color-white;
 }
 
@@ -181,7 +181,7 @@ $number-of-menu-items: 4;
 
   .tooltip__text {
     width: 100%;
-    padding: 0 16px;
+    padding: 0 $padding--default;
     white-space: nowrap;
   }
 }
@@ -239,7 +239,7 @@ $number-of-menu-items: 4;
   .tooltip__text {
     color: $color-white;
     transition: all 0.5s ease-out;
-    padding: 16px;
+    padding: $padding--default;
   }
   .menu-item--right .tooltip__text {
     padding-left: 30px;
