@@ -56,8 +56,8 @@ export const NoteActionFactory = {
   /**
    * Creates an action which should be dispatched when the user edits a note.
    *
-   * @param noteId the note id
-   * @param text the edited text of the note
+   * @param note the note id
+   * @param request the edited attributes
    */
   editNote: (note: string, request: EditNote) => ({
     type: NoteAction.EditNote,

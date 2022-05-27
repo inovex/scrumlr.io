@@ -113,19 +113,6 @@
   background-color: rgba(var(--accent-color-rgb), 0.2);
 }
 
-.column__note-list {
-  margin: 0;
-  padding: 0 $padding--large $padding--default $padding--large;
-  display: grid;
-  grid-auto-flow: row;
-  grid-row-gap: 20px;
-  grid-column-gap: 24px;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-}
-[column-visibility="collapsed"] .column__note-list {
-  padding-bottom: 72px;
-}
-
 .column__header-toggle {
   display: flex;
   align-items: center;

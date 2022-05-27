@@ -66,10 +66,16 @@ $note__author-image-size: 26px;
 }
 .note--isDragging {
   opacity: 0.5;
+  border: 2px solid red;
 }
-.note--isOver {
-  padding: 14px 18px;
+.note--isDraggingOver {
+  //padding: 14px 18px;
   border: 2px solid var(--accent-color);
+}
+
+.note--isDraggedOver {
+  //padding: 14px 18px;
+  border: 2px solid yellowgreen;
 }
 .note--own-card::before {
   content: "";

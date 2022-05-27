@@ -10,8 +10,11 @@ import {toast} from "react-toastify";
 import {Actions} from "store/action";
 import _ from "underscore";
 import {Outlet} from "react-router-dom";
+import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {useDispatch} from "react-redux";
 
 export const Board = () => {
+  const dispatch = useDispatch();
   useEffect(
     () => () => {
       toast.clearWaitingQueue();
@@ -59,6 +62,16 @@ export const Board = () => {
     return <LoadingScreen />;
   }
 
+  const onDragEnd = (result: DropResult) => {
+    const {destination, source, draggableId} = result;
+    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+      return;
+    }
+    console.log(`destination: \t id: ${destination.droppableId} / rank: ${destination.index}`);
+    console.log(`source: \t id: ${source.droppableId} / rank: ${source.index}`);
+    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: destination.index}}));
+  };
+
   if (state.board.status === "ready") {
     return (
       <>
@@ -70,21 +83,23 @@ export const Board = () => {
         )}
         <InfoBar />
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
-          {state.columns
-            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
-            .map((column, columnIndex) => (
-              <Column
-                tabIndex={TabIndex.Column + columnIndex * 17}
-                key={column.id}
-                id={column.id}
-                index={column.index}
-                name={column.name}
-                visible={column.visible}
-                color={column.color}
-              />
-            ))}
-        </BoardComponent>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
+            {state.columns
+              .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
+              .map((column, columnIndex) => (
+                <Column
+                  tabIndex={TabIndex.Column + columnIndex * 17}
+                  key={column.id}
+                  id={column.id}
+                  index={column.index}
+                  name={column.name}
+                  visible={column.visible}
+                  color={column.color}
+                />
+              ))}
+          </BoardComponent>
+        </DragDropContext>
       </>
     );
   }
