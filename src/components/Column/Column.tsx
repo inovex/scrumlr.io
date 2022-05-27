@@ -38,7 +38,8 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       notes: applicationState.notes
         .filter((note) => !note.position.stack)
         .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
-        .map((note) => ({id: note.id, rank: note.position.rank})),
+        .map((note) => ({id: note.id, rank: note.position.rank}))
+        .sort((a, b) => a.rank - b.rank), // Ascending: a.rank - b.rank | ALT: (a.rank > b.rank ? -1 : 1) w. Ascending: -1 : 1 | Descending: 1 : 1
       showAuthors: applicationState.board.data!.showAuthors,
       moderating: applicationState.view.moderating,
       viewer: applicationState.participants!.self,
@@ -128,27 +129,25 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
         </div>
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
-          <Droppable droppableId={id}>
+          <Droppable droppableId={id} isCombineEnabled>
             {(provided, snapshot) => (
               <NoteList innerRef={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
-                {state.notes
-                  .sort((a, b) => a.rank - b.rank) // (a.rank > b.rank ? -1 : 1)) // Ascending: -1 : 1 | Descending: 1 : 1
-                  .map((note, noteIndex) => (
-                    <Note
-                      showAuthors={state.showAuthors!}
-                      key={note.id}
-                      noteId={note.id}
-                      columnId={id}
-                      columnName={name}
-                      columnColor={color}
-                      columnVisible={visible}
-                      tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
-                      moderating={state.moderating}
-                      viewer={state.viewer}
-                      rank={note.rank}
-                      isDraggedOver={snapshot.isDraggingOver}
-                    />
-                  ))}
+                {state.notes.map((note, noteIndex) => (
+                  <Note
+                    showAuthors={state.showAuthors!}
+                    key={note.id}
+                    noteId={note.id}
+                    columnId={id}
+                    columnName={name}
+                    columnColor={color}
+                    columnVisible={visible}
+                    tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
+                    moderating={state.moderating}
+                    viewer={state.viewer}
+                    rank={note.rank}
+                    isDraggedOver={snapshot.isDraggingOver}
+                  />
+                ))}
                 {provided.placeholder}
               </NoteList>
             )}

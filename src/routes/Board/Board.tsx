@@ -63,12 +63,13 @@ export const Board = () => {
   }
 
   const onDragEnd = (result: DropResult) => {
-    const {destination, source, draggableId} = result;
+    const {destination, source, combine, draggableId} = result;
+    if (combine) {
+      dispatch(Actions.editNote(draggableId, {position: {column: combine.droppableId, stack: combine.draggableId, rank: 0}}));
+    }
     if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
       return;
     }
-    console.log(`destination: \t id: ${destination.droppableId} / rank: ${destination.index}`);
-    console.log(`source: \t id: ${source.droppableId} / rank: ${source.index}`);
     dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: destination.index}}));
   };
 
