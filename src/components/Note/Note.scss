@@ -94,7 +94,7 @@ $note__author-image-size: 26px;
   min-height: 3 * $line-height--medium;
   width: calc(100% - 20px);
   color: $color-black;
-  font-size: $text-size--default;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
   -webkit-line-clamp: 3;
@@ -161,7 +161,7 @@ $note__author-image-size: 26px;
 .note__author-name {
   margin-left: $margin--default;
   color: $color-dark-gray;
-  font-size: $text-size--secondary;
+  font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
 }

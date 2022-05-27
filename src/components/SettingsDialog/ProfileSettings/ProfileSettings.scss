@@ -15,7 +15,7 @@
   padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--default;
+  font-size: $text-size--medium;
   text-align: right;
   width: 60%;
   cursor: inherit;
@@ -28,7 +28,7 @@
 .profile-settings__user-name-button_input::placeholder {
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--default;
+  font-size: $text-size--medium;
   color: $color-black;
 }
 
