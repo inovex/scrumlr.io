@@ -10,7 +10,7 @@ import {toast} from "react-toastify";
 import {Actions} from "store/action";
 import _ from "underscore";
 import {Outlet} from "react-router-dom";
-import {DragDropContext, DropResult} from "react-beautiful-dnd";
+import {DragDropContext, DragUpdate, DropResult} from "react-beautiful-dnd";
 import {useDispatch} from "react-redux";
 
 export const Board = () => {
@@ -73,6 +73,14 @@ export const Board = () => {
     dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: destination.index}}));
   };
 
+  const onDragUpdate = (initial: DragUpdate) => {
+    const {destination, source, draggableId} = initial;
+    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+      return;
+    }
+    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: destination.index}}));
+  };
+
   if (state.board.status === "ready") {
     return (
       <>
@@ -84,7 +92,7 @@ export const Board = () => {
         )}
         <InfoBar />
         <Outlet />
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
           <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
             {state.columns
               .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
