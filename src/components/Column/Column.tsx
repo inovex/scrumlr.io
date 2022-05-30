@@ -13,7 +13,7 @@ import {TabIndex} from "constants/tabIndex";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {Droppable} from "react-beautiful-dnd";
+import {DragDropContext, DragUpdate, Droppable, DropResult} from "react-beautiful-dnd";
 import {Note} from "../Note";
 import {NoteList} from "../NoteList";
 import {ColumnSettings} from "./ColumnSettings";
@@ -39,7 +39,8 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         .filter((note) => !note.position.stack)
         .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
         .map((note) => ({id: note.id, rank: note.position.rank}))
-        .sort((a, b) => a.rank - b.rank), // Ascending: a.rank - b.rank | ALT: (a.rank > b.rank ? -1 : 1) w. Ascending: -1 : 1 | Descending: 1 : 1
+        .sort((a, b) => a.rank - b.rank) // Ascending: a.rank - b.rank | ALT: (a.rank > b.rank ? -1 : 1) w. Ascending: -1 : 1 | Descending: 1 : 1
+        .reverse(),
       showAuthors: applicationState.board.data!.showAuthors,
       moderating: applicationState.view.moderating,
       viewer: applicationState.participants!.self,
@@ -52,6 +53,28 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
+
+  const reverseIndex = (n: number, i: number) => n - i - 1;
+
+  const onDragEnd = (result: DropResult) => {
+    const {destination, source, combine, draggableId} = result;
+
+    if (combine) {
+      dispatch(Actions.editNote(draggableId, {position: {column: combine.droppableId, stack: combine.draggableId, rank: 0}}));
+    }
+    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+      return;
+    }
+    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
+  };
+
+  const onDragUpdate = (initial: DragUpdate) => {
+    const {destination, source, draggableId} = initial;
+    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+      return;
+    }
+    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
+  };
 
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
@@ -105,55 +128,57 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   );
 
   return (
-    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
-      <div className="column__content">
-        <div className="column__header">
-          <div className="column__header-title">
-            {renderColumnName()}
-            {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
-            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} />}
-            {isModerator && renderColumnModifiers()}
-            {openedColumnSettings && (
-              <ColumnSettings
-                tabIndex={tabIndex! + 4}
-                id={id}
-                name={name}
-                color={color}
-                visible={visible}
-                index={index}
-                onClose={() => setOpenedColumnSettings(false)}
-                onNameEdit={() => setColumnNameMode("EDIT")}
-              />
-            )}
+    <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+      <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
+        <div className="column__content">
+          <div className="column__header">
+            <div className="column__header-title">
+              {renderColumnName()}
+              {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
+              {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} />}
+              {isModerator && renderColumnModifiers()}
+              {openedColumnSettings && (
+                <ColumnSettings
+                  tabIndex={tabIndex! + 4}
+                  id={id}
+                  name={name}
+                  color={color}
+                  visible={visible}
+                  index={index}
+                  onClose={() => setOpenedColumnSettings(false)}
+                  onNameEdit={() => setColumnNameMode("EDIT")}
+                />
+              )}
+            </div>
+            <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
           </div>
-          <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
+          <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
+            <Droppable droppableId={id} isCombineEnabled>
+              {(provided, snapshot) => (
+                <NoteList innerRef={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
+                  {state.notes.map((note, noteIndex) => (
+                    <Note
+                      showAuthors={state.showAuthors!}
+                      key={note.id}
+                      noteId={note.id}
+                      columnId={id}
+                      columnName={name}
+                      columnColor={color}
+                      columnVisible={visible}
+                      tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
+                      moderating={state.moderating}
+                      viewer={state.viewer}
+                      noteIndex={noteIndex}
+                      isDraggedOver={snapshot.isDraggingOver}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </NoteList>
+              )}
+            </Droppable>
+          </div>
         </div>
-        <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
-          <Droppable droppableId={id} isCombineEnabled>
-            {(provided, snapshot) => (
-              <NoteList innerRef={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
-                {state.notes.map((note, noteIndex) => (
-                  <Note
-                    showAuthors={state.showAuthors!}
-                    key={note.id}
-                    noteId={note.id}
-                    columnId={id}
-                    columnName={name}
-                    columnColor={color}
-                    columnVisible={visible}
-                    tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
-                    moderating={state.moderating}
-                    viewer={state.viewer}
-                    rank={note.rank}
-                    isDraggedOver={snapshot.isDraggingOver}
-                  />
-                ))}
-                {provided.placeholder}
-              </NoteList>
-            )}
-          </Droppable>
-        </div>
-      </div>
-    </section>
+      </section>
+    </DragDropContext>
   );
 };

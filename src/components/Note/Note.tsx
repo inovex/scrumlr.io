@@ -23,7 +23,7 @@ interface NoteProps {
   moderating: boolean;
   viewer: Participant;
   tabIndex?: number;
-  rank: number;
+  noteIndex: number;
   isDraggedOver: boolean;
 }
 
@@ -92,7 +92,7 @@ export const Note = (props: NoteProps) => {
   };
 
   return (
-    <Draggable draggableId={props.noteId} index={props.rank}>
+    <Draggable draggableId={props.noteId} index={props.noteIndex}>
       {(provided, snapshot) => (
         <li
           ref={provided.innerRef}
