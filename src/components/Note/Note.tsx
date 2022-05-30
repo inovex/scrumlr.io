@@ -24,7 +24,6 @@ interface NoteProps {
   viewer: Participant;
   tabIndex?: number;
   noteIndex: number;
-  isDraggedOver: boolean;
 }
 
 export const Note = (props: NoteProps) => {
@@ -98,11 +97,21 @@ export const Note = (props: NoteProps) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={classNames("note__root", {"note--isDragging": snapshot.isDragging, "note--isDraggingOver": snapshot.draggingOver, "note--isDraggedOver": props.isDraggedOver})}
+          className={classNames("note__root")}
           onClick={handleShowDialog}
           onKeyPress={handleKeyPress}
         >
-          <div className={classNames("note", {"note--own-card": props.viewer.user.id === note?.author})} tabIndex={props.tabIndex ?? TabIndex.default}>
+          <div
+            className={classNames(
+              "note",
+              {"note--own-card": props.viewer.user.id === note?.author},
+              {
+                "note--isDragging": snapshot.isDragging,
+                "note--isCombineTarget": snapshot.combineTargetFor,
+              }
+            )}
+            tabIndex={props.tabIndex ?? TabIndex.default}
+          >
             <div className="note__content">
               <p className="note__text">{note!.text}</p>
               <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === note?.author})} />

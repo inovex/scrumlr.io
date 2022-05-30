@@ -15,7 +15,6 @@ import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {DragDropContext, DragUpdate, Droppable, DropResult} from "react-beautiful-dnd";
 import {Note} from "../Note";
-import {NoteList} from "../NoteList";
 import {ColumnSettings} from "./ColumnSettings";
 
 const MAX_NOTE_LENGTH = 1024;
@@ -155,7 +154,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
             <Droppable droppableId={id} isCombineEnabled>
               {(provided, snapshot) => (
-                <NoteList innerRef={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
+                <ul ref={provided.innerRef} {...provided.droppableProps} className={classNames("column__note-list", {"column__note-list--isDraggedOver": snapshot.isDraggingOver})}>
                   {state.notes.map((note, noteIndex) => (
                     <Note
                       showAuthors={state.showAuthors!}
@@ -169,11 +168,10 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
                       moderating={state.moderating}
                       viewer={state.viewer}
                       noteIndex={noteIndex}
-                      isDraggedOver={snapshot.isDraggingOver}
                     />
                   ))}
                   {provided.placeholder}
-                </NoteList>
+                </ul>
               )}
             </Droppable>
           </div>
