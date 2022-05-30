@@ -78,7 +78,7 @@
     "hash-files": "^1.1.1",
     "husky": "^8.0.1",
     "i18next-fs-backend": "^1.1.4",
-    "lint-staged": "^12.4.1",
+    "lint-staged": "^12.4.3",
     "prettier": "^2.6.2",
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
