@@ -30,7 +30,7 @@
     "react-redux": "^7.2.8",
     "react-router": "^6.0.1",
     "react-router-dom": "^6.3.0",
-    "react-toastify": "^9.0.1",
+    "react-toastify": "^9.0.2",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "sockette": "^2.0.6",
