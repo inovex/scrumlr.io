@@ -16,6 +16,8 @@ export const FeedbackAPI = {
       if (response.ok) {
         Toast.success("Thank you for your feedback!");
       }
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(`unable to send feedback: ${error}`);
+    }
   },
 };

@@ -1,4 +1,5 @@
 import React, {FormEvent, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
 import {FeedbackAPI} from "api/feedback";
@@ -8,22 +9,17 @@ import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
 import "./Feedback.scss";
 
 export const Feedback: React.FC = () => {
+  const {t} = useTranslation();
   const [errorMessage, setErrorMessage] = useState<string>();
   const contactInput = useRef<HTMLInputElement>(null);
   const feedbackTextarea = useRef<HTMLTextAreaElement>(null);
 
-  const onSubmitFeedback = (
-    e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}; preventDefault: () => void}
-  ) => {
+  const onSubmitFeedback = (e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}) => {
     e.preventDefault();
     setErrorMessage(undefined);
     const {feedbackType, feedback, contact} = e.target;
     if (feedbackType.value === "") {
-      setErrorMessage("Please choose the type of your feedback!");
-      return;
-    }
-    if (feedback.value === "") {
-      setErrorMessage("Please be so kind a leave us some words");
+      setErrorMessage(t("Feedback.ErrorUndefinedType"));
       return;
     }
     if (
@@ -32,7 +28,7 @@ export const Feedback: React.FC = () => {
         .toLowerCase()
         .match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
     ) {
-      setErrorMessage("Please enter a valid email address!");
+      setErrorMessage(t("Feedback.ErrorInvalidEmail"));
       return;
     }
     FeedbackAPI.sendFeedback(feedbackType.value, feedback.value, contact.value);
@@ -74,14 +70,14 @@ export const Feedback: React.FC = () => {
       </div>
       <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>
         {renderFeedbackOptions()}
-        <SettingsButton label="Anything else you want to tell us?" className="feedback-form__settings-button" onClick={() => feedbackTextarea.current?.focus()}>
-          <textarea name="feedback" placeholder="Type your additional feedback here!" className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
+        <SettingsButton label={t("Feedback.FeedbackInputLabel")} className="feedback-form__settings-button" onClick={() => feedbackTextarea.current?.focus()}>
+          <textarea name="feedback" placeholder={t("Feedback.FeedbackInputPlaceholder")} className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
         </SettingsButton>
-        <SettingsButton label="If you would like us to contact you, leave your email!" className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
+        <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
           <input name="contact" placeholder="mail@inovex.de" className="feedback-form__contact-input" ref={contactInput} />
         </SettingsButton>
         <button type="submit" className="feedback-form__submit-button">
-          Send Feedback
+          {t("Feedback.SubmitButton")}
         </button>
       </form>
       {errorMessage && <span className="settings-dialog__error-message">{errorMessage}</span>}

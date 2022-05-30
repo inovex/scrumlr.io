@@ -254,6 +254,14 @@
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel"
   },
+  "Feedback": {
+    "FeedbackInputLabel": "Möchtest du uns noch etwas mitteilen?",
+    "FeedbackInputPlaceholder": "Hier kannst du deine Gedanken festhalten!",
+    "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail!",
+    "SubmitButton": "Feedback abschicken",
+    "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
+    "ErrorInvalidEmail": "Bitte gebe eine gültige E-Mail Adresse an!"
+  },
   "ProfileSettings": {
     "Profile": "Profil",
     "UserName": "Nutzername"

@@ -133,6 +133,12 @@ func main() {
 				Usage: "disable check origin (strongly suggestion to only use this for development)",
 				Value: false,
 			},
+			&cli.StringFlag{
+			    Name: "feedback-webhook-url",
+			    EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
+			    Usage: "the url where feedback will be sent to",
+			    Required: false
+			}
 		},
 	}
 

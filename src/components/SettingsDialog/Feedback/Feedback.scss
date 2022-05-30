@@ -5,7 +5,6 @@
   flex-direction: row;
   justify-content: center;
   gap: $padding--medium;
-  background-color: $color-dark-one;
   height: 96px;
 }
 
@@ -23,18 +22,28 @@
   gap: 4px;
   height: 96px;
   width: 80px;
-  border-radius: 16px;
-  color: $color-white;
+  border-radius: 8px;
   cursor: pointer;
   text-align: center;
   font-size: $text-size;
   font-weight: 500;
-  background-color: $color-dark-mode-note;
+  color: $color-black;
+  background-color: $color-white;
   position: relative;
   top: -19px;
+  &:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
+  }
 }
 .feedback-option__input:checked + .feedback-option__label {
   border: 2px solid var(--accent-color);
+}
+[theme="dark"] .settings-dialog__feedback-option > label {
+  color: $color-white;
+  background-color: $color-dark-mode-note;
+  &:hover {
+    background-color: $color-dark-mode-note--hover;
+  }
 }
 
 .settings-dialog__feedback-form {
@@ -42,7 +51,6 @@
   flex-direction: column;
   align-items: center;
   gap: $padding--medium;
-  background-color: #242c3d;
 }
 
 .feedback-form__submit-button {
@@ -55,8 +63,12 @@
   width: max-content;
   font-weight: 700;
   cursor: pointer;
+  transition: all 0.1s ease-in-out;
   &:active {
     transform: scale(0.95);
+  }
+  &:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.8);
   }
 }
 

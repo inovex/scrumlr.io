@@ -32,7 +32,7 @@ func (feedbackType *FeedbackType) UnmarshalJSON(b []byte) error {
 
 type FeedbackRequest struct {
 	Contact *string      `json:"contact"`
-	Text    string       `json:"text"`
+	Text    *string      `json:"text"`
 	Type    FeedbackType `json:"type"`
 }
 
@@ -56,8 +56,12 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if body.Contact == nil || *body.Contact == "" {
-		str := "Unbekannt"
+		str := "/"
 		body.Contact = &str
+	}
+	if body.Text == nil || *body.Text == "" {
+		str := "/"
+		body.Text = &str
 	}
 
 	u, err := json.Marshal(WebhookRequest{Text: "Scrumlr hat neues Feedback erhalten!", Blocks: []WebhookBlock{
@@ -77,7 +81,7 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	_, err = http.Post("https://hooks.slack.com/services/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", "application/json", bytes.NewBuffer(u))
+	_, err = http.Post("", "application/json", bytes.NewBuffer(u))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
