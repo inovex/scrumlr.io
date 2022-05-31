@@ -13,7 +13,7 @@ import {TabIndex} from "constants/tabIndex";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {DragDropContext, DragUpdate, Droppable, DropResult} from "react-beautiful-dnd";
+import {DragDropContext, Droppable, DropResult} from "react-beautiful-dnd";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -37,8 +37,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       notes: applicationState.notes
         .filter((note) => !note.position.stack)
         .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
-        .map((note) => ({id: note.id, rank: note.position.rank}))
-        .sort((a, b) => a.rank - b.rank) // Ascending: a.rank - b.rank | ALT: (a.rank > b.rank ? -1 : 1) w. Ascending: -1 : 1 | Descending: 1 : 1
+        .sort((a, b) => a.position.rank - b.position.rank) // Ascending: a.rank - b.rank | ALT: (a.rank > b.rank ? -1 : 1) w. Ascending: -1 : 1 | Descending: 1 : 1
         .reverse(),
       showAuthors: applicationState.board.data!.showAuthors,
       moderating: applicationState.view.moderating,
@@ -46,6 +45,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     }),
     _.isEqual
   );
+  const [noteList, setNoteList] = useState(state.notes);
   const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
@@ -55,23 +55,40 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
 
   const reverseIndex = (n: number, i: number) => n - i - 1;
 
-  const onDragEnd = (result: DropResult) => {
+  const moveArrayItem = (arr: {id: string; rank: number}[], oldIndex: number, newIndex: number) => {
+    if (newIndex >= arr.length) {
+      let k = newIndex - arr.length + 1;
+      while (k--) {
+        arr.push({id: "", rank: -1});
+      }
+    }
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+    return arr;
+  };
+
+  const onDragEnd = async (result: DropResult) => {
     const {destination, source, combine, draggableId} = result;
 
+    console.log(`destination: \t ${destination}`);
+    console.log(`source: \t ${source}`);
+    console.log(`combine: \t ${combine}`);
+    console.log(`combine.draggableId: \t ${combine?.draggableId}, combine.droppableId: ${combine?.droppableId}`);
+
     if (combine) {
+      setNoteList(noteList.slice(source.index, 1));
       dispatch(Actions.editNote(draggableId, {position: {column: combine.droppableId, stack: combine.draggableId, rank: 0}}));
     }
     if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
       return;
     }
-    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
-  };
 
-  const onDragUpdate = (initial: DragUpdate) => {
-    const {destination, source, draggableId} = initial;
-    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
-      return;
-    }
+    console.log(`destination: \t id: ${destination.droppableId} / index: ${destination.index} (rank: ${reverseIndex(state.notes.length, destination.index)})`);
+    console.log(`source: \t id: ${source.droppableId} / index: ${source.index} (rank: ${reverseIndex(state.notes.length, source.index)})`);
+
+    // dispatch(Actions.updateNotesOptimistic(moveArrayItem(state.notes, source.index, destination.index)));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    setNoteList(moveArrayItem(noteList, source.index, destination.index));
     dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
   };
 
@@ -127,7 +144,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   );
 
   return (
-    <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+    <DragDropContext onDragEnd={onDragEnd}>
       <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
         <div className="column__content">
           <div className="column__header">
@@ -155,7 +172,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
             <Droppable droppableId={id} isCombineEnabled>
               {(provided, snapshot) => (
                 <ul ref={provided.innerRef} {...provided.droppableProps} className={classNames("column__note-list", {"column__note-list--isDraggedOver": snapshot.isDraggingOver})}>
-                  {state.notes.map((note, noteIndex) => (
+                  {noteList.map((note, noteIndex) => (
                     <Note
                       showAuthors={state.showAuthors!}
                       key={note.id}

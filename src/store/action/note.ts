@@ -14,6 +14,7 @@ export const NoteAction = {
   StopSharing: "scrumlr.io/stopSharing" as const,
 
   EditNote: "scrumlr.io/editNote" as const,
+  UpdateNotesOptimistic: "scrumlr.io/updateNotesOptimistic" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
 
   DeleteNote: "scrumlr.io/deleteNote" as const,
@@ -65,6 +66,15 @@ export const NoteActionFactory = {
     request,
   }),
   /**
+   * Creates an action which should be dispatched when the list of notes is updated, e.g. after a user edited a note. Only updates local state, use editNote for persistence.
+   *
+   * @param notes the updated list of notes
+   */
+  updateNotesOptimistic: (notes: unknown[]) => ({
+    type: NoteAction.UpdateNotesOptimistic,
+    notes,
+  }),
+  /**
    * Creates an action which should be dispatched when the user unstacks a note.
    * @param note contains the noteId and the parentId
    */
@@ -90,5 +100,6 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.shareNote>
   | ReturnType<typeof NoteActionFactory.stopSharing>
   | ReturnType<typeof NoteActionFactory.editNote>
+  | ReturnType<typeof NoteActionFactory.updateNotesOptimistic>
   | ReturnType<typeof NoteActionFactory.unstackNote>
   | ReturnType<typeof NoteActionFactory.deleteNote>;

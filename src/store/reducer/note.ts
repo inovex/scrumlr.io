@@ -5,7 +5,7 @@ import {NotesState} from "types/note";
 export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesState => {
   switch (action.type) {
     case Action.InitializeBoard:
-    case Action.UpdatedNotes: {
+    case Action.UpdatedNotes || Action.UpdateNotesOptimistic: {
       return action.notes;
     }
     case Action.UpdatedVoting: {
