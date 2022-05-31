@@ -21,7 +21,8 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     columns: [
       {name: "Start", hidden: false, color: "backlog-blue"},
       {name: "Stop", hidden: false, color: "grooming-green"},
-      {name: "Continue", hidden: false, color: "planning-pink"},
+      {name: "Continue", hidden: false, color: "online-orange"},
+      {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
   madSadGlad: {
