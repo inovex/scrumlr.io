@@ -28,6 +28,7 @@ type Server struct {
 	notes    services.Notes
 	sessions services.BoardSessions
 	health   services.Health
+	feedback services.Feedback
 
 	upgrader websocket.Upgrader
 
@@ -46,6 +47,7 @@ func New(
 	notes services.Notes,
 	sessions services.BoardSessions,
 	health services.Health,
+	feedback services.Feedback,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -85,6 +87,7 @@ func New(
 		notes:                            notes,
 		sessions:                         sessions,
 		health:                           health,
+		feedback:                         feedback,
 	}
 
 	// initialize websocket upgrader with origin check depending on options

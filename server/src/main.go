@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/boards"
+	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
@@ -134,11 +135,11 @@ func main() {
 				Value: false,
 			},
 			&cli.StringFlag{
-			    Name: "feedback-webhook-url",
-			    EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
-			    Usage: "the url where feedback will be sent to",
-			    Required: false
-			}
+				Name:     "feedback-webhook-url",
+				EnvVars:  []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
+				Usage:    "the url where feedback will be sent to",
+				Required: false,
+			},
 		},
 	}
 
@@ -210,6 +211,7 @@ func run(c *cli.Context) error {
 	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection)
 	noteService := notes.NewNoteService(dbConnection, rt)
+	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 
 	s := api.New(
@@ -222,6 +224,7 @@ func run(c *cli.Context) error {
 		noteService,
 		boardSessionService,
 		healthService,
+		feedbackService,
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 	)

@@ -1,13 +1,11 @@
 package api
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/go-chi/render"
 	"net/http"
-	"time"
 )
 
 type FeedbackType string
@@ -36,19 +34,6 @@ type FeedbackRequest struct {
 	Type    FeedbackType `json:"type"`
 }
 
-type WebhookText struct {
-	Type string `json:"type"`
-	Text string `json:"text"`
-}
-type WebhookBlock struct {
-	Type string      `json:"type"`
-	Text WebhookText `json:"text"`
-}
-type WebhookRequest struct {
-	Text   string         `json:"text"`
-	Blocks []WebhookBlock `json:"blocks"`
-}
-
 func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 	var body FeedbackRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -64,28 +49,7 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		body.Text = &str
 	}
 
-	u, err := json.Marshal(WebhookRequest{Text: "Scrumlr hat neues Feedback erhalten!", Blocks: []WebhookBlock{
-		{
-			Type: "header", Text: WebhookText{
-				Type: "plain_text", Text: fmt.Sprintf("%s vom %s", body.Type, time.Now().Format("02.01.2006 15:04")),
-			},
-		},
-		{
-			Type: "section", Text: WebhookText{
-				Type: "mrkdwn", Text: fmt.Sprintf("*Kontakt:* %s\n*Text:* %s", *body.Contact, body.Text),
-			},
-		},
-	},
-	})
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	_, err = http.Post("", "application/json", bytes.NewBuffer(u))
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
 	w.WriteHeader(http.StatusCreated)
 	return
 }
