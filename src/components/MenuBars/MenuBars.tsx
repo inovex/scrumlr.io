@@ -106,9 +106,10 @@ export const MenuBars = () => {
             setAnimate(true);
             toggleMenus((prevState) => !prevState);
           }}
+          aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}
         >
-          <ToggleAddMenuIcon className="switch__icon switch__icon--add" />
-          <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" />
+          <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
+          <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
         </button>
       )}
     </aside>

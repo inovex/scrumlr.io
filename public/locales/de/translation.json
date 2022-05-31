@@ -152,7 +152,9 @@
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
-    "settings": "Einstellungen"
+    "settings": "Einstellungen",
+    "switchToUserMenu": "Wechsle zum User-Menu",
+    "switchToAdminMenu": "Wechsle zum Admin-Menu"
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
