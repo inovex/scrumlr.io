@@ -53,9 +53,18 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Converts between note rank and note index (which are reversed).
+   *
+   * @param n the total number of notes
+   * @param i the note rank/index to be converted
+   */
   const reverseIndex = (n: number, i: number) => n - i - 1;
 
-  const moveArrayItem = (arr: NoteType[], oldIndex: number, newIndex: number) => {
+  /**
+   * Moves a note inside the note list.
+   */
+  const moveNoteItem = (arr: NoteType[], oldIndex: number, newIndex: number) => {
     if (newIndex >= arr.length) {
       let i = newIndex - arr.length + 1;
       while (i--) {
@@ -76,7 +85,8 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
       return;
     }
-    dispatch(Actions.updatedNotesOptimistically(moveArrayItem(state.notes, source.index, destination.index)));
+    // Optimistically updates the local note list before persisting the change to prevent flickering
+    dispatch(Actions.updatedNotesOptimistically(moveNoteItem(state.notes, source.index, destination.index)));
     dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
   };
 
