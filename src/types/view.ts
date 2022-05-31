@@ -9,6 +9,8 @@ export interface View {
 
   readonly enabledAuthProvider: string[];
 
+  readonly feedbackEnabled: boolean;
+
   readonly language?: string;
 
   readonly route?: string;

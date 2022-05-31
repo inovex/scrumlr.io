@@ -24,6 +24,7 @@ export const SettingsDialog: VFC = () => {
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
 
   useEffect(() => {
     // If user is not a moderator of the board, he shouldn't see the board settings
@@ -80,14 +81,16 @@ export const SettingsDialog: VFC = () => {
               <p>{t("SettingsDialog.ExportBoardDescription")}</p>
               <ExportIcon className="navigation-item__icon" />
             </Link>
-            <Link
-              to="feedback"
-              className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
-            >
-              <p>{t("SettingsDialog.Feedback")}</p>
-              <p>{t("SettingsDialog.FeedbackDescription")}</p>
-              <FeedbackIcon className="navigation-item__icon" />
-            </Link>
+            {feedbackEnabled && (
+              <Link
+                to="feedback"
+                className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
+              >
+                <p>{t("SettingsDialog.Feedback")}</p>
+                <p>{t("SettingsDialog.FeedbackDescription")}</p>
+                <FeedbackIcon className="navigation-item__icon" />
+              </Link>
+            )}
             {me && (
               <Link
                 to="profile"

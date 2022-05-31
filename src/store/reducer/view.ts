@@ -5,6 +5,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
   serverTimeOffset: 0,
   enabledAuthProvider: [],
+  feedbackEnabled: false,
 };
 
 // eslint-disable-next-line default-param-last
@@ -36,6 +37,7 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
         ...state,
         enabledAuthProvider: action.enabledAuthProvider,
         serverTimeOffset: new Date().getTime() - action.serverTime.getTime(),
+        feedbackEnabled: action.feedbackEnabled,
       };
     }
 
