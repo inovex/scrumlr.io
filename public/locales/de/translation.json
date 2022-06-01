@@ -260,7 +260,9 @@
     "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail!",
     "SubmitButton": "Feedback abschicken",
     "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
-    "ErrorInvalidEmail": "Bitte gebe eine gültige E-Mail Adresse an!"
+    "ErrorInvalidEmail": "Bitte gebe eine gültige E-Mail Adresse an!",
+    "ErrorMissingFeatureRequestText": "Bitte gebe an, welches Feature du dir wünscht!",
+    "ErrorMissingBugReportText": "Bitte gebe an, welchen Bug du melden möchtest!"
   },
   "ProfileSettings": {
     "Profile": "Profil",

@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
 import {FeedbackAPI} from "api/feedback";
+import {useAppSelector} from "store";
 import {ReactComponent as BugIcon} from "assets/icon-bug.svg";
 import {ReactComponent as PraiseIcon} from "assets/icon-praise.svg";
 import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
@@ -11,6 +12,7 @@ import "./Feedback.scss";
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
   const [errorMessage, setErrorMessage] = useState<string>();
+  const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
   const contactInput = useRef<HTMLInputElement>(null);
   const feedbackTextarea = useRef<HTMLTextAreaElement>(null);
 
@@ -31,7 +33,15 @@ export const Feedback: React.FC = () => {
       setErrorMessage(t("Feedback.ErrorInvalidEmail"));
       return;
     }
-    FeedbackAPI.sendFeedback(feedbackType.value, feedback.value, contact.value);
+    if (feedbackType.value === "FEATURE_REQUEST" && feedback.value.trim() === "") {
+      setErrorMessage(t("Feedback.ErrorMissingFeatureRequestText"));
+      return;
+    }
+    if (feedbackType.value === "BUG_REPORT" && feedback.value.trim() === "") {
+      setErrorMessage(t("Feedback.ErrorMissingBugReportText"));
+      return;
+    }
+    FeedbackAPI.sendFeedback(feedbackType.value, feedback.value.trim(), contact.value.trim());
     e.target.reset();
   };
 
@@ -68,18 +78,20 @@ export const Feedback: React.FC = () => {
       <div className="settings-dialog__header">
         <h2 className={classNames("settings-dialog__header-text", "accent-color__poker-purple")}>Feedback</h2>
       </div>
-      <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>
-        {renderFeedbackOptions()}
-        <SettingsButton label={t("Feedback.FeedbackInputLabel")} className="feedback-form__settings-button" onClick={() => feedbackTextarea.current?.focus()}>
-          <textarea name="feedback" placeholder={t("Feedback.FeedbackInputPlaceholder")} className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
-        </SettingsButton>
-        <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
-          <input name="contact" placeholder="mail@inovex.de" className="feedback-form__contact-input" ref={contactInput} />
-        </SettingsButton>
-        <button type="submit" className="feedback-form__submit-button">
-          {t("Feedback.SubmitButton")}
-        </button>
-      </form>
+      {feedbackEnabled && (
+        <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>
+          {renderFeedbackOptions()}
+          <SettingsButton label={t("Feedback.FeedbackInputLabel")} className="feedback-form__settings-button" onClick={() => feedbackTextarea.current?.focus()}>
+            <textarea name="feedback" placeholder={t("Feedback.FeedbackInputPlaceholder")} className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
+          </SettingsButton>
+          <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
+            <input name="contact" placeholder="mail@inovex.de" className="feedback-form__contact-input" ref={contactInput} />
+          </SettingsButton>
+          <button type="submit" className="feedback-form__submit-button">
+            {t("Feedback.SubmitButton")}
+          </button>
+        </form>
+      )}
       {errorMessage && <span className="settings-dialog__error-message">{errorMessage}</span>}
     </div>
   );
