@@ -1,11 +1,14 @@
 @import "src/constants/style";
 
+$FEEDBACK_OPTION_HEIGHT: 96px;
+$FEEDBACK_OPTION_WIDTH: 80px;
+
 .settings-dialog__feedback-options {
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: $padding--medium;
-  height: 96px;
+  height: $FEEDBACK_OPTION_HEIGHT;
 }
 
 .settings-dialog__feedback-option > input {
@@ -20,8 +23,8 @@
   justify-content: center;
   align-items: center;
   gap: 4px;
-  height: 96px;
-  width: 80px;
+  height: $FEEDBACK_OPTION_HEIGHT;
+  width: $FEEDBACK_OPTION_WIDTH;
   padding: $padding--small;
   border-radius: 8px;
   cursor: pointer;
@@ -89,12 +92,12 @@
   border: none;
   outline: none;
   resize: none;
-  width: calc(100% - 48px);
+  width: calc(100% - (2 * $margin--medium));
   height: 80px;
   margin-top: 0;
-  margin-bottom: 16px;
-  margin-left: 24px;
-  margin-right: 24px;
+  margin-bottom: $margin--default;
+  margin-left: $margin--medium;
+  margin-right: $margin--medium;
   padding: 0;
 }
 [theme="dark"] .feedback-form__feedback-textarea {
@@ -105,15 +108,15 @@
   background-color: transparent;
   border: none;
   outline: none;
-  width: calc(100% - 48px);
+  width: calc(100% - (2 * $margin--medium));
   margin-top: 0;
-  margin-bottom: 16px;
-  margin-left: 24px;
-  margin-right: 24px;
+  margin-bottom: $margin--default;
+  margin-left: $margin--medium;
+  margin-right: $margin--medium;
   padding: 0;
 }
 [theme="dark"] .feedback-form__contact-input {
-  color: white;
+  color: $color-white;
 }
 
 .settings-dialog__error-message {
