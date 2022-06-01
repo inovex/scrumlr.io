@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Feedback should match snapshot 1`] = `
+<div
+  class="settings-dialog__container accent-color__poker-purple"
+>
+  <div
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text accent-color__poker-purple"
+    >
+      Feedback
+    </h2>
+  </div>
+  <form
+    class="settings-dialog__feedback-form"
+  >
+    <div
+      class="settings-dialog__feedback-options"
+    >
+      <div
+        class="settings-dialog__feedback-option"
+      >
+        <input
+          class="feedback-option__input"
+          id="feedbackTypePraise"
+          name="feedbackType"
+          type="radio"
+          value="PRAISE"
+        />
+        <label
+          class="feedback-option__label"
+          for="feedbackTypePraise"
+        >
+          <svg>
+            icon-praise.svg
+          </svg>
+          <span>
+            Praise
+          </span>
+        </label>
+      </div>
+      <div
+        class="settings-dialog__feedback-option"
+      >
+        <input
+          class="feedback-option__input"
+          id="feedbackTypeFeatureRequest"
+          name="feedbackType"
+          type="radio"
+          value="FEATURE_REQUEST"
+        />
+        <label
+          class="feedback-option__label"
+          for="feedbackTypeFeatureRequest"
+        >
+          <svg>
+            icon-add-feature.svg
+          </svg>
+          <span>
+            Feature Request
+          </span>
+        </label>
+      </div>
+      <div
+        class="settings-dialog__feedback-option"
+      >
+        <input
+          class="feedback-option__input"
+          id="feedbackTypeBugReport"
+          name="feedbackType"
+          type="radio"
+          value="BUG_REPORT"
+        />
+        <label
+          class="feedback-option__label"
+          for="feedbackTypeBugReport"
+        >
+          <svg>
+            icon-bug.svg
+          </svg>
+          <span>
+            Bug Report
+          </span>
+        </label>
+      </div>
+    </div>
+    <button
+      class="settings-option-button feedback-form__settings-button"
+      type="button"
+    >
+      <span
+        class="settings-option-button__label"
+      >
+        Feedback.FeedbackInputLabel
+      </span>
+      <textarea
+        class="feedback-form__feedback-textarea"
+        name="feedback"
+        placeholder="Feedback.FeedbackInputPlaceholder"
+      />
+    </button>
+    <button
+      class="settings-option-button feedback-form__settings-button"
+      type="button"
+    >
+      <span
+        class="settings-option-button__label"
+      >
+        Feedback.ContactInputLabel
+      </span>
+      <input
+        class="feedback-form__contact-input"
+        name="contact"
+        placeholder="mail@inovex.de"
+      />
+    </button>
+    <button
+      class="feedback-form__submit-button"
+      type="submit"
+    >
+      Feedback.SubmitButton
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Feedback should render correctly 1`] = `
+<div
+  class="settings-dialog__container accent-color__poker-purple"
+>
+  <div
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text accent-color__poker-purple"
+    >
+      Feedback
+    </h2>
+  </div>
+</div>
+`;
