@@ -151,7 +151,9 @@
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
-    "settings": "Settings"
+    "settings": "Settings",
+    "switchToUserMenu": "Switch to user menu",
+    "switchToAdminMenu": "Switch to admin menu"
   },
   "VoteConfigurationButton": {
     "label": "Voting",
