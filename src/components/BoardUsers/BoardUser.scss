@@ -55,8 +55,10 @@
     animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
     transform-origin: 37% 40%;
   }
+}
 
-  ~ .avatar #Circle-Background {
+.user-ready {
+  > .avatar #Circle-Background {
     transform: rotate(90deg) scale(-1, 1);
     stroke: $color-grooming-green;
     stroke-width: 24px;
@@ -68,11 +70,25 @@
   }
 }
 
+.user-avatar__raised-hand {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+
+  width: 24px;
+  height: 24px;
+
+  color: $color-backlog-blue;
+}
+
 [theme="dark"] {
   .user__initials,
   .rest-users__count {
     color: $color-white;
     font-weight: bold;
+  }
+  .user-avatar__raised-hand {
+    color: $color-planning-pink;
   }
 }
 
