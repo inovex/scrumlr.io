@@ -79,6 +79,15 @@
   height: 24px;
 
   color: $color-backlog-blue;
+  animation: wave 0.8s ease-in-out;
+  transform-origin: bottom left;
+
+  .wave {
+    --dasharray: 12;
+    stroke-dasharray: var(--dasharray);
+    stroke-dashoffset: 0;
+    animation: draw 0.8s ease-in-out;
+  }
 }
 
 [theme="dark"] {
@@ -104,5 +113,23 @@
   }
   60% {
     transform: scale(1.2);
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg) scale(0);
+  }
+  25% {
+    transform: rotate(15deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
   }
 }
