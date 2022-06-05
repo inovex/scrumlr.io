@@ -29,12 +29,17 @@ export const LoginBoard = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  let redirectPath = "/";
+  if (location.state) {
+    redirectPath = (location.state as State).from.pathname;
+  }
+
   // anonymous sign in and redirection to board path that is in history
   async function handleLogin() {
     if (termsAccepted) {
       try {
         await Auth.signInAnonymously(displayName);
-        navigate((location.state as State).from.pathname);
+        navigate(redirectPath);
       } catch (err) {
         Toast.error(t("LoginBoard.errorOnRedirect"));
       }
@@ -54,7 +59,7 @@ export const LoginBoard = () => {
 
             <h1>{t("LoginBoard.title")}</h1>
 
-            <LoginProviders originURL={`${window.location.origin}${(location.state as State).from.pathname}`} />
+            <LoginProviders originURL={`${window.location.origin}${redirectPath}`} />
 
             <hr className="login-board__divider" data-label="or" />
 

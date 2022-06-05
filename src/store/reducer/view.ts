@@ -8,7 +8,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   feedbackEnabled: false,
 };
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: ReduxAction): ViewState => {
   switch (action.type) {
     case Action.LeaveBoard: {
