@@ -23,6 +23,7 @@ exports[`Feedback should match snapshot 1`] = `
         class="settings-dialog__feedback-option"
       >
         <input
+          checked=""
           class="feedback-option__input"
           id="feedbackTypePraise"
           name="feedbackType"
@@ -93,7 +94,7 @@ exports[`Feedback should match snapshot 1`] = `
       <span
         class="settings-option-button__label"
       >
-        Feedback.FeedbackInputLabel
+        Feedback.PraiseInputLabel
       </span>
       <textarea
         class="feedback-form__feedback-textarea"
@@ -123,21 +124,5 @@ exports[`Feedback should match snapshot 1`] = `
       Feedback.SubmitButton
     </button>
   </form>
-</div>
-`;
-
-exports[`Feedback should render correctly 1`] = `
-<div
-  class="settings-dialog__container accent-color__poker-purple"
->
-  <div
-    class="settings-dialog__header"
-  >
-    <h2
-      class="settings-dialog__header-text accent-color__poker-purple"
-    >
-      Feedback
-    </h2>
-  </div>
 </div>
 `;

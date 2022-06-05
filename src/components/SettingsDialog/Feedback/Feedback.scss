@@ -59,13 +59,12 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 
 .feedback-form__submit-button {
   padding: $padding--small $padding--medium;
-  height: 32px;
   border-radius: 32px;
   background-color: var(--accent-color);
   color: $color-white;
   border: none;
-  width: max-content;
-  font-weight: 700;
+  width: 260px;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.1s ease-in-out;
   &:active {

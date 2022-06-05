@@ -257,14 +257,17 @@
     "colorSchemeDark": "Dunkel"
   },
   "Feedback": {
-    "FeedbackInputLabel": "Möchtest du uns noch etwas mitteilen?",
-    "FeedbackInputPlaceholder": "Hier kannst du deine Gedanken festhalten!",
-    "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail!",
+    "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
+    "BugReportInputLabel": "Welchen Bug möchtest Du uns melden?",
+    "FeatureRequestInputLabel": "Welches Feature hättest Du gerne?",
+    "FeedbackInputPlaceholder": "Schreibe alles Zusätzliche hier auf!",
+    "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail! (Optional)",
     "SubmitButton": "Feedback abschicken",
     "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
-    "ErrorInvalidEmail": "Bitte gebe eine gültige E-Mail Adresse an!",
-    "ErrorMissingFeatureRequestText": "Bitte gebe an, welches Feature du dir wünscht!",
-    "ErrorMissingBugReportText": "Bitte gebe an, welchen Bug du melden möchtest!"
+    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail Adresse an!",
+    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünscht!",
+    "ErrorMissingBugReportText": "Bitte gib an, welchen Bug du melden möchtest!",
+    "SubmitNotification": "Vielen Dank für dein Feedback!"
   },
   "ProfileSettings": {
     "Profile": "Profil",

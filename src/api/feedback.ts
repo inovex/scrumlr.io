@@ -1,3 +1,4 @@
+import i18n from "i18n";
 import {SERVER_HTTP_URL} from "../config";
 import {Toast} from "../utils/Toast";
 
@@ -14,7 +15,7 @@ export const FeedbackAPI = {
         }),
       });
       if (response.ok) {
-        Toast.success("Thank you for your feedback!");
+        Toast.success(i18n.t("Feedback.SubmitNotification"));
       }
     } catch (error) {
       throw new Error(`unable to send feedback: ${error}`);
