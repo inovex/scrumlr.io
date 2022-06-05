@@ -11,7 +11,7 @@ import {useDispatch} from "react-redux";
 import _ from "underscore";
 import {Participant} from "types/participant";
 import {useAppSelector} from "store";
-import {Draggable} from "react-beautiful-dnd";
+import {useSortable} from "@dnd-kit/sortable";
 
 interface NoteProps {
   noteId: string;
@@ -24,6 +24,7 @@ interface NoteProps {
   viewer: Participant;
   tabIndex?: number;
   noteIndex: number;
+  dragActiveId?: string;
 }
 
 export const Note = (props: NoteProps) => {
@@ -43,6 +44,14 @@ export const Note = (props: NoteProps) => {
   );
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
   const [showDialog, setShowDialog] = React.useState(noteIsShared);
+
+  const {attributes, listeners, setNodeRef, transform, transition, isDragging, isOver} = useSortable({id: props.noteId});
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        transition,
+      }
+    : undefined;
 
   const handleShowDialog = () => {
     if (props.moderating && props.noteId) {
@@ -84,64 +93,54 @@ export const Note = (props: NoteProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteIsShared]);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !showDialog) {
       handleShowDialog();
     }
   };
 
   return (
-    <Draggable draggableId={props.noteId} index={props.noteIndex}>
-      {(provided, snapshot) => (
-        <li
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          className={classNames("note__root")}
-          onClick={handleShowDialog}
-          onKeyPress={handleKeyPress}
-        >
-          <div
-            className={classNames(
-              "note",
-              {"note--own-card": props.viewer.user.id === note?.author},
-              {
-                "note--isDragging": snapshot.isDragging,
-                "note--isCombineTarget": snapshot.combineTargetFor,
-              }
-            )}
-            tabIndex={props.tabIndex ?? TabIndex.default}
-          >
-            <div className="note__content">
-              <p className="note__text">{note!.text}</p>
-              <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === note?.author})} />
-            </div>
-            <div className="note__footer">
-              {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
-                <figure className="note__author" aria-roledescription="author">
-                  <UserAvatar id={note!.author} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
-                  <figcaption className="note__author-name">{author!.user.name}</figcaption>
-                </figure>
-              )}
-              <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
-            </div>
-            {showDialog && (
-              <NoteDialog
-                {...props}
-                text={note!.text}
-                authorId={note!.author}
-                authorName={author!.user.name}
-                childrenNotes={childrenNotes}
-                onClose={handleShowDialog}
-                onDeleteOfParent={() => setShowDialog(false)}
-                moderating={props.moderating}
-                columnVisible={props.columnVisible}
-              />
-            )}
-          </div>
-          {childrenNotes.length > 0 && <div className="note__in-stack" />}
-        </li>
-      )}
-    </Draggable>
+    <li ref={setNodeRef} style={style} {...listeners} {...attributes} className={classNames("note__root")} onClick={handleShowDialog} onKeyDown={handleKeyDown}>
+      <div
+        className={classNames(
+          "note",
+          {"note--own-card": props.viewer.user.id === note?.author},
+          {
+            "note--isDragging": isDragging,
+            "note--isOver": isOver && props.noteId !== props.dragActiveId,
+            //   "note--isCombineTarget": snapshot.combineTargetFor,
+          }
+        )}
+        tabIndex={props.tabIndex ?? TabIndex.default}
+      >
+        <div className="note__content">
+          <p className="note__text">{note!.text}</p>
+          <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === note?.author})} />
+        </div>
+        <div className="note__footer">
+          {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
+            <figure className="note__author" aria-roledescription="author">
+              <UserAvatar id={note!.author} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{author!.user.name}</figcaption>
+            </figure>
+          )}
+          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
+        </div>
+        {showDialog && (
+          <NoteDialog
+            {...props}
+            text={note!.text}
+            authorId={note!.author}
+            authorName={author!.user.name}
+            childrenNotes={childrenNotes}
+            onClose={handleShowDialog}
+            onDeleteOfParent={() => setShowDialog(false)}
+            moderating={props.moderating}
+            columnVisible={props.columnVisible}
+          />
+        )}
+      </div>
+      {childrenNotes.length > 0 && <div className="note__in-stack" />}
+    </li>
   );
 };

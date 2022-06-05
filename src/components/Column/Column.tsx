@@ -13,7 +13,8 @@ import {TabIndex} from "constants/tabIndex";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
-import {DragDropContext, Droppable, DropResult} from "react-beautiful-dnd";
+import {closestCenter, DndContext, DragEndEvent, MouseSensor, useDroppable, useSensor, useSensors, DragOverlay, DragStartEvent} from "@dnd-kit/core";
+import {rectSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {Note as NoteType} from "types/note";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
@@ -38,7 +39,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       notes: applicationState.notes
         .filter((note) => !note.position.stack)
         .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
-        .sort((a, b) => a.position.rank - b.position.rank) // Ascending: (a.rank - b.rank) | Descending: (a.rank > b.rank ? 1 : 1)
+        .sort((a, b) => a.position.rank - b.position.rank) // Ascending: (a - b) | Descending: (a > b ? 1 : 1)
         .reverse(),
       showAuthors: applicationState.board.data!.showAuthors,
       moderating: applicationState.view.moderating,
@@ -49,9 +50,23 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
+  const [dragActiveId, setDragActiveId] = useState("");
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        delay: 125, // Mouse down delay before drag start (ms)
+        tolerance: 10, // Tolerated mouse movement during delay (px)
+      },
+    })
+  );
+
+  const {isOver, setNodeRef} = useDroppable({
+    id: "droppable",
+  });
 
   /**
    * Converts between note rank and note index (which are reversed).
@@ -59,36 +74,36 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
    * @param n the total number of notes
    * @param i the note rank/index to be converted
    */
-  const reverseIndex = (n: number, i: number) => n - i - 1;
+  // const reverseIndex = (n: number, i: number) => n - i - 1;
 
   /**
    * Moves a note inside the note list.
    */
-  const moveNoteItem = (arr: NoteType[], oldIndex: number, newIndex: number) => {
-    if (newIndex >= arr.length) {
-      let i = newIndex - arr.length + 1;
-      while (i--) {
-        arr.push({...arr[0]}); // Pad with placeholder
-      }
-    }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-    return arr;
-  };
+  // const moveNoteItem = (arr: NoteType[], oldIndex: number, newIndex: number) => {
+  //   if (newIndex >= arr.length) {
+  //     let i = newIndex - arr.length + 1;
+  //     while (i--) {
+  //       arr.push({...arr[0]}); // Pad with placeholder
+  //     }
+  //   }
+  //   arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+  //   return arr;
+  // };
 
-  const onDragEnd = async (result: DropResult) => {
-    const {destination, source, combine, draggableId} = result;
-
-    if (combine) {
-      dispatch(Actions.updatedNotesOptimistically(state.notes.slice(source.index, 1)));
-      dispatch(Actions.editNote(draggableId, {position: {column: combine.droppableId, stack: combine.draggableId, rank: 0}}));
-    }
-    if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
-      return;
-    }
-    // Optimistically updates the local note list before persisting the change to prevent flickering
-    dispatch(Actions.updatedNotesOptimistically(moveNoteItem(state.notes, source.index, destination.index)));
-    dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
-  };
+  // const onDragEnd = async (result: DropResult) => {
+  //   const {destination, source, combine, draggableId} = result;
+  //
+  //   if (combine) {
+  //     dispatch(Actions.updatedNotesOptimistically(state.notes.slice(source.index, 1)));
+  //     dispatch(Actions.editNote(draggableId, {position: {column: combine.droppableId, stack: combine.draggableId, rank: 0}}));
+  //   }
+  //   if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
+  //     return;
+  //   }
+  //   // Optimistically updates the local note list before persisting the change to prevent flickering
+  //   dispatch(Actions.updatedNotesOptimistically(moveNoteItem(state.notes, source.index, destination.index)));
+  //   dispatch(Actions.editNote(draggableId, {position: {column: destination.droppableId, stack: undefined, rank: reverseIndex(state.notes.length, destination.index)}}));
+  // };
 
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
@@ -141,8 +156,42 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     </>
   );
 
+  const handleDragEnd = (e: DragEndEvent) => {
+    const {active, over} = e;
+
+    if (over?.data?.current && active.id !== over.id) {
+      dispatch(
+        Actions.editNote(active.id.toString(), {
+          position: {column: over.data.current.sortable.containerId, stack: over.id.toString(), rank: 0},
+        })
+      );
+    }
+    setDragActiveId("");
+  };
+
+  const handleDragStart = (e: DragStartEvent) => {
+    setDragActiveId(e.active.id.toString());
+  };
+
+  const getNoteComponent = (note: NoteType, noteIndex: number) => (
+    <Note
+      showAuthors={state.showAuthors!}
+      key={note.id}
+      noteId={note.id}
+      columnId={id}
+      columnName={name}
+      columnColor={color}
+      columnVisible={visible}
+      tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
+      moderating={state.moderating}
+      viewer={state.viewer}
+      noteIndex={noteIndex}
+      dragActiveId={dragActiveId}
+    />
+  );
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
       <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
         <div className="column__content">
           <div className="column__header">
@@ -166,32 +215,16 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
             </div>
             <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
           </div>
-          <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
-            <Droppable droppableId={id} isCombineEnabled>
-              {(provided, snapshot) => (
-                <ul ref={provided.innerRef} {...provided.droppableProps} className={classNames("column__note-list", {"column__note-list--isDraggedOver": snapshot.isDraggingOver})}>
-                  {state.notes.map((note, noteIndex) => (
-                    <Note
-                      showAuthors={state.showAuthors!}
-                      key={note.id}
-                      noteId={note.id}
-                      columnId={id}
-                      columnName={name}
-                      columnColor={color}
-                      columnVisible={visible}
-                      tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
-                      moderating={state.moderating}
-                      viewer={state.viewer}
-                      noteIndex={noteIndex}
-                    />
-                  ))}
-                  {provided.placeholder}
-                </ul>
-              )}
-            </Droppable>
-          </div>
+          <SortableContext id={id} items={state.notes} strategy={rectSortingStrategy}>
+            <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper")}>
+              <ul ref={setNodeRef} className={classNames("column__note-list", {"column__note-list--isDraggedOver": isOver})}>
+                {state.notes.map((note, noteIndex) => getNoteComponent(note, noteIndex))}
+              </ul>
+              <DragOverlay>{dragActiveId ? state.notes.filter((n) => n.id === dragActiveId).map((note, noteIndex) => getNoteComponent(note, noteIndex)) : null}</DragOverlay>
+            </div>
+          </SortableContext>
         </div>
       </section>
-    </DragDropContext>
+    </DndContext>
   );
 };

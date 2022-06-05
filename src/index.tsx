@@ -1,8 +1,6 @@
 import React, {Suspense} from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
@@ -21,9 +19,7 @@ ReactDOM.render(
         <Html />
         <Suspense fallback={<LoadingScreen />}>
           <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
-          <DndProvider backend={HTML5Backend}>
-            <Router />
-          </DndProvider>
+          <Router />
           <CookieNotice />
         </Suspense>
       </Provider>

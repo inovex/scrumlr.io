@@ -13,7 +13,6 @@ $note__author-image-size: 26px;
 .note__root {
   list-style-type: none;
   position: relative;
-  margin-bottom: 20px;
 }
 
 .note {
@@ -66,10 +65,10 @@ $note__author-image-size: 26px;
   outline: none;
 }
 .note--isDragging {
-  opacity: 0.5;
+  opacity: 0.4;
+  border: 2px dashed var(--accent-color);
 }
-
-.note--isCombineTarget {
+.note--isOver {
   border: 2px solid var(--accent-color);
 }
 .note--own-card::before {
