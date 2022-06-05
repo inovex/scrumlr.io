@@ -6,7 +6,7 @@ import {Action, ReduxAction} from "store/action";
  */
 const INITIAL_VOTING_STATE: VotingsState = {open: undefined, past: []};
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const votingReducer = (state: VotingsState = INITIAL_VOTING_STATE, action: ReduxAction): VotingsState => {
   if (action.type === Action.InitializeBoard) {
     return {
