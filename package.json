@@ -15,7 +15,7 @@
     "file-saver": "^2.0.5",
     "i18next": "^21.8.7",
     "i18next-browser-languagedetector": "^6.1.4",
-    "i18next-http-backend": "^1.4.0",
+    "i18next-http-backend": "^1.4.1",
     "js-cookie": "^3.0.1",
     "marked": "4.0.16",
     "qrcode.react": "^3.0.2",
