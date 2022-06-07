@@ -26,7 +26,7 @@ export const Feedback: React.FC = () => {
     } else {
       setFeedbackInputLabel(t("Feedback.BugReportInputLabel"));
     }
-  }, [feedbackTypeInput]);
+  }, [t, feedbackTypeInput]);
 
   const onSubmitFeedback = (e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}) => {
     e.preventDefault();
