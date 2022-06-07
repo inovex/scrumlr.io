@@ -10,7 +10,7 @@ export type NoteDialogNoteProps = {
   parentId?: string;
   text: string;
   authorId: string;
-  authorCustomAvatar?: AvataaarProps;
+  avatar?: AvataaarProps;
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
