@@ -12,6 +12,7 @@ import _ from "underscore";
 import {Participant} from "types/participant";
 import {useAppSelector} from "store";
 import {useSortable} from "@dnd-kit/sortable";
+import {Active, Collision, useDndContext} from "@dnd-kit/core";
 
 interface NoteProps {
   noteId: string;
@@ -25,6 +26,7 @@ interface NoteProps {
   tabIndex?: number;
   noteIndex: number;
   dragActiveId?: string;
+  noteDialogHandler: (noteDialogActive: boolean) => void;
 }
 
 export const Note = (props: NoteProps) => {
@@ -42,13 +44,17 @@ export const Note = (props: NoteProps) => {
         })),
     _.isEqual
   );
+
+  const {collisions: collisionsCtx, active: activeCtx} = useDndContext();
+
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
   const [showDialog, setShowDialog] = React.useState(noteIsShared);
 
   const {attributes, listeners, setNodeRef, transform, transition, isDragging, isOver} = useSortable({id: props.noteId});
+
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        // transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
         transition,
       }
     : undefined;
@@ -93,11 +99,31 @@ export const Note = (props: NoteProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noteIsShared]);
 
+  useEffect(() => {
+    props.noteDialogHandler(showDialog);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDialog]);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !showDialog) {
       handleShowDialog();
     }
   };
+
+  const getIsCombinable = (collisions: Collision[] | null, active: Active | null) => {
+    if (!collisions || collisions.length < 2) {
+      return false;
+    }
+    const {id: firstCollisionId, data: collisionData} = collisions[0];
+
+    if (!collisionData || firstCollisionId === active?.id || firstCollisionId !== props.noteId) {
+      return false;
+    }
+    const collisionValue = collisionData.value;
+    return collisionValue != null && collisionValue > 0.1 && collisionValue < 45;
+  };
+
+  const isCombinable = getIsCombinable(collisionsCtx, activeCtx);
 
   return (
     <li ref={setNodeRef} style={style} {...listeners} {...attributes} className={classNames("note__root")} onClick={handleShowDialog} onKeyDown={handleKeyDown}>
@@ -108,7 +134,7 @@ export const Note = (props: NoteProps) => {
           {
             "note--isDragging": isDragging,
             "note--isOver": isOver && props.noteId !== props.dragActiveId,
-            //   "note--isCombineTarget": snapshot.combineTargetFor,
+            "note--isCombinable": isCombinable,
           }
         )}
         tabIndex={props.tabIndex ?? TabIndex.default}

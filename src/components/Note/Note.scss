@@ -66,10 +66,12 @@ $note__author-image-size: 26px;
 }
 .note--isDragging {
   opacity: 0.4;
-  border: 2px dashed var(--accent-color);
 }
 .note--isOver {
   border: 2px solid var(--accent-color);
+}
+.note--isCombinable {
+  border: 2px solid yellowgreen;
 }
 .note--own-card::before {
   content: "";
