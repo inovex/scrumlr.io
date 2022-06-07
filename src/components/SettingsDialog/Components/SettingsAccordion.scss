@@ -37,11 +37,7 @@
 }
 
 [theme="dark"] {
-  .accordion-item {
-    // background-color: $color-dark-mode-note;
-
-    &__header {
-      color: $color-white;
-    }
+  .accordion-item__header {
+    color: $color-white;
   }
 }
