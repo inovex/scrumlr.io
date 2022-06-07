@@ -23,7 +23,7 @@
       border: 0;
       border-radius: 20px;
       background-color: $color-white;
-      box-shadow: 0 16px 32px rgba($color-lean-lilac, 0.3);
+      box-shadow: 0 16px 32px rgba(var(--accent-color-rgb), 0.3);
       align-items: center;
       justify-content: center;
 
