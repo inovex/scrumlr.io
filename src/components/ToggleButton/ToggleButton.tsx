@@ -41,6 +41,7 @@ type ToggleButtonProps<T> = {
   tabIndex?: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
   const onClick = () => {
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];

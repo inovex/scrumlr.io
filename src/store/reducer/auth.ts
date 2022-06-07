@@ -2,7 +2,7 @@ import {AuthState} from "types/auth";
 import {ReduxAction} from "store/action";
 import {AuthAction} from "store/action/auth";
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const authReducer = (state: AuthState = {user: undefined, initializationSucceeded: null}, action: ReduxAction): AuthState => {
   if (action.type === AuthAction.SignOut) {
     return {

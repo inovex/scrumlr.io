@@ -1,7 +1,7 @@
 import {RequestsState} from "types/request";
 import {Action, ReduxAction} from "store/action";
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const joinRequestReducer = (state: RequestsState = [], action: ReduxAction): RequestsState => {
   if (action.type === Action.InitializeBoard) {
     return action.requests;
