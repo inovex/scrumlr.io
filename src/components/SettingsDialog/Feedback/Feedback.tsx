@@ -1,4 +1,4 @@
-import React, {FormEvent, useRef, useState} from "react";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
@@ -12,10 +12,21 @@ import "./Feedback.scss";
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [feedbackType, setFeedbackType] = useState("PRAISE");
+  const [feedbackTypeInput, setFeedbackTypeInput] = useState("PRAISE");
+  const [feedbackInputLabel, setFeedbackInputLabel] = useState<string>(t("Feedback.PraiseInputLabel"));
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
   const contactInput = useRef<HTMLInputElement>(null);
   const feedbackTextarea = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (feedbackTypeInput === "PRAISE") {
+      setFeedbackInputLabel(t("Feedback.PraiseInputLabel"));
+    } else if (feedbackTypeInput === "FEATURE_REQUEST") {
+      setFeedbackInputLabel(t("Feedback.FeatureRequestInputLabel"));
+    } else {
+      setFeedbackInputLabel(t("Feedback.BugReportInputLabel"));
+    }
+  }, [feedbackTypeInput]);
 
   const onSubmitFeedback = (e: FormEvent<HTMLFormElement> & {target: {reset: () => void; feedbackType: {value: string}; feedback: {value: string}; contact: {value: string}}}) => {
     e.preventDefault();
@@ -56,7 +67,7 @@ export const Feedback: React.FC = () => {
           value="PRAISE"
           className="feedback-option__input"
           defaultChecked
-          onClick={() => setFeedbackType("PRAISE")}
+          onClick={() => setFeedbackTypeInput("PRAISE")}
         />
         <label htmlFor="feedbackTypePraise" className="feedback-option__label">
           <PraiseIcon />
@@ -71,7 +82,7 @@ export const Feedback: React.FC = () => {
           id="feedbackTypeFeatureRequest"
           value="FEATURE_REQUEST"
           className="feedback-option__input"
-          onClick={() => setFeedbackType("FEATURE_REQUEST")}
+          onClick={() => setFeedbackTypeInput("FEATURE_REQUEST")}
         />
         <label htmlFor="feedbackTypeFeatureRequest" className="feedback-option__label">
           <AddFeatureIcon />
@@ -80,7 +91,14 @@ export const Feedback: React.FC = () => {
       </div>
 
       <div className="settings-dialog__feedback-option">
-        <input type="radio" name="feedbackType" id="feedbackTypeBugReport" value="BUG_REPORT" className="feedback-option__input" onClick={() => setFeedbackType("BUG_REPORT")} />
+        <input
+          type="radio"
+          name="feedbackType"
+          id="feedbackTypeBugReport"
+          value="BUG_REPORT"
+          className="feedback-option__input"
+          onClick={() => setFeedbackTypeInput("BUG_REPORT")}
+        />
         <label htmlFor="feedbackTypeBugReport" className="feedback-option__label">
           <BugIcon />
           <span>Bug Report</span>
@@ -97,17 +115,7 @@ export const Feedback: React.FC = () => {
       {feedbackEnabled && (
         <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>
           {renderFeedbackOptions()}
-          <SettingsButton
-            label={
-              feedbackType === "PRAISE"
-                ? t("Feedback.PraiseInputLabel")
-                : feedbackType === "FEATURE_REQUEST"
-                ? t("Feedback.FeatureRequestInputLabel")
-                : t("Feedback.BugReportInputLabel")
-            }
-            className="feedback-form__settings-button"
-            onClick={() => feedbackTextarea.current?.focus()}
-          >
+          <SettingsButton label={feedbackInputLabel} className="feedback-form__settings-button" onClick={() => feedbackTextarea.current?.focus()}>
             <textarea name="feedback" placeholder={t("Feedback.FeedbackInputPlaceholder")} className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
           </SettingsButton>
           <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
