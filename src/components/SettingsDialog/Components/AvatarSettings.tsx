@@ -1,4 +1,5 @@
 import {ReactComponent as IconShuffle} from "assets/icon-shuffle.svg";
+import classNames from "classnames";
 import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
 import {
   AVATAR_ACCESSORIES_TYPES,
@@ -56,12 +57,16 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps}[]} = {
+  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
     hair: [
       {values: AVATAR_TOP_TYPES, key: "topType"},
-      {values: AVATAR_HAIR_COLORS, key: "hairColor"},
-      {values: AVATAR_FACIAL_HAIR_TYPES, key: "facialHairType"},
-      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor"},
+      {
+        values: AVATAR_HAIR_COLORS,
+        key: "hairColor",
+        disabledOn: {topType: ["NoHair", "Eyepatch", "Hat", "Hijab", "Turban", "WinterHat1", "WinterHat2", "WinterHat3", "WinterHat4", "LongHairFrida", "LongHairShavedSides"]},
+      },
+      {values: AVATAR_FACIAL_HAIR_TYPES, key: "facialHairType", disabledOn: {topType: ["Hijab"]}},
+      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor", disabledOn: {topType: ["Hijab"], facialHairType: ["Blank"]}},
     ],
     facialFeatures: [
       {values: AVATAR_SKIN_COLORS, key: "skinColor"},
@@ -70,10 +75,14 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       {values: AVATAR_MOUTH_TYPES, key: "mouthType"},
     ],
     clothing: [
-      {values: AVATAR_ACCESSORIES_TYPES, key: "accessoriesType"},
+      {values: AVATAR_ACCESSORIES_TYPES, key: "accessoriesType", disabledOn: {topType: ["Eyepatch"]}},
       {values: AVATAR_CLOTHE_TYPES, key: "clotheType"},
-      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor"},
-      {values: AVATAR_GRAPHIC_TYPES, key: "graphicType"},
+      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor", disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater"]}},
+      {
+        values: AVATAR_GRAPHIC_TYPES,
+        key: "graphicType",
+        disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater", "CollarSweater", "Hoodie", "Overall", "ShirtCrewNeck", "ShirtScoopNeck", "ShirtVNeck"]},
+      },
     ],
   };
 
@@ -98,20 +107,29 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
               >
                 <hr className="avatar-settings__settings-group-seperator" />
                 <div className="avatar-settings__settings-group">
-                  {props.map((element, index) => (
-                    <>
-                      <SettingsCarousel
-                        carouselItems={element.values}
-                        currentValue={properties[element.key]}
-                        onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                        key={element.key}
-                        localizationPath={`Avatar.${element.key}.`}
-                        label={t(`Avatar.${element.key}.label`)}
-                        className="avatar-settings__settings-group-item"
-                      />
-                      {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                    </>
-                  ))}
+                  {props.map((element, index) => {
+                    const isDisabled =
+                      element.disabledOn &&
+                      Object.entries(element.disabledOn)
+                        .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
+                        .some((val) => val);
+
+                    return (
+                      <>
+                        <SettingsCarousel
+                          carouselItems={element.values}
+                          currentValue={properties[element.key]}
+                          onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
+                          key={element.key}
+                          disabled={isDisabled}
+                          localizationPath={`Avatar.${element.key}.`}
+                          label={t(`Avatar.${element.key}.label`)}
+                          className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
+                        />
+                        {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
+                      </>
+                    );
+                  })}
                 </div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}

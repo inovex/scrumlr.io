@@ -81,7 +81,15 @@
         width: 90%;
         margin: 0 auto;
 
-        &:hover {
+        &.disabled {
+          opacity: 0.3;
+
+          & > button {
+            cursor: default;
+          }
+        }
+
+        &:hover:not(.disabled) {
           background-color: rgba(var(--accent-color-rgb), 0.1);
         }
 
@@ -127,7 +135,9 @@
         }
 
         &-item {
-          &:hover {
+          color: $color-white;
+
+          &:hover:not(.disabled) {
             background-color: $color-dark-mode-note--hover;
           }
 
