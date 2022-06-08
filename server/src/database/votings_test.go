@@ -1,6 +1,7 @@
 package database
 
 import (
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
@@ -21,6 +22,7 @@ func TestRunnerForVoting(t *testing.T) {
 	t.Run("Update=2", testChangeAbortedToClosedVotingShouldFail)
 	t.Run("Update=3", testChangeClosedToAbortedVotingShouldFail)
 	t.Run("Update=4", testCloseVoting)
+	t.Run("Update=5", testCloseVotingUpdateRank)
 
 	t.Run("Create=0", testCreateVotingWithNegativeVoteLimitShouldFail)
 	t.Run("Create=1", testCreateVotingWithVoteLimitGreater99ShouldFail)
@@ -188,4 +190,112 @@ func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 		Status:             types.VotingStatusOpen,
 	})
 	assert.NotNil(t, err)
+}
+
+func testCloseVotingUpdateRank(t *testing.T) {
+	user := fixture.MustRow("User.jane").(*User)
+	board := fixture.MustRow("Board.votingSortingTestBoard").(*Board)
+	column := fixture.MustRow("Column.votingSortingColumn").(*Column)
+	voting, _ := testDb.CreateVoting(VotingInsert{
+		Board:              board.ID,
+		VoteLimit:          20,
+		AllowMultipleVotes: true,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusOpen,
+	})
+	assert.NotNil(t, voting)
+
+	// Create some notes
+	note1, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "AAA",
+	})
+	note2, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "BBB",
+	})
+	note3, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "CCC",
+	})
+	note4, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "DDD",
+	})
+	note5, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "EEE",
+	})
+	note6, _ := testDb.CreateNote(NoteInsert{
+		Author: user.ID,
+		Board:  board.ID,
+		Column: column.ID,
+		Text:   "FFF",
+	})
+
+	// Stack some notes
+	var err error
+	note3, err = testDb.UpdateNote(user.ID, NoteUpdate{
+		Board: board.ID,
+		ID:    note3.ID,
+		Position: &NoteUpdatePosition{
+			Stack:  uuid.NullUUID{UUID: note2.ID, Valid: true},
+			Column: column.ID,
+			Rank:   0,
+		},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, uuid.NullUUID{UUID: note2.ID, Valid: true}, note3.Stack)
+	note4, err = testDb.UpdateNote(user.ID, NoteUpdate{
+		Board: board.ID,
+		ID:    note4.ID,
+		Position: &NoteUpdatePosition{
+			Stack:  uuid.NullUUID{UUID: note2.ID, Valid: true},
+			Column: column.ID,
+			Rank:   0,
+		},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, uuid.NullUUID{UUID: note2.ID, Valid: true}, note4.Stack)
+	note6, err = testDb.UpdateNote(user.ID, NoteUpdate{
+		Board: board.ID,
+		ID:    note6.ID,
+		Position: &NoteUpdatePosition{
+			Stack:  uuid.NullUUID{UUID: note5.ID, Valid: true},
+			Column: column.ID,
+			Rank:   0,
+		},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, uuid.NullUUID{UUID: note5.ID, Valid: true}, note6.Stack)
+
+	// Create some votes
+	testDb.AddVote(board.ID, user.ID, note1.ID)
+	testDb.AddVote(board.ID, user.ID, note2.ID)
+	testDb.AddVote(board.ID, user.ID, note4.ID)
+	testDb.AddVote(board.ID, user.ID, note6.ID)
+
+	// Close voting
+	testDb.UpdateVoting(VotingUpdate{
+		ID:     voting.ID,
+		Board:  voting.Board,
+		Status: types.VotingStatusClosed,
+	})
+
+	t.Log(note1.Text, note1.Rank)
+	t.Log(note2.Text, note2.Rank)
+	t.Log(note3.Text, note3.Rank)
+	t.Log(note4.Text, note4.Rank)
+	t.Log(note5.Text, note5.Rank)
+	t.Log(note6.Text, note6.Rank)
 }

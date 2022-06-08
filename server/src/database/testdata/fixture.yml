@@ -91,6 +91,13 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
+    - _id: votingSortingTestBoard
+      id: "6113b096-786c-1e23-ade7-c3fa19224bd4"
+      name: Voting Sorting test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
     - _id: notesTestBoard
       id: "2813b096-986c-4e23-adf7-c3fa19224bd4"
       name: Notes test
@@ -179,6 +186,10 @@
       board: '{{ $.Board.votingTestBoard.ID }}'
       user: '{{ $.User.jane.ID }}'
       role: PARTICIPANT
+    - _id: janesSessionOnVotingSortingTestBoard
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      role: OWNER
     - _id: jacksSessionOnNotesTestBoard
       board: '{{ $.Board.notesTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
@@ -247,6 +258,13 @@
       id: "3113b196-986c-5f23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
       name: Voting column
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: votingSortingColumn
+      id: "3123a396-986c-5f23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      name: Voting Sorting column
       color: backlog-blue
       visible: true
       index: 0
