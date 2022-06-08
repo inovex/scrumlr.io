@@ -48,6 +48,10 @@
   position: relative;
 }
 
+.column__header-title--isTemporary {
+  box-shadow: 0 0 0 1px #8d006e;
+}
+
 .column__header-text {
   font-size: calc(18px + 0.4vw);
   border-bottom: solid 3px var(--accent-color);
@@ -192,6 +196,12 @@
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 }
+
+.column__header-edit-button--disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
 .column__header-edit-button:first-of-type {
   margin-left: auto;
 }
