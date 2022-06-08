@@ -101,13 +101,13 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
-        <h2 className={classNames("column__header-text", visible ? "column__header-text--visible" : "column__header-text--hidden")}>{name}</h2>
+        <h2 className={classNames("column__header-text", {"column__header-text--hidden": !visible})}>{name}</h2>
       </div>
     ) : (
       <input
         tabIndex={tabIndex}
         maxLength={32}
-        className={classNames("column__header-input", {"column__header-input--hidden": !visible})}
+        className="column__header-input"
         defaultValue={name}
         onChange={() => setColumnName(inputRef.current?.value ?? "")}
         onKeyDown={(e) => {

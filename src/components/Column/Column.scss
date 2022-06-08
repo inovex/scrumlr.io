@@ -71,9 +71,6 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-}
-
-.column__header-text--visible {
   color: $color-black;
 }
 
@@ -97,9 +94,6 @@
   outline: none;
   max-width: 300px;
   width: 50%;
-}
-.column__header-input--hidden {
-  color: $color-middle-gray;
 }
 [theme="dark"] {
   .column__header-input {
@@ -182,8 +176,11 @@
 }
 
 [theme="dark"] {
-  .column__header-text--visible {
+  .column__header-text {
     color: $color-white;
+  }
+  .column__header-text--hidden {
+    color: $color-middle-gray;
   }
   .column__header-toggle-button-icon {
     color: $color-white;
