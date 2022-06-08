@@ -74,6 +74,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
   useEffect(() => {
     if (isTemporary) {
       setColumnNameMode("EDIT");
+      columnRef?.current?.scrollIntoView({inline: "start", behavior: "smooth"});
     }
   }, [isTemporary]);
 
