@@ -107,9 +107,8 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
       <input
         tabIndex={tabIndex}
         maxLength={32}
-        className="column__header-input"
+        className={classNames("column__header-input", {"column__header-input--hidden": !visible})}
         defaultValue={name}
-        placeholder={t("Column.editNamePlaceholder")}
         onChange={() => setColumnName(inputRef.current?.value ?? "")}
         onKeyDown={(e) => {
           if (e.key === "Escape") {
@@ -138,7 +137,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         <button
           tabIndex={tabIndex! + 1}
           title={t("Column.submitName")}
-          className={classNames("column__header-edit-button", {"column__header-edit-button--disabled": !columnName})}
+          className="column__header-edit-button"
           onClick={() => {
             handleEditColumnName(inputRef.current?.value ?? "");
           }}

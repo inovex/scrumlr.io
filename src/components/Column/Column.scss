@@ -98,6 +98,9 @@
   max-width: 300px;
   width: 50%;
 }
+.column__header-input--hidden {
+  color: $color-middle-gray;
+}
 [theme="dark"] {
   .column__header-input {
     color: $color-white;
