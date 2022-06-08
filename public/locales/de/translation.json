@@ -89,8 +89,7 @@
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
-    "editNamePlaceholder": "Neue Spalte",
-    "nameRequired": "Spaltenname ist erforderlich"
+    "editNamePlaceholder": "Neue Spalte"
   },
 
   "ErrorPage": {

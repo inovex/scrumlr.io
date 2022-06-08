@@ -134,33 +134,32 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
 
   const renderColumnModifiers = () => (
     <>
+      {columnNameMode === "EDIT" && columnName && (
+        <button
+          tabIndex={tabIndex! + 1}
+          title={t("Column.submitName")}
+          className={classNames("column__header-edit-button", {"column__header-edit-button--disabled": !columnName})}
+          onClick={() => {
+            handleEditColumnName(inputRef.current?.value ?? "");
+          }}
+        >
+          <SubmitIcon className="column__header-edit-button-icon" />
+        </button>
+      )}
       {columnNameMode === "EDIT" && (
-        <>
-          <button
-            tabIndex={tabIndex! + 1}
-            title={columnName ? t("Column.submitName") : t("Column.nameRequired")}
-            className={classNames("column__header-edit-button", {"column__header-edit-button--disabled": !columnName})}
-            disabled={!columnName}
-            onClick={() => {
-              handleEditColumnName(inputRef.current?.value ?? "");
-            }}
-          >
-            <SubmitIcon className="column__header-edit-button-icon" />
-          </button>
-          <button
-            tabIndex={tabIndex! + 2}
-            title={t("Column.resetName")}
-            className="column__header-edit-button"
-            onClick={() => {
-              if (isTemporary) {
-                dispatch(Actions.deleteColumnOptimistically(id));
-              }
-              setColumnNameMode("VIEW");
-            }}
-          >
-            <AbortIcon className="column__header-edit-button-icon" />
-          </button>
-        </>
+        <button
+          tabIndex={tabIndex! + 2}
+          title={t("Column.resetName")}
+          className="column__header-edit-button"
+          onClick={() => {
+            if (isTemporary) {
+              dispatch(Actions.deleteColumnOptimistically(id));
+            }
+            setColumnNameMode("VIEW");
+          }}
+        >
+          <AbortIcon className="column__header-edit-button-icon" />
+        </button>
       )}
       {!isTemporary && (
         <button tabIndex={tabIndex! + 3} title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>

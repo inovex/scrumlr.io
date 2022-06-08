@@ -89,8 +89,7 @@
     "addColumnLeft": "Add column left",
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants",
-    "editNamePlaceholder": "New Column",
-    "nameRequired": "Column name is required"
+    "editNamePlaceholder": "New Column"
   },
   "ErrorPage": {
     "navigateHome": "Home",
