@@ -5,14 +5,10 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 import {useTranslation} from "react-i18next";
+import useSound from "use-sound";
 
 type TimerProps = {
   endTime: Date;
-};
-
-const stopAudio = (audio: HTMLAudioElement) => {
-  audio.pause();
-  audio.currentTime = 0;
 };
 
 const usePrevious = (value: boolean) => {
@@ -38,8 +34,9 @@ export const Timer = (props: TimerProps) => {
   };
 
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
-  const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
-  const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
+
+  const [playCountdownAudio, {stop: stopCountdownAudio}] = useSound(`${process.env.PUBLIC_URL}/timer_warning.mp3`, {volume: 0.5});
+  const [playTimesUpAudio, {stop: stopTimesUpAudio}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
   const [playCountdown, setPlayCountdown] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
@@ -54,11 +51,10 @@ export const Timer = (props: TimerProps) => {
   });
 
   useEffect(() => {
-    if (!previousPlayCountdownState && playCountdown) {
-      countdownAudio.play();
-      return () => {
-        stopAudio(countdownAudio);
-      };
+    if (previousPlayCountdownState && !playCountdown) {
+      stopCountdownAudio();
+    } else if (!previousPlayCountdownState && playCountdown) {
+      playCountdownAudio();
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,9 +62,10 @@ export const Timer = (props: TimerProps) => {
 
   useEffect(() => {
     if (!previousPlayTimesUpState && playTimesUp) {
-      timesUpAudio.play();
+      playTimesUpAudio();
       return () => {
-        stopAudio(timesUpAudio);
+        stopTimesUpAudio();
+        setPlayTimesUp(false);
       };
     }
     return () => {};
@@ -76,11 +73,14 @@ export const Timer = (props: TimerProps) => {
   }, [playTimesUp]);
 
   useEffect(() => {
-    if (timeLeft.m === 0) {
-      if (timeLeft.s <= 30 && !playCountdown) {
+    if (timeLeft.m === 0 && !playTimesUp) {
+      if (timeLeft.s <= 0) {
+        if (playCountdown) {
+          setPlayCountdown(false);
+          setPlayTimesUp(true);
+        }
+      } else if (timeLeft.s <= 5 && !playCountdown) {
         setPlayCountdown(true);
-      } else if (timeLeft.s <= 0 && !playTimesUp) {
-        setPlayTimesUp(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
