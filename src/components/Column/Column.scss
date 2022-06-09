@@ -66,7 +66,7 @@
 }
 
 .column__header-text {
-  font-size: calc(18px + 0.4vw);
+  font-size: calc($text-size--large + 0.4vw);
   margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
@@ -94,6 +94,7 @@
   outline: none;
   max-width: 300px;
   width: 50%;
+  caret-color: var(--accent-color);
 }
 [theme="dark"] {
   .column__header-input {
@@ -103,7 +104,7 @@
 
 .column__header-card-number {
   margin-bottom: $margin--default;
-  font-size: 20px;
+  font-size: $text-size--medium;
   color: $color-middle-gray;
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
@@ -179,12 +180,15 @@
   .column__header-text {
     color: $color-white;
   }
+
   .column__header-text--hidden {
     color: $color-middle-gray;
   }
+
   .column__header-toggle-button-icon {
     color: $color-white;
   }
+
   .column__notes-wrapper {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
@@ -216,19 +220,26 @@
   outline: none;
   padding: 0;
   border-radius: 4px;
+
   &:hover,
   &:focus {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    > svg {
+      color: var(--accent-color);
+    }
   }
 }
 
 .column__header-edit-button:first-of-type {
   margin-left: auto;
 }
+
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
 }
+
 [theme="dark"] .column__header-edit-button-icon {
   color: $color-white;
 }
