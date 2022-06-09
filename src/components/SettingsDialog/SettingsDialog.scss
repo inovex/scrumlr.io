@@ -186,12 +186,12 @@ $settings-dialog-container--bottom: 62px;
   left: 64px;
 }
 .navigation__item > p:first-child {
-  font-size: calc($text-size + 1px);
+  font-size: $text-size--medium;
   font-weight: 600;
   top: 12px;
 }
 .navigation__item > p:nth-child(2) {
-  font-size: calc($text-size - 1px);
+  font-size: $text-size--small;
   top: 30px;
   opacity: 0.65;
 }
