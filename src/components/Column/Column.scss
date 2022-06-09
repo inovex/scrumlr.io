@@ -44,7 +44,7 @@
 
 .column__header-title {
   display: flex;
-  word-break: break-all;
+  word-break: break-word;
   align-items: center;
   margin-bottom: $margin--default;
   height: 48px;
@@ -66,14 +66,11 @@
 }
 
 .column__header-text {
-  font-size: calc($text-size--large + 0.4vw);
+  font-size: calc(#{$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-}
-
-.column__header-text--visible {
   color: $color-black;
 }
 
@@ -180,8 +177,12 @@
 }
 
 [theme="dark"] {
-  .column__header-text--visible {
+  .column__header-text {
     color: $color-white;
+  }
+
+  .column__header-text--hidden {
+    color: $color-middle-gray;
   }
 
   .column__header-toggle-button-icon {

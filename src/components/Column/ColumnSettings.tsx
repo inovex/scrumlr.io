@@ -6,13 +6,14 @@ import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {ReactComponent as PreviousIcon} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as NextIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
-import {Color, getColorClassName} from "constants/colors";
+import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
-import i18n from "i18next";
 import {useAppSelector} from "store";
-import {Toast} from "utils/Toast";
+import i18n from "i18next";
+import {Toast} from "../../utils/Toast";
+import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
 
 type ColumnSettingsProps = {
   tabIndex: number;
@@ -41,7 +42,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
     return () => document.removeEventListener("click", handleClickOutside);
   }, [columnSettingsRef, onClose]);
 
-  const addColumn = (columnIndex: number) => {
+  const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
       dispatch(Actions.setShowHiddenColumns(true));
       Toast.success(
@@ -51,7 +52,8 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         3000
       );
     }
-    dispatch(Actions.createColumn({name: "New column", color: "backlog-blue", visible: false, index: columnIndex}));
+    const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
+    dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
   return (
@@ -73,7 +75,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
           <button
             tabIndex={tabIndex + 1}
             onClick={() => {
-              // setColumnNameMode("EDIT");
               onNameEdit?.();
               onClose?.();
             }}
@@ -87,7 +88,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 2}
             onClick={() => {
               onClose?.();
-              addColumn(index);
+              handleAddColumn(index);
             }}
           >
             <PreviousIcon />
@@ -99,7 +100,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
             tabIndex={tabIndex + 3}
             onClick={() => {
               onClose?.();
-              addColumn(index + 1);
+              handleAddColumn(index + 1);
             }}
           >
             <NextIcon />
