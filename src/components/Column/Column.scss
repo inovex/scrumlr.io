@@ -66,7 +66,7 @@
 }
 
 .column__header-text {
-  font-size: calc($text-size--large + 0.4vw);
+  font-size: calc(#{$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
