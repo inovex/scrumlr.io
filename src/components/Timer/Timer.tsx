@@ -35,7 +35,7 @@ export const Timer = (props: TimerProps) => {
 
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
-  const [playCountdownSound, {stop: stopCountdownSound}] = useSound(`${process.env.PUBLIC_URL}/timer_warning.mp3`, {volume: 0.5, interrupt: true});
+  const [playCountdownSound, {stop: stopCountdownSound}] = useSound(`${process.env.PUBLIC_URL}/timer_warning.mp3`, {volume: 0.35, interrupt: true});
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
   const [playCountdown, setPlayCountdown] = useState(false);
