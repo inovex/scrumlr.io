@@ -12,12 +12,12 @@
     align-items: center;
 
     &-label {
-      font-size: 12px;
+      font-size: $text-size--small;
       font-weight: 500;
       color: rgba($color-black, 0.5);
     }
     &-value {
-      font-size: 14px;
+      font-size: $text-size--medium;
       font-weight: bold;
     }
   }
