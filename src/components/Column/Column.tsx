@@ -69,9 +69,16 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     }
   }
 
+  const toggleVisibilityHandler = () => {
+    dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+  };
+
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
-      <h2 className={classNames("column__header-text", visible ? "column__header-text--visible" : "column__header-text--hidden")}>{name}</h2>
+      <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
+        {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
+        <h2 className={classNames("column__header-text", visible ? "column__header-text--visible" : "column__header-text--hidden")}>{name}</h2>
+      </div>
     ) : (
       <input
         tabIndex={tabIndex}
@@ -127,7 +134,6 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
-            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} />}
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
