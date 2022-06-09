@@ -3,7 +3,7 @@
 .join-request {
   position: fixed;
   min-width: 300px;
-  max-width: 400px;
+  max-width: 480px;
   border-radius: 8px;
   top: 60px;
   left: 10px;
@@ -17,7 +17,7 @@
 @media screen and (min-width: 420px) {
   .join-request {
     left: calc(50% - 200px);
-    width: 400px;
+    width: 480px;
   }
 }
 @media #{$tablet} {
@@ -34,7 +34,7 @@
 }
 
 .request__button {
-  font-size: $text-size;
+  font-size: $text-size--medium;
   font-weight: 600;
   letter-spacing: $letter-spacing--small;
   line-height: 24px;
@@ -48,7 +48,7 @@
 }
 
 .request__button + .request__button {
-  margin-left: $margin--small;
+  margin-left: $margin--default;
 }
 
 [theme="dark"] {
@@ -59,14 +59,13 @@
 
 .request__header {
   height: 42px;
-
-  font-size: $text-size;
-  line-height: 24px;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--small;
+  display: flex;
+  align-items: center;
   font-weight: 600;
   position: relative;
-  padding-top: $padding--small;
-  padding-left: 15px;
+  padding-left: $padding--default;
   color: $color-white;
   background-color: $color-backlog-blue;
   overflow-wrap: break-word;
@@ -81,7 +80,7 @@
 
 @media screen and (min-width: 375px) {
   .request__header {
-    font-size: $text-size;
+    font-size: $text-size--medium;
   }
 }
 
@@ -101,7 +100,8 @@
 .join-request__unique-request-container {
   display: flex;
   align-items: center;
-  margin: 0 0 0 $margin--default;
+  justify-content: space-between;
+  margin: 0 $margin--default;
 }
 
 .join-request__unique-request-container + .join-request__unique-request-container {
@@ -120,7 +120,7 @@
 .join-request__request-name {
   margin-left: $margin--default;
   color: $color-black;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--medium;
 }
@@ -146,7 +146,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $color-black;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--small;
   margin: 0 $margin--default;
 }
@@ -189,7 +189,7 @@
   margin-left: -8px;
   text-align: center;
   line-height: 37px;
-  font-size: 16px;
+  font-size: $text-size--medium;
   color: $color-black;
 }
 [theme="dark"] {
@@ -216,16 +216,15 @@
 .join-request__request-display-name {
   height: 18px;
   color: $color-black;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--medium;
   width: 144px;
-  margin-right: $margin--default;
+  margin: 0 $margin--default;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  margin-left: $margin--small;
 }
 @media screen and (max-width: 375px) {
   .join-request__request-display-name {

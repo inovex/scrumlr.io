@@ -18,7 +18,8 @@
   border: none;
   padding: $padding--small $padding--default;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: $text-size--medium;
+  cursor: pointer;
 
   &-accept {
     @extend .cookie-notice__button;

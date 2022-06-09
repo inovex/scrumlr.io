@@ -49,7 +49,7 @@
       padding: $padding--default $padding--medium $padding--default $padding--default;
       font-weight: bold;
       letter-spacing: $letter-spacing--medium;
-      font-size: $text-size;
+      font-size: $text-size--medium;
       text-align: right;
       max-width: 150px;
       cursor: inherit;
@@ -57,7 +57,7 @@
       &::placeholder {
         font-weight: bold;
         letter-spacing: $letter-spacing--medium;
-        font-size: $text-size;
+        font-size: $text-size--medium;
         color: $color-black;
       }
 
