@@ -6,7 +6,7 @@ import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {ReactComponent as PreviousIcon} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as NextIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
-import {Color, COLOR_ORDER, getColorClassName, getColorForIndex} from "constants/colors";
+import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
@@ -52,7 +52,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         3000
       );
     }
-    const randomColor = getColorForIndex(Math.floor(Math.random() * COLOR_ORDER.length));
+    const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
