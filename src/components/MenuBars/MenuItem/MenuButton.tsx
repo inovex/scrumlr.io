@@ -39,11 +39,12 @@ export const MenuButton = (props: MenuButtonProps) => {
         }
       }}
       tabIndex={props.tabIndex ?? TabIndex.default}
+      aria-label={props.label}
     >
-      <div className="menu-item__tooltip">
+      <div className="menu-item__tooltip" aria-hidden>
         <span className="tooltip__text">{props.label}</span>
       </div>
-      <Icon className="menu-item__icon menu-item__icon--start" />
+      <Icon className="menu-item__icon menu-item__icon--start" aria-hidden />
     </button>
   );
 };

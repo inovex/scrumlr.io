@@ -26,5 +26,8 @@ ENV SCRUMLR_SERVER_URL=''
 # Override the websocket address for API calls
 ENV SCRUMLR_WEBSOCKET_URL=''
 
+# Server port
+ENV SCRUMLR_LISTEN_PORT='80'
+
 COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html

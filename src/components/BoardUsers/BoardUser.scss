@@ -39,6 +39,33 @@
   height: 24px;
 
   color: $color-grooming-green;
+
+  .circle {
+    --dasharray: 55;
+    stroke-dasharray: var(--dasharray);
+    stroke-dashoffset: 0;
+    animation: draw 0.45s ease-out, scale 0.3s ease-out;
+    transform-origin: 37% 40%;
+  }
+
+  .check {
+    --dasharray: 20;
+    stroke-dasharray: var(--dasharray);
+    stroke-dashoffset: 0;
+    animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
+    transform-origin: 37% 40%;
+  }
+
+  ~ .avatar #Circle-Background {
+    transform: rotate(90deg) scale(-1, 1);
+    stroke: $color-grooming-green;
+    stroke-width: 24px;
+    --dasharray: 760;
+    stroke-dasharray: var(--dasharray);
+    stroke-dashoffset: 0;
+    animation: draw 0.45s ease-out;
+    transform-origin: 45.5% 43%;
+  }
 }
 
 [theme="dark"] {
@@ -46,5 +73,20 @@
   .rest-users__count {
     color: $color-white;
     font-weight: bold;
+  }
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: var(--dasharray);
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.2);
   }
 }

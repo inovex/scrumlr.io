@@ -45,13 +45,30 @@
 .column__header-title {
   display: flex;
   word-break: break-all;
+  align-items: center;
+  margin-bottom: $margin--default;
+  height: 48px;
   position: relative;
+}
+
+.column__header-text-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  height: auto;
+  border-bottom: solid 3px var(--accent-color);
+  margin: 0 $margin--small 0 0;
+}
+
+.column__header-text-wrapper--hidden {
+  border-bottom-style: dashed;
 }
 
 .column__header-text {
   font-size: calc($text-size--large + 0.4vw);
   border-bottom: solid 3px var(--accent-color);
-  margin: $margin--default $margin--small $margin--default $margin--default;
+  margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -66,12 +83,13 @@
 }
 
 .column__header-input {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   border: none;
   font-size: calc(18px + 0.4vw);
   color: $color-black;
-  border-bottom: solid 3px var(--accent-color);
-  margin: $margin--default $margin--small $margin--default $margin--default;
+  border-bottom: dashed 3px var(--accent-color);
+  margin: 0 $margin--small 0 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -89,6 +107,7 @@
 }
 
 .column__header-card-number {
+  margin-bottom: $margin--default;
   font-size: $text-size--medium;
   color: $color-middle-gray;
   font-weight: 600;
@@ -177,8 +196,19 @@
 
 .column__header-hidden-icon {
   height: 20px;
-  margin: 4px 0 0 $margin--small;
+  margin: 0 $margin--small 0 0;
   color: $color-middle-gray;
+  cursor: pointer;
+}
+
+.column__header-hidden-icon:hover {
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .column__header-hidden-icon:hover {
+    color: $color-white;
+  }
 }
 
 .column__header-edit-button {

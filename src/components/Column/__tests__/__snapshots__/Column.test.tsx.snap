@@ -13,22 +13,26 @@ exports[`Column should have correct style show column with correct style 1`] = `
       <div
         class="column__header-title"
       >
-        <h2
-          class="column__header-text column__header-text--hidden"
+        <div
+          class="column__header-text-wrapper column__header-text-wrapper--hidden"
         >
-          Testheader
-        </h2>
+          <svg
+            class="column__header-hidden-icon"
+            title="Column is hidden for all participants"
+          >
+            icon-hidden.svg
+          </svg>
+          <h2
+            class="column__header-text column__header-text--hidden"
+          >
+            Testheader
+          </h2>
+        </div>
         <span
           class="column__header-card-number"
         >
           0
         </span>
-        <svg
-          class="column__header-hidden-icon"
-          title="Column is hidden for all participants"
-        >
-          icon-hidden.svg
-        </svg>
         <button
           class="column__header-edit-button"
           tabindex="NaN"

@@ -1,7 +1,7 @@
 import {Action, ReduxAction} from "store/action";
 import {ParticipantsState} from "types/participant";
 
-// eslint-disable-next-line default-param-last
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const participantsReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
   switch (action.type) {
     case Action.InitializeBoard:
