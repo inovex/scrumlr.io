@@ -52,7 +52,7 @@
   padding: $padding--default $padding--medium $padding--default $padding--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   text-align: right;
   max-width: 150px;
   cursor: inherit;
@@ -66,7 +66,7 @@
 .board-settings__board-name-button_input::placeholder {
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   color: $color-placeholder;
 }
 
@@ -106,7 +106,7 @@
   padding: $padding--default $padding--medium $padding--default 4px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: 0.5px;
   color: $color-placeholder;
 }
@@ -185,7 +185,7 @@
   padding: $padding--default;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   text-align: right;
   max-width: 120px;
 }
@@ -233,7 +233,7 @@
 .board-settings__password-management-text {
   padding-left: 4px;
   font-weight: bold;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
 }
 

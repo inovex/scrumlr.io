@@ -13,7 +13,7 @@
 .settings-dropdown-button {
   background-color: inherit;
   color: inherit;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   font-weight: bold;
   border: none;
   cursor: inherit;
@@ -42,7 +42,7 @@
   width: 100%;
   color: $color-black;
   padding: $padding--default $padding--medium $padding--default $padding--default;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   font-weight: bold;
   background-color: $color-white;
   gap: 12px;

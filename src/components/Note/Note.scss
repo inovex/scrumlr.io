@@ -7,7 +7,6 @@ $note__box-shadow-color-dark-mode: rgba(0, 0, 0, 0.2);
 $note__indicator-height: 34px;
 $note__indicator-width: 3px;
 
-$note__author-name-size: 12px;
 $note__author-image-size: 26px;
 
 .note__root {
@@ -95,7 +94,7 @@ $note__author-image-size: 26px;
   min-height: 3 * $line-height--medium;
   width: calc(100% - 20px);
   color: $color-black;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
   -webkit-line-clamp: 3;
@@ -162,7 +161,7 @@ $note__author-image-size: 26px;
 .note__author-name {
   margin-left: $margin--default;
   color: $color-dark-gray;
-  font-size: $note__author-name-size;
+  font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
 }
