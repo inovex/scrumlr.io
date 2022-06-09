@@ -88,8 +88,7 @@
     "deleteColumn": "Delete column",
     "addColumnLeft": "Add column left",
     "addColumnRight": "Add column right",
-    "hiddenColumn": "Column is hidden for all participants",
-    "editNamePlaceholder": "New Column"
+    "hiddenColumn": "Column is hidden for all participants"
   },
   "ErrorPage": {
     "navigateHome": "Home",

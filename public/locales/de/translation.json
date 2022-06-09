@@ -88,8 +88,7 @@
     "deleteColumn": "Löschen",
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
-    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
-    "editNamePlaceholder": "Neue Spalte"
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
   },
 
   "ErrorPage": {
