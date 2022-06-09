@@ -41,7 +41,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: $text-size--medium;
+  font-size: $text-size--small;
 }
 [theme="dark"] .column__header-menu-dropdown > ul > li > button {
   color: $color-white;
