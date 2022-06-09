@@ -44,7 +44,7 @@
 
 .column__header-title {
   display: flex;
-  word-break: break-all;
+  word-break: break-word;
   align-items: center;
   margin-bottom: $margin--default;
   height: 48px;
