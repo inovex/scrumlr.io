@@ -1,7 +1,7 @@
 import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
@@ -45,8 +45,10 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     _.isEqual
   );
   const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
+  const [columnName, setColumnName] = useState(name);
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
+  const [isTemporary, setIsTemporary] = useState(id === "TEMP_ID");
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
@@ -69,21 +71,53 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
     }
   }
 
+  const toggleVisibilityHandler = () => {
+    dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+  };
+
+  useEffect(() => {
+    if (isTemporary) {
+      setColumnNameMode("EDIT");
+      columnRef?.current?.scrollIntoView({inline: "start", behavior: "smooth"});
+    }
+  }, [isTemporary]);
+
+  const handleEditColumnName = (newName: string) => {
+    if (isTemporary) {
+      if (!newName) {
+        dispatch(Actions.deleteColumnOptimistically(id));
+      } else {
+        dispatch(Actions.editColumnOptimistically(id, {name: newName, color, visible, index})); // Prevents flicker when submitting a new column
+        dispatch(Actions.createColumn({name: newName, color, visible, index}));
+        setIsTemporary(false);
+      }
+    } else {
+      dispatch(Actions.editColumn(id, {name: newName, color, visible, index}));
+    }
+    setColumnNameMode("VIEW");
+  };
+
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
-      <h2 className={classNames("column__header-text", visible ? "column__header-text--visible" : "column__header-text--hidden")}>{name}</h2>
+      <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
+        {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
+        <h2 className={classNames("column__header-text", {"column__header-text--hidden": !visible})}>{name}</h2>
+      </div>
     ) : (
       <input
         tabIndex={tabIndex}
         maxLength={32}
         className="column__header-input"
         defaultValue={name}
+        onChange={() => setColumnName(inputRef.current?.value ?? "")}
         onKeyDown={(e) => {
           if (e.key === "Escape") {
+            if (isTemporary) {
+              dispatch(Actions.deleteColumnOptimistically(id));
+            }
             setColumnNameMode("VIEW");
           } else if (e.key === "Enter") {
-            setColumnNameMode("VIEW");
-            dispatch(Actions.editColumn(id, {name: (e.target as HTMLInputElement).value, color, visible, index}));
+            handleEditColumnName((e.target as HTMLInputElement).value);
           }
         }}
         ref={(ref) => {
@@ -91,32 +125,46 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           inputRef.current = ref!;
         }}
         onFocus={(e) => e.target.select()}
+        onBlur={(e) => {
+          handleEditColumnName((e.target as HTMLInputElement).value);
+        }}
       />
     );
 
   const renderColumnModifiers = () => (
     <>
-      {columnNameMode === "EDIT" && (
-        <>
-          <button
-            tabIndex={tabIndex! + 1}
-            title={t("Column.submitName")}
-            className="column__header-edit-button"
-            onClick={() => {
-              dispatch(Actions.editColumn(id, {name: inputRef.current?.value ?? "", color, visible, index}));
-              setColumnNameMode("VIEW");
-            }}
-          >
-            <SubmitIcon className="column__header-edit-button-icon" />
-          </button>
-          <button tabIndex={tabIndex! + 2} title={t("Column.resetName")} className="column__header-edit-button" onClick={() => setColumnNameMode("VIEW")}>
-            <AbortIcon className="column__header-edit-button-icon" />
-          </button>
-        </>
+      {columnNameMode === "EDIT" && columnName && (
+        <button
+          tabIndex={tabIndex! + 1}
+          title={t("Column.submitName")}
+          className="column__header-edit-button"
+          onClick={() => {
+            handleEditColumnName(inputRef.current?.value ?? "");
+          }}
+        >
+          <SubmitIcon className="column__header-edit-button-icon" />
+        </button>
       )}
-      <button tabIndex={tabIndex! + 3} title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-        {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
-      </button>
+      {columnNameMode === "EDIT" && (
+        <button
+          tabIndex={tabIndex! + 2}
+          title={t("Column.resetName")}
+          className="column__header-edit-button"
+          onClick={() => {
+            if (isTemporary) {
+              dispatch(Actions.deleteColumnOptimistically(id));
+            }
+            setColumnNameMode("VIEW");
+          }}
+        >
+          <AbortIcon className="column__header-edit-button-icon" />
+        </button>
+      )}
+      {!isTemporary && (
+        <button tabIndex={tabIndex! + 3} title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
+          {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
+        </button>
+      )}
     </>
   );
 
@@ -127,7 +175,6 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
-            {columnNameMode === "VIEW" && !visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} />}
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
