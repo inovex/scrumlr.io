@@ -10,12 +10,20 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo384.png",
+      "src": "logo512.png",
       "type": "image/png",
-      "sizes": "384x384"
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
