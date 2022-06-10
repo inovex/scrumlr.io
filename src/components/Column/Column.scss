@@ -6,7 +6,8 @@
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
-  height: 100vh;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
