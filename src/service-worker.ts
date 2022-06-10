@@ -10,7 +10,7 @@
 
 import {clientsClaim} from "workbox-core";
 import {ExpirationPlugin} from "workbox-expiration";
-import {precacheAndRoute, createHandlerBoundToURL} from "workbox-precaching";
+import {createHandlerBoundToURL} from "workbox-precaching";
 import {registerRoute} from "workbox-routing";
 import {StaleWhileRevalidate} from "workbox-strategies";
 
@@ -22,7 +22,9 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute(self.__WB_MANIFEST);
+
+// eslint-disable-line
+const ignored = self.__WB_MANIFEST;
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -50,7 +52,7 @@ registerRoute(
     // Return true to signal that we want to use the handler.
     return true;
   },
-  createHandlerBoundToURL(`${process.env.PUBLIC_URL  }/index.html`)
+  createHandlerBoundToURL(`${process.env.PUBLIC_URL}/index.html`)
 );
 
 // An example runtime caching route for requests that aren't handled by the
@@ -78,3 +80,6 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
+self.addEventListener("fetch", (event) => {
+  event.respondWith(fetch(event.request));
+});
