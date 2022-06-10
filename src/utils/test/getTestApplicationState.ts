@@ -136,6 +136,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     moderating: false,
     serverTimeOffset: 0,
     enabledAuthProvider: [],
+    feedbackEnabled: false,
   },
   ...overwrite,
 });

@@ -255,6 +255,19 @@
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark"
   },
+  "Feedback": {
+    "PraiseInputLabel": "Anything else you want to tell us?",
+    "BugReportInputLabel": "What bug would you like to report?",
+    "FeatureRequestInputLabel": "What feature would you like to have?",
+    "FeedbackInputPlaceholder": "Type anything additional here!",
+    "ContactInputLabel": "If you would like us to contact you, leave your email! (Optional)",
+    "SubmitButton": "Send Feedback",
+    "ErrorUndefinedType": "Please select the type of your feedback!",
+    "ErrorInvalidEmail": "Please enter a valid email!",
+    "ErrorMissingFeatureRequestText": "Please specify the feature you want to request!",
+    "ErrorMissingBugReportText": "Please specify the bug you want to report!",
+    "SubmitNotification": "Thank you for your feedback!"
+  },
   "ProfileSettings": {
     "Profile": "Profile",
     "UserName": "User Name"
