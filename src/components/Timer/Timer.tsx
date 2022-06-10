@@ -37,7 +37,7 @@ export const Timer = (props: TimerProps) => {
 
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
-  const [countdownIsActive, setCountdownIsActive] = useState(false);
+  const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
 
@@ -60,12 +60,12 @@ export const Timer = (props: TimerProps) => {
   useEffect(() => {
     if (timeLeft.m === 0 && !playTimesUp) {
       if (timeLeft.s <= 0) {
-        if (countdownIsActive) {
-          setCountdownIsActive(false);
+        if (timesUpShouldPlay) {
           setPlayTimesUp(true);
+          setTimesUpShouldPlay(false);
         }
-      } else if (timeLeft.s <= 6 && !countdownIsActive) {
-        setCountdownIsActive(true);
+      } else if (!timesUpShouldPlay) {
+        setTimesUpShouldPlay(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
