@@ -193,7 +193,8 @@
     "timerCancelled": "Timer cancelled!",
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
-    "boardMadePublic": "The board is now public!"
+    "boardMadePublic": "The board is now public!",
+    "allParticipantsDone": "All participants are done."
   },
   "Language": {
     "german": "German",
