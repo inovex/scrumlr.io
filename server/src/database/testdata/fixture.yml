@@ -25,6 +25,11 @@
       name: Jay Doe
       account_type: ANONYMOUS
       created_at: '{{ now }}'
+    - _id: justin
+      id: "62e0ea41-6fbf-49a3-8921-1d2f4e5ae316"
+      name: Justin Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
 
 - model: Board
   rows:
@@ -91,13 +96,6 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
-    - _id: votingSortingTestBoard
-      id: "6113b096-786c-1e23-ade7-c3fa19224bd4"
-      name: Voting Sorting test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
     - _id: notesTestBoard
       id: "2813b096-986c-4e23-adf7-c3fa19224bd4"
       name: Notes test
@@ -147,6 +145,13 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
+    - _id: votingSortingTestBoard
+      id: "1acd6899-ad71-4479-8ffe-6c6401b208d7"
+      name: Voting Sorting test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
 
 - model: BoardSessionInsert
   rows:
@@ -186,10 +191,6 @@
       board: '{{ $.Board.votingTestBoard.ID }}'
       user: '{{ $.User.jane.ID }}'
       role: PARTICIPANT
-    - _id: janesSessionOnVotingSortingTestBoard
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      user: '{{ $.User.jane.ID }}'
-      role: OWNER
     - _id: jacksSessionOnNotesTestBoard
       board: '{{ $.Board.notesTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
@@ -201,6 +202,10 @@
     - _id: jaysSessionOnBoardSessionsObserverTestBoard
       board: '{{ $.Board.boardSessionsObserverTestBoard.ID }}'
       user: '{{ $.User.jay.ID }}'
+      role: OWNER
+    - _id: justinSessionOnVotingSortingTestBoard
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      user: '{{ $.User.justin.ID }}'
       role: OWNER
 
 - model: Column
@@ -261,13 +266,6 @@
       color: backlog-blue
       visible: true
       index: 0
-    - _id: votingSortingColumn
-      id: "3123a396-986c-5f23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      name: Voting Sorting column
-      color: backlog-blue
-      visible: true
-      index: 0
     - _id: notesColumnA
       id: "3113b196-986c-2123-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesTestBoard.ID }}'
@@ -286,6 +284,13 @@
       id: "3113b196-986c-2951-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesObserverTestBoard.ID }}'
       name: B
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: votingSortingColumn
+      id: "00c8c51b-d391-4472-8136-06efdfe7bbd2"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      name: Voting Sorting column
       color: backlog-blue
       visible: true
       index: 0
@@ -404,6 +409,54 @@
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000b2"
       rank: 0
+    - _id: votingSortingNote1
+      id: "2638e01b-e38e-4360-a4ce-74af074ee0be"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 1"
+      stack: null
+      rank: 0
+    - _id: votingSortingNote2
+      id: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 2"
+      stack: null
+      rank: 1
+    - _id: votingSortingNote3
+      id: "7840fe66-1a97-4841-ae75-40d87ee327ec"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 3"
+      stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      rank: 2
+    - _id: votingSortingNote4
+      id: "1f6b22ba-ea68-4e9e-a9c9-4266e76b1051"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 4"
+      stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      rank: 3
+    - _id: votingSortingNote5
+      id: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 5"
+      stack: null
+      rank: 4
+    - _id: votingSortingNote6
+      id: "c98dd4cd-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 6"
+      stack: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
+      rank: 5
 
 - model: Voting
   rows:
@@ -459,6 +512,13 @@
     - _id: votingTestBoardOpenVoting
       id: "3113b396-1114-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: OPEN
+    - _id: votingSortingTestBoardOpenVoting
+      id: "3113b396-2110-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: true
