@@ -11,7 +11,7 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
   if (action.type === Action.InitApplication) {
     API.getServerInfo()
       .then((r) => {
-        dispatch(Actions.setServerInfo(r.authProvider || [], new Date(r.serverTime)));
+        dispatch(Actions.setServerInfo(r.authProvider || [], new Date(r.serverTime), r.feedbackEnabled));
       })
       .catch(() => {
         Toast.error(

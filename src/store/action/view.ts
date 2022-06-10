@@ -21,10 +21,11 @@ export const ViewActionFactory = {
     language,
   }),
 
-  setServerInfo: (enabledAuthProvider: string[], serverTime: Date) => ({
+  setServerInfo: (enabledAuthProvider: string[], serverTime: Date, feedbackEnabled: boolean) => ({
     type: ViewAction.SetServerInfo,
     enabledAuthProvider,
     serverTime,
+    feedbackEnabled,
   }),
 
   setRoute: (route: string) => ({
