@@ -35,7 +35,10 @@
     "redux-thunk": "^2.4.1",
     "sockette": "^2.0.6",
     "underscore": "^1.13.4",
-    "use-sound": "^4.0.1"
+    "use-sound": "^4.0.1",
+    "workbox-core": "^6.5.3",
+    "workbox-precaching": "^6.5.3",
+    "workbox-routing": "^6.5.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^8.12.0",
