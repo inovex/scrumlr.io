@@ -13,6 +13,7 @@ import i18n from "i18n";
 import {LoadingScreen} from "components/LoadingScreen";
 import {Actions} from "store/action";
 import {Html} from "components/Html";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -31,5 +32,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
 store.dispatch(Actions.initApplication());
+serviceWorkerRegistration.register();
