@@ -35,12 +35,10 @@ export const Timer = (props: TimerProps) => {
 
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
-  const [playCountdownSound, {stop: stopCountdownSound}] = useSound(`${process.env.PUBLIC_URL}/timer_warning.mp3`, {volume: 0.35, interrupt: true});
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
-  const [playCountdown, setPlayCountdown] = useState(false);
+  const [countdownIsActive, setCountdownIsActive] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
-  const previousPlayCountdownState = usePrevious(playCountdown);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
 
   useEffect(() => {
@@ -49,16 +47,6 @@ export const Timer = (props: TimerProps) => {
     }, 250);
     return () => clearTimeout(timerUpdateTimeout);
   });
-
-  useEffect(() => {
-    if (previousPlayCountdownState && !playCountdown) {
-      stopCountdownSound();
-    } else if (!previousPlayCountdownState && playCountdown) {
-      playCountdownSound();
-    }
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playCountdown]);
 
   useEffect(() => {
     if (!previousPlayTimesUpState && playTimesUp) {
@@ -72,12 +60,12 @@ export const Timer = (props: TimerProps) => {
   useEffect(() => {
     if (timeLeft.m === 0 && !playTimesUp) {
       if (timeLeft.s <= 0) {
-        if (playCountdown) {
-          setPlayCountdown(false);
+        if (countdownIsActive) {
+          setCountdownIsActive(false);
           setPlayTimesUp(true);
         }
-      } else if (timeLeft.s <= 6 && !playCountdown) {
-        setPlayCountdown(true);
+      } else if (timeLeft.s <= 6 && !countdownIsActive) {
+        setCountdownIsActive(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
