@@ -11,6 +11,7 @@ import {ShareSession} from "components/SettingsDialog/ShareSession";
 import {BoardSettings} from "components/SettingsDialog/BoardSettings/BoardSettings";
 import {Appearance} from "components/SettingsDialog/Appearance/Appearance";
 import {Participants} from "components/SettingsDialog/Participants/Participants";
+import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
@@ -49,7 +50,7 @@ const Router = () => (
           <Route path="appearance" element={<Appearance />} />
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
-          {/* <Route path="feedback" element={<div>Feedback</div>} /> */}
+          <Route path="feedback" element={<Feedback />} />
           <Route path="profile" element={<ProfileSettings />} />
         </Route>
         <Route path="voting" element={<VotingDialog />} />

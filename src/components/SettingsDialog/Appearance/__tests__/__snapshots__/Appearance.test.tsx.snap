@@ -18,6 +18,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
   >
     <button
       class="settings-option-button appearance-settings_language-dropdown"
+      type="button"
     >
       <span
         class="settings-option-button__label"
@@ -46,6 +47,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
     </button>
     <button
       class="settings-option-button appearance-settings_language-dropdown"
+      type="button"
     >
       <span
         class="settings-option-button__label"

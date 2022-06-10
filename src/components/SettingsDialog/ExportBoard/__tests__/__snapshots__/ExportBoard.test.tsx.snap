@@ -25,6 +25,7 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-json"
+            type="button"
           >
             <span
               class="settings-option-button__label"
@@ -43,6 +44,7 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-csv"
+            type="button"
           >
             <span
               class="settings-option-button__label"
@@ -80,6 +82,7 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-json"
+          type="button"
         >
           <span
             class="settings-option-button__label"
@@ -98,6 +101,7 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-csv"
+          type="button"
         >
           <span
             class="settings-option-button__label"
