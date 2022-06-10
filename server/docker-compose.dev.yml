@@ -1,8 +1,6 @@
-
 version: "3.9"
 
 services:
-
   nats:
     image: nats:2-alpine
     ports:
