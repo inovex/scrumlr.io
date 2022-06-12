@@ -2,6 +2,7 @@
 
 .login-board__dialog {
   color: $color-black;
+  min-height: 100vh;
 }
 
 .login-board__illustration {
@@ -140,7 +141,7 @@
 
   .login-board__divider::after {
     color: $color-middle-gray;
-    background: $color-dark-two;
+    background: #1a2232;
   }
 
   @media #{$tablet} {

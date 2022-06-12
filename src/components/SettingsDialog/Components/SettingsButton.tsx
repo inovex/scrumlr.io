@@ -17,6 +17,7 @@ export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, o
 
   return (
     <button
+      type="button"
       disabled={disabled}
       className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, className)}
       onClick={onClick}

@@ -69,8 +69,8 @@
   "ExportBoardOption": {
     "title": "Export board",
     "button": "Export board",
-    "exportAsJson": "Export as json",
-    "exportAsCSV": "Export as csv"
+    "exportAsJson": "Export as JSON",
+    "exportAsCSV": "Export as CSV"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
@@ -182,7 +182,7 @@
     "authenticationError": "There occurred a problem while signing you in",
     "votingStarted": "You started the voting phase!",
     "votingFinished": "You ended the voting phase!",
-    "focusModeStart": "You started the moderation phase! The cards you select will be presented to all users",
+    "focusModeStart": "You started the moderation phase! The notes you select will be presented to all users",
     "focusModeFinished": "You ended the moderation phase",
     "votingPhaseStarted": "Voting phase started! You can vote now!",
     "votingPhaseEnded": "Voting phase ended! You can't vote anymore!",
@@ -236,9 +236,9 @@
     "SetAccessPolicyOpen": "Remove password protection",
     "SecurePasswordHint": "Please enter a secure password",
     "DeleteBoard": "Delete Board",
-    "ShowAuthorOption": "Show authors of cards",
+    "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
-    "ShowOtherUsersNotesOption": "Show cards of other users",
+    "ShowOtherUsersNotesOption": "Show notes of other users",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
@@ -254,6 +254,19 @@
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark"
+  },
+  "Feedback": {
+    "PraiseInputLabel": "Anything else you want to tell us?",
+    "BugReportInputLabel": "What bug would you like to report?",
+    "FeatureRequestInputLabel": "What feature would you like to have?",
+    "FeedbackInputPlaceholder": "Type anything additional here!",
+    "ContactInputLabel": "If you would like us to contact you, leave your email! (Optional)",
+    "SubmitButton": "Send Feedback",
+    "ErrorUndefinedType": "Please select the type of your feedback!",
+    "ErrorInvalidEmail": "Please enter a valid email!",
+    "ErrorMissingFeatureRequestText": "Please specify the feature you want to request!",
+    "ErrorMissingBugReportText": "Please specify the bug you want to report!",
+    "SubmitNotification": "Thank you for your feedback!"
   },
   "ProfileSettings": {
     "Profile": "Profile",

@@ -4,7 +4,7 @@ $board-header__hover-padding-top-bottom: 5px;
 $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--large;
 
 .board-header {
-  position: fixed;
+  position: absolute;
   left: 30px;
   right: 30px;
   top: 10px;
@@ -101,7 +101,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header__access-policy-status {
   color: $color-middle-gray;
-  font-size: $text-size;
+  font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;

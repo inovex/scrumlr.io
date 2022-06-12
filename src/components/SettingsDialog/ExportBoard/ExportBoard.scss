@@ -1,4 +1,16 @@
+@import "src/constants/style.scss";
+
 .export-board__button-reverse-order {
   flex-direction: row-reverse;
   justify-content: flex-end;
+}
+
+[theme="dark"] {
+  .export-board__button-reverse-order svg g g {
+    opacity: 1;
+  }
+  .export-board__button-reverse-order svg text {
+    fill: $color-white;
+    stroke: $color-white;
+  }
 }
