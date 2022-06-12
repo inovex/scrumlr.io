@@ -156,9 +156,87 @@ You're very welcome to be part of this project. You can contribute by opening an
 fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
 `yarn test` and `yarn lint` are passing and that every change is covered by unit tests.
 
+## Our team and beloved friends
+
+<a href="https://github.com/brandstetterm">
+  <img src="https://avatars.githubusercontent.com/u/36969812?s=60&amp;v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/timengel">
+  <img src="https://avatars.githubusercontent.com/u/32651718?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/Resaki1">
+  <img src="https://avatars.githubusercontent.com/u/35272402?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/Benjosh95">
+  <img src="https://avatars.githubusercontent.com/u/49522775?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/CronJorian">
+  <img src="https://avatars.githubusercontent.com/u/44020029?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/louiskroener">
+  <img src="https://avatars.githubusercontent.com/u/68269653?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/bitionaire">
+  <img src="https://avatars.githubusercontent.com/u/1539948?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/dbaderINO">
+  <img src="https://avatars.githubusercontent.com/u/88541778?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/Kraft16">
+  <img src="https://avatars.githubusercontent.com/u/105675885?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/miiho">
+  <img src="https://avatars.githubusercontent.com/u/5772868?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/brandeins1403">
+  <img src="https://avatars.githubusercontent.com/u/70689411?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+
+<br />
+
+<a href="https://github.com/Dominik-Weinzierl">
+  <img src="https://avatars.githubusercontent.com/u/60005702?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/andiKandi">
+  <img src="https://avatars.githubusercontent.com/u/86951527?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/jdolinga">
+  <img src="https://avatars.githubusercontent.com/u/97038583?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/busilina">
+  <img src="https://avatars.githubusercontent.com/u/5882421?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/doppelreim">
+  <img src="https://avatars.githubusercontent.com/u/400103?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/alphapfote">
+  <img src="https://avatars.githubusercontent.com/u/28045496?s=60&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/orangehelicopter">
+  <img src="https://avatars.githubusercontent.com/u/23505569?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/theexiile1305">
+  <img src="https://avatars.githubusercontent.com/u/24627030?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/theinrichs">
+  <img src="https://avatars.githubusercontent.com/u/8872752?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+<a href="https://github.com/cdreier">
+  <img src="https://avatars.githubusercontent.com/u/731608?s=64&v=4" style="border-radius: 100%;" alt="brandstetterm" width="38" height="38">
+</a>
+
+... and many more!
+
 ## Thank you
 
 Thanks to all our users, contributors & supporters! ❤️
+
+<a href="https://inovex.de">
+<img src="https://www.inovex.de/wp-content/uploads/2020/10/inovex-logo-dunkelblau-quadrat-1.svg" alt="inovex">
+</a>
+
+A special shout-out goes to [inovex](https://inovex.de) for all the support and the opportunity to realize this project! 🙌
+[Contact us](https://www.inovex.de/de/kontakt/) if you look for the best IT service provider out there.
 
 ## License
 
