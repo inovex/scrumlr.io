@@ -40,7 +40,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
-  border: 2px solid var(--accent-color);
+  outline: 2px solid var(--accent-color);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
   color: $color-white;
