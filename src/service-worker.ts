@@ -1,5 +1,7 @@
 /// <reference lib="webworker" />
 /* eslint-disable no-restricted-globals */
+// Boilerplate code taken from the CRA PWA Typescript template
+// https://github.com/cra-template/pwa/blob/main/packages/cra-template-pwa-typescript/template/src/service-worker.ts
 // See https://cra.link/PWA for more information
 
 import {clientsClaim} from "workbox-core";

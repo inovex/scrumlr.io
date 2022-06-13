@@ -1,3 +1,6 @@
+// Boilerplate code taken from the CRA PWA Typescript template
+// https://github.com/cra-template/pwa/blob/main/packages/cra-template-pwa-typescript/template/src/serviceWorkerRegistration.ts
+
 /* eslint-disable no-console */
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
