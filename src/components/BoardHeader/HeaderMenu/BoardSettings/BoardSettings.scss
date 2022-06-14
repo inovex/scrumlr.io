@@ -69,13 +69,17 @@ $header-menu-button-width: 24px;
   background-color: transparent;
   color: $color-white;
   cursor: pointer;
-  transition: scale 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 
   &:focus {
     outline: 0;
   }
+  &:hover {
+    background-color: $color-white;
+    color: var(--accent-color);
+  }
   &:active {
-    scale: 0.95;
+    transform: scale(0.95);
   }
 }
 
