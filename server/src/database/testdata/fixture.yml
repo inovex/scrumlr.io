@@ -25,6 +25,11 @@
       name: Jay Doe
       account_type: ANONYMOUS
       created_at: '{{ now }}'
+    - _id: justin
+      id: "62e0ea41-6fbf-49a3-8921-1d2f4e5ae316"
+      name: Justin Doe
+      account_type: ANONYMOUS
+      created_at: '{{ now }}'
 
 - model: Board
   rows:
@@ -140,6 +145,13 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
+    - _id: votingSortingTestBoard
+      id: "1acd6899-ad71-4479-8ffe-6c6401b208d7"
+      name: Voting Sorting test
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
 
 - model: BoardSessionInsert
   rows:
@@ -190,6 +202,10 @@
     - _id: jaysSessionOnBoardSessionsObserverTestBoard
       board: '{{ $.Board.boardSessionsObserverTestBoard.ID }}'
       user: '{{ $.User.jay.ID }}'
+      role: OWNER
+    - _id: justinSessionOnVotingSortingTestBoard
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      user: '{{ $.User.justin.ID }}'
       role: OWNER
 
 - model: Column
@@ -268,6 +284,13 @@
       id: "3113b196-986c-2951-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesObserverTestBoard.ID }}'
       name: B
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: votingSortingColumn
+      id: "00c8c51b-d391-4472-8136-06efdfe7bbd2"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      name: Voting Sorting column
       color: backlog-blue
       visible: true
       index: 0
@@ -386,6 +409,54 @@
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000b2"
       rank: 0
+    - _id: votingSortingNote1
+      id: "2638e01b-e38e-4360-a4ce-74af074ee0be"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 1"
+      stack: null
+      rank: 0
+    - _id: votingSortingNote2
+      id: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 2"
+      stack: null
+      rank: 1
+    - _id: votingSortingNote3
+      id: "7840fe66-1a97-4841-ae75-40d87ee327ec"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 3"
+      stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      rank: 1
+    - _id: votingSortingNote4
+      id: "1f6b22ba-ea68-4e9e-a9c9-4266e76b1051"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 4"
+      stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
+      rank: 0
+    - _id: votingSortingNote5
+      id: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 5"
+      stack: null
+      rank: 2
+    - _id: votingSortingNote6
+      id: "c98dd4cd-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.votingSortingColumn.ID }}'
+      text: "Note 6"
+      stack: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
+      rank: 0
 
 - model: Voting
   rows:
@@ -445,6 +516,13 @@
       allow_multiple_votes: true
       show_votes_of_others: true
       status: OPEN
+    - _id: votingSortingTestBoardOpenVoting
+      id: "19d2cbf9-99db-464c-a74c-be0ab1b38d59"
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      vote_limit: 5
+      allow_multiple_votes: true
+      show_votes_of_others: true
+      status: OPEN
 
 - model: Vote
   rows:
@@ -478,3 +556,23 @@
       voting: '{{ $.Voting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
       user: '{{ $.User.jane.ID }}'
       note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+    - _id: votingSortingBoardNote1Vote
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      note: '{{ $.Note.votingSortingNote1.ID }}'
+    - _id: votingSortingBoardNote2Vote
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      note: '{{ $.Note.votingSortingNote2.ID }}'
+    - _id: votingSortingBoardNote4Vote
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      note: '{{ $.Note.votingSortingNote4.ID }}'
+    - _id: votingSortingBoardNote6Vote
+      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      note: '{{ $.Note.votingSortingNote6.ID }}'
