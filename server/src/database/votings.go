@@ -119,29 +119,15 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 }
 
 func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
-	combinedVotes :=
-		d.db.NewSelect().
-			TableExpr("notes as n").
-			Column("id", "rank", "column", "note").
-			Join(fmt.Sprintf("LEFT JOIN (SELECT * FROM votes WHERE voting = (SELECT id FROM \"%s\")) AS v", votingQuery)).
-			JoinOn("n.id = v.note").
-			Where(fmt.Sprintf("n.stack IS NULL AND n.board = (SELECT board FROM \"%s\")", votingQuery)).
-			UnionAll(d.db.NewSelect().
-				TableExpr("notes as n").
-				ColumnExpr("stack as id").
-				Column("rank", "column", "note").
-				Join(fmt.Sprintf("INNER JOIN (SELECT * FROM votes WHERE voting = (SELECT id FROM \"%s\")) AS v", votingQuery)).
-				JoinOn("n.id = v.note").
-				Where(fmt.Sprintf("n.stack IS NOT NULL  AND n.board = (SELECT board FROM \"%s\")", votingQuery)).
-				OrderExpr("rank")).
-			OrderExpr("rank")
-
 	newRankSelect := d.db.NewSelect().
-		With("combinedVotes", combinedVotes).
-		Table("combinedVotes").
-		ColumnExpr("ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY COUNT(note))-1 AS new_rank").
+		TableExpr("notes as note").
+		ColumnExpr(fmt.Sprintf(
+			"ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY "+
+				"(SELECT COUNT(*) FROM notes AS n INNER JOIN (SELECT * FROM VOTES WHERE voting = (SELECT id FROM \"%s\")) as v ON n.id = v.note WHERE n.id = note.id OR n.stack = note.id), rank)-1 AS new_rank",
+			votingQuery)).
 		Column("id").
-		GroupExpr("id, \"column\"")
+		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
+		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
 		Model((*Note)(nil)).

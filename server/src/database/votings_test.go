@@ -1,7 +1,6 @@
 package database
 
 import (
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
@@ -193,109 +192,30 @@ func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 }
 
 func testCloseVotingUpdateRank(t *testing.T) {
-	user := fixture.MustRow("User.jane").(*User)
-	board := fixture.MustRow("Board.votingSortingTestBoard").(*Board)
-	column := fixture.MustRow("Column.votingSortingColumn").(*Column)
-	voting, _ := testDb.CreateVoting(VotingInsert{
-		Board:              board.ID,
-		VoteLimit:          20,
-		AllowMultipleVotes: true,
-		ShowVotesOfOthers:  false,
-		Status:             types.VotingStatusOpen,
-	})
-	assert.NotNil(t, voting)
-
-	// Create some notes
-	note1, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "AAA",
-	})
-	note2, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "BBB",
-	})
-	note3, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "CCC",
-	})
-	note4, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "DDD",
-	})
-	note5, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "EEE",
-	})
-	note6, _ := testDb.CreateNote(NoteInsert{
-		Author: user.ID,
-		Board:  board.ID,
-		Column: column.ID,
-		Text:   "FFF",
-	})
-
-	// Stack some notes
-	var err error
-	note3, err = testDb.UpdateNote(user.ID, NoteUpdate{
-		Board: board.ID,
-		ID:    note3.ID,
-		Position: &NoteUpdatePosition{
-			Stack:  uuid.NullUUID{UUID: note2.ID, Valid: true},
-			Column: column.ID,
-			Rank:   0,
-		},
-	})
-	assert.Nil(t, err)
-	assert.Equal(t, uuid.NullUUID{UUID: note2.ID, Valid: true}, note3.Stack)
-	note4, err = testDb.UpdateNote(user.ID, NoteUpdate{
-		Board: board.ID,
-		ID:    note4.ID,
-		Position: &NoteUpdatePosition{
-			Stack:  uuid.NullUUID{UUID: note2.ID, Valid: true},
-			Column: column.ID,
-			Rank:   0,
-		},
-	})
-	assert.Nil(t, err)
-	assert.Equal(t, uuid.NullUUID{UUID: note2.ID, Valid: true}, note4.Stack)
-	note6, err = testDb.UpdateNote(user.ID, NoteUpdate{
-		Board: board.ID,
-		ID:    note6.ID,
-		Position: &NoteUpdatePosition{
-			Stack:  uuid.NullUUID{UUID: note5.ID, Valid: true},
-			Column: column.ID,
-			Rank:   0,
-		},
-	})
-	assert.Nil(t, err)
-	assert.Equal(t, uuid.NullUUID{UUID: note5.ID, Valid: true}, note6.Stack)
-
-	// Create some votes
-	testDb.AddVote(board.ID, user.ID, note1.ID)
-	testDb.AddVote(board.ID, user.ID, note2.ID)
-	testDb.AddVote(board.ID, user.ID, note4.ID)
-	testDb.AddVote(board.ID, user.ID, note6.ID)
+	voting := fixture.MustRow("Voting.votingSortingTestBoardOpenVoting").(*Voting)
 
 	// Close voting
-	testDb.UpdateVoting(VotingUpdate{
+	closedVoting, err := testDb.UpdateVoting(VotingUpdate{
 		ID:     voting.ID,
 		Board:  voting.Board,
 		Status: types.VotingStatusClosed,
 	})
+	assert.Nil(t, err)
+	assert.Equal(t, types.VotingStatusClosed, closedVoting.Status)
 
-	t.Log(note1.Text, note1.Rank)
-	t.Log(note2.Text, note2.Rank)
-	t.Log(note3.Text, note3.Rank)
-	t.Log(note4.Text, note4.Rank)
-	t.Log(note5.Text, note5.Rank)
-	t.Log(note6.Text, note6.Rank)
+	note1, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote1").(*Note).ID)
+	note2, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote2").(*Note).ID)
+	note3, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote3").(*Note).ID)
+	note4, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote4").(*Note).ID)
+	note5, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote5").(*Note).ID)
+	note6, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote6").(*Note).ID)
+
+	// Note 2 should be the highest rank with the most amount of votes
+	// Note 5 should be higher than Note 1 with equal amount of votes because the old rank has been higher
+	assert.Equal(t, note1.Rank, 0)
+	assert.Equal(t, note2.Rank, 2)
+	assert.Equal(t, note3.Rank, 2)
+	assert.Equal(t, note4.Rank, 2)
+	assert.Equal(t, note5.Rank, 1)
+	assert.Equal(t, note6.Rank, 1)
 }
