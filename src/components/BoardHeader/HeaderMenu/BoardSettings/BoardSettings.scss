@@ -49,6 +49,7 @@ $header-menu-button-width: 24px;
   outline: 0;
   padding: 0;
   transition: border-color 0.1s linear;
+  caret-color: $color-white;
 
   &::placeholder {
     color: $color-white;
