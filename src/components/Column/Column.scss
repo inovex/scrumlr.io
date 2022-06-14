@@ -6,7 +6,8 @@
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
-  height: 100vh;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
@@ -44,7 +45,7 @@
 
 .column__header-title {
   display: flex;
-  word-break: break-all;
+  word-break: break-word;
   align-items: center;
   margin-bottom: $margin--default;
   height: 48px;
@@ -66,14 +67,11 @@
 }
 
 .column__header-text {
-  font-size: calc(18px + 0.4vw);
+  font-size: calc(#{$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-}
-
-.column__header-text--visible {
   color: $color-black;
 }
 
@@ -97,6 +95,7 @@
   outline: none;
   max-width: 300px;
   width: 50%;
+  caret-color: var(--accent-color);
 }
 [theme="dark"] {
   .column__header-input {
@@ -106,7 +105,7 @@
 
 .column__header-card-number {
   margin-bottom: $margin--default;
-  font-size: 20px;
+  font-size: $text-size--medium;
   color: $color-middle-gray;
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
@@ -179,12 +178,18 @@
 }
 
 [theme="dark"] {
-  .column__header-text--visible {
+  .column__header-text {
     color: $color-white;
   }
+
+  .column__header-text--hidden {
+    color: $color-middle-gray;
+  }
+
   .column__header-toggle-button-icon {
     color: $color-white;
   }
+
   .column__notes-wrapper {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
@@ -216,18 +221,26 @@
   outline: none;
   padding: 0;
   border-radius: 4px;
+
   &:hover,
   &:focus {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+    > svg {
+      color: var(--accent-color);
+    }
   }
 }
+
 .column__header-edit-button:first-of-type {
   margin-left: auto;
 }
+
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
 }
+
 [theme="dark"] .column__header-edit-button-icon {
   color: $color-white;
 }

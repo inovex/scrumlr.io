@@ -25,11 +25,12 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-json"
+            type="button"
           >
             <span
               class="settings-option-button__label"
             >
-              Export as json
+              Export as JSON
             </span>
             <svg
               class="settings-option-button__icon"
@@ -43,11 +44,12 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-csv"
+            type="button"
           >
             <span
               class="settings-option-button__label"
             >
-              Export as csv
+              Export as CSV
             </span>
             <svg
               class="settings-option-button__icon"
@@ -80,11 +82,12 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-json"
+          type="button"
         >
           <span
             class="settings-option-button__label"
           >
-            Export as json
+            Export as JSON
           </span>
           <svg
             class="settings-option-button__icon"
@@ -98,11 +101,12 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-csv"
+          type="button"
         >
           <span
             class="settings-option-button__label"
           >
-            Export as csv
+            Export as CSV
           </span>
           <svg
             class="settings-option-button__icon"

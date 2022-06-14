@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"math"
 	"net"
 	"net/http"
 	"scrumlr.io/server/common"
@@ -116,7 +117,11 @@ func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
 		cookie.SameSite = http.SameSiteStrictMode
 	}
 
-	hostname, _, _ := net.SplitHostPort(r.Host)
+	hostname := r.Host
+	if strings.Contains(hostname, ":") {
+		hostname, _, _ = net.SplitHostPort(hostname)
+	}
+
 	hostWithSubdomain := strings.Split(hostname, ".")
 	if len(hostWithSubdomain) >= 2 {
 		cookie.Domain = fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
@@ -125,4 +130,5 @@ func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
 	}
 
 	cookie.HttpOnly = true
+	cookie.MaxAge = math.MaxInt32
 }

@@ -87,6 +87,7 @@ $icon--large: 32px;
 // margin and padding
 $margin--small: 8px;
 $margin--default: 16px;
+$margin--medium: 24px;
 $margin--large: 32px;
 $padding--small: 8px;
 $padding--default: 16px;
@@ -97,9 +98,11 @@ $padding--large: 32px;
 $letter-spacing--small: 0.25px;
 $letter-spacing--medium: 0.35px;
 $letter-spacing--large: 0.75px;
-$text-size: 13px;
+$text-size--small: 12px;
+$text-size--medium: 16px;
+$text-size--large: 20px;
 $line-height--small: 16px;
-$line-height--medium: 18px;
+$line-height--medium: 20px;
 $line-height--large: 32px;
 
 // z-index

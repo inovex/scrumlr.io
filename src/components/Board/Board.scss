@@ -16,7 +16,7 @@
   scroll-padding: $board__side-panel-width;
 
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -66,13 +66,13 @@ $board__navigation-button-icon-dimension: 24px;
 
 .board__navigation {
   position: fixed;
-  top: calc(50% - calc($board__navigation-button-dimension / 2));
+  top: calc(50% - calc(#{$board__navigation-button-dimension} / 2));
 
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  width: calc($board__navigation-button-dimension / 2);
+  width: calc(#{$board__navigation-button-dimension} / 2);
   height: $board__navigation-button-dimension;
 
   background-color: var(--accent-color);
