@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {useEffect, useRef, useState} from "react";
+import {ChangeEvent, useEffect, useRef, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -10,7 +10,7 @@ import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -18,6 +18,7 @@ import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsToggle} from "../Components/SettingsToggle";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
+import {SettingsInput} from "../Components/SettingsInput";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -36,7 +37,6 @@ export const BoardSettings = () => {
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [activeEditMode, setActiveEditMode] = useState(false);
 
-  const boardInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
@@ -181,33 +181,13 @@ export const BoardSettings = () => {
       </header>
       <div className="board-settings__container-wrapper">
         <div className="board-settings__container">
-          <SettingsButton
-            className="board-settings__board-name-button"
+          <SettingsInput
+            value={boardName}
             label={t("BoardSettings.BoardName")}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
+            submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
             disabled={!state.currentUserIsModerator}
-            onClick={() => boardInputRef.current?.focus()}
-          >
-            <input
-              ref={boardInputRef}
-              className="board-settings__board-name-button_input"
-              value={boardName}
-              placeholder={DEFAULT_BOARD_NAME}
-              autoComplete="off"
-              onChange={(e) => setBoardName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
-              onBlur={(e) => {
-                e.target.placeholder = DEFAULT_BOARD_NAME;
-                store.dispatch(Actions.editBoard({name: boardName}));
-              }}
-              onFocus={(e) => {
-                e.target.placeholder = "";
-                if (boardName) {
-                  e.target.select();
-                }
-              }}
-              disabled={!state.currentUserIsModerator}
-            />
-          </SettingsButton>
+          />
 
           <div className="board-settings__group-and-button">
             <div className="settings-dialog__group">
@@ -227,7 +207,7 @@ export const BoardSettings = () => {
                     <div className="board-settings__password-button_value">
                       <input
                         ref={passwordInputRef}
-                        type={showPassword ? "text" : "password"}
+                        type={showPassword ? "text" : "text"}
                         className="board-settings__password-button_value-input"
                         value={password}
                         readOnly={isProtected && !activeEditMode}
