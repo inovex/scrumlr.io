@@ -46,7 +46,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true}
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
 	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
@@ -55,18 +55,14 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/"}
+	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
 	s.sealCookie(r, &cookie)
-	cookie.MaxAge = -1
-	cookie.Expires = time.UnixMilli(0)
 	http.SetCookie(w, &cookie)
 
-	if getHostnameWithoutPort(r) != getTopLevelHostname(r) {
-		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/"}
+	if getHostWithoutPort(r) != getTopLevelHost(r) {
+		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
 		s.sealCookie(r, &cookieWithSubdomain)
-		cookieWithSubdomain.Domain = getHostnameWithoutPort(r)
-		cookieWithSubdomain.MaxAge = -1
-		cookieWithSubdomain.Expires = time.UnixMilli(0)
+		cookieWithSubdomain.Domain = getHostWithoutPort(r)
 		http.SetCookie(w, &cookieWithSubdomain)
 	}
 
@@ -129,12 +125,11 @@ func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
 		cookie.SameSite = http.SameSiteStrictMode
 	}
 
-	cookie.Domain = getTopLevelHostname(r)
+	cookie.Domain = getTopLevelHost(r)
 	cookie.HttpOnly = true
-	cookie.MaxAge = math.MaxInt32
 }
 
-func getHostnameWithoutPort(r *http.Request) string {
+func getHostWithoutPort(r *http.Request) string {
 	hostname := r.Host
 	if strings.Contains(hostname, ":") {
 		hostname, _, _ = net.SplitHostPort(hostname)
@@ -142,8 +137,8 @@ func getHostnameWithoutPort(r *http.Request) string {
 	return hostname
 }
 
-func getTopLevelHostname(r *http.Request) string {
-	hostname := getHostnameWithoutPort(r)
+func getTopLevelHost(r *http.Request) string {
+	hostname := getHostWithoutPort(r)
 	hostWithSubdomain := strings.Split(hostname, ".")
 	if len(hostWithSubdomain) >= 2 {
 		return fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
