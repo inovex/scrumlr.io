@@ -5,7 +5,7 @@
   overflow-y: auto;
   padding-right: 10px;
   margin-right: -20px;
-  margin-bottom: $settings-dialog-container--bottom;
+  padding-bottom: $padding--small;
 
   @include scrollbar();
 }
@@ -23,6 +23,7 @@
   gap: 32px;
   width: 100%;
   max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
+  padding-bottom: $padding--small;
 }
 
 @media screen and (min-width: 450px) {
