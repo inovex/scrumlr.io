@@ -25,3 +25,28 @@ func TestDomainOfSealedCookieWithoutPort(t *testing.T) {
 
 	assert.Equal(t, "scrumlr.io", c.Domain)
 }
+
+func TestGetTopLevelHostnameWithSubdomain(t *testing.T) {
+	r := http.Request{Host: "beta.scrumlr.io"}
+	assert.Equal(t, "scrumlr.io", getTopLevelHostname(&r))
+}
+
+func TestGetTopLevelHostnameWithoutSubdomain(t *testing.T) {
+	r := http.Request{Host: "scrumlr.io"}
+	assert.Equal(t, "scrumlr.io", getTopLevelHostname(&r))
+}
+
+func TestGetTopLevelHostnameWithSubdomainAndPort(t *testing.T) {
+	r := http.Request{Host: "beta.scrumlr.io:3000"}
+	assert.Equal(t, "scrumlr.io", getTopLevelHostname(&r))
+}
+
+func TestGetHostnameWithoutPortWithPort(t *testing.T) {
+	r := http.Request{Host: "beta.scrumlr.io:3000"}
+	assert.Equal(t, "beta.scrumlr.io", getHostnameWithoutPort(&r))
+}
+
+func TestGetHostnameWithoutPortWithoutPort(t *testing.T) {
+	r := http.Request{Host: "beta.scrumlr.io"}
+	assert.Equal(t, "beta.scrumlr.io", getHostnameWithoutPort(&r))
+}
