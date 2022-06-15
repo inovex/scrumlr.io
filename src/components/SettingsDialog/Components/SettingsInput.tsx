@@ -1,13 +1,12 @@
 import {ChangeEvent, FC} from "react";
-import {EditBoardRequest} from "types/board";
 import "./SettingsInput.scss";
 
 export interface SettingsInputProps {
   label: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  submit: () => {type: "scrumlr.io/editBoard"; board: EditBoardRequest};
-  disabled: boolean;
+  submit: () => any;
+  disabled?: boolean;
 }
 
 export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, submit, disabled}) => (
@@ -16,7 +15,7 @@ export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, s
       placeholder={label}
       value={value}
       onChange={onChange}
-      onBlur={submit}
+      onBlur={() => value && submit()}
       onKeyDown={(e) => e.key === "Enter" && value && submit()}
       disabled={disabled}
       type="text"
