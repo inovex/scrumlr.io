@@ -15,6 +15,7 @@
     padding: 0 $padding--medium;
     font-size: $text-size--medium;
     font-weight: bold;
+    padding-top: 10px;
 
     &::placeholder {
       visibility: hidden;
@@ -33,7 +34,7 @@
     &:focus ~ label,
     &:not(:placeholder-shown) ~ label {
       margin: 0 $margin--medium;
-      top: 0;
+      top: 2px;
       font-size: $text-size--small;
       line-height: $line-height--medium;
     }
