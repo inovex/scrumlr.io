@@ -27,7 +27,6 @@ updates:
     target-branch: "main"
     labels:
       - "Type: Dependencies"
-    versioning-strategy: increase
     commit-message:
       prefix: "go"
       include: "scope"
