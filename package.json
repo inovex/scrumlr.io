@@ -75,7 +75,7 @@
     "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "7.30.0",
-    "eslint-plugin-react-hooks": "4.5.0",
+    "eslint-plugin-react-hooks": "4.6.0",
     "hash-files": "^1.1.1",
     "husky": "^8.0.1",
     "i18next-fs-backend": "^1.1.4",
