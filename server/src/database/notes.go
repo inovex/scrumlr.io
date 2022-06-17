@@ -161,7 +161,7 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 		With("update_when_new_is_higher", updateWhenNewIsHigher).
 		With("update_child_notes", updateChildNotes).
 		Set("\"column\" = ?", update.Position.Column).
-		Set("stack = ?", update.Position.Stack).
+		Set("\"stack\" = ?", update.Position.Stack).
 		Set("rank = (SELECT new_rank FROM rank_selection)").
 		Where("id = ?", update.ID).
 		Where("board = ?", update.Board).
@@ -202,7 +202,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	rankSelection := d.db.NewSelect().Model((*Note)(nil)).
 		ColumnExpr("CASE "+
 			"WHEN (SELECT is_stack_swap FROM update_check) THEN (SELECT rank FROM stack_target) "+
-			"WHEN (SELECT is_same_stack FROM update_check) THEN LEAST((SELECT COUNT(*) AS max FROM notes WHERE \"stack\" = ?)-1, ?) "+
+			"WHEN (SELECT is_same_stack FROM update_check) THEN LEAST((SELECT COUNT(*) FROM notes WHERE \"stack\" = ?)-1, ?) "+
 			"WHEN (SELECT is_new_in_stack FROM update_check) THEN COUNT(*) + (SELECT COUNT(*) FROM children) "+
 			"ELSE (SELECT rank FROM previous) END as new_rank", update.Position.Stack, newRank).
 		Where("\"column\" = ?", update.Position.Column).
