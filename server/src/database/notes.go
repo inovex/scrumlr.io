@@ -176,6 +176,11 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 }
 
 func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
+	newRank := update.Position.Rank
+	if update.Position.Rank < 0 {
+		newRank = 0
+	}
+
 	// select previous configuration of note to update
 	previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", update.ID).Where("board = ?", update.Board)
 
@@ -197,9 +202,9 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	rankSelection := d.db.NewSelect().Model((*Note)(nil)).
 		ColumnExpr("CASE "+
 			"WHEN (SELECT is_stack_swap FROM update_check) THEN (SELECT rank FROM stack_target) "+
-			"WHEN (SELECT is_same_stack FROM update_check) THEN GREATEST(0, LEAST((SELECT COUNT(*) FROM children), ?)) "+
+			"WHEN (SELECT is_same_stack FROM update_check) THEN LEAST((SELECT COUNT(*) AS max FROM notes WHERE \"stack\" = ?)-1, ?) "+
 			"WHEN (SELECT is_new_in_stack FROM update_check) THEN COUNT(*) + (SELECT COUNT(*) FROM children) "+
-			"ELSE (SELECT rank FROM previous) END as new_rank", update.Position.Rank).
+			"ELSE (SELECT rank FROM previous) END as new_rank", update.Position.Stack, newRank).
 		Where("\"column\" = ?", update.Position.Column).
 		Where("board = ?", update.Board).
 		Where("stack = ?", update.Position.Stack)
@@ -214,6 +219,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	updateWhenPreviouslyNotInStack := d.db.NewUpdate().Model((*Note)(nil)).
 		Set("rank=rank-1").
 		Where("(SELECT is_new_in_stack FROM update_check)").
+		Where("NOT (SELECT is_stack_swap FROM update_check)").
 		Where("(SELECT valid_update FROM update_check)").
 		Where("board = ?", update.Board).
 		Where("\"column\" = (SELECT \"column\" FROM previous)").
@@ -240,7 +246,18 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 		Set("rank = (SELECT new_rank FROM rank_selection) - c.index").
 		Set("\"column\" = ?", update.Position.Column).
 		Where("(SELECT valid_update FROM update_check)").
-		Where("((SELECT is_new_in_stack FROM update_check) OR (SELECT is_stack_swap FROM update_check))").
+		Where("(SELECT is_new_in_stack FROM update_check)").
+		Where("NOT (SELECT is_stack_swap FROM update_check)").
+		Where("n.id = c.id")
+
+	// update the stack and rank of the children of the note to update, so that it matches the new configuration
+	updateChildrenInSwap := d.db.NewUpdate().
+		TableExpr("notes as n").
+		TableExpr("children as c").
+		Set("stack = ?", update.Position.Stack).
+		Set("\"column\" = ?", update.Position.Column).
+		Where("(SELECT valid_update FROM update_check)").
+		Where("(SELECT is_stack_swap FROM update_check)").
 		Where("n.id = c.id")
 
 	// update new stack root
@@ -262,6 +279,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 		With("update_higher", updateWhenNewIsHigher).
 		With("update_when_previously_not_in_stack", updateWhenPreviouslyNotInStack).
 		With("update_children", updateChildren).
+		With("update_children_in_swap", updateChildrenInSwap).
 		With("update_stack_target", updateSwapNote).
 		Set("\"column\" = ?", update.Position.Column).
 		Set("stack = ?", update.Position.Stack).
