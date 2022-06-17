@@ -196,7 +196,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	// TODO hier muss die optimierte positionsberechnung erfolgen
 	// select the new rank for the note based on the limits of the ranks pre-existing
 	rankSelection := d.db.NewSelect().Model((*Note)(nil)).
-		ColumnExpr("CASE WHEN (SELECT is_new_in_stack FROM update_check) THEN COUNT(*) + (SELECT COUNT(*) FROM children) ELSE (SELECT rank FROM previous) END as new_rank").
+		ColumnExpr("CASE WHEN (SELECT is_stack_swap FROM update_check) THEN (SELECT rank FROM stack_target) WHEN (SELECT is_new_in_stack FROM update_check) THEN COUNT(*) + (SELECT COUNT(*) FROM children) ELSE (SELECT rank FROM previous) END as new_rank").
 		Where("\"column\" = ?", update.Position.Column).
 		Where("board = ?", update.Board).
 		Where("stack = ?", update.Position.Stack)
@@ -231,10 +231,10 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 		Set("rank = (SELECT new_rank FROM rank_selection) - c.index").
 		Set("\"column\" = ?", update.Position.Column).
 		Where("(SELECT valid_update FROM update_check)").
-		Where("(SELECT is_new_in_stack FROM update_check)").
+		Where("(SELECT is_new_in_stack FROM update_check)"). // TODO ... or is stack_swap
 		Where("n.id = c.id")
 
-		// TODO update stack target if stack swap
+	// TODO update stack target if stack swap
 
 	query := d.db.NewUpdate().Model(&update).
 		With("previous", previous).
