@@ -227,7 +227,6 @@ func (s *Server) initColumnResources(r chi.Router) {
 
 			r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
 
-			// TODO delete showNote if column with note is deleted
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
 		})
 	})
@@ -246,7 +245,6 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Get("/", s.getNote)
 			r.Put("/", s.updateNote)
 
-			// TODO delete showNote if note is deleted
 			r.Delete("/", s.deleteNote)
 		})
 	})
