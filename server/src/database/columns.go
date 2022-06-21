@@ -126,7 +126,7 @@ func (d *Database) DeleteColumn(board, column uuid.UUID) error {
   boardUpdate := d.db.NewUpdate().
     Model((*Board)(nil)).
     Set("shared_note = null").
-    Where("shared_note IS NOT NULL AND id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
+    Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
 	_, err := d.db.NewDelete().
     With("boardUpdate", boardUpdate).
 		With("indexUpdate", indexUpdate).
