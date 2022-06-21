@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 	"time"
+  "fmt"
 )
 
 type Note struct {
@@ -262,8 +263,14 @@ func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
 					})
 			})
 
+    updateBoard := d.db.NewUpdate().
+      Model((*Board)(nil)).
+      Set("shared_note = null").
+      Where(fmt.Sprintf("id = %s AND shared_note = %s", board, id))
+
 		var notes []Note
 		_, err := d.db.NewDelete().
+      With("update_board", updateBoard).
 			With("update_ranks", updateRanks).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
 			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Result", &notes), &notes)
