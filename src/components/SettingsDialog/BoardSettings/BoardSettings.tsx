@@ -198,37 +198,20 @@ export const BoardSettings = () => {
               {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
-                  <SettingsButton
-                    id="password-input-section"
-                    className="board-settings__password-button"
+                  <SettingsInput
                     label={t("BoardSettings.Password")}
-                    onClick={() => passwordInputRef.current?.focus()}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    submit={() => handleSetPassword(password)}
+                    disabled={isProtectedOnInitialSettingsOpen && !activeEditMode}
+                    type={showPassword ? "text" : "password"}
                   >
-                    <div className="board-settings__password-button_value">
-                      <input
-                        ref={passwordInputRef}
-                        type={showPassword ? "text" : "text"}
-                        className="board-settings__password-button_value-input"
-                        value={password}
-                        readOnly={isProtected && !activeEditMode}
-                        disabled={isProtectedOnInitialSettingsOpen && !activeEditMode}
-                        placeholder={!isProtected || (isProtected && activeEditMode) ? "" : PLACEHOLDER_PASSWORD}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
-                        onKeyDown={(e) => e.key === "Enter" && handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
-                        onBlur={(e) => {
-                          if (e.relatedTarget?.id !== "password-input-section") {
-                            handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
-                          }
-                        }}
-                      />
-                      {!isProtected && !activeEditMode && password !== "" && submitPasswordButton}
-                      {isProtected && getPasswordVisibilityButton()}
-                      {isProtected && getPasswordStatusButton()}
-                    </div>
-                  </SettingsButton>
+                    {!isProtected && !activeEditMode && password !== "" && submitPasswordButton}
+                    {isProtected && getPasswordVisibilityButton()}
+                    {isProtected && getPasswordStatusButton()}
+                  </SettingsInput>
                 </>
               )}
             </div>
