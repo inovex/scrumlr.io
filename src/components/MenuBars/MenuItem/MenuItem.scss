@@ -24,6 +24,9 @@ $number-of-menu-items: 4;
 .menu-item:focus {
   outline: 2px solid rgba(var(--primaryColor-rgb), 0.5);
 }
+[theme="dark"] .menu-item:focus {
+  outline: 2px solid $color-white;
+}
 
 @include collapsedColumns(".menu-bars") {
   $menu-item__first-position-left: 28px;
