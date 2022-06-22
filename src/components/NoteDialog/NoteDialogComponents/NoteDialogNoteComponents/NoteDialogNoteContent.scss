@@ -23,7 +23,7 @@
   outline: none;
   resize: none;
 }
-.note-dialog__note-content__text:enabled {
+.note-dialog__note-content__text[contentEditable] {
   &:hover,
   &:focus {
     border-color: rgba(var(--accent-color-rgb), 0.3);
