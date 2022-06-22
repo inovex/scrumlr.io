@@ -27,7 +27,7 @@ export const ProfileSettings = () => {
             label={t("ProfileSettings.UserName")}
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
-            submit={() => store.dispatch(Actions.editSelf({id: state.participant.user.id, name: userName}))}
+            submit={() => store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
           />
 
           <AvatarSettings id={id} />
