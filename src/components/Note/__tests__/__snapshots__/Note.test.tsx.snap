@@ -531,13 +531,13 @@ exports[`Note Test NoteDialog created/not created NoteDialog is present: snapsho
                   <div
                     class="note-dialog__note-content"
                   >
-                    <textarea
+                    <blockquote
                       class="note-dialog__note-content__text"
-                      disabled=""
+                      contenteditable="false"
                       tabindex="-1"
                     >
                       Lorem Ipsum
-                    </textarea>
+                    </blockquote>
                   </div>
                   <div
                     class="note-dialog__note-footer"
