@@ -9,9 +9,10 @@ export interface SettingsInputProps {
   submit: () => any;
   disabled?: boolean;
   type?: "text" | "password";
+  placeholder?: string;
 }
 
-export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, submit, disabled, type, children}) => {
+export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, submit, disabled, type, placeholder, children}) => {
   const getValue = (): string => {
     if (type !== "password") return value;
     if (disabled) return PLACEHOLDER_PASSWORD;
@@ -21,7 +22,8 @@ export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, s
   return (
     <div className="settings-input__container">
       <input
-        placeholder={label}
+        className={!placeholder ? "settings-input__hidden-placeholder" : undefined}
+        placeholder={placeholder ?? label}
         value={getValue()}
         onChange={onChange}
         onBlur={() => value && submit()}

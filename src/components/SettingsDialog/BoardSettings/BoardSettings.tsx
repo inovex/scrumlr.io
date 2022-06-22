@@ -8,8 +8,6 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
@@ -134,28 +132,6 @@ export const BoardSettings = () => {
       />
     );
 
-  const submitPasswordButton = (
-    <CheckIcon
-      className="board-settings__edit-password-button"
-      onClick={() => {
-        setActiveEditMode(false);
-        handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
-      }}
-    />
-  );
-
-  const getPasswordStatusButton = () =>
-    activeEditMode ? (
-      submitPasswordButton
-    ) : (
-      <EditIcon
-        className="board-settings__edit-password-button"
-        onClick={() => {
-          setActiveEditMode(true);
-        }}
-      />
-    );
-
   const getAccessPolicyTitle = () => {
     if (isByInvite)
       return (
@@ -205,12 +181,10 @@ export const BoardSettings = () => {
                       setPassword(e.target.value);
                     }}
                     submit={() => handleSetPassword(password)}
-                    disabled={isProtectedOnInitialSettingsOpen && !activeEditMode}
                     type={showPassword ? "text" : "password"}
+                    placeholder={!password && !isProtected ? undefined : PLACEHOLDER_PASSWORD}
                   >
-                    {!isProtected && !activeEditMode && password !== "" && submitPasswordButton}
                     {isProtected && getPasswordVisibilityButton()}
-                    {isProtected && getPasswordStatusButton()}
                   </SettingsInput>
                 </>
               )}
@@ -218,7 +192,7 @@ export const BoardSettings = () => {
 
             {!isByInvite && state.currentUserIsModerator && getPasswordManagementButton()}
           </div>
-
+          {activeEditMode ? "true" : "false"}
           {state.currentUserIsModerator && (
             <>
               <div className="settings-dialog__group">
