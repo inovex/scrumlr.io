@@ -6,7 +6,6 @@ import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
-import i18n from "i18n";
 
 type TimerProps = {
   endTime: Date;
@@ -39,9 +38,7 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
-  const {allReady} = useAppSelector((state) => ({
-    allReady: state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready),
-  }));
+  const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
   const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
@@ -95,7 +92,7 @@ export const Timer = (props: TimerProps) => {
     if (isModerator && allReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.success(
         <div>
-          <div>{i18n.t("Toast.allParticipantsDone")}</div>
+          <div>{t("Toast.allParticipantsDone")}</div>
         </div>,
         5000
       );
