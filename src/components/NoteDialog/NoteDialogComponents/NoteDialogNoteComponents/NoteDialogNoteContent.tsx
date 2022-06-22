@@ -16,7 +16,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const dispatch = useDispatch();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
-  const onEdit = (id: string, editorId: string, newText: string) => {
+  const onEdit = (id: string, newText: string) => {
     if (editable && newText !== text) {
       dispatch(Actions.editNote(id, {text: newText}));
     }
@@ -25,12 +25,13 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   return (
     <div className="note-dialog__note-content">
       <textarea
-        tabIndex={0}
+        tabIndex={editable ? 0 : -1}
         className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
-        contentEditable={editable}
+        disabled={!editable}
         suppressContentEditableWarning
+        value={text}
         onBlur={(e) => {
-          onEdit(noteId!, authorId, e.target.value ?? "");
+          onEdit(noteId!, e.target.value ?? "");
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -38,9 +39,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             (e.target as HTMLTextAreaElement).blur();
           }
         }}
-      >
-        {text}
-      </textarea>
+      />
     </div>
   );
 };
