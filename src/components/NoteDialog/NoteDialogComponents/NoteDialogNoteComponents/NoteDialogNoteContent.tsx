@@ -12,6 +12,7 @@ type NoteDialogNoteContentProps = {
   viewer: Participant;
 };
 
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
   const dispatch = useDispatch();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
@@ -24,14 +25,13 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   return (
     <div className="note-dialog__note-content">
-      <textarea
+      <blockquote
         tabIndex={editable ? 0 : -1}
         className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
-        disabled={!editable}
+        contentEditable={editable}
         suppressContentEditableWarning
-        defaultValue={text}
         onBlur={(e) => {
-          onEdit(noteId!, e.target.value ?? "");
+          onEdit(noteId!, e.target.textContent ?? "");
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -39,7 +39,9 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             (e.target as HTMLTextAreaElement).blur();
           }
         }}
-      />
+      >
+        {text}
+      </blockquote>
     </div>
   );
 };

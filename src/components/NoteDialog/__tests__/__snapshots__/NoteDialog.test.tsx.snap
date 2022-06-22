@@ -19,13 +19,13 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
         <div
           class="note-dialog__note-content"
         >
-          <textarea
+          <blockquote
             class="note-dialog__note-content__text"
-            disabled=""
+            contenteditable="false"
             tabindex="-1"
           >
             Test Text
-          </textarea>
+          </blockquote>
         </div>
         <div
           class="note-dialog__note-footer"
@@ -525,9 +525,9 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
         <div
           class="note-dialog__note-content"
         >
-          <textarea
+          <blockquote
             class="note-dialog__note-content__text"
-            disabled=""
+            contenteditable="false"
             tabindex="-1"
           />
         </div>
@@ -970,9 +970,9 @@ exports[`<NoteDialog/> should render correctly note-dialog match snapshot 1`] = 
         <div
           class="note-dialog__note-content"
         >
-          <textarea
+          <blockquote
             class="note-dialog__note-content__text"
-            disabled=""
+            contenteditable="false"
             tabindex="-1"
           />
         </div>
