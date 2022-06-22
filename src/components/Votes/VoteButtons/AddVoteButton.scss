@@ -9,8 +9,7 @@
   height: $vote-button-height;
   width: $vote-button-width;
 
-  background-color: rgba(var(--accent-color-rgb), 0.1);
-  color: var(--accent-color);
+  background-color: rgba(var(--accent-color-rgb), 0.2);
 }
 
 .vote-button-add__icon {
@@ -19,22 +18,15 @@
   color: var(--accent-color);
   pointer-events: none;
 }
-
-.vote-button-add:not([disabled]):focus,
-.vote-button-add:not([disabled]):hover {
-  background-color: var(--accent-color);
-
-  .vote-button-add__icon {
-    color: $color-white;
-  }
+.vote-button-add:enabled:hover {
+  background-color: rgba(var(--accent-color-rgb), 0.3);
+}
+.vote-button-add:enabled:focus {
+  border: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 [theme="dark"] {
   .vote-button-add {
     background-color: rgba(var(--accent-color-rgb), 0.25);
-  }
-
-  .vote-button-add__icon {
-    filter: brightness(1.7);
   }
 }

@@ -7,22 +7,18 @@
   width: $vote-button-width;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
-}
-
-.vote-button-remove:not([disabled]) {
-  background-color: var(--accent-color);
-  color: $color-white;
-}
-
-.vote-button-remove:not([disabled]):focus > .vote-button-remove__folded-corner,
-.vote-button-remove:not([disabled]):hover > .vote-button-remove__folded-corner {
-  border-width: 12px 0 0 12px;
-}
-.vote-button-remove:not([disabled]):active {
-  transform: none;
+  overflow: hidden;
+  line-height: 18px;
 }
 .vote-button-remove:disabled {
   cursor: default;
+}
+
+.vote-button-remove:enabled:active {
+  transform: none;
+}
+.vote-button-remove:enabled:focus {
+  border: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 .vote-button-remove__folded-corner {
@@ -39,6 +35,10 @@
   border-color: $color-white $color-white transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
+.vote-button-remove:enabled:hover > .vote-button-remove__folded-corner {
+  border-width: 12px 0 0 12px;
+}
+
 [theme="dark"] {
   .vote-button-remove__folded-corner {
     box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
