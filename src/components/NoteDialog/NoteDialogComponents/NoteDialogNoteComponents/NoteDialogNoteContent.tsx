@@ -3,7 +3,7 @@ import React, {FC} from "react";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
-import {Participant} from "../../../../types/participant";
+import {Participant} from "types/participant";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -25,11 +25,17 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   return (
     <div className="note-dialog__note-content">
       <blockquote
+        tabIndex={0}
         className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
         contentEditable={editable}
         suppressContentEditableWarning
         onBlur={(e: React.FocusEvent<HTMLElement>) => {
           onEdit(noteId!, authorId, e.target.textContent as string);
+        }}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
         }}
       >
         {text}
