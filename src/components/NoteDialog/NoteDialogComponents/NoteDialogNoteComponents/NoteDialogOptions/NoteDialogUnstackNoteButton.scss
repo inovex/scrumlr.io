@@ -2,8 +2,8 @@
 @import "./NoteDialogNoteOptions.scss";
 
 .note-dialog__note-option__unstack {
-  height: 28px;
-  width: 28px;
+  height: $icon--large;
+  width: $icon--large;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +20,6 @@
 }
 
 .note-dialog__note-option__unstack-icon {
-  height: $option-height;
-  width: $option-width;
+  height: $icon--medium;
+  width: $icon--medium;
 }

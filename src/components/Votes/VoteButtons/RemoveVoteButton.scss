@@ -3,8 +3,8 @@
 
 .vote-button-remove {
   position: relative;
-  height: $vote-button-height;
-  width: $vote-button-width;
+  height: $icon--large;
+  width: $icon--large;
   overflow: hidden;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);

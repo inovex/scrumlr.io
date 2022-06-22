@@ -6,8 +6,8 @@
   justify-content: center;
   align-items: center;
 
-  height: $vote-button-height;
-  width: $vote-button-width;
+  height: $icon--large;
+  width: $icon--large;
 
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
@@ -18,8 +18,8 @@
 }
 
 .vote-button-add__icon {
-  height: $vote-button-icon-height;
-  width: $vote-button-icon-width;
+  height: $icon--medium;
+  width: $icon--medium;
   color: inherit;
   pointer-events: none;
 }

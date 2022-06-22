@@ -3,8 +3,8 @@
 .votes {
   display: inline-flex;
   position: relative;
-  width: 60px;
-  height: 28px;
+  width: calc($icon--large * 2 + 4px);
+  height: $icon--large;
   justify-content: flex-end;
 }
 
