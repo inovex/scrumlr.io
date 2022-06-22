@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ChangeEvent, useEffect, useRef, useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -8,7 +8,7 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import {MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -33,87 +33,62 @@ export const BoardSettings = () => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const [isProtectedOnInitialSettingsOpen, setIsProtectedOnInitialSettingsOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
-  const [activeEditMode, setActiveEditMode] = useState(false);
-
-  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
 
   const handleSetPassword = (newPassword: string) => {
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      if (!isProtected || activeEditMode) {
-        store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
-        navigator.clipboard.writeText(newPassword).then(() =>
-          Toast.success(
-            <div>
-              <div>{t("Toast.passwordCopied")}</div>
-            </div>,
-            1500
-          )
-        );
-        if (activeEditMode) {
-          setIsProtectedOnInitialSettingsOpen(false);
-          setActiveEditMode(false);
-        }
-        if (!isProtected) {
-          setIsProtected(true);
-        }
-      }
-    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
-      if (!activeEditMode) {
-        store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
-        setIsProtectedOnInitialSettingsOpen(false);
-        setIsProtected(false);
-        Toast.info(
+      store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
+      navigator.clipboard.writeText(newPassword).then(() =>
+        Toast.success(
           <div>
-            <div>{t("Toast.boardMadePublic")}</div>
-          </div>
-        );
-      } else {
-        setActiveEditMode(false);
-        if (passwordInputRef.current) passwordInputRef.current.placeholder = PLACEHOLDER_PASSWORD;
-      }
+            <div>{t("Toast.passwordCopied")}</div>
+          </div>,
+          1500
+        )
+      );
+      setIsProtected(true);
+    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
+      store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
+      setIsProtectedOnInitialSettingsOpen(false);
+      setIsProtected(false);
+      Toast.info(
+        <div>
+          <div>{t("Toast.boardMadePublic")}</div>
+        </div>
+      );
     }
   };
 
-  useEffect(() => {
-    if (activeEditMode) {
-      passwordInputRef.current?.focus();
-      passwordInputRef.current?.select();
-    }
-  }, [activeEditMode]);
-
   const getPasswordManagementButton = () => {
-    if (!activeEditMode) {
-      if (isProtected) {
-        return (
-          <button
-            className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
-            onClick={() => {
-              setPassword("");
-              handleSetPassword("");
-            }}
-          >
-            <SetPolicyIcon />
-            <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
-          </button>
-        );
-      }
-      if (!password) {
-        return (
-          <button
-            className="board-settings__password-management-button board-settings__generate-password-button"
-            onClick={() => {
-              const pw = generateRandomString();
-              setPassword(pw);
-              handleSetPassword(pw);
-            }}
-          >
-            <RefreshIcon />
-            <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
-          </button>
-        );
-      }
+    if (isProtected) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
+          onClick={() => {
+            setPassword("");
+            handleSetPassword("");
+          }}
+        >
+          <SetPolicyIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
+        </button>
+      );
+    }
+    if (!password) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__generate-password-button"
+          onClick={() => {
+            const pw = generateRandomString();
+            setPassword(pw);
+            handleSetPassword(pw);
+          }}
+        >
+          <RefreshIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
+        </button>
+      );
     }
     return (
       <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
@@ -127,8 +102,8 @@ export const BoardSettings = () => {
       <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
     ) : (
       <HiddenIcon
-        className={!isProtectedOnInitialSettingsOpen || activeEditMode ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
-        onClick={() => !isProtectedOnInitialSettingsOpen && setShowPassword(true)}
+        className={password ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
+        onClick={() => password && setShowPassword(true)}
       />
     );
 
@@ -163,6 +138,7 @@ export const BoardSettings = () => {
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
             submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
             disabled={!state.currentUserIsModerator}
+            placeholder={DEFAULT_BOARD_NAME}
           />
 
           <div className="board-settings__group-and-button">
@@ -192,7 +168,6 @@ export const BoardSettings = () => {
 
             {!isByInvite && state.currentUserIsModerator && getPasswordManagementButton()}
           </div>
-          {activeEditMode ? "true" : "false"}
           {state.currentUserIsModerator && (
             <>
               <div className="settings-dialog__group">
