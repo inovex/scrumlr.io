@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, {FC} from "react";
+import {FC} from "react";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
@@ -24,22 +24,23 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   return (
     <div className="note-dialog__note-content">
-      <blockquote
+      <textarea
         tabIndex={0}
         className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
         contentEditable={editable}
         suppressContentEditableWarning
-        onBlur={(e: React.FocusEvent<HTMLElement>) => {
-          onEdit(noteId!, authorId, e.target.textContent as string);
+        onBlur={(e) => {
+          onEdit(noteId!, authorId, e.target.value ?? "");
         }}
-        onKeyPress={(e) => {
+        onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
+            (e.target as HTMLTextAreaElement).blur();
           }
         }}
       >
         {text}
-      </blockquote>
+      </textarea>
     </div>
   );
 };
