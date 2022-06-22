@@ -16,7 +16,7 @@
 .vote-button-remove:active {
   transform: none;
 }
-.vote-button-remove:hover {
+.vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
   color: $color-white;
 }

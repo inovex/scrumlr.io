@@ -13,6 +13,9 @@
   color: var(--accent-color);
   transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
+.vote-button-add:disabled {
+  opacity: 0.5;
+}
 
 .vote-button-add__icon {
   height: $vote-button-icon-height;
@@ -20,7 +23,7 @@
   color: inherit;
   pointer-events: none;
 }
-.vote-button-add:hover {
+.vote-button-add:enabled:hover {
   background-color: var(--accent-color);
   color: $color-white;
 }
