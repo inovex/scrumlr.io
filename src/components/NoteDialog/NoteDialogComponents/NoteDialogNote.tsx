@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import {FC} from "react";
+import {AvataaarProps} from "components/Avatar";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
 import {Participant} from "../../../types/participant";
@@ -9,6 +10,7 @@ export type NoteDialogNoteProps = {
   parentId?: string;
   text: string;
   authorId: string;
+  avatar?: AvataaarProps;
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;

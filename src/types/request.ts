@@ -1,3 +1,5 @@
+import {Auth} from "./auth";
+
 export enum JoinRequestStatus {
   "PENDING" = 0,
   "ACCEPTED" = 1,
@@ -7,10 +9,7 @@ export enum JoinRequestStatus {
 export type JoinRequestStatusType = keyof typeof JoinRequestStatus;
 
 export interface Request {
-  user: {
-    id: string;
-    name: string;
-  };
+  user: Auth;
   status: JoinRequestStatusType;
 }
 
