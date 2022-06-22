@@ -17,15 +17,17 @@
   line-height: $line-height--medium;
   margin-bottom: $margin--small;
   padding: $padding--small;
-  border: 1px dashed transparent;
+  border: 2px dashed transparent;
   border-radius: 5px;
-  transition: border-color 0.5s ease-in-out;
+  transition: border-color 150ms ease-in-out;
   outline: none;
+  resize: none;
 }
-
-.note-dialog__note-content__text-hover:hover,
-.note-dialog__note-content__text-hover:focus {
-  border-color: $color-middle-gray;
+.note-dialog__note-content__text:enabled {
+  &:hover,
+  &:focus {
+    border-color: rgba(var(--accent-color-rgb), 0.3);
+  }
 }
 
 [theme="dark"] {

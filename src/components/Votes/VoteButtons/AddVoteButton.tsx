@@ -1,10 +1,9 @@
-import {Actions} from "store/action";
-import {DotButton} from "components/DotButton";
-import "./AddVoteButton.scss";
-import "./VoteButton.scss";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {FC} from "react";
 import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
+import {DotButton} from "components/DotButton";
+import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
+import "./AddVoteButton.scss";
 
 type AddVoteProps = {
   noteId: string;
