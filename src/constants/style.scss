@@ -87,6 +87,7 @@ $icon--large: 32px;
 // margin and padding
 $margin--small: 8px;
 $margin--default: 16px;
+$margin--medium: 24px;
 $margin--large: 32px;
 $padding--small: 8px;
 $padding--default: 16px;
@@ -114,6 +115,7 @@ $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
 $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
+$request-z-index: $base-z-index + (10 * $base-z-index-step);
 
 // responsive
 $smartphone: "screen and (max-width: 767px)";
