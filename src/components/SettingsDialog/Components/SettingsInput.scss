@@ -57,13 +57,14 @@
     z-index: 1;
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     padding: $padding--small $padding--medium;
     pointer-events: none;
 
     * {
       pointer-events: initial;
       height: 100%;
+      aspect-ratio: 1 / 1;
     }
   }
 }
