@@ -53,6 +53,7 @@
       overflow-y: auto;
       padding-right: 10px;
       margin-right: -20px;
+      scrollbar-gutter: stable;
 
       @include scrollbar();
 
