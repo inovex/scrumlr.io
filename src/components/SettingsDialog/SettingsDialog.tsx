@@ -98,7 +98,7 @@ export const SettingsDialog: VFC = () => {
               >
                 <p className="navigation-item__user-name">{me.name}</p>
                 <p>{t("SettingsDialog.ProfileDescription")}</p>
-                <Avatar seed={me.id} className="navigation-item__icon" />
+                <Avatar seed={me.id} avatar={me.avatar} className="navigation-item__icon" />
               </Link>
             )}
           </nav>
