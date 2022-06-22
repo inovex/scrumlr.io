@@ -21,6 +21,7 @@ func TestRunnerForVoting(t *testing.T) {
 	t.Run("Update=2", testChangeAbortedToClosedVotingShouldFail)
 	t.Run("Update=3", testChangeClosedToAbortedVotingShouldFail)
 	t.Run("Update=4", testCloseVoting)
+	t.Run("Update=5", testCloseVotingUpdateRank)
 
 	t.Run("Create=0", testCreateVotingWithNegativeVoteLimitShouldFail)
 	t.Run("Create=1", testCreateVotingWithVoteLimitGreater99ShouldFail)
@@ -188,4 +189,33 @@ func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 		Status:             types.VotingStatusOpen,
 	})
 	assert.NotNil(t, err)
+}
+
+func testCloseVotingUpdateRank(t *testing.T) {
+	voting := fixture.MustRow("Voting.votingSortingTestBoardOpenVoting").(*Voting)
+
+	// Close voting
+	closedVoting, err := testDb.UpdateVoting(VotingUpdate{
+		ID:     voting.ID,
+		Board:  voting.Board,
+		Status: types.VotingStatusClosed,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, types.VotingStatusClosed, closedVoting.Status)
+
+	note1, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote1").(*Note).ID)
+	note2, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote2").(*Note).ID)
+	note3, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote3").(*Note).ID)
+	note4, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote4").(*Note).ID)
+	note5, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote5").(*Note).ID)
+	note6, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote6").(*Note).ID)
+
+	// Note 2 should be the highest rank with the most amount of votes
+	// Note 5 should be higher than Note 1 with equal amount of votes because the old rank has been higher
+	assert.Equal(t, note1.Rank, 0)
+	assert.Equal(t, note2.Rank, 2)
+	assert.Equal(t, note3.Rank, 2)
+	assert.Equal(t, note4.Rank, 2)
+	assert.Equal(t, note5.Rank, 1)
+	assert.Equal(t, note6.Rank, 1)
 }

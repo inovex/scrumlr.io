@@ -17,6 +17,10 @@ body,
   font-variant-numeric: lining-nums;
 }
 
+#root {
+  position: relative;
+}
+
 body {
   margin: 0;
   font-family: "Raleway", sans-serif;

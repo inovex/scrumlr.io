@@ -15,6 +15,6 @@ export const exportAsCSV = async (id: string, name?: string) => {
 export const exportAsJSON = async (id: string, name?: string) => {
   const response = await API.exportBoard(id, "application/json");
   const json = await response.json();
-  const blob = new Blob([json], {type: "application/json"});
-  saveAs(blob, `${fileName(name)}.json`);
+  const blob = new Blob([JSON.stringify(json)], {type: "application/json"});
+  saveAs(blob, `${fileName(name ?? "scrumlr.io")}.json`);
 };

@@ -87,12 +87,14 @@ export const Homepage = withTranslation()(() => {
         <AppInfo className="homepage__app-info" />
 
         <div className="homepage__footer-developers">
-          <Trans
-            i18nKey="Homepage.developers"
-            components={{
-              inovex: <InovexAnchor />,
-            }}
-          />
+          <span>
+            <Trans
+              i18nKey="Homepage.developers"
+              components={{
+                inovex: <InovexAnchor />,
+              }}
+            />
+          </span>
         </div>
 
         {SHOW_LEGAL_DOCUMENTS && (
