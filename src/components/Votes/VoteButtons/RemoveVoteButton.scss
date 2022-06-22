@@ -5,20 +5,23 @@
   position: relative;
   height: $vote-button-height;
   width: $vote-button-width;
+  overflow: hidden;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
-  overflow: hidden;
-  line-height: 18px;
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
 .vote-button-remove:disabled {
   cursor: default;
 }
-
-.vote-button-remove:enabled:active {
+.vote-button-remove:active {
   transform: none;
 }
-.vote-button-remove:enabled:focus {
-  border: 2px solid rgba(var(--accent-color-rgb), 0.5);
+.vote-button-remove:hover {
+  background-color: var(--accent-color);
+  color: $color-white;
+}
+.vote-button-remove:focus {
+  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 .vote-button-remove__folded-corner {

@@ -10,19 +10,22 @@
   width: $vote-button-width;
 
   background-color: rgba(var(--accent-color-rgb), 0.2);
+  color: var(--accent-color);
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
 
 .vote-button-add__icon {
   height: $vote-button-icon-height;
   width: $vote-button-icon-width;
-  color: var(--accent-color);
+  color: inherit;
   pointer-events: none;
 }
-.vote-button-add:enabled:hover {
-  background-color: rgba(var(--accent-color-rgb), 0.3);
+.vote-button-add:hover {
+  background-color: var(--accent-color);
+  color: $color-white;
 }
-.vote-button-add:enabled:focus {
-  border: 2px solid rgba(var(--accent-color-rgb), 0.5);
+.vote-button-add:focus {
+  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 [theme="dark"] {

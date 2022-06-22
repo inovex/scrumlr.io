@@ -2,18 +2,24 @@
 @import "./NoteDialogNoteOptions.scss";
 
 .note-dialog__note-option__unstack {
-  height: $option-height;
-  width: $option-width;
-  background-color: transparent;
-  color: rgba(var(--accent-color-rgb), 0.4);
+  height: 28px;
+  width: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(var(--accent-color-rgb), 0.2);
+  color: var(--accent-color);
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+}
+.note-dialog__note-option__unstack:hover {
+  background-color: var(--accent-color);
+  color: $color-white;
+}
+.note-dialog__note-option__unstack:focus {
+  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 .note-dialog__note-option__unstack-icon {
   height: $option-height;
   width: $option-width;
-}
-
-.note-dialog__note-option__unstack:focus,
-.note-dialog__note-option__unstack:hover {
-  color: var(--accent-color);
 }
