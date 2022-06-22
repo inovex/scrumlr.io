@@ -29,7 +29,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         className={classNames("note-dialog__note-content__text", {".note-dialog__note-content__text-hover": editable})}
         disabled={!editable}
         suppressContentEditableWarning
-        value={text}
+        defaultValue={text}
         onBlur={(e) => {
           onEdit(noteId!, e.target.value ?? "");
         }}
