@@ -1,10 +1,9 @@
 import classNames from "classnames";
-import {FC, ReactElement} from "react";
+import {FC} from "react";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsAccordion.scss";
 
 export interface SettingsAccordionProps {
-  children: ReactElement | ReactElement[];
   isOpen: boolean;
   onClick: () => unknown;
   label?: string;
