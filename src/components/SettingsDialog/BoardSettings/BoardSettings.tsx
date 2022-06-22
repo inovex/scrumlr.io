@@ -160,7 +160,7 @@ export const BoardSettings = () => {
                     type={showPassword ? "text" : "password"}
                     placeholder={!password && !isProtected ? undefined : PLACEHOLDER_PASSWORD}
                   >
-                    {isProtected && getPasswordVisibilityButton()}
+                    {password && getPasswordVisibilityButton()}
                   </SettingsInput>
                 </>
               )}
