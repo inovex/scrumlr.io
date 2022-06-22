@@ -1,0 +1,53 @@
+@import "constants/style";
+
+.settings-carousel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-label {
+      font-size: $text-size--small;
+      font-weight: 500;
+      color: rgba($color-black, 0.5);
+    }
+    &-value {
+      font-size: $text-size--medium;
+      font-weight: bold;
+    }
+  }
+
+  &__button {
+    display: flex;
+    cursor: pointer;
+    background-color: unset;
+    justify-items: center;
+    align-items: center;
+    border: none;
+    color: var(--accent-color);
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+[theme="dark"] {
+  .settings-carousel {
+    &__text {
+      &-label {
+        color: rgba($color-white, 0.65);
+      }
+    }
+
+    &__button {
+      color: var(--accent-color);
+    }
+  }
+}

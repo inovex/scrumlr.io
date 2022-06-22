@@ -121,7 +121,7 @@ export const Note = (props: NoteProps) => {
         <div className="note__footer">
           {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={note!.author} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author!.user.name}</figcaption>
             </figure>
           )}

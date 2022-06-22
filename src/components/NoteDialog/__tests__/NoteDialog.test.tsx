@@ -126,7 +126,7 @@ describe("<NoteDialog/>", () => {
         useDispatchSpy.mockReturnValue(mockDispatchFn);
         const {container} = render(createNoteDialog({authorId: "test-participant-id"}), {container: global.document.querySelector("#portal")!});
         const noteContentText = container.querySelector(".note-dialog__note-content__text")!;
-        fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
+        fireEvent.blur(noteContentText, {target: {value: "Changed Text"}});
 
         await waitFor(() => {
           expect(mockDispatchFn).toHaveBeenCalledWith(Actions.editNote("0", {text: "Changed Text"}));
@@ -139,7 +139,7 @@ describe("<NoteDialog/>", () => {
         useDispatchSpy.mockReturnValue(mockDispatchFn);
         const {container} = render(createNoteDialog({currentUserIsModerator: true}), {container: global.document.querySelector("#portal")!});
         const noteContentText = container.querySelector(".note-dialog__note-content__text")!;
-        fireEvent.blur(noteContentText, {target: {textContent: "Changed Text"}});
+        fireEvent.blur(noteContentText, {target: {value: "Changed Text"}});
 
         await waitFor(() => {
           expect(mockDispatchFn).toHaveBeenCalledWith(Actions.editNote("0", {text: "Changed Text"}));
