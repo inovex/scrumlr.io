@@ -11,10 +11,6 @@ $number-of-menu-items: 4;
   background: transparent;
 }
 
-.menu-item:focus {
-  outline: none;
-}
-
 .menu-item {
   background-color: transparent;
   border: none;
@@ -24,6 +20,9 @@ $number-of-menu-items: 4;
   position: relative;
   width: 36px;
   cursor: pointer;
+}
+.menu-item:focus {
+  outline: 2px solid rgba(var(--primaryColor-rgb), 0.5);
 }
 
 @include collapsedColumns(".menu-bars") {
