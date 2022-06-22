@@ -3,9 +3,9 @@
 .votes {
   display: inline-flex;
   position: relative;
-  width: calc($icon--large * 2 + 4px);
   height: $icon--large;
   justify-content: flex-end;
+  gap: 4px;
 }
 
 .votes > * + * {
