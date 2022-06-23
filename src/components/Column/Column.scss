@@ -118,7 +118,6 @@
   border: 2px dashed transparent;
   transition: all 0.25s ease-in-out;
   flex: 1;
-  margin-top: $margin--small;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray $color-white;
 
@@ -132,7 +131,8 @@
 
 .column__note-list {
   margin: 0;
-  padding: 0 $padding--large $padding--default $padding--large;
+  // padding-top of 4px to display note outline focus correctly
+  padding: 4px $padding--large $padding--default $padding--large;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;
