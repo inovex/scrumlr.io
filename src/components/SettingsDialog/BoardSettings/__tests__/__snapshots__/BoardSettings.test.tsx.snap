@@ -25,7 +25,7 @@ exports[`BoardSettings should match snapshot 1`] = `
       >
         <input
           autocomplete="off"
-          id="BoardSettings.BoardName"
+          id="boardSettingsBoardName"
           placeholder="scrumlr.io"
           type="text"
           value="test-board-name"
@@ -72,7 +72,7 @@ exports[`BoardSettings should match snapshot 1`] = `
             <input
               autocomplete="off"
               class="settings-input__hidden-placeholder"
-              id="BoardSettings.Password"
+              id="boardSettingsPassword"
               placeholder="BoardSettings.Password"
               type="password"
               value=""
