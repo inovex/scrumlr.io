@@ -38,13 +38,7 @@
 .toggle--active::after {
   left: 16px;
   background-color: var(--accent-color);
-  box-shadow: 0 4px 8px #0057ff29;
-}
-
-[theme="dark"] {
-  .toggle--active::after {
-    box-shadow: 0 4px 8px #ff006929;
-  }
+  box-shadow: 0 4px 8px rgba(var(--accent-color-rgb), 0.24);
 }
 
 .toggle.toggle--disabled {

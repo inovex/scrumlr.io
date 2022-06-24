@@ -4,9 +4,9 @@ import {Actions} from "store/action";
 import {Avatar} from "components/Avatar";
 import {useTranslation} from "react-i18next";
 import {SettingsButton} from "../Components/SettingsButton";
-import {SettingsToggle} from "../Components/SettingsToggle";
 import "./Participants.scss";
 import "../SettingsDialog.scss";
+import {Toggle} from "components/Toggle";
 
 export const Participants = () => {
   const {t} = useTranslation();
@@ -33,7 +33,7 @@ export const Participants = () => {
                 </span>
                 <div className={state.me.connected ? "participants__online-mark" : "participants__offline-mark"} />
               </div>
-              {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <SettingsToggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} />}
+              {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <Toggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} disabled />}
             </SettingsButton>
             {state.others.length > 0 && <hr className="settings-dialog__separator" />}
             {state.others.length > 0 &&
@@ -51,7 +51,9 @@ export const Participants = () => {
                       </span>
                       <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
                     </div>
-                    {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <SettingsToggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} />}
+                    {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && (
+                      <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
+                    )}
                   </SettingsButton>
                   {state.others[index + 1] && <hr className="settings-dialog__separator" />}
                 </>
