@@ -67,14 +67,9 @@ describe("Note", () => {
       expect(container.querySelector(".note__root")!.firstChild).not.toHaveClass("note--own-card");
     });
 
-    test("note content is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note")?.firstChild).toHaveClass("note__content");
-    });
-
     test("note text is present", () => {
       const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__content")?.firstChild).toHaveClass("note__text");
+      expect(container.querySelector(".note")?.firstChild).toHaveClass("note__text");
     });
 
     test("note text has correct text", () => {

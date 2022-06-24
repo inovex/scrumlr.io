@@ -65,8 +65,9 @@ func (s *UserService) CreateAppleUser(_ context.Context, id, name, avatarUrl str
 
 func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dto.User, error) {
 	user, err := s.database.UpdateUser(database.UserUpdate{
-		ID:   body.ID,
-		Name: body.Name,
+		ID:     body.ID,
+		Name:   body.Name,
+		Avatar: body.Avatar,
 	})
 	return new(dto.User).From(user), err
 }

@@ -3,7 +3,6 @@ import classNames from "classnames";
 import {Actions} from "store/action";
 import React, {useEffect, useRef} from "react";
 import {NoteDialog} from "components/NoteDialog";
-import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {Votes} from "components/Votes";
 import {useDrag, useDrop} from "react-dnd";
 import {UserAvatar} from "components/BoardUsers";
@@ -118,14 +117,11 @@ export const Note = (props: NoteProps) => {
         className={classNames("note", {"note--own-card": props.viewer.user.id === note?.author}, {"note--isDragging": isDragging}, {"note--isOver": isOver})}
         tabIndex={props.tabIndex ?? TabIndex.default}
       >
-        <div className="note__content">
-          <p className="note__text">{note!.text}</p>
-          <EditIcon className={classNames("note__edit", {"note__edit--own-card": props.viewer.user.id === note?.author})} />
-        </div>
+        <p className="note__text">{note!.text}</p>
         <div className="note__footer">
           {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={note!.author} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author!.user.name}</figcaption>
             </figure>
           )}

@@ -1,35 +1,71 @@
+@import "src/constants/style";
 @import "../SettingsDialog";
 
-.profile-settings__user-name-button {
-  justify-content: space-between;
-  cursor: text;
-}
+.profile-settings {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $margin--large;
+    height: 100%;
+    width: 100%;
+    max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
 
-.profile-settings__user-name-button span {
-  cursor: inherit;
-}
+    @media screen and (min-width: 450px) {
+      max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+    }
 
-.profile-settings__user-name-button_input {
-  background-color: transparent;
-  border: none;
-  padding: $padding--default $padding--medium $padding--default $padding--default;
-  font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
-  text-align: right;
-  width: 60%;
-  cursor: inherit;
-}
+    @media screen and (min-width: 920px) {
+      max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+    }
 
-.profile-settings__user-name-button_input:focus {
-  outline: none;
-}
+    &-wrapper {
+      overflow-y: auto;
+      padding-right: $padding--small;
+      margin-right: calc(-1 * ($padding--small + 10px));
+      margin-bottom: $settings-dialog-container--bottom;
 
-.profile-settings__user-name-button_input::placeholder {
-  font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
-  color: $color-black;
+      @media screen and (min-width: 920px) {
+        padding-right: $padding--medium;
+        margin-right: calc(-1 * ($padding--medium + 10px));
+      }
+    }
+
+    > button {
+      flex: 0;
+    }
+  }
+
+  &__user-name-button {
+    justify-content: space-between;
+    cursor: text;
+
+    span {
+      cursor: inherit;
+    }
+
+    &_input {
+      background-color: transparent;
+      border: none;
+      padding: $padding--default $padding--medium $padding--default $padding--default;
+      font-weight: bold;
+      letter-spacing: $letter-spacing--medium;
+      font-size: $text-size--medium;
+      text-align: right;
+      max-width: 150px;
+      cursor: inherit;
+
+      &::placeholder {
+        font-weight: bold;
+        letter-spacing: $letter-spacing--medium;
+        font-size: $text-size--medium;
+        color: $color-black;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
 }
 
 [theme="dark"] {
