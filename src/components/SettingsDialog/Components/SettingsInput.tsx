@@ -3,6 +3,7 @@ import "./SettingsInput.scss";
 
 export interface SettingsInputProps {
   label: string;
+  id: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   submit: () => void;
@@ -11,7 +12,7 @@ export interface SettingsInputProps {
   placeholder?: string;
 }
 
-export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, submit, disabled, type, placeholder, children}) => (
+export const SettingsInput: FC<SettingsInputProps> = ({label, id, value, onChange, submit, disabled, type, placeholder, children}) => (
   <div className="settings-input__container">
     <input
       className={!placeholder ? "settings-input__hidden-placeholder" : undefined}
@@ -22,7 +23,7 @@ export const SettingsInput: FC<SettingsInputProps> = ({label, value, onChange, s
       onKeyDown={(e) => e.key === "Enter" && value && submit()}
       disabled={disabled}
       type={type ?? "text"}
-      id={label}
+      id={id}
       autoComplete="off"
     />
     <label htmlFor={label}>{label}</label>

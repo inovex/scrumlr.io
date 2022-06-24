@@ -37,6 +37,7 @@ export const BoardSettings = () => {
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
 
   const handleSetPassword = (newPassword: string) => {
+    setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
       store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
       navigator.clipboard.writeText(newPassword).then(() =>
@@ -66,7 +67,6 @@ export const BoardSettings = () => {
         <button
           className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
           onClick={() => {
-            setPassword("");
             handleSetPassword("");
           }}
         >
@@ -81,7 +81,6 @@ export const BoardSettings = () => {
           className="board-settings__password-management-button board-settings__generate-password-button"
           onClick={() => {
             const pw = generateRandomString();
-            setPassword(pw);
             handleSetPassword(pw);
           }}
         >
@@ -134,6 +133,7 @@ export const BoardSettings = () => {
         <div className="board-settings__container">
           <SettingsInput
             value={boardName}
+            id="boardSettingsBoardName"
             label={t("BoardSettings.BoardName")}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
             submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
@@ -151,6 +151,7 @@ export const BoardSettings = () => {
                 <>
                   <hr className="settings-dialog__separator" />
                   <SettingsInput
+                    id="boardSettingsPassword"
                     label={t("BoardSettings.Password")}
                     value={password}
                     onChange={(e) => {

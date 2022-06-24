@@ -24,6 +24,7 @@ export const ProfileSettings = () => {
       <div className="profile-settings__container-wrapper">
         <div className="profile-settings__container">
           <SettingsInput
+            id="profileSettingsUserName"
             label={t("ProfileSettings.UserName")}
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
