@@ -33,7 +33,7 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
 
   return ReactDOM.createPortal(
     <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>
-      <FocusLock autoFocus={false}>
+      <FocusLock autoFocus={false} returnFocus>
         <div
           className={classNames(
             "portal__frame",

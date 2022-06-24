@@ -17,6 +17,7 @@ import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
+import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 
 const Router = () => (
@@ -55,6 +56,7 @@ const Router = () => (
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />
+        <Route path="stack/:noteId" element={<StackView />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
