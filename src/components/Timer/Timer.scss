@@ -44,10 +44,20 @@
   cursor: pointer;
   padding: 0;
   outline: none;
-}
+  transition: all 0.08s ease-out;
 
-.timer > button:focus {
-  transform: scale(1.1);
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
 // Shake animation on expired timer
