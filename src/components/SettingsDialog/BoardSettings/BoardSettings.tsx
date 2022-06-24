@@ -11,12 +11,12 @@ import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
+import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
+import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
-import {SettingsInput} from "../Components/SettingsInput";
-import {Toggle} from "components/Toggle";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();

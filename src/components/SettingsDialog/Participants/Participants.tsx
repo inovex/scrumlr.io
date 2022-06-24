@@ -1,12 +1,12 @@
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {Toggle} from "components/Toggle";
 import {Avatar} from "components/Avatar";
 import {useTranslation} from "react-i18next";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./Participants.scss";
 import "../SettingsDialog.scss";
-import {Toggle} from "components/Toggle";
 
 export const Participants = () => {
   const {t} = useTranslation();
