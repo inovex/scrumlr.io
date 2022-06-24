@@ -76,6 +76,7 @@
   width: 100%;
   background: $color-white;
   cursor: pointer;
+  transition: all 0.08s ease-out;
 
   &:hover {
     background-color: rgba(var(--accent-color-rgb), 0.1);
