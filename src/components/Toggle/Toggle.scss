@@ -4,6 +4,11 @@
   position: relative;
   width: 40px;
   height: 24px;
+
+  &:hover::after {
+    filter: brightness(1.1);
+    transform: scale(1.1);
+  }
 }
 
 .toggle::before {
@@ -23,7 +28,7 @@
   height: 24px;
   width: 24px;
   border-radius: 100%;
-  transition: all 0.2s linear;
+  transition: all 0.08s linear;
   top: 0;
 
   left: 0;
@@ -42,7 +47,13 @@
   }
 }
 
-.toggle.toggle--disabled::after {
-  background-color: $color-middle-gray;
-  box-shadow: none;
+.toggle.toggle--disabled {
+  &::after {
+    background-color: $color-middle-gray;
+    box-shadow: none;
+  }
+  &:hover::after {
+    filter: none;
+    transform: none;
+  }
 }

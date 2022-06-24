@@ -76,19 +76,26 @@
   width: 100%;
   background: $color-white;
   cursor: pointer;
+
+  &:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  > label:first-of-type {
+    font-size: $text-size--medium;
+    color: $color-black;
+    letter-spacing: $letter-spacing--medium;
+    position: absolute;
+    left: 24px;
+    top: 16px;
+    cursor: pointer;
+  }
 }
-.dialog__button:focus {
-  outline: none;
-}
-.dialog__button > label:first-of-type {
-  font-size: $text-size--medium;
-  color: $color-black;
-  letter-spacing: $letter-spacing--medium;
-  position: absolute;
-  left: 24px;
-  top: 16px;
-  cursor: pointer;
-}
+
 [theme="dark"] {
   .dialog__button {
     background-color: $color-dark-mode-note;

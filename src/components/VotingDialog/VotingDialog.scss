@@ -106,6 +106,17 @@
   width: 80%;
   background: $color-planning-pink;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: scale(1.01);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.24);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 .voting-dialog__start-button > label {
   font-weight: bold;
@@ -131,13 +142,26 @@
   position: absolute;
   top: 8px;
   padding: 0;
+  transition: all 0.08s ease-out;
+
+  &:first-of-type {
+    right: 80px;
+  }
+
+  &:last-of-type {
+    right: 24px;
+  }
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
-.voting-dialog__vote-button:first-of-type {
-  right: 80px;
-}
-.voting-dialog__vote-button:last-of-type {
-  right: 24px;
-}
+
 .voting-dialog__vote-label {
   position: absolute;
   top: 8px;
