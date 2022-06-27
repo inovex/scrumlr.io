@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, {useRef} from "react";
+import React, {useRef, useEffect} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
@@ -25,9 +25,30 @@ export const Note = (props: NoteProps) => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
+
+  if (!note) {
+    return null;
+  }
+
+  useEffect(() => {
+    if (isShared && !document.location.pathname.endsWith(props.noteId)) {
+      navigate(`stack/${note.id}`);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isShared) {
+      if (!document.location.pathname.endsWith(props.noteId)) {
+        navigate(`stack/${note.id}`);
+      }
+    } else if (document.location.pathname.endsWith(props.noteId)) {
+        navigate(`.`);
+      }
+  }, [isShared]);
 
   const [{isDragging}, drag] = useDrag({
     type: isStack ? "STACK" : "NOTE",
