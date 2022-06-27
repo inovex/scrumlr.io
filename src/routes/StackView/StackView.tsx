@@ -8,7 +8,6 @@ import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./StackView.scss";
-import {useEffect} from "react";
 
 export const StackView = () => {
   const {boardId, noteId} = useParams();
@@ -20,7 +19,7 @@ export const StackView = () => {
   const authorName = useAppSelector(
     (state) => state.participants?.others.find((participant) => participant.user.id === note?.author)?.user.name ?? state.participants?.self.user.name ?? ""
   );
-  const childrenNotes = useAppSelector(
+  const stackedNotes = useAppSelector(
     (state) =>
       state.notes
         .filter((n) => n.position.stack === note?.id)
@@ -38,11 +37,12 @@ export const StackView = () => {
     navigate(`/board/${boardId}`);
   }
 
-  useEffect(() => {
-    if (moderating && (viewer.role === "OWNER" || viewer.role === "MODERATOR")) {
-      dispatch(Actions.shareNote(note!.id));
+  const handleClose = () => {
+    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+      dispatch(Actions.stopSharing());
     }
-  }, [moderating, viewer]);
+    navigate(`/board/${boardId}`);
+  };
 
   const props = {
     noteId,
@@ -51,28 +51,17 @@ export const StackView = () => {
     columnName: column!.name,
     columnColor: column!.color,
     columnVisible: column!.visible,
+    childrenNotes: stackedNotes,
     authorName,
     showAuthors,
-    childrenNotes,
     viewer,
     moderating,
-    onClose: () => navigate(`/board/${boardId}`),
-    onDeleteOfParent: () => navigate(`/board/${boardId}`),
+    onClose: handleClose,
+    onDeleteOfParent: handleClose,
   };
 
   return (
-    <Portal
-      onClose={() => {
-        if (moderating && (viewer.role === "OWNER" || viewer.role === "MODERATOR")) {
-          dispatch(Actions.stopSharing());
-        }
-        navigate(`/board/${boardId}`);
-      }}
-      className="stack-view__portal"
-      hiddenOverflow
-      centered
-      disabledPadding
-    >
+    <Portal onClose={handleClose} className="stack-view__portal" hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(props.columnColor as Color))}>
         <NoteDialogComponents.Header columnName={props.columnName} />
         <NoteDialogComponents.Wrapper>

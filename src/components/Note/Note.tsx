@@ -1,21 +1,19 @@
-import "./Note.scss";
 import classNames from "classnames";
-import {Actions} from "store/action";
 import React, {useRef} from "react";
-import {Votes} from "components/Votes";
 import {useDrag, useDrop} from "react-dnd";
-import {UserAvatar} from "components/BoardUsers";
-import {TabIndex} from "constants/tabIndex";
 import {useDispatch} from "react-redux";
-import _ from "underscore";
-import {Participant} from "types/participant";
-import {useAppSelector} from "store";
 import {useNavigate} from "react-router";
+import _ from "underscore";
+import {TabIndex} from "constants/tabIndex";
+import {UserAvatar} from "components/BoardUsers";
+import {Votes} from "components/Votes";
+import {useAppSelector} from "store";
+import {Actions} from "store/action";
+import {Participant} from "types/participant";
+import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
-  showAuthors: boolean;
-  moderating: boolean;
   viewer: Participant;
   tabIndex?: number;
 }
@@ -26,11 +24,13 @@ export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLLIElement>(null);
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
-  const noteIsStackParent = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
+  const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
+  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
+  const moderating = useAppSelector((state) => state.view.moderating);
 
   const [{isDragging}, drag] = useDrag({
-    type: noteIsStackParent ? "STACK" : "NOTE",
+    type: isStack ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: note!.position.column},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -49,12 +49,14 @@ export const Note = (props: NoteProps) => {
   }));
 
   const handleClick = () => {
+    if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
+      dispatch(Actions.shareNote(props.noteId));
+    }
     navigate(`stack/${props.noteId}`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      // handleShowDialog();
       navigate(`stack/${props.noteId}`);
     }
   };
@@ -70,7 +72,7 @@ export const Note = (props: NoteProps) => {
       >
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
-          {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
+          {(showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
               <UserAvatar id={note!.author} avatar={author!.user.avatar} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author!.user.name}</figcaption>
@@ -79,7 +81,7 @@ export const Note = (props: NoteProps) => {
           <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
         </div>
       </div>
-      {noteIsStackParent && <div className="note__in-stack" />}
+      {isStack && <div className="note__in-stack" />}
     </li>
   );
 };
