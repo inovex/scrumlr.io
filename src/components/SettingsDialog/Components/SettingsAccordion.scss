@@ -13,6 +13,10 @@
     border: none;
     justify-content: space-between;
     align-items: center;
+
+    &:hover > .accordion-item__header-icon {
+      filter: brightness(1.4);
+    }
   }
 
   &__header-icon {

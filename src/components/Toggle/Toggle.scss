@@ -28,7 +28,7 @@
   height: 24px;
   width: 24px;
   border-radius: 100%;
-  transition: all 0.08s linear;
+  transition: all 0.16s ease-out, transform 0.08s ease-out;
   top: 0;
 
   left: 0;
