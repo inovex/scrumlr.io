@@ -1,5 +1,6 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
+import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -73,16 +74,22 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           </button>
         </div>
 
-        <button
-          aria-label={t("BoardHeader.showParticipants")}
-          tabIndex={TabIndex.BoardHeader + 2}
-          aria-haspopup
-          aria-pressed={showParticipants}
-          className="board-header__users"
-          onClick={() => setShowParticipants(!showParticipants)}
-        >
-          <BoardUsers />
-        </button>
+        <div className="board-header__right">
+          <button
+            aria-label={t("BoardHeader.showParticipants")}
+            tabIndex={TabIndex.BoardHeader + 2}
+            aria-haspopup
+            aria-pressed={showParticipants}
+            className="board-header__users"
+            onClick={() => setShowParticipants(!showParticipants)}
+          >
+            <BoardUsers />
+          </button>
+
+          <button className="board-header__share-button" onClick={() => navigate("settings/share")} tabIndex={TabIndex.BoardHeader + 3}>
+            <ShareIcon />
+          </button>
+        </div>
 
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
         {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}

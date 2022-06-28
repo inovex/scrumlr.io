@@ -4,13 +4,19 @@
 .rest-users {
   box-sizing: border-box;
   height: 48px;
-  width: 48px;
   border-radius: 100px;
   display: inline-block;
   position: relative;
 }
 
-.rest-users,
+.user-avatar {
+  width: 48px;
+}
+
+.rest-users {
+  margin-left: $margin--default;
+}
+
 .user-avatar:not(:last-child) {
   margin-left: -5px;
 }
