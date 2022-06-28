@@ -112,6 +112,10 @@
   .user-avatar__raised-hand {
     color: $color-planning-pink;
   }
+
+  .user-avatar #Circle-Background {
+    stroke: $color-dark-one;
+  }
 }
 
 @keyframes draw {
