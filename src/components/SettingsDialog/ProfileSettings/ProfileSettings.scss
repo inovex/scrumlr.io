@@ -34,43 +34,4 @@
       flex: 0;
     }
   }
-
-  &__user-name-button {
-    justify-content: space-between;
-    cursor: text;
-
-    span {
-      cursor: inherit;
-    }
-
-    &_input {
-      background-color: transparent;
-      border: none;
-      padding: $padding--default $padding--medium $padding--default $padding--default;
-      font-weight: bold;
-      letter-spacing: $letter-spacing--medium;
-      font-size: $text-size--medium;
-      text-align: right;
-      max-width: 150px;
-      cursor: inherit;
-
-      &::placeholder {
-        font-weight: bold;
-        letter-spacing: $letter-spacing--medium;
-        font-size: $text-size--medium;
-        color: $color-black;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-}
-
-[theme="dark"] {
-  .profile-settings__user-name-button_input,
-  .profile-settings__user-name-button_input::placeholder {
-    color: $color-white;
-  }
 }

@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {useRef, useState} from "react";
+import {useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {SettingsButton} from "../Components/SettingsButton";
 import "./ProfileSettings.scss";
 import {AvatarSettings} from "../Components/AvatarSettings";
+import {SettingsInput} from "../Components/SettingsInput";
 
 export const ProfileSettings = () => {
   const {t} = useTranslation();
@@ -13,10 +13,8 @@ export const ProfileSettings = () => {
     participant: applicationState.participants!.self,
   }));
 
-  const [userName, setUserName] = useState<string | undefined>(state.participant?.user.name);
+  const [userName, setUserName] = useState<string>(state.participant?.user.name);
   const [id] = useState<string | undefined>(state.participant?.user.id);
-
-  const nameInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
@@ -25,16 +23,13 @@ export const ProfileSettings = () => {
       </header>
       <div className="profile-settings__container-wrapper">
         <div className="profile-settings__container">
-          <SettingsButton className="profile-settings__user-name-button" label={t("ProfileSettings.UserName")} onClick={() => nameInputRef.current?.focus()}>
-            <input
-              ref={nameInputRef}
-              className="profile-settings__user-name-button_input"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && state.participant && userName && store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
-              onBlur={() => state.participant && userName && store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
-            />
-          </SettingsButton>
+          <SettingsInput
+            id="profileSettingsUserName"
+            label={t("ProfileSettings.UserName")}
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            submit={() => store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
+          />
 
           <AvatarSettings id={id} />
         </div>
