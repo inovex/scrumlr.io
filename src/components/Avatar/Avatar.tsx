@@ -1,5 +1,6 @@
 import Avataar from "avataaars";
 import React from "react";
+import _ from "underscore";
 import "./Avatar.scss";
 import classNames from "classnames";
 import {getColorClassName, getColorForIndex} from "../../constants/colors";
@@ -145,5 +146,5 @@ export const Avatar = React.memo(
       />
     );
   },
-  (prev, next) => prev === next
+  (prev, next) => prev.seed === next.seed && _.isEqual(prev.avatar, next.avatar)
 );
