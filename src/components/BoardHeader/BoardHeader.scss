@@ -40,21 +40,15 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   margin: $margin--default auto 0;
 }
 
-.board-header__right {
+.board-header__users {
   position: absolute;
   right: 0;
   top: calc(24px - #{$board-header__hover-padding-top-bottom});
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.board-header__users {
   border-radius: 16px;
   padding: $board-header__hover-padding-top-bottom $padding--large $board-header__hover-padding-top-bottom $padding--large;
 
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
 
   background: none;
   border: none;
@@ -81,6 +75,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   border-radius: 100%;
   height: 41.14px;
   width: 41.14px;
+  margin-top: 5px;
+  margin-left: $margin--default;
   box-sizing: border-box;
   display: flex;
   justify-content: center;

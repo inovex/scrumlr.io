@@ -74,22 +74,27 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           </button>
         </div>
 
-        <div className="board-header__right">
-          <button
-            aria-label={t("BoardHeader.showParticipants")}
-            tabIndex={TabIndex.BoardHeader + 2}
-            aria-haspopup
-            aria-pressed={showParticipants}
-            className="board-header__users"
-            onClick={() => setShowParticipants(!showParticipants)}
-          >
-            <BoardUsers />
-          </button>
+        <button
+          aria-label={t("BoardHeader.showParticipants")}
+          tabIndex={TabIndex.BoardHeader + 2}
+          aria-haspopup
+          aria-pressed={showParticipants}
+          className="board-header__users"
+          onClick={() => setShowParticipants(!showParticipants)}
+        >
+          <BoardUsers />
 
-          <button className="board-header__share-button" onClick={() => navigate("settings/share")} tabIndex={TabIndex.BoardHeader + 3}>
+          <button
+            className="board-header__share-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate("settings/share");
+            }}
+            tabIndex={TabIndex.BoardHeader + 3}
+          >
             <ShareIcon />
           </button>
-        </div>
+        </button>
 
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
         {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
