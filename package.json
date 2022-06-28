@@ -71,7 +71,7 @@
     "eslint-plugin-css-modules": "^2.11.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "^26.5.3",
-    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-jsx-a11y": "6.6.0",
     "eslint-plugin-only-warn": "^1.0.3",
     "eslint-plugin-prettier": "^4.1.0",
     "eslint-plugin-react": "7.30.1",
