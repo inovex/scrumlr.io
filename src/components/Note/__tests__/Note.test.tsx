@@ -11,6 +11,7 @@ import * as reactRedux from "react-redux";
 import {ApplicationState} from "types";
 import {ViewState} from "types/view";
 import {BoardState} from "types/board";
+import getTestApplicationState from "utils/test/getTestApplicationState";
 
 const NOTE_ID = "test-notes-id-1";
 
@@ -28,11 +29,11 @@ const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<
   };
 };
 
-const createNote = (moderator: boolean, overwrite?: Partial<ApplicationState>) => {
+const createNote = (isModerator: boolean, overwrite?: Partial<ApplicationState>) => {
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={getTestStore(overwrite)}>
-      <NoteContext key={NOTE_ID} noteId={NOTE_ID} viewer={getTestParticipant(moderator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})} />
+      <NoteContext key={NOTE_ID} noteId={NOTE_ID} viewer={getTestParticipant(isModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})} />
     </Provider>
   );
 };
@@ -48,6 +49,15 @@ describe("Note", () => {
     );
   });
 
+  describe("content", () => {
+    it("should display the text content of the note", () => {
+      const note = getTestApplicationState().notes.find((n) => n.id === NOTE_ID);
+      expect(note).toBeDefined();
+      const {container} = render(createNote(false));
+      expect(container.firstChild).toHaveTextContent(note!.text);
+    });
+  });
+
   describe("author information", () => {
     it("should be displayed on enabled author visibility", () => {
       const board = createBoardData({showAuthors: true});
@@ -58,6 +68,13 @@ describe("Note", () => {
       const board = createBoardData({showAuthors: false});
       const {container} = render(createNote(false, {board: board}));
       expect(container.firstChild).not.toContainHTML("figure");
+    });
+  });
+
+  describe("votes", () => {
+    it("should contain votes container element", () => {
+      const {container} = render(createNote(false));
+      expect(container.getElementsByClassName("votes").length).toBeGreaterThan(0);
     });
   });
 
