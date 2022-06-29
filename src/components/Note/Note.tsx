@@ -11,6 +11,7 @@ import {useDispatch} from "react-redux";
 import _ from "underscore";
 import {Participant} from "types/participant";
 import {useAppSelector} from "store";
+import {useTranslation} from "react-i18next";
 
 interface NoteProps {
   noteId: string;
@@ -25,6 +26,7 @@ interface NoteProps {
 }
 
 export const Note = (props: NoteProps) => {
+  const {t} = useTranslation();
   const noteRef = useRef<HTMLLIElement>(null);
   const dispatch = useDispatch();
 
@@ -36,11 +38,13 @@ export const Note = (props: NoteProps) => {
         .filter((n) => n.position.stack === note?.id)
         .map((n) => ({
           ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? state.participants?.self.user.name ?? "",
+          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me") ?? "",
         })),
     _.isEqual
   );
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+
   const [showDialog, setShowDialog] = React.useState(noteIsShared);
 
   const handleShowDialog = () => {
@@ -121,8 +125,8 @@ export const Note = (props: NoteProps) => {
         <div className="note__footer">
           {(props.showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{author!.user.name}</figcaption>
+              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{authorName}</figcaption>
             </figure>
           )}
           <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
@@ -132,7 +136,7 @@ export const Note = (props: NoteProps) => {
             {...props}
             text={note!.text}
             authorId={note!.author}
-            authorName={author!.user.name}
+            authorName={authorName}
             childrenNotes={childrenNotes}
             onClose={handleShowDialog}
             onDeleteOfParent={() => setShowDialog(false)}
