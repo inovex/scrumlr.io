@@ -3,6 +3,7 @@ import {Portal} from "components/Portal";
 import {Color, getColorClassName} from "constants/colors";
 import {Note as NoteModel} from "types/note";
 import "./NoteDialog.scss";
+import {AvataaarProps} from "components/Avatar";
 import {NoteDialogComponents} from "./NoteDialogComponents";
 import {Participant} from "../../types/participant";
 
@@ -10,6 +11,7 @@ interface NoteDialogProps {
   noteId?: string;
   text: string;
   authorId: string;
+  avatar?: AvataaarProps;
   columnName: string;
   columnColor: string;
   columnVisible: boolean;
