@@ -30,25 +30,23 @@ export const Note = (props: NoteProps) => {
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
 
-  if (!note) {
-    return null;
-  }
-
+  /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId)) {
-      navigate(`stack/${note.id}`);
+      navigate(`stack/${note!.id}`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId)) {
-        navigate(`stack/${note.id}`);
+        navigate(`stack/${note!.id}`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
-        navigate(`.`);
-      }
+      navigate(`.`);
+    }
   }, [isShared]);
+  /* eslint-enable */
 
   const [{isDragging}, drag] = useDrag({
     type: isStack ? "STACK" : "NOTE",

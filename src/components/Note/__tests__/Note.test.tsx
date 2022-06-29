@@ -62,7 +62,7 @@ describe("Note", () => {
   });
 
   describe("side effects", () => {
-    it("should share note on active moderation", () => {
+    it("should share note during active moderation on click", () => {
       const dispatchSpy = jest.fn();
       jest.spyOn(reactRedux, "useDispatch").mockImplementationOnce(() => dispatchSpy);
       const view: ViewState = {

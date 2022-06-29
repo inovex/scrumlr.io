@@ -14,8 +14,8 @@ export const StackView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const note = useAppSelector((state) => state.notes.find((note) => note.id === noteId));
-  const column = useAppSelector((state) => state.columns.find((column) => column.id === note?.position.column));
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
+  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const authorName = useAppSelector(
     (state) => state.participants?.others.find((participant) => participant.user.id === note?.author)?.user.name ?? state.participants?.self.user.name ?? ""
   );
@@ -66,8 +66,8 @@ export const StackView = () => {
         <NoteDialogComponents.Header columnName={props.columnName} />
         <NoteDialogComponents.Wrapper>
           <NoteDialogComponents.Note {...props} showUnstackButton={false} />
-          {props.childrenNotes.map((note) => (
-            <NoteDialogComponents.Note {...props} {...note} parentId={props.noteId} key={note.id} showUnstackButton noteId={note.id} authorId={note.author} />
+          {props.childrenNotes.map((n) => (
+            <NoteDialogComponents.Note {...props} {...note} parentId={props.noteId} key={n.id} showUnstackButton noteId={n.id} authorId={n.author} />
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
