@@ -14,6 +14,7 @@ export const StackView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const viewer = useAppSelector((state) => state.participants!.self);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
@@ -24,11 +25,10 @@ export const StackView = () => {
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? state.participants?.self.user.name ?? "",
-          avatar: state.participants?.others.find((p) => p.user.id === n.author)?.user.avatar ?? state.participants?.self.user.avatar,
+          avatar: viewer.user.id !== n.author ? state.participants?.others.find((p) => p.user.id === n.author)?.user.avatar : state.participants?.self.user.avatar,
         })),
     _.isEqual
   );
-  const viewer = useAppSelector((state) => state.participants!.self);
   const moderating = useAppSelector((state) => state.view.moderating);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true);
 
