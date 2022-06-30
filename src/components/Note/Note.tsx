@@ -133,6 +133,7 @@ export const Note = (props: NoteProps) => {
             text={note!.text}
             authorId={note!.author}
             authorName={author!.user.name}
+            avatar={author!.user.avatar}
             childrenNotes={childrenNotes}
             onClose={handleShowDialog}
             onDeleteOfParent={() => setShowDialog(false)}
