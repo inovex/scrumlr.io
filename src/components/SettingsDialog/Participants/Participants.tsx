@@ -27,7 +27,7 @@ export const Participants = () => {
           <div className="participants__user-list">
             <SettingsButton className="participants__user" disabled>
               <div className="participants__user_avatar-name-wrapper">
-                <Avatar className="participants__user_avatar" seed={state.me.user.id} />
+                <Avatar className="participants__user_avatar" avatar={state.me.user.avatar} seed={state.me.user.id} />
                 <span className="participants__user-name">
                   {state.me.user.name} {state.me.role === "OWNER" && `(${t("Participants.Owner")})`}
                 </span>
@@ -45,7 +45,7 @@ export const Participants = () => {
                     onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
                   >
                     <div className="participants__user_avatar-name-wrapper">
-                      <Avatar className="participants__user_avatar" seed={participant.user.id} />
+                      <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
                       <span className="participants__user-name">
                         {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
                       </span>

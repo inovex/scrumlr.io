@@ -16,9 +16,7 @@ export const StackView = () => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
-  const authorName = useAppSelector(
-    (state) => state.participants?.others.find((participant) => participant.user.id === note?.author)?.user.name ?? state.participants?.self.user.name ?? ""
-  );
+  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -26,6 +24,7 @@ export const StackView = () => {
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? state.participants?.self.user.name ?? "",
+          avatar: state.participants?.others.find((p) => p.user.id === n.author)?.user.avatar ?? state.participants?.self.user.avatar,
         })),
     _.isEqual
   );
@@ -52,7 +51,8 @@ export const StackView = () => {
     columnColor: column!.color,
     columnVisible: column!.visible,
     childrenNotes: stackedNotes,
-    authorName,
+    authorName: author!.user.name,
+    avatar: author!.user.avatar,
     showAuthors,
     viewer,
     moderating,
@@ -67,7 +67,7 @@ export const StackView = () => {
         <NoteDialogComponents.Wrapper>
           <NoteDialogComponents.Note {...props} showUnstackButton={false} />
           {props.childrenNotes.map((n) => (
-            <NoteDialogComponents.Note {...props} {...note} parentId={props.noteId} key={n.id} showUnstackButton noteId={n.id} authorId={n.author} />
+            <NoteDialogComponents.Note {...props} {...note} avatar={n.avatar} parentId={props.noteId} key={n.id} showUnstackButton noteId={n.id} authorId={n.author} />
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
