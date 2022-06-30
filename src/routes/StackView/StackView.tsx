@@ -43,31 +43,39 @@ export const StackView = () => {
     navigate(`/board/${boardId}`);
   };
 
-  const props = {
-    noteId,
-    text: note!.text,
-    authorId: note!.author,
-    columnName: column!.name,
-    columnColor: column!.color,
-    columnVisible: column!.visible,
-    childrenNotes: stackedNotes,
-    authorName: author!.user.name,
-    avatar: author!.user.avatar,
-    showAuthors,
-    viewer,
-    moderating,
-    onClose: handleClose,
-    onDeleteOfParent: handleClose,
-  };
-
   return (
     <Portal onClose={handleClose} className="stack-view__portal" hiddenOverflow centered disabledPadding>
-      <div className={classNames("stack-view", getColorClassName(props.columnColor as Color))}>
-        <NoteDialogComponents.Header columnName={props.columnName} />
+      <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
+        <NoteDialogComponents.Header columnName={column!.name} />
         <NoteDialogComponents.Wrapper>
-          <NoteDialogComponents.Note {...props} showUnstackButton={false} />
-          {props.childrenNotes.map((n) => (
-            <NoteDialogComponents.Note {...props} {...note} avatar={n.avatar} parentId={props.noteId} key={n.id} showUnstackButton noteId={n.id} authorId={n.author} />
+          <NoteDialogComponents.Note
+            key={noteId}
+            noteId={noteId}
+            text={note!.text}
+            authorId={note!.author}
+            avatar={author!.user.avatar}
+            authorName={author!.user.name}
+            showAuthors={showAuthors}
+            onClose={handleClose}
+            onDeleteOfParent={handleClose}
+            showUnstackButton={false}
+            viewer={viewer}
+          />
+          {stackedNotes.map((n) => (
+            <NoteDialogComponents.Note
+              key={n.id}
+              noteId={n.id}
+              parentId={noteId}
+              text={n.text}
+              authorId={n.author}
+              avatar={n.avatar}
+              authorName={n.authorName}
+              showAuthors={showAuthors}
+              onClose={handleClose}
+              onDeleteOfParent={handleClose}
+              showUnstackButton
+              viewer={viewer}
+            />
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
