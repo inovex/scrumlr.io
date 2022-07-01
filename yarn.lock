@@ -4311,10 +4311,10 @@ encodeurl@~1.0.2:
   resolved "https://registry.yarnpkg.com/encodeurl/-/encodeurl-1.0.2.tgz#ad3ff4c86ec2d029322f5a02c3a9a606c95b3f59"
   integrity sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=
 
-enhanced-resolve@^5.9.2, enhanced-resolve@^5.9.3:
-  version "5.9.3"
-  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.9.3.tgz#44a342c012cbc473254af5cc6ae20ebd0aae5d88"
-  integrity sha512-Bq9VSor+kjvW3f9/MiiR4eE3XYgOl7/rS8lnSxbRbF3kS0B2r+Y9w5krBWxZgDxASVZbdYrn5wT4j/Wb0J9qow==
+enhanced-resolve@^5.10.0, enhanced-resolve@^5.9.2:
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.10.0.tgz#0dc579c3bb2a1032e357ac45b8f3a6f3ad4fb1e6"
+  integrity sha512-T0yTFjdpldGY8PmuXXR0PyQ1ufZpEGiHVrp7zHKB7jdR4qlmZHhONVM5AQOAWXuF/w3dnHbEQVrNptJgt7F+cQ==
   dependencies:
     graceful-fs "^4.2.4"
     tapable "^2.2.0"
@@ -4510,14 +4510,14 @@ eslint-import-resolver-node@^0.3.6:
     debug "^3.2.7"
     resolve "^1.20.0"
 
-eslint-import-resolver-typescript@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.1.1.tgz#9a3e4b9260a39608b7e42fd12190f19f9913fcc3"
-  integrity sha512-rnC7s69VAXeg3RVhPIhiX8M/fHiPaDyK8zqw8wUDYy34weWQcfyvN5sw/74HhGKiv/teD+BF8bQMZthoyrWTvA==
+eslint-import-resolver-typescript@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/eslint-import-resolver-typescript/-/eslint-import-resolver-typescript-3.1.3.tgz#ffb2014469184d64ff5ee4cb5b944d9115838fb4"
+  integrity sha512-u7YJAWmgJlpwvKsEl0khVJdRsdLNfReL2Sc8hrc21iEEVEOTKH0Ea3nUtfdlhHuQieJ7lFpOJd0LbDaWpb3+RA==
   dependencies:
     debug "^4.3.4"
-    enhanced-resolve "^5.9.3"
-    get-tsconfig "^4.0.6"
+    enhanced-resolve "^5.10.0"
+    get-tsconfig "^4.1.0"
     globby "^13.1.2"
     is-core-module "^2.9.0"
     is-glob "^4.0.3"
@@ -5190,10 +5190,10 @@ get-symbol-description@^1.0.0:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
-get-tsconfig@^4.0.6:
-  version "4.0.7"
-  resolved "https://registry.yarnpkg.com/get-tsconfig/-/get-tsconfig-4.0.7.tgz#fa6314dfdd43f693605379e9f4717332d5f93e46"
-  integrity sha512-hI0ikvRti9TmxszXtfRaVxSU0yQ2HJK03MU14dG/exX/RrELbMTYJW0xOzGR6c2FsddZ3eZHZxDotEIPOw4D+A==
+get-tsconfig@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/get-tsconfig/-/get-tsconfig-4.1.0.tgz#325fd5a58ee94596037263ce8b7db0ce8ac7b925"
+  integrity sha512-bhshxJhpfmeQ8x4fAvDqJV2VfGp5TfHdLpmBpNZZhMoVyfIrOippBW4mayC3DT9Sxuhcyl56Efw61qL28hG4EQ==
 
 glob-all@^3.0.3:
   version "3.3.0"
