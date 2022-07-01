@@ -5,7 +5,6 @@ import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
-import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {useTranslation} from "react-i18next";
 import {TabIndex} from "constants/tabIndex";
 import {Actions} from "store/action";
@@ -32,7 +31,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState(false);
-  const [showParticipants, setShowParticipants] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
   return (
@@ -74,14 +72,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           </button>
         </div>
 
-        <button
-          aria-label={t("BoardHeader.showParticipants")}
-          tabIndex={TabIndex.BoardHeader + 2}
-          aria-haspopup
-          aria-pressed={showParticipants}
-          className="board-header__users"
-          onClick={() => setShowParticipants(!showParticipants)}
-        >
+        <div className="board-header__users">
           <BoardUsers />
 
           <button
@@ -94,12 +85,10 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           >
             <ShareIcon />
           </button>
-        </button>
+        </div>
 
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
         {/* Only render the participants if the users have loaded (this reduces unnecessary rerendering)  */}
-
-        <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
       </header>
     </>
   );

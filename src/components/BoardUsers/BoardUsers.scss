@@ -6,8 +6,6 @@
   display: flex;
   flex-direction: row-reverse;
   width: max-content;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
   padding: 0;
   margin: 0;
 }
@@ -17,9 +15,18 @@
 }
 
 .board-users__other-avatars {
-  display: contents;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: row-reverse;
 
-  & > * {
+  cursor: pointer;
+  padding-left: $padding--default;
+  border-radius: 16px;
+
+  & .user-avatar,
+  & .rest-users {
     transition: all 0.08s ease-out;
   }
 
@@ -29,10 +36,14 @@
       background-color: $color-backlog-blue;
       transform: scale(1.16);
     }
-    & > :not(.rest-users) {
+    & .user-avatar {
       filter: brightness(1.1);
       transform: scale(1.08);
     }
+  }
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue;
   }
 
   &:active {
@@ -43,9 +54,25 @@
   }
 }
 
+.board-users__my-avatar {
+  display: contents;
+  margin-left: $margin--small;
+
+  & > button {
+    border: none;
+    background: none;
+    border-radius: 16px;
+    cursor: pointer;
+
+    &:focus {
+      outline: 2px solid $color-backlog-blue;
+    }
+  }
+}
+
 .board-users__my-avatar .user-avatar {
-  margin-left: $margin--default;
   transition: all 0.08s ease-out;
+  margin: 0;
 
   &:hover {
     filter: brightness(1.1);
@@ -80,5 +107,13 @@
 [theme="dark"] {
   .board-users__other-avatars:hover > .rest-users {
     background-color: $color-planning-pink;
+  }
+
+  .board-users__other-avatars:focus {
+    outline: 2px solid $color-planning-pink;
+  }
+
+  .board-users__my-avatar > button:focus {
+    outline: 2px solid $color-planning-pink;
   }
 }

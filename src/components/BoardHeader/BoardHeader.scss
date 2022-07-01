@@ -48,6 +48,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
   display: flex;
   flex-direction: row;
+  align-items: center;
 
   background: none;
   border: none;
@@ -56,11 +57,12 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header__share-button {
   color: $color-backlog-blue;
+  outline: none;
   border: 2px solid $color-backlog-blue;
   border-radius: 100%;
   height: 41.14px;
   width: 41.14px;
-  margin-top: 5px;
+  margin-top: 3px;
   margin-left: $margin--default;
   box-sizing: border-box;
   display: flex;
@@ -71,10 +73,14 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   background: none;
   cursor: pointer;
 
-  &:hover {
-    transform: scale(1.16);
+  &:hover,
+  &:focus {
     color: $color-white;
     background: $color-backlog-blue;
+  }
+
+  &:hover {
+    transform: scale(1.16);
   }
 
   &:active {
@@ -87,7 +93,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
     color: $color-white;
     border: 2px solid $color-planning-pink;
 
-    &:hover {
+    &:hover,
+    &:focus {
       background: $color-planning-pink;
     }
   }
