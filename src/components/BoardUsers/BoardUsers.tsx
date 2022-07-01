@@ -43,24 +43,27 @@ export const BoardUsers = () => {
 
   return (
     <ul className="board-users">
-      {them.length > usersToShow.length && (
-        <li className="rest-users">
-          <div className="rest-users__count">{them.length - usersToShow.length}</div>
-        </li>
-      )}
-      {usersToShow.map((participant) => (
-        <li key={participant.user.id}>
-          <UserAvatar id={participant.user.id} avatar={participant.user.avatar} ready={participant.ready} raisedHand={participant.raisedHand} name={participant.user.name} />
-        </li>
-      ))}
+      <div className="board-users__other-avatars">
+        {true && (
+          <li className="rest-users">
+            <div className="rest-users__count">18</div>
+          </li>
+        )}
+        {usersToShow.map((participant) => (
+          <li key={participant.user.id}>
+            <UserAvatar id={participant.user.id} avatar={participant.user.avatar} ready={participant.ready} raisedHand={participant.raisedHand} name={participant.user.name} />
+          </li>
+        ))}
+      </div>
       {!!me && (
         <li
+          className="board-users__my-avatar"
           onClick={(e) => {
             e.stopPropagation();
             navigate("settings/profile");
           }}
         >
-          <UserAvatar className="board-users__my-avatar" id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
         </li>
       )}
     </ul>

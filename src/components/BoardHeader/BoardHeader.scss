@@ -42,10 +42,9 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header__users {
   position: absolute;
-  right: 0;
+  right: $margin--large;
   top: calc(24px - #{$board-header__hover-padding-top-bottom});
-  border-radius: 16px;
-  padding: $board-header__hover-padding-top-bottom $padding--large $board-header__hover-padding-top-bottom $padding--large;
+  padding: $board-header__hover-padding-top-bottom $padding--small;
 
   display: flex;
   flex-direction: row;
@@ -53,20 +52,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   background: none;
   border: none;
   outline: none;
-
-  cursor: pointer;
-}
-
-.board-header__users:focus,
-.board-header__users:hover {
-  background-color: rgba(0, 87, 255, 0.06);
-}
-
-[theme="dark"] {
-  .board-header__users:focus,
-  .board-header__users:hover {
-    background-color: rgba(255, 0, 105, 0.15);
-  }
 }
 
 .board-header__share-button {

@@ -16,8 +16,39 @@
   display: inline;
 }
 
+.board-users__other-avatars {
+  display: contents;
+
+  & > * {
+    transition: all 0.08s ease-out;
+  }
+
+  &:hover {
+    & > * {
+      filter: brightness(1.1);
+      transform: scale(1.04);
+    }
+  }
+
+  &:active {
+    & > * {
+      transform: scale(1);
+    }
+  }
+}
+
 .board-users__my-avatar {
   margin-right: $margin--default;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.1);
+    transform: scale(1.04);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
 @media screen and (max-width: 768px) {
