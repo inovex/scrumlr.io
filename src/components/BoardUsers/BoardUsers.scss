@@ -24,26 +24,32 @@
   }
 
   &:hover {
-    & > * {
+    & > .rest-users {
+      color: $color-white;
+      background-color: $color-backlog-blue;
+      transform: scale(1.16);
+    }
+    & > :not(.rest-users) {
       filter: brightness(1.1);
-      transform: scale(1.04);
+      transform: scale(1.08);
     }
   }
 
   &:active {
-    & > * {
+    & > .rest-users,
+    & > :not(.rest-users) {
       transform: scale(1);
     }
   }
 }
 
-.board-users__my-avatar {
-  margin-right: $margin--default;
+.board-users__my-avatar .user-avatar {
+  margin-left: $margin--default;
   transition: all 0.08s ease-out;
 
   &:hover {
     filter: brightness(1.1);
-    transform: scale(1.04);
+    transform: scale(1.08);
   }
 
   &:active {
@@ -68,5 +74,11 @@
 
   .board-users__my-avatar {
     margin-right: 0;
+  }
+}
+
+[theme="dark"] {
+  .board-users__other-avatars:hover > .rest-users {
+    background-color: $color-planning-pink;
   }
 }

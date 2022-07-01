@@ -43,6 +43,17 @@ export const BoardUsers = () => {
 
   return (
     <ul className="board-users">
+      {!!me && (
+        <li
+          className="board-users__my-avatar"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("settings/profile");
+          }}
+        >
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
+        </li>
+      )}
       <div className="board-users__other-avatars">
         {them.length > usersToShow.length && (
           <li className="rest-users">
@@ -55,17 +66,6 @@ export const BoardUsers = () => {
           </li>
         ))}
       </div>
-      {!!me && (
-        <li
-          className="board-users__my-avatar"
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate("settings/profile");
-          }}
-        >
-          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
-        </li>
-      )}
     </ul>
   );
 };

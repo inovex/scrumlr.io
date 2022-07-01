@@ -61,7 +61,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   height: 41.14px;
   width: 41.14px;
   margin-top: 5px;
-  margin-left: $margin--small;
+  margin-left: $margin--default;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -72,8 +72,9 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   cursor: pointer;
 
   &:hover {
-    filter: brightness(1.4);
-    transform: scale(1.04);
+    transform: scale(1.16);
+    color: $color-white;
+    background: $color-backlog-blue;
   }
 
   &:active {
@@ -83,8 +84,12 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 [theme="dark"] {
   .board-header__share-button {
-    color: $color-planning-pink;
+    color: $color-white;
     border: 2px solid $color-planning-pink;
+
+    &:hover {
+      background: $color-planning-pink;
+    }
   }
 }
 

@@ -105,8 +105,9 @@
 
 [theme="dark"] {
   .user__initials,
-  .rest-users__count {
+  .rest-users {
     color: $color-white;
+    border-color: $color-planning-pink;
     font-weight: bold;
   }
   .user-avatar__raised-hand {
