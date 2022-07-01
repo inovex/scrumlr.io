@@ -1,6 +1,7 @@
 import "./BoardUsers.scss";
 import {useAppSelector} from "store";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {
@@ -13,6 +14,7 @@ const getWindowDimensions = () => {
 
 export const BoardUsers = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleResize() {
@@ -51,7 +53,16 @@ export const BoardUsers = () => {
           <UserAvatar id={participant.user.id} avatar={participant.user.avatar} ready={participant.ready} raisedHand={participant.raisedHand} name={participant.user.name} />
         </li>
       ))}
-      {!!me && <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />}
+      {!!me && (
+        <li
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("settings/profile");
+          }}
+        >
+          <UserAvatar className="board-users__my-avatar" id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
+        </li>
+      )}
     </ul>
   );
 };

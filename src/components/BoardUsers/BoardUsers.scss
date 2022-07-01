@@ -16,6 +16,10 @@
   display: inline;
 }
 
+.board-users__my-avatar {
+  margin-right: $margin--default;
+}
+
 @media screen and (max-width: 768px) {
   .board-users {
     margin-right: $margin--small;
