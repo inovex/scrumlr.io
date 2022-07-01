@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {useParams, useNavigate} from "react-router";
 import _ from "underscore";
 import {Color, getColorClassName} from "constants/colors";
-import {NoteDialogComponents} from "components/NoteDialog/NoteDialogComponents";
+import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
