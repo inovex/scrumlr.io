@@ -44,9 +44,9 @@ export const BoardUsers = () => {
   return (
     <ul className="board-users">
       <div className="board-users__other-avatars">
-        {true && (
+        {them.length > usersToShow.length && (
           <li className="rest-users">
-            <div className="rest-users__count">18</div>
+            <div className="rest-users__count">{them.length - usersToShow.length}</div>
           </li>
         )}
         {usersToShow.map((participant) => (

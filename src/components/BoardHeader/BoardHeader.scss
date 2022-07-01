@@ -181,7 +181,15 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 }
 
 @media #{$smartphone} {
+  .board-header__users {
+    right: 0;
+  }
+
   .board-header__share-button {
     display: none;
+  }
+
+  .board-header__link {
+    padding: 5px $padding--small;
   }
 }

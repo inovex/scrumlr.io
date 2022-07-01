@@ -58,7 +58,15 @@
 }
 
 @media screen and (max-width: 500px) {
-  .board-users li:not(:last-child) {
+  .board-users {
+    margin-right: 0;
+  }
+
+  .board-users__other-avatars {
     display: none;
+  }
+
+  .board-users__my-avatar {
+    margin-right: 0;
   }
 }
