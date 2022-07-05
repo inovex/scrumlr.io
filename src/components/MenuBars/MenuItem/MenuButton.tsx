@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import {TabIndex} from "constants/tabIndex";
-import {useState} from "react";
 import "./MenuItem.scss";
 
 type MenuButtonProps = {
@@ -13,31 +12,13 @@ type MenuButtonProps = {
 };
 
 export const MenuButton = (props: MenuButtonProps) => {
-  const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
   return (
     <button
       disabled={props.disabled}
-      className={classNames(`menu-item menu-item--${props.direction}`, {"menu-item--touch-hover": touchHover})}
+      className={classNames(`menu-item menu-item--${props.direction}`)}
       onClick={() => props.onClick()}
-      onTouchEnd={(e) => {
-        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
-          e.preventDefault();
-          window.addEventListener("click", () => setTouchHover(false), {once: true});
-          setTouchHover(true);
-        }
-        if (touchHover) {
-          e.preventDefault();
-          setTouchHover(false);
-          props.onClick();
-        }
-      }}
-      onBlur={() => {
-        if (touchHover) {
-          setTouchHover(false);
-        }
-      }}
       tabIndex={props.tabIndex ?? TabIndex.default}
       aria-label={props.label}
     >

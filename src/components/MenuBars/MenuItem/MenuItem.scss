@@ -52,6 +52,7 @@ $number-of-menu-items: 4;
   max-width: 0;
   height: 36px;
   border-radius: 16px;
+  user-select: none;
 }
 
 .tooltip__text {
@@ -109,18 +110,6 @@ $number-of-menu-items: 4;
 }
 
 .menu-item__icon--end {
-  visibility: hidden;
-}
-
-.menu-item--active.menu-item--touch-hover > .menu-item__icon--end,
-.menu-item--active:enabled:hover > .menu-item__icon--end,
-.menu-item--active:enabled:active > .menu-item__icon--end {
-  visibility: visible;
-}
-
-.menu-item--active.menu-item--touch-hover > .menu-item__icon--start,
-.menu-item--active:enabled:hover > .menu-item__icon--start,
-.menu-item--active:enabled:active > .menu-item__icon--start {
   visibility: hidden;
 }
 

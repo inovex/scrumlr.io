@@ -34,6 +34,7 @@
 
 .board__spacer-left {
   @include inset-border($top: true, $left: true, $bottom: true);
+  user-select: none;
 }
 .board__spacer-right {
   @include inset-border($top: true, $right: true, $bottom: true);
