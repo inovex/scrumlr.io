@@ -18,6 +18,7 @@ import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import RouteChangeObserver from "./RouteChangeObserver";
+import PrintView from "../components/SettingsDialog/ExportBoard/PrintView/PrintView";
 
 const Router = () => (
   <BrowserRouter>
@@ -44,6 +45,7 @@ const Router = () => (
           </RequireAuthentication>
         }
       >
+        <Route path="print" element={<PrintView />} />
         <Route path="settings" element={<SettingsDialog />}>
           <Route path="board" element={<BoardSettings />} />
           <Route path="participants" element={<Participants />} />

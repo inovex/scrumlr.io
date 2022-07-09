@@ -1,0 +1,67 @@
+@import "src/constants/style.scss";
+
+$note__border-radius: 16px;
+$note__box-shadow-color: rgba(0, 87, 255, 0.16);
+
+.print-view__portal {
+  background-color: cyan;
+}
+
+.print-view__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightcoral;
+  overflow: visible;
+  width: 870px;
+}
+
+.print-view__column-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.print-view__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 25px;
+  width: 100%;
+  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  background-color: $color-white;
+  color: $color-black;
+}
+
+.print-view__column-header-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 $padding--small;
+  margin: $margin--small 0 $margin--default 0;
+}
+
+.print-view__column-header-text {
+  font-size: $text-size--large;
+  margin: 0;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--large;
+  color: $color-black;
+  border-bottom: solid 3px $color-backlog-blue;
+}
+
+.print-view__column-header-card-count {
+  font-size: $text-size--medium;
+  color: $color-darker-gray;
+}
+
+.print-view__note {
+  width: 95%;
+  margin-bottom: 5px;
+  border: 1px solid $color-black;
+  border-radius: $note__border-radius;
+}
