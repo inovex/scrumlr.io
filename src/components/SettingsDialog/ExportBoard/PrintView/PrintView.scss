@@ -4,16 +4,41 @@ $note__border-radius: 16px;
 $note__box-shadow-color: rgba(0, 87, 255, 0.16);
 
 .print-view__portal {
-  background-color: cyan;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
 }
 
 .print-view__container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: lightcoral;
+  background-color: cyan;
   overflow: visible;
   width: 870px;
+  padding: $padding--large;
+}
+
+.print-view__title-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $margin--large;
+}
+
+.print-view__title-text {
+  color: $color-black;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--large;
+  line-height: 40px;
+  margin: 0;
+}
+
+.print-view__title-date {
+  font-size: $text-size--medium;
+  color: $color-black;
 }
 
 .print-view__column-list {
@@ -21,6 +46,7 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
   flex-direction: column;
   align-items: center;
   width: 100%;
+  gap: $margin--default;
 }
 
 .print-view__column {
@@ -28,7 +54,6 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-top: 25px;
   width: 100%;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   background-color: $color-white;

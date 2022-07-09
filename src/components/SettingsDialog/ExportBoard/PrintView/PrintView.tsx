@@ -5,6 +5,7 @@ import {Portal} from "components/Portal";
 import {useNavigate} from "react-router";
 import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
+import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 
 interface BoardData {
   board: {
@@ -50,10 +51,21 @@ const PrintView = () => {
     getBoardData();
   }, []);
 
+  const currDate = new Date();
+  const currDateStr = `${String(currDate.getDate()).padStart(2, "0")}.${String(currDate.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}.${currDate.getFullYear()}, ${currDate.getHours()}:${currDate.getMinutes()}`;
+
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
       <button onClick={handlePrint}>PRINT</button>
       <div ref={printRef} className="print-view__container">
+        <div className="print-view__title-wrapper">
+          <ScrumlrLogo />
+          <h1 className="print-view__title-text">{boardData?.board.name ?? "Scrumlr.io"}</h1>
+          <div className="print-view__title-date">{currDateStr}</div>
+        </div>
         <div className="print-view__column-list">
           {boardData &&
             boardData.columns?.map((c) => (
