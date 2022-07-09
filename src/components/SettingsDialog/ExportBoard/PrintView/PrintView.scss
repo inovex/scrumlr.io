@@ -2,6 +2,7 @@
 
 $note__border-radius: 16px;
 $note__box-shadow-color: rgba(0, 87, 255, 0.16);
+$color-backlog-blue-transparent: rgba(0, 87, 255, 0.3);
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -12,7 +13,7 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: cyan;
+  background-color: $color-white;
   overflow: visible;
   width: 870px;
   padding: $padding--large;
@@ -55,7 +56,6 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   background-color: $color-white;
   color: $color-black;
 }
@@ -65,7 +65,7 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 $padding--small;
+  padding: 0;
   margin: $margin--small 0 $margin--default 0;
 }
 
@@ -85,8 +85,9 @@ $note__box-shadow-color: rgba(0, 87, 255, 0.16);
 }
 
 .print-view__note {
-  width: 95%;
-  margin-bottom: 5px;
-  border: 1px solid $color-black;
+  width: 100%;
+  margin-bottom: $margin--small;
+  padding: $padding--small;
+  border: 2px solid $color-backlog-blue-transparent;
   border-radius: $note__border-radius;
 }

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router";
 import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
+import {useTranslation} from "react-i18next";
 
 interface BoardData {
   board: {
@@ -28,12 +29,21 @@ interface BoardData {
       };
     }
   ];
+  participants: [
+    {
+      role: string;
+    }
+  ];
 }
 
 const PrintView = () => {
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  const [boardData, setBoardData] = useState<BoardData>();
+
+  const {t} = useTranslation();
   const navigate = useNavigate();
+
+  const [boardData, setBoardData] = useState<BoardData>();
+
   const printRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -44,6 +54,7 @@ const PrintView = () => {
     const json = await response.json();
     setBoardData(json);
   };
+  console.log(boardData);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -52,10 +63,9 @@ const PrintView = () => {
   }, []);
 
   const currDate = new Date();
-  const currDateStr = `${String(currDate.getDate()).padStart(2, "0")}.${String(currDate.getMonth() + 1).padStart(
-    2,
-    "0"
-  )}.${currDate.getFullYear()}, ${currDate.getHours()}:${currDate.getMinutes()}`;
+  const currDateStr = `${String(currDate.getDate()).padStart(2, "0")}.${String(currDate.getMonth() + 1).padStart(2, "0")}.${currDate.getFullYear()}, ${String(
+    currDate.getHours()
+  ).padStart(2, "0")}:${String(currDate.getMinutes()).padStart(2, "0")}`;
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
@@ -64,7 +74,10 @@ const PrintView = () => {
         <div className="print-view__title-wrapper">
           <ScrumlrLogo />
           <h1 className="print-view__title-text">{boardData?.board.name ?? "Scrumlr.io"}</h1>
-          <div className="print-view__title-date">{currDateStr}</div>
+          <div className="print-view__title-info">
+            <div className="print-view__title-date">{currDateStr}</div>
+            <div className="print-view__title-participant-count">{`${boardData?.participants.length} ${t("SettingsDialog.Participants")}`}</div>
+          </div>
         </div>
         <div className="print-view__column-list">
           {boardData &&
