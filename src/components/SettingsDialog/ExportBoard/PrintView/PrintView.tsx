@@ -87,7 +87,9 @@ const PrintView = () => {
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
-      <button onClick={handlePrint}>PRINT</button>
+      <button className="print-view__print-button" onClick={handlePrint}>
+        PRINT
+      </button>
       <div ref={printRef} className="print-view__container">
         <div className="print-view__title-wrapper">
           <ScrumlrLogo />

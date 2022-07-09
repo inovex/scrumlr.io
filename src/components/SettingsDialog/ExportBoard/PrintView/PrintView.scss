@@ -1,12 +1,32 @@
 @import "src/constants/style.scss";
 
 $note__border-radius: 16px;
+$border-radius--round: 50px;
 
 $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
+}
+
+.print-view__print-button {
+  background: $color-white;
+  border: solid 1px $color-white;
+  border-radius: $border-radius--round;
+  margin: $margin--small;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 4px $padding--small;
+
+  &:hover {
+    background: $color-light-gray;
+    border: solid 1px $color-middle-gray;
+  }
+  &:active {
+    background: $color-middle-gray;
+  }
 }
 
 .print-view__container {
@@ -70,7 +90,7 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 
 .print-view__column-header-text {
   font-size: $text-size--large;
-  margin: 0;
+  margin: 0 0 0 $margin--small;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -79,6 +99,7 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 }
 
 .print-view__column-header-card-count {
+  margin: 0 $margin--small 0 0;
   font-size: $text-size--medium;
   color: $color-darker-gray;
 }
@@ -109,7 +130,7 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 }
 
 .print-view__note-info-votes {
-  border-radius: 50px;
+  border-radius: $border-radius--round;
   padding: $padding--small 12px;
   background: $color-backlog-blue-transparent;
   color: $color-backlog-blue;
