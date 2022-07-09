@@ -32,6 +32,18 @@ interface BoardData {
   participants: [
     {
       role: string;
+      user: {
+        id: string;
+        name: string;
+      };
+    }
+  ];
+  votings: [
+    {
+      votes: {
+        votes: number;
+        votesPerNote: [];
+      };
     }
   ];
 }
@@ -54,7 +66,6 @@ const PrintView = () => {
     const json = await response.json();
     setBoardData(json);
   };
-  console.log(boardData);
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -66,6 +77,13 @@ const PrintView = () => {
   const currDateStr = `${String(currDate.getDate()).padStart(2, "0")}.${String(currDate.getMonth() + 1).padStart(2, "0")}.${currDate.getFullYear()}, ${String(
     currDate.getHours()
   ).padStart(2, "0")}:${String(currDate.getMinutes()).padStart(2, "0")}`;
+
+  const getAuthorName = (authorId: string) => boardData?.participants.filter((p) => p.user.id === authorId)[0].user.name ?? "-";
+
+  const getNoteVotes = (noteId: string) => {
+    const votes = boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0;
+    return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
+  };
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
@@ -91,7 +109,11 @@ const PrintView = () => {
                   .filter((n) => n.position.column === c.id)
                   .map((n) => (
                     <div key={n.id} className="print-view__note">
-                      {n.text}
+                      <p className="print-view__note-text">{n.text}</p>
+                      <div className="print-view__note-info-wrapper">
+                        <div className="print-view__note-info-author">{getAuthorName(n.author)}</div>
+                        {getNoteVotes(n.id)}
+                      </div>
                     </div>
                   ))}
               </div>

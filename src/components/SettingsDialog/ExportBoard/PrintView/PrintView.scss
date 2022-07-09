@@ -1,8 +1,8 @@
 @import "src/constants/style.scss";
 
 $note__border-radius: 16px;
-$note__box-shadow-color: rgba(0, 87, 255, 0.16);
-$color-backlog-blue-transparent: rgba(0, 87, 255, 0.3);
+
+$color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -22,7 +22,6 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.3);
 .print-view__title-wrapper {
   width: 100%;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   margin-bottom: $margin--large;
@@ -85,9 +84,34 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.3);
 }
 
 .print-view__note {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: $margin--small;
   padding: $padding--small;
   border: 2px solid $color-backlog-blue-transparent;
   border-radius: $note__border-radius;
+}
+
+.print-view__note-text {
+  margin: 0 0 $margin--medium 0;
+}
+
+.print-view__note-info-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.print-view__note-info-author {
+  margin-top: auto;
+  color: $color-darker-gray;
+}
+
+.print-view__note-info-votes {
+  border-radius: 50px;
+  padding: $padding--small 12px;
+  background: $color-backlog-blue-transparent;
+  color: $color-backlog-blue;
+  font-weight: bold;
 }
