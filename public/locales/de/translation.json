@@ -70,7 +70,8 @@
     "title": "Sitzung exportieren",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
-    "exportAsCSV": "CSV exportieren"
+    "exportAsCSV": "CSV exportieren",
+    "openPrintView": "Druckansicht öffnen"
   },
   "ShareQrCodeOption": {
     "title": "Sitzung teilen",
