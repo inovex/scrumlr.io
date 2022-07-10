@@ -153,3 +153,10 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
   color: $color-backlog-blue;
   font-weight: bold;
 }
+
+.print-view__footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}

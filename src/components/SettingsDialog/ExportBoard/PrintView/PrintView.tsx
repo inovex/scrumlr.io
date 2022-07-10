@@ -154,6 +154,20 @@ const PrintView = () => {
               </div>
             ))}
         </div>
+        <div className="print-view__footer-container">
+          <p>
+            Generated on{" "}
+            <a href="https://scrumlr.io/" target="_blank" rel="noopener noreferrer">
+              scrumlr.io
+            </a>
+          </p>
+          <p>
+            Provided with ♥ by{" "}
+            <a href="https://www.inovex.de/" target="_blank" rel="noopener noreferrer">
+              inovex
+            </a>
+          </p>
+        </div>
       </div>
     </Portal>
   );
