@@ -5,8 +5,6 @@ $border-radius--round: 50px;
 
 $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 $color-button: $color-lean-lilac;
-$color-button--hover: #cb39ff;
-$color-button--active: #d462ff;
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -29,15 +27,17 @@ $color-button--active: #d462ff;
   font-weight: bold;
   font-size: 16px;
   padding: 6px $padding--default;
-  box-shadow: 0 4px 8px 6px rgba($color-button, 0.15);
+  box-shadow: 0 2px 12px 6px lighten($color-button, 45%);
 
   &:hover {
-    background: $color-button--hover;
-    border: solid 1px $color-button--hover;
-    box-shadow: 0 4px 8px 6px rgba($color-button, 0.22);
+    background: darken($color-button, 10%);
+    border: solid 1px darken($color-button, 10%);
+    box-shadow: 0 2px 12px 6px lighten($color-button, 42%);
   }
   &:active {
-    background: $color-button--active;
+    background: darken($color-button, 15%);
+    border: solid 1px darken($color-button, 15%);
+    box-shadow: 0 2px 12px 6px lighten($color-button, 40%);
   }
 }
 

@@ -74,7 +74,11 @@ const PrintView = () => {
   };
 
   useEffect(() => {
-    getBoardData().then((data) => setBoardData(data));
+    if (!boardData) {
+      getBoardData()
+        .then((data) => setBoardData(data))
+        .then(handlePrint);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

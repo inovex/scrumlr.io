@@ -3,6 +3,8 @@ import {VFC} from "react";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
+import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
+import {useNavigate} from "react-router";
 import {useAppSelector} from "../../../store";
 import {exportAsJSON, exportAsCSV} from "../../../utils/export";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -11,6 +13,7 @@ import "../SettingsDialog.scss";
 
 export const ExportBoard: VFC = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
 
@@ -39,6 +42,15 @@ export const ExportBoard: VFC = () => {
             exportAsCSV(boardId);
           }}
           data-testid="export-csv"
+        />
+        <hr className="settings-dialog__separator" />
+        <SettingsButton
+          label={t("ExportBoardOption.openPrintView")}
+          icon={PrintIcon}
+          className="export-board__button-reverse-order"
+          onClick={() => {
+            navigate(`/board/${boardId}/print`);
+          }}
         />
       </div>
     </div>
