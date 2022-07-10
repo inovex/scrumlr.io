@@ -104,14 +104,31 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
   color: $color-darker-gray;
 }
 
+.print-view__note-stack-wrapper {
+  width: 100%;
+  border-radius: $note__border-radius;
+  margin-bottom: $margin--small;
+}
+
 .print-view__note {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: $margin--small;
+  margin-bottom: $margin--default;
   padding: $padding--small;
   border: 2px solid $color-backlog-blue-transparent;
   border-radius: $note__border-radius;
+}
+
+.print-view__note--isChild {
+  width: calc(100% - #{$margin--large});
+  margin-bottom: $margin--small;
+  margin-left: $margin--large;
+  border: 2px dashed $color-backlog-blue-transparent;
+}
+
+.print-view__note--isTop {
+  margin-bottom: $margin--small;
 }
 
 .print-view__note-text {

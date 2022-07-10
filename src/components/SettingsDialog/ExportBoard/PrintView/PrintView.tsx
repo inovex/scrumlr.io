@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {ReactElement, useEffect, useRef, useState} from "react";
 import {useAppSelector} from "store";
 import {API} from "api";
 import {Portal} from "components/Portal";
@@ -7,11 +7,14 @@ import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import {useTranslation} from "react-i18next";
+import classNames from "classnames";
 
 interface BoardData {
   board: {
     id: string;
     name: string;
+    showAuthors: boolean;
+    showVoting: boolean;
   };
   columns: [
     {
@@ -24,8 +27,10 @@ interface BoardData {
       id: string;
       author: string;
       text: string;
+      votes: number;
       position: {
         column: string;
+        stack: string;
       };
     }
   ];
@@ -63,14 +68,12 @@ const PrintView = () => {
 
   const getBoardData = async () => {
     const response = await API.exportBoard(boardId, "application/json");
-    const json = await response.json();
-    setBoardData(json);
+    return response.json();
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   useEffect(() => {
-    getBoardData();
+    getBoardData().then((data) => setBoardData(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const currDate = new Date();
@@ -78,12 +81,40 @@ const PrintView = () => {
     currDate.getHours()
   ).padStart(2, "0")}:${String(currDate.getMinutes()).padStart(2, "0")}`;
 
-  const getAuthorName = (authorId: string) => boardData?.participants.filter((p) => p.user.id === authorId)[0].user.name ?? "-";
+  const getAuthorName = (authorId: string) => (boardData?.board.showAuthors ? boardData?.participants.filter((p) => p.user.id === authorId)[0].user.name : "");
 
-  const getNoteVotes = (noteId: string) => {
-    const votes = boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0;
-    return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
+  const getNoteVotes = (noteId: string) => boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0;
+
+  const voteLabel = (noteId: string) => {
+    if (boardData?.board.showVoting) {
+      const votes = getNoteVotes(noteId);
+      return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
+    }
+    return "";
   };
+
+  const getChildNotes = (noteId: string) =>
+    boardData?.notes
+      .filter((n) => n.position.stack === noteId)
+      .sort((n) => getNoteVotes(n.id))
+      .reverse();
+
+  const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
+    <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
+      <p className="print-view__note-text">{text}</p>
+      <div className="print-view__note-info-wrapper">
+        <div className="print-view__note-info-author">{getAuthorName(authorId)}</div>
+        {voteLabel(id)}
+      </div>
+    </div>
+  );
+
+  const noteStackWrapper = (input: ReactElement, childNotes: {id: string; text: string; author: string}[]) => (
+    <div className="print-view__note-stack-wrapper">
+      {input}
+      <div className="print-view__note-stack-child-wrapper">{childNotes.map((n) => noteElement(n.id, n.text, n.author, true, false))}</div>
+    </div>
+  );
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
@@ -109,15 +140,17 @@ const PrintView = () => {
                 </div>
                 {boardData.notes
                   .filter((n) => n.position.column === c.id)
-                  .map((n) => (
-                    <div key={n.id} className="print-view__note">
-                      <p className="print-view__note-text">{n.text}</p>
-                      <div className="print-view__note-info-wrapper">
-                        <div className="print-view__note-info-author">{getAuthorName(n.author)}</div>
-                        {getNoteVotes(n.id)}
-                      </div>
-                    </div>
-                  ))}
+                  .sort((n) => getNoteVotes(n.id))
+                  .reverse()
+                  .map((n) => {
+                    if (!n.position.stack) {
+                      const childNotes = getChildNotes(n.id);
+                      return childNotes && childNotes.length > 0
+                        ? noteStackWrapper(noteElement(n.id, n.text, n.author, false, true), childNotes)
+                        : noteElement(n.id, n.text, n.author, false, false);
+                    }
+                    return "";
+                  })}
               </div>
             ))}
         </div>
