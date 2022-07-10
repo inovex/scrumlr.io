@@ -4,29 +4,56 @@ $note__border-radius: 16px;
 $border-radius--round: 50px;
 
 $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
+$color-button: $color-lean-lilac;
+$color-button--hover: #cb39ff;
+$color-button--active: #d462ff;
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
 }
 
-.print-view__print-button {
-  background: $color-white;
-  border: solid 1px $color-white;
+.print-view__button-container {
+  position: fixed;
+  top: 92%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.print-view__button {
+  background: $color-button;
+  border: solid 1px $color-button;
   border-radius: $border-radius--round;
   margin: $margin--small;
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
-  padding: 4px $padding--small;
+  padding: 6px $padding--default;
+  box-shadow: 0 4px 8px 6px rgba($color-button, 0.15);
 
   &:hover {
-    background: $color-light-gray;
-    border: solid 1px $color-middle-gray;
+    background: $color-button--hover;
+    border: solid 1px $color-button--hover;
+    box-shadow: 0 4px 8px 6px rgba($color-button, 0.22);
   }
   &:active {
-    background: $color-middle-gray;
+    background: $color-button--active;
   }
+}
+
+.print-view__icon-print {
+  width: 26px;
+  height: 26px;
+  margin: 2px;
+  padding-top: 2px;
+  color: white;
+}
+
+.print-view__icon-close {
+  width: 30px;
+  height: 30px;
+  padding: 2px 0 0 0;
+  color: white;
 }
 
 .print-view__container {
@@ -148,7 +175,7 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 
 .print-view__note-info-votes {
   border-radius: $border-radius--round;
-  padding: $padding--small 12px;
+  padding: 6px 11px;
   background: $color-backlog-blue-transparent;
   color: $color-backlog-blue;
   font-weight: bold;

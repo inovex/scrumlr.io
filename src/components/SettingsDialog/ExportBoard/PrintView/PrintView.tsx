@@ -6,6 +6,8 @@ import {useNavigate} from "react-router";
 import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
+import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 
@@ -116,11 +118,18 @@ const PrintView = () => {
     </div>
   );
 
+  const handleClose = () => navigate(`/board/${boardId}`);
+
   return (
-    <Portal onClose={() => navigate(`/board/${boardId}`)} className="print-view__portal" disabledPadding>
-      <button className="print-view__print-button" onClick={handlePrint}>
-        PRINT
-      </button>
+    <Portal onClose={handleClose} className="print-view__portal" disabledPadding>
+      <div className="print-view__button-container">
+        <button className="print-view__button" onClick={handlePrint}>
+          <PrintIcon className="print-view__icon-print" />
+        </button>
+        <button className="print-view__button" onClick={handleClose}>
+          <CloseIcon className="print-view__icon-close" />
+        </button>
+      </div>
       <div ref={printRef} className="print-view__container">
         <div className="print-view__title-wrapper">
           <ScrumlrLogo />
