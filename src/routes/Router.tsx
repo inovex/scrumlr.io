@@ -15,10 +15,10 @@ import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
+import PrintView from "components/SettingsDialog/ExportBoard/PrintView/PrintView";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import RouteChangeObserver from "./RouteChangeObserver";
-import PrintView from "../components/SettingsDialog/ExportBoard/PrintView/PrintView";
 
 const Router = () => (
   <BrowserRouter>
