@@ -100,10 +100,17 @@ export const PrintView = () => {
     return "";
   };
 
+  const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: string; position: {rank: number}}) => {
+    if (boardData?.votings && getNoteVotes(a.id) !== getNoteVotes(b.id)) {
+      return getNoteVotes(a.id) > getNoteVotes(b.id) ? -1 : 1;
+    }
+    return a.position.rank > b.position.rank ? -1 : 1;
+  };
+
   const getChildNotes = (noteId: string) =>
     boardData?.notes
       .filter((n) => n.position.stack === noteId)
-      .sort((n) => getNoteVotes(n.id))
+      .sort((a, b) => compareNotes(a, b))
       .reverse();
 
   const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
@@ -154,12 +161,7 @@ export const PrintView = () => {
                 </div>
                 {boardData.notes
                   .filter((n) => n.position.column === c.id)
-                  .sort((a, b) => {
-                    if (boardData?.votings && getNoteVotes(a.id) !== getNoteVotes(b.id)) {
-                      return getNoteVotes(a.id) > getNoteVotes(b.id) ? -1 : 1;
-                    }
-                    return a.position.rank > b.position.rank ? -1 : 1;
-                  })
+                  .sort((a, b) => compareNotes(a, b))
                   .map((n) => {
                     if (!n.position.stack) {
                       const childNotes = getChildNotes(n.id);
