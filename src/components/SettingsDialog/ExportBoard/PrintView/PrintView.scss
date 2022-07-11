@@ -27,7 +27,7 @@ $color-button: $color-lean-lilac;
   font-weight: bold;
   font-size: 16px;
   padding: 3px 5px;
-  box-shadow: 0 2px 12px 6px lighten($color-button, 42%);
+  box-shadow: 0 4px 7px 1px $color-dark-gray;
   svg {
     color: $color-button;
   }
@@ -35,7 +35,7 @@ $color-button: $color-lean-lilac;
   &:hover {
     background: $color-button;
     border: solid 1px $color-button;
-    box-shadow: 0 2px 12px 6px lighten($color-button, 38%);
+    box-shadow: 0 4px 7px 1px darken($color-dark-gray, 15%);
     svg {
       color: $color-white;
     }
@@ -43,7 +43,7 @@ $color-button: $color-lean-lilac;
   &:active {
     background: darken($color-button, 10%);
     border: solid 1px darken($color-button, 10%);
-    box-shadow: 0 2px 12px 6px lighten($color-button, 34%);
+    box-shadow: 0 4px 5px 1px darken($color-dark-gray, 25%);
     svg {
       color: $color-white;
     }

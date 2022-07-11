@@ -89,10 +89,10 @@ export const PrintView = () => {
 
   const getAuthorName = (authorId: string) => (boardData?.board.showAuthors ? boardData?.participants.filter((p) => p.user?.id === authorId)[0].user?.name : "");
 
-  const getNoteVotes = (noteId: string) => (boardData?.votings ? boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0 : 0);
+  const getNoteVotes = (noteId: string) => (boardData?.votings ? boardData?.votings[0].votes?.votesPerNote[noteId]?.total ?? 0 : 0);
 
   const voteLabel = (noteId: string) => {
-    if (boardData?.board.showVoting) {
+    if (boardData?.votings && boardData?.board.showVoting) {
       const votes = getNoteVotes(noteId);
       return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
     }
@@ -153,7 +153,7 @@ export const PrintView = () => {
                 </div>
                 {boardData.notes
                   .filter((n) => n.position.column === c.id)
-                  .sort((n) => getNoteVotes(n.id))
+                  .sort((n) => (boardData?.votings ? getNoteVotes(n.id) : n.id))
                   .reverse()
                   .map((n) => {
                     if (!n.position.stack) {
