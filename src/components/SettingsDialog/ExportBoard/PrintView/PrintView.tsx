@@ -154,8 +154,12 @@ export const PrintView = () => {
                 </div>
                 {boardData.notes
                   .filter((n) => n.position.column === c.id)
-                  .sort((n) => (boardData?.votings ? getNoteVotes(n.id) : n.position.rank))
-                  .reverse()
+                  .sort((a, b) => {
+                    if (boardData?.votings && getNoteVotes(a.id) !== getNoteVotes(b.id)) {
+                      return getNoteVotes(a.id) > getNoteVotes(b.id) ? -1 : 1;
+                    }
+                    return a.position.rank > b.position.rank ? -1 : 1;
+                  })
                   .map((n) => {
                     if (!n.position.stack) {
                       const childNotes = getChildNotes(n.id);

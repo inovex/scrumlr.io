@@ -5,6 +5,7 @@ $border-radius--round: 50px;
 
 $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 $color-button: $color-lean-lilac;
+$color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -27,7 +28,7 @@ $color-button: $color-lean-lilac;
   font-weight: bold;
   font-size: 16px;
   padding: 3px 5px;
-  box-shadow: 0 4px 7px 1px $color-dark-gray;
+  box-shadow: 0 4px 7px 1px $color-button-shadow;
   svg {
     color: $color-button;
   }
@@ -35,7 +36,7 @@ $color-button: $color-lean-lilac;
   &:hover {
     background: $color-button;
     border: solid 1px $color-button;
-    box-shadow: 0 4px 7px 1px darken($color-dark-gray, 15%);
+    box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
     svg {
       color: $color-white;
     }
@@ -43,7 +44,7 @@ $color-button: $color-lean-lilac;
   &:active {
     background: darken($color-button, 10%);
     border: solid 1px darken($color-button, 10%);
-    box-shadow: 0 4px 5px 1px darken($color-dark-gray, 25%);
+    box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
     svg {
       color: $color-white;
     }
