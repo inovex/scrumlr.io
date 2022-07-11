@@ -107,11 +107,7 @@ export const PrintView = () => {
     return a.position.rank > b.position.rank ? -1 : 1;
   };
 
-  const getChildNotes = (noteId: string) =>
-    boardData?.notes
-      .filter((n) => n.position.stack === noteId)
-      .sort((a, b) => compareNotes(a, b))
-      .reverse();
+  const getChildNotes = (noteId: string) => boardData?.notes.filter((n) => n.position.stack === noteId).sort((a, b) => compareNotes(a, b));
 
   const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
     <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
