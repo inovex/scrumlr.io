@@ -33,6 +33,7 @@ interface BoardData {
       position: {
         column: string;
         stack: string;
+        rank: number;
       };
     }
   ];
@@ -153,7 +154,7 @@ export const PrintView = () => {
                 </div>
                 {boardData.notes
                   .filter((n) => n.position.column === c.id)
-                  .sort((n) => (boardData?.votings ? getNoteVotes(n.id) : n.id))
+                  .sort((n) => (boardData?.votings ? getNoteVotes(n.id) : n.position.rank))
                   .reverse()
                   .map((n) => {
                     if (!n.position.stack) {
