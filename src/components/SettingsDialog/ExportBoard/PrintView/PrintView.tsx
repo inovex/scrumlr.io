@@ -8,6 +8,7 @@ import {useReactToPrint} from "react-to-print";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {ReactComponent as StackIcon} from "assets/icon-unstack.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 
@@ -67,7 +68,7 @@ export const PrintView = () => {
   const printRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
-    documentTitle: boardData?.board.name ?? "scrumlr.io",
+    documentTitle: String(boardData?.board.name) ?? "scrumlr.io",
   });
 
   const getBoardData = async () => {
@@ -115,7 +116,10 @@ export const PrintView = () => {
       <p className="print-view__note-text">{text}</p>
       <div className="print-view__note-info-wrapper">
         <div className="print-view__note-info-author">{getAuthorName(authorId)}</div>
-        {voteLabel(id)}
+        <div className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>
+          {(isTop || isChild) && <StackIcon />}
+          {voteLabel(id)}
+        </div>
       </div>
     </div>
   );
