@@ -55,7 +55,7 @@ interface BoardData {
   ];
 }
 
-const PrintView = () => {
+export const PrintView = () => {
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
 
   const {t} = useTranslation();
