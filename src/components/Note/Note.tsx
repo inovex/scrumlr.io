@@ -13,7 +13,7 @@ import {Participant} from "types/participant";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 
-interface NoteProps {
+export interface NoteProps {
   noteId: string;
   columnId: string;
   columnName: string;
