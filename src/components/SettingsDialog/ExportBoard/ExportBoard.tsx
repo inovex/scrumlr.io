@@ -16,6 +16,7 @@ export const ExportBoard: VFC = () => {
   const navigate = useNavigate();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const boardName = useAppSelector((state) => state.board.data!.name);
 
   return (
     <div data-testid="export" className="settings-dialog__container">
@@ -29,7 +30,7 @@ export const ExportBoard: VFC = () => {
           icon={ExportJSON}
           className="export-board__button-reverse-order"
           onClick={() => {
-            exportAsJSON(boardId);
+            exportAsJSON(boardId, boardName);
           }}
           data-testid="export-json"
         />
@@ -39,7 +40,7 @@ export const ExportBoard: VFC = () => {
           icon={ExportCSV}
           className="export-board__button-reverse-order"
           onClick={() => {
-            exportAsCSV(boardId);
+            exportAsCSV(boardId, boardName);
           }}
           data-testid="export-csv"
         />
