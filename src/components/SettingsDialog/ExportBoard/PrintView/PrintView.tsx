@@ -87,9 +87,9 @@ export const PrintView = () => {
     currDate.getHours()
   ).padStart(2, "0")}:${String(currDate.getMinutes()).padStart(2, "0")}`;
 
-  const getAuthorName = (authorId: string) => (boardData?.board.showAuthors ? boardData?.participants.filter((p) => p.user.id === authorId)[0].user.name : "");
+  const getAuthorName = (authorId: string) => (boardData?.board.showAuthors ? boardData?.participants.filter((p) => p.user?.id === authorId)[0].user?.name : "");
 
-  const getNoteVotes = (noteId: string) => boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0;
+  const getNoteVotes = (noteId: string) => (boardData?.votings ? boardData?.votings[0].votes.votesPerNote[noteId]?.total ?? 0 : 0);
 
   const voteLabel = (noteId: string) => {
     if (boardData?.board.showVoting) {
