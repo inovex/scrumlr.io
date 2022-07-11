@@ -39,6 +39,7 @@ export const Note = (props: NoteProps) => {
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
+          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
         })),
     _.isEqual
   );
@@ -137,6 +138,7 @@ export const Note = (props: NoteProps) => {
             text={note!.text}
             authorId={note!.author}
             authorName={authorName}
+            avatar={author!.user.avatar}
             childrenNotes={childrenNotes}
             onClose={handleShowDialog}
             onDeleteOfParent={() => setShowDialog(false)}
