@@ -11,10 +11,10 @@
     "title": "Registrierung bei scrumlr.io",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
-    "termsValidationError": "Du musst den AGBs und der Datenschutzerklärung zustimmen",
+    "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
     "login": "Registrieren",
-    "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
+    "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
   },
@@ -37,7 +37,7 @@
     "byPassphraseTitle": "Passwortgeschützt",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
-    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fälle sicher genug sein, da die URLs schwer zu erraten sind.",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
     "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt. Dies ist gut geeignet, wenn man mit einer Gruppe nicht gleichzeitig zusammenarbeitet und Benutzer jederzeit beitreten können.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
@@ -120,7 +120,7 @@
     "placeholder": "Füge ein Kärtchen hinzu..."
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein um beizutreten",
+    "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
     "submit": "Absenden"
   },
@@ -186,7 +186,7 @@
     "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert.",
     "focusModeFinished": "Du hast die Moderation beendet!",
     "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
-    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weitere Stimmen werden gezählt!",
+    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weiteren Stimmen werden gezählt!",
     "moderationStarted": "Der Moderator wird nun Inhalte teilen!",
     "moderationEnded": "Die Moderation wurde beendet!",
     "timerStarted": "Ein Alarm wurde gesetzt!",
@@ -204,7 +204,7 @@
   "Homepage": {
     "developers": "© 2021-2022, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
-    "teaserText": "Starte in kürzester Zeit deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
+    "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
@@ -224,7 +224,7 @@
     "Appearance": "Darstellung",
     "AppearanceDescription": "Mitteilungen, Sprache, UI",
     "ShareSession": "Sitzung teilen",
-    "ShareSessionDescription": "QR Code, URL",
+    "ShareSessionDescription": "QR-Code, URL",
     "ExportBoard": "Sitzung exportieren",
     "ExportBoardDescription": "Exportiere das Board",
     "Feedback": "Feedback",
@@ -265,8 +265,8 @@
     "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail! (Optional)",
     "SubmitButton": "Feedback abschicken",
     "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
-    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail Adresse an!",
-    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünscht!",
+    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail-Adresse an!",
+    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünschst!",
     "ErrorMissingBugReportText": "Bitte gib an, welchen Bug du melden möchtest!",
     "SubmitNotification": "Vielen Dank für dein Feedback!"
   },
