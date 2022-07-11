@@ -19,25 +19,34 @@ $color-button: $color-lean-lilac;
 }
 
 .print-view__button {
-  background: $color-button;
-  border: solid 1px $color-button;
+  background: lighten($color-button, 35%);
+  border: solid 1px lighten($color-button, 35%);
   border-radius: $border-radius--round;
   margin: $margin--small;
   cursor: pointer;
   font-weight: bold;
   font-size: 16px;
-  padding: 6px $padding--default;
+  padding: 3px 5px;
   box-shadow: 0 2px 12px 6px lighten($color-button, 45%);
+  svg {
+    color: $color-button;
+  }
 
   &:hover {
-    background: darken($color-button, 10%);
-    border: solid 1px darken($color-button, 10%);
-    box-shadow: 0 2px 12px 6px lighten($color-button, 42%);
+    background: $color-button;
+    border: solid 1px $color-button;
+    box-shadow: 0 2px 12px 6px lighten($color-button, 40%);
+    svg {
+      color: $color-white;
+    }
   }
   &:active {
-    background: darken($color-button, 15%);
-    border: solid 1px darken($color-button, 15%);
-    box-shadow: 0 2px 12px 6px lighten($color-button, 40%);
+    background: darken($color-button, 10%);
+    border: solid 1px darken($color-button, 10%);
+    box-shadow: 0 2px 12px 6px lighten($color-button, 35%);
+    svg {
+      color: $color-white;
+    }
   }
 }
 
@@ -45,15 +54,13 @@ $color-button: $color-lean-lilac;
   width: 26px;
   height: 26px;
   margin: 2px;
-  padding-top: 2px;
-  color: white;
+  padding: 4px 2px 2px 2px;
 }
 
 .print-view__icon-close {
   width: 30px;
   height: 30px;
-  padding: 2px 0 0 0;
-  color: white;
+  padding: 3px 0 0 0;
 }
 
 .print-view__container {
@@ -63,7 +70,7 @@ $color-button: $color-lean-lilac;
   background-color: $color-white;
   overflow: visible;
   width: 870px;
-  padding: $padding--large;
+  padding: 40px 70px;
 }
 
 .print-view__title-wrapper {
@@ -127,8 +134,8 @@ $color-button: $color-lean-lilac;
 
 .print-view__column-header-card-count {
   margin: 0 $margin--small 0 0;
-  font-size: $text-size--medium;
-  color: $color-darker-gray;
+  color: $color-middle-gray;
+  font-weight: bold;
 }
 
 .print-view__note-stack-wrapper {
@@ -142,7 +149,7 @@ $color-button: $color-lean-lilac;
   flex-direction: column;
   width: 100%;
   margin-bottom: $margin--default;
-  padding: $padding--small;
+  padding: calc(#{$padding--small} + 4px);
   border: 2px solid $color-backlog-blue-transparent;
   border-radius: $note__border-radius;
 }
@@ -170,7 +177,8 @@ $color-button: $color-lean-lilac;
 
 .print-view__note-info-author {
   margin-top: auto;
-  color: $color-darker-gray;
+  color: $color-middle-gray;
+  font-weight: bold;
 }
 
 .print-view__note-info-votes {
