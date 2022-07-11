@@ -30,6 +30,7 @@ const createNote = (props: Partial<TestProps>) => {
         showAuthors={props.showAuthors || false}
         moderating={props.moderating || false}
         viewer={getTestParticipant(props.currentUserIsModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})}
+        columnVisible={false}
       />
     </Provider>
   );
