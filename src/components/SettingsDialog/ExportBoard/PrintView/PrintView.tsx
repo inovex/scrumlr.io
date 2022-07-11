@@ -59,6 +59,7 @@ interface BoardData {
 
 export const PrintView = () => {
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
+  const boardName = useAppSelector((applicationState) => applicationState.board.data!.name);
 
   const {t} = useTranslation();
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ export const PrintView = () => {
   const printRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
-    documentTitle: String(boardData?.board.name) ?? "scrumlr.io",
+    documentTitle: boardName ?? "scrumlr.io",
   });
 
   const getBoardData = async () => {
