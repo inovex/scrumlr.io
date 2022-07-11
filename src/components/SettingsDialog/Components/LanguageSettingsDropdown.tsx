@@ -21,7 +21,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
     });
   };
 
-  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.language);
+  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.resolvedLanguage);
 
   return (
     <div className="settings-dropdown">
