@@ -9,9 +9,10 @@ import getTestParticipant from "utils/test/getTestParticipant";
 import * as redux from "react-redux";
 import {ApplicationState} from "types";
 import getTestNote from "utils/test/getTestNote";
-import {NoteProps} from "components/Note/Note";
 
-type TestProps = NoteProps & {
+type TestProps = {
+  showAuthors: boolean;
+  moderating: boolean;
   currentUserIsModerator: boolean;
   overwrite?: Partial<ApplicationState>;
 };
@@ -29,7 +30,6 @@ const createNote = (props: Partial<TestProps>) => {
         showAuthors={props.showAuthors || false}
         moderating={props.moderating || false}
         viewer={getTestParticipant(props.currentUserIsModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})}
-        columnVisible={props.columnVisible || false}
       />
     </Provider>
   );
