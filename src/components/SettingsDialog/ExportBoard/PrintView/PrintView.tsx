@@ -67,6 +67,7 @@ export const PrintView = () => {
   const printRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
+    documentTitle: boardData?.board.name ?? "scrumlr.io",
   });
 
   const getBoardData = async () => {
