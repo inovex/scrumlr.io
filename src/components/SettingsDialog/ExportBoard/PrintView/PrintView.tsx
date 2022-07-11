@@ -185,5 +185,3 @@ export const PrintView = () => {
     </Portal>
   );
 };
-
-export default PrintView;
