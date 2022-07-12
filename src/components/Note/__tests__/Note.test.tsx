@@ -56,6 +56,11 @@ describe("Note", () => {
       const {container} = render(createNote(false));
       expect(container.firstChild).toHaveTextContent(note!.text);
     });
+
+    test("own note author name is me", () => {
+      const {container} = render(createNote({showAuthors: true, overwrite: {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}}));
+      expect(container.firstChild).toHaveTextContent("Me");
+    });
   });
 
   describe("author information", () => {

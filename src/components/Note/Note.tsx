@@ -3,6 +3,7 @@ import React, {useRef, useEffect} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
+import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {TabIndex} from "constants/tabIndex";
 import {UserAvatar} from "components/BoardUsers";
@@ -19,6 +20,7 @@ interface NoteProps {
 }
 
 export const Note = (props: NoteProps) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const noteRef = useRef<HTMLLIElement>(null);
@@ -27,6 +29,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
 
@@ -93,8 +96,8 @@ export const Note = (props: NoteProps) => {
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author!.user.id) && (
             <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={author!.user.name} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{author!.user.name}</figcaption>
+              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{authorName}</figcaption>
             </figure>
           )}
           <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
