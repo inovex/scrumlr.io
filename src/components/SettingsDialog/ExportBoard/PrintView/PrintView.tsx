@@ -68,6 +68,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const pageStyle = `
       @page {
         size: A4;
+
       }
     `;
 
@@ -120,8 +121,8 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
       <p className="print-view__note-text">{text}</p>
       <div className="print-view__note-info-wrapper">
-        <div className="print-view__note-info-author">{getAuthorName(authorId)}</div>
-        <div className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>{voteLabel(id)}</div>
+        <span className="print-view__note-info-author">{getAuthorName(authorId)}</span>
+        <span className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>{voteLabel(id)}</span>
       </div>
     </div>
   );

@@ -8,9 +8,16 @@ $color-backlog-blue-background: rgba(0, 87, 255, 0.05);
 $color-button: $color-lean-lilac;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
+@page {
+  margin: 11mm 17mm 17mm 17mm;
+}
+
 @media print {
   .print-view__button-container {
     display: none;
+  }
+  .print-view__note {
+    break-inside: avoid-page;
   }
 }
 
@@ -113,18 +120,13 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__column-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
   width: 100%;
   gap: $margin--default;
 }
 
 .print-view__column {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  display: block;
   width: 100%;
   background-color: $color-white;
   color: $color-black;
@@ -190,9 +192,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__note-info-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: block;
+  position: relative;
 }
 
 .print-view__note-info--isTop {
@@ -214,12 +215,19 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__note-info-author {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline;
+  width: auto;
   margin-top: auto;
   color: $color-middle-gray;
   font-weight: bold;
 }
 
 .print-view__note-info-votes {
+  display: inline !important;
+  float: right;
   border-radius: $border-radius--round;
   padding: 6px 11px;
   background: $color-backlog-blue-transparent;
