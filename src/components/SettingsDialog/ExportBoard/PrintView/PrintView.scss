@@ -7,9 +7,15 @@ $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
 $color-button: $color-lean-lilac;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
-.print-view__portal {
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+@media print {
+  .print-view__button-container {
+    display: none;
+  }
+}
+
+.print-view__container {
+  height: auto;
+  overflow: visible;
 }
 
 .print-view__button-container {
@@ -67,13 +73,13 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   height: 25px;
 }
 
-.print-view__container {
+.print-view {
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: $color-white;
   overflow: visible;
-  width: 870px;
+  width: 850px;
   padding: 40px 70px;
 }
 

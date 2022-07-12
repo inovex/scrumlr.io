@@ -15,7 +15,6 @@ import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
-import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
@@ -39,14 +38,21 @@ const Router = () => (
       />
       <Route path="/login" element={<LoginBoard />} />
       <Route
+        path="/board/:boardId/print"
+        element={
+          <RequireAuthentication>
+            <BoardGuard printViewEnabled />
+          </RequireAuthentication>
+        }
+      />
+      <Route
         path="/board/:boardId"
         element={
           <RequireAuthentication>
-            <BoardGuard />
+            <BoardGuard printViewEnabled={false} />
           </RequireAuthentication>
         }
       >
-        <Route path="print" element={<PrintView />} />
         <Route path="settings" element={<SettingsDialog />}>
           <Route path="board" element={<BoardSettings />} />
           <Route path="participants" element={<Participants />} />

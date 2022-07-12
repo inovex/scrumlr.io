@@ -1,7 +1,5 @@
 import {ReactElement, useEffect, useRef, useState} from "react";
-import {useAppSelector} from "store";
 import {API} from "api";
-import {Portal} from "components/Portal";
 import {useNavigate} from "react-router";
 import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
@@ -57,19 +55,28 @@ interface BoardData {
   ];
 }
 
-export const PrintView = () => {
-  const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  const boardName = useAppSelector((applicationState) => applicationState.board.data!.name);
+interface PrintViewProps {
+  boardId: string;
+  boardName: string;
+}
 
+export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
   const [boardData, setBoardData] = useState<BoardData>();
 
+  const pageStyle = `
+      @page {
+        size: A4;
+      }
+    `;
+
   const printRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     documentTitle: boardName ?? "scrumlr.io",
+    pageStyle,
   });
 
   const getBoardData = async () => {
@@ -133,7 +140,7 @@ export const PrintView = () => {
   const handleClose = () => navigate(`/board/${boardId}`);
 
   return (
-    <Portal onClose={handleClose} className="print-view__portal" disabledPadding>
+    <div className="print-view__container">
       <div className="print-view__button-container">
         <button className="print-view__button" onClick={handlePrint}>
           <PrintIcon className="print-view__icon-print" />
@@ -142,7 +149,7 @@ export const PrintView = () => {
           <CloseIcon className="print-view__icon-close" />
         </button>
       </div>
-      <div ref={printRef} className="print-view__container">
+      <div ref={printRef} className="print-view">
         <div className="print-view__title-wrapper">
           <ScrumlrLogo />
           <h1 className="print-view__title-text">{boardData?.board.name ?? "Scrumlr.io"}</h1>
@@ -189,6 +196,6 @@ export const PrintView = () => {
           </p>
         </div>
       </div>
-    </Portal>
+    </div>
   );
 };
