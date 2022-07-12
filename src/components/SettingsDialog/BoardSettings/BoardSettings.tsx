@@ -11,12 +11,12 @@ import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
+import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
-import {SettingsToggle} from "../Components/SettingsToggle";
+import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 import "../SettingsDialog.scss";
-import {SettingsInput} from "../Components/SettingsInput";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -180,7 +180,7 @@ export const BoardSettings = () => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                 >
-                  <SettingsToggle active={state.board.showAuthors} />
+                  <Toggle active={state.board.showAuthors} />
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -189,7 +189,7 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
-                  <SettingsToggle active={state.board.showNotesOfOtherUsers} />
+                  <Toggle active={state.board.showNotesOfOtherUsers} />
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -198,7 +198,7 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
-                  <SettingsToggle active={state.me?.showHiddenColumns} />
+                  <Toggle active={state.me?.showHiddenColumns ?? false} />
                 </SettingsButton>
               </div>
 

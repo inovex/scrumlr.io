@@ -5,6 +5,10 @@
   z-index: $menu-z-index;
 }
 
+.menu-bars__switch:hover {
+  filter: brightness(1.4);
+}
+
 [theme="light"] {
   .menu-bars--admin {
     .menu-bars__switch {
@@ -93,7 +97,7 @@
     padding: 0;
     border: 0;
     border-radius: 100%;
-    transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s ease-in-out, filter 0.08s ease-out;
     margin-left: 214px;
     position: relative;
     cursor: pointer;
