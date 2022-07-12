@@ -1167,8 +1167,8 @@ github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGr
 github.com/uptrace/bun v1.1.5/go.mod h1:Z2Pd3cRvNKbrYuL6Gp1XGjA9QEYz+rDz5KkEi9MZLnQ=
 github.com/uptrace/bun v1.1.6 h1:vDJ1Qs6fXock5+q/PSOZZ7vZVZABmWkGlgZDUkJwbfc=
 github.com/uptrace/bun v1.1.6/go.mod h1:Z2Pd3cRvNKbrYuL6Gp1XGjA9QEYz+rDz5KkEi9MZLnQ=
-github.com/uptrace/bun/dbfixture v1.1.5 h1:f1Pb+q12eFjqorj9T+fFKcRGBOppmW0DijNu2mEIXuE=
-github.com/uptrace/bun/dbfixture v1.1.5/go.mod h1:FXVBBEKNYhGqeepIZYosfIJf0nasFQj5PRyVsd24Cwc=
+github.com/uptrace/bun/dbfixture v1.1.6 h1:UuO8GCHWqH+gQ905sdysffA4GbkrigxwbE2TV9F/4ro=
+github.com/uptrace/bun/dbfixture v1.1.6/go.mod h1:5ilXO9AaLJvORTBMIy5kF7yv1rPrcmK3GNNguxg7gqM=
 github.com/uptrace/bun/dialect/pgdialect v1.1.6 h1:mDGOPm9FkWaM2kQLddzcRW6juUdITJ1XPUr1vt2anYw=
 github.com/uptrace/bun/dialect/pgdialect v1.1.6/go.mod h1:vSyJq5nr4EP/QcVZEOctDnbHQ4OKebZbXGRd1bTBIFI=
 github.com/uptrace/bun/extra/bundebug v1.1.5 h1:exf4y7l2YXuLzUqixOVuWEI/Fql6oy1zeUbK2HUtwtY=
