@@ -38,10 +38,18 @@ const Router = () => (
       />
       <Route path="/login" element={<LoginBoard />} />
       <Route
+        path="/board/:boardId/print"
+        element={
+          <RequireAuthentication>
+            <BoardGuard printViewEnabled />
+          </RequireAuthentication>
+        }
+      />
+      <Route
         path="/board/:boardId"
         element={
           <RequireAuthentication>
-            <BoardGuard />
+            <BoardGuard printViewEnabled={false} />
           </RequireAuthentication>
         }
       >
