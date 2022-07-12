@@ -60,9 +60,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   outline: none;
   border: 2px solid $color-backlog-blue;
   border-radius: 100%;
-  height: 41.14px;
-  width: 41.14px;
-  margin-top: 3px;
+  height: 44px;
+  width: 44px;
   margin-left: $margin--default;
   box-sizing: border-box;
   display: flex;
@@ -202,6 +201,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   }
 
   .board-header__link {
-    padding: 5px $padding--small;
+    padding: $padding--small;
   }
 }
