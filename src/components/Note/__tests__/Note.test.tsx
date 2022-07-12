@@ -12,6 +12,7 @@ import {ApplicationState} from "types";
 import {ViewState} from "types/view";
 import {BoardState} from "types/board";
 import getTestApplicationState from "utils/test/getTestApplicationState";
+import getTestNote from "utils/test/getTestNote";
 
 const NOTE_ID = "test-notes-id-1";
 
@@ -58,7 +59,7 @@ describe("Note", () => {
     });
 
     test("own note author name is me", () => {
-      const {container} = render(createNote({showAuthors: true, overwrite: {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}}));
+      const {container} = render(createNote(false, {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}));
       expect(container.firstChild).toHaveTextContent("Me");
     });
   });

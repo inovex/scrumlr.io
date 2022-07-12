@@ -1,10 +1,12 @@
 import {fireEvent, render} from "@testing-library/react";
 import {createMemoryHistory} from "history";
 import {Suspense} from "react";
+import {I18nextProvider} from "react-i18next";
 import {Provider} from "react-redux";
 import {Router} from "react-router";
 import * as reactRedux from "react-redux";
 import * as reactRouter from "react-router";
+import i18nTest from "i18nTest";
 import {StackView} from "../StackView";
 import {Actions} from "store/action";
 import {ApplicationState} from "types";
@@ -18,11 +20,13 @@ const createStackView = (overwrite?: Partial<ApplicationState>) => {
   const history = createMemoryHistory();
   return (
     <Suspense fallback={<div>fallback</div>}>
-      <Provider store={getTestStore(overwrite)}>
-        <Router location={history.location} navigator={history}>
-          <StackView />
-        </Router>
-      </Provider>
+      <I18nextProvider i18n={i18nTest}>
+        <Provider store={getTestStore(overwrite)}>
+          <Router location={history.location} navigator={history}>
+            <StackView />
+          </Router>
+        </Provider>
+      </I18nextProvider>
     </Suspense>
   );
 };
