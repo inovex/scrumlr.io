@@ -137,6 +137,8 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     </div>
   );
 
+  const columnHasNotes = (columnId: string) => columnId && !!boardData?.notes.filter((n) => n.position.column === columnId).length;
+
   const handleClose = () => navigate(`/board/${boardId}`);
 
   return (
@@ -160,26 +162,29 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
         </div>
         <div className="print-view__column-list">
           {boardData &&
-            boardData.columns?.map((c) => (
-              <div key={c.id} className="print-view__column">
-                <div className="print-view__column-header-wrapper">
-                  <h2 className="print-view__column-header-text">{c.name}</h2>
-                  <div className="print-view__column-header-card-count">{boardData.notes.filter((n) => n.position.column === c.id).length} cards</div>
-                </div>
-                {boardData.notes
-                  .filter((n) => n.position.column === c.id)
-                  .sort((a, b) => compareNotes(a, b))
-                  .map((n) => {
-                    if (!n.position.stack) {
-                      const childNotes = getChildNotes(n.id);
-                      return childNotes && childNotes.length > 0
-                        ? noteStackWrapper(noteElement(n.id, n.text, n.author, false, true), childNotes)
-                        : noteElement(n.id, n.text, n.author, false, false);
-                    }
-                    return "";
-                  })}
-              </div>
-            ))}
+            boardData.columns?.map(
+              (c) =>
+                columnHasNotes(c.id) && (
+                  <div key={c.id} className="print-view__column">
+                    <div className="print-view__column-header-wrapper">
+                      <h2 className="print-view__column-header-text">{c.name}</h2>
+                      <div className="print-view__column-header-card-count">{boardData.notes.filter((n) => n.position.column === c.id).length} notes</div>
+                    </div>
+                    {boardData.notes
+                      .filter((n) => n.position.column === c.id)
+                      .sort((a, b) => compareNotes(a, b))
+                      .map((n) => {
+                        if (!n.position.stack) {
+                          const childNotes = getChildNotes(n.id);
+                          return childNotes && childNotes.length > 0
+                            ? noteStackWrapper(noteElement(n.id, n.text, n.author, false, true), childNotes)
+                            : noteElement(n.id, n.text, n.author, false, false);
+                        }
+                        return "";
+                      })}
+                  </div>
+                )
+            )}
         </div>
         <div className="print-view__footer-container">
           <p>
