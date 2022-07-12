@@ -209,6 +209,9 @@
     "cookiePolicy": "Cookie policy",
     "terms": "Terms & conditions"
   },
+  "Note": {
+    "me": "Me"
+  },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
   },
