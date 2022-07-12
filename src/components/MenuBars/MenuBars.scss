@@ -19,6 +19,7 @@ $box-shadow: 0px 10px 20px #00000026;
 }
 
 .menu {
+  z-index: $menu-z-index;
   border-radius: calc($action-bar-width / 2);
   background-color: $color-white;
   box-shadow: $box-shadow;
