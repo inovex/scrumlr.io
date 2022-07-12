@@ -96,11 +96,9 @@ export const PrintView = () => {
   const getNoteVotes = (noteId: string) => (boardData?.votings ? boardData?.votings[0].votes?.votesPerNote[noteId]?.total ?? 0 : 0);
 
   const voteLabel = (noteId: string) => {
-    if (boardData?.votings && boardData?.board.showVoting) {
-      const votes = getNoteVotes(noteId);
-      return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
-    }
-    return "";
+    if (!(boardData?.votings && boardData?.board.showVoting)) return "";
+    const votes = getNoteVotes(noteId);
+    return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
   };
 
   const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: string; position: {rank: number}}) => {

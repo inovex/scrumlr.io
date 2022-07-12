@@ -14,20 +14,24 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__button-container {
   position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   top: 92%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .print-view__button {
+  width: 35px;
+  height: 35px;
   background: lighten($color-button, 35%);
-  border: solid 1px lighten($color-button, 35%);
+  border: none;
   border-radius: $border-radius--round;
   margin: $margin--small;
   cursor: pointer;
   font-weight: bold;
-  font-size: 16px;
-  padding: 3px 5px;
+  font-size: $text-size--medium;
   box-shadow: 0 4px 7px 1px $color-button-shadow;
   svg {
     color: $color-button;
@@ -35,7 +39,6 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
   &:hover {
     background: $color-button;
-    border: solid 1px $color-button;
     box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
     svg {
       color: $color-white;
@@ -43,7 +46,6 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   }
   &:active {
     background: darken($color-button, 10%);
-    border: solid 1px darken($color-button, 10%);
     box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
     svg {
       color: $color-white;
@@ -52,16 +54,17 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__icon-print {
-  width: 26px;
-  height: 26px;
-  margin: 2px;
-  padding: 4px 2px 2px 2px;
+  display: block;
+  margin: auto;
+  width: 18px;
+  height: 18px;
 }
 
 .print-view__icon-close {
-  width: 30px;
-  height: 30px;
-  padding: 3px 0 0 0;
+  display: block;
+  margin: auto;
+  width: 25px;
+  height: 25px;
 }
 
 .print-view__container {
