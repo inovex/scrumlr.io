@@ -4,6 +4,7 @@ $note__border-radius: 16px;
 $border-radius--round: 50px;
 
 $color-backlog-blue-transparent: rgba(0, 87, 255, 0.25);
+$color-backlog-blue-background: rgba(0, 87, 255, 0.05);
 $color-button: $color-lean-lilac;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
@@ -155,8 +156,12 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__note-stack-wrapper {
+  border-radius: $note__border-radius;
+  padding: $padding--small $padding--small 0 $padding--small;
+  border: 2px solid $color-backlog-blue-transparent;
   width: 100%;
-  margin-bottom: $margin--small;
+  margin-bottom: $margin--default;
+  background: $color-backlog-blue-background;
 }
 
 .print-view__note {
@@ -167,12 +172,12 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   padding: calc(#{$padding--small} + 4px);
   border: 2px solid $color-backlog-blue-transparent;
   border-radius: $note__border-radius;
+  background: $color-white;
 }
 
 .print-view__note--isChild {
-  width: calc(100% - 45px);
+  width: 100%;
   margin-bottom: $margin--small;
-  margin-left: 45px;
   border: 2px dashed $color-backlog-blue-transparent;
 }
 
