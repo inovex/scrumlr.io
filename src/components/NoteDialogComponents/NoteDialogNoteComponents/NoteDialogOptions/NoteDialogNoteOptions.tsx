@@ -1,8 +1,8 @@
 import {FC} from "react";
+import {Participant} from "types/participant";
 import {NoteDialogDeleteNoteButton} from "./NoteDialogDeleteNoteButton";
 import {NoteDialogUnstackNoteButton} from "./NoteDialogUnstackNoteButton";
 import "./NoteDialogNoteOptions.scss";
-import {Participant} from "../../../../../types/participant";
 
 type NoteDialogNoteOptionsProps = {
   showUnstackButton: boolean;
