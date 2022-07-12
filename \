@@ -39,14 +39,13 @@
   color: $color-black;
   background: $color-white;
   background-clip: content-box;
-  border: 3px solid transparent;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 42px;
-  height: 42px;
+  top: 3px;
+  left: 3px;
+  width: 36px;
+  height: 36px;
   border-radius: 100%;
-  transition: visibility 150ms ease-out, border-color 0ms linear 150ms;
+  transition: all 0.12s ease-out;
 }
 
 .menu-item__icon--end {
@@ -157,29 +156,65 @@
     line-height: 42px;
     width: max-content;
     //transform: scaleX(0);
+    transform: translateX(-100%);
     transition: transform 150ms linear;
   }
   .menu-item--left .tooltip__text {
     padding-right: 48px;
     padding-left: $padding--default;
-    transform: translateX(100%);
     transform-origin: right;
   }
   .menu-item--right .tooltip__text {
     padding-left: 48px;
     padding-right: $padding--default;
-    transform: translateX(-100%);
     transform-origin: left;
   }
   .menu-item:hover .tooltip__text {
-    //transform: scaleX(1);
-    transform: translateX(0);
+    transform: scaleX(1);
   }
 
-  .menu-item:hover .menu-item__icon {
-    border-color: #d6d7da;
-    transition: border-color 0ms linear 0ms;
-  }
+
+  //.menu-item__tooltip {
+    //position: absolute;
+    //white-space: nowrap;
+    //overflow: hidden;
+    //background-color: #d6d7da;
+    //width: auto;
+    //max-width: none;
+    //top: 0;
+    //transform: scaleX(0);
+  //}
+  //// Tooltip opens up to the left, ankered on the right side
+  //.menu-item--left > .menu-item__tooltip {
+    //right: 0;
+    //transform-origin: right ;
+  //}
+  //// Tooltip opens up to the right, ankered on the left side
+  //.menu-item--right > .menu-item__tooltip {
+    //left: 0;
+    //transform-origin: left;
+  //}
+
+  //.menu-item:hover .menu-item__tooltip {
+    //transition: transform 0.2s linear;
+    //transform: scaleX(1);
+  //}
+
+  //.menu-item__icon {
+    //transition: all 0.25s linear;
+  //}
+
+  //.tooltip__text {
+    //color: $color-black;
+    //transition: all 0.5s ease-out;
+    //padding: $padding--default;
+  //}
+  //.menu-item--right .tooltip__text {
+    //padding-left: 48px;
+  //}
+  //.menu-item--left .tooltip__text {
+    //padding-right: 48px;
+  //}
 }
 
 @keyframes open-tooltip-to-right {
