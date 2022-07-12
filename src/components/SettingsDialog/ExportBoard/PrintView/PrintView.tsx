@@ -147,8 +147,8 @@ export const PrintView = () => {
           <ScrumlrLogo />
           <h1 className="print-view__title-text">{boardData?.board.name ?? "Scrumlr.io"}</h1>
           <div className="print-view__title-info">
-            <div className="print-view__title-date">{currDateStr}</div>
-            <div className="print-view__title-participant-count">{`${boardData?.participants.length} ${t("SettingsDialog.Participants")}`}</div>
+            <p>{currDateStr}</p>
+            <p>{`${boardData?.participants.length} ${t("SettingsDialog.Participants")}`}</p>
           </div>
         </div>
         <div className="print-view__column-list">
