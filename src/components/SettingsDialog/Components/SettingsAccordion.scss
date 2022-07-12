@@ -13,12 +13,17 @@
     border: none;
     justify-content: space-between;
     align-items: center;
+
+    &:hover > .accordion-item__header-icon {
+      filter: brightness(1.4);
+    }
   }
 
   &__header-icon {
     height: 24px;
     color: var(--accent-color);
     transform: rotate(90deg);
+    transition: transform 0.2s ease-out;
 
     &--open {
       transform: rotate(-90deg);
