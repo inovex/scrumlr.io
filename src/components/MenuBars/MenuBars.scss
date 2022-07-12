@@ -8,11 +8,9 @@ $box-shadow: 0px 10px 20px #00000026;
 .menu-bars {
   z-index: $menu-z-index;
   position: fixed;
-  left: calc(50% - 105px);
+  left: 50%;
+  transform: translateX(-50%);
   bottom: $margin--small;
-}
-.menu-bars--isAdmin {
-  left: calc(50% - 141px);
 }
 @media print {
   .menu-bars {
@@ -110,17 +108,23 @@ $box-shadow: 0px 10px 20px #00000026;
 }
 
 @include visibleColumns(".menu-bars") {
+  &.menu-bars {
+    position: static;
+    transform: none;
+    left: auto;
+    bottom: auto;
+  }
   .menu {
     padding-top: $padding--medium;
     padding-bottom: $padding--medium;
-    padding-left: none;
-    padding-right: none;
+    padding-left: 0;
+    padding-right: 0;
     width: $action-bar-width;
     height: auto;
     position: fixed;
     top: 50%;
-    bottom: auto;
     transform: translateY(-50%);
+    bottom: auto;
     visibility: visible;
     opacity: 1;
   }

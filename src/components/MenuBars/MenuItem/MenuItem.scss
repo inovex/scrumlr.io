@@ -1,24 +1,13 @@
 @import "constants/style.scss";
 
-$number-of-menu-items: 4;
-
-// DISABLED
-.menu-item:disabled {
-  cursor: not-allowed;
-}
-.menu-item:disabled .menu-item__icon {
-  color: $color-dark-gray;
-  background: transparent;
-}
-
 .menu-item {
+  height: 42px;
+  width: 42px;
+  border-radius: 21px;
   background-color: transparent;
   border: none;
-  border-radius: 18px;
-  height: 36px;
   padding: 0;
   position: relative;
-  width: 36px;
   cursor: pointer;
 }
 .menu-item:focus {
@@ -29,34 +18,17 @@ $number-of-menu-items: 4;
   color: $color-white;
 }
 
-@include collapsedColumns(".menu-bars") {
-  $menu-item__first-position-left: 28px;
-
-  @for $i from 1 through $number-of-menu-items {
-    .menu-item:nth-child(#{$i}) {
-      left: $menu-item__first-position-left + (($i - 1) * 58px);
-    }
-  }
-
-  .menu-item {
-    position: absolute;
-    top: 14px;
-    right: 0;
-    bottom: 0;
-  }
-}
-
 .menu-item__tooltip {
   display: inline-flex;
   box-sizing: border-box;
   align-items: center;
   max-width: 0;
-  height: 36px;
-  border-radius: 16px;
+  height: 42px;
+  border-radius: 21px;
 }
 
 .tooltip__text {
-  font-size: $text-size--small;
+  font-size: 14px;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: $letter-spacing--large;
@@ -65,15 +37,15 @@ $number-of-menu-items: 4;
 }
 
 .menu-item__icon {
+  color: $color-black;
+  background: $color-white;
+  background-clip: content-box;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 3px;
+  left: 3px;
   width: 36px;
   height: 36px;
   border-radius: 100%;
-  color: $color-black;
-  background: $color-white;
 }
 
 .menu-item__icon--end {
@@ -156,43 +128,42 @@ $number-of-menu-items: 4;
 // ALL columns are fully visible
 // *****************************
 @include visibleColumns(".menu-bars") {
-  .menu-item--touch-hover:enabled > .menu-item__tooltip,
-  .menu-item:enabled:hover > .menu-item__tooltip {
-    width: auto;
-    max-width: 384px;
-  }
-  .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
-  .menu-item--left:enabled:focus .tooltip__text,
-  .menu-item--left:enabled:hover .tooltip__text {
-    right: 30px;
-  }
-  .menu-item--right.menu-item--touch-hover:enabled .tooltip__text,
-  .menu-item--right:enabled:focus .tooltip__text,
-  .menu-item--right:enabled:hover .tooltip__text {
-    left: 30px;
-  }
-
   .menu-item__tooltip {
     position: absolute;
     white-space: nowrap;
     overflow: hidden;
-    transition: max-width 0.25s ease-in-out;
+    transition: max-width 0.3s linear;
     background-color: #d6d7da;
   }
+
+  .menu-item:hover {
+    > .menu-item__tooltip {
+      width: auto;
+      max-width: 384px;
+    }
+  }
+
+  .menu-item--left.menu-item--touch-hover:enabled .tooltip__text,
+  .menu-item--left:enabled:focus .tooltip__text,
+  .menu-item--left:enabled:hover .tooltip__text {
+    right: 48px;
+  }
+  .menu-item--right.menu-item--touch-hover:enabled .tooltip__text,
+  .menu-item--right:enabled:focus .tooltip__text,
+  .menu-item--right:enabled:hover .tooltip__text {
+    left: 48px;
+  }
+
   .menu-item__icon {
     transition: all 0.25s linear;
   }
   .menu-item--left > .menu-item__tooltip {
-    right: 18px;
+    right: 0;
     top: 0;
-    border-top-right-radius: unset;
-    border-bottom-right-radius: unset;
   }
   .menu-item--right > .menu-item__tooltip {
-    left: 18px;
+    left: 0;
     top: 0;
-    border-top-left-radius: unset;
-    border-bottom-left-radius: unset;
   }
 
   .tooltip__text {
@@ -201,10 +172,17 @@ $number-of-menu-items: 4;
     padding: $padding--default;
   }
   .menu-item--right .tooltip__text {
-    padding-left: 30px;
+    padding-left: 48px;
   }
   .menu-item--left .tooltip__text {
-    padding-right: 30px;
+    padding-right: 48px;
+  }
+}
+
+@keyframes open-tooltip-to-right {
+  100% {
+    width: auto;
+    max-width: 400px;
   }
 }
 
