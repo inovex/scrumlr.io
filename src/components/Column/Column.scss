@@ -221,18 +221,13 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  border-radius: 100%;
   transition: all 0.08s ease-out;
 
   &:hover,
-  &:focus {
-    //box-shadow: 0 4px 8px rgba(var(--accent-color-rgb), 0.24);
-
-    > svg {
-      transform: translate(-0.64px, -0.64px);
-      filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
-      color: var(--accent-color);
-    }
+  &:focus > svg {
+    transform: translate(-0.64px, -0.64px);
+    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
+    color: var(--accent-color);
   }
 }
 
