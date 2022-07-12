@@ -38,7 +38,6 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         .filter((note) => !note.position.stack)
         .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
         .map((note) => note.id),
-      showAuthors: applicationState.board.data!.showAuthors,
       moderating: applicationState.view.moderating,
       viewer: applicationState.participants!.self,
     }),
@@ -194,18 +193,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
             {state.notes.map((note, noteIndex) => (
-              <Note
-                showAuthors={state.showAuthors!}
-                key={note}
-                noteId={note}
-                columnId={id}
-                columnName={name}
-                columnColor={color}
-                columnVisible={visible}
-                tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3}
-                moderating={state.moderating}
-                viewer={state.viewer}
-              />
+              <Note key={note} noteId={note} tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3} viewer={state.viewer} />
             ))}
           </ul>
         </div>

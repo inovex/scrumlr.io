@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import {FC} from "react";
 import {AvataaarProps} from "components/Avatar";
+import {Participant} from "types/participant";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
-import {Participant} from "../../../types/participant";
 
 export type NoteDialogNoteProps = {
   noteId?: string;
