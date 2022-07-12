@@ -11,6 +11,11 @@
 
   align-items: center;
   justify-content: space-between;
+
+  &:hover,
+  &:focus {
+    background-color: $color-white-two;
+  }
 }
 
 .participant:not(:last-child)::after {
