@@ -1,5 +1,6 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
+import {ReactComponent as ExitIcon} from "assets/icon-exit.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -51,6 +52,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
       <header className="board-header">
         <button tabIndex={TabIndex.BoardHeader} className="board-header__link" onClick={() => setShowConfirmationDialog(true)}>
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          <ExitIcon />
         </button>
 
         <div className="board-header__name-and-settings">

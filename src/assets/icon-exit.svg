@@ -1,0 +1,10 @@
+<svg id="ic_exit" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
+  <path id="Pfad_71" data-name="Pfad 71" d="M9.882,0H2.118C.948,0,0,1.343,0,3V14c0,1.657.948,3,2.118,3H9.882C11.052,17,12,15.657,12,14V3C12,1.343,11.052,0,9.882,0Z" transform="translate(9.5 7.5)" fill="none" stroke="rgba(0,87,255,0.5)" stroke-width="1.5"/>
+  <rect id="Rechteck_57" data-name="Rechteck 57" width="7" height="11" transform="translate(18 11)" fill="#fff"/>
+  <g id="arrow" transform="translate(-0.5 3.921)">
+    <path id="Pfad_11" data-name="Pfad 11" d="M0,0H3" transform="translate(21.551 10.08) rotate(45)" fill="none" stroke="#0057ff" stroke-linecap="square" stroke-width="2"/>
+    <path id="Pfad_72" data-name="Pfad 72" d="M0,0V3" transform="translate(23.672 12.201) rotate(45)" fill="none" stroke="#0057ff" stroke-linecap="square" stroke-width="2"/>
+    <path id="Pfad_11-2" data-name="Pfad 11" d="M0,1H6.386" transform="translate(16 11.244)" fill="none" stroke="#0057ff" stroke-linecap="round" stroke-width="2"/>
+  </g>
+</svg>

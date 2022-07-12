@@ -160,3 +160,21 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
     min-width: 240px;
   }
 }
+
+@media #{$smartphone} {
+  .board-header__users {
+    display: none;
+  }
+
+  .board-header__name {
+    max-width: 56vw;
+  }
+
+  .board-header__logo {
+    display: none;
+  }
+
+  .board-header__link {
+    padding: 0;
+  }
+}
