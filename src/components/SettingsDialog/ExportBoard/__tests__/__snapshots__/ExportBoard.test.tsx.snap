@@ -57,6 +57,24 @@ Object {
               icon-export-csv.svg
             </svg>
           </button>
+          <hr
+            class="settings-dialog__separator"
+          />
+          <button
+            class="settings-option-button export-board__button-reverse-order"
+            type="button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              Open print view
+            </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-print.svg
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -112,6 +130,24 @@ Object {
             class="settings-option-button__icon"
           >
             icon-export-csv.svg
+          </svg>
+        </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button export-board__button-reverse-order"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Open print view
+          </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-print.svg
           </svg>
         </button>
       </div>

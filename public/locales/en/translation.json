@@ -70,7 +70,8 @@
     "title": "Export board",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
-    "exportAsCSV": "Export as CSV"
+    "exportAsCSV": "Export as CSV",
+    "openPrintView": "Open print view"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
