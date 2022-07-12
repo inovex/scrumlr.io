@@ -515,12 +515,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active toggle--disabled"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -964,12 +960,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -1443,12 +1435,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--left"
-            />
-          </div>
+            class="toggle"
+          />
         </button>
       </div>
     </div>
