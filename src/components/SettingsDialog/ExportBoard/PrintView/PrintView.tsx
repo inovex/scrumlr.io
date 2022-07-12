@@ -182,7 +182,7 @@ export const PrintView = () => {
             </a>
           </p>
           <p>
-            Provided with ♥ by{" "}
+            Provided with ♥️ by{" "}
             <a href="https://www.inovex.de/" target="_blank" rel="noopener noreferrer">
               inovex
             </a>
