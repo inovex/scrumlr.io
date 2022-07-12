@@ -195,7 +195,7 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
-    "allParticipantsDone": "Alle Teilnehmner sind fertig."
+    "allParticipantsDone": "Alle Teilnehmer sind fertig."
   },
   "Language": {
     "german": "Deutsch",
@@ -209,6 +209,9 @@
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
     "terms": "AGB"
+  },
+  "Note": {
+    "me": "Ich"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"

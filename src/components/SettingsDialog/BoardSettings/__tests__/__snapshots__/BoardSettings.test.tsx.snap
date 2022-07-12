@@ -114,12 +114,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowAuthorOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -135,12 +131,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowOtherUsersNotesOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -156,12 +148,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowHiddenColumnsOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--left"
-            />
-          </div>
+            class="toggle"
+          />
         </button>
       </div>
       <button

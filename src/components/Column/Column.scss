@@ -200,6 +200,7 @@
   margin: 0 $margin--small 0 0;
   color: $color-middle-gray;
   cursor: pointer;
+  transition: all 0.08s ease-out;
 }
 
 .column__header-hidden-icon:hover {
@@ -220,15 +221,13 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  border-radius: 4px;
+  transition: all 0.08s ease-out;
 
   &:hover,
-  &:focus {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-
-    > svg {
-      color: var(--accent-color);
-    }
+  &:focus > svg {
+    transform: translate(-0.64px, -0.64px);
+    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
+    color: var(--accent-color);
   }
 }
 
@@ -239,6 +238,7 @@
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
+  transition: all 0.08s ease-out;
 }
 
 [theme="dark"] .column__header-edit-button-icon {

@@ -30,6 +30,12 @@
     align-items: center;
     border: none;
     color: var(--accent-color);
+    transition: all 0.08s ease-out;
+
+    &:hover {
+      filter: brightness(1.4);
+      transform: scale(1.1);
+    }
 
     svg {
       width: 24px;

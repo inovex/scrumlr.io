@@ -85,6 +85,8 @@ $board__navigation-button-icon-dimension: 24px;
   padding: 0;
 
   z-index: $board__navigation-button-z-index;
+
+  cursor: pointer;
 }
 
 .board__navigation:focus {

@@ -1,8 +1,5 @@
 @import "constants/style.scss";
 
-$header-bottom_distance: 16px;
-$header-left_distance: 24px;
-
 .participants {
   position: absolute;
   top: 92px;
@@ -24,17 +21,20 @@ $header-left_distance: 24px;
   height: 86px;
   position: relative;
   background-color: var(--accent-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: $padding--default $padding--medium;
 }
 
 .participants__header-text {
+  position: relative;
   margin: 0;
   font-weight: bold;
   font-size: $text-size--large;
   line-height: $line-height--medium;
   letter-spacing: $letter-spacing--small;
-  position: absolute;
-  top: 24px;
-  left: $header-left_distance;
+  width: fit-content;
 }
 
 .participants__header-number {
@@ -48,36 +48,44 @@ $header-left_distance: 24px;
   right: -12px;
 }
 
+.participants__header-search {
+  position: relative;
+  display: flex;
+}
+
 .participants__header-input {
   background-color: transparent;
   color: $color-white;
+  caret-color: $color-white;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--small;
   border: none;
   border-bottom: 1px solid transparent;
-  position: absolute;
-  bottom: $header-bottom_distance;
-  left: $header-left_distance;
   padding-left: 24px;
   opacity: 0.8;
+  transition: all 0.08s ease-out;
+  outline: none;
 
   &::placeholder {
     opacity: 1;
     color: $color-white;
   }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:focus {
+    opacity: 1;
+    outline: none;
+    border-bottom: 1px solid $color-white;
+  }
 }
 
-.participants__header > input:focus {
-  outline: none;
-  border-bottom: 1px solid $color-white;
-}
-
-.header__icon {
+.participants__search_icon {
+  position: absolute;
   width: 20px;
   height: 20px;
-  position: absolute;
-  bottom: $header-bottom_distance;
-  left: $header-left_distance;
 }
 
 .participants__list {

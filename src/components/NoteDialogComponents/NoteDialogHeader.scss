@@ -1,5 +1,4 @@
 @import "constants/style";
-@import "components/NoteDialog/NoteDialog.scss";
 
 .note-dialog__header {
   font-size: calc(24px + 0.8vw);
@@ -7,7 +6,7 @@
   width: max-content;
   border-bottom: solid 3px var(--accent-color);
   padding-bottom: $padding--default;
-  margin: $margin--default 0 $margin--large $note-dialog-spacing-side;
+  margin: $margin--default 0 $margin--large $margin--default;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   cursor: initial;

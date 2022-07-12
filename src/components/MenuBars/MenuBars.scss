@@ -53,12 +53,15 @@ $box-shadow: 0px 10px 20px #00000026;
   padding: 0;
   border: 0;
   border-radius: 100%;
-  transition: background-color 0.25s ease-in-out;
+  transition: background-color 0.25s ease-in-out, filter 0.08s ease-out;
   // 206px is the width of the horizontal action bar
   margin-left: calc(206px + $margin--small);
   position: relative;
   cursor: pointer;
   display: none;
+}
+.menu-bars__switch:hover {
+  filter: brightness(1.4);
 }
 .switch__icon {
   position: absolute;
