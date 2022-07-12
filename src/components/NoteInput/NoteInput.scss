@@ -12,7 +12,7 @@ $note-input__input-right: 40px;
   margin-bottom: $margin--default;
   background-color: $color-light-gray;
   border-radius: 20px;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: all 0.12s ease-in-out;
 }
 
 .note-input__input {
@@ -38,7 +38,7 @@ $note-input__input-right: 40px;
 
 .note-input:hover,
 .note-input:focus-within {
-  box-shadow: 0 6px 9px 0 rgba(0, 87, 255, 0.16);
+  box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
 }
 [theme="dark"] {
   .note-input {
@@ -60,4 +60,10 @@ $note-input__input-right: 40px;
   color: var(--accent-color);
   align-self: center;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.2);
+    transform: scale(1.2);
+  }
 }
