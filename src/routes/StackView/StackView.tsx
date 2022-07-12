@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {useParams, useNavigate} from "react-router";
+import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
@@ -10,6 +11,7 @@ import {Actions} from "store/action";
 import "./StackView.scss";
 
 export const StackView = () => {
+  const {t} = useTranslation();
   const {boardId, noteId} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,13 +19,14 @@ export const StackView = () => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
         .filter((n) => n.position.stack === note?.id)
         .map((n) => ({
           ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? state.participants?.self.user.name ?? "",
+          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
           avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
         })),
     _.isEqual
@@ -54,7 +57,7 @@ export const StackView = () => {
             text={note!.text}
             authorId={note!.author}
             avatar={author!.user.avatar}
-            authorName={author!.user.name}
+            authorName={authorName}
             showAuthors={showAuthors}
             onClose={handleClose}
             onDeleteOfParent={handleClose}
