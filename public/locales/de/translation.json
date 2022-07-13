@@ -73,6 +73,13 @@
     "exportAsCSV": "CSV exportieren",
     "openPrintView": "Druckansicht öffnen"
   },
+  "PrintView": {
+    "Participants": "Teilnehmer",
+    "GeneratedOn": "Erstellt auf",
+    "ProvidedBy": "Bereitgestellt mit ♥️ von",
+    "Notes": "Kärtchen",
+    "Votes": "Votes"
+  },
   "ShareQrCodeOption": {
     "title": "Sitzung teilen",
     "button": "Sitzung teilen",

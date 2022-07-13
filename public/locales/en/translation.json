@@ -73,6 +73,13 @@
     "exportAsCSV": "Export as CSV",
     "openPrintView": "Open print view"
   },
+  "PrintView": {
+    "Participants": "Participants",
+    "GeneratedOn": "Generated on",
+    "ProvidedBy": "Provided with ♥️ by",
+    "Notes": "Kärtchen",
+    "Votes": "Stimmen"
+  },
   "ShareQrCodeOption": {
     "title": "Share Session",
     "button": "Share board",
