@@ -55,6 +55,12 @@ $note-input__input-right: 40px;
 
 .note-input__add-button {
   all: unset;
+  cursor: pointer;
+
+  &:hover > .note-input__icon {
+    filter: brightness(1.2);
+    transform: scale(1.2);
+  }
 }
 
 .note-input__icon {
@@ -63,11 +69,5 @@ $note-input__input-right: 40px;
   height: 20px;
   color: var(--accent-color);
   align-self: center;
-  cursor: pointer;
   transition: all 0.08s ease-out;
-
-  &:hover {
-    filter: brightness(1.2);
-    transform: scale(1.2);
-  }
 }
