@@ -44,6 +44,7 @@ export const NoteInput = ({columnId, tabIndex, maxNoteLength}: NoteInputProps) =
           }
         }}
         tabIndex={tabIndex ?? TabIndex.default}
+        maxLength={maxNoteLength}
       />
       <button
         type="submit"
