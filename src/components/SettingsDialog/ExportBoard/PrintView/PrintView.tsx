@@ -8,6 +8,7 @@ import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
+import {Color, getColorClassName} from "constants/colors";
 
 interface BoardData {
   board: {
@@ -20,6 +21,7 @@ interface BoardData {
     {
       id: string;
       name: string;
+      color: Color;
     }
   ];
   notes: [
@@ -151,10 +153,10 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
       <div ref={printRef} className="print-view">
         <div className="print-view__title-wrapper">
           <ScrumlrLogo />
-          <h1 className="print-view__title-text">{boardData?.board.name ?? "Scrumlr.io"}</h1>
+          <h1 className="print-view__title-text">{boardData?.board.name ?? "scrumlr.io"}</h1>
           <div className="print-view__title-info">
             <p>{currDateStr}</p>
-            <p>{`${boardData?.participants.length} ${t("SettingsDialog.Participants")}`}</p>
+            <p>{`${boardData?.participants.length} ${t("PrintView.Participants")}`}</p>
           </div>
         </div>
         <div className="print-view__column-list">
@@ -162,10 +164,12 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
             boardData.columns?.map(
               (c) =>
                 columnHasNotes(c.id) && (
-                  <div key={c.id} className="print-view__column">
+                  <div key={c.id} className={classNames("print-view__column", getColorClassName(c.color))}>
                     <div className="print-view__column-header-wrapper">
                       <h2 className="print-view__column-header-text">{c.name}</h2>
-                      <div className="print-view__column-header-card-count">{boardData.notes.filter((n) => n.position.column === c.id).length} notes</div>
+                      <div className="print-view__column-header-card-count">
+                        {boardData.notes.filter((n) => n.position.column === c.id).length} {t("PrintView.Notes")}
+                      </div>
                     </div>
                     {boardData.notes
                       .filter((n) => n.position.column === c.id)
@@ -185,13 +189,13 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
         </div>
         <div className="print-view__footer-container">
           <p>
-            Generated on{" "}
+            {t("PrintView.GeneratedOn")}{" "}
             <a href="https://scrumlr.io/" target="_blank" rel="noopener noreferrer">
               scrumlr.io
             </a>
           </p>
           <p>
-            Provided with ♥️ by{" "}
+            {t("PrintView.ProvidedBy")}{" "}
             <a href="https://www.inovex.de/" target="_blank" rel="noopener noreferrer">
               inovex
             </a>
