@@ -19,6 +19,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   top: 92%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 200;
 }
 @media print {
   .print-view__button-container {
@@ -27,8 +28,11 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__button {
-  width: 35px;
-  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 42px;
   background: lighten($color-button, 35%);
   border: none;
   border-radius: $border-radius--round;
@@ -58,15 +62,11 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__icon-print {
-  display: block;
-  margin: auto;
   width: 18px;
   height: 18px;
 }
 
 .print-view__icon-close {
-  display: block;
-  margin: auto;
   width: 25px;
   height: 25px;
 }
