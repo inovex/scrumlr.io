@@ -110,6 +110,12 @@
   .user-avatar #Circle-Background {
     stroke: $color-dark-one;
   }
+
+  .user-ready {
+    > .avatar #Circle-Background {
+      stroke: $color-grooming-green;
+    }
+  }
 }
 
 @keyframes draw {

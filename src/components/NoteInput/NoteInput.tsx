@@ -30,7 +30,7 @@ export const NoteInput = ({columnId, tabIndex, maxNoteLength}: NoteInputProps) =
     }
   };
   return (
-    <div className="note-input">
+    <form className="note-input">
       <input
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
@@ -39,12 +39,22 @@ export const NoteInput = ({columnId, tabIndex, maxNoteLength}: NoteInputProps) =
         onChange={handleChangeNotetext}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
+            e.preventDefault();
             onAddNote();
           }
         }}
         tabIndex={tabIndex ?? TabIndex.default}
       />
-      <PlusIcon onClick={onAddNote} className="note-input__icon" />
-    </div>
+      <button
+        type="submit"
+        className="note-input__add-button"
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          e.preventDefault();
+          onAddNote();
+        }}
+      >
+        <PlusIcon className="note-input__icon" />
+      </button>
+    </form>
   );
 };
