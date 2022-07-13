@@ -156,6 +156,10 @@
     "switchToUserMenu": "Switch to user menu",
     "switchToAdminMenu": "Switch to admin menu"
   },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys enabled!",
+    "hotkeysDisabled": "Hotkeys disabled!"
+  },
   "VoteConfigurationButton": {
     "label": "Voting",
     "showVotesOfOthers": "Anonymous voting",
