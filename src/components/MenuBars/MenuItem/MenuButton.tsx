@@ -44,7 +44,7 @@ export const MenuButton = (props: MenuButtonProps) => {
       <div className="menu-item__tooltip" aria-hidden>
         <span className="tooltip__text">{props.label}</span>
       </div>
-      <Icon className="menu-item__icon menu-item__icon--start" aria-hidden />
+      <Icon className="menu-item__icon" aria-hidden />
     </button>
   );
 };

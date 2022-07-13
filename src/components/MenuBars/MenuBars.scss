@@ -30,12 +30,16 @@ $box-shadow: 0px 10px 20px #00000026;
   visibility: hidden;
   opacity: 0;
   position: absolute;
+  bottom: 0;
+}
+.menu:first-child:nth-child(1) {
+  position: static;
 }
 .user-menu {
-  bottom: calc(-1 * $action-bar-width);
+  transform: translateY(calc(-1 * $action-bar-width));
 }
 .admin-menu {
-  bottom: $action-bar-width;
+  transform: translateY($action-bar-width);
 }
 
 .menu__items {
@@ -73,29 +77,29 @@ $box-shadow: 0px 10px 20px #00000026;
   color: $color-black;
 }
 .menu-animation {
-  transition: bottom 0.4s, opacity 0.6s, visibility 0.6s;
+  transition: transform 400ms, opacity 400ms, visibility 400ms;
 }
 
 @include collapsedColumns(".menu-bars") {
   &.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 0;
+    transform: translateY(0);
   }
   &.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: $action-bar-width;
+    transform: translateY($action-bar-width);
   }
   &.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
-    bottom: 0;
+    transform: translateY(0);
   }
   &.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    bottom: calc(-1 * $action-bar-width);
+    transform: translateY(calc(-1 * $action-bar-width));
   }
   &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
@@ -134,10 +138,10 @@ $box-shadow: 0px 10px 20px #00000026;
     opacity: 1;
   }
   .user-menu {
-    left: $margin--small;
+    left: 12px;
   }
   .admin-menu {
-    right: $margin--small;
+    right: 12px;
   }
   .menu__items {
     flex-direction: column;

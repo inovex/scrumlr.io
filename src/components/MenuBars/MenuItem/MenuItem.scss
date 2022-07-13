@@ -16,198 +16,188 @@ $background-color-dark: #333948;
 .menu-item:focus {
   outline: 2px solid #00000050;
 }
-.menu-item--active .menu-item__icon {
-  background-color: $background-color-dark;
-  color: $color-white;
+[theme="dark"] {
+  .menu-item:focus {
+    outline: 2px solid #ffffff50;
+  }
 }
 
 .menu-item__tooltip {
+  position: absolute;
+  top: -58px;
+  left: 18px;
   display: inline-flex;
   align-items: center;
   max-width: 0;
   height: $menu-item-size;
   border-radius: calc($menu-item-size / 2);
+  background-color: #d6d7da;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms linear 500ms;
+  transform: translateX(-50%);
+}
+.menu-item__tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: #d6d7da transparent transparent transparent;
+}
+.menu-item:hover .menu-item__tooltip {
+  max-width: max-content;
+  visibility: visible;
+  opacity: 1;
+}
+[theme="dark"] {
+  .menu-item__tooltip {
+    background-color: #485064;
+  }
+  .menu-item__tooltip::after {
+    border-color: #485064 transparent transparent transparent;
+  }
+}
+@media screen and (max-width: 450px) {
+  .menu-item:nth-child(1) {
+    .menu-item__tooltip {
+      transform: translateX(-25%);
+    }
+    .menu-item__tooltip::after {
+      left: calc(25% - 5px);
+    }
+  }
+  .menu-item:nth-child(4) {
+    .menu-item__tooltip {
+      transform: translateX(-75%);
+    }
+    .menu-item__tooltip::after {
+      left: calc(75% - 5px);
+    }
+  }
+}
+@include visibleColumns(".menu-item") {
+  .menu-item__tooltip {
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+    overflow: hidden;
+    top: 0;
+    transition: max-width 0ms linear 150ms;
+    background-color: transparent;
+    transform: translateX(0);
+  }
+  .menu-item__tooltip::after {
+    display: none;
+  }
+
+  &.menu-item--left .menu-item__tooltip {
+    right: 0;
+    left: auto;
+  }
+  &.menu-item--right .menu-item__tooltip {
+    left: 0;
+  }
+  &:hover .menu-item__tooltip {
+    max-width: 500px;
+    transition: none;
+  }
 }
 
 .tooltip__text {
+  width: 100%;
+  padding: 0 $padding--default;
+  white-space: nowrap;
   font-size: $text-size--small;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--small;
   color: $color-black;
+  border-radius: calc($menu-item-size / 2);
+}
+@include visibleColumns(".menu-item") {
+  .tooltip__text {
+    color: $color-black;
+    background-color: #d6d7da;
+    height: $menu-item-size;
+    line-height: $menu-item-size;
+    width: max-content;
+    transition: transform 150ms linear 0ms;
+  }
+  &.menu-item--left .tooltip__text {
+    padding-right: calc($menu-item-size + $padding--small);
+    padding-left: $padding--default;
+    transform: translateX(100%);
+    transform-origin: right;
+  }
+  &.menu-item--right .tooltip__text {
+    padding-left: calc($menu-item-size + $padding--small);
+    padding-right: $padding--default;
+    transform: translateX(-100%);
+    transform-origin: left;
+  }
+  &:hover .tooltip__text {
+    transform: translateX(0);
+  }
+}
+[theme="dark"] {
+  .tooltip__text {
+    color: $color-white !important;
+    background-color: #485064 !important;
+  }
 }
 
 .menu-item__icon {
+  background-clip: content-box !important;
   color: $color-black;
-  background: $color-white;
-  background-clip: content-box;
+  background-color: $color-white;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
   left: 0;
   width: $menu-item-size;
   height: $menu-item-size;
-  border-radius: 100%;
-  transition: visibility 150ms ease-out, border-color 0ms linear 150ms;
+  border-radius: $menu-item-size;
+  transition: visibility 150ms linear;
 }
-
-.menu-item__icon--end {
+.menu-item--active .menu-item__icon {
+  background-color: $background-color-dark;
+  color: $color-white;
+}
+.menu-item__icon:nth-of-type(2) {
   visibility: hidden;
 }
-
-.menu-item--active.menu-item--touch-hover > .menu-item__icon--end,
-.menu-item--active:enabled:hover > .menu-item__icon--end,
-.menu-item--active:enabled:active > .menu-item__icon--end {
-  visibility: visible;
-}
-
-.menu-item--active.menu-item--touch-hover > .menu-item__icon--start,
-.menu-item--active:enabled:hover > .menu-item__icon--start,
-.menu-item--active:enabled:active > .menu-item__icon--start {
-  visibility: hidden;
-}
-
-// Columns partly hidden, no touch screen device
-@include collapsedColumns(".menu-bars") {
-  .menu-item--touch-hover,
-  .menu-item:enabled:hover {
-    .menu-item__tooltip {
-      max-width: 264px;
-      opacity: 1;
-      visibility: visible;
-      // Tooltip will be shown after 0.5s delay, but cleared instantly
-      transition-delay: 0.5s;
-    }
-  }
-
-  .menu-item__tooltip {
-    position: absolute;
-    animation: none;
-    top: -58px;
-    left: 18px;
-    transform: translateX(-50%);
-    opacity: 0;
+.menu-item--active:hover,
+.menu-item--active:enabled:active {
+  .menu-item__icon:nth-of-type(1) {
     visibility: hidden;
-    transition: opacity 0.1s linear;
-    background-color: #d6d7da;
   }
-  @media screen and (max-width: 450px) {
-    .menu-item:nth-child(1) {
-      .menu-item__tooltip {
-        transform: translateX(-25%);
-      }
-      .menu-item__tooltip::after {
-        left: calc(25% - 5px);
-      }
-    }
-    .menu-item:nth-child(4) {
-      .menu-item__tooltip {
-        transform: translateX(-75%);
-      }
-      .menu-item__tooltip::after {
-        left: calc(75% - 5px);
-      }
-    }
-  }
-
-  .menu-item__tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: calc(50% - 5px);
-    border-width: 5px;
-    border-style: solid;
-    border-color: #d6d7da transparent transparent transparent;
-  }
-
-  .tooltip__text {
-    width: 100%;
-    padding: 0 $padding--default;
-    white-space: nowrap;
+  .menu-item__icon:nth-of-type(2) {
+    visibility: visible;
   }
 }
-
-// *****************************
-// ALL columns are fully visible
-// *****************************
-@include visibleColumns(".menu-bars") {
-  .menu-item__tooltip {
-    border-radius: 21px;
-    width: auto;
-    max-width: 0;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    transition: max-width 0ms linear;
-    transition-delay: 150ms;
+@include visibleColumns(".menu-item") {
+  .menu-item__icon {
+    transition: border-color 0ms linear 150ms;
   }
-  .menu-item--left .menu-item__tooltip {
-    right: 0;
-  }
-  .menu-item--right .menu-item__tooltip {
-    left: 0;
-  }
-  .menu-item:hover .menu-item__tooltip {
-    max-width: 500px;
-    transition: none;
-  }
-
-  .tooltip__text {
-    border-radius: 21px;
-    background-color: #d6d7da;
-    height: 42px;
-    line-height: 42px;
-    width: max-content;
-    //transform: scaleX(0);
-    transition: transform 150ms linear;
-  }
-  .menu-item--left .tooltip__text {
-    padding-right: 48px;
-    padding-left: $padding--default;
-    transform: translateX(100%);
-    transform-origin: right;
-  }
-  .menu-item--right .tooltip__text {
-    padding-left: 48px;
-    padding-right: $padding--default;
-    transform: translateX(-100%);
-    transform-origin: left;
-  }
-  .menu-item:hover .tooltip__text {
-    //transform: scaleX(1);
-    transform: translateX(0);
-  }
-
-  .menu-item:hover .menu-item__icon {
+  &:hover .menu-item__icon {
     border-color: #d6d7da;
     transition: border-color 0ms linear 0ms;
   }
 }
-
-@keyframes open-tooltip-to-right {
-  100% {
-    width: auto;
-    max-width: 400px;
-  }
-}
-
 [theme="dark"] {
-  .menu-item:focus {
-    outline: 2px solid #ffffff50;
-  }
   .menu-item__icon {
     color: $color-white;
     background: #333948;
   }
-  .menu-item .menu-item__tooltip {
-    background-color: #485064;
-  }
-  .menu-item .tooltip__text {
-    color: $color-white;
-  }
   .menu-item--active .menu-item__icon {
     background-color: $color-white;
     color: $color-black;
+  }
+  .menu-item:hover .menu-item__icon {
+    border-color: #485064 !important;
   }
 }
