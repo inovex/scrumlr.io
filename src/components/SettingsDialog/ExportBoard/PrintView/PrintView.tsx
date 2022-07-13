@@ -8,6 +8,7 @@ import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
+import {Color, getColorClassName} from "constants/colors";
 
 interface BoardData {
   board: {
@@ -20,6 +21,7 @@ interface BoardData {
     {
       id: string;
       name: string;
+      color: Color;
     }
   ];
   notes: [
@@ -162,7 +164,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
             boardData.columns?.map(
               (c) =>
                 columnHasNotes(c.id) && (
-                  <div key={c.id} className="print-view__column">
+                  <div key={c.id} className={classNames("print-view__column", getColorClassName(c.color))}>
                     <div className="print-view__column-header-wrapper">
                       <h2 className="print-view__column-header-text">{c.name}</h2>
                       <div className="print-view__column-header-card-count">{boardData.notes.filter((n) => n.position.column === c.id).length} notes</div>
