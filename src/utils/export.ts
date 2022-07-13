@@ -9,7 +9,7 @@ export const fileName = (name?: string) => {
 export const exportAsCSV = async (id: string, name?: string) => {
   const response = await API.exportBoard(id, "text/csv");
   const blob = await response.blob();
-  saveAs(blob, `${fileName(name)}.csv`);
+  saveAs(blob, `${fileName(name ?? "scrumlr.io")}.csv`);
 };
 
 export const exportAsJSON = async (id: string, name?: string) => {

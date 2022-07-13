@@ -70,7 +70,15 @@
     "title": "Export board",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
-    "exportAsCSV": "Export as CSV"
+    "exportAsCSV": "Export as CSV",
+    "openPrintView": "Open print view"
+  },
+  "PrintView": {
+    "Participants": "Participants",
+    "GeneratedOn": "Generated on",
+    "ProvidedBy": "Provided with ♥️ by",
+    "Notes": "Kärtchen",
+    "Votes": "Stimmen"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
