@@ -31,7 +31,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           value="test-board-name"
         />
         <label
-          for="BoardSettings.BoardName"
+          for="boardSettingsBoardName"
         >
           BoardSettings.BoardName
         </label>
@@ -78,7 +78,7 @@ exports[`BoardSettings should match snapshot 1`] = `
               value=""
             />
             <label
-              for="BoardSettings.Password"
+              for="boardSettingsPassword"
             >
               BoardSettings.Password
             </label>
