@@ -37,7 +37,7 @@ export const Note = (props: NoteProps) => {
       displayName,
       isSelf,
     };
-  });
+  }, _.isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
