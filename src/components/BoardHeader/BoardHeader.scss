@@ -134,9 +134,10 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
-  margin: auto;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  margin: 0 auto;
 }
 
 .board-header__name-container {
