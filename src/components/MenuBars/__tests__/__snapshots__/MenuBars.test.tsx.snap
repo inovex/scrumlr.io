@@ -28,13 +28,13 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-check.svg
         </svg>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--end"
+          class="menu-item__icon"
         >
           icon-close.svg
         </svg>
@@ -56,13 +56,13 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-hand.svg
         </svg>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--end"
+          class="menu-item__icon"
         >
           icon-close.svg
         </svg>
@@ -84,7 +84,7 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-settings.svg
         </svg>
@@ -114,7 +114,7 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-timer.svg
         </svg>
@@ -136,7 +136,7 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-vote.svg
         </svg>
@@ -158,13 +158,13 @@ exports[`MenuBars should match snapshot 1`] = `
         </div>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--start"
+          class="menu-item__icon"
         >
           icon-focus.svg
         </svg>
         <svg
           aria-hidden="true"
-          class="menu-item__icon menu-item__icon--end"
+          class="menu-item__icon"
         >
           icon-close.svg
         </svg>
