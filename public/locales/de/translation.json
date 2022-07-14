@@ -19,9 +19,9 @@
     "username": "Benutzername"
   },
   "AccessPolicy": {
-    "PUBLIC": "Öffentliche Session",
+    "PUBLIC": "Offen",
     "BY_PASSPHRASE": "Passwortgeschützt",
-    "BY_INVITE": "Geschlossene Session"
+    "BY_INVITE": "Geschlossen"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Falsches Passwort.",
