@@ -28,6 +28,7 @@ type Server struct {
 	notes    services.Notes
 	sessions services.BoardSessions
 	health   services.Health
+	feedback services.Feedback
 
 	upgrader websocket.Upgrader
 
@@ -46,6 +47,7 @@ func New(
 	notes services.Notes,
 	sessions services.BoardSessions,
 	health services.Health,
+	feedback services.Feedback,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -85,6 +87,7 @@ func New(
 		notes:                            notes,
 		sessions:                         sessions,
 		health:                           health,
+		feedback:                         feedback,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -118,7 +121,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
-
+		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
 			r.Post("/anonymous", s.signInAnonymously)
@@ -224,7 +227,6 @@ func (s *Server) initColumnResources(r chi.Router) {
 
 			r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
 
-			// TODO delete showNote if column with note is deleted
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
 		})
 	})
@@ -243,7 +245,6 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Get("/", s.getNote)
 			r.Put("/", s.updateNote)
 
-			// TODO delete showNote if note is deleted
 			r.Delete("/", s.deleteNote)
 		})
 	})

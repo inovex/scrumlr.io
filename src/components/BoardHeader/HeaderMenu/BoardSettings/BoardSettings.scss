@@ -18,54 +18,70 @@ $header-menu-button-width: 24px;
   background-color: var(--accent-color);
 }
 
+.board-settings > form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: $padding--default;
+  padding-right: $padding--default;
+}
+
 .board-settings__board-name {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  height: 19px;
-  width: 160px;
+  height: $header-menu-button-height;
+  flex-grow: 1;
   color: $color-white;
-  font-size: $text-size--large;
+  background-color: transparent;
+  font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--medium;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  background-color: transparent;
-  border: none;
+  overflow: hidden;
+  border-top: none;
+  border-right: none;
   border-bottom: $header-menu__item-border-width dashed $color-white;
+  border-left: none;
+  border-radius: 0;
+  -webkit-border-radius: 0;
   outline: 0;
+  padding: 0;
   transition: border-color 0.1s linear;
-}
+  caret-color: $color-white;
 
-.board-settings__board-name::placeholder {
-  color: $color-white;
-  opacity: 0.85;
-}
-
-.board-settings__board-name:disabled {
-  border-color: transparent;
+  &::placeholder {
+    color: $color-white;
+    opacity: 0.85;
+  }
+  &:disabled {
+    border-color: transparent;
+    opacity: 1;
+  }
 }
 
 .board-settings__edit-button {
-  position: absolute;
+  margin-left: $margin--default;
   height: $header-menu-button-height;
-  box-shadow: 0 0 0 0.1em #f9fafb;
+  box-shadow: 0 0 0 0.1em $color-white;
   border-color: transparent;
   border-radius: 32px;
   background-color: transparent;
   color: $color-white;
   cursor: pointer;
-  top: 18px;
-  right: 16px;
-  transition: scale 0.1s ease-in-out;
-}
-.board-settings__edit-button:focus {
-  outline: 0;
-}
-.board-settings__edit-button:active {
-  scale: 0.95;
+  transition: all 0.1s ease-in-out;
+
+  &:focus {
+    outline: 0;
+  }
+  &:hover {
+    background-color: $color-white;
+    color: var(--accent-color);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 [theme="dark"] {

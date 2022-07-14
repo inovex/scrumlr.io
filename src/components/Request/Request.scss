@@ -8,10 +8,10 @@
   top: 60px;
   left: 10px;
   right: 10px;
-  z-index: 140;
   overflow: hidden;
   animation: fly-in-top 0.5s ease-out;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
+  z-index: $request-z-index;
 }
 
 @media screen and (min-width: 420px) {
@@ -45,6 +45,12 @@
   background-color: transparent;
   color: $color-backlog-blue;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.06);
+  }
 }
 
 .request__button + .request__button {

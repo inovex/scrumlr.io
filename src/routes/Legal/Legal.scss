@@ -9,6 +9,13 @@
 
 .legal a {
   color: $color-planning-pink;
+  font-weight: bold;
+  text-decoration: none;
+
+  &:hover {
+    filter: brightness(1.4);
+    text-decoration: underline;
+  }
 }
 
 .legal__text {

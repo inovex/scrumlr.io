@@ -9,8 +9,11 @@ export const ColumnAction = {
    * won't work otherwise (e.g. in reducers).
    */
   CreateColumn: "scrumlr.io/createColumn" as const,
+  CreateColumnOptimistically: "scrumlr.io/createColumnOptimistically" as const,
   EditColumn: "scrumlr.io/editColumn" as const,
+  EditColumnOptimistically: "scrumlr.io/editColumnOptimistically" as const,
   DeleteColumn: "scrumlr.io/deleteColumn" as const,
+  DeleteColumnOptimistically: "scrumlr.io/deleteColumnOptimistically" as const,
   UpdatedColumns: "scrumlr.io/updatedColumns" as const,
 };
 
@@ -18,13 +21,16 @@ export const ColumnAction = {
 export const ColumnActionFactory = {
   /*
    * ATTENTION:
-   * Each action creator should be also listed in the type `ColumnReduxAction`, because
+   * - Each action creator should also be listed in the type `ColumnReduxAction`, because
    * the type inference won't work otherwise (e.g. in reducers).
+   *
+   * - Actions suffixed with "Optimistically" only edit local state and should not persist changes in the backend.
    */
 
   /**
    * Creates an action which should be dispatched when the user edits a column.
    *
+   * @param id the column id
    * @param column contains
    *  columnId: the edited column id
    *  name: the new name
@@ -36,8 +42,17 @@ export const ColumnActionFactory = {
     id,
     column,
   }),
+  editColumnOptimistically: (id: string, column: EditColumnRequest) => ({
+    type: ColumnAction.EditColumnOptimistically,
+    id,
+    column,
+  }),
   deleteColumn: (id: string) => ({
     type: ColumnAction.DeleteColumn,
+    id,
+  }),
+  deleteColumnOptimistically: (id: string) => ({
+    type: ColumnAction.DeleteColumnOptimistically,
     id,
   }),
   updateColumns: (columns: Column[]) => ({
@@ -48,10 +63,17 @@ export const ColumnActionFactory = {
     type: ColumnAction.CreateColumn,
     column,
   }),
+  createColumnOptimistically: (column: {id: string; name: string; color: Color; visible: boolean; index: number}) => ({
+    type: ColumnAction.CreateColumnOptimistically,
+    column,
+  }),
 };
 
 export type ColumnReduxAction =
   | ReturnType<typeof ColumnActionFactory.deleteColumn>
+  | ReturnType<typeof ColumnActionFactory.deleteColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.createColumn>
+  | ReturnType<typeof ColumnActionFactory.createColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.editColumn>
+  | ReturnType<typeof ColumnActionFactory.editColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.updateColumns>;

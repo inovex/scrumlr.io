@@ -1,0 +1,27 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+$note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large});
+
+.note-dialog__scrollbar {
+  max-height: calc(#{$note-dialog__scrollbar-height} - 100px);
+  overflow: auto;
+  margin-left: $margin--default;
+  scrollbar-color: $color-middle-gray $color-white;
+
+  @include scrollbar();
+}
+
+.note-dialog__note-wrapper {
+  margin-right: $margin--default;
+}
+
+.note-dialog__note-wrapper .note-dialog__note:last-child {
+  margin-bottom: 0;
+}
+
+[theme="dark"] {
+  .note-dialog__scrollbar {
+    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+  }
+}

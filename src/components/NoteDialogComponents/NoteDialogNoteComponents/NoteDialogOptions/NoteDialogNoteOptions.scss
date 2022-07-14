@@ -1,0 +1,18 @@
+@import "src/constants/style";
+
+.note-dialog__note-options {
+  list-style-type: none;
+  position: relative;
+  display: inline-flex;
+  height: $icon--large;
+  width: fit-content;
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.note-dialog__note-option {
+  padding-top: 0;
+}

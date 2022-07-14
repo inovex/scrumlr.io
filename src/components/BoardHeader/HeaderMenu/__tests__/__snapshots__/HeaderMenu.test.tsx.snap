@@ -61,7 +61,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  Show authors of cards
+                  Show authors of notes
                 </span>
               </button>
             </li>
@@ -82,7 +82,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  Show cards of other users
+                  Show notes of other users
                 </span>
               </button>
             </li>

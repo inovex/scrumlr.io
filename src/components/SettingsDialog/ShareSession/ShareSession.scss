@@ -2,7 +2,6 @@
 
 $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
-$header-menu-button-height: 40px;
 
 .share-qr-code-option__qrcode {
   height: 100%;
@@ -27,26 +26,38 @@ $header-menu-button-height: 40px;
 }
 
 .share-qr-code-option__copy-to-clipboard {
-  height: $header-menu-button-height;
+  padding: $padding--small $padding--medium;
   margin-top: $margin--large;
   width: 260px;
-  border: none;
+  border: solid 2px var(--accent-color);
   border-radius: 32px;
   background-color: var(--accent-color);
   color: $color-white;
   font-weight: bold;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.24);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 
   &.--copied {
     background-color: transparent;
-    border: solid 2px var(--accent-color);
     color: var(--accent-color);
     cursor: default;
-  }
-}
 
-.share-qr-code-option__copy-to-clipboard:active {
-  scale: 0.95;
+    &:hover {
+      filter: none;
+      transform: none;
+      box-shadow: none;
+    }
+  }
 }
 
 .share-session__container {

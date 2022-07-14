@@ -1,0 +1,39 @@
+@import "constants/style";
+@import "components/Note/Note.scss";
+
+.note-dialog__note-content {
+  display: flex;
+  width: 100%;
+}
+
+.note-dialog__note-content__text {
+  background: none;
+  margin: 0;
+  min-height: 3 * $line-height--medium;
+  width: 100%;
+  color: $color-black;
+  font-size: $text-size--medium;
+  letter-spacing: $letter-spacing--medium;
+  line-height: $line-height--medium;
+  margin-bottom: $margin--small;
+  padding: $padding--small;
+  border: 2px dashed transparent;
+  border-radius: 5px;
+  transition: border-color 150ms ease-in-out;
+  outline: none;
+  resize: none;
+  word-wrap: break-word;
+}
+
+.note-dialog__note-content__text[contentEditable] {
+  &:hover,
+  &:focus {
+    border-color: rgba(var(--accent-color-rgb), 0.3);
+  }
+}
+
+[theme="dark"] {
+  .note-dialog__note-content__text {
+    color: $color-white;
+  }
+}

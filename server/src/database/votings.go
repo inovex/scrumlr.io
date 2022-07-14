@@ -120,14 +120,14 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 
 func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
 	newRankSelect := d.db.NewSelect().
-		TableExpr("notes AS n").
-		ColumnExpr("ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY COUNT(note) ASC, rank ASC)-1 AS new_rank").
+		TableExpr("notes as note").
+		ColumnExpr(fmt.Sprintf(
+			"ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY "+
+				"(SELECT COUNT(*) FROM notes AS n INNER JOIN (SELECT * FROM VOTES WHERE voting = (SELECT id FROM \"%s\")) as v ON n.id = v.note WHERE n.id = note.id OR n.stack = note.id), rank)-1 AS new_rank",
+			votingQuery)).
 		Column("id").
-		Join(fmt.Sprintf("LEFT JOIN (SELECT * FROM votes WHERE voting = (SELECT id FROM \"%s\")) AS v", votingQuery)).
-		JoinOn("n.id = v.note OR n.stack = v.note").
-		Where("n.stack IS NULL").
-		GroupExpr("v.note, v.voting, v.\"user\", n.id").
-		Order("new_rank DESC")
+		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
+		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
 		Model((*Note)(nil)).

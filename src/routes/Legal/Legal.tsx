@@ -15,8 +15,8 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
   const [text, setText] = useState<string>("");
 
   useEffect(() => {
-    if (i18n.language) {
-      const legalDocument = generatePath(`/locales/:lang/${document}.md`, {lang: i18n.language || "en"});
+    if (i18n.resolvedLanguage) {
+      const legalDocument = generatePath(`/locales/:lang/${document}.md`, {lang: i18n.resolvedLanguage || "en"});
 
       fetch(legalDocument)
         .then((response) => response.text())
@@ -25,7 +25,7 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i18n.language]);
+  }, [i18n.resolvedLanguage]);
 
   const markdownText = marked.parse(text);
 

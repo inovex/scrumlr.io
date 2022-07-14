@@ -1,0 +1,13 @@
+@import "constants/style";
+
+.note-dialog__header {
+  font-size: calc(24px + 0.8vw);
+  color: $color-white;
+  width: max-content;
+  border-bottom: solid 3px var(--accent-color);
+  padding-bottom: $padding--default;
+  margin: $margin--default 0 $margin--large $margin--default;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--large;
+  cursor: initial;
+}

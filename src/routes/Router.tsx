@@ -11,11 +11,13 @@ import {ShareSession} from "components/SettingsDialog/ShareSession";
 import {BoardSettings} from "components/SettingsDialog/BoardSettings/BoardSettings";
 import {Appearance} from "components/SettingsDialog/Appearance/Appearance";
 import {Participants} from "components/SettingsDialog/Participants/Participants";
+import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
+import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 
 const Router = () => (
@@ -36,10 +38,18 @@ const Router = () => (
       />
       <Route path="/login" element={<LoginBoard />} />
       <Route
+        path="/board/:boardId/print"
+        element={
+          <RequireAuthentication>
+            <BoardGuard printViewEnabled />
+          </RequireAuthentication>
+        }
+      />
+      <Route
         path="/board/:boardId"
         element={
           <RequireAuthentication>
-            <BoardGuard />
+            <BoardGuard printViewEnabled={false} />
           </RequireAuthentication>
         }
       >
@@ -49,11 +59,12 @@ const Router = () => (
           <Route path="appearance" element={<Appearance />} />
           <Route path="share" element={<ShareSession />} />
           <Route path="export" element={<ExportBoard />} />
-          {/* <Route path="feedback" element={<div>Feedback</div>} /> */}
+          <Route path="feedback" element={<Feedback />} />
           <Route path="profile" element={<ProfileSettings />} />
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />
+        <Route path="stack/:noteId" element={<StackView />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

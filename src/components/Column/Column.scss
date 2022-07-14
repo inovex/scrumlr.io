@@ -6,7 +6,8 @@
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
   padding-top: $header__height;
-  height: 100vh;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
 }
 .column__moderation-isActive {
@@ -44,7 +45,7 @@
 
 .column__header-title {
   display: flex;
-  word-break: break-all;
+  word-break: break-word;
   align-items: center;
   margin-bottom: $margin--default;
   height: 48px;
@@ -66,14 +67,11 @@
 }
 
 .column__header-text {
-  font-size: calc($text-size--large + 0.4vw);
+  font-size: calc(#{$text-size--large} + 0.4vw);
   margin: 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-}
-
-.column__header-text--visible {
   color: $color-black;
 }
 
@@ -85,7 +83,7 @@
   display: flex;
   align-items: center;
   border: none;
-  font-size: calc(18px + 0.4vw);
+  font-size: calc(#{$text-size--large} + 0.4vw);
   color: $color-black;
   border-bottom: dashed 3px var(--accent-color);
   margin: 0 $margin--small 0 0;
@@ -120,7 +118,6 @@
   border: 2px dashed transparent;
   transition: all 0.25s ease-in-out;
   flex: 1;
-  margin-top: $margin--small;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray $color-white;
 
@@ -134,7 +131,8 @@
 
 .column__note-list {
   margin: 0;
-  padding: 0 $padding--large $padding--default $padding--large;
+  // padding-top of 4px to display note outline focus correctly
+  padding: 4px $padding--large $padding--default $padding--large;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;
@@ -180,8 +178,12 @@
 }
 
 [theme="dark"] {
-  .column__header-text--visible {
+  .column__header-text {
     color: $color-white;
+  }
+
+  .column__header-text--hidden {
+    color: $color-middle-gray;
   }
 
   .column__header-toggle-button-icon {
@@ -198,6 +200,7 @@
   margin: 0 $margin--small 0 0;
   color: $color-middle-gray;
   cursor: pointer;
+  transition: all 0.08s ease-out;
 }
 
 .column__header-hidden-icon:hover {
@@ -218,15 +221,13 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  border-radius: 4px;
+  transition: all 0.08s ease-out;
 
-  &:hover,
-  &:focus {
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-
-    > svg {
-      color: var(--accent-color);
-    }
+  &:hover > svg,
+  &:focus > svg {
+    transform: translate(-0.64px, -0.64px);
+    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
+    color: var(--accent-color);
   }
 }
 
@@ -237,6 +238,7 @@
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
+  transition: all 0.08s ease-out;
 }
 
 [theme="dark"] .column__header-edit-button-icon {

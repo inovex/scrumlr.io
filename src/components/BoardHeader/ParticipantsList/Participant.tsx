@@ -33,11 +33,13 @@ export const Participant = ({participant}: ParticipantProps) => {
       <figure className="participant__avatar-and-name" aria-roledescription="participant">
         <UserAvatar
           ready={participant.ready}
+          raisedHand={participant.raisedHand}
           id={participant.user.id}
           name={participant.user.name}
           className="participant__user-avatar-wrapper"
           avatarClassName="participant__user-avatar"
           badgeText={badgeText}
+          avatar={participant.user.avatar}
         />
         <figcaption className="participant__name">{participant.user.name}</figcaption>
       </figure>

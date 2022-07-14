@@ -26,6 +26,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
         <button
           class="settings-option-button settings-option-button--disabled participants__user"
           disabled=""
+          type="button"
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -514,18 +515,15 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active toggle--disabled"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
         />
         <button
           class="settings-option-button participants__user"
+          type="button"
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -962,18 +960,15 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
         />
         <button
           class="settings-option-button participants__user"
+          type="button"
         >
           <div
             class="participants__user_avatar-name-wrapper"
@@ -1440,12 +1435,8 @@ exports[`Participants should render filter and participants correctly 1`] = `
             />
           </div>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--left"
-            />
-          </div>
+            class="toggle"
+          />
         </button>
       </div>
     </div>

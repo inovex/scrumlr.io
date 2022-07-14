@@ -1,0 +1,20 @@
+@import "constants/style";
+
+$stack-view-top-margin: 100px;
+
+.stack-view__portal {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.stack-view__portal-moderation-visible {
+  box-shadow: inset 0 0 0 $column__border-width $color-goal-green;
+}
+
+.stack-view {
+  margin-top: $stack-view-top-margin;
+}
+
+.stack-view__disabled-click {
+  pointer-events: none;
+}

@@ -25,11 +25,12 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-json"
+            type="button"
           >
             <span
               class="settings-option-button__label"
             >
-              Export as json
+              Export as JSON
             </span>
             <svg
               class="settings-option-button__icon"
@@ -43,16 +44,35 @@ Object {
           <button
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-csv"
+            type="button"
           >
             <span
               class="settings-option-button__label"
             >
-              Export as csv
+              Export as CSV
             </span>
             <svg
               class="settings-option-button__icon"
             >
               icon-export-csv.svg
+            </svg>
+          </button>
+          <hr
+            class="settings-dialog__separator"
+          />
+          <button
+            class="settings-option-button export-board__button-reverse-order"
+            type="button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              Open print view
+            </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-print.svg
             </svg>
           </button>
         </div>
@@ -80,11 +100,12 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-json"
+          type="button"
         >
           <span
             class="settings-option-button__label"
           >
-            Export as json
+            Export as JSON
           </span>
           <svg
             class="settings-option-button__icon"
@@ -98,16 +119,35 @@ Object {
         <button
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-csv"
+          type="button"
         >
           <span
             class="settings-option-button__label"
           >
-            Export as csv
+            Export as CSV
           </span>
           <svg
             class="settings-option-button__icon"
           >
             icon-export-csv.svg
+          </svg>
+        </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button export-board__button-reverse-order"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Open print view
+          </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-print.svg
           </svg>
         </button>
       </div>

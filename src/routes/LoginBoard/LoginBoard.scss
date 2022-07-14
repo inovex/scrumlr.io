@@ -2,6 +2,7 @@
 
 .login-board__dialog {
   color: $color-black;
+  min-height: 100vh;
 }
 
 .login-board__illustration {
@@ -14,6 +15,11 @@
 
 .login-board__logo {
   margin-bottom: 1.5em;
+  transition: all 0.16s ease-out;
+
+  &:hover {
+    filter: drop-shadow(4px 4px 4px $color-middle-gray);
+  }
 }
 
 .login-board__divider {
@@ -68,6 +74,12 @@
   color: $color-planning-pink;
   font-weight: bold;
   text-decoration: none;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    text-decoration: underline;
+  }
 }
 
 .login-board__terms-label {
@@ -92,15 +104,15 @@
   background: $color-white;
   cursor: pointer;
   border-radius: 100%;
-  transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
+  transition: all 0.16s ease-out;
 }
 
 .login-board__terms:hover .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
 }
 
 .login-board__terms:focus .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
 // checkbox checkmark
@@ -140,7 +152,19 @@
 
   .login-board__divider::after {
     color: $color-middle-gray;
-    background: $color-dark-two;
+    background: #1a2232;
+  }
+
+  .login-board__logo:hover {
+    filter: drop-shadow(4px 4px 4px $color-black);
+  }
+
+  .login-board__terms:hover .login-board__terms-label::before {
+    box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+  }
+
+  .login-board__terms:focus .login-board__terms-label::before {
+    box-shadow: 0 0 0 4px rgba($color-white, 0.4);
   }
 
   @media #{$tablet} {

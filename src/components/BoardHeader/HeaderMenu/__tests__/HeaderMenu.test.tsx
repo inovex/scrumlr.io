@@ -81,7 +81,7 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("author")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Show authors of cards");
+        expect(label.innerHTML).toEqual("Show authors of notes");
       });
     });
 
@@ -105,7 +105,7 @@ describe("<HeaderMenu/>", () => {
 
         const label = screen.getByTestId("note")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
-        expect(label.innerHTML).toEqual("Show cards of other users");
+        expect(label.innerHTML).toEqual("Show notes of other users");
       });
     });
 

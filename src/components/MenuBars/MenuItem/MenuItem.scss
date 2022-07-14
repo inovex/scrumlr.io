@@ -11,10 +11,6 @@ $number-of-menu-items: 4;
   background: transparent;
 }
 
-.menu-item:focus {
-  outline: none;
-}
-
 .menu-item {
   background-color: transparent;
   border: none;
@@ -24,6 +20,12 @@ $number-of-menu-items: 4;
   position: relative;
   width: 36px;
   cursor: pointer;
+}
+.menu-item:focus {
+  outline: 2px solid rgba(var(--primaryColor-rgb), 0.5);
+}
+[theme="dark"] .menu-item:focus {
+  outline: 2px solid $color-white;
 }
 
 @include collapsedColumns(".menu-bars") {
@@ -71,6 +73,7 @@ $number-of-menu-items: 4;
   border-radius: 100%;
   color: var(--primaryColor);
   background: $color-white;
+  transition: all 0.12s ease-out;
 }
 [theme="dark"] {
   .menu-item__icon {

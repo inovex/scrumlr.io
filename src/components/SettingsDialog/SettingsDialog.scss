@@ -119,9 +119,25 @@ $settings-dialog-container--bottom: 62px;
   width: 44px;
   height: 44px;
   border-radius: 22px;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    background-color: $color-backlog-blue;
+    color: $color-white;
+    transform: scale(1.04);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 [theme="dark"] .settings-dialog__close-button {
   color: $color-planning-pink;
+
+  &:hover {
+    background-color: $color-planning-pink;
+    color: $color-white;
+  }
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__close-button {

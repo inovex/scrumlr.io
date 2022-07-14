@@ -5,14 +5,11 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./Timer.scss";
 import {useTranslation} from "react-i18next";
+import {Toast} from "utils/Toast";
+import useSound from "use-sound";
 
 type TimerProps = {
   endTime: Date;
-};
-
-const stopAudio = (audio: HTMLAudioElement) => {
-  audio.pause();
-  audio.currentTime = 0;
 };
 
 const usePrevious = (value: boolean) => {
@@ -37,13 +34,13 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
+  const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
-  const countdownAudio = new Audio(`${process.env.PUBLIC_URL}/timer_warning.mp3`);
-  const timesUpAudio = new Audio(`${process.env.PUBLIC_URL}/timer_finished.mp3`);
+
+  const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
-  const [playCountdown, setPlayCountdown] = useState(false);
+  const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
-  const previousPlayCountdownState = usePrevious(playCountdown);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
 
   useEffect(() => {
@@ -54,37 +51,39 @@ export const Timer = (props: TimerProps) => {
   });
 
   useEffect(() => {
-    if (!previousPlayCountdownState && playCountdown) {
-      countdownAudio.play();
-      return () => {
-        stopAudio(countdownAudio);
-      };
-    }
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playCountdown]);
-
-  useEffect(() => {
     if (!previousPlayTimesUpState && playTimesUp) {
-      timesUpAudio.play();
-      return () => {
-        stopAudio(timesUpAudio);
-      };
+      timesUpSoundObject.on("end", () => setPlayTimesUp(false));
+      playTimesUpSound();
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playTimesUp]);
 
   useEffect(() => {
-    if (timeLeft.m === 0) {
-      if (timeLeft.s <= 30 && !playCountdown) {
-        setPlayCountdown(true);
-      } else if (timeLeft.s <= 0 && !playTimesUp) {
-        setPlayTimesUp(true);
+    if (timeLeft.m === 0 && !playTimesUp) {
+      if (timeLeft.s <= 0) {
+        if (timesUpShouldPlay) {
+          setPlayTimesUp(true);
+          setTimesUpShouldPlay(false);
+        }
+      } else if (!timesUpShouldPlay) {
+        setTimesUpShouldPlay(true);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
+
+  useEffect(() => {
+    if (isModerator && allReady && Object.values(timeLeft).some((time) => time > 0)) {
+      Toast.success(
+        <div>
+          <div>{t("Toast.allParticipantsDone")}</div>
+        </div>,
+        5000
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allReady, isModerator]);
 
   return (
     <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
