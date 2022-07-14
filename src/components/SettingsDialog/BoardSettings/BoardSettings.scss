@@ -201,7 +201,8 @@
   outline: none;
 }
 
-.board-settings__password-management-button {
+.board-settings__password-management-button,
+.board-settings__password-input-hint {
   display: flex;
   align-items: center;
   padding: 0 $padding--medium;
@@ -209,8 +210,11 @@
   border: none;
   background-color: inherit;
   color: var(--accent-color);
-  cursor: pointer;
   align-self: center;
+}
+
+.board-settings__password-management-button {
+  cursor: pointer;
   transition: all 0.08s ease-out;
 
   &:hover {
@@ -230,11 +234,6 @@
   height: $icon--small;
   margin: 0 4px 2px 3px;
   color: var(--accent-color);
-}
-
-.board-settings__password-input-hint {
-  cursor: default;
-  align-self: center;
 }
 
 .board-settings__password-management-text {
