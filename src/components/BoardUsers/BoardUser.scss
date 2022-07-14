@@ -111,10 +111,8 @@
     stroke: $color-dark-one;
   }
 
-  .user-ready {
-    > .avatar #Circle-Background {
-      stroke: $color-grooming-green;
-    }
+  .user-ready #Circle-Background {
+    stroke: $color-grooming-green;
   }
 }
 
