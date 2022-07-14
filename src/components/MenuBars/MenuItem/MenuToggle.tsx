@@ -62,8 +62,8 @@ export const MenuToggle = (props: MenuToggleProps) => {
       <div className="menu-item__tooltip" aria-hidden>
         <span className="tooltip__text">{value ? props.toggleStopLabel : props.toggleStartLabel}</span>
       </div>
-      <Icon className="menu-item__icon menu-item__icon--start" aria-hidden />
-      <CloseIcon className="menu-item__icon menu-item__icon--end" aria-hidden />
+      <Icon className="menu-item__icon" aria-hidden />
+      <CloseIcon className="menu-item__icon" aria-hidden />
     </button>
   );
 };
