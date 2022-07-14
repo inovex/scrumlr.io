@@ -45,22 +45,28 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
         </button>
       </div>
-      <div
+      <form
         class="note-input"
       >
         <input
           class="note-input__input"
+          maxlength="1024"
           placeholder="Add your note..."
           tabindex="0"
           type="text"
           value=""
         />
-        <svg
-          class="note-input__icon"
+        <button
+          class="note-input__add-button"
+          type="submit"
         >
-          icon-add.svg
-        </svg>
-      </div>
+          <svg
+            class="note-input__icon"
+          >
+            icon-add.svg
+          </svg>
+        </button>
+      </form>
     </div>
     <div
       class="column__notes-wrapper"
