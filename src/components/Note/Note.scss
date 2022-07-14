@@ -16,19 +16,20 @@ $note__author-image-size: 26px;
 
 .note {
   cursor: pointer;
-  padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
   z-index: $note-z-index;
+  padding: $padding--default $padding--medium 20px;
 }
 
 .note .note__user-avatar {
   height: 34px;
   width: 34px;
   padding: 0;
+  margin-bottom: 4px;
 }
 
 .note__in-stack {
@@ -71,7 +72,8 @@ $note__author-image-size: 26px;
   padding: 14px 18px;
   border: 2px solid var(--accent-color);
 }
-.note--own-card::before {
+
+.note:focus::before {
   content: "";
   display: block;
   position: absolute;
@@ -83,8 +85,7 @@ $note__author-image-size: 26px;
 }
 
 .note__text {
-  margin: 0;
-  margin-bottom: $margin--small;
+  margin: 0 0 $margin--small;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
@@ -111,18 +112,46 @@ $note__author-image-size: 26px;
   height: 26px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
+
 .note__author {
   display: inline-flex;
   align-items: center;
   // reset css from figure-element:
   margin: 0;
-  padding: 0;
   border: 0;
   font: inherit;
   vertical-align: baseline;
-  flex-grow: 1;
+  flex-grow: 0;
+  height: 35px;
+  padding: 0 $margin--default 0 0;
+}
+
+.note__author--self {
+  background: var(--accent-color--desaturated-light);
+  border-radius: 21px;
+  padding-left: 2px;
+}
+
+.note__author--self > .note__user-avatar #Circle-Background {
+  stroke: none;
+}
+
+.note__author--self > .note__author-name {
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .note__author--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
+  .note__author--self > .note__author-name {
+    color: $color-white;
+    font-weight: bold;
+  }
+
 }
 
 .note__author-image {
@@ -132,7 +161,7 @@ $note__author-image-size: 26px;
 }
 
 .note__author-name {
-  margin-left: $margin--default;
+  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
