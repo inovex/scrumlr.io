@@ -89,11 +89,7 @@ export const BoardSettings = () => {
         </button>
       );
     }
-    return (
-      <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
-        {t("BoardSettings.SecurePasswordHint")}
-      </span>
-    );
+    return <span className="board-settings__password-input-hint board-settings__password-management-text">{t("BoardSettings.SecurePasswordHint")}</span>;
   };
 
   const getPasswordVisibilityButton = () =>

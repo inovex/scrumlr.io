@@ -1,6 +1,8 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
+import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -23,7 +25,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const state = useAppSelector(
     (rootState) => ({
       name: rootState.board.data?.name,
-      accessPolicy: rootState.board.data?.accessPolicy === "PUBLIC" ? t("Board.publicSession") : t("Board.privateSession"),
+      accessPolicy: rootState.board.data?.accessPolicy,
     }),
     shallowEqual
   );
@@ -63,8 +65,14 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             tabIndex={TabIndex.BoardHeader + 1}
           >
             <div className="board-header__access-policy-status">
-              <LockIcon className="board-header__access-policy-status-icon" title={state.accessPolicy} />
-              <span>{state.accessPolicy}</span>
+              {
+                {
+                  BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
+                  BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
+                  PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
+                }[state.accessPolicy!]
+              }
+              <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
             </div>
             <div className="board-header__name-container">
               <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
