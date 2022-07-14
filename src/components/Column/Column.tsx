@@ -188,7 +188,7 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
               />
             )}
           </div>
-          <NoteInput columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
+          <NoteInput columnIndex={index} columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
         </div>
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
