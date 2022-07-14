@@ -10,4 +10,5 @@ export const hotkeyMap = {
   TOGGLE_SHOW_OTHER_USERS_NOTES: "cmd+u, ctrl+u",
   TOGGLE_COLUMN_VISIBILITY: "cmd+j, ctrl+j",
   SELECT_NOTE_INPUT_FIRST_KEY: ["cmd", "ctrl"],
+  SET_TIMER_FIRST_KEY: ["ctrl+t"],
 };

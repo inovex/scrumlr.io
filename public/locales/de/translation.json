@@ -178,6 +178,7 @@
     "1min": "1 Minute",
     "3min": "3 Minuten",
     "5min": "5 Minuten",
+    "min": "Minuten",
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },

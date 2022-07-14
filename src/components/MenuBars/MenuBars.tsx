@@ -36,6 +36,7 @@ export const MenuBars = () => {
     TOGGLE_SHOW_AUTHORS,
     TOGGLE_SHOW_OTHER_USERS_NOTES,
     TOGGLE_COLUMN_VISIBILITY,
+    SET_TIMER_FIRST_KEY,
   } = hotkeyMap;
 
   const [hotkeysEnabled, setHotkeysEnabled] = useState(true);
@@ -90,6 +91,10 @@ export const MenuBars = () => {
       Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
     }
     setHotkeysEnabled(!hotkeysEnabled);
+  };
+  const startTimer = (minutes: number) => {
+    dispatch(Actions.setTimer(minutes));
+    Toast.info(`${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`);
   };
 
   const hotkeyOptions = {
@@ -153,6 +158,14 @@ export const MenuBars = () => {
     hotkeyOptionsAdmin,
     [state.showHiddenColumns]
   );
+  const hotkeyTimerCombo = SET_TIMER_FIRST_KEY.map((firstKey) => _.range(1, 10).map((minute) => `${firstKey}+${minute}`)).join(",");
+  useHotkeys(hotkeyTimerCombo, (e) => {
+    e.preventDefault();
+    const minutes = Number(e.key);
+    if (minutes && minutes > 0) {
+      startTimer(minutes);
+    }
+  });
 
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
