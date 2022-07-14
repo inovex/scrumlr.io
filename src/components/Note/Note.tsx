@@ -97,10 +97,7 @@ export const Note = (props: NoteProps) => {
 
   return (
     <li className={classNames("note__root")} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
-      <div
-        className={classNames("note", {"note--own-card": props.viewer.user.id === note?.author}, {"note--isDragging": isDragging}, {"note--isOver": isOver})}
-        tabIndex={props.tabIndex ?? TabIndex.default}
-      >
+      <div className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} tabIndex={props.tabIndex ?? TabIndex.default}>
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (

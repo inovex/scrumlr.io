@@ -16,13 +16,13 @@ $note__author-image-size: 26px;
 
 .note {
   cursor: pointer;
-  padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
   z-index: $note-z-index;
+  padding: $padding--default $padding--medium 20px;
 }
 
 .note .note__user-avatar {
@@ -72,7 +72,8 @@ $note__author-image-size: 26px;
   padding: 14px 18px;
   border: 2px solid var(--accent-color);
 }
-.note--own-card::before {
+
+.note:focus::before {
   content: "";
   display: block;
   position: absolute;
@@ -84,8 +85,7 @@ $note__author-image-size: 26px;
 }
 
 .note__text {
-  margin: 0;
-  margin-bottom: $margin--small;
+  margin: 0 0 $margin--small;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
