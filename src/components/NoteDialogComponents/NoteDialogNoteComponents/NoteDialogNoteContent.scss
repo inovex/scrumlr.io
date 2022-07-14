@@ -22,7 +22,9 @@
   transition: border-color 150ms ease-in-out;
   outline: none;
   resize: none;
+  word-wrap: break-word;
 }
+
 .note-dialog__note-content__text[contentEditable] {
   &:hover,
   &:focus {
