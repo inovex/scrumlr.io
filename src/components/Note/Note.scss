@@ -29,6 +29,7 @@ $note__author-image-size: 26px;
   height: 34px;
   width: 34px;
   padding: 0;
+  margin-bottom: 4px;
 }
 
 .note__in-stack {
@@ -109,18 +110,46 @@ $note__author-image-size: 26px;
   height: 26px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
+
 .note__author {
   display: inline-flex;
   align-items: center;
   // reset css from figure-element:
   margin: 0;
-  padding: 0;
   border: 0;
   font: inherit;
   vertical-align: baseline;
-  flex-grow: 1;
+  flex-grow: 0;
+  height: 35px;
+  padding: 0 $margin--default 0 0;
+}
+
+.note__author--self {
+  background: var(--accent-color--desaturated-light);
+  border-radius: 21px;
+  padding-left: 2px;
+}
+
+.note__author--self > .note__user-avatar #Circle-Background {
+  stroke: none;
+}
+
+.note__author--self > .note__author-name {
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .note__author--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
+  .note__author--self > .note__author-name {
+    color: $color-white;
+    font-weight: bold;
+  }
+
 }
 
 .note__author-image {
@@ -130,7 +159,7 @@ $note__author-image-size: 26px;
 }
 
 .note__author-name {
-  margin-left: $margin--default;
+  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;

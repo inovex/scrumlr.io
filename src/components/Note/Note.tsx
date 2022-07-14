@@ -28,8 +28,17 @@ export const Note = (props: NoteProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
-  const author = useAppSelector((state) => state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self);
-  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+  const author = useAppSelector((state) => {
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
+    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
+    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
+    return {
+      ...noteAuthor,
+      displayName: displayName,
+      isSelf,
+    };
+  });
+
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
 
@@ -94,10 +103,10 @@ export const Note = (props: NoteProps) => {
       >
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === author!.user.id) && (
-            <figure className="note__author" aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author!.user.avatar} name={authorName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{authorName}</figcaption>
+          {(showAuthors || props.viewer.user.id === author.user!.id) && (
+            <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
+              <UserAvatar id={note!.author} avatar={author.user!.avatar} name={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
           <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
