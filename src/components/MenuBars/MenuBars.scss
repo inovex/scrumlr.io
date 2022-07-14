@@ -32,7 +32,7 @@ $box-shadow: 0px 10px 20px #00000026;
   position: absolute;
   bottom: 0;
 }
-.menu:first-child:nth-child(1) {
+.menu:first-child:last-child {
   position: static;
 }
 .user-menu {

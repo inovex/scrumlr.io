@@ -1,7 +1,10 @@
 @import "constants/style.scss";
 
 $menu-item-size: 42px;
-$background-color-dark: #333948;
+$tooltip-background-color-light: #d6d7da;
+$tooltip-background-color-dark: #485064;
+$icon-background-color-light: $color-white;
+$icon-background-color-dark: #333948;
 
 .menu-item {
   height: $menu-item-size;
@@ -31,7 +34,7 @@ $background-color-dark: #333948;
   max-width: 0;
   height: $menu-item-size;
   border-radius: calc($menu-item-size / 2);
-  background-color: #d6d7da;
+  background-color: $tooltip-background-color-light;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -43,9 +46,9 @@ $background-color-dark: #333948;
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-width: 5px;
+  border-width: 10px;
   border-style: solid;
-  border-color: #d6d7da transparent transparent transparent;
+  border-color: $tooltip-background-color-light transparent transparent transparent;
 }
 .menu-item:hover .menu-item__tooltip {
   max-width: max-content;
@@ -54,10 +57,10 @@ $background-color-dark: #333948;
 }
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: #485064;
+    background-color: $tooltip-background-color-dark;
   }
   .menu-item__tooltip::after {
-    border-color: #485064 transparent transparent transparent;
+    border-color: $tooltip-background-color-dark transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -121,7 +124,7 @@ $background-color-dark: #333948;
 @include visibleColumns(".menu-item") {
   .tooltip__text {
     color: $color-black;
-    background-color: #d6d7da;
+    background-color: $tooltip-background-color-light;
     height: $menu-item-size;
     line-height: $menu-item-size;
     width: max-content;
@@ -146,14 +149,14 @@ $background-color-dark: #333948;
 [theme="dark"] {
   .tooltip__text {
     color: $color-white !important;
-    background-color: #485064 !important;
+    background-color: $tooltip-background-color-dark !important;
   }
 }
 
 .menu-item__icon {
   background-clip: content-box !important;
   color: $color-black;
-  background-color: $color-white;
+  background-color: $icon-background-color-light;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -164,7 +167,7 @@ $background-color-dark: #333948;
   transition: visibility 150ms linear;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $background-color-dark;
+  background-color: $icon-background-color-dark;
   color: $color-white;
 }
 .menu-item__icon:nth-of-type(2) {
@@ -184,20 +187,20 @@ $background-color-dark: #333948;
     transition: border-color 0ms linear 150ms;
   }
   &:hover .menu-item__icon {
-    border-color: #d6d7da;
+    border-color: $tooltip-background-color-light;
     transition: border-color 0ms linear 0ms;
   }
 }
 [theme="dark"] {
   .menu-item__icon {
     color: $color-white;
-    background: #333948;
+    background: $icon-background-color-dark;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $color-white;
+    background-color: $icon-background-color-light;
     color: $color-black;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: #485064 !important;
+    border-color: $tooltip-background-color-dark !important;
   }
 }
