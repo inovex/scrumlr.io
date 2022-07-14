@@ -97,7 +97,9 @@ $note__author-image-size: 26px;
   text-overflow: ellipsis;
   display: -webkit-box;
   word-break: keep-all;
+  word-wrap: break-word;
 }
+
 [theme="dark"] {
   .note__text {
     color: $color-white;
