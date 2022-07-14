@@ -19,7 +19,7 @@ import {useDispatch} from "react-redux";
 import "./MenuBars.scss";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
-import {Toast} from "../../utils/Toast";
+import {Toast} from "utils/Toast";
 
 export const MenuBars = () => {
   const {t} = useTranslation();
@@ -39,7 +39,6 @@ export const MenuBars = () => {
     SET_TIMER_FIRST_KEY,
   } = hotkeyMap;
 
-  const [hotkeysEnabled, setHotkeysEnabled] = useState(true);
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -50,6 +49,7 @@ export const MenuBars = () => {
       showAuthors: rootState.board.data?.showAuthors,
       showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
       showHiddenColumns: rootState.participants!.self.showHiddenColumns,
+      hotkeysAreActive: rootState.view.hotkeysAreActive,
     }),
     _.isEqual
   );
@@ -85,12 +85,12 @@ export const MenuBars = () => {
     toggleMenus((prevState) => !prevState);
   };
   const toggleHotkeys = () => {
-    if (hotkeysEnabled) {
+    if (state.hotkeysAreActive) {
       Toast.info(t("Hotkeys.hotkeysDisabled"), 1500);
     } else {
       Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
     }
-    setHotkeysEnabled(!hotkeysEnabled);
+    dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
   };
   const startTimer = (minutes: number) => {
     dispatch(Actions.setTimer(minutes));
@@ -98,13 +98,13 @@ export const MenuBars = () => {
   };
 
   const hotkeyOptions = {
-    enabled: hotkeysEnabled,
+    enabled: state.hotkeysAreActive,
   };
   const hotkeyOptionsAdmin = {
-    enabled: hotkeysEnabled && isAdmin,
+    enabled: state.hotkeysAreActive && isAdmin,
   };
 
-  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [hotkeysEnabled]);
+  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive]);
   useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation]);
   useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady]);
   useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand]);

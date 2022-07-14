@@ -159,7 +159,8 @@
   },
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys aktiviert!",
-    "hotkeysDisabled": "Hotkeys deaktiviert!"
+    "hotkeysDisabled": "Hotkeys deaktiviert!",
+    "hotkeyToggle": "Hotkeys aktivieren"
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",

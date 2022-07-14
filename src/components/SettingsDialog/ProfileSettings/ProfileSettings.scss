@@ -1,6 +1,8 @@
 @import "src/constants/style";
 @import "../SettingsDialog";
 
+$settings__item-height: 48px;
+
 .profile-settings {
   &__container {
     display: flex;
@@ -21,12 +23,12 @@
     &-wrapper {
       overflow-y: auto;
       padding-right: $padding--small;
-      margin-right: calc(-1 * ($padding--small + 10px));
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
       margin-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
-        margin-right: calc(-1 * ($padding--medium + 10px));
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
       }
     }
 
@@ -34,4 +36,23 @@
       flex: 0;
     }
   }
+}
+
+.profile-settings__open-cheat-sheet-button {
+  width: $line-height--medium;
+  height: $line-height--medium;
+  border: none;
+  background: var(--accent-color);
+  border-radius: 50px;
+  margin-right: $margin--default;
+  a {
+    font-weight: bold;
+    color: $color-white;
+    text-decoration: none;
+  }
+}
+.profile-settings__toggle-hotkeys-button {
+  justify-content: space-between;
+  padding-right: 24px;
+  height: $settings__item-height;
 }
