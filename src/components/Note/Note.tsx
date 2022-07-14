@@ -34,7 +34,7 @@ export const Note = (props: NoteProps) => {
     const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
     return {
       ...noteAuthor,
-      displayName: displayName,
+      displayName,
       isSelf,
     };
   });
