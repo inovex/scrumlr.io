@@ -18,9 +18,10 @@
     "generateRandomName": "Generate random name",
     "username": "Username"
   },
-  "Board": {
-    "publicSession": "Public Session",
-    "privateSession": "Private Session"
+  "AccessPolicy": {
+    "PUBLIC": "Open session",
+    "BY_PASSPHRASE": "Password protected",
+    "BY_INVITE": "Closed session"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",
