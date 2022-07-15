@@ -18,29 +18,17 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./MenuBars.scss";
 import {useHotkeys} from "react-hotkeys-hook";
-import {hotkeyMap} from "constants/hotkeys";
-import {Toast} from "utils/Toast";
+import {hotkeyMap} from "../../constants/hotkeys";
 
 export const MenuBars = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {
-    TOGGLE_MODERATION,
-    TOGGLE_RAISED_HAND,
-    TOGGLE_READY_STATE,
-    SHOW_TIMER_MENU,
-    SHOW_VOTING_MENU,
-    SHOW_SETTINGS,
-    TOGGLE_HOTKEYS,
-    TOGGLE_SHOW_AUTHORS,
-    TOGGLE_SHOW_OTHER_USERS_NOTES,
-    TOGGLE_COLUMN_VISIBILITY,
-    SET_TIMER_FIRST_KEY,
-  } = hotkeyMap;
 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
+
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
@@ -84,30 +72,11 @@ export const MenuBars = () => {
     setAnimate(true);
     toggleMenus((prevState) => !prevState);
   };
-  const toggleHotkeys = () => {
-    if (state.hotkeysAreActive) {
-      Toast.info(t("Hotkeys.hotkeysDisabled"), 1500);
-    } else {
-      Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
-    }
-    dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
-  };
-  const startTimer = (minutes: number) => {
-    dispatch(Actions.setTimer(minutes));
-    Toast.info(`${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`);
-  };
 
-  const hotkeyOptions = {
-    enabled: state.hotkeysAreActive,
-  };
   const hotkeyOptionsAdmin = {
     enabled: state.hotkeysAreActive && isAdmin,
   };
 
-  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive]);
-  useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation]);
-  useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady]);
-  useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand]);
   useHotkeys(
     SHOW_TIMER_MENU,
     () => {
@@ -130,42 +99,6 @@ export const MenuBars = () => {
     hotkeyOptionsAdmin,
     [showAdminMenu]
   );
-  useHotkeys(SHOW_SETTINGS, showSettings, hotkeyOptions);
-  useHotkeys(
-    TOGGLE_SHOW_AUTHORS,
-    (e: KeyboardEvent) => {
-      e.preventDefault();
-      dispatch(Actions.editBoard({showAuthors: !state.showAuthors}));
-    },
-    hotkeyOptionsAdmin,
-    [state.showAuthors]
-  );
-  useHotkeys(
-    TOGGLE_SHOW_OTHER_USERS_NOTES,
-    (e: KeyboardEvent) => {
-      e.preventDefault();
-      dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.showNotesOfOtherUsers}));
-    },
-    hotkeyOptionsAdmin,
-    [state.showNotesOfOtherUsers]
-  );
-  useHotkeys(
-    TOGGLE_COLUMN_VISIBILITY,
-    (e: KeyboardEvent) => {
-      e.preventDefault();
-      dispatch(Actions.setShowHiddenColumns(!state.showHiddenColumns));
-    },
-    hotkeyOptionsAdmin,
-    [state.showHiddenColumns]
-  );
-  const hotkeyTimerCombo = SET_TIMER_FIRST_KEY.map((firstKey) => _.range(1, 10).map((minute) => `${firstKey}+${minute}`)).join(",");
-  useHotkeys(hotkeyTimerCombo, (e) => {
-    e.preventDefault();
-    const minutes = Number(e.key);
-    if (minutes && minutes > 0) {
-      startTimer(minutes);
-    }
-  });
 
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
