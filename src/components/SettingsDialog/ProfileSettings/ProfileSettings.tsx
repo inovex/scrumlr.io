@@ -5,6 +5,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./ProfileSettings.scss";
 import {useDispatch} from "react-redux";
+import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -39,21 +40,21 @@ export const ProfileSettings = () => {
 
           <AvatarSettings id={id} />
         </div>
-        <SettingsButton
-          data-testid="author"
-          className="profile-settings__toggle-hotkeys-button"
-          label={t("Hotkeys.hotkeyToggle")}
-          onClick={() => {
-            dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
-          }}
-        >
-          <button className="profile-settings__open-cheat-sheet-button">
-            <a href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
-              ?
-            </a>
-          </button>
-          <Toggle active={state.hotkeysAreActive} />
-        </SettingsButton>
+        <div className="profile-settings__hotkey-settings">
+          <SettingsButton
+            className="profile-settings__toggle-hotkeys-button"
+            label={t("Hotkeys.hotkeyToggle")}
+            onClick={() => {
+              dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
+            }}
+          >
+            <Toggle active={state.hotkeysAreActive} />
+          </SettingsButton>
+          <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
+            <p>Hotkey Cheat Sheet</p>
+            <InfoIcon />
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -38,21 +38,58 @@ $settings__item-height: 48px;
   }
 }
 
+.profile-settings__hotkey-settings {
+  align-items: center;
+  width: calc(100% - #{$margin--small});
+}
+
+.profile-settings__toggle-hotkeys-button {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: $settings__item-height;
+  padding-right: $padding--default;
+}
+
 .profile-settings__open-cheat-sheet-button {
-  width: $line-height--medium;
-  height: $line-height--medium;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: $color-dark-gray;
+  gap: $margin--small;
+  margin-top: 2px;
+  padding-left: $padding--medium;
+  width: 100%;
+  height: $settings__item-height;
   border: none;
-  background: var(--accent-color);
-  border-radius: 50px;
-  margin-right: $margin--default;
-  a {
-    font-weight: bold;
-    color: $color-white;
-    text-decoration: none;
+  background: none;
+  svg {
+    width: $icon--medium;
+    height: $icon--medium;
+    margin-right: $margin--medium;
+    g,
+    line {
+      stroke: $color-dark-gray;
+    }
+  }
+  &:hover,
+  &:focus,
+  &:active {
+    background: none;
   }
 }
-.profile-settings__toggle-hotkeys-button {
-  justify-content: space-between;
-  padding-right: 24px;
-  height: $settings__item-height;
+
+[theme="dark"] {
+  .profile-settings__open-cheat-sheet-button {
+    background: none;
+    color: $color-middle-gray;
+    &:hover {
+      background: none;
+    }
+    svg g,
+    line {
+      stroke: $color-middle-gray;
+    }
+  }
 }
