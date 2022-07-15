@@ -1933,10 +1933,10 @@
     "@testing-library/dom" "^8.0.0"
     "@types/react-dom" "*"
 
-"@testing-library/user-event@^14.2.1":
-  version "14.2.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.2.1.tgz#8c5ff2d004544bb2220e1d864f7267fe7eb6c556"
-  integrity sha512-HOr1QiODrq+0j9lKU5i10y9TbhxMBMRMGimNx10asdmau9cb8Xb1Vyg0GvTwyIL2ziQyh2kAloOtAQFBQVuecA==
+"@testing-library/user-event@^14.2.3":
+  version "14.2.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.2.3.tgz#7731a9c2d4148f2f9bb53d718c56dc9e6afe5b3e"
+  integrity sha512-07Ly+NsFDTvjNdvl5bLBA5oHeGIIHCKc7CniGuKnHrjvqcTPVqPEo4z6a8iYydZ0WvDA6ZA0fnhYrqCLbsm0+A==
 
 "@tootallnate/once@1":
   version "1.1.2"
@@ -4544,10 +4544,10 @@ eslint-plugin-jest@^25.3.0:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-jest@^26.5.3:
-  version "26.5.3"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-26.5.3.tgz#a3ceeaf4a757878342b8b00eca92379b246e5505"
-  integrity sha512-sICclUqJQnR1bFRZGLN2jnSVsYOsmPYYnroGCIMVSvTS3y8XR3yjzy1EcTQmk6typ5pRgyIWzbjqxK6cZHEZuQ==
+eslint-plugin-jest@^26.6.0:
+  version "26.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-26.6.0.tgz#546804fa42da75d7d58d4d3b278d5186abd3f6c0"
+  integrity sha512-f8n46/97ZFdU4KqeQYqO8AEVGIhHWvkpgNBWHH3jrM28/y8llnbf3IjfIKv6p2pZIMinK1PCqbbROxs9Eud02Q==
   dependencies:
     "@typescript-eslint/utils" "^5.10.0"
 
