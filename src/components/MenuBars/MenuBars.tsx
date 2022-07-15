@@ -18,7 +18,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./MenuBars.scss";
 import {useHotkeys} from "react-hotkeys-hook";
-import {hotkeyMap} from "../../constants/hotkeys";
+import {hotkeyMap} from "constants/hotkeys";
 
 export const MenuBars = () => {
   const {t} = useTranslation();

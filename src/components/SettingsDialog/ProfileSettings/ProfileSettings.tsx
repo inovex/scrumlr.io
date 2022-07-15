@@ -6,10 +6,10 @@ import {Actions} from "store/action";
 import "./ProfileSettings.scss";
 import {useDispatch} from "react-redux";
 import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
+import {Toggle} from "components/Toggle";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
-import {Toggle} from "../../Toggle";
 
 export const ProfileSettings = () => {
   const {t} = useTranslation();
