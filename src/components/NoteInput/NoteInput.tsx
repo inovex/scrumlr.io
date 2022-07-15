@@ -47,7 +47,7 @@ export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: Note
     }
   };
   return (
-    <div className="note-input">
+    <form className="note-input">
       <input
         ref={noteInputRef}
         className="note-input__input"
@@ -57,12 +57,23 @@ export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: Note
         onChange={handleChangeNoteText}
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
+            e.preventDefault();
             onAddNote();
           }
         }}
         tabIndex={tabIndex ?? TabIndex.default}
+        maxLength={maxNoteLength}
       />
-      <PlusIcon onClick={onAddNote} className="note-input__icon" />
-    </div>
+      <button
+        type="submit"
+        className="note-input__add-button"
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          e.preventDefault();
+          onAddNote();
+        }}
+      >
+        <PlusIcon className="note-input__icon" />
+      </button>
+    </form>
   );
 };

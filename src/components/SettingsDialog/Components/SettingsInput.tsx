@@ -26,7 +26,9 @@ export const SettingsInput: FC<SettingsInputProps> = ({label, id, value, onChang
       id={id}
       autoComplete="off"
     />
-    <label htmlFor={label}>{label}</label>
-    <div className="settings-input__children">{children}</div>
+    <label htmlFor={id}>{label}</label>
+    <button className="settings-input__children" onMouseDown={(e) => e.preventDefault()}>
+      {children}
+    </button>
   </div>
 );
