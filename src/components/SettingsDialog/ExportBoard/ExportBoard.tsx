@@ -4,9 +4,10 @@ import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
 import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
+import {ReactComponent as ClipboardIcon} from "assets/icon-clipboard.svg";
 import {useNavigate} from "react-router";
-import {useAppSelector} from "../../../store";
-import {exportAsJSON, exportAsCSV} from "../../../utils/export";
+import {useAppSelector} from "store";
+import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
@@ -51,6 +52,15 @@ export const ExportBoard: VFC = () => {
           className="export-board__button-reverse-order"
           onClick={() => {
             navigate(`/board/${boardId}/print`);
+          }}
+        />
+        <hr className="settings-dialog__separator" />
+        <SettingsButton
+          label={t("ExportBoardOption.exportToClipboard")}
+          icon={ClipboardIcon}
+          className="export-board__button-reverse-order"
+          onClick={() => {
+            getMarkdownExport(boardId).then((result) => navigator.clipboard.writeText(result));
           }}
         />
       </div>

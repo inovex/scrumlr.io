@@ -8,53 +8,8 @@ import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {Color, getColorClassName} from "constants/colors";
-
-interface BoardData {
-  board: {
-    id: string;
-    name: string;
-    showAuthors: boolean;
-    showVoting: boolean;
-  };
-  columns: [
-    {
-      id: string;
-      name: string;
-      color: Color;
-    }
-  ];
-  notes: [
-    {
-      id: string;
-      author: string;
-      text: string;
-      votes: number;
-      position: {
-        column: string;
-        stack: string;
-        rank: number;
-      };
-    }
-  ];
-  participants: [
-    {
-      role: string;
-      user: {
-        id: string;
-        name: string;
-      };
-    }
-  ];
-  votings: [
-    {
-      votes: {
-        votes: number;
-        votesPerNote: [];
-      };
-    }
-  ];
-}
+import {getColorClassName} from "constants/colors";
+import {BoardDataType} from "../types";
 
 interface PrintViewProps {
   boardId: string;
@@ -65,7 +20,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
-  const [boardData, setBoardData] = useState<BoardData>();
+  const [boardData, setBoardData] = useState<BoardDataType>();
 
   const pageStyle = `
       @page {

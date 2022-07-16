@@ -72,7 +72,8 @@
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",
-    "openPrintView": "Druckansicht öffnen"
+    "openPrintView": "Druckansicht öffnen",
+    "exportToClipboard": "Markdown in die Zwischenablage kopieren"
   },
   "PrintView": {
     "Participants": "Teilnehmer",
@@ -80,6 +81,16 @@
     "ProvidedBy": "Bereitgestellt mit ♥️ von",
     "Notes": "Kärtchen",
     "Votes": "Votes"
+  },
+  "MarkdownExport": {
+    "properties": "Eigenschaften",
+    "columns": "Spalten",
+    "note": "Kärtchen",
+    "participants": "Teilnehmer",
+    "boardId": "Sitzungs-ID",
+    "votes": "Votes",
+    "vote": "Vote",
+    "stackSize": "Stapelgröße"
   },
   "ShareQrCodeOption": {
     "title": "Sitzung teilen",

@@ -72,7 +72,8 @@
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
-    "openPrintView": "Open print view"
+    "openPrintView": "Open print view",
+    "exportToClipboard": "Copy Markdown to Clipboard"
   },
   "PrintView": {
     "Participants": "Participants",
@@ -80,6 +81,16 @@
     "ProvidedBy": "Provided with ♥️ by",
     "Notes": "Kärtchen",
     "Votes": "Stimmen"
+  },
+  "MarkdownExport": {
+    "properties": "Properties",
+    "columns": "Columns",
+    "note": "Note",
+    "participants": "Participants",
+    "boardId": "Board-ID",
+    "votes": "Votes",
+    "vote": "Vote",
+    "stackSize": "Stack size"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
