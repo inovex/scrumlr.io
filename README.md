@@ -32,6 +32,7 @@ $ cd scrumlr.io
 
 - [Node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/)
+- [Go](https://go.dev/dl/)
 - [Docker](https://www.docker.com/)
 - _(optional)_ [minikube](https://kubernetes.io/docs/tasks/tools/)
 - _(optional)_ [kubectl](https://kubernetes.io/docs/tasks/tools/)
