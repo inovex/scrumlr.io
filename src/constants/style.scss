@@ -23,7 +23,7 @@ $color-grooming-green: #18d8ab;
 $color-goal-green: #70e000;
 $color-lean-lilac: #c000ff;
 $color-online-orange: #ffaa5a;
-$color-planning-pink: #ff0069;
+$color-planning-pink: #e20360;
 $color-poker-purple: #5e00ff;
 $color-retro-red: #ea434b;
 $color-warning-red: #eb625b;
@@ -32,7 +32,7 @@ $color-warning-red: #eb625b;
   --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
   --accent-color--desaturated-light: #{color.adjust($color, $lightness: 35%)};
-  --accent-color--desaturated-dark: #{color.adjust($color, $lightness: 12%, $alpha: -.7)};
+  --accent-color--desaturated-dark: #{color.adjust($color, $lightness: 12%, $alpha: -0.7)};
 }
 
 .accent-color__backlog-blue {
