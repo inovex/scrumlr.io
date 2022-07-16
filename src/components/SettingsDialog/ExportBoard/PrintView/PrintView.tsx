@@ -9,6 +9,7 @@ import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
+import {compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
 import {BoardDataType} from "../types";
 
 interface PrintViewProps {
@@ -25,7 +26,6 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const pageStyle = `
       @page {
         size: A4;
-
       }
     `;
 
@@ -55,30 +55,17 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     currDate.getHours()
   ).padStart(2, "0")}:${String(currDate.getMinutes()).padStart(2, "0")}`;
 
-  const getAuthorName = (authorId: string) => (boardData?.board.showAuthors ? boardData?.participants.filter((p) => p.user?.id === authorId)[0].user?.name : "");
-
-  const getNoteVotes = (noteId: string) => (boardData?.votings ? boardData?.votings[0].votes?.votesPerNote[noteId]?.total ?? 0 : 0);
-
   const voteLabel = (noteId: string) => {
     if (!(boardData?.votings && boardData?.board.showVoting)) return "";
-    const votes = getNoteVotes(noteId);
+    const votes = getNoteVotes(noteId, boardData?.votings);
     return votes > 0 ? <div className="print-view__note-info-votes">{votes} Votes</div> : "";
   };
-
-  const compareNotes = (a: {id: string; position: {rank: number}}, b: {id: string; position: {rank: number}}) => {
-    if (boardData?.votings && getNoteVotes(a.id) !== getNoteVotes(b.id)) {
-      return getNoteVotes(a.id) > getNoteVotes(b.id) ? -1 : 1;
-    }
-    return a.position.rank > b.position.rank ? -1 : 1;
-  };
-
-  const getChildNotes = (noteId: string) => boardData?.notes.filter((n) => n.position.stack === noteId).sort((a, b) => compareNotes(a, b));
 
   const noteElement = (id: string, text: string, authorId: string, isChild: boolean, isTop: boolean) => (
     <div key={id} className={classNames("print-view__note", {"print-view__note--isChild": isChild, "print-view__note--isTop": isTop})}>
       <p className="print-view__note-text">{text}</p>
       <div className="print-view__note-info-wrapper">
-        <span className="print-view__note-info-author">{getAuthorName(authorId)}</span>
+        <span className="print-view__note-info-author">{boardData?.board.showAuthors ? getAuthorName(authorId, boardData?.participants) : ""}</span>
         <span className={classNames({"print-view__note-info--isTop": isTop, "print-view__note-info--isChild": isChild})}>{voteLabel(id)}</span>
       </div>
     </div>
@@ -128,10 +115,10 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
                     </div>
                     {boardData.notes
                       .filter((n) => n.position.column === c.id)
-                      .sort((a, b) => compareNotes(a, b))
+                      .sort((a, b) => compareNotes(a, b, boardData?.votings))
                       .map((n) => {
                         if (!n.position.stack) {
-                          const childNotes = getChildNotes(n.id);
+                          const childNotes = getChildNotes(boardData?.notes, boardData?.votings, n.id);
                           return childNotes && childNotes.length > 0
                             ? noteStackWrapper(noteElement(n.id, n.text, n.author, false, true), childNotes)
                             : noteElement(n.id, n.text, n.author, false, false);

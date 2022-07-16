@@ -86,10 +86,11 @@
     "properties": "Properties",
     "columns": "Columns",
     "note": "Note",
+    "notes": "Notes",
     "participants": "Participants",
     "boardId": "Board-ID",
-    "votes": "Votes",
     "vote": "Vote",
+    "votes": "Votes",
     "stackSize": "Stack size"
   },
   "ShareQrCodeOption": {

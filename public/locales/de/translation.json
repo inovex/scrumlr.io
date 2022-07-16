@@ -80,16 +80,17 @@
     "GeneratedOn": "Erstellt auf",
     "ProvidedBy": "Bereitgestellt mit ♥️ von",
     "Notes": "Kärtchen",
-    "Votes": "Votes"
+    "Votes": "Stimmen"
   },
   "MarkdownExport": {
     "properties": "Eigenschaften",
     "columns": "Spalten",
     "note": "Kärtchen",
+    "notes": "Kärtchen",
     "participants": "Teilnehmer",
     "boardId": "Sitzungs-ID",
-    "votes": "Votes",
-    "vote": "Vote",
+    "vote": "Stimme",
+    "votes": "Stimmen",
     "stackSize": "Stapelgröße"
   },
   "ShareQrCodeOption": {
