@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 $menu-item-size: 42px;
-$tooltip-background-color-light: #d6d7da;
+$tooltip-background-color-light: #d3daf0;
 $tooltip-background-color-dark: #485064;
 $icon-background-color-light: $color-white;
 $icon-background-color-dark: #333948;
@@ -113,14 +113,14 @@ $icon-background-color-dark: #333948;
   width: 100%;
   padding: 0 $padding--default;
   white-space: nowrap;
-  font-size: $text-size--small;
+  font-size: 14px;
   font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: $letter-spacing--large;
+  letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   color: $color-black;
   border-radius: calc($menu-item-size / 2);
 }
+
 @include visibleColumns(".menu-item") {
   .tooltip__text {
     color: $color-black;
