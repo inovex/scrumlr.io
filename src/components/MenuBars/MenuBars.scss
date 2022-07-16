@@ -82,50 +82,50 @@ $box-shadow: 0px 10px 20px #00000026;
   transition: transform 400ms, opacity 400ms, visibility 400ms;
 }
 
-@include onMobile(".menu-bars") {
-  &.menu-bars--user > .user-menu {
+@media #{$smartphone} {
+  .menu-bars.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
   }
-  &.menu-bars--user > .admin-menu {
+  .menu-bars.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
     transform: translateY($action-bar-width);
   }
-  &.menu-bars--admin > .admin-menu {
+  .menu-bars.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
   }
-  &.menu-bars--admin > .user-menu {
+  .menu-bars.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
     transform: translateY(calc(-1 * $action-bar-width));
   }
-  &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
+  .menu-bars.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
     opacity: 0;
     transform: rotate(360deg);
   }
-  &.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
+  .menu-bars.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
     visibility: hidden;
     opacity: 0;
     transform: rotate(-360deg);
   }
-  .menu-bars__switch {
+  .menu-bars .menu-bars__switch {
     display: block;
   }
 }
 
-@include onDesktop(".menu-bars") {
-  &.menu-bars {
+@media #{$tablet} {
+  .menu-bars.menu-bars {
     position: static;
     transform: none;
     left: auto;
     bottom: auto;
   }
-  .menu {
+  .menu-bars .menu {
     padding: $padding--medium 0;
     width: $action-bar-width;
     height: auto;
@@ -136,13 +136,13 @@ $box-shadow: 0px 10px 20px #00000026;
     visibility: visible;
     opacity: 1;
   }
-  .user-menu {
+  .menu-bars .user-menu {
     left: 12px;
   }
-  .admin-menu {
+  .menu-bars .admin-menu {
     right: 12px;
   }
-  .menu__items {
+  .menu-bars .menu__items {
     flex-direction: column;
     height: auto;
   }
@@ -216,14 +216,14 @@ $box-shadow: 0px 10px 20px #00000026;
   width: 24px;
 }
 
-@include onMobile(".menu-bars__navigation") {
-  & {
+@media #{$smartphone} {
+  .menu-bars__navigation {
     display: none;
   }
 }
 
-@include onDesktop(".menu-bars__navigation") {
-  &.menu-bars__navigation--visible {
+@media #{$tablet} {
+  .menu-bars__navigation.menu-bars__navigation--visible {
     display: flex;
     align-items: center;
     justify-content: center;

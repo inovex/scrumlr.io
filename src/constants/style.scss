@@ -134,22 +134,6 @@ $menu-desktop: "screen and (min-width: 1344px)";
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
 
-@mixin onMobile($selector) {
-  @media screen and (max-width: 767px) {
-    #{$selector} {
-      @content;
-    }
-  }
-}
-
-@mixin onDesktop($selector) {
-  @media screen and (min-width: 768px) {
-    #{$selector} {
-      @content;
-    }
-  }
-}
-
 // scrollbar
 @mixin scrollbar($width: 10px, $border-radius: 8px) {
   &::-webkit-scrollbar {

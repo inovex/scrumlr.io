@@ -11,7 +11,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
   return (
     <Provider store={getTestStore()}>
-      <BoardContext currentUserIsModerator>
+      <BoardContext currentUserIsModerator moderating={false}>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
         ))}
