@@ -1,10 +1,10 @@
 <svg id="ic_minus" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
   <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
-  <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(4 4)" fill="none" stroke="#ff0069" stroke-width="2">
+  <g id="Ellipse_32" data-name="Ellipse 32" transform="translate(4 4)" fill="none" stroke="#E20360" stroke-width="2">
     <circle cx="12" cy="12" r="12" stroke="none"/>
     <circle cx="12" cy="12" r="11" fill="none"/>
   </g>
-  <g id="Rechteck_573" data-name="Rechteck 573" transform="translate(12 15)" fill="#fff" stroke="#ff0069" stroke-width="1">
+  <g id="Rechteck_573" data-name="Rechteck 573" transform="translate(12 15)" fill="#fff" stroke="#E20360" stroke-width="1">
     <rect width="8" height="2" rx="1" stroke="none"/>
     <rect x="0.5" y="0.5" width="7" height="1" rx="0.5" fill="none"/>
   </g>
