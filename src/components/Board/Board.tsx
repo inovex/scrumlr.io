@@ -69,8 +69,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
         const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
         const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
 
-        document.getElementById("root")!.setAttribute("column-visibility", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0 ? "collapsed" : "visible");
-
         setColumnState({
           firstVisibleColumnIndex,
           lastVisibleColumnIndex,
