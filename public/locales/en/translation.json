@@ -91,7 +91,8 @@
     "boardId": "Board-ID",
     "vote": "Vote",
     "votes": "Votes",
-    "stackSize": "Stack size"
+    "stackSize": "Stack size",
+    "showAuthorsDisabled": "Note authors are hidden"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",

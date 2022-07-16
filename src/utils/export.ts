@@ -42,40 +42,56 @@ const mdBoardProperties = (board: BoardType, participants: ParticipantType[]) =>
   const header = `## ${i18n.t("MarkdownExport.properties")}\n`;
   const boardId = `- ${i18n.t("MarkdownExport.boardId")}: ${board.id}\n`;
   const participantsNumber = `- ${t("MarkdownExport.participants")}: ${participants.length}\n`;
-  return `${header + boardId + participantsNumber}\n`;
+  const authorsHidden = !board.showAuthors ? `- ${t("MarkdownExport.showAuthorsDisabled")}\n` : "";
+  return `${header + boardId + participantsNumber + authorsHidden}\n`;
 };
 
 const mdVotesPerNote = (noteId: string, votings: VotingType[]) => {
   const votes = votings ? getNoteVotes(noteId, votings) : 0;
-  return votes ? `, ${votes} ${votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes")}` : "";
+  return votes ? `${votes} ${votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes")}` : "";
 };
 
-const mdNote = (note: NoteType, participants: ParticipantType[], votes: string, stack: string) => {
+const mdBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `(${input})` : input);
+
+const mdNote = (note: NoteType, author: string, votes: string, stack: string) => {
   const nested = stack === "" && note.position.stack;
-  return `${nested ? "\n    " : "\n"}- ${note.text} (${participants.filter((p) => p.user.id === note.author)[0].user.name}${votes})${stack}`;
+  const bracketsRequired = !!author || !!votes;
+  const separator = !!author && !!votes ? ", " : "";
+  return `${nested ? "\n    " : "\n"}- ${note.text} ${mdBrackets(bracketsRequired, `${author + separator + votes}`)}${stack}`;
 };
 
-const mdStack = (notesInStack: NoteType[], participants: ParticipantType[], votings: VotingType[]) =>
-  notesInStack.length > 0 ? `${notesInStack.map((n) => mdNote(n, participants, mdVotesPerNote(n.id, votings), "")).join("")}` : "";
+const mdStack = (notesInStack: NoteType[], boardData: BoardDataType) =>
+  notesInStack.length > 0
+    ? `${notesInStack
+        .map((n) =>
+          mdNote(
+            n,
+            boardData.board.showAuthors ? getAuthorName(n.author, boardData.participants) : "",
+            boardData.board.showAuthors ? mdVotesPerNote(n.id, boardData.votings) : "",
+            ""
+          )
+        )
+        .join("")}`
+    : "";
 
-const mdNotesPerColumn = (columnId: string, notes: NoteType[], participants: ParticipantType[], votings: VotingType[]) =>
-  notes
+const mdNotesPerColumn = (columnId: string, boardData: BoardDataType) =>
+  boardData.notes
     .filter((n) => !n.position.stack && n.position.column === columnId)
-    .sort((a, b) => compareNotes(a, b, votings))
+    .sort((a, b) => compareNotes(a, b, boardData.votings))
     .map((n) => {
-      const votes = mdVotesPerNote(n.id, votings);
-      const stack = mdStack(getChildNotes(notes, votings, n.id), participants, votings);
-      return mdNote(n, participants, votes, stack);
+      const votes = boardData.board.showVoting ? mdVotesPerNote(n.id, boardData.votings) : "";
+      const author = boardData.board.showAuthors ? getAuthorName(n.author, boardData.participants) : "";
+      const stack = mdStack(getChildNotes(boardData.notes, boardData.votings, n.id), boardData);
+      return mdNote(n, author, votes, stack);
     })
     .join("");
 
-const mdColumns = (columns: ColumnType[], notes: NoteType[], participants: ParticipantType[], votings: VotingType[]) => {
+const mdColumns = (boardData: BoardDataType) => {
   const header = `## ${t("MarkdownExport.columns")}\n`;
-  const columnList = columns
-    .filter((c) => notes.filter((n) => n.position.column === c.id).length > 0)
+  const columnList = boardData.columns
+    .filter((c) => boardData.notes.filter((n) => n.position.column === c.id).length > 0)
     .map(
-      (c: ColumnType) =>
-        `### ${c.name} (${notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, notes, participants, votings)}`
+      (c: ColumnType) => `### ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`
     )
     .join("\n\n");
   return `${header + columnList}\n\n`;
@@ -87,10 +103,7 @@ const mdBranding = () =>
   }/scrumlr-logo-light.svg)`;
 
 const mdTemplate = (boardData: BoardDataType) =>
-  mdBoardHeader(boardData.board.name) +
-  mdColumns(boardData.columns, boardData.notes, boardData.participants, boardData.votings) +
-  mdBoardProperties(boardData.board, boardData.participants) +
-  mdBranding();
+  mdBoardHeader(boardData.board.name) + mdColumns(boardData) + mdBoardProperties(boardData.board, boardData.participants) + mdBranding();
 
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");

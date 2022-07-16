@@ -5,6 +5,7 @@ export interface BoardType {
   name: string;
   showAuthors: boolean;
   showVoting: boolean;
+  accessPolicy: string;
 }
 
 export interface ColumnType {

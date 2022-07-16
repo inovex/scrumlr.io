@@ -91,7 +91,8 @@
     "boardId": "Sitzungs-ID",
     "vote": "Stimme",
     "votes": "Stimmen",
-    "stackSize": "Stapelgröße"
+    "stackSize": "Stapelgröße",
+    "showAuthorsDisabled": "Kartenautoren werden nicht angezeigt"
   },
   "ShareQrCodeOption": {
     "title": "Sitzung teilen",
