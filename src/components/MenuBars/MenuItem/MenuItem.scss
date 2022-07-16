@@ -81,7 +81,8 @@ $icon-background-color-dark: #333948;
     }
   }
 }
-@include visibleColumns(".menu-item") {
+
+@include onDesktop(".menu-item") {
   .menu-item__tooltip {
     opacity: 1;
     visibility: visible;
@@ -121,7 +122,7 @@ $icon-background-color-dark: #333948;
   border-radius: calc($menu-item-size / 2);
 }
 
-@include visibleColumns(".menu-item") {
+@include onDesktop(".menu-item") {
   .tooltip__text {
     color: $color-black;
     background-color: $tooltip-background-color-light;
@@ -146,6 +147,7 @@ $icon-background-color-dark: #333948;
     transform: translateX(0);
   }
 }
+
 [theme="dark"] {
   .tooltip__text {
     color: $color-white !important;
@@ -182,7 +184,8 @@ $icon-background-color-dark: #333948;
     visibility: visible;
   }
 }
-@include visibleColumns(".menu-item") {
+
+@include onDesktop(".menu-item") {
   .menu-item__icon {
     transition: border-color 0ms linear 150ms;
   }
@@ -191,6 +194,7 @@ $icon-background-color-dark: #333948;
     transition: border-color 0ms linear 0ms;
   }
 }
+
 [theme="dark"] {
   .menu-item__icon {
     color: $color-white;

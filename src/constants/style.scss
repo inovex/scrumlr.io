@@ -32,7 +32,7 @@ $color-warning-red: #eb625b;
   --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
   --accent-color--desaturated-light: #{color.adjust($color, $lightness: 35%)};
-  --accent-color--desaturated-dark: #{color.adjust($color, $lightness: 12%, $alpha: -.7)};
+  --accent-color--desaturated-dark: #{color.adjust($color, $lightness: 12%, $alpha: -0.7)};
 }
 
 .accent-color__backlog-blue {
@@ -134,23 +134,17 @@ $menu-desktop: "screen and (min-width: 1344px)";
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
 
-// apply styles on given selector if columns are collapsed (not all visible on a single screen)
-@mixin collapsedColumns($selector) {
+@mixin onMobile($selector) {
   @media screen and (max-width: 767px) {
     #{$selector} {
       @content;
     }
   }
-
-  [column-visibility="collapsed"] #{$selector} {
-    @content;
-  }
 }
 
-// apply styles on given selector if columns are visible entirely on the screen
-@mixin visibleColumns($selector) {
+@mixin onDesktop($selector) {
   @media screen and (min-width: 768px) {
-    [column-visibility="visible"] #{$selector} {
+    #{$selector} {
       @content;
     }
   }

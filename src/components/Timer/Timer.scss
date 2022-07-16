@@ -9,16 +9,12 @@
   color: $color-white;
   background-color: $color-backlog-blue;
   vertical-align: bottom;
-}
-@include collapsedColumns(".timer > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
 
 [theme="dark"] {
   .timer > * {
     background-color: $color-planning-pink;
-  }
-  @include collapsedColumns(".timer > *") {
     box-shadow: 0 8px 16px #ff006925;
   }
 }

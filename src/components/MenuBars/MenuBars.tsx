@@ -16,9 +16,18 @@ import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.s
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./MenuBars.scss";
 
-export const MenuBars = () => {
+export interface MenuBarsProps {
+  showPreviousColumn: boolean;
+  showNextColumn: boolean;
+  onPreviousColumn: () => void;
+  onNextColumn: () => void;
+}
+
+export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -80,7 +89,17 @@ export const MenuBars = () => {
           />
           <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
         </div>
+
+        <button
+          className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+          disabled={!showPreviousColumn}
+          onClick={onPreviousColumn}
+          aria-hidden
+        >
+          <LeftArrowIcon className="menu-bars__navigation-icon" />
+        </button>
       </section>
+
       {isAdmin && (
         <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
@@ -97,8 +116,18 @@ export const MenuBars = () => {
               isFocusModeToggle
             />
           </div>
+
+          <button
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+            disabled={!showNextColumn}
+            onClick={onNextColumn}
+            aria-hidden
+          >
+            <RightArrowIcon className="menu-bars__navigation-icon" />
+          </button>
         </section>
       )}
+
       {isAdmin && (
         <button
           className="menu-bars__switch"

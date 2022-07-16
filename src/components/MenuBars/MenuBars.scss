@@ -12,6 +12,7 @@ $box-shadow: 0px 10px 20px #00000026;
   transform: translateX(-50%);
   bottom: $margin--small;
 }
+
 @media print {
   .menu-bars {
     display: none !important;
@@ -32,6 +33,7 @@ $box-shadow: 0px 10px 20px #00000026;
   position: absolute;
   bottom: 0;
 }
+
 .menu:first-child:last-child {
   position: static;
 }
@@ -80,7 +82,7 @@ $box-shadow: 0px 10px 20px #00000026;
   transition: transform 400ms, opacity 400ms, visibility 400ms;
 }
 
-@include collapsedColumns(".menu-bars") {
+@include onMobile(".menu-bars") {
   &.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
@@ -116,7 +118,7 @@ $box-shadow: 0px 10px 20px #00000026;
   }
 }
 
-@include visibleColumns(".menu-bars") {
+@include onDesktop(".menu-bars") {
   &.menu-bars {
     position: static;
     transform: none;
@@ -124,10 +126,7 @@ $box-shadow: 0px 10px 20px #00000026;
     bottom: auto;
   }
   .menu {
-    padding-top: $padding--medium;
-    padding-bottom: $padding--medium;
-    padding-left: 0;
-    padding-right: 0;
+    padding: $padding--medium 0;
     width: $action-bar-width;
     height: auto;
     position: fixed;
@@ -157,5 +156,76 @@ $box-shadow: 0px 10px 20px #00000026;
   }
   .switch__icon {
     color: $color-white;
+  }
+}
+
+.menu-bars__navigation {
+  display: none;
+  position: absolute;
+  top: calc(100% + 22px);
+  left: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+  border: none;
+  border-radius: 100%;
+  outline: none;
+  box-shadow: $box-shadow;
+  color: $color-black;
+}
+
+.menu-bars__navigation:enabled {
+  cursor: pointer;
+}
+
+.menu-bars__navigation:focus {
+  outline: 2px solid #00000050;
+}
+
+.menu-bars__navigation:enabled:hover {
+  border: 3px solid #d3daf0;
+}
+
+.menu-bars__navigation:disabled {
+  color: $color-light-gray;
+}
+
+[theme="dark"] {
+  .menu-bars__navigation {
+    background: #333948;
+    color: $color-white;
+  }
+
+  .menu-bars__navigation:focus {
+    outline: 2px solid #ffffff50;
+  }
+
+  .menu-bars__navigation:enabled:hover {
+    border: 3px solid #485064;
+  }
+
+  .menu-bars__navigation:disabled {
+    color: $color-dark-mode;
+  }
+}
+
+.menu-bars__navigation-icon {
+  height: 24px;
+  width: 24px;
+}
+
+@include onMobile(".menu-bars__navigation") {
+  & {
+    display: none;
+  }
+}
+
+@include onDesktop(".menu-bars__navigation") {
+  &.menu-bars__navigation--visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
