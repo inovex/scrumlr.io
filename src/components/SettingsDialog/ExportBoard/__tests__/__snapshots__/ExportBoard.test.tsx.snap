@@ -75,6 +75,24 @@ Object {
               icon-print.svg
             </svg>
           </button>
+          <hr
+            class="settings-dialog__separator"
+          />
+          <button
+            class="settings-option-button export-board__button-reverse-order"
+            type="button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              Copy Markdown to Clipboard
+            </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-clipboard.svg
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -148,6 +166,24 @@ Object {
             class="settings-option-button__icon"
           >
             icon-print.svg
+          </svg>
+        </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button export-board__button-reverse-order"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Copy Markdown to Clipboard
+          </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-clipboard.svg
           </svg>
         </button>
       </div>
