@@ -42,30 +42,60 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header__users {
   position: absolute;
-  right: 0;
+  right: $margin--large;
   top: calc(24px - #{$board-header__hover-padding-top-bottom});
-  border-radius: 16px;
-  padding: $board-header__hover-padding;
+  padding: $board-header__hover-padding-top-bottom $padding--small;
 
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
+  align-items: center;
 
   background: none;
   border: none;
   outline: none;
-
-  cursor: pointer;
 }
 
-.board-header__users:focus,
-.board-header__users:hover {
-  background-color: rgba(0, 87, 255, 0.06);
+.board-header__share-button {
+  color: $color-backlog-blue;
+  outline: none;
+  border: 2px solid $color-backlog-blue;
+  border-radius: 100%;
+  height: 44px;
+  width: 44px;
+  margin-left: $margin--default;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.08s ease-out;
+
+  background: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: $color-white;
+    background: $color-backlog-blue;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
 [theme="dark"] {
-  .board-header__users:focus,
-  .board-header__users:hover {
-    background-color: rgba(255, 0, 105, 0.15);
+  .board-header__share-button {
+    color: $color-white;
+    border: 2px solid $color-planning-pink;
+
+    &:hover,
+    &:focus {
+      background: $color-planning-pink;
+    }
   }
 }
 
@@ -104,9 +134,10 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
-  margin: auto;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  margin: 0 auto;
 }
 
 .board-header__name-container {
@@ -158,5 +189,19 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   .board-header__name-container {
     min-height: 40px;
     min-width: 240px;
+  }
+}
+
+@media #{$smartphone} {
+  .board-header__users {
+    right: 0;
+  }
+
+  .board-header__share-button {
+    display: none;
+  }
+
+  .board-header__link {
+    padding: $padding--small;
   }
 }

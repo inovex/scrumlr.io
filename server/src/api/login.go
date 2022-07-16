@@ -46,7 +46,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true}
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
 	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
@@ -58,6 +58,14 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
 	s.sealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
+
+	if getHostWithoutPort(r) != getTopLevelHost(r) {
+		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+		s.sealCookie(r, &cookieWithSubdomain)
+		cookieWithSubdomain.Domain = getHostWithoutPort(r)
+		http.SetCookie(w, &cookieWithSubdomain)
+	}
+
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
 }
@@ -117,18 +125,24 @@ func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
 		cookie.SameSite = http.SameSiteStrictMode
 	}
 
+	cookie.Domain = getTopLevelHost(r)
+	cookie.HttpOnly = true
+}
+
+func getHostWithoutPort(r *http.Request) string {
 	hostname := r.Host
 	if strings.Contains(hostname, ":") {
 		hostname, _, _ = net.SplitHostPort(hostname)
 	}
+	return hostname
+}
 
+func getTopLevelHost(r *http.Request) string {
+	hostname := getHostWithoutPort(r)
 	hostWithSubdomain := strings.Split(hostname, ".")
 	if len(hostWithSubdomain) >= 2 {
-		cookie.Domain = fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
-	} else {
-		cookie.Domain = hostname
+		return fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
 	}
 
-	cookie.HttpOnly = true
-	cookie.MaxAge = math.MaxInt32
+	return hostname
 }

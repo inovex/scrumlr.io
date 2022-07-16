@@ -123,7 +123,12 @@ func (d *Database) DeleteColumn(board, column uuid.UUID) error {
 		Model((*Column)(nil)).Set("index = index-1").
 		Where("board = (SELECT board from \"selectPreviousIndex\")").
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
+  boardUpdate := d.db.NewUpdate().
+    Model((*Board)(nil)).
+    Set("shared_note = null").
+    Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
 	_, err := d.db.NewDelete().
+    With("boardUpdate", boardUpdate).
 		With("indexUpdate", indexUpdate).
 		Model((*Column)(nil)).
 		Where("id = ?", column).

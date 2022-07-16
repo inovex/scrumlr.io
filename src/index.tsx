@@ -14,6 +14,7 @@ import {LoadingScreen} from "components/LoadingScreen";
 import {Actions} from "store/action";
 import {Html} from "components/Html";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import {SHOW_LEGAL_DOCUMENTS} from "./config";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,7 +26,7 @@ ReactDOM.render(
           <DndProvider backend={HTML5Backend}>
             <Router />
           </DndProvider>
-          <CookieNotice />
+          {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
         </Suspense>
       </Provider>
     </I18nextProvider>

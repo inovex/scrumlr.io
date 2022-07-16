@@ -110,13 +110,26 @@
   position: absolute;
   top: 8px;
   padding: 0;
+  transition: all 0.08s ease-out;
+
+  &:first-of-type {
+    right: 80px;
+  }
+
+  &:last-of-type {
+    right: 24px;
+  }
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
-.timer-dialog__time-button:first-of-type {
-  right: 80px;
-}
-.timer-dialog__time-button:last-of-type {
-  right: 24px;
-}
+
 .timer-dialog__time-label {
   position: absolute;
   top: 8px;

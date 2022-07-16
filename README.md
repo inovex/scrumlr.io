@@ -170,6 +170,8 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/5772868?s=48&amp;v=4" width="48" height="48" alt="miiho">](https://github.com/miiho)
 [<img src="https://avatars.githubusercontent.com/u/70689411?s=48&amp;v=4" width="48" height="48" alt="brandeins1403">](https://github.com/brandeins1403)
 
+[<img src="https://avatars.githubusercontent.com/u/741171?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/wlbr)
+[<img src="https://avatars.githubusercontent.com/u/5778920?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/bontscho)
 [<img src="https://avatars.githubusercontent.com/u/60005702?s=36&amp;v=4" width="36" height="36" alt="Dominik-Weinzierl">](https://github.com/Dominik-Weinzierl)
 [<img src="https://avatars.githubusercontent.com/u/86951527?s=36&amp;v=4" width="36" height="36" alt="andiKandi">](https://github.com/andiKandi)
 [<img src="https://avatars.githubusercontent.com/u/97038583?s=36&amp;v=4" width="36" height="36" alt="jdolinga">](https://github.com/jdolinga)
@@ -180,6 +182,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/24627030?s=36&amp;v=4" width="36" height="36" alt="theexiile1305">](https://github.com/theexiile1305)
 [<img src="https://avatars.githubusercontent.com/u/8872752?s=36&amp;v=4" width="36" height="36" alt="theinrichs">](https://github.com/theinrichs)
 [<img src="https://avatars.githubusercontent.com/u/731608?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/cdreier)
+[<img src="https://avatars.githubusercontent.com/u/3976183?s=36&v=4" width="36" height="36" alt="dotcs">](https://github.com/dotcs)
 
 ... and many more!
 

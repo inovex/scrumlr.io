@@ -6,9 +6,15 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
 
-  &__denied-link {
-    color: $color-planning-pink;
+.board-guard__denied-link {
+  color: $color-planning-pink;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.02);
   }
 }
 

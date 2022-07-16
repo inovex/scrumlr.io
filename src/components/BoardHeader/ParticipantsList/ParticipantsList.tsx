@@ -42,8 +42,14 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
               <span className="participants__header-number">{them.length + 1}</span>
             </h4>
           </div>
-          <SearchIcon className="header__icon" />
-          <input className="participants__header-input" placeholder={t("ParticipantsList.search")} onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+          <div className="participants__header-search">
+            <SearchIcon className="participants__search_icon" />
+            <input
+              className="participants__header-input"
+              placeholder={t("ParticipantsList.search")}
+              onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())}
+            />
+          </div>
         </div>
         <ul className="participants__list">
           <div className="list__header">

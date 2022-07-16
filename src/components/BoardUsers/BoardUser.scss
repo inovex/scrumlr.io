@@ -4,15 +4,25 @@
 .rest-users {
   box-sizing: border-box;
   height: 48px;
-  width: 48px;
   border-radius: 100px;
   display: inline-block;
   position: relative;
 }
 
-.rest-users,
-.user-avatar:not(:last-child) {
-  margin-left: -5px;
+.user-avatar {
+  width: 48px;
+
+  #Circle-Background {
+    stroke: $color-white-one;
+    stroke-width: 24px;
+  }
+}
+
+.rest-users {
+  color: $color-backlog-blue;
+  border: 2px solid $color-backlog-blue;
+  height: 44px;
+  width: 44px;
 }
 
 .user__initials,
@@ -24,10 +34,6 @@
   height: 95%;
   color: var(--accent-color);
   font-weight: bold;
-}
-
-.rest-users__count::before {
-  content: "+";
 }
 
 .user-avatar__ready {
@@ -92,12 +98,21 @@
 
 [theme="dark"] {
   .user__initials,
-  .rest-users__count {
+  .rest-users {
     color: $color-white;
+    border-color: $color-planning-pink;
     font-weight: bold;
   }
   .user-avatar__raised-hand {
     color: $color-planning-pink;
+  }
+
+  .user-avatar #Circle-Background {
+    stroke: $color-dark-one;
+  }
+
+  .user-ready #Circle-Background {
+    stroke: $color-grooming-green;
   }
 }
 

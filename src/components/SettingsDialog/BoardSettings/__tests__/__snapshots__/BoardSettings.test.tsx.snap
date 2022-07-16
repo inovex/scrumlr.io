@@ -20,22 +20,25 @@ exports[`BoardSettings should match snapshot 1`] = `
     <div
       class="board-settings__container"
     >
-      <button
-        class="settings-option-button board-settings__board-name-button"
-        type="button"
+      <div
+        class="settings-input__container"
       >
-        <span
-          class="settings-option-button__label"
-        >
-          BoardSettings.BoardName
-        </span>
         <input
           autocomplete="off"
-          class="board-settings__board-name-button_input"
+          id="boardSettingsBoardName"
           placeholder="scrumlr.io"
+          type="text"
           value="test-board-name"
         />
-      </button>
+        <label
+          for="boardSettingsBoardName"
+        >
+          BoardSettings.BoardName
+        </label>
+        <button
+          class="settings-input__children"
+        />
+      </div>
       <div
         class="board-settings__group-and-button"
       >
@@ -63,28 +66,26 @@ exports[`BoardSettings should match snapshot 1`] = `
           <hr
             class="settings-dialog__separator"
           />
-          <button
-            class="settings-option-button board-settings__password-button"
-            id="password-input-section"
-            type="button"
+          <div
+            class="settings-input__container"
           >
-            <span
-              class="settings-option-button__label"
+            <input
+              autocomplete="off"
+              class="settings-input__hidden-placeholder"
+              id="boardSettingsPassword"
+              placeholder="BoardSettings.Password"
+              type="password"
+              value=""
+            />
+            <label
+              for="boardSettingsPassword"
             >
               BoardSettings.Password
-            </span>
-            <div
-              class="board-settings__password-button_value"
-            >
-              <input
-                autocomplete="off"
-                class="board-settings__password-button_value-input"
-                placeholder=""
-                type="password"
-                value=""
-              />
-            </div>
-          </button>
+            </label>
+            <button
+              class="settings-input__children"
+            />
+          </div>
         </div>
         <button
           class="board-settings__password-management-button board-settings__generate-password-button"
@@ -113,12 +114,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowAuthorOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -134,12 +131,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowOtherUsersNotesOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--right"
-            />
-          </div>
+            class="toggle toggle--active"
+          />
         </button>
         <hr
           class="settings-dialog__separator"
@@ -155,12 +148,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowHiddenColumnsOption
           </span>
           <div
-            class="settings-toggle"
-          >
-            <div
-              class="settings-toggle__switch settings-toggle__switch--left"
-            />
-          </div>
+            class="toggle"
+          />
         </button>
       </div>
       <button

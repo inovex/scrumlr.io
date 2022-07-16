@@ -60,6 +60,11 @@
   width: 18px;
   border-radius: 4px;
   background-color: var(--accent-color);
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 // Hacky way to not show delete column button if it's the last column

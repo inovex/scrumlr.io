@@ -3,8 +3,8 @@
 
 .board-settings__container-wrapper {
   overflow-y: auto;
-  padding-right: 10px;
-  margin-right: -20px;
+  padding-right: $padding--small;
+  margin-right: calc(-1 * ($padding--small + 10px));
   margin-bottom: $settings-dialog-container--bottom;
 
   @include scrollbar();
@@ -12,8 +12,8 @@
 
 @media screen and (min-width: 920px) {
   .board-settings__container-wrapper {
-    padding-right: 20px;
-    margin-right: -30px;
+    padding-right: $padding--medium;
+    margin-right: calc(-1 * ($padding--medium + 10px));
   }
 }
 
@@ -23,6 +23,7 @@
   gap: 32px;
   width: 100%;
   max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
+  padding-bottom: $padding--small;
 }
 
 @media screen and (min-width: 450px) {
@@ -153,19 +154,19 @@
   height: $icon--medium;
 }
 
-.board-settings__edit-password-button {
-  color: var(--accent-color);
-  cursor: pointer;
-  margin-left: 4px;
-}
-
-.board-settings__edit-password-button svg {
-  width: $icon--medium;
-  height: $icon--medium;
-}
-
 .board-settings__show-password-button--enabled {
   color: var(--accent-color);
+  cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
 }
 
 .board-settings__show-password-button--disabled {
@@ -200,7 +201,8 @@
   outline: none;
 }
 
-.board-settings__password-management-button {
+.board-settings__password-management-button,
+.board-settings__password-input-hint {
   display: flex;
   align-items: center;
   padding: 0 $padding--medium;
@@ -208,8 +210,17 @@
   border: none;
   background-color: inherit;
   color: var(--accent-color);
-  cursor: pointer;
   align-self: center;
+}
+
+.board-settings__password-management-button {
+  cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.01);
+  }
 }
 
 .board-settings__remove-protection-button svg {
@@ -223,11 +234,6 @@
   height: $icon--small;
   margin: 0 4px 2px 3px;
   color: var(--accent-color);
-}
-
-.board-settings__password-input-hint {
-  cursor: default;
-  align-self: center;
 }
 
 .board-settings__password-management-text {

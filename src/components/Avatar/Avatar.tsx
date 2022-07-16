@@ -1,5 +1,6 @@
 import Avataar from "avataaars";
 import React from "react";
+import _ from "underscore";
 import "./Avatar.scss";
 import classNames from "classnames";
 import {getColorClassName, getColorForIndex} from "../../constants/colors";
@@ -30,22 +31,27 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvatarProps {
-  seed?: string;
-  className?: string;
-  skinColor?: AvatarSkinColor;
-  topType?: AvatarTopType;
-  clotheColor?: AvatarClotheColor;
-  graphicType?: AvatarGraphicType;
-  clotheType?: AvatarClotheType;
-  hairColor?: AvatarHairColor;
-  facialHairColor?: AvatarFacialHairColor;
-  facialHairType?: AvatarFacialHairType;
-  accessoriesType?: AvatarAccessoriesType;
-  eyeType?: AvatarEyeType;
-  eyebrowType?: AvatarEyebrowType;
-  mouthType?: AvatarMouthType;
+export interface AvataaarProps {
+  accentColorClass: string;
+  skinColor: AvatarSkinColor;
+  topType: AvatarTopType;
+  clotheColor: AvatarClotheColor;
+  graphicType: AvatarGraphicType;
+  clotheType: AvatarClotheType;
+  hairColor: AvatarHairColor;
+  facialHairColor: AvatarFacialHairColor;
+  facialHairType: AvatarFacialHairType;
+  accessoriesType: AvatarAccessoriesType;
+  eyeType: AvatarEyeType;
+  eyebrowType: AvatarEyebrowType;
+  mouthType: AvatarMouthType;
 }
+
+export type AvatarProps = {
+  seed: string;
+  className?: string;
+  avatar?: AvataaarProps;
+};
 
 /**
  * Generates a fixed hash number for any given string.
@@ -72,35 +78,27 @@ const hashCode = (s: string) => {
  * @param seed the seed will be hashed by the `hashCode` function and define the outcome
  * @returns a set of properties for the `<Avatar />` component
  */
-const generateRandomProps = (seed: string) => {
+export const generateRandomProps = (seed: string) => {
   const hash = hashCode(seed);
-  const props: AvatarProps = {};
-
-  props.skinColor = AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length];
-  props.topType = AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length];
-  props.clotheType = AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length];
-  props.clotheColor = AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length];
-  props.graphicType = AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length];
-  props.hairColor = AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length];
 
   const hasFacialHair = hash % 4 === 1 || hash % 4 === 2;
-  if (hasFacialHair) {
-    props.facialHairColor = AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length];
-    props.facialHairType = AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length];
-  }
-
   const hasAccessories = hash % 4 === 2 || hash % 4 === 3;
-  if (hasAccessories) {
-    props.accessoriesType = AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length];
-  }
 
-  props.eyebrowType = AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length];
-  props.eyeType = AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length];
-  props.mouthType = AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length];
-
-  props.className = getColorClassName(getColorForIndex(hash));
-
-  return props;
+  return {
+    accentColorClass: getColorClassName(getColorForIndex(hash)),
+    skinColor: AVATAR_SKIN_COLORS[hash % AVATAR_SKIN_COLORS.length],
+    topType: AVATAR_TOP_TYPES[hash % AVATAR_TOP_TYPES.length],
+    clotheColor: AVATAR_CLOTHE_COLORS[hash % AVATAR_CLOTHE_COLORS.length],
+    graphicType: AVATAR_GRAPHIC_TYPES[hash % AVATAR_GRAPHIC_TYPES.length],
+    clotheType: AVATAR_CLOTHE_TYPES[hash % AVATAR_CLOTHE_TYPES.length],
+    hairColor: AVATAR_HAIR_COLORS[hash % AVATAR_HAIR_COLORS.length],
+    facialHairColor: AVATAR_FACIAL_HAIR_COLORS[hash % AVATAR_FACIAL_HAIR_COLORS.length],
+    facialHairType: !hasFacialHair ? "Blank" : AVATAR_FACIAL_HAIR_TYPES[hash % AVATAR_FACIAL_HAIR_TYPES.length],
+    accessoriesType: !hasAccessories ? "Blank" : AVATAR_ACCESSORIES_TYPES[hash % AVATAR_ACCESSORIES_TYPES.length],
+    eyeType: AVATAR_EYE_TYPES[hash % AVATAR_EYE_TYPES.length],
+    eyebrowType: AVATAR_EYEBROW_TYPES[hash % AVATAR_EYEBROW_TYPES.length],
+    mouthType: AVATAR_MOUTH_TYPES[hash % AVATAR_MOUTH_TYPES.length],
+  } as AvataaarProps;
 };
 
 /**
@@ -123,45 +121,30 @@ const generateRandomProps = (seed: string) => {
  * @param mouthType the mouth type
  */
 export const Avatar = React.memo(
-  ({
-    seed,
-    className,
-    skinColor,
-    topType,
-    clotheColor,
-    graphicType,
-    clotheType,
-    hairColor,
-    facialHairColor,
-    facialHairType,
-    accessoriesType,
-    eyebrowType,
-    eyeType,
-    mouthType,
-  }: AvatarProps) => {
-    if (seed) {
-      const {className: accentColorClass, ...avatarProps} = generateRandomProps(seed);
+  ({className, seed, avatar}: AvatarProps) => {
+    if (!avatar) {
+      const {accentColorClass, ...avatarProps} = generateRandomProps(seed);
       return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;
     }
 
     return (
       <Avataar
-        className={classNames("avatar", className)}
+        className={classNames("avatar", className, avatar.accentColorClass)}
         avatarStyle="Circle"
-        topType={topType}
-        accessoriesType={accessoriesType}
-        hairColor={hairColor}
-        facialHairType={facialHairType}
-        facialHairColor={facialHairColor}
-        clotheType={clotheType}
-        clotheColor={clotheColor}
-        graphicType={graphicType}
-        eyeType={eyeType}
-        eyebrowType={eyebrowType}
-        mouthType={mouthType}
-        skinColor={skinColor}
+        topType={avatar.topType}
+        accessoriesType={avatar.accessoriesType}
+        hairColor={avatar.hairColor}
+        facialHairType={avatar.facialHairType}
+        facialHairColor={avatar.facialHairColor}
+        clotheType={avatar.clotheType}
+        clotheColor={avatar.clotheColor}
+        graphicType={avatar.graphicType}
+        eyeType={avatar.eyeType}
+        eyebrowType={avatar.eyebrowType}
+        mouthType={avatar.mouthType}
+        skinColor={avatar.skinColor}
       />
     );
   },
-  (prev, next) => prev.seed === next.seed
+  (prev, next) => prev.seed === next.seed && _.isEqual(prev.avatar, next.avatar)
 );

@@ -3,12 +3,13 @@ package database
 import (
   "context"
   "errors"
-  "github.com/google/uuid"
   "net/url"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/common/filter"
   "strconv"
   "time"
+
+  "github.com/google/uuid"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/common/filter"
 
   "github.com/uptrace/bun"
   "scrumlr.io/server/database/types"
@@ -18,6 +19,7 @@ type BoardSession struct {
   bun.BaseModel     `bun:"table:board_sessions"`
   Board             uuid.UUID
   User              uuid.UUID
+  Avatar            *types.Avatar
   Name              string
   ShowHiddenColumns bool
   Connected         bool
@@ -82,7 +84,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
     With("insertQuery", insertQuery).
     Model((*BoardSession)(nil)).
     ModelTableExpr("\"insertQuery\" AS s").
-    ColumnExpr("s.board, s.user, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
     Where("s.board = ?", boardSession.Board).
     Where("s.user = ?", boardSession.User).
     Join("INNER JOIN users AS u ON u.id = s.user").
@@ -124,7 +126,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
     With("updateQuery", updateQuery).
     Model((*BoardSession)(nil)).
     ModelTableExpr("\"updateQuery\" AS s").
-    ColumnExpr("s.board, s.user, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
     Where("s.board = ?", update.Board).
     Where("s.user = ?", update.User).
     Join("INNER JOIN users AS u ON u.id = s.user").
@@ -154,7 +156,7 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
     With("updateQuery", updateQuery).
     Model((*BoardSession)(nil)).
     ModelTableExpr("\"updateQuery\" AS s").
-    ColumnExpr("s.board, s.user, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
     Where("s.board = ?", update.Board).
     Join("INNER JOIN users AS u ON u.id = s.user").
     Scan(common.ContextWithValues(context.Background(),
@@ -179,7 +181,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
   var session BoardSession
   err := d.db.NewSelect().
     TableExpr("board_sessions AS s").
-    ColumnExpr("s.board, s.user, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+    ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
     Where("s.board = ?", board).
     Where("s.user = ?", user).
     Join("INNER JOIN users AS u ON u.id = s.user").
@@ -190,7 +192,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
   query := d.db.NewSelect().
     TableExpr("board_sessions AS s").
-    ColumnExpr("s.user, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+    ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
     Where("s.board = ?", board).
     Join("INNER JOIN users AS u ON u.id = s.user")
 

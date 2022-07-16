@@ -39,6 +39,7 @@ export const Participant = ({participant}: ParticipantProps) => {
           className="participant__user-avatar-wrapper"
           avatarClassName="participant__user-avatar"
           badgeText={badgeText}
+          avatar={participant.user.avatar}
         />
         <figcaption className="participant__name">{participant.user.name}</figcaption>
       </figure>
