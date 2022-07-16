@@ -168,7 +168,8 @@
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys aktiviert!",
     "hotkeysDisabled": "Hotkeys deaktiviert!",
-    "hotkeyToggle": "Hotkeys aktivieren"
+    "hotkeyToggle": "Hotkeys aktivieren",
+    "cheatSheet": "Hotkey Spickzettel"
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",

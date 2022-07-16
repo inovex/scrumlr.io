@@ -167,7 +167,8 @@
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys enabled!",
     "hotkeysDisabled": "Hotkeys disabled!",
-    "hotkeyToggle": "Enable hotkeys"
+    "hotkeyToggle": "Enable hotkeys",
+    "cheatSheet": "Hotkey Cheat Sheet"
   },
   "VoteConfigurationButton": {
     "label": "Voting",
