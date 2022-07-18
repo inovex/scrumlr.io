@@ -21,7 +21,7 @@ $box-shadow: 0px 10px 20px #00000026;
 
 .menu {
   z-index: $menu-z-index;
-  border-radius: calc($action-bar-width / 2);
+  border-radius: $action-bar-width / 2;
   background-color: $color-white;
   box-shadow: $box-shadow;
   padding-left: $padding--medium;
@@ -38,10 +38,18 @@ $box-shadow: 0px 10px 20px #00000026;
   position: static;
 }
 .user-menu {
-  transform: translateY(calc(-1 * $action-bar-width));
+  transform: translateY(-$action-bar-width);
 }
+
 .admin-menu {
   transform: translateY($action-bar-width);
+}
+
+.admin-menu.admin-menu--empty {
+  background: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
 }
 
 .menu__items {
@@ -62,7 +70,7 @@ $box-shadow: 0px 10px 20px #00000026;
   border-radius: 100%;
   transition: background-color 0.25s ease-in-out, filter 0.08s ease-out;
   // 206px is the width of the horizontal action bar
-  margin-left: calc(206px + $margin--small);
+  margin-left: 206px + $margin--small;
   position: relative;
   cursor: pointer;
   display: none;
@@ -101,7 +109,7 @@ $box-shadow: 0px 10px 20px #00000026;
   .menu-bars.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(calc(-1 * $action-bar-width));
+    transform: translateY(-$action-bar-width);
   }
   .menu-bars.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
@@ -164,6 +172,7 @@ $box-shadow: 0px 10px 20px #00000026;
   position: absolute;
   top: calc(100% + 22px);
   left: 12px;
+  right: 12px;
 
   width: 42px;
   height: 42px;
@@ -174,6 +183,10 @@ $box-shadow: 0px 10px 20px #00000026;
   outline: none;
   box-shadow: $box-shadow;
   color: $color-black;
+}
+
+.menu-bars__navigation.menu-bars__navigation--empty {
+  top: 0;
 }
 
 .menu-bars__navigation:enabled {
@@ -227,5 +240,9 @@ $box-shadow: 0px 10px 20px #00000026;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .menu:first-child:last-child {
+    position: fixed;
   }
 }

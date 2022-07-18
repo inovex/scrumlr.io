@@ -100,8 +100,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         </button>
       </section>
 
-      {isAdmin && (
-        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
+      <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin, "menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
+        {isAdmin && (
           <div className="menu__items">
             <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
             <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
@@ -116,17 +116,17 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               isFocusModeToggle
             />
           </div>
+        )}
 
-          <button
-            className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
-            disabled={!showNextColumn}
-            onClick={onNextColumn}
-            aria-hidden
-          >
-            <RightArrowIcon className="menu-bars__navigation-icon" />
-          </button>
-        </section>
-      )}
+        <button
+          className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+          disabled={!showNextColumn}
+          onClick={onNextColumn}
+          aria-hidden
+        >
+          <RightArrowIcon className="menu-bars__navigation-icon" />
+        </button>
+      </section>
 
       {isAdmin && (
         <button
