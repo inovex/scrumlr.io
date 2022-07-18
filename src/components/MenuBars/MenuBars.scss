@@ -46,10 +46,10 @@ $box-shadow: 0px 10px 20px #00000026;
 }
 
 .admin-menu.admin-menu--empty {
-  background: none;
-  box-shadow: none;
-  margin: 0;
-  padding: 0;
+  background: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .menu__items {
