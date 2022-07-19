@@ -1,7 +1,7 @@
 import {saveAs} from "file-saver";
 import {BoardDataType, BoardType, ColumnType, NoteType, ParticipantType, VotingType} from "components/SettingsDialog/ExportBoard/types";
 import i18n from "i18next";
-import {DEFAULT_URL} from "constants/misc";
+import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {API} from "../api";
 
 export const fileName = (name?: string) => {
@@ -104,7 +104,7 @@ const mdBranding = () =>
   }/scrumlr-logo-light.svg)`;
 
 const mdTemplate = (boardData: BoardDataType) =>
-  mdBoardHeader(boardData.board.name) + mdColumns(boardData) + mdBoardProperties(boardData.board, boardData.participants) + mdBranding();
+  mdBoardHeader(boardData.board.name || DEFAULT_BOARD_NAME) + mdBoardProperties(boardData.board, boardData.participants) + mdColumns(boardData) + mdBranding();
 
 export const getMarkdownExport = async (id: string) => {
   const response = await API.exportBoard(id, "application/json");
