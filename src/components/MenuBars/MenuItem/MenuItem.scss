@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 $menu-item-size: 42px;
-$tooltip-background-color-light: #d6d7da;
+$tooltip-background-color-light: #d3daf0;
 $tooltip-background-color-dark: #485064;
 $icon-background-color-light: $color-white;
 $icon-background-color-dark: #333948;
@@ -81,8 +81,9 @@ $icon-background-color-dark: #333948;
     }
   }
 }
-@include visibleColumns(".menu-item") {
-  .menu-item__tooltip {
+
+@media #{$tablet} {
+  .menu-item .menu-item__tooltip {
     opacity: 1;
     visibility: visible;
     width: auto;
@@ -92,18 +93,18 @@ $icon-background-color-dark: #333948;
     background-color: transparent;
     transform: translateX(0);
   }
-  .menu-item__tooltip::after {
+  .menu-item .menu-item__tooltip::after {
     display: none;
   }
 
-  &.menu-item--left .menu-item__tooltip {
+  .menu-item.menu-item--left .menu-item__tooltip {
     right: 0;
     left: auto;
   }
-  &.menu-item--right .menu-item__tooltip {
+  .menu-item.menu-item--right .menu-item__tooltip {
     left: 0;
   }
-  &:hover .menu-item__tooltip {
+  .menu-item:hover .menu-item__tooltip {
     max-width: 500px;
     transition: none;
   }
@@ -113,16 +114,16 @@ $icon-background-color-dark: #333948;
   width: 100%;
   padding: 0 $padding--default;
   white-space: nowrap;
-  font-size: $text-size--small;
+  font-size: 14px;
   font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: $letter-spacing--large;
+  letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   color: $color-black;
   border-radius: calc($menu-item-size / 2);
 }
-@include visibleColumns(".menu-item") {
-  .tooltip__text {
+
+@media #{$tablet} {
+  .menu-item .tooltip__text {
     color: $color-black;
     background-color: $tooltip-background-color-light;
     height: $menu-item-size;
@@ -130,22 +131,23 @@ $icon-background-color-dark: #333948;
     width: max-content;
     transition: transform 150ms linear 0ms;
   }
-  &.menu-item--left .tooltip__text {
+  .menu-item.menu-item--left .tooltip__text {
     padding-right: calc($menu-item-size + $padding--small);
     padding-left: $padding--default;
     transform: translateX(100%);
     transform-origin: right;
   }
-  &.menu-item--right .tooltip__text {
+  .menu-item.menu-item--right .tooltip__text {
     padding-left: calc($menu-item-size + $padding--small);
     padding-right: $padding--default;
     transform: translateX(-100%);
     transform-origin: left;
   }
-  &:hover .tooltip__text {
+  .menu-item:hover .tooltip__text {
     transform: translateX(0);
   }
 }
+
 [theme="dark"] {
   .tooltip__text {
     color: $color-white !important;
@@ -182,15 +184,17 @@ $icon-background-color-dark: #333948;
     visibility: visible;
   }
 }
-@include visibleColumns(".menu-item") {
-  .menu-item__icon {
+
+@media #{$tablet} {
+  .menu-item .menu-item__icon {
     transition: border-color 0ms linear 150ms;
   }
-  &:hover .menu-item__icon {
+  .menu-item:hover .menu-item__icon {
     border-color: $tooltip-background-color-light;
     transition: border-color 0ms linear 0ms;
   }
 }
+
 [theme="dark"] {
   .menu-item__icon {
     color: $color-white;
