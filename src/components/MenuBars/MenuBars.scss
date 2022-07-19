@@ -96,6 +96,11 @@ $box-shadow: 0px 10px 20px #00000026;
     opacity: 1;
     transform: translateY(0);
   }
+
+  :not(.menu-bars--isAdmin).menu-bars--user > .user-menu {
+    transform: translateX(-50%);
+  }
+
   .menu-bars.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;

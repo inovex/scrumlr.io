@@ -9,7 +9,7 @@ $icon-background-color-dark: #333948;
 .menu-item {
   height: $menu-item-size;
   width: $menu-item-size;
-  border-radius: calc($menu-item-size / 2);
+  border-radius: $menu-item-size / 2;
   background-color: transparent;
   border: none;
   padding: 0;
@@ -33,7 +33,7 @@ $icon-background-color-dark: #333948;
   align-items: center;
   max-width: 0;
   height: $menu-item-size;
-  border-radius: calc($menu-item-size / 2);
+  border-radius: $menu-item-size / 2;
   background-color: $tooltip-background-color-light;
   opacity: 0;
   visibility: hidden;
@@ -50,11 +50,21 @@ $icon-background-color-dark: #333948;
   border-style: solid;
   border-color: $tooltip-background-color-light transparent transparent transparent;
 }
-.menu-item:hover .menu-item__tooltip {
-  max-width: max-content;
-  visibility: visible;
-  opacity: 1;
+
+@media #{$smartphone} {
+  .menu-item .menu-item__tooltip {
+    display: none;
+  }
 }
+
+@media #{$tablet} {
+  .menu-item:hover .menu-item__tooltip {
+    max-width: max-content;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
 [theme="dark"] {
   .menu-item__tooltip {
     background-color: $tooltip-background-color-dark;
@@ -119,7 +129,7 @@ $icon-background-color-dark: #333948;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   color: $color-black;
-  border-radius: calc($menu-item-size / 2);
+  border-radius: $menu-item-size / 2;
 }
 
 @media #{$tablet} {
@@ -132,13 +142,13 @@ $icon-background-color-dark: #333948;
     transition: transform 150ms linear 0ms;
   }
   .menu-item.menu-item--left .tooltip__text {
-    padding-right: calc($menu-item-size + $padding--small);
+    padding-right: $menu-item-size + $padding--small;
     padding-left: $padding--default;
     transform: translateX(100%);
     transform-origin: right;
   }
   .menu-item.menu-item--right .tooltip__text {
-    padding-left: calc($menu-item-size + $padding--small);
+    padding-left: $menu-item-size + $padding--small;
     padding-right: $padding--default;
     transform: translateX(-100%);
     transform-origin: left;
