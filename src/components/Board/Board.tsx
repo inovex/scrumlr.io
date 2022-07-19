@@ -1,8 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
-import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
@@ -71,8 +69,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
         const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
         const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
 
-        document.getElementById("root")!.setAttribute("column-visibility", lastVisibleColumnIndex < columnsCount - 1 || firstVisibleColumnIndex > 0 ? "collapsed" : "visible");
-
         setColumnState({
           firstVisibleColumnIndex,
           lastVisibleColumnIndex,
@@ -123,7 +119,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <div className="board--empty">
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
-        <MenuBars />
+        <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <main className="board" ref={boardRef}>
           {/* Fixed color - can also be dynamic */}
           <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
@@ -152,29 +148,13 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
 
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
-      <MenuBars />
-
-      {state.showPreviousButton && (
-        <button className={`board__navigation board__navigation-prev ${getColorClassName(columnColors[previousColumnIndex])}`} onClick={handlePreviousClick} aria-hidden>
-          <LeftArrowIcon className="board__navigation-arrow board__navigation-arrow-prev" />
-        </button>
-      )}
+      <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
 
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
         <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
       </main>
-
-      {state.showNextButton && (
-        <button
-          className={`board__navigation board__navigation-next ${getColorClassName(columnColors[Math.min(nextColumnIndex, columnColors.length - 1)])}`}
-          onClick={handleNextClick}
-          aria-hidden
-        >
-          <RightArrowIcon className="board__navigation-arrow board__navigation-arrow-next" />
-        </button>
-      )}
     </>
   );
 };

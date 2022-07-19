@@ -12,6 +12,7 @@ $box-shadow: 0px 10px 20px #00000026;
   transform: translateX(-50%);
   bottom: $margin--small;
 }
+
 @media print {
   .menu-bars {
     display: none !important;
@@ -20,7 +21,7 @@ $box-shadow: 0px 10px 20px #00000026;
 
 .menu {
   z-index: $menu-z-index;
-  border-radius: calc($action-bar-width / 2);
+  border-radius: $action-bar-width / 2;
   background-color: $color-white;
   box-shadow: $box-shadow;
   padding-left: $padding--medium;
@@ -32,14 +33,23 @@ $box-shadow: 0px 10px 20px #00000026;
   position: absolute;
   bottom: 0;
 }
+
 .menu:first-child:last-child {
   position: static;
 }
 .user-menu {
-  transform: translateY(calc(-1 * $action-bar-width));
+  transform: translateY(-$action-bar-width);
 }
+
 .admin-menu {
   transform: translateY($action-bar-width);
+}
+
+.admin-menu.admin-menu--empty {
+  background: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .menu__items {
@@ -60,7 +70,7 @@ $box-shadow: 0px 10px 20px #00000026;
   border-radius: 100%;
   transition: background-color 0.25s ease-in-out, filter 0.08s ease-out;
   // 206px is the width of the horizontal action bar
-  margin-left: calc(206px + $margin--small);
+  margin-left: 206px + $margin--small;
   position: relative;
   cursor: pointer;
   display: none;
@@ -80,54 +90,51 @@ $box-shadow: 0px 10px 20px #00000026;
   transition: transform 400ms, opacity 400ms, visibility 400ms;
 }
 
-@include collapsedColumns(".menu-bars") {
-  &.menu-bars--user > .user-menu {
+@media #{$smartphone} {
+  .menu-bars.menu-bars--user > .user-menu {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
   }
-  &.menu-bars--user > .admin-menu {
+  .menu-bars.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
     transform: translateY($action-bar-width);
   }
-  &.menu-bars--admin > .admin-menu {
+  .menu-bars.menu-bars--admin > .admin-menu {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
   }
-  &.menu-bars--admin > .user-menu {
+  .menu-bars.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(calc(-1 * $action-bar-width));
+    transform: translateY(-$action-bar-width);
   }
-  &.menu-bars--user > .menu-bars__switch > .switch__icon--add {
+  .menu-bars.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
     opacity: 0;
     transform: rotate(360deg);
   }
-  &.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
+  .menu-bars.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
     visibility: hidden;
     opacity: 0;
     transform: rotate(-360deg);
   }
-  .menu-bars__switch {
+  .menu-bars .menu-bars__switch {
     display: block;
   }
 }
 
-@include visibleColumns(".menu-bars") {
-  &.menu-bars {
+@media #{$tablet} {
+  .menu-bars.menu-bars {
     position: static;
     transform: none;
     left: auto;
     bottom: auto;
   }
-  .menu {
-    padding-top: $padding--medium;
-    padding-bottom: $padding--medium;
-    padding-left: 0;
-    padding-right: 0;
+  .menu-bars .menu {
+    padding: $padding--medium 0;
     width: $action-bar-width;
     height: auto;
     position: fixed;
@@ -137,13 +144,13 @@ $box-shadow: 0px 10px 20px #00000026;
     visibility: visible;
     opacity: 1;
   }
-  .user-menu {
+  .menu-bars .user-menu {
     left: 12px;
   }
-  .admin-menu {
+  .menu-bars .admin-menu {
     right: 12px;
   }
-  .menu__items {
+  .menu-bars .menu__items {
     flex-direction: column;
     height: auto;
   }
@@ -157,5 +164,85 @@ $box-shadow: 0px 10px 20px #00000026;
   }
   .switch__icon {
     color: $color-white;
+  }
+}
+
+.menu-bars__navigation {
+  display: none;
+  position: absolute;
+  top: calc(100% + 22px);
+  left: 12px;
+  right: 12px;
+
+  width: 42px;
+  height: 42px;
+
+  background: white;
+  border: none;
+  border-radius: 100%;
+  outline: none;
+  box-shadow: $box-shadow;
+  color: $color-black;
+}
+
+.menu-bars__navigation.menu-bars__navigation--empty {
+  top: 0;
+}
+
+.menu-bars__navigation:enabled {
+  cursor: pointer;
+}
+
+.menu-bars__navigation:focus {
+  outline: 2px solid #00000050;
+}
+
+.menu-bars__navigation:enabled:hover {
+  border: 3px solid #d3daf0;
+}
+
+.menu-bars__navigation:disabled {
+  color: $color-light-gray;
+}
+
+[theme="dark"] {
+  .menu-bars__navigation {
+    background: $background-color-dark;
+    color: $color-white;
+  }
+
+  .menu-bars__navigation:focus {
+    outline: 2px solid #ffffff50;
+  }
+
+  .menu-bars__navigation:enabled:hover {
+    border: 3px solid #485064;
+  }
+
+  .menu-bars__navigation:disabled {
+    color: $color-dark-mode;
+  }
+}
+
+.menu-bars__navigation-icon {
+  height: 24px;
+  width: 24px;
+}
+
+@media #{$smartphone} {
+  .menu-bars__navigation {
+    display: none;
+  }
+}
+
+@media #{$tablet} {
+  .menu-bars__navigation.menu-bars__navigation--visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .menu:first-child:last-child {
+    position: fixed;
   }
 }
