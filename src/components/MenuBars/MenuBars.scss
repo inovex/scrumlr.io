@@ -207,7 +207,7 @@ $box-shadow: 0px 10px 20px #00000026;
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: #333948;
+    background: $background-color-dark;
     color: $color-white;
   }
 
