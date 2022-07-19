@@ -51,13 +51,13 @@ const mdVotesPerNote = (noteId: string, votings: VotingType[]) => {
   return votes ? `${votes} ${votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes")}` : "";
 };
 
-const mdBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `(${input})` : input);
+const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
 
 const mdNote = (note: NoteType, author: string, votes: string, stack: string) => {
   const nested = stack === "" && note.position.stack;
   const bracketsRequired = !!author || !!votes;
   const separator = !!author && !!votes ? ", " : "";
-  return `${nested ? "\n    " : "\n"}- ${note.text} ${mdBrackets(bracketsRequired, `${author + separator + votes}`)}${stack}`;
+  return `${nested ? "\n    " : "\n"}- ${note.text} ${mdItalicBrackets(bracketsRequired, `${author + separator + votes}`)}${stack}`;
 };
 
 const mdStack = (notesInStack: NoteType[], boardData: BoardDataType) =>
@@ -89,9 +89,7 @@ const mdNotesPerColumn = (columnId: string, boardData: BoardDataType) =>
 const mdColumns = (boardData: BoardDataType) => {
   const columnList = boardData.columns
     .filter((c) => boardData.notes.filter((n) => n.position.column === c.id).length > 0)
-    .map(
-      (c: ColumnType) => `## ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`
-    )
+    .map((c: ColumnType) => `## ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`)
     .join("\n\n");
   return `${columnList}\n\n`;
 };
