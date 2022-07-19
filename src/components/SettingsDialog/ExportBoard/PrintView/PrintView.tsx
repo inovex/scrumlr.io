@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
 import {compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
+import {DEFAULT_URL} from "constants/misc";
 import {BoardDataType} from "../types";
 
 interface PrintViewProps {
@@ -132,7 +133,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
         <div className="print-view__footer-container">
           <p>
             {t("PrintView.GeneratedOn")}{" "}
-            <a href="https://scrumlr.io/" target="_blank" rel="noopener noreferrer">
+            <a href={DEFAULT_URL} target="_blank" rel="noopener noreferrer">
               scrumlr.io
             </a>
           </p>

@@ -1,6 +1,7 @@
 import {saveAs} from "file-saver";
 import {BoardDataType, BoardType, ColumnType, NoteType, ParticipantType, VotingType} from "components/SettingsDialog/ExportBoard/types";
 import i18n from "i18next";
+import {DEFAULT_URL} from "constants/misc";
 import {API} from "../api";
 
 export const fileName = (name?: string) => {
@@ -98,8 +99,8 @@ const mdColumns = (boardData: BoardDataType) => {
 };
 
 const mdBranding = () =>
-  `> ${i18n.t("PrintView.GeneratedOn")} [scrumlr.io](https://www.scrumlr.io)  \n${t("PrintView.ProvidedBy")} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${
-    process.env.REACT_APP_PUBLIC_URL
+  `> ${i18n.t("PrintView.GeneratedOn")} [scrumlr.io](${DEFAULT_URL})  \n${t("PrintView.ProvidedBy")} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${
+    process.env.REACT_APP_PUBLIC_URL || DEFAULT_URL
   }/scrumlr-logo-light.svg)`;
 
 const mdTemplate = (boardData: BoardDataType) =>
