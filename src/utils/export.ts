@@ -4,6 +4,8 @@ import i18n from "i18next";
 import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
 import {API} from "../api";
 
+const {t} = i18n;
+
 export const fileName = (name?: string) => {
   const date = new Date().toJSON().slice(0, 10);
   return `${date}_${name}`;
@@ -36,22 +38,21 @@ export const getChildNotes = (notes: NoteType[], votings: VotingType[], noteId: 
 
 export const getAuthorName = (authorId: string, participants: ParticipantType[]) => participants.filter((p: ParticipantType) => p.user?.id === authorId)[0].user?.name;
 
-const {t} = i18n;
+const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
+
 const mdBoardHeader = (boardName: string) => `# ${boardName}\n\n`;
 
 const mdBoardProperties = (board: BoardType, participants: ParticipantType[]) => {
-  const boardId = `- ${i18n.t("MarkdownExport.boardId")}: ${board.id}\n`;
+  const linkToBoard = `- [${t("MarkdownExport.linkToBoard")}](${window.location.href.replace("/settings/export", "")})\n`;
   const participantsNumber = `- ${t("MarkdownExport.participants")}: ${participants.length}\n`;
   const authorsHidden = !board.showAuthors ? `- ${t("MarkdownExport.showAuthorsDisabled")}\n` : "";
-  return `${boardId + participantsNumber + authorsHidden}\n`;
+  return `${participantsNumber + authorsHidden + linkToBoard}\n`;
 };
 
 const mdVotesPerNote = (noteId: string, votings: VotingType[]) => {
   const votes = votings ? getNoteVotes(noteId, votings) : 0;
   return votes ? `${votes} ${votes === 1 ? t("MarkdownExport.vote") : t("MarkdownExport.votes")}` : "";
 };
-
-const mdItalicBrackets = (addBrackets: boolean, input: string) => (addBrackets ? `_(${input})_` : input);
 
 const mdNote = (note: NoteType, author: string, votes: string, stack: string) => {
   const nested = stack === "" && note.position.stack;
@@ -95,7 +96,7 @@ const mdColumns = (boardData: BoardDataType) => {
 };
 
 const mdBranding = () =>
-  `> ${i18n.t("PrintView.GeneratedOn")} [scrumlr.io](${DEFAULT_URL})  \n${t("PrintView.ProvidedBy")} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${
+  `> ${t("PrintView.GeneratedOn")} [scrumlr.io](${DEFAULT_URL})  \n${t("PrintView.ProvidedBy")} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${
     process.env.REACT_APP_PUBLIC_URL || DEFAULT_URL
   }/scrumlr-logo-light.svg)`;
 
