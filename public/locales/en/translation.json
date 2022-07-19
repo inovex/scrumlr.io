@@ -83,12 +83,11 @@
     "Votes": "Stimmen"
   },
   "MarkdownExport": {
-    "properties": "Board Properties",
     "columns": "Columns",
     "note": "Note",
     "notes": "Notes",
     "participants": "Participants",
-    "boardId": "Board-ID",
+    "boardId": "Link zum Board",
     "vote": "Vote",
     "votes": "Votes",
     "stackSize": "Stack size",

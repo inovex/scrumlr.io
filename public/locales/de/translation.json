@@ -83,12 +83,11 @@
     "Votes": "Stimmen"
   },
   "MarkdownExport": {
-    "properties": "Sitzungseigenschaften",
     "columns": "Spalten",
     "note": "Kärtchen",
     "notes": "Kärtchen",
     "participants": "Teilnehmer",
-    "boardId": "Sitzungs-ID",
+    "boardId": "Link to board",
     "vote": "Stimme",
     "votes": "Stimmen",
     "stackSize": "Stapelgröße",

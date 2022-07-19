@@ -37,14 +37,13 @@ export const getChildNotes = (notes: NoteType[], votings: VotingType[], noteId: 
 export const getAuthorName = (authorId: string, participants: ParticipantType[]) => participants.filter((p: ParticipantType) => p.user?.id === authorId)[0].user?.name;
 
 const {t} = i18n;
-const mdBoardHeader = (boardName: string) => `# ${boardName}\n`;
+const mdBoardHeader = (boardName: string) => `# ${boardName}\n\n`;
 
 const mdBoardProperties = (board: BoardType, participants: ParticipantType[]) => {
-  const header = `## ${i18n.t("MarkdownExport.properties")}\n`;
   const boardId = `- ${i18n.t("MarkdownExport.boardId")}: ${board.id}\n`;
   const participantsNumber = `- ${t("MarkdownExport.participants")}: ${participants.length}\n`;
   const authorsHidden = !board.showAuthors ? `- ${t("MarkdownExport.showAuthorsDisabled")}\n` : "";
-  return `${header + boardId + participantsNumber + authorsHidden}\n`;
+  return `${boardId + participantsNumber + authorsHidden}\n`;
 };
 
 const mdVotesPerNote = (noteId: string, votings: VotingType[]) => {
@@ -88,14 +87,13 @@ const mdNotesPerColumn = (columnId: string, boardData: BoardDataType) =>
     .join("");
 
 const mdColumns = (boardData: BoardDataType) => {
-  const header = `## ${t("MarkdownExport.columns")}\n`;
   const columnList = boardData.columns
     .filter((c) => boardData.notes.filter((n) => n.position.column === c.id).length > 0)
     .map(
-      (c: ColumnType) => `### ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`
+      (c: ColumnType) => `## ${c.name} (${boardData.notes.filter((n) => n.position.column === c.id).length} ${t("MarkdownExport.notes")})\n${mdNotesPerColumn(c.id, boardData)}`
     )
     .join("\n\n");
-  return `${header + columnList}\n\n`;
+  return `${columnList}\n\n`;
 };
 
 const mdBranding = () =>
