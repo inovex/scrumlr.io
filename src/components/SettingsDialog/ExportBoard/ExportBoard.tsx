@@ -48,7 +48,7 @@ export const ExportBoard: VFC = () => {
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
           icon={PrintIcon}
-          className="export-board__button-reverse-order"
+          className="export-board__button-reverse-order export-board__button-print-view"
           onClick={() => {
             navigate(`/board/${boardId}/print`);
           }}
