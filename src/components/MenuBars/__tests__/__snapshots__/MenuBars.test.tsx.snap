@@ -90,6 +90,17 @@ exports[`MenuBars should match snapshot 1`] = `
         </svg>
       </button>
     </div>
+    <button
+      aria-hidden="true"
+      class="menu-bars__navigation"
+      disabled=""
+    >
+      <svg
+        class="menu-bars__navigation-icon"
+      >
+        icon-arrow-previous.svg
+      </svg>
+    </button>
   </section>
   <section
     class="menu admin-menu"
@@ -170,6 +181,17 @@ exports[`MenuBars should match snapshot 1`] = `
         </svg>
       </button>
     </div>
+    <button
+      aria-hidden="true"
+      class="menu-bars__navigation"
+      disabled=""
+    >
+      <svg
+        class="menu-bars__navigation-icon"
+      >
+        icon-arrow-next.svg
+      </svg>
+    </button>
   </section>
   <button
     aria-label="MenuBars.switchToAdminMenu"

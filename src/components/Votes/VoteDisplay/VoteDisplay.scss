@@ -9,17 +9,13 @@
   color: $color-white;
   background-color: $color-backlog-blue;
   vertical-align: bottom;
-}
-@include collapsedColumns(".vote-display > *") {
   box-shadow: 0 8px 16px #0057ff25;
 }
 
 [theme="dark"] {
   .vote-display > * {
     background-color: $color-planning-pink;
-  }
-  @include collapsedColumns(".vote-display > *") {
-    box-shadow: 0 8px 16px #ff006925;
+    box-shadow: 0 8px 16px #e2036025;
   }
 }
 .vote-display > span {

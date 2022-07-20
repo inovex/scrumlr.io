@@ -30,6 +30,7 @@
 
 .column__content {
   max-height: 100%;
+  max-width: 100%;
   padding: $padding--large 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
@@ -60,6 +61,7 @@
   height: auto;
   border-bottom: solid 3px var(--accent-color);
   margin: 0 $margin--small 0 0;
+  overflow: hidden;
 }
 
 .column__header-text-wrapper--hidden {
@@ -73,6 +75,10 @@
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   color: $color-black;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .column__header-text--hidden {
@@ -110,6 +116,7 @@
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
+  flex: 1 0 12px;
 }
 
 .column__notes-wrapper {
@@ -139,7 +146,7 @@
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
-[column-visibility="collapsed"] .column__note-list {
+.column__note-list {
   padding-bottom: 72px;
 }
 
@@ -197,6 +204,9 @@
 
 .column__header-hidden-icon {
   height: 20px;
+  width: 20px;
+  min-width: 20px;
+  min-height: 20px;
   margin: 0 $margin--small 0 0;
   color: $color-middle-gray;
   cursor: pointer;
@@ -215,13 +225,15 @@
 
 .column__header-edit-button {
   height: 24px;
-  margin: auto calc(#{$margin--default} - 2px) auto 0; // Align with note-input__icon
+  // Align with note-input__icon
   background-color: transparent;
   border: none;
   cursor: pointer;
   outline: none;
   padding: 0;
   transition: all 0.08s ease-out;
+  flex: 0 0 24px;
+  margin: auto calc(#{$margin--default} - 2px) auto $margin--default;
 
   &:hover > svg,
   &:focus > svg {
@@ -229,10 +241,6 @@
     filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
     color: var(--accent-color);
   }
-}
-
-.column__header-edit-button:first-of-type {
-  margin-left: auto;
 }
 
 .column__header-edit-button-icon {

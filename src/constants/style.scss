@@ -23,7 +23,7 @@ $color-grooming-green: #18d8ab;
 $color-goal-green: #70e000;
 $color-lean-lilac: #c000ff;
 $color-online-orange: #ffaa5a;
-$color-planning-pink: #ff0069;
+$color-planning-pink: #e20360;
 $color-poker-purple: #5e00ff;
 $color-retro-red: #ea434b;
 $color-warning-red: #eb625b;
@@ -132,28 +132,6 @@ $menu-desktop: "screen and (min-width: 1344px)";
 
 @mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
-}
-
-// apply styles on given selector if columns are collapsed (not all visible on a single screen)
-@mixin collapsedColumns($selector) {
-  @media screen and (max-width: 767px) {
-    #{$selector} {
-      @content;
-    }
-  }
-
-  [column-visibility="collapsed"] #{$selector} {
-    @content;
-  }
-}
-
-// apply styles on given selector if columns are visible entirely on the screen
-@mixin visibleColumns($selector) {
-  @media screen and (min-width: 768px) {
-    [column-visibility="visible"] #{$selector} {
-      @content;
-    }
-  }
 }
 
 // scrollbar
