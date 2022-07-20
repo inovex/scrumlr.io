@@ -18,7 +18,6 @@ type MenuToggleProps = {
 
 export const MenuToggle = (props: MenuToggleProps) => {
   const [value, setValue] = useState(props.value ?? false);
-  const [touchHover, setTouchHover] = useState(false);
   const Icon = props.icon;
 
   useEffect(() => {
@@ -36,25 +35,10 @@ export const MenuToggle = (props: MenuToggleProps) => {
       className={classNames(
         "menu-item",
         {"menu-item--active": !props.isFocusModeToggle && value, "menu-item__focus-mode-toggle--active": props.isFocusModeToggle && value, "menu-item--disabled": !value},
-        `menu-item--${props.direction}`,
-        {"menu-item--touch-hover": touchHover}
+        `menu-item--${props.direction}`
       )}
       onClick={() => {
-        if (document.getElementsByClassName("menu-item--touch-hover").length === 0) {
-          onToggle();
-        }
-      }}
-      onTouchEnd={(e) => {
-        if (!touchHover && document.getElementsByClassName("menu-item--touch-hover").length === 0) {
-          e.preventDefault();
-          window.addEventListener("click", () => setTouchHover(false), {once: true});
-          setTouchHover(true);
-        }
-        if (touchHover) {
-          e.preventDefault();
-          setTouchHover(false);
-          onToggle();
-        }
+        onToggle();
       }}
       tabIndex={props.tabIndex ?? TabIndex.default}
       aria-label={value ? props.toggleStopLabel : props.toggleStartLabel}
