@@ -73,7 +73,8 @@
     "exportAsJson": "JSON exportieren",
     "exportAsCSV": "CSV exportieren",
     "openPrintView": "Druckansicht öffnen",
-    "exportToClipboard": "Markdown in die Zwischenablage kopieren"
+    "exportToClipboard": "Markdown in die Zwischenablage kopieren",
+    "copyToClipboardSuccess": "Markdown kopiert!"
   },
   "PrintView": {
     "Participants": "Teilnehmer",

@@ -4,7 +4,7 @@ export interface BoardType {
   id: string;
   name: string;
   showAuthors: boolean;
-  showVoting: boolean;
+  showVoting: string;
   accessPolicy: string;
 }
 
@@ -12,6 +12,7 @@ export interface ColumnType {
   id: string;
   name: string;
   color: Color;
+  visible: boolean;
 }
 
 export interface NoteType {
@@ -20,7 +21,7 @@ export interface NoteType {
   text: string;
   position: {
     column: string;
-    stack: string;
+    stack: string | null;
     rank: number;
   };
 }

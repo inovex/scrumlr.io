@@ -8,6 +8,8 @@ import {ReactComponent as ClipboardIcon} from "assets/icon-clipboard.svg";
 import {useNavigate} from "react-router";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
+import {Toast} from "utils/Toast";
+import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
@@ -60,8 +62,11 @@ export const ExportBoard: VFC = () => {
           icon={ClipboardIcon}
           className="export-board__button-reverse-order"
           onClick={() => {
-            getMarkdownExport(boardId).then((result) => navigator.clipboard.writeText(result));
+            getMarkdownExport(boardId).then((result) => {
+              navigator.clipboard.writeText(result).then(() => Toast.success(t("ExportBoardOption.copyToClipboardSuccess"), TOAST_TIMER_SHORT));
+            });
           }}
+          data-testid="export-markdown"
         />
       </div>
     </div>

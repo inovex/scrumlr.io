@@ -14,14 +14,14 @@ export const fileName = (name?: string) => {
 export const exportAsCSV = async (id: string, name?: string) => {
   const response = await API.exportBoard(id, "text/csv");
   const blob = await response.blob();
-  saveAs(blob, `${fileName(name ?? "scrumlr.io")}.csv`);
+  saveAs(blob, `${fileName(name ?? DEFAULT_BOARD_NAME)}.csv`);
 };
 
 export const exportAsJSON = async (id: string, name?: string) => {
   const response = await API.exportBoard(id, "application/json");
   const json = await response.json();
   const blob = new Blob([JSON.stringify(json)], {type: "application/json"});
-  saveAs(blob, `${fileName(name ?? "scrumlr.io")}.json`);
+  saveAs(blob, `${fileName(name ?? DEFAULT_BOARD_NAME)}.json`);
 };
 
 export const getNoteVotes = (noteId: string, votings: VotingType[]) => votings[0].votes?.votesPerNote[noteId]?.total ?? 0;
