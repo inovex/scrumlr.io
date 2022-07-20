@@ -40,7 +40,8 @@ $settings__item-height: 48px;
 
 .profile-settings__hotkey-settings {
   align-items: center;
-  width: calc(100% - #{$margin--small});
+  width: 100%;
+  max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large})); // Avatar settings width
 }
 
 .profile-settings__toggle-hotkeys-button {
