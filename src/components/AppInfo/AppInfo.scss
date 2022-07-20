@@ -8,6 +8,13 @@
 
   text-decoration: none;
   color: $color-dark-gray;
+
+  transition: all 0.08s ease-out;
+
+  &:focus {
+    outline: none;
+    text-decoration: underline;
+  }
 }
 
 .app-info__icon {
@@ -18,5 +25,10 @@
 [theme="dark"] {
   .app-info {
     color: $color-middle-gray;
+
+    &:focus,
+    &:hover {
+      color: $color-white;
+    }
   }
 }

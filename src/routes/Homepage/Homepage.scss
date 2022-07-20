@@ -177,6 +177,12 @@ html:not([theme="dark"]) {
 .homepage__footer-link a {
   color: currentColor;
   text-decoration: none;
+  transition: all 0.08s ease-out;
+
+  &:focus {
+    outline: none;
+    text-decoration: underline;
+  }
 }
 
 [theme="dark"] {
@@ -198,6 +204,11 @@ html:not([theme="dark"]) {
 
   .homepage__footer-link {
     color: $color-middle-gray;
+
+    a:focus,
+    a:hover {
+      color: $color-white;
+    }
   }
 
   .homepage__footer-developers {
