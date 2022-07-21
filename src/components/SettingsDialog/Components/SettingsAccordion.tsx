@@ -17,6 +17,6 @@ export const SettingsAccordion: FC<SettingsAccordionProps> = ({label, isOpen, on
       {label}
       <DropdownIcon className={classNames("accordion-item__header-icon", {"accordion-item__header-icon--open": isOpen})} />
     </button>
-    <div className={classNames("accordion-item__body", {"accordion-item__body--open": isOpen})}>{children}</div>
+    {isOpen && <div className="accordion-item__body">{children}</div>}
   </div>
 );

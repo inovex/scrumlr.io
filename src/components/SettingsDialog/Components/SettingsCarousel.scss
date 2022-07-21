@@ -29,12 +29,17 @@
     justify-items: center;
     align-items: center;
     border: none;
+    outline: none;
     color: var(--accent-color);
     transition: all 0.08s ease-out;
 
     &:hover {
       filter: brightness(1.4);
       transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      filter: brightness(1.4);
     }
 
     svg {

@@ -160,6 +160,7 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__back-link {
   display: none;
 }
+
 @media screen and (max-width: 920px) {
   .settings-dialog__back-link {
     display: inline;
@@ -192,34 +193,45 @@ $settings-dialog-container--bottom: 62px;
   position: relative;
   outline: none;
   overflow-x: hidden;
+
+  &:hover {
+    background: rgba(var(--accent-color-rgb), 0.8);
+    color: $color-white;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--accent-color);
+  }
+
+  p {
+    margin: 0;
+    position: absolute;
+    left: 64px;
+
+    &:first-child {
+      font-size: $text-size--medium;
+      font-weight: 600;
+      top: 12px;
+    }
+
+    &:nth-child(2) {
+      font-size: $text-size--small;
+      top: 30px;
+      opacity: 0.65;
+    }
+  }
 }
+
 [theme="dark"] .navigation__item {
   color: $color-white;
 }
-.navigation__item > p {
-  margin: 0;
-  position: absolute;
-  left: 64px;
-}
-.navigation__item > p:first-child {
-  font-size: $text-size--medium;
-  font-weight: 600;
-  top: 12px;
-}
-.navigation__item > p:nth-child(2) {
-  font-size: $text-size--small;
-  top: 30px;
-  opacity: 0.65;
-}
-.navigation__item:hover {
-  background: rgba(var(--accent-color-rgb), 0.8);
-  color: $color-white;
-}
+
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
   color: $color-white;
 }
+
 .navigation-item__icon {
   position: absolute;
   top: 8px;
@@ -230,6 +242,7 @@ $settings-dialog-container--bottom: 62px;
   background: var(--accent-color);
   color: $color-white;
 }
+
 .navigation-item__user-name {
   white-space: nowrap;
 }

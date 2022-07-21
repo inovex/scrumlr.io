@@ -24,6 +24,10 @@ $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button:focus-visible {
   outline: none;
+
+  .toggle::after {
+    transform: scale(1.1);
+  }
 }
 
 .settings-option-button:focus-within,
