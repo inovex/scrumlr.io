@@ -1,6 +1,8 @@
 @import "src/constants/style";
 @import "../SettingsDialog";
 
+$settings__item-height: 48px;
+
 .profile-settings {
   &__container {
     display: flex;
@@ -21,17 +23,74 @@
     &-wrapper {
       overflow-y: auto;
       padding-right: $padding--small;
-      margin-right: calc(-1 * ($padding--small + 10px));
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
       margin-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
-        margin-right: calc(-1 * ($padding--medium + 10px));
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
       }
     }
 
     > button {
       flex: 0;
+    }
+  }
+}
+
+.profile-settings__hotkey-settings {
+  align-items: center;
+  width: 100%;
+  max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large})); // Avatar settings width
+}
+
+.profile-settings__toggle-hotkeys-button {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: $settings__item-height;
+  padding-right: $padding--default;
+}
+
+.profile-settings__open-cheat-sheet-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: $color-dark-gray;
+  gap: $margin--small;
+  margin-top: 2px;
+  padding-left: $padding--medium;
+  width: 100%;
+  height: $settings__item-height;
+  border: none;
+  background: none;
+  svg {
+    width: $icon--medium;
+    height: $icon--medium;
+    margin-right: $margin--medium;
+    g,
+    line {
+      stroke: $color-dark-gray;
+    }
+  }
+  &:hover,
+  &:focus,
+  &:active {
+    background: none;
+  }
+}
+
+[theme="dark"] {
+  .profile-settings__open-cheat-sheet-button {
+    background: none;
+    color: $color-middle-gray;
+    &:hover {
+      background: none;
+    }
+    svg g,
+    line {
+      stroke: $color-middle-gray;
     }
   }
 }

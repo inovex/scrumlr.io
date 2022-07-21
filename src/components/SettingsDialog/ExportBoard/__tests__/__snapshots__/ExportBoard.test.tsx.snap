@@ -61,7 +61,7 @@ Object {
             class="settings-dialog__separator"
           />
           <button
-            class="settings-option-button export-board__button-reverse-order"
+            class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
             type="button"
           >
             <span
@@ -155,7 +155,7 @@ Object {
           class="settings-dialog__separator"
         />
         <button
-          class="settings-option-button export-board__button-reverse-order"
+          class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
           type="button"
         >
           <span

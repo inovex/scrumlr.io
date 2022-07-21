@@ -54,19 +54,19 @@
     &-wrapper {
       overflow-y: auto;
       padding-right: $padding--small;
-      margin-right: calc(-1 * ($padding--small + 10px));
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
 
       @include scrollbar();
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
-        margin-right: calc(-1 * ($padding--medium + 10px));
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
       }
     }
 
     &-group {
       &:last-child {
-        padding: calc($padding--small / 2) 0;
+        padding: calc(#{$padding--small} / 2) 0;
       }
 
       &-header {

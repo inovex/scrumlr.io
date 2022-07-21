@@ -178,6 +178,12 @@
     "switchToUserMenu": "Wechsle zum User-Menu",
     "switchToAdminMenu": "Wechsle zum Admin-Menu"
   },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys aktiviert!",
+    "hotkeysDisabled": "Hotkeys deaktiviert!",
+    "hotkeyToggle": "Hotkeys aktivieren",
+    "cheatSheet": "Hotkey Spickzettel"
+  },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
     "showVotesOfOthers": "Anonyme Abstimmung",
@@ -195,6 +201,7 @@
     "1min": "1 Minute",
     "3min": "3 Minuten",
     "5min": "5 Minuten",
+    "min": "Minuten",
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },

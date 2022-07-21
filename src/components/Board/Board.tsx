@@ -4,6 +4,7 @@ import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
+import {HotkeyAnchor} from "components/HotkeyAnchor";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -119,6 +120,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
+        <HotkeyAnchor />
         <main className="board" ref={boardRef}>
           {/* Fixed color - can also be dynamic */}
           <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
@@ -148,6 +150,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
 
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
+      <HotkeyAnchor />
 
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
