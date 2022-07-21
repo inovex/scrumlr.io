@@ -164,6 +164,12 @@
     "switchToUserMenu": "Switch to user menu",
     "switchToAdminMenu": "Switch to admin menu"
   },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys enabled!",
+    "hotkeysDisabled": "Hotkeys disabled!",
+    "hotkeyToggle": "Enable hotkeys",
+    "cheatSheet": "Hotkey Cheat Sheet"
+  },
   "VoteConfigurationButton": {
     "label": "Voting",
     "showVotesOfOthers": "Anonymous voting",
@@ -181,6 +187,7 @@
     "1min": "1 minute",
     "3min": "3 minute",
     "5min": "5 minute",
+    "min": "minutes",
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },

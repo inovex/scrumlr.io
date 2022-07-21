@@ -19,6 +19,8 @@ import {useDispatch} from "react-redux";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./MenuBars.scss";
+import {useHotkeys} from "react-hotkeys-hook";
+import {hotkeyMap} from "constants/hotkeys";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -35,10 +37,16 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
 
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
+
   const state = useAppSelector(
     (rootState) => ({
       currentUser: rootState.participants!.self,
       moderation: rootState.view.moderating,
+      showAuthors: rootState.board.data?.showAuthors,
+      showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
+      showHiddenColumns: rootState.participants!.self.showHiddenColumns,
+      hotkeysAreActive: rootState.view.hotkeysAreActive,
     }),
     _.isEqual
   );
@@ -65,6 +73,42 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 
+  const showTimerMenu = () => navigate("timer");
+  const showVotingMenu = () => navigate("voting");
+  const showSettings = () => navigate("settings");
+
+  const toggleAdminMenu = () => {
+    setAnimate(true);
+    toggleMenus((prevState) => !prevState);
+  };
+
+  const hotkeyOptionsAdmin = {
+    enabled: state.hotkeysAreActive && isAdmin,
+  };
+
+  useHotkeys(
+    SHOW_TIMER_MENU,
+    () => {
+      if (!showAdminMenu) {
+        toggleAdminMenu();
+      }
+      showTimerMenu();
+    },
+    hotkeyOptionsAdmin,
+    [showAdminMenu]
+  );
+  useHotkeys(
+    SHOW_VOTING_MENU,
+    () => {
+      if (!showAdminMenu) {
+        toggleAdminMenu();
+      }
+      showVotingMenu();
+    },
+    hotkeyOptionsAdmin,
+    [showAdminMenu]
+  );
+
   return (
     <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
       <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
@@ -87,7 +131,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             onToggle={toggleRaiseHand}
             value={raisedHand}
           />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
+          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
         </div>
 
         <button
@@ -103,8 +147,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin, "menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
         {isAdmin && (
           <div className="menu__items">
-            <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
-            <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
+            <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+            <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
             <MenuToggle
               value={state.moderation}
               direction="left"
@@ -129,14 +173,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       </section>
 
       {isAdmin && (
-        <button
-          className="menu-bars__switch"
-          onClick={() => {
-            setAnimate(true);
-            toggleMenus((prevState) => !prevState);
-          }}
-          aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}
-        >
+        <button className="menu-bars__switch" onClick={toggleAdminMenu} aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}>
           <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
           <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
         </button>

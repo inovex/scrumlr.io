@@ -4,6 +4,7 @@ export const ViewAction = {
   SetLanguage: "scrumlr.io/setLanguage" as const,
   SetServerInfo: "scrumlr.io/setServerInfo" as const,
   SetRoute: "scrumlr.io/setRoute" as const,
+  SetHotkeyState: "scrumlr.io/setHotkeyState" as const,
 };
 
 export const ViewActionFactory = {
@@ -32,6 +33,11 @@ export const ViewActionFactory = {
     type: ViewAction.SetRoute,
     route,
   }),
+
+  setHotkeyState: (active: boolean) => ({
+    type: ViewAction.SetHotkeyState,
+    active,
+  }),
 };
 
 export type ViewReduxAction =
@@ -39,4 +45,5 @@ export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.setModerating>
   | ReturnType<typeof ViewActionFactory.setLanguage>
   | ReturnType<typeof ViewActionFactory.setRoute>
-  | ReturnType<typeof ViewActionFactory.setServerInfo>;
+  | ReturnType<typeof ViewActionFactory.setServerInfo>
+  | ReturnType<typeof ViewActionFactory.setHotkeyState>;
