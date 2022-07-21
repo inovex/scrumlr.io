@@ -14,6 +14,8 @@ export interface View {
   readonly language?: string;
 
   readonly route?: string;
+
+  readonly hotkeysAreActive: boolean;
 }
 
 export type ViewState = View;

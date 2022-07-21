@@ -137,6 +137,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     serverTimeOffset: 0,
     enabledAuthProvider: [],
     feedbackEnabled: false,
+    hotkeysAreActive: true,
   },
   ...overwrite,
 });
