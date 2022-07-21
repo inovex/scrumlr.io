@@ -82,13 +82,13 @@
 
 .button:not(:disabled):not(.button--text-link):hover {
   filter: brightness(1.05);
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow: 0 6px 9px 0 rgba($color-backlog-blue, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:hover {
   filter: brightness(1.05);
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow: 0 6px 9px 0 rgba($color-planning-pink, 0.24);
 }
 
@@ -105,7 +105,7 @@
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:focus {
-  outline: 2px solid $color-white;
+  outline: 2px solid rgba($color-planning-pink, 0.4);
 }
 
 .button__label {
@@ -132,5 +132,13 @@
   .button.button--text-link,
   .button.button--primary.button--outlined {
     color: $color-white;
+  }
+
+  .button:not(:disabled):not(.button--text-link):focus {
+    outline: 2px solid $color-white;
+  }
+
+  .button:not(:disabled):not(.button--text-link).button--primary:focus {
+    outline: 2px solid $color-white;
   }
 }
