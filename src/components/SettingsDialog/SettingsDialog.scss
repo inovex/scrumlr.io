@@ -120,6 +120,8 @@ $settings-dialog-container--bottom: 62px;
   height: 44px;
   border-radius: 22px;
   transition: all 0.08s ease-out;
+  border: 2px solid transparent;
+  outline: none;
 
   &:hover {
     background-color: $color-backlog-blue;
@@ -130,6 +132,10 @@ $settings-dialog-container--bottom: 62px;
   &:active {
     transform: scale(1);
   }
+
+  &:focus-visible {
+    border: 2px solid $color-backlog-blue;
+  }
 }
 [theme="dark"] .settings-dialog__close-button {
   color: $color-planning-pink;
@@ -137,6 +143,10 @@ $settings-dialog-container--bottom: 62px;
   &:hover {
     background-color: $color-planning-pink;
     color: $color-white;
+  }
+
+  &:focus-visible {
+    border: 2px solid $color-planning-pink;
   }
 }
 @media screen and (min-width: 450px) {

@@ -79,6 +79,7 @@
   top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:first-of-type {
     right: 80px;
@@ -95,6 +96,10 @@
 
   &:active {
     transform: scale(1);
+  }
+
+  &:focus-visible {
+    transform: scale(1.1);
   }
 }
 

@@ -84,6 +84,10 @@
   &:active {
     transform: scale(1);
   }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+  }
 }
 .voting-dialog__start-button > label {
   font-weight: bold;
@@ -110,6 +114,7 @@
   top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:first-of-type {
     right: 80px;
@@ -126,6 +131,10 @@
 
   &:active {
     transform: scale(1);
+  }
+
+  &:focus-visible {
+    transform: scale(1.1);
   }
 }
 
