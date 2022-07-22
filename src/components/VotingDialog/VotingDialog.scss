@@ -89,6 +89,7 @@
     outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
   }
 }
+
 .voting-dialog__start-button > label {
   font-weight: bold;
   font-size: $text-size--medium;
@@ -151,4 +152,10 @@
   user-select: none;
   -webkit-touch-callout: none;
   -webit-user-select: none;
+}
+
+[theme="dark"] {
+  .voting-dialog__start-button:focus-visible {
+    outline: 2px solid $color-white;
+  }
 }
