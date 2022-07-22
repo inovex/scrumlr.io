@@ -14,16 +14,20 @@ $header-menu-border-bottom-color: #efefef;
 
   background-color: $color-white;
   border: none;
+  outline: none;
   padding: 0;
   height: 100%;
   width: 100%;
   text-align: left;
   cursor: pointer;
-}
 
-.board-option-button:focus,
-.board-option-button:hover {
-  background-color: $header-menu-hover-color--light;
+  &:hover {
+    filter: brightness(0.92);
+  }
+
+  &:focus-visible {
+    background-color: $header-menu-hover-color--light;
+  }
 }
 
 .board-option-button__label {
@@ -48,8 +52,7 @@ $header-menu-border-bottom-color: #efefef;
   box-sizing: border-box;
 }
 
-.board-option-button:focus,
-.board-option-button--expandable:focus,
+.board-option-button--expandable:focus-visible,
 .board-option-button--expandable:hover {
   background-color: $header-menu-hover-color--light;
 }
@@ -57,11 +60,14 @@ $header-menu-border-bottom-color: #efefef;
 [theme="dark"] {
   .board-option-button {
     background-color: $color-dark-mode-note;
-  }
 
-  .board-option-button:focus,
-  .board-option-button:hover {
-    background-color: $color-dark-mode-note--hover;
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    &:focus-visible {
+      background-color: $color-dark-mode-note--hover;
+    }
   }
 
   .board-option-button__label {
@@ -72,8 +78,7 @@ $header-menu-border-bottom-color: #efefef;
     background-color: $color-dark-mode-note;
   }
 
-  .board-option-button:focus,
-  .board-option-button--expandable:focus,
+  .board-option-button--expandable:focus-visible,
   .board-option-button--expandable:hover {
     background-color: $color-dark-mode-note--hover;
   }

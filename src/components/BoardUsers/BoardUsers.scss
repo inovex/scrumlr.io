@@ -18,6 +18,7 @@
   box-sizing: border-box;
   background: none;
   border: none;
+  outline: none;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
@@ -44,8 +45,8 @@
     }
   }
 
-  &:focus {
-    outline: 2px solid $color-backlog-blue;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
   }
 
   &:active {
@@ -62,12 +63,13 @@
 
   & > button {
     border: none;
+    outline: none;
     background: none;
     border-radius: 16px;
     cursor: pointer;
 
-    &:focus {
-      outline: 2px solid $color-backlog-blue;
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
     }
   }
 }
@@ -111,11 +113,8 @@
     background-color: $color-planning-pink;
   }
 
-  .board-users__other-avatars:focus {
-    outline: 2px solid $color-planning-pink;
-  }
-
+  .board-users__other-avatars:focus-visible,
   .board-users__my-avatar > button:focus {
-    outline: 2px solid $color-planning-pink;
+    box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
   }
 }

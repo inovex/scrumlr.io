@@ -1,5 +1,7 @@
 @import "constants/style.scss";
 
+$header-menu-hover-color--light: #f3f3f3;
+
 .participant {
   display: flex;
   background-color: $color-white;
@@ -12,9 +14,12 @@
   align-items: center;
   justify-content: space-between;
 
-  &:hover,
-  &:focus {
-    background-color: $color-white-two;
+  &:hover {
+    filter: brightness(0.92);
+  }
+
+  &:focus-visible {
+    background-color: $header-menu-hover-color--light;
   }
 }
 
@@ -75,10 +80,14 @@
 [theme="dark"] {
   .participant {
     background-color: $color-dark-mode-note;
-  }
-  .participant:focus,
-  .participant:hover {
-    background-color: $color-dark-one;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    &:focus-visible {
+      background-color: $color-dark-mode-note--hover;
+    }
   }
   .participant:not(:last-child)::after {
     background-color: rgba(125, 125, 125, 0.1);
