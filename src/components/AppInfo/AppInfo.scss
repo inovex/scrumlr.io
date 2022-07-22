@@ -11,7 +11,7 @@
 
   transition: all 0.08s ease-out;
 
-  &:focus {
+  &:focus-visible {
     outline: none;
     text-decoration: underline;
   }
@@ -26,7 +26,7 @@
   .app-info {
     color: $color-middle-gray;
 
-    &:focus,
+    &:focus-visible,
     &:hover {
       color: $color-white;
     }

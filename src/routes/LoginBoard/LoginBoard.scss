@@ -111,7 +111,7 @@
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
 }
 
-.login-board__terms:focus .login-board__terms-label::before {
+.login-board__terms:focus-visible.login-board__terms-label::before {
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
@@ -163,7 +163,7 @@
     box-shadow: 0 0 0 4px rgba($color-white, 0.2);
   }
 
-  .login-board__terms:focus .login-board__terms-label::before {
+  .login-board__terms:focus-visible.login-board__terms-label::before {
     box-shadow: 0 0 0 4px rgba($color-white, 0.4);
   }
 

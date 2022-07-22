@@ -27,7 +27,7 @@
   transform: scale(1.08);
 }
 
-.text-input-action:focus {
+.text-input-action:focus-visible {
   box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.4);
 }
 
@@ -37,7 +37,7 @@
 }
 
 [theme="dark"] {
-  .text-input-action:focus {
+  .text-input-action:focus-visible {
     box-shadow: 0 0 0 2px $color-white;
   }
 }

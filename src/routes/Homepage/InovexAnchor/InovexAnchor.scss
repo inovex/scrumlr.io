@@ -6,7 +6,7 @@
 
   transition: all 0.08s ease-out;
 
-  &:focus {
+  &:focus-visible {
     outline: none;
     text-decoration: underline;
   }
@@ -20,7 +20,7 @@
 }
 
 [theme="dark"] {
-  .inovex-anchor:focus,
+  .inovex-anchor:focus-visible,
   .inovex-anchor:hover {
     color: $color-white;
   }

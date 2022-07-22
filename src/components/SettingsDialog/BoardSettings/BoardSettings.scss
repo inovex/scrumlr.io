@@ -60,7 +60,7 @@
   text-overflow: ellipsis;
 }
 
-.board-settings__board-name-button_input:focus {
+.board-settings__board-name-button_input:focus-visible {
   outline: none;
 }
 
@@ -201,7 +201,7 @@
   }
 }
 
-.board-settings__password-button_value-input:focus {
+.board-settings__password-button_value-input:focus-visible {
   outline: none;
 }
 

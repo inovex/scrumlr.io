@@ -32,7 +32,7 @@ $note-input__input-right: 40px;
   caret-color: var(--accent-color);
 }
 
-.note-input__input:focus {
+.note-input__input:focus-visible {
   outline: none;
 }
 

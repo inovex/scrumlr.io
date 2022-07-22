@@ -25,7 +25,7 @@
       }
     }
 
-    &:focus > svg {
+    &:focus-visible > svg {
       filter: brightness(1.4);
     }
   }
@@ -50,7 +50,7 @@
   height: 1px;
   width: 1px;
 
-  &:focus + .new-board__mode-label {
+  &:focus-visible + .new-board__mode-label {
     border: 1px solid $color-middle-gray;
   }
 }

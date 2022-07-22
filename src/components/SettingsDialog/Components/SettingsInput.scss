@@ -27,7 +27,7 @@
       background-color: $color-white;
     }
 
-    &:focus ~ label,
+    &:focus-visible ~ label,
     &:not(.settings-input__hidden-placeholder) ~ label,
     &:not(:placeholder-shown) ~ label {
       margin: 0 $margin--medium;

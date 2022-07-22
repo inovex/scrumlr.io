@@ -114,7 +114,7 @@
   }
 
   .board-users__other-avatars:focus-visible,
-  .board-users__my-avatar > button:focus {
+  .board-users__my-avatar > button:focus-visible {
     box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
   }
 }

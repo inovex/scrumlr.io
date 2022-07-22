@@ -72,7 +72,7 @@ $header-menu-hover-color--light: #f3f3f3;
   outline: none;
 }
 
-.participant .participant__permission-toggle:focus::after,
+.participant .participant__permission-toggle:focus-visible::after,
 .participant .participant__permission-toggle:hover::after {
   transform: scale(1.2);
 }

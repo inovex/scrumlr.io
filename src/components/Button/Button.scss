@@ -43,7 +43,7 @@
   color: $color-black;
 }
 
-.button.button--text-link:focus,
+.button.button--text-link:focus-visible,
 .button.button--text-link:hover {
   text-decoration: underline;
 }
@@ -100,11 +100,11 @@
   transform: scale(1);
 }
 
-.button:not(:disabled):not(.button--text-link):focus {
+.button:not(:disabled):not(.button--text-link):focus-visible {
   outline: 2px solid rgba($color-backlog-blue, 0.4);
 }
 
-.button:not(:disabled):not(.button--text-link).button--primary:focus {
+.button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
   outline: 2px solid rgba($color-planning-pink, 0.4);
 }
 
@@ -134,11 +134,11 @@
     color: $color-white;
   }
 
-  .button:not(:disabled):not(.button--text-link):focus {
+  .button:not(:disabled):not(.button--text-link):focus-visible {
     outline: 2px solid $color-white;
   }
 
-  .button:not(:disabled):not(.button--text-link).button--primary:focus {
+  .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
     outline: 2px solid $color-white;
   }
 }
