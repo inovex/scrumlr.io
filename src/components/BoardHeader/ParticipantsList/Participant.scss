@@ -1,7 +1,5 @@
 @import "constants/style.scss";
 
-$header-menu-hover-color--light: #f3f3f3;
-
 .participant {
   display: flex;
   background-color: $color-white;
@@ -19,7 +17,7 @@ $header-menu-hover-color--light: #f3f3f3;
   }
 
   &:focus-visible {
-    background-color: $header-menu-hover-color--light;
+    background-color: $color-white-two;
   }
 }
 

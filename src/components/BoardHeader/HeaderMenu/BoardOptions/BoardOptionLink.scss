@@ -1,5 +1,4 @@
 @import "constants/style";
-$header-menu-hover-color--light: #f3f3f3;
 $header-menu__item-height: 48px;
 
 .board-option-link {
@@ -11,7 +10,7 @@ $header-menu__item-height: 48px;
   height: $header-menu__item-height;
 
   &:focus-visible {
-    background-color: $header-menu-hover-color--light;
+    background-color: $color-white-two;
   }
 
   &:hover {

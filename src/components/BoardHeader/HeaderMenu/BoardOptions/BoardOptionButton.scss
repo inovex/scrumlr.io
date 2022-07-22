@@ -1,7 +1,6 @@
 @import "constants/style";
 
 $header-menu__item-border-width: 1px;
-$header-menu-hover-color--light: #f3f3f3;
 $header-menu-button-height: 24px;
 $header-menu-icon-width: 79px;
 $header-menu-icon-height: 24px;
@@ -26,7 +25,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   &:focus-visible {
-    background-color: $header-menu-hover-color--light;
+    background-color: $color-white-two;
   }
 }
 
@@ -54,7 +53,7 @@ $header-menu-border-bottom-color: #efefef;
 
 .board-option-button--expandable:focus-visible,
 .board-option-button--expandable:hover {
-  background-color: $header-menu-hover-color--light;
+  background-color: $color-white-two;
 }
 
 [theme="dark"] {
