@@ -1,6 +1,5 @@
 @import "constants/style.scss";
 
-$action-bar-width: 64px;
 $background-color-light: $color-white;
 $background-color-dark: #333948;
 $box-shadow: 0px 10px 20px #00000026;
@@ -44,8 +43,8 @@ $box-shadow: 0px 10px 20px #00000026;
   background: red;
   border-radius: $border-radius--round;
   cursor: pointer;
-  width: $action-bar-width;
-  height: $action-bar-width;
+  width: $action-bar__width;
+  height: $action-bar__width;
   border: none;
 }
 
@@ -66,8 +65,8 @@ $box-shadow: 0px 10px 20px #00000026;
     display: grid;
 
     &--isExpanded {
-      grid-template-columns: $action-bar-width $action-bar-width $action-bar-width;
-      grid-template-rows: $action-bar-width $action-bar-width $action-bar-width;
+      grid-template-columns: $action-bar__width $action-bar__width $action-bar__width;
+      grid-template-rows: $action-bar__width $action-bar__width $action-bar__width;
     }
   }
 }
@@ -88,12 +87,12 @@ $box-shadow: 0px 10px 20px #00000026;
 
 .menu {
   z-index: $menu-z-index;
-  border-radius: $action-bar-width / 2;
+  border-radius: $action-bar__width / 2;
   background-color: $color-white;
   box-shadow: $box-shadow;
   padding-left: $padding--medium;
   padding-right: $padding--medium;
-  height: $action-bar-width;
+  height: $action-bar__width;
   width: auto;
   visibility: hidden;
   opacity: 0;
@@ -105,11 +104,11 @@ $box-shadow: 0px 10px 20px #00000026;
   position: static;
 }
 .user-menu {
-  transform: translateY(-$action-bar-width);
+  transform: translateY(-$action-bar__width);
 }
 
 .admin-menu {
-  transform: translateY($action-bar-width);
+  transform: translateY($action-bar__width);
 }
 
 .admin-menu.admin-menu--empty {
@@ -130,8 +129,8 @@ $box-shadow: 0px 10px 20px #00000026;
 .menu-bars__switch {
   background-color: $background-color-light;
   box-shadow: $box-shadow;
-  height: $action-bar-width;
-  width: $action-bar-width;
+  height: $action-bar__width;
+  width: $action-bar__width;
   padding: 0;
   border: 0;
   border-radius: 100%;
@@ -171,7 +170,7 @@ $box-shadow: 0px 10px 20px #00000026;
   .menu-bars.menu-bars--user > .admin-menu {
     visibility: hidden;
     opacity: 0;
-    transform: translateY($action-bar-width);
+    transform: translateY($action-bar__width);
   }
   .menu-bars.menu-bars--admin > .admin-menu {
     visibility: visible;
@@ -181,7 +180,7 @@ $box-shadow: 0px 10px 20px #00000026;
   .menu-bars.menu-bars--admin > .user-menu {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-$action-bar-width);
+    transform: translateY(-$action-bar__width);
   }
   .menu-bars.menu-bars--user > .menu-bars__switch > .switch__icon--add {
     visibility: hidden;
@@ -207,7 +206,7 @@ $box-shadow: 0px 10px 20px #00000026;
   }
   .menu-bars .menu {
     padding: $padding--medium 0;
-    width: $action-bar-width;
+    width: $action-bar__width;
     height: auto;
     position: fixed;
     top: 50%;
