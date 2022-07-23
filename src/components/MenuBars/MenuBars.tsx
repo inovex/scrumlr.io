@@ -36,6 +36,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const [showAdminMenu, toggleMenus] = useState(false);
   const [animate, setAnimate] = useState(false);
+  const [fabIsExpanded, setFabIsExpanded] = useState(false);
 
   const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
 
@@ -110,74 +111,109 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   );
 
   return (
-    <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
-      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
-        <div className="menu__items">
-          <MenuToggle
-            direction="right"
-            value={isReady}
-            toggleStartLabel={t("MenuBars.markAsDone")}
-            toggleStopLabel={t("MenuBars.unmarkAsDone")}
-            icon={CheckIcon}
-            onToggle={toggleReadyState}
-            tabIndex={TabIndex.UserMenu}
-          />
-          <MenuToggle
-            tabIndex={TabIndex.UserMenu + 1}
-            direction="right"
-            toggleStartLabel={t("MenuBars.raiseHand")}
-            toggleStopLabel={t("MenuBars.lowerHand")}
-            icon={RaiseHand}
-            onToggle={toggleRaiseHand}
-            value={raisedHand}
-          />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
-        </div>
-
-        <button
-          className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
-          disabled={!showPreviousColumn}
-          onClick={onPreviousColumn}
-          aria-hidden
-        >
-          <LeftArrowIcon className="menu-bars__navigation-icon" />
-        </button>
-      </section>
-
-      <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin, "menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
-        {isAdmin && (
+    <>
+      <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
+        <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
           <div className="menu__items">
-            <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
-            <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
             <MenuToggle
-              value={state.moderation}
-              direction="left"
-              toggleStartLabel={t("MenuBars.startFocusMode")}
-              toggleStopLabel={t("MenuBars.stopFocusMode")}
-              icon={FocusIcon}
-              onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 2}
-              isFocusModeToggle
+              direction="right"
+              value={isReady}
+              toggleStartLabel={t("MenuBars.markAsDone")}
+              toggleStopLabel={t("MenuBars.unmarkAsDone")}
+              icon={CheckIcon}
+              onToggle={toggleReadyState}
+              tabIndex={TabIndex.UserMenu}
             />
+            <MenuToggle
+              tabIndex={TabIndex.UserMenu + 1}
+              direction="right"
+              toggleStartLabel={t("MenuBars.raiseHand")}
+              toggleStopLabel={t("MenuBars.lowerHand")}
+              icon={RaiseHand}
+              onToggle={toggleRaiseHand}
+              value={raisedHand}
+            />
+            <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
           </div>
+
+          <button
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+            disabled={!showPreviousColumn}
+            onClick={onPreviousColumn}
+            aria-hidden
+          >
+            <LeftArrowIcon className="menu-bars__navigation-icon" />
+          </button>
+        </section>
+
+        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin, "menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
+          {isAdmin && (
+            <div className="menu__items">
+              <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+              <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+              <MenuToggle
+                value={state.moderation}
+                direction="left"
+                toggleStartLabel={t("MenuBars.startFocusMode")}
+                toggleStopLabel={t("MenuBars.stopFocusMode")}
+                icon={FocusIcon}
+                onToggle={toggleModeration}
+                tabIndex={TabIndex.AdminMenu + 2}
+                isFocusModeToggle
+              />
+            </div>
+          )}
+
+          <button
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+            disabled={!showNextColumn}
+            onClick={onNextColumn}
+            aria-hidden
+          >
+            <RightArrowIcon className="menu-bars__navigation-icon" />
+          </button>
+        </section>
+
+        {isAdmin && (
+          <button className="menu-bars__switch" onClick={toggleAdminMenu} aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}>
+            <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
+            <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
+          </button>
         )}
-
-        <button
-          className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
-          disabled={!showNextColumn}
-          onClick={onNextColumn}
-          aria-hidden
-        >
-          <RightArrowIcon className="menu-bars__navigation-icon" />
+      </aside>
+      <aside className={classNames("menu-bars-mobile__container", {"menu-bars-mobile__container--isExpanded": fabIsExpanded})}>
+        <button className="menu-bars-mobile__fab menu-bars-mobile__fab-main" onClick={() => setFabIsExpanded(!fabIsExpanded)}>
+          <ToggleAddMenuIcon className="" aria-hidden />
         </button>
-      </section>
-
-      {isAdmin && (
-        <button className="menu-bars__switch" onClick={toggleAdminMenu} aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}>
-          <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
-          <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
-        </button>
-      )}
-    </aside>
+        {fabIsExpanded && (
+          <>
+            <ul className="menu-bars-mobile__options-vertical">
+              <li>
+                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                  <ToggleAddMenuIcon className="" aria-hidden />
+                </button>
+              </li>
+              <li>
+                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                  <ToggleAddMenuIcon className="" aria-hidden />
+                </button>
+              </li>
+            </ul>
+            <ul className="menu-bars-mobile__options-horizontal">
+              <li>
+                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                  <ToggleAddMenuIcon className="" aria-hidden />
+                </button>
+              </li>
+              <li>
+                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                  <ToggleAddMenuIcon className="" aria-hidden />
+                </button>
+              </li>
+            </ul>
+          </>
+        )}
+      </aside>
+    </>
   );
 };
