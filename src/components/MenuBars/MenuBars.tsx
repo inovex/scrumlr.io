@@ -192,7 +192,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         </button>
         {fabIsExpanded && (
           <>
-            <ul className="menu-bars-mobile__options-vertical">
+            <ul className="menu-bars-mobile__options menu-bars-mobile__options--vertical">
               <li className="menu-bars-mobile__fab-option">
                 <MenuToggle
                   direction="right"
@@ -220,7 +220,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             </ul>
             {isAdmin && (
-              <ul className="menu-bars-mobile__options-horizontal">
+              <ul className="menu-bars-mobile__options menu-bars-mobile__options--horizontal">
                 <li className="menu-bars-mobile__fab-option">
                   <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
