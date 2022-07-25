@@ -188,14 +188,28 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         {fabIsExpanded && (
           <>
             <ul className="menu-bars-mobile__options-vertical">
+              {isAdmin && (
+                <>
+                  <li>
+                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                      <CheckIcon className="" aria-hidden />
+                    </button>
+                  </li>
+                  <li>
+                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                      <RaiseHand className="" aria-hidden />
+                    </button>
+                  </li>
+                  <li>
+                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                      <FocusIcon className="" aria-hidden />
+                    </button>
+                  </li>
+                </>
+              )}
               <li>
                 <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                  <ToggleAddMenuIcon className="" aria-hidden />
-                </button>
-              </li>
-              <li>
-                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                  <ToggleAddMenuIcon className="" aria-hidden />
+                  <SettingsIcon className="" aria-hidden />
                 </button>
               </li>
             </ul>
