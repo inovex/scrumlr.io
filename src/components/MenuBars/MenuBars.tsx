@@ -188,7 +188,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
             setFabIsExpanded(!fabIsExpanded);
-            setTimeout(() => setAnimate(!animate), 5);
+            setTimeout(() => setAnimate(!animate), 25);
           }}
         >
           {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}

@@ -52,6 +52,13 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   border: none;
   box-shadow: $box-shadow--light;
   z-index: $menu-item-z-index;
+  transition: background-color 0.125s;
+
+  svg {
+    fill: $color-black;
+    width: $icon--medium;
+    height: $icon--medium;
+  }
 }
 
 .menu-bars-mobile__fab-option {
@@ -59,39 +66,45 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   border-radius: $border-radius--round;
 }
 
-.menu-bars-mobile__fab svg {
-  fill: $color-black;
-  width: $icon--medium;
-  height: $icon--medium;
-}
-
 [theme="dark"] {
   .menu-bars-mobile__fab {
     background: $menu-icon-background-color--dark;
     box-shadow: $box-shadow--dark;
   }
+
   .menu-bars-mobile__fab-option {
     box-shadow: $box-shadow--dark;
   }
 }
 
 .menu-bars-mobile__fab-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-row: 2 / 3;
   grid-column: 2 / 3;
 }
 
-.menu-bars-mobile__fab-main--isExpanded svg {
-  color: $color-black;
-  width: auto;
-  height: auto;
+.menu-bars-mobile__fab-main--isExpanded {
+  background: $menu-icon-background-color--dark;
+
+  svg {
+    color: $color-white;
+    width: auto;
+    height: auto;
+  }
 }
 
 [theme="dark"] {
   .menu-bars-mobile__fab svg {
     fill: $color-white;
   }
-  .menu-bars-mobile__fab-main--isExpanded svg {
-    color: $color-white;
+
+  .menu-bars-mobile__fab-main--isExpanded {
+    svg {
+      color: $color-black;
+    }
+    background: $menu-icon-background-color--light;
   }
 }
 
@@ -141,6 +154,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 .menu:first-child:last-child {
   position: static;
 }
+
 .user-menu {
   transform: translateY(-$action-bar__width);
 }
@@ -179,9 +193,11 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   display: none;
 }
+
 .menu-bars__switch:hover {
   filter: brightness(1.4);
 }
+
 .switch__icon {
   position: absolute;
   top: 0;
@@ -190,6 +206,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   transition: opacity 0.5s, visibility 0.5s, transform 1s;
   color: $color-black;
 }
+
 .menu-animation {
   transition: transform 400ms, opacity 400ms, visibility 400ms;
 }
@@ -271,6 +288,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     background-color: $menu-icon-background-color--dark;
     box-shadow: $box-shadow--light;
   }
+
   .switch__icon {
     color: $color-white;
   }
