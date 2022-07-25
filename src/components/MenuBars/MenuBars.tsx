@@ -200,11 +200,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                       <RaiseHand className="" aria-hidden />
                     </button>
                   </li>
-                  <li>
-                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                      <FocusIcon className="" aria-hidden />
-                    </button>
-                  </li>
                 </>
               )}
               <li>
@@ -213,18 +208,25 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 </button>
               </li>
             </ul>
-            <ul className="menu-bars-mobile__options-horizontal">
-              <li>
-                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                  <ToggleAddMenuIcon className="" aria-hidden />
-                </button>
-              </li>
-              <li>
-                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                  <ToggleAddMenuIcon className="" aria-hidden />
-                </button>
-              </li>
-            </ul>
+            {isAdmin && (
+              <ul className="menu-bars-mobile__options-horizontal">
+                <li>
+                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                    <TimerIcon className="" aria-hidden />
+                  </button>
+                </li>
+                <li>
+                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                    <VoteIcon className="" aria-hidden />
+                  </button>
+                </li>
+                <li>
+                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
+                    <FocusIcon className="" aria-hidden />
+                  </button>
+                </li>
+              </ul>
+            )}
           </>
         )}
       </aside>
