@@ -19,6 +19,7 @@ export const Appearance = () => {
         <h2 className="settings-dialog__header-text">{t("SettingsDialog.Appearance")}</h2>
       </header>
       <div className="appearance-container">
+        {/* TODO: turn component to html select component for better accessibility */}
         <SettingsButton
           className="appearance-settings_language-dropdown"
           label={t("Appearance.colorScheme")}
