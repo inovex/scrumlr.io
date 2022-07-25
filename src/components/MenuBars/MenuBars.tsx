@@ -13,6 +13,8 @@ import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
 import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
+import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -182,48 +184,60 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         )}
       </aside>
       <aside className={classNames("menu-bars-mobile__container", {"menu-bars-mobile__container--isExpanded": fabIsExpanded})}>
-        <button className="menu-bars-mobile__fab menu-bars-mobile__fab-main" onClick={() => setFabIsExpanded(!fabIsExpanded)}>
-          <ToggleAddMenuIcon className="" aria-hidden />
+        <button
+          className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
+          onClick={() => setFabIsExpanded(!fabIsExpanded)}
+        >
+          {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}
         </button>
         {fabIsExpanded && (
           <>
             <ul className="menu-bars-mobile__options-vertical">
-              {isAdmin && (
-                <>
-                  <li>
-                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                      <CheckIcon className="" aria-hidden />
-                    </button>
-                  </li>
-                  <li>
-                    <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                      <RaiseHand className="" aria-hidden />
-                    </button>
-                  </li>
-                </>
-              )}
-              <li>
-                <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                  <SettingsIcon className="" aria-hidden />
-                </button>
+              <li className="menu-bars-mobile__fab-option">
+                <MenuToggle
+                  direction="right"
+                  value={isReady}
+                  toggleStartLabel={t("MenuBars.markAsDone")}
+                  toggleStopLabel={t("MenuBars.unmarkAsDone")}
+                  icon={CheckIcon}
+                  onToggle={toggleReadyState}
+                  tabIndex={TabIndex.UserMenu}
+                />
+              </li>
+              <li className="menu-bars-mobile__fab-option">
+                <MenuToggle
+                  tabIndex={TabIndex.UserMenu + 1}
+                  direction="right"
+                  toggleStartLabel={t("MenuBars.raiseHand")}
+                  toggleStopLabel={t("MenuBars.lowerHand")}
+                  icon={RaiseHand}
+                  onToggle={toggleRaiseHand}
+                  value={raisedHand}
+                />
+              </li>
+              <li className="menu-bars-mobile__fab-option">
+                <MenuButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
             </ul>
             {isAdmin && (
               <ul className="menu-bars-mobile__options-horizontal">
-                <li>
-                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                    <TimerIcon className="" aria-hidden />
-                  </button>
+                <li className="menu-bars-mobile__fab-option">
+                  <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
-                <li>
-                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                    <VoteIcon className="" aria-hidden />
-                  </button>
+                <li className="menu-bars-mobile__fab-option">
+                  <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
-                <li>
-                  <button className="menu-bars-mobile__fab menu-bars-mobile__fab-option">
-                    <FocusIcon className="" aria-hidden />
-                  </button>
+                <li className="menu-bars-mobile__fab-option">
+                  <MenuToggle
+                    value={state.moderation}
+                    direction="left"
+                    toggleStartLabel={t("MenuBars.startFocusMode")}
+                    toggleStopLabel={t("MenuBars.stopFocusMode")}
+                    icon={FocusIcon}
+                    onToggle={toggleModeration}
+                    tabIndex={TabIndex.AdminMenu + 2}
+                    isFocusModeToggle
+                  />
                 </li>
               </ul>
             )}

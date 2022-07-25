@@ -14,10 +14,16 @@ $color-dark-gray: #859093;
 $color-darker-gray: #4f5253;
 $color-darkest-gray: #232323;
 $color-black: #111111;
+
+// element colors
 $color-dark-mode: #272f41;
 $color-dark-mode--disabled: #1b202d;
 $color-dark-mode-note: #313949;
 $color-dark-mode-note--hover: #3d4555;
+$menu-icon-background-color--dark: #333948;
+$menu-icon-background-color--light: $color-white;
+$tooltip-background-color--light: #d3daf0;
+$tooltip-background-color--dark: #485064;
 
 // theme colors
 $color-backlog-blue: #0057ff;

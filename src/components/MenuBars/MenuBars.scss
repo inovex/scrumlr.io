@@ -1,8 +1,7 @@
 @import "constants/style.scss";
 
-$background-color-light: $color-white;
-$background-color-dark: #333948;
-$box-shadow: 0px 10px 20px #00000026;
+$box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
+$box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 .menu-bars-mobile__container {
   display: none;
@@ -10,7 +9,6 @@ $box-shadow: 0px 10px 20px #00000026;
   position: fixed;
   bottom: $margin--small;
   right: $margin--small;
-  background: rgba(0, 185, 37, 0.3);
   pointer-events: none; // Click-through container
 }
 
@@ -48,12 +46,35 @@ $box-shadow: 0px 10px 20px #00000026;
 
 .menu-bars-mobile__fab {
   pointer-events: auto;
-  background: red;
+  background: $menu-icon-background-color--light;
   border-radius: $border-radius--round;
   cursor: pointer;
   width: $action-bar__width;
   height: $action-bar__width;
   border: none;
+  box-shadow: $box-shadow--light;
+  z-index: $menu-item-z-index;
+}
+
+.menu-bars-mobile__fab-option {
+  box-shadow: $box-shadow--light;
+  border-radius: $border-radius--round;
+}
+
+.menu-bars-mobile__fab svg {
+  fill: $color-black;
+  width: $icon--medium;
+  height: $icon--medium;
+}
+
+[theme="dark"] {
+  .menu-bars-mobile__fab {
+    background: $menu-icon-background-color--dark;
+    box-shadow: $box-shadow--dark;
+  }
+  .menu-bars-mobile__fab-option {
+    box-shadow: $box-shadow--dark;
+  }
 }
 
 .menu-bars-mobile__fab-main {
@@ -61,14 +82,18 @@ $box-shadow: 0px 10px 20px #00000026;
   grid-column: 2 / 3;
 }
 
-.menu-bars-mobile__fab-option {
-  background: greenyellow;
-  width: 50px;
-  height: 50px;
+.menu-bars-mobile__fab-main--isExpanded svg {
+  color: $color-black;
+  width: auto;
+  height: auto;
+}
 
-  svg {
-    width: $icon--large;
-    height: $icon--large;
+[theme="dark"] {
+  .menu-bars-mobile__fab svg {
+    fill: $color-white;
+  }
+  .menu-bars-mobile__fab-main--isExpanded svg {
+    color: $color-white;
   }
 }
 
@@ -104,7 +129,7 @@ $box-shadow: 0px 10px 20px #00000026;
   z-index: $menu-z-index;
   border-radius: $action-bar__width / 2;
   background-color: $color-white;
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow--light;
   padding-left: $padding--medium;
   padding-right: $padding--medium;
   height: $action-bar__width;
@@ -142,8 +167,8 @@ $box-shadow: 0px 10px 20px #00000026;
 }
 
 .menu-bars__switch {
-  background-color: $background-color-light;
-  box-shadow: $box-shadow;
+  background-color: $color-white;
+  box-shadow: $box-shadow--light;
   height: $action-bar__width;
   width: $action-bar__width;
   padding: 0;
@@ -245,8 +270,8 @@ $box-shadow: 0px 10px 20px #00000026;
 [theme="dark"] {
   .menu,
   .menu-bars__switch {
-    background-color: $background-color-dark;
-    box-shadow: $box-shadow;
+    background-color: $menu-icon-background-color--dark;
+    box-shadow: $box-shadow--light;
   }
   .switch__icon {
     color: $color-white;
@@ -267,7 +292,7 @@ $box-shadow: 0px 10px 20px #00000026;
   border: none;
   border-radius: 100%;
   outline: none;
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow--light;
   color: $color-black;
 }
 
@@ -293,7 +318,7 @@ $box-shadow: 0px 10px 20px #00000026;
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: $background-color-dark;
+    background: $menu-icon-background-color--dark;
     color: $color-white;
   }
 
