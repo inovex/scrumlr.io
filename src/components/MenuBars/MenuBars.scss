@@ -18,6 +18,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   align-items: center;
   padding: 0;
   gap: $margin--small;
+  opacity: 0.25;
 
   &--vertical {
     margin: 0 0 $margin--small 0;
@@ -33,6 +34,11 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     justify-content: flex-start;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
+  }
+
+  &--animate {
+    transition: opacity 0.15s;
+    opacity: 1;
   }
 }
 
