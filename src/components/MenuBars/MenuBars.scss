@@ -29,7 +29,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   }
 }
 
-.menu-bars-mobile__container {
+.menu-bars-mobile {
   display: none;
   z-index: $menu-z-index;
   position: fixed;
@@ -135,10 +135,10 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 @media #{$smartphone} {
-  #menu-bars {
+  .menu-bars {
     display: none;
   }
-  .menu-bars-mobile__container {
+  .menu-bars-mobile {
     display: grid;
 
     &--isExpanded {
