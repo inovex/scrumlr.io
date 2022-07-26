@@ -188,14 +188,13 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
             setFabIsExpanded(!fabIsExpanded);
-            setTimeout(() => setAnimate(!animate), 25);
           }}
         >
           {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}
         </button>
         {fabIsExpanded && (
           <>
-            <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {"menu-bars-mobile__options--animate": animate})}>
+            <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {"menu-bars-mobile__options--isExpanded": fabIsExpanded})}>
               <li className="menu-bars-mobile__fab-option">
                 <MenuToggle
                   direction="right"
@@ -223,7 +222,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             </ul>
             {isAdmin && (
-              <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {"menu-bars-mobile__options--animate": animate})}>
+              <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {"menu-bars-mobile__options--isExpanded": fabIsExpanded})}>
                 <li className="menu-bars-mobile__fab-option">
                   <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
