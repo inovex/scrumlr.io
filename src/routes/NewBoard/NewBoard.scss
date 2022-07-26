@@ -47,7 +47,7 @@
   width: 1px;
 
   &:focus-visible + .new-board__mode-label {
-    border: 1px solid $color-middle-gray;
+    box-shadow: 0 0 0 2px $color-middle-gray;
   }
 }
 
@@ -124,6 +124,10 @@
     color: $color-white;
     background: $color-dark-mode-note;
     box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
+
+  .new-board__mode-input:focus-visible + .new-board__mode-label {
+    box-shadow: 0 0 0 2px $color-white;
   }
 
   .new-board__mode-input + .new-board__mode-label:hover {

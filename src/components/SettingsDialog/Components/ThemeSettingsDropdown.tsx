@@ -60,6 +60,7 @@ export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDrop
                 setTheme(Theme.DARK);
               }}
               onKeyDown={handleKeyDown(Theme.DARK)}
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
               <DarkIcon className="settings-dropdown-flag" />
@@ -73,6 +74,7 @@ export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDrop
                 setTheme(Theme.LIGHT);
               }}
               onKeyDown={handleKeyDown(Theme.LIGHT)}
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
               <LightIcon className="settings-dropdown-flag" />

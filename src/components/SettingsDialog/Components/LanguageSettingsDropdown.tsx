@@ -63,6 +63,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
                 setCurrentlanguage("en");
               }}
               onKeyDown={handleKeyDown("en")}
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
               <English className="settings-dropdown-flag" />
@@ -77,6 +78,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
                 setCurrentlanguage("de");
               }}
               onKeyDown={handleKeyDown("en")}
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
               <German className="settings-dropdown-flag" />
