@@ -77,14 +77,13 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 .menu-bars-mobile__fab-option {
   box-shadow: $box-shadow--light;
   border-radius: $border-radius--round;
+  margin: 0;
 
   &--vertical {
-    margin-bottom: 0;
     animation: expandVertically 0.25s ease forwards;
   }
 
   &--horizontal {
-    margin-right: 0;
     animation: expandHorizontally 0.25s ease forwards;
   }
 }
@@ -139,8 +138,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     display: grid;
 
     &--isExpanded {
-      grid-template-columns: $action-bar__width $action-bar__width;
-      grid-template-rows: $action-bar__width $action-bar__width;
+      grid-template-columns: 0 $action-bar__width;
+      grid-template-rows: 0 $action-bar__width;
     }
   }
 }
