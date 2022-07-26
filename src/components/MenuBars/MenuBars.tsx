@@ -159,7 +159,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={FocusIcon}
                 onToggle={toggleModeration}
                 tabIndex={TabIndex.AdminMenu + 2}
-                isFocusModeToggle
               />
             </div>
           )}
@@ -250,7 +249,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   toggleStopLabel={t("MenuBars.stopFocusMode")}
                   icon={FocusIcon}
                   onToggle={toggleModeration}
-                  isFocusModeToggle
                   tabIndex={TabIndex.AdminMenu + 2}
                 />
               </li>
