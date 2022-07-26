@@ -52,7 +52,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   border: none;
   box-shadow: $box-shadow--light;
   z-index: $menu-item-z-index;
-  transition: background-color 0.125s;
 
   svg {
     fill: $color-black;
