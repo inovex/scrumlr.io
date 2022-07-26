@@ -21,8 +21,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   display: none;
   z-index: $menu-z-index;
   position: fixed;
-  bottom: $margin--small;
-  right: $margin--small;
+  transition: bottom 0.25s, right 0.25s;
 }
 
 .menu-bars-mobile__options {
@@ -136,6 +135,15 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     display: grid;
     grid-template-columns: 0 $action-bar__width;
     grid-template-rows: 0 $action-bar__width;
+    bottom: $margin--medium;
+    right: $margin--medium;
+  }
+}
+
+@media #{$mini-smartphone} {
+  .menu-bars-mobile {
+    bottom: $margin--small;
+    right: $margin--small;
   }
 }
 

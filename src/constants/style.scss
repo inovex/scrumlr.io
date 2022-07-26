@@ -127,6 +127,7 @@ $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (10 * $base-z-index-step);
 
 // responsive
+$mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
