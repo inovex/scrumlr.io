@@ -1,4 +1,4 @@
-import {VFC, useState} from "react";
+import {VFC, useState, KeyboardEvent, Dispatch, SetStateAction} from "react";
 import "./LanguageSettingsDropdown.scss";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as German} from "assets/flags/DE.svg";
@@ -8,10 +8,12 @@ import i18n from "i18n";
 
 interface LanguageSettingsDropdownProps {
   showDropdown?: boolean;
+  setShowDropdown: Dispatch<SetStateAction<boolean>>;
 }
 
-export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({showDropdown}) => {
+export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({showDropdown, setShowDropdown}) => {
   const {t} = useTranslation();
+  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.resolvedLanguage);
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language).then(() => {
@@ -21,7 +23,20 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
     });
   };
 
-  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.resolvedLanguage);
+  const handleKeyDown = (newLanguage: string) => (e: KeyboardEvent<HTMLLIElement>) => {
+    switch (e.key) {
+      case " ":
+      case "SpaceBar":
+      case "Enter":
+        e.preventDefault();
+        changeLanguage(newLanguage);
+        setCurrentlanguage(newLanguage);
+        setShowDropdown(false);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="settings-dropdown">
@@ -41,12 +56,14 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
 
       {showDropdown &&
         (currentlanguage === "de" ? (
-          <ul className="settings-dropdown-content">
+          <ul className="settings-dropdown-content" role="listbox" tabIndex={-1}>
             <li
               onClick={() => {
                 changeLanguage("en");
                 setCurrentlanguage("en");
               }}
+              onKeyDown={handleKeyDown("en")}
+              tabIndex={0}
             >
               <English className="settings-dropdown-flag" />
               {t("Language.english")}
@@ -59,6 +76,8 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
                 changeLanguage("de");
                 setCurrentlanguage("de");
               }}
+              onKeyDown={handleKeyDown("en")}
+              tabIndex={0}
             >
               <German className="settings-dropdown-flag" />
               {t("Language.german")}

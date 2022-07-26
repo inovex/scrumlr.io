@@ -1,4 +1,4 @@
-import {useEffect, useState, VFC} from "react";
+import {useEffect, useState, VFC, KeyboardEvent, SetStateAction, Dispatch} from "react";
 import {t} from "i18next";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./LanguageSettingsDropdown.scss";
@@ -7,18 +7,38 @@ import {ReactComponent as DarkIcon} from "assets/icon-darkmode.svg";
 
 type ThemeSettingsDropdownProps = {
   showDropdown: boolean;
+  setShowDropdown: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDropdown}) => {
-  const [theme, setTheme] = useState(document.documentElement.getAttribute("theme") ?? "light");
+enum Theme {
+  LIGHT = "light",
+  DARK = "dark",
+}
+
+export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDropdown, setShowDropdown}) => {
+  const [theme, setTheme] = useState<Theme>((document.documentElement.getAttribute("theme") as Theme) ?? Theme.LIGHT);
   useEffect(() => {
     document.documentElement.setAttribute("theme", theme!);
     localStorage.setItem("theme", theme!);
   }, [theme]);
 
+  const handleKeyDown = (newTheme: Theme) => (e: KeyboardEvent<HTMLLIElement>) => {
+    switch (e.key) {
+      case " ":
+      case "SpaceBar":
+      case "Enter":
+        e.preventDefault();
+        setTheme(newTheme);
+        setShowDropdown(false);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="settings-dropdown">
-      {theme === "light" ? (
+      {theme === Theme.LIGHT ? (
         <>
           <LightIcon className="settings-dropdown-flag" />
           <span className="settings-dropdown-button">{t("Appearance.colorSchemeLight")}</span>
@@ -33,23 +53,27 @@ export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDrop
       )}
 
       {showDropdown &&
-        (theme === "light" ? (
-          <ul className="settings-dropdown-content">
+        (theme === Theme.LIGHT ? (
+          <ul className="settings-dropdown-content" role="listbox" tabIndex={-1}>
             <li
               onClick={() => {
-                setTheme("dark");
+                setTheme(Theme.DARK);
               }}
+              onKeyDown={handleKeyDown(Theme.DARK)}
+              tabIndex={0}
             >
               <DarkIcon className="settings-dropdown-flag" />
               {t("Appearance.colorSchemeDark")}
             </li>
           </ul>
         ) : (
-          <ul className="settings-dropdown-content">
+          <ul className="settings-dropdown-content" role="listbox" tabIndex={-1}>
             <li
               onClick={() => {
-                setTheme("light");
+                setTheme(Theme.LIGHT);
               }}
+              onKeyDown={handleKeyDown(Theme.LIGHT)}
+              tabIndex={0}
             >
               <LightIcon className="settings-dropdown-flag" />
               {t("Appearance.colorSchemeLight")}
