@@ -192,7 +192,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             })}
           >
             {(fabIsExpanded || isReady) && (
-              <li className="menu-bars-mobile__fab-option">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
                 <MenuToggle
                   value={isReady}
                   direction="right"
@@ -205,7 +205,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {(fabIsExpanded || raisedHand) && (
-              <li className="menu-bars-mobile__fab-option">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
                 <MenuToggle
                   value={raisedHand}
                   direction="right"
@@ -218,7 +218,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {fabIsExpanded && (
-              <li className="menu-bars-mobile__fab-option">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
                 <MenuButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
             )}
@@ -233,16 +233,16 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           >
             {fabIsExpanded && (
               <>
-                <li className="menu-bars-mobile__fab-option">
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                   <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
-                <li className="menu-bars-mobile__fab-option">
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                   <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
               </>
             )}
             {(fabIsExpanded || state.moderation) && (
-              <li className="menu-bars-mobile__fab-option">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                 <MenuToggle
                   value={state.moderation}
                   direction="left"

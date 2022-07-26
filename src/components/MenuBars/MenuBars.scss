@@ -5,14 +5,14 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 @keyframes expandHorizontally {
   to {
-    gap: $margin--small;
+    margin-right: $margin--small;
     opacity: 1;
   }
 }
 
 @keyframes expandVertically {
   to {
-    gap: $margin--small;
+    margin-bottom: $margin--small;
     opacity: 1;
   }
 }
@@ -32,7 +32,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   align-items: center;
   padding: 0;
   margin: 0;
-  gap: 0;
   opacity: 0.25;
 
   &--vertical {
@@ -49,25 +48,9 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     grid-column: 1 / 2;
   }
 
+  &--isExpanded,
   &--hasActiveButton {
-    gap: $margin--small;
     opacity: 1;
-  }
-
-  &--hasActiveButton.menu-bars-mobile__options--vertical {
-    margin-bottom: $margin--small;
-  }
-
-  &--hasActiveButton.menu-bars-mobile__options--horizontal {
-    margin-right: $margin--small;
-  }
-
-  &--isExpanded.menu-bars-mobile__options--vertical {
-    animation: expandVertically 0.25s ease forwards;
-  }
-
-  &--isExpanded.menu-bars-mobile__options--horizontal {
-    animation: expandHorizontally 0.25s ease forwards;
   }
 }
 
@@ -94,6 +77,16 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 .menu-bars-mobile__fab-option {
   box-shadow: $box-shadow--light;
   border-radius: $border-radius--round;
+
+  &--vertical {
+    margin-bottom: 0;
+    animation: expandVertically 0.25s ease-in-out forwards;
+  }
+
+  &--horizontal {
+    margin-right: 0;
+    animation: expandHorizontally 0.25s ease-in-out forwards;
+  }
 }
 
 [theme="dark"] {
