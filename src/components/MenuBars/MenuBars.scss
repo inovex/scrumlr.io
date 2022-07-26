@@ -204,78 +204,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   height: 100%;
 }
 
-.menu-bars__switch {
-  background-color: $color-white;
-  box-shadow: $box-shadow--light;
-  height: $action-bar__width;
-  width: $action-bar__width;
-  padding: 0;
-  border: 0;
-  border-radius: 100%;
-  transition: background-color 0.25s ease-in-out, filter 0.08s ease-out;
-  // 206px is the width of the horizontal action bar
-  margin-left: 206px + $margin--small;
-  position: relative;
-  cursor: pointer;
-  display: none;
-}
-
-.menu-bars__switch:hover {
-  filter: brightness(1.4);
-}
-
-.switch__icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: rotate(0deg);
-  transition: opacity 0.5s, visibility 0.5s, transform 1s;
-  color: $color-black;
-}
-
 .menu-animation {
   transition: transform 400ms, opacity 400ms, visibility 400ms;
-}
-
-@media #{$smartphone} {
-  .menu-bars.menu-bars--user > .user-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  :not(.menu-bars--isAdmin).menu-bars--user > .user-menu {
-    transform: translateX(-50%);
-  }
-
-  .menu-bars.menu-bars--user > .admin-menu {
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY($action-bar__width);
-  }
-  .menu-bars.menu-bars--admin > .admin-menu {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .menu-bars.menu-bars--admin > .user-menu {
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(-$action-bar__width);
-  }
-  .menu-bars.menu-bars--user > .menu-bars__switch > .switch__icon--add {
-    visibility: hidden;
-    opacity: 0;
-    transform: rotate(360deg);
-  }
-  .menu-bars.menu-bars--admin > .menu-bars__switch > .switch__icon--settings {
-    visibility: hidden;
-    opacity: 0;
-    transform: rotate(-360deg);
-  }
-  .menu-bars .menu-bars__switch {
-    display: block;
-  }
 }
 
 @media #{$tablet} {
@@ -309,14 +239,9 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 [theme="dark"] {
-  .menu,
-  .menu-bars__switch {
+  .menu {
     background-color: $menu-icon-background-color--dark;
     box-shadow: $box-shadow--light;
-  }
-
-  .switch__icon {
-    color: $color-white;
   }
 }
 

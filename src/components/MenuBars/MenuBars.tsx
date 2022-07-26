@@ -11,8 +11,6 @@ import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
-import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
-import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {TabIndex} from "constants/tabIndex";
@@ -175,13 +173,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             <RightArrowIcon className="menu-bars__navigation-icon" />
           </button>
         </section>
-
-        {isAdmin && (
-          <button className="menu-bars__switch" onClick={toggleAdminMenu} aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}>
-            <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
-            <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
-          </button>
-        )}
       </aside>
       <aside className={classNames("menu-bars-mobile__container", {"menu-bars-mobile__container--isExpanded": fabIsExpanded})}>
         <button
