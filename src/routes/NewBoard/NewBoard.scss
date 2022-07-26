@@ -17,16 +17,12 @@
   a {
     outline: none;
 
-    &:hover {
-      filter: brightness(1.4);
-
-      > svg .scrumlr-logo__paths path:first-of-type {
-        transform: scale(1.08);
-      }
+    &:hover svg {
+      filter: drop-shadow(4px 4px 4px $color-middle-gray);
     }
 
     &:focus-visible > svg {
-      filter: brightness(1.4);
+      filter: brightness(1.6);
     }
   }
 }
@@ -118,6 +114,10 @@
 [theme="dark"] {
   .new-board {
     color: $color-white;
+
+    a:hover svg {
+      filter: drop-shadow(4px 4px 4px $color-black);
+    }
   }
 
   .new-board__mode-label {

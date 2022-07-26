@@ -13,6 +13,14 @@
   padding: $padding--default;
 }
 
+.login-board__form a {
+  outline: none;
+
+  &:focus-visible svg {
+    filter: brightness(1.6);
+  }
+}
+
 .login-board__logo {
   margin-bottom: 1.5em;
   transition: all 0.16s ease-out;
@@ -86,6 +94,10 @@
   position: relative;
   display: block;
   padding-left: 1.5em;
+
+  a:focus-visible {
+    text-decoration: underline;
+  }
 }
 
 // checkbox border
@@ -111,7 +123,7 @@
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
 }
 
-.login-board__terms:focus-visible.login-board__terms-label::before {
+.login-board__checkbox:focus-visible + .login-board__terms-label::before {
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
