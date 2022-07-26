@@ -161,8 +161,7 @@
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
     "settings": "Settings",
-    "switchToUserMenu": "Switch to user menu",
-    "switchToAdminMenu": "Switch to admin menu"
+    "openMenu": "Open user menu"
   },
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys enabled!",

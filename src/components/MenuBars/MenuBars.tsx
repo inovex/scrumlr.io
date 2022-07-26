@@ -189,6 +189,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           onClick={() => {
             setFabIsExpanded(!fabIsExpanded);
           }}
+          aria-label={t("MenuBars.openMenu")}
         >
           {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}
         </button>

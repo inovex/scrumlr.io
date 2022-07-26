@@ -162,8 +162,7 @@
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
     "settings": "Einstellungen",
-    "switchToUserMenu": "Wechsle zum User-Menu",
-    "switchToAdminMenu": "Wechsle zum Admin-Menu"
+    "openMenu": "Öffne das Benutzermenü"
   },
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys aktiviert!",
