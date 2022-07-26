@@ -23,7 +23,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   position: fixed;
   bottom: $margin--small;
   right: $margin--small;
-  pointer-events: none; // Click-through container
 }
 
 .menu-bars-mobile__options {
@@ -55,7 +54,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 .menu-bars-mobile__fab {
-  pointer-events: auto;
   background: $menu-icon-background-color--light;
   border-radius: $border-radius--round;
   cursor: pointer;
@@ -136,11 +134,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   }
   .menu-bars-mobile {
     display: grid;
-
-    &--isExpanded {
-      grid-template-columns: 0 $action-bar__width;
-      grid-template-rows: 0 $action-bar__width;
-    }
+    grid-template-columns: 0 $action-bar__width;
+    grid-template-rows: 0 $action-bar__width;
   }
 }
 

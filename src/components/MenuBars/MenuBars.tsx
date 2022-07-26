@@ -173,7 +173,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </button>
         </section>
       </aside>
-      <aside className={classNames("menu-bars-mobile", {"menu-bars-mobile--isExpanded": fabIsExpanded})}>
+      <aside className="menu-bars-mobile">
         <button
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
