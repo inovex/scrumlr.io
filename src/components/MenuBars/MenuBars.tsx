@@ -184,13 +184,18 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         >
           {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}
         </button>
-        {fabIsExpanded && (
-          <>
-            <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {"menu-bars-mobile__options--isExpanded": fabIsExpanded})}>
+        {(fabIsExpanded || isReady || raisedHand) && (
+          <ul
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {
+              "menu-bars-mobile__options--isExpanded": fabIsExpanded,
+              "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
+            })}
+          >
+            {(fabIsExpanded || isReady) && (
               <li className="menu-bars-mobile__fab-option">
                 <MenuToggle
-                  direction="right"
                   value={isReady}
+                  direction="right"
                   toggleStartLabel={t("MenuBars.markAsDone")}
                   toggleStopLabel={t("MenuBars.unmarkAsDone")}
                   icon={CheckIcon}
@@ -198,44 +203,59 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   tabIndex={TabIndex.UserMenu}
                 />
               </li>
+            )}
+            {(fabIsExpanded || raisedHand) && (
               <li className="menu-bars-mobile__fab-option">
                 <MenuToggle
-                  tabIndex={TabIndex.UserMenu + 1}
+                  value={raisedHand}
                   direction="right"
                   toggleStartLabel={t("MenuBars.raiseHand")}
                   toggleStopLabel={t("MenuBars.lowerHand")}
                   icon={RaiseHand}
                   onToggle={toggleRaiseHand}
-                  value={raisedHand}
+                  tabIndex={TabIndex.UserMenu + 1}
                 />
               </li>
+            )}
+            {fabIsExpanded && (
               <li className="menu-bars-mobile__fab-option">
                 <MenuButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
-            </ul>
-            {isAdmin && (
-              <ul className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {"menu-bars-mobile__options--isExpanded": fabIsExpanded})}>
+            )}
+          </ul>
+        )}
+        {isAdmin && (fabIsExpanded || state.moderation) && (
+          <ul
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
+              "menu-bars-mobile__options--isExpanded": fabIsExpanded,
+              "menu-bars-mobile__options--hasActiveButton": state.moderation,
+            })}
+          >
+            {fabIsExpanded && (
+              <>
                 <li className="menu-bars-mobile__fab-option">
                   <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
                 <li className="menu-bars-mobile__fab-option">
                   <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
-                <li className="menu-bars-mobile__fab-option">
-                  <MenuToggle
-                    value={state.moderation}
-                    direction="left"
-                    toggleStartLabel={t("MenuBars.startFocusMode")}
-                    toggleStopLabel={t("MenuBars.stopFocusMode")}
-                    icon={FocusIcon}
-                    onToggle={toggleModeration}
-                    tabIndex={TabIndex.AdminMenu + 2}
-                    isFocusModeToggle
-                  />
-                </li>
-              </ul>
+              </>
             )}
-          </>
+            {(fabIsExpanded || state.moderation) && (
+              <li className="menu-bars-mobile__fab-option">
+                <MenuToggle
+                  value={state.moderation}
+                  direction="left"
+                  toggleStartLabel={t("MenuBars.startFocusMode")}
+                  toggleStopLabel={t("MenuBars.stopFocusMode")}
+                  icon={FocusIcon}
+                  onToggle={toggleModeration}
+                  isFocusModeToggle
+                  tabIndex={TabIndex.AdminMenu + 2}
+                />
+              </li>
+            )}
+          </ul>
         )}
       </aside>
     </>

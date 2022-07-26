@@ -4,27 +4,15 @@ $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
 $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 @keyframes expandHorizontally {
-  from {
-    gap: 0;
-    margin: 0;
-    opacity: 0.25;
-  }
   to {
     gap: $margin--small;
-    margin-right: $margin--small;
     opacity: 1;
   }
 }
 
 @keyframes expandVertically {
-  from {
-    gap: 0;
-    margin: 0;
-    opacity: 0.25;
-  }
   to {
     gap: $margin--small;
-    margin-bottom: $margin--small;
     opacity: 1;
   }
 }
@@ -43,6 +31,9 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   padding: 0;
+  margin: 0;
+  gap: 0;
+  opacity: 0.25;
 
   &--vertical {
     flex-direction: column-reverse;
@@ -56,6 +47,19 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     justify-content: flex-start;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
+  }
+
+  &--hasActiveButton {
+    gap: $margin--small;
+    opacity: 1;
+  }
+
+  &--hasActiveButton.menu-bars-mobile__options--vertical {
+    margin-bottom: $margin--small;
+  }
+
+  &--hasActiveButton.menu-bars-mobile__options--horizontal {
+    margin-right: $margin--small;
   }
 
   &--isExpanded.menu-bars-mobile__options--vertical {
