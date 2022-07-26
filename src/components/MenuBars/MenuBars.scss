@@ -80,12 +80,12 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
   &--vertical {
     margin-bottom: 0;
-    animation: expandVertically 0.25s ease-in-out forwards;
+    animation: expandVertically 0.25s ease forwards;
   }
 
   &--horizontal {
     margin-right: 0;
-    animation: expandHorizontally 0.25s ease-in-out forwards;
+    animation: expandHorizontally 0.25s ease forwards;
   }
 }
 
