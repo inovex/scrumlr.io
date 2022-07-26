@@ -3,7 +3,6 @@
 exports[`MenuBars should match snapshot 1`] = `
 <aside
   class="menu-bars menu-bars--user menu-bars--isAdmin"
-  id="menu-bars"
 >
   <section
     class="menu user-menu"
@@ -193,22 +192,5 @@ exports[`MenuBars should match snapshot 1`] = `
       </svg>
     </button>
   </section>
-  <button
-    aria-label="MenuBars.switchToAdminMenu"
-    class="menu-bars__switch"
-  >
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--add"
-    >
-      icon-toggle-add-menu.svg
-    </svg>
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--settings"
-    >
-      icon-toggle-settings-menu.svg
-    </svg>
-  </button>
 </aside>
 `;
