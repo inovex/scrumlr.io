@@ -4,6 +4,11 @@ $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
 $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 @keyframes expandHorizontally {
+  from {
+    gap: 0;
+    margin: 0;
+    opacity: 0.25;
+  }
   to {
     gap: $margin--small;
     margin-right: $margin--small;
@@ -12,6 +17,11 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 @keyframes expandVertically {
+  from {
+    gap: 0;
+    margin: 0;
+    opacity: 0.25;
+  }
   to {
     gap: $margin--small;
     margin-bottom: $margin--small;
@@ -33,11 +43,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   padding: 0;
-  gap: 0;
-  opacity: 0.25;
 
   &--vertical {
-    margin: 0;
     flex-direction: column-reverse;
     justify-content: flex-start;
     grid-row: 1 / 2;
@@ -45,7 +52,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   }
 
   &--horizontal {
-    margin: 0;
     flex-direction: row-reverse;
     justify-content: flex-start;
     grid-row: 2 / 3;
