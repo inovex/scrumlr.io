@@ -63,9 +63,11 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   z-index: $menu-item-z-index;
 
   svg {
-    fill: $color-black;
     width: $icon--medium;
     height: $icon--medium;
+    path {
+      fill: $color-black;
+    }
   }
 }
 
@@ -104,7 +106,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 [theme="dark"] {
-  .menu-bars-mobile__fab svg {
+  .menu-bars-mobile__fab svg path {
     fill: $color-white;
   }
 
