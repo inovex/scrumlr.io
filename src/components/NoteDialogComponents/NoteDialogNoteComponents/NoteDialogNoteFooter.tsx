@@ -7,13 +7,14 @@ import {Participant} from "types/participant";
 import {AvataaarProps} from "components/Avatar";
 import _ from "underscore";
 import "./NoteDialogNoteFooter.scss";
+import {Votes} from "components/Votes";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
   authorId: string;
   avatar?: AvataaarProps;
   authorName: string;
-  noteId?: string;
+  noteId: string;
   /* parentId?: string;
   onDeleteOfParent: () => void;
   onClose: () => void;
@@ -43,6 +44,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
       )}
+      <Votes {...props} />
     </div>
   );
 };

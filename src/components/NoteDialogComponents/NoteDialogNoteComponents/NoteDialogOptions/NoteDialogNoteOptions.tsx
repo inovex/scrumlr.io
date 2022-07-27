@@ -1,6 +1,5 @@
 import {FC} from "react";
 import {Participant} from "types/participant";
-import {Votes} from "components/Votes";
 import {NoteDialogDeleteNoteButton} from "./NoteDialogDeleteNoteButton";
 import {NoteDialogUnstackNoteButton} from "./NoteDialogUnstackNoteButton";
 import "./NoteDialogNoteOptions.scss";
@@ -29,9 +28,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <NoteDialogDeleteNoteButton {...props} />
         </li>
       )}
-      <li>
-        <Votes {...props} />
-      </li>
     </ul>
   );
 };

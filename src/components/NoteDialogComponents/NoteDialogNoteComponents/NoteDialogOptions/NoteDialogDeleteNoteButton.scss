@@ -7,7 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  background: none;
   color: var(--accent-color);
   transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
 }
