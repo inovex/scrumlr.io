@@ -31,10 +31,8 @@ export const MenuToggle = (props: MenuToggleProps) => {
   return (
     <button
       disabled={props.disabled}
-      className={classNames("menu-item", {"menu-item--active": value, "menu-item--disabled": !value}, `menu-item--${props.direction}`)}
-      onClick={() => {
-        onToggle();
-      }}
+      className={classNames("menu-item", {"menu-item--active": value}, `menu-item--${props.direction}`)}
+      onClick={onToggle}
       tabIndex={props.tabIndex ?? TabIndex.default}
       aria-label={value ? props.toggleStopLabel : props.toggleStartLabel}
     >

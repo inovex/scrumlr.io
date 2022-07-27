@@ -54,14 +54,6 @@ $menu-item-size: 42px;
   }
 }
 
-@media #{$tablet} {
-  .menu-item:hover .menu-item__tooltip {
-    max-width: max-content;
-    visibility: visible;
-    opacity: 1;
-  }
-}
-
 [theme="dark"] {
   .menu-item__tooltip {
     background-color: $tooltip-background-color--dark;
@@ -90,6 +82,12 @@ $menu-item-size: 42px;
 }
 
 @media #{$tablet} {
+  .menu-item:hover .menu-item__tooltip {
+    max-width: max-content;
+    visibility: visible;
+    opacity: 1;
+  }
+
   .menu-item .menu-item__tooltip {
     opacity: 1;
     visibility: visible;
@@ -173,7 +171,6 @@ $menu-item-size: 42px;
   width: $menu-item-size;
   height: $menu-item-size;
   border-radius: $menu-item-size;
-  transition: visibility 150ms linear;
 }
 .menu-item--active .menu-item__icon {
   background-color: $menu-icon-background-color--dark;
