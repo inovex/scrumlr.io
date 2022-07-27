@@ -11,7 +11,6 @@
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;

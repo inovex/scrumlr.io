@@ -4,7 +4,7 @@ $stack-view-top-margin: 64px;
 
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px) brightness(0.76);
+  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
   box-shadow: inset 0 0 0 $column__border-width var(--accent-color);
   background: rgba(var(--accent-color-rgb), 0.42);
 }
