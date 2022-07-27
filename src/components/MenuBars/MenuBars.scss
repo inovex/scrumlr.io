@@ -203,10 +203,6 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   height: 100%;
 }
 
-.menu-animation {
-  transition: transform 400ms, opacity 400ms, visibility 400ms;
-}
-
 @media #{$tablet} {
   .menu-bars.menu-bars {
     position: static;

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
@@ -34,8 +34,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [showAdminMenu, toggleMenus] = useState(false);
-  const [animate, setAnimate] = useState(false);
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
 
   const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
@@ -56,64 +54,33 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
 
-  const toggleModeration = () => {
-    dispatch(Actions.setModerating(!state.moderation));
-  };
-
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
-  };
-
-  const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
-    if (event.currentTarget.attributes.getNamedItem("class")?.nodeValue?.includes("menu-animation")) {
-      setAnimate(false);
-    }
   };
 
   const toggleRaiseHand = () => {
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 
+  const toggleModeration = () => {
+    dispatch(Actions.setModerating(!state.moderation));
+  };
+
   const showTimerMenu = () => navigate("timer");
   const showVotingMenu = () => navigate("voting");
   const showSettings = () => navigate("settings");
-
-  const toggleAdminMenu = () => {
-    setAnimate(true);
-    toggleMenus((prevState) => !prevState);
-  };
 
   const hotkeyOptionsAdmin = {
     enabled: state.hotkeysAreActive && isAdmin,
   };
 
-  useHotkeys(
-    SHOW_TIMER_MENU,
-    () => {
-      if (!showAdminMenu) {
-        toggleAdminMenu();
-      }
-      showTimerMenu();
-    },
-    hotkeyOptionsAdmin,
-    [showAdminMenu]
-  );
-  useHotkeys(
-    SHOW_VOTING_MENU,
-    () => {
-      if (!showAdminMenu) {
-        toggleAdminMenu();
-      }
-      showVotingMenu();
-    },
-    hotkeyOptionsAdmin,
-    [showAdminMenu]
-  );
+  useHotkeys(SHOW_TIMER_MENU, showTimerMenu, hotkeyOptionsAdmin, []);
+  useHotkeys(SHOW_VOTING_MENU, showVotingMenu, hotkeyOptionsAdmin, []);
 
   return (
     <>
-      <aside className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
-        <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
+      <aside className="menu-bars">
+        <section className="menu user-menu">
           <div className="menu__items">
             <MenuToggle
               direction="right"
@@ -146,7 +113,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </button>
         </section>
 
-        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin, "menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
+        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
           {isAdmin && (
             <div className="menu__items">
               <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
