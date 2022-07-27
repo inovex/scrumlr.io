@@ -54,7 +54,7 @@ export const StackView = () => {
         <NoteDialogComponents.Wrapper>
           <NoteDialogComponents.Note
             key={noteId}
-            noteId={noteId}
+            noteId={noteId!}
             text={note!.text}
             authorId={note!.author}
             avatar={author!.user.avatar}

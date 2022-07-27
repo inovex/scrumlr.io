@@ -6,7 +6,7 @@ import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
-  noteId?: string;
+  noteId: string;
   parentId?: string;
   text: string;
   authorId: string;
@@ -24,5 +24,6 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
   <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId})}>
     <NoteDialogNoteComponents.Content {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
+    <NoteDialogNoteComponents.Options {...props} />
   </div>
 );

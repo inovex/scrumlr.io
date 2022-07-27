@@ -2,6 +2,10 @@
 @import "src/components/Note/Note.scss";
 
 .note-dialog__note {
+  display: grid;
+  grid-template-columns: 11fr 1fr;
+  grid-template-rows: 4fr 1fr;
+
   margin-bottom: $margin--default;
   padding: $padding--default $padding--medium;
   position: relative;

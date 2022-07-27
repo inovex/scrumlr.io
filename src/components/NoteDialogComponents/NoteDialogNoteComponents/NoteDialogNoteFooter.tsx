@@ -1,5 +1,4 @@
 import {UserAvatar} from "components/BoardUsers";
-import {Votes} from "components/Votes";
 import {FC} from "react";
 import classNames from "classnames";
 import {useAppSelector} from "store";
@@ -7,7 +6,6 @@ import {useTranslation} from "react-i18next";
 import {Participant} from "types/participant";
 import {AvataaarProps} from "components/Avatar";
 import _ from "underscore";
-import {NoteDialogNoteOptions} from "./NoteDialogOptions";
 import "./NoteDialogNoteFooter.scss";
 
 type NoteDialogNoteFooterProps = {
@@ -16,10 +14,10 @@ type NoteDialogNoteFooterProps = {
   avatar?: AvataaarProps;
   authorName: string;
   noteId?: string;
-  parentId?: string;
+  /* parentId?: string;
   onDeleteOfParent: () => void;
   onClose: () => void;
-  showUnstackButton: boolean;
+  showUnstackButton: boolean; */
   viewer: Participant;
 };
 
@@ -45,10 +43,6 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
       )}
-      <div className="note-dialog__note-footer__options-and-votes">
-        <Votes noteId={props.noteId!} />
-        <NoteDialogNoteOptions {...props} />
-      </div>
     </div>
   );
 };
