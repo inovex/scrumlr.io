@@ -109,8 +109,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
   svg {
     color: $color-white;
-    width: auto;
-    height: auto;
+    width: $icon--huge;
+    height: $icon--huge;
   }
 }
 
