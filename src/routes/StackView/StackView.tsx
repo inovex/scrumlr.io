@@ -8,6 +8,7 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 
 export const StackView = () => {
@@ -82,6 +83,9 @@ export const StackView = () => {
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
+      <button onClick={handleClose} className="stack-view__close-button">
+        <CloseIcon />
+      </button>
     </Portal>
   );
 };

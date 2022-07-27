@@ -20,3 +20,27 @@ $stack-view-top-margin: 64px;
 .stack-view__disabled-click {
   pointer-events: none;
 }
+
+.stack-view__close-button {
+  all: unset;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: $margin--default;
+  cursor: pointer;
+  width: 42px;
+  color: $color-white;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    transform: scale(1.4);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    color: var(--accent-color);
+  }
+}
