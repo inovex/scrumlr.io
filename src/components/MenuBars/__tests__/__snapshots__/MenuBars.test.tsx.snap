@@ -13,7 +13,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.markAsDone"
-          class="menu-item menu-item--disabled menu-item--right"
+          class="menu-item menu-item--right"
           tabindex="300"
         >
           <div
@@ -43,7 +43,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.raiseHand"
-          class="menu-item menu-item--disabled menu-item--right"
+          class="menu-item menu-item--right"
           tabindex="301"
         >
           <div
@@ -164,7 +164,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.startFocusMode"
-          class="menu-item menu-item--disabled menu-item--left"
+          class="menu-item menu-item--left"
           tabindex="402"
         >
           <div
