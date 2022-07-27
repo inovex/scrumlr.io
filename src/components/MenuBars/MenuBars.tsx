@@ -81,27 +81,33 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     <>
       <aside className="menu-bars">
         <section className="menu user-menu">
-          <div className="menu__items">
-            <MenuToggle
-              direction="right"
-              value={isReady}
-              toggleStartLabel={t("MenuBars.markAsDone")}
-              toggleStopLabel={t("MenuBars.unmarkAsDone")}
-              icon={CheckIcon}
-              onToggle={toggleReadyState}
-              tabIndex={TabIndex.UserMenu}
-            />
-            <MenuToggle
-              tabIndex={TabIndex.UserMenu + 1}
-              direction="right"
-              toggleStartLabel={t("MenuBars.raiseHand")}
-              toggleStopLabel={t("MenuBars.lowerHand")}
-              icon={RaiseHand}
-              onToggle={toggleRaiseHand}
-              value={raisedHand}
-            />
-            <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
-          </div>
+          <ul className="menu__items">
+            <li>
+              <MenuToggle
+                direction="right"
+                value={isReady}
+                toggleStartLabel={t("MenuBars.markAsDone")}
+                toggleStopLabel={t("MenuBars.unmarkAsDone")}
+                icon={CheckIcon}
+                onToggle={toggleReadyState}
+                tabIndex={TabIndex.UserMenu}
+              />
+            </li>
+            <li>
+              <MenuToggle
+                tabIndex={TabIndex.UserMenu + 1}
+                direction="right"
+                toggleStartLabel={t("MenuBars.raiseHand")}
+                toggleStopLabel={t("MenuBars.lowerHand")}
+                icon={RaiseHand}
+                onToggle={toggleRaiseHand}
+                value={raisedHand}
+              />
+            </li>
+            <li>
+              <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+            </li>
+          </ul>
 
           <button
             className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
@@ -115,19 +121,25 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
         <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
           {isAdmin && (
-            <div className="menu__items">
-              <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
-              <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
-              <MenuToggle
-                value={state.moderation}
-                direction="left"
-                toggleStartLabel={t("MenuBars.startFocusMode")}
-                toggleStopLabel={t("MenuBars.stopFocusMode")}
-                icon={FocusIcon}
-                onToggle={toggleModeration}
-                tabIndex={TabIndex.AdminMenu + 2}
-              />
-            </div>
+            <ul className="menu__items">
+              <li>
+                <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+              </li>
+              <li>
+                <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+              </li>
+              <li>
+                <MenuToggle
+                  value={state.moderation}
+                  direction="left"
+                  toggleStartLabel={t("MenuBars.startFocusMode")}
+                  toggleStopLabel={t("MenuBars.stopFocusMode")}
+                  icon={FocusIcon}
+                  onToggle={toggleModeration}
+                  tabIndex={TabIndex.AdminMenu + 2}
+                />
+              </li>
+            </ul>
           )}
 
           <button
