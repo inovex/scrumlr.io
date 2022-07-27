@@ -27,14 +27,3 @@
     width: calc(100vw - 32px);
   }
 }
-
-.note-dialog__note--own-card::before {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  width: $note__indicator-width;
-  height: $note__indicator-height;
-  border-radius: 0 $note__indicator-width $note__indicator-width 0;
-  background: var(--accent-color);
-}

@@ -5,7 +5,7 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   height: 26px;
 }
 
@@ -25,6 +25,7 @@
   display: inline-flex;
   align-items: center;
   flex-grow: 1;
+  height: 35px;
   // reset css from figure-element:
   margin: 0;
   padding: 0;
@@ -40,15 +41,43 @@
 }
 
 .note-dialog__note-author-name {
-  margin-left: $margin--default;
+  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
 }
 
-.note-dialog .note-dialog__note-user-avatar {
+.note-dialog__note-user-avatar {
   height: 34px;
   width: 34px;
   padding: 0;
+  margin-bottom: 4px;
+
+  #Circle-Background {
+    stroke: none;
+  }
+}
+
+.note-dialog__note-author {
+  display: inline-flex;
+  align-items: center;
+  // reset css from figure-element:
+  margin: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  flex-grow: 0;
+  height: 35px;
+  padding: 0 $margin--default 0 0;
+}
+
+.note-dialog__note-author--self {
+  background: var(--accent-color--desaturated-light);
+  border-radius: 21px;
+  padding-left: 2px;
+
+  .note-dialog__note-author-name {
+    color: var(--accent-color);
+  }
 }

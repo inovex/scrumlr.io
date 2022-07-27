@@ -4,9 +4,9 @@ $stack-view-top-margin: 64px;
 
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px) brightness(0.76);
   box-shadow: inset 0 0 0 $column__border-width var(--accent-color);
-  background: rgba(var(--accent-color-rgb), 0.6);
+  background: rgba(var(--accent-color-rgb), 0.42);
 }
 
 .stack-view__portal-moderation-visible {
@@ -33,7 +33,7 @@ $stack-view-top-margin: 64px;
   transition: all 0.08s ease-out;
 
   &:hover {
-    transform: scale(1.4);
+    transform: scale(1.3);
   }
 
   &:active {
