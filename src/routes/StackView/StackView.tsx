@@ -47,7 +47,7 @@ export const StackView = () => {
   };
 
   return (
-    <Portal onClose={handleClose} className="stack-view__portal" hiddenOverflow centered disabledPadding>
+    <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
         <NoteDialogComponents.Wrapper>
