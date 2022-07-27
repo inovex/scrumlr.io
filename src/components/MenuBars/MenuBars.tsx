@@ -160,7 +160,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           }}
           aria-label={t("MenuBars.openMenu")}
         >
-          {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon className="menu-bars-mobile__fab-main-icon" aria-hidden />}
+          {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon aria-hidden />}
         </button>
         {(fabIsExpanded || isReady || raisedHand) && (
           <ul
