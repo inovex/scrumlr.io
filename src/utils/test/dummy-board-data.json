@@ -1,0 +1,97 @@
+{
+  "board": {
+    "id": "4af0854f-2cf1-4607-b1a6-6f96cd88a000",
+    "name": "Test Board",
+    "accessPolicy": "PUBLIC",
+    "showAuthors": true,
+    "showVoting": "8337b5a4-9011-46d2-a884-115668760be5"
+  },
+  "participants": [
+    {
+      "user": {
+        "id": "1a536773-7159-4c33-b92f-1d510547170d",
+        "name": "Happy Hornet"
+      },
+      "role": "OWNER"
+    }
+  ],
+  "columns": [
+    {
+      "id": "68559232-b70f-4db7-abae-da6f31206a31",
+      "name": "Positive",
+      "color": "backlog-blue",
+      "visible": true
+    },
+    {
+      "id": "9f43d504-351d-4afe-b248-93b03bd2f9dd",
+      "name": "Negative",
+      "color": "lean-lilac",
+      "visible": true
+    }
+  ],
+  "notes": [
+    {
+      "id": "24ceedf8-9c7b-4993-b021-06ef0d67ef80",
+      "author": "1a536773-7159-4c33-b92f-1d510547170d",
+      "text": "qwert",
+      "position": {
+        "column": "68559232-b70f-4db7-abae-da6f31206a31",
+        "stack": null,
+        "rank": 0
+      }
+    },
+    {
+      "id": "cd93b71b-d5df-404d-b34d-da5f03f29498",
+      "author": "1a536773-7159-4c33-b92f-1d510547170d",
+      "text": "asdf",
+      "position": {
+        "column": "68559232-b70f-4db7-abae-da6f31206a31",
+        "stack": "24ceedf8-9c7b-4993-b021-06ef0d67ef80",
+        "rank": 0
+      }
+    },
+    {
+      "id": "835929bf-0bf6-444d-b718-ac23568fb2d0",
+      "author": "1a536773-7159-4c33-b92f-1d510547170d",
+      "text": "poiuz",
+      "position": {
+        "column": "9f43d504-351d-4afe-b248-93b03bd2f9dd",
+        "stack": null,
+        "rank": 1
+      }
+    },
+    {
+      "id": "b2ed2bd1-e77f-4311-b4ae-c6279a8d90aa",
+      "author": "1a536773-7159-4c33-b92f-1d510547170d",
+      "text": "asdf",
+      "position": {
+        "column": "9f43d504-351d-4afe-b248-93b03bd2f9dd",
+        "stack": null,
+        "rank": 0
+      }
+    }
+  ],
+  "votings": [
+    {
+      "id": "8337b5a4-9011-46d2-a884-115668760be5",
+      "voteLimit": 5,
+      "allowMultipleVotes": true,
+      "showVotesOfOthers": false,
+      "status": "CLOSED",
+      "votes": {
+        "total": 5,
+        "votesPerNote": {
+          "24ceedf8-9c7b-4993-b021-06ef0d67ef80": {
+            "total": 2
+          },
+          "b2ed2bd1-e77f-4311-b4ae-c6279a8d90aa": {
+            "total": 2
+          },
+          "cd93b71b-d5df-404d-b34d-da5f03f29498": {
+            "total": 1
+          }
+        }
+      }
+    }
+  ]
+}
