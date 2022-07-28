@@ -301,8 +301,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 }
 
 .menu-bars__navigation-icon {
-  height: 24px;
-  width: 24px;
+  height: $icon--small;
+  width: $icon--small;
 }
 
 @media #{$smartphone} {
