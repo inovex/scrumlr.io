@@ -8,7 +8,7 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
@@ -45,7 +45,7 @@ export const BoardSettings = () => {
           <div>
             <div>{t("Toast.passwordCopied")}</div>
           </div>,
-          1500
+          TOAST_TIMER_SHORT
         )
       );
       setIsProtected(true);
