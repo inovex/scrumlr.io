@@ -13,7 +13,14 @@ import i18n from "i18n";
 import {LoadingScreen} from "components/LoadingScreen";
 import {Actions} from "store/action";
 import {Html} from "components/Html";
+import {APP_VERSION_STORAGE_KEY} from "constants/storage";
+import {saveToStorage} from "utils/storage";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
+
+const APP_VERSION = process.env.REACT_APP_VERSION;
+if (APP_VERSION) {
+  saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
+}
 
 ReactDOM.render(
   <React.StrictMode>
