@@ -1164,8 +1164,9 @@ github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYm
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
 github.com/tv42/httpunix v0.0.0-20191220191345-2ba4b9c3382c/go.mod h1:hzIxponao9Kjc7aWznkXaL4U4TWaDSs8zcsY4Ka08nM=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
-github.com/uptrace/bun v1.1.6 h1:vDJ1Qs6fXock5+q/PSOZZ7vZVZABmWkGlgZDUkJwbfc=
 github.com/uptrace/bun v1.1.6/go.mod h1:Z2Pd3cRvNKbrYuL6Gp1XGjA9QEYz+rDz5KkEi9MZLnQ=
+github.com/uptrace/bun v1.1.7 h1:biOoh5dov69hQPBlaRsXSHoEOIEnCxFzQvUmbscSNJI=
+github.com/uptrace/bun v1.1.7/go.mod h1:Z2Pd3cRvNKbrYuL6Gp1XGjA9QEYz+rDz5KkEi9MZLnQ=
 github.com/uptrace/bun/dbfixture v1.1.6 h1:UuO8GCHWqH+gQ905sdysffA4GbkrigxwbE2TV9F/4ro=
 github.com/uptrace/bun/dbfixture v1.1.6/go.mod h1:5ilXO9AaLJvORTBMIy5kF7yv1rPrcmK3GNNguxg7gqM=
 github.com/uptrace/bun/dialect/pgdialect v1.1.6 h1:mDGOPm9FkWaM2kQLddzcRW6juUdITJ1XPUr1vt2anYw=
