@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .homepage {
-  background: $color-light-gray;
+  background: $color-lighter-gray;
 }
 
 .homepage__hero {
@@ -31,7 +31,7 @@
 }
 
 .homepage__language {
-  background: $color-light-gray;
+  background: $color-lighter-gray;
 }
 
 html:not([theme="dark"]) {

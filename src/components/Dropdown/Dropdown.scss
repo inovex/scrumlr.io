@@ -44,7 +44,7 @@ $dropdown__border-color--dark: #4b515c;
   border: {
     top: 1px solid;
     bottom: 0;
-    color: $color-light-gray;
+    color: $color-lighter-gray;
   }
   margin-bottom: $margin--small;
 }
@@ -95,7 +95,7 @@ $dropdown__border-color--dark: #4b515c;
   border: {
     bottom: 1px solid;
     top: 0;
-    image: linear-gradient(to right, transparent 0px, transparent 49px, $color-light-gray 50px, $color-light-gray 240px) 1;
+    image: linear-gradient(to right, transparent 0px, transparent 49px, $color-lighter-gray 50px, $color-lighter-gray 240px) 1;
   }
 }
 
