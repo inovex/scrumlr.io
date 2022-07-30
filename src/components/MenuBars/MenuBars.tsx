@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
@@ -33,8 +33,19 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const menuBarsMobileRef = useRef<HTMLElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = ({target}: MouseEvent) => {
+      if (!menuBarsMobileRef.current?.contains(target as Node) && fabIsExpanded) {
+        setFabIsExpanded(!fabIsExpanded);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [menuBarsMobileRef, fabIsExpanded]);
 
   const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
 
@@ -152,7 +163,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </button>
         </section>
       </aside>
-      <aside className="menu-bars-mobile">
+      <aside className="menu-bars-mobile" ref={menuBarsMobileRef}>
         <button
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
