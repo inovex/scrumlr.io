@@ -15,11 +15,16 @@
 [theme="dark"] .dialog {
   background: $color-dark-one;
 }
-@media screen and (min-width: 600px) {
+
+@media #{$tablet} {
   .dialog {
     width: 400px;
     height: auto;
     border-radius: 8px;
+  }
+
+  .dialog__close-button {
+    display: none;
   }
 }
 
@@ -58,11 +63,7 @@
   padding: 0;
   background-color: transparent;
 }
-@media screen and (min-width: 600px) {
-  .dialog__close-button {
-    display: none;
-  }
-}
+
 .close-button__icon {
   width: 44px;
   height: 44px;
