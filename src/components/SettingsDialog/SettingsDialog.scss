@@ -289,11 +289,10 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__separator {
-  margin: 0;
-  margin-left: 5%;
+  margin: 0 0 0 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid $color-light-gray;
+  border-top: 0.5px solid $color-lighter-gray;
 }
 
 .settings-dialog__group {

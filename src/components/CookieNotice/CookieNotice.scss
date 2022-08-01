@@ -29,13 +29,13 @@
   }
   &-decline {
     @extend .cookie-notice__button;
-    background: $color-light-gray;
+    background: $color-lighter-gray;
     color: $color-darkest-gray;
     margin: 0 0 $margin--default $margin--default;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
-    background: $color-light-gray;
+    background: $color-lighter-gray;
     color: $color-darkest-gray;
     margin: 0 auto $margin--default 0;
   }

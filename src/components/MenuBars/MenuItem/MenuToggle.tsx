@@ -13,7 +13,6 @@ type MenuToggleProps = {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
   tabIndex?: number;
-  isFocusModeToggle?: boolean;
 };
 
 export const MenuToggle = (props: MenuToggleProps) => {
@@ -32,14 +31,8 @@ export const MenuToggle = (props: MenuToggleProps) => {
   return (
     <button
       disabled={props.disabled}
-      className={classNames(
-        "menu-item",
-        {"menu-item--active": !props.isFocusModeToggle && value, "menu-item__focus-mode-toggle--active": props.isFocusModeToggle && value, "menu-item--disabled": !value},
-        `menu-item--${props.direction}`
-      )}
-      onClick={() => {
-        onToggle();
-      }}
+      className={classNames("menu-item", {"menu-item--active": value}, `menu-item--${props.direction}`)}
+      onClick={onToggle}
       tabIndex={props.tabIndex ?? TabIndex.default}
       aria-label={value ? props.toggleStopLabel : props.toggleStartLabel}
     >

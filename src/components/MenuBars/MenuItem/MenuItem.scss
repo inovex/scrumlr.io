@@ -1,10 +1,6 @@
 @import "constants/style.scss";
 
 $menu-item-size: 42px;
-$tooltip-background-color-light: #d3daf0;
-$tooltip-background-color-dark: #485064;
-$icon-background-color-light: $color-white;
-$icon-background-color-dark: #333948;
 
 .menu-item {
   height: $menu-item-size;
@@ -15,6 +11,7 @@ $icon-background-color-dark: #333948;
   padding: 0;
   position: relative;
   cursor: pointer;
+  pointer-events: auto;
 }
 .menu-item:focus-visible {
   outline: 2px solid #00000050;
@@ -34,7 +31,7 @@ $icon-background-color-dark: #333948;
   max-width: 0;
   height: $menu-item-size;
   border-radius: $menu-item-size / 2;
-  background-color: $tooltip-background-color-light;
+  background-color: $tooltip-background-color--light;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -48,7 +45,7 @@ $icon-background-color-dark: #333948;
   transform: translateX(-50%);
   border-width: 10px;
   border-style: solid;
-  border-color: $tooltip-background-color-light transparent transparent transparent;
+  border-color: $tooltip-background-color--light transparent transparent transparent;
 }
 
 @media #{$smartphone} {
@@ -57,20 +54,12 @@ $icon-background-color-dark: #333948;
   }
 }
 
-@media #{$tablet} {
-  .menu-item:hover .menu-item__tooltip {
-    max-width: max-content;
-    visibility: visible;
-    opacity: 1;
-  }
-}
-
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: $tooltip-background-color-dark;
+    background-color: $tooltip-background-color--dark;
   }
   .menu-item__tooltip::after {
-    border-color: $tooltip-background-color-dark transparent transparent transparent;
+    border-color: $tooltip-background-color--dark transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -93,6 +82,12 @@ $icon-background-color-dark: #333948;
 }
 
 @media #{$tablet} {
+  .menu-item:hover .menu-item__tooltip {
+    max-width: max-content;
+    visibility: visible;
+    opacity: 1;
+  }
+
   .menu-item .menu-item__tooltip {
     opacity: 1;
     visibility: visible;
@@ -135,7 +130,7 @@ $icon-background-color-dark: #333948;
 @media #{$tablet} {
   .menu-item .tooltip__text {
     color: $color-black;
-    background-color: $tooltip-background-color-light;
+    background-color: $tooltip-background-color--light;
     height: $menu-item-size;
     line-height: $menu-item-size;
     width: max-content;
@@ -161,14 +156,14 @@ $icon-background-color-dark: #333948;
 [theme="dark"] {
   .tooltip__text {
     color: $color-white !important;
-    background-color: $tooltip-background-color-dark !important;
+    background-color: $tooltip-background-color--dark !important;
   }
 }
 
 .menu-item__icon {
   background-clip: content-box !important;
   color: $color-black;
-  background-color: $icon-background-color-light;
+  background-color: $menu-icon-background-color--light;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -176,10 +171,9 @@ $icon-background-color-dark: #333948;
   width: $menu-item-size;
   height: $menu-item-size;
   border-radius: $menu-item-size;
-  transition: visibility 150ms linear;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $icon-background-color-dark;
+  background-color: $menu-icon-background-color--dark;
   color: $color-white;
 }
 .menu-item__icon:nth-of-type(2) {
@@ -200,7 +194,7 @@ $icon-background-color-dark: #333948;
     transition: border-color 0ms linear 150ms;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color-light;
+    border-color: $tooltip-background-color--light;
     transition: border-color 0ms linear 0ms;
   }
 }
@@ -208,13 +202,13 @@ $icon-background-color-dark: #333948;
 [theme="dark"] {
   .menu-item__icon {
     color: $color-white;
-    background: $icon-background-color-dark;
+    background: $menu-icon-background-color--dark;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $icon-background-color-light;
+    background-color: $menu-icon-background-color--light;
     color: $color-black;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color-dark !important;
+    border-color: $tooltip-background-color--dark !important;
   }
 }
