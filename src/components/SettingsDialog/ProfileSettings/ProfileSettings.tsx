@@ -39,21 +39,21 @@ export const ProfileSettings = () => {
           />
 
           <AvatarSettings id={id} />
-        </div>
-        <div className="profile-settings__hotkey-settings">
-          <SettingsButton
-            className="profile-settings__toggle-hotkeys-button"
-            label={t("Hotkeys.hotkeyToggle")}
-            onClick={() => {
-              dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
-            }}
-          >
-            <Toggle active={state.hotkeysAreActive} />
-          </SettingsButton>
-          <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
-            <p>{t("Hotkeys.cheatSheet")}</p>
-            <InfoIcon />
-          </a>
+          <div className="profile-settings__hotkey-settings">
+            <SettingsButton
+              className="profile-settings__toggle-hotkeys-button"
+              label={t("Hotkeys.hotkeyToggle")}
+              onClick={() => {
+                dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
+              }}
+            >
+              <Toggle active={state.hotkeysAreActive} />
+            </SettingsButton>
+            <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
+              <p>{t("Hotkeys.cheatSheet")}</p>
+              <InfoIcon />
+            </a>
+          </div>
         </div>
       </div>
     </div>

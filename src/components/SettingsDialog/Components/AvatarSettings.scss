@@ -52,11 +52,8 @@
     max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
     &-wrapper {
-      overflow-y: auto;
       padding-right: $padding--small;
       margin-right: calc(-1 * (#{$padding--small} + 10px));
-
-      @include scrollbar();
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
