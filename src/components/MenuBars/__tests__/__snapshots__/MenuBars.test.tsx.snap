@@ -2,94 +2,99 @@
 
 exports[`MenuBars should match snapshot 1`] = `
 <aside
-  class="menu-bars menu-bars--user menu-bars--isAdmin"
-  id="menu-bars"
+  class="menu-bars"
 >
   <section
     class="menu user-menu"
   >
-    <div
+    <ul
       class="menu__items"
     >
-      <button
-        aria-label="MenuBars.markAsDone"
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="300"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
+      <li>
+        <button
+          aria-label="MenuBars.markAsDone"
+          class="menu-item menu-item--right"
+          tabindex="300"
         >
-          <span
-            class="tooltip__text"
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
           >
-            MenuBars.markAsDone
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-check.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.raiseHand"
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="301"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            <span
+              class="tooltip__text"
+            >
+              MenuBars.markAsDone
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
           >
-            MenuBars.raiseHand
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-hand.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.settings"
-        class="menu-item menu-item--right"
-        tabindex="302"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            icon-check.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
           >
-            MenuBars.settings
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.raiseHand"
+          class="menu-item menu-item--right"
+          tabindex="301"
         >
-          icon-settings.svg
-        </svg>
-      </button>
-    </div>
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
+          >
+            <span
+              class="tooltip__text"
+            >
+              MenuBars.raiseHand
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-hand.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.settings"
+          class="menu-item menu-item--right"
+          tabindex="302"
+        >
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
+          >
+            <span
+              class="tooltip__text"
+            >
+              MenuBars.settings
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-settings.svg
+          </svg>
+        </button>
+      </li>
+    </ul>
     <button
       aria-hidden="true"
       class="menu-bars__navigation"
@@ -105,82 +110,88 @@ exports[`MenuBars should match snapshot 1`] = `
   <section
     class="menu admin-menu"
   >
-    <div
+    <ul
       class="menu__items"
     >
-      <button
-        aria-label="Timer"
-        class="menu-item menu-item--left"
-        tabindex="400"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
+      <li>
+        <button
+          aria-label="Timer"
+          class="menu-item menu-item--left"
+          tabindex="400"
         >
-          <span
-            class="tooltip__text"
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
           >
-            Timer
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-timer.svg
-        </svg>
-      </button>
-      <button
-        aria-label="Voting"
-        class="menu-item menu-item--left"
-        tabindex="401"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            <span
+              class="tooltip__text"
+            >
+              Timer
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
           >
-            Voting
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+            icon-timer.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Voting"
+          class="menu-item menu-item--left"
+          tabindex="401"
         >
-          icon-vote.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.startFocusMode"
-        class="menu-item menu-item--disabled menu-item--left"
-        tabindex="402"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
           >
-            MenuBars.startFocusMode
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+            <span
+              class="tooltip__text"
+            >
+              Voting
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-vote.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.startFocusMode"
+          class="menu-item menu-item--left"
+          tabindex="402"
         >
-          icon-focus.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-    </div>
+          <div
+            aria-hidden="true"
+            class="menu-item__tooltip"
+          >
+            <span
+              class="tooltip__text"
+            >
+              MenuBars.startFocusMode
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-focus.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="menu-item__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+    </ul>
     <button
       aria-hidden="true"
       class="menu-bars__navigation"
@@ -193,22 +204,5 @@ exports[`MenuBars should match snapshot 1`] = `
       </svg>
     </button>
   </section>
-  <button
-    aria-label="MenuBars.switchToAdminMenu"
-    class="menu-bars__switch"
-  >
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--add"
-    >
-      icon-toggle-add-menu.svg
-    </svg>
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--settings"
-    >
-      icon-toggle-settings-menu.svg
-    </svg>
-  </button>
 </aside>
 `;

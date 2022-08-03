@@ -4,9 +4,12 @@ import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
 import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
+import {ReactComponent as ClipboardIcon} from "assets/icon-clipboard.svg";
 import {useNavigate} from "react-router";
-import {useAppSelector} from "../../../store";
-import {exportAsJSON, exportAsCSV} from "../../../utils/export";
+import {useAppSelector} from "store";
+import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
+import {Toast} from "utils/Toast";
+import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
@@ -52,6 +55,18 @@ export const ExportBoard: VFC = () => {
           onClick={() => {
             navigate(`/board/${boardId}/print`);
           }}
+        />
+        <hr className="settings-dialog__separator" />
+        <SettingsButton
+          label={t("ExportBoardOption.exportToClipboard")}
+          icon={ClipboardIcon}
+          className="export-board__button-reverse-order"
+          onClick={() => {
+            getMarkdownExport(boardId).then((result) => {
+              navigator.clipboard.writeText(result).then(() => Toast.success(t("ExportBoardOption.copyToClipboardSuccess"), TOAST_TIMER_SHORT));
+            });
+          }}
+          data-testid="export-markdown"
         />
       </div>
     </div>
