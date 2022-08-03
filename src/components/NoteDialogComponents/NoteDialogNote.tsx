@@ -22,6 +22,7 @@ export type NoteDialogNoteProps = {
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
+  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
   <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)} onClick={(e) => e.stopPropagation()}>
     <NoteDialogNoteComponents.Content {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
