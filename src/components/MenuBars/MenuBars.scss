@@ -163,7 +163,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 .menu {
   z-index: $menu-z-index;
-  border-radius: $action-bar__width / 2;
+  border-radius: calc($action-bar__width / 2);
   background-color: $color-white;
   box-shadow: $box-shadow--light;
   padding-left: $padding--medium;
