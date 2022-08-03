@@ -157,20 +157,16 @@ $menu-desktop: "screen and (min-width: 1344px)";
 
   &::-webkit-scrollbar-track {
     border-radius: #{$border-radius};
-    background-color: $color-white;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: $color-middle-gray;
+    background-color: rgba($color-light-gray, 0.3);
   }
 
   [theme="dark"] & {
-    &::-webkit-scrollbar-track {
-      background-color: $color-dark-mode-note;
-    }
     &::-webkit-scrollbar-thumb {
-      background-color: $color-darkest-gray;
+      background-color: rgba($color-black, 0.3);
     }
   }
 }

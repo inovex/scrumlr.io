@@ -5,12 +5,13 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
 
 .note-dialog__scrollbar {
   max-height: calc(#{$note-dialog__scrollbar-height} - 206px);
-  width: 100%;
+  width: calc(100vw - (2 * $column__border-width));
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-color: $color-middle-gray $color-white;
   margin-bottom: $column__border-width;
   padding-top: $padding--large;
+  box-sizing: border-box;
 
   @include scrollbar();
 }
