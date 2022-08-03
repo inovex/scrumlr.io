@@ -16,12 +16,13 @@ export type NoteDialogNoteProps = {
   onClose: () => void;
   onDeleteOfParent: () => void;
   showUnstackButton: boolean;
+  className?: string;
 
   viewer: Participant;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
-  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId})}>
+  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)}>
     <NoteDialogNoteComponents.Content {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
     <NoteDialogNoteComponents.Options {...props} />

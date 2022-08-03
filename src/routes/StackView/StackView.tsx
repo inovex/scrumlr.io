@@ -51,20 +51,21 @@ export const StackView = () => {
     <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
+        <NoteDialogComponents.Note
+          key={noteId}
+          noteId={noteId!}
+          text={note!.text}
+          authorId={note!.author}
+          avatar={author!.user.avatar}
+          authorName={authorName}
+          showAuthors={showAuthors}
+          onClose={handleClose}
+          onDeleteOfParent={handleClose}
+          showUnstackButton={false}
+          viewer={viewer}
+          className="stack-view__parent-note"
+        />
         <NoteDialogComponents.Wrapper>
-          <NoteDialogComponents.Note
-            key={noteId}
-            noteId={noteId!}
-            text={note!.text}
-            authorId={note!.author}
-            avatar={author!.user.avatar}
-            authorName={authorName}
-            showAuthors={showAuthors}
-            onClose={handleClose}
-            onDeleteOfParent={handleClose}
-            showUnstackButton={false}
-            viewer={viewer}
-          />
           {stackedNotes.map((n) => (
             <NoteDialogComponents.Note
               key={n.id}

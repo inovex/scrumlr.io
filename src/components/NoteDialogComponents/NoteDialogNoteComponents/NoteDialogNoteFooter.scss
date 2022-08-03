@@ -70,5 +70,16 @@
 
   .note-dialog__note-author-name {
     color: var(--accent-color);
+    font-weight: bold;
+  }
+}
+
+[theme="dark"] {
+  .note-dialog__note-author--self {
+    background: var(--accent-color--desaturated-dark);
+
+    .note-dialog__note-author-name {
+      color: $color-white;
+    }
   }
 }

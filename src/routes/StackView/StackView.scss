@@ -15,6 +15,10 @@ $stack-view-top-margin: 64px;
 
 .stack-view {
   margin-top: $stack-view-top-margin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
 }
 
 .stack-view__disabled-click {
@@ -43,4 +47,10 @@ $stack-view-top-margin: 64px;
   &:focus-visible {
     color: var(--accent-color);
   }
+}
+
+.stack-view__parent-note {
+  margin: 0;
+  max-width: 700px;
+  height: 208px;
 }
