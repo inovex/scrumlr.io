@@ -1,12 +1,13 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -147,9 +148,9 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
 			r.With(s.BoardParticipantContext).Post("/timer", s.setTimer)
 			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
-
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
+			r.With(s.BoardModeratorContext).Get("/resetUserState", s.testResetUserState)
 
 			s.initBoardSessionRequestResources(r)
 			s.initBoardSessionResources(r)

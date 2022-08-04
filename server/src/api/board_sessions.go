@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -100,4 +101,45 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, sessions)
+}
+
+func (s *Server) testResetUserState(w http.ResponseWriter, r *http.Request) {
+	desiredUserState := false
+	// allSessions := s.getBoardSessions(w, r)
+
+	log := logger.FromRequest(r)
+	var body dto.BoardSessionsUpdateRequest
+
+	board := r.Context().Value("Board").(uuid.UUID)
+
+	filter := database.BoardSessionFilterTypeFromQueryString(r.URL.Query())
+	sessions, err := s.sessions.List(r.Context(), board, filter)
+	if err != nil {
+		log.Errorw("unable to get board sessions", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+
+	for _, v := range sessions {
+		v.Ready = *changeBoolPointer(desiredUserState)
+	}
+
+	body.Board = board
+	body.Ready = changeBoolPointer(desiredUserState)
+	body.RaisedHand = changeBoolPointer(desiredUserState)
+	sessions, err = s.sessions.UpdateAll(r.Context(), body)
+	if err != nil {
+		return
+	}
+
+	for _, session := range sessions {
+		fmt.Println("Generated Session: ", session)
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, sessions)
+}
+
+func changeBoolPointer(x bool) *bool {
+	return &x
 }
