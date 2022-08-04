@@ -22,6 +22,7 @@ $settings__item-height: 48px;
 
     &-wrapper {
       overflow-y: auto;
+      overflow-x: hidden;
       padding-right: $padding--small;
       margin-right: calc(-1 * (#{$padding--small} + 10px));
       margin-bottom: $settings-dialog-container--bottom;
@@ -30,6 +31,8 @@ $settings__item-height: 48px;
         padding-right: $padding--medium;
         margin-right: calc(-1 * (#{$padding--medium} + 10px));
       }
+
+      @include scrollbar();
     }
 
     > button {

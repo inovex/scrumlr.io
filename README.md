@@ -170,6 +170,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/105675885?s=48&amp;v=4" width="48" height="48" alt="Kraft16">](https://github.com/Kraft16)
 [<img src="https://avatars.githubusercontent.com/u/5772868?s=48&amp;v=4" width="48" height="48" alt="miiho">](https://github.com/miiho)
 [<img src="https://avatars.githubusercontent.com/u/70689411?s=48&amp;v=4" width="48" height="48" alt="brandeins1403">](https://github.com/brandeins1403)
+[<img src="https://avatars.githubusercontent.com/u/56362368?s=48&v=4" width="48" height="48" alt="benedicthomuth">](https://github.com/benedicthomuth)
 
 [<img src="https://avatars.githubusercontent.com/u/741171?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/wlbr)
 [<img src="https://avatars.githubusercontent.com/u/5778920?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/bontscho)

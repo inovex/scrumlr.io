@@ -5,7 +5,7 @@ $menu-item-size: 42px;
 .menu-item {
   height: $menu-item-size;
   width: $menu-item-size;
-  border-radius: $menu-item-size / 2;
+  border-radius: calc($menu-item-size / 2);
   background-color: transparent;
   border: none;
   padding: 0;
@@ -30,7 +30,7 @@ $menu-item-size: 42px;
   align-items: center;
   max-width: 0;
   height: $menu-item-size;
-  border-radius: $menu-item-size / 2;
+  border-radius: calc($menu-item-size / 2);
   background-color: $tooltip-background-color--light;
   opacity: 0;
   visibility: hidden;
@@ -124,7 +124,7 @@ $menu-item-size: 42px;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   color: $color-black;
-  border-radius: $menu-item-size / 2;
+  border-radius: calc($menu-item-size / 2);
 }
 
 @media #{$tablet} {
