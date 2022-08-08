@@ -7,7 +7,6 @@ import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
   noteId: string;
-  parentId?: string;
   text: string;
   authorId: string;
   avatar?: AvataaarProps;

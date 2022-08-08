@@ -70,7 +70,6 @@ export const StackView = () => {
             <NoteDialogComponents.Note
               key={n.id}
               noteId={n.id}
-              parentId={noteId}
               text={n.text}
               authorId={n.author}
               avatar={n.avatar}

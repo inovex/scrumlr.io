@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import classNames from "classnames";
 import "./MenuItem.scss";
-import {TabIndex} from "constants/tabIndex";
+import {TooltipButton} from "components/TooltipButton/TooltipButton";
 
 type MenuToggleProps = {
   direction: "left" | "right";
@@ -17,7 +15,6 @@ type MenuToggleProps = {
 
 export const MenuToggle = (props: MenuToggleProps) => {
   const [value, setValue] = useState(props.value ?? false);
-  const Icon = props.icon;
 
   useEffect(() => {
     setValue(props.value!);
@@ -29,18 +26,14 @@ export const MenuToggle = (props: MenuToggleProps) => {
   };
 
   return (
-    <button
-      disabled={props.disabled}
-      className={classNames("menu-item", {"menu-item--active": value}, `menu-item--${props.direction}`)}
+    <TooltipButton
+      direction={props.direction}
       onClick={onToggle}
-      tabIndex={props.tabIndex ?? TabIndex.default}
-      aria-label={value ? props.toggleStopLabel : props.toggleStartLabel}
-    >
-      <div className="menu-item__tooltip" aria-hidden>
-        <span className="tooltip__text">{value ? props.toggleStopLabel : props.toggleStartLabel}</span>
-      </div>
-      <Icon className="menu-item__icon" aria-hidden />
-      <CloseIcon className="menu-item__icon" aria-hidden />
-    </button>
+      label={value ? props.toggleStopLabel : props.toggleStartLabel}
+      disabled={props.disabled}
+      tabIndex={props.tabIndex}
+      icon={props.icon}
+      active={value}
+    />
   );
 };
