@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -103,43 +102,38 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, sessions)
 }
 
-func (s *Server) testResetUserState(w http.ResponseWriter, r *http.Request) {
-	desiredUserState := false
-	// allSessions := s.getBoardSessions(w, r)
-
+func (s *Server) resetAllReadyStates(w http.ResponseWriter, r *http.Request) {
+	var desiredUserState = false
 	log := logger.FromRequest(r)
-	var body dto.BoardSessionsUpdateRequest
-
-	board := r.Context().Value("Board").(uuid.UUID)
+	currentBoard := r.Context().Value("Board").(uuid.UUID)
+	caller := r.Context().Value("User").(uuid.UUID)
 
 	filter := database.BoardSessionFilterTypeFromQueryString(r.URL.Query())
-	sessions, err := s.sessions.List(r.Context(), board, filter)
+	sessions, err := s.sessions.List(r.Context(), currentBoard, filter)
 	if err != nil {
 		log.Errorw("unable to get board sessions", "err", err)
 		common.Throw(w, r, common.InternalServerError)
-		return
-	}
-
-	for _, v := range sessions {
-		v.Ready = *changeBoolPointer(desiredUserState)
-	}
-
-	body.Board = board
-	body.Ready = changeBoolPointer(desiredUserState)
-	body.RaisedHand = changeBoolPointer(desiredUserState)
-	sessions, err = s.sessions.UpdateAll(r.Context(), body)
-	if err != nil {
-		return
 	}
 
 	for _, session := range sessions {
-		fmt.Println("Generated Session: ", session)
+		board := currentBoard
+		caller := caller
+		user := session.User.ID
+
+		var body dto.BoardSessionUpdateRequest
+
+		body.Board = board
+		body.Caller = caller
+		body.User = user
+		body.Ready = &desiredUserState
+
+		session, err = s.sessions.Update(r.Context(), body)
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
 	}
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, sessions)
-}
-
-func changeBoolPointer(x bool) *bool {
-	return &x
 }
