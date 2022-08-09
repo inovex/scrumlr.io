@@ -6,8 +6,8 @@
   justify-content: center;
   align-items: center;
 
-  height: $votes-button-size;
-  width: $votes-button-size;
+  height: var(--note-footer-height, $votes-button-size);
+  width: var(--note-footer-height, $votes-button-size);
 
   background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);

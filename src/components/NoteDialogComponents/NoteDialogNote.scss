@@ -2,6 +2,8 @@
 @import "src/components/Note/Note.scss";
 
 .note-dialog__note {
+  --note-footer-height: 28px;
+
   display: grid;
   grid-template-columns: 11fr 1fr;
   grid-template-rows: 4fr 1fr;
