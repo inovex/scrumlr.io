@@ -9,4 +9,8 @@ $votes-button-size: 28px;
   height: $votes-button-size;
   justify-content: flex-end;
   gap: 4px;
+
+  > *:last-child {
+    margin-left: $margin--small;
+  }
 }
