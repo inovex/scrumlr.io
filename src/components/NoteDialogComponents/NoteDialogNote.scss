@@ -18,15 +18,23 @@
   width: calc(100vw - 36px);
   max-width: 380px;
 }
-[theme="dark"] {
-  .note-dialog__note {
-    background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
-}
+
 @media #{$tablet} {
   .note-dialog__note {
     max-width: 415px;
     width: calc(100vw - 32px);
+  }
+}
+
+@media #{$smartphone} {
+  .note-dialog__note {
+    width: calc(100vw - 64px);
+  }
+}
+
+[theme="dark"] {
+  .note-dialog__note {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
   }
 }

@@ -11,6 +11,7 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
   scrollbar-color: $color-middle-gray $color-white;
   margin-bottom: $column__border-width;
   padding-top: $padding--large;
+  padding-left: 10px;
   box-sizing: border-box;
 
   @include scrollbar();
