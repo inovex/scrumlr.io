@@ -25,7 +25,7 @@ export const ThemeSettingsDropdown: VFC<ThemeSettingsDropdownProps> = ({showDrop
   const handleKeyDown = (newTheme: Theme) => (e: KeyboardEvent<HTMLLIElement>) => {
     switch (e.key) {
       case " ":
-      case "SpaceBar":
+      case "Spacebar":
       case "Enter":
         e.preventDefault();
         setTheme(newTheme);

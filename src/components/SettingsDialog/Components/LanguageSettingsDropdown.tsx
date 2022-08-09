@@ -26,7 +26,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
   const handleKeyDown = (newLanguage: string) => (e: KeyboardEvent<HTMLLIElement>) => {
     switch (e.key) {
       case " ":
-      case "SpaceBar":
+      case "Spacebar":
       case "Enter":
         e.preventDefault();
         changeLanguage(newLanguage);

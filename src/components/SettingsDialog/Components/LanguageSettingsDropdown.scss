@@ -7,9 +7,6 @@
   align-items: center;
   color: $color-black;
 }
-[theme="dark"] .settings-dropdown {
-  color: $color-white;
-}
 
 .settings-dropdown-button {
   background-color: inherit;
@@ -21,18 +18,12 @@
   padding: $padding--default $padding--default $padding--default $padding--small;
 }
 
-[theme="dark"] {
-  .settings-dropdown-button {
-    color: $color-white;
-  }
-}
-
 .settings-dropdown-content {
   position: absolute;
   width: calc(100% + 20px);
   top: calc($settings__item-height + 1px);
   left: -16px;
-  border-radius: 8px 8px 8px 8px;
+  border-radius: 8px;
   padding: 0;
   margin: 0;
 }
@@ -49,7 +40,7 @@
   background-color: $color-white;
   gap: 12px;
   border: 2px solid transparent;
-  border-radius: 8px 8px 8px 8px;
+  border-radius: 8px;
 
   &:last-child {
     border-radius: 0px 0px 8px 8px;
@@ -61,21 +52,6 @@
 
   &:hover {
     background-color: rgba(var(--accent-color-rgb), 0.1);
-  }
-}
-
-[theme="dark"] {
-  .settings-dropdown-content li {
-    background-color: $color-dark-mode-note;
-    color: $color-white;
-
-    &:focus-visible {
-      border: 2px solid rgba($color-white, 0.6);
-    }
-
-    &:hover {
-      background-color: $color-dark-mode-note--hover;
-    }
   }
 }
 
@@ -92,7 +68,28 @@
 }
 
 [theme="dark"] {
+  .settings-dropdown {
+    color: $color-white;
+  }
+
   .settings-dropdown-icon {
     color: $color-white;
+  }
+
+  .settings-dropdown-button {
+    color: $color-white;
+  }
+
+  .settings-dropdown-content li {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+
+    &:focus-visible {
+      border: 2px solid rgba($color-white, 0.6);
+    }
+
+    &:hover {
+      background-color: $color-dark-mode-note--hover;
+    }
   }
 }

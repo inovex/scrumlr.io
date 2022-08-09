@@ -11,6 +11,10 @@
 
   transition: all 0.08s ease-out;
 
+  &:hover {
+    color: $color-middle-gray;
+  }
+
   &:focus-visible {
     outline: none;
     text-decoration: underline;
