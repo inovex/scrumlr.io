@@ -26,3 +26,9 @@
     }
   }
 }
+
+[theme="dark"] {
+  .note-dialog__header > h2::after {
+    background: var(--accent-color--dark);
+  }
+}

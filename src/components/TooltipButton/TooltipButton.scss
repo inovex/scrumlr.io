@@ -194,11 +194,12 @@ $tooltip-button-size: 42px;
   .tooltip-button__icon {
     background: $menu-icon-background-color--dark;
     color: $color-white;
+    fill: var(--accent-color--dark);
   }
 
   .tooltip-button__tooltip-text {
     background-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
-    color: var(--accent-color, $color-white);
+    color: var(--accent-color--dark, $color-white);
   }
 
   .tooltip-button--active .tooltip-button__icon {

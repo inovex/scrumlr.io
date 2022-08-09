@@ -39,6 +39,7 @@ $color-warning-red: #eb625b;
 @mixin rgb($color) {
   --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+  --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
   --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
   --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
 }
