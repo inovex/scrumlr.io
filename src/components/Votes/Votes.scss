@@ -9,8 +9,4 @@ $votes-button-size: 28px;
   height: $votes-button-size;
   justify-content: flex-end;
   gap: 4px;
-
-  > *:last-child {
-    margin: 0 calc(($tooltip-button-size - $votes-button-size) / 2);
-  }
 }

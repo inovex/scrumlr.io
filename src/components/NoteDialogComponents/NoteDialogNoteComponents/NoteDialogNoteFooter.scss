@@ -1,5 +1,7 @@
 @import "src/constants/style";
 @import "src/components/Note/Note.scss";
+@import "src/components/TooltipButton/TooltipButton.scss";
+@import "src/components/Votes/Votes.scss";
 
 .note-dialog__note-footer {
   position: relative;
@@ -72,6 +74,10 @@
     color: var(--accent-color);
     font-weight: bold;
   }
+}
+
+.note-dialog__note-votes {
+  margin: 0 calc(($tooltip-button-size - $votes-button-size) / 2);
 }
 
 [theme="dark"] {

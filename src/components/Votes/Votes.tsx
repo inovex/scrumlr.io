@@ -1,4 +1,5 @@
 import {VFC} from "react";
+import classNames from "classnames";
 import _ from "underscore";
 import {TabIndex} from "constants/tabIndex";
 import {useAppSelector} from "store";
@@ -31,7 +32,7 @@ export const Votes: VFC<VotesProps> = (props) => {
   );
 
   return (
-    <div role="none" className="votes" onClick={(e) => e.stopPropagation()}>
+    <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
         <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} disabled>
           {allPastVotes}
