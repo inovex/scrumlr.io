@@ -16,17 +16,23 @@
 .login-board__form a {
   outline: none;
 
+  svg {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 2px;
+  }
+
   &:focus-visible svg {
-    filter: brightness(1.6);
+    border: 1px solid $color-backlog-blue;
   }
 }
 
 .login-board__logo {
   margin-bottom: 1.5em;
-  transition: all 0.16s ease-out;
+  transition: all 0.08s ease-out;
 
   &:hover {
-    filter: drop-shadow(4px 4px 4px $color-middle-gray);
+    filter: $brighten--strongly;
   }
 }
 
@@ -165,10 +171,6 @@
   .login-board__divider::after {
     color: $color-middle-gray;
     background: #1a2232;
-  }
-
-  .login-board__logo:hover {
-    filter: drop-shadow(4px 4px 4px $color-black);
   }
 
   .login-board__terms:hover .login-board__terms-label::before {

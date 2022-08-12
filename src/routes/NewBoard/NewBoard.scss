@@ -17,12 +17,18 @@
   a {
     outline: none;
 
+    svg {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 2px;
+    }
+
     &:hover svg {
-      filter: drop-shadow(4px 4px 4px $color-middle-gray);
+      filter: $brighten--strongly;
     }
 
     &:focus-visible > svg {
-      filter: brightness(1.6);
+      border: 1px solid $color-backlog-blue;
     }
   }
 }
@@ -114,10 +120,6 @@
 [theme="dark"] {
   .new-board {
     color: $color-white;
-
-    a:hover svg {
-      filter: drop-shadow(4px 4px 4px $color-black);
-    }
   }
 
   .new-board__mode-label {

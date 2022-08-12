@@ -15,7 +15,7 @@
   outline: none;
 
   &:hover {
-    filter: brightness(1.4);
+    filter: $brighten--strongly;
 
     > svg .scrumlr-logo__paths path:first-of-type {
       transform: scale(1.08);
@@ -27,7 +27,7 @@
     text-decoration: underline;
 
     > svg {
-      filter: brightness(1.4);
+      filter: $brighten--strongly;
     }
   }
 }

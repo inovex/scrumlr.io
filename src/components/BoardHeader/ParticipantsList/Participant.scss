@@ -13,7 +13,7 @@
   justify-content: space-between;
 
   &:hover {
-    filter: brightness(0.92);
+    filter: $darken--slightly;
   }
 
   &:focus-visible {
@@ -80,7 +80,7 @@
     background-color: $color-dark-mode-note;
 
     &:hover {
-      filter: brightness(1.1);
+      filter: $brighten--slightly;
     }
 
     &:focus-visible {

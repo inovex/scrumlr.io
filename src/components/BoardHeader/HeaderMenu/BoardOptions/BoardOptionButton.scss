@@ -21,7 +21,7 @@ $header-menu-border-bottom-color: #efefef;
   cursor: pointer;
 
   &:hover {
-    filter: brightness(0.92);
+    filter: $darken--slightly;
   }
 
   &:focus-visible {
@@ -61,7 +61,7 @@ $header-menu-border-bottom-color: #efefef;
     background-color: $color-dark-mode-note;
 
     &:hover {
-      filter: brightness(1.1);
+      filter: $brighten--slightly;
     }
 
     &:focus-visible {

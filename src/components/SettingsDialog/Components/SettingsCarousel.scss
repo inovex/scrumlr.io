@@ -34,12 +34,12 @@
     transition: all 0.08s ease-out;
 
     &:hover {
-      filter: brightness(1.4);
+      filter: $brighten--strongly;
       transform: scale(1.1);
     }
 
     &:focus-visible {
-      filter: brightness(1.4);
+      filter: $brighten--strongly;
     }
 
     svg {

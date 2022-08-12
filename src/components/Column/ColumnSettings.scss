@@ -11,10 +11,6 @@
   z-index: 150;
 }
 
-[theme="dark"] .column__header-menu-dropdown {
-  background-color: $color-dark-mode-note;
-}
-
 .column__header-menu-dropdown > ul {
   list-style: none;
   padding: $padding--small 0;
@@ -24,24 +20,14 @@
 .column__header-menu-dropdown > ul > li {
   height: 32px;
   padding: 0 16px;
+  background-color: $color-white;
 
   &:hover {
-    background-color: $color-white-one;
+    filter: $darken--slightly;
   }
 
   &:focus-within {
     background-color: $color-white-two;
-  }
-}
-
-[theme="dark"] .column__header-menu-dropdown > ul > li {
-  &:hover {
-    background-color: $color-dark-mode-note;
-    filter: brightness(1.1);
-  }
-
-  &:focus-within {
-    background-color: $color-dark-mode-note--hover;
   }
 }
 
@@ -58,10 +44,6 @@
   align-items: center;
   gap: 10px;
   font-size: $text-size--small;
-}
-
-[theme="dark"] .column__header-menu-dropdown > ul > li > button {
-  color: $color-white;
 }
 
 .column__header-menu-dropdown > ul > li > button > svg {
@@ -91,11 +73,33 @@
   }
 }
 
-[theme="dark"] .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
-  box-shadow: 0 0 0 2px $color-white;
-}
-
 // Hacky way to not show delete column button if it's the last column
 .column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
   display: none;
+}
+
+[theme="dark"] {
+  .column__header-menu-dropdown {
+    background-color: $color-dark-mode-note;
+  }
+
+  .column__header-menu-dropdown > ul > li {
+    background-color: $color-dark-mode-note;
+
+    &:hover {
+      filter: $brighten--slightly;
+    }
+
+    &:focus-within {
+      background-color: $color-dark-mode-note--hover;
+    }
+  }
+
+  .column__header-menu-dropdown > ul > li > button {
+    color: $color-white;
+  }
+
+  .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
+    box-shadow: 0 0 0 2px $color-white;
+  }
 }
