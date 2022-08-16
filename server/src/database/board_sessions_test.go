@@ -456,3 +456,30 @@ func Test_testDatabase_UpdateBoardSessions(t *testing.T) {
 
 	assert.Len(t, sessions, 1, "check sessions result, expecting %d - but found %d", 1, len(result))
 }
+
+func Test_testDatabase_UpdateBoardSession(t *testing.T) {
+	boardId := uuid.MustParse("3113b096-986c-4e23-adf7-b3fa19224bd4")
+	userId := uuid.MustParse("3113b096-986c-4e23-adf7-b3fa19224bd2")
+	role := types.SessionRoleParticipant
+	desiredUserState := true
+
+	result, err := testDb.UpdateBoardSession(BoardSessionUpdate{
+		Board:             boardId,
+		User:              userId,
+		Connected:         &desiredUserState,
+		ShowHiddenColumns: &desiredUserState,
+		Ready:             &desiredUserState,
+		RaisedHand:        &desiredUserState,
+		Role:              &role,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, result)
+
+	assert.True(t, result.Connected)
+	assert.True(t, result.RaisedHand)
+	assert.True(t, result.ShowHiddenColumns)
+	assert.True(t, result.Ready)
+	assert.True(t, result.RaisedHand)
+	assert.Equal(t, result.Role, types.SessionRoleParticipant)
+}
