@@ -141,7 +141,12 @@ func (s *Server) resetAllReadyStates(w http.ResponseWriter, r *http.Request) {
 func (s *Server) testUpdateAll(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	desiredUserState := true
-	boardId := r.Context().Value("Board").(uuid.UUID)
+	boardId, success := r.Context().Value("Board").(uuid.UUID)
+	if !success {
+		render.Status(r, http.StatusBadRequest)
+		render.Respond(w, r, "unable to find board id")
+		return
+	}
 
 	var body dto.BoardSessionsUpdateRequest
 

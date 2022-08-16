@@ -1,10 +1,13 @@
 package database
 
 import (
+	"log"
+	"testing"
+
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
-	"testing"
 )
 
 func TestRunnerForBoardSessions(t *testing.T) {
@@ -19,6 +22,8 @@ func TestRunnerForBoardSessions(t *testing.T) {
 	t.Run("Update=3", testUpdateOfParticipantToModerator)
 	t.Run("Update=4", testUpdateOfParticipantToOwnerShouldFail)
 	t.Run("Update=5", testUpdateOfModeratorToOwnerShouldFail)
+
+	// t.Run("UpdateAll=0", testDatabase_UpdateBoardSessions)
 
 	t.Run("Exists=0", testBoardSessionExistsForParticipant)
 	t.Run("Exists=1", testBoardSessionExistsForModerator)
@@ -428,4 +433,26 @@ func testGetBoardSessionsWithMultipleFilters(t *testing.T) {
 	sessions, err := testDb.GetBoardSessions(board.ID, filter.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
+}
+
+func Test_testDatabase_UpdateBoardSessions(t *testing.T) {
+	log.Println("UNSER TEST")
+	THISISTRUE := true
+	boardID := uuid.MustParse("3113b096-986c-4e23-adf7-b3fa19224bd4")
+	result, err := testDb.UpdateBoardSessions(BoardSessionUpdate{
+		Board: boardID,
+		// User:              uuid.MustParse("3113b096-986c-4e23-adf7-b3fa19224bd2"),
+		Ready:      &THISISTRUE,
+		RaisedHand: &THISISTRUE,
+	})
+	assert.Nil(t, err)
+	assert.Len(t, result, 1, "check result, expecting %d - but found %d", 1, len(result))
+
+	sessions, err := testDb.GetBoardSessions(boardID)
+	assert.Nil(t, err)
+
+	assert.True(t, sessions[0].RaisedHand)
+	assert.True(t, sessions[0].Ready)
+
+	assert.Len(t, sessions, 1, "check sessions result, expecting %d - but found %d", 1, len(result))
 }
