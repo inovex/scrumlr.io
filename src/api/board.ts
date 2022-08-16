@@ -142,4 +142,20 @@ export const BoardAPI = {
       throw new Error(`unable to delete board timer: ${error}`);
     }
   },
+  resetAllReadyStates: async (id: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}/resetAllReadyStates`, {
+        method: "PUT",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to reset all ready states with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to reset all ready states: ${error}`);
+    }
+  },
 };

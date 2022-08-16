@@ -108,6 +108,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
   if (action.type === Action.CancelTimer) {
     const currentState = stateAPI.getState().board.data!;
     API.deleteTimer(currentState.id);
+    API.resetAllReadyStates(currentState.id);
   }
 
   if (action.type === Action.ShareNote) {
