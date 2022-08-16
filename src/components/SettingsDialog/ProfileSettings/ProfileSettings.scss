@@ -78,7 +78,7 @@ $settings__item-height: 48px;
     }
   }
   &:hover,
-  &:focus,
+  &:focus-visible,
   &:active {
     background: none;
   }

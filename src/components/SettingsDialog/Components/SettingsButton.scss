@@ -1,7 +1,6 @@
 @import "constants/style";
 
 $header-menu__item-border-width: 1px;
-$header-menu-hover-color--light: #f3f3f3;
 $header-menu-button-height: 24px;
 $header-menu-icon-width: 79px;
 $header-menu-icon-height: 24px;
@@ -16,7 +15,7 @@ $header-menu-border-bottom-color: #efefef;
   border-radius: 8px;
   border: none;
   padding: 0;
-  height: 100%;
+  height: $settings__item-height;
   width: 100%;
   text-align: left;
   cursor: pointer;
@@ -24,6 +23,10 @@ $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button:focus-visible {
   outline: none;
+
+  .toggle::after {
+    transform: scale(1.1);
+  }
 }
 
 .settings-option-button:focus-within,

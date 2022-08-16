@@ -1,5 +1,4 @@
 @import "constants/style";
-$header-menu-hover-color--light: #f3f3f3;
 $header-menu__item-height: 48px;
 
 .board-option-link {
@@ -7,20 +6,29 @@ $header-menu__item-height: 48px;
   width: 100%;
   background: $color-white;
   text-decoration: none;
+  outline: none;
   height: $header-menu__item-height;
+
+  &:hover {
+    filter: $darken--slightly;
+  }
+
+  &:focus-visible {
+    background-color: $color-white-two;
+  }
 }
-.board-option-link:focus,
-.board-option-link:hover {
-  background-color: $header-menu-hover-color--light;
-}
+
 [theme="dark"] {
   .board-option-link {
     background-color: $color-dark-mode-note;
-  }
 
-  .board-option-link:focus,
-  .board-option-link:hover {
-    background-color: $color-dark-mode-note--hover;
+    &:hover {
+      filter: $brighten--slightly;
+    }
+
+    &:focus-visible {
+      background-color: $color-dark-mode-note--hover;
+    }
   }
 }
 
@@ -31,6 +39,7 @@ $header-menu__item-height: 48px;
   color: $color-backlog-blue;
   font-weight: 600;
 }
+
 [theme="dark"] .board-option-link__label {
   color: $color-planning-pink;
 }
