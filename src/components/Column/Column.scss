@@ -125,6 +125,7 @@
   border: 2px dashed transparent;
   transition: all 0.25s ease-in-out;
   flex: 1;
+  outline: none;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray $color-white;
 
@@ -164,7 +165,7 @@
   cursor: pointer;
   outline: none;
 }
-.column__header-toggle-button:focus > .column__header-toggle-button-icon,
+.column__header-toggle-button:focus-visible > .column__header-toggle-button-icon,
 .column__header-toggle-button:hover > .column__header-toggle-button-icon {
   animation: none;
   color: var(--accent-color);
@@ -236,7 +237,7 @@
   margin: auto calc(#{$margin--default} - 2px) auto $margin--default;
 
   &:hover > svg,
-  &:focus > svg {
+  &:focus-visible > svg {
     transform: translate(-0.64px, -0.64px);
     filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
     color: var(--accent-color);

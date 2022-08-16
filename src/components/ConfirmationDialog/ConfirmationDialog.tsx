@@ -20,7 +20,7 @@ export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMe
       <Button type="submit" color="primary" className="confirmation-dialog__button" onClick={() => onAccept()}>
         {acceptMessage}
       </Button>
-      <Button type="submit" color="primary" className="confirmation-dialog__button" variant="outlined" onClick={() => onDecline()}>
+      <Button type="submit" color="primary" className="confirmation-dialog__button" variant="outlined" onClick={() => onDecline()} autoFocus>
         {declineMessage}
       </Button>
     </div>
