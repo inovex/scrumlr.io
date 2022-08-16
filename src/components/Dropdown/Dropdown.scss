@@ -79,13 +79,13 @@ $dropdown__border-color--dark: #4b515c;
 }
 
 .dropdown__item:hover,
-.dropdown__item-button > button:focus,
+.dropdown__item-button > button:focus-visible,
 .dropdown__item-button:hover {
   background-color: $hover-background-light;
 }
 [theme="dark"] {
   .dropdown__item:hover,
-  .dropdown__item-button > button:focus,
+  .dropdown__item-button > button:focus-visible,
   .dropdown__item-button:hover {
     background-color: $hover-background-dark;
   }

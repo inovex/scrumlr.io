@@ -59,7 +59,14 @@ export const NewBoard = () => {
               <div className="new-board__mode-selection">
                 {Object.keys(columnTemplates).map((key) => (
                   <label key={key} className="new-board__mode">
-                    <input className="new-board__mode-input" type="radio" name="mode" value={key} onChange={(e) => setColumnTemplate(e.target.value)} />
+                    <input
+                      className="new-board__mode-input"
+                      type="radio"
+                      name="mode"
+                      value={key}
+                      onChange={(e) => setColumnTemplate(e.target.value)}
+                      checked={columnTemplate === key}
+                    />
                     <div className="new-board__mode-label">
                       <div>
                         <div className="new-board__mode-name">{columnTemplates[key].name}</div>

@@ -60,7 +60,7 @@
   text-overflow: ellipsis;
 }
 
-.board-settings__board-name-button_input:focus {
+.board-settings__board-name-button_input:focus-visible {
   outline: none;
 }
 
@@ -167,6 +167,10 @@
   &:active {
     transform: scale(1);
   }
+
+  &:focus-visible {
+    transform: scale(1.1);
+  }
 }
 
 .board-settings__show-password-button--disabled {
@@ -197,7 +201,7 @@
   }
 }
 
-.board-settings__password-button_value-input:focus {
+.board-settings__password-button_value-input:focus-visible {
   outline: none;
 }
 
@@ -216,10 +220,19 @@
 .board-settings__password-management-button {
   cursor: pointer;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:hover {
     filter: brightness(1.4);
     transform: scale(1.01);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    text-decoration: underline;
   }
 }
 

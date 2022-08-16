@@ -12,8 +12,11 @@
   align-items: center;
   justify-content: space-between;
 
-  &:hover,
-  &:focus {
+  &:hover {
+    filter: $darken--slightly;
+  }
+
+  &:focus-visible {
     background-color: $color-white-two;
   }
 }
@@ -67,7 +70,7 @@
   outline: none;
 }
 
-.participant .participant__permission-toggle:focus::after,
+.participant .participant__permission-toggle:focus-visible::after,
 .participant .participant__permission-toggle:hover::after {
   transform: scale(1.2);
 }
@@ -75,10 +78,14 @@
 [theme="dark"] {
   .participant {
     background-color: $color-dark-mode-note;
-  }
-  .participant:focus,
-  .participant:hover {
-    background-color: $color-dark-one;
+
+    &:hover {
+      filter: $brighten--slightly;
+    }
+
+    &:focus-visible {
+      background-color: $color-dark-mode-note--hover;
+    }
   }
   .participant:not(:last-child)::after {
     background-color: rgba(125, 125, 125, 0.1);
