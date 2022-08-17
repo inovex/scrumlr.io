@@ -16,16 +16,8 @@ exports[`Appearance should render all Settings correctly 1`] = `
   <div
     class="appearance-container"
   >
-<<<<<<< HEAD
-    <button
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      class="settings-option-button appearance-settings_language-dropdown"
-      type="button"
-=======
     <div
       class="appearance-settings__theme-container"
->>>>>>> f67ac6eb (fixed test)
     >
       <span
         class="appearance-settings__theme-title"
