@@ -11,7 +11,6 @@ import "../SettingsDialog.scss";
 import "./Appearance.scss";
 
 export const Appearance = () => {
-  // const [syncMode, setSyncMode] = useState(false);
   // const [showNotifications, setShowNotifications] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
   useEffect(() => {
@@ -38,14 +37,14 @@ export const Appearance = () => {
         <div className="appearance-settings__theme-container">
           <span className="appearance-settings__theme-title">{t("Appearance.colorScheme")}</span>
           <div className="appearance-settings__theme-options">
-            <label htmlFor="auto" className="appearence-settings__theme-option">
+            <label htmlFor="auto" className="appearence-settings__theme-option" title={t("Appearance.SyncModeDescription")}>
               <input id="auto" type="radio" value="auto" name="theme" checked={theme === "auto"} onChange={() => setTheme("auto")} />
               <div className="appearance-settings__auto-preview">
                 <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
                 <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
               </div>
               <span>
-                <LightIcon className="settings-dropdown-flag" />
+                <LightIcon className="appearance-settings__theme-icon" />
                 Auto
               </span>
             </label>
@@ -53,7 +52,7 @@ export const Appearance = () => {
               <input id="light" type="radio" value="light" name="theme" checked={theme === "light"} onChange={() => setTheme("light")} />
               <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
               <span>
-                <LightIcon className="settings-dropdown-flag" />
+                <LightIcon className="appearance-settings__theme-icon" />
                 {t("Appearance.colorSchemeLight")}
               </span>
             </label>
@@ -61,29 +60,12 @@ export const Appearance = () => {
               <input id="dark" type="radio" value="dark" name="theme" checked={theme === "dark"} onChange={() => setTheme("dark")} />
               <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
               <span>
-                <DarkIcon className="settings-dropdown-flag" />
+                <DarkIcon className="appearance-settings__theme-icon" />
                 {t("Appearance.colorSchemeDark")}
               </span>
             </label>
           </div>
         </div>
-        {/* <SettingsButton */}
-        {/*   className="appearance-settings_sync-button" */}
-        {/*   onClick={() => { */}
-        {/*     setSyncMode((prevVal) => !prevVal); */}
-        {/*   }} */}
-        {/* > */}
-        {/*   <div className="appearance-settings_sync-button_label"> */}
-        {/*     <p>{t("Appearance.SyncMode")}</p> */}
-        {/*     <p>{t("Appearance.SyncModeDescription")}</p> */}
-        {/*   </div> */}
-        {/*   <SettingsToggle active={syncMode} /> */}
-        {/* </SettingsButton> */}
-        {/* <SettingsButton  */}
-        {/*   className="appearance-settings_notifications-button"  */}
-        {/*   label={t("Appearance.AllowNotifications")} onClick={() => setShowNotifications(!showNotifications)}> */}
-        {/*   <SettingsToggle active={showNotifications} /> */}
-        {/* </SettingsButton> */}
         <SettingsButton
           className="appearance-settings_language-dropdown"
           label={t("Appearance.Language")}
