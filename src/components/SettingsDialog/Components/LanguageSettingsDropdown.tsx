@@ -28,7 +28,6 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
       case " ":
       case "Spacebar":
       case "Enter":
-        console.log("setting language to", newLanguage);
         e.preventDefault();
         changeLanguage(newLanguage);
         setCurrentlanguage(newLanguage);
