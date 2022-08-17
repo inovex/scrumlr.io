@@ -54,6 +54,10 @@
     &:checked + .appearance-settings__auto-preview > img {
       box-shadow: 0 0 0 2px var(--accent-color);
     }
+
+    &:focus-visible + img {
+      box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5);
+    }
   }
 
   > img,
