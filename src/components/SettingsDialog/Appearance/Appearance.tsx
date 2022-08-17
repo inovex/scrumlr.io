@@ -15,7 +15,7 @@ export const Appearance = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
   useEffect(() => {
     if (theme === "auto") {
-      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
       document.documentElement.setAttribute("theme", autoTheme);
     } else document.documentElement.setAttribute("theme", theme!);
 
