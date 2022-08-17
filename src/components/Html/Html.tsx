@@ -11,6 +11,7 @@ export const Html: FC = () => {
 
     if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "auto") {
       setTheme(colorScheme);
+      document.documentElement.setAttribute("theme", colorScheme);
     }
   });
 
