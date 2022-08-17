@@ -28,6 +28,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
       case " ":
       case "Spacebar":
       case "Enter":
+        console.log("setting language to", newLanguage);
         e.preventDefault();
         changeLanguage(newLanguage);
         setCurrentlanguage(newLanguage);
@@ -77,7 +78,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
                 changeLanguage("de");
                 setCurrentlanguage("de");
               }}
-              onKeyDown={handleKeyDown("en")}
+              onKeyDown={handleKeyDown("de")}
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
