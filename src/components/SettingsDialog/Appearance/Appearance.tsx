@@ -3,6 +3,7 @@ import {t} from "i18next";
 import {useEffect, useState, FocusEvent} from "react";
 import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
 import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
+import {ReactComponent as AutoIcon} from "assets/icon-settings.svg";
 import {ReactComponent as LightIcon} from "assets/icon-lightmode.svg";
 import {ReactComponent as DarkIcon} from "assets/icon-darkmode.svg";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -44,7 +45,7 @@ export const Appearance = () => {
                 <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
               </div>
               <span>
-                <LightIcon className="appearance-settings__theme-icon" />
+                <AutoIcon className="appearance-settings__theme-icon" />
                 Auto
               </span>
             </label>

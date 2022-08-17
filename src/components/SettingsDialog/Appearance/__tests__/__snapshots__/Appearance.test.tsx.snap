@@ -55,7 +55,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             <svg
               class="appearance-settings__theme-icon"
             >
-              icon-lightmode.svg
+              icon-settings.svg
             </svg>
             Auto
           </span>
