@@ -9,7 +9,7 @@ export const Html: FC = () => {
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
     const colorScheme = e.matches ? "dark" : "light";
 
-    if (!localStorage.getItem("theme")) {
+    if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "auto") {
       setTheme(colorScheme);
     }
   });

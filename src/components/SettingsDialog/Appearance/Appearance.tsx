@@ -13,9 +13,13 @@ import "./Appearance.scss";
 export const Appearance = () => {
   // const [syncMode, setSyncMode] = useState(false);
   // const [showNotifications, setShowNotifications] = useState(false);
-  const [theme, setTheme] = useState(document.documentElement.getAttribute("theme") ?? "light");
+  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
   useEffect(() => {
-    document.documentElement.setAttribute("theme", theme!);
+    if (theme === "auto") {
+      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.setAttribute("theme", autoTheme);
+    } else document.documentElement.setAttribute("theme", theme!);
+
     localStorage.setItem("theme", theme!);
   }, [theme]);
 
@@ -34,16 +38,27 @@ export const Appearance = () => {
         <div className="appearance-settings__theme-container">
           <span className="appearance-settings__theme-title">{t("Appearance.colorScheme")}</span>
           <div className="appearance-settings__theme-options">
-            <label htmlFor="light" onClick={() => setTheme("light")} className="appearence-settings__theme-option">
-              <input id="light" type="radio" value="light" name="theme" checked={theme === "light"} />
+            <label htmlFor="auto" className="appearence-settings__theme-option">
+              <input id="auto" type="radio" value="auto" name="theme" checked={theme === "auto"} onChange={() => setTheme("auto")} />
+              <div className="appearance-settings__auto-preview">
+                <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
+                <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
+              </div>
+              <span>
+                <LightIcon className="settings-dropdown-flag" />
+                Auto
+              </span>
+            </label>
+            <label htmlFor="light" className="appearence-settings__theme-option">
+              <input id="light" type="radio" value="light" name="theme" checked={theme === "light"} onChange={() => setTheme("light")} />
               <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
               <span>
                 <LightIcon className="settings-dropdown-flag" />
                 {t("Appearance.colorSchemeLight")}
               </span>
             </label>
-            <label htmlFor="dark" onClick={() => setTheme("dark")} className="appearence-settings__theme-option">
-              <input id="dark" type="radio" value="dark" name="theme" checked={theme === "dark"} />
+            <label htmlFor="dark" className="appearence-settings__theme-option">
+              <input id="dark" type="radio" value="dark" name="theme" checked={theme === "dark"} onChange={() => setTheme("dark")} />
               <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
               <span>
                 <DarkIcon className="settings-dropdown-flag" />
