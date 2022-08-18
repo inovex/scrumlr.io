@@ -18,8 +18,6 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language).then(() => {
       document.documentElement.lang = i18n.language;
-      // eslint-disable-next-line no-restricted-globals
-      location.reload();
     });
   };
 
