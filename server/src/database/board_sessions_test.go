@@ -437,29 +437,29 @@ func testUpdateBoardSessions(t *testing.T) {
 
 	ready := true
 	raisedHand := true
-	result, err := testDb.UpdateBoardSessions(BoardSessionUpdate{
+	sessions, err := testDb.UpdateBoardSessions(BoardSessionUpdate{
 		Board:      board.ID,
 		Ready:      &ready,
 		RaisedHand: &raisedHand,
 	})
 	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.True(t, result[0].Ready)
-	assert.True(t, result[0].RaisedHand)
-	assert.True(t, result[1].Ready)
-	assert.True(t, result[1].RaisedHand)
+	assert.NotNil(t, sessions)
+	for _, session := range sessions {
+		assert.True(t, session.Ready)
+		assert.True(t, session.RaisedHand)
+	}
 
 	ready = false
 	raisedHand = false
-	result, err = testDb.UpdateBoardSessions(BoardSessionUpdate{
+	sessions, err = testDb.UpdateBoardSessions(BoardSessionUpdate{
 		Board:      board.ID,
 		Ready:      &ready,
 		RaisedHand: &raisedHand,
 	})
 	assert.Nil(t, err)
-	assert.NotNil(t, result)
-	assert.False(t, result[0].Ready)
-	assert.False(t, result[0].RaisedHand)
-	assert.False(t, result[1].Ready)
-	assert.False(t, result[1].RaisedHand)
+	assert.NotNil(t, sessions)
+	for _, session := range sessions {
+		assert.False(t, session.Ready)
+		assert.False(t, session.RaisedHand)
+	}
 }
