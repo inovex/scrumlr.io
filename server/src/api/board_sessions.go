@@ -105,22 +105,19 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 func (s *Server) resetAllReadyStates(w http.ResponseWriter, r *http.Request) {
 	var desiredUserState = false
 	log := logger.FromRequest(r)
-	currentBoard := r.Context().Value("Board").(uuid.UUID)
+	board := r.Context().Value("Board").(uuid.UUID)
 	caller := r.Context().Value("User").(uuid.UUID)
 
 	filter := database.BoardSessionFilterTypeFromQueryString(r.URL.Query())
-	sessions, err := s.sessions.List(r.Context(), currentBoard, filter)
+	sessions, err := s.sessions.List(r.Context(), board, filter)
 	if err != nil {
 		log.Errorw("unable to get board sessions", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 	}
 
 	for _, session := range sessions {
-		board := currentBoard
-		caller := caller
-		user := session.User.ID
-
 		var body dto.BoardSessionUpdateRequest
+		user := session.User.ID
 
 		body.Board = board
 		body.Caller = caller
