@@ -12,7 +12,6 @@ import "../SettingsDialog.scss";
 import "./Appearance.scss";
 
 export const Appearance = () => {
-  // const [showNotifications, setShowNotifications] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
   useEffect(() => {
     if (theme === "auto") {
