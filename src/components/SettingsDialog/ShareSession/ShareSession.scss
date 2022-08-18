@@ -47,6 +47,10 @@ $header-menu-border-bottom-color: #efefef;
     transform: scale(1);
   }
 
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+  }
+
   &.--copied {
     background-color: transparent;
     color: var(--accent-color);

@@ -35,9 +35,6 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           BoardSettings.BoardName
         </label>
-        <button
-          class="settings-input__children"
-        />
       </div>
       <div
         class="board-settings__group-and-button"
@@ -82,9 +79,7 @@ exports[`BoardSettings should match snapshot 1`] = `
             >
               BoardSettings.Password
             </label>
-            <button
-              class="settings-input__children"
-            />
+            
           </div>
         </div>
         <button

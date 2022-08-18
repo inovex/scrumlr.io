@@ -1,0 +1,214 @@
+@import "constants/style.scss";
+
+$menu-item-size: 42px;
+
+.menu-item {
+  height: $menu-item-size;
+  width: $menu-item-size;
+  border-radius: calc($menu-item-size / 2);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.menu-item:focus-visible {
+  outline: 2px solid rgba($color-black, 0.5);
+}
+[theme="dark"] {
+  .menu-item:focus-visible {
+    outline: 2px solid rgba($color-white, 0.5);
+  }
+}
+
+.menu-item__tooltip {
+  position: absolute;
+  top: -58px;
+  left: 18px;
+  display: inline-flex;
+  align-items: center;
+  max-width: 0;
+  height: $menu-item-size;
+  border-radius: calc($menu-item-size / 2);
+  background-color: $tooltip-background-color--light;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms linear 500ms;
+  transform: translateX(-50%);
+}
+.menu-item__tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: $tooltip-background-color--light transparent transparent transparent;
+}
+
+@media #{$smartphone} {
+  .menu-item .menu-item__tooltip {
+    display: none;
+  }
+}
+
+[theme="dark"] {
+  .menu-item__tooltip {
+    background-color: $tooltip-background-color--dark;
+  }
+  .menu-item__tooltip::after {
+    border-color: $tooltip-background-color--dark transparent transparent transparent;
+  }
+}
+@media screen and (max-width: 450px) {
+  .menu-item:nth-child(1) {
+    .menu-item__tooltip {
+      transform: translateX(-25%);
+    }
+    .menu-item__tooltip::after {
+      left: calc(25% - 5px);
+    }
+  }
+  .menu-item:nth-child(4) {
+    .menu-item__tooltip {
+      transform: translateX(-75%);
+    }
+    .menu-item__tooltip::after {
+      left: calc(75% - 5px);
+    }
+  }
+}
+
+@media #{$tablet} {
+  .menu-item:hover .menu-item__tooltip {
+    max-width: max-content;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .menu-item .menu-item__tooltip {
+    opacity: 1;
+    visibility: visible;
+    width: auto;
+    overflow: hidden;
+    top: 0;
+    transition: max-width 0ms linear 150ms;
+    background-color: transparent;
+    transform: translateX(0);
+  }
+  .menu-item .menu-item__tooltip::after {
+    display: none;
+  }
+
+  .menu-item.menu-item--left .menu-item__tooltip {
+    right: 0;
+    left: auto;
+  }
+  .menu-item.menu-item--right .menu-item__tooltip {
+    left: 0;
+  }
+  .menu-item:hover .menu-item__tooltip {
+    max-width: 500px;
+    transition: none;
+  }
+}
+
+.tooltip__text {
+  width: 100%;
+  padding: 0 $padding--default;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  line-height: $line-height--small;
+  color: $color-black;
+  border-radius: calc($menu-item-size / 2);
+}
+
+@media #{$tablet} {
+  .menu-item .tooltip__text {
+    color: $color-black;
+    background-color: $tooltip-background-color--light;
+    height: $menu-item-size;
+    line-height: $menu-item-size;
+    width: max-content;
+    transition: transform 150ms linear 0ms;
+  }
+  .menu-item.menu-item--left .tooltip__text {
+    padding-right: $menu-item-size + $padding--small;
+    padding-left: $padding--default;
+    transform: translateX(100%);
+    transform-origin: right;
+  }
+  .menu-item.menu-item--right .tooltip__text {
+    padding-left: $menu-item-size + $padding--small;
+    padding-right: $padding--default;
+    transform: translateX(-100%);
+    transform-origin: left;
+  }
+  .menu-item:hover .tooltip__text {
+    transform: translateX(0);
+  }
+}
+
+[theme="dark"] {
+  .tooltip__text {
+    color: $color-white !important;
+    background-color: $tooltip-background-color--dark !important;
+  }
+}
+
+.menu-item__icon {
+  background-clip: content-box !important;
+  color: $color-black;
+  background-color: $menu-icon-background-color--light;
+  border: 3px solid transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $menu-item-size;
+  height: $menu-item-size;
+  border-radius: $menu-item-size;
+}
+.menu-item--active .menu-item__icon {
+  background-color: $menu-icon-background-color--dark;
+  color: $color-white;
+}
+.menu-item__icon:nth-of-type(2) {
+  visibility: hidden;
+}
+.menu-item--active:hover,
+.menu-item--active:enabled:active {
+  .menu-item__icon:nth-of-type(1) {
+    visibility: hidden;
+  }
+  .menu-item__icon:nth-of-type(2) {
+    visibility: visible;
+  }
+}
+
+@media #{$tablet} {
+  .menu-item .menu-item__icon {
+    transition: border-color 0ms linear 150ms;
+  }
+  .menu-item:hover .menu-item__icon {
+    border-color: $tooltip-background-color--light;
+    transition: border-color 0ms linear 0ms;
+  }
+}
+
+[theme="dark"] {
+  .menu-item__icon {
+    color: $color-white;
+    background: $menu-icon-background-color--dark;
+  }
+  .menu-item--active .menu-item__icon {
+    background-color: $menu-icon-background-color--light;
+    color: $color-black;
+  }
+  .menu-item:hover .menu-item__icon {
+    border-color: $tooltip-background-color--dark !important;
+  }
+}

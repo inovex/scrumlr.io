@@ -58,7 +58,7 @@ $note__author-image-size: 26px;
 }
 
 .note:focus-within,
-.note:focus {
+.note:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 .note:hover {
@@ -72,7 +72,7 @@ $note__author-image-size: 26px;
   border: 2px solid var(--accent-color);
 }
 
-.note:focus::before {
+.note:focus-visible::before {
   content: "";
   display: block;
   position: absolute;

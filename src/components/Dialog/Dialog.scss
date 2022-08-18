@@ -78,13 +78,14 @@
   background: $color-white;
   cursor: pointer;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:hover {
     background-color: rgba(var(--accent-color-rgb), 0.1);
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 1);
   }
 
   > label:first-of-type {

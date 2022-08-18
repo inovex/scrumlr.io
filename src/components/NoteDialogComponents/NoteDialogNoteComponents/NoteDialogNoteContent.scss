@@ -26,7 +26,7 @@
 
 .note-dialog__note-content__text[contentEditable] {
   &:hover,
-  &:focus {
+  &:focus-visible {
     border-color: rgba(var(--accent-color-rgb), 0.3);
   }
 }

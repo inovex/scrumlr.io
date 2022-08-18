@@ -13,12 +13,26 @@
   padding: $padding--default;
 }
 
+.login-board__form a {
+  outline: none;
+
+  svg {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 2px;
+  }
+
+  &:focus-visible svg {
+    border: 1px solid $color-backlog-blue;
+  }
+}
+
 .login-board__logo {
   margin-bottom: 1.5em;
-  transition: all 0.16s ease-out;
+  transition: all 0.08s ease-out;
 
   &:hover {
-    filter: drop-shadow(4px 4px 4px $color-middle-gray);
+    filter: $brighten--strongly;
   }
 }
 
@@ -86,6 +100,10 @@
   position: relative;
   display: block;
   padding-left: 1.5em;
+
+  a:focus-visible {
+    text-decoration: underline;
+  }
 }
 
 // checkbox border
@@ -111,7 +129,7 @@
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
 }
 
-.login-board__terms:focus .login-board__terms-label::before {
+.login-board__checkbox:focus-visible + .login-board__terms-label::before {
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
@@ -155,20 +173,17 @@
     background: #1a2232;
   }
 
-  .login-board__logo:hover {
-    filter: drop-shadow(4px 4px 4px $color-black);
-  }
-
   .login-board__terms:hover .login-board__terms-label::before {
     box-shadow: 0 0 0 4px rgba($color-white, 0.2);
   }
 
-  .login-board__terms:focus .login-board__terms-label::before {
+  .login-board__terms:focus-visible.login-board__terms-label::before {
     box-shadow: 0 0 0 4px rgba($color-white, 0.4);
   }
 
   @media #{$tablet} {
-    .login-board__form-wrapper {
+    .login-board__form-wrapper,
+    .login-board__divider::after {
       background: $color-dark-two;
     }
   }

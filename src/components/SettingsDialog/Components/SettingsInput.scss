@@ -11,13 +11,12 @@
     background-color: $color-white;
     border: none;
     outline: none;
-    position: absolute;
     padding: 0 $padding--medium;
     font-size: $text-size--medium;
     font-weight: bold;
     padding-top: 10px;
 
-    &:focus,
+    &:focus-visible,
     &:hover {
       background-color: rgba(var(--accent-color-rgb), 0.1);
     }
@@ -27,7 +26,7 @@
       background-color: $color-white;
     }
 
-    &:focus ~ label,
+    &:focus-visible ~ label,
     &:not(.settings-input__hidden-placeholder) ~ label,
     &:not(:placeholder-shown) ~ label {
       margin: 0 $margin--medium;
@@ -39,7 +38,6 @@
 
   label {
     margin: $margin--default $margin--medium;
-    z-index: 1;
     position: absolute;
     transition: all 0.08s ease-out;
     cursor: text;
@@ -65,6 +63,13 @@
     pointer-events: initial;
     height: 100%;
     aspect-ratio: 1 / 1;
+    border-radius: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  &:focus-visible * {
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5);
   }
 }
 

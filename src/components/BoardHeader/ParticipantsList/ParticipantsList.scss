@@ -75,7 +75,7 @@
     opacity: 1;
   }
 
-  &:focus {
+  &:focus-visible {
     opacity: 1;
     outline: none;
     border-bottom: 1px solid $color-white;

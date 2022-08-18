@@ -17,6 +17,8 @@ exports[`Appearance should render all Settings correctly 1`] = `
     class="appearance-container"
   >
     <button
+      aria-expanded="false"
+      aria-haspopup="listbox"
       class="settings-option-button appearance-settings_language-dropdown"
       type="button"
     >
@@ -46,6 +48,8 @@ exports[`Appearance should render all Settings correctly 1`] = `
       </div>
     </button>
     <button
+      aria-expanded="false"
+      aria-haspopup="listbox"
       class="settings-option-button appearance-settings_language-dropdown"
       type="button"
     >
