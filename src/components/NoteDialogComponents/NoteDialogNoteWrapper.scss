@@ -29,6 +29,12 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
   margin-bottom: 0;
 }
 
+@media #{$smartphone} {
+  .note-dialog__scrollbar {
+    padding-left: 0;
+  }
+}
+
 [theme="dark"] {
   .note-dialog__scrollbar {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;

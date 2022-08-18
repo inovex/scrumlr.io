@@ -21,7 +21,7 @@
       display: block;
       height: 6px;
       background: var(--accent-color);
-      border-radius: 64px;
+      border-radius: $border-radius--round;
       margin-top: $margin--default;
     }
   }

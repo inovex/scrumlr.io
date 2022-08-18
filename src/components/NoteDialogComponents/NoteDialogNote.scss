@@ -17,20 +17,19 @@
   list-style-type: none;
   z-index: $note-dialog-z-index;
   min-width: calc(240px);
-  width: calc(100vw - 36px);
+  width: 100vw;
   max-width: 380px;
 }
 
 @media #{$tablet} {
   .note-dialog__note {
     max-width: 415px;
-    width: calc(100vw - 32px);
   }
 }
 
 @media #{$smartphone} {
   .note-dialog__note {
-    width: calc(100vw - 64px);
+    width: calc(100vw - 5 * $column__border-width);
   }
 }
 

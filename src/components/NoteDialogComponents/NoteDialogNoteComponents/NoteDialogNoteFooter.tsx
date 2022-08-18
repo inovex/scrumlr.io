@@ -15,10 +15,6 @@ type NoteDialogNoteFooterProps = {
   avatar?: AvataaarProps;
   authorName: string;
   noteId: string;
-  /* parentId?: string;
-  onDeleteOfParent: () => void;
-  onClose: () => void;
-  showUnstackButton: boolean; */
   viewer: Participant;
 };
 

@@ -51,7 +51,7 @@ $stack-view-top-margin: 64px;
 
 .stack-view__parent-note {
   margin: 0;
-  width: calc(100vw - 36px);
+  width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
   height: 208px;
   font-size: $text-size--large;
@@ -62,7 +62,7 @@ $stack-view-top-margin: 64px;
   }
 
   .vote-button-add {
-    margin: 0 0 0 8px;
+    margin: 0 0 0 $margin--small;
   }
 }
 
