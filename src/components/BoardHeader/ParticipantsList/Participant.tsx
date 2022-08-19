@@ -4,7 +4,6 @@ import {Participant as ParticipantModel} from "types/participant";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import "./Participant.scss";
-import {TabIndex} from "constants/tabIndex";
 import {useDispatch} from "react-redux";
 
 interface ParticipantProps {
@@ -29,7 +28,7 @@ export const Participant = ({participant}: ParticipantProps) => {
   }
 
   return (
-    <li tabIndex={TabIndex.default} className="participant">
+    <li className="participant">
       <figure className="participant__avatar-and-name" aria-roledescription="participant">
         <UserAvatar
           ready={participant.ready}
@@ -52,7 +51,6 @@ export const Participant = ({participant}: ParticipantProps) => {
           onToggle={(val: "participant" | "moderator") => {
             dispatch(Actions.changePermission(participant!.user.id, val === "moderator"));
           }}
-          tabIndex={TabIndex.default}
         />
       )}
     </li>
