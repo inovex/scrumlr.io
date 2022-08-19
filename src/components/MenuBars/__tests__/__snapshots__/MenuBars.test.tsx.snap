@@ -13,28 +13,28 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.markAsDone"
-          class="menu-item menu-item--right"
+          class="tooltip-button tooltip-button--right"
           tabindex="300"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               MenuBars.markAsDone
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-check.svg
           </svg>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-close.svg
           </svg>
@@ -43,28 +43,28 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.raiseHand"
-          class="menu-item menu-item--right"
+          class="tooltip-button tooltip-button--right"
           tabindex="301"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               MenuBars.raiseHand
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-hand.svg
           </svg>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-close.svg
           </svg>
@@ -73,24 +73,30 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="MenuBars.settings"
-          class="menu-item menu-item--right"
+          class="tooltip-button tooltip-button--right"
           tabindex="302"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               MenuBars.settings
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-settings.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
           </svg>
         </button>
       </li>
@@ -116,76 +122,88 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="Timer"
-          class="menu-item menu-item--left"
+          class="tooltip-button tooltip-button--left"
           tabindex="400"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               Timer
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-timer.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
           </svg>
         </button>
       </li>
       <li>
         <button
           aria-label="Voting"
-          class="menu-item menu-item--left"
+          class="tooltip-button tooltip-button--left"
           tabindex="401"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               Voting
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-vote.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
           </svg>
         </button>
       </li>
       <li>
         <button
           aria-label="MenuBars.startFocusMode"
-          class="menu-item menu-item--left"
+          class="tooltip-button tooltip-button--left"
           tabindex="402"
         >
           <div
             aria-hidden="true"
-            class="menu-item__tooltip"
+            class="tooltip-button__tooltip"
           >
             <span
-              class="tooltip__text"
+              class="tooltip-button__tooltip-text"
             >
               MenuBars.startFocusMode
             </span>
           </div>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-focus.svg
           </svg>
           <svg
             aria-hidden="true"
-            class="menu-item__icon"
+            class="tooltip-button__icon"
           >
             icon-close.svg
           </svg>

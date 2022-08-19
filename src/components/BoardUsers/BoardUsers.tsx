@@ -58,7 +58,7 @@ export const BoardUsers = () => {
               }}
               tabIndex={TabIndex.BoardHeader + 3}
             >
-              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
+              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
             </button>
           </li>
         )}
@@ -78,7 +78,14 @@ export const BoardUsers = () => {
             )}
             {usersToShow.map((participant) => (
               <li key={participant.user.id}>
-                <UserAvatar id={participant.user.id} avatar={participant.user.avatar} ready={participant.ready} raisedHand={participant.raisedHand} name={participant.user.name} />
+                <UserAvatar
+                  id={participant.user.id}
+                  avatar={participant.user.avatar}
+                  ready={participant.ready}
+                  raisedHand={participant.raisedHand}
+                  name={participant.user.name}
+                  className="board-users__avatar"
+                />
               </li>
             ))}
           </button>

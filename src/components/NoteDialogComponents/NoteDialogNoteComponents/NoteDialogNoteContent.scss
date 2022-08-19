@@ -12,17 +12,16 @@
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
-  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
   margin-bottom: $margin--small;
-  padding: $padding--small;
   border: 2px dashed transparent;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
   outline: none;
   resize: none;
   word-wrap: break-word;
+  padding: 0 4px;
 }
 
 .note-dialog__note-content__text[contentEditable] {
