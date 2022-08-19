@@ -2,39 +2,40 @@
 @import "src/components/Note/Note.scss";
 
 .note-dialog__note {
+  --note-footer-height: 28px;
+
+  display: grid;
+  grid-template-columns: 11fr 1fr;
+  grid-template-rows: 4fr 1fr;
+
   margin-bottom: $margin--default;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;
   min-width: calc(240px);
-  width: calc(100vw - 36px);
+  width: 100vw;
   max-width: 380px;
 }
+
+@media #{$tablet} {
+  .note-dialog__note {
+    max-width: 415px;
+  }
+}
+
+@media #{$smartphone} {
+  .note-dialog__note {
+    width: calc(100vw - 5 * $column__border-width);
+  }
+}
+
 [theme="dark"] {
   .note-dialog__note {
     background-color: $color-dark-mode-note;
     box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
   }
-}
-@media #{$tablet} {
-  .note-dialog__note {
-    max-width: 600px;
-    width: calc(100vw - 32px);
-  }
-}
-
-.note-dialog__note--own-card::before {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  width: $note__indicator-width;
-  height: $note__indicator-height;
-  border-radius: 0 $note__indicator-width $note__indicator-width 0;
-  background: var(--accent-color);
 }

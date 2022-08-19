@@ -40,7 +40,7 @@ export const SettingsDialog: VFC = () => {
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)} className="settings-dialog__portal">
-      <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}>
+      <aside className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})} onClick={(e) => e.stopPropagation()}>
         <div className="settings-dialog__sidebar">
           <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
           <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
