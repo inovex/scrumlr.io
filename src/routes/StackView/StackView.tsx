@@ -8,6 +8,7 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 
 export const StackView = () => {
@@ -47,28 +48,28 @@ export const StackView = () => {
   };
 
   return (
-    <Portal onClose={handleClose} className="stack-view__portal" hiddenOverflow centered disabledPadding>
+    <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
+        <NoteDialogComponents.Note
+          key={noteId}
+          noteId={noteId!}
+          text={note!.text}
+          authorId={note!.author}
+          avatar={author!.user.avatar}
+          authorName={authorName}
+          showAuthors={showAuthors}
+          onClose={handleClose}
+          onDeleteOfParent={handleClose}
+          showUnstackButton={false}
+          viewer={viewer}
+          className="stack-view__parent-note"
+        />
         <NoteDialogComponents.Wrapper>
-          <NoteDialogComponents.Note
-            key={noteId}
-            noteId={noteId}
-            text={note!.text}
-            authorId={note!.author}
-            avatar={author!.user.avatar}
-            authorName={authorName}
-            showAuthors={showAuthors}
-            onClose={handleClose}
-            onDeleteOfParent={handleClose}
-            showUnstackButton={false}
-            viewer={viewer}
-          />
           {stackedNotes.map((n) => (
             <NoteDialogComponents.Note
               key={n.id}
               noteId={n.id}
-              parentId={noteId}
               text={n.text}
               authorId={n.author}
               avatar={n.avatar}
@@ -82,6 +83,9 @@ export const StackView = () => {
           ))}
         </NoteDialogComponents.Wrapper>
       </div>
+      <button onClick={handleClose} className="stack-view__close-button">
+        <CloseIcon />
+      </button>
     </Portal>
   );
 };

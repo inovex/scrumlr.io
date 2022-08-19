@@ -4,7 +4,6 @@ import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
@@ -21,6 +20,7 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./MenuBars.scss";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
+import {TooltipButton} from "components/TooltipButton/TooltipButton";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -94,29 +94,27 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         <section className="menu user-menu">
           <ul className="menu__items">
             <li>
-              <MenuToggle
+              <TooltipButton
                 direction="right"
-                value={isReady}
-                toggleStartLabel={t("MenuBars.markAsDone")}
-                toggleStopLabel={t("MenuBars.unmarkAsDone")}
+                onClick={toggleReadyState}
+                label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                 icon={CheckIcon}
-                onToggle={toggleReadyState}
+                active={isReady}
                 tabIndex={TabIndex.UserMenu}
               />
             </li>
             <li>
-              <MenuToggle
+              <TooltipButton
                 tabIndex={TabIndex.UserMenu + 1}
                 direction="right"
-                toggleStartLabel={t("MenuBars.raiseHand")}
-                toggleStopLabel={t("MenuBars.lowerHand")}
+                label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
                 icon={RaiseHand}
-                onToggle={toggleRaiseHand}
-                value={raisedHand}
+                onClick={toggleRaiseHand}
+                active={raisedHand}
               />
             </li>
             <li>
-              <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+              <TooltipButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
             </li>
           </ul>
 
@@ -134,19 +132,18 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                <TooltipButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
               </li>
               <li>
-                <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                <TooltipButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
               </li>
               <li>
-                <MenuToggle
-                  value={state.moderation}
+                <TooltipButton
+                  active={state.moderation}
                   direction="left"
-                  toggleStartLabel={t("MenuBars.startFocusMode")}
-                  toggleStopLabel={t("MenuBars.stopFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
                   icon={FocusIcon}
-                  onToggle={toggleModeration}
+                  onClick={toggleModeration}
                   tabIndex={TabIndex.AdminMenu + 2}
                 />
               </li>
@@ -182,33 +179,31 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           >
             {(fabIsExpanded || isReady) && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                <MenuToggle
-                  value={isReady}
+                <TooltipButton
+                  active={isReady}
                   direction="right"
-                  toggleStartLabel={t("MenuBars.markAsDone")}
-                  toggleStopLabel={t("MenuBars.unmarkAsDone")}
+                  label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                   icon={CheckIcon}
-                  onToggle={toggleReadyState}
+                  onClick={toggleReadyState}
                   tabIndex={TabIndex.UserMenu}
                 />
               </li>
             )}
             {(fabIsExpanded || raisedHand) && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                <MenuToggle
-                  value={raisedHand}
+                <TooltipButton
+                  active={raisedHand}
                   direction="right"
-                  toggleStartLabel={t("MenuBars.raiseHand")}
-                  toggleStopLabel={t("MenuBars.lowerHand")}
+                  label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
                   icon={RaiseHand}
-                  onToggle={toggleRaiseHand}
+                  onClick={toggleRaiseHand}
                   tabIndex={TabIndex.UserMenu + 1}
                 />
               </li>
             )}
             {fabIsExpanded && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                <MenuButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
             )}
           </ul>
@@ -223,22 +218,21 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             {fabIsExpanded && (
               <>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                  <TooltipButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                  <TooltipButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
               </>
             )}
             {(fabIsExpanded || state.moderation) && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                <MenuToggle
-                  value={state.moderation}
+                <TooltipButton
+                  active={state.moderation}
                   direction="left"
-                  toggleStartLabel={t("MenuBars.startFocusMode")}
-                  toggleStopLabel={t("MenuBars.stopFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
                   icon={FocusIcon}
-                  onToggle={toggleModeration}
+                  onClick={toggleModeration}
                   tabIndex={TabIndex.AdminMenu + 2}
                 />
               </li>
