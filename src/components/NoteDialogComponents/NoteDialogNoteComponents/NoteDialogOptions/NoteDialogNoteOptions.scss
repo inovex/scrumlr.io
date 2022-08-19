@@ -1,16 +1,13 @@
 @import "src/constants/style";
 
 .note-dialog__note-options {
-  list-style-type: none;
-  position: relative;
-  display: inline-flex;
-  height: $icon--large;
-  width: fit-content;
-  padding: 0;
-  margin: 0;
-  justify-content: space-between;
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  grid-area: 1 / 2 / 2 / 2;
   align-items: flex-end;
-  gap: 4px;
+  gap: 8px;
 }
 
 .note-dialog__note-option {
