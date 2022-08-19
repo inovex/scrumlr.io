@@ -30,6 +30,7 @@ export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
         false
       );
     });
+    API.resetAllReadyStates(action.context.board!);
   }
 
   if (action.type === Action.AbortVoting) {
@@ -42,5 +43,6 @@ export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
         false
       );
     });
+    API.resetAllReadyStates(action.context.board!);
   }
 };
