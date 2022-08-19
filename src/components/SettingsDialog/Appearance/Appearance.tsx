@@ -1,17 +1,28 @@
 import classNames from "classnames";
 import {t} from "i18next";
-import {useState, FocusEvent} from "react";
+import {useEffect, useState, FocusEvent} from "react";
+import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
+import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
+import {ReactComponent as AutoIcon} from "assets/icon-settings.svg";
+import {ReactComponent as LightIcon} from "assets/icon-lightmode.svg";
+import {ReactComponent as DarkIcon} from "assets/icon-darkmode.svg";
 import {SettingsButton} from "../Components/SettingsButton";
 import {LanguageSettingsDropdown} from "../Components/LanguageSettingsDropdown";
 import "../SettingsDialog.scss";
 import "./Appearance.scss";
-import {ThemeSettingsDropdown} from "../Components/ThemeSettingsDropdown";
 
 export const Appearance = () => {
-  // const [syncMode, setSyncMode] = useState(false);
-  // const [showNotifications, setShowNotifications] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
+  useEffect(() => {
+    if (theme === "auto") {
+      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
+      document.documentElement.setAttribute("theme", autoTheme);
+    } else document.documentElement.setAttribute("theme", theme!);
+
+    localStorage.setItem("theme", theme!);
+  }, [theme]);
+
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showThemeDropdown, setShowThemeDropdown] = useState(false);
 
   const handleBlur = (e: FocusEvent<HTMLButtonElement>, callback: () => void) => {
     if (!e.currentTarget.contains(e.relatedTarget)) callback();
@@ -23,34 +34,38 @@ export const Appearance = () => {
         <h2 className="settings-dialog__header-text">{t("SettingsDialog.Appearance")}</h2>
       </header>
       <div className="appearance-container">
-        {/* TODO: turn component to html select component for better accessibility */}
-        <SettingsButton
-          className="appearance-settings_language-dropdown"
-          label={t("Appearance.colorScheme")}
-          aria-haspopup="listbox"
-          aria-expanded={showThemeDropdown}
-          onClick={() => setShowThemeDropdown((o) => !o)}
-          onBlur={(e) => handleBlur(e, () => setShowThemeDropdown(false))}
-        >
-          <ThemeSettingsDropdown showDropdown={showThemeDropdown} setShowDropdown={setShowThemeDropdown} />
-        </SettingsButton>
-        {/* <SettingsButton */}
-        {/*   className="appearance-settings_sync-button" */}
-        {/*   onClick={() => { */}
-        {/*     setSyncMode((prevVal) => !prevVal); */}
-        {/*   }} */}
-        {/* > */}
-        {/*   <div className="appearance-settings_sync-button_label"> */}
-        {/*     <p>{t("Appearance.SyncMode")}</p> */}
-        {/*     <p>{t("Appearance.SyncModeDescription")}</p> */}
-        {/*   </div> */}
-        {/*   <SettingsToggle active={syncMode} /> */}
-        {/* </SettingsButton> */}
-        {/* <SettingsButton  */}
-        {/*   className="appearance-settings_notifications-button"  */}
-        {/*   label={t("Appearance.AllowNotifications")} onClick={() => setShowNotifications(!showNotifications)}> */}
-        {/*   <SettingsToggle active={showNotifications} /> */}
-        {/* </SettingsButton> */}
+        <div className="appearance-settings__theme-container">
+          <span className="appearance-settings__theme-title">{t("Appearance.colorScheme")}</span>
+          <div className="appearance-settings__theme-options">
+            <label htmlFor="auto" className="appearence-settings__theme-option" title={t("Appearance.SyncModeDescription")}>
+              <input id="auto" type="radio" value="auto" name="theme" checked={theme === "auto"} onChange={() => setTheme("auto")} />
+              <div className="appearance-settings__auto-preview">
+                <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
+                <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
+              </div>
+              <span>
+                <AutoIcon className="appearance-settings__theme-icon" />
+                Auto
+              </span>
+            </label>
+            <label htmlFor="light" className="appearence-settings__theme-option">
+              <input id="light" type="radio" value="light" name="theme" checked={theme === "light"} onChange={() => setTheme("light")} />
+              <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
+              <span>
+                <LightIcon className="appearance-settings__theme-icon" />
+                {t("Appearance.colorSchemeLight")}
+              </span>
+            </label>
+            <label htmlFor="dark" className="appearence-settings__theme-option">
+              <input id="dark" type="radio" value="dark" name="theme" checked={theme === "dark"} onChange={() => setTheme("dark")} />
+              <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
+              <span>
+                <DarkIcon className="appearance-settings__theme-icon" />
+                {t("Appearance.colorSchemeDark")}
+              </span>
+            </label>
+          </div>
+        </div>
         <SettingsButton
           className="appearance-settings_language-dropdown"
           label={t("Appearance.Language")}
