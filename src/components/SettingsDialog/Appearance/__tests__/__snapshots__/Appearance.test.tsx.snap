@@ -16,37 +16,98 @@ exports[`Appearance should render all Settings correctly 1`] = `
   <div
     class="appearance-container"
   >
-    <button
-      aria-expanded="false"
-      aria-haspopup="listbox"
-      class="settings-option-button appearance-settings_language-dropdown"
-      type="button"
+    <div
+      class="appearance-settings__theme-container"
     >
       <span
-        class="settings-option-button__label"
+        class="appearance-settings__theme-title"
       >
         Appearance.colorScheme
       </span>
       <div
-        class="settings-dropdown"
+        class="appearance-settings__theme-options"
       >
-        <svg
-          class="settings-dropdown-flag"
+        <label
+          class="appearence-settings__theme-option"
+          for="auto"
+          title="Appearance.SyncModeDescription"
         >
-          icon-lightmode.svg
-        </svg>
-        <span
-          class="settings-dropdown-button"
+          <input
+            checked=""
+            id="auto"
+            name="theme"
+            type="radio"
+            value="auto"
+          />
+          <div
+            class="appearance-settings__auto-preview"
+          >
+            <img
+              alt="Appearance.colorScheme Auto"
+              src="theme-preview-light.svg"
+            />
+            <img
+              alt="Appearance.colorScheme Auto"
+              src="theme-preview-dark.svg"
+            />
+          </div>
+          <span>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-settings.svg
+            </svg>
+            Auto
+          </span>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="light"
         >
-          Appearance.colorSchemeLight
-        </span>
-        <svg
-          class="settings-dropdown-icon"
+          <input
+            id="light"
+            name="theme"
+            type="radio"
+            value="light"
+          />
+          <img
+            alt="Appearance.colorScheme Appearance.colorSchemeLight"
+            src="theme-preview-light.svg"
+          />
+          <span>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-lightmode.svg
+            </svg>
+            Appearance.colorSchemeLight
+          </span>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="dark"
         >
-          icon-arrow-next.svg
-        </svg>
+          <input
+            id="dark"
+            name="theme"
+            type="radio"
+            value="dark"
+          />
+          <img
+            alt="Appearance.colorScheme Appearance.colorSchemeDark"
+            src="theme-preview-dark.svg"
+          />
+          <span>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-darkmode.svg
+            </svg>
+            Appearance.colorSchemeDark
+          </span>
+        </label>
       </div>
-    </button>
+    </div>
     <button
       aria-expanded="false"
       aria-haspopup="listbox"
