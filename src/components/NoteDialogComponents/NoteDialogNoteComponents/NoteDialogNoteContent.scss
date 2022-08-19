@@ -22,9 +22,10 @@
   resize: none;
   word-wrap: break-word;
   padding: 0 4px;
+  font-size: $text-size--large;
 }
 
-.note-dialog__note-content__text[contentEditable] {
+.note-dialog__note-content__text:not(:disabled) {
   &:hover,
   &:focus-visible {
     border-color: rgba(var(--accent-color-rgb), 0.3);
