@@ -1,10 +1,12 @@
 @import "constants/style";
 
-$stack-view-top-margin: 100px;
+$stack-view-top-margin: 64px;
 
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
+  box-shadow: inset 0 0 0 $column__border-width var(--accent-color);
+  background: rgba(var(--accent-color-rgb), 0.42);
 }
 
 .stack-view__portal-moderation-visible {
@@ -13,8 +15,61 @@ $stack-view-top-margin: 100px;
 
 .stack-view {
   margin-top: $stack-view-top-margin;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
 }
 
 .stack-view__disabled-click {
   pointer-events: none;
+}
+
+.stack-view__close-button {
+  all: unset;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: $margin--default;
+  cursor: pointer;
+  width: 42px;
+  color: $color-white;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    transform: scale(1.3);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    color: var(--accent-color);
+  }
+}
+
+.stack-view__parent-note {
+  margin: 0;
+  width: calc(100vw - 3 * $column__border-width);
+  max-width: 700px;
+  height: 208px;
+  font-size: $text-size--large;
+  --note-footer-height: 36px;
+
+  .note-dialog__note-content__text {
+    line-height: $line-height--large;
+  }
+
+  .vote-button-add {
+    margin: 0 0 0 $margin--small;
+  }
+}
+
+[theme="dark"] {
+  .stack-view__portal {
+    backdrop-filter: blur(10px) brightness(0.24) saturate(0);
+    box-shadow: inset 0 0 0 $column__border-width var(--accent-color--dark);
+    background: rgba(var(--accent-color-rgb), 0.1);
+  }
 }

@@ -21,7 +21,8 @@ export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onC
 
   return (
     <Portal onClose={onClose}>
-      <div className="cookie-policy">
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div className="cookie-policy" onClick={(e) => e.stopPropagation()}>
         <div className="cookie-policy__title">
           <h1>{t("CookiePolicy.title")}</h1>
         </div>

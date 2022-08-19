@@ -71,6 +71,7 @@ export const BoardUsers = () => {
                     ready={participant.ready}
                     raisedHand={participant.raisedHand}
                     name={participant.user.name}
+                    className="board-users__avatar"
                   />
                 </li>
               ))}
@@ -84,7 +85,7 @@ export const BoardUsers = () => {
                 navigate("settings/profile");
               }}
             >
-              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
+              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
             </button>
           </li>
         )}

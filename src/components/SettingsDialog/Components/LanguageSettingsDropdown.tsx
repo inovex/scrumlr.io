@@ -18,8 +18,6 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language).then(() => {
       document.documentElement.lang = i18n.language;
-      // eslint-disable-next-line no-restricted-globals
-      location.reload();
     });
   };
 
@@ -77,7 +75,7 @@ export const LanguageSettingsDropdown: VFC<LanguageSettingsDropdownProps> = ({sh
                 changeLanguage("de");
                 setCurrentlanguage("de");
               }}
-              onKeyDown={handleKeyDown("en")}
+              onKeyDown={handleKeyDown("de")}
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
             >
