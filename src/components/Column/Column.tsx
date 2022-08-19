@@ -190,11 +190,11 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
           <NoteInput columnIndex={index} columnId={id} tabIndex={tabIndex} maxNoteLength={MAX_NOTE_LENGTH} />
         </div>
         <div tabIndex={TabIndex.disabled} className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
-          <ul className="column__note-list">
-            {state.notes.map((note, noteIndex) => (
-              <Note key={note} noteId={note} tabIndex={TabIndex.Note + (tabIndex! - TabIndex.Column) * TabIndex.Note + noteIndex * 3} viewer={state.viewer} />
+          <div className="column__note-list">
+            {state.notes.map((note) => (
+              <Note key={note} noteId={note} viewer={state.viewer} />
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </section>
