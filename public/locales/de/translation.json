@@ -223,7 +223,10 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
-    "allParticipantsDone": "Alle Teilnehmer sind fertig."
+    "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "moderatorResetReadyStates": "Alle Teilnehmer auf nicht fertig setzen?",
+    "moderatorResetReadyStatesButton": "Zurücksetzen!"
+
   },
   "Language": {
     "german": "Deutsch",

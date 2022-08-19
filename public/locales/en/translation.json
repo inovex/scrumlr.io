@@ -223,7 +223,9 @@
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
-    "allParticipantsDone": "All participants are ready."
+    "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Set all participants to not ready?",
+    "moderatorResetReadyStatesButton": "Reset!"
   },
   "Language": {
     "german": "German",
