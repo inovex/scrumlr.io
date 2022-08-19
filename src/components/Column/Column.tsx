@@ -177,7 +177,6 @@ export const Column = ({id, name, color, visible, index, tabIndex}: ColumnProps)
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
-                tabIndex={tabIndex! + 4}
                 id={id}
                 name={name}
                 color={color}
