@@ -134,31 +134,3 @@ func (s *Server) resetAllReadyStates(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, sessions)
 }
-
-func (s *Server) testUpdateAll(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	desiredUserState := true
-	boardId, success := r.Context().Value("Board").(uuid.UUID)
-	if !success {
-		render.Status(r, http.StatusBadRequest)
-		render.Respond(w, r, "unable to find board id")
-		return
-	}
-
-	var body dto.BoardSessionsUpdateRequest
-
-	body.Ready = &desiredUserState
-	body.RaisedHand = &desiredUserState
-	body.Board = boardId
-
-	sessions, err := s.sessions.UpdateAll(r.Context(), body)
-	if err != nil {
-		common.Throw(w, r, err)
-		log.Errorw("Test function of UpdateAll threw an error: ", "err", err)
-		return
-	}
-
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, sessions)
-
-}
