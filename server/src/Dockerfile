@@ -1,15 +1,11 @@
 # Build application
-FROM golang:1.17 as build
+FROM golang:1.17
 WORKDIR /go/src/github.com/inovex/scrumlr.io/
 COPY ./ .
-RUN GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -a -o main
-
-# Remote Delve Debugging
-FROM build as debug
-RUN go get github.com/go-delve/delve/cmd/dlv
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -o main
 
 # Start application
-FROM alpine:3.15 as prod
+FROM alpine:3.15
 
 RUN mkdir /app
 WORKDIR /app
