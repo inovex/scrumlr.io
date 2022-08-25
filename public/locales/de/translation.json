@@ -224,7 +224,7 @@
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
     "allParticipantsDone": "Alle Teilnehmer sind fertig.",
-    "moderatorResetReadyStates": "Alle Teilnehmer auf nicht fertig setzen?",
+    "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!"
 
   },
