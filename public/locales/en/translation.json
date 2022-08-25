@@ -224,7 +224,7 @@
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
     "allParticipantsDone": "All participants are ready.",
-    "moderatorResetReadyStates": "Set all participants to not ready?",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!"
   },
   "Language": {
