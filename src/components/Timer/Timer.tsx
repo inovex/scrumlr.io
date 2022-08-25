@@ -61,11 +61,10 @@ export const Timer = (props: TimerProps) => {
       if (isModerator) {
         Toast.info(
           <div>
-            <div>{t("Toast.moderatorResetReadyStates")}</div>
-            <br />
-            <div>
-              <Button onClick={() => API.updateReadyStates(boardId, false)}>{t("Toast.moderatorResetReadyStatesButton")}</Button>
-            </div>
+            {t("Toast.moderatorResetReadyStates")}
+            <Button style={{marginTop: "1rem"}} onClick={() => API.updateReadyStates(boardId, false)}>
+              {t("Toast.moderatorResetReadyStatesButton")}
+            </Button>
           </div>,
           false
         );
