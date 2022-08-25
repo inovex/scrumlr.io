@@ -39,8 +39,7 @@ export const Timer = (props: TimerProps) => {
   const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
-  // Better way to get boardId? Please help :)
-  const boardId = `${useAppSelector((state) => state.board.data?.id)}`;
+  const boardId = useAppSelector((state) => state.board.data!.id);
 
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
@@ -63,7 +62,10 @@ export const Timer = (props: TimerProps) => {
         Toast.info(
           <div>
             <div>{t("Toast.moderatorResetReadyStates")}</div>
-            <Button onClick={() => API.resetAllReadyStates(boardId)}>{t("Toast.moderatorResetReadyStatesButton")}</Button>
+            <br />
+            <div>
+              <Button onClick={() => API.updateReadyStates(boardId, false)}>{t("Toast.moderatorResetReadyStatesButton")}</Button>
+            </div>
           </div>,
           false
         );
