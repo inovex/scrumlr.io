@@ -150,7 +150,6 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
-			r.With(s.BoardModeratorContext).Put("/resetAllReadyStates", s.resetAllReadyStates)
 
 			s.initBoardSessionRequestResources(r)
 			s.initBoardSessionResources(r)
@@ -198,6 +197,8 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
 
 		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
+
+		r.With(s.BoardModeratorContext).Put("/ready", s.updateReadyStates)
 
 		r.Route("/{session}", func(r chi.Router) {
 			r.Use(s.BoardParticipantContext)
