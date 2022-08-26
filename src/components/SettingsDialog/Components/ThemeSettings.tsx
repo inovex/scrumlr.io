@@ -23,31 +23,29 @@ export const ThemeSettings = () => {
       <span className="appearance-settings__theme-title">{t("Appearance.colorScheme")}</span>
       <form className="appearance-settings__theme-options">
         <label htmlFor="auto" className="appearence-settings__theme-option" title={t("Appearance.SyncModeDescription")}>
-          <input id="auto" type="radio" value="auto" name="theme" checked={theme === "auto"} onChange={() => setTheme("auto")} />
-          <div className="appearance-settings__auto-preview">
-            <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
-            <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
-          </div>
-          <span>
+          <input id="auto" type="radio" value="auto" name="themeAuto" checked={theme === "auto"} onChange={() => setTheme("auto")} />
+          <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
+          <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
+          <p>
             <AutoIcon className="appearance-settings__theme-icon" />
-            Auto
-          </span>
+            <span>Auto</span>
+          </p>
         </label>
         <label htmlFor="light" className="appearence-settings__theme-option">
-          <input id="light" type="radio" value="light" name="theme" checked={theme === "light"} onChange={() => setTheme("light")} />
+          <input id="light" type="radio" value="light" name="themeLight" checked={theme === "light"} onChange={() => setTheme("light")} />
           <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
-          <span>
+          <p>
             <LightIcon className="appearance-settings__theme-icon" />
-            {t("Appearance.colorSchemeLight")}
-          </span>
+            <span>{t("Appearance.colorSchemeLight")}</span>
+          </p>
         </label>
         <label htmlFor="dark" className="appearence-settings__theme-option">
-          <input id="dark" type="radio" value="dark" name="theme" checked={theme === "dark"} onChange={() => setTheme("dark")} />
+          <input id="dark" type="radio" value="dark" name="themeDark" checked={theme === "dark"} onChange={() => setTheme("dark")} />
           <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
-          <span>
+          <p>
             <DarkIcon className="appearance-settings__theme-icon" />
-            {t("Appearance.colorSchemeDark")}
-          </span>
+            <span>{t("Appearance.colorSchemeDark")}</span>
+          </p>
         </label>
       </form>
     </div>

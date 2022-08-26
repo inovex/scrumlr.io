@@ -13,19 +13,20 @@
 }
 
 .appearance-settings__theme-options {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
 }
 
 .appearence-settings__theme-option {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
   cursor: pointer;
-
   transition: all 0.08s ease-out;
+  min-width: 0;
+  overflow-x: hidden;
 
   &:hover {
     color: var(--accent-color);
@@ -37,46 +38,65 @@
     height: 0;
     opacity: 0;
 
-    &:checked + img,
-    &:checked + .appearance-settings__auto-preview > img {
-      box-shadow: 0 0 0 2px var(--accent-color);
+    &:checked {
+      + img {
+        box-shadow: 0 0 0 2px var(--accent-color);
+      }
+      ~ p {
+        background-color: var(--accent-color);
+        color: $color-white;
+      }
     }
 
-    &:focus-visible + img {
-      box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5);
+    &:focus-within {
+      + img {
+        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+      }
+      ~ p {
+        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+      }
     }
   }
 
-  > img,
-  .appearance-settings__auto-preview > img {
+  > img {
     border-radius: 4px;
+    margin: calc($margin--small / 2);
+
+    &:not(:first-of-type) {
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: 4px auto;
+      position: absolute;
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+      z-index: 1;
+    }
   }
 
-  > span {
+  > p {
+    margin-bottom: calc($margin--small / 2);
+    margin-top: $margin--small;
+    padding: 0 2px;
     display: flex;
-    flex-direction: row;
-    gap: 4px;
+    max-width: 100%;
     line-height: $line-height--medium;
     font-weight: bold;
-    margin-top: 4px;
-  }
-}
+    border-radius: $border-radius--round;
 
-.appearance-settings__auto-preview {
-  position: relative;
-  border-radius: 4px;
-  display: contents;
-
-  > img:first-child {
-    position: absolute;
-    clip-path: polygon(0 0, 0 100%, 100% 0, 100% 0);
-    z-index: 1;
+    > span {
+      padding-right: 6px; // equalize the space to the paragraph
+      vertical-align: middle;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 }
 
 .appearance-settings__theme-icon {
   height: 20px;
   width: 20px;
+  flex: 0 0 auto;
 }
 
 [theme="dark"] {
@@ -98,6 +118,6 @@
 
 @media screen and (max-width: 380px) {
   .appearance-settings__theme-options {
-    flex-direction: column;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
