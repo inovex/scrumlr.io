@@ -23,7 +23,7 @@ require (
 	github.com/uptrace/bun/dialect/pgdialect v1.1.7
 	github.com/uptrace/bun/extra/bundebug v1.1.7
 	github.com/urfave/cli/v2 v2.11.2
-	go.uber.org/zap v1.22.0
+	go.uber.org/zap v1.23.0
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 )
 
