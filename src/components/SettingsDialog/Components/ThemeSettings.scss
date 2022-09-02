@@ -33,7 +33,9 @@
 
   > input {
     position: absolute;
-    display: none;
+    width: 0;
+    height: 0;
+    opacity: 0;
 
     &:checked {
       + img {
