@@ -15,7 +15,7 @@
 .appearance-settings__theme-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+  gap: 16px;
 }
 
 .appearence-settings__theme-option {
@@ -26,7 +26,6 @@
   cursor: pointer;
   transition: all 0.08s ease-out;
   min-width: 0;
-  overflow-x: hidden;
 
   &:hover {
     color: var(--accent-color);
@@ -34,9 +33,7 @@
 
   > input {
     position: absolute;
-    width: 0;
-    height: 0;
-    opacity: 0;
+    display: none;
 
     &:checked {
       + img {
@@ -60,27 +57,28 @@
 
   > img {
     border-radius: 4px;
-    margin: calc($margin--small / 2);
+    width: 100%;
 
     &:not(:first-of-type) {
-      top: 0;
       left: 0;
       right: 0;
-      margin: 4px auto;
+      margin: auto;
       position: absolute;
       clip-path: polygon(100% 0, 0 100%, 100% 100%);
-      z-index: 1;
+      z-index: 0;
     }
   }
 
   > p {
-    margin-bottom: calc($margin--small / 2);
+    margin-bottom: 0;
     margin-top: $margin--small;
     display: flex;
     max-width: 100%;
     line-height: $line-height--medium;
     font-weight: bold;
     border-radius: $border-radius--round;
+    gap: 4px;
+    align-items: center;
 
     > span {
       padding-right: 6px; // equalize the space to the paragraph
@@ -93,8 +91,8 @@
 }
 
 .appearance-settings__theme-icon {
-  height: 20px;
-  width: 20px;
+  height: $icon--medium;
+  width: $icon--medium;
   flex: 0 0 auto;
 }
 
@@ -106,12 +104,6 @@
 
   .appearence-settings__theme-option:hover {
     color: var(--accent-color--desaturated-light);
-  }
-}
-
-@media screen and (max-width: 920px) {
-  .appearance-settings__theme-options img {
-    transform: scale(0.8);
   }
 }
 
