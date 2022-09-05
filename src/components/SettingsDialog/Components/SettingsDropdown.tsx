@@ -47,8 +47,8 @@ export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, curr
             Icon = item.icon!;
 
             return (
-              <li className="settings-dropdown__item">
-                <button className="settings-dropdown__button" key={item.text} onClick={() => handleClick(item.callback)}>
+              <li className="settings-dropdown__item" key={item.text}>
+                <button className="settings-dropdown__button" onClick={() => handleClick(item.callback)}>
                   {Icon && <Icon className="settings-dropdown__item-icon" />}
                   <span>{item.text}</span>
                 </button>
