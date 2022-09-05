@@ -12,6 +12,7 @@
   z-index: $backdrop-z-index;
   background: $color-white;
   padding: 0px 2rem;
+  border-radius: 8px;
 }
 
 @media screen and (max-width: 920px) {
