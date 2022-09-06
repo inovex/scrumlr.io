@@ -63,6 +63,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps
       />
       <button
         type="submit"
+        tabIndex={-1} // skip focus
         className="note-input__add-button"
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault();
