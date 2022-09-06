@@ -148,40 +148,6 @@
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 }
 
-.column__header-toggle {
-  display: flex;
-  align-items: center;
-}
-.column__header-toggle:first-of-type {
-  margin-left: auto;
-}
-
-.column__header-toggle-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-}
-.column__header-toggle-button:focus-visible > .column__header-toggle-button-icon,
-.column__header-toggle-button:hover > .column__header-toggle-button-icon {
-  animation: none;
-  color: var(--accent-color);
-}
-
-.column__header-toggle-button-icon {
-  color: $color-black;
-  width: 24px;
-}
-.column__edit-icon {
-  width: 20px;
-}
-.column__submit-icon {
-  width: 28px;
-}
-.column__reset-icon {
-  width: 32px;
-}
-
 [theme="dark"] {
   .column__header-text {
     color: $color-white;
@@ -191,20 +157,16 @@
     color: $color-middle-gray;
   }
 
-  .column__header-toggle-button-icon {
-    color: $color-white;
-  }
-
   .column__notes-wrapper {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
 
 .column__header-hidden-icon {
-  height: 20px;
-  width: 20px;
-  min-width: 20px;
-  min-height: 20px;
+  height: $icon--medium;
+  width: $icon--medium;
+  min-width: $icon--medium;
+  min-height: $icon--medium;
   margin: 0 $margin--small 0 0;
   color: $color-middle-gray;
   cursor: pointer;
