@@ -11,7 +11,6 @@ type NoteDialogNoteContentProps = {
   viewer: Participant;
 };
 
-/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
   const dispatch = useDispatch();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
