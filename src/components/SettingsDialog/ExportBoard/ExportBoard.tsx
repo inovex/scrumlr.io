@@ -72,7 +72,7 @@ export const ExportBoard: VFC = () => {
         />
       </div>
 
-      <ExportHintHiddenColumns columns={columns} />
+      <ExportHintHiddenColumns columns={columns} className="export-board__hint-hidden-columns" />
     </div>
   );
 };
