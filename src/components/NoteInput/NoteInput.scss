@@ -60,8 +60,8 @@ $note-input__input-right: 40px;
 
 .note-input__icon {
   margin-right: $margin--default;
-  width: 20px;
-  height: 20px;
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
   align-self: center;
   transition: all 0.08s ease-out;
