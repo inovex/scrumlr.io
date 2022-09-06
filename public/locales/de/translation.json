@@ -76,6 +76,9 @@
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
     "copyToClipboardSuccess": "Markdown kopiert!"
   },
+  "ExportHint": {
+    "hint": "Achtung: Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+  },
   "PrintView": {
     "Participants": "Teilnehmer",
     "GeneratedOn": "Erstellt auf",

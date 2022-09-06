@@ -1,4 +1,5 @@
 import {FC} from "react";
+import {useTranslation} from "react-i18next";
 import {Column} from "../../../../types/column";
 
 export interface ExportHintHiddenColumnsProps {
@@ -7,12 +8,12 @@ export interface ExportHintHiddenColumnsProps {
 
 export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({columns}) => {
   const hiddenColumns = columns.filter((col) => !col.visible);
+  const {t} = useTranslation();
 
   if (hiddenColumns.length > 0) {
     return (
       <div>
-        <p>Warning: You have hidden columns which will not be exported.</p>
-        <p>Columns:</p>
+        <p>{t("ExportHint.hint")}</p>
         <ul>
           {hiddenColumns.map((hiddenCol) => (
             <li>{hiddenCol.name}</li>

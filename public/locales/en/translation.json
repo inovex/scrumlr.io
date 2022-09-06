@@ -75,7 +75,9 @@
     "openPrintView": "Open print view",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!"
-
+  },
+  "ExportHint": {
+    "hint": "Warning: The following columns are hidden and will not be exported:"
   },
   "PrintView": {
     "Participants": "Participants",
