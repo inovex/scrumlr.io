@@ -175,7 +175,9 @@ export const BoardSettings = () => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                 >
-                  <Toggle active={state.board.showAuthors} />
+                  <div className="board-settings__show-author-value">
+                    <Toggle active={state.board.showAuthors} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -184,7 +186,9 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
-                  <Toggle active={state.board.showNotesOfOtherUsers} />
+                  <div className="board-settings__show-notes-value">
+                    <Toggle active={state.board.showNotesOfOtherUsers} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -193,12 +197,16 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
-                  <Toggle active={state.me?.showHiddenColumns ?? false} />
+                  <div className="board-settings__show-columns-value">
+                    <Toggle active={state.me?.showHiddenColumns ?? false} />
+                  </div>
                 </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
-                <DeleteIcon />
+                <div className="board-settings__delete-value">
+                  <DeleteIcon />
+                </div>
               </SettingsButton>
             </>
           )}
