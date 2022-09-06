@@ -26,13 +26,13 @@ export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, curr
 
   const handleClick = (callback?: DropdownItem["callback"]) => {
     if (callback) callback();
-    setIsOpen(false);
+    setIsOpen(!isOpen);
   };
 
   return (
     // onBlur is not working on webkit due to not focussing the element.
     <div className="settings-dropdown" onBlur={(e) => handleBlur(e)}>
-      <button className="settings-dropdown__button" onClick={() => setIsOpen(!isOpen)} role="combobox" aria-controls="dropdown-list" aria-expanded={isOpen}>
+      <button className="settings-dropdown__button" onClick={() => handleClick()} role="combobox" aria-controls="dropdown-list" aria-expanded={isOpen}>
         <span>{label}</span>
         <p className="settings-dropdown__item--current">
           <Icon className="settings-dropdown__item-icon" />
