@@ -16,7 +16,6 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
-import "../SettingsDialog.scss";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
