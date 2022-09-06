@@ -1,16 +1,28 @@
 import {Component} from "react";
+import {Column} from "../../../../types/column";
 
-export class ExportHintHiddenColumns extends Component {
+export type ExportHintHiddenColumnsProps = {
+  columns: Column[];
+};
+
+export class ExportHintHiddenColumns extends Component<ExportHintHiddenColumnsProps> {
+  hiddenColumns = this.props.columns.filter((col) => !col.visible);
+
   render() {
-    return (
-      <div>
-        Warning: You have hidden columns which will not be exported. Columns:
-        <ul>
-          <li>col1</li>
-          <li>col2</li>
-          <li>col3</li>
-        </ul>
-      </div>
-    );
+    if (this.hiddenColumns.length > 0) {
+      return (
+        <div>
+          <p>Warning: You have hidden columns which will not be exported.</p>
+          <p>Columns:</p>
+          <ul>
+            {this.hiddenColumns.map((hiddenCol) => (
+              <li>{hiddenCol.name}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    } 
+      return null;
+    
   }
 }

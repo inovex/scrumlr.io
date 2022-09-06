@@ -21,6 +21,7 @@ export const ExportBoard: VFC = () => {
 
   const boardId = useAppSelector((state) => state.board.data!.id);
   const boardName = useAppSelector((state) => state.board.data!.name);
+  const columns = useAppSelector((state) => state.columns);
 
   return (
     <div data-testid="export" className="settings-dialog__container">
@@ -71,7 +72,7 @@ export const ExportBoard: VFC = () => {
         />
       </div>
 
-      <ExportHintHiddenColumns />
+      <ExportHintHiddenColumns columns={columns} />
     </div>
   );
 };
