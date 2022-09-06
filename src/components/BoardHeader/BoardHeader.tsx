@@ -8,7 +8,6 @@ import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
@@ -50,7 +49,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         />
       )}
       <header className="board-header">
-        <button tabIndex={TabIndex.BoardHeader} className="board-header__link" onClick={() => setShowConfirmationDialog(true)}>
+        <button className="board-header__link" onClick={() => setShowConfirmationDialog(true)}>
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 
@@ -62,7 +61,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             }}
             aria-haspopup
             aria-pressed={showMenu}
-            tabIndex={TabIndex.BoardHeader + 1}
           >
             <div className="board-header__access-policy-status">
               {
@@ -89,7 +87,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               e.stopPropagation();
               navigate("settings/share");
             }}
-            tabIndex={TabIndex.BoardHeader + 3}
           >
             <ShareIcon />
           </button>
