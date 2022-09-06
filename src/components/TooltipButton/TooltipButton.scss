@@ -185,11 +185,14 @@ $tooltip-button-size: 42px;
 
 [theme="dark"] {
   .tooltip-button {
-    &:hover .tooltip-button__icon {
-      border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
+    &:focus-visible,
+    &:hover {
+      .tooltip-button__icon {
+        border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
+      }
     }
 
-    &:focus-visible {
+    &:focus-visible .tooltip-button__icon {
       outline: 2px solid rgba($color-white, 0.5);
     }
   }
