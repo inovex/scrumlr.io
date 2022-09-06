@@ -6,11 +6,10 @@ import "./RemoveVoteButton.scss";
 
 type RemoveVoteProps = {
   noteId: string;
-  tabIndex: number;
   disabled?: boolean;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, tabIndex, disabled, children}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, children}) => {
   const dispatch = useDispatch();
 
   const deleteVote = () => {
@@ -18,7 +17,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, tabIndex, disable
   };
 
   return (
-    <DotButton tabIndex={tabIndex} className="vote-button-remove" disabled={disabled} onClick={deleteVote}>
+    <DotButton className="vote-button-remove" disabled={disabled} onClick={deleteVote}>
       <span className="vote-button-remove__folded-corner" />
       <span>{children}</span>
     </DotButton>
