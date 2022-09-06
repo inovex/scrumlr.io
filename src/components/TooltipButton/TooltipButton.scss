@@ -113,6 +113,7 @@ $tooltip-button-size: 42px;
       }
     }
 
+    &:focus-visible,
     &:hover {
       .tooltip-button__tooltip {
         max-width: 500px;
@@ -129,6 +130,10 @@ $tooltip-button-size: 42px;
       .tooltip-button__tooltip-text {
         transform: translateX(0);
       }
+    }
+
+    &:focus-visible .tooltip-button__icon {
+      outline: 2px solid rgba($color-black, 0.5);
     }
 
     .tooltip-button__tooltip-text {
