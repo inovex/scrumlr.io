@@ -4,3 +4,9 @@
   margin-top: $margin--default;
   padding: 0 $padding--default 0 $padding--default;
 }
+
+[theme="dark"] {
+  .export-board__hint-hidden-columns {
+    color: $color-white;
+  }
+}
