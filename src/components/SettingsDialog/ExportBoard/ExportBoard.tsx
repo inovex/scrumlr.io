@@ -11,6 +11,7 @@ import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
+import {ExportHintHiddenColumns} from "./ExportHintHiddenColumns";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
 
@@ -69,6 +70,8 @@ export const ExportBoard: VFC = () => {
           data-testid="export-markdown"
         />
       </div>
+
+      <ExportHintHiddenColumns />
     </div>
   );
 };
