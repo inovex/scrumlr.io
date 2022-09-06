@@ -94,22 +94,12 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__scrumlr-logo {
   height: 40px;
   margin: $margin--large;
-
-  &--dark {
-    display: none;
-  }
 }
-
-[theme="dark"] {
-  .settings-dialog__scrumlr-logo {
-    &--light {
-      display: none;
-    }
-
-    &--dark {
-      display: inline;
-    }
-  }
+[theme="light"] .settings-dialog__scrumlr-logo--dark {
+  display: none;
+}
+[theme="dark"] .settings-dialog__scrumlr-logo--light {
+  display: none;
 }
 
 .settings-dialog__navigation {
