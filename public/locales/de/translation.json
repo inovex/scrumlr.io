@@ -74,10 +74,8 @@
     "exportAsCSV": "CSV exportieren",
     "openPrintView": "Druckansicht öffnen",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
-    "copyToClipboardSuccess": "Markdown kopiert!"
-  },
-  "ExportHint": {
-    "hint": "Achtung: Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+    "copyToClipboardSuccess": "Markdown kopiert!",
+    "hintHiddenColumns": "Achtung: Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
   },
   "PrintView": {
     "Participants": "Teilnehmer",

@@ -15,7 +15,7 @@ export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({colum
   if (hiddenColumns.length > 0) {
     return (
       <div className={className}>
-        {t("ExportHint.hint")}
+        {t("ExportBoardOption.hintHiddenColumns")}
         <ul>
           {hiddenColumns.map((hiddenCol) => (
             <li>{hiddenCol.name}</li>
