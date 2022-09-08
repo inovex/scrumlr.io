@@ -63,7 +63,6 @@ $settings__item-height: 48px;
   color: $color-dark-gray;
   gap: $margin--small;
   margin-top: 2px;
-  padding-left: $padding--medium;
   width: 100%;
   height: $settings__item-height;
   border: none;
@@ -71,7 +70,6 @@ $settings__item-height: 48px;
   svg {
     width: $icon--medium;
     height: $icon--medium;
-    margin-right: $margin--medium;
     g,
     line {
       stroke: $color-dark-gray;
