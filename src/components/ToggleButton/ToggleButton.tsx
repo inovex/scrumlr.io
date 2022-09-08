@@ -52,6 +52,7 @@ export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => 
   const isActive = props.value === props.values[1];
 
   return (
+    // aria-disabled instead of disabled so that it is focusable but not editable
     <button aria-disabled={props.disabled} onClick={onClick} className={classNames("toggle-button", props.className)} aria-pressed={isActive}>
       <Toggle active={isActive} disabled={props.disabled} />
     </button>
