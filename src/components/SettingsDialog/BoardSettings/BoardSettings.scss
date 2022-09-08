@@ -256,24 +256,17 @@
   letter-spacing: $letter-spacing--medium;
 }
 
-.board-settings__show-author-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
+.board-settings__show-author,
+.board-settings__show-notes,
+.board-settings__delete,
+.board-settings__show-columns {
+  &-button {
+    justify-content: space-between;
+  }
 
-.board-settings__show-notes-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__show-columns-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__delete-button {
-  justify-content: space-between;
-  padding-right: 24px;
+  &-value {
+    padding-right: $padding--medium;
+  }
 }
 
 .board-settings__delete-button span {
