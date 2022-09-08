@@ -13,7 +13,7 @@ export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({colum
   const hiddenColumns = columns.filter((col) => !col.visible);
   const {t} = useTranslation();
 
-  if (hiddenColumns.length > 0) {
+  if (hiddenColumns.length) {
     return (
       <div className={className}>
         <div className="hint-hidden-columns__info-container">
