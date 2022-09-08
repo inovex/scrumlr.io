@@ -22,7 +22,7 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
   if (action.type === Action.DeleteNote) {
     const sharedNoteId = stateAPI.getState().board.data?.sharedNote;
     const currentNoteId = action.noteId;
-    const moderating = stateAPI.getState().view;
+    const {moderating} = stateAPI.getState().view;
 
     if (sharedNoteId === currentNoteId && !moderating) {
       Toast.error(
