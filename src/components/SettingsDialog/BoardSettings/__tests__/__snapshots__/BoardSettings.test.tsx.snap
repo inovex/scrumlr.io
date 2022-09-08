@@ -109,8 +109,12 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowAuthorOption
           </span>
           <div
-            class="toggle toggle--active"
-          />
+            class="board-settings__show-author-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
         </button>
         <hr
           class="settings-dialog__separator"
@@ -126,8 +130,12 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowOtherUsersNotesOption
           </span>
           <div
-            class="toggle toggle--active"
-          />
+            class="board-settings__show-notes-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
         </button>
         <hr
           class="settings-dialog__separator"
@@ -143,8 +151,12 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowHiddenColumnsOption
           </span>
           <div
-            class="toggle"
-          />
+            class="board-settings__show-columns-value"
+          >
+            <div
+              class="toggle"
+            />
+          </div>
         </button>
       </div>
       <button
@@ -156,9 +168,13 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           BoardSettings.DeleteBoard
         </span>
-        <svg>
-          icon-delete.svg
-        </svg>
+        <div
+          class="board-settings__delete-value"
+        >
+          <svg>
+            icon-delete.svg
+          </svg>
+        </div>
       </button>
     </div>
   </div>
