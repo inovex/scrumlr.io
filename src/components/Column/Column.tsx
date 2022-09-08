@@ -185,11 +185,13 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           </div>
         </div>
         <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
-          <div className="column__note-list">
+          <ul className="column__note-list">
             {state.notes.map((note) => (
-              <Note key={note} noteId={note} viewer={state.viewer} />
+              <li>
+                <Note key={note} noteId={note} viewer={state.viewer} />
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>
