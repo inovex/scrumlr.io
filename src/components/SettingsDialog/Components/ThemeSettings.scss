@@ -109,7 +109,7 @@
   }
 }
 
-@media screen and (max-width: 380px) {
+@media #{$smartphone} {
   .appearance-settings__theme-options {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
