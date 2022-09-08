@@ -75,7 +75,7 @@
     "openPrintView": "Druckansicht öffnen",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
     "copyToClipboardSuccess": "Markdown kopiert!",
-    "hintHiddenColumns": "Achtung: Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
   },
   "PrintView": {
     "Participants": "Teilnehmer",

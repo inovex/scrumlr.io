@@ -1,8 +1,38 @@
 @import "src/constants/style.scss";
 
+$icon-text--gap: 20px;
+$columns-list--padding-left: $icon-text--gap + 50px;
+$list-style-type: "– ";
+
 .export-board__hint-hidden-columns {
-  margin-top: $margin--default;
-  padding: 0 $padding--default 0 $padding--default;
+  margin-top: $margin--large;
+  padding: 0 $padding--large 0 $padding--large;
+
+  font-size: $text-size--medium;
+}
+
+.hint-hidden-columns__info-container {
+  display: flex;
+  align-items: center;
+}
+
+.hint-hidden-columns__info-icon {
+  width: $icon--huge;
+  height: $icon--huge;
+
+  margin-right: $icon-text--gap;
+
+  g g,
+  line {
+    stroke: $color-warning-red;
+  }
+}
+
+.hint-hidden-columns__columns-list {
+  padding-left: $columns-list--padding-left;
+  margin-top: $margin--small;
+
+  list-style-type: $list-style-type;
 }
 
 [theme="dark"] {
