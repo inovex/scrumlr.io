@@ -30,13 +30,19 @@ $list-style-type: "– ";
 
 .hint-hidden-columns__columns-list {
   padding-left: $columns-list--padding-left;
-  margin-top: $margin--small;
-
+  margin-top: 0;
   list-style-type: $list-style-type;
 }
 
 [theme="dark"] {
   .export-board__hint-hidden-columns {
     color: $color-white;
+  }
+}
+
+// change margin responsively, since the text requires three instead of two lines of space in smaller viewports
+@media screen and (min-width: 920px) {
+  .hint-hidden-columns__columns-list {
+    margin-top: -$margin--small;
   }
 }
