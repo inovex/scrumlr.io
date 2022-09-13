@@ -3,19 +3,17 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
   columnId: string;
-  tabIndex?: number;
   maxNoteLength: number;
   columnIndex: number;
 }
 
-export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -61,11 +59,11 @@ export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: Note
             onAddNote();
           }
         }}
-        tabIndex={tabIndex ?? TabIndex.default}
         maxLength={maxNoteLength}
       />
       <button
         type="submit"
+        tabIndex={-1} // skip focus
         className="note-input__add-button"
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault();
