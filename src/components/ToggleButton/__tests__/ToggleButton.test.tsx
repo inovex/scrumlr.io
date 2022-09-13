@@ -22,7 +22,7 @@ describe("ToggleButton", () => {
 
   test("should render correctly with disabled flag", () => {
     const {container} = render(createToggleButton({disabled: true}));
-    expect(container.firstChild).toHaveAttribute("disabled");
+    expect(container.firstChild).toHaveAttribute("aria-disabled");
   });
 
   test("should render correctly with additional classname", () => {
