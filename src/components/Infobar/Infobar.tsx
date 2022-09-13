@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import "./Infobar.scss";
 import _ from "underscore";
 import {useAppSelector} from "store";
+import {ReturnToFocusButton} from "components/ReturnToFocusButton/ReturnToFocusButton";
 
 export const InfoBar = () => {
   const state = useAppSelector(
@@ -12,6 +13,7 @@ export const InfoBar = () => {
       activeVoting: Boolean(applicationState.votings.open),
       possibleVotes: applicationState.votings.open?.voteLimit,
       usedVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id).length,
+      sharedNote: applicationState.board.data?.sharedNote,
     }),
     _.isEqual
   );
@@ -20,6 +22,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
+      {state.sharedNote && <ReturnToFocusButton sharedNote={state.sharedNote} />}
     </aside>,
     document.getElementById("root")!
   );
