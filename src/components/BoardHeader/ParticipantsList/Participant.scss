@@ -16,6 +16,7 @@
     filter: $darken--slightly;
   }
 
+  &:focus-within,
   &:focus-visible {
     background-color: $color-white-two;
   }
