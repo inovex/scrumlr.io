@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToFocusedNote": "Zurück zur Fokuskarte"
+  },
   "NewBoard": {
     "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
