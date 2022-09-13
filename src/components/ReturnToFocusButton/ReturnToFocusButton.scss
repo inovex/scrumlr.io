@@ -1,0 +1,62 @@
+@import "constants/style.scss";
+
+.return-to-focus-button {
+  position: relative;
+  height: 42px;
+  width: 42px;
+  border: none;
+  border-radius: 21px;
+  background-color: transparent;
+  cursor: pointer;
+  color: white;
+  padding: 0;
+  background-color: transparent;
+  transition: all 150ms linear;
+}
+
+.return-to-focus-button > svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 42px;
+  width: 42px;
+  border-radius: 42px;
+  background-color: $menu-icon-background-color--dark;
+}
+
+.return-to-focus-button > span {
+  box-sizing: border-box;
+  position: absolute;
+  height: 42px;
+  width: 0px;
+  border-radius: 21px;
+  font-size: 14px;
+  background-color: $tooltip-background-color--light;
+  letter-spacing: 0.5px;
+  color: #333948;
+  overflow: hidden;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: left;
+  line-height: 42px;
+  transition: all 150ms linear;
+}
+
+.return-to-focus-button:hover > span {
+  width: 260px;
+  padding-left: 52px;
+}
+.return-to-focus-button:focus {
+  outline: 2px solid rgba($color-black, 0.5);
+}
+
+[theme="dark"] {
+  .return-to-focus-button > svg {
+    color: $color-black;
+    background-color: $menu-icon-background-color--light;
+  }
+  .return-to-focus-button > span {
+    background-color: $tooltip-background-color--dark;
+    color: $color-white;
+  }
+}
