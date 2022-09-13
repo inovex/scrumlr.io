@@ -47,16 +47,16 @@ $settings__item-height: 48px;
 }
 
 .profile-settings__hotkey-settings {
+  display: flex;
+  flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large})); // Avatar settings width
 }
 
 .profile-settings__toggle-hotkeys-button {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: $settings__item-height;
   padding-right: $padding--medium;
 }
 
@@ -67,36 +67,43 @@ $settings__item-height: 48px;
   text-decoration: none;
   color: $color-dark-gray;
   gap: $margin--small;
-  margin-top: 2px;
-  width: 100%;
-  height: $settings__item-height;
-  border: none;
-  background: none;
-  svg {
+  margin: $margin--small;
+  padding: $padding--small;
+  transition: transform 0.08s ease-in-out;
+
+  > svg {
     width: $icon--medium;
     height: $icon--medium;
-    g,
-    line {
-      stroke: $color-dark-gray;
-    }
+    stroke: $color-dark-gray;
   }
-  &:hover,
-  &:focus-visible,
+
+  > p {
+    margin: 0;
+  }
+
+  &:hover {
+    transform: scale(1.06);
+  }
+
   &:active {
-    background: none;
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    border-radius: $border-radius--round;
+    outline: 2px solid var(--accent-color);
   }
 }
 
 [theme="dark"] {
   .profile-settings__open-cheat-sheet-button {
-    background: none;
     color: $color-middle-gray;
-    &:hover {
-      background: none;
-    }
-    svg g,
-    line {
+    svg {
       stroke: $color-middle-gray;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
     }
   }
 }
