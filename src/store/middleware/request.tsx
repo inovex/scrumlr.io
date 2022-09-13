@@ -7,6 +7,7 @@ import {API} from "api";
 import i18n from "i18next";
 import {Toast} from "../../utils/Toast";
 import {Button} from "../../components/Button";
+import {SERVER_WEBSOCKET_PROTOCOL} from "../../config";
 
 let socket: Socket | undefined;
 
@@ -45,7 +46,7 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.PendingBoardAccessConfirmation) {
     // change protocol of url
     const websocketURL = new URL(action.requestReference);
-    websocketURL.protocol = "ws";
+    websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
 
     socket = new Socket(websocketURL.toString(), {
       timeout: 5000,
