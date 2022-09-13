@@ -3,7 +3,6 @@ import {useAppSelector} from "store";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {UserAvatar} from "./UserAvatar";
 
@@ -49,24 +48,10 @@ export const BoardUsers = () => {
   return (
     <div>
       <ul className="board-users">
-        {!!me && (
-          <li className="board-users__my-avatar">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate("settings/profile");
-              }}
-              tabIndex={TabIndex.BoardHeader + 3}
-            >
-              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
-            </button>
-          </li>
-        )}
         {them.length > 0 && (
           <button
             className="board-users__other-avatars"
             aria-label={t("BoardHeader.showParticipants")}
-            tabIndex={TabIndex.BoardHeader + 2}
             aria-haspopup
             aria-pressed={showParticipants}
             onClick={() => setShowParticipants(!showParticipants)}
@@ -76,19 +61,33 @@ export const BoardUsers = () => {
                 <div className="rest-users__count">{them.length - usersToShow.length}</div>
               </li>
             )}
-            {usersToShow.map((participant) => (
-              <li key={participant.user.id}>
-                <UserAvatar
-                  id={participant.user.id}
-                  avatar={participant.user.avatar}
-                  ready={participant.ready}
-                  raisedHand={participant.raisedHand}
-                  name={participant.user.name}
-                  className="board-users__avatar"
-                />
-              </li>
-            ))}
+            {usersToShow
+              .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name))
+              .map((participant) => (
+                <li key={participant.user.id}>
+                  <UserAvatar
+                    id={participant.user.id}
+                    avatar={participant.user.avatar}
+                    ready={participant.ready}
+                    raisedHand={participant.raisedHand}
+                    name={participant.user.name}
+                    className="board-users__avatar"
+                  />
+                </li>
+              ))}
           </button>
+        )}
+        {!!me && (
+          <li className="board-users__my-avatar">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate("settings/profile");
+              }}
+            >
+              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
+            </button>
+          </li>
         )}
       </ul>
       <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />

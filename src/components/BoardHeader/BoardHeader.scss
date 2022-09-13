@@ -1,8 +1,5 @@
 @import "constants/style";
 
-$board-header__hover-padding-top-bottom: 5px;
-$board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--large;
-
 .board-header {
   position: absolute;
   left: 30px;
@@ -14,7 +11,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   position: absolute;
   left: 0;
   top: 20px;
-  padding: $board-header__hover-padding;
+  padding: $padding--small $padding--large;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -51,8 +48,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 .board-header__users {
   position: absolute;
   right: $margin--large;
-  top: calc(24px - #{$board-header__hover-padding-top-bottom});
-  padding: $board-header__hover-padding-top-bottom $padding--small;
+  top: calc(24px - $padding--small);
+  padding: $padding--small;
 
   display: flex;
   flex-direction: row;
@@ -111,7 +108,7 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 
 .board-header_name-and-settings-button {
   width: max-content;
-  padding: $board-header__hover-padding;
+  padding: $padding--small $padding--large;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 
@@ -183,8 +180,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   display: inline;
   vertical-align: bottom;
 
-  width: 20px;
-  height: 20px;
+  width: $icon--medium;
+  height: $icon--medium;
   align-self: center;
   margin-right: 2px;
 }

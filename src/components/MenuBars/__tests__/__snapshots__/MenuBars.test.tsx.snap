@@ -14,7 +14,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.markAsDone"
           class="tooltip-button tooltip-button--right"
-          tabindex="300"
         >
           <div
             aria-hidden="true"
@@ -44,7 +43,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.raiseHand"
           class="tooltip-button tooltip-button--right"
-          tabindex="301"
         >
           <div
             aria-hidden="true"
@@ -74,7 +72,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.settings"
           class="tooltip-button tooltip-button--right"
-          tabindex="302"
         >
           <div
             aria-hidden="true"
@@ -123,7 +120,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="Timer"
           class="tooltip-button tooltip-button--left"
-          tabindex="400"
         >
           <div
             aria-hidden="true"
@@ -153,7 +149,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="Voting"
           class="tooltip-button tooltip-button--left"
-          tabindex="401"
         >
           <div
             aria-hidden="true"
@@ -183,7 +178,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.startFocusMode"
           class="tooltip-button tooltip-button--left"
-          tabindex="402"
         >
           <div
             aria-hidden="true"
