@@ -38,6 +38,7 @@ export const StackView = () => {
 
   if (!note) {
     navigate(`/board/${boardId}`);
+    return null;
   }
 
   const handleClose = () => {
