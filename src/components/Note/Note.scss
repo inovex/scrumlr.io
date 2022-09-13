@@ -9,7 +9,6 @@ $note__indicator-width: 3px;
 $note__author-image-size: 26px;
 
 .note__root {
-  list-style-type: none;
   position: relative;
 }
 
@@ -22,6 +21,9 @@ $note__author-image-size: 26px;
   transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
   z-index: $note-z-index;
   padding: $padding--default $padding--medium 20px;
+  width: 100%;
+  text-align: start;
+  border: unset;
 }
 
 .note .note__user-avatar {
@@ -70,6 +72,7 @@ $note__author-image-size: 26px;
 .note--isOver {
   padding: 14px 18px;
   border: 2px solid var(--accent-color);
+  border-radius: $note__border-radius;
 }
 
 .note:focus-visible::before {

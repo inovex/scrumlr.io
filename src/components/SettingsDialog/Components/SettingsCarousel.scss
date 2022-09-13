@@ -33,18 +33,20 @@
     color: var(--accent-color);
     transition: all 0.08s ease-out;
 
-    &:hover {
-      filter: $brighten--strongly;
+    &:hover > svg {
+      background-color: var(--accent-color--desaturated-light);
       transform: scale(1.1);
     }
 
-    &:focus-visible {
-      filter: $brighten--strongly;
+    &:focus-visible > svg {
+      background-color: var(--accent-color--desaturated-light);
     }
 
     svg {
-      width: 24px;
-      height: 24px;
+      border-radius: $border-radius--round;
+      width: $icon--large;
+      height: $icon--large;
+      padding: calc($padding--small / 2);
     }
   }
 }
@@ -59,6 +61,11 @@
 
     &__button {
       color: var(--accent-color);
+
+      &:hover > svg,
+      &:focus-visible > svg {
+        background-color: var(--accent-color--desaturated-dark);
+      }
     }
   }
 }

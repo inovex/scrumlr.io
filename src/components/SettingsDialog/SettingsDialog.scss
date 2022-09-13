@@ -116,8 +116,8 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
+  width: $icon--extralarge;
+  height: $icon--extralarge;
   border-radius: 22px;
   transition: all 0.08s ease-out;
   border: 2px solid transparent;
@@ -160,11 +160,6 @@ $settings-dialog-container--bottom: 62px;
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
     background: $color-dark-mode;
   }
-}
-.close-button__icon {
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
 }
 
 .settings-dialog__back-link {
