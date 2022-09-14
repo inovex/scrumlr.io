@@ -315,6 +315,7 @@
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
     "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
