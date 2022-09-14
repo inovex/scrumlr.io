@@ -28,9 +28,5 @@ export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesS
     return action.votes;
   }
 
-  if (action.type === Action.DeletedNote) {
-    return state.filter((v) => v.note !== action.noteId);
-  }
-
   return state;
 };

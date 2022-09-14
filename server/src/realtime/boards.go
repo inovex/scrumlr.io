@@ -16,6 +16,7 @@ const (
 	BoardEventColumnsUpdated        BoardEventType = "COLUMNS_UPDATED"
 	BoardEventColumnDeleted         BoardEventType = "COLUMN_DELETED"
 	BoardEventNotesUpdated          BoardEventType = "NOTES_UPDATED"
+	BoardEventNoteDeleted           BoardEventType = "NOTE_DELETED"
 	BoardEventVotesUpdated          BoardEventType = "VOTES_UPDATED"
 	BoardEventSessionRequestCreated BoardEventType = "REQUEST_CREATED"
 	BoardEventSessionRequestUpdated BoardEventType = "REQUEST_UPDATED"

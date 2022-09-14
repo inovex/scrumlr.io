@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common/filter"
 )
 
 type NotesObserver interface {
@@ -13,7 +14,7 @@ type NotesObserver interface {
 	UpdatedNotes(board uuid.UUID, notes []Note)
 
 	// DeletedNote will be called if a note has been deleted.
-	DeletedNote(board uuid.UUID, note uuid.UUID)
+	DeletedNote(user, board, note uuid.UUID, votes []Vote)
 }
 
 var _ bun.AfterInsertHook = (*NoteInsert)(nil)
@@ -29,10 +30,9 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 }
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
-	notifyNoteDeleted(ctx)
 	result := ctx.Value("Result").(*[]Note)
 	if len(*result) > 0 {
-		return notifyNotesUpdated(ctx)
+		return notifyNoteDeleted(ctx)
 	}
 	return nil
 }
@@ -64,11 +64,16 @@ func notifyNoteDeleted(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
+		user := ctx.Value("User").(uuid.UUID)
 		board := ctx.Value("Board").(uuid.UUID)
 		note := ctx.Value("Note").(uuid.UUID)
+		votes, err := d.GetVotes(filter.VoteFilter{Board: board})
+		if err != nil {
+			return err
+		}
 		for _, observer := range d.observer {
 			if o, ok := observer.(NotesObserver); ok {
-				o.DeletedNote(board, note)
+				o.DeletedNote(user, board, note, votes)
 				return nil
 			}
 		}
