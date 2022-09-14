@@ -24,5 +24,13 @@ export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesS
     return state.filter((v) => v.voting !== action.voting);
   }
 
+  if (action.type === Action.UpdatedVotes) {
+    return action.votes;
+  }
+
+  if (action.type === Action.DeletedNote) {
+    return state.filter((v) => v.note !== action.noteId);
+  }
+
   return state;
 };

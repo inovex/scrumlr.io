@@ -110,3 +110,12 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 }
+func (s *NoteService) DeletedNote(board uuid.UUID, note uuid.UUID) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: "NOTE_DELETED",
+		Data: note,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
+	}
+}

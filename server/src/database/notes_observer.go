@@ -11,6 +11,9 @@ type NotesObserver interface {
 
 	// UpdatedNotes will be called if the notes of the board with the specified id were updated.
 	UpdatedNotes(board uuid.UUID, notes []Note)
+
+	// DeletedNote will be called if a note has been deleted.
+	DeletedNote(board uuid.UUID, note uuid.UUID)
 }
 
 var _ bun.AfterInsertHook = (*NoteInsert)(nil)
@@ -26,6 +29,7 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 }
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
+	notifyNoteDeleted(ctx)
 	result := ctx.Value("Result").(*[]Note)
 	if len(*result) > 0 {
 		return notifyNotesUpdated(ctx)
@@ -47,6 +51,24 @@ func notifyNotesUpdated(ctx context.Context) error {
 		for _, observer := range d.observer {
 			if o, ok := observer.(NotesObserver); ok {
 				o.UpdatedNotes(board, notes)
+				return nil
+			}
+		}
+	}
+	return nil
+}
+
+func notifyNoteDeleted(ctx context.Context) error {
+	if ctx.Value("Database") == nil {
+		return nil
+	}
+	d := ctx.Value("Database").(*Database)
+	if len(d.observer) > 0 {
+		board := ctx.Value("Board").(uuid.UUID)
+		note := ctx.Value("Note").(uuid.UUID)
+		for _, observer := range d.observer {
+			if o, ok := observer.(NotesObserver); ok {
+				o.DeletedNote(board, note)
 				return nil
 			}
 		}
