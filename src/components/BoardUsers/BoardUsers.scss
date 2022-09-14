@@ -27,10 +27,30 @@
   padding-left: $padding--default;
   border-radius: 16px;
 
-  & .user-avatar,
-  & .rest-users {
+  > * {
     margin-left: -12px;
+  }
+
+  & .rest-users {
     transition: all 0.08s ease-out;
+    box-sizing: border-box;
+    color: $color-backlog-blue;
+    border: 2px solid $color-backlog-blue;
+    height: $icon--extralarge;
+    width: $icon--extralarge;
+    border-radius: 100px;
+    display: inline-block;
+    position: relative;
+  }
+
+  .rest-users__count {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+    color: var(--accent-color);
+    font-weight: bold;
   }
 
   &:hover {
