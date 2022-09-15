@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToFocusedNote": "Return to focused note"
+  },
   "NewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
