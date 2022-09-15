@@ -44,10 +44,11 @@
 
 .rest-users {
   position: relative;
+  font-size: $text-size--medium;
   height: $icon--extralarge;
   width: $icon--extralarge;
   border-radius: $border-radius--round;
-  background-color: $color-black;
+  background-color: $menu-icon-background-color--dark;
   padding: 2px;
   color: $color-white;
   font-weight: 700;
