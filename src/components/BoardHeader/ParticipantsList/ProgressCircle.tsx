@@ -14,6 +14,7 @@ export const ProgressCircle: VFC<ProgressCircleProps> = ({percentage, className}
         cx="50%"
         cy="50%"
         r="50%"
+        stroke="currentColor"
         strokeWidth="100%"
         strokeDasharray={`${Math.PI * 100}%`}
         strokeDashoffset={`${Math.PI * 100 * (1 - percentage)}%`}
