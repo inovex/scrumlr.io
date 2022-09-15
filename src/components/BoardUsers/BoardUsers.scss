@@ -1,140 +1,83 @@
 @import "constants/style.scss";
 
 .board-users {
-  list-style-type: none;
-  align-self: center;
   display: flex;
   flex-direction: row;
-  width: max-content;
-  padding: 0;
-  margin: 0;
+  gap: $margin--default;
 }
 
-.board-users li {
-  display: inline;
-}
-
-.board-users__other-avatars {
-  box-sizing: border-box;
+.board-users__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
   background: none;
   border: none;
   outline: none;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-
   cursor: pointer;
-  padding-left: $padding--default;
   border-radius: 16px;
 
-  > * {
-    margin-left: -12px;
-  }
-
-  & .rest-users {
-    transition: all 0.08s ease-out;
-    box-sizing: border-box;
-    color: $color-backlog-blue;
-    border: 2px solid $color-backlog-blue;
-    height: $icon--extralarge;
-    width: $icon--extralarge;
-    border-radius: 100px;
-    display: inline-block;
-    position: relative;
-  }
-
-  .rest-users__count {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 95%;
-    color: var(--accent-color);
-    font-weight: bold;
-  }
-
-  &:hover {
-    & > .rest-users {
-      color: $color-white;
-      background-color: $color-backlog-blue;
-      transform: scale(1.16);
-    }
-    & .user-avatar {
-      filter: brightness(1.1);
-      transform: scale(1.08);
-    }
+  &--others {
+    flex-direction: row-reverse;
+    padding-left: $padding--default;
   }
 
   &:focus-visible {
     box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
   }
 
-  &:active {
-    & > .rest-users,
-    & > :not(.rest-users) {
-      transform: scale(1);
-    }
-  }
-}
-
-.board-users__my-avatar {
-  display: contents;
-  margin-left: $margin--small;
-
-  & > button {
-    border: none;
-    outline: none;
-    background: none;
-    border-radius: 16px;
-    cursor: pointer;
-
-    &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
-    }
-  }
-}
-
-.board-users__my-avatar .user-avatar {
-  transition: all 0.08s ease-out;
-  margin: 0;
-
   &:hover {
-    filter: brightness(1.1);
-    transform: scale(1.08);
-  }
+    .board-users__avatar {
+      filter: brightness(1.1);
+      transform: scale(1.08);
+    }
 
-  &:active {
-    transform: scale(1);
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .board-users {
-    margin-right: $margin--small;
+    .rest-users {
+      color: $color-white;
+      background-color: $color-backlog-blue;
+    }
   }
 }
 
-@media screen and (max-width: 500px) {
-  .board-users {
-    margin-right: 0;
+.board-users__avatar {
+  transition: all 0.08s ease-out;
+
+  &--others {
+    margin-left: -12px;
   }
 
-  .board-users__other-avatars {
+  &.rest-users {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $icon--extralarge;
+    width: $icon--extralarge;
+    border-radius: $border-radius--round;
+    border: 2px solid $color-backlog-blue;
+    color: $color-backlog-blue;
+    font-weight: bold;
+  }
+}
+
+@media #{$mini-smartphone} {
+  .board-users__button--others {
     display: none;
-  }
-
-  .board-users__my-avatar {
-    margin-right: 0;
   }
 }
 
 [theme="dark"] {
-  .board-users__other-avatars:hover > .rest-users {
-    background-color: $color-planning-pink;
+  .rest-users {
+    border-color: $color-planning-pink;
+    color: $color-white;
   }
 
-  .board-users__other-avatars:focus-visible,
-  .board-users__my-avatar > button:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+  .board-users__button {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+    }
+
+    &:hover .rest-users {
+      background-color: $color-planning-pink;
+    }
   }
 }

@@ -46,50 +46,46 @@ export const BoardUsers = () => {
   const usersToShow = them.slice().splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
 
   return (
-    <div>
-      <ul className="board-users">
-        {them.length > 0 && (
-          <button
-            className="board-users__other-avatars"
-            aria-label={t("BoardHeader.showParticipants")}
-            aria-haspopup
-            aria-pressed={showParticipants}
-            onClick={() => setShowParticipants(!showParticipants)}
-          >
-            {them.length > usersToShow.length && (
-              <li className="rest-users">
-                <div className="rest-users__count">{them.length - usersToShow.length}</div>
-              </li>
-            )}
-            {usersToShow
-              .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name))
-              .map((participant) => (
-                <li key={participant.user.id}>
-                  <UserAvatar
-                    id={participant.user.id}
-                    avatar={participant.user.avatar}
-                    ready={participant.ready}
-                    raisedHand={participant.raisedHand}
-                    name={participant.user.name}
-                    className="board-users__avatar"
-                  />
-                </li>
-              ))}
-          </button>
-        )}
-        {!!me && (
-          <li className="board-users__my-avatar">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate("settings/profile");
-              }}
-            >
-              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
-            </button>
-          </li>
-        )}
-      </ul>
+    <div className="board-users">
+      {them.length > 0 && (
+        <button
+          className="board-users__button board-users__button--others"
+          aria-label={t("BoardHeader.showParticipants")}
+          aria-haspopup
+          aria-pressed={showParticipants}
+          onClick={() => setShowParticipants(!showParticipants)}
+        >
+          {them.length > usersToShow.length && (
+            <div className="board-users__avatar board-users__avatar--others rest-users">
+              <span className="rest-users__count">{them.length - usersToShow.length}</span>
+            </div>
+          )}
+          {usersToShow
+            .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name))
+            .map((participant) => (
+              <UserAvatar
+                key={participant.user.id}
+                id={participant.user.id}
+                avatar={participant.user.avatar}
+                ready={participant.ready}
+                raisedHand={participant.raisedHand}
+                name={participant.user.name}
+                className="board-users__avatar board-users__avatar--others"
+              />
+            ))}
+        </button>
+      )}
+      {!!me && (
+        <button
+          className="board-users__button board-users__button--me"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("settings/profile");
+          }}
+        >
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
+        </button>
+      )}
       <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
     </div>
   );
