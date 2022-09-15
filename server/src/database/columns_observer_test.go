@@ -73,7 +73,8 @@ func testColumnsObserverOnUpdate(t *testing.T) {
 	assert.Equal(t, column.Name, (*columnsObserver.columns)[0].Name)
 }
 func testColumnsObserverOnDelete(t *testing.T) {
-	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID)
+	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
+	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, columnsObserver.board)
 	assert.NotNil(t, columnsObserver.columns)
@@ -81,7 +82,8 @@ func testColumnsObserverOnDelete(t *testing.T) {
 
 }
 func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
-	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID)
+	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
+	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.Nil(t, columnsObserver.board)
 	assert.Nil(t, columnsObserver.columns)
