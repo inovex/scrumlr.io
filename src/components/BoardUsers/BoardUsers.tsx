@@ -59,6 +59,7 @@ export const BoardUsers = () => {
           {them.length > usersToShow.length && (
             <div className="board-users__avatar board-users__avatar--others rest-users">
               <ProgressCircle
+                className="rest-users__readiness"
                 percentage={
                   them.filter((participant) => !usersToShow.map((p) => p.user.id).includes(participant.user.id) && participant.ready).length / (them.length - usersToShow.length)
                 }

@@ -54,9 +54,17 @@
   border-radius: $border-radius--round;
   border: 2px solid $color-black;
   background-color: $color-black;
-  fill: $color-backlog-blue;
+  stroke: $color-backlog-blue;
   color: $color-white;
   font-weight: bold;
+
+  &__readiness {
+    border-radius: $border-radius--round;
+
+    circle {
+      transition: stroke-dashoffset 0.08s ease-in-out;
+    }
+  }
 
   &__count {
     position: absolute;
@@ -76,6 +84,7 @@
   .rest-users {
     border-color: $color-planning-pink;
     color: $color-white;
+    stroke: $color-planning-pink;
   }
 
   .board-users__button {
