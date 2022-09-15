@@ -45,17 +45,24 @@
   &--others {
     margin-left: -12px;
   }
+}
 
-  &.rest-users {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: $icon--extralarge;
-    width: $icon--extralarge;
-    border-radius: $border-radius--round;
-    border: 2px solid $color-backlog-blue;
-    color: $color-backlog-blue;
-    font-weight: bold;
+.rest-users {
+  position: relative;
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+  border-radius: $border-radius--round;
+  border: 2px solid $color-black;
+  background-color: $color-black;
+  fill: $color-backlog-blue;
+  color: $color-white;
+  font-weight: bold;
+
+  &__count {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 

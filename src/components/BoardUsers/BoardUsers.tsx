@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
+import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {
@@ -57,6 +58,11 @@ export const BoardUsers = () => {
         >
           {them.length > usersToShow.length && (
             <div className="board-users__avatar board-users__avatar--others rest-users">
+              <ProgressCircle
+                percentage={
+                  them.filter((participant) => !usersToShow.map((p) => p.user.id).includes(participant.user.id) && participant.ready).length / (them.length - usersToShow.length)
+                }
+              />
               <span className="rest-users__count">{them.length - usersToShow.length}</span>
             </div>
           )}
