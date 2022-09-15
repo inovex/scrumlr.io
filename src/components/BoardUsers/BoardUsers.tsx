@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
+import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {
@@ -44,7 +45,8 @@ export const BoardUsers = () => {
     me: state.participants!.self,
   }));
 
-  const usersToShow = them.slice().splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
+  const usersRest = them.slice();
+  const usersToShow = usersRest.splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
 
   return (
     <div className="board-users">
@@ -56,15 +58,14 @@ export const BoardUsers = () => {
           aria-pressed={showParticipants}
           onClick={() => setShowParticipants(!showParticipants)}
         >
-          {them.length > usersToShow.length && (
+          {usersRest.length && (
             <div className="board-users__avatar board-users__avatar--others rest-users">
-              <ProgressCircle
-                className="rest-users__readiness"
-                percentage={
-                  them.filter((participant) => !usersToShow.map((p) => p.user.id).includes(participant.user.id) && participant.ready).length / (them.length - usersToShow.length)
-                }
-              />
-              <span className="rest-users__count">{them.length - usersToShow.length}</span>
+              <ProgressCircle className="rest-users__readiness" percentage={usersRest.filter((participant) => participant.ready).length / usersRest.length} />
+              {usersRest.filter((participant) => participant.ready).length / usersRest.length < 1 ? (
+                <span className="rest-users__count">{usersRest.length}</span>
+              ) : (
+                <CheckIcon className="rest-users__all-ready" />
+              )}
             </div>
           )}
           {usersToShow
