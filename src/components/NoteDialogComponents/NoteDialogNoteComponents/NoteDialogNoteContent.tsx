@@ -25,7 +25,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       <textarea
         className="note-dialog__note-content__text"
         disabled={!editable}
-        onBlur={(e) => onEdit(noteId!, e.target.textContent ?? "")}
+        onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
