@@ -19,21 +19,20 @@
 }
 
 .rest-users {
-  color: $color-backlog-blue;
-  border: 2px solid $color-backlog-blue;
-  height: $icon--extralarge;
-  width: $icon--extralarge;
+  background-color: $menu-icon-background-color--dark;
+  color: $color-white;
+  height: 36px;
+  width: 36px;
 }
 
 .user__initials,
 .rest-users__count {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 95%;
   color: var(--accent-color);
   font-weight: bold;
+  line-height: 36px;
+  font-size: $text-size--medium;
+  padding-left: 4px;
 }
 
 .user-avatar__ready {
@@ -99,9 +98,8 @@
 [theme="dark"] {
   .user__initials,
   .rest-users {
-    color: $color-white;
-    border-color: $color-planning-pink;
-    font-weight: bold;
+    background-color: #9ebfff;
+    color: #333948;
   }
   .user-avatar__raised-hand {
     color: $color-planning-pink;

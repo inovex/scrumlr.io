@@ -63,10 +63,11 @@
 .board-header__share-button {
   color: $color-backlog-blue;
   outline: none;
-  border: 2px solid $color-backlog-blue;
+  border: 2px solid $menu-icon-background-color--dark;
+  color: $menu-icon-background-color--dark;
   border-radius: 100%;
-  height: $icon--extralarge;
-  width: $icon--extralarge;
+  height: 36px;
+  width: 36px;
   margin-left: $margin--default;
   box-sizing: border-box;
   display: flex;
@@ -76,12 +77,6 @@
   background: none;
   cursor: pointer;
 
-  &:hover,
-  &:focus-visible {
-    color: $color-white;
-    background: $color-backlog-blue;
-  }
-
   &:hover {
     transform: scale(1.1);
   }
@@ -90,15 +85,18 @@
     transform: scale(1);
   }
 }
+.board-header__share-button > svg {
+  height: 36px;
+  width: 36px;
+}
 
 [theme="dark"] {
   .board-header__share-button {
-    color: $color-white;
-    border: 2px solid $color-planning-pink;
+    border: 2px solid $color-icon-light-blue;
+    color: $color-icon-light-blue;
 
     &:hover,
     &:focus-visible {
-      background: $color-planning-pink;
     }
   }
 }
