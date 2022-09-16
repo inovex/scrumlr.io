@@ -63,8 +63,8 @@
 .board-header__share-button {
   color: $color-backlog-blue;
   outline: none;
-  border: 2px solid $menu-icon-background-color--dark;;
-  color: $menu-icon-background-color--dark;;
+  border: 2px solid $menu-icon-background-color--dark;
+  color: $menu-icon-background-color--dark;
   border-radius: 100%;
   height: 36px;
   width: 36px;
@@ -92,8 +92,8 @@
 
 [theme="dark"] {
   .board-header__share-button {
-    border: 2px solid #9ebfff;
-    color: #9ebfff;
+    border: 2px solid $color-icon-light-blue;
+    color: $color-icon-light-blue;
 
     &:hover,
     &:focus-visible {
