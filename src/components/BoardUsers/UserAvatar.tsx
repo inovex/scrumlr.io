@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import "./BoardUser.scss";
+import "./UserAvatar.scss";
 import classNames from "classnames";
 import {ReactComponent as IconCheck} from "assets/icon-check.svg";
 import {ReactComponent as RaisedHand} from "assets/icon-hand.svg";
