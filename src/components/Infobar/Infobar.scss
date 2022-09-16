@@ -22,10 +22,10 @@
 }
 
 .info-bar__return-to-focused-note-button > svg {
-  background-color: #333948;
+  background-color: $menu-icon-background-color--dark;
   color: $color-white;
 }
 [theme="dark"] .info-bar__return-to-focused-note-button > svg {
   background-color: $color-white;
-  color: #333948;
+  color: $menu-icon-background-color--dark;
 }

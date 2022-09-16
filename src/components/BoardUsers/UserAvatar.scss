@@ -1,38 +1,17 @@
 @import "constants/style.scss";
 
-.user-avatar,
-.rest-users {
+.user-avatar {
   box-sizing: border-box;
   height: 48px;
+  width: 48px;
   border-radius: 100px;
   display: inline-block;
   position: relative;
-}
-
-.user-avatar {
-  width: 48px;
 
   #Circle-Background {
     stroke: $color-white-one;
     stroke-width: 24px;
   }
-}
-
-.rest-users {
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
-  height: 36px;
-  width: 36px;
-}
-
-.user__initials,
-.rest-users__count {
-  position: relative;
-  color: var(--accent-color);
-  font-weight: bold;
-  line-height: 36px;
-  font-size: $text-size--medium;
-  padding-left: 4px;
 }
 
 .user-avatar__ready {
@@ -96,11 +75,6 @@
 }
 
 [theme="dark"] {
-  .user__initials,
-  .rest-users {
-    background-color: #9ebfff;
-    color: #333948;
-  }
   .user-avatar__raised-hand {
     color: $color-planning-pink;
   }
