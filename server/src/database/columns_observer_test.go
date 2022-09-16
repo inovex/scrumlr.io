@@ -26,6 +26,7 @@ func (o *ColumnsObserverForTests) DeletedColumn(user, board, column uuid.UUID, n
 func (o *ColumnsObserverForTests) Reset() {
 	o.board = nil
 	o.columns = nil
+	o.deletedColumn = nil
 }
 
 var columnsObserver ColumnsObserverForTests
@@ -90,5 +91,5 @@ func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
 	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.Nil(t, columnsObserver.board)
-	assert.Nil(t, columnsObserver.columns)
+	assert.Nil(t, columnsObserver.deletedColumn)
 }
