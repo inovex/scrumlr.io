@@ -66,11 +66,10 @@ func (b *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest(us
 		select {
 		case msg := <-b.subscriptions[userId]:
 			logger.Get().Debugw("message received", "message", msg)
-			for _, conn := range b.clients {
-				err := conn.WriteJSON(msg)
-				if err != nil {
-					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
-				}
+			conn := b.clients[userId]
+			err := conn.WriteJSON(msg)
+			if err != nil {
+				logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 			}
 		}
 	}
