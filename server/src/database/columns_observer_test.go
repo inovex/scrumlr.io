@@ -7,9 +7,10 @@ import (
 )
 
 type ColumnsObserverForTests struct {
-	t       *testing.T
-	board   *uuid.UUID
-	columns *[]Column
+	t             *testing.T
+	board         *uuid.UUID
+	columns       *[]Column
+	deletedColumn *uuid.UUID
 }
 
 func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Column) {
@@ -19,6 +20,7 @@ func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Colu
 
 func (o *ColumnsObserverForTests) DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote) {
 	o.board = &board
+	o.deletedColumn = &column
 }
 
 func (o *ColumnsObserverForTests) Reset() {
@@ -81,9 +83,7 @@ func testColumnsObserverOnDelete(t *testing.T) {
 	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, columnsObserver.board)
-	assert.NotNil(t, columnsObserver.columns)
-	assert.Equal(t, 0, len(*columnsObserver.columns))
-
+	assert.NotNil(t, columnsObserver.deletedColumn)
 }
 func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
 	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
