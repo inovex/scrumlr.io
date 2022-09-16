@@ -17,6 +17,10 @@ func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Colu
 	o.columns = &columns
 }
 
+func (o *ColumnsObserverForTests) DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote) {
+	o.board = &board
+}
+
 func (o *ColumnsObserverForTests) Reset() {
 	o.board = nil
 	o.columns = nil
