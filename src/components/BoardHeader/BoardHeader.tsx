@@ -1,6 +1,6 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
-import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {BoardUsers} from "components/BoardUsers";
@@ -88,7 +88,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               navigate("settings/share");
             }}
           >
-            <ShareIcon />
+            <PlusIcon />
           </button>
         </div>
 
