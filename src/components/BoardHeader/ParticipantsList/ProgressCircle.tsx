@@ -1,11 +1,9 @@
-import {VFC} from "react";
-
-interface ProgressCircleProps {
+type ProgressCircleProps = {
   className?: string;
   percentage: number;
-}
+};
 
-export const ProgressCircle: VFC<ProgressCircleProps> = ({percentage, className}) => {
+export const ProgressCircle = ({percentage, className}: ProgressCircleProps) => {
   // clamp between 0 and 1
   percentage = Math.min(Math.max(percentage, 0), 1);
   return (
