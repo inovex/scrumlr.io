@@ -10,10 +10,10 @@ type HeaderMenuProps = {
   currentUserIsModerator: boolean;
 };
 
-const HeaderMenu = (props: HeaderMenuProps) => {
+const HeaderMenu = ({open, onClose, currentUserIsModerator}: HeaderMenuProps) => {
   const [activeEditMode, setActiveEditMode] = useState(false);
 
-  if (!props.open) {
+  if (!open) {
     return null;
   }
 
@@ -21,19 +21,19 @@ const HeaderMenu = (props: HeaderMenuProps) => {
     <Portal
       onClose={() => {
         setActiveEditMode(false);
-        props.onClose();
+        onClose();
       }}
     >
       <ul className="header-menu" onClick={(e) => e.stopPropagation()}>
-        <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={props.currentUserIsModerator} setActiveEditMode={setActiveEditMode} />
-        {props.currentUserIsModerator && (
+        <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={currentUserIsModerator} setActiveEditMode={setActiveEditMode} />
+        {currentUserIsModerator && (
           <>
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
           </>
         )}
-        <BoardOption.ShowAllBoardSettings onClose={props.onClose} />
+        <BoardOption.ShowAllBoardSettings onClose={onClose} />
       </ul>
     </Portal>
   );

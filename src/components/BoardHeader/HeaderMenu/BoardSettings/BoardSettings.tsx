@@ -12,7 +12,7 @@ export type BoardSettingsProps = {
   setActiveEditMode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const BoardSettings = (props: BoardSettingsProps) => {
+export const BoardSettings = ({activeEditMode, currentUserIsModerator, setActiveEditMode}: BoardSettingsProps) => {
   const {t} = useTranslation();
   const state = useAppSelector((applicationState: ApplicationState) => ({
     board: applicationState.board.data!,
@@ -25,10 +25,10 @@ export const BoardSettings = (props: BoardSettingsProps) => {
   }, [state.board.name]);
 
   const onSubmit = () => {
-    if (props.activeEditMode && state.board!.name !== boardName) {
+    if (activeEditMode && state.board!.name !== boardName) {
       store.dispatch(Actions.editBoard({name: boardName}));
     }
-    props.setActiveEditMode(!props.activeEditMode);
+    setActiveEditMode(!activeEditMode);
   };
 
   return (
@@ -46,7 +46,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           className="board-settings__board-name"
           value={boardName}
           placeholder={DEFAULT_BOARD_NAME}
-          disabled={!props.activeEditMode}
+          disabled={!activeEditMode}
           onChange={(e) => setBoardName(e.target.value)}
           ref={(input) => {
             if (!input?.disabled) input?.focus();
@@ -62,9 +62,9 @@ export const BoardSettings = (props: BoardSettingsProps) => {
           }}
         />
 
-        {props.currentUserIsModerator && (
+        {currentUserIsModerator && (
           <button type="submit" className="board-settings__edit-button">
-            {props.activeEditMode ? t("BoardSettings.save") : t("BoardSettings.edit")}
+            {activeEditMode ? t("BoardSettings.save") : t("BoardSettings.edit")}
           </button>
         )}
       </form>

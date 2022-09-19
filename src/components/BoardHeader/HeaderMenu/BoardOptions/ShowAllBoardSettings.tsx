@@ -6,11 +6,11 @@ type ShowAllBoardSettingsProps = {
   onClose?: () => void;
 };
 
-export const ShowAllBoardSettings = (props: ShowAllBoardSettingsProps) => {
+export const ShowAllBoardSettings = ({onClose}: ShowAllBoardSettingsProps) => {
   const {t} = useTranslation();
   return (
     <BoardOption data-testid="allSettings">
-      <BoardOptionLink to="settings" label={t("BoardHeader.showAllBoardSettings")} onClick={props.onClose} />
+      <BoardOptionLink to="settings" label={t("BoardHeader.showAllBoardSettings")} onClick={onClose} />
     </BoardOption>
   );
 };

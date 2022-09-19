@@ -10,16 +10,16 @@ type DotButtonProps = {
   title?: string;
 };
 
-export const DotButton = (props: DotButtonProps) => (
+export const DotButton = ({className, disabled, onClick, children, title}: DotButtonProps) => (
   <button
-    className={classNames("dot-button", props.className)}
-    disabled={props.disabled}
+    className={classNames("dot-button", className)}
+    disabled={disabled}
     onClick={(e) => {
       e.stopPropagation();
-      props.onClick?.();
+      onClick?.();
     }}
-    title={props.title}
+    title={title}
   >
-    {props.children}
+    {children}
   </button>
 );

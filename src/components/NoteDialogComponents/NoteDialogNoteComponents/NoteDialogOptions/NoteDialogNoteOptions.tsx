@@ -17,7 +17,7 @@ type NoteDialogNoteOptionsProps = {
   viewer: Participant;
 };
 
-export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
+export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = ({showUnstackButton, noteId, authorId, onDeleteOfParent, onClose, viewer}: NoteDialogNoteOptionsProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
@@ -29,15 +29,15 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
     dispatch(Actions.deleteNote(id));
   };
 
-  const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";
+  const showDeleteButton = authorId === viewer.user.id || viewer.role === "OWNER" || viewer.role === "MODERATOR";
   return (
     <ul className="note-dialog__note-options">
-      {props.showUnstackButton && (
+      {showUnstackButton && (
         <li className="note-dialog__note-option">
           <TooltipButton
             onClick={() => {
-              onUnstack(props.noteId);
-              props.onClose();
+              onUnstack(noteId);
+              onClose();
             }}
             label={t("NoteDialogUnstackNoteButton.title")}
             icon={UnstackIcon}
@@ -48,8 +48,8 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         <li className="note-dialog__note-option">
           <TooltipButton
             onClick={() => {
-              onDelete(props.noteId);
-              props.onDeleteOfParent();
+              onDelete(noteId);
+              onDeleteOfParent();
             }}
             label={t("NoteDialogDeleteNoteButton.title")}
             icon={DeleteIcon}

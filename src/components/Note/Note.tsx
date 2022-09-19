@@ -17,15 +17,15 @@ type NoteProps = {
   viewer: Participant;
 };
 
-export const Note = (props: NoteProps) => {
+export const Note = ({noteId, viewer}: NoteProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const noteRef = useRef<HTMLButtonElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
-  const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
-  const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId), _.isEqual);
+  const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === noteId).length > 0);
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
@@ -42,17 +42,17 @@ export const Note = (props: NoteProps) => {
 
   /* eslint-disable */
   useEffect(() => {
-    if (isShared && !document.location.pathname.endsWith(props.noteId)) {
+    if (isShared && !document.location.pathname.endsWith(noteId)) {
       navigate(`note/${note!.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
-      if (!document.location.pathname.endsWith(props.noteId)) {
+      if (!document.location.pathname.endsWith(noteId)) {
         navigate(`note/${note!.id}/stack`);
       }
-    } else if (document.location.pathname.endsWith(props.noteId)) {
+    } else if (document.location.pathname.endsWith(noteId)) {
       navigate(`.`);
     }
   }, [isShared]);
@@ -60,7 +60,7 @@ export const Note = (props: NoteProps) => {
 
   const [{isDragging}, drag] = useDrag({
     type: isStack ? "STACK" : "NOTE",
-    item: {id: props.noteId, columnId: note!.position.column},
+    item: {id: noteId, columnId: note!.position.column},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -70,23 +70,23 @@ export const Note = (props: NoteProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string}, monitor) => {
       if (!monitor.didDrop()) {
-        dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: note!.position.column, rank: 0}}));
+        dispatch(Actions.editNote(item.id, {position: {stack: noteId!, column: note!.position.column, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
-    canDrop: (item: {id: string}) => item.id !== props.noteId,
+    canDrop: (item: {id: string}) => item.id !== noteId,
   }));
 
   const handleClick = () => {
-    if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
-      dispatch(Actions.shareNote(props.noteId));
+    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+      dispatch(Actions.shareNote(noteId));
     }
-    navigate(`note/${props.noteId}/stack`);
+    navigate(`note/${noteId}/stack`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      navigate(`note/${props.noteId}/stack`);
+      navigate(`note/${noteId}/stack`);
     }
   };
 
@@ -98,13 +98,13 @@ export const Note = (props: NoteProps) => {
       <button className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === author.user!.id) && (
+          {(showAuthors || viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
               <UserAvatar id={note!.author} avatar={author.user!.avatar} name={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
-          <Votes noteId={props.noteId!} aggregateVotes />
+          <Votes noteId={noteId!} aggregateVotes />
         </div>
       </button>
       {isStack && <div className="note__in-stack" />}

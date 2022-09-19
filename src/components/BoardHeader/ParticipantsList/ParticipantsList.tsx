@@ -11,7 +11,7 @@ type ParticipantsListProps = {
   onClose: () => void;
 };
 
-export const ParticipantsList = (props: ParticipantsListProps) => {
+export const ParticipantsList = ({open, onClose}: ParticipantsListProps) => {
   const {t} = useTranslation();
 
   const {me, them} = useAppSelector((state) => ({
@@ -21,7 +21,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
 
   const [searchString, setSearchString] = useState("");
 
-  if (!props.open || them.length < 0) {
+  if (!open || them.length < 0) {
     return null;
   }
 
@@ -30,7 +30,7 @@ export const ParticipantsList = (props: ParticipantsListProps) => {
   return (
     <Portal
       onClose={() => {
-        props.onClose();
+        onClose();
         setSearchString("");
       }}
     >
