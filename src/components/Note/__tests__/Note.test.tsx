@@ -104,7 +104,7 @@ describe("Note", () => {
       jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);
       const {container} = render(createNote(false));
       fireEvent.click(container.querySelector(".note")!);
-      expect(navigateSpy).toHaveBeenCalledWith(`stack/${NOTE_ID}`);
+      expect(navigateSpy).toHaveBeenCalledWith(`note/${NOTE_ID}/stack`);
     });
   });
 });
