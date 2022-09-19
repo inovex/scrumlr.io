@@ -110,3 +110,26 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 }
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDeleted,
+		Data: note,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
+	}
+
+	personalVotes := []*dto.Vote{}
+	for _, vote := range votes {
+		if vote.User == user {
+			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
+		}
+	}
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotesUpdated,
+		Data: personalVotes,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated votes", "err", err)
+	}
+}
