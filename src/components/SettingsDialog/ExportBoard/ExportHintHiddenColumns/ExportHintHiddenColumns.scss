@@ -1,0 +1,44 @@
+@import "src/constants/style.scss";
+
+$list-style-type: "– ";
+
+/*
+ * layout:
+ * | icon text |
+ * | **** list |
+ */
+.hint-hidden-columns__grid-container {
+  display: grid;
+  align-items: center;
+
+  grid-gap: $margin--small $margin--default;
+  margin-top: $margin--medium;
+  padding: 0 $padding--default;
+}
+
+.hint-hidden-columns__info-icon {
+  width: $icon--large;
+  height: $icon--large;
+  color: $color-warning-red;
+}
+
+.hint-hidden-columns__info-text {
+  grid-column-start: 2; // top right
+}
+
+.hint-hidden-columns__columns-list-container {
+  grid-column-start: 2; // bottom right
+}
+
+.hint-hidden-columns__columns-list {
+  margin: 0;
+  padding-left: $padding--medium;
+  list-style-type: $list-style-type;
+}
+
+[theme="dark"] {
+  .hint-hidden-columns__info-text,
+  .hint-hidden-columns__columns-list {
+    color: $color-white;
+  }
+}
