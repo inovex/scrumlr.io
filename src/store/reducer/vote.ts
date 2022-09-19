@@ -24,5 +24,9 @@ export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesS
     return state.filter((v) => v.voting !== action.voting);
   }
 
+  if (action.type === Action.UpdatedVotes) {
+    return action.votes;
+  }
+
   return state;
 };
