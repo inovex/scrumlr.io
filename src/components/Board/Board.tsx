@@ -16,6 +16,7 @@ export type BoardState = {
   showNextButton: boolean;
   showPreviousButton: boolean;
 };
+
 type ColumnState = {
   firstVisibleColumnIndex: number;
   lastVisibleColumnIndex: number;
