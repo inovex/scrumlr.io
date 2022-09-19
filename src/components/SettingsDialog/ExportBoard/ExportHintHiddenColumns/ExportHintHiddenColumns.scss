@@ -11,14 +11,15 @@ $list-style-type: "– ";
   display: grid;
   align-items: center;
 
-  column-gap: $margin--default;
+  grid-gap: $margin--small $margin--default;
   margin-top: $margin--medium;
-  padding: 0 $padding--default 0 $padding--default;
+  padding: 0 $padding--default;
 }
 
 .hint-hidden-columns__info-icon {
   width: $icon--large;
   height: $icon--large;
+  color: $color-warning-red;
 }
 
 .hint-hidden-columns__info-text {
