@@ -4,9 +4,9 @@ import {ReactComponent as InfoIcon} from "assets/icon-warning.svg";
 import {Column} from "../../../../types/column";
 import "./ExportHintHiddenColumns.scss";
 
-export interface ExportHintHiddenColumnsProps {
+type ExportHintHiddenColumnsProps = {
   columns: Column[];
-}
+};
 
 export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({columns}) => {
   const hiddenColumns = columns.filter((col) => !col.visible);
