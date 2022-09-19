@@ -1,7 +1,7 @@
 /**
  * The representation of a note on the server.
  */
-export interface Note {
+export type Note = {
   id: string;
   author: string;
   text: string;
@@ -10,7 +10,7 @@ export interface Note {
     stack?: string;
     rank: number;
   };
-}
+};
 
 export type EditNote = Partial<Omit<Note, "id" | "author">>;
 

@@ -3,7 +3,7 @@ export type VotingStatus = "OPEN" | "CLOSED" | "ABORTED";
 /**
  * The representation of a vote configuration on the server.
  */
-export interface Voting {
+export type Voting = {
   id: string;
   voteLimit: number;
   allowMultipleVotes: boolean;
@@ -21,15 +21,15 @@ export interface Voting {
       };
     };
   };
-}
+};
 
-export interface CreateVotingRequest {
+export type CreateVotingRequest = {
   voteLimit: number;
   allowMultipleVotes: boolean;
   showVotesOfOthers: boolean;
-}
+};
 
-export interface VotingsState {
+export type VotingsState = {
   open?: Voting;
   past: Voting[];
-}
+};

@@ -1,12 +1,12 @@
 import {AvataaarProps} from "components/Avatar";
 
-export interface Auth {
+export type Auth = {
   id: string;
   name: string;
   avatar?: AvataaarProps;
-}
+};
 
-export interface AuthState {
+export type AuthState = {
   user: Auth | undefined;
   initializationSucceeded: boolean | null;
-}
+};

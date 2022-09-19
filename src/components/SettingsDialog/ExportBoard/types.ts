@@ -1,21 +1,21 @@
 import {Color} from "constants/colors";
 
-export interface BoardType {
+export type BoardType = {
   id: string;
   name: string;
   showAuthors: boolean;
   showVoting: string;
   accessPolicy: string;
-}
+};
 
-export interface ColumnType {
+export type ColumnType = {
   id: string;
   name: string;
   color: Color;
   visible: boolean;
-}
+};
 
-export interface NoteType {
+export type NoteType = {
   id: string;
   author: string;
   text: string;
@@ -24,27 +24,27 @@ export interface NoteType {
     stack: string | null;
     rank: number;
   };
-}
+};
 
-export interface ParticipantType {
+export type ParticipantType = {
   role: string;
   user: {
     id: string;
     name: string;
   };
-}
+};
 
-export interface VotingType {
+export type VotingType = {
   votes: {
     votes: number;
     votesPerNote: [];
   };
-}
+};
 
-export interface BoardDataType {
+export type BoardDataType = {
   board: BoardType;
   columns: ColumnType[];
   notes: NoteType[];
   participants: ParticipantType[];
   votings: VotingType[];
-}
+};

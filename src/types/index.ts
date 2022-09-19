@@ -8,7 +8,7 @@ import {ParticipantsState} from "./participant";
 import {NotesState} from "./note";
 import {ViewState} from "./view";
 
-export interface ApplicationState {
+export type ApplicationState = {
   auth: AuthState;
   board: BoardState;
   requests: RequestsState;
@@ -18,4 +18,4 @@ export interface ApplicationState {
   votes: VotesState;
   votings: VotingsState;
   view: ViewState;
-}
+};

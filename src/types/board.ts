@@ -4,7 +4,7 @@ export enum AccessPolicy {
   "BY_INVITE" = 2,
 }
 
-export interface Board {
+export type Board = {
   id: string;
 
   name?: string;
@@ -16,13 +16,13 @@ export interface Board {
 
   sharedNote?: string;
   showVoting?: string;
-}
+};
 
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 
 export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
 
-export interface BoardState {
+export type BoardState = {
   status: BoardStatus;
   data?: Board;
-}
+};

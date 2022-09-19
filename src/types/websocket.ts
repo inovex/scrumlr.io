@@ -6,7 +6,7 @@ import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
 
-export interface BoardInitEvent {
+type BoardInitEvent = {
   type: "INIT";
   data: {
     board: Board;
@@ -17,84 +17,84 @@ export interface BoardInitEvent {
     participants: Participant[];
     requests?: Request[];
   };
-}
+};
 
-export interface BoardUpdateEvent {
+type BoardUpdateEvent = {
   type: "BOARD_UPDATED";
   data: Board;
-}
+};
 
-export interface BoardTimerUpdateEvent {
+type BoardTimerUpdateEvent = {
   type: "BOARD_TIMER_UPDATED";
   data: Board;
-}
+};
 
-export interface BoardDeletedEvent {
+type BoardDeletedEvent = {
   type: "BOARD_DELETED";
-}
+};
 
-export interface UpdatedColumnsEvent {
+type UpdatedColumnsEvent = {
   type: "COLUMNS_UPDATED";
   data: Column[];
-}
+};
 
-export interface DeletedColumnEvent {
+type DeletedColumnEvent = {
   type: "COLUMN_DELETED";
   data: string;
-}
+};
 
-export interface UpdatedNotesEvent {
+type UpdatedNotesEvent = {
   type: "NOTES_UPDATED";
   data: Note[];
-}
+};
 
-export interface DeletedNoteEvent {
+type DeletedNoteEvent = {
   type: "NOTE_DELETED";
   data: string;
-}
+};
 
-export interface RequestCreatedEvent {
+type RequestCreatedEvent = {
   type: "REQUEST_CREATED";
   data: Request;
-}
+};
 
-export interface RequestUpdatedEvent {
+type RequestUpdatedEvent = {
   type: "REQUEST_UPDATED";
   data: Request;
-}
+};
 
-export interface ParticipantCreatedEvent {
+type ParticipantCreatedEvent = {
   type: "PARTICIPANT_CREATED";
   data: Participant;
-}
+};
 
-export interface ParticipantUpdatedEvent {
+type ParticipantUpdatedEvent = {
   type: "PARTICIPANT_UPDATED";
   data: Participant;
-}
+};
 
-export interface ParticipantsUpdatedEvent {
+type ParticipantsUpdatedEvent = {
   type: "PARTICIPANTS_UPDATED";
   data: Participant[];
-}
+};
 
-export interface VotingCreatedEvent {
+type VotingCreatedEvent = {
   type: "VOTING_CREATED";
   data: Voting;
-}
+};
 
-export interface VotingUpdatedEvent {
+type VotingUpdatedEvent = {
   type: "VOTING_UPDATED";
   data: {
     voting: Voting;
     notes?: Note[];
   };
-}
+};
 
-export interface UpdatedVotesEvent {
+type UpdatedVotesEvent = {
   type: "VOTES_UPDATED";
   data: Vote[];
-}
+};
 
 export type ServerEvent =
   | BoardInitEvent

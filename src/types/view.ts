@@ -1,4 +1,4 @@
-export interface View {
+type View = {
   readonly moderating: boolean;
 
   /**
@@ -16,6 +16,6 @@ export interface View {
   readonly route?: string;
 
   readonly hotkeysAreActive: boolean;
-}
+};
 
 export type ViewState = View;

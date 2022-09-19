@@ -1,4 +1,4 @@
-export interface Name {
+type Name = {
   A: string[];
   B: string[];
   C: string[];
@@ -23,9 +23,9 @@ export interface Name {
   W: string[];
   Y: string[];
   Z: string[];
-}
+};
 
-export const ANIMAL_NAMES: Name = {
+const ANIMAL_NAMES: Name = {
   A: ["Alligator", "Alpaca", "Antelope", "Ape"],
   B: ["Bat", "Bear", "Beaver", "Bee", "Bird", "Butterfly"],
   C: ["Camel", "Cat", "Chicken", "Coyote", "Crow", "Crocodile"],
@@ -52,7 +52,7 @@ export const ANIMAL_NAMES: Name = {
   Z: ["Zebra"],
 };
 
-export const MYTHICAL_CREATURES: Name = {
+const MYTHICAL_CREATURES: Name = {
   A: ["Alien", "Angel"],
   B: ["Bigfoot", "Bogeyman", "Bookworm"],
   C: ["Centaur", "Cerberus", "Chtulhu", "Cyclops"],
@@ -78,7 +78,7 @@ export const MYTHICAL_CREATURES: Name = {
   Z: ["Zombie"],
 };
 
-export const ADJECTIVES: Name = {
+const ADJECTIVES: Name = {
   A: ["Adorable", "Adventurous", "Acrobatic", "Afraid", "Aggressive", "Agile", "Amazing", "Angry", "Anxious", "Ashamed", "Awesome", "Awful", "Awkward"],
   B: ["Bad", "Beautiful", "Beloved", "Best", "Black", "Bold", "Brave", "Brilliant", "Busy"],
   C: ["Calm", "Charming", "Cheap", "Cold", "Concerned", "Cool", "Crazy", "Creative", "Critical", "Curly", "Cute"],
@@ -142,5 +142,3 @@ export const getRandomName = () => {
 
   return `${randomAdjective} ${randomCreature}`;
 };
-
-export default getRandomName;

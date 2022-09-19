@@ -1,10 +1,10 @@
 import {SERVER_HTTP_URL} from "../config";
 
-interface ServerInformation {
+type ServerInformation = {
   authProvider: string[];
   serverTime: string;
   feedbackEnabled: boolean;
-}
+};
 
 export const InfoAPI = {
   /**
