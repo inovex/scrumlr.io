@@ -58,7 +58,7 @@ export const BoardUsers = () => {
           aria-pressed={showParticipants}
           onClick={() => setShowParticipants(!showParticipants)}
         >
-          {usersRest.length && (
+          {usersRest.length > 0 && (
             <div className="board-users__avatar board-users__avatar--others rest-users">
               <ProgressCircle className="rest-users__readiness" percentage={usersRest.filter((participant) => participant.ready).length / usersRest.length} />
               {usersRest.filter((participant) => participant.ready).length / usersRest.length < 1 ? (
