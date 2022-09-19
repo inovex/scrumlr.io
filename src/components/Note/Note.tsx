@@ -5,7 +5,6 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
-import {TabIndex} from "constants/tabIndex";
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
@@ -16,14 +15,13 @@ import "./Note.scss";
 interface NoteProps {
   noteId: string;
   viewer: Participant;
-  tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const noteRef = useRef<HTMLLIElement>(null);
+  const noteRef = useRef<HTMLButtonElement>(null);
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
@@ -45,14 +43,14 @@ export const Note = (props: NoteProps) => {
   /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId)) {
-      navigate(`stack/${note!.id}`);
+      navigate(`note/${note!.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId)) {
-        navigate(`stack/${note!.id}`);
+        navigate(`note/${note!.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
       navigate(`.`);
@@ -83,12 +81,12 @@ export const Note = (props: NoteProps) => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
       dispatch(Actions.shareNote(props.noteId));
     }
-    navigate(`stack/${props.noteId}`);
+    navigate(`note/${props.noteId}/stack`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      navigate(`stack/${props.noteId}`);
+      navigate(`note/${props.noteId}/stack`);
     }
   };
 
@@ -96,8 +94,8 @@ export const Note = (props: NoteProps) => {
   drop(noteRef);
 
   return (
-    <li className={classNames("note__root")} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
-      <div className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} tabIndex={props.tabIndex ?? TabIndex.default}>
+    <div className={classNames("note__root")}>
+      <button className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
@@ -106,10 +104,10 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
-          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
+          <Votes noteId={props.noteId!} aggregateVotes />
         </div>
-      </div>
+      </button>
       {isStack && <div className="note__in-stack" />}
-    </li>
+    </div>
   );
 };

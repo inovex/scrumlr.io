@@ -7,9 +7,10 @@ import (
 )
 
 type ColumnsObserverForTests struct {
-	t       *testing.T
-	board   *uuid.UUID
-	columns *[]Column
+	t             *testing.T
+	board         *uuid.UUID
+	columns       *[]Column
+	deletedColumn *uuid.UUID
 }
 
 func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Column) {
@@ -17,9 +18,15 @@ func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Colu
 	o.columns = &columns
 }
 
+func (o *ColumnsObserverForTests) DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote) {
+	o.board = &board
+	o.deletedColumn = &column
+}
+
 func (o *ColumnsObserverForTests) Reset() {
 	o.board = nil
 	o.columns = nil
+	o.deletedColumn = nil
 }
 
 var columnsObserver ColumnsObserverForTests
@@ -73,16 +80,16 @@ func testColumnsObserverOnUpdate(t *testing.T) {
 	assert.Equal(t, column.Name, (*columnsObserver.columns)[0].Name)
 }
 func testColumnsObserverOnDelete(t *testing.T) {
-	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID)
+	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
+	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, columnsObserver.board)
-	assert.NotNil(t, columnsObserver.columns)
-	assert.Equal(t, 0, len(*columnsObserver.columns))
-
+	assert.NotNil(t, columnsObserver.deletedColumn)
 }
 func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
-	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID)
+	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
+	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
 	assert.Nil(t, err)
 	assert.Nil(t, columnsObserver.board)
-	assert.Nil(t, columnsObserver.columns)
+	assert.Nil(t, columnsObserver.deletedColumn)
 }

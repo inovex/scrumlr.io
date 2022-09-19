@@ -38,9 +38,19 @@ export interface UpdatedColumnsEvent {
   data: Column[];
 }
 
+export interface DeletedColumnEvent {
+  type: "COLUMN_DELETED";
+  data: string;
+}
+
 export interface UpdatedNotesEvent {
   type: "NOTES_UPDATED";
   data: Note[];
+}
+
+export interface DeletedNoteEvent {
+  type: "NOTE_DELETED";
+  data: string;
 }
 
 export interface RequestCreatedEvent {
@@ -81,17 +91,25 @@ export interface VotingUpdatedEvent {
   };
 }
 
+export interface UpdatedVotesEvent {
+  type: "VOTES_UPDATED";
+  data: Vote[];
+}
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
   | BoardTimerUpdateEvent
   | BoardDeletedEvent
   | UpdatedColumnsEvent
+  | DeletedColumnEvent
   | UpdatedNotesEvent
+  | DeletedNoteEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent
   | ParticipantUpdatedEvent
   | ParticipantsUpdatedEvent
   | VotingCreatedEvent
-  | VotingUpdatedEvent;
+  | VotingUpdatedEvent
+  | UpdatedVotesEvent;

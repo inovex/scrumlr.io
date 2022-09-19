@@ -46,9 +46,18 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updateColumns(columns));
         }
 
+        if (message.type === "COLUMN_DELETED") {
+          const columnId = message.data;
+          store.dispatch(Actions.deletedColumn(columnId));
+        }
+
         if (message.type === "NOTES_UPDATED") {
           const notes = message.data;
           store.dispatch(Actions.updatedNotes(notes));
+        }
+        if (message.type === "NOTE_DELETED") {
+          const noteId = message.data;
+          store.dispatch(Actions.deletedNote(noteId));
         }
 
         if (message.type === "PARTICIPANT_CREATED") {
@@ -66,6 +75,11 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         }
         if (message.type === "VOTING_UPDATED") {
           store.dispatch(Actions.updatedVoting(message.data.voting, message.data.notes));
+        }
+
+        if (message.type === "VOTES_UPDATED") {
+          const votes = message.data;
+          store.dispatch(Actions.updatedVotes(votes));
         }
 
         if (message.type === "REQUEST_CREATED") {
