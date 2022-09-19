@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import {VFC} from "react";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
@@ -14,7 +13,7 @@ import {SettingsButton} from "../Components/SettingsButton";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
 
-export const ExportBoard: VFC = () => {
+export const ExportBoard = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 

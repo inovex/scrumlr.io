@@ -2,10 +2,10 @@ import classNames from "classnames";
 import QRCode from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import "./ShareSession.scss";
-import {useState, VFC} from "react";
+import {useState} from "react";
 import {useAppSelector} from "store";
 
-export const ShareSession: VFC = () => {
+export const ShareSession = () => {
   const {t} = useTranslation();
   const boardId = useAppSelector((state) => state.board.data?.id);
 

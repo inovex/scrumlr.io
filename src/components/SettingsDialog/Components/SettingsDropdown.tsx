@@ -1,4 +1,4 @@
-import {ElementType, VFC, useState, FocusEvent} from "react";
+import {ElementType, useState, FocusEvent} from "react";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsDropdown.scss";
 import classNames from "classnames";
@@ -15,7 +15,7 @@ interface DropdownItem {
   callback?: () => unknown;
 }
 
-export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, current}) => {
+export const SettingsDropdown = ({label, items, current}: SettingsDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   let Icon = current.icon!;

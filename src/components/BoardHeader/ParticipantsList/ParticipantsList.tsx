@@ -1,5 +1,5 @@
 import {Portal} from "components/Portal";
-import {useState, VFC} from "react";
+import {useState} from "react";
 import "./ParticipantsList.scss";
 import {useAppSelector} from "store";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
@@ -11,7 +11,7 @@ type ParticipantsListProps = {
   onClose: () => void;
 };
 
-export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
+export const ParticipantsList = (props: ParticipantsListProps) => {
   const {t} = useTranslation();
 
   const {me, them} = useAppSelector((state) => ({

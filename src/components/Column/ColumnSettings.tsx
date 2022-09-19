@@ -1,4 +1,4 @@
-import {useEffect, useRef, VFC} from "react";
+import {useEffect, useRef} from "react";
 import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
@@ -26,7 +26,7 @@ type ColumnSettingsProps = {
   onNameEdit?: () => void;
 };
 
-export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings = ({id, name, color, visible, index, onClose, onNameEdit}: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();

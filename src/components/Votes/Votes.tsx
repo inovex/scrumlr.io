@@ -1,4 +1,3 @@
-import {VFC} from "react";
 import classNames from "classnames";
 import _ from "underscore";
 import {useAppSelector} from "store";
@@ -12,7 +11,7 @@ type VotesProps = {
   aggregateVotes?: boolean;
 };
 
-export const Votes: VFC<VotesProps> = (props) => {
+export const Votes = (props: VotesProps) => {
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
     (state) => ({

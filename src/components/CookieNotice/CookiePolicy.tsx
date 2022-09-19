@@ -10,7 +10,7 @@ interface CookiePolicyProps {
   show: boolean;
 }
 
-export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onClose, show}) => {
+export const CookiePolicy = ({decline, accept, onClose, show}: CookiePolicyProps) => {
   const {t} = useTranslation();
 
   if (!show) {

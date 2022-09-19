@@ -1,4 +1,4 @@
-import {useEffect, VFC} from "react";
+import {useEffect} from "react";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
@@ -18,7 +18,7 @@ import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 import "./SettingsDialog.scss";
 
-export const SettingsDialog: VFC = () => {
+export const SettingsDialog = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);

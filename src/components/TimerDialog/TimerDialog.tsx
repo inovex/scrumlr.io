@@ -1,4 +1,4 @@
-import {VFC, useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
@@ -13,7 +13,7 @@ import "./TimerDialog.scss";
 import {getNumberFromStorage, saveToStorage} from "utils/storage";
 import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";
 
-export const TimerDialog: VFC = () => {
+export const TimerDialog = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");

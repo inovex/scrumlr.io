@@ -1,4 +1,4 @@
-import {VFC, useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
@@ -11,7 +11,7 @@ import "./VotingDialog.scss";
 import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
 import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
 
-export const VotingDialog: VFC = () => {
+export const VotingDialog = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");

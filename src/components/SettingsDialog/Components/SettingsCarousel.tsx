@@ -1,4 +1,3 @@
-import {VFC} from "react";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./SettingsCarousel.scss";
@@ -15,7 +14,7 @@ export interface SettingsCarouselProps<T> {
   className?: string;
 }
 
-export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, currentValue, onValueChange, localizationPath, label, className, disabled}) => {
+export const SettingsCarousel = ({carouselItems, currentValue, onValueChange, localizationPath, label, className, disabled}: SettingsCarouselProps<string>) => {
   const {t} = useTranslation();
 
   const handleClick = (left = false) => {

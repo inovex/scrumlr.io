@@ -1,4 +1,3 @@
-import React from "react";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionLink} from "./BoardOptionLink";
@@ -7,7 +6,7 @@ type ShowAllBoardSettingsProps = {
   onClose?: () => void;
 };
 
-export const ShowAllBoardSettings: React.VFC<ShowAllBoardSettingsProps> = (props) => {
+export const ShowAllBoardSettings = (props: ShowAllBoardSettingsProps) => {
   const {t} = useTranslation();
   return (
     <BoardOption data-testid="allSettings">
