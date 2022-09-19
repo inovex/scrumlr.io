@@ -19,11 +19,6 @@ $list-style-type: "– ";
 .hint-hidden-columns__info-icon {
   width: $icon--large;
   height: $icon--large;
-
-  g g,
-  line {
-    stroke: $color-warning-red;
-  }
 }
 
 .hint-hidden-columns__info-text {
