@@ -33,7 +33,7 @@ export const InfoBar = () => {
           icon={ShareIcon}
           direction="right"
           label={t("InfoBar.ReturnToFocusedNote")}
-          onClick={() => navigate(`stack/${state.sharedNote}`)}
+          onClick={() => navigate(`note/${state.sharedNote}/stack`)}
         />
       )}
     </aside>,
