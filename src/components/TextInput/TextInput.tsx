@@ -2,12 +2,12 @@ import {Children, cloneElement, DetailedHTMLProps, FC, InputHTMLAttributes, Reac
 import classNames from "classnames";
 import "./TextInput.scss";
 
-export interface TextInputProps extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   type?: "text" | "password";
   rightAdornment?: ReactElement;
   leftAdornment?: ReactElement;
   actions?: ReactNode;
-}
+};
 
 export const TextInput: FC<TextInputProps> = ({className, leftAdornment, rightAdornment, actions, type = "text", ...other}) => {
   if (!(leftAdornment || rightAdornment || actions)) {
