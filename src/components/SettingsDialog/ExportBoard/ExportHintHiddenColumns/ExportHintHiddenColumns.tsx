@@ -6,21 +6,18 @@ import "./ExportHintHiddenColumns.scss";
 
 export interface ExportHintHiddenColumnsProps {
   columns: Column[];
-  className: string;
 }
 
-export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({columns, className}) => {
+export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({columns}) => {
   const hiddenColumns = columns.filter((col) => !col.visible);
   const {t} = useTranslation();
 
   if (hiddenColumns.length) {
     return (
-      <div className={className}>
-        <div className="hint-hidden-columns__info-container">
-          <InfoIcon className="hint-hidden-columns__info-icon" />
-          <span className="hint-hidden-columns__info-text">{t("ExportBoardOption.hintHiddenColumns")}</span>
-        </div>
-        <div>
+      <div className="hint-hidden-columns__grid-container">
+        <InfoIcon className="hint-hidden-columns__info-icon" />
+        <span className="hint-hidden-columns__info-text">{t("ExportBoardOption.hintHiddenColumns")}</span>
+        <div className="hint-hidden-columns__columns-list-container">
           <ul className="hint-hidden-columns__columns-list">
             {hiddenColumns.map((hiddenCol) => (
               <li>{hiddenCol.name}</li>

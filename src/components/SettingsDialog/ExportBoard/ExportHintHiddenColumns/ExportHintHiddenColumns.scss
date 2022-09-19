@@ -1,26 +1,24 @@
 @import "src/constants/style.scss";
 
-$icon-text--gap: 20px;
-$columns-list--padding-left: $icon-text--gap + 50px;
 $list-style-type: "– ";
 
-.export-board__hint-hidden-columns {
-  margin-top: $margin--large;
-  padding: 0 $padding--large 0 $padding--large;
-
-  font-size: $text-size--medium;
-}
-
-.hint-hidden-columns__info-container {
-  display: flex;
+/*
+ * layout:
+ * | icon text |
+ * | **** list |
+ */
+.hint-hidden-columns__grid-container {
+  display: grid;
   align-items: center;
+
+  column-gap: $margin--default;
+  margin-top: $margin--medium;
+  padding: 0 $padding--default 0 $padding--default;
 }
 
 .hint-hidden-columns__info-icon {
-  width: $icon--huge;
-  height: $icon--huge;
-
-  margin-right: $icon-text--gap;
+  width: $icon--large;
+  height: $icon--large;
 
   g g,
   line {
@@ -28,21 +26,23 @@ $list-style-type: "– ";
   }
 }
 
+.hint-hidden-columns__info-text {
+  grid-column-start: 2; // top right
+}
+
+.hint-hidden-columns__columns-list-container {
+  grid-column-start: 2; // bottom right
+}
+
 .hint-hidden-columns__columns-list {
-  padding-left: $columns-list--padding-left;
-  margin-top: 0;
+  margin: 0;
+  padding-left: $padding--medium;
   list-style-type: $list-style-type;
 }
 
 [theme="dark"] {
-  .export-board__hint-hidden-columns {
-    color: $color-white;
-  }
-}
-
-// change margin responsively, since the text requires three instead of two lines of space in smaller viewports
-@media screen and (min-width: 920px) {
+  .hint-hidden-columns__info-text,
   .hint-hidden-columns__columns-list {
-    margin-top: -$margin--small;
+    color: $color-white;
   }
 }
