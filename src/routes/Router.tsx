@@ -64,7 +64,7 @@ const Router = () => (
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />
-        <Route path="stack/:noteId" element={<StackView />} />
+        <Route path="note/:noteId/stack" element={<StackView />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
