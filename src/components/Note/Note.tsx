@@ -12,10 +12,10 @@ import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
 
-interface NoteProps {
+type NoteProps = {
   noteId: string;
   viewer: Participant;
-}
+};
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();

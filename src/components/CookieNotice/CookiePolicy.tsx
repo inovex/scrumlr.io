@@ -3,12 +3,12 @@ import {Portal} from "components/Portal";
 import {useTranslation} from "react-i18next";
 import {marked} from "marked";
 
-interface CookiePolicyProps {
+type CookiePolicyProps = {
   decline: () => void;
   accept: () => void;
   onClose: () => void;
   show: boolean;
-}
+};
 
 export const CookiePolicy = ({decline, accept, onClose, show}: CookiePolicyProps) => {
   const {t} = useTranslation();

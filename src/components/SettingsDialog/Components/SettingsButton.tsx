@@ -2,7 +2,7 @@ import classNames from "classnames";
 import {FC, ElementType, MouseEventHandler, FocusEventHandler} from "react";
 import "./SettingsButton.scss";
 
-export interface SettingsButtonProps {
+type SettingsButtonProps = {
   label?: string;
   icon?: ElementType;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
@@ -10,7 +10,7 @@ export interface SettingsButtonProps {
   className?: string;
   disabled?: boolean;
   [key: string]: unknown;
-}
+};
 
 export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
   const Icon = icon!;

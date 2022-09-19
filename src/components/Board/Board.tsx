@@ -6,21 +6,20 @@ import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
 
-export interface BoardProps {
+type BoardProps = {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
   moderating: boolean;
-}
+};
 
-export interface BoardState {
+export type BoardState = {
   showNextButton: boolean;
   showPreviousButton: boolean;
-}
-
-export interface ColumnState {
+};
+type ColumnState = {
   firstVisibleColumnIndex: number;
   lastVisibleColumnIndex: number;
-}
+};
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({

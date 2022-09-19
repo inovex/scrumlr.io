@@ -16,9 +16,9 @@ import {FC} from "react";
 import classNames from "classnames";
 import "./HeroIllustration.scss";
 
-export interface HeroIllustrationProps {
+type HeroIllustrationProps = {
   className?: string;
-}
+};
 
 export const HeroIllustration: FC<HeroIllustrationProps> = ({className}) => (
   <aside className={classNames("hero-illustration", className)} aria-hidden>

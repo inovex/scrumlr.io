@@ -6,9 +6,9 @@ import {useAppSelector} from "store";
 import "./Participant.scss";
 import {useDispatch} from "react-redux";
 
-interface ParticipantProps {
+type ParticipantProps = {
   participant: ParticipantModel;
-}
+};
 
 export const Participant = ({participant}: ParticipantProps) => {
   const state = useAppSelector((applicationState) => ({

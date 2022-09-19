@@ -23,9 +23,9 @@ import "./AvatarSettings.scss";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
-export interface AvatarSettingsProps {
+type AvatarSettingsProps = {
   id?: string;
-}
+};
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   const {t} = useTranslation();

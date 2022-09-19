@@ -3,17 +3,17 @@ import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsDropdown.scss";
 import classNames from "classnames";
 
-interface SettingsDropdownProps {
+type SettingsDropdownProps = {
   label: string;
   items: DropdownItem[];
   current: DropdownItem;
-}
+};
 
-interface DropdownItem {
+type DropdownItem = {
   icon?: ElementType;
   text: string;
   callback?: () => unknown;
-}
+};
 
 export const SettingsDropdown = ({label, items, current}: SettingsDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);

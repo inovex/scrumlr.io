@@ -10,9 +10,9 @@ import {Button} from "components/Button";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {Board} from "./Board";
 
-interface BoardGuardProps {
+type BoardGuardProps = {
   printViewEnabled: boolean;
-}
+};
 
 export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   const {boardId} = useParams<"boardId">();

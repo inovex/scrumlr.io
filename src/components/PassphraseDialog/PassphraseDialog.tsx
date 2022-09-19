@@ -10,9 +10,9 @@ import {TextInput} from "../TextInput";
 import {Button} from "../Button";
 import {TextInputAdornment} from "../TextInputAdornment";
 
-export interface PassphraseDialogProps {
+type PassphraseDialogProps = {
   onSubmit: (passphrase: string) => void;
-}
+};
 
 export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
   const {t} = useTranslation();

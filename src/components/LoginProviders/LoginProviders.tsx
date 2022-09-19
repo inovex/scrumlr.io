@@ -8,11 +8,11 @@ import "./LoginProviders.scss";
 import {Button} from "../Button";
 import {useAppSelector} from "../../store";
 
-export interface LoginProvidersProps {
+type LoginProvidersProps = {
   originURL?: string;
-}
+};
 
-export const LoginProviders = ({originURL = window.location.href}) => {
+export const LoginProviders = ({originURL = window.location.href}: LoginProvidersProps) => {
   const {t} = useTranslation();
   const providers = useAppSelector((state) => state.view.enabledAuthProvider);
 

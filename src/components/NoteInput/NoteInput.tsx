@@ -7,11 +7,11 @@ import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "../../constants/hotkeys";
 
-export interface NoteInputProps {
+type NoteInputProps = {
   columnId: string;
   maxNoteLength: number;
   columnIndex: number;
-}
+};
 
 export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps) => {
   const {t} = useTranslation();

@@ -15,9 +15,9 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
-export interface BoardHeaderProps {
+type BoardHeaderProps = {
   currentUserIsModerator: boolean;
-}
+};
 
 export const BoardHeader = (props: BoardHeaderProps) => {
   const {t} = useTranslation();

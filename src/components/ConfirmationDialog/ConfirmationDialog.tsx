@@ -3,14 +3,14 @@ import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./ConfirmationDialog.scss";
 
-export interface ConfirmationDialogProps {
+type ConfirmationDialogProps = {
   headline: string;
   acceptMessage: string;
   declineMessage: string;
   onAccept: () => void;
   onDecline: () => void;
   className?: string;
-}
+};
 
 export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, className}: ConfirmationDialogProps) => (
   <div className={classNames("confirmation-dialog__wrapper", className)}>

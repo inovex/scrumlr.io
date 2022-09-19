@@ -2,9 +2,9 @@ import {FC} from "react";
 import classNames from "classnames";
 import "./BoardOptionToggle.scss";
 
-export interface BoardOptionToggleProps {
+type BoardOptionToggleProps = {
   active: boolean;
-}
+};
 
 export const BoardOptionToggle: FC<BoardOptionToggleProps> = ({active}) => (
   <div className="board-option-toggle">

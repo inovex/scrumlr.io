@@ -21,12 +21,12 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 
-export interface MenuBarsProps {
+type MenuBarsProps = {
   showPreviousColumn: boolean;
   showNextColumn: boolean;
   onPreviousColumn: () => void;
   onNextColumn: () => void;
-}
+};
 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();

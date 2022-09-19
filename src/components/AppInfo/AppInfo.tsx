@@ -4,9 +4,9 @@ import "./AppInfo.scss";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 
-export interface AppInfoProps {
+type AppInfoProps = {
   className?: string;
-}
+};
 
 export const AppInfo: FC<AppInfoProps> = ({className}) => {
   const {t} = useTranslation();

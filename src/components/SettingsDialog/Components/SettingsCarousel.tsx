@@ -4,7 +4,7 @@ import "./SettingsCarousel.scss";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 
-export interface SettingsCarouselProps<T> {
+type SettingsCarouselProps<T> = {
   disabled?: boolean;
   onValueChange?: (value: T) => unknown;
   carouselItems: readonly T[];
@@ -12,7 +12,7 @@ export interface SettingsCarouselProps<T> {
   currentValue?: T;
   label?: string;
   className?: string;
-}
+};
 
 export const SettingsCarousel = ({carouselItems, currentValue, onValueChange, localizationPath, label, className, disabled}: SettingsCarouselProps<string>) => {
   const {t} = useTranslation();

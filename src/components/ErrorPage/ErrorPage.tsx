@@ -3,10 +3,10 @@ import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 
-export interface ErrorPageProps {
+type ErrorPageProps = {
   errorMessage: string;
   originURL: string;
-}
+};
 
 export const ErrorPage = ({errorMessage, originURL}: ErrorPageProps) => {
   const {t} = useTranslation();

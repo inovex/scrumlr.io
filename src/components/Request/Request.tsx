@@ -6,10 +6,10 @@ import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
 import {UserAvatar} from "../BoardUsers";
 
-export interface RequestProps {
+type RequestProps = {
   requests: RequestModel[];
   participantsWithRaisedHand: Participant[];
-}
+};
 
 export const Request = ({requests, participantsWithRaisedHand}: RequestProps) => {
   const {t} = useTranslation();

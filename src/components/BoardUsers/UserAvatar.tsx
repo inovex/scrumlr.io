@@ -6,7 +6,7 @@ import {ReactComponent as RaisedHand} from "assets/icon-hand.svg";
 import {AvataaarProps, Avatar} from "../Avatar";
 import {Badge} from "../Badge";
 
-export interface UserAvatarProps {
+type UserAvatarProps = {
   className?: string;
   avatarClassName?: string;
   id: string;
@@ -15,7 +15,7 @@ export interface UserAvatarProps {
   ready?: boolean;
   raisedHand?: boolean;
   badgeText?: string;
-}
+};
 
 export const UserAvatar = ({name, badgeText, id, ready, raisedHand, avatar, className, avatarClassName}: UserAvatarProps) => {
   const [showHand, setShowHand] = useState<boolean | undefined>(raisedHand);

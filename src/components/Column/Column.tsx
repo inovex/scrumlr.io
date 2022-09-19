@@ -18,13 +18,13 @@ import {ColumnSettings} from "./ColumnSettings";
 
 const MAX_NOTE_LENGTH = 1024;
 
-export interface ColumnProps {
+export type ColumnProps = {
   id: string;
   name: string;
   color: Color;
   visible: boolean;
   index: number;
-}
+};
 
 export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();

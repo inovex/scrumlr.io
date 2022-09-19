@@ -17,9 +17,9 @@ import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
-interface State {
+type State = {
   from: {pathname: string};
-}
+};
 
 export const LoginBoard = () => {
   const {t} = useTranslation();

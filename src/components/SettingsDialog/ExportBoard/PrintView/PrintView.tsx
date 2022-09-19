@@ -13,10 +13,10 @@ import {compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/ex
 import {DEFAULT_URL} from "constants/misc";
 import {BoardDataType} from "../types";
 
-interface PrintViewProps {
+type PrintViewProps = {
   boardId: string;
   boardName: string;
-}
+};
 
 export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const {t} = useTranslation();

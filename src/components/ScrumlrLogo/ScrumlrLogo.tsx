@@ -1,10 +1,10 @@
 import classNames from "classnames";
 import "./ScrumlrLogo.scss";
 
-interface ScrumlrLogoProps {
+type ScrumlrLogoProps = {
   accentColorClassNames?: string[];
   className?: string;
-}
+};
 
 export const ScrumlrLogo = ({accentColorClassNames, className}: ScrumlrLogoProps) => {
   const gradientStops = [<stop key="gradient-default-stop" className="scrumlr-logo__stop" />];

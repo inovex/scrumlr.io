@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import "./SettingsToggle.scss";
 
-export interface SettingsToggleProps {
-  active: boolean | undefined;
-}
+type SettingsToggleProps = {
+  active?: boolean;
+};
 
 export const SettingsToggle = ({active}: SettingsToggleProps) => (
   <div className="settings-toggle">

@@ -6,9 +6,9 @@ import {Link} from "react-router-dom";
 import {marked} from "marked";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
-export interface LegalProps {
+type LegalProps = {
   document: "privacyPolicy" | "termsAndConditions" | "cookiePolicy";
-}
+};
 
 const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
   const {i18n} = useTranslation();

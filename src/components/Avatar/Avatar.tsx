@@ -31,7 +31,7 @@ import {
   AvatarTopType,
 } from "./types";
 
-export interface AvataaarProps {
+export type AvataaarProps = {
   accentColorClass: string;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
@@ -45,7 +45,7 @@ export interface AvataaarProps {
   eyeType: AvatarEyeType;
   eyebrowType: AvatarEyebrowType;
   mouthType: AvatarMouthType;
-}
+};
 
 export type AvatarProps = {
   seed: string;

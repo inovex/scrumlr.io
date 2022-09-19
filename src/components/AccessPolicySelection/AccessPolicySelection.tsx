@@ -14,12 +14,12 @@ import {Button} from "../Button";
 import {ValidationError} from "../ValidationError";
 import {TextInputAction} from "../TextInputAction";
 
-export interface AccessPolicySelectionProps {
+type AccessPolicySelectionProps = {
   accessPolicy: AccessPolicy;
   onAccessPolicyChange: (accessPolicy: AccessPolicy) => void;
   passphrase: string;
   onPassphraseChange: (passphrase: string) => void;
-}
+};
 
 export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPolicy, onAccessPolicyChange, passphrase, onPassphraseChange}) => {
   const {t} = useTranslation();
