@@ -43,14 +43,14 @@ export const Note = (props: NoteProps) => {
   /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId)) {
-      navigate(`stack/${note!.id}`);
+      navigate(`note/${note!.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId)) {
-        navigate(`stack/${note!.id}`);
+        navigate(`note/${note!.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
       navigate(`.`);
@@ -81,12 +81,12 @@ export const Note = (props: NoteProps) => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
       dispatch(Actions.shareNote(props.noteId));
     }
-    navigate(`stack/${props.noteId}`);
+    navigate(`note/${props.noteId}/stack`);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      navigate(`stack/${props.noteId}`);
+      navigate(`note/${props.noteId}/stack`);
     }
   };
 
