@@ -16,7 +16,7 @@
     "file-saver": "^2.0.5",
     "i18next": "^21.9.2",
     "i18next-browser-languagedetector": "^6.1.5",
-    "i18next-http-backend": "^1.4.1",
+    "i18next-http-backend": "^1.4.2",
     "js-cookie": "^3.0.1",
     "marked": "4.1.0",
     "qrcode.react": "^3.1.0",
@@ -44,7 +44,7 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
-    "@testing-library/dom": "^8.18.0",
+    "@testing-library/dom": "^8.18.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^14.4.3",
