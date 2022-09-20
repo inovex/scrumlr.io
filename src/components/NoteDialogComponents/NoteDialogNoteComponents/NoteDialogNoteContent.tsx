@@ -24,7 +24,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     <div className="note-dialog__note-content">
       <blockquote
         className="note-dialog__note-content__text"
-        contentEditable={!editable}
+        contentEditable={editable}
+        suppressContentEditableWarning
         onBlur={(e) => onEdit(noteId!, e.target.textContent ?? "")}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
