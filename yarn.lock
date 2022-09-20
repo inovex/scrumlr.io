@@ -5551,10 +5551,10 @@ i18next-fs-backend@^1.1.5:
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-1.1.5.tgz#dcbd8227b1c1e4323b3c40e269d4762e8313d9e5"
   integrity sha512-raTel3EfshiUXxR0gvmIoqp75jhkj8+7R1LjB006VZKPTFBbXyx6TlUVhb8Z9+7ahgpFbcQg1QWVOdf/iNzI5A==
 
-i18next-http-backend@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-1.4.1.tgz"
-  integrity sha512-s4Q9hK2jS29iyhniMP82z+yYY8riGTrWbnyvsSzi5TaF7Le4E7b5deTmtuaRuab9fdDcYXtcwdBgawZG+JCEjA==
+i18next-http-backend@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-1.4.2.tgz#9aee6fcdc0ab8e652029f5900139662018ab996f"
+  integrity sha512-Ig3bjNFrgFuRgEug0pTUCyH2NyUeMO4cUDwuom+CIB3LkKSba8ui5p4nWmZISuBtLQ7SI/5naDUXDmq6ZWuEwA==
   dependencies:
     cross-fetch "3.1.5"
 
