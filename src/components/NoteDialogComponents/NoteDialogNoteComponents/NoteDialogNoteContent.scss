@@ -9,7 +9,8 @@
 .note-dialog__note-content__text {
   background: none;
   margin: 0;
-  min-height: 3 * $line-height--medium;
+  overflow-y: scroll;
+  @include scrollbar();
   width: 100%;
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
