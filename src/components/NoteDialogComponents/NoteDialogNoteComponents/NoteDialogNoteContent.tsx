@@ -22,11 +22,10 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   return (
     <div className="note-dialog__note-content">
-      <blockquote
+      <textarea
         className="note-dialog__note-content__text"
-        contentEditable={editable}
-        suppressContentEditableWarning
-        onBlur={(e) => onEdit(noteId!, e.target.textContent ?? "")}
+        disabled={!editable}
+        onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
@@ -35,7 +34,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         }}
       >
         {text}
-      </blockquote>
+      </textarea>
     </div>
   );
 };
