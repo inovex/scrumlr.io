@@ -57,10 +57,10 @@ $stack-view-top-margin: 64px;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {
-    line-height: $line-height--large;
-    height: auto;
     min-height: 92px;
     max-height: 164px;
+    line-height: $line-height--large;
+    height: auto;
   }
 
   .vote-button-add {
