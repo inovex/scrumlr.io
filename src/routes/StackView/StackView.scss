@@ -1,6 +1,8 @@
 @import "constants/style";
 
 $stack-view-top-margin: 64px;
+$stack-view__parent-note__max-textarea-height: 164px;
+$stack-view__parent-note__max-textarea-height: 92px;
 
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -57,10 +59,7 @@ $stack-view-top-margin: 64px;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {
-    min-height: 92px;
-    max-height: 164px;
     line-height: $line-height--large;
-    height: auto;
   }
 
   .vote-button-add {
