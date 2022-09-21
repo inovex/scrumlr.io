@@ -53,12 +53,14 @@ $stack-view-top-margin: 64px;
   margin: 0;
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
-  height: 208px;
   font-size: $text-size--large;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {
     line-height: $line-height--large;
+    height: auto;
+    min-height: 92px;
+    max-height: 164px;
   }
 
   .vote-button-add {
