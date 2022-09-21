@@ -11,6 +11,7 @@ import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
+import {ExportHintHiddenColumns} from "./ExportHintHiddenColumns";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
 
@@ -20,6 +21,7 @@ export const ExportBoard: VFC = () => {
 
   const boardId = useAppSelector((state) => state.board.data!.id);
   const boardName = useAppSelector((state) => state.board.data!.name);
+  const columns = useAppSelector((state) => state.columns);
 
   return (
     <div data-testid="export" className="settings-dialog__container">
@@ -69,6 +71,8 @@ export const ExportBoard: VFC = () => {
           data-testid="export-markdown"
         />
       </div>
+
+      <ExportHintHiddenColumns columns={columns} />
     </div>
   );
 };
