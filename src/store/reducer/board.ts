@@ -14,13 +14,7 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     }
     case Action.UpdatedBoardTimer: {
       if (action.board.timerEnd) {
-        let endTime;
-        if (action.context.serverTimeOffset >= 0) {
-          endTime = new Date(new Date(action.board.timerEnd).getTime() + action.context.serverTimeOffset);
-        } else {
-          endTime = new Date(new Date(action.board.timerEnd).getTime() - action.context.serverTimeOffset);
-        }
-        return {...state, data: {...state.data!, timerEnd: endTime}};
+        return {...state, data: {...state.data!, timerEnd: new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset))}};
       }
       return {
         status: "ready",
