@@ -7,14 +7,32 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
   switch (action.type) {
     case Action.InitializeBoard:
     case Action.UpdatedBoard: {
+      let endTime;
+      if (action.context.serverTimeOffset >= 0 && action.board.timerEnd) {
+        // Server behind
+        endTime = new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
+      } else if (action.context.serverTimeOffset <= 0 && action.board.timerEnd) {
+        // Server ahead
+        endTime = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
+      }
+
       return {
         status: "ready",
-        data: {...action.board, timerEnd: action.board.timerEnd ? new Date(new Date(action.board.timerEnd).getTime() - action.context.serverTimeOffset) : undefined},
+        data: {...action.board, timerEnd: action.board.timerEnd ? endTime : undefined},
       };
     }
     case Action.UpdatedBoardTimer: {
       if (action.board.timerEnd) {
-        return {...state, data: {...state.data!, timerEnd: new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset))}};
+        let endTime;
+        if (action.context.serverTimeOffset >= 0) {
+          // Server behind
+          endTime = new Date(new Date(action.board.timerEnd).getTime() + action.context.serverTimeOffset);
+        } else {
+          // Server ahead
+          endTime = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
+        }
+
+        return {...state, data: {...state.data!, timerEnd: endTime}};
       }
       return {
         status: "ready",
