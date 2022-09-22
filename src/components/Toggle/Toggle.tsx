@@ -16,6 +16,4 @@ type ToggleProps = {
   active: boolean;
 };
 
-export const Toggle: FC<ToggleProps> = ({className, disabled, active}) => (
-  <div className={classNames("toggle", {"toggle--active": active, "toggle--disabled": disabled}, className)} />
-);
+export const Toggle: FC<ToggleProps> = (props) => <div className={classNames("toggle", {"toggle--active": props.active, "toggle--disabled": props.disabled}, props.className)} />;

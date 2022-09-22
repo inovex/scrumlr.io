@@ -12,18 +12,18 @@ type TooltipButtonProps = {
   active?: boolean;
 };
 
-export const TooltipButton = ({direction, onClick, label, disabled, icon, className, active}: TooltipButtonProps) => {
-  const Icon = icon;
+export const TooltipButton = (props: TooltipButtonProps) => {
+  const Icon = props.icon;
 
   return (
     <button
-      disabled={disabled}
-      className={classNames("tooltip-button", `tooltip-button--${direction ?? "right"}`, {"tooltip-button--active": active}, className)}
-      onClick={() => onClick()}
-      aria-label={label}
+      disabled={props.disabled}
+      className={classNames("tooltip-button", `tooltip-button--${props.direction ?? "right"}`, {"tooltip-button--active": props.active}, props.className)}
+      onClick={() => props.onClick()}
+      aria-label={props.label}
     >
       <div className="tooltip-button__tooltip" aria-hidden>
-        <span className="tooltip-button__tooltip-text">{label}</span>
+        <span className="tooltip-button__tooltip-text">{props.label}</span>
       </div>
       <Icon className="tooltip-button__icon" aria-hidden />
       <CloseIcon className="tooltip-button__icon" aria-hidden />

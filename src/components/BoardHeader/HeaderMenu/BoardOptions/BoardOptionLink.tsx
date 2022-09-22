@@ -9,8 +9,8 @@ export type BoardOptionLinkProps = {
   onClick?: MouseEventHandler<HTMLAnchorElement> | undefined;
 };
 
-export const BoardOptionLink = ({to, label, onClick}: BoardOptionLinkProps) => (
-  <Link to={to} onClick={onClick} className={classNames("board-option-link")}>
-    <p className="board-option-link__label">{label}</p>
+export const BoardOptionLink = (props: BoardOptionLinkProps) => (
+  <Link to={props.to} onClick={props.onClick} className={classNames("board-option-link")}>
+    <p className="board-option-link__label">{props.label}</p>
   </Link>
 );

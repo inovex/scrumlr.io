@@ -37,24 +37,24 @@ type ToggleButtonProps<T> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
-export const ToggleButton = <T extends unknown>({className, values, value, onToggle, disabled, onLeft, onRight}: ToggleButtonProps<T>) => {
+export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
   const onClick = () => {
-    if (disabled) return;
-    const newValue = value === values[0] ? values[1] : values[0];
-    onToggle?.(newValue);
-    if (newValue === values[0]) {
-      onLeft?.();
+    if (props.disabled) return;
+    const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
+    props.onToggle?.(newValue);
+    if (newValue === props.values[0]) {
+      props.onLeft?.();
     } else {
-      onRight?.();
+      props.onRight?.();
     }
   };
 
-  const isActive = value === values[1];
+  const isActive = props.value === props.values[1];
 
   return (
     // aria-disabled instead of disabled so that it is focusable but not editable
-    <button aria-disabled={disabled} onClick={onClick} className={classNames("toggle-button", className)} aria-pressed={isActive}>
-      <Toggle active={isActive} disabled={disabled} />
+    <button aria-disabled={props.disabled} onClick={onClick} className={classNames("toggle-button", props.className)} aria-pressed={isActive}>
+      <Toggle active={isActive} disabled={props.disabled} />
     </button>
   );
 };

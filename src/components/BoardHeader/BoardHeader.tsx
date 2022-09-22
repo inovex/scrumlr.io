@@ -19,7 +19,7 @@ type BoardHeaderProps = {
   currentUserIsModerator: boolean;
 };
 
-export const BoardHeader = ({currentUserIsModerator}: BoardHeaderProps) => {
+export const BoardHeader = (props: BoardHeaderProps) => {
   const {t} = useTranslation();
   const state = useAppSelector(
     (rootState) => ({
@@ -92,7 +92,7 @@ export const BoardHeader = ({currentUserIsModerator}: BoardHeaderProps) => {
           </button>
         </div>
 
-        <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={currentUserIsModerator} />
+        <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />
       </header>
     </>
   );

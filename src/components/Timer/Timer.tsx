@@ -20,11 +20,11 @@ const usePrevious = (value: boolean) => {
   return ref.current;
 };
 
-export const Timer = ({endTime}: TimerProps) => {
+export const Timer = (props: TimerProps) => {
   const {t} = useTranslation();
 
   const calculateTime = () => {
-    const difference = +endTime - +new Date();
+    const difference = +props.endTime - +new Date();
     // In this object the remaining time is calculated
     // If the ending date of the timer is past the current date, it will show zero
     return {

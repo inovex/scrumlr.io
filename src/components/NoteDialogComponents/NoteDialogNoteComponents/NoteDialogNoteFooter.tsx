@@ -18,10 +18,10 @@ type NoteDialogNoteFooterProps = {
   viewer: Participant;
 };
 
-export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = ({showAuthors, authorId, avatar, authorName, noteId, viewer}: NoteDialogNoteFooterProps) => {
+export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
   const {t} = useTranslation();
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId), _.isEqual);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
@@ -34,13 +34,13 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = ({showAuthors
   }, _.isEqual);
   return (
     <div className="note-dialog__note-footer">
-      {(showAuthors || viewer.user.id === authorId) && (
+      {(props.showAuthors || props.viewer.user.id === props.authorId) && (
         <figure className={classNames("note-dialog__note-author", {"note-dialog__note-author--self": author.isSelf})}>
-          <UserAvatar id={authorId} avatar={avatar} name={authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
-          <figcaption className="note-dialog__note-author-name">{authorName}</figcaption>
+          <UserAvatar id={props.authorId} avatar={props.avatar} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
+          <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
       )}
-      <Votes noteId={noteId} className="note-dialog__note-votes" />
+      <Votes {...props} className="note-dialog__note-votes" />
     </div>
   );
 };
