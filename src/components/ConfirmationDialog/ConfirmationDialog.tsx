@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
+import FocusLock from "react-focus-lock";
 import "./ConfirmationDialog.scss";
 
 export interface ConfirmationDialogProps {
@@ -13,18 +14,20 @@ export interface ConfirmationDialogProps {
 }
 
 export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, className}: ConfirmationDialogProps) => (
-  <div className={classNames("confirmation-dialog__wrapper", className)}>
-    <div className="confirmation-dialog">
-      <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-      <h2>{headline}</h2>
-      <Button type="submit" color="primary" className="confirmation-dialog__button" onClick={() => onAccept()}>
-        {acceptMessage}
-      </Button>
-      <Button type="submit" color="primary" className="confirmation-dialog__button" variant="outlined" onClick={() => onDecline()} autoFocus>
-        {declineMessage}
-      </Button>
+  <FocusLock autoFocus={false} returnFocus>
+    <div className={classNames("confirmation-dialog__wrapper", className)}>
+      <div className="confirmation-dialog">
+        <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+        <h2>{headline}</h2>
+        <Button type="submit" color="primary" className="confirmation-dialog__button" onClick={() => onAccept()}>
+          {acceptMessage}
+        </Button>
+        <Button type="submit" color="primary" className="confirmation-dialog__button" variant="outlined" onClick={() => onDecline()} autoFocus>
+          {declineMessage}
+        </Button>
+      </div>
     </div>
-  </div>
+  </FocusLock>
 );
 
 export default ConfirmationDialog;
