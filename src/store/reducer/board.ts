@@ -4,35 +4,32 @@ import {BoardState} from "types/board";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
+  function addOffset(action: any): Date | undefined {
+    let endTime;
+
+    if (!action.board.timerEnd) return undefined;
+
+    if (action.board.timerEnd && action.context.serverTimeOffset >= 0) {
+      // Server behind
+      endTime = new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
+    } else {
+      // Server ahead
+      endTime = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
+    }
+    return endTime;
+  }
+
   switch (action.type) {
     case Action.InitializeBoard:
     case Action.UpdatedBoard: {
-      let timerEnd;
-      if (action.board.timerEnd && action.context.serverTimeOffset >= 0) {
-        // Server behind
-        timerEnd = new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
-      } else if (action.board.timerEnd && action.context.serverTimeOffset < 0) {
-        // Server ahead
-        timerEnd = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
-      }
-
       return {
         status: "ready",
-        data: {...action.board, timerEnd: action.board.timerEnd ? timerEnd : undefined},
+        data: {...action.board, timerEnd: addOffset(action)},
       };
     }
     case Action.UpdatedBoardTimer: {
       if (action.board.timerEnd) {
-        let timerEnd;
-        if (action.context.serverTimeOffset >= 0) {
-          // Server behind
-          timerEnd = new Date(new Date(action.board.timerEnd).getTime() + action.context.serverTimeOffset);
-        } else {
-          // Server ahead
-          timerEnd = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
-        }
-
-        return {...state, data: {...state.data!, timerEnd}};
+        return {...state, data: {...state.data!, timerEnd: addOffset(action)}};
       }
       return {
         status: "ready",
