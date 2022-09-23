@@ -34,7 +34,7 @@ export const ParticipantsList: VFC<ParticipantsListProps> = (props) => {
         setSearchString("");
       }}
     >
-      <aside className="participants">
+      <aside className="participants" onClick={(e) => e.stopPropagation()}>
         <div className="participants__header">
           <div className="participants__header-title">
             <h4 className="participants__header-text">
