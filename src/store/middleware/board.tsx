@@ -16,18 +16,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
   function removeOffset(): Date | undefined {
     const offset = stateAPI.getState().view.serverTimeOffset;
     const timerEnd = stateAPI.getState().board.data?.timerEnd;
-    let endTime;
 
     if (!timerEnd) return undefined;
-
     if (timerEnd && offset >= 0) {
       // Server behind
-      endTime = new Date(new Date(timerEnd).getTime() - Math.abs(offset));
-    } else {
-      // Server ahead
-      endTime = new Date(new Date(timerEnd).getTime() + Math.abs(offset));
+      return new Date(new Date(timerEnd).getTime() - Math.abs(offset));
     }
-    return endTime;
+    // Server ahead
+    return new Date(new Date(timerEnd).getTime() + Math.abs(offset));
   }
 
   if (action.type === Action.LeaveBoard) {
