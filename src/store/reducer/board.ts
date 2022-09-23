@@ -7,32 +7,32 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
   switch (action.type) {
     case Action.InitializeBoard:
     case Action.UpdatedBoard: {
-      let endTime;
-      if (action.context.serverTimeOffset >= 0 && action.board.timerEnd) {
+      let timerEnd;
+      if (action.board.timerEnd && action.context.serverTimeOffset >= 0) {
         // Server behind
-        endTime = new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
-      } else if (action.context.serverTimeOffset <= 0 && action.board.timerEnd) {
+        timerEnd = new Date(new Date(action.board.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
+      } else if (action.board.timerEnd && action.context.serverTimeOffset < 0) {
         // Server ahead
-        endTime = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
+        timerEnd = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
       }
 
       return {
         status: "ready",
-        data: {...action.board, timerEnd: action.board.timerEnd ? endTime : undefined},
+        data: {...action.board, timerEnd: action.board.timerEnd ? timerEnd : undefined},
       };
     }
     case Action.UpdatedBoardTimer: {
       if (action.board.timerEnd) {
-        let endTime;
+        let timerEnd;
         if (action.context.serverTimeOffset >= 0) {
           // Server behind
-          endTime = new Date(new Date(action.board.timerEnd).getTime() + action.context.serverTimeOffset);
+          timerEnd = new Date(new Date(action.board.timerEnd).getTime() + action.context.serverTimeOffset);
         } else {
           // Server ahead
-          endTime = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
+          timerEnd = new Date(new Date(action.board.timerEnd).getTime() - Math.abs(action.context.serverTimeOffset));
         }
 
-        return {...state, data: {...state.data!, timerEnd: endTime}};
+        return {...state, data: {...state.data!, timerEnd}};
       }
       return {
         status: "ready",

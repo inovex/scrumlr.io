@@ -94,10 +94,21 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
   if (action.type === Action.EditBoard) {
     const currentState = stateAPI.getState().board.data!;
+    const serverOffset = stateAPI.getState().view.serverTimeOffset;
+
+    let timerEnd;
+    if (currentState.timerEnd && serverOffset >= 0) {
+      // Server behind
+      timerEnd = new Date(new Date(currentState.timerEnd).getTime() - action.context.serverTimeOffset);
+    } else if (currentState.timerEnd && serverOffset < 0) {
+      // Server ahead
+      timerEnd = new Date(new Date(currentState.timerEnd).getTime() + Math.abs(action.context.serverTimeOffset));
+    }
+
     API.editBoard(action.context.board!, {
       sharedNote: currentState.sharedNote,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerEnd: currentState.timerEnd ? timerEnd : undefined,
       accessPolicy: action.board.accessPolicy,
       passphrase: action.board.passphrase,
       allowStacking: action.board.allowStacking,
