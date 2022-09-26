@@ -1,19 +1,17 @@
 @import "src/constants/style";
 
-$request-container-padding: 30px;
-
 // CONTAINER
 .request__container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  column-gap: $request-container-padding;
+  column-gap: 12px;
 
   width: fit-content;
   height: 56px;
-  border-radius: 28px;
 
-  padding: 0 $request-container-padding;
+  padding: 0 5px;
+  border-radius: 28px;
 
   background-color: $color-white;
   box-shadow: 0 3px 5px rgba($menu-icon-background-color--dark, 30%);
@@ -41,7 +39,7 @@ $request-container-padding: 30px;
 }
 
 // ICON
-.request__icon {
-  width: $icon--large;
-  height: $icon--large;
+.request__icon-container {
+  width: $icon--extralarge;
+  height: $icon--extralarge;
 }
