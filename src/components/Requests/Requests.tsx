@@ -1,18 +1,16 @@
 import {Actions} from "store/action";
 import {Request as RequestModel} from "types/request";
 import "./Request.scss";
-// import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
-// import {UserAvatar} from "../BoardUsers";
+import {Request} from "./Request";
 
-export interface RequestProps {
+export interface RequestsProps {
   requests: RequestModel[];
   participantsWithRaisedHand: Participant[];
 }
 
-export const Requests = ({requests, participantsWithRaisedHand}: RequestProps) => {
-  // const {t} = useTranslation();
+export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) => {
   const dispatch = useDispatch();
 
   // @ts-ignore
@@ -34,18 +32,12 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestProps) =
 
   return requests.length !== 0 || participantsWithRaisedHand.length !== 0 ? (
     <div className="requests__wrapper">
-      <div className="request__main">
+      <div className="requests__main">
         {/* list of all request */}
-        <ul className="request__requests">
-          {/* all raise hand requests */}
-          {participantsWithRaisedHand.map((p) => (
-            <li key={p.user.id} className="join-request__unique-request-container">
-              <div>(Avatar)</div>
-              <div>{p.user.name}</div>
-              <div>(Click)</div>
-            </li>
-          ))}
-        </ul>
+        {/* all raise hand requests */}
+        {participantsWithRaisedHand.map((p) => (
+          <Request participant={p} />
+        ))}
       </div>
     </div>
   ) : null;
