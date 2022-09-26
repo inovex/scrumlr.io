@@ -6,7 +6,7 @@
     "url": "https://github.com/inovex/scrumlr.io/issues",
     "email": "info@scrumlr.io"
   },
-  "version": "2.7.6",
+  "version": "2.7.7",
   "private": true,
   "license": "MIT",
   "dependencies": {
