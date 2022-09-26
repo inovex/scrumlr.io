@@ -1,5 +1,5 @@
 import {fireEvent, getByText} from "@testing-library/react";
-import {Request} from "components/Request";
+import {Requests} from "components/Requests";
 import {Actions} from "store/action";
 import {render} from "testUtils";
 import * as redux from "react-redux";
@@ -17,7 +17,7 @@ describe("JoinRequest", () => {
         status: "PENDING" as const,
       });
     }
-    return <Request requests={joinRequests} participantsWithRaisedHand={[]} />;
+    return <Requests requests={joinRequests} participantsWithRaisedHand={[]} />;
   };
 
   describe("should render correctly", () => {

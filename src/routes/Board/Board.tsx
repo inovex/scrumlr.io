@@ -1,7 +1,7 @@
 import {LoadingScreen} from "components/LoadingScreen";
 import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
-import {Request} from "components/Request";
+import {Requests} from "components/Requests";
 import store, {useAppSelector} from "store";
 import {InfoBar} from "components/Infobar";
 import {useEffect} from "react";
@@ -62,7 +62,7 @@ export const Board = () => {
     return (
       <>
         {currentUserIsModerator && (
-          <Request
+          <Requests
             requests={state.requests.filter((request) => request.status === "PENDING")}
             participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
           />
