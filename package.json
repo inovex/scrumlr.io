@@ -6,7 +6,7 @@
     "url": "https://github.com/inovex/scrumlr.io/issues",
     "email": "info@scrumlr.io"
   },
-  "version": "2.7.5",
+  "version": "2.7.7",
   "private": true,
   "license": "MIT",
   "dependencies": {
@@ -55,7 +55,7 @@
     "@types/jest": "^29.0.3",
     "@types/js-cookie": "^3.0.2",
     "@types/marked": "^4.0.7",
-    "@types/node": "^18.7.18",
+    "@types/node": "^18.7.21",
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^17.0.43",
     "@types/react-dnd": "^3.0.2",
@@ -71,7 +71,7 @@
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "cross-env": "^7.0.3",
-    "eslint": "8.23.1",
+    "eslint": "8.24.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
