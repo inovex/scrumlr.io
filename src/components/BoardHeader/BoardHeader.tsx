@@ -4,11 +4,10 @@ import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {BoardUsers} from "components/BoardUsers";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
-import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
@@ -37,16 +36,13 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   return (
     <>
       {showConfirmationDialog && (
-        <ConfirmationDialog
-          headline={t("ConfirmationDialog.returnToHomepage")}
-          acceptMessage={t("ConfirmationDialog.yes")}
-          onAccept={() => {
-            store.dispatch(Actions.leaveBoard());
-            navigate("/");
-          }}
-          declineMessage={t("ConfirmationDialog.no")}
-          onDecline={() => setShowConfirmationDialog(false)}
-        />
+        <ConfirmationDialog onClose={() => setShowConfirmationDialog(false)}>
+          <span>Are you sure that you want to leave the session and return to the homepage?</span>
+          <div>
+            <button>No</button>
+            <button>Yes</button>
+          </div>
+        </ConfirmationDialog>
       )}
       <header className="board-header">
         <button className="board-header__link" onClick={() => setShowConfirmationDialog(true)}>

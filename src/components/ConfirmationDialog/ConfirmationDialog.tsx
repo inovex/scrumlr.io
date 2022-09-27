@@ -1,31 +1,16 @@
-import {Button} from "components/Button";
-import {ScrumlrLogo} from "components/ScrumlrLogo";
-import "./ConfirmationDialog.scss";
+import {FC} from "react";
+import classNames from "classnames";
 import {Portal} from "../Portal";
+import "./ConfirmationDialog.scss";
 
 export interface ConfirmationDialogProps {
-  headline: string;
-  acceptMessage: string;
-  declineMessage: string;
-  onAccept: () => void;
-  onDecline: () => void;
   className?: string;
+  onClose: () => void;
 }
 
-export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, className}: ConfirmationDialogProps) => (
-  <Portal onClose={() => onDecline()} className="confirmation-dialog__wrapper">
-    <aside className="confirmation-dialog">
-      <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-      <h2>{headline}</h2>
-      <div>
-        <Button type="submit" color="primary" onClick={() => onAccept()}>
-          {acceptMessage}
-        </Button>
-        <Button type="submit" color="primary" variant="outlined" onClick={() => onDecline()} autoFocus>
-          {declineMessage}
-        </Button>
-      </div>
-    </aside>
+export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => (
+  <Portal onClose={() => props.onClose()} className={classNames("confirmation-dialog__wrapper", props.className)}>
+    <aside className="confirmation-dialog">{props.children}</aside>
   </Portal>
 );
 
