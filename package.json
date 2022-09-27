@@ -40,7 +40,7 @@
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "sockette": "^2.0.6",
-    "underscore": "^1.13.4",
+    "underscore": "^1.13.6",
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
