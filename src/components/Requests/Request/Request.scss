@@ -7,7 +7,7 @@
   align-items: center;
   column-gap: 12px;
 
-  width: fit-content;
+  width: auto;
   height: 56px;
 
   padding: 0 5px;
@@ -15,6 +15,22 @@
 
   background-color: $color-white;
   box-shadow: 0 3px 5px rgba($menu-icon-background-color--dark, 30%);
+
+  #Circle-Background {
+    stroke: $tooltip-background-color--light;
+  }
+
+  &:hover {
+    animation: anim-hover 0.4s ease-out both;
+
+    #Circle-Background {
+      animation: anim-hover-circle 0.4s ease-out both;
+    }
+
+    .request__request-figure {
+      animation: anim-hover-figure 0.4s ease-out both;
+    }
+  }
 }
 
 // FIGURE
@@ -42,4 +58,23 @@
 .request__icon-container {
   width: $icon--extralarge;
   height: $icon--extralarge;
+}
+
+// ANIMATIONS
+@keyframes anim-hover {
+  to {
+    background-color: $hover-background-orchid;
+  }
+}
+
+@keyframes anim-hover-circle {
+  to {
+    stroke: $color-lean-lilac;
+  }
+}
+
+@keyframes anim-hover-figure {
+  to {
+    margin-right: 5px;
+  }
 }
