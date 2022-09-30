@@ -48,6 +48,7 @@
 
 .column__header-menu-dropdown > ul > li > button > svg {
   height: 24px;
+  width: 24px;
 }
 
 .column__header-menu-dropdown > ul > li:last-of-type {
@@ -97,6 +98,9 @@
 
   .column__header-menu-dropdown > ul > li > button {
     color: $color-white;
+    > svg {
+      fill: $color-white;
+    }
   }
 
   .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
