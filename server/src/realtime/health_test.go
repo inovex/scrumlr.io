@@ -9,11 +9,11 @@ import (
 )
 
 func TestRealtime_IsHealthy(t *testing.T) {
-	rt, err := realtime.New("foo")
+	rt, err := realtime.NewNats("foo")
 	assert.NotNil(t, err)
 	assert.False(t, rt.IsHealthy())
 
-	rt, err = realtime.New(SetupNatsContainer(t))
+	rt, err = realtime.NewNats(SetupNatsContainer(t))
 	assert.Nil(t, err)
 	assert.True(t, rt.IsHealthy())
 }

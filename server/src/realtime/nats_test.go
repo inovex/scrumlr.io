@@ -60,7 +60,7 @@ func SetupNatsContainer(t *testing.T) string {
 			// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
 			pool.MaxWait = 120 * time.Second
 			if err = pool.Retry(func() error {
-				rt, err := realtime.New(natsTestURL)
+				rt, err := realtime.NewNats(natsTestURL)
 				if err != nil || !rt.IsHealthy() {
 					return errors.New("nats not healthy yet")
 				}

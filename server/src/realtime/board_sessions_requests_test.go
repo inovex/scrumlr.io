@@ -16,7 +16,7 @@ func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
 
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelFunc()
-	rt, err := realtime.New(SetupNatsContainer(t))
+	rt, err := realtime.NewNats(SetupNatsContainer(t))
 	assert.Nil(t, err)
 	testBoard := uuid.New()
 	testUser := uuid.New()

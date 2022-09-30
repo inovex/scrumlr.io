@@ -159,7 +159,7 @@ func run(c *cli.Context) error {
 		return errors.Wrap(err, "unable to migrate database")
 	}
 
-	rt, err := realtime.New(c.String("nats"))
+	rt, err := realtime.NewNats(c.String("nats"))
 	if err != nil {
 		logger.Get().Fatalf("failed to connect to message queue: %v", err)
 	}

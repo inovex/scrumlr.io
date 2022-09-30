@@ -6,12 +6,38 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type Realtime struct {
+type natsClient struct {
 	con *nats.EncodedConn
 }
 
-func New(url string) (*Realtime, error) {
-	r := new(Realtime)
+// Publish the given event to the given subject
+func (n *natsClient) Publish(subject string, event interface{}) error {
+	return n.con.Publish(subject, event)
+}
+
+// SubscribeToBoardSessionEvents subscribes to the given subject
+func (n *natsClient) SubscribeToBoardSessionEvents(subject string) (chan *BoardSessionRequestEventType, error) {
+	receiverChan := make(chan *BoardSessionRequestEventType)
+	_, err := n.con.BindRecvChan(subject, receiverChan)
+	if err != nil {
+		return receiverChan, fmt.Errorf("failed to bind to subject %s: %w", subject, err)
+	}
+	return receiverChan, nil
+}
+
+// SubscribeToBoardEvents subscribes to the given subject
+func (n *natsClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, error) {
+	receiverChan := make(chan *BoardEvent)
+	_, err := n.con.BindRecvChan(subject, receiverChan)
+	if err != nil {
+		return receiverChan, fmt.Errorf("failed to bind to subject %s: %w", subject, err)
+	}
+	return receiverChan, nil
+}
+
+// NewNats returns a new NATs backed Broker
+func NewNats(url string) (*Broker, error) {
+	r := new(Broker)
 
 	// Connect to a server
 	nc, err := nats.Connect(url)
@@ -23,7 +49,7 @@ func New(url string) (*Realtime, error) {
 		return nil, fmt.Errorf("unable to open encoded connection: %w", err)
 	}
 
-	r.con = c
+	r.con = &natsClient{con: c}
 
 	return r, nil
 }
