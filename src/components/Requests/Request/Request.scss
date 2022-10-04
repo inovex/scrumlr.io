@@ -21,14 +21,10 @@
   }
 
   &:hover {
-    animation: anim-hover 0.4s ease-out both;
+    background-color: $hover-background-orchid;
 
     #Circle-Background {
-      animation: anim-hover-circle 0.4s ease-out both;
-    }
-
-    .request__request-figure {
-      animation: anim-hover-figure 0.4s ease-out both;
+      stroke: $color-lean-lilac;
     }
   }
 }
@@ -38,10 +34,16 @@
   margin: 0;
 }
 
+// MIDDLE WRAPPER
+.request__middle-wrapper {
+  position: relative;
+}
+
 // NAME AND TEXT
 .request__info-container {
   display: flex;
   flex-direction: column;
+  font-size: $text-size--medium;
 }
 
 .request__participant-name {
@@ -54,27 +56,26 @@
   opacity: 50%;
 }
 
+// BUTTON
+.request__button {
+  // position button over .request__info-container and center vertically
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  height: 40px;
+  width: 100%;
+
+  background-clip: $menu-icon-background-color--light;
+  border-radius: 21px;
+
+  font-weight: bold;
+  font-size: $text-size--medium;
+}
+
 // ICON
 .request__icon-container {
   width: $icon--extralarge;
   height: $icon--extralarge;
-}
-
-// ANIMATIONS
-@keyframes anim-hover {
-  to {
-    background-color: $hover-background-orchid;
-  }
-}
-
-@keyframes anim-hover-circle {
-  to {
-    stroke: $color-lean-lilac;
-  }
-}
-
-@keyframes anim-hover-figure {
-  to {
-    margin-right: 5px;
-  }
 }
