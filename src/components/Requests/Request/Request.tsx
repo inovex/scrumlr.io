@@ -6,9 +6,10 @@ import {UserAvatar} from "../../BoardUsers";
 
 export type RequestProps = {
   participant: Participant;
+  handleClick: (user: string) => void;
 };
 
-export const Request = ({participant}: RequestProps) => {
+export const Request = ({participant, handleClick}: RequestProps) => {
   const {t} = useTranslation();
 
   return (
@@ -23,7 +24,9 @@ export const Request = ({participant}: RequestProps) => {
           <span className="request__participant-name">{participant.user.name}</span>
           <span className="request__info-text">{t("RaiseRequest.title")}</span>
         </div>
-        <button className="request__button">{t("RaiseRequest.lower")}</button>
+        <button className="request__button" onClick={() => handleClick(participant.user.id)}>
+          {t("RaiseRequest.lower")}
+        </button>
       </div>
 
       <div className="request__icon-container">

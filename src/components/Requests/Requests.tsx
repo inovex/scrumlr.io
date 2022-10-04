@@ -23,11 +23,8 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
     dispatch(Actions.rejectJoinRequests(userIds));
   };
 
-  // @ts-ignore
-  const lowerHand = (userId: string[]) => {
-    userId.forEach((user) => {
-      dispatch(Actions.setRaisedHand(user, false));
-    });
+  const lowerHand = (user: string) => {
+    dispatch(Actions.setRaisedHand(user, false));
   };
 
   return requests.length !== 0 || participantsWithRaisedHand.length !== 0 ? (
@@ -36,7 +33,7 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
         {/* list of all request */}
         {/* all raise hand requests */}
         {participantsWithRaisedHand.map((p) => (
-          <Request participant={p} />
+          <Request participant={p} handleClick={lowerHand} />
         ))}
       </div>
     </div>
