@@ -29,6 +29,15 @@
   }
 }
 
+.board-header__confirmation-dialog {
+  > span {
+    font-weight: bold;
+    font-size: 25px;
+    letter-spacing: 0.88px;
+    color: $color-black;
+  }
+}
+
 [theme="dark"] {
   .board-header__link {
     &:focus-visible {

@@ -7,6 +7,7 @@
 }
 
 .confirmation-dialog {
+  position: relative;
   max-width: 420px;
   color: $color-black;
   background-color: $color-white-one;
@@ -19,6 +20,20 @@
 .confirmation-dialog > div {
   display: flex;
   gap: $padding--small;
+}
+.confirmation-dialog__close-button {
+  height: 44px;
+  width: 44px;
+  border: none;
+  border-radius: 22px;
+  background-color: $color-white;
+  color: $color-backlog-blue;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  box-shadow: 0 16px 32px #0057ff3d;
 }
 
 [theme="dark"] {

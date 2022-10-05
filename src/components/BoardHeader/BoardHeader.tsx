@@ -36,10 +36,10 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   return (
     <>
       {showConfirmationDialog && (
-        <ConfirmationDialog onClose={() => setShowConfirmationDialog(false)}>
+        <ConfirmationDialog className="board-header__confirmation-dialog" onClose={() => setShowConfirmationDialog(false)}>
           <span>Are you sure that you want to leave the session and return to the homepage?</span>
           <div>
-            <button>No</button>
+            <button onClick={() => setShowConfirmationDialog(false)}>No</button>
             <button>Yes</button>
           </div>
         </ConfirmationDialog>
