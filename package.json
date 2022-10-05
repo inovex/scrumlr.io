@@ -52,7 +52,7 @@
     "@types/file-saver": "^2.0.5",
     "@types/history": "^5.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
-    "@types/jest": "^29.1.0",
+    "@types/jest": "^29.1.1",
     "@types/js-cookie": "^3.0.2",
     "@types/marked": "^4.0.7",
     "@types/node": "^18.8.2",
