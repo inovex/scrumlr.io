@@ -47,7 +47,8 @@
 }
 
 .column__header-menu-dropdown > ul > li > button > svg {
-  height: 24px;
+  height: $icon--medium;
+  width: $icon--medium;
 }
 
 .column__header-menu-dropdown > ul > li:last-of-type {
