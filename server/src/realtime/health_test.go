@@ -4,16 +4,40 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"scrumlr.io/server/realtime"
 )
 
-func TestRealtime_IsHealthy(t *testing.T) {
-	rt, err := realtime.NewNats("foo")
-	assert.NotNil(t, err)
-	assert.False(t, rt.IsHealthy())
-
-	rt, err = realtime.NewNats(SetupNatsContainer(t))
-	assert.Nil(t, err)
-	assert.True(t, rt.IsHealthy())
+func TestBroker_IsHealthy(t *testing.T) {
+	type testCase struct {
+		name        string
+		setupBroker func(t *testing.T) *realtime.Broker
+		expected    bool
+	}
+	testcases := []testCase{
+		{
+			name: "nats client has has wrong url",
+			setupBroker: func(t *testing.T) *realtime.Broker {
+				rt, err := realtime.NewNats("foo")
+				require.NotNil(t, err)
+				return rt
+			},
+			expected: false,
+		},
+		{
+			name: "nats client is setup correctly",
+			setupBroker: func(t *testing.T) *realtime.Broker {
+				rt, err := realtime.NewNats(SetupNatsContainer(t))
+				require.Nil(t, err)
+				return rt
+			},
+			expected: true,
+		},
+	}
+	for _, tt := range testcases {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.expected, tt.setupBroker(t).IsHealthy(), "healthy didn't return expected result")
+		})
+	}
 }
