@@ -72,3 +72,96 @@ $stack-view-top-margin: 64px;
     background: rgba(var(--accent-color-rgb), 0.1);
   }
 }
+
+.stack-view__inception {
+  z-index: 300;
+}
+
+.backdrop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1000px;
+  height: 600px;
+
+  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
+  background: rgba(0, 87, 255, 0.42);
+}
+
+.dialog {
+  display: flex;
+  height: 283px;
+  width: 596px;
+  border-radius: 25px 0px 25px 25px;
+  background: #ffffff;
+  position: relative;
+}
+
+.dialog__quit {
+  position: absolute;
+  left: 100%;
+  transform: translate(-50%, -50%);
+  height: 44px;
+  width: 44px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0px 16px 32px #0057ff3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog__quit:hover {
+  cursor: pointer;
+  background: blue;
+}
+
+.dialog__quit img {
+  height: 28px;
+  width: 28px;
+}
+
+.dialog__icon {
+  width: 53px;
+  height: 59px;
+  margin: 43px 40px 0px 43px;
+}
+
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  margin: 40px 37px 35px 0px;
+}
+
+.dialog__content h3 {
+  margin: 0px 0px 15px 0px;
+  font-size: 25px;
+}
+
+.dialog__content p {
+  margin: 0;
+}
+.dialog__content-buttons {
+  margin-top: auto;
+  display: flex;
+  gap: 20px;
+}
+.dialog__content-buttons-button {
+  height: 50px;
+  width: 100px;
+  border-radius: 25px;
+  border: 2px solid blue;
+  color: blue;
+  background: white;
+  opacity: 0.6;
+}
+
+.dialog__content-buttons-button:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.primary {
+  background: blue;
+  color: white;
+}

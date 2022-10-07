@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
 
@@ -93,7 +94,8 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 	return new(dto.Note).From(note), err
 }
 
-func (s *NoteService) Delete(ctx context.Context, id uuid.UUID) error {
+func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
+	// TODO: write second db method that gets called here on condition deleteStack flag true/false???
 	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id)
 }
 

@@ -10,8 +10,11 @@ import {Actions} from "store/action";
 
 type NoteDialogNoteOptionsProps = {
   showUnstackButton: boolean;
+  isParentNote?: boolean;
   noteId: string;
   authorId: string;
+  handleDelete: (isDialogOpen: boolean, noteId: string) => void;
+  showDeletionDialog: (show: boolean) => void;
   onDeleteOfParent: () => void;
   onClose: () => void;
   viewer: Participant;
@@ -26,7 +29,15 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
   };
 
   const onDelete = (id: string) => {
-    dispatch(Actions.deleteNote(id));
+    props.handleDelete(true, id);
+    // props.showDeletionDialog(true);
+
+    // TODO show different Dialogs
+    // if(props.isParentNote){
+    //   props.showDeletionDialog(true);
+    // }
+
+    // dispatch(Actions.deleteNote(id));
   };
 
   const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";
@@ -49,7 +60,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <TooltipButton
             onClick={() => {
               onDelete(props.noteId);
-              props.onDeleteOfParent();
+              // props.onDeleteOfParent();
             }}
             label={t("NoteDialogDeleteNoteButton.title")}
             icon={DeleteIcon}

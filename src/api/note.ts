@@ -44,6 +44,9 @@ export const NoteAPI = {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
         method: "DELETE",
         credentials: "include",
+        body: JSON.stringify({
+          deleteStack: true, // TODO: pass variable
+        }),
       });
 
       if (response.status === 204) {

@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
@@ -31,6 +32,9 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	result := ctx.Value("Result").(*[]Note)
+	//TODO: works but how to notify about UpdatedNotes in the right way
+	notifyNotesUpdated(ctx)
+
 	if len(*result) > 0 {
 		return notifyNoteDeleted(ctx)
 	}
