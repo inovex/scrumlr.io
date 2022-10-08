@@ -1,0 +1,69 @@
+@import "constants/style.scss";
+
+.stack-view__navigation {
+  height: 14%;
+  width: 42%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.stack-view__navigation-button {
+  width: 42px;
+  height: 42px;
+
+  opacity: 0.5;
+  background: $color-white;
+  border: 3px solid transparent;
+  border-radius: 100%;
+  outline: none;
+  box-shadow: $box-shadow--light;
+  color: $color-black;
+
+  transition: all 0.08s ease-out;
+
+  > svg {
+    height: $icon--small;
+    width: $icon--small;
+  }
+
+  &:enabled {
+    cursor: pointer;
+    opacity: 1;
+
+    &:hover {
+      border: 3px solid var(--accent-color--desaturated-light);
+      transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba($color-black, 0.5);
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
+}
+
+[theme="dark"] {
+  .stack-view__navigation-button {
+    background: $menu-icon-background-color--dark;
+    color: $color-white;
+
+    &:enabled {
+      &:hover {
+        border: 3px solid var(--accent-color--desaturated-dark);
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba($color-white, 0.5);
+      }
+    }
+
+    &:disabled {
+      color: $color-dark-mode--disabled;
+    }
+  }
+}

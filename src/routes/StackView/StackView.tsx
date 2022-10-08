@@ -10,6 +10,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
+import {StackNavigation} from "components/StackNavigation";
 
 export const StackView = () => {
   const {t} = useTranslation();
@@ -19,6 +20,7 @@ export const StackView = () => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
+  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
   const stackedNotes = useAppSelector(
@@ -48,10 +50,16 @@ export const StackView = () => {
     navigate(`/board/${boardId}`);
   };
 
+  const navigationProps = {
+    stacks: stacksInColumn,
+    currentStack: note.id,
+  };
+
   return (
     <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
+        {stacksInColumn.length > 1 && <StackNavigation {...navigationProps} />}
         <NoteDialogComponents.Note
           key={noteId}
           noteId={noteId!}
