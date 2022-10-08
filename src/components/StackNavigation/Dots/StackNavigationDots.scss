@@ -1,0 +1,43 @@
+@import "constants/style.scss";
+
+.stack-view__navigation-dots {
+  display: flex;
+  flex-direction: row;
+  width: 172px;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack-view__navigation-dot {
+  all: unset;
+  height: 8px;
+  width: 8px;
+  border-radius: 100%;
+  background: $color-white;
+  opacity: 0.5;
+  margin: 0 $margin--small;
+
+  cursor: pointer;
+
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    transform: scale(1.5);
+  }
+
+  &--active {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  &--small {
+    height: 4px;
+    width: 4px;
+  }
+
+  &--hidden {
+    height: 0px;
+    width: 0px;
+    margin: 0px 0px;
+  }
+}

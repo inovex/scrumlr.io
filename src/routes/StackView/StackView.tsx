@@ -59,7 +59,7 @@ export const StackView = () => {
     <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
-        {stacksInColumn.length > 1 && <StackNavigation {...navigationProps} />}
+        <StackNavigation {...navigationProps} />
         <NoteDialogComponents.Note
           key={noteId}
           noteId={noteId!}

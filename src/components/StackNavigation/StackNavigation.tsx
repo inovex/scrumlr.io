@@ -4,6 +4,7 @@ import {Note} from "types/note";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./StackNavigation.scss";
+import {StackNavigationDots} from "./Dots/StackNavigationDots";
 
 interface StackNavigationProps {
   stacks: Note[];
@@ -27,6 +28,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack}
       <button disabled={currentIndex === 0} onClick={handleBackClick} className="stack-view__navigation-button">
         <LeftArrowIcon />
       </button>
+      <StackNavigationDots stacks={stacks} currentIndex={currentIndex} />
       <button disabled={currentIndex === stacks.length - 1} onClick={handleForwardClick} className="stack-view__navigation-button">
         <RightArrowIcon />
       </button>
