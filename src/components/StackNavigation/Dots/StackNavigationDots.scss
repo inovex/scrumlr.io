@@ -31,8 +31,8 @@
   }
 
   &--small {
-    height: 4px;
-    width: 4px;
+    transform: scale(0.5);
+    opacity: 0.25;
   }
 
   &--hidden {
