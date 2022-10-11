@@ -74,6 +74,19 @@ export const Timer = (props: TimerProps) => {
   }, [timeLeft]);
 
   useEffect(() => {
+    if (playTimesUp) {
+      console.log("Timer Startet(5sec.)");
+      setTimeout(() => {
+        console.log("5sec. over");
+        store.dispatch(Actions.cancelTimer());
+      }, 5000);
+    }
+    return () => {
+      console.log("CALLED");
+    };
+  }, [playTimesUp]);
+
+  useEffect(() => {
     if (isModerator && allReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.success(
         <div>
