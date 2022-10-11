@@ -1,10 +1,11 @@
 import {useState, VFC} from "react";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {BoardUsers} from "components/BoardUsers";
-import {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
@@ -44,7 +45,14 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           </div>
           <div className="confirmation-dialog__button-row">
             <button onClick={() => setShowConfirmationDialog(false)}>No</button>
-            <button>Yes</button>
+            <button
+              onClick={() => {
+                store.dispatch(Actions.leaveBoard());
+                navigate("/");
+              }}
+            >
+              Yes
+            </button>
           </div>
         </ConfirmationDialog>
       )}
