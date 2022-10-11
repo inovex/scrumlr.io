@@ -59,7 +59,7 @@
 // Shake animation on expired timer
 .timer--expired > span {
   animation: shake 0.5s;
-  animation-iteration-count: infinite;
+  animation-iteration-count: 10;
 }
 @media (prefers-reduced-motion: reduce) {
   .timer--expired > span {
