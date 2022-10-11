@@ -75,15 +75,11 @@ export const Timer = (props: TimerProps) => {
 
   useEffect(() => {
     if (playTimesUp) {
-      console.log("Timer Startet(5sec.)");
       setTimeout(() => {
-        console.log("5sec. over");
         store.dispatch(Actions.cancelTimer());
       }, 5000);
     }
-    return () => {
-      console.log("CALLED");
-    };
+    return () => {};
   }, [playTimesUp]);
 
   useEffect(() => {
