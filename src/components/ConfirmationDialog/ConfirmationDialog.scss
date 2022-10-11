@@ -1,39 +1,44 @@
 @import "constants/style";
 
 .confirmation-dialog__wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  min-width: 100%;
-  min-height: 100%;
-  align-items: center;
-  justify-content: center;
-  z-index: $backdrop-z-index;
-  background: $color-white;
-  padding: 0px 2rem;
-}
-
-@media screen and (max-width: 920px) {
-  .confirmation-dialog__wrapper {
-    padding: $padding--medium;
-  }
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 .confirmation-dialog {
+  position: relative;
   max-width: 420px;
   color: $color-black;
+  background-color: $color-white-one;
+  padding: $padding--large;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-
-.confirmation-dialog__button {
-  margin-right: $margin--small;
+.confirmation-dialog > div {
+  display: flex;
+  gap: $padding--small;
+}
+.confirmation-dialog__close-button {
+  height: 44px;
+  width: 44px;
+  border: none;
+  border-radius: 22px;
+  background-color: $color-white;
+  color: $color-backlog-blue;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  box-shadow: 0 16px 32px #0057ff3d;
 }
 
 [theme="dark"] {
-  .confirmation-dialog__wrapper {
-    background: $color-dark-mode;
-  }
   .confirmation-dialog {
     color: $color-white;
+    background-color: $color-dark-one;
   }
 }

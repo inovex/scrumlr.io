@@ -211,16 +211,7 @@ export const BoardSettings = () => {
             </>
           )}
 
-          {showConfirmationDialog && (
-            <ConfirmationDialog
-              headline={t("ConfirmationDialog.deleteBoard")}
-              acceptMessage={t("ConfirmationDialog.yes")}
-              onAccept={() => store.dispatch(Actions.deleteBoard())}
-              declineMessage={t("ConfirmationDialog.no")}
-              onDecline={() => setShowConfirmationDialog(false)}
-              className="board-settings__confirmation-dialog"
-            />
-          )}
+          {showConfirmationDialog && <ConfirmationDialog onClose={() => setShowConfirmationDialog(false)} className="board-settings__confirmation-dialog" />}
         </div>
       </div>
     </div>
