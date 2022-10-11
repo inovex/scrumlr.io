@@ -9,9 +9,9 @@ services:
     healthcheck:
       test: [ "CMD", "ping", "nats", "-c", "2"]
       start_period: 5s
-      timeout: 5s
       interval: 10s
-      retries: 5
+      timeout: 5s
+      retries: 10
     profiles:
       - dev
       - build
