@@ -49,10 +49,12 @@
   display: flex;
   flex-direction: row;
   gap: $padding--small;
+  width: 100%;
+  justify-content: flex-end;
+  margin-top: $margin--small;
 
   > button {
-    height: 48px;
-    width: 104px;
+    padding: $padding--small $padding--medium;
     border-radius: 25px;
     color: $color-backlog-blue;
     font-weight: bold;
