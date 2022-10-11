@@ -1,20 +1,22 @@
 @import "constants/style";
+@import "routes/StackView/StackView.scss";
 
 .note-dialog__header {
   font-size: calc(24px + 0.8vw);
   color: $color-white;
   width: 100%;
-  margin-bottom: $margin--large;
+  height: $stack-view__header-height;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   text-align: center;
   cursor: initial;
   display: flex;
   justify-content: center;
+  align-items: center;
 
   h2 {
     width: max-content;
-    margin: 0;
+    margin: $margin--medium 0 0 0;
 
     &::after {
       content: " ";
