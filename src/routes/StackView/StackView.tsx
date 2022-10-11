@@ -20,6 +20,10 @@ export const StackView = () => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
+  const prevColumn = useAppSelector((state) => state.columns[column!.index - 1]);
+  const nextColumn = useAppSelector((state) => state.columns[column!.index + 1]);
+  const prevColumnStack = useAppSelector((state) => state.notes.filter((n) => n.position.column === prevColumn?.id && n.position.stack === null));
+  const nextColumnStack = useAppSelector((state) => state.notes.filter((n) => n.position.column === nextColumn?.id && n.position.stack === null));
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
@@ -53,6 +57,8 @@ export const StackView = () => {
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
+    prevColumnStack: prevColumnStack[prevColumnStack.length - 1]?.id,
+    nextColumnStack: nextColumnStack[0]?.id,
   };
 
   return (
