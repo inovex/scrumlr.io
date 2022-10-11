@@ -42,6 +42,7 @@ export const Timer = (props: TimerProps) => {
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
+  const [overtimesUp, setOvertimesUp] = useState(false);
 
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
@@ -76,7 +77,7 @@ export const Timer = (props: TimerProps) => {
   useEffect(() => {
     if (playTimesUp) {
       setTimeout(() => {
-        store.dispatch(Actions.cancelTimer());
+        setOvertimesUp(true);
       }, 5000);
     }
     return () => {};
@@ -95,7 +96,7 @@ export const Timer = (props: TimerProps) => {
   }, [allReady, isModerator]);
 
   return (
-    <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+    <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0 && !overtimesUp})}>
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
