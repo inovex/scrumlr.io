@@ -12,6 +12,7 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
+import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -37,8 +38,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     <>
       {showConfirmationDialog && (
         <ConfirmationDialog className="board-header__confirmation-dialog" onClose={() => setShowConfirmationDialog(false)}>
-          <span>Are you sure that you want to leave the session and return to the homepage?</span>
-          <div>
+          <div className="confirmation-dialog__info-row">
+            <ShareIcon />
+            <span>Are you sure that you want to leave the session and return to the homepage?</span>
+          </div>
+          <div className="confirmation-dialog__button-row">
             <button onClick={() => setShowConfirmationDialog(false)}>No</button>
             <button>Yes</button>
           </div>

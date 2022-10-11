@@ -11,7 +11,7 @@ export interface ConfirmationDialogProps {
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => (
   <Portal onClose={() => props.onClose()} className={classNames("confirmation-dialog__wrapper", props.className)}>
-    <aside className="confirmation-dialog">
+    <aside className="confirmation-dialog" onClick={(e) => e.stopPropagation()}>
       <button className="confirmation-dialog__close-button" onClick={() => props.onClose()}>
         <CloseIcon />
       </button>

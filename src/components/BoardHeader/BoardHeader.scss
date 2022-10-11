@@ -29,12 +29,36 @@
   }
 }
 
-.board-header__confirmation-dialog {
+.confirmation-dialog__info-row {
+  display: flex;
+  flex-direction: row;
+  gap: $padding--small;
   > span {
     font-weight: bold;
-    font-size: 25px;
+    font-size: $text-size--large;
     letter-spacing: 0.88px;
     color: $color-black;
+  }
+  > svg {
+    height: 128px;
+    width: 128px;
+    color: $color-backlog-blue;
+  }
+}
+.confirmation-dialog__button-row {
+  display: flex;
+  flex-direction: row;
+  gap: $padding--small;
+
+  > button {
+    height: 48px;
+    width: 104px;
+    border-radius: 25px;
+    color: $color-backlog-blue;
+    font-weight: bold;
+    border: 2px solid $color-backlog-blue;
+    font-size: 14px;
+    cursor: pointer;
   }
 }
 
