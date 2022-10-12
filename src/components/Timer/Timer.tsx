@@ -77,7 +77,7 @@ export const Timer = (props: TimerProps) => {
     if (isModerator && allReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.success(
         <div>
-          <div>{t("Toast.timerStarted")}</div>
+          <div>{t("Toast.allParticipantsDone")}</div>
         </div>,
         5000
       );
