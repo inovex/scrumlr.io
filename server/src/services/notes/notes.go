@@ -3,10 +3,12 @@ package notes
 import (
 	"context"
 	"database/sql"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
 
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/realtime"
 
@@ -16,7 +18,7 @@ import (
 
 type NoteService struct {
 	database DB
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 }
 
 type Observer interface {
@@ -32,7 +34,7 @@ type DB interface {
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID) error
 }
 
-func NewNoteService(db DB, rt *realtime.Realtime) services.Notes {
+func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
 	b := new(NoteService)
 	b.database = db
 	b.realtime = rt

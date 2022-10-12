@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/logger"
 )
 
@@ -33,13 +34,20 @@ type BoardEvent struct {
 	Data interface{}    `json:"data,omitempty"`
 }
 
-func (r *Realtime) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
+func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
 	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
-	return r.con.Publish(fmt.Sprintf("board.%s", boardID), msg)
+	return b.con.Publish(boardsSubject(boardID), msg)
 }
 
-func (r *Realtime) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
-	receiverChan := make(chan *BoardEvent)
-	r.con.BindRecvChan(fmt.Sprintf("board.%s", boardID), receiverChan)
-	return receiverChan
+func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
+	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID))
+	if err != nil {
+		// TODO: Bubble up this error, so the caller can retry to establish this subscription
+		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
+	}
+	return c
+}
+
+func boardsSubject(boardID uuid.UUID) string {
+	return fmt.Sprintf("board.%s", boardID)
 }
