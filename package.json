@@ -6,7 +6,7 @@
     "url": "https://github.com/inovex/scrumlr.io/issues",
     "email": "info@scrumlr.io"
   },
-  "version": "2.7.7",
+  "version": "2.7.8",
   "private": true,
   "license": "MIT",
   "dependencies": {
@@ -68,8 +68,8 @@
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.39.0",
-    "@typescript-eslint/parser": "^5.39.0",
+    "@typescript-eslint/eslint-plugin": "^5.40.0",
+    "@typescript-eslint/parser": "^5.40.0",
     "cross-env": "^7.0.3",
     "eslint": "8.25.0",
     "eslint-config-airbnb": "19.0.4",
