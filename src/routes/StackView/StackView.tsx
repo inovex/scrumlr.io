@@ -20,10 +20,24 @@ export const StackView = () => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
-  const prevColumn = useAppSelector((state) => state.columns[column!.index - 1]);
-  const nextColumn = useAppSelector((state) => state.columns[column!.index + 1]);
-  const prevColumnStack = useAppSelector((state) => state.notes.filter((n) => n.position.column === prevColumn?.id && n.position.stack === null));
-  const nextColumnStack = useAppSelector((state) => state.notes.filter((n) => n.position.column === nextColumn?.id && n.position.stack === null));
+  const prevColumnStack = useAppSelector((state) => {
+    const prevColumns = state.columns.filter((c) => c.index < column!.index).reverse();
+    let prevStack;
+    while (prevColumns.length > 0 && !prevStack) {
+      prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
+      prevColumns.shift();
+    }
+    return prevStack;
+  });
+  const nextColumnStack = useAppSelector((state) => {
+    const nextColumns = state.columns.slice(column!.index + 1);
+    let nextStack;
+    while (nextColumns.length > 0 && !nextStack) {
+      nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
+      nextColumns.shift();
+    }
+    return nextStack;
+  });
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
@@ -57,8 +71,8 @@ export const StackView = () => {
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
-    prevColumnStack: prevColumnStack[prevColumnStack.length - 1]?.id,
-    nextColumnStack: nextColumnStack[0]?.id,
+    prevColumnStack: prevColumnStack?.id,
+    nextColumnStack: nextColumnStack?.id,
   };
 
   return (
