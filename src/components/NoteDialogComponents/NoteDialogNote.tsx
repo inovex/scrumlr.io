@@ -12,12 +12,10 @@ export type NoteDialogNoteProps = {
   avatar?: AvataaarProps;
   authorName: string;
   showAuthors: boolean;
-  isParentNote?: boolean;
   showUnstackButton: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  showDeletionDialog: (show: boolean) => void;
-  handleDelete: (isDialogOpen: boolean, noteId: string) => void;
+  isParent?: boolean;
   className?: string;
 
   viewer: Participant;

@@ -36,16 +36,17 @@ export const NoteAPI = {
    * Deletes a note with the specified id.
    *
    * @param noteId the note id
+   * @param deleteStack delete entire stack of note
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  deleteNote: async (board: string, noteId: string) => {
+  deleteNote: async (board: string, noteId: string, deleteStack?: boolean) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
         method: "DELETE",
         credentials: "include",
         body: JSON.stringify({
-          deleteStack: true, // TODO: pass variable
+          deleteStack,
         }),
       });
 
