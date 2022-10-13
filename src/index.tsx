@@ -2,7 +2,6 @@ import React, {Suspense} from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
 import {DndProvider} from "react-dnd-multi-backend";
-import HTML5toTouch from "react-dnd-multi-backend/dist/esm/HTML5toTouch";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
@@ -15,6 +14,7 @@ import {Actions} from "store/action";
 import {Html} from "components/Html";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
+import {HTML5toTouch} from "rdndmb-html5-to-touch";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
