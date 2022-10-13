@@ -13,3 +13,51 @@
 .note-dialog__note-option {
   padding-top: 0;
 }
+
+// TODO remove magic numbers, hover, darkmode, mobile, etc...
+.deletion-dialog > svg {
+  color: #7fabff; // ???
+  min-height: 80px;
+  min-width: 70px;
+  transform: translate(-10%, -20%); // workaround (how to crop svg?)
+}
+
+.deletion-dialog__info-row {
+  margin-bottom: 30px;
+
+  & > h1 {
+    margin: 0px 0px 20px 0px;
+    font-size: 20px;
+  }
+
+  & > p {
+    font-size: 14px;
+    margin: 0;
+  }
+
+  & p:first-of-type {
+    margin: 0px 0px 6px 0px;
+  }
+}
+
+.deletion-dialog__button-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+
+  & > button {
+    padding: 10px 20px;
+    border-radius: 25px;
+    color: #0057ff;
+    font-weight: bold;
+    border: 2px solid #0057ff;
+    font-size: 12px;
+    box-shadow: 0px 3px 6px rgb(0 87 255 / 30%);
+    cursor: pointer;
+  }
+
+  & > :nth-child(1) {
+    background-color: #0057ff;
+    color: white;
+  }
+}

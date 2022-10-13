@@ -41,6 +41,19 @@ export const StackView = () => {
     return null;
   }
 
+  // Save ParentNoteId from Params anyhow?
+
+  // if (!note && !stackedNotes.length) {
+  //   navigate(`/board/${boardId}`);
+  //   return null;
+  // }
+
+  // if (!note && stackedNotes.length) {
+  //   const nextParentId = stackedNotes[0].id;
+  //   navigate(`/board/${boardId}/note/${nextParentId}/stack}`);
+  //   return null;
+  // }
+
   const handleClose = () => {
     if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
       dispatch(Actions.stopSharing());

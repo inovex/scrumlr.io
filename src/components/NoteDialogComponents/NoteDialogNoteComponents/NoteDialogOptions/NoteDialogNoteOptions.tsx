@@ -31,7 +31,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
   };
 
   const onDelete = (id: string, deleteStack?: boolean) => {
-    console.log("Gönn", id, deleteStack);
     if (props.isParent && !showParentDialog) {
       setShowParentDialog(true);
       return;
@@ -51,7 +50,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <TooltipButton
             onClick={() => {
               onUnstack(props.noteId);
-              props.onClose();
             }}
             label={t("NoteDialogUnstackNoteButton.title")}
             icon={UnstackIcon}
@@ -72,34 +70,38 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       )}
       {showParentDialog && (
         <ConfirmationDialog onClose={() => setShowParentDialog(false)}>
-          <div className="confirmation-dialog__info-row">
+          <div className="deletion-dialog">
             <DeleteIcon />
             <div>
-              <h1>What do you want to delete?</h1>
-              <span>This note or stack will be deleted immediately.</span>
-              <span>This action can not be revoked.</span>
+              <div className="deletion-dialog__info-row">
+                <h1>What do you want to delete?</h1>
+                <p>This note or stack will be deleted immediately.</p>
+                <p>This action can not be revoked.</p>
+              </div>
+              <div className="deletion-dialog__button-row">
+                <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
+                <button onClick={() => onDelete(props.noteId, true)}>Delete stack</button>
+                <button onClick={() => setShowParentDialog(false)}>Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="confirmation-dialog__button-row">
-            <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
-            <button onClick={() => onDelete(props.noteId, true)}>Delete stack</button>
-            <button onClick={() => setShowParentDialog(false)}>Cancel</button>
           </div>
         </ConfirmationDialog>
       )}
       {showChildDialog && (
         <ConfirmationDialog onClose={() => setShowChildDialog(false)}>
-          <div className="confirmation-dialog__info-row">
+          <div className="deletion-dialog">
             <DeleteIcon />
             <div>
-              <h1>Are you realy sure that do you want to delete this note?</h1>
-              <span>This note will be deleted immediately.</span>
-              <span>This action can not be revoked.</span>
+              <div className="deletion-dialog__info-row">
+                <h1>Are you realy sure that do you want to delete this note?</h1>
+                <p>This note will be deleted immediately.</p>
+                <p>This action can not be revoked.</p>
+              </div>
+              <div className="deletion-dialog__button-row">
+                <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
+                <button onClick={() => setShowChildDialog(false)}>Cancel</button>
+              </div>
             </div>
-          </div>
-          <div className="confirmation-dialog__button-row">
-            <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
-            <button onClick={() => setShowChildDialog(false)}>Cancel</button>
           </div>
         </ConfirmationDialog>
       )}
