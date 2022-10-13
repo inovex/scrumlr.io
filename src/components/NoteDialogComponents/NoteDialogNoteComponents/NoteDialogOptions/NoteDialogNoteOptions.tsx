@@ -10,13 +10,13 @@ import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 
 type NoteDialogNoteOptionsProps = {
-  showUnstackButton: boolean;
   noteId: string;
   authorId: string;
-  onClose: () => void;
-  onDeleteOfParent: () => void;
+  showUnstackButton: boolean;
   isParent?: boolean;
   viewer: Participant;
+  onClose: () => void;
+  onDeleteOfParent: () => void;
 };
 
 export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
@@ -31,10 +31,12 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
   };
 
   const onDelete = (id: string, deleteStack?: boolean) => {
+    console.log("Gönn", id, deleteStack);
     if (props.isParent && !showParentDialog) {
       setShowParentDialog(true);
       return;
-    } if (!props.isParent && !showChildDialog) {
+    }
+    if (!props.isParent && !showChildDialog) {
       setShowChildDialog(true);
       return;
     }
@@ -61,7 +63,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <TooltipButton
             onClick={() => {
               onDelete(props.noteId);
-              props.onDeleteOfParent();
+              // props.onDeleteOfParent(); leads to no-display of confidialog
             }}
             label={t("NoteDialogDeleteNoteButton.title")}
             icon={DeleteIcon}

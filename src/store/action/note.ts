@@ -83,7 +83,7 @@ export const NoteActionFactory = {
    *
    * @param noteId the note id
    */
-  deleteNote: (noteId: string, deleteStack?: boolean) => ({
+  deleteNote: (noteId: string, deleteStack = false) => ({
     type: NoteAction.DeleteNote,
     noteId,
     deleteStack,

@@ -13,12 +13,11 @@ export type NoteDialogNoteProps = {
   authorName: string;
   showAuthors: boolean;
   showUnstackButton: boolean;
-  onClose: () => void;
-  onDeleteOfParent: () => void;
   isParent?: boolean;
   className?: string;
-
   viewer: Participant;
+  onClose: () => void;
+  onDeleteOfParent: () => void;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (

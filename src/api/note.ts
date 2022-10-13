@@ -40,7 +40,7 @@ export const NoteAPI = {
    *
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
-  deleteNote: async (board: string, noteId: string, deleteStack?: boolean) => {
+  deleteNote: async (board: string, noteId: string, deleteStack: boolean) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${noteId}`, {
         method: "DELETE",
