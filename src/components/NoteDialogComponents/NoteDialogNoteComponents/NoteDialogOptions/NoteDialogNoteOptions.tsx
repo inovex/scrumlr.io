@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {ReactComponent as InfoIcon} from "assets/icon-warning.svg";
 
 type NoteDialogNoteOptionsProps = {
   noteId: string;
@@ -73,7 +74,10 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <div>
               <div className="deletion-dialog__info-row">
                 <h1>{t(`NoteDeletionDialog.titleParentNote`)}</h1>
-                <p>{t(`NoteDeletionDialog.warning`)}</p>
+                <div>
+                  <InfoIcon />
+                  <p>{t(`NoteDeletionDialog.warning`)}</p>
+                </div>
               </div>
               <div className="deletion-dialog__button-row">
                 <button onClick={() => onDelete(props.noteId, false)}>{t(`NoteDeletionDialog.deleteNote`)}</button>
@@ -91,7 +95,10 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <div>
               <div className="deletion-dialog__info-row">
                 <h1>{t(`NoteDeletionDialog.titleNote`)}</h1>
-                <p>{t(`NoteDeletionDialog.warning`)}</p>
+                <div>
+                  <InfoIcon />
+                  <p>{t(`NoteDeletionDialog.warning`)}</p>
+                </div>
               </div>
               <div className="deletion-dialog__button-row">
                 <button onClick={() => onDelete(props.noteId, false)}>{t(`NoteDeletionDialog.deleteNote`)}</button>

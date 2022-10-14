@@ -14,46 +14,59 @@
   padding-top: 0;
 }
 
-// TODO remove magic numbers, hover, darkmode, mobile, etc...
+// TODO hover, darkmode, mobile
 .deletion-dialog > svg {
-  color: #7fabff; // ???
-  min-height: 80px;
-  min-width: 70px;
+  color: $color-backlog-blue; // better use #7fabff from design?
+  height: 80px;
+  width: 70px;
   transform: translate(-10%, -20%); // workaround (how to crop svg?)
 }
 
 .deletion-dialog__info-row {
-  margin-bottom: 30px;
+  margin-bottom: $margin--large;
 
   & > h1 {
     margin: 0px 0px 10px 0px;
-    font-size: 20px;
+    font-size: $text-size--large;
   }
 
-  & > p {
-    margin: 0px;
+  & > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  & > div > svg {
+    height: 18px;
+    width: 18px;
+    color: $color-backlog-blue;
+  }
+
+  & > div > p {
+    margin: 0;
     font-size: 14px;
   }
 }
 
 .deletion-dialog__button-row {
   display: flex;
-  gap: 8px;
   align-items: flex-end;
+  gap: 12px;
 
   & > button {
     padding: 10px 20px;
-    border-radius: 25px;
-    color: #0057ff;
+    border-radius: $border-radius--round;
+    color: $color-backlog-blue;
     font-weight: bold;
-    border: 2px solid #0057ff;
-    font-size: 12px;
+    border: 2px solid $color-backlog-blue;
+    font-size: $text-size--small;
     box-shadow: 0px 3px 6px rgb(0 87 255 / 30%);
     cursor: pointer;
   }
 
   & > :nth-child(1) {
-    background-color: #0057ff;
-    color: white;
+    background-color: $color-backlog-blue;
+    color: $color-white;
   }
 }
