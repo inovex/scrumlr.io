@@ -26,17 +26,13 @@
   margin-bottom: 30px;
 
   & > h1 {
-    margin: 0px 0px 20px 0px;
+    margin: 0px 0px 10px 0px;
     font-size: 20px;
   }
 
   & > p {
+    margin: 0px;
     font-size: 14px;
-    margin: 0;
-  }
-
-  & p:first-of-type {
-    margin: 0px 0px 6px 0px;
   }
 }
 

@@ -17,7 +17,6 @@ export type NoteDialogNoteProps = {
   className?: string;
   viewer: Participant;
   onClose: () => void;
-  onDeleteOfParent: () => void;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (

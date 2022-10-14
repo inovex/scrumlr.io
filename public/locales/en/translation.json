@@ -250,6 +250,14 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
   },
+  "NoteDeletionDialog": {
+    "titleParentNote": "What do you want to delete?",
+    "titleNote": "Are you sure that you want to delete this note?",
+    "warning": "This action can not be undone.",
+    "deleteNote": "delete note",
+    "deleteStack": "delete stack",
+    "cancel":"cancel"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
     "BoardSettingsDescription": "Name, Access Policy",

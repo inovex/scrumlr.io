@@ -16,7 +16,6 @@ type NoteDialogNoteOptionsProps = {
   isParent?: boolean;
   viewer: Participant;
   onClose: () => void;
-  onDeleteOfParent: () => void;
 };
 
 export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
@@ -61,7 +60,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <TooltipButton
             onClick={() => {
               onDelete(props.noteId);
-              // props.onDeleteOfParent(); leads to no-display of confidialog
             }}
             label={t("NoteDialogDeleteNoteButton.title")}
             icon={DeleteIcon}
@@ -74,14 +72,13 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <DeleteIcon />
             <div>
               <div className="deletion-dialog__info-row">
-                <h1>What do you want to delete?</h1>
-                <p>This note or stack will be deleted immediately.</p>
-                <p>This action can not be revoked.</p>
+                <h1>{t(`NoteDeletionDialog.titleParentNote`)}</h1>
+                <p>{t(`NoteDeletionDialog.warning`)}</p>
               </div>
               <div className="deletion-dialog__button-row">
-                <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
-                <button onClick={() => onDelete(props.noteId, true)}>Delete stack</button>
-                <button onClick={() => setShowParentDialog(false)}>Cancel</button>
+                <button onClick={() => onDelete(props.noteId, false)}>{t(`NoteDeletionDialog.deleteNote`)}</button>
+                <button onClick={() => onDelete(props.noteId, true)}>{t(`NoteDeletionDialog.deleteStack`)}</button>
+                <button onClick={() => setShowParentDialog(false)}>{t(`NoteDeletionDialog.cancel`)}</button>
               </div>
             </div>
           </div>
@@ -93,13 +90,12 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
             <DeleteIcon />
             <div>
               <div className="deletion-dialog__info-row">
-                <h1>Are you realy sure that do you want to delete this note?</h1>
-                <p>This note will be deleted immediately.</p>
-                <p>This action can not be revoked.</p>
+                <h1>{t(`NoteDeletionDialog.titleNote`)}</h1>
+                <p>{t(`NoteDeletionDialog.warning`)}</p>
               </div>
               <div className="deletion-dialog__button-row">
-                <button onClick={() => onDelete(props.noteId, false)}>Delete note</button>
-                <button onClick={() => setShowChildDialog(false)}>Cancel</button>
+                <button onClick={() => onDelete(props.noteId, false)}>{t(`NoteDeletionDialog.deleteNote`)}</button>
+                <button onClick={() => setShowChildDialog(false)}>{t(`NoteDeletionDialog.cancel`)}</button>
               </div>
             </div>
           </div>

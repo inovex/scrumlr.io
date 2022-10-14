@@ -251,6 +251,14 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
   },
+  "NoteDeletionDialog": {
+    "titleParentNote": "Was genau möchtest du löschen?",
+    "titleNote": "Bist du dir sicher, dass du dieses Kärtchen löschen möchtest?",
+    "warning": "Diese Aktion ist nicht umkehrbar.",
+    "deleteNote": "Kärtchen löschen",
+    "deleteStack": "Stapel löschen",
+    "cancel":"abbrechen"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",
