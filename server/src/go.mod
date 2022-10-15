@@ -14,7 +14,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/markbates/goth v1.74.1
-	github.com/nats-io/nats.go v1.17.0
+	github.com/nats-io/nats.go v1.18.0
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.0
