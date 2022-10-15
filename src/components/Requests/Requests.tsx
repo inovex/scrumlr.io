@@ -30,10 +30,14 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
   return requests.length !== 0 || participantsWithRaisedHand.length !== 0 ? (
     <div className="requests__wrapper">
       <div className="requests__main">
-        {/* list of all request */}
-        {/* all raise hand requests */}
+        {/* join requests */}
+        {requests.map((p) => (
+          <Request type="JOIN" participant={p.user} handleClick={lowerHand} />
+        ))}
+
+        {/* raise hand requests */}
         {participantsWithRaisedHand.map((p) => (
-          <Request participant={p} handleClick={lowerHand} />
+          <Request type="RAISE_HAND" participant={p.user} handleClick={lowerHand} />
         ))}
       </div>
     </div>
