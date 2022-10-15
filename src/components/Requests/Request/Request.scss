@@ -73,13 +73,20 @@ $transition-time: 0.2s;
 }
 
 // BUTTON
-.request__button {
+.request__button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  column-gap: 6px;
+
   // position button over .request__info-container and center vertically
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+}
 
+.request__button {
   height: 40px;
   width: 100%;
 
