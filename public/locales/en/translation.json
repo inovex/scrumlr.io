@@ -121,7 +121,7 @@
     "navigateBack": "Go back"
   },
   "JoinRequest": {
-    "title": "Someone requests to participate",
+    "title": "Is requesting to participate",
     "accept": "Accept",
     "reject": "Reject"
   },

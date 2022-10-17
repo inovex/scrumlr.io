@@ -20,10 +20,10 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
       return (
         <>
           <button className="request__button" onClick={() => handleClick(participant.id, false)}>
-            reject
+            {t("JoinRequest.reject")}
           </button>
           <button className="request__button" onClick={() => handleClick(participant.id, true)}>
-            accept
+            {t("JoinRequest.accept")}
           </button>
         </>
       );
@@ -45,7 +45,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
       <div className="request__middle-wrapper">
         <div className="request__info-container">
           <span className="request__participant-name">{participant.name}</span>
-          <span className="request__info-text">{t("RaiseRequest.title")}</span>
+          <span className="request__info-text">{type === "JOIN" ? t("JoinRequest.title") : t("RaiseRequest.title")}</span>
         </div>
         <div className="request__button-container">{renderButtons(type)}</div>
       </div>
