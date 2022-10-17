@@ -8,20 +8,6 @@
   z-index: $request-z-index;
 }
 
-/*@media screen and (min-width: 420px) {
-  .requests__wrapper {
-    left: calc(50% - 200px);
-    width: 480px;
-  }
-}
-@media #{$tablet} {
-  .requests__wrapper {
-    right: 92px;
-    left: auto;
-    animation: fly-in-right 0.5s ease-out;
-  }
-}*/
-
 .requests__main {
   display: flex;
   flex-direction: column;
@@ -30,12 +16,6 @@
 
   width: 100%;
   height: auto;
-}
-
-[theme="dark"] {
-  .requests__main {
-    background-color: $color-dark-mode-note;
-  }
 }
 
 /*@keyframes fly-in-top {
