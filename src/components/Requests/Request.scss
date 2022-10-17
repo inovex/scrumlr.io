@@ -1,10 +1,13 @@
 @import "src/constants/style";
 
+$wrapper-position__top: 110px;
+$wrapper-position__right: 30px;
+
 /* fixed wrapper in the top right containing all request */
 .requests__wrapper {
   position: fixed;
-  top: 110px;
-  right: 30px;
+  top: $wrapper-position__top;
+  right: $wrapper-position__right;
   z-index: $request-z-index;
 }
 
@@ -17,29 +20,3 @@
   width: 100%;
   height: auto;
 }
-
-/*@keyframes fly-in-top {
-  0% {
-    top: -200px;
-    opacity: 0;
-    visibility: hidden;
-  }
-  100% {
-    top: 60px;
-    opacity: 1;
-    visibility: visible;
-  }
-}
-@keyframes fly-in-right {
-  0% {
-    right: -500px;
-    opacity: 0;
-    visibility: hidden;
-  }
-  100% {
-    right: 92px;
-    opacity: 1;
-    visibility: visible;
-  }
-}
-*/
