@@ -14,7 +14,6 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
   const dispatch = useDispatch();
 
   const handleJoin = (user: string, acceptJoin?: boolean) => {
-    console.log(user, acceptJoin);
     if (acceptJoin) {
       dispatch(Actions.acceptJoinRequests([user]));
     } else {
