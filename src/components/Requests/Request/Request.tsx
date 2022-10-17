@@ -9,7 +9,7 @@ type RequestType = "JOIN" | "RAISE_HAND";
 export type RequestProps = {
   type: RequestType;
   participant: Auth;
-  handleClick: (user: string) => void;
+  handleClick: (user: string, acceptJoin?: boolean) => void;
 };
 
 export const Request = ({type, participant, handleClick}: RequestProps) => {
@@ -19,21 +19,20 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
     if (type === "JOIN") {
       return (
         <>
-          <button className="request__button" onClick={() => handleClick(participant.id)}>
+          <button className="request__button" onClick={() => handleClick(participant.id, false)}>
             reject
           </button>
-          <button className="request__button" onClick={() => handleClick(participant.id)}>
+          <button className="request__button" onClick={() => handleClick(participant.id, true)}>
             accept
           </button>
         </>
       );
-    } 
-      return (
-        <button className="request__button" onClick={() => handleClick(participant.id)}>
-          {t("RaiseRequest.lower")}
-        </button>
-      );
-    
+    }
+    return (
+      <button className="request__button" onClick={() => handleClick(participant.id)}>
+        {t("RaiseRequest.lower")}
+      </button>
+    );
   };
 
   return (

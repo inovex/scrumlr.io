@@ -13,14 +13,13 @@ export interface RequestsProps {
 export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) => {
   const dispatch = useDispatch();
 
-  // @ts-ignore
-  const handleAccept = (userIds: string[]) => () => {
-    dispatch(Actions.acceptJoinRequests(userIds));
-  };
-
-  // @ts-ignore
-  const handleReject = (userIds: string[]) => () => {
-    dispatch(Actions.rejectJoinRequests(userIds));
+  const handleJoin = (user: string, acceptJoin?: boolean) => {
+    console.log(user, acceptJoin);
+    if (acceptJoin) {
+      dispatch(Actions.acceptJoinRequests([user]));
+    } else {
+      dispatch(Actions.rejectJoinRequests([user]));
+    }
   };
 
   const lowerHand = (user: string) => {
@@ -32,7 +31,7 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
       <div className="requests__main">
         {/* join requests */}
         {requests.map((p) => (
-          <Request type="JOIN" participant={p.user} handleClick={lowerHand} />
+          <Request type="JOIN" participant={p.user} handleClick={handleJoin} />
         ))}
 
         {/* raise hand requests */}
