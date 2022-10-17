@@ -31,12 +31,12 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
       <div className="requests__main">
         {/* join requests */}
         {requests.map((p) => (
-          <Request type="JOIN" participant={p.user} handleClick={handleJoin} />
+          <Request key={p.user.id} type="JOIN" participant={p.user} handleClick={handleJoin} />
         ))}
 
         {/* raise hand requests */}
         {participantsWithRaisedHand.map((p) => (
-          <Request type="RAISE_HAND" participant={p.user} handleClick={lowerHand} />
+          <Request key={p.user.id} type="RAISE_HAND" participant={p.user} handleClick={lowerHand} />
         ))}
       </div>
     </div>
