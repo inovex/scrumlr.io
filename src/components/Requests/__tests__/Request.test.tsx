@@ -58,18 +58,6 @@ describe("JoinRequest", () => {
       expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0"]));
     });
 
-    test("multiple join request should call acceptJoinRequests correctly", () => {
-      const {container} = render(createJoinRequest(3));
-      fireEvent.click(getByText(container, "Accept all")!);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
-    });
-
-    test("multiple join request should call rejectJoinRequests correctly", () => {
-      const {container} = render(createJoinRequest(3));
-      fireEvent.click(getByText(container, "Reject all")!);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.rejectJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
-    });
-
     test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
       const {container} = render(createJoinRequest(3));
       const figures = container.querySelectorAll(".join-request__requests-figure");
