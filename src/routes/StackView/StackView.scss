@@ -1,6 +1,7 @@
 @import "constants/style";
 
-$stack-view-top-margin: 64px;
+$stack-view__header-height: 16%;
+$stack-view__parent-note-height: 22%;
 
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
@@ -14,8 +15,8 @@ $stack-view-top-margin: 64px;
 }
 
 .stack-view {
-  margin-top: $stack-view-top-margin;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   align-items: center;
   width: fit-content;
@@ -51,9 +52,9 @@ $stack-view-top-margin: 64px;
 
 .stack-view__parent-note {
   margin: 0;
+  height: $stack-view__parent-note-height;
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
-  height: 208px;
   font-size: $text-size--large;
   --note-footer-height: 36px;
 

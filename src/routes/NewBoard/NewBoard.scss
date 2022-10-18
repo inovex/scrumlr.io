@@ -33,12 +33,17 @@
   }
 }
 
+.new-board__mode {
+  width: 100%;
+  max-width: 320px;
+}
+
 .new-board__mode-selection {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   gap: 16px;
-
+  justify-items: center;
   margin-top: 1em;
 }
 
@@ -77,9 +82,6 @@
   border-radius: 16px;
   border: 1px solid transparent;
   transition: all 0.08s ease-out;
-
-  width: 100%;
-  max-width: 320px;
   min-height: 76px;
 
   padding: $padding--default;

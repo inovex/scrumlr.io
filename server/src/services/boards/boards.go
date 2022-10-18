@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
@@ -19,10 +20,10 @@ import (
 
 type BoardService struct {
 	database *database.Database
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 }
 
-func NewBoardService(db *database.Database, rt *realtime.Realtime) services.Boards {
+func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards {
 	b := new(BoardService)
 	b.database = db
 	b.realtime = rt
