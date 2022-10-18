@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {Dispatch, FC, SetStateAction} from "react";
 import {useNavigate} from "react-router";
 import {Note} from "types/note";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
@@ -11,19 +11,22 @@ interface StackNavigationProps {
   currentStack: string;
   prevColumnStack: string | undefined;
   nextColumnStack: string | undefined;
+  setAnimateDirection: Dispatch<SetStateAction<"left" | "right" | undefined>>;
 }
 
-export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack}: StackNavigationProps) => {
+export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, setAnimateDirection}: StackNavigationProps) => {
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
   const handleBackClick = () => {
+    setAnimateDirection("left");
     if (currentIndex > 0) {
       navigate(`../note/${stacks[currentIndex - 1].id}/stack`);
     } else if (prevColumnStack) navigate(`../note/${prevColumnStack}/stack`);
   };
 
   const handleForwardClick = () => {
+    setAnimateDirection("right");
     if (currentIndex < stacks.length - 1) {
       navigate(`../note/${stacks[currentIndex + 1].id}/stack`);
     } else if (nextColumnStack) navigate(`../note/${nextColumnStack}/stack`);

@@ -25,6 +25,8 @@
       background: var(--accent-color);
       border-radius: $border-radius--round;
       margin-top: $margin--default;
+
+      transition: all 0.2s ease-in-out;
     }
   }
 }
