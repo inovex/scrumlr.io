@@ -20,21 +20,11 @@ $transition-time: 0.2s;
   background-color: $color-white;
   box-shadow: 0 3px 5px rgba($menu-icon-background-color--dark, 30%);
 
-  transition: background-color $transition-time ease-out, margin-right $transition-time ease-out, padding-right $transition-time ease-out;
-
-  #Circle-Background {
-    stroke: $tooltip-background-color--light;
-    transition: stroke $transition-time ease-out;
-  }
+  transition: margin-right $transition-time ease-out, padding-right $transition-time ease-out;
 
   &:hover {
-    background-color: $hover-background-orchid;
     padding-right: 10px;
     margin-right: -10px;
-
-    #Circle-Background {
-      stroke: $color-lean-lilac;
-    }
 
     .request__info-container {
       opacity: 0;
