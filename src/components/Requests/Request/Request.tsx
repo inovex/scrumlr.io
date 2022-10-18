@@ -15,7 +15,7 @@ export type RequestProps = {
 export const Request = ({type, participant, handleClick}: RequestProps) => {
   const {t} = useTranslation();
 
-  const renderButtons = (type: RequestType) => {
+  const renderButtons = () => {
     if (type === "JOIN") {
       return (
         <>
@@ -47,7 +47,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
           <span className="request__participant-name">{participant.name}</span>
           <span className="request__info-text">{type === "JOIN" ? t("JoinRequest.title") : t("RaiseRequest.title")}</span>
         </div>
-        <div className="request__button-container">{renderButtons(type)}</div>
+        <div className="request__button-container">{renderButtons()}</div>
       </div>
 
       <div className="request__icon-container">
