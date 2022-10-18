@@ -1,6 +1,6 @@
 import {Actions} from "store/action";
 import {Request as RequestModel} from "types/request";
-import "./Request.scss";
+import "./Requests.scss";
 import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
 import {Request} from "./Request";
