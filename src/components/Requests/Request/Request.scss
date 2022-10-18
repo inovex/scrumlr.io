@@ -1,6 +1,7 @@
 @import "src/constants/style";
 
 $transition-time: 0.2s;
+$transition-time--text: 0.1s;
 $fly-in-time: 0.5s;
 
 // CONTAINER
@@ -52,7 +53,7 @@ $fly-in-time: 0.5s;
   flex-direction: column;
   font-size: $text-size--medium;
 
-  transition: opacity 0.1s ease-out;
+  transition: opacity $transition-time--text ease-out;
 }
 
 .request__participant-name {

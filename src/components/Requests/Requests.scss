@@ -2,6 +2,7 @@
 
 $wrapper-position__top: 110px;
 $wrapper-position__right: 30px;
+$gap-between-requests: 15px;
 
 /* fixed wrapper in the top right containing all request */
 .requests__wrapper {
@@ -15,7 +16,7 @@ $wrapper-position__right: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  row-gap: 15px;
+  row-gap: $gap-between-requests;
 
   width: 100%;
   height: auto;
