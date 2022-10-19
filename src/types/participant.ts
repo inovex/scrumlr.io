@@ -7,6 +7,7 @@ export interface Participant {
   connected: boolean;
   ready: boolean;
   raisedHand: boolean;
+  viewsSharedNote: boolean;
   showHiddenColumns: boolean;
   role: ParticipantRole;
 }

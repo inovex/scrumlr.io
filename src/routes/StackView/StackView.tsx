@@ -10,6 +10,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
+import {useEffect} from "react";
 
 export const StackView = () => {
   const {t} = useTranslation();
@@ -17,10 +18,12 @@ export const StackView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const currentUser = useAppSelector((state) => state.participants!.self.user.id);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -40,6 +43,15 @@ export const StackView = () => {
     navigate(`/board/${boardId}`);
     return null;
   }
+
+  useEffect(() => {
+    if (!moderating && isShared) {
+      dispatch(Actions.setViewsSharedNote(currentUser, true));
+    }
+    return () => {
+      !moderating && isShared && dispatch(Actions.setViewsSharedNote(currentUser, false));
+    };
+  }, []);
 
   const handleClose = () => {
     if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {

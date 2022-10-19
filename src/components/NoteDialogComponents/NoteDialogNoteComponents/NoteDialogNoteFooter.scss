@@ -75,6 +75,19 @@
   }
 }
 
+// remove magic numbers, Design needed
+.note-dialog__note-viewers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--accent-color--desaturated-light);
+  border-radius: 21px;
+  padding: 0px 8px 0px 8px;
+  height: var(--note-footer-height);
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .note-dialog__note-votes > *:last-child {
   margin: 0 calc(($tooltip-button-size - var(--note-footer-height, $votes-button-size)) / 2);
 }

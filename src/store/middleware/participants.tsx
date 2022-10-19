@@ -30,6 +30,18 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
     });
   }
 
+  if (action.type === Action.SetViewsSharedNoteStatus) {
+    console.log(action.viewsSharedNote);
+    API.editParticipant(action.context.board!, action.user, {viewsSharedNote: action.viewsSharedNote}).catch(() => {
+      Toast.error(
+        <div>
+          <div>Blub</div>
+          <Button onClick={() => store.dispatch(Actions.setViewsSharedNote(action.user, action.viewsSharedNote))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
+    });
+  }
+
   if (action.type === Action.SetShowHiddenColumns) {
     API.editParticipant(action.context.board!, action.context.user!, {showHiddenColumns: action.showHiddenColumns}).catch(() => {
       Toast.error(

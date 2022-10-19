@@ -21,6 +21,9 @@ type NoteDialogNoteFooterProps = {
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
   const {t} = useTranslation();
 
+  const them = useAppSelector((state) => state.participants!.others.filter((p) => p.connected), _.isEqual);
+  const viewers = them.filter((participant) => participant.viewsSharedNote);
+  const moderating = useAppSelector((state) => state.view.moderating);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
@@ -39,6 +42,11 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           <UserAvatar id={props.authorId} avatar={props.avatar} name={props.authorName} className="note-dialog__note-user-avatar" avatarClassName="note-dialog__note-user-avatar" />
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
+      )}
+      {moderating && (
+        <div className="note-dialog__note-viewers">
+          {viewers?.length}/{them?.length} Viewers
+        </div>
       )}
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
