@@ -106,6 +106,7 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 		User:              body.User,
 		Ready:             body.Ready,
 		RaisedHand:        body.RaisedHand,
+		ViewsSharedNote:   body.ViewsSharedNote,
 		ShowHiddenColumns: body.ShowHiddenColumns,
 		Role:              body.Role,
 	})

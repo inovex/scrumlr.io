@@ -89,6 +89,7 @@ create table board_sessions
     "connected"  boolean      not null DEFAULT false,
     "ready"      boolean      not null DEFAULT false,
     raised_hand  boolean      not null DEFAULT false,
+    "views_shared_note"   boolean not null DEFAULT false,
     "role"       session_role not null,
     "created_at" timestamptz  not null DEFAULT now(),
     PRIMARY KEY ("user", board)
