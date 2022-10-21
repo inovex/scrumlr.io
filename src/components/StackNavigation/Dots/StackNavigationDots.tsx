@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import {Dispatch, SetStateAction} from "react";
 import {useNavigate} from "react-router";
 import {Note} from "types/note";
 import "./StackNavigationDots.scss";
@@ -6,6 +7,7 @@ import "./StackNavigationDots.scss";
 type StackNavigationDotsProps = {
   stacks: Note[];
   currentIndex: number;
+  setAnimateDirection: Dispatch<SetStateAction<"left" | "right" | undefined>>;
 };
 
 const getCenterDot = (length: number, currentIndex: number) => {
@@ -18,10 +20,11 @@ const getCenterDot = (length: number, currentIndex: number) => {
   return currentIndex;
 };
 
-export const StackNavigationDots = ({stacks, currentIndex}: StackNavigationDotsProps) => {
+export const StackNavigationDots = ({stacks, currentIndex, setAnimateDirection}: StackNavigationDotsProps) => {
   const navigate = useNavigate();
 
   const handleClick = (index: number) => {
+    setAnimateDirection(index > currentIndex ? "right" : "left");
     navigate(`../note/${stacks[index].id}/stack`);
   };
 

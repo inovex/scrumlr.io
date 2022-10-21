@@ -38,7 +38,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
       <button disabled={currentIndex === 0 && prevColumnStack === undefined} onClick={handleBackClick} className="stack-view__navigation-button">
         <LeftArrowIcon />
       </button>
-      <StackNavigationDots stacks={stacks} currentIndex={currentIndex} />
+      <StackNavigationDots stacks={stacks} currentIndex={currentIndex} setAnimateDirection={setAnimateDirection} />
       <button disabled={currentIndex === stacks.length - 1 && nextColumnStack === undefined} onClick={handleForwardClick} className="stack-view__navigation-button">
         <RightArrowIcon />
       </button>
