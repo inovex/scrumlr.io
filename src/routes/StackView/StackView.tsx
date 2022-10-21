@@ -32,17 +32,6 @@ export const StackView = () => {
     }
     return prevStack;
   });
-  const prevColumnStack = useAppSelector(
-    (state) =>
-      state.notes
-        .filter((n) => n.position.stack === prevColumnParent?.id)
-        .map((n) => ({
-          ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
-          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
-        })),
-    _.isEqual
-  );
   const nextColumnParent = useAppSelector((state) => {
     const nextColumns = state.columns.slice(column!.index + 1);
     let nextStack;
@@ -52,17 +41,6 @@ export const StackView = () => {
     }
     return nextStack;
   });
-  const nextColumnStack = useAppSelector(
-    (state) =>
-      state.notes
-        .filter((n) => n.position.stack === nextColumnParent?.id)
-        .map((n) => ({
-          ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
-          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
-        })),
-    _.isEqual
-  );
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
@@ -105,11 +83,7 @@ export const StackView = () => {
     return "translateX(0)";
   };
 
-  const items = [
-    {parent: prevColumnParent, stack: prevColumnStack},
-    {parent: note, stack: stackedNotes},
-    {parent: nextColumnParent, stack: nextColumnStack},
-  ];
+  const items = [{parent: note, stack: stackedNotes}];
 
   const navigationProps = {
     stacks: stacksInColumn,
