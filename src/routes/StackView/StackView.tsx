@@ -83,8 +83,6 @@ export const StackView = () => {
     return "translateX(0)";
   };
 
-  const items = [{parent: note, stack: stackedNotes}];
-
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
@@ -107,7 +105,7 @@ export const StackView = () => {
             top: "26.8vh",
             opacity: 0,
           }}
-          items={items}
+          items={{parent: note, stack: stackedNotes, avatar: author!.user.avatar, authorName}}
         >
           {(styles: object, item) => (
             <animated.div style={styles} className="stack-view__animation-wrapper">
@@ -119,8 +117,8 @@ export const StackView = () => {
                     noteId={item.parent!.id}
                     text={item.parent!.text}
                     authorId={item.parent!.author}
-                    avatar={author!.user.avatar}
-                    authorName={authorName}
+                    avatar={item.avatar}
+                    authorName={item.authorName}
                     showAuthors={showAuthors}
                     onClose={handleClose}
                     onDeleteOfParent={handleClose}
