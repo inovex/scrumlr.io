@@ -1,4 +1,4 @@
-import {Dispatch, FC, SetStateAction} from "react";
+import {FC} from "react";
 import {useNavigate} from "react-router";
 import {Note} from "types/note";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
@@ -11,25 +11,31 @@ interface StackNavigationProps {
   currentStack: string;
   prevColumnStack: string | undefined;
   nextColumnStack: string | undefined;
-  setAnimateDirection: Dispatch<SetStateAction<"left" | "right" | undefined>>;
+  handleModeration: (stackId: string) => void;
 }
 
-export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, setAnimateDirection}: StackNavigationProps) => {
+export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, handleModeration}: StackNavigationProps) => {
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
   const handleBackClick = () => {
-    setAnimateDirection("left");
     if (currentIndex > 0) {
+      handleModeration(stacks[currentIndex - 1].id);
       navigate(`../note/${stacks[currentIndex - 1].id}/stack`);
-    } else if (prevColumnStack) navigate(`../note/${prevColumnStack}/stack`);
+    } else if (prevColumnStack) {
+      handleModeration(prevColumnStack);
+      navigate(`../note/${prevColumnStack}/stack`);
+    }
   };
 
   const handleForwardClick = () => {
-    setAnimateDirection("right");
     if (currentIndex < stacks.length - 1) {
+      handleModeration(stacks[currentIndex + 1].id);
       navigate(`../note/${stacks[currentIndex + 1].id}/stack`);
-    } else if (nextColumnStack) navigate(`../note/${nextColumnStack}/stack`);
+    } else if (nextColumnStack) {
+      handleModeration(nextColumnStack);
+      navigate(`../note/${nextColumnStack}/stack`);
+    }
   };
 
   return (
@@ -38,7 +44,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
       <button disabled={currentIndex === 0 && prevColumnStack === undefined} onClick={handleBackClick} className="stack-view__navigation-button">
         <LeftArrowIcon />
       </button>
-      <StackNavigationDots stacks={stacks} currentIndex={currentIndex} setAnimateDirection={setAnimateDirection} />
+      <StackNavigationDots stacks={stacks} currentIndex={currentIndex} handleModeration={handleModeration} />
       <button disabled={currentIndex === stacks.length - 1 && nextColumnStack === undefined} onClick={handleForwardClick} className="stack-view__navigation-button">
         <RightArrowIcon />
       </button>

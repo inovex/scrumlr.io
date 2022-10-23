@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
-import {useParams, useNavigate} from "react-router";
+import {useParams, useNavigate, useLocation} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {animated, Transition} from "react-spring";
@@ -12,15 +12,19 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useRef} from "react";
 
 export const StackView = () => {
   const {t} = useTranslation();
   const {boardId, noteId} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [animateDirection, setAnimateDirection] = useState<"left" | "right" | undefined>(undefined);
+  const location = useLocation();
+  const prevId = useRef<string | undefined>();
 
+  const newId = location.pathname.split("note/").pop()?.split("/")[0];
+  const oldIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === prevId.current));
+  const newIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === newId));
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const prevColumnParent = useAppSelector((state) => {
@@ -30,7 +34,7 @@ export const StackView = () => {
       prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
       prevColumns.shift();
     }
-    return prevStack;
+    return prevStack?.id;
   });
   const nextColumnParent = useAppSelector((state) => {
     const nextColumns = state.columns.slice(column!.index + 1);
@@ -39,7 +43,7 @@ export const StackView = () => {
       nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
       nextColumns.shift();
     }
-    return nextStack;
+    return nextStack?.id;
   });
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
@@ -59,7 +63,27 @@ export const StackView = () => {
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true);
   const viewer = useAppSelector((state) => state.participants!.self);
 
-  useEffect(() => () => setAnimateDirection(undefined), []);
+  const animateDirection = useRef<"left" | "right" | undefined>(undefined);
+
+  useMemo(() => {
+    if (!prevId.current) {
+      prevId.current = noteId;
+      return;
+    }
+    if (prevId.current === newId) return;
+    if (oldIndex === newIndex) return;
+    animateDirection.current = newIndex > oldIndex ? "right" : "left";
+    prevId.current = newId;
+  }, [newId, newIndex, noteId, oldIndex]);
+
+  useEffect(
+    () => () => {
+      animateDirection.current = undefined;
+    },
+    []
+  );
+
+  useEffect(() => console.log("StackView render"));
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -73,11 +97,17 @@ export const StackView = () => {
     navigate(`/board/${boardId}`);
   };
 
+  const handleModeration = (id: string) => {
+    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+      dispatch(Actions.shareNote(id));
+    }
+  };
+
   const getTransform = (state: "start" | "end") => {
-    if (animateDirection === "left") {
+    if (animateDirection.current === "left") {
       return state === "start" ? "translateX(-100%)" : "translateX(100%)";
     }
-    if (animateDirection === "right") {
+    if (animateDirection.current === "right") {
       return state === "start" ? "translateX(100%)" : "translateX(-100%)";
     }
     return "translateX(0)";
@@ -86,9 +116,9 @@ export const StackView = () => {
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
-    prevColumnStack: prevColumnParent?.id,
-    nextColumnStack: nextColumnParent?.id,
-    setAnimateDirection,
+    prevColumnStack: prevColumnParent,
+    nextColumnStack: nextColumnParent,
+    handleModeration,
   };
 
   return (
@@ -111,7 +141,6 @@ export const StackView = () => {
             <animated.div style={styles} className="stack-view__animation-wrapper">
               {item.parent?.position.column === column!.id && (
                 <>
-                  {/* TODO: Fix author */}
                   <NoteDialogComponents.Note
                     key={item.parent!.id}
                     noteId={item.parent!.id}
