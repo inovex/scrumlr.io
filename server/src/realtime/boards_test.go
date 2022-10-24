@@ -12,12 +12,10 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-func TestRealtime_GetBoardChannel(t *testing.T) {
-
+func testRealtime_GetBoardChannelWithBroker(t *testing.T, rt *realtime.Broker) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelFunc()
-	rt, err := realtime.NewNats(SetupNatsContainer(t))
-	assert.Nil(t, err)
+
 	testBoard := uuid.New()
 
 	testEvents := []realtime.BoardEvent{
@@ -62,26 +60,34 @@ func TestRealtime_GetBoardChannel(t *testing.T) {
 		},
 	}
 
-	eventChannel := rt.GetBoardChannel(testBoard)
-	readEvents := []realtime.BoardEvent{}
+	const clients = 10
+	eventChannels := [clients]chan *realtime.BoardEvent{}
+	for i := range eventChannels {
+		eventChannels[i] = rt.GetBoardChannel(testBoard)
+	}
+	readEvents := [clients][]realtime.BoardEvent{}
 	wg := sync.WaitGroup{}
-	go func() {
-		for {
-			select {
-			case ev := <-eventChannel:
-				assert.NotNil(t, ev)
-				readEvents = append(readEvents, *ev)
-				wg.Done()
-			case <-ctx.Done():
-				return
+
+	for i := range readEvents {
+		client := i
+		go func() {
+			for {
+				select {
+				case ev := <-eventChannels[client]:
+					assert.NotNil(t, ev)
+					readEvents[client] = append(readEvents[client], *ev)
+					wg.Done()
+				case <-ctx.Done():
+					return
+				}
 			}
-		}
-	}()
+		}()
+	}
 
 	for _, ev := range testEvents {
 		err := rt.BroadcastToBoard(testBoard, ev)
 		assert.Nil(t, err)
-		wg.Add(1)
+		wg.Add(1 * clients)
 	}
 
 	go func() {
@@ -91,6 +97,21 @@ func TestRealtime_GetBoardChannel(t *testing.T) {
 
 	<-ctx.Done()
 
-	assert.Equal(t, expectedEvents, readEvents)
+	for i := 0; i < clients; i++ {
+		assert.Equal(t, expectedEvents, readEvents[i])
+	}
+}
 
+func TestRealtime_GetBoardChannel(t *testing.T) {
+	t.Run("with nats", func(t *testing.T) {
+		rt, err := realtime.NewNats(SetupNatsContainer(t))
+		assert.Nil(t, err)
+		testRealtime_GetBoardChannelWithBroker(t, rt)
+	})
+
+	t.Run("with redis", func(t *testing.T) {
+		rt, err := realtime.NewRedis(SetupRedisContainer(t))
+		assert.Nil(t, err)
+		testRealtime_GetBoardChannelWithBroker(t, rt)
+	})
 }
