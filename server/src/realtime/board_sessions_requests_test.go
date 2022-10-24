@@ -12,7 +12,7 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-func testRealtime_GetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker) {
+func testRealtimeGetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelFunc()
 	testBoard := uuid.New()
@@ -48,9 +48,9 @@ func testRealtime_GetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broke
 	}
 
 	for _, ev := range testEvents {
+		wg.Add(1 * clients)
 		err := rt.BroadcastUpdateOnBoardSessionRequest(testBoard, testUser, ev)
 		assert.Nil(t, err)
-		wg.Add(1 * clients)
 	}
 
 	go func() {
@@ -69,13 +69,13 @@ func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
 	t.Run("with nats", func(t *testing.T) {
 		rt, err := realtime.NewNats(SetupNatsContainer(t))
 		assert.Nil(t, err)
-		testRealtime_GetBoardSessionRequestChannel(t, rt)
+		testRealtimeGetBoardSessionRequestChannel(t, rt)
 	})
 
 	t.Run("with redis", func(t *testing.T) {
 		rt, err := realtime.NewRedis(SetupRedisContainer(t))
 		assert.Nil(t, err)
-		testRealtime_GetBoardSessionRequestChannel(t, rt)
+		testRealtimeGetBoardSessionRequestChannel(t, rt)
 	})
 
 }
