@@ -5,15 +5,18 @@ import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
+import {Toast} from "utils/Toast";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
   columnId: string;
   maxNoteLength: number;
   columnIndex: number;
+  columnIsVisible: boolean;
+  toggleColumn: any;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumn}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -41,6 +44,14 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps
   const onAddNote = () => {
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
+      if (!columnIsVisible) {
+        Toast.info(
+          <div>
+            <div>You added a note to a hidden column</div>
+            <button onClick={toggleColumn}>show column</button>
+          </div>
+        );
+      }
       setValue("");
     }
   };
