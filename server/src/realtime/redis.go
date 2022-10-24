@@ -58,8 +58,23 @@ func (r *redisClient) Publish(subject string, event interface{}) error {
 func (r *redisClient) SubscribeToBoardSessionEvents(subject string) (chan *BoardSessionRequestEventType, error) {
 	ctx := context.Background()
 	pubsub := r.con.Subscribe(ctx, subject)
-	c := pubsub.Channel(redis.WithChannelSize(10), redis.WithChannelHealthCheckInterval(10*time.Second))
 	retChannel := make(chan *BoardSessionRequestEventType)
+	event, err := pubsub.Receive(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to subscribe: %w", err)
+	}
+	switch event.(type) {
+	case *redis.Message:
+		var boardEvent BoardSessionRequestEventType
+		err := decodeEvent(event.(*redis.Message).Payload, &boardEvent)
+		if err == nil {
+			retChannel <- &boardEvent
+		}
+	default:
+		// do nothing
+	}
+	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
+
 	go func() {
 		for {
 			select {
@@ -79,9 +94,23 @@ func (r *redisClient) SubscribeToBoardSessionEvents(subject string) (chan *Board
 
 func (r *redisClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, error) {
 	ctx := context.Background()
-	pubsub := r.con.Subscribe(ctx, subject)
-	c := pubsub.Channel(redis.WithChannelSize(10), redis.WithChannelHealthCheckInterval(10*time.Second))
 	retChannel := make(chan *BoardEvent)
+	pubsub := r.con.Subscribe(ctx, subject)
+	event, err := pubsub.Receive(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to subscribe: %w", err)
+	}
+	switch event.(type) {
+	case *redis.Message:
+		var boardEvent BoardEvent
+		err := decodeEvent(event.(*redis.Message).Payload, &boardEvent)
+		if err == nil {
+			retChannel <- &boardEvent
+		}
+	default:
+		// do nothing
+	}
+	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
 	go func() {
 		for {
 			select {
