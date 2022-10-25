@@ -47,8 +47,8 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       if (!columnIsVisible) {
         Toast.info(
           <div>
-            <div>You added a note to a hidden column</div>
-            <button onClick={toggleColumn}>show column</button>
+            <div>{t("Toast.noteToHiddenColumn")}</div>
+            <button onClick={toggleColumn}>{t("Toast.noteToHiddenColumnButton")}</button>
           </div>
         );
       }
