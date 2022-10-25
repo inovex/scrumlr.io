@@ -1,29 +1,43 @@
 @import "src/constants/style.scss";
 
 .vote-display {
+  height: 42px;
+  width: 114px;
+  color: white;
+  background-color: #333948;
+  border-radius: 21px;
   position: relative;
-  width: 85px;
+  overflow: hidden;
+  border: 2px solid #333948;
 }
 
-.vote-display > * {
-  color: $color-white;
-  background-color: $color-backlog-blue;
-  vertical-align: bottom;
-  box-shadow: 0 8px 16px #0057ff25;
+.vote-display > svg {
+  position: absolute;
+  height: 38px;
+  width: 38px;
+  background-color: #333948;
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
 }
 
-[theme="dark"] {
-  .vote-display > * {
-    background-color: $color-planning-pink;
-    box-shadow: 0 8px 16px #e2036025;
-  }
-}
 .vote-display > span {
-  display: inline-block;
-  border-radius: 18px;
-  width: 84px;
-  cursor: default;
-  font-weight: bold;
-  line-height: $line-height--large;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 38px;
+  width: 72px;
+  line-height: 38px;
   text-align: center;
+  font-weight: bold;
+}
+
+.vote-display > div {
+  position: absolute;
+  top: 0;
+  left: 19px;
+  right: 72px;
+  height: 38px;
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
+  background-color: #ccddff;
 }
