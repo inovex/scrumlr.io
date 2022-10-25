@@ -13,10 +13,10 @@ export interface NoteInputProps {
   maxNoteLength: number;
   columnIndex: number;
   columnIsVisible: boolean;
-  toggleColumn: any;
+  toggleColumnVisibility: any;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumn}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -48,7 +48,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         Toast.info(
           <div>
             <div>{t("Toast.noteToHiddenColumn")}</div>
-            <button className="toast-button" onClick={toggleColumn}>
+            <button className="toast-button" onClick={toggleColumnVisibility}>
               {t("Toast.noteToHiddenColumnButton")}
             </button>
           </div>

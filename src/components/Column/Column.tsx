@@ -166,7 +166,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
-          <NoteInput columnIndex={index} columnId={id} maxNoteLength={MAX_NOTE_LENGTH} columnIsVisible={visible} toggleColumn={toggleVisibilityHandler} />
+          <NoteInput columnIndex={index} columnId={id} maxNoteLength={MAX_NOTE_LENGTH} columnIsVisible={visible} toggleColumnVisibility={toggleVisibilityHandler} />
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
