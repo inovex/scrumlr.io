@@ -19,6 +19,10 @@
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
 }
+[theme="dark"] .vote-display > svg {
+  background-color: $color-white;
+  color: $color-black;
+}
 
 .vote-display > span {
   position: absolute;
@@ -39,5 +43,5 @@
   height: 38px;
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  background-color: #ccddff;
+  background-color: #3c7fff;
 }
