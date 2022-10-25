@@ -48,7 +48,9 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         Toast.info(
           <div>
             <div>{t("Toast.noteToHiddenColumn")}</div>
-            <button onClick={toggleColumn}>{t("Toast.noteToHiddenColumnButton")}</button>
+            <button className="toast-button" onClick={toggleColumn}>
+              {t("Toast.noteToHiddenColumnButton")}
+            </button>
           </div>
         );
       }

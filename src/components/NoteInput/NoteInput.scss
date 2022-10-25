@@ -67,6 +67,14 @@ $note-input__input-right: 40px;
   transition: all 0.08s ease-out;
 }
 
+.toast-button {
+  background-color: $color-white;
+  border-color: $color-backlog-blue;
+  border-radius: 12px;
+  height: 40px;
+  margin: 10px;
+}
+
 [theme="dark"] {
   .note-input {
     background-color: $color-dark-mode-note;
@@ -79,5 +87,11 @@ $note-input__input-right: 40px;
 
   .note-input__input {
     color: $color-white;
+  }
+
+  .toast-button {
+    border-color: $color-planning-pink;
+    background-color: $color-dark-mode-note;
+    color: white;
   }
 }
