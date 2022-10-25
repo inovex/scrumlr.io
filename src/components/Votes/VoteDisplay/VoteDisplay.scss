@@ -109,6 +109,10 @@
   top: -35px;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
+[theme="dark"] .short-actions__button-wrapper > span {
+  background-color: #485064;
+  color: #ffffff;
+}
 .short-actions__button-wrapper > span::after {
   content: "";
   position: absolute;
@@ -117,6 +121,9 @@
   left: 50%;
   transform: translateX(-50%);
   top: 100%;
+}
+[theme="dark"] .short-actions__button-wrapper > span::after {
+  border-color: #485064 transparent transparent transparent;
 }
 .short-actions__button-wrapper:hover > span {
   visibility: visible;
