@@ -13,7 +13,7 @@ export interface NoteInputProps {
   maxNoteLength: number;
   columnIndex: number;
   columnIsVisible: boolean;
-  toggleColumnVisibility: any;
+  toggleColumnVisibility: () => void;
 }
 
 export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
@@ -21,6 +21,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
   const noteInputRef = useRef<HTMLInputElement | null>(null);
+  const [hiddenColumnToastHasBeenShown, setHiddenColumnToastHasBeenShown] = useState(false);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
@@ -44,7 +45,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   const onAddNote = () => {
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
-      if (!columnIsVisible) {
+      if (!columnIsVisible && !hiddenColumnToastHasBeenShown) {
         Toast.info(
           <div>
             <div>{t("Toast.noteToHiddenColumn")}</div>
@@ -53,6 +54,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
             </button>
           </div>
         );
+        setHiddenColumnToastHasBeenShown(true);
       }
       setValue("");
     }
