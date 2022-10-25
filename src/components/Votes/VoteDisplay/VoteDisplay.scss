@@ -7,7 +7,6 @@
   background-color: #333948;
   border-radius: 21px;
   position: relative;
-  overflow: hidden;
   border: 2px solid #333948;
 }
 
@@ -16,8 +15,7 @@
   height: 38px;
   width: 38px;
   background-color: #333948;
-  border-top-right-radius: 19px;
-  border-bottom-right-radius: 19px;
+  border-radius: 19px;
 }
 [theme="dark"] .vote-display > svg {
   background-color: $color-white;
@@ -35,13 +33,92 @@
   font-weight: bold;
 }
 
-.vote-display > div {
+.vote-display > .vote-display__progress-bar {
   position: absolute;
   top: 0;
   left: 19px;
-  right: 72px;
   height: 38px;
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
   background-color: #3c7fff;
+}
+
+.vote-display > .vote-display__short-actions {
+  position: absolute;
+  top: 0;
+  left: 19px;
+  padding-left: 19px;
+  right: 0;
+  height: 38px;
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
+  background-color: #333948;
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.vote-display:hover > .vote-display__short-actions {
+  visibility: visible;
+}
+
+.vote-display__short-actions > .short-actions__button-wrapper > button {
+  border: none;
+  background-color: #929aad;
+  color: $color-black;
+  height: 28px;
+  width: 28px;
+  border-radius: 14px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vote-display__short-actions > .short-actions__button-wrapper > button > svg {
+  height: 16px;
+  width: 16px;
+}
+.vote-display__short-actions > .short-actions__button-wrapper > button:hover {
+  background-color: #3c7fff;
+  color: white;
+}
+
+.short-actions__button-wrapper {
+  height: 28px;
+  width: 28px;
+  position: relative;
+  border-radius: 14px;
+}
+
+.short-actions__button-wrapper > span {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 36px;
+  border-radius: 18px;
+  padding: 5px 20px;
+  background-color: #d3daf0;
+  color: $color-black;
+  font-weight: bold;
+  height: auto;
+  top: -35px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+.short-actions__button-wrapper > span::after {
+  content: "";
+  position: absolute;
+  border: 4px solid;
+  border-color: #d3daf0 transparent transparent transparent;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
+}
+.short-actions__button-wrapper:hover > span {
+  visibility: visible;
+  opacity: 1;
 }
