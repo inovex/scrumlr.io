@@ -1,10 +1,10 @@
-import "./VoteDisplay.scss";
 import {useTranslation} from "react-i18next";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import "./VoteDisplay.scss";
 
 type VoteDisplayProps = {
   usedVotes: number;
