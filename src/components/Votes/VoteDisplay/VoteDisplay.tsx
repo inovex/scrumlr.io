@@ -28,13 +28,13 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             <button onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
               <FlagIcon />
             </button>
-            <span>Finish</span>
+            <span>{t("VoteDisplay.finishActionTooltip")}</span>
           </div>
           <div className="short-actions__button-wrapper">
             <button onClick={() => store.dispatch(Actions.abortVoting(voting!))}>
               <CancelIcon />
             </button>
-            <span>Abort</span>
+            <span>{t("VoteDisplay.abortActionTooltip")}</span>
           </div>
         </div>
       )}
