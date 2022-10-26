@@ -3,18 +3,18 @@
 .vote-display {
   height: 42px;
   width: 114px;
-  color: white;
-  background-color: #333948;
+  color: $color-white;
+  background-color: $menu-icon-background-color--dark;
   border-radius: 21px;
   position: relative;
-  border: 2px solid #333948;
+  border: 2px solid $menu-icon-background-color--dark;
 }
 
 .vote-display > svg {
   position: absolute;
   height: 38px;
   width: 38px;
-  background-color: #333948;
+  background-color: $menu-icon-background-color--dark;
   border-radius: 19px;
 }
 [theme="dark"] .vote-display > svg {
@@ -40,7 +40,7 @@
   height: 38px;
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  background-color: #3c7fff;
+  background-color: $color-progress-circle;
 }
 
 .vote-display > .vote-display__short-actions {
@@ -52,7 +52,7 @@
   height: 38px;
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  background-color: #333948;
+  background-color: $menu-icon-background-color--dark;
   visibility: hidden;
   display: flex;
   justify-content: center;
@@ -66,8 +66,8 @@
 
 .vote-display__short-actions > .short-actions__button-wrapper > button {
   border: none;
-  background-color: #929aad;
-  color: #333948;
+  background-color: $color-dark-gray;
+  color: $menu-icon-background-color--dark;
   height: 28px;
   width: 28px;
   border-radius: 14px;
@@ -82,8 +82,8 @@
   width: 16px;
 }
 .vote-display__short-actions > .short-actions__button-wrapper > button:hover {
-  background-color: #3c7fff;
-  color: white;
+  background-color: $color-progress-circle;
+  color: $color-white;
 }
 
 .short-actions__button-wrapper {
@@ -102,28 +102,28 @@
   height: 36px;
   border-radius: 18px;
   padding: 5px 20px;
-  background-color: #d3daf0;
-  color: #333948;
+  background-color: $tooltip-background-color--light;
+  color: $menu-icon-background-color--dark;
   font-weight: bold;
   height: auto;
   top: -35px;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 [theme="dark"] .short-actions__button-wrapper > span {
-  background-color: #485064;
-  color: #ffffff;
+  background-color: $tooltip-background-color--dark;
+  color: $color-white;
 }
 .short-actions__button-wrapper > span::after {
   content: "";
   position: absolute;
   border: 4px solid;
-  border-color: #d3daf0 transparent transparent transparent;
+  border-color: $tooltip-background-color--light transparent transparent transparent;
   left: 50%;
   transform: translateX(-50%);
   top: 100%;
 }
 [theme="dark"] .short-actions__button-wrapper > span::after {
-  border-color: #485064 transparent transparent transparent;
+  border-color: $tooltip-background-color--dark transparent transparent transparent;
 }
 .short-actions__button-wrapper:hover > span {
   visibility: visible;
