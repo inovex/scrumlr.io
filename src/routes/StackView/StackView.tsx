@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
-import {useParams, useNavigate, useLocation} from "react-router";
+import {useParams, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {animated, Transition} from "react-spring";
@@ -19,14 +19,11 @@ export const StackView = () => {
   const {boardId, noteId} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const prevId = useRef<string | undefined>();
+  const prevIndex = useRef<number | undefined>();
 
-  const newId = location.pathname.split("note/").pop()?.split("/")[0];
-  const oldIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === prevId.current));
-  const newIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === newId));
+  const newIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === noteId));
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
-  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
+  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column), _.isEqual);
   const prevColumnParent = useAppSelector((state) => {
     const prevColumns = state.columns.filter((c) => c.index < column!.index).reverse();
     let prevStack;
@@ -45,9 +42,9 @@ export const StackView = () => {
     }
     return nextStack?.id;
   });
-  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null));
-  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
-  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
+  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self, _.isEqual);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name), _.isEqual);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -59,22 +56,21 @@ export const StackView = () => {
         })),
     _.isEqual
   );
-  const moderating = useAppSelector((state) => state.view.moderating);
-  const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true);
-  const viewer = useAppSelector((state) => state.participants!.self);
+  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
+  const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
 
   const animateDirection = useRef<"left" | "right" | undefined>(undefined);
 
   useMemo(() => {
-    if (!prevId.current) {
-      prevId.current = noteId;
+    if (prevIndex.current === undefined) {
+      prevIndex.current = newIndex;
       return;
     }
-    if (prevId.current === newId) return;
-    if (oldIndex === newIndex) return;
-    animateDirection.current = newIndex > oldIndex ? "right" : "left";
-    prevId.current = newId;
-  }, [newId, newIndex, noteId, oldIndex]);
+    if (prevIndex.current === newIndex) return;
+    animateDirection.current = newIndex > prevIndex.current ? "right" : "left";
+    prevIndex.current = newIndex;
+  }, [newIndex, prevIndex]);
 
   useEffect(
     () => () => {
@@ -82,8 +78,6 @@ export const StackView = () => {
     },
     []
   );
-
-  useEffect(() => console.log("StackView render"));
 
   if (!note) {
     navigate(`/board/${boardId}`);

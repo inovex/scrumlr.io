@@ -49,7 +49,7 @@ export const Note = (props: NoteProps) => {
 
   useEffect(() => {
     if (isShared) {
-      if (!document.location.pathname.endsWith(props.noteId)) {
+      if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
         navigate(`note/${note!.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
