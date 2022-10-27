@@ -18,7 +18,6 @@ $stack-view__parent-note-height: 22%;
 }
 
 .stack-view__portal-moderation-visible {
-  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
   box-shadow: inset 0 0 0 $column__border-width $color-goal-green !important;
 }
 
