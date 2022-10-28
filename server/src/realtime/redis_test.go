@@ -21,7 +21,7 @@ var (
 
 // SetupRedisContainer starts the nats container if required.
 // Returns the connection string for nats
-func SetupRedisContainer(t *testing.T) string {
+func SetupRedisContainer(t *testing.T) realtime.RedisServer {
 	onceRedisSetup.Do(
 		func() {
 			pool, err := dockertest.NewPool("")
@@ -46,7 +46,7 @@ func SetupRedisContainer(t *testing.T) string {
 			// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
 			pool.MaxWait = 120 * time.Second
 			if err = pool.Retry(func() error {
-				rt, err := realtime.NewRedis(redisTestURL)
+				rt, err := realtime.NewRedis(realtime.RedisServer{Addr: redisTestURL})
 				if err != nil || !rt.IsHealthy() {
 					return errors.New("redis not healthy yet")
 				}
@@ -56,5 +56,7 @@ func SetupRedisContainer(t *testing.T) string {
 			}
 
 		})
-	return redisTestURL
+	return realtime.RedisServer{
+		Addr: redisTestURL,
+	}
 }
