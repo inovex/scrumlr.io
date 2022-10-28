@@ -3,21 +3,25 @@
 cert:
   enabled: false
   prod: false
-  name:
-hostname:
-
-oauthroute:
+  name: scrumlr-cert-main
+# setzt den hostname auf den aufgelöst werden soll. Unterstützt nicht mehrere
+hostname: minikube.test
+minikube:
   enabled: true
+ingressrewrite:
+  enabled: false
+oauthroute:
+  enabled: false
 
 frontend:
   name: frontend
-  image: scrumlr-frontend
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:2.7.8
   imagePullPolicy:
-  replicas:
+  replicas: 3
 
 server:
   name: server
-  image: scrumlr-server
+  image: ghcr.io/inovex/scrumlr.io/scrumlr-server:2.7.8
   imagePullPolicy:
   replicas: 3
 
@@ -27,7 +31,7 @@ nats:
     enabled: false
     # username: admin
     # password: password
-
+# die zugangsdaten auch von der db url in der server configmap ändern
 postgresql:
   fullnameOverride: scrumlr-database
   auth:
@@ -35,6 +39,7 @@ postgresql:
     password: password
     database: scrumlr
     postgresPassword: supersecret
-  persistence:
-    storageClass: cinder-csi
-    size: 256
+  priamary:
+    persistence:
+      storageClass: cinder-csi
+      size: 10Gi

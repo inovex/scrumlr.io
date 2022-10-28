@@ -7,7 +7,10 @@ metadata:
     {{- include "labels" . | nindent 6}}
   annotations:
     kubernetes.io/ingress.class: "nginx"
+    {{- if  .Values.ingressrewrite.enabled }}
+    
     nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- end}}
     {{- if .Values.cert.enabled }}
     cert-manager.io/cluster-issuer: {{if .Values.cert.prod}}"letsencrypt-prod"{{ else }}"letsencrypt-staging"{{ end }}
     {{- end }}

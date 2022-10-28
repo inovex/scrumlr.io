@@ -38,61 +38,25 @@ Running our Parse Server, Parse LiveQuery, MongoDB, Redis Cache, React Frontend 
 3. **Create Nginx Ingress Controller**
 
     ```bash
-    $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+    $ minikube addons enable ingress
     ```
 
 4. **Run our deployment script**
 
     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
     ```bash
-    $ sh build.sh
-    $ sh deploy.sh
+    $ cd chart
+    $ helm install scrumlr . -n scrumlr --create-namespace
     ```
 
 5. **Create a minikube tunnel**
 
     The minikube tunnel is needed so that our Ingress can be reached on `127.0.0.1`.
     ```bash
-    $ minikube tunnel
+    $ sudo minikube tunnel
     ```
 
-### Docker-Desktop
 
-On MacOS and Windows machines you could also use the Docker Desktop application as Kubernetes context.
-
-1. **Enable Kubernetes**
-
-    To enable Kubernetes support and install a standalone instance of Kubernetes running as a Docker container, go to `Docker Desktop > Preferences > Kubernetes` and then click `Enable Kubernetes`.
-
-2. **Make sure to use the correct Kubernetes context**
-
-    Ensure that the context is pointing to `docker-desktop`.
-
-    ```bash
-    $ kubectl config get-contexts
-    $ kubectl config use-context docker-desktop
-    ```
-
-3. **Create Nginx Ingress Controller**
-
-    ```bash
-    $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-    ```
-
-4. **Run our build & deployment script**
-
-    The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all kubernetes resources afterwards.
-    ```bash
-    $ sh build.sh
-    $ sh deploy.sh
-    ```
-
-### Access our running application
-
-- Our React application is served on http://localhost/
-- API requests should go to http://localhost/api
-    - The server health status can be checked on http://localhost/api/health
-- WebSocket requests should go to ws://localhost/api
 
 ## kubectl cheatsheet
 

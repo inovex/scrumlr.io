@@ -6,9 +6,12 @@ metadata:
     {{- include "selectorLabels" .Values.frontend | nindent 6 }}
     {{- include "labels" . | nindent 6 }}
 spec:
+  {{- if .Values.minikube.enabled }}
+  type: LoadBalancer
+  {{- end }}
   ports:
     - port: 80 
-      targetPort: 80
+      targetPort: 8080
       protocol: TCP
   selector:
     {{- include "selectorLabels" .Values.frontend | nindent 6 }}

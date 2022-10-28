@@ -11,3 +11,6 @@ data:
   SCRUMLR_API_HOST: "localhost"
   SCRUMLR_SERVER_PORT: "8080"
   SCRUMLR_BASE_URL: "http://localhost/api"
+  SCRUMLR_BASE_PATH: "/api"
+
+ 

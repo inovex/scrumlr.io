@@ -7,6 +7,11 @@ metadata:
     {{- include "labels" . | nindent 6}}
 spec:
   replicas: {{ .Values.frontend.replicas | default 1}} 
+  strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
   selector:
     matchLabels:
       {{- include "selectorLabels" .Values.frontend | nindent 8}}
@@ -15,22 +20,23 @@ spec:
       labels: 
         {{- include "selectorLabels" .Values.frontend | nindent 8 }}    
     spec:
+    
       containers:
         - name: {{ include "scrumlr-fullname" .Values.frontend }}
           image: {{ .Values.frontend.image }}
           imagePullPolicy: {{ .Values.frontend.imagePullPolicy | default "IfNotPresent" }}
           ports:
-            - containerPort: 80 
+            - containerPort: 8080 
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 3
           readinessProbe: 
             httpGet:
               path: /
-              port: 80
+              port: 8080
             initialDelaySeconds: 3
             periodSeconds: 3
       restartPolicy: Always
