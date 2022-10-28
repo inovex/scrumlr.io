@@ -55,6 +55,18 @@ func main() {
 				Value:   "",
 			},
 			&cli.StringFlag{
+				Name:    "redis-username",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_USERNAME"},
+				Usage:   "the redis user (if required)",
+				Value:   "",
+			},
+			&cli.StringFlag{
+				Name:    "redis-password",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_PASSWORD"},
+				Usage:   "the redis password (if required)",
+				Value:   "",
+			},
+			&cli.StringFlag{
 				Name:    "database",
 				Aliases: []string{"d"},
 				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
@@ -167,7 +179,11 @@ func run(c *cli.Context) error {
 
 	var rt *realtime.Broker
 	if c.String("redis-address") != "" {
-		rt, err = realtime.NewNats(c.String("redis-address"))
+		rt, err = realtime.NewRedis(realtime.RedisServer{
+			Addr:     c.String("redis-address"),
+			Username: c.String("redis-username"),
+			Password: c.String("redis-password"),
+		})
 		if err != nil {
 			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
 		}

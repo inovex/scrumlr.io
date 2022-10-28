@@ -9,19 +9,26 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func NewRedis(url string) (*Broker, error) {
-	return &Broker{con: connectRedis(url)}, nil
+func NewRedis(server RedisServer) (*Broker, error) {
+	return &Broker{con: connectRedis(server)}, nil
 }
 
 type redisClient struct {
 	con *redis.Client
 }
 
-func connectRedis(redisURL string) *redisClient {
+type RedisServer struct {
+	Addr     string
+	Password string
+	Username string
+}
+
+func connectRedis(server RedisServer) *redisClient {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     redisURL,
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Addr:     server.Addr,
+		Username: server.Username,
+		Password: server.Password,
+		DB:       0, // use default DB
 	})
 	return &redisClient{con: rdb}
 }
