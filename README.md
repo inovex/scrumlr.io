@@ -156,7 +156,6 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 ## Our team and beloved friends
 
 [<img src="https://avatars.githubusercontent.com/u/36969812?s=48&amp;v=4" width="48" height="48" alt="brandstetterm">](https://github.com/brandstetterm)
-[<img src="https://avatars.githubusercontent.com/u/32651718?s=48&amp;v=4" width="48" height="48" alt="timengel">](https://github.com/timengel)
 [<img src="https://avatars.githubusercontent.com/u/35272402?s=48&amp;v=4" width="48" height="48" alt="Resaki1">](https://github.com/Resaki1)
 [<img src="https://avatars.githubusercontent.com/u/49522775?s=48&amp;v=4" width="48" height="48" alt="Benjosh95">](https://github.com/Benjosh95)
 [<img src="https://avatars.githubusercontent.com/u/44020029?s=48&amp;v=4" width="48" height="48" alt="CronJorian">](https://github.com/CronJorian)
@@ -183,6 +182,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/8872752?s=36&amp;v=4" width="36" height="36" alt="theinrichs">](https://github.com/theinrichs)
 [<img src="https://avatars.githubusercontent.com/u/731608?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/cdreier)
 [<img src="https://avatars.githubusercontent.com/u/3976183?s=36&v=4" width="36" height="36" alt="dotcs">](https://github.com/dotcs)
+[<img src="https://avatars.githubusercontent.com/u/32651718?s=36&amp;v=4" width="36" height="36" alt="timengel">](https://github.com/timengel)
 
 ... and many more!
 
