@@ -37,7 +37,6 @@ func (n *natsClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, e
 
 // NewNats returns a new NATs backed Broker
 func NewNats(url string) (*Broker, error) {
-	r := new(Broker)
 
 	// Connect to a server
 	nc, err := nats.Connect(url)
@@ -49,7 +48,7 @@ func NewNats(url string) (*Broker, error) {
 		return nil, fmt.Errorf("unable to open encoded connection: %w", err)
 	}
 
-	r.con = &natsClient{con: c}
-
-	return r, nil
+	return &Broker{
+		con: &natsClient{con: c},
+	}, nil
 }
