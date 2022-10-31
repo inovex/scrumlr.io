@@ -12,12 +12,9 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
-
+func testRealtimeGetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker) {
 	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelFunc()
-	rt, err := realtime.NewNats(SetupNatsContainer(t))
-	assert.Nil(t, err)
 	testBoard := uuid.New()
 	testUser := uuid.New()
 
@@ -26,27 +23,34 @@ func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
 		realtime.RequestAccepted,
 		"some undefined event",
 	}
-
-	eventChannel := rt.GetBoardSessionRequestChannel(testBoard, testUser)
-	readEvents := []realtime.BoardSessionRequestEventType{}
+	const clients = 10
+	eventChannels := [clients]chan *realtime.BoardSessionRequestEventType{}
+	for i := range eventChannels {
+		eventChannels[i] = rt.GetBoardSessionRequestChannel(testBoard, testUser)
+	}
+	readEvents := [clients][]realtime.BoardSessionRequestEventType{}
 	wg := sync.WaitGroup{}
-	go func() {
-		for {
-			select {
-			case ev := <-eventChannel:
-				assert.NotNil(t, ev)
-				readEvents = append(readEvents, *ev)
-				wg.Done()
-			case <-ctx.Done():
-				return
+
+	for i := range readEvents {
+		client := i
+		go func() {
+			for {
+				select {
+				case ev := <-eventChannels[client]:
+					assert.NotNil(t, ev)
+					readEvents[client] = append(readEvents[client], *ev)
+					wg.Done()
+				case <-ctx.Done():
+					return
+				}
 			}
-		}
-	}()
+		}()
+	}
 
 	for _, ev := range testEvents {
+		wg.Add(1 * clients)
 		err := rt.BroadcastUpdateOnBoardSessionRequest(testBoard, testUser, ev)
 		assert.Nil(t, err)
-		wg.Add(1)
 	}
 
 	go func() {
@@ -55,6 +59,23 @@ func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
 	}()
 
 	<-ctx.Done()
-	assert.Equal(t, testEvents, readEvents)
+	for i := 0; i < clients; i++ {
+		assert.Equal(t, testEvents, readEvents[i])
+	}
+}
+
+func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
+
+	t.Run("with nats", func(t *testing.T) {
+		rt, err := realtime.NewNats(SetupNatsContainer(t))
+		assert.Nil(t, err)
+		testRealtimeGetBoardSessionRequestChannel(t, rt)
+	})
+
+	t.Run("with redis", func(t *testing.T) {
+		rt, err := realtime.NewRedis(SetupRedisContainer(t))
+		assert.Nil(t, err)
+		testRealtimeGetBoardSessionRequestChannel(t, rt)
+	})
 
 }
