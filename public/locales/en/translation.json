@@ -227,8 +227,8 @@
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
     "allParticipantsDone": "All participants are ready.",
-    "noteToHiddenColumn": "You just added a note to a hidden column",
-    "noteToHiddenColumnButton": "reveal column"
+    "noteToHiddenColumn": "You just added a note to a hidden column.",
+    "noteToHiddenColumnButton": "Reveal column"
   },
   "Language": {
     "german": "German",
