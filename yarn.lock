@@ -8502,10 +8502,10 @@ react-to-print@^2.14.7:
   dependencies:
     prop-types "^15.8.1"
 
-react-toastify@^9.0.8:
-  version "9.0.8"
-  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.0.8.tgz#3876c89fc6211a29027b3075010b5ec39ebe4f7e"
-  integrity sha512-EwM+teWt49HSHx+67qI08yLAW1zAsBxCXLCsUfxHYv1W7/R3ZLhrqKalh7j+kjgPna1h5LQMSMwns4tB4ww2yQ==
+react-toastify@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.0.tgz#7be07cb61f7e352c5d25a3228575db4cce88a2b5"
+  integrity sha512-63i/5SROvfYz9yzdkmxIrpndtggTdif/5ZpswY3VH+s2/S1Hxo/hiv+oGXnPH6UO2pJBOgfcLNeyVh7okRmnhg==
   dependencies:
     clsx "^1.1.1"
 
