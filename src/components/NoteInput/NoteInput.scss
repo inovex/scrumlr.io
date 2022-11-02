@@ -70,10 +70,10 @@ $note-input__input-right: 40px;
 .toast-button {
   background-color: $color-backlog-blue;
   border-style: none;
-  border-radius: 12px;
+  border-radius: 8px;
   height: 40px;
-  width: 80%;
-  margin: 10px;
+  width: 100%;
+  margin-top: $margin--default;
   color: $color-white;
 }
 
