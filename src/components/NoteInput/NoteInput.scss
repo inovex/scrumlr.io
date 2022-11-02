@@ -67,12 +67,19 @@ $note-input__input-right: 40px;
   transition: all 0.08s ease-out;
 }
 
+.toast-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .toast-button {
   background-color: $color-backlog-blue;
   border-style: none;
   border-radius: 8px;
   height: 40px;
-  width: 100%;
+  width: 70%;
   margin-top: $margin--default;
   color: $color-white;
 }
