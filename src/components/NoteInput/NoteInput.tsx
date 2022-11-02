@@ -5,19 +5,23 @@ import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
+import {Toast} from "utils/Toast";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
   columnId: string;
   maxNoteLength: number;
   columnIndex: number;
+  columnIsVisible: boolean;
+  toggleColumnVisibility: () => void;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
   const noteInputRef = useRef<HTMLInputElement | null>(null);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
@@ -41,6 +45,17 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength}: NoteInputProps
   const onAddNote = () => {
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
+      if (!columnIsVisible && !toastDisplayed) {
+        Toast.info(
+          <div>
+            <div>{t("Toast.noteToHiddenColumn")}</div>
+            <button className="toast-button" onClick={toggleColumnVisibility}>
+              {t("Toast.noteToHiddenColumnButton")}
+            </button>
+          </div>
+        );
+        setToastDisplayed(true);
+      }
       setValue("");
     }
   };
