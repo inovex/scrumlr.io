@@ -12,18 +12,107 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {useEffect, useMemo, useRef} from "react";
+import {useCallback, useEffect, useState} from "react";
+import {Note} from "types/note";
+import {AvataaarProps} from "components/Avatar";
+
+const useNoteAnimation = () => {
+  const {t} = useTranslation();
+  const {noteId} = useParams();
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
+  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self, _.isEqual);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name), _.isEqual);
+  const columns = useAppSelector((state) => state.columns, _.isEqual);
+  const stackedNotes = useAppSelector(
+    (state) =>
+      state.notes
+        .filter((n) => n.position.stack === note?.id)
+        .map((n) => ({
+          ...n,
+          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
+          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
+        })),
+    _.isEqual
+  );
+
+  const [prevNote, setPrevNote] = useState<Note | undefined>();
+  const [transitionConfig, setTransitionConfig] = useState({
+    from: {transform: "translate(0%)", position: "absolute", opacity: 0},
+    enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+    leave: {
+      transform: "translate(0%)",
+      position: "absolute",
+      top: "26.8vh",
+      opacity: 0,
+    },
+    items: {
+      parent: note,
+      stack: stackedNotes,
+      avatar: author!.user.avatar,
+      authorName,
+    },
+  });
+
+  const getTransform = useCallback((state: "start" | "end", dir?: string) => {
+    if (dir === "left") {
+      return state === "start" ? "translateX(-100%)" : "translateX(100%)";
+    }
+    if (dir === "right") {
+      return state === "start" ? "translateX(100%)" : "translateX(-100%)";
+    }
+    return "translateX(0)";
+  }, []);
+
+  const updateTransitionConfig = useCallback(
+    (direction?: string) => {
+      setTransitionConfig({
+        from: {transform: getTransform("start", direction), position: "absolute", opacity: 0},
+        enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+        leave: {
+          transform: getTransform("end", direction),
+          position: "absolute",
+          top: "26.8vh",
+          opacity: 0,
+        },
+        items: {
+          parent: note,
+          stack: stackedNotes,
+          avatar: author!.user.avatar,
+          authorName,
+        },
+      });
+    },
+    [getTransform, note, stackedNotes, author, authorName]
+  );
+
+  useEffect(() => {
+    if (prevNote?.id !== note?.id) {
+      let direction;
+      if (prevNote && prevNote.position.column === note?.position?.column) {
+        direction = prevNote.position.rank > note!.position.rank ? "right" : "left";
+      } else if (prevNote) {
+        const oldColumnIndex = columns.findIndex((c) => c.id === prevNote?.position.column);
+        const newColumnIndex = columns.findIndex((c) => c.id === note?.position.column);
+        direction = oldColumnIndex > newColumnIndex ? "left" : "right";
+      }
+      updateTransitionConfig(direction);
+      setPrevNote(note);
+    }
+  }, [columns, note, prevNote, updateTransitionConfig]);
+
+  return transitionConfig;
+};
 
 export const StackView = () => {
-  const {t} = useTranslation();
   const {boardId, noteId} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const prevIndex = useRef<number | undefined>();
 
-  const newIndex = useAppSelector((state) => state.notes.findIndex((n) => n.id === noteId));
+  const transitionConfig = useNoteAnimation();
+
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
-  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column), _.isEqual);
+  const columns = useAppSelector((state) => state.columns, _.isEqual);
+  const column = columns.find((c) => c.id === note?.position.column);
   const prevColumnParent = useAppSelector((state) => {
     const prevColumns = state.columns.filter((c) => c.index < column!.index).reverse();
     let prevStack;
@@ -43,41 +132,9 @@ export const StackView = () => {
     return nextStack?.id;
   });
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
-  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self, _.isEqual);
-  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name), _.isEqual);
-  const stackedNotes = useAppSelector(
-    (state) =>
-      state.notes
-        .filter((n) => n.position.stack === note?.id)
-        .map((n) => ({
-          ...n,
-          authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
-          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
-        })),
-    _.isEqual
-  );
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
-
-  const animateDirection = useRef<"left" | "right" | undefined>(undefined);
-
-  useMemo(() => {
-    if (prevIndex.current === undefined) {
-      prevIndex.current = newIndex;
-      return;
-    }
-    if (prevIndex.current === newIndex) return;
-    animateDirection.current = newIndex > prevIndex.current ? "right" : "left";
-    prevIndex.current = newIndex;
-  }, [newIndex, prevIndex]);
-
-  useEffect(
-    () => () => {
-      animateDirection.current = undefined;
-    },
-    []
-  );
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -97,16 +154,6 @@ export const StackView = () => {
     }
   };
 
-  const getTransform = (state: "start" | "end") => {
-    if (animateDirection.current === "left") {
-      return state === "start" ? "translateX(-100%)" : "translateX(100%)";
-    }
-    if (animateDirection.current === "right") {
-      return state === "start" ? "translateX(100%)" : "translateX(-100%)";
-    }
-    return "translateX(0)";
-  };
-
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
@@ -120,20 +167,10 @@ export const StackView = () => {
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
         <StackNavigation {...navigationProps} />
-        <Transition
-          from={{transform: getTransform("start"), position: "absolute", opacity: 0}}
-          enter={{transform: "translate(0%)", position: "relative", opacity: 1}}
-          leave={{
-            transform: getTransform("end"),
-            position: "absolute",
-            top: "26.8vh",
-            opacity: 0,
-          }}
-          items={{parent: note, stack: stackedNotes, avatar: author!.user.avatar, authorName}}
-        >
-          {(styles: object, item) => (
+        <Transition {...transitionConfig}>
+          {(styles: object, item: {parent: Note | undefined; stack: Note[]; avatar: AvataaarProps | undefined; authorName: string}) => (
             <animated.div style={styles} className="stack-view__animation-wrapper">
-              {item.parent?.position.column === column!.id && (
+              {item?.parent?.position.column === column!.id && (
                 <>
                   <NoteDialogComponents.Note
                     key={item.parent!.id}
@@ -150,7 +187,7 @@ export const StackView = () => {
                     className="stack-view__parent-note"
                   />
                   <NoteDialogComponents.Wrapper>
-                    {item.stack?.map((n) => (
+                    {item.stack?.map((n: any) => (
                       <NoteDialogComponents.Note
                         key={n.id}
                         noteId={n.id}
