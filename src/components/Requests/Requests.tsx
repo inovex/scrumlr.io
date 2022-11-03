@@ -25,7 +25,7 @@ export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) 
     dispatch(Actions.setRaisedHand(user, false));
   };
 
-  return requests.length !== 0 || participantsWithRaisedHand.length !== 0 ? (
+  return requests.length || participantsWithRaisedHand.length ? (
     <div className="requests__wrapper">
       <div className="requests__main">
         {/* join requests */}

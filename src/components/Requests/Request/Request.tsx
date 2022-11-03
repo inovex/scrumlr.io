@@ -6,7 +6,7 @@ import {Auth} from "../../../types/auth";
 
 type RequestType = "JOIN" | "RAISE_HAND";
 
-export type RequestProps = {
+type RequestProps = {
   type: RequestType;
   participant: Auth;
   handleClick: (user: string, acceptJoin?: boolean) => void;
@@ -41,8 +41,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
         <UserAvatar id={participant.id} avatar={participant.avatar} name={participant.name} />
       </figure>
 
-      {/* either `request__text-container` or `request__button` is displayed */}
-      <div className="request__middle-wrapper">
+      <div className="request__wrapper">
         <div className="request__info-container">
           <span className="request__participant-name">{participant.name}</span>
           <span className="request__info-text">{type === "JOIN" ? t("JoinRequest.title") : t("RaiseRequest.title")}</span>

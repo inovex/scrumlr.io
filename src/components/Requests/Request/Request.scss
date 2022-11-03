@@ -14,7 +14,7 @@ $fly-in-time: 0.5s;
   width: auto;
   height: 56px;
 
-  padding: 0 5px;
+  padding: 0 $padding--small;
   border-radius: 28px;
 
   animation: fly-in-right $fly-in-time ease-out;
@@ -25,8 +25,8 @@ $fly-in-time: 0.5s;
   transition: margin-right $transition-time ease-out, padding-right $transition-time ease-out;
 
   &:hover {
-    padding-right: 10px;
-    margin-right: 10px;
+    padding-right: $padding--small;
+    margin-right: $margin--small;
 
     .request__info-container {
       opacity: 0;
@@ -43,7 +43,7 @@ $fly-in-time: 0.5s;
 }
 
 // MIDDLE WRAPPER
-.request__middle-wrapper {
+.request__wrapper {
   position: relative;
 }
 
@@ -85,7 +85,7 @@ $fly-in-time: 0.5s;
   width: 100%;
 
   border: none;
-  border-radius: 21px;
+  border-radius: $border-radius--round;
 
   font-weight: bold;
   font-size: $text-size--medium;
