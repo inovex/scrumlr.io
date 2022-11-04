@@ -14,7 +14,7 @@ export interface NoteInputProps {
   columnIndex: number;
   columnIsVisible: boolean;
   toggleColumnVisibility: () => void;
-  hotkeyHint: string;
+  hotkeyHint?: string;
 }
 
 export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyHint}: NoteInputProps) => {

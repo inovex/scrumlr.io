@@ -15,6 +15,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <input
           class="note-input__input"
+          data-tip="cmd/ctrl + 1"
           maxlength="1024"
           placeholder="Add your note..."
           type="text"
