@@ -5,6 +5,7 @@ import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
+import ReactTooltip from "react-tooltip";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -147,7 +148,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   return (
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
-
+      <ReactTooltip type={localStorage.getItem("theme") === "dark" ? "dark" : "light"} place="bottom" delayShow={500} multiline />
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
