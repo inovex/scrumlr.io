@@ -174,7 +174,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             maxNoteLength={MAX_NOTE_LENGTH}
             columnIsVisible={visible}
             toggleColumnVisibility={toggleVisibilityHandler}
-            hotkeyHint={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, index) => index === 0 ? `${key  }/` : key).join("")} + ${index + 1}`}
+            hotkeyHint={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key}/` : key)).join("")} + ${index + 1}`}
           />
           <div className="column__header-title">
             {renderColumnName()}
