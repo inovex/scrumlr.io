@@ -16,6 +16,11 @@ import {useCallback, useEffect, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 
+type StackedNote = Note & {
+  authorName: string;
+  avatar?: AvataaarProps;
+};
+
 const useNoteAnimation = () => {
   const {t} = useTranslation();
   const {noteId} = useParams();
@@ -167,7 +172,7 @@ export const StackView = () => {
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
           <Transition {...transitionConfig}>
-            {(styles: object, item: {parent: Note | undefined; stack: Note[]; avatar: AvataaarProps | undefined; authorName: string}) => (
+            {(styles: object, item: {parent: Note | undefined; stack: StackedNote[]; avatar: AvataaarProps | undefined; authorName: string}) => (
               <animated.div style={styles} className="stack-view__animation-wrapper">
                 {item?.parent?.position.column === column!.id && (
                   <>
@@ -186,7 +191,7 @@ export const StackView = () => {
                       className="stack-view__parent-note"
                     />
                     <NoteDialogComponents.Wrapper>
-                      {item.stack?.map((n: any) => (
+                      {item.stack?.map((n: StackedNote) => (
                         <NoteDialogComponents.Note
                           key={n.id}
                           noteId={n.id}
