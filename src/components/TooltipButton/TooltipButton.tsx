@@ -10,6 +10,7 @@ type TooltipButtonProps = {
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   className?: string;
   active?: boolean;
+  hotkeyHint?: string;
 };
 
 export const TooltipButton = (props: TooltipButtonProps) => {
@@ -21,6 +22,8 @@ export const TooltipButton = (props: TooltipButtonProps) => {
       className={classNames("tooltip-button", `tooltip-button--${props.direction ?? "right"}`, {"tooltip-button--active": props.active}, props.className)}
       onClick={() => props.onClick()}
       aria-label={props.label}
+      data-tip={props.hotkeyHint}
+      data-place="bottom"
     >
       <div className="tooltip-button__tooltip" aria-hidden>
         <span className="tooltip-button__tooltip-text">{props.label}</span>
