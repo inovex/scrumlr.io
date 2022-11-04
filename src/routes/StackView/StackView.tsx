@@ -42,7 +42,6 @@ const useNoteAnimation = () => {
     leave: {
       transform: "translate(0%)",
       position: "absolute",
-      top: "26.8vh",
       opacity: 0,
     },
     items: {
@@ -71,7 +70,6 @@ const useNoteAnimation = () => {
         leave: {
           transform: getTransform("end", direction),
           position: "absolute",
-          top: "26.8vh",
           opacity: 0,
         },
         items: {
@@ -167,47 +165,49 @@ export const StackView = () => {
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
         <StackNavigation {...navigationProps} />
-        <Transition {...transitionConfig}>
-          {(styles: object, item: {parent: Note | undefined; stack: Note[]; avatar: AvataaarProps | undefined; authorName: string}) => (
-            <animated.div style={styles} className="stack-view__animation-wrapper">
-              {item?.parent?.position.column === column!.id && (
-                <>
-                  <NoteDialogComponents.Note
-                    key={item.parent!.id}
-                    noteId={item.parent!.id}
-                    text={item.parent!.text}
-                    authorId={item.parent!.author}
-                    avatar={item.avatar}
-                    authorName={item.authorName}
-                    showAuthors={showAuthors}
-                    onClose={handleClose}
-                    onDeleteOfParent={handleClose}
-                    showUnstackButton={false}
-                    viewer={viewer}
-                    className="stack-view__parent-note"
-                  />
-                  <NoteDialogComponents.Wrapper>
-                    {item.stack?.map((n: any) => (
-                      <NoteDialogComponents.Note
-                        key={n.id}
-                        noteId={n.id}
-                        text={n.text}
-                        authorId={n.author}
-                        avatar={n.avatar}
-                        authorName={n.authorName}
-                        showAuthors={showAuthors}
-                        onClose={handleClose}
-                        onDeleteOfParent={handleClose}
-                        showUnstackButton
-                        viewer={viewer}
-                      />
-                    ))}
-                  </NoteDialogComponents.Wrapper>
-                </>
-              )}
-            </animated.div>
-          )}
-        </Transition>
+        <div className="stack-view__content">
+          <Transition {...transitionConfig}>
+            {(styles: object, item: {parent: Note | undefined; stack: Note[]; avatar: AvataaarProps | undefined; authorName: string}) => (
+              <animated.div style={styles} className="stack-view__animation-wrapper">
+                {item?.parent?.position.column === column!.id && (
+                  <>
+                    <NoteDialogComponents.Note
+                      key={item.parent!.id}
+                      noteId={item.parent!.id}
+                      text={item.parent!.text}
+                      authorId={item.parent!.author}
+                      avatar={item.avatar}
+                      authorName={item.authorName}
+                      showAuthors={showAuthors}
+                      onClose={handleClose}
+                      onDeleteOfParent={handleClose}
+                      showUnstackButton={false}
+                      viewer={viewer}
+                      className="stack-view__parent-note"
+                    />
+                    <NoteDialogComponents.Wrapper>
+                      {item.stack?.map((n: any) => (
+                        <NoteDialogComponents.Note
+                          key={n.id}
+                          noteId={n.id}
+                          text={n.text}
+                          authorId={n.author}
+                          avatar={n.avatar}
+                          authorName={n.authorName}
+                          showAuthors={showAuthors}
+                          onClose={handleClose}
+                          onDeleteOfParent={handleClose}
+                          showUnstackButton
+                          viewer={viewer}
+                        />
+                      ))}
+                    </NoteDialogComponents.Wrapper>
+                  </>
+                )}
+              </animated.div>
+            )}
+          </Transition>
+        </div>
       </div>
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />

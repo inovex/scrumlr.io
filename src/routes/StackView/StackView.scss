@@ -23,12 +23,15 @@ $stack-view__parent-note-height: 22vh;
   width: fit-content;
 }
 
+.stack-view__content {
+  position: relative;
+}
+
 .stack-view__animation-wrapper {
   width: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
 .stack-view__disabled-click {
