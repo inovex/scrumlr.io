@@ -30,7 +30,8 @@ export const StackNavigationDots = ({stacks, currentIndex, handleModeration}: St
   const centerDot = getCenterDot(stacks.length, currentIndex);
 
   return (
-    <div className="stack-view__navigation-dots">
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div className="stack-view__navigation-dots" onClick={(e) => e.stopPropagation()}>
       {stacks.map((stack, index) => {
         const distance = Math.abs(centerDot - index);
         return (
@@ -43,6 +44,7 @@ export const StackNavigationDots = ({stacks, currentIndex, handleModeration}: St
               distance === 3 && index !== 0 && index !== stacks.length - 1 && "stack-view__navigation-dot--small",
               distance > 3 && "stack-view__navigation-dot--hidden"
             )}
+            tabIndex={distance > 3 ? -1 : undefined}
             aria-label={`Go to note #${index + 1}`}
           />
         );

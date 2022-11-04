@@ -42,7 +42,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid rgba($color-black, 0.5);
+      outline: 2px solid var(--accent-color);
     }
 
     &:active {
@@ -62,7 +62,7 @@
       }
 
       &:focus-visible {
-        outline: 2px solid rgba($color-white, 0.5);
+        outline: 2px solid var(--accent-color--desaturated-dark);
       }
     }
 

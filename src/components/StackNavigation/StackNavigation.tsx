@@ -56,12 +56,26 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
 
   return (
     /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
-    <div className="stack-view__navigation" onClick={(e) => e.stopPropagation()}>
-      <button disabled={currentIndex === 0 && prevColumnStack === undefined} onClick={handleBackClick} className="stack-view__navigation-button">
+    <div className="stack-view__navigation">
+      <button
+        disabled={currentIndex === 0 && prevColumnStack === undefined}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleBackClick();
+        }}
+        className="stack-view__navigation-button"
+      >
         <LeftArrowIcon />
       </button>
       <StackNavigationDots stacks={stacks} currentIndex={currentIndex} handleModeration={handleModeration} />
-      <button disabled={currentIndex === stacks.length - 1 && nextColumnStack === undefined} onClick={handleForwardClick} className="stack-view__navigation-button">
+      <button
+        disabled={currentIndex === stacks.length - 1 && nextColumnStack === undefined}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleForwardClick();
+        }}
+        className="stack-view__navigation-button"
+      >
         <RightArrowIcon />
       </button>
     </div>
