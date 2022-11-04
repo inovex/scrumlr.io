@@ -39,10 +39,10 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft") {
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
       event.preventDefault();
       handleBackClick();
-    } else if (event.key === "ArrowRight") {
+    } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
       event.preventDefault();
       handleForwardClick();
     }
