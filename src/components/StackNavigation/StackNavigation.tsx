@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {useNavigate} from "react-router";
 import {Note} from "types/note";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
@@ -37,6 +37,22 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
       navigate(`../note/${nextColumnStack}/stack`);
     }
   };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      handleBackClick();
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      handleForwardClick();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
 
   return (
     /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
