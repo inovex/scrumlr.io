@@ -413,7 +413,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         </div>
       </figure>
       <div
-        class="request__middle-wrapper"
+        class="request__wrapper"
       >
         <div
           class="request__info-container"
@@ -862,7 +862,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         </div>
       </figure>
       <div
-        class="request__middle-wrapper"
+        class="request__wrapper"
       >
         <div
           class="request__info-container"
@@ -1342,7 +1342,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         </div>
       </figure>
       <div
-        class="request__middle-wrapper"
+        class="request__wrapper"
       >
         <div
           class="request__info-container"
@@ -1800,7 +1800,7 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
         </div>
       </figure>
       <div
-        class="request__middle-wrapper"
+        class="request__wrapper"
       >
         <div
           class="request__info-container"
