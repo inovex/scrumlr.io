@@ -1,6 +1,7 @@
 @import "src/constants/style";
 
 $wrapper-position__top: 110px;
+$wrapper-position__bottom: 110px;
 $wrapper-position__right: 30px;
 $gap-between-requests: 15px;
 
@@ -8,8 +9,12 @@ $gap-between-requests: 15px;
 .requests__wrapper {
   position: fixed;
   top: $wrapper-position__top;
+  bottom: $wrapper-position__bottom; // start overflowing here and show scrollbar
   right: $wrapper-position__right;
   z-index: $request-z-index;
+
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .requests__main {
