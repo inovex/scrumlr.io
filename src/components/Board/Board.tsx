@@ -148,7 +148,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   return (
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
-      <ReactTooltip type={localStorage.getItem("theme") === "dark" ? "dark" : "light"} place="bottom" delayShow={500} multiline />
+      <ReactTooltip type={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"} place="bottom" delayShow={500} multiline />
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
