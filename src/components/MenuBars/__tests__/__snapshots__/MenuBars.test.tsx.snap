@@ -14,8 +14,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.markAsDone"
           class="tooltip-button tooltip-button--right"
-          data-place="bottom"
-          data-tip="D"
         >
           <div
             aria-hidden="true"
@@ -25,6 +23,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.markAsDone
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [D]
+              </span>
             </span>
           </div>
           <svg
@@ -45,8 +48,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.raiseHand"
           class="tooltip-button tooltip-button--right"
-          data-place="bottom"
-          data-tip="H"
         >
           <div
             aria-hidden="true"
@@ -56,6 +57,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.raiseHand
+              <span
+                  class="tooltip-button__hotkey"
+                >
+                 [H]
+                </span>
             </span>
           </div>
           <svg
@@ -76,8 +82,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.settings"
           class="tooltip-button tooltip-button--right"
-          data-place="bottom"
-          data-tip="S"
         >
           <div
             aria-hidden="true"
@@ -87,6 +91,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.settings
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [S]
+              </span>
             </span>
           </div>
           <svg
@@ -126,8 +135,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="Timer"
           class="tooltip-button tooltip-button--left"
-          data-place="bottom"
-          data-tip="T<br/>CTRL+T + 1, 2,..."
         >
           <div
             aria-hidden="true"
@@ -137,6 +144,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               Timer
+              <span
+                  class="tooltip-button__hotkey"
+                >
+                 [T]
+              </span>
             </span>
           </div>
           <svg
@@ -157,8 +169,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="Voting"
           class="tooltip-button tooltip-button--left"
-          data-place="bottom"
-          data-tip="V"
         >
           <div
             aria-hidden="true"
@@ -168,6 +178,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               Voting
+              <span
+                  class="tooltip-button__hotkey"
+                >
+                 [V]
+                </span>
             </span>
           </div>
           <svg
@@ -188,8 +203,6 @@ exports[`MenuBars should match snapshot 1`] = `
         <button
           aria-label="MenuBars.startFocusMode"
           class="tooltip-button tooltip-button--left"
-          data-place="bottom"
-          data-tip="F"
         >
           <div
             aria-hidden="true"
@@ -199,6 +212,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.startFocusMode
+              <span
+                  class="tooltip-button__hotkey"
+                >
+                 [F]
+              </span>
             </span>
           </div>
           <svg

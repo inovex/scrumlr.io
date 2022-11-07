@@ -25,7 +25,8 @@ export const TooltipButton = (props: TooltipButtonProps) => {
     >
       <div className="tooltip-button__tooltip" aria-hidden>
         <span className="tooltip-button__tooltip-text">
-          {props.label} <span className="tooltip-button__hotkey">{` [${props.hotkeyKey}]`}</span>
+          {props.label}
+          <span className="tooltip-button__hotkey">{` [${props.hotkeyKey}]`}</span>
         </span>
       </div>
       <Icon className="tooltip-button__icon" aria-hidden />
