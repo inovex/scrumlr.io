@@ -58,10 +58,10 @@ exports[`MenuBars should match snapshot 1`] = `
             >
               MenuBars.raiseHand
               <span
-                  class="tooltip-button__hotkey"
-                >
+                class="tooltip-button__hotkey"
+              >
                  [H]
-                </span>
+              </span>
             </span>
           </div>
           <svg
@@ -145,8 +145,8 @@ exports[`MenuBars should match snapshot 1`] = `
             >
               Timer
               <span
-                  class="tooltip-button__hotkey"
-                >
+                class="tooltip-button__hotkey"
+              >
                  [T]
               </span>
             </span>
@@ -179,10 +179,10 @@ exports[`MenuBars should match snapshot 1`] = `
             >
               Voting
               <span
-                  class="tooltip-button__hotkey"
-                >
+                class="tooltip-button__hotkey"
+              >
                  [V]
-                </span>
+              </span>
             </span>
           </div>
           <svg
@@ -213,8 +213,8 @@ exports[`MenuBars should match snapshot 1`] = `
             >
               MenuBars.startFocusMode
               <span
-                  class="tooltip-button__hotkey"
-                >
+                class="tooltip-button__hotkey"
+              >
                  [F]
               </span>
             </span>
