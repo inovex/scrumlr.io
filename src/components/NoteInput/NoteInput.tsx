@@ -14,10 +14,10 @@ export interface NoteInputProps {
   columnIndex: number;
   columnIsVisible: boolean;
   toggleColumnVisibility: () => void;
-  hotkeyHint?: string;
+  hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyHint}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
@@ -76,7 +76,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
           }
         }}
         maxLength={maxNoteLength}
-        data-tip={hotkeyHint}
+        data-tip={hotkeyKey}
       />
       <button
         type="submit"
