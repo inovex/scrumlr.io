@@ -15,7 +15,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/markbates/goth v1.74.2
-	github.com/nats-io/nats.go v1.18.0
+	github.com/nats-io/nats.go v1.19.0
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.1
@@ -23,7 +23,7 @@ require (
 	github.com/uptrace/bun/dbfixture v1.1.8
 	github.com/uptrace/bun/dialect/pgdialect v1.1.8
 	github.com/uptrace/bun/extra/bundebug v1.1.8
-	github.com/urfave/cli/v2 v2.20.3
+	github.com/urfave/cli/v2 v2.23.0
 	go.uber.org/zap v1.23.0
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 )
