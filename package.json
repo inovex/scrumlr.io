@@ -15,7 +15,7 @@
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
     "i18next": "^22.0.4",
-    "i18next-browser-languagedetector": "^7.0.0",
+    "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.0.1",
     "js-cookie": "^3.0.1",
     "marked": "4.2.1",
