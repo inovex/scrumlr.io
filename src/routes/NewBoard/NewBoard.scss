@@ -114,12 +114,12 @@
 
 .new-board__actions {
   display: flex;
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   justify-content: center;
   width: 100%;
-  padding: $padding--default;
   bottom: 0;
-  margin-top: min(2em) 200px;
+  padding: $padding--default;
   background: linear-gradient(0deg, $color-white 0%, $color-white 80%, rgba(0, 0, 0, 0) 100%);
 }
 
