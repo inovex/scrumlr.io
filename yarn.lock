@@ -8501,10 +8501,10 @@ react-side-effect@^2.1.0:
   resolved "https://registry.npmjs.org/react-side-effect/-/react-side-effect-2.1.1.tgz"
   integrity sha512-2FoTQzRNTncBVtnzxFOk2mCpcfxQpenBMbk5kSVBg5UcPqV9fRbgY2zhb7GTWWOlpFmAxhClBDlIq8Rsubz1yQ==
 
-react-to-print@^2.14.7:
-  version "2.14.7"
-  resolved "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.7.tgz"
-  integrity sha512-lWVVAs9Co25uyE0toxcWeFsmaZObwUozXrJD9WMpDPclpBgk+WIzxlt3Q3omL/BCBG/cpf0XNvhayUWa+99YGw==
+react-to-print@^2.14.8:
+  version "2.14.8"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.8.tgz#15203e4f4b83b18931a490d39899b25d68923a6f"
+  integrity sha512-5MkSF3rLdxF9gmcSA6PdqTq9IFh7XkpYiJGP15OW+7hVr0+bpjLvi+kAIAuVjyV5/pv4GI3GuhVBQ0/hq94EZg==
   dependencies:
     prop-types "^15.8.1"
 
