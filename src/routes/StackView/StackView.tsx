@@ -12,7 +12,7 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 
@@ -37,9 +37,8 @@ export const StackView = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
-  const [prevNote, setPrevNote] = useState<Note | undefined>();
-
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
+  const prevNote = useRef<Note | undefined>(note);
   const columns = useAppSelector((state) => state.columns, _.isEqual);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self, _.isEqual);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name), _.isEqual);
@@ -95,24 +94,26 @@ export const StackView = () => {
   });
 
   useEffect(() => {
-    if (prevNote?.id !== note?.id) {
-      let direction;
-      if (prevNote && prevNote.position.column === note?.position?.column) {
-        direction = prevNote.position.rank > note!.position.rank ? "right" : "left";
+    if (prevNote.current && prevNote.current?.id !== note?.id) {
+      let direction: "left" | "right" | undefined;
+      if (prevNote && prevNote.current?.position?.column === note?.position?.column) {
+        direction = prevNote.current?.position?.rank > note!.position.rank ? "right" : "left";
       } else if (prevNote) {
-        const oldColumnIndex = columns.findIndex((c) => c.id === prevNote?.position.column);
+        const oldColumnIndex = columns.findIndex((c) => c.id === prevNote.current?.position.column);
         const newColumnIndex = columns.findIndex((c) => c.id === note?.position.column);
         direction = oldColumnIndex > newColumnIndex ? "left" : "right";
       }
       setTransitionConfig({
-        ...transitionConfig,
         from: {
-          ...transitionConfig.from,
           transform: getTransform("start", direction),
+          position: "absolute",
+          opacity: 0,
         },
+        enter: {transform: "translate(0%)", position: "relative", opacity: 1},
         leave: {
-          ...transitionConfig.leave,
           transform: getTransform("end", direction),
+          position: "absolute",
+          opacity: 0,
         },
         items: {
           parent: note,
@@ -121,9 +122,9 @@ export const StackView = () => {
           authorName,
         },
       });
-      setPrevNote(note);
+      prevNote.current = note;
     }
-  }, [author, authorName, columns, note, prevNote, stackedNotes, transitionConfig]);
+  }, [author, authorName, columns, note, stackedNotes]);
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -160,7 +161,7 @@ export const StackView = () => {
           <Transition {...transitionConfig}>
             {(styles: object, item: {parent: Note | undefined; stack: StackedNote[]; avatar: AvataaarProps | undefined; authorName: string}) => (
               <animated.div style={styles} className="stack-view__animation-wrapper">
-                {item?.parent?.position.column === column!.id && (
+                {item.parent?.position.column === column!.id && (
                   <>
                     <NoteDialogComponents.Note
                       key={item.parent!.id}
