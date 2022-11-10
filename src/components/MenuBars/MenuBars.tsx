@@ -46,7 +46,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     return () => document.removeEventListener("click", handleClickOutside);
   }, [menuBarsMobileRef, fabIsExpanded]);
 
-  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
@@ -99,6 +99,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                 icon={CheckIcon}
                 active={isReady}
+                hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
               />
             </li>
             <li>
@@ -108,10 +109,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={RaiseHand}
                 onClick={toggleRaiseHand}
                 active={raisedHand}
+                hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
               />
             </li>
             <li>
-              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
             </li>
           </ul>
 
@@ -129,10 +131,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
@@ -141,6 +143,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
+                  hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
                 />
               </li>
             </ul>
