@@ -97,6 +97,10 @@ $tooltip-button-size: 42px;
   }
 }
 
+.tooltip-button__hotkey {
+  color: $color-dark-gray;
+}
+
 @media #{$tablet} {
   .tooltip-button {
     .tooltip-button__tooltip {

@@ -37,6 +37,7 @@
     "react-router-dom": "^6.4.3",
     "react-to-print": "^2.14.8",
     "react-toastify": "^9.1.1",
+    "react-tooltip": "^4.4.3",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.2",
     "sockette": "^2.0.6",
