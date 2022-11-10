@@ -1,7 +1,20 @@
-#!/bin/sh
-SCRIPT_DIRECTORY=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+#!/usr/bin/env sh
+
+HUSKY_SH="$(dirname -- "$0")/_/husky.sh"
+
+if [ ! -f "$HUSKY_SH" ]; then
+    >&2 echo "$HUSKY_SH does not exist. run 'yarn install'"
+    exit 1
+fi
+
+# shellcheck disable=SC1090
+. "$HUSKY_SH"
+
+set -eu
+
+SCRIPT_DIRECTORY="$(dirname -- "$( readlink -f -- "$0"; )";)"
+
 PATH="$PATH:$SCRIPT_DIRECTORY/../node_modules/.bin"
-. "$SCRIPT_DIRECTORY/_/husky.sh"
 
 echo "... about to format staged files for client"
 lint-staged
