@@ -13,10 +13,12 @@ import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
+import {hotkeyMap} from "constants/hotkeys";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
 const MAX_NOTE_LENGTH = 1024;
+const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
 export interface ColumnProps {
   id: string;
@@ -166,7 +168,14 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
-          <NoteInput columnIndex={index} columnId={id} maxNoteLength={MAX_NOTE_LENGTH} columnIsVisible={visible} toggleColumnVisibility={toggleVisibilityHandler} />
+          <NoteInput
+            columnIndex={index}
+            columnId={id}
+            maxNoteLength={MAX_NOTE_LENGTH}
+            columnIsVisible={visible}
+            toggleColumnVisibility={toggleVisibilityHandler}
+            hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
+          />
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
