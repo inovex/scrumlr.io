@@ -23,6 +23,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.markAsDone
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [D]
+              </span>
             </span>
           </div>
           <svg
@@ -52,6 +57,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.raiseHand
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [H]
+              </span>
             </span>
           </div>
           <svg
@@ -81,6 +91,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.settings
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [S]
+              </span>
             </span>
           </div>
           <svg
@@ -129,6 +144,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               Timer
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [T]
+              </span>
             </span>
           </div>
           <svg
@@ -158,6 +178,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               Voting
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [V]
+              </span>
             </span>
           </div>
           <svg
@@ -187,6 +212,11 @@ exports[`MenuBars should match snapshot 1`] = `
               class="tooltip-button__tooltip-text"
             >
               MenuBars.startFocusMode
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [F]
+              </span>
             </span>
           </div>
           <svg
