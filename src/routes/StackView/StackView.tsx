@@ -76,6 +76,7 @@ export const StackView = () => {
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const presenting = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
   const [transitionConfig, setTransitionConfig] = useState({
     from: {transform: "translate(0%)", position: "absolute", opacity: 0},
@@ -132,14 +133,14 @@ export const StackView = () => {
   }
 
   const handleClose = () => {
-    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+    if (presenting) {
       dispatch(Actions.stopSharing());
     }
     navigate(`/board/${boardId}`);
   };
 
   const handleModeration = (id: string) => {
-    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+    if (presenting) {
       dispatch(Actions.shareNote(id));
     }
   };
@@ -201,6 +202,7 @@ export const StackView = () => {
           </Transition>
         </div>
       </div>
+      <div className={classNames("stack-view__border", presenting && "stack-view__border--presenting", getColorClassName(column!.color as Color))} />
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />
       </button>
