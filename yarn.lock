@@ -4528,10 +4528,10 @@ eslint-plugin-jest@^25.3.0:
   dependencies:
     "@typescript-eslint/experimental-utils" "^5.0.0"
 
-eslint-plugin-jest@^27.1.4:
-  version "27.1.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-27.1.4.tgz#bdfaf51ee9ed0b86dac1e83753e22da072acaa92"
-  integrity sha512-evJ9E9id/z2Fu6LR+ncNySJ6UMs5RiJiv4JsmdA3gPWoq0AR+uZyva738+Y9Uln+3WaYX+3OYP9HJoau94Iurg==
+eslint-plugin-jest@^27.1.5:
+  version "27.1.5"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-27.1.5.tgz#16fad619cfee6cdf73d56098fbed0761e1f653ce"
+  integrity sha512-CK2dekZ5VBdzsOSOH5Fc1rwC+cWXjkcyrmf1RV714nDUDKu+o73TTJiDxpbILG8PtPPpAAl3ywzh5QA7Ft0mjA==
   dependencies:
     "@typescript-eslint/utils" "^5.10.0"
 
@@ -8515,10 +8515,10 @@ react-toastify@^9.1.1:
   dependencies:
     clsx "^1.1.1"
 
-react-tooltip@^4.4.3:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.4.3.tgz#44cbb6c8bdb3281c2819d16c92e3c419ebd98582"
-  integrity sha512-l7/TDBwq3JtuLBtq6FvIs7wsqcHjvoHFT8AvNGpf0JhHwzh+ZhCDN25wM/+gxelj8i1ngw/ULFv53XRQ/wCMzQ==
+react-tooltip@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.5.0.tgz#862a39fbb05522624fb6efa782b245a89a0db784"
+  integrity sha512-mJNurq29atce+TJc9Xe+/FHrcEs3K9J7wkjZZXwbK5Yq6uG5SZeKSFHwd0wcRPUipVwx5crmgzSW8Zu1xyvLTQ==
   dependencies:
     prop-types "^15.8.1"
     uuid "^7.0.3"
