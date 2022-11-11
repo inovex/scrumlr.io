@@ -37,7 +37,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     return <Board />;
   }
 
-  if (boardStatus === "passphrase_required") {
+  if (boardStatus === "passphrase_required" || boardStatus === "too_many_join_requests") {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {

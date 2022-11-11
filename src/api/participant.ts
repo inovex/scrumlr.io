@@ -43,6 +43,12 @@ export const ParticipantsAPI = {
       };
     }
 
+    if (response.status === 429) {
+      return {
+        status: "TOO_MANY_JOIN_REQUESTS",
+      };
+    }
+
     return {
       status: "REJECTED",
     };

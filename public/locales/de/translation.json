@@ -148,7 +148,8 @@
   "PassphraseDialog": {
     "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
-    "submit": "Absenden"
+    "submit": "Absenden",
+    "tooManyJoinRequests": "Zu viele Versuche. Bitte warte kurz"
   },
   "Timer": {
     "stopTimer": "Stoppe Alarm"
