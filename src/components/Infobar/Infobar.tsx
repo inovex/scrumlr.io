@@ -13,6 +13,7 @@ export const InfoBar = () => {
   const navigate = useNavigate();
   const {t} = useTranslation();
   const viewer = useAppSelector((state) => state.participants!.self);
+  const focusInitiator = useAppSelector((state) => state.focus.initiator);
 
   const state = useAppSelector(
     (applicationState) => ({
@@ -29,7 +30,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && !(viewer.role === "MODERATOR" || viewer.role === "OWNER") && (
+      {state.sharedNote && viewer !== focusInitiator && (
         <TooltipButton
           className="info-bar__return-to-focused-note-button"
           icon={ShareIcon}

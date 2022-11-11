@@ -22,6 +22,7 @@ import {columnsReducer} from "./reducer/columns";
 import {viewReducer} from "./reducer/view";
 import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
+import {focusReducer} from "./reducer/focus";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -55,6 +56,7 @@ const rootReducer = combineReducers<ApplicationState>({
   votes: voteReducer,
   votings: votingReducer,
   view: viewReducer,
+  focus: focusReducer,
 });
 
 // Disable redux dev tools in production

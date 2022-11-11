@@ -139,5 +139,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     feedbackEnabled: false,
     hotkeysAreActive: true,
   },
+  focus: {
+    initiator: null,
+  },
   ...overwrite,
 });

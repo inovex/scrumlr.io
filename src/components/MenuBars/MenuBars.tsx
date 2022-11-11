@@ -74,6 +74,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const toggleModeration = () => {
     dispatch(Actions.setModerating(!state.moderation));
+    if (state.moderation) dispatch(Actions.clearFocusInitiator());
+    else dispatch(Actions.setFocusInitiator(state.currentUser));
   };
 
   const showTimerMenu = () => navigate("timer");
