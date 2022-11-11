@@ -12,6 +12,8 @@ import "./Infobar.scss";
 export const InfoBar = () => {
   const navigate = useNavigate();
   const {t} = useTranslation();
+  const viewer = useAppSelector((state) => state.participants!.self);
+
   const state = useAppSelector(
     (applicationState) => ({
       endTime: applicationState.board.data?.timerEnd,
@@ -27,7 +29,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && (
+      {state.sharedNote && !(viewer.role === "MODERATOR" || viewer.role === "OWNER") && (
         <TooltipButton
           className="info-bar__return-to-focused-note-button"
           icon={ShareIcon}
