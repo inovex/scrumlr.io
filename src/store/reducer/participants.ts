@@ -10,11 +10,13 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
 
       const self = action.participants.find((p) => p.user.id === ownUserId)!;
       const others = action.participants.filter((p) => p.user.id !== ownUserId);
+      const focusInitiator = null;
 
       return {
         ...state,
         self,
         others,
+        focusInitiator,
       };
     }
 
@@ -23,6 +25,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
         ...state,
         self: state!.self,
         others: [action.participant, ...state!.others],
+        focusInitiator: state!.focusInitiator,
       };
     }
 
@@ -32,6 +35,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
           ...state,
           self: action.participant,
           others: [...state!.others],
+          focusInitiator: state!.focusInitiator,
         };
       }
 
@@ -44,6 +48,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
         ...state,
         self: state!.self,
         others: newOthers,
+        focusInitiator: state!.focusInitiator,
       };
     }
 
@@ -55,6 +60,26 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
           user: action.user,
         },
         others: [...state!.others],
+        focusInitiator: state!.focusInitiator,
+      };
+    }
+
+    case Action.SetFocusInitiator: {
+      const focusInitiator = action.participant;
+      return {
+        ...state,
+        self: state!.self,
+        others: [...state!.others],
+        focusInitiator,
+      };
+    }
+
+    case Action.ClearFocusInitiator: {
+      return {
+        ...state,
+        self: state!.self,
+        others: [...state!.others],
+        focusInitiator: null,
       };
     }
 

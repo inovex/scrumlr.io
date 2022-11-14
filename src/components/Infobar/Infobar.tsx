@@ -13,7 +13,7 @@ export const InfoBar = () => {
   const navigate = useNavigate();
   const {t} = useTranslation();
   const viewer = useAppSelector((state) => state.participants!.self);
-  const focusInitiator = useAppSelector((state) => state.focus.initiator);
+  const focusInitiator = useAppSelector((state) => state.participants?.focusInitiator);
 
   const state = useAppSelector(
     (applicationState) => ({
