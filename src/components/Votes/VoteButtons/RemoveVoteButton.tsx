@@ -3,6 +3,7 @@ import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
+import classNames from "classnames";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -24,7 +25,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, childre
 
   return (
     <DotButton
-      className={classNames("vote-button-remove", {"bump": doBump})}
+      className={classNames("vote-button-remove", {bump: doBump})}
       disabled={disabled}
       onClick={deleteVote}
       onAnimationEnd={() => {
