@@ -91,22 +91,21 @@ export const NewBoard = () => {
             </div>
           )}
         </div>
-
-        <div className="new-board__actions">
-          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
-            {t("NewBoard.createNewBoard")}
+      </div>
+      <div className="new-board__actions">
+        <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+          {t("NewBoard.createNewBoard")}
+        </Button>
+        {!extendedConfiguration && (
+          <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+            {t("NewBoard.extendedConfigurationButton")}
           </Button>
-          {!extendedConfiguration && (
-            <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
-              {t("NewBoard.extendedConfigurationButton")}
-            </Button>
-          )}
-          {extendedConfiguration && (
-            <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
-              {t("NewBoard.basicConfigurationButton")}
-            </Button>
-          )}
-        </div>
+        )}
+        {extendedConfiguration && (
+          <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+            {t("NewBoard.basicConfigurationButton")}
+          </Button>
+        )}
       </div>
     </div>
   );
