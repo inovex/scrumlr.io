@@ -75,6 +75,7 @@ $stack-view__parent-note-height: 22vh;
 .stack-view__parent-note {
   margin: 0;
   height: $stack-view__parent-note-height;
+  min-height: 176px;
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
   font-size: $text-size--large;
