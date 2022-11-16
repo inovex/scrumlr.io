@@ -24,7 +24,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, childre
 
   return (
     <DotButton
-      className={doBump ? "vote-button-remove bump" : "vote-button-remove"}
+      className={classNames("vote-button-remove", {"bump": doBump})}
       disabled={disabled}
       onClick={deleteVote}
       onAnimationEnd={() => {
