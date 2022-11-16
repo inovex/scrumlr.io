@@ -20,6 +20,7 @@ i18n
       caches: ["localStorage"],
     },
     fallbackLng: "en",
+    returnNull: false,
   })
   .then(() => {
     store.dispatch(Actions.setLanguage(i18n.language));
