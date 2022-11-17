@@ -22,20 +22,18 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
 
     case Action.CreatedParticipant: {
       return {
-        ...state,
+        ...state!,
         self: state!.self,
         others: [action.participant, ...state!.others],
-        focusInitiator: state!.focusInitiator,
       };
     }
 
     case Action.UpdatedParticipant: {
       if (action.participant.user.id === state!.self.user.id) {
         return {
-          ...state,
+          ...state!,
           self: action.participant,
           others: [...state!.others],
-          focusInitiator: state!.focusInitiator,
         };
       }
 
@@ -45,22 +43,20 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
       newOthers.splice(index, 1, action.participant);
 
       return {
-        ...state,
+        ...state!,
         self: state!.self,
         others: newOthers,
-        focusInitiator: state!.focusInitiator,
       };
     }
 
     case Action.EditSelf: {
       return {
-        ...state,
+        ...state!,
         self: {
           ...state!.self,
           user: action.user,
         },
         others: [...state!.others],
-        focusInitiator: state!.focusInitiator,
       };
     }
 
