@@ -35,6 +35,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const menuBarsMobileRef = useRef<HTMLElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
+  const focusInitiator = useAppSelector((state) => state.participants?.focusInitiator);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
@@ -73,10 +74,13 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleModeration = () => {
-    if (state.moderation) dispatch(Actions.stopSharing());
+    if (state.moderation) {
+      console.log(focusInitiator);
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+
     dispatch(Actions.setModerating(!state.moderation));
-    if (state.moderation) dispatch(Actions.clearFocusInitiator());
-    else dispatch(Actions.setFocusInitiator(state.currentUser));
   };
 
   const showTimerMenu = () => navigate("timer");

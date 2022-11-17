@@ -30,7 +30,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.endTime && <Timer endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && viewer !== focusInitiator && (
+      {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
         <TooltipButton
           className="info-bar__return-to-focused-note-button"
           icon={ShareIcon}
