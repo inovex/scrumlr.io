@@ -79,6 +79,11 @@
   margin: 0 calc(($tooltip-button-size - var(--note-footer-height, $votes-button-size)) / 2);
 }
 
+.note-dialog__assignees {
+  width: 100%;
+  background-color: $color-white;
+}
+
 [theme="dark"] {
   .note-dialog__note-author--self {
     background: var(--accent-color--desaturated-dark);
