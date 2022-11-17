@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
@@ -18,8 +18,13 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, childre
   };
 
   const [doBump, setDoBump] = useState(false);
+  const firstUpdate = useRef(true);
 
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
     setDoBump(true);
   }, [children]);
 
