@@ -14,4 +14,4 @@ export const AssigneeActionFactory = {
   }),
 };
 
-export type VoteReduxAction = ReturnType<typeof AssigneeActionFactory.addAssignee> | ReturnType<typeof AssigneeActionFactory.removeAssignee>;
+export type AssigneeReduxAction = ReturnType<typeof AssigneeActionFactory.addAssignee> | ReturnType<typeof AssigneeActionFactory.removeAssignee>;

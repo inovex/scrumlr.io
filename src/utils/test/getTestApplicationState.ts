@@ -139,5 +139,9 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     feedbackEnabled: false,
     hotkeysAreActive: true,
   },
+  assignees: {
+    name: "sample name",
+    note: "test-notes-id-1",
+  },
   ...overwrite,
 });

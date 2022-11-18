@@ -1,0 +1,23 @@
+.assing-wrapper {
+  width: 100%;
+  background-color: lightblue;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: flex-start;
+}
+
+#manage-assignees {
+  height: 28px;
+  width: min(28px);
+  border-radius: 14px;
+  border-width: 1px;
+}
+
+#input-list-wrapper {
+  padding-top: 2.5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  flex-wrap: wrap;
+}

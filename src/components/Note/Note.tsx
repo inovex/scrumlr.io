@@ -11,7 +11,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
-import {Assignees} from "components/Assignees";
+import {Assigning} from "components/Assignees/Assigning";
 
 interface NoteProps {
   noteId: string;
@@ -105,7 +105,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
-          <Assignees />
+          <Assigning note="THIS NOTE BUT ITS DEBUG" />
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>

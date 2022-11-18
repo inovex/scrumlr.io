@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Auth} from "types/auth";
+import "./Autocomplete.scss";
 
 export interface AutocompleteProps {
   suggestions: Auth[];
@@ -14,16 +15,8 @@ export const Autocomplete = (props: AutocompleteProps) => {
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(e.currentTarget.value);
     setActiveSuggestion(0);
-    if (userInput === "")
-      setFilteredSuggestions(
-        props.suggestions.map((suggestion) => suggestion.name)
-      );
-    else
-      setFilteredSuggestions(
-        props.suggestions
-          .map((suggestion) => suggestion.name)
-          .filter((suggestion) => suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1)
-      );
+    if (userInput === "") setFilteredSuggestions(props.suggestions.map((suggestion) => suggestion.name));
+    else setFilteredSuggestions(props.suggestions.map((suggestion) => suggestion.name).filter((suggestion) => suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1));
     setShowSuggestions(true);
   };
 
@@ -51,7 +44,7 @@ export const Autocomplete = (props: AutocompleteProps) => {
   };
 
   return (
-    <div>
+    <div className="input-container">
       <input
         type="text"
         onChange={onInputChange}
@@ -65,7 +58,9 @@ export const Autocomplete = (props: AutocompleteProps) => {
       />
       {showSuggestions && (
         <ul>
-          {filteredSuggestions.map((suggestion) => <button onClick={() => onSelectSuggestion(suggestion)}>{suggestion}</button>)}
+          {filteredSuggestions.map((suggestion) => (
+            <button onClick={() => onSelectSuggestion(suggestion)}>{suggestion}</button>
+          ))}
         </ul>
       )}
     </div>
