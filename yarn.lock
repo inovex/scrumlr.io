@@ -5370,11 +5370,6 @@ hoopy@^0.1.4:
   resolved "https://registry.npmjs.org/hoopy/-/hoopy-0.1.4.tgz"
   integrity sha512-HRcs+2mr52W0K+x8RzcLzuPPmVIKMSv97RGHy0Ea9y/mpcaK+xTrjICA04KAHi4GRzxliNqNJEFYWHghy3rSfQ==
 
-hotkeys-js@3.9.4:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/hotkeys-js/-/hotkeys-js-3.9.4.tgz#ce1aa4c3a132b6a63a9dd5644fc92b8a9b9cbfb9"
-  integrity sha512-2zuLt85Ta+gIyvs4N88pCYskNrxf1TFv3LR9t5mdAZIX8BcgQQ48F2opUptvHa6m8zsy5v/a0i9mWzTrlNWU0Q==
-
 howler@^2.1.3:
   version "2.2.3"
   resolved "https://registry.npmjs.org/howler/-/howler-2.2.3.tgz"
@@ -8379,12 +8374,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hotkeys-hook@^3.4.7:
-  version "3.4.7"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-3.4.7.tgz#e16a0a85f59feed9f48d12cfaf166d7df4c96b7a"
-  integrity sha512-+bbPmhPAl6ns9VkXkNNyxlmCAIyDAcWbB76O4I0ntr3uWCRuIQf/aRLartUahe9chVMPj+OEzzfk3CQSjclUEQ==
-  dependencies:
-    hotkeys-js "3.9.4"
+react-hotkeys-hook@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.0.4.tgz#41675ce5f82cf1a978e89e16461242f2cd132e81"
+  integrity sha512-3w8Sk3ElOOv8+e8YreXlF4fl57iHcJ7GacocSKvvVRhGZDBzTfOe+DKz31ogtYJx7n9PRW5wMlaw2GDKhvUJeA==
 
 react-i18next@^12.0.0:
   version "12.0.0"
