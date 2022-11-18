@@ -11,38 +11,50 @@
 
 .stack-view__navigation-dot {
   all: unset;
-  height: 8px;
-  width: 8px;
-  border-radius: 100%;
-  background: $color-white;
-  opacity: 0.5;
-  margin: 0 $margin--small;
+  height: 32px;
+  width: 24px;
+  margin: 0;
 
   cursor: pointer;
 
-  transition: all 0.08s ease-out;
+  &::after {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    opacity: 0.5;
+    border-radius: 100%;
+    background: $color-white;
+    margin: 12px auto;
+  }
 
-  &:hover {
+  &:hover::after {
     transform: scale(1.5);
   }
 
-  &:focus-visible {
+  &:focus-visible::after {
     background: var(--accent-color);
   }
 
-  &--active {
+  &--active::after {
     opacity: 1;
     transform: scale(1.5);
   }
 
-  &--small {
+  &--small::after {
     transform: scale(0.5);
     opacity: 0.25;
   }
 
-  &--hidden {
+  &--hidden,
+  &--hidden::after {
     height: 0px;
     width: 0px;
     margin: 0px;
   }
+}
+
+.stack-view__navigation-dot,
+.stack-view__navigation-dot::after {
+  transition: all 0.08s ease-out;
 }
