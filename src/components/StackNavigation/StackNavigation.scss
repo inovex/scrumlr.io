@@ -1,7 +1,8 @@
 @import "constants/style.scss";
+@import "routes/StackView/StackView.scss";
 
 .stack-view__navigation {
-  height: 14vh;
+  height: $stack-view__navigation-height;
   min-height: 80px;
   width: 82%;
   display: flex;

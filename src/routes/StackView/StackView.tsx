@@ -12,7 +12,7 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {useEffect, useRef, useState} from "react";
+import {CSSProperties, useEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 
@@ -76,7 +76,7 @@ export const StackView = () => {
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
-  const presenting = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
+  const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
   const [transitionConfig, setTransitionConfig] = useState({
     from: {transform: "translate(0%)", position: "absolute", opacity: 0},
@@ -133,14 +133,14 @@ export const StackView = () => {
   }
 
   const handleClose = () => {
-    if (presenting) {
+    if (userIsModerating) {
       dispatch(Actions.stopSharing());
     }
     navigate(`/board/${boardId}`);
   };
 
   const handleModeration = (id: string) => {
-    if (presenting) {
+    if (userIsModerating) {
       dispatch(Actions.shareNote(id));
     }
   };
@@ -160,7 +160,7 @@ export const StackView = () => {
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
           <Transition {...transitionConfig}>
-            {(styles: object, item: {parent: Note | undefined; stack: StackedNote[]; avatar: AvataaarProps | undefined; authorName: string}) => (
+            {(styles: CSSProperties, item: {parent?: Note; stack: StackedNote[]; avatar?: AvataaarProps; authorName: string}) => (
               <animated.div style={styles} className="stack-view__animation-wrapper">
                 {item.parent?.position.column === column!.id && (
                   <>
@@ -202,7 +202,7 @@ export const StackView = () => {
           </Transition>
         </div>
       </div>
-      <div className={classNames("stack-view__border", presenting && "stack-view__border--presenting", getColorClassName(column!.color as Color))} />
+      <div className={classNames("stack-view__border", userIsModerating && "stack-view__border--moderating", getColorClassName(column!.color as Color))} />
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />
       </button>

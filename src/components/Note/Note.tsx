@@ -42,7 +42,7 @@ export const Note = (props: NoteProps) => {
 
   /* eslint-disable */
   useEffect(() => {
-    if (isShared && !document.location.pathname.endsWith(props.noteId)) {
+    if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
       navigate(`note/${note!.id}/stack`);
     }
   }, []);

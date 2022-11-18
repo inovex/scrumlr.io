@@ -18,33 +18,28 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
-  const handleBackClick = () => {
-    if (currentIndex > 0) {
-      handleModeration(stacks[currentIndex - 1].id);
-      navigate(`../note/${stacks[currentIndex - 1].id}/stack`);
-    } else if (prevColumnStack) {
-      handleModeration(prevColumnStack);
-      navigate(`../note/${prevColumnStack}/stack`);
-    }
+  const getNextStackId = (index: number): string | undefined => {
+    if (index < 0 && prevColumnStack) return prevColumnStack;
+    if (index === stacks.length && nextColumnStack) return nextColumnStack;
+    if (stacks[index]) return stacks[index].id;
+    return undefined;
   };
 
-  const handleForwardClick = () => {
-    if (currentIndex < stacks.length - 1) {
-      handleModeration(stacks[currentIndex + 1].id);
-      navigate(`../note/${stacks[currentIndex + 1].id}/stack`);
-    } else if (nextColumnStack) {
-      handleModeration(nextColumnStack);
-      navigate(`../note/${nextColumnStack}/stack`);
+  const handleNavigation = (index: number) => {
+    const stackId = getNextStackId(index);
+    if (stackId) {
+      handleModeration(stackId);
+      navigate(`../note/${stackId}/stack`);
     }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
       event.preventDefault();
-      handleBackClick();
+      handleNavigation(currentIndex - 1);
     } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
       event.preventDefault();
-      handleForwardClick();
+      handleNavigation(currentIndex + 1);
     }
   };
 
@@ -61,22 +56,32 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
         disabled={currentIndex === 0 && prevColumnStack === undefined}
         onClick={(e) => {
           e.stopPropagation();
-          handleBackClick();
+          handleNavigation(currentIndex - 1);
         }}
         className="stack-view__navigation-button"
       >
-        <LeftArrowIcon />
+        <LeftArrowIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNavigation(currentIndex - 1);
+          }}
+        />
       </button>
       <StackNavigationDots stacks={stacks} currentIndex={currentIndex} handleModeration={handleModeration} />
       <button
         disabled={currentIndex === stacks.length - 1 && nextColumnStack === undefined}
         onClick={(e) => {
           e.stopPropagation();
-          handleForwardClick();
+          handleNavigation(currentIndex + 1);
         }}
         className="stack-view__navigation-button"
       >
-        <RightArrowIcon />
+        <RightArrowIcon
+          onClick={(e) => {
+            e.stopPropagation();
+            handleNavigation(currentIndex + 1);
+          }}
+        />
       </button>
     </div>
   );

@@ -38,12 +38,11 @@ export const StackNavigationDots = ({stacks, currentIndex, handleModeration}: St
           <button
             key={stack.id}
             onClick={() => handleClick(index)}
-            className={classNames(
-              "stack-view__navigation-dot",
-              index === currentIndex && "stack-view__navigation-dot--active",
-              distance === 3 && index !== 0 && index !== stacks.length - 1 && "stack-view__navigation-dot--small",
-              distance > 3 && "stack-view__navigation-dot--hidden"
-            )}
+            className={classNames("stack-view__navigation-dot", {
+              "stack-view__navigation-dot--active": index === currentIndex,
+              "stack-view__navigation-dot--small": distance === 3 && index !== 0 && index !== stacks.length - 1,
+              "stack-view__navigation-dot--hidden": distance > 3,
+            })}
             tabIndex={distance > 3 ? -1 : undefined}
             aria-label={`Go to note #${index + 1}`}
           />
