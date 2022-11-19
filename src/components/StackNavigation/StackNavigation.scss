@@ -3,7 +3,7 @@
 
 .stack-view__navigation {
   height: $stack-view__navigation-height;
-  min-height: 80px;
+  min-height: $stack-view__min-height;
   width: 82%;
   display: flex;
   flex-direction: row;

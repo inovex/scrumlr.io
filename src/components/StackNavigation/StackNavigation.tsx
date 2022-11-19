@@ -18,15 +18,15 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
-  const getNextStackId = (index: number): string | undefined => {
-    if (index < 0 && prevColumnStack) return prevColumnStack;
-    if (index === stacks.length && nextColumnStack) return nextColumnStack;
+  const getStackId = (index: number): string | undefined => {
     if (stacks[index]) return stacks[index].id;
-    return undefined;
+    return index < 0 ? prevColumnStack : nextColumnStack;
   };
 
+  // takes the index of the stack we want to navigate to
+  // if the index is out of bounds, it will navigate to the previous or next column
   const handleNavigation = (index: number) => {
-    const stackId = getNextStackId(index);
+    const stackId = getStackId(index);
     if (stackId) {
       handleModeration(stackId);
       navigate(`../note/${stackId}/stack`);

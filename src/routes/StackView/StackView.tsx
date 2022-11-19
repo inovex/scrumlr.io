@@ -22,13 +22,10 @@ type StackedNote = Note & {
 };
 
 const getTransform = (state: "start" | "end", dir?: string) => {
-  if (dir === "left") {
-    return state === "start" ? "translateX(-100%)" : "translateX(100%)";
-  }
-  if (dir === "right") {
-    return state === "start" ? "translateX(100%)" : "translateX(-100%)";
-  }
-  return "translateX(0)";
+  if (!dir) return "translateX(0%)";
+  const st = state === "start" ? -1 : 1;
+  const dr = dir === "right" ? -1 : 1;
+  return `translateX(${st * dr * 100}%)`;
 };
 
 export const StackView = () => {
