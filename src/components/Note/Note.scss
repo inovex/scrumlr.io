@@ -23,7 +23,7 @@ $note__author-image-size: 26px;
   padding: $padding--default $padding--medium 20px;
   width: 100%;
   text-align: start;
-  border: unset;
+  border: 2px solid transparent;
 }
 
 .note .note__user-avatar {
@@ -70,7 +70,8 @@ $note__author-image-size: 26px;
   opacity: 0.5;
 }
 .note--isOver {
-  padding: 14px 18px;
+  transform: scale(0.97);
+  transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
 }
