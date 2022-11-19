@@ -28,12 +28,15 @@
     margin: 12px auto;
   }
 
-  &:hover::after {
-    transform: scale(1.5);
+  &:focus-visible::after {
+    opacity: 1;
+    outline: 2px solid $color-white;
+    background: var(--accent-color);
+    transform: scale(1);
   }
 
-  &:focus-visible::after {
-    background: var(--accent-color);
+  &:hover::after {
+    transform: scale(1.5);
   }
 
   &--active::after {

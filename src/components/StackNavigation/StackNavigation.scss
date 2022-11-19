@@ -39,12 +39,12 @@
     opacity: 1;
 
     &:hover {
-      border: 3px solid var(--accent-color--desaturated-light);
       transform: scale(1.1);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--accent-color);
+      background: var(--accent-color);
+      color: $color-white;
     }
 
     &:active {
@@ -58,14 +58,9 @@
     background: $menu-icon-background-color--dark;
     color: $color-white;
 
-    &:enabled {
-      &:hover {
-        border: 3px solid var(--accent-color--desaturated-dark);
-      }
-
-      &:focus-visible {
-        outline: 2px solid var(--accent-color--desaturated-dark);
-      }
+    &:enabled:focus-visible {
+      background: var(--accent-color--dark);
+      color: $color-black;
     }
 
     &:disabled {

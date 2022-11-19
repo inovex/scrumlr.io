@@ -37,8 +37,8 @@ export const StackView = () => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const prevNote = useRef<Note | undefined>(note);
   const columns = useAppSelector((state) => state.columns, _.isEqual);
-  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self, _.isEqual);
-  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name), _.isEqual);
+  const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -94,9 +94,9 @@ export const StackView = () => {
   useEffect(() => {
     if (prevNote.current && prevNote.current?.id !== note?.id) {
       let direction: "left" | "right" | undefined;
-      if (prevNote && prevNote.current?.position?.column === note?.position?.column) {
+      if (prevNote.current?.position?.column === note?.position?.column) {
         direction = prevNote.current?.position?.rank > note!.position.rank ? "right" : "left";
-      } else if (prevNote) {
+      } else {
         const oldColumnIndex = columns.findIndex((c) => c.id === prevNote.current?.position.column);
         const newColumnIndex = columns.findIndex((c) => c.id === note?.position.column);
         direction = oldColumnIndex > newColumnIndex ? "left" : "right";
@@ -199,7 +199,7 @@ export const StackView = () => {
           </Transition>
         </div>
       </div>
-      <div className={classNames("stack-view__border", userIsModerating && "stack-view__border--moderating", getColorClassName(column!.color as Color))} />
+      <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, getColorClassName(column!.color as Color))} />
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />
       </button>
