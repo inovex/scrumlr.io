@@ -19,8 +19,8 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
   const getStackId = (index: number): string | undefined => {
-    if (stacks[index]) return stacks[index].id;
-    return index < 0 ? prevColumnStack : nextColumnStack;
+    if (stacks[index]) return stacks[index].id; // if a stack in the current column exists at the given index, return its id
+    return index < 0 ? prevColumnStack : nextColumnStack; // if the index is out of bounds, return the id of the first/last stack in the previous/next column
   };
 
   // takes the index of the stack we want to navigate to
