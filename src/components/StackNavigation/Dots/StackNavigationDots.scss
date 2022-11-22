@@ -1,0 +1,63 @@
+@import "constants/style.scss";
+
+.stack-view__navigation-dots {
+  display: flex;
+  flex-direction: row;
+  width: 172px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+.stack-view__navigation-dot {
+  all: unset;
+  height: 32px;
+  width: 24px;
+  margin: 0;
+
+  cursor: pointer;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    opacity: 0.5;
+    border-radius: 100%;
+    background: $color-white;
+    margin: 12px auto;
+  }
+
+  &:focus-visible::after {
+    opacity: 1;
+    outline: 2px solid $color-white;
+    background: var(--accent-color);
+    transform: scale(1);
+  }
+
+  &:hover::after {
+    transform: scale(1.5);
+  }
+
+  &--active::after {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  &--small::after {
+    transform: scale(0.5);
+    opacity: 0.25;
+  }
+
+  &--hidden,
+  &--hidden::after {
+    height: 0px;
+    width: 0px;
+    margin: 0px;
+  }
+}
+
+.stack-view__navigation-dot,
+.stack-view__navigation-dot::after {
+  transition: all 0.08s ease-out;
+}
