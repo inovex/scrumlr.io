@@ -21,7 +21,7 @@ type StackedNote = Note & {
   avatar?: AvataaarProps;
 };
 
-const getTransform = (state: "start" | "end", dir?: string) => {
+const getTransform = (state: "start" | "end", dir?: "left" | "right") => {
   if (!dir) return "translateX(0%)";
   const st = state === "start" ? -1 : 1;
   const dr = dir === "right" ? -1 : 1;
