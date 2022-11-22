@@ -32,9 +32,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             (e.target as HTMLTextAreaElement).blur();
           }
         }}
-      >
-        {text}
-      </textarea>
+        defaultValue={text}
+      />
     </div>
   );
 };
