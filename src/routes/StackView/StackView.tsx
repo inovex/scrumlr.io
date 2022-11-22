@@ -151,7 +151,13 @@ export const StackView = () => {
   };
 
   return (
-    <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
+    <Portal
+      onClose={handleClose}
+      className={classNames("stack-view__portal", getColorClassName(column!.color as Color), {"stack-view__portal-moderation-visible": moderating})}
+      hiddenOverflow
+      centered
+      disabledPadding
+    >
       <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
         <NoteDialogComponents.Header columnName={column!.name} />
         <StackNavigation {...navigationProps} />
