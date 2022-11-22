@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
 import {useAppSelector} from "store";
 import {Assignee} from "types/assignee";
+import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import "./Assigning.scss";
+import {Badge} from "components/Badge";
+import {AssignAvatar} from "./AssignAvatar";
 
 export interface AssigningProps {
   note: string;
@@ -9,10 +12,10 @@ export interface AssigningProps {
 
 export const Assigning = (props: AssigningProps) => {
   /* TODO:
-    - display avatars
-    - make everything look nicer
-    - display all possibilities when input is empty
-    */
+      - display avatars
+      - make everything look nicer
+      - display all possibilities when input is empty
+      */
   const {me, them} = useAppSelector((state) => ({
     them: state.participants!.others,
     me: state.participants!.self,
@@ -26,108 +29,111 @@ export const Assigning = (props: AssigningProps) => {
     {name: me.user.name, note: "", user: me.user},
     ...them.map((participant) => ({name: participant.user.name, note: "", user: participant.user})),
   ]);
-  // People that are strangers to the board so we dont have an id etc.
-  const [externalParticipants, setExternalParticipants] = useState<Assignee[]>([]);
   // All People
   const [participants, setParticipants] = useState<Assignee[]>([]);
-  // A filtered version of All People based on the userInput
-  const [filteredSuggestions, setFilteredSuggestions] = useState<Assignee[]>([]);
 
   useEffect(() => {
-    setParticipants([...onBoardParticipants, ...externalParticipants]);
-  }, [onBoardParticipants, externalParticipants]);
-
-  const addExternalParticipant = (participant: Assignee) => {
-    setExternalParticipants([...externalParticipants, participant]);
-  };
-
-  // const removeExternalParticipant = (participant: Assignee) => {
-  //     setExternalParticipants(externalParticipants.filter(external => external !== participant));
-  // }
+    setParticipants([...onBoardParticipants, {name: "debug don", note: "note"}]);
+  }, [onBoardParticipants]);
 
   const toggleAssigneesList = () => {
     // show input field and list
     setShowList(!showList);
   };
 
-  const handleChangeUserInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // user is typing name
-    setUserInput(e.target.value);
-    setFilteredSuggestions(participants.map((participant) => participant).filter((participant) => participant.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1));
-  };
-
-  const handleUserSubmit = () => {
-    // user submitted a name by hitting enter
-    addExternalParticipant({name: userInput, note: props.note});
-    setUserInput("");
-  };
-
-  const handleSelectSuggestion = (suggestion: Assignee) => {
-    const matchingParticcipants = participants.filter((p) => p === suggestion);
-    if (matchingParticcipants.length !== 1) return; // this should not happen
-
-    // make changes
-    const selectedParticipant = matchingParticcipants[0];
-    const index = participants.indexOf(selectedParticipant);
-    selectedParticipant.note = selectedParticipant.note === "" ? props.note : "";
-
-    // apply changes
-    const participantsCopy = participants;
-    participantsCopy[index] = selectedParticipant;
+  const onSelectParticipant = (participant: Assignee) => {
+    const index = participants.indexOf(participant);
+    const participantsCopy = [...participants];
+    participantsCopy[index].note = participantsCopy[index].note === "" ? props.note : "";
     setParticipants(participantsCopy);
   };
 
+  const handleAddExtern = () => {
+    // TODO: add button to add participant(e.g for mobile)
+    setParticipants([...participants, {name: userInput, note: props.note}]);
+  };
+
   const deleteME = () => {
+    // TODO:
+    // this function is just for DEBUG purpose. delete before roll-out
     setOnBoardParticipants([]);
   };
 
+  const drawSuggestions = (participant: Assignee) => (
+      <li className="participant">
+        <AssignAvatar participant={participant} caption />
+        <Badge text={participant.note !== "" ? "Assigned" : "Unassigned"} />
+        <input type="checkbox" checked={participant.note !== ""} onClick={() => onSelectParticipant(participant)} />
+      </li>
+    );
+
   return (
-    <div className="assing-wrapper">
+    <div
+      className="assing-wrapper"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <button
-        id="manage-assignees"
         onClick={(e) => {
-          e.stopPropagation();
           toggleAssigneesList();
         }}
       >
-        {/* cycle through all assignees and ddisplay first 2 or 3 to show avatar */}
+        {participants
+          .filter((participant) => participant.note !== "")
+          .slice(0, 2)
+          .sort((parA, parB) => parA.name.localeCompare(parB.name))
+          .map((participant) => (
+            <AssignAvatar participant={participant} />
+          ))}
       </button>
-
       {showList && (
-        <div id="input-list-wrapper" onBlur={toggleAssigneesList}>
-          <input
-            value={userInput}
-            onChange={handleChangeUserInput}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleUserSubmit();
-              }
-            }}
-          />
-          <ul>
-            {filteredSuggestions.map((suggestion) => (
-              <li>
-                <button
-                  onClick={(e) => {
+        <aside className="assign" onBlur={toggleAssigneesList}>
+          <div className="assign__header">
+            <div className="assign__header-title">
+              <h4 className="assign__header-text">
+                <span>Assign someone</span>
+              </h4>
+            </div>
+            <div className="participants__header-search">
+              <SearchIcon className="participants__search_icon" />
+              <input
+                className="participants__header-input"
+                placeholder="placeholder"
+                onChange={(event) => setUserInput(event.target.value.trim())}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddExtern();
                     e.stopPropagation();
-                    handleSelectSuggestion(suggestion);
-                  }}
-                >
-                  <input readOnly type="checkbox" checked={suggestion.note !== ""} />
-                  {suggestion.name}
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <ul className="participants__list">
+            <div className="list__header">
+              <label>Name</label>
+              {(me.role === "MODERATOR" || me.role === "OWNER") && <label>assigned</label>}
+            </div>
+            {userInput === ""
+              ? participants.sort((parA, parB) => parA.name.localeCompare(parB.name)).map((participant) => drawSuggestions(participant))
+              : participants
+                  .sort((parA, parB) => parA.name.localeCompare(parB.name))
+                  .filter((participant) => userInput.split(" ").every((substr) => participant.name.toLowerCase().includes(substr.toLowerCase())))
+                  .map((participant) => drawSuggestions(participant))}
+            {false && (
+              <li>
+                <button disabled onClick={deleteME}>
+                  dedbug only
                 </button>
               </li>
-            ))}
-            {/* cycle through all assigned first , then everyone else */}
-            <li>
-              <button onClick={deleteME}>dedbug only</button>
-            </li>
+            )}
           </ul>
-        </div>
+        </aside>
       )}
     </div>
   );
