@@ -61,6 +61,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             }}
             aria-haspopup
             aria-pressed={showMenu}
+            title={state.name || DEFAULT_BOARD_NAME}
           >
             <div className="board-header__access-policy-status">
               {
