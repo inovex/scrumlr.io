@@ -60,6 +60,7 @@ describe("StackView", () => {
         serverTimeOffset: 0,
         feedbackEnabled: false,
         enabledAuthProvider: [],
+        hotkeysAreActive: false,
       };
       const {container} = render(
         createStackView({
