@@ -14,4 +14,5 @@ export interface Participant {
 export type ParticipantsState = null | {
   others: Participant[];
   self: Participant;
+  focusInitiator: Participant | null;
 };
