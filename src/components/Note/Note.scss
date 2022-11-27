@@ -70,7 +70,7 @@ $note__author-image-size: 26px;
   opacity: 0.5;
 }
 .note--isOver {
-  transform: scale(0.97);
+  transform: scale(1.03);
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
@@ -102,6 +102,15 @@ $note__author-image-size: 26px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+}
+
+.note__stack-icon {
+  height: $icon--huge;
+  width: $icon--huge;
+  position: absolute;
+  top: calc(50% - ($icon--huge/2));
+  left: calc(50% - ($icon--huge/2));
+  fill: var(--accent-color);
 }
 
 [theme="dark"] {
