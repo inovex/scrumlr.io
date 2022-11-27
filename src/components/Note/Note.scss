@@ -44,6 +44,7 @@ $note__author-image-size: 26px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
+  transition: all 0.1s ease-in-out;
 }
 [theme="dark"] {
   .note__in-stack {
