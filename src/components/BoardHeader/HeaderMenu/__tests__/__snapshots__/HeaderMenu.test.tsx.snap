@@ -40,7 +40,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                   class="board-settings__edit-button"
                   type="submit"
                 >
-                  BoardSettings.edit
+                  edit
                 </button>
               </form>
             </li>
@@ -61,7 +61,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  BoardSettings.ShowAuthorOption
+                  Show authors of notes
                 </span>
               </button>
             </li>
@@ -82,7 +82,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  BoardSettings.ShowOtherUsersNotesOption
+                  Show notes of other users
                 </span>
               </button>
             </li>
@@ -103,7 +103,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  BoardSettings.ShowHiddenColumnsOption
+                  Show hidden columns for me
                 </span>
               </button>
             </li>
@@ -118,7 +118,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <p
                   class="board-option-link__label"
                 >
-                  BoardHeader.showAllBoardSettings
+                  Show all board settings
                 </p>
               </a>
             </li>
@@ -184,7 +184,7 @@ exports[`<HeaderMenu/> should render correctly for participants 1`] = `
                 <p
                   class="board-option-link__label"
                 >
-                  BoardHeader.showAllBoardSettings
+                  Show all board settings
                 </p>
               </a>
             </li>

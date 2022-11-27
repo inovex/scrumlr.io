@@ -17,7 +17,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           class="note-input__input"
           data-tip="CMD/CTRL + 1"
           maxlength="1024"
-          placeholder="NoteInput.placeholder"
+          placeholder="Add your note..."
           type="text"
           value=""
         />
@@ -41,7 +41,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           <svg
             class="column__header-hidden-icon"
-            title="Column.hiddenColumn"
+            title="Column is hidden for all participants"
           >
             icon-hidden.svg
           </svg>
@@ -58,7 +58,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </span>
         <button
           class="column__header-edit-button"
-          title="Column.settings"
+          title="Settings"
         >
           <svg
             class="column__header-edit-button-icon"
