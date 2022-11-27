@@ -99,7 +99,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         <span
           class="text-input-label__label"
         >
-          Enter the passphrase to access this board
+          PassphraseDialog.passphraseInputLabel
         </span>
       </label>
       <div
@@ -115,9 +115,9 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
             value=""
           />
           <button
-            aria-label="Toggle passphrase visibility"
+            aria-label="PassphraseDialog.togglePassphraseVisibility"
             class="text-input-adornment text-input__adornment text-input__adornment--right"
-            title="Toggle passphrase visibility"
+            title="PassphraseDialog.togglePassphraseVisibility"
             type="button"
           >
             <svg>
@@ -137,7 +137,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         <span
           class="button__label"
         >
-          Submit
+          PassphraseDialog.submit
         </span>
       </button>
     </form>

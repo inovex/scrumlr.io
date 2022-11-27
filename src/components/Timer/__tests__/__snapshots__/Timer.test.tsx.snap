@@ -11,7 +11,7 @@ exports[`Timer should render correctly 1`] = `
     59
   </span>
   <button
-    title="Stop timer"
+    title="Timer.stopTimer"
   >
     <svg>
       icon-close.svg

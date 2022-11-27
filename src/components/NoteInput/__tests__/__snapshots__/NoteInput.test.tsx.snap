@@ -7,7 +7,7 @@ exports[`Note Input should render correctly 1`] = `
   <input
     class="note-input__input"
     maxlength="1024"
-    placeholder="Add your note..."
+    placeholder="NoteInput.placeholder"
     type="text"
     value=""
   />

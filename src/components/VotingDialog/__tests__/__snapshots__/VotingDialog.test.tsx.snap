@@ -29,14 +29,14 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
             <h2
               class="dialog__header-text"
             >
-              Voting
+              VoteConfigurationButton.label
             </h2>
             <button
               class="voting-dialog__start-button"
               data-testid="voting-dialog__cancel-button"
             >
               <label>
-                Cancel voting phase
+                VoteConfigurationButton.cancelVoting
               </label>
             </button>
             <button
@@ -44,7 +44,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
               data-testid="voting-dialog__stop-button"
             >
               <label>
-                End voting phase
+                VoteConfigurationButton.stopVoting
               </label>
             </button>
           </article>
@@ -98,14 +98,14 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             <h2
               class="dialog__header-text"
             >
-              Voting
+              VoteConfigurationButton.label
             </h2>
             <button
               class="dialog__button"
               data-testid="voting-dialog__cumulative-voting-button"
             >
               <label>
-                Allow cumulative voting
+                VoteConfigurationButton.allowMultipleVotesPerNote
               </label>
               <div
                 class="toggle toggle--active voting-dialog__toggle"
@@ -115,7 +115,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
               class="dialog__button"
             >
               <label>
-                Number of votes
+                VoteConfigurationButton.numberOfVotes
               </label>
               <button
                 class="voting-dialog__vote-button"
@@ -144,7 +144,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
               data-testid="voting-dialog__start-button"
             >
               <label>
-                Start voting phase
+                VoteConfigurationButton.startVoting
               </label>
             </button>
           </article>
