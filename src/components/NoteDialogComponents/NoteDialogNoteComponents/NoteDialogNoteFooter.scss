@@ -71,8 +71,7 @@
   height: var(--note-footer-height);
 
   .note-dialog__note-author-name {
-    color: var(--accent-color);
-    font-weight: bold;
+    color: $color-black;
   }
 }
 
@@ -87,5 +86,8 @@
     .note-dialog__note-author-name {
       color: $color-white;
     }
+  }
+  .note-dialog__note-user-avatar #Circle-Background {
+    stroke: none;
   }
 }

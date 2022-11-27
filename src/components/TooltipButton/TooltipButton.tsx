@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {TabIndex} from "constants/tabIndex";
 import "./TooltipButton.scss";
 
 type TooltipButtonProps = {
@@ -8,10 +7,10 @@ type TooltipButtonProps = {
   onClick: () => void;
   label: string;
   disabled?: boolean;
-  tabIndex?: number;
   icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   className?: string;
   active?: boolean;
+  hotkeyKey?: string;
 };
 
 export const TooltipButton = (props: TooltipButtonProps) => {
@@ -22,11 +21,13 @@ export const TooltipButton = (props: TooltipButtonProps) => {
       disabled={props.disabled}
       className={classNames("tooltip-button", `tooltip-button--${props.direction ?? "right"}`, {"tooltip-button--active": props.active}, props.className)}
       onClick={() => props.onClick()}
-      tabIndex={props.tabIndex ?? TabIndex.default}
       aria-label={props.label}
     >
       <div className="tooltip-button__tooltip" aria-hidden>
-        <span className="tooltip-button__tooltip-text">{props.label}</span>
+        <span className="tooltip-button__tooltip-text">
+          {props.label}
+          {props.hotkeyKey !== undefined && <span className="tooltip-button__hotkey">{` [${props.hotkeyKey}]`}</span>}
+        </span>
       </div>
       <Icon className="tooltip-button__icon" aria-hidden />
       <CloseIcon className="tooltip-button__icon" aria-hidden />

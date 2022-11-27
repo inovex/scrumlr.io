@@ -1,10 +1,9 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
-
-$note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large});
+@import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
-  max-height: calc(#{$note-dialog__scrollbar-height} - 206px);
+  height: calc(100vh - #{$stack-view__header-height} - #{$stack-view__navigation-height} - #{$stack-view__parent-note-height});
   width: calc(100vw - (2 * $column__border-width));
   overflow-y: auto;
   overflow-x: hidden;
@@ -18,7 +17,7 @@ $note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--de
 }
 
 .note-dialog__note-wrapper {
-  margin-right: $margin--default;
+  margin: 0 $margin--default $margin--default 0;
   width: 100%;
   display: flex;
   flex-direction: column;

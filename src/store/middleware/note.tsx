@@ -20,14 +20,27 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
   }
 
   if (action.type === Action.DeleteNote) {
-    API.deleteNote(action.context.board!, action.noteId).catch(() => {
+    const sharedNoteId = stateAPI.getState().board.data?.sharedNote;
+    const currentNoteId = action.noteId;
+    const {moderating} = stateAPI.getState().view;
+
+    if (sharedNoteId === currentNoteId && !moderating) {
       Toast.error(
         <div>
-          <div>{i18n.t("Error.deleteNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.deleteNote(action.noteId))}>{i18n.t("Error.retry")}</Button>
-        </div>
+          <div>{i18n.t("Error.deleteNoteWhenShared")}</div>
+        </div>,
+        5000
       );
-    });
+    } else {
+      API.deleteNote(action.context.board!, action.noteId).catch(() => {
+        Toast.error(
+          <div>
+            <div>{i18n.t("Error.deleteNote")}</div>
+            <Button onClick={() => store.dispatch(Actions.deleteNote(action.noteId))}>{i18n.t("Error.retry")}</Button>
+          </div>
+        );
+      });
+    }
   }
 
   if (action.type === Action.EditNote) {

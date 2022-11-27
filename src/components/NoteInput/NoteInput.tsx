@@ -3,23 +3,26 @@ import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
+import {Toast} from "utils/Toast";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
   columnId: string;
-  tabIndex?: number;
   maxNoteLength: number;
   columnIndex: number;
+  columnIsVisible: boolean;
+  toggleColumnVisibility: () => void;
+  hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const [value, setValue] = useState("");
   const noteInputRef = useRef<HTMLInputElement | null>(null);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
@@ -43,6 +46,17 @@ export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: Note
   const onAddNote = () => {
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
+      if (!columnIsVisible && !toastDisplayed) {
+        Toast.info(
+          <div>
+            <div>{t("Toast.noteToHiddenColumn")}</div>
+            <button className="toast-button" onClick={toggleColumnVisibility}>
+              {t("Toast.noteToHiddenColumnButton")}
+            </button>
+          </div>
+        );
+        setToastDisplayed(true);
+      }
       setValue("");
     }
   };
@@ -61,11 +75,12 @@ export const NoteInput = ({columnIndex, columnId, tabIndex, maxNoteLength}: Note
             onAddNote();
           }
         }}
-        tabIndex={tabIndex ?? TabIndex.default}
         maxLength={maxNoteLength}
+        data-tip={hotkeyKey}
       />
       <button
         type="submit"
+        tabIndex={-1} // skip focus
         className="note-input__add-button"
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           e.preventDefault();

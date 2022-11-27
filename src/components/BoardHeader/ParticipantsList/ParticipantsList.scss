@@ -103,10 +103,9 @@
 }
 
 .list__header {
-  height: 32px;
   position: relative;
   display: flex;
-  padding: $padding--default;
+  padding: $padding--small $padding--default;
   justify-content: space-between;
 }
 

@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToFocusedNote": "Zurück zur Fokuskarte"
+  },
   "NewBoard": {
     "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
@@ -74,7 +77,8 @@
     "exportAsCSV": "CSV exportieren",
     "openPrintView": "Druckansicht öffnen",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
-    "copyToClipboardSuccess": "Markdown kopiert!"
+    "copyToClipboardSuccess": "Markdown kopiert!",
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
   },
   "PrintView": {
     "Participants": "Teilnehmer",
@@ -226,7 +230,8 @@
     "allParticipantsDone": "Alle Teilnehmer sind fertig.",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!"
-
+    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
+    "noteToHiddenColumnButton": "Spalte für alle anzeigen"
   },
   "Language": {
     "german": "Deutsch",
@@ -318,6 +323,7 @@
     "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",
     "addNote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen des Kärtchens. Bitte versuche es erneut.",
     "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
+    "deleteNoteWhenShared": "Das Kärtchen kann, während es geteilt wird, nicht von dir gelöscht werden.",
     "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",

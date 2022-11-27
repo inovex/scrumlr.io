@@ -1,7 +1,3 @@
-> The code of the online version of [scrumlr.io](https://scrumlr.io) is located
-> [at the v1 branch](https://github.com/inovex/scrumlr.io/tree/v1), since we are currently working on a new
-> implementation of your favorite webapp for collaborative sessions.
-
 <div align="center" markdown="1" style="margin-bottom: 2.5em">
   <p>
     <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
@@ -24,7 +20,7 @@ We developed the client with the help of [React](https://reactjs.org/) while our
 Checkout the sources.
 
 ```bash
-$ git clone git@github.com:inovex/scrumlr.io.git
+$ git clone https://github.com/inovex/scrumlr.io.git
 $ cd scrumlr.io
 ```
 
@@ -160,7 +156,6 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 ## Our team and beloved friends
 
 [<img src="https://avatars.githubusercontent.com/u/36969812?s=48&amp;v=4" width="48" height="48" alt="brandstetterm">](https://github.com/brandstetterm)
-[<img src="https://avatars.githubusercontent.com/u/32651718?s=48&amp;v=4" width="48" height="48" alt="timengel">](https://github.com/timengel)
 [<img src="https://avatars.githubusercontent.com/u/35272402?s=48&amp;v=4" width="48" height="48" alt="Resaki1">](https://github.com/Resaki1)
 [<img src="https://avatars.githubusercontent.com/u/49522775?s=48&amp;v=4" width="48" height="48" alt="Benjosh95">](https://github.com/Benjosh95)
 [<img src="https://avatars.githubusercontent.com/u/44020029?s=48&amp;v=4" width="48" height="48" alt="CronJorian">](https://github.com/CronJorian)
@@ -172,6 +167,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/70689411?s=48&amp;v=4" width="48" height="48" alt="brandeins1403">](https://github.com/brandeins1403)
 [<img src="https://avatars.githubusercontent.com/u/56362368?s=48&v=4" width="48" height="48" alt="benedicthomuth">](https://github.com/benedicthomuth)
 [<img src="https://avatars.githubusercontent.com/u/7889564?s=48&amp;v=4" width="48" height="48" alt="schwehn42">](https://github.com/schwehn42)
+[<img src="https://avatars.githubusercontent.com/u/58441634?s=48&amp;v=4" width="48" height="48" alt="NNKKOO">](https://github.com/NNKKOO)
 
 [<img src="https://avatars.githubusercontent.com/u/741171?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/wlbr)
 [<img src="https://avatars.githubusercontent.com/u/5778920?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/bontscho)
@@ -186,6 +182,8 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/8872752?s=36&amp;v=4" width="36" height="36" alt="theinrichs">](https://github.com/theinrichs)
 [<img src="https://avatars.githubusercontent.com/u/731608?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/cdreier)
 [<img src="https://avatars.githubusercontent.com/u/3976183?s=36&v=4" width="36" height="36" alt="dotcs">](https://github.com/dotcs)
+[<img src="https://avatars.githubusercontent.com/u/32651718?s=36&amp;v=4" width="36" height="36" alt="timengel">](https://github.com/timengel)
+[<img src="https://avatars.githubusercontent.com/u/79283124?v=4" width="36" height="36" alt="Lennart01">](https//github.com/lennart01)
 
 ... and many more!
 

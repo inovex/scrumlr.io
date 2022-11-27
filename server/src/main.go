@@ -49,6 +49,24 @@ func main() {
 				Value:   "nats://localhost:4222", // nats://nats:4222
 			},
 			&cli.StringFlag{
+				Name:    "redis-address",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_HOST"},
+				Usage:   "the `address` of the redis server. Example `localhost:6379`. If redis-address is set, it's used over the default nats",
+				Value:   "",
+			},
+			&cli.StringFlag{
+				Name:    "redis-username",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_USERNAME"},
+				Usage:   "the redis user (if required)",
+				Value:   "",
+			},
+			&cli.StringFlag{
+				Name:    "redis-password",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_PASSWORD"},
+				Usage:   "the redis password (if required)",
+				Value:   "",
+			},
+			&cli.StringFlag{
 				Name:    "database",
 				Aliases: []string{"d"},
 				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
@@ -159,7 +177,22 @@ func run(c *cli.Context) error {
 		return errors.Wrap(err, "unable to migrate database")
 	}
 
-	rt := realtime.New(c.String("nats"))
+	var rt *realtime.Broker
+	if c.String("redis-address") != "" {
+		rt, err = realtime.NewRedis(realtime.RedisServer{
+			Addr:     c.String("redis-address"),
+			Username: c.String("redis-username"),
+			Password: c.String("redis-password"),
+		})
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+		}
+	} else {
+		rt, err = realtime.NewNats(c.String("nats"))
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+		}
+	}
 
 	basePath := "/"
 	if c.IsSet("base-path") {

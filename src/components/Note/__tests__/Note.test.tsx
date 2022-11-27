@@ -93,17 +93,18 @@ describe("Note", () => {
         serverTimeOffset: 0,
         feedbackEnabled: false,
         enabledAuthProvider: [],
+        hotkeysAreActive: false,
       };
       const {container} = render(createNote(true, {view}));
-      fireEvent.click(container.querySelector(".note__root")!);
+      fireEvent.click(container.querySelector(".note")!);
       expect(dispatchSpy).toHaveBeenCalledWith(Actions.shareNote(NOTE_ID));
     });
     it("should navigate to stack route on click", () => {
       const navigateSpy = jest.fn();
       jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);
       const {container} = render(createNote(false));
-      fireEvent.click(container.querySelector(".note__root")!);
-      expect(navigateSpy).toHaveBeenCalledWith(`stack/${NOTE_ID}`);
+      fireEvent.click(container.querySelector(".note")!);
+      expect(navigateSpy).toHaveBeenCalledWith(`note/${NOTE_ID}/stack`);
     });
   });
 });

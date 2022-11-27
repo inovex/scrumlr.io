@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToFocusedNote": "Return to focused note"
+  },
   "NewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
@@ -74,15 +77,15 @@
     "exportAsCSV": "Export as CSV",
     "openPrintView": "Open print view",
     "exportToClipboard": "Copy Markdown to Clipboard",
-    "copyToClipboardSuccess": "Markdown copied!"
-
+    "copyToClipboardSuccess": "Markdown copied!",
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
   },
   "PrintView": {
     "Participants": "Participants",
     "GeneratedOn": "Generated on",
     "ProvidedBy": "Provided with ♥️ by",
-    "Notes": "Kärtchen",
-    "Votes": "Stimmen"
+    "Notes": "Notes",
+    "Votes": "Votes"
   },
   "MarkdownExport": {
     "columns": "Columns",
@@ -226,6 +229,8 @@
     "allParticipantsDone": "All participants are ready.",
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!"
+    "noteToHiddenColumn": "You just added a note to a hidden column.",
+    "noteToHiddenColumnButton": "Reveal column"
   },
   "Language": {
     "german": "German",
@@ -317,6 +322,7 @@
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
     "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",

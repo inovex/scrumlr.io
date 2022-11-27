@@ -87,7 +87,7 @@ export const VotingDialog: VFC = () => {
           </button>
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
+            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
               <MinusIcon />
             </button>
             <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>

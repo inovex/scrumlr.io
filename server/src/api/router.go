@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -20,7 +21,7 @@ import (
 type Server struct {
 	basePath string
 
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 	auth     auth.Auth
 
 	boards   services.Boards
@@ -40,7 +41,7 @@ type Server struct {
 
 func New(
 	basePath string,
-	rt *realtime.Realtime,
+	rt *realtime.Broker,
 	auth auth.Auth,
 	boards services.Boards,
 	votings services.Votings,

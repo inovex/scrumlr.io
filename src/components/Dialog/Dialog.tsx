@@ -17,7 +17,7 @@ export const Dialog: FC<DialogProps> = ({title, className, onClose, children, ..
         {children}
       </article>
       <button onClick={() => onClose?.()} className="dialog__close-button">
-        <CloseIcon className="close-button__icon" />
+        <CloseIcon className="dialog__close-icon" />
       </button>
     </aside>
   </Portal>

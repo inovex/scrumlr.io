@@ -12,6 +12,19 @@ import {SERVER_WEBSOCKET_URL} from "../../config";
 
 let socket: Socket | undefined;
 
+const removeOffset = (stateAPI: MiddlewareAPI): Date | undefined => {
+  const offset = stateAPI.getState().view.serverTimeOffset;
+  const timerEnd = stateAPI.getState().board.data?.timerEnd;
+
+  if (!timerEnd) return undefined;
+  if (timerEnd && offset >= 0) {
+    // Server behind
+    return new Date(new Date(timerEnd).getTime() - Math.abs(offset));
+  }
+  // Server ahead
+  return new Date(new Date(timerEnd).getTime() + Math.abs(offset));
+};
+
 export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.LeaveBoard) {
     socket?.close();
@@ -46,9 +59,18 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updateColumns(columns));
         }
 
+        if (message.type === "COLUMN_DELETED") {
+          const columnId = message.data;
+          store.dispatch(Actions.deletedColumn(columnId));
+        }
+
         if (message.type === "NOTES_UPDATED") {
           const notes = message.data;
           store.dispatch(Actions.updatedNotes(notes));
+        }
+        if (message.type === "NOTE_DELETED") {
+          const noteId = message.data;
+          store.dispatch(Actions.deletedNote(noteId));
         }
 
         if (message.type === "PARTICIPANT_CREATED") {
@@ -68,6 +90,11 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updatedVoting(message.data.voting, message.data.notes));
         }
 
+        if (message.type === "VOTES_UPDATED") {
+          const votes = message.data;
+          store.dispatch(Actions.updatedVotes(votes));
+        }
+
         if (message.type === "REQUEST_CREATED") {
           store.dispatch(Actions.createJoinRequest(message.data));
         }
@@ -83,7 +110,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: currentState.sharedNote,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerEnd: removeOffset(stateAPI),
       accessPolicy: action.board.accessPolicy,
       passphrase: action.board.passphrase,
       allowStacking: action.board.allowStacking,
@@ -115,7 +142,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: action.note,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerEnd: removeOffset(stateAPI),
     }).catch(() => {
       Toast.error(
         <div>
@@ -131,7 +158,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: undefined,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerEnd: removeOffset(stateAPI),
     }).catch(() => {
       Toast.error(
         <div>

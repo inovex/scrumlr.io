@@ -12,7 +12,6 @@ import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {TabIndex} from "constants/tabIndex";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
@@ -47,7 +46,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     return () => document.removeEventListener("click", handleClickOutside);
   }, [menuBarsMobileRef, fabIsExpanded]);
 
-  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU} = hotkeyMap;
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
@@ -74,6 +73,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleModeration = () => {
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+
     dispatch(Actions.setModerating(!state.moderation));
   };
 
@@ -100,21 +104,21 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                 icon={CheckIcon}
                 active={isReady}
-                tabIndex={TabIndex.UserMenu}
+                hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
               />
             </li>
             <li>
               <TooltipButton
-                tabIndex={TabIndex.UserMenu + 1}
                 direction="right"
                 label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
                 icon={RaiseHand}
                 onClick={toggleRaiseHand}
                 active={raisedHand}
+                hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
               />
             </li>
             <li>
-              <TooltipButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
             </li>
           </ul>
 
@@ -132,10 +136,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
@@ -144,7 +148,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
-                  tabIndex={TabIndex.AdminMenu + 2}
+                  hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
                 />
               </li>
             </ul>
@@ -185,7 +189,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                   icon={CheckIcon}
                   onClick={toggleReadyState}
-                  tabIndex={TabIndex.UserMenu}
                 />
               </li>
             )}
@@ -197,7 +200,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
                   icon={RaiseHand}
                   onClick={toggleRaiseHand}
-                  tabIndex={TabIndex.UserMenu + 1}
                 />
               </li>
             )}
@@ -218,10 +220,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             {fabIsExpanded && (
               <>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                  <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                  <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
               </>
             )}
@@ -233,7 +235,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
-                  tabIndex={TabIndex.AdminMenu + 2}
                 />
               </li>
             )}
