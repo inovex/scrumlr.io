@@ -3,7 +3,6 @@ package database
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -160,13 +159,15 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
 		Where("s.board = ?", update.Board).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(common.ContextWithValues(context.Background(),
-			"Database", d,
-			"Operation", "UPDATES",
-			"Board", update.Board,
-			"Result", &sessions,
-		), &sessions)
-	fmt.Println(updateQuery.String())
+		Scan(context.Background(), &sessions)
+
+    // send update to observers here, as bun .AfterScanRow() is triggered for each updated row
+    // see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
+    for _, observer := range d.observer {
+      if o, ok := observer.(BoardSessionsObserver); ok {
+        o.UpdatedSessions(update.Board, sessions)
+      }
+    }
 
 	return sessions, err
 }

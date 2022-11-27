@@ -81,7 +81,7 @@ export const ParticipantsAPI = {
    */
   updateReadyStates: async (boardId: string, desiredReadyStates: boolean) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants/ready`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
         method: "PUT",
         credentials: "include",
         body: JSON.stringify({ready: desiredReadyStates}),

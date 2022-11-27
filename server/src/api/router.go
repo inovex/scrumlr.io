@@ -198,8 +198,6 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 
 		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
 
-		r.With(s.BoardModeratorContext).Put("/ready", s.updateReadyStates)
-
 		r.Route("/{session}", func(r chi.Router) {
 			r.Use(s.BoardParticipantContext)
 			r.Get("/", s.getBoardSession)
