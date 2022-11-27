@@ -12,6 +12,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
+import {getEmptyImage} from "react-dnd-html5-backend";
 
 interface NoteProps {
   noteId: string;
@@ -59,7 +60,7 @@ export const Note = (props: NoteProps) => {
   }, [isShared]);
   /* eslint-enable */
 
-  const [{isDragging}, drag] = useDrag({
+  const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: note!.position.column},
     collect: (monitor) => ({
@@ -77,6 +78,10 @@ export const Note = (props: NoteProps) => {
     collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
+
+  useEffect(() => {
+    preview(getEmptyImage());
+  }, [preview]);
 
   const handleClick = () => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {

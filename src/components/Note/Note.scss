@@ -18,7 +18,7 @@ $note__author-image-size: 26px;
   border-radius: $note__border-radius;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
-  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
   padding: $padding--default $padding--medium 20px;
   width: 100%;
@@ -63,17 +63,26 @@ $note__author-image-size: 26px;
 .note:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
+
 .note:hover {
   transform: scale(1.02);
 }
+
 .note--isDragging {
   opacity: 0.5;
 }
+
 .note--isOver {
-  transform: scale(1.03);
+  transform: translateY(-8px);
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
+  z-index: $note-z-index + 2 * $base-z-index-step;
+
+  & ~ .note__in-stack {
+    z-index: 0;
+    transform: translateY(8px);
+  }
 }
 
 .note:focus-visible::before {
