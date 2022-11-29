@@ -139,6 +139,9 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
   if (action.type === Action.ShareNote) {
     const currentState = stateAPI.getState().board.data!;
+    const note = stateAPI.getState().notes.find((n) => n.id === action.note);
+    const column = stateAPI.getState().columns.find((c) => c.id === note?.position.column);
+    if (!column?.visible) return; // Do not share notes in hidden columns
     API.editBoard(action.context.board!, {
       sharedNote: action.note,
       showVoting: currentState.showVoting,
