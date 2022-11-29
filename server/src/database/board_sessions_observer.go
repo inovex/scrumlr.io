@@ -47,16 +47,7 @@ func (*BoardSession) AfterScanRow(ctx context.Context) error {
 					return nil
 				}
 			}
-		case "UPDATES":
-			sessions := ctx.Value("Result").(*[]BoardSession)
-			for _, observer := range d.observer {
-				if o, ok := observer.(BoardSessionsObserver); ok {
-					o.UpdatedSessions(board, *sessions)
-					return nil
-				}
-			}
 		}
-
 	}
 	return nil
 }
