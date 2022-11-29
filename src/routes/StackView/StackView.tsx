@@ -76,11 +76,11 @@ export const StackView = () => {
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
   const [transitionConfig, setTransitionConfig] = useState({
-    from: {transform: "translate(0%)", position: "absolute", opacity: 0},
-    enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+    from: {transform: "translateX(0%)", position: "relative", opacity: 0},
+    enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
     leave: {
-      transform: "translate(0%)",
-      position: "absolute",
+      transform: "translateX(0%)",
+      position: "relative",
       opacity: 0,
     },
     items: {
@@ -104,10 +104,10 @@ export const StackView = () => {
       setTransitionConfig({
         from: {
           transform: getTransform("start", direction),
-          position: "absolute",
+          position: "relative",
           opacity: 0,
         },
-        enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+        enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
         leave: {
           transform: getTransform("end", direction),
           position: "absolute",
