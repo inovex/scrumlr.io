@@ -137,6 +137,10 @@ $settings-dialog-container--bottom: 62px;
     border: 2px solid $color-backlog-blue;
   }
 }
+.settings-dialog__close-button > svg {
+  height: 100%;
+  width: 100%;
+}
 [theme="dark"] .settings-dialog__close-button {
   color: $color-planning-pink;
 

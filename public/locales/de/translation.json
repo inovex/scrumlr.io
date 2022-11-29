@@ -1,6 +1,6 @@
 {
   "InfoBar": {
-    "ReturnToFocusedNote": "Zurück zur Fokuskarte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
   "NewBoard": {
     "boardName": "Sitzungsname",
@@ -173,8 +173,8 @@
     "themeToggle": "Ändere Farbschema",
     "editColumns": "Bearbeite Spalten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
-    "startFocusMode": "Starte Fokus-Modus",
-    "stopFocusMode": "Beende Fokus-Modus",
+    "startPresenterMode": "Präsentiermodus starten",
+    "stopPresenterMode": "Präsentiermodus beenden",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
