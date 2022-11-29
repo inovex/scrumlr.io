@@ -227,6 +227,8 @@
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
     "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
     "noteToHiddenColumn": "You just added a note to a hidden column.",
     "noteToHiddenColumnButton": "Reveal column"
   },
