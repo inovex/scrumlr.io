@@ -2,6 +2,8 @@
 
 $vote-display-height: 42px;
 $vote-display-width: 114px;
+$vote-display__content-height: 38px;
+$vote-display__short-actions-height: 28px;
 
 .vote-display {
   height: $vote-display-height;
@@ -30,8 +32,8 @@ $vote-display-width: 114px;
   left: 0;
   height: 100%;
   width: 100%;
-  padding-left: 38px;
-  line-height: 38px;
+  padding-left: $vote-display__content-height;
+  line-height: $vote-display__content-height;
   text-align: center;
   font-weight: bold;
 }
@@ -40,9 +42,9 @@ $vote-display-width: 114px;
   position: absolute;
   top: 0;
   left: 19px;
-  height: 38px;
-  border-top-right-radius: 19px;
-  border-bottom-right-radius: 19px;
+  height: $vote-display__content-height;
+  border-top-right-radius: calc($vote-display__content-height / 2);
+  border-bottom-right-radius: calc($vote-display__content-height / 2);
   background-color: $color-progress-circle;
 }
 
@@ -50,31 +52,30 @@ $vote-display-width: 114px;
   height: 100%;
   width: 100%;
   position: absolute;
-  padding-left: 38px;
-  border-radius: 19px;
+  border-radius: calc($vote-display__content-height / 2);
   background-color: $menu-icon-background-color--dark;
-  visibility: hidden;
-  display: flex;
-  justify-content: center;
+  display: none;
+  justify-content: end;
   align-items: center;
   gap: $margin--small;
+  padding-right: 4px;
 }
 
 .vote-display:hover > .vote-display__short-actions {
-  visibility: visible;
+  display: flex;
 }
 
 .short-actions__button-wrapper {
   position: relative;
-  height: 28px;
-  width: 28px;
-  border-radius: 14px;
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: calc($vote-display__short-actions-height / 2);
 }
 
 .short-actions__button-wrapper > button {
-  height: 28px;
-  width: 28px;
-  border-radius: 14px;
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: calc($vote-display__short-actions-height / 2);
   background-color: $color-dark-gray;
   color: $menu-icon-background-color--dark;
   border: none;
@@ -108,7 +109,7 @@ $vote-display-width: 114px;
   color: $menu-icon-background-color--dark;
   font-weight: bold;
   height: auto;
-  top: -35px;
+  bottom: calc(100% + 4px);
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 @media (prefers-reduced-motion) {
