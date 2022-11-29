@@ -73,7 +73,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleModeration = () => {
-    if (state.moderation) dispatch(Actions.stopSharing());
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+
     dispatch(Actions.setModerating(!state.moderation));
   };
 
