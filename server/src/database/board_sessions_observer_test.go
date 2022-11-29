@@ -12,6 +12,7 @@ type BoardSessionsObserverForTests struct {
 	board    *uuid.UUID
 	session  *BoardSession
 	sessions *[]BoardSession
+    updateCalls int
 }
 
 func (o *BoardSessionsObserverForTests) CreatedSession(board uuid.UUID, session BoardSession) {
@@ -27,12 +28,14 @@ func (o *BoardSessionsObserverForTests) UpdatedSession(board uuid.UUID, session 
 func (o *BoardSessionsObserverForTests) UpdatedSessions(board uuid.UUID, sessions []BoardSession) {
 	o.board = &board
 	o.sessions = &sessions
+    o.updateCalls++
 }
 
 func (o *BoardSessionsObserverForTests) Reset() {
 	o.board = nil
 	o.session = nil
 	o.sessions = nil
+    o.updateCalls = 0
 }
 
 var boardSessionsObserver BoardSessionsObserverForTests
@@ -100,6 +103,8 @@ func testBoardSessionsObserverOnUpdates(t *testing.T) {
 	assert.Equal(t, board.ID, (*boardSessionsObserver.sessions)[1].Board)
 	assert.Equal(t, user.ID, (*boardSessionsObserver.sessions)[1].User)
 	assert.Equal(t, newReady, (*boardSessionsObserver.sessions)[1].Ready)
+
+    assert.Equal(t, 1, boardSessionsObserver.updateCalls)
 }
 
 func testUpdateUserNameShouldUpdateBoardSession(t *testing.T) {

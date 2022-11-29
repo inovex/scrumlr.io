@@ -7,6 +7,8 @@ import "./Timer.scss";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
+import {API} from "api";
+import {Button} from "../Button";
 
 type TimerProps = {
   endTime: Date;
@@ -37,6 +39,8 @@ export const Timer = (props: TimerProps) => {
   const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
+  const boardId = useAppSelector((state) => state.board.data!.id);
+
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
@@ -54,6 +58,17 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
+      if (isModerator) {
+        Toast.info(
+          <div>
+            {t("Toast.moderatorResetReadyStates")}
+            <Button style={{marginTop: "1rem"}} onClick={() => API.updateReadyStates(boardId, false)}>
+              {t("Toast.moderatorResetReadyStatesButton")}
+            </Button>
+          </div>,
+          false
+        );
+      }
     }
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
