@@ -56,6 +56,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
       showHiddenColumns: rootState.participants!.self.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
+      activeTimer: !!rootState.board.data?.timerEnd,
+      activeVoting: !!rootState.votings.open,
     }),
     _.isEqual
   );
@@ -136,10 +138,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
