@@ -145,7 +145,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   active={state.moderation}
                   direction="left"
-                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
@@ -232,7 +232,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   active={state.moderation}
                   direction="left"
-                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
                 />

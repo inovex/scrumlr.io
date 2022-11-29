@@ -32,10 +32,10 @@ export const InfoBar = () => {
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
       {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
         <TooltipButton
-          className="info-bar__return-to-focused-note-button"
+          className="info-bar__return-to-presented-note-button"
           icon={ShareIcon}
           direction="right"
-          label={t("InfoBar.ReturnToFocusedNote")}
+          label={t("InfoBar.ReturnToPresentedNote")}
           onClick={() => navigate(`note/${state.sharedNote}/stack`)}
         />
       )}
