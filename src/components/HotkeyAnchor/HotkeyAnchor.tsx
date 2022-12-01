@@ -70,8 +70,13 @@ export const HotkeyAnchor = () => {
   };
 
   const toggleModeration = () => {
-    if (state.moderation) dispatch(Actions.stopSharing());
-    else if (note.current) dispatch(Actions.shareNote(note.current));
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else {
+      dispatch(Actions.setFocusInitiator(state.currentUser));
+      if (note.current) dispatch(Actions.shareNote(note.current));
+    }
     dispatch(Actions.setModerating(!state.moderation));
   };
 
