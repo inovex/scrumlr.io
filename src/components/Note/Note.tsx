@@ -98,9 +98,17 @@ export const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
+  // TODO: replace with stack setting from state when implemented. thanks, love u <3
+  const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
+
   return (
     <div className={classNames("note__root")}>
-      <button className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
+      <button
+        className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
+        onClick={handleClick}
+        onKeyPress={handleKeyPress}
+        ref={noteRef}
+      >
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
