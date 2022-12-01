@@ -74,7 +74,7 @@ export const Note = (props: NoteProps) => {
         dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: note!.position.column, rank: 0}}));
       }
     },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}) && monitor.canDrop()}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
 
