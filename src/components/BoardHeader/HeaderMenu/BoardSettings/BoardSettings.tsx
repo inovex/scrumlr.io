@@ -44,7 +44,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
       >
         <input
           className="board-settings__board-name"
-          value={boardName}
+          value={boardName ?? ""}
           placeholder={DEFAULT_BOARD_NAME}
           disabled={!props.activeEditMode}
           onChange={(e) => setBoardName(e.target.value)}

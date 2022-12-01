@@ -97,12 +97,11 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       <div className="avatar-settings__settings-wrapper">
         <div className="avatar-settings__settings">
           {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
-            <>
+            <div key={label}>
               <SettingsAccordion
                 label={t(`Avatar.groups.${label}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
-                key={label}
                 headerClassName="avatar-settings__settings-group-header"
               >
                 <hr className="avatar-settings__settings-group-seperator" />
@@ -115,25 +114,24 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                         .some((val) => val);
 
                     return (
-                      <>
+                      <div key={element.key}>
                         <SettingsCarousel
                           carouselItems={element.values}
                           currentValue={properties[element.key]}
                           onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                          key={element.key}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
                           label={t(`Avatar.${element.key}.label`)}
                           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
                         />
                         {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                      </>
+                      </div>
                     );
                   })}
                 </div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
-            </>
+            </div>
           ))}
         </div>
       </div>

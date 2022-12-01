@@ -55,7 +55,7 @@ export const Participants = () => {
                       <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
                     )}
                   </SettingsButton>
-                  {state.others[index + 1] && <hr className="settings-dialog__separator" />}
+                  {state.others[index + 1] && <hr key={participant.user.id} className="settings-dialog__separator" />}
                 </>
               ))}
           </div>
