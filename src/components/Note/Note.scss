@@ -78,7 +78,7 @@ $note__author-image-size: 26px;
 }
 
 .note--isOver {
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(1.02);
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
@@ -86,7 +86,7 @@ $note__author-image-size: 26px;
 
   & ~ .note__in-stack {
     z-index: 0;
-    transform: translateY(8px);
+    transform: translateY(8px) scale(0.98);
   }
 }
 

@@ -7,7 +7,6 @@ import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
-import {ReactComponent as StackIcon} from "assets/icon-stack.svg";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
@@ -112,7 +111,6 @@ export const Note = (props: NoteProps) => {
           )}
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
-        {isOver && <StackIcon className="note__stack-icon" />}
       </button>
       {isStack && <div className="note__in-stack" />}
     </div>
