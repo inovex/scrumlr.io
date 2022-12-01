@@ -8,9 +8,10 @@ const CustomDragLayer = () => {
   const [size, setSize] = useState({width: 0, height: 0});
   const viewer = useAppSelector((state) => state.participants!.self);
 
-  const {isDragging, currentOffset, item} = useDragLayer((monitor: DragLayerMonitor) => ({
+  const {isDragging, currenSourceOffset, currentOffset, item} = useDragLayer((monitor: DragLayerMonitor) => ({
     item: monitor.getItem(),
-    currentOffset: monitor.getSourceClientOffset(),
+    currenSourceOffset: monitor.getSourceClientOffset(),
+    currentOffset: monitor.getClientOffset(),
     isDragging: monitor.isDragging(),
   }));
 
@@ -26,11 +27,14 @@ const CustomDragLayer = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return isDragging && currentOffset && item ? (
+  return isDragging && currenSourceOffset && currentOffset && item ? (
     <div className="board__custom-drag-layer">
       <div
         style={{
-          transform: `translate(${currentOffset.x}px, ${currentOffset.y}px)`,
+          /* workaround for bug where currentSourceClientOffset values are NaN on first drag on touch devices */
+          transform: `translate(
+            ${!Number.isNaN(currenSourceOffset.x) ? currenSourceOffset.x : currentOffset.x - size.width / 2}px,
+            ${!Number.isNaN(currenSourceOffset.y) ? currenSourceOffset.y : currentOffset.y - size.height / 2}px)`,
           position: "fixed",
           top: 0,
           left: 0,
