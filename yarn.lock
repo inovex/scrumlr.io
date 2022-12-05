@@ -1883,9 +1883,9 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@*", "@types/jest@^29.2.3":
-  version "29.2.3"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-29.2.3.tgz"
+"@types/jest@*", "@types/jest@^29.2.4":
+  version "29.2.4"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-29.2.4.tgz#9c155c4b81c9570dbd183eb8604aa0ae80ba5a5b"
   dependencies:
     expect "^29.0.0"
     pretty-format "^29.0.0"
@@ -3426,7 +3426,7 @@ decimal.js@^10.2.1:
   version "10.4.2"
   resolved "https://registry.npmjs.org/decimal.js/-/decimal.js-10.4.2.tgz"
 
-decode-uri-component@^0.2.1:
+decode-uri-component@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
 
@@ -3934,9 +3934,9 @@ eslint-plugin-jsx-a11y@6.6.1, eslint-plugin-jsx-a11y@^6.5.1:
     minimatch "^3.1.2"
     semver "^6.3.0"
 
-eslint-plugin-only-warn@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/eslint-plugin-only-warn/-/eslint-plugin-only-warn-1.0.3.tgz"
+eslint-plugin-only-warn@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-only-warn/-/eslint-plugin-only-warn-1.1.0.tgz#c6ddc37ddc4e72c121f07be565fcb7b6671fe78a"
 
 eslint-plugin-prettier@^4.2.1:
   version "4.2.1"
@@ -4012,9 +4012,9 @@ eslint-webpack-plugin@^3.1.1:
     normalize-path "^3.0.0"
     schema-utils "^4.0.0"
 
-eslint@8.28.0, eslint@^8.3.0:
-  version "8.28.0"
-  resolved "https://registry.npmjs.org/eslint/-/eslint-8.28.0.tgz"
+eslint@8.29.0, eslint@^8.3.0:
+  version "8.29.0"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-8.29.0.tgz#d74a88a20fb44d59c51851625bc4ee8d0ec43f87"
   dependencies:
     "@eslint/eslintrc" "^1.3.3"
     "@humanwhocodes/config-array" "^0.11.6"
@@ -4803,9 +4803,9 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^22.0.6:
-  version "22.0.6"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-22.0.6.tgz"
+i18next@^22.0.7:
+  version "22.0.7"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.0.7.tgz#c307c918ff1d0c304947d0cd11f89ae357d986e1"
   dependencies:
     "@babel/runtime" "^7.17.2"
 
@@ -5769,9 +5769,9 @@ lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.1.6.tgz"
 
-lint-staged@^13.0.4:
-  version "13.0.4"
-  resolved "https://registry.npmjs.org/lint-staged/-/lint-staged-13.0.4.tgz"
+lint-staged@^13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-13.1.0.tgz#d4c61aec939e789e489fa51987ec5207b50fd37e"
   dependencies:
     cli-truncate "^3.1.0"
     colorette "^2.0.19"
@@ -7040,11 +7040,11 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@^7.1.2:
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.2.tgz#5a3bf43013e102773c2f80bb5d8517997fe98267"
+query-string@^7.1.3:
+  version "7.1.3"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.3.tgz#a1cf90e994abb113a325804a972d98276fe02328"
   dependencies:
-    decode-uri-component "^0.2.1"
+    decode-uri-component "^0.2.2"
     filter-obj "^1.1.0"
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
