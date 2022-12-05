@@ -6,7 +6,7 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CloseIcon, ReactComponent as AbortIcon} from "assets/icon-close.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
@@ -125,9 +125,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           inputRef.current = ref!;
         }}
         onFocus={(e) => e.target.select()}
-        onBlur={(e) => {
-          handleEditColumnName((e.target as HTMLInputElement).value);
-        }}
       />
     );
 
@@ -155,7 +152,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             setColumnNameMode("VIEW");
           }}
         >
-          <AbortIcon className="column__header-edit-button-icon" />
+          <CloseIcon className="column__header-edit-button-icon" />
         </button>
       )}
       {!isTemporary && (
