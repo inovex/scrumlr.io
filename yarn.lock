@@ -4803,9 +4803,9 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^22.0.6:
-  version "22.0.6"
-  resolved "https://registry.npmjs.org/i18next/-/i18next-22.0.6.tgz"
+i18next@^22.0.7:
+  version "22.0.7"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.0.7.tgz#c307c918ff1d0c304947d0cd11f89ae357d986e1"
   dependencies:
     "@babel/runtime" "^7.17.2"
 
