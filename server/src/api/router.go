@@ -152,6 +152,8 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
+      r.With(s.BoardModeratorContext).Get("/moderation", s.getBoardModeration)
+
 			s.initBoardSessionRequestResources(r)
 			s.initBoardSessionResources(r)
 			s.initColumnResources(r)

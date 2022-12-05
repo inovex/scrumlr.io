@@ -13,7 +13,28 @@ import (
 type BoardSubscription struct {
 	subscription chan *realtime.BoardEvent
 	clients      map[uuid.UUID]*websocket.Conn
+	moderators   map[uuid.UUID]*websocket.Conn
 }
+
+func (s *Server) openModerationSocket(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value("Board").(uuid.UUID)
+	userId := r.Context().Value("User").(uuid.UUID)
+
+	_, err := s.upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		logger.FromRequest(r).Errorw("unable to upgrade websocket",
+			"err", err,
+			"board", boardId,
+			"user", userId)
+		return
+	}
+}
+
+
+
+
+
+
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value("Board").(uuid.UUID)

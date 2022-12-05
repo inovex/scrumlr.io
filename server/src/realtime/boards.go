@@ -9,6 +9,7 @@ import (
 )
 
 type BoardEventType string
+type BoardModerationEventType string
 
 const (
 	BoardEventInit                  BoardEventType = "INIT"
@@ -27,6 +28,9 @@ const (
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
+
+  // Create some events only receivable by moderators
+  BoardModerationEventInit        BoardModerationEventType = "MODERATION_INIT"
 )
 
 type BoardEvent struct {
@@ -48,6 +52,19 @@ func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
 	return c
 }
 
+func (b *Broker) GetBoardModerationChannel(boardId uuid.UUID) chan *BoardEvent {
+  c, err := b.con.SubscribeToBoardEvents(boardsModerationSubject(boardId))
+	if err != nil {
+		// TODO: Bubble up this error, so the caller can retry to establish this subscription
+		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
+	}
+	return c
+}
+
 func boardsSubject(boardID uuid.UUID) string {
 	return fmt.Sprintf("board.%s", boardID)
+}
+
+func boardsModerationSubject(boardId uuid.UUID) string {
+  return fmt.Sprintf("board.moderation.%s", boardId)
 }
