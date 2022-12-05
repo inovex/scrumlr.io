@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useAppSelector} from "store";
-import {Assignee} from "types/assignee";
+import {Assign} from "types/assign";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import "./Assigning.scss";
 import {Badge} from "components/Badge";
@@ -25,15 +25,15 @@ export const Assigning = (props: AssigningProps) => {
   const [userInput, setUserInput] = useState("");
 
   // People that are registered on the Board (connected or not)
-  const [onBoardParticipants, setOnBoardParticipants] = useState<Assignee[]>([
+  const [onBoardParticipants, setOnBoardParticipants] = useState<Assign[]>([
     {name: me.user.name, note: "", user: me.user},
     ...them.map((participant) => ({name: participant.user.name, note: "", user: participant.user})),
   ]);
   // All People
-  const [participants, setParticipants] = useState<Assignee[]>([]);
+  const [participants, setParticipants] = useState<Assign[]>([]);
 
   useEffect(() => {
-    setParticipants([...onBoardParticipants, {name: "debug don", note: "note"}]);
+    // setParticipants([...onBoardParticipants, {name: "debug don", note: "note"}]);
   }, [onBoardParticipants]);
 
   const toggleAssigneesList = () => {
@@ -41,7 +41,7 @@ export const Assigning = (props: AssigningProps) => {
     setShowList(!showList);
   };
 
-  const onSelectParticipant = (participant: Assignee) => {
+  const onSelectParticipant = (participant: Assign) => {
     const index = participants.indexOf(participant);
     const participantsCopy = [...participants];
     participantsCopy[index].note = participantsCopy[index].note === "" ? props.note : "";
@@ -50,7 +50,7 @@ export const Assigning = (props: AssigningProps) => {
 
   const handleAddExtern = () => {
     // TODO: add button to add participant(e.g for mobile)
-    setParticipants([...participants, {name: userInput, note: props.note}]);
+    // setParticipants([...participants, {use: userInput, note: props.note}]);
   };
 
   const deleteME = () => {
@@ -59,13 +59,13 @@ export const Assigning = (props: AssigningProps) => {
     setOnBoardParticipants([]);
   };
 
-  const drawSuggestions = (participant: Assignee) => (
-      <li className="participant">
-        <AssignAvatar participant={participant} caption />
-        <Badge text={participant.note !== "" ? "Assigned" : "Unassigned"} />
-        <input type="checkbox" checked={participant.note !== ""} onClick={() => onSelectParticipant(participant)} />
-      </li>
-    );
+  const drawSuggestions = (participant: Assign) => (
+    <li className="participant">
+      <AssignAvatar participant={participant} caption />
+      <Badge text={participant.note !== "" ? "Assigned" : "Unassigned"} />
+      <input type="checkbox" checked={participant.note !== ""} onClick={() => onSelectParticipant(participant)} />
+    </li>
+  );
 
   return (
     <div

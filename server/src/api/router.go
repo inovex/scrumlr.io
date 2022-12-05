@@ -24,13 +24,14 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards   services.Boards
-	votings  services.Votings
-	users    services.Users
-	notes    services.Notes
-	sessions services.BoardSessions
-	health   services.Health
-	feedback services.Feedback
+	boards     services.Boards
+	votings    services.Votings
+	assignings services.Assignings
+	users      services.Users
+	notes      services.Notes
+	sessions   services.BoardSessions
+	health     services.Health
+	feedback   services.Feedback
 
 	upgrader websocket.Upgrader
 
@@ -50,6 +51,7 @@ func New(
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
+	assign services.Assignings,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -90,6 +92,7 @@ func New(
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
+		assignings:                       assign,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -248,6 +251,17 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Put("/", s.updateNote)
 
 			r.Delete("/", s.deleteNote)
+			
+			s.initAssignResources(r)
 		})
+	})
+}
+
+func (s *Server) initAssignResources(r chi.Router) {
+	r.Route("/assigning", func(r chi.Router) {
+		//r.Use() ???
+		r.Post("/", s.addAssignee)
+		r.Delete("/", s.removeAssignee)
+		r.Get("/", s.getAssignings)
 	})
 }

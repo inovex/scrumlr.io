@@ -22,7 +22,8 @@ import {columnsReducer} from "./reducer/columns";
 import {viewReducer} from "./reducer/view";
 import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
-import {assigneeReducer} from "./reducer/assignee";
+import {assignReducer} from "./reducer/assign";
+import {passAssignMiddleware} from "./middleware/assign";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -43,6 +44,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
+    passAssignMiddleware(stateAPI, dispatch, action);
   }
 };
 
@@ -56,7 +58,7 @@ const rootReducer = combineReducers<ApplicationState>({
   votes: voteReducer,
   votings: votingReducer,
   view: viewReducer,
-  assignees: assigneeReducer,
+  assigned: assignReducer,
 });
 
 // Disable redux dev tools in production

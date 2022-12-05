@@ -1,15 +1,17 @@
-import {Avatar} from "components/Avatar";
-import {Assignee} from "types/assignee";
-import {ExternalAvatar} from "./ExternalAvatar";
+import {Assign} from "types/assign";
 
 export interface AssignAvatarProps {
-  participant: Assignee;
+  participant: Assign;
   caption?: boolean;
 }
 
 export const AssignAvatar = ({participant, caption = false}: AssignAvatarProps) => (
-    <figure className="participant__avatar-and-name" aria-roledescription="participant">
-      {participant.user ? <Avatar seed={participant.user.id} avatar={participant.user.avatar} className="assign-avatar" /> : <ExternalAvatar name={participant.name} />}
-      {caption && <figcaption className="participant__name">{participant.name}</figcaption>}
-    </figure>
-  );
+  <figure className="participant__avatar-and-name" aria-roledescription="participant">
+    {
+      // participant.user.id
+      // ? <Avatar seed={participant.user.id!} avatar={participant.user.avatar!} className="assign-avatar" />
+      // : <ExternalAvatar name={participant.user.name} />
+    }
+    {caption && <figcaption className="participant__name">{participant.name}</figcaption>}
+  </figure>
+);

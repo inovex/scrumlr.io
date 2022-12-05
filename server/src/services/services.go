@@ -38,7 +38,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
-	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, error)
+	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assign, error)
 }
 
 type BoardSessions interface {
@@ -82,4 +82,10 @@ type Votings interface {
 type Health interface {
 	IsDatabaseHealthy() bool
 	IsRealtimeHealthy() bool
+}
+
+type Assignings interface{
+	AddAssign(ctx context.Context, req dto.AssignRequest) (*dto.Assign, error)
+	RemoveAssign(ctx context.Context, req dto.AssignRequest) error
+	GetAssignings(ctx context.Context, f filter.AssignFilter) ([]*dto.Assign, error)
 }
