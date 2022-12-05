@@ -39,6 +39,7 @@ export const StackView = () => {
   const columns = useAppSelector((state) => state.columns, _.isEqual);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -52,7 +53,9 @@ export const StackView = () => {
   );
   const column = columns.find((c) => c.id === note?.position.column);
   const prevColumnParent = useAppSelector((state) => {
-    const prevColumns = state.columns.filter((c) => c.index < column!.index).reverse();
+    // the last stack in the previous column
+    let prevColumns = state.columns.filter((c) => c.index < column!.index).reverse(); // get all columns before current column, in descending order
+    if (viewer.role === "PARTICIPANT") prevColumns = prevColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let prevStack;
     while (prevColumns.length > 0 && !prevStack) {
       prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
@@ -61,7 +64,9 @@ export const StackView = () => {
     return prevStack?.id;
   });
   const nextColumnParent = useAppSelector((state) => {
-    const nextColumns = state.columns.slice(column!.index + 1);
+    // the first stack in the next column
+    let nextColumns = state.columns.slice(column!.index + 1); // get all columns after current column, in ascending order
+    if (viewer.role === "PARTICIPANT") nextColumns = nextColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let nextStack;
     while (nextColumns.length > 0 && !nextStack) {
       nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
@@ -72,15 +77,14 @@ export const StackView = () => {
   const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
-  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
   const [transitionConfig, setTransitionConfig] = useState({
-    from: {transform: "translate(0%)", position: "absolute", opacity: 0},
-    enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+    from: {transform: "translateX(0%)", position: "relative", opacity: 0},
+    enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
     leave: {
-      transform: "translate(0%)",
-      position: "absolute",
+      transform: "translateX(0%)",
+      position: "relative",
       opacity: 0,
     },
     items: {
@@ -104,10 +108,10 @@ export const StackView = () => {
       setTransitionConfig({
         from: {
           transform: getTransform("start", direction),
-          position: "absolute",
+          position: "relative",
           opacity: 0,
         },
-        enter: {transform: "translate(0%)", position: "relative", opacity: 1},
+        enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
         leave: {
           transform: getTransform("end", direction),
           position: "absolute",
