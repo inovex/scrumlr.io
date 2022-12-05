@@ -49,7 +49,7 @@ export const ProfileSettings = () => {
             >
               <Toggle active={state.hotkeysAreActive} />
             </SettingsButton>
-            <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
+            <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.png`} target="_blank" rel="noopener noreferrer">
               <p>{t("Hotkeys.cheatSheet")}</p>
               <InfoIcon />
             </a>
