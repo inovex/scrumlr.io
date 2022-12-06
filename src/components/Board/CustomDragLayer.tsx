@@ -28,6 +28,7 @@ const CustomDragLayer = () => {
   }, []);
 
   if (isDragging && size.width === 0 && size.height === 0) {
+    // initialize dimensions again, if they weren't properly setup in useEffect call
     handleResize();
   }
 
