@@ -27,6 +27,10 @@ const CustomDragLayer = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (isDragging && size.width === 0 && size.height === 0) {
+    handleResize();
+  }
+
   return isDragging && currenSourceOffset && currentOffset && item ? (
     <div className="board__custom-drag-layer">
       <div
