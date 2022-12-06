@@ -215,7 +215,7 @@ exports[`MenuBars should match snapshot 1`] = `
               <span
                 class="tooltip-button__hotkey"
               >
-                 [F]
+                 [P]
               </span>
             </span>
           </div>

@@ -1,6 +1,6 @@
 export const hotkeyMap = {
   TOGGLE_HOTKEYS: "shift+?, shift+ß",
-  TOGGLE_MODERATION: "f",
+  TOGGLE_MODERATION: "p",
   TOGGLE_READY_STATE: "d",
   TOGGLE_RAISED_HAND: "h",
   SHOW_TIMER_MENU: "t",
