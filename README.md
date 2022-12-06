@@ -183,7 +183,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/731608?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/cdreier)
 [<img src="https://avatars.githubusercontent.com/u/3976183?s=36&v=4" width="36" height="36" alt="dotcs">](https://github.com/dotcs)
 [<img src="https://avatars.githubusercontent.com/u/32651718?s=36&amp;v=4" width="36" height="36" alt="timengel">](https://github.com/timengel)
-[<img src="https://avatars.githubusercontent.com/u/68269653?s=48&amp;v=4" width="48" height="48" alt="louiskroener">](https://github.com/louiskroener)
+[<img src="https://avatars.githubusercontent.com/u/68269653?s=36&amp;v=4" width="36" height="36" alt="louiskroener">](https://github.com/louiskroener)
 
 ... and many more!
 
