@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./TooltipButton.scss";
+import {Icon} from "components/Icon";
 
 type TooltipButtonProps = {
   direction?: "left" | "right";
@@ -13,10 +13,7 @@ type TooltipButtonProps = {
   hotkeyKey?: string;
 };
 
-export const TooltipButton = (props: TooltipButtonProps) => {
-  const Icon = props.icon;
-
-  return (
+export const TooltipButton = (props: TooltipButtonProps) => (
     <button
       disabled={props.disabled}
       className={classNames("tooltip-button", `tooltip-button--${props.direction ?? "right"}`, {"tooltip-button--active": props.active}, props.className)}
@@ -29,8 +26,6 @@ export const TooltipButton = (props: TooltipButtonProps) => {
           {props.hotkeyKey !== undefined && <span className="tooltip-button__hotkey">{` [${props.hotkeyKey}]`}</span>}
         </span>
       </div>
-      <Icon className="tooltip-button__icon" aria-hidden />
-      <CloseIcon className="tooltip-button__icon" aria-hidden />
+      <Icon name="ic_focus" className="tooltip-button__icon" aria-hidden />
     </button>
   );
-};

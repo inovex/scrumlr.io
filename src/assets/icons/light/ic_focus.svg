@@ -1,0 +1,10 @@
+<svg id="ic_focus" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)" opacity="0.3"/>
+  <g id="ic" transform="translate(5.363 6)">
+    <path id="Pfad_42" data-name="Pfad 42" d="M5,0,0,4.989" transform="translate(10.112 7.477)" fill="none" stroke="#333948" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="Pfad_43" data-name="Pfad 43" d="M0,0H2.989L3,.011V3" transform="translate(12.112 7.466)" fill="none" stroke="#333948" stroke-linecap="square" stroke-width="1.5"/>
+    <path id="Pfad_44" data-name="Pfad 44" d="M0,1.974A1.821,1.821,0,0,1,1.6,0H17.4A1.821,1.821,0,0,1,19,1.974V14.026A1.821,1.821,0,0,1,17.4,16H1.6A1.821,1.821,0,0,1,0,14.026Z" transform="translate(0 3.554)" fill="none" stroke="#333948" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="Pfad_45" data-name="Pfad 45" d="M0,.614,13.848.386" transform="translate(2.612 15.852)" fill="none" stroke="rgba(51,57,72,0.5)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    <path id="Pfad_46" data-name="Pfad 46" d="M.482,0h.931C3.66,0,6.482,2.751,6.482,4.912V6.427" transform="translate(16.156)" fill="none" stroke="rgba(51,57,72,0.5)" stroke-width="1.5"/>
+  </g>
+</svg>
