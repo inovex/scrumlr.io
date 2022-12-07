@@ -27,6 +27,11 @@ const CustomDragLayer = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (isDragging && size.width === 0 && size.height === 0) {
+    // initialize dimensions again, if they weren't properly setup in useEffect call
+    handleResize();
+  }
+
   return isDragging && currenSourceOffset && currentOffset && item ? (
     <div className="board__custom-drag-layer">
       <div
