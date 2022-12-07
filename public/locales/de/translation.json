@@ -251,6 +251,9 @@
   "Note": {
     "me": "Ich"
   },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
+  },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"
   },

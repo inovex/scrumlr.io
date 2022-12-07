@@ -250,6 +250,9 @@
   "Note": {
     "me": "Me"
   },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
+  },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
   },

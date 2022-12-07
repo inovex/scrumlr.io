@@ -51,7 +51,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
               onDelete(props.noteId);
               props.onDeleteOfParent();
             }}
-            label={t("NoteDialogDeleteNoteButton.title")}
+            label={props.showUnstackButton ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
             icon={DeleteIcon}
           />
         </li>
