@@ -9,7 +9,8 @@ import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 
 type NoteDialogNoteOptionsProps = {
-  showUnstackButton: boolean;
+  isStackedNote: boolean;
+  hasStackedNotes?: boolean;
   noteId: string;
   authorId: string;
   onDeleteOfParent: () => void;
@@ -32,7 +33,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
   const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";
   return (
     <ul className="note-dialog__note-options">
-      {props.showUnstackButton && (
+      {props.isStackedNote && (
         <li className="note-dialog__note-option">
           <TooltipButton
             onClick={() => {
@@ -51,7 +52,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
               onDelete(props.noteId);
               props.onDeleteOfParent();
             }}
-            label={t("NoteDialogDeleteNoteButton.title")}
+            label={props.isStackedNote || !props.hasStackedNotes ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
             icon={DeleteIcon}
           />
         </li>
