@@ -5,6 +5,8 @@ import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./StackNavigation.scss";
 import {StackNavigationDots} from "./Dots/StackNavigationDots";
+import {ApplicationState} from "../../types";
+import {useAppSelector} from "../../store";
 
 interface StackNavigationProps {
   stacks: Note[];
@@ -15,6 +17,8 @@ interface StackNavigationProps {
 }
 
 export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, handleModeration}: StackNavigationProps) => {
+  const noteFocus = useAppSelector((s: ApplicationState) => s.view.noteFocused);
+
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);
 
@@ -34,12 +38,14 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-      event.preventDefault();
-      handleNavigation(currentIndex - 1);
-    } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-      event.preventDefault();
-      handleNavigation(currentIndex + 1);
+    if (!noteFocus) {
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        event.preventDefault();
+        handleNavigation(currentIndex - 1);
+      } else if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        event.preventDefault();
+        handleNavigation(currentIndex + 1);
+      }
     }
   };
 
