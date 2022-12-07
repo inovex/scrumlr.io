@@ -7246,9 +7246,9 @@ react-hotkeys-hook@^4.0.4:
   version "4.0.4"
   resolved "https://registry.npmjs.org/react-hotkeys-hook/-/react-hotkeys-hook-4.0.4.tgz"
 
-react-i18next@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.npmjs.org/react-i18next/-/react-i18next-12.0.0.tgz"
+react-i18next@^12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-12.1.1.tgz#2626cdbfe6bcb76ef833861c0184a5c4e5e3c089"
   dependencies:
     "@babel/runtime" "^7.14.5"
     html-parse-stringify "^3.0.1"
