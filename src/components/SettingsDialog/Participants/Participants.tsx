@@ -19,19 +19,37 @@ export const Participants = () => {
     status: "OFFLINE" | "ONLINE" | "ALL";
     role: ParticipantRole | "ALL";
   };
-  const [filter] = useState<ParticipantsFilter>({name: "", status: "ALL", role: "ALL"});
-  const nameFilter = (participant: Participant): boolean => filter.name
+  const [filter, setFilter] = useState<ParticipantsFilter>({name: "", status: "ALL", role: "ALL"});
+  const nameFilter = (participant: Participant): boolean =>
+    filter.name.length < 3 ||
+    filter.name
       .toLowerCase()
       .split(" ")
-      .every((s) => participant.user.name.includes(s));
-  const statusFilter = (participant: Participant): boolean => filter.status === "ALL" || participant.connected ? filter.status === "ONLINE" : filter.status === "OFFLINE";
-  const roleFilter = (participant: Participant): boolean => filter.status === "ALL" || participant.role === filter.role;
+      .every((substr) => participant.user.name.toLowerCase().includes(substr));
+  const statusFilter = (participant: Participant): boolean =>
+    filter.status === "ALL" || (filter.status === "ONLINE" && participant.connected) || (filter.status === "OFFLINE" && !participant.connected);
+  const roleFilter = (participant: Participant): boolean => filter.role === "ALL" || participant.role === filter.role;
   const filterFunctions = (participant: Participant) => _.every([nameFilter(participant), statusFilter(participant), roleFilter(participant)]);
 
-  const state = useAppSelector((applicationState) => ({
-    me: applicationState.participants!.self,
-    others: applicationState.participants!.others,
-  }));
+  const participants: Participant[] = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
+  const isModerator: boolean = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+
+  const renderFilterOptions = () => (
+    <div>
+      <input aria-label="Name Filter" placeholder="Name" onChange={(e) => setFilter((filter) => ({...filter, name: e.target.value}))} />
+      <select name="status" value={filter.status} onChange={(e) => setFilter((filter) => ({...filter, status: e.target.value as typeof filter.status}))}>
+        <option value="ALL">All</option>
+        <option value="ONLINE">Online</option>
+        <option value="OFFLINE">Offline</option>
+      </select>
+      <select name="role" value={filter.role} onChange={(e) => setFilter((filter) => ({...filter, role: e.target.value as typeof filter.role}))}>
+        <option value="ALL">All</option>
+        <option value="PARTICIPANT">Participant</option>
+        <option value="MODERATOR">Moderator</option>
+        <option value="OWNER">Owner</option>
+      </select>
+    </div>
+  );
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__poker-purple")}>
@@ -39,44 +57,27 @@ export const Participants = () => {
         <h2 className="settings-dialog__header-text"> {t("SettingsDialog.Participants")}</h2>
       </header>
 
+      {renderFilterOptions()}
+
       <div className="participants__container">
         <div className="participants__user-list-wrapper">
           <div className="participants__user-list">
-            <SettingsButton className="participants__user" disabled>
-              <div className="participants__user_avatar-name-wrapper">
-                <Avatar className="participants__user_avatar" avatar={state.me.user.avatar} seed={state.me.user.id} />
-                <span className="participants__user-name">
-                  {state.me.user.name} {state.me.role === "OWNER" && `(${t("Participants.Owner")})`}
-                </span>
-                <div className={state.me.connected ? "participants__online-mark" : "participants__offline-mark"} />
-              </div>
-              {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <Toggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} disabled />}
-            </SettingsButton>
-            {state.others.length > 0 && <hr className="settings-dialog__separator" />}
-            {state.others.length > 0 &&
-              state.others
-                .filter((participant) => filterFunctions(participant))
-                .map((participant, index) => (
-                  <>
-                    <SettingsButton
-                      className="participants__user"
-                      disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
-                      onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
-                    >
-                      <div className="participants__user_avatar-name-wrapper">
-                        <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
-                        <span className="participants__user-name">
-                          {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
-                        </span>
-                        <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
-                      </div>
-                      {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && (
-                        <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
-                      )}
-                    </SettingsButton>
-                    {state.others[index + 1] && <hr className="settings-dialog__separator" />}
-                  </>
-                ))}
+            {participants.filter(filterFunctions).map((participant) => (
+              <SettingsButton
+                className="participants__user"
+                disabled={!isModerator || participant.role === "OWNER"}
+                onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
+              >
+                <div className="participants__user_avatar-name-wrapper">
+                  <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
+                  <span className="participants__user-name">
+                    {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
+                  </span>
+                  <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
+                </div>
+                {isModerator && <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />}
+              </SettingsButton>
+            ))}
           </div>
         </div>
       </div>
