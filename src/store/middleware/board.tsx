@@ -39,6 +39,15 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
         if (message.type === "INIT") {
           const {board, columns, participants, notes, votes, votings, requests} = message.data;
+
+          if (
+            participants.find((participant) => participant.user.id === action.context.user)?.role === "MODERATOR" ||
+            participants.find((participant) => participant.user.id === action.context.user)?.role === "OWNER"
+          ) {
+            console.log("BOARD INIT USER IS MODERATOR");
+            stateAPI.dispatch(Actions.joinModeration(action.boardId));
+          }
+
           store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || []));
         }
 

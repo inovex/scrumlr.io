@@ -16,26 +16,6 @@ type BoardSubscription struct {
 	moderators   map[uuid.UUID]*websocket.Conn
 }
 
-func (s *Server) openModerationSocket(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value("Board").(uuid.UUID)
-	userId := r.Context().Value("User").(uuid.UUID)
-
-	_, err := s.upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		logger.FromRequest(r).Errorw("unable to upgrade websocket",
-			"err", err,
-			"board", boardId,
-			"user", userId)
-		return
-	}
-}
-
-
-
-
-
-
-
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value("Board").(uuid.UUID)
 	userID := r.Context().Value("User").(uuid.UUID)
@@ -110,10 +90,58 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (s *Server) openModerationSocket(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value("Board").(uuid.UUID)
+	userId := r.Context().Value("User").(uuid.UUID)
+
+	conn, err := s.upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		logger.FromRequest(r).Errorw("unable to upgrade websocket",
+			"err", err,
+			"board", boardId,
+			"user", userId)
+		return
+	}
+	err = conn.WriteJSON(struct {
+    Type realtime.ModerationEventType `json:"type"`
+    Data interface{} `json:"data"`
+  }{
+    Type: realtime.ModerationEventInit,
+  })
+
+	if err != nil {
+		logger.Get().Errorw("failed to send init message")
+		s.closeBoardSocket(boardId, userId, conn)
+		return
+	}
+
+	defer s.closeBoardSocket(boardId, boardId, conn)
+
+	s.listenOnModeration(boardId, userId, conn)
+
+	for {
+		_, message, err := conn.ReadMessage()
+		if err != nil {
+			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
+				logger.Get().Debugw("websocket to user no longer available, about to disconnect", "user", userId)
+				delete(s.boardSubscriptions[boardId].moderators, userId)
+			}
+			break
+		}
+		logger.Get().Debugw("received message", "message", message)
+	}
+}
+
+
+
+
+
+
 func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
+			moderators: make(map[uuid.UUID]*websocket.Conn),
 		}
 	}
 
@@ -127,12 +155,50 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) 
 	}
 }
 
+func (s *Server) listenOnModeration(boardID, userID uuid.UUID, conn *websocket.Conn) {
+	if _, exist := s.boardSubscriptions[boardID]; !exist {
+		s.boardSubscriptions[boardID] = &BoardSubscription{
+			clients: make(map[uuid.UUID]*websocket.Conn),
+			moderators: make(map[uuid.UUID]*websocket.Conn),
+		}
+	}
+
+	b := s.boardSubscriptions[boardID]
+	b.moderators[userID] = conn
+
+	// if not already done, start listening to moderation changes
+	if b.subscription == nil {
+		b.subscription = s.realtime.GetBoardModerationChannel(boardID)
+		go b.startListeningOnBoard()
+	}
+}
+
+
+
+
+
+
 func (b *BoardSubscription) startListeningOnBoard() {
 	for {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
 			for _, conn := range b.clients {
+				err := conn.WriteJSON(msg)
+				if err != nil {
+					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
+				}
+			}
+		}
+	}
+}
+
+func (b *BoardSubscription) startListeningOnModeration() {
+	for {
+		select {
+		case msg := <-b.subscription:
+			logger.Get().Debugw("message received", "message", msg)
+			for _, conn := range b.moderators {
 				err := conn.WriteJSON(msg)
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", msg, "err", err)

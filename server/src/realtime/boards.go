@@ -9,7 +9,7 @@ import (
 )
 
 type BoardEventType string
-type BoardModerationEventType string
+type ModerationEventType string
 
 const (
 	BoardEventInit                  BoardEventType = "INIT"
@@ -30,7 +30,8 @@ const (
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
 
   // Create some events only receivable by moderators
-  BoardModerationEventInit        BoardModerationEventType = "MODERATION_INIT"
+  ModerationEventInit        ModerationEventType = "MODERATION_INIT"
+  ModerationEventVotesUpdated ModerationEventType = "MODERATION_VOTES_UPDATED"
 )
 
 type BoardEvent struct {
@@ -38,9 +39,19 @@ type BoardEvent struct {
 	Data interface{}    `json:"data,omitempty"`
 }
 
+type ModerationEvent struct {
+  Type ModerationEventType `json:"type"`
+  Data interface{} `json:"data,omitempty"`
+}
+
 func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
 	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
 	return b.con.Publish(boardsSubject(boardID), msg)
+}
+
+func (b *Broker) BroadcastToModeration(boardID uuid.UUID, msg ModerationEvent) error {
+	logger.Get().Debugw("broadcasting to moderation", "board", boardID, "msg", msg.Type)
+	return b.con.Publish(boardsModerationSubject(boardID), msg)
 }
 
 func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {

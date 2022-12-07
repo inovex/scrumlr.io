@@ -4,10 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
 )
 
 func (s *VotingService) AddVote(ctx context.Context, body dto.VoteRequest) (*dto.Vote, error) {
@@ -31,4 +34,13 @@ func (s *VotingService) GetVotes(_ context.Context, f filter.VoteFilter) ([]*dto
 	votes, err := s.database.GetVotes(f)
 	return dto.Votes(votes), err
 
+}
+
+func (s *VotingService) UpdatedVotes(board uuid.UUID) {
+  err := s.realtime.BroadcastToModeration(board, realtime.ModerationEvent{
+    Type: realtime.ModerationEventVotesUpdated,
+  })
+  if err != nil {
+    logger.Get().Errorw("unable to broadcast updated votes", "err", err)
+  }
 }

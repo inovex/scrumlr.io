@@ -60,29 +60,6 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-func (s *Server) getBoardModeration(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	boardId := r.Context().Value("Board").(uuid.UUID)
-
-	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
-		s.openBoardSocket(w, r)
-		return
-	}
-
-	board, err := s.boards.Get(r.Context(), boardId)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			common.Throw(w, r, common.NotFoundError)
-			return
-		}
-		log.Errorw("unable to access board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
-		return
-	}
-
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, board)
-}
 
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
@@ -107,6 +84,14 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, board)
+}
+
+func (s *Server) getBoardModeration(w http.ResponseWriter, r *http.Request) {
+	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
+		s.openModerationSocket(w, r)
+		return
+	}
+	render.Status(r, http.StatusOK)
 }
 
 // JoinBoardRequest represents the request to create a new participant of a board.

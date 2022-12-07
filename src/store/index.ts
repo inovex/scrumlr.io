@@ -22,6 +22,7 @@ import {columnsReducer} from "./reducer/columns";
 import {viewReducer} from "./reducer/view";
 import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
+import {passModerationMiddleware} from "./middleware/moderation";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -42,6 +43,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passNoteMiddleware(stateAPI, dispatch, action);
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
+    passModerationMiddleware(stateAPI, dispatch, action);
   }
 };
 
