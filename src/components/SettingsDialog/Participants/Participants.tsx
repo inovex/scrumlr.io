@@ -4,12 +4,29 @@ import {Actions} from "store/action";
 import {Toggle} from "components/Toggle";
 import {Avatar} from "components/Avatar";
 import {useTranslation} from "react-i18next";
-import {SettingsButton} from "../Components/SettingsButton";
 import "./Participants.scss";
 import "../SettingsDialog.scss";
+import {Participant, ParticipantRole} from "types/participant";
+import _ from "underscore";
+import {useState} from "react";
+import {SettingsButton} from "../Components/SettingsButton";
 
 export const Participants = () => {
   const {t} = useTranslation();
+
+  type ParticipantsFilter = {
+    name: string;
+    status: "OFFLINE" | "ONLINE" | "ALL";
+    role: ParticipantRole | "ALL";
+  };
+  const [filter] = useState<ParticipantsFilter>({name: "", status: "ALL", role: "ALL"});
+  const nameFilter = (participant: Participant): boolean => filter.name
+      .toLowerCase()
+      .split(" ")
+      .every((s) => participant.user.name.includes(s));
+  const statusFilter = (participant: Participant): boolean => filter.status === "ALL" || participant.connected ? filter.status === "ONLINE" : filter.status === "OFFLINE";
+  const roleFilter = (participant: Participant): boolean => filter.status === "ALL" || participant.role === filter.role;
+  const filterFunctions = (participant: Participant) => _.every([nameFilter(participant), statusFilter(participant), roleFilter(participant)]);
 
   const state = useAppSelector((applicationState) => ({
     me: applicationState.participants!.self,
@@ -37,27 +54,29 @@ export const Participants = () => {
             </SettingsButton>
             {state.others.length > 0 && <hr className="settings-dialog__separator" />}
             {state.others.length > 0 &&
-              state.others.map((participant, index) => (
-                <>
-                  <SettingsButton
-                    className="participants__user"
-                    disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
-                    onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
-                  >
-                    <div className="participants__user_avatar-name-wrapper">
-                      <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
-                      <span className="participants__user-name">
-                        {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
-                      </span>
-                      <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
-                    </div>
-                    {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && (
-                      <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
-                    )}
-                  </SettingsButton>
-                  {state.others[index + 1] && <hr className="settings-dialog__separator" />}
-                </>
-              ))}
+              state.others
+                .filter((participant) => filterFunctions(participant))
+                .map((participant, index) => (
+                  <>
+                    <SettingsButton
+                      className="participants__user"
+                      disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
+                      onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
+                    >
+                      <div className="participants__user_avatar-name-wrapper">
+                        <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
+                        <span className="participants__user-name">
+                          {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
+                        </span>
+                        <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
+                      </div>
+                      {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && (
+                        <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
+                      )}
+                    </SettingsButton>
+                    {state.others[index + 1] && <hr className="settings-dialog__separator" />}
+                  </>
+                ))}
           </div>
         </div>
       </div>
