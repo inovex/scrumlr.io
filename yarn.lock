@@ -7086,11 +7086,11 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rdndmb-html5-to-touch@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/rdndmb-html5-to-touch/-/rdndmb-html5-to-touch-7.1.0.tgz"
+rdndmb-html5-to-touch@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/rdndmb-html5-to-touch/-/rdndmb-html5-to-touch-7.1.2.tgz#df404dfc525f445be0941fe1f6d7b429f97cfcef"
   dependencies:
-    dnd-multi-backend "^7.1.0"
+    dnd-multi-backend "^7.1.2"
     react-dnd-html5-backend "12.1.1 - 15.1.2"
     react-dnd-touch-backend "12.0.0 - 15.1.2"
 
