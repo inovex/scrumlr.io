@@ -1,8 +1,0 @@
-<svg id="ic_raisehand" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
-  <path id="Pfad_3522" data-name="Pfad 3522" d="M7,7A7,7,0,0,0,0,0" transform="translate(18.883 4.273)" fill="none" stroke="rgba(51,57,72,0.5)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <g id="Gruppe_3853" data-name="Gruppe 3853">
-    <path id="Pfad_3520" data-name="Pfad 3520" d="M3.459,7.773.123,1.788A1.336,1.336,0,0,1,.058.839,1.207,1.207,0,0,1,.632.122a1.089,1.089,0,0,1,1.5.555L3.4,2.9" transform="translate(8.887 12.023) rotate(30)" fill="none" stroke="#333948" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    <path id="Pfad_3521" data-name="Pfad 3521" d="M.471,11.611,0,1.9A1.281,1.281,0,0,1,1.295.633,1.281,1.281,0,0,1,2.59,1.9l.471,5.467.5-6.1a1.3,1.3,0,0,1,2.59,0L5.651,8,6.8,2.533a1.3,1.3,0,0,1,2.59,0l-1.147,6.1.826-2.808c.291-.633.583-1.267,1.295-1.267s1.457.6,1.295,1.267l-.826,5.025L10.244,13.9C9.8,16.314,7.5,18.237,5.709,18.237a18.222,18.222,0,0,1-2.421-.1A3.286,3.286,0,0,1,.5,16.614" transform="translate(15.885 6.093) rotate(30)" fill="none" stroke="#333948" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  </g>
-</svg>

@@ -1,5 +1,0 @@
-<svg id="ic_check" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
-  <path id="Path_2" data-name="Path 2" d="M0,4.376,2.892,7.2,10.086,0" transform="translate(11.463 15.801)" fill="none" stroke="rgba(51,57,72,0.5)" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5"/>
-  <path id="Path" d="M13.191,1.411A8.5,8.5,0,1,0,17,8.5a8.578,8.578,0,0,0-.076-1.141" transform="translate(7 11.242)" fill="none" stroke="#333948" stroke-miterlimit="10" stroke-width="1.5"/>
-</svg>
