@@ -1,9 +1,1 @@
-<svg id="ic_timer" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)" opacity="0.3"/>
-  <g id="ic" transform="translate(8 6)">
-    <path id="Pfad_32" data-name="Pfad 32" d="M11.329.482a8.508,8.508,0,1,0,3.38,2.213l1.139-1.019.685-.613" transform="translate(0 3.5)" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width="1.5"/>
-    <path id="Pfad_33" data-name="Pfad 33" d="M11.648.6A10.538,10.538,0,0,0,8.5,0a8.5,8.5,0,1,0,6.209,2.695" transform="translate(0 3.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-    <path id="Pfad_34" data-name="Pfad 34" d="M0,1.039V1A1.107,1.107,0,0,1,1.19,0h3.57a1.107,1.107,0,0,1,1.19,1v.081" transform="translate(5.5)" fill="none" stroke="rgba(255,255,255,0.5)" stroke-linecap="square" stroke-width="1.5"/>
-    <path id="Pfad_35" data-name="Pfad 35" d="M.5,4.748V0" transform="translate(8 8)" fill="none" stroke="rgba(255,255,255,0.5)" stroke-linecap="round" stroke-width="1.5"/>
-  </g>
-</svg>
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke-width="1.5"><path stroke="#fff" stroke-linejoin="round" d="M19.329 9.982a8.508 8.508 0 103.38 2.213l1.139-1.019.685-.613"/><path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" d="M19.648 10.1a10.538 10.538 0 00-3.148-.6 8.5 8.5 0 106.209 2.695"/><path stroke="rgba(255,255,255,0.5)" stroke-linecap="square" d="M13.5 7.039V7a1.107 1.107 0 011.19-1h3.57a1.107 1.107 0 011.19 1v.081"/><path stroke="rgba(255,255,255,0.5)" stroke-linecap="round" d="M16.5 18.748V14"/></g></svg>

@@ -34,7 +34,6 @@ $tooltip-button-size: 42px;
 
   .tooltip-button__icon {
     background-color: $menu-icon-background-color--dark;
-    color: $color-white;
   }
 }
 
@@ -81,12 +80,10 @@ $tooltip-button-size: 42px;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
-  left: 0;
+  right: 0;
   width: $tooltip-button-size;
   height: $tooltip-button-size;
   border-radius: $tooltip-button-size;
-  fill: var(--accent-color);
-  color: var(--accent-color, $color-black);
 
   &:nth-of-type(1) {
     visibility: visible;
@@ -204,8 +201,6 @@ $tooltip-button-size: 42px;
 
   .tooltip-button__icon {
     background: $menu-icon-background-color--dark;
-    color: var(--accent-color, $color-white);
-    fill: var(--accent-color--dark);
   }
 
   .tooltip-button__tooltip-text {
@@ -215,6 +210,5 @@ $tooltip-button-size: 42px;
 
   .tooltip-button--active .tooltip-button__icon {
     background-color: $menu-icon-background-color--light;
-    color: $color-black;
   }
 }
