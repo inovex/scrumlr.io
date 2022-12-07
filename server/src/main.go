@@ -19,7 +19,6 @@ import (
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
-	"scrumlr.io/server/services/assign"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 
@@ -245,7 +244,6 @@ func run(c *cli.Context) error {
 	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection)
 	noteService := notes.NewNoteService(dbConnection, rt)
-	assignService := assign.NewAssignService(dbConnection, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 
@@ -260,7 +258,6 @@ func run(c *cli.Context) error {
 		boardSessionService,
 		healthService,
 		feedbackService,
-		assignService,
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 	)

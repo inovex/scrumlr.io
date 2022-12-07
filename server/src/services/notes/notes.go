@@ -86,6 +86,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 		Board:    body.Board,
 		Text:     body.Text,
 		Position: positionUpdate,
+		Assignee: body.Assignee,
 	})
 	if err != nil {
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
