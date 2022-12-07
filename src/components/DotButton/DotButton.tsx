@@ -8,6 +8,7 @@ type DotButtonProps = {
   onClick?: () => void;
   children?: ReactElement | ReactElement[];
   title?: string;
+  onAnimationEnd?: () => void;
 };
 
 export const DotButton = (props: DotButtonProps) => (
@@ -19,6 +20,7 @@ export const DotButton = (props: DotButtonProps) => (
       props.onClick?.();
     }}
     title={props.title}
+    onAnimationEnd={props.onAnimationEnd}
   >
     {props.children}
   </button>
