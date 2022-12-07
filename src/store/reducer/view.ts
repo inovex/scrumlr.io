@@ -50,7 +50,7 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
     }
 
     case Action.UpdatedParticipant: {
-      if (action.participant.user.id === action.context.user && action.participant.role === "PARTICIPANT" && state.moderating === true) {
+      if (action.participant.user.id === action.context.user && action.participant.role === "PARTICIPANT" && state.moderating) {
         return {
           ...state,
           moderating: INITIAL_VIEW_STATE.moderating,
@@ -63,6 +63,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       return {
         ...state,
         hotkeysAreActive: action.active,
+      };
+    }
+
+    case Action.SetTheme: {
+      return {
+        ...state,
+        theme: action.theme,
       };
     }
 

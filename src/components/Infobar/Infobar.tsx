@@ -6,7 +6,6 @@ import ReactDOM from "react-dom";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
-import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import "./Infobar.scss";
 
 export const InfoBar = () => {
@@ -33,7 +32,8 @@ export const InfoBar = () => {
       {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
         <TooltipButton
           className="info-bar__return-to-presented-note-button"
-          icon={ShareIcon}
+          // TODO share icon here
+          icon="ic_focus"
           direction="right"
           label={t("InfoBar.ReturnToPresentedNote")}
           onClick={() => navigate(`note/${state.sharedNote}/stack`)}

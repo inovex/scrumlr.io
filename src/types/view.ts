@@ -13,6 +13,8 @@ export interface View {
 
   readonly language?: string;
 
+  readonly theme?: "light" | "dark";
+
   readonly route?: string;
 
   readonly hotkeysAreActive: boolean;

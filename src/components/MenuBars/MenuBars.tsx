@@ -4,12 +4,6 @@ import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
-import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
-import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
@@ -104,7 +98,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 direction="right"
                 onClick={toggleReadyState}
                 label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                icon={CheckIcon}
+                icon="ic_check"
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
               />
@@ -113,14 +107,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               <TooltipButton
                 direction="right"
                 label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                icon={RaiseHand}
+                icon="ic_raisehand"
                 onClick={toggleRaiseHand}
                 active={raisedHand}
                 hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
               />
             </li>
             <li>
-              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
+              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon="ic_settings" hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
             </li>
           </ul>
 
@@ -138,17 +132,17 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon="ic_timer" hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon="ic_vote" hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
                   active={state.moderation}
                   direction="left"
                   label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                  icon={FocusIcon}
+                  icon="ic_focus"
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
                 />
@@ -189,7 +183,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   active={isReady}
                   direction="right"
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                  icon={CheckIcon}
+                  icon="ic_check"
                   onClick={toggleReadyState}
                 />
               </li>
@@ -200,14 +194,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   active={raisedHand}
                   direction="right"
                   label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                  icon={RaiseHand}
+                  icon="ic_raisehand"
                   onClick={toggleRaiseHand}
                 />
               </li>
             )}
             {fabIsExpanded && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon="ic_settings" />
               </li>
             )}
           </ul>
@@ -222,10 +216,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             {fabIsExpanded && (
               <>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                  <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon="ic_timer" />
                 </li>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                  <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon="ic_vote" />
                 </li>
               </>
             )}
@@ -235,7 +229,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   active={state.moderation}
                   direction="left"
                   label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                  icon={FocusIcon}
+                  icon="ic_focus"
                   onClick={toggleModeration}
                 />
               </li>

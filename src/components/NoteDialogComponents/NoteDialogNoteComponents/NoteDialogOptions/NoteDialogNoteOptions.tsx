@@ -1,7 +1,5 @@
 import {FC} from "react";
 import {Participant} from "types/participant";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
-import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
 import "./NoteDialogNoteOptions.scss";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {useTranslation} from "react-i18next";
@@ -40,7 +38,8 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
               props.onClose();
             }}
             label={t("NoteDialogUnstackNoteButton.title")}
-            icon={UnstackIcon}
+            // TODO unstack icon here
+            icon="ic_focus"
           />
         </li>
       )}
@@ -52,7 +51,8 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
               props.onDeleteOfParent();
             }}
             label={t("NoteDialogDeleteNoteButton.title")}
-            icon={DeleteIcon}
+            // TODO delete icon here
+            icon="ic_focus"
           />
         </li>
       )}

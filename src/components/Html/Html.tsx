@@ -1,26 +1,37 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
+import {useDispatch} from "react-redux";
+import {Actions} from "../../store/action";
 
 export const Html: FC = () => {
-  const lang = useAppSelector((state) => state.view.language);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+  const {lang, theme} = useAppSelector((state) => ({lang: state.view.language, theme: state.view.theme}));
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (theme === "auto") {
-      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
-      setTheme(autoTheme);
+    // initialize theme
+    const userTheme = localStorage.getItem("theme");
+    if (!userTheme || userTheme === "auto" || (userTheme !== "light" && userTheme !== "dark")) {
+      if (!window.matchMedia) {
+        // use dark theme as default, if media query is not available
+        dispatch(Actions.setTheme("dark"));
+      } else {
+        // check OS configuration of theming and set it as the default state
+        dispatch(Actions.setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+      }
+    } else {
+      // use user configuration of theming, if available
+      dispatch(Actions.setTheme(userTheme));
     }
-  }, [theme]);
 
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    const colorScheme = e.matches ? "dark" : "light";
-
-    if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "auto") {
-      setTheme(colorScheme);
-      document.documentElement.setAttribute("theme", colorScheme);
-    }
-  });
+    // add listener for theme changes
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "auto") {
+        const colorScheme = e.matches ? "dark" : "light";
+        dispatch(Actions.setTheme(colorScheme));
+      }
+    });
+  }, []);
 
   return <Helmet htmlAttributes={{lang, theme}} />;
 };
