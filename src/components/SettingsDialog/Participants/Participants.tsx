@@ -11,14 +11,15 @@ import _ from "underscore";
 import {useState} from "react";
 import {SettingsButton} from "../Components/SettingsButton";
 
+type ParticipantsFilter = {
+  name: string;
+  status: "OFFLINE" | "ONLINE" | "ALL";
+  role: ParticipantRole | "ALL";
+};
+
 export const Participants = () => {
   const {t} = useTranslation();
 
-  type ParticipantsFilter = {
-    name: string;
-    status: "OFFLINE" | "ONLINE" | "ALL";
-    role: ParticipantRole | "ALL";
-  };
   const [filter, setFilter] = useState<ParticipantsFilter>({name: "", status: "ALL", role: "ALL"});
   const nameFilter = (participant: Participant): boolean =>
     filter.name.length < 3 ||
@@ -35,19 +36,21 @@ export const Participants = () => {
   const isModerator: boolean = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
   const renderFilterOptions = () => (
-    <div>
+    <div className="participants__filter-options">
       <input aria-label="Name Filter" placeholder="Name" onChange={(e) => setFilter((filter) => ({...filter, name: e.target.value}))} />
-      <select name="status" value={filter.status} onChange={(e) => setFilter((filter) => ({...filter, status: e.target.value as typeof filter.status}))}>
-        <option value="ALL">All</option>
-        <option value="ONLINE">Online</option>
-        <option value="OFFLINE">Offline</option>
-      </select>
-      <select name="role" value={filter.role} onChange={(e) => setFilter((filter) => ({...filter, role: e.target.value as typeof filter.role}))}>
-        <option value="ALL">All</option>
-        <option value="PARTICIPANT">Participant</option>
-        <option value="MODERATOR">Moderator</option>
-        <option value="OWNER">Owner</option>
-      </select>
+      <div>
+        <select name="status" value={filter.status} onChange={(e) => setFilter((filter) => ({...filter, status: e.target.value as typeof filter.status}))}>
+          <option value="ALL">All</option>
+          <option value="ONLINE">Online</option>
+          <option value="OFFLINE">Offline</option>
+        </select>
+        <select name="role" value={filter.role} onChange={(e) => setFilter((filter) => ({...filter, role: e.target.value as typeof filter.role}))}>
+          <option value="ALL">All</option>
+          <option value="PARTICIPANT">Participant</option>
+          <option value="MODERATOR">Moderator</option>
+          <option value="OWNER">Owner</option>
+        </select>
+      </div>
     </div>
   );
 
@@ -56,9 +59,7 @@ export const Participants = () => {
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text"> {t("SettingsDialog.Participants")}</h2>
       </header>
-
       {renderFilterOptions()}
-
       <div className="participants__container">
         <div className="participants__user-list-wrapper">
           <div className="participants__user-list">
@@ -70,9 +71,7 @@ export const Participants = () => {
               >
                 <div className="participants__user_avatar-name-wrapper">
                   <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
-                  <span className="participants__user-name">
-                    {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
-                  </span>
+                  <span className="participants__user-name">{participant.user.name}</span>
                   <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
                 </div>
                 {isModerator && <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />}

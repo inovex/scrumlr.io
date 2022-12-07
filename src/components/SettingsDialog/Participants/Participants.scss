@@ -88,3 +88,38 @@
   border-radius: 50%;
   background-color: $color-retro-red;
 }
+
+.participants__filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  > input {
+    color: $color-white;
+    background-color: $color-dark-mode-note;
+    border: none;
+    padding: $padding--small $padding--default;
+    border-radius: 999px;
+    font-size: 14px;
+    flex: 1;
+  }
+  > input:focus {
+    outline: none;
+  }
+
+  div {
+    display: flex;
+    gap: 8px;
+  }
+
+  select {
+    flex: 1;
+    color: white;
+    background-color: $color-dark-mode-note;
+    padding: $padding--small $padding--default;
+    font-size: 14px;
+    border: none;
+    border-radius: 999px;
+  }
+}
