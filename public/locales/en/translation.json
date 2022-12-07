@@ -108,7 +108,7 @@
     "settings": "Settings",
     "editName": "Change the name",
     "submitName": "Confirm name",
-    "resetName": "Reset name",
+    "resetName": "Abort",
     "hideColumn": "Hide the column",
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
