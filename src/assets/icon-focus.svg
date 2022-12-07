@@ -1,13 +1,1 @@
-<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" stroke="currentColor">
-<g transform="translate(7 11)">
-<line x1="16" x2="11" y1="4.011" y2="9" stroke-linejoin="round" stroke-width="1.5"/>
-<polyline points="13 4 15.989 4 16 4.011 16 7" stroke-linecap="square" stroke-width="1.5"/>
-<g stroke-linejoin="round">
-<path d="m0.8878 2.0618c0-1.0855 0.71916-1.9737 1.5981-1.9737h15.804c0.87898 0 1.5981 0.88817 1.5981 1.9737v12.053c0 1.0855-0.71916 1.9737-1.5981 1.9737h-15.804c-0.87898 0-1.5981-0.88817-1.5981-1.9737v-12.053z" stroke-width="2"/>
-<line x1="3.5" x2="17.348" y1="13" y2="12.773" opacity=".7" stroke-linecap="round" stroke-width="1.5"/>
-</g>
-</g>
-<path d="m24.525 7.5339h-0.48163 1.4129c2.2471 0 5.0687 2.7513 5.0687 4.9117v1.0883 0.42694" opacity=".7" stroke-width="1.5"/>
-</g>
-</svg>
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linejoin="round" d="M20.475 13.477l-5 4.989"/><path stroke-linecap="square" d="M17.475 13.466h2.989l.011.011v2.989"/><path stroke-linejoin="round" d="M5.363 11.528a1.821 1.821 0 011.6-1.974h15.8a1.821 1.821 0 011.6 1.974V23.58a1.821 1.821 0 01-1.6 1.974h-15.8a1.821 1.821 0 01-1.6-1.974z"/><g stroke-opacity=".5"><path stroke-linecap="round" stroke-linejoin="round" d="M7.975 22.466l13.848-.228"/><path d="M22.001 6h.931c2.247 0 5.069 2.751 5.069 4.912v1.515"/></g></g></svg>

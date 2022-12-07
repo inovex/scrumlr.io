@@ -1,6 +1,1 @@
-<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" stroke="currentColor">
-<polyline class="check" points="12.463 18.398 16.477 22.324 26.463 12.324" stroke-linecap="square" stroke-width="2"/>
-<path class="circle" d="m23.519 9.6596c-1.5817-1.0487-3.479-1.6596-5.519-1.6596-5.5228 0-10 4.4772-10 10s4.4772 10 10 10 10-4.4772 10-10c0-0.45515-0.030407-0.90319-0.089301-1.3422" opacity=".7" stroke-width="1.5"/>
-</g>
-</svg>
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="1.5"><path stroke-linecap="square" stroke-opacity=".5" d="M11.463 16.177l2.892 2.824 7.194-7.2"/><path d="M20.191 8.653A8.5 8.5 0 1024 15.742a8.578 8.578 0 00-.076-1.141"/></g></svg>
