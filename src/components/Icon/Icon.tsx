@@ -1,7 +1,7 @@
 import {FunctionComponent, useEffect, useState} from "react";
 import {useAppSelector} from "../../store";
 
-export type IconType = "ic_focus" | "ic_check" | "ic_raisehand" | "ic_settings" | "ic_timer" | "ic_vote";
+export type IconType = "ic_focus" | "ic_check" | "ic_raisehand" | "ic_settings" | "ic_timer" | "ic_vote" | "ic_close";
 
 interface IconProps {
   name: IconType;

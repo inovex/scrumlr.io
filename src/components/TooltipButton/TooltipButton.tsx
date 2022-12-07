@@ -27,6 +27,6 @@ export const TooltipButton = (props: TooltipButtonProps) => (
       </span>
     </div>
     <Icon name={props.icon} className="tooltip-button__icon" aria-hidden />
-    {/* TODO Close button is missing here */}
+    <Icon name="ic_close" className="tooltip-button__icon" aria-hidden />
   </button>
 );
