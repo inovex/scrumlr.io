@@ -3552,7 +3552,7 @@ dnd-core@^10.0.2:
     "@react-dnd/invariant" "^2.0.0"
     redux "^4.0.4"
 
-dnd-multi-backend@^7.1.0, dnd-multi-backend@^7.1.2:
+dnd-multi-backend@^7.1.2:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-7.1.2.tgz#48d188b9f8ca33ee86ea2096f4f67bd223fa091b"
 

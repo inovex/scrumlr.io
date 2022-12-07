@@ -50,6 +50,7 @@
   display: flex;
   word-break: break-word;
   align-items: center;
+  justify-content: end;
   margin-bottom: $margin--default;
   height: 48px;
   position: relative;
@@ -94,7 +95,7 @@
   font-size: calc(#{$text-size--large} + 0.4vw);
   color: $color-black;
   border-bottom: dashed 3px var(--accent-color);
-  margin: 0 $margin--small 0 0;
+  margin: 0 auto 0 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
