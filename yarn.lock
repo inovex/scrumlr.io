@@ -5931,9 +5931,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-marked@4.2.3:
-  version "4.2.3"
-  resolved "https://registry.npmjs.org/marked/-/marked-4.2.3.tgz"
+marked@4.2.4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.2.4.tgz#5a4ce6c7a1ae0c952601fce46376ee4cf1797e1c"
 
 mdn-data@2.0.14:
   version "2.0.14"
