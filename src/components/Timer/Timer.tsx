@@ -36,7 +36,11 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
-  const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
+  const allParticipantsReady = useAppSelector(
+    (state) =>
+      state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").length &&
+      state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready)
+  );
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
   const boardId = useAppSelector((state) => state.board.data!.id);
@@ -89,7 +93,7 @@ export const Timer = (props: TimerProps) => {
   }, [timeLeft]);
 
   useEffect(() => {
-    if (isModerator && allReady && Object.values(timeLeft).some((time) => time > 0)) {
+    if (isModerator && allParticipantsReady && Object.values(timeLeft).some((time) => time > 0)) {
       Toast.success(
         <div>
           <div>{t("Toast.allParticipantsDone")}</div>
@@ -98,7 +102,7 @@ export const Timer = (props: TimerProps) => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allReady, isModerator]);
+  }, [allParticipantsReady, isModerator]);
 
   return (
     <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
