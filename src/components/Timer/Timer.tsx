@@ -37,6 +37,7 @@ export const Timer = (props: TimerProps) => {
   };
 
   const allReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready));
+  const anyReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected).some((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
   const boardId = useAppSelector((state) => state.board.data!.id);
@@ -58,7 +59,7 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
-      if (isModerator) {
+      if (isModerator && anyReady) {
         Toast.info(
           <div>
             {t("Toast.moderatorResetReadyStates")}
