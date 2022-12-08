@@ -139,7 +139,8 @@ func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 
 func (d *Database) updateNoteAssignee(update NoteUpdate) (Note, error) {
 	var note Note
-	_, err := d.db.NewUpdate().Model(&update).Column("assignee").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
+	q := d.db.NewUpdate().Model(&update).Column("assignee").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*")
+	_, err := q.Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
 	if err != nil {
 		return note, err
 	}

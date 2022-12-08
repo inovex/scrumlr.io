@@ -2,9 +2,10 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 )
@@ -70,7 +71,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
 	noteId := r.Context().Value("Note").(uuid.UUID)
 
-	var body dto.NoteUpdateRequest
+	var body dto.NoteUpdateRequest //body initialisation
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return

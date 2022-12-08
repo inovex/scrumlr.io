@@ -13,7 +13,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
 
   const onSubmitHandler = () => {
-    dispatch(Actions.editNote(noteId, {assignees: [userInput]}));
+    dispatch(Actions.editNote(noteId, {assignee: [userInput]}));
   };
 
   return (
@@ -25,7 +25,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
           console.log(e.target.value);
           setUserInput(e.target.value);
         }}
-        value={note?.assignees ? note?.assignees[0] : userInput}
+        value={note?.assignee ? note?.assignee[0] : userInput}
       />
     </div>
   );
