@@ -1,6 +1,6 @@
 {
   "InfoBar": {
-    "ReturnToFocusedNote": "Zurück zur Fokuskarte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
   "NewBoard": {
     "boardName": "Sitzungsname",
@@ -108,7 +108,7 @@
     "settings": "Einstellungen",
     "editName": "Name ändern",
     "submitName": "Name bestätigen",
-    "resetName": "Name zurücksetzen",
+    "resetName": "Abbrechen",
     "hideColumn": "Ausblenden",
     "showColumn": "Einblenden",
     "deleteColumn": "Löschen",
@@ -170,8 +170,8 @@
     "themeToggle": "Ändere Farbschema",
     "editColumns": "Bearbeite Spalten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
-    "startFocusMode": "Starte Fokus-Modus",
-    "stopFocusMode": "Beende Fokus-Modus",
+    "startPresenterMode": "Präsentiermodus starten",
+    "stopPresenterMode": "Präsentiermodus beenden",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
@@ -194,6 +194,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Beenden",
+    "abortActionTooltip": "Abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -225,6 +227,8 @@
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
     "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
+    "moderatorResetReadyStatesButton": "Zurücksetzen!",
     "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen"
   },
@@ -243,6 +247,9 @@
   },
   "Note": {
     "me": "Ich"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"

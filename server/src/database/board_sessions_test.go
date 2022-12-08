@@ -1,10 +1,11 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
-	"testing"
 )
 
 func TestRunnerForBoardSessions(t *testing.T) {
@@ -19,6 +20,7 @@ func TestRunnerForBoardSessions(t *testing.T) {
 	t.Run("Update=3", testUpdateOfParticipantToModerator)
 	t.Run("Update=4", testUpdateOfParticipantToOwnerShouldFail)
 	t.Run("Update=5", testUpdateOfModeratorToOwnerShouldFail)
+	t.Run("Update=6", testUpdateBoardSessions)
 
 	t.Run("Exists=0", testBoardSessionExistsForParticipant)
 	t.Run("Exists=1", testBoardSessionExistsForModerator)
@@ -428,4 +430,36 @@ func testGetBoardSessionsWithMultipleFilters(t *testing.T) {
 	sessions, err := testDb.GetBoardSessions(board.ID, filter.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
+}
+
+func testUpdateBoardSessions(t *testing.T) {
+	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
+
+	ready := true
+	raisedHand := true
+	sessions, err := testDb.UpdateBoardSessions(BoardSessionUpdate{
+		Board:      board.ID,
+		Ready:      &ready,
+		RaisedHand: &raisedHand,
+	})
+	assert.Nil(t, err)
+	assert.NotNil(t, sessions)
+	for _, session := range sessions {
+		assert.True(t, session.Ready)
+		assert.True(t, session.RaisedHand)
+	}
+
+	ready = false
+	raisedHand = false
+	sessions, err = testDb.UpdateBoardSessions(BoardSessionUpdate{
+		Board:      board.ID,
+		Ready:      &ready,
+		RaisedHand: &raisedHand,
+	})
+	assert.Nil(t, err)
+	assert.NotNil(t, sessions)
+	for _, session := range sessions {
+		assert.False(t, session.Ready)
+		assert.False(t, session.RaisedHand)
+	}
 }

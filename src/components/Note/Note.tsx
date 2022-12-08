@@ -11,6 +11,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
+import {getEmptyImage} from "react-dnd-html5-backend";
 
 interface NoteProps {
   noteId: string;
@@ -42,14 +43,14 @@ export const Note = (props: NoteProps) => {
 
   /* eslint-disable */
   useEffect(() => {
-    if (isShared && !document.location.pathname.endsWith(props.noteId)) {
+    if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
       navigate(`note/${note!.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
-      if (!document.location.pathname.endsWith(props.noteId)) {
+      if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
         navigate(`note/${note!.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
@@ -58,7 +59,7 @@ export const Note = (props: NoteProps) => {
   }, [isShared]);
   /* eslint-enable */
 
-  const [{isDragging}, drag] = useDrag({
+  const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: note!.position.column},
     collect: (monitor) => ({
@@ -73,9 +74,13 @@ export const Note = (props: NoteProps) => {
         dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: note!.position.column, rank: 0}}));
       }
     },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}) && monitor.canDrop()}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
+
+  useEffect(() => {
+    preview(getEmptyImage());
+  }, [preview]);
 
   const handleClick = () => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
@@ -93,9 +98,17 @@ export const Note = (props: NoteProps) => {
   drag(noteRef);
   drop(noteRef);
 
+  // TODO: replace with stack setting from state when implemented. thanks, love u <3
+  const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
+
   return (
     <div className={classNames("note__root")}>
-      <button className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
+      <button
+        className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
+        onClick={handleClick}
+        onKeyPress={handleKeyPress}
+        ref={noteRef}
+      >
         <p className="note__text">{note!.text}</p>
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (

@@ -1,6 +1,6 @@
 {
   "InfoBar": {
-    "ReturnToFocusedNote": "Return to focused note"
+    "ReturnToPresentedNote": "Return to presented note"
   },
   "NewBoard": {
     "boardName": "Board name",
@@ -108,7 +108,7 @@
     "settings": "Settings",
     "editName": "Change the name",
     "submitName": "Confirm name",
-    "resetName": "Reset name",
+    "resetName": "Abort",
     "hideColumn": "Hide the column",
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
@@ -169,8 +169,8 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
-    "startFocusMode": "Start focused mode",
-    "stopFocusMode": "End focused mode",
+    "startPresenterMode": "Start presenter mode",
+    "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
@@ -193,6 +193,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Finish",
+    "abortActionTooltip": "Abort",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -224,6 +226,8 @@
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
     "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
     "noteToHiddenColumn": "You just added a note to a hidden column.",
     "noteToHiddenColumnButton": "Reveal column"
   },
@@ -242,6 +246,9 @@
   },
   "Note": {
     "me": "Me"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"

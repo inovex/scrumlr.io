@@ -66,6 +66,6 @@ describe("InfoBar", () => {
         },
       },
     });
-    expect(container.getElementsByClassName("info-bar__return-to-focused-note-button").length).toBe(1);
+    expect(container.getElementsByClassName("info-bar__return-to-presented-note-button").length).toBe(1);
   });
 });

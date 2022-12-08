@@ -168,7 +168,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <li>
         <button
           aria-label="Voting"
-          class="tooltip-button tooltip-button--left"
+          class="tooltip-button tooltip-button--left tooltip-button--active"
         >
           <div
             aria-hidden="true"
@@ -201,7 +201,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
-          aria-label="MenuBars.startFocusMode"
+          aria-label="MenuBars.startPresenterMode"
           class="tooltip-button tooltip-button--left"
         >
           <div
@@ -211,11 +211,11 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.startFocusMode
+              MenuBars.startPresenterMode
               <span
                 class="tooltip-button__hotkey"
               >
-                 [F]
+                 [P]
               </span>
             </span>
           </div>

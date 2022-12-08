@@ -6,7 +6,7 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CloseIcon, ReactComponent as AbortIcon} from "assets/icon-close.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
@@ -100,7 +100,16 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
-        <h2 className={classNames("column__header-text", {"column__header-text--hidden": !visible})}>{name}</h2>
+        <h2
+          onDoubleClick={() => {
+            if (isModerator) {
+              setColumnNameMode("EDIT");
+            }
+          }}
+          className={classNames("column__header-text", {"column__header-text--hidden": !visible})}
+        >
+          {name}
+        </h2>
       </div>
     ) : (
       <input
@@ -123,9 +132,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           inputRef.current = ref!;
         }}
         onFocus={(e) => e.target.select()}
-        onBlur={(e) => {
-          handleEditColumnName((e.target as HTMLInputElement).value);
-        }}
       />
     );
 
@@ -153,7 +159,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             setColumnNameMode("VIEW");
           }}
         >
-          <AbortIcon className="column__header-edit-button-icon" />
+          <CloseIcon className="column__header-edit-button-icon" />
         </button>
       )}
       {!isTemporary && (
