@@ -11,7 +11,7 @@ export interface UserAvatarProps {
   avatarClassName?: string;
   id: string;
   avatar?: AvataaarProps;
-  name: string;
+  name?: string;
   ready?: boolean;
   raisedHand?: boolean;
   badgeText?: string;

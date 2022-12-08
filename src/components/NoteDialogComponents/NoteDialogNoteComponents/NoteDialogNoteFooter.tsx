@@ -13,7 +13,7 @@ type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
   authorId: string;
   avatar?: AvataaarProps;
-  authorName: string;
+  authorName?: string;
   noteId: string;
   viewer: Participant;
 };
