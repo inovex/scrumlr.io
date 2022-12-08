@@ -3,11 +3,13 @@ package database
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 type Note struct {
@@ -20,7 +22,7 @@ type Note struct {
 	Text          string
 	Stack         uuid.NullUUID
 	Rank          int
-	Assignee      []string
+	Assignee      []string `bun:",array"`
 }
 
 type NoteInsert struct {
@@ -43,7 +45,7 @@ type NoteUpdate struct {
 	Board         uuid.UUID
 	Text          *string
 	Position      *NoteUpdatePosition `bun:"embed"`
-	Assignee      []string
+	Assignee      []string `bun:",array"`
 }
 
 func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
@@ -124,7 +126,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 			err = errors.New("not permitted to change position of note")
 		}
 	}
-	
+
 	return note, err
 }
 
@@ -139,8 +141,7 @@ func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 
 func (d *Database) updateNoteAssignee(update NoteUpdate) (Note, error) {
 	var note Note
-	q := d.db.NewUpdate().Model(&update).Column("assignee").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*")
-	_, err := q.Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
+	_, err := d.db.NewUpdate().Model(&update).Set("assignee = ?", pgdialect.Array(update.Assignee)).Where("id = ?", update.ID).Returning("*").Where("board = ?", update.Board).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
 	if err != nil {
 		return note, err
 	}
