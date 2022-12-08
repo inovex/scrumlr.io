@@ -95,6 +95,27 @@ export const StackView = () => {
     },
   });
 
+  // update transition config when note changes so that the visible notes are updated without any animation
+  useEffect(
+    () =>
+      setTransitionConfig({
+        from: {transform: "translateX(0%)", position: "relative", opacity: 1},
+        enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
+        leave: {
+          transform: "translateX(0%)",
+          position: "absolute",
+          opacity: 1,
+        },
+        items: {
+          parent: note,
+          stack: stackedNotes,
+          avatar: author!.user.avatar,
+          authorName,
+        },
+      }),
+    [author, authorName, note, stackedNotes]
+  );
+
   useEffect(() => {
     if (prevNote.current && prevNote.current?.id !== note?.id) {
       let direction: "left" | "right" | undefined;
