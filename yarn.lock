@@ -1518,9 +1518,9 @@
     "@react-spring/shared" "~9.5.5"
     "@react-spring/types" "~9.5.5"
 
-"@remix-run/router@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.4.tgz#cbfbec6735711e7c2fc93b9b40adf70ef5a39990"
+"@remix-run/router@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.5.tgz#d5c65626add4c3c185a89aa5bd38b1e42daec075"
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -7280,18 +7280,18 @@ react-refresh@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz"
 
-react-router-dom@^6.4.4:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.4.tgz#4271ec66333c440d1754477e4e6a3a5acb5487f8"
+react-router-dom@^6.4.5:
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.5.tgz#4fdb12efef4f3848c693a76afbeaed1f6ca02047"
   dependencies:
-    "@remix-run/router" "1.0.4"
-    react-router "6.4.4"
+    "@remix-run/router" "1.0.5"
+    react-router "6.4.5"
 
-react-router@6.4.4, react-router@^6.0.1:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.4.tgz#8e7794f55ccc7050cb03937c87ff3720ce9f8b60"
+react-router@6.4.5, react-router@^6.0.1:
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.5.tgz#73f382af2c8b9a86d74e761a7c5fc3ce7cb0024d"
   dependencies:
-    "@remix-run/router" "1.0.4"
+    "@remix-run/router" "1.0.5"
 
 react-scripts@^5.0.1:
   version "5.0.1"
