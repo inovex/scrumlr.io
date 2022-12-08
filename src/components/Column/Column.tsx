@@ -171,7 +171,10 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   );
 
   return (
-    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
+    <section
+      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
+      ref={columnRef}
+    >
       <div className="column__content">
         <div className="column__header">
           <NoteInput
