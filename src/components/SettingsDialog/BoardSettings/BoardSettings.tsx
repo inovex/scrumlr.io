@@ -201,6 +201,17 @@ export const BoardSettings = () => {
                     <Toggle active={state.me?.showHiddenColumns ?? false} />
                   </div>
                 </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="columns"
+                  className="board-settings__show-columns-button"
+                  label="Erlaube das Verschieben von Kärtchen"
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                >
+                  <div className="board-settings__show-columns-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
+                </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
