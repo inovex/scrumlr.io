@@ -45,7 +45,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     ],
   },
   plusDelta: {
-    name: "Plus & Delta",
+    name: "Plus/Delta",
     columns: [
       {name: "Plus", hidden: false, color: "backlog-blue"},
       {name: "Delta", hidden: false, color: "lean-lilac"},
@@ -61,6 +61,16 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
       {name: "Lacked", hidden: false, color: "lean-lilac"},
       {name: "Longed for", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
+    ],
+  },
+  swot: {
+    name: "SWOT",
+    description: "This template uses the familiar SWOT framework - strengths, weaknesses, opportunities, and threats - to help teams identify and prioritize areas for improvement.",
+    columns: [
+      {name: "Strengths", hidden: false, color: "backlog-blue"},
+      {name: "Weaknesses", hidden: false, color: "online-orange"},
+      {name: "Opportunities", hidden: false, color: "grooming-green"},
+      {name: "Threats", hidden: false, color: "retro-red"},
     ],
   },
 };
