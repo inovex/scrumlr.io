@@ -23,7 +23,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
     const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
     return {

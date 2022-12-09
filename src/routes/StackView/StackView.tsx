@@ -98,10 +98,14 @@ export const StackView = () => {
   });
 
   const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({name: authorName, avatar: author?.user.avatar});
+  const stackedNotesRef = useRef<StackedNote[]>(stackedNotes);
 
   // update transition config when note changes so that the visible notes are updated without any animation
   useEffect(() => {
-    if (prevNote.current?.id === note?.id && (!_.isEqual(prevNote.current, note) || !_.isEqual(authorRef.current, {name: authorName, avatar: author?.user.avatar}))) {
+    if (
+      prevNote.current?.id === note?.id &&
+      (!_.isEqual(prevNote.current, note) || !_.isEqual(authorRef.current, {name: authorName, avatar: author?.user.avatar}) || !_.isEqual(stackedNotesRef.current, stackedNotes))
+    ) {
       setTransitionConfig({
         from: {transform: "translateX(0%)", position: "relative", opacity: 1},
         enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
@@ -119,6 +123,7 @@ export const StackView = () => {
       });
     }
     authorRef.current = {name: authorName, avatar: author?.user.avatar};
+    stackedNotesRef.current = stackedNotes;
   }, [author, authorName, note, stackedNotes]);
 
   useEffect(() => {
