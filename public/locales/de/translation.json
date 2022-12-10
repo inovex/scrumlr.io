@@ -277,7 +277,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugangsrichtlinien",
+    "AccessPolicy": "Zugangs\u00ADrichtlinien",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",

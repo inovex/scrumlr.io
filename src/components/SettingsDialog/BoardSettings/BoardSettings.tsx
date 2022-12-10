@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -34,6 +34,14 @@ export const BoardSettings = () => {
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
+
+  useEffect(() => {
+    setBoardName(state.board.name ?? "");
+  }, [state.board.name]);
+
+  useEffect(() => {
+    setIsProtected(state.board.accessPolicy === "BY_PASSPHRASE");
+  }, [state.board.accessPolicy]);
 
   const handleSetPassword = (newPassword: string) => {
     setPassword(newPassword);
@@ -141,7 +149,6 @@ export const BoardSettings = () => {
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
                 <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
               </SettingsButton>
-
               {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />

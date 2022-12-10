@@ -18,10 +18,10 @@ export const BoardSettings = (props: BoardSettingsProps) => {
     board: applicationState.board.data!,
   }));
 
-  const [boardName, setBoardName] = useState(state.board.name);
+  const [boardName, setBoardName] = useState(state.board.name ?? "");
 
   useEffect(() => {
-    setBoardName(state.board.name);
+    setBoardName(state.board.name ?? "");
   }, [state.board.name]);
 
   const onSubmit = () => {
@@ -44,7 +44,7 @@ export const BoardSettings = (props: BoardSettingsProps) => {
       >
         <input
           className="board-settings__board-name"
-          value={boardName ?? ""}
+          value={boardName}
           placeholder={DEFAULT_BOARD_NAME}
           disabled={!props.activeEditMode}
           onChange={(e) => setBoardName(e.target.value)}
