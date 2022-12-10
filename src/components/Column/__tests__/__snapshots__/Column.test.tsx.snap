@@ -2,7 +2,7 @@
 
 exports[`Column should have correct style show column with correct style 1`] = `
 <section
-  class="column accent-color__planning-pink"
+  class="column column--hidden accent-color__planning-pink"
 >
   <div
     class="column__content"
@@ -15,7 +15,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <input
           class="note-input__input"
-          data-tip="CMD/CTRL + 1"
+          data-tip="OPTION/ALT + 1"
           maxlength="1024"
           placeholder="Add your note..."
           type="text"

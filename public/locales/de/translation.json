@@ -108,7 +108,7 @@
     "settings": "Einstellungen",
     "editName": "Name ändern",
     "submitName": "Name bestätigen",
-    "resetName": "Name zurücksetzen",
+    "resetName": "Abbrechen",
     "hideColumn": "Ausblenden",
     "showColumn": "Einblenden",
     "deleteColumn": "Löschen",
@@ -250,6 +250,9 @@
   },
   "Note": {
     "me": "Ich"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"

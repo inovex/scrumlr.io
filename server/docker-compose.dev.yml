@@ -1,5 +1,6 @@
 version: "3.9"
 
+name: scrumlr-dev
 services:
   nats:
     image: nats:2-alpine
