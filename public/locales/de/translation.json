@@ -129,12 +129,12 @@
     "rejectAll": "Alle ablehnen"
   },
   "RaiseRequest": {
-    "title": "Jemand hebt seine/ihre Hand",
+    "title": "Jemand hebt die Hand",
     "lower": "Senke die Hand",
     "lowerAll": "Alle Hände senken"
   },
   "Request": {
-    "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
+    "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
