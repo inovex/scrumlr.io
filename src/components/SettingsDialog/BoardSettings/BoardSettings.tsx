@@ -203,12 +203,12 @@ export const BoardSettings = () => {
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
-                  data-testid="columns"
-                  className="board-settings__show-columns-button"
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
                   label={t("BoardSettings.AllowNoteRepositioningOption")}
                   onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
                 >
-                  <div className="board-settings__show-columns-value">
+                  <div className="board-settings__show-note-repositioning-value">
                     <Toggle active={state.board.allowStacking} />
                   </div>
                 </SettingsButton>
