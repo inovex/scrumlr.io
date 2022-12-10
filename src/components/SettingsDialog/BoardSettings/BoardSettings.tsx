@@ -205,7 +205,7 @@ export const BoardSettings = () => {
                 <SettingsButton
                   data-testid="columns"
                   className="board-settings__show-columns-button"
-                  label="Erlaube das Verschieben von Kärtchen"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
                   onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
                 >
                   <div className="board-settings__show-columns-value">
