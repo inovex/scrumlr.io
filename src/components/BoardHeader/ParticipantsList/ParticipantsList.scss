@@ -112,7 +112,6 @@
 .list__header > label {
   letter-spacing: $letter-spacing--small;
   color: $color-darker-gray;
-  opacity: 0.8;
   font-size: $text-size--medium;
 }
 
@@ -127,7 +126,7 @@
   .list__header {
     background: $color-dark-mode-note;
     > label {
-      color: $color-middle-gray;
+      color: $color-light-gray;
     }
   }
 }
