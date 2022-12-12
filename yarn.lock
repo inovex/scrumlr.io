@@ -1902,9 +1902,9 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
 
-"@types/marked@^4.0.7":
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/@types/marked/-/marked-4.0.7.tgz"
+"@types/marked@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.8.tgz#b316887ab3499d0a8f4c70b7bd8508f92d477955"
 
 "@types/mime@*":
   version "3.0.1"
