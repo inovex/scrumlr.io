@@ -1902,17 +1902,17 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
 
-"@types/marked@^4.0.7":
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/@types/marked/-/marked-4.0.7.tgz"
+"@types/marked@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.8.tgz#b316887ab3499d0a8f4c70b7bd8508f92d477955"
 
 "@types/mime@*":
   version "3.0.1"
   resolved "https://registry.npmjs.org/@types/mime/-/mime-3.0.1.tgz"
 
-"@types/node@*", "@types/node@^18.11.12":
-  version "18.11.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.12.tgz#89e7f8aa8c88abf432f9bd594888144d7dba10aa"
+"@types/node@*", "@types/node@^18.11.13":
+  version "18.11.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.13.tgz#dff34f226ec1ac0432ae3b136ec5552bd3b9c0fe"
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -3552,7 +3552,7 @@ dnd-core@^10.0.2:
     "@react-dnd/invariant" "^2.0.0"
     redux "^4.0.4"
 
-dnd-multi-backend@^7.1.2, dnd-multi-backend@^7.1.3:
+dnd-multi-backend@^7.1.3:
   version "7.1.3"
   resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-7.1.3.tgz#401ba42bb4ee79246a966cd3c5bfafbc3ed6e57c"
 
@@ -4787,9 +4787,9 @@ i18next-browser-languagedetector@^7.0.1:
   dependencies:
     "@babel/runtime" "^7.19.4"
 
-i18next-fs-backend@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/i18next-fs-backend/-/i18next-fs-backend-2.0.1.tgz"
+i18next-fs-backend@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.1.0.tgz#a90983df2992f478e1d5f3a4c794754d19a0bcdc"
 
 i18next-http-backend@^2.0.2:
   version "2.0.2"
@@ -4803,9 +4803,9 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^22.1.4:
-  version "22.1.4"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.1.4.tgz#907a4e710889ae23fb92f3510a0f7147823f92ff"
+i18next@^22.4.2:
+  version "22.4.2"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.4.2.tgz#954d78475e3497dec8fc63d8a1eeb16057a38dd5"
   dependencies:
     "@babel/runtime" "^7.20.6"
 
@@ -7242,9 +7242,9 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hotkeys-hook@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/react-hotkeys-hook/-/react-hotkeys-hook-4.0.4.tgz"
+react-hotkeys-hook@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.0.6.tgz#c1c14dde9803d0c2d84727e0b88e1a50af81dc8c"
 
 react-i18next@^12.1.1:
   version "12.1.1"
