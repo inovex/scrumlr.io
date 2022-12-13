@@ -1,5 +1,6 @@
 @import "constants/style.scss";
 @import "components/Votes/VoteButtons/AddVoteButton.scss";
+@import "./AssignAvatar.scss";
 
 .assigning {
   margin-left: 10px;
@@ -13,6 +14,12 @@
   justify-content: flex-start;
 }
 
+label {
+  font-size: inherit;
+  font-weight: bold;
+  text-align: center;
+}
+
 .assigning__avatar-button {
   background-color: transparent;
   border: none;
@@ -22,27 +29,7 @@
   justify-content: flex-start;
 }
 
-.assigning__avatar-external {
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  background-color: #03cdff;
-
-  font: inherit;
-  color: $color-black;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-left: -12px;
-}
-
-.assigning__avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-
+.avatar-on-note {
   margin-left: -12px;
 }
 
@@ -89,7 +76,7 @@
   }
 }
 
-@media only screen and (max-width: 1730px) {
+@media only screen and (max-width: 1600px) {
   .assining__pill-assign-label-small {
     display: inline-block;
   }
@@ -108,7 +95,7 @@
   }
 }
 
-@media only screen and (max-width: 970px) {
+@media only screen and (max-width: 880px) {
   .assining__pill-assign-label-small {
     display: inline-block;
   }

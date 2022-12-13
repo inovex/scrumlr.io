@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {Assignee} from "types/assignee";
 import {DotButton} from "components/DotButton";
 import {Avatar} from "components/Avatar";
+import _ from "underscore";
 import {ExternalAvatar} from "./ExternalAvatar";
 import {AssigneeList} from "./AssigneeList";
 
@@ -18,6 +19,13 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
   const [allParticipants, setAllParticipants] = useState<Assignee[]>([]);
   const [assigned, setAssigned] = useState<Assignee[]>([]);
   const [expanded, setExpanded] = useState(false);
+
+  const state = useAppSelector(
+    (applicationState) => ({
+      activeVoting: Boolean(applicationState.votings.open),
+    }),
+    _.isEqual
+  );
 
   useEffect(() => {
     if (!note) {
@@ -58,46 +66,48 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
 
   return (
     <div className="assigning">
-      <div className="assining__pill" data-tip="assign someone">
-        {/* TODO: provide translation  (ddont forget the tooltip) */}
-        <label className="assining__pill-assign-label-large">assigned:</label>
-        <label className="assining__pill-assign-label-small">+</label>
-        {
-          // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
-          // TODO: Add a popup on hover with the participants name
-          assigned.length === 0 ? (
-            <DotButton className="vote-button-add" onClick={() => setExpanded(!expanded)} disabled={false}>
-              <PlusIcon className="vote-button-add__icon" />
-            </DotButton>
-          ) : (
-            <button
-              className="assigning__avatar-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpanded(!expanded);
-              }}
-            >
-              {assigned
-                .map((x) => x)
-                .splice(0, assigned.length > 3 ? 2 : 3)
-                .map((assignee) =>
-                  assignee.id !== "" ? (
-                    <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar" />
-                  ) : (
-                    <ExternalAvatar name={assignee.name} className="assigning__avatar-external" />
-                  )
+      {!state.activeVoting && (
+        <div className="assining__pill" data-tip="assign someone">
+          {/* TODO: provide translation  (ddont forget the tooltip) */}
+          <label className="assining__pill-assign-label-large">assigned:</label>
+          <label className="assining__pill-assign-label-small">@</label>
+          {
+            // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
+            // TODO: Add a popup on hover with the participants name
+            assigned.length === 0 ? (
+              <DotButton className="vote-button-add" onClick={() => setExpanded(!expanded)} disabled={false}>
+                <PlusIcon className="vote-button-add__icon" />
+              </DotButton>
+            ) : (
+              <button
+                className="assigning__avatar-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setExpanded(!expanded);
+                }}
+              >
+                {assigned
+                  .map((x) => x)
+                  .splice(0, assigned.length > 3 ? 2 : 3)
+                  .map((assignee) =>
+                    assignee.id !== "" ? (
+                      <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar-board-user avatar-on-note" />
+                    ) : (
+                      <ExternalAvatar name={assignee.name} className="assigning__avatar-external avatar-on-note" />
+                    )
+                  )}
+                {assigned.length > 3 ? (
+                  <div>
+                    <label>+{assigned.length - 2}</label>
+                  </div>
+                ) : (
+                  <></>
                 )}
-              {assigned.length > 3 ? (
-                <div>
-                  <label>+{assigned.length - 2}</label>
-                </div>
-              ) : (
-                <></>
-              )}
-            </button>
-          )
-        }
-      </div>
+              </button>
+            )
+          }
+        </div>
+      )}
       <AssigneeList open={expanded} onClose={() => setExpanded(false)} allParticipants={allParticipants} noteId={note!.id} assigned={assigned} />
     </div>
   );

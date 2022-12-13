@@ -8,14 +8,14 @@ export interface AssignAvatarProps {
 }
 
 export const AssignAvatar = ({participant}: AssignAvatarProps) => (
-  <div className="assignee__avatar-and-name">
+  <div className="assigning__avatar-and-name">
     <div>
       {participant.id != "" ? (
-        <Avatar seed={participant.id} avatar={participant.avatar} className="assignee__avatar-board-user" />
+        <Avatar seed={participant.id} avatar={participant.avatar} className="assigning__avatar-board-user" />
       ) : (
-        <ExternalAvatar name={participant.name} className="assignee__avatar-external" />
+        <ExternalAvatar name={participant.name} className="assigning__avatar-external" />
       )}
     </div>
-    <figcaption className="assignee__name">{participant.name}</figcaption>
+    <figcaption className="assigning__name">{participant.name}</figcaption>
   </div>
 );

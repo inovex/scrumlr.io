@@ -1,10 +1,10 @@
 @import "constants/style.scss";
-.assignee__avatar-external {
-  width: 30px;
-  height: 30px;
+.assigning__avatar-external {
+  width: 26px;
+  height: 26px;
   border-radius: 15px;
 
-  background-color: #03ff8e;
+  background-color: #03cdff;
 
   font: inherit;
   text-align: center;
@@ -13,17 +13,18 @@
   justify-content: center;
 }
 
-.assignee__avatar-board-user {
+.assigning__avatar-board-user {
   width: 30px;
   height: 30px;
   border-radius: 15px;
 }
 
-.assignee__avatar-and-name {
+.assigning__avatar-and-name {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
-.assignee__name {
+.assigning__name {
   font: inherit;
 }
