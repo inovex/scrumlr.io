@@ -1,5 +1,5 @@
 import {Portal} from "components/Portal";
-import {useState, VFC} from "react";
+import {useState} from "react";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import {useTranslation} from "react-i18next";
 import "./AssigneeList.scss";
@@ -16,7 +16,7 @@ type AssigneeListProps = {
   onClose: () => void;
 };
 
-export const AssigneeList: VFC<AssigneeListProps> = (props) => {
+export const AssigneeList = (props: AssigneeListProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [searchString, setSearchString] = useState("");
@@ -68,15 +68,16 @@ export const AssigneeList: VFC<AssigneeListProps> = (props) => {
               .sort((parA, parB) => parA.name.localeCompare(parB.name)) // Sort participants by name
               .filter((participant) => searchString.split(" ").every((substr) => participant.name.toLowerCase().includes(substr)))
               .map((participant) => (
-                  <li className="assignees__list-element">
-                    <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
-                      <AssignAvatar participant={participant} />
-                      <input type="checkbox" disabled checked={participant.assigned} />
-                    </button>
-                  </li>
-                ))}
+                <li className="assignees__list-element">
+                  <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
+                    <AssignAvatar participant={participant} />
+                    <input type="checkbox" checked={participant.assigned} />
+                  </button>
+                </li>
+              ))}
           <li>
             <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked({name: searchString, id: "", assigned: false})}>
+              {/* provide translation */}
               <label>+ Add custom name</label>
             </button>
           </li>

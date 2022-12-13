@@ -36,20 +36,21 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
     3.if it is a "onBoard"-user fetch the name and avatar and set it to assigned in all users
       if its an external, push it to all participants and add it as an assigned user
     */
-    if (note.assignee.length > 0) {
-      note?.assignee.map((name) => {
-        if (name !== "") {
-          const index = participantUsers.map((participant) => participant.id).indexOf(name);
-          if (index >= 0) {
-            assign.push({name: participantUsers[index].name, id: participantUsers[index].id, assigned: true, avatar: participantUsers[index].avatar});
-            all[index].assigned = true;
-          } else {
-            assign.push({name, id: "", assigned: true});
-            all.push({name, id: "", assigned: true});
+    if (note.assignee)
+      if (note.assignee.length > 0) {
+        note?.assignee.map((name) => {
+          if (name !== "") {
+            const index = participantUsers.map((participant) => participant.id).indexOf(name);
+            if (index >= 0) {
+              assign.push({name: participantUsers[index].name, id: participantUsers[index].id, assigned: true, avatar: participantUsers[index].avatar});
+              all[index].assigned = true;
+            } else {
+              assign.push({name, id: "", assigned: true});
+              all.push({name, id: "", assigned: true});
+            }
           }
-        }
-      });
-    }
+        });
+      }
     setAssigned(assign);
     setAllParticipants(all);
     console.log(note.text, assigned);
@@ -65,27 +66,31 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
             <PlusIcon className="vote-button-add__icon" />
           </DotButton>
         ) : (
-          assigned.map((assignee) => assignee.id !== "" ? (
-              <button
-                className="assigning__avatar-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setExpanded(!expanded);
-                }}
-              >
-                <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar" />
-              </button>
+          <button
+            className="assigning__avatar-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpanded(!expanded);
+            }}
+          >
+            {assigned
+              .map((x) => x)
+              .splice(0, assigned.length > 3 ? 2 : 3)
+              .map((assignee) =>
+                assignee.id !== "" ? (
+                  <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar" />
+                ) : (
+                  <ExternalAvatar name={assignee.name} className="assigning__avatar-external" />
+                )
+              )}
+            {assigned.length > 3 ? (
+              <div>
+                <label>+{assigned.length - 2}</label>
+              </div>
             ) : (
-              <button
-                className="assigning__avatar-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setExpanded(!expanded);
-                }}
-              >
-                <ExternalAvatar name={assignee.name} className="assigning__avatar-external" />
-              </button>
-            ))
+              <></>
+            )}
+          </button>
         )
       }
       <AssigneeList open={expanded} onClose={() => setExpanded(false)} allParticipants={allParticipants} noteId={note!.id} assigned={assigned} />

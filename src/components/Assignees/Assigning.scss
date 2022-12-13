@@ -6,9 +6,11 @@
   min-width: 40px;
   width: fit-content;
   border-radius: 12px;
-  background-color: red;
   padding: 2px;
+  display: flex;
+  flex-direction: row;
 }
+
 .assigning__avatar-button {
   background-color: transparent;
   border: none;
@@ -30,10 +32,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  margin-left: -12px;
 }
 
 .assigning__avatar {
   width: 30px;
   height: 30px;
   border-radius: 15px;
+
+  margin-left: -12px;
 }
