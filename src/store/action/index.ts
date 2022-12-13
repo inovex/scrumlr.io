@@ -7,7 +7,6 @@ import {RequestActionFactory, RequestAction, RequestReduxAction} from "./request
 import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
 import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
 import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
-import {AssignAction, AssignActionFactory, AssignReduxAction} from "./assign";
 
 /** This object lists all internal Redux Action types. */
 export const Action = {
@@ -20,7 +19,6 @@ export const Action = {
   ...VoteAction,
   ...VotingAction,
   ...ViewAction,
-  ...AssignAction,
 };
 
 /** Factory or creator class of internal Redux actions. */
@@ -34,7 +32,6 @@ export const Actions = {
   ...VoteActionFactory,
   ...VotingActionFactory,
   ...ViewActionFactory,
-  ...AssignActionFactory,
 };
 
 /** The types of all application internal redux actions. */
@@ -48,5 +45,4 @@ export type ReduxAction = {context: {board?: string; user?: string; voting?: str
   | VoteReduxAction
   | VotingReduxAction
   | ViewReduxAction
-  | AssignReduxAction
 );

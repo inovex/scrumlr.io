@@ -38,8 +38,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         const message: ServerEvent = JSON.parse(evt.data);
 
         if (message.type === "INIT") {
-          const {board, columns, participants, notes, assigned, votes, votings, requests} = message.data;
-          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], assigned || [], votes || [], votings || []));
+          const {board, columns, participants, notes, votes, votings, requests} = message.data;
+          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || []));
         }
 
         if (message.type === "BOARD_UPDATED") {

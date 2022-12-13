@@ -1,28 +1,41 @@
 import {Portal} from "components/Portal";
 import {useState, VFC} from "react";
-import {useAppSelector} from "store";
 import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
-import "../BoardHeader/ParticipantsList/ParticipantsList.scss";
-import {Participant} from "components/BoardHeader/ParticipantsList/Participant";
+import {useTranslation} from "react-i18next";
+import "./AssigneeList.scss";
+import {Assignee} from "types/assignee";
+import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
+import {AssignAvatar} from "./AssignAvatar";
 
-interface AssigneeListProps {
+type AssigneeListProps = {
   open: boolean;
+  allParticipants: Assignee[];
+  assigned: Assignee[];
+  noteId: string;
   onClose: () => void;
-}
+};
 
 export const AssigneeList: VFC<AssigneeListProps> = (props) => {
-  const {me, them} = useAppSelector((state) => ({
-    me: state.participants!.self,
-    them: state.participants!.others.filter((p) => p.connected),
-  }));
-
+  const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [searchString, setSearchString] = useState("");
 
-  if (!props.open || them.length < 0) {
+  if (!props.open || props.allParticipants.length === 0) {
     return null;
   }
 
-  const showMe = searchString.split(" ").every((substr) => me.user.name.toLowerCase().includes(substr));
+  const handleAsigneeClicked = (participant: Assignee) => {
+    participant.assigned = !participant.assigned;
+    let {assigned} = props;
+
+    if (participant.assigned) {
+      assigned.push(participant);
+    } else {
+      assigned = assigned.filter((a) => a.name != participant.name);
+    }
+    dispatch(Actions.editNote(props.noteId, {assignee: assigned.map((assignee) => (assignee.id != "" ? assignee.id : assignee.name))}));
+  };
 
   return (
     <Portal
@@ -31,30 +44,42 @@ export const AssigneeList: VFC<AssigneeListProps> = (props) => {
         setSearchString("");
       }}
     >
-      <aside className="participants" onClick={(e) => e.stopPropagation()}>
-        <div className="participants__header">
-          <div className="participants__header-title">
-            <h4 className="participants__header-text">
-              <span>title</span>
-              <span className="participants__header-number">{them.length + 1}</span>
+      <aside className="assignees" onClick={(e) => e.stopPropagation()}>
+        <div className="assignees__header">
+          <div className="assignees__header-title">
+            <h4 className="assignees__header-text">
+              {/** TODO: Add translation */}
+              <span>Assign someone</span>
             </h4>
           </div>
-          <div className="participants__header-search">
-            <SearchIcon className="participants__search_icon" />
-            <input className="participants__header-input" placeholder="placeholder" onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+          <div className="assignees__header-search">
+            <SearchIcon className="assignees__search_icon" />
+            <input className="assignees__header-input" placeholder={t("ParticipantsList.search")} onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
           </div>
         </div>
-        <ul className="participants__list">
+        <ul className="assignees__list">
           <div className="list__header">
-            <label>namestuff</label>
-            {(me.role === "MODERATOR" || me.role === "OWNER") && <label>text2</label>}
+            {/* TODO:provide translation */}
+            <label>Name</label>
+            <label>Assigned</label>
           </div>
-          {showMe && <Participant key={me.user.id} participant={me!} />}
-          {them.length > 0 &&
-            them
-              .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name)) // Sort participants by name
-              .filter((participant) => searchString.split(" ").every((substr) => participant.user.name.toLowerCase().includes(substr)))
-              .map((participant) => <Participant key={participant.user.id} participant={participant} />)}
+          {props.allParticipants.length > 0 &&
+            props.allParticipants
+              .sort((parA, parB) => parA.name.localeCompare(parB.name)) // Sort participants by name
+              .filter((participant) => searchString.split(" ").every((substr) => participant.name.toLowerCase().includes(substr)))
+              .map((participant) => (
+                  <li className="assignees__list-element">
+                    <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
+                      <AssignAvatar participant={participant} />
+                      <input type="checkbox" disabled checked={participant.assigned} />
+                    </button>
+                  </li>
+                ))}
+          <li>
+            <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked({name: searchString, id: "", assigned: false})}>
+              <label>+ Add custom name</label>
+            </button>
+          </li>
         </ul>
       </aside>
     </Portal>

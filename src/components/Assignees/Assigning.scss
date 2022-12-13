@@ -1,161 +1,39 @@
 @import "constants/style.scss";
+@import "components/Votes/VoteButtons/AddVoteButton.scss";
 
-.assing-wrapper {
-  width: 100%;
-  background-color: lightblue;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: flex-start;
-}
-
-.assing-wrapper button {
-  height: 28px;
+.assigning {
+  height: 100%;
+  min-width: 40px;
   width: fit-content;
-  border-radius: 14px;
-  border-width: 1px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  border-radius: 12px;
+  background-color: red;
+  padding: 2px;
 }
-
-//---list---
-
-.assign {
-  position: absolute;
-  top: 92px;
-  right: 60px;
-  width: 300px;
-  border-radius: 16px;
-  box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
-  overflow: hidden;
-  z-index: 200;
-}
-
-.assign__header {
-  color: $color-white;
-  height: 86px;
-  position: relative;
-  background-color: var(--accent-color);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  padding: $padding--default $padding--medium;
-}
-
-.assign__header-text {
-  position: relative;
-  margin: 0;
-  font-weight: bold;
-  font-size: $text-size--large;
-  line-height: $line-height--medium;
-  letter-spacing: $letter-spacing--small;
-  width: fit-content;
-}
-
-.assign__header-search {
-  position: relative;
-  display: flex;
-}
-
-.assign__header-input {
+.assigning__avatar-button {
   background-color: transparent;
-  color: $color-white;
-  caret-color: $color-white;
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--small;
   border: none;
-  border-bottom: 1px solid transparent;
-  padding-left: 24px;
-  opacity: 0.8;
-  transition: all 0.08s ease-out;
-  outline: none;
-
-  &::placeholder {
-    opacity: 1;
-    color: $color-white;
-  }
-
-  &:hover {
-    opacity: 1;
-  }
-
-  &:focus-visible {
-    opacity: 1;
-    outline: none;
-    border-bottom: 1px solid $color-white;
-  }
-}
-
-.assign__search_icon {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-}
-
-//
-
-.input-list {
-  padding-top: 2.5px;
+  height: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: left;
-  flex-wrap: wrap;
-  background-color: lightcoral;
-}
-
-.input-list input {
-  width: 100%;
-}
-
-.input-list ul {
-  width: 100%;
-}
-
-.input-list button {
-  width: 100%;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
 }
 
-#add-external {
-  width: 20px;
-  height: 20px;
-  background-color: transparent;
-  color: white;
-  border-color: white;
-  box-shadow: none;
-}
+.assigning__avatar-external {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  background-color: #03ff8e;
 
-.list-element button {
-  height: 20px;
-  width: 20px;
-  border-radius: 12px;
-  justify-self: right;
-}
-
-#checkbox {
-  height: 15px;
-  width: 15px;
-  background-color: white;
-  left: 0;
-}
-#remove-Assigned {
-  height: 15px;
-  width: 15px;
-  border-radius: 12px;
+  font: inherit;
+  color: $color-black;
+  text-align: center;
   display: flex;
-  justify-self: right;
-}
-.assign-avatar {
-  height: 24px;
-  width: 24px;
+  align-items: center;
+  justify-content: center;
 }
 
-.assigned {
-  background-color: greenyellow;
+.assigning__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
 }

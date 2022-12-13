@@ -1,0 +1,29 @@
+@import "constants/style.scss";
+.assignee__avatar-external {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+
+  background-color: #03ff8e;
+
+  font: inherit;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assignee__avatar-board-user {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+}
+
+.assignee__avatar-and-name {
+  display: flex;
+  align-items: center;
+}
+
+.assignee__name {
+  font: inherit;
+}

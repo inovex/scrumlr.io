@@ -5,7 +5,6 @@ import {Note} from "./note";
 import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
-import {Assign} from "./assign";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -13,7 +12,6 @@ export interface BoardInitEvent {
     board: Board;
     columns: Column[];
     notes?: Note[];
-    assigned?: Assign[];
     votings?: Voting[];
     votes?: Vote[];
     participants: Participant[];
