@@ -1,8 +1,8 @@
 @import "constants/style.scss";
 
 .assignees {
-  position: absolute;
-  top: 400px;
+  position: sticky;
+  top: 270px;
   right: 400px;
   width: 300px;
   border-radius: 16px;
@@ -10,8 +10,6 @@
   overflow: hidden;
   z-index: 200;
 }
-
-//TODO: no idea how to make it mobile frienddly
 
 .assignees__header {
   color: $color-white;
@@ -127,6 +125,13 @@
 }
 
 [theme="dark"] {
+  & label {
+    color: $color-white;
+  }
+  & figcaption {
+    color: $color-white;
+  }
+
   .assignees {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
   }

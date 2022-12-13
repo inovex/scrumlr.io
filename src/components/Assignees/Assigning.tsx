@@ -58,72 +58,47 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
 
   return (
     <div className="assigning">
-      {
-        // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
-        // TODO: Add a popup on hover with the participants name
-        assigned.length === 0 ? (
-          <DotButton className="vote-button-add" onClick={() => setExpanded(!expanded)} disabled={false}>
-            <PlusIcon className="vote-button-add__icon" />
-          </DotButton>
-        ) : (
-          <button
-            className="assigning__avatar-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpanded(!expanded);
-            }}
-          >
-            {assigned
-              .map((x) => x)
-              .splice(0, assigned.length > 3 ? 2 : 3)
-              .map((assignee) =>
-                assignee.id !== "" ? (
-                  <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar" />
-                ) : (
-                  <ExternalAvatar name={assignee.name} className="assigning__avatar-external" />
-                )
+      <div className="assining__pill" data-tip="assign someone">
+        {/* TODO: provide translation  (ddont forget the tooltip) */}
+        <label className="assining__pill-assign-label-large">assigned:</label>
+        <label className="assining__pill-assign-label-small">+</label>
+        {
+          // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
+          // TODO: Add a popup on hover with the participants name
+          assigned.length === 0 ? (
+            <DotButton className="vote-button-add" onClick={() => setExpanded(!expanded)} disabled={false}>
+              <PlusIcon className="vote-button-add__icon" />
+            </DotButton>
+          ) : (
+            <button
+              className="assigning__avatar-button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(!expanded);
+              }}
+            >
+              {assigned
+                .map((x) => x)
+                .splice(0, assigned.length > 3 ? 2 : 3)
+                .map((assignee) =>
+                  assignee.id !== "" ? (
+                    <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assigning__avatar" />
+                  ) : (
+                    <ExternalAvatar name={assignee.name} className="assigning__avatar-external" />
+                  )
+                )}
+              {assigned.length > 3 ? (
+                <div>
+                  <label>+{assigned.length - 2}</label>
+                </div>
+              ) : (
+                <></>
               )}
-            {assigned.length > 3 ? (
-              <div>
-                <label>+{assigned.length - 2}</label>
-              </div>
-            ) : (
-              <></>
-            )}
-          </button>
-        )
-      }
+            </button>
+          )
+        }
+      </div>
       <AssigneeList open={expanded} onClose={() => setExpanded(false)} allParticipants={allParticipants} noteId={note!.id} assigned={assigned} />
     </div>
   );
 };
-
-{
-  /* <div className="assigning">
-
-<button title="toggle-assigning" onClick={() => setExpanded(!expanded)}>
-  {
-    //check if no one is assigned. if so, show +assign  icon, else show assigned avatars
-    //TODO: Add a popup on hover with the participants name
-    assigned.length === 0
-      ? <ExternalAvatar name="+" />
-      : assigned.map(assignee => assignee.id != ""
-        ? <Avatar seed={assignee.id!} avatar={assignee.avatar} className="assign-avatar" />
-        : <ExternalAvatar name={assignee.name} />)
-  }
-</button>
-{expanded&&
-<input/>}
-</div> */
-}
-//   <div onClick={(e) => {e.stopPropagation;e.preventDefault}}>
-//   <button onClick={onSubmitHandler}>submit</button>
-//   <input
-//     type="text"
-//     onChange={(e) => {
-//       console.log(e.target.value);
-//       setUserInput(e.target.value);
-//     }}
-//     value={note?.assignee ? note?.assignee[0] : userInput}
-//   />
-// </div>

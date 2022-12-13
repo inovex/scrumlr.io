@@ -2,13 +2,15 @@
 @import "components/Votes/VoteButtons/AddVoteButton.scss";
 
 .assigning {
+  margin-left: 10px;
   height: 100%;
   min-width: 40px;
-  width: fit-content;
+  width: 100%;
   border-radius: 12px;
   padding: 2px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .assigning__avatar-button {
@@ -24,7 +26,7 @@
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  background-color: #03ff8e;
+  background-color: #03cdff;
 
   font: inherit;
   color: $color-black;
@@ -42,4 +44,94 @@
   border-radius: 15px;
 
   margin-left: -12px;
+}
+
+.assining__pill {
+  width: fit-content;
+  border-radius: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  background-color: var(--accent-color--desaturated-light);
+}
+
+[theme="dark"] {
+  .assining__pill {
+    background-color: var(--accent-color--desaturated-dark);
+  }
+
+  & label {
+    color: $color-white;
+  }
+}
+
+.assining__pill-assign-label-small {
+  display: inline-block;
+}
+.assining__pill-assign-label-large {
+  display: none;
+}
+
+@media only screen and (max-width: 1970px) {
+  .assining__pill-assign-label-small {
+    display: none;
+  }
+
+  .assining__pill-assign-label-large {
+    display: inline-block;
+  }
+}
+
+@media only screen and (max-width: 1730px) {
+  .assining__pill-assign-label-small {
+    display: inline-block;
+  }
+  .assining__pill-assign-label-large {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1391px) {
+  .assining__pill-assign-label-small {
+    display: none;
+  }
+
+  .assining__pill-assign-label-large {
+    display: inline-block;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .assining__pill-assign-label-small {
+    display: inline-block;
+  }
+  .assining__pill-assign-label-large {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 760px) {
+  .assining__pill-assign-label-small {
+    display: none;
+  }
+
+  .assining__pill-assign-label-large {
+    display: inline-block;
+  }
+}
+
+@media only screen and (max-width: 510px) {
+  .assining__pill-assign-label-small {
+    display: inline-block;
+  }
+  .assining__pill-assign-label-large {
+    display: none;
+  }
 }

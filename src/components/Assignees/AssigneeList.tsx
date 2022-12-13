@@ -54,7 +54,7 @@ export const AssigneeList = (props: AssigneeListProps) => {
           </div>
           <div className="assignees__header-search">
             <SearchIcon className="assignees__search_icon" />
-            <input className="assignees__header-input" placeholder={t("ParticipantsList.search")} onChange={(event) => setSearchString(event.target.value.trim().toLowerCase())} />
+            <input className="assignees__header-input" placeholder={t("ParticipantsList.search")} onChange={(event) => setSearchString(event.target.value.trim())} />
           </div>
         </div>
         <ul className="assignees__list">
@@ -66,7 +66,12 @@ export const AssigneeList = (props: AssigneeListProps) => {
           {props.allParticipants.length > 0 &&
             props.allParticipants
               .sort((parA, parB) => parA.name.localeCompare(parB.name)) // Sort participants by name
-              .filter((participant) => searchString.split(" ").every((substr) => participant.name.toLowerCase().includes(substr)))
+              .filter((participant) =>
+                searchString
+                  .toLocaleLowerCase()
+                  .split(" ")
+                  .every((substr) => participant.name.toLowerCase().includes(substr))
+              )
               .map((participant) => (
                 <li className="assignees__list-element">
                   <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
