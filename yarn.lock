@@ -4791,9 +4791,9 @@ i18next-fs-backend@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.1.0.tgz#a90983df2992f478e1d5f3a4c794754d19a0bcdc"
 
-i18next-http-backend@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.0.2.tgz"
+i18next-http-backend@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-2.1.0.tgz#c521603b864e5334fee21fcf1a57c5adefb15089"
   dependencies:
     cross-fetch "3.1.5"
 
