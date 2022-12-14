@@ -57,7 +57,7 @@
     "@types/jest": "^29.2.4",
     "@types/js-cookie": "^3.0.2",
     "@types/marked": "^4.0.8",
-    "@types/node": "^18.11.13",
+    "@types/node": "^18.11.15",
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^17.0.43",
     "@types/react-dnd": "^3.0.2",
