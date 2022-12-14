@@ -6,7 +6,7 @@ go 1.17
 replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
 
 require (
-	github.com/go-chi/chi/v5 v5.0.7
+	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/jwtauth/v5 v5.1.0
 	github.com/go-chi/render v1.0.2
@@ -23,7 +23,7 @@ require (
 	github.com/uptrace/bun/dbfixture v1.1.9
 	github.com/uptrace/bun/dialect/pgdialect v1.1.9
 	github.com/uptrace/bun/extra/bundebug v1.1.9
-	github.com/urfave/cli/v2 v2.23.6
+	github.com/urfave/cli/v2 v2.23.7
 	go.uber.org/zap v1.24.0
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 )

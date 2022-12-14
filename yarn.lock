@@ -1414,17 +1414,13 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@react-dnd/asap@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/@react-dnd/asap/-/asap-4.0.0.tgz"
-
 "@react-dnd/asap@4.0.1", "@react-dnd/asap@^4.0.0":
   version "4.0.1"
   resolved "https://registry.npmjs.org/@react-dnd/asap/-/asap-4.0.1.tgz"
 
-"@react-dnd/invariant@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@react-dnd/invariant/-/invariant-3.0.0.tgz"
+"@react-dnd/asap@^5.0.1":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@react-dnd/asap/-/asap-5.0.2.tgz#1f81f124c1cd6f39511c11a881cfb0f715343488"
 
 "@react-dnd/invariant@3.0.1":
   version "3.0.1"
@@ -1434,6 +1430,10 @@
   version "2.0.0"
   resolved "https://registry.npmjs.org/@react-dnd/invariant/-/invariant-2.0.0.tgz"
 
+"@react-dnd/invariant@^4.0.1":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@react-dnd/invariant/-/invariant-4.0.2.tgz#b92edffca10a26466643349fac7cdfb8799769df"
+
 "@react-dnd/shallowequal@3.0.1":
   version "3.0.1"
   resolved "https://registry.npmjs.org/@react-dnd/shallowequal/-/shallowequal-3.0.1.tgz"
@@ -1442,85 +1442,85 @@
   version "2.0.0"
   resolved "https://registry.npmjs.org/@react-dnd/shallowequal/-/shallowequal-2.0.0.tgz"
 
-"@react-spring/animated@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/animated/-/animated-9.5.5.tgz"
+"@react-spring/animated@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.6.0.tgz#3ac531d82e35e4ad205456f9fe9464e2bbcb1c5f"
   dependencies:
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/core@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/core/-/core-9.5.5.tgz"
+"@react-spring/core@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/core/-/core-9.6.0.tgz#081c44e4005c52e7e6957ba151a697709cc0b05a"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/rafz" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/rafz" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/konva@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/konva/-/konva-9.5.5.tgz"
+"@react-spring/konva@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/konva/-/konva-9.6.0.tgz#cb589061f04c5ca1982232bfefb516449980b7fa"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/native@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/native/-/native-9.5.5.tgz"
+"@react-spring/native@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/native/-/native-9.6.0.tgz#8673355aaa26c94dd0347fde2cc72479daa4023e"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/rafz@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/rafz/-/rafz-9.5.5.tgz"
+"@react-spring/rafz@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/rafz/-/rafz-9.6.0.tgz#8c46fff30157159775eb9007094dae3400390728"
 
-"@react-spring/shared@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/shared/-/shared-9.5.5.tgz"
+"@react-spring/shared@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/shared/-/shared-9.6.0.tgz#4ccdf911d64dacb409c5f292de65fdb8ad41508f"
   dependencies:
-    "@react-spring/rafz" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/rafz" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/three@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/three/-/three-9.5.5.tgz"
+"@react-spring/three@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/three/-/three-9.6.0.tgz#4700c6621d710079278f5f0284fab1a547e6d743"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/types@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/types/-/types-9.5.5.tgz"
+"@react-spring/types@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/types/-/types-9.6.0.tgz#9ba7061fef88ffa872b7898fcf008ffb29a51d90"
 
-"@react-spring/web@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/web/-/web-9.5.5.tgz"
+"@react-spring/web@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/web/-/web-9.6.0.tgz#81fcdc1dc6efe6caedf2ef7f706bd18500e7b582"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@react-spring/zdog@~9.5.5":
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/@react-spring/zdog/-/zdog-9.5.5.tgz"
+"@react-spring/zdog@~9.6.0":
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/@react-spring/zdog/-/zdog-9.6.0.tgz#130d540a22cc33c809061321dc967e670b5d5e5f"
   dependencies:
-    "@react-spring/animated" "~9.5.5"
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/shared" "~9.5.5"
-    "@react-spring/types" "~9.5.5"
+    "@react-spring/animated" "~9.6.0"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/shared" "~9.6.0"
+    "@react-spring/types" "~9.6.0"
 
-"@remix-run/router@1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.4.tgz#cbfbec6735711e7c2fc93b9b40adf70ef5a39990"
+"@remix-run/router@1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.5.tgz#d5c65626add4c3c185a89aa5bd38b1e42daec075"
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -1902,17 +1902,17 @@
   version "0.0.29"
   resolved "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
 
-"@types/marked@^4.0.7":
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/@types/marked/-/marked-4.0.7.tgz"
+"@types/marked@^4.0.8":
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/@types/marked/-/marked-4.0.8.tgz#b316887ab3499d0a8f4c70b7bd8508f92d477955"
 
 "@types/mime@*":
   version "3.0.1"
   resolved "https://registry.npmjs.org/@types/mime/-/mime-3.0.1.tgz"
 
-"@types/node@*", "@types/node@^18.11.11":
-  version "18.11.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.11.tgz#1d455ac0211549a8409d3cdb371cd55cc971e8dc"
+"@types/node@*", "@types/node@^18.11.15":
+  version "18.11.15"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.15.tgz#de0e1fbd2b22b962d45971431e2ae696643d3f5d"
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -2084,13 +2084,13 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^5.45.1", "@typescript-eslint/eslint-plugin@^5.5.0":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.45.1.tgz#ee5b51405f6c9ee7e60e4006d68c69450d3b4536"
+"@typescript-eslint/eslint-plugin@^5.46.1", "@typescript-eslint/eslint-plugin@^5.5.0":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.46.1.tgz#098abb4c9354e19f460d57ab18bff1f676a6cff0"
   dependencies:
-    "@typescript-eslint/scope-manager" "5.45.1"
-    "@typescript-eslint/type-utils" "5.45.1"
-    "@typescript-eslint/utils" "5.45.1"
+    "@typescript-eslint/scope-manager" "5.46.1"
+    "@typescript-eslint/type-utils" "5.46.1"
+    "@typescript-eslint/utils" "5.46.1"
     debug "^4.3.4"
     ignore "^5.2.0"
     natural-compare-lite "^1.4.0"
@@ -2104,13 +2104,13 @@
   dependencies:
     "@typescript-eslint/utils" "5.43.0"
 
-"@typescript-eslint/parser@^5.45.1", "@typescript-eslint/parser@^5.5.0":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.45.1.tgz#6440ec283fa1373a12652d4e2fef4cb6e7b7e8c6"
+"@typescript-eslint/parser@^5.46.1", "@typescript-eslint/parser@^5.5.0":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.46.1.tgz#1fc8e7102c1141eb64276c3b89d70da8c0ba5699"
   dependencies:
-    "@typescript-eslint/scope-manager" "5.45.1"
-    "@typescript-eslint/types" "5.45.1"
-    "@typescript-eslint/typescript-estree" "5.45.1"
+    "@typescript-eslint/scope-manager" "5.46.1"
+    "@typescript-eslint/types" "5.46.1"
+    "@typescript-eslint/typescript-estree" "5.46.1"
     debug "^4.3.4"
 
 "@typescript-eslint/scope-manager@5.43.0":
@@ -2120,19 +2120,19 @@
     "@typescript-eslint/types" "5.43.0"
     "@typescript-eslint/visitor-keys" "5.43.0"
 
-"@typescript-eslint/scope-manager@5.45.1":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.45.1.tgz#5b87d025eec7035d879b99c260f03be5c247883c"
+"@typescript-eslint/scope-manager@5.46.1":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.46.1.tgz#70af8425c79bbc1178b5a63fb51102ddf48e104a"
   dependencies:
-    "@typescript-eslint/types" "5.45.1"
-    "@typescript-eslint/visitor-keys" "5.45.1"
+    "@typescript-eslint/types" "5.46.1"
+    "@typescript-eslint/visitor-keys" "5.46.1"
 
-"@typescript-eslint/type-utils@5.45.1":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/type-utils/-/type-utils-5.45.1.tgz#cb7d300c3c95802cea9f87c7f8be363cf8f8538c"
+"@typescript-eslint/type-utils@5.46.1":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/type-utils/-/type-utils-5.46.1.tgz#195033e4b30b51b870dfcf2828e88d57b04a11cc"
   dependencies:
-    "@typescript-eslint/typescript-estree" "5.45.1"
-    "@typescript-eslint/utils" "5.45.1"
+    "@typescript-eslint/typescript-estree" "5.46.1"
+    "@typescript-eslint/utils" "5.46.1"
     debug "^4.3.4"
     tsutils "^3.21.0"
 
@@ -2140,9 +2140,9 @@
   version "5.43.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/types/-/types-5.43.0.tgz"
 
-"@typescript-eslint/types@5.45.1":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.45.1.tgz#8e1883041cee23f1bb7e1343b0139f97f6a17c14"
+"@typescript-eslint/types@5.46.1":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.46.1.tgz#4e9db2107b9a88441c4d5ecacde3bb7a5ebbd47e"
 
 "@typescript-eslint/typescript-estree@5.43.0":
   version "5.43.0"
@@ -2156,12 +2156,12 @@
     semver "^7.3.7"
     tsutils "^3.21.0"
 
-"@typescript-eslint/typescript-estree@5.45.1":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.45.1.tgz#b3dc37f0c4f0fe73e09917fc735e6f96eabf9ba4"
+"@typescript-eslint/typescript-estree@5.46.1":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.46.1.tgz#5358088f98a8f9939355e0996f9c8f41c25eced2"
   dependencies:
-    "@typescript-eslint/types" "5.45.1"
-    "@typescript-eslint/visitor-keys" "5.45.1"
+    "@typescript-eslint/types" "5.46.1"
+    "@typescript-eslint/visitor-keys" "5.46.1"
     debug "^4.3.4"
     globby "^11.1.0"
     is-glob "^4.0.3"
@@ -2181,15 +2181,15 @@
     eslint-utils "^3.0.0"
     semver "^7.3.7"
 
-"@typescript-eslint/utils@5.45.1", "@typescript-eslint/utils@^5.10.0", "@typescript-eslint/utils@^5.13.0":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.45.1.tgz#39610c98bde82c4792f2a858b29b7d0053448be2"
+"@typescript-eslint/utils@5.46.1", "@typescript-eslint/utils@^5.10.0", "@typescript-eslint/utils@^5.13.0":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.46.1.tgz#7da3c934d9fd0eb4002a6bb3429f33298b469b4a"
   dependencies:
     "@types/json-schema" "^7.0.9"
     "@types/semver" "^7.3.12"
-    "@typescript-eslint/scope-manager" "5.45.1"
-    "@typescript-eslint/types" "5.45.1"
-    "@typescript-eslint/typescript-estree" "5.45.1"
+    "@typescript-eslint/scope-manager" "5.46.1"
+    "@typescript-eslint/types" "5.46.1"
+    "@typescript-eslint/typescript-estree" "5.46.1"
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
     semver "^7.3.7"
@@ -2201,11 +2201,11 @@
     "@typescript-eslint/types" "5.43.0"
     eslint-visitor-keys "^3.3.0"
 
-"@typescript-eslint/visitor-keys@5.45.1":
-  version "5.45.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.45.1.tgz#204428430ad6a830d24c5ac87c71366a1cfe1948"
+"@typescript-eslint/visitor-keys@5.46.1":
+  version "5.46.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.46.1.tgz#126cc6fe3c0f83608b2b125c5d9daced61394242"
   dependencies:
-    "@typescript-eslint/types" "5.45.1"
+    "@typescript-eslint/types" "5.46.1"
     eslint-visitor-keys "^3.3.0"
 
 "@webassemblyjs/ast@1.11.1":
@@ -3528,14 +3528,6 @@ dlv@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npmjs.org/dlv/-/dlv-1.1.3.tgz"
 
-dnd-core@15.1.1:
-  version "15.1.1"
-  resolved "https://registry.npmjs.org/dnd-core/-/dnd-core-15.1.1.tgz"
-  dependencies:
-    "@react-dnd/asap" "4.0.0"
-    "@react-dnd/invariant" "3.0.0"
-    redux "^4.1.1"
-
 dnd-core@15.1.2:
   version "15.1.2"
   resolved "https://registry.npmjs.org/dnd-core/-/dnd-core-15.1.2.tgz"
@@ -3552,9 +3544,17 @@ dnd-core@^10.0.2:
     "@react-dnd/invariant" "^2.0.0"
     redux "^4.0.4"
 
-dnd-multi-backend@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/dnd-multi-backend/-/dnd-multi-backend-7.1.0.tgz"
+dnd-core@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-16.0.1.tgz#a1c213ed08961f6bd1959a28bb76f1a868360d19"
+  dependencies:
+    "@react-dnd/asap" "^5.0.1"
+    "@react-dnd/invariant" "^4.0.1"
+    redux "^4.2.0"
+
+dnd-multi-backend@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-8.0.0.tgz#54c63d9ec12f71b7b13ac53971f60d70e2bc5487"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -4272,9 +4272,9 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-filter-obj@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/filter-obj/-/filter-obj-1.1.0.tgz"
+filter-obj@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/filter-obj/-/filter-obj-5.1.0.tgz#5bd89676000a713d7db2e197f660274428e524ed"
 
 finalhandler@1.2.0:
   version "1.2.0"
@@ -4787,13 +4787,13 @@ i18next-browser-languagedetector@^7.0.1:
   dependencies:
     "@babel/runtime" "^7.19.4"
 
-i18next-fs-backend@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/i18next-fs-backend/-/i18next-fs-backend-2.0.1.tgz"
+i18next-fs-backend@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-fs-backend/-/i18next-fs-backend-2.1.0.tgz#a90983df2992f478e1d5f3a4c794754d19a0bcdc"
 
-i18next-http-backend@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.npmjs.org/i18next-http-backend/-/i18next-http-backend-2.0.2.tgz"
+i18next-http-backend@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-http-backend/-/i18next-http-backend-2.1.0.tgz#c521603b864e5334fee21fcf1a57c5adefb15089"
   dependencies:
     cross-fetch "3.1.5"
 
@@ -4803,9 +4803,9 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^22.0.8:
-  version "22.0.8"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.0.8.tgz#0ab088d60cb83495c85422bb2e035a8a1e3756ef"
+i18next@^22.4.5:
+  version "22.4.5"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.4.5.tgz#7324e4946c2facbe743ca25bca8980af05b0a109"
   dependencies:
     "@babel/runtime" "^7.20.6"
 
@@ -5931,9 +5931,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-marked@4.2.3:
-  version "4.2.3"
-  resolved "https://registry.npmjs.org/marked/-/marked-4.2.3.tgz"
+marked@4.2.4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.2.4.tgz#5a4ce6c7a1ae0c952601fce46376ee4cf1797e1c"
 
 mdn-data@2.0.14:
   version "2.0.14"
@@ -6946,9 +6946,9 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^2.8.0:
-  version "2.8.0"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-2.8.0.tgz"
+prettier@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.1.tgz#4e1fd11c34e2421bc1da9aea9bd8127cd0a35efc"
 
 pretty-bytes@^5.3.0, pretty-bytes@^5.4.1:
   version "5.6.0"
@@ -7040,14 +7040,13 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@^7.1.3:
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-7.1.3.tgz#a1cf90e994abb113a325804a972d98276fe02328"
+query-string@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-8.0.2.tgz#500007fca8d244478a1e264e5bdd561c34055c18"
   dependencies:
     decode-uri-component "^0.2.2"
-    filter-obj "^1.1.0"
+    filter-obj "^5.1.0"
     split-on-first "^1.0.0"
-    strict-uri-encode "^2.0.0"
 
 querystringify@^2.1.1:
   version "2.2.0"
@@ -7086,13 +7085,13 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rdndmb-html5-to-touch@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.npmjs.org/rdndmb-html5-to-touch/-/rdndmb-html5-to-touch-7.1.0.tgz"
+rdndmb-html5-to-touch@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/rdndmb-html5-to-touch/-/rdndmb-html5-to-touch-8.0.0.tgz#ccc0088fcf431eb4e50853a37a375012afbc24b6"
   dependencies:
-    dnd-multi-backend "^7.1.0"
-    react-dnd-html5-backend "12.1.1 - 15.1.2"
-    react-dnd-touch-backend "12.0.0 - 15.1.2"
+    dnd-multi-backend "^8.0.0"
+    react-dnd-html5-backend "^16.0.1"
+    react-dnd-touch-backend "^16.0.1"
 
 react-app-polyfill@^3.0.0:
   version "3.0.0"
@@ -7140,28 +7139,28 @@ react-dev-utils@^12.0.1:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-react-dnd-html5-backend@*, react-dnd-html5-backend@^15.1.3:
+react-dnd-html5-backend@*, react-dnd-html5-backend@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-16.0.1.tgz#87faef15845d512a23b3c08d29ecfd34871688b6"
+  dependencies:
+    dnd-core "^16.0.1"
+
+react-dnd-html5-backend@^15.1.3:
   version "15.1.3"
   resolved "https://registry.npmjs.org/react-dnd-html5-backend/-/react-dnd-html5-backend-15.1.3.tgz"
   dependencies:
     dnd-core "15.1.2"
 
-"react-dnd-html5-backend@12.1.1 - 15.1.2":
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd-html5-backend/-/react-dnd-html5-backend-15.1.2.tgz"
+react-dnd-multi-backend@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-8.0.0.tgz#453a28cc266231422a1f90ba7f277a5837e5a712"
   dependencies:
-    dnd-core "15.1.1"
+    dnd-multi-backend "^8.0.0"
+    react-dnd-preview "^8.0.0"
 
-react-dnd-multi-backend@^7.1.1:
-  version "7.1.1"
-  resolved "https://registry.npmjs.org/react-dnd-multi-backend/-/react-dnd-multi-backend-7.1.1.tgz"
-  dependencies:
-    dnd-multi-backend "^7.1.0"
-    react-dnd-preview "^7.1.1"
-
-react-dnd-preview@^7.1.1:
-  version "7.1.1"
-  resolved "https://registry.npmjs.org/react-dnd-preview/-/react-dnd-preview-7.1.1.tgz"
+react-dnd-preview@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-8.0.0.tgz#5b90b1c934e3087e357f0c00714f9ea8429a20ac"
 
 react-dnd-test-backend@^15.1.2:
   version "15.1.2"
@@ -7173,19 +7172,26 @@ react-dnd-test-utils@^15.1.2:
   version "15.1.2"
   resolved "https://registry.npmjs.org/react-dnd-test-utils/-/react-dnd-test-utils-15.1.2.tgz"
 
-"react-dnd-touch-backend@12.0.0 - 15.1.2", react-dnd-touch-backend@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd-touch-backend/-/react-dnd-touch-backend-15.1.2.tgz"
-  dependencies:
-    "@react-dnd/invariant" "3.0.1"
-    dnd-core "15.1.2"
-
 react-dnd-touch-backend@^10.0.2:
   version "10.0.2"
   resolved "https://registry.npmjs.org/react-dnd-touch-backend/-/react-dnd-touch-backend-10.0.2.tgz"
   dependencies:
     "@react-dnd/invariant" "^2.0.0"
     dnd-core "^10.0.2"
+
+react-dnd-touch-backend@^15.1.2:
+  version "15.1.2"
+  resolved "https://registry.npmjs.org/react-dnd-touch-backend/-/react-dnd-touch-backend-15.1.2.tgz"
+  dependencies:
+    "@react-dnd/invariant" "3.0.1"
+    dnd-core "15.1.2"
+
+react-dnd-touch-backend@^16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-touch-backend/-/react-dnd-touch-backend-16.0.1.tgz#e73f8169e2b9fac0f687970f875cac0a4d02d6e2"
+  dependencies:
+    "@react-dnd/invariant" "^4.0.1"
+    dnd-core "^16.0.1"
 
 react-dnd@*, react-dnd@^15.1.2:
   version "15.1.2"
@@ -7242,13 +7248,13 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hotkeys-hook@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/react-hotkeys-hook/-/react-hotkeys-hook-4.0.4.tgz"
+react-hotkeys-hook@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.0.6.tgz#c1c14dde9803d0c2d84727e0b88e1a50af81dc8c"
 
-react-i18next@^12.0.0:
-  version "12.0.0"
-  resolved "https://registry.npmjs.org/react-i18next/-/react-i18next-12.0.0.tgz"
+react-i18next@^12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-12.1.1.tgz#2626cdbfe6bcb76ef833861c0184a5c4e5e3c089"
   dependencies:
     "@babel/runtime" "^7.14.5"
     html-parse-stringify "^3.0.1"
@@ -7280,18 +7286,18 @@ react-refresh@^0.11.0:
   version "0.11.0"
   resolved "https://registry.npmjs.org/react-refresh/-/react-refresh-0.11.0.tgz"
 
-react-router-dom@^6.4.4:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.4.tgz#4271ec66333c440d1754477e4e6a3a5acb5487f8"
+react-router-dom@^6.4.5:
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.5.tgz#4fdb12efef4f3848c693a76afbeaed1f6ca02047"
   dependencies:
-    "@remix-run/router" "1.0.4"
-    react-router "6.4.4"
+    "@remix-run/router" "1.0.5"
+    react-router "6.4.5"
 
-react-router@6.4.4, react-router@^6.0.1:
-  version "6.4.4"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.4.tgz#8e7794f55ccc7050cb03937c87ff3720ce9f8b60"
+react-router@6.4.5, react-router@^6.0.1:
+  version "6.4.5"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.5.tgz#73f382af2c8b9a86d74e761a7c5fc3ce7cb0024d"
   dependencies:
-    "@remix-run/router" "1.0.4"
+    "@remix-run/router" "1.0.5"
 
 react-scripts@^5.0.1:
   version "5.0.1"
@@ -7351,16 +7357,16 @@ react-side-effect@^2.1.0:
   version "2.1.1"
   resolved "https://registry.npmjs.org/react-side-effect/-/react-side-effect-2.1.1.tgz"
 
-react-spring@^9.5.5:
-  version "9.5.5"
-  resolved "https://registry.npmjs.org/react-spring/-/react-spring-9.5.5.tgz"
+react-spring@^9.6.0:
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-9.6.0.tgz#a47fc9ca9d696256b1b7447364ca406dca3bcf20"
   dependencies:
-    "@react-spring/core" "~9.5.5"
-    "@react-spring/konva" "~9.5.5"
-    "@react-spring/native" "~9.5.5"
-    "@react-spring/three" "~9.5.5"
-    "@react-spring/web" "~9.5.5"
-    "@react-spring/zdog" "~9.5.5"
+    "@react-spring/core" "~9.6.0"
+    "@react-spring/konva" "~9.6.0"
+    "@react-spring/native" "~9.6.0"
+    "@react-spring/three" "~9.6.0"
+    "@react-spring/web" "~9.6.0"
+    "@react-spring/zdog" "~9.6.0"
 
 react-to-print@^2.14.10:
   version "2.14.10"
@@ -7451,7 +7457,7 @@ redux-thunk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.2.tgz"
 
-redux@^4.0.0, redux@^4.0.4, redux@^4.0.5, redux@^4.1.1, redux@^4.1.2, redux@^4.2.0:
+redux@^4.0.0, redux@^4.0.4, redux@^4.0.5, redux@^4.1.2, redux@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/redux/-/redux-4.2.0.tgz"
   dependencies:
@@ -7674,9 +7680,9 @@ sass-loader@^12.3.0:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.56.1:
-  version "1.56.1"
-  resolved "https://registry.npmjs.org/sass/-/sass-1.56.1.tgz"
+sass@^1.56.2:
+  version "1.56.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.56.2.tgz#9433b345ab3872996c82a53a58c014fd244fd095"
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
@@ -7990,10 +7996,6 @@ statuses@2.0.1:
 "statuses@>= 1.4.0 < 2":
   version "1.5.0"
   resolved "https://registry.npmjs.org/statuses/-/statuses-1.5.0.tgz"
-
-strict-uri-encode@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/strict-uri-encode/-/strict-uri-encode-2.0.0.tgz"
 
 string-argv@^0.3.1:
   version "0.3.1"
@@ -8439,9 +8441,9 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.9.3:
-  version "4.9.3"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.3.tgz"
+typescript@^4.9.4:
+  version "4.9.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

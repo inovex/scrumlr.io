@@ -100,7 +100,14 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
-        <h2 onDoubleClick={() => setColumnNameMode("EDIT")} className={classNames("column__header-text", {"column__header-text--hidden": !visible})}>
+        <h2
+          onDoubleClick={() => {
+            if (isModerator) {
+              setColumnNameMode("EDIT");
+            }
+          }}
+          className={classNames("column__header-text", {"column__header-text--hidden": !visible})}
+        >
           {name}
         </h2>
       </div>
@@ -164,7 +171,10 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   );
 
   return (
-    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
+    <section
+      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
+      ref={columnRef}
+    >
       <div className="column__content">
         <div className="column__header">
           <NoteInput
