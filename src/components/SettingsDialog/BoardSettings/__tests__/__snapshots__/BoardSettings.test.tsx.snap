@@ -172,12 +172,8 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.AllowNoteRepositioningOption
           </span>
           <div
-            class="board-settings__show-note-repositioning-value"
-          >
-            <div
-              class="toggle toggle--active"
-            />
-          </div>
+            class="toggle toggle--active board-settings__show-note-repositioning-value"
+          />
         </button>
       </div>
       <button
