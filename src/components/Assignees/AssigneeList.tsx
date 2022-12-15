@@ -36,6 +36,7 @@ export const AssigneeList = (props: AssigneeListProps) => {
       assigned = assigned.filter((a) => a.name !== participant.name);
     }
     dispatch(Actions.editNote(props.noteId, {assignee: assigned.map((assignee) => (assignee.id !== "" ? assignee.id : assignee.name))}));
+    setSearchString("");
   };
 
   return (
@@ -66,6 +67,7 @@ export const AssigneeList = (props: AssigneeListProps) => {
               className="assignees__header-input"
               placeholder={t("ParticipantsList.search")}
               onChange={(event) => setSearchString(event.target.value.trim())}
+              value={searchString}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === "Enter") {
                   e.preventDefault();
