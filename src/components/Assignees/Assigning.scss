@@ -4,11 +4,10 @@
 
 .assigning {
   margin-left: 10px;
-  height: 100%;
+  height: var(--note-footer-height);
   min-width: 40px;
   width: 100%;
   border-radius: 12px;
-  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -16,17 +15,18 @@
 
 label {
   font-size: inherit;
-  font-weight: bold;
   text-align: center;
 }
 
-.assigning__avatar-button {
+.assigning__avatar-container {
   background-color: transparent;
   border: none;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding-bottom: 2px;
+  margin-left: 5px;
 }
 
 .avatar-on-note {
@@ -34,7 +34,9 @@ label {
 }
 
 .assining__pill {
+  height: 100%;
   width: fit-content;
+  border: none;
   border-radius: 100px;
   padding-left: 10px;
   padding-right: 10px;
@@ -47,6 +49,19 @@ label {
   gap: 10px;
 
   background-color: var(--accent-color--desaturated-light);
+}
+
+.assining__add-button-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assining__add-button-plus__icon {
+  height: $icon--medium;
+  width: $icon--medium;
+  color: var(--accent-color);
+  pointer-events: none;
 }
 
 [theme="dark"] {
@@ -85,7 +100,7 @@ label {
   }
 }
 
-@media only screen and (max-width: 1391px) {
+@media only screen and (max-width: 1018px) {
   .assining__pill-assign-label-small {
     display: none;
   }

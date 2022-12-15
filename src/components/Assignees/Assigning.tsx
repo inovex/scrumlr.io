@@ -3,7 +3,6 @@ import {useAppSelector} from "store";
 import "./Assigning.scss";
 import {useEffect, useState} from "react";
 import {Assignee} from "types/assignee";
-import {DotButton} from "components/DotButton";
 import {Avatar} from "components/Avatar";
 import _ from "underscore";
 import {ExternalAvatar} from "./ExternalAvatar";
@@ -67,7 +66,14 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
   return (
     <div className="assigning">
       {!state.activeVoting && (
-        <div className="assining__pill" data-tip="assign someone">
+        <button
+          className="assining__pill"
+          data-tip="assign someone"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+          }}
+        >
           {/* TODO: provide translation  (ddont forget the tooltip) */}
           <label className="assining__pill-assign-label-large">assigned:</label>
           <label className="assining__pill-assign-label-small">@</label>
@@ -75,17 +81,11 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
             // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
             // TODO: Add a popup on hover with the participants name
             assigned.length === 0 ? (
-              <DotButton className="vote-button-add" onClick={() => setExpanded(!expanded)} disabled={false}>
-                <PlusIcon className="vote-button-add__icon" />
-              </DotButton>
+              <div className="assining__add-button-plus">
+                <PlusIcon className="assining__add-button-plus__icon" />
+              </div>
             ) : (
-              <button
-                className="assigning__avatar-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setExpanded(!expanded);
-                }}
-              >
+              <div className="assigning__avatar-container">
                 {assigned
                   .map((x) => x)
                   .splice(0, assigned.length > 3 ? 2 : 3)
@@ -103,10 +103,10 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
                 ) : (
                   <></>
                 )}
-              </button>
+              </div>
             )
           }
-        </div>
+        </button>
       )}
       <AssigneeList open={expanded} onClose={() => setExpanded(false)} allParticipants={allParticipants} noteId={note!.id} assigned={assigned} />
     </div>
