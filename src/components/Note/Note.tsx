@@ -40,6 +40,8 @@ export const Note = (props: NoteProps) => {
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
+  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
   /* eslint-disable */
   useEffect(() => {
@@ -65,6 +67,7 @@ export const Note = (props: NoteProps) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    canDrag: isModerator || allowStacking,
   });
 
   const [{isOver}, drop] = useDrop(() => ({
