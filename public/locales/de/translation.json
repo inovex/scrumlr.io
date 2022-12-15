@@ -21,11 +21,6 @@
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
   },
-  "AccessPolicy": {
-    "PUBLIC": "Offen",
-    "BY_PASSPHRASE": "Passwortgeschützt",
-    "BY_INVITE": "Geschlossen"
-  },
   "BoardGuard": {
     "incorrectPassphrase": "Falsches Passwort.",
     "reject": "Du wurdest zu der Sitzung nicht zugelassen.",
@@ -38,7 +33,7 @@
   "AccessPolicySelection": {
     "title": "Zugriffseinstellung",
     "publicTitle": "Offen",
-    "byPassphraseTitle": "Passwortgeschützt",
+    "byPassphraseTitle": "Mit Passwort",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
     "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
@@ -277,7 +272,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugangs\u00ADrichtlinien",
+    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",

@@ -206,7 +206,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
-                <Note key={note} noteId={note} viewer={state.viewer} />
+                <Note noteId={note} viewer={state.viewer} />
               </li>
             ))}
           </ul>
