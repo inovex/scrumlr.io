@@ -2,7 +2,7 @@ import {FC} from "react";
 import "./NoteDialogHeader.scss";
 
 type NoteDialogHeaderProps = {
-  columnName?: string;
+  columnName: string;
 };
 
 export const NoteDialogHeader: FC<NoteDialogHeaderProps> = ({columnName}: NoteDialogHeaderProps) => (

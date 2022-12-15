@@ -93,7 +93,7 @@ export const StackView = () => {
       parent: note,
       stack: stackedNotes,
       avatar: author?.user.avatar,
-      authorName,
+      authorName: authorName ?? "",
     },
   });
 
@@ -118,7 +118,7 @@ export const StackView = () => {
           parent: note,
           stack: stackedNotes,
           avatar: author?.user.avatar,
-          authorName,
+          authorName: authorName ?? "",
         },
       });
     }
@@ -152,7 +152,7 @@ export const StackView = () => {
           parent: note,
           stack: stackedNotes,
           avatar: author?.user.avatar,
-          authorName,
+          authorName: authorName ?? "",
         },
       });
       prevNote.current = note;
@@ -194,11 +194,11 @@ export const StackView = () => {
       disabledPadding
     >
       <div className={classNames("stack-view", getColorClassName(column?.color as Color))}>
-        <NoteDialogComponents.Header columnName={column?.name} />
+        <NoteDialogComponents.Header columnName={column?.name ?? ""} />
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
           <Transition {...transitionConfig}>
-            {(styles: CSSProperties, item: {parent?: Note; stack: StackedNote[]; avatar?: AvataaarProps; authorName?: string}) => (
+            {(styles: CSSProperties, item: {parent?: Note; stack: StackedNote[]; avatar?: AvataaarProps; authorName: string}) => (
               <animated.div style={styles} className="stack-view__animation-wrapper">
                 {item.parent && item.parent.position.column === column?.id && (
                   <>
