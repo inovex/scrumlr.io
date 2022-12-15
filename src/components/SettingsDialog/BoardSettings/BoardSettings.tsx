@@ -201,6 +201,15 @@ export const BoardSettings = () => {
                     <Toggle active={state.me?.showHiddenColumns ?? false} />
                   </div>
                 </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                >
+                  <Toggle className="board-settings__show-note-repositioning-value" active={state.board.allowStacking} />
+                </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
