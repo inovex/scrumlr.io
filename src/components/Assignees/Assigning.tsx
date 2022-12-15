@@ -18,6 +18,8 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
   const [allParticipants, setAllParticipants] = useState<Assignee[]>([]);
   const [assigned, setAssigned] = useState<Assignee[]>([]);
   const [expanded, setExpanded] = useState(false);
+  const [xCoord, setXCoord] = useState(0);
+  const [yCoord, setYCoord] = useState(0);
 
   const state = useAppSelector(
     (applicationState) => ({
@@ -60,7 +62,6 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
       }
     setAssigned(assign);
     setAllParticipants(all);
-    console.log(note.text, assigned);
   }, [note]);
 
   return (
@@ -70,6 +71,10 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
           className="assining__pill"
           data-tip="assign someone"
           onClick={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            setXCoord(rect.left);
+            setYCoord(rect.top);
+
             e.stopPropagation();
             setExpanded(!expanded);
           }}
@@ -108,7 +113,14 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
           }
         </button>
       )}
-      <AssigneeList open={expanded} onClose={() => setExpanded(false)} allParticipants={allParticipants} noteId={note!.id} assigned={assigned} />
+      <AssigneeList
+        open={expanded}
+        onClose={() => setExpanded(false)}
+        allParticipants={allParticipants}
+        noteId={note!.id}
+        coords={{top: yCoord, left: xCoord}}
+        assigned={assigned}
+      />
     </div>
   );
 };

@@ -13,6 +13,7 @@ type AssigneeListProps = {
   allParticipants: Assignee[];
   assigned: Assignee[];
   noteId: string;
+  coords: {top: number; left: number};
   onClose: () => void;
 };
 
@@ -32,9 +33,9 @@ export const AssigneeList = (props: AssigneeListProps) => {
     if (participant.assigned) {
       assigned.push(participant);
     } else {
-      assigned = assigned.filter((a) => a.name != participant.name);
+      assigned = assigned.filter((a) => a.name !== participant.name);
     }
-    dispatch(Actions.editNote(props.noteId, {assignee: assigned.map((assignee) => (assignee.id != "" ? assignee.id : assignee.name))}));
+    dispatch(Actions.editNote(props.noteId, {assignee: assigned.map((assignee) => (assignee.id !== "" ? assignee.id : assignee.name))}));
   };
 
   return (
@@ -44,7 +45,14 @@ export const AssigneeList = (props: AssigneeListProps) => {
         setSearchString("");
       }}
     >
-      <aside className="assignees" onClick={(e) => e.stopPropagation()}>
+      <aside
+        className="assignees"
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          left: `${props.coords.left - 75}px`,
+          top: `${props.coords.top + 40}px`,
+        }}
+      >
         <div className="assignees__header">
           <div className="assignees__header-title">
             <h4 className="assignees__header-text">
@@ -76,7 +84,7 @@ export const AssigneeList = (props: AssigneeListProps) => {
                 <li className="assignees__list-element">
                   <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
                     <AssignAvatar participant={participant} />
-                    <input type="checkbox" checked={participant.assigned} />
+                    <input type="checkbox" checked={participant.assigned} readOnly />
                   </button>
                 </li>
               ))}

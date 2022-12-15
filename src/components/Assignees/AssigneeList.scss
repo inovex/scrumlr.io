@@ -1,9 +1,7 @@
 @import "constants/style.scss";
 
 .assignees {
-  position: sticky;
-  top: 270px;
-  right: 400px;
+  position: absolute;
   width: 300px;
   border-radius: 16px;
   box-shadow: 0 16px 32px 0 rgba(0, 87, 255, 0.24);
