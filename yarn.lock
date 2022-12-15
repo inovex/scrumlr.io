@@ -7040,9 +7040,9 @@ qs@6.11.0:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@^8.0.2:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-8.0.2.tgz#500007fca8d244478a1e264e5bdd561c34055c18"
+query-string@^8.0.3:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-8.0.3.tgz#c6f18a1ce18005fb5d3dcd6507dbcdc165615c49"
   dependencies:
     decode-uri-component "^0.2.2"
     filter-obj "^5.1.0"
