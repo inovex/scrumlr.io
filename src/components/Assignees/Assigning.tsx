@@ -58,6 +58,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
               all.push({name, id: "", assigned: true});
             }
           }
+          return null;
         });
       }
     setAssigned(assign);
@@ -65,11 +66,10 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
   }, [note]);
 
   return (
-    <div className="assigning">
+    <div className="assigning" onClick={(e) => e.stopPropagation()}>
       {!state.activeVoting && (
         <button
           className="assining__pill"
-          data-tip="assign someone"
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             setXCoord(rect.left);
@@ -105,9 +105,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
                   <div>
                     <label>+{assigned.length - 2}</label>
                   </div>
-                ) : (
-                  <></>
-                )}
+                ) : null}
               </div>
             )
           }
