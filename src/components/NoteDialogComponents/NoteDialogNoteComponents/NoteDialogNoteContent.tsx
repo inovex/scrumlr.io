@@ -3,6 +3,8 @@ import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
+import {useImageChecker} from "utils/hooks/useImageChecker";
+import {addProtocol} from "utils/images";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -26,21 +28,27 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     dispatch(Actions.onNoteBlur());
   };
 
+  const isImage = useImageChecker(text);
+
   return (
     <div className="note-dialog__note-content">
-      <textarea
-        className="note-dialog__note-content__text"
-        disabled={!editable}
-        onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
-        onFocus={onFocus}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            (e.target as HTMLTextAreaElement).blur();
-          }
-        }}
-        defaultValue={text}
-      />
+      {isImage ? (
+        <img src={addProtocol(text)} className="note-dialog__note-content--image" alt="note" />
+      ) : (
+        <textarea
+          className="note-dialog__note-content--text"
+          disabled={!editable}
+          onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
+          onFocus={onFocus}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              (e.target as HTMLTextAreaElement).blur();
+            }
+          }}
+          defaultValue={text}
+        />
+      )}
     </div>
   );
 };

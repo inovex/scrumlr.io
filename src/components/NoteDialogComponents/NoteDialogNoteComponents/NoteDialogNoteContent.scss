@@ -1,12 +1,20 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
+@import "routes/StackView/StackView.scss";
 
 .note-dialog__note-content {
   display: flex;
   width: 100%;
+  max-height: 20vh;
+  flex: 1;
+  overflow: hidden;
+
+  &:has(&--image) {
+    padding: $padding--small;
+  }
 }
 
-.note-dialog__note-content__text {
+.note-dialog__note-content--text {
   background: none;
   margin: 0;
   overflow-y: scroll;
@@ -24,17 +32,23 @@
   word-wrap: break-word;
   padding: 0 4px;
   font-size: $text-size--large;
-}
 
-.note-dialog__note-content__text:not(:disabled) {
-  &:hover,
-  &:focus-visible {
-    border-color: var(--accent-color--desaturated-dark);
+  &:not(:disabled) {
+    &:hover,
+    &:focus-visible {
+      border-color: var(--accent-color--desaturated-dark);
+    }
   }
 }
 
+.note-dialog__note-content--image {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
 [theme="dark"] {
-  .note-dialog__note-content__text {
+  .note-dialog__note-content--text {
     color: $color-white;
   }
 }

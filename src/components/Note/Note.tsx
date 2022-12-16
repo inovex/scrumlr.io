@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useRef, useEffect, useState, KeyboardEvent} from "react";
+import {useRef, useEffect, KeyboardEvent} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
@@ -12,8 +12,9 @@ import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
-import {addProtocol, isImageUrl} from "utils/images";
+import {addProtocol} from "utils/images";
 import {getColorClassName} from "constants/colors";
+import {useImageChecker} from "utils/hooks/useImageChecker";
 
 interface NoteProps {
   noteId: string;
@@ -64,16 +65,7 @@ export const Note = (props: NoteProps) => {
   }, [isShared]);
   /* eslint-enable */
 
-  const [isImage, setIsImage] = useState(false);
-
-  useEffect(() => {
-    const checkImageUrl = async () => {
-      const url = note?.text ?? "";
-      setIsImage(await isImageUrl(url));
-    };
-
-    checkImageUrl();
-  }, [note]);
+  const isImage = useImageChecker(note?.text ?? "");
 
   const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
