@@ -1,7 +1,5 @@
 export const isImageUrl = async (url: string): Promise<boolean> => {
-  console.log("isImageUrl", url);
-  // Regular expression to match image file extensions
-  const imageExtensionRegex = /\.(jpeg|jpg|gif|png)$/;
+  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|webp)$/;
   if (imageExtensionRegex.test(url)) return true;
 
   try {

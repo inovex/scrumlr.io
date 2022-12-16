@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, {useRef, useEffect, useState, useMemo} from "react";
+import {useRef, useEffect, useState, KeyboardEvent} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
@@ -64,7 +64,7 @@ export const Note = (props: NoteProps) => {
 
   const [isImage, setIsImage] = useState(false);
 
-  useMemo(() => {
+  useEffect(() => {
     console.log("useEffect");
     const checkImageUrl = async () => {
       const url = note?.text ?? "";
@@ -105,7 +105,7 @@ export const Note = (props: NoteProps) => {
     navigate(`note/${props.noteId}/stack`);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === "Enter") {
       navigate(`note/${props.noteId}/stack`);
     }
