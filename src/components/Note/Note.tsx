@@ -65,7 +65,6 @@ export const Note = (props: NoteProps) => {
   const [isImage, setIsImage] = useState(false);
 
   useEffect(() => {
-    console.log("useEffect");
     const checkImageUrl = async () => {
       const url = note?.text ?? "";
       setIsImage(await isImageUrl(url));

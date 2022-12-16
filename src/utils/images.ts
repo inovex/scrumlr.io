@@ -1,5 +1,5 @@
 export const isImageUrl = async (url: string): Promise<boolean> => {
-  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|webp)$/;
+  const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|bmp ico|png ico|ico|webp)$/;
   if (imageExtensionRegex.test(url)) return true;
 
   try {
