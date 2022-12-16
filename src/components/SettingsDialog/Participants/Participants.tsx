@@ -4,6 +4,7 @@ import {Actions} from "store/action";
 import {Toggle} from "components/Toggle";
 import {Avatar} from "components/Avatar";
 import {useTranslation} from "react-i18next";
+import {Fragment} from "react";
 import {SettingsButton} from "../Components/SettingsButton";
 import "./Participants.scss";
 import "../SettingsDialog.scss";
@@ -38,7 +39,7 @@ export const Participants = () => {
             {state.others.length > 0 && <hr className="settings-dialog__separator" />}
             {state.others.length > 0 &&
               state.others.map((participant, index) => (
-                <>
+                <Fragment key={participant.user.id}>
                   <SettingsButton
                     className="participants__user"
                     disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
@@ -56,7 +57,7 @@ export const Participants = () => {
                     )}
                   </SettingsButton>
                   {state.others[index + 1] && <hr className="settings-dialog__separator" />}
-                </>
+                </Fragment>
               ))}
           </div>
         </div>

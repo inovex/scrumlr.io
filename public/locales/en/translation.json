@@ -21,11 +21,6 @@
     "generateRandomName": "Generate random name",
     "username": "Username"
   },
-  "AccessPolicy": {
-    "PUBLIC": "Open",
-    "BY_PASSPHRASE": "Password protected",
-    "BY_INVITE": "Closed"
-  },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",
     "reject": "You have been rejected.",
