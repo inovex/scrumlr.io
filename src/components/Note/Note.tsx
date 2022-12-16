@@ -12,7 +12,7 @@ import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
-import {isImageUrl} from "utils/images";
+import {addProtocol, isImageUrl} from "utils/images";
 
 interface NoteProps {
   noteId: string;
@@ -126,7 +126,7 @@ export const Note = (props: NoteProps) => {
       >
         {isImage ? (
           <div className="note__image-wrapper">
-            <img src={note!.text} className="note__image" alt="note" />
+            <img src={addProtocol(note!.text)} className="note__image" alt="note" />
           </div>
         ) : (
           <p className="note__text">{note!.text}</p>
