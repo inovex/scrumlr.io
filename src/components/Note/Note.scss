@@ -24,6 +24,7 @@ $note__author-image-size: 26px;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
+  overflow: hidden;
 }
 
 .note .note__user-avatar {
@@ -134,6 +135,19 @@ $note__author-image-size: 26px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+}
+
+.note__image-wrapper {
+  height: 72px;
+}
+
+.note__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .note__stack-icon {

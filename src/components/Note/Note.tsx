@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, {useRef, useEffect} from "react";
+import React, {useRef, useEffect, useState, useMemo} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
@@ -12,6 +12,7 @@ import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
+import {isImageUrl} from "utils/images";
 
 interface NoteProps {
   noteId: string;
@@ -61,6 +62,18 @@ export const Note = (props: NoteProps) => {
   }, [isShared]);
   /* eslint-enable */
 
+  const [isImage, setIsImage] = useState(false);
+
+  useMemo(() => {
+    console.log("useEffect");
+    const checkImageUrl = async () => {
+      const url = note?.text ?? "";
+      setIsImage(await isImageUrl(url));
+    };
+
+    checkImageUrl();
+  }, [note]);
+
   const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: note!.position.column},
@@ -109,10 +122,16 @@ export const Note = (props: NoteProps) => {
       <button
         className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
         onClick={handleClick}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         ref={noteRef}
       >
-        <p className="note__text">{note!.text}</p>
+        {isImage ? (
+          <div className="note__image-wrapper">
+            <img src={note!.text} className="note__image" alt="note" />
+          </div>
+        ) : (
+          <p className="note__text">{note!.text}</p>
+        )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
