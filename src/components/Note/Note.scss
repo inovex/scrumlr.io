@@ -47,19 +47,6 @@ $note__author-image-size: 26px;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
 }
-[theme="dark"] {
-  .note__in-stack {
-    background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
-}
-
-[theme="dark"] {
-  .note {
-    background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
-}
 
 .note:focus-within,
 .note:focus-visible {
@@ -159,12 +146,6 @@ $note__author-image-size: 26px;
   fill: var(--accent-color);
 }
 
-[theme="dark"] {
-  .note__text {
-    color: $color-white;
-  }
-}
-
 .note__footer {
   position: relative;
   height: 28px;
@@ -184,12 +165,13 @@ $note__author-image-size: 26px;
   flex-grow: 0;
   height: 28px;
   padding: 0 $margin--default 0 0;
+  background: $color-white;
+  border-radius: 21px;
+  padding-left: 2px;
 }
 
 .note__author--self {
   background: var(--accent-color--desaturated-light);
-  border-radius: 21px;
-  padding-left: 2px;
 }
 
 .note__author--self > .note__user-avatar #Circle-Background {
@@ -198,17 +180,6 @@ $note__author-image-size: 26px;
 
 .note__author--self > .note__author-name {
   color: $color-black;
-}
-
-[theme="dark"] {
-  .note__author--self {
-    background: var(--accent-color--desaturated-dark);
-  }
-
-  .note__author--self > .note__author-name {
-    color: $color-white;
-    font-weight: bold;
-  }
 }
 
 .note__author-image {
@@ -239,4 +210,33 @@ $note__author-image-size: 26px;
 
 .note__disabled-click {
   pointer-events: none;
+}
+
+[theme="dark"] {
+  .note,
+  .note__in-stack {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+
+  .note__text {
+    color: $color-white;
+  }
+
+  .note__author {
+    background: $color-dark-mode-note;
+  }
+
+  .note__author-name {
+    color: $color-white;
+  }
+
+  .note__author--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
+  .note__author--self > .note__author-name {
+    color: $color-white;
+    font-weight: bold;
+  }
 }
