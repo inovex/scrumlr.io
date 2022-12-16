@@ -18,10 +18,10 @@ export const BoardSettings = (props: BoardSettingsProps) => {
     board: applicationState.board.data!,
   }));
 
-  const [boardName, setBoardName] = useState(state.board.name);
+  const [boardName, setBoardName] = useState(state.board.name ?? "");
 
   useEffect(() => {
-    setBoardName(state.board.name);
+    setBoardName(state.board.name ?? "");
   }, [state.board.name]);
 
   const onSubmit = () => {
