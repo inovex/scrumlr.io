@@ -57,15 +57,14 @@ export const AssigneeList = (props: AssigneeListProps) => {
         <div className="assignees__header">
           <div className="assignees__header-title">
             <h4 className="assignees__header-text">
-              {/** TODO: Add translation */}
-              <span>Assign someone</span>
+              <span>{t("assigning.header")}</span>
             </h4>
           </div>
           <div className="assignees__header-search">
             <SearchIcon className="assignees__search_icon" />
             <input
               className="assignees__header-input"
-              placeholder={t("ParticipantsList.search")}
+              placeholder={t("assigning.placeholder")}
               onChange={(event) => setSearchString(event.target.value.trim())}
               value={searchString}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,9 +78,8 @@ export const AssigneeList = (props: AssigneeListProps) => {
         </div>
         <ul className="assignees__list">
           <div className="list__header">
-            {/* TODO:provide translation */}
-            <label>Name</label>
-            <label>Assigned</label>
+            <label>{t("assigning.listHeader01")}</label>
+            <label>{t("assigning.listHeader02")}</label>
           </div>
           {props.allParticipants.length > 0 &&
             props.allParticipants
@@ -102,8 +100,7 @@ export const AssigneeList = (props: AssigneeListProps) => {
               ))}
           <li>
             <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked({name: searchString, id: "", assigned: false})}>
-              {/* TODO: provide translation */}
-              <label>+ Add custom name</label>
+              <label>+ {t("assigning.addCustomName")}</label>
             </button>
           </li>
         </ul>

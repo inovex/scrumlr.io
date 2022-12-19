@@ -528,6 +528,14 @@
       "Bear": "Bear",
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
-    }
+    }    
+  },
+  "assigning":{
+    "header": "Assign someone",
+    "placeholder": "Search",
+    "listHeader01": "Name",
+    "listHeader02": "Assigned",
+    "addCustomName": "Add custom name",
+    "capsule": "Assigned"
   }
 }
