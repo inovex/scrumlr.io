@@ -1522,6 +1522,10 @@
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.0.5.tgz#d5c65626add4c3c185a89aa5bd38b1e42daec075"
 
+"@remix-run/router@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.1.0.tgz#b48db8148c8a888e50580a8152b6f68161c49406"
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.npmjs.org/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz"
@@ -7293,11 +7297,17 @@ react-router-dom@^6.4.5:
     "@remix-run/router" "1.0.5"
     react-router "6.4.5"
 
-react-router@6.4.5, react-router@^6.0.1:
+react-router@6.4.5:
   version "6.4.5"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.5.tgz#73f382af2c8b9a86d74e761a7c5fc3ce7cb0024d"
   dependencies:
     "@remix-run/router" "1.0.5"
+
+react-router@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.5.0.tgz#b53f15543a60750c925609d2e38037ac5aed6dd3"
+  dependencies:
+    "@remix-run/router" "1.1.0"
 
 react-scripts@^5.0.1:
   version "5.0.1"
