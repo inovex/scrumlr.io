@@ -11,6 +11,7 @@ import {API} from "api";
 import {Button} from "../Button";
 
 type TimerProps = {
+  startTime: Date;
   endTime: Date;
 };
 
@@ -36,6 +37,12 @@ export const Timer = (props: TimerProps) => {
     };
   };
 
+  const calculateElapsedTimePercentage = () => {
+    const difference = +new Date() - +props.startTime;
+    const total = +props.endTime - +props.startTime;
+    return Math.min(Math.floor((difference / total) * 100), 100);
+  };
+
   const allParticipantsReady = useAppSelector(
     (state) =>
       state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").length &&
@@ -48,6 +55,7 @@ export const Timer = (props: TimerProps) => {
 
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(calculateTime());
+  const [elapsedTimePercentage, setElapsedTimePercentage] = useState<number>(calculateElapsedTimePercentage());
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
@@ -55,6 +63,7 @@ export const Timer = (props: TimerProps) => {
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
       setTimeLeft(calculateTime());
+      setElapsedTimePercentage(calculateElapsedTimePercentage());
     }, 250);
     return () => clearTimeout(timerUpdateTimeout);
   });
@@ -108,6 +117,7 @@ export const Timer = (props: TimerProps) => {
   return (
     <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
       <span>
+        {`${String(elapsedTimePercentage)  }%`}
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
       {isModerator && (
