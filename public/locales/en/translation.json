@@ -21,11 +21,6 @@
     "generateRandomName": "Generate random name",
     "username": "Username"
   },
-  "AccessPolicy": {
-    "PUBLIC": "Open",
-    "BY_PASSPHRASE": "Password protected",
-    "BY_INVITE": "Closed"
-  },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",
     "reject": "You have been rejected.",
@@ -284,6 +279,7 @@
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show notes of other users",
+    "AllowNoteRepositioningOption": "Allow note repositioning",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
