@@ -34,7 +34,7 @@ export const Participant = ({participant}: ParticipantProps) => {
           ready={participant.ready}
           raisedHand={participant.raisedHand}
           id={participant.user.id}
-          name={participant.user.name}
+          title={participant.user.name}
           className="participant__user-avatar-wrapper"
           avatarClassName="participant__user-avatar"
           badgeText={badgeText}

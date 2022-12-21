@@ -40,6 +40,8 @@ export const Note = (props: NoteProps) => {
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
+  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
   /* eslint-disable */
   useEffect(() => {
@@ -65,6 +67,7 @@ export const Note = (props: NoteProps) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    canDrag: isModerator || allowStacking,
   });
 
   const [{isOver}, drop] = useDrop(() => ({
@@ -113,7 +116,7 @@ export const Note = (props: NoteProps) => {
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} name={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}

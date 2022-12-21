@@ -77,7 +77,7 @@ export const BoardUsers = () => {
                 avatar={participant.user.avatar}
                 ready={participant.ready}
                 raisedHand={participant.raisedHand}
-                name={participant.user.name}
+                title={participant.user.name}
                 className="board-users__avatar board-users__avatar--others"
               />
             ))}
@@ -91,7 +91,7 @@ export const BoardUsers = () => {
             navigate("settings/profile");
           }}
         >
-          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} title={me.user.name} className="board-users__avatar" />
         </button>
       )}
       <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
