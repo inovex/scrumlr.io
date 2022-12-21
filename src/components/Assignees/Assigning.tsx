@@ -5,7 +5,6 @@ import {useEffect, useState} from "react";
 import {Assignee} from "types/assignee";
 import {Avatar} from "components/Avatar";
 import _ from "underscore";
-import {t} from "i18next";
 import {ExternalAvatar} from "./ExternalAvatar";
 import {AssigneeList} from "./AssigneeList";
 
@@ -80,8 +79,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
             setExpanded(!expanded);
           }}
         >
-          <label className="assining__pill-assign-label-large">{t("assigning.capsule")}:</label>
-          <label className="assining__pill-assign-label-small">@</label>
+          <label className="assining__pill-assign-label">@</label>
           {
             // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
             assigned.length === 0 ? (

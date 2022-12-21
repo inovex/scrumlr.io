@@ -535,7 +535,6 @@
     "placeholder": "Search",
     "listHeader01": "Name",
     "listHeader02": "Assigned",
-    "addCustomName": "Add custom name",
-    "capsule": "Assigned"
+    "addCustomName": "Add custom name"
   }
 }

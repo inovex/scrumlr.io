@@ -536,7 +536,6 @@
       "placeholder": "Suche",
       "listHeader01": "Name",
       "listHeader02": "Zugewiesen",
-      "addCustomName": "Eigenen Namen hinzufügen",
-      "capsule": "Zugewiesen"
+      "addCustomName": "Eigenen Namen hinzufügen"
     }
 }

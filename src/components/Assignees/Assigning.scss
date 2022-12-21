@@ -74,66 +74,8 @@ label {
   }
 }
 
-.assining__pill-assign-label-small {
-  display: inline-block;
-}
-.assining__pill-assign-label-large {
-  display: none;
-}
-
-@media only screen and (max-width: 1970px) {
-  .assining__pill-assign-label-small {
-    display: none;
-  }
-
-  .assining__pill-assign-label-large {
-    display: inline-block;
-  }
-}
-
-@media only screen and (max-width: 1600px) {
-  .assining__pill-assign-label-small {
-    display: inline-block;
-  }
-  .assining__pill-assign-label-large {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 1018px) {
-  .assining__pill-assign-label-small {
-    display: none;
-  }
-
-  .assining__pill-assign-label-large {
-    display: inline-block;
-  }
-}
-
-@media only screen and (max-width: 880px) {
-  .assining__pill-assign-label-small {
-    display: inline-block;
-  }
-  .assining__pill-assign-label-large {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 760px) {
-  .assining__pill-assign-label-small {
-    display: none;
-  }
-
-  .assining__pill-assign-label-large {
-    display: inline-block;
-  }
-}
-
-@media only screen and (max-width: 510px) {
-  .assining__pill-assign-label-small {
-    display: inline-block;
-  }
-  .assining__pill-assign-label-large {
-    display: none;
-  }
+.assining__pill-assign-label {
+  display: flex;
+  font-weight: bold;
+  padding-bottom: 3px;
 }

@@ -6,6 +6,7 @@ import "./AssigneeList.scss";
 import {Assignee} from "types/assignee";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import {AssignAvatar} from "./AssignAvatar";
 
 type AssigneeListProps = {
@@ -22,11 +23,16 @@ export const AssigneeList = (props: AssigneeListProps) => {
   const {t} = useTranslation();
   const [searchString, setSearchString] = useState("");
 
+  const {me} = useAppSelector((state) => ({
+    me: state.participants!.self,
+  }));
+
   if (!props.open || props.allParticipants.length === 0) {
     return null;
   }
 
   const handleAsigneeClicked = (participant: Assignee) => {
+    console.log("role: ", me.role);
     participant.assigned = !participant.assigned;
     let {assigned} = props;
 
@@ -92,14 +98,18 @@ export const AssigneeList = (props: AssigneeListProps) => {
               )
               .map((participant) => (
                 <li className="assignees__list-element">
-                  <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)}>
+                  <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked(participant)} disabled={me.role === "PARTICIPANT"}>
                     <AssignAvatar participant={participant} />
                     <input type="checkbox" checked={participant.assigned} readOnly />
                   </button>
                 </li>
               ))}
           <li>
-            <button className="assignees__list-element__button" onClick={() => handleAsigneeClicked({name: searchString, id: "", assigned: false})}>
+            <button
+              className="assignees__list-element__button"
+              onClick={() => handleAsigneeClicked({name: searchString, id: "", assigned: false})}
+              disabled={me.role === "PARTICIPANT"}
+            >
               <label>+ {t("assigning.addCustomName")}</label>
             </button>
           </li>
