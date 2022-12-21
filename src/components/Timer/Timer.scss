@@ -2,6 +2,8 @@
 
 $timer-display-height: 42px;
 $timer-display-width: 114px;
+$timer__content-height: 38px;
+$timer__short-actions-height: 28px;
 
 .timer {
   height: $timer-display-height;
@@ -29,8 +31,8 @@ $timer-display-width: 114px;
   left: 0;
   height: 100%;
   width: 100%;
-  padding-left: 38px;
-  line-height: 38px;
+  padding-left: $timer__content-height;
+  line-height: $timer__content-height;
   text-align: center;
   font-weight: bold;
 }
@@ -39,9 +41,9 @@ $timer-display-width: 114px;
   position: absolute;
   top: 0;
   left: 19px;
-  height: 38px;
-  border-top-right-radius: calc(38px / 2);
-  border-bottom-right-radius: calc(38px / 2);
+  height: $timer__content-height;
+  border-top-right-radius: calc($timer__content-height / 2);
+  border-bottom-right-radius: calc($timer__content-height / 2);
   background-color: $color-progress-circle;
 }
 
@@ -49,7 +51,7 @@ $timer-display-width: 114px;
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: calc(38px / 2);
+  border-radius: calc($timer__content-height / 2);
   background-color: $menu-icon-background-color--dark;
   display: none;
   justify-content: end;
@@ -64,15 +66,15 @@ $timer-display-width: 114px;
 
 .short-actions__button-wrapper {
   position: relative;
-  height: 28px;
-  width: 28px;
-  border-radius: calc(28px / 2);
+  height: $timer__short-actions-height;
+  width: $timer__short-actions-height;
+  border-radius: calc($timer__short-actions-height / 2);
 }
 
 .short-actions__button-wrapper > button {
-  height: 28px;
-  width: 28px;
-  border-radius: calc(28px / 2);
+  height: $timer__short-actions-height;
+  width: $timer__short-actions-height;
+  border-radius: calc($timer__short-actions-height / 2);
   background-color: $color-dark-gray;
   color: $menu-icon-background-color--dark;
   border: none;
