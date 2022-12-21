@@ -8,9 +8,9 @@ import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
 import {API} from "api";
+import {Timer as TimerUtils} from "utils/timer";
 import {Button} from "../Button";
 import "./Timer.scss";
-import {Timer as TimerUtils} from "utils/timer";
 
 type TimerProps = {
   startTime: Date;
