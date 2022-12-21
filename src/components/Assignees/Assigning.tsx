@@ -15,7 +15,7 @@ export interface BasicAssignProps {
 export const Assigning = ({noteId}: BasicAssignProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const participantUsers = useAppSelector((state) => [...state.participants!.others.map((p) => p.user), state.participants!.self.user]);
-  const [allParticipants, setAllParticipants] = useState<Assignee[]>([]);
+  // const [allParticipants, setAllParticipants] = useState<Assignee[]>([]);
   const [assigned, setAssigned] = useState<Assignee[]>([]);
   const [expanded, setExpanded] = useState(false);
   const [xCoord, setXCoord] = useState(0);
@@ -27,6 +27,8 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
     }),
     _.isEqual
   );
+
+  useEffect(() => {});
 
   useEffect(() => {
     if (!note) {
@@ -62,7 +64,6 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
         });
       }
     setAssigned(assign);
-    setAllParticipants(all);
   }, [note]);
 
   return (
@@ -108,14 +109,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
           }
         </button>
       )}
-      <AssigneeList
-        open={expanded}
-        onClose={() => setExpanded(false)}
-        allParticipants={allParticipants}
-        noteId={note!.id}
-        coords={{top: yCoord, left: xCoord}}
-        assigned={assigned}
-      />
+      <AssigneeList open={expanded} onClose={() => setExpanded(false)} noteId={note!.id} coords={{top: yCoord, left: xCoord}} assigned={assigned} />
     </div>
   );
 };

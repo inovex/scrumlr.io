@@ -7,11 +7,11 @@ import {Assignee} from "types/assignee";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
+import {Participant} from "types/participant";
 import {AssignAvatar} from "./AssignAvatar";
 
 type AssigneeListProps = {
   open: boolean;
-  allParticipants: Assignee[];
   assigned: Assignee[];
   noteId: string;
   coords: {top: number; left: number};
@@ -23,16 +23,29 @@ export const AssigneeList = (props: AssigneeListProps) => {
   const {t} = useTranslation();
   const [searchString, setSearchString] = useState("");
 
-  const {me} = useAppSelector((state) => ({
+  const {me, all}: {me: Participant; all: Assignee[]} = useAppSelector((state) => ({
     me: state.participants!.self,
+    /*
+      >>this comment is supposed to explain what happens in the declaration of 'all' below
+      1.collect all the tohers and me (now we have all the users currently on the board)
+      2.map them to be of type 'Assignee' 
+      3.delete them(filter) who are also in the assigned list(the assigned list contains all the assigned users on Board users and external users) 
+      4.remember right now we only have on Board users an since we deleted those who are assigne dwe just have to append the  assignee list to our current list and voila  we're done
+    */
+    all: [
+      ...[...state.participants!.others.map((p) => p.user), state.participants!.self.user]
+        .map((p) => ({name: p.name, id: p.id, assigned: false, avatar: p.avatar} as Assignee))
+        .filter((p) => props.assigned.map((a) => a.id).indexOf(p.id) === -1),
+      ...props.assigned,
+    ],
   }));
 
-  if (!props.open || props.allParticipants.length === 0) {
+  if (!props.open) {
     return null;
   }
 
   const handleAsigneeClicked = (participant: Assignee) => {
-    console.log("role: ", me.role);
+    console.log(props.assigned);
     participant.assigned = !participant.assigned;
     let {assigned} = props;
 
@@ -87,8 +100,8 @@ export const AssigneeList = (props: AssigneeListProps) => {
             <label>{t("assigning.listHeader01")}</label>
             <label>{t("assigning.listHeader02")}</label>
           </div>
-          {props.allParticipants.length > 0 &&
-            props.allParticipants
+          {all.length > 0 &&
+            all
               .sort((parA, parB) => parA.name.localeCompare(parB.name)) // Sort participants by name
               .filter((participant) =>
                 searchString
