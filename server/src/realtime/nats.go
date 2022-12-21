@@ -35,6 +35,15 @@ func (n *natsClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, e
 	return receiverChan, nil
 }
 
+func (n *natsClient) SubscribeToModerationEvents(subject string) (chan *ModerationEvent, error) {
+	receiverChan := make(chan *ModerationEvent)
+	_, err := n.con.BindRecvChan(subject, receiverChan)
+	if err != nil {
+		return receiverChan, fmt.Errorf("failed to bind to subject %s: %w", subject, err)
+	}
+	return receiverChan, nil
+}
+
 // NewNats returns a new NATs backed Broker
 func NewNats(url string) (*Broker, error) {
 

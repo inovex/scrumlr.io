@@ -104,7 +104,15 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 	for index, note := range notes {
 		eventNotes[index] = *new(dto.Note).From(note)
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+  err := s.realtime.BroadcastToModeration(board, realtime.ModerationEvent{
+    Type: realtime.ModerationEventNotesUpdated,
+    Data: eventNotes,
+  })
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes moderation", "err", err)
+	}
+  println("broadcasted notes moderation")
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})

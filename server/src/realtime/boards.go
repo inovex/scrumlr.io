@@ -32,6 +32,7 @@ const (
   // Create some events only receivable by moderators
   ModerationEventInit        ModerationEventType = "MODERATION_INIT"
   ModerationEventVotesUpdated ModerationEventType = "MODERATION_VOTES_UPDATED"
+  ModerationEventNotesUpdated ModerationEventType = "MODERATION_NOTES_UPDATED"
 )
 
 type BoardEvent struct {
@@ -63,8 +64,8 @@ func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
 	return c
 }
 
-func (b *Broker) GetBoardModerationChannel(boardId uuid.UUID) chan *BoardEvent {
-  c, err := b.con.SubscribeToBoardEvents(boardsModerationSubject(boardId))
+func (b *Broker) GetBoardModerationChannel(boardId uuid.UUID) chan *ModerationEvent {
+  c, err := b.con.SubscribeToModerationEvents(boardsModerationSubject(boardId))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)

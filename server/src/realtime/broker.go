@@ -13,6 +13,8 @@ type Client interface {
 	// SubscribeToBoardEvents subscribes to the given topic and return a channel
 	//	// with the received BoardEvent
 	SubscribeToBoardEvents(subject string) (chan *BoardEvent, error)
+
+  SubscribeToModerationEvents(subject string) (chan *ModerationEvent, error)
 }
 
 // The Broker enables a user to broadcast and receive events

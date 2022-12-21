@@ -134,3 +134,39 @@ func (r *redisClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, 
 	}()
 	return retChannel, nil
 }
+
+func (r *redisClient) SubscribeToModerationEvents(subject string) (chan *ModerationEvent, error) {
+	ctx := context.Background()
+	retChannel := make(chan *ModerationEvent)
+	pubsub := r.con.Subscribe(ctx, subject)
+	event, err := pubsub.Receive(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("failed to subscribe: %w", err)
+	}
+	switch event.(type) {
+	case *redis.Message:
+		var moderationEvent ModerationEvent
+		err := decodeEvent(event.(*redis.Message).Payload, &moderationEvent)
+		if err == nil {
+			retChannel <- &moderationEvent
+		}
+	default:
+		// do nothing
+	}
+	c := pubsub.Channel(redis.WithChannelHealthCheckInterval(10 * time.Second))
+	go func() {
+		for {
+			select {
+			case msg := <-c:
+				var event ModerationEvent
+				err := decodeEvent(msg.Payload, &event)
+				if err == nil {
+					retChannel <- &event
+				}
+			case <-ctx.Done():
+				close(retChannel)
+			}
+		}
+	}()
+	return retChannel, nil
+}

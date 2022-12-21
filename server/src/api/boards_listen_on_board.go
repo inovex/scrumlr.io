@@ -13,7 +13,11 @@ import (
 type BoardSubscription struct {
 	subscription chan *realtime.BoardEvent
 	clients      map[uuid.UUID]*websocket.Conn
-	moderators   map[uuid.UUID]*websocket.Conn
+}
+
+type ModerationSubscription struct {
+  subscription chan *realtime.ModerationEvent
+  clients      map[uuid.UUID]*websocket.Conn
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -115,7 +119,7 @@ func (s *Server) openModerationSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	defer s.closeBoardSocket(boardId, boardId, conn)
+	//defer s.closeBoardSocket(boardId, boardId, conn)
 
 	s.listenOnModeration(boardId, userId, conn)
 
@@ -124,7 +128,7 @@ func (s *Server) openModerationSocket(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
 				logger.Get().Debugw("websocket to user no longer available, about to disconnect", "user", userId)
-				delete(s.boardSubscriptions[boardId].moderators, userId)
+				delete(s.moderationSubscriptions[boardId].clients, userId)
 			}
 			break
 		}
@@ -141,7 +145,6 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) 
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
-			moderators: make(map[uuid.UUID]*websocket.Conn),
 		}
 	}
 
@@ -156,27 +159,21 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) 
 }
 
 func (s *Server) listenOnModeration(boardID, userID uuid.UUID, conn *websocket.Conn) {
-	if _, exist := s.boardSubscriptions[boardID]; !exist {
-		s.boardSubscriptions[boardID] = &BoardSubscription{
+	if _, exist := s.moderationSubscriptions[boardID]; !exist {
+		s.moderationSubscriptions[boardID] = &ModerationSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
-			moderators: make(map[uuid.UUID]*websocket.Conn),
 		}
 	}
 
-	b := s.boardSubscriptions[boardID]
-	b.moderators[userID] = conn
+	m := s.moderationSubscriptions[boardID]
+	m.clients[userID] = conn
 
 	// if not already done, start listening to moderation changes
-	if b.subscription == nil {
-		b.subscription = s.realtime.GetBoardModerationChannel(boardID)
-		go b.startListeningOnBoard()
+	if m.subscription == nil {
+		m.subscription = s.realtime.GetBoardModerationChannel(boardID)
+		go m.startListeningOnModeration()
 	}
 }
-
-
-
-
-
 
 func (b *BoardSubscription) startListeningOnBoard() {
 	for {
@@ -193,12 +190,12 @@ func (b *BoardSubscription) startListeningOnBoard() {
 	}
 }
 
-func (b *BoardSubscription) startListeningOnModeration() {
+func (m *ModerationSubscription) startListeningOnModeration() {
 	for {
 		select {
-		case msg := <-b.subscription:
+		case msg := <-m.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			for _, conn := range b.moderators {
+			for _, conn := range m.clients {
 				err := conn.WriteJSON(msg)
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", msg, "err", err)

@@ -35,8 +35,9 @@ type Server struct {
 	upgrader websocket.Upgrader
 
 	// map of boardSubscriptions with maps of users with connections
-	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+  boardSubscriptions               map[uuid.UUID]*BoardSubscription
+  moderationSubscriptions map[uuid.UUID]*ModerationSubscription
+  boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 }
 
 func New(
@@ -81,6 +82,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
+		moderationSubscriptions:               make(map[uuid.UUID]*ModerationSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
