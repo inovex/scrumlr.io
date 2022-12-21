@@ -5,17 +5,13 @@ import Socket from "sockette";
 import {ServerEvent} from "types/websocket";
 import store from "store";
 import {API} from "api";
+import {Timer} from "utils/timer";
 import {Toast} from "../../utils/Toast";
 import i18n from "../../i18n";
 import {Button} from "../../components/Button";
 import {SERVER_WEBSOCKET_URL} from "../../config";
 
 let socket: Socket | undefined;
-
-const removeOffsetFromDate = (date: Date | undefined, offset: number): Date | undefined => {
-  if (!date) return undefined;
-  return new Date(new Date(date).getTime() - offset);
-};
 
 export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.LeaveBoard) {
@@ -102,8 +98,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: currentState.sharedNote,
       showVoting: currentState.showVoting,
-      timerStart: removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
-      timerEnd: removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
       accessPolicy: action.board.accessPolicy,
       passphrase: action.board.passphrase,
       allowStacking: action.board.allowStacking,
@@ -138,8 +134,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: action.note,
       showVoting: currentState.showVoting,
-      timerStart: removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
-      timerEnd: removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
       Toast.error(
         <div>
@@ -155,8 +151,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: undefined,
       showVoting: currentState.showVoting,
-      timerStart: removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
-      timerEnd: removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
       Toast.error(
         <div>

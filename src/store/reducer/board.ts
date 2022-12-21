@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {Action, ReduxAction} from "store/action";
 import {BoardState} from "types/board";
-
-const addOffsetToDate = (date: Date | undefined, offset: number): Date | undefined => {
-  if (!date) return undefined;
-  return new Date(new Date(date).getTime() + offset);
-};
+import {Timer} from "utils/timer";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
@@ -16,8 +12,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "ready",
         data: {
           ...action.board,
-          timerStart: addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
-          timerEnd: addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
+          timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
+          timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
         },
       };
     }
@@ -27,8 +23,8 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
           ...state,
           data: {
             ...state.data!,
-            timerStart: addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
-            timerEnd: addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
+            timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
+            timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
           },
         };
       }
