@@ -12,12 +12,22 @@ export interface BasicAssignProps {
   noteId: string;
 }
 
+/*
+  Assignings (this file) purpose is to render the capsule and assign button on the note.
+  it also controls wether to show or hide the AssigneeList.
+*/
 export const Assigning = ({noteId}: BasicAssignProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const participantUsers = useAppSelector((state) => [...state.participants!.others.map((p) => p.user), state.participants!.self.user]);
-  // const [allParticipants, setAllParticipants] = useState<Assignee[]>([]);
   const [assigned, setAssigned] = useState<Assignee[]>([]);
   const [expanded, setExpanded] = useState(false);
+  /*
+    what are those x- and y-Coord for youre asking?
+    well since I am using a Portal to display the Assigneelist on top of all the Notes,
+    the lists Parent is not the note, wich made positioning quite hard/impossible for me.
+    Thats why i'm taking the x and y coordinate from the assign-button on the note to position
+    the list manually. now you're probably asking if this is the best solution? -propably not.
+  */
   const [xCoord, setXCoord] = useState(0);
   const [yCoord, setYCoord] = useState(0);
 
@@ -82,7 +92,7 @@ export const Assigning = ({noteId}: BasicAssignProps) => {
         >
           <label className="assining__pill-assign-label">@</label>
           {
-            // check if no one is assigned. if so, show +assign  icon, else show assigned avatars
+            // check if no one is assigned. if so, show the "+"-icon, else show assigned avatars
             assigned.length === 0 ? (
               <div className="assining__add-button-plus">
                 <PlusIcon className="assining__add-button-plus__icon" />

@@ -27,16 +27,16 @@ export const AssigneeList = (props: AssigneeListProps) => {
     me: state.participants!.self,
     /*
       >>this comment is supposed to explain what happens in the declaration of 'all' below
-      1.collect all the tohers and me (now we have all the users currently on the board)
+      1.collect all the 'others' and 'me' (now we have all the on board users)
       2.map them to be of type 'Assignee' 
       3.delete them(filter) who are also in the assigned list(the assigned list contains all the assigned users on Board users and external users) 
-      4.remember right now we only have on Board users an since we deleted those who are assigne dwe just have to append the  assignee list to our current list and voila  we're done
+      4.right now we only have on Board users an since we deleted those who are assigned we just have to append the  assignee list to our current list and voila  we're done
     */
     all: [
-      ...[...state.participants!.others.map((p) => p.user), state.participants!.self.user]
-        .map((p) => ({name: p.name, id: p.id, assigned: false, avatar: p.avatar} as Assignee))
-        .filter((p) => props.assigned.map((a) => a.id).indexOf(p.id) === -1),
-      ...props.assigned,
+      ...[...state.participants!.others.map((p) => p.user), state.participants!.self.user] // 1
+        .map((p) => ({name: p.name, id: p.id, assigned: false, avatar: p.avatar} as Assignee)) // 2
+        .filter((p) => props.assigned.map((a) => a.id).indexOf(p.id) === -1), // 3
+      ...props.assigned, // 4
     ],
   }));
 
