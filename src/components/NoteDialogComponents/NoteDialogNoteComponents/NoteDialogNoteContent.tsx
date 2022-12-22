@@ -33,7 +33,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   return (
     <div className="note-dialog__note-content">
       {isImage ? (
-        <img src={addProtocol(text)} className="note-dialog__note-content--image" alt="note" />
+        <img
+          src={addProtocol(text)}
+          className="note-dialog__note-content--image"
+          alt="note"
+          draggable={false} // safari bugfix
+        />
       ) : (
         <textarea
           className="note-dialog__note-content--text"

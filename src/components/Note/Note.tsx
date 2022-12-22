@@ -120,7 +120,12 @@ export const Note = (props: NoteProps) => {
       >
         {isImage ? (
           <div className="note__image-wrapper">
-            <img src={addProtocol(note!.text)} className="note__image" alt="note" />
+            <img
+              src={addProtocol(note!.text)}
+              className="note__image"
+              alt="note"
+              draggable={false} // safari bugfix
+            />
           </div>
         ) : (
           <p className="note__text">{note!.text}</p>
