@@ -16,7 +16,11 @@ export const isImageUrl = async (url: string): Promise<boolean> => {
 
   // check if the url ends with an image extension, if so return true
   const imageExtensionRegex = /\.(jpeg|jpg|gif|png|apng|svg|bmp|bmp ico|png ico|ico|webp)$/;
-  if (imageExtensionRegex.test(url)) return true;
+  if (imageExtensionRegex.test(url)) {
+    // pre-fetch image for faster load times once note is added
+    fetch(addProtocol(url));
+    return true;
+  }
 
   // check if the url returns an image content type, if so return true
   try {

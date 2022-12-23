@@ -137,7 +137,8 @@
     "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {
-    "placeholder": "Add your note..."
+    "placeholder": "Add your note...",
+    "imageInfo": "This link will be added as an image!"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Enter the passphrase to access this board",
