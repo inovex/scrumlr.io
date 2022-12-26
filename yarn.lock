@@ -7248,9 +7248,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hotkeys-hook@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.0.8.tgz#fb529ec24792e67e15f29f970da0657945d597b2"
+react-hotkeys-hook@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.3.0.tgz#ef9f1abd9be3a179cbe9749876ba728288647c8a"
+  integrity sha512-U7wOxar+7SnocOv9Ha4Rzf5nTd2qg4SNGGqv7e4HfYKefr/a3J4Hw8Wwok0k2F+JNfsHN9wVgKgLJXbf0yVJXQ==
 
 react-i18next@^12.1.1:
   version "12.1.1"
