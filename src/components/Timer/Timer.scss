@@ -109,7 +109,7 @@ $timer__short-actions-height: 28px;
   font-weight: bold;
   height: auto;
   bottom: calc(100% + 4px);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: $box-shadow--light;
 }
 @media (prefers-reduced-motion) {
   .short-actions__button-wrapper > span {
