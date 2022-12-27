@@ -4,6 +4,7 @@ $timer-display-height: 42px;
 $timer-display-width: 114px;
 $timer__content-height: 38px;
 $timer__short-actions-height: 28px;
+$timer__short-actions-tooltip-height: 36px;
 
 .timer {
   height: $timer-display-height;
@@ -101,8 +102,8 @@ $timer__short-actions-height: 28px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  height: 36px;
-  border-radius: 18px;
+  height: $timer__short-actions-tooltip-height;
+  border-radius: calc($timer__short-actions-tooltip-height / 2);
   padding: 5px $padding--default;
   background-color: $tooltip-background-color--light;
   color: $menu-icon-background-color--dark;
