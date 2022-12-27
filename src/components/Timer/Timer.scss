@@ -40,7 +40,7 @@ $timer__short-actions-height: 28px;
 .timer__progress-bar {
   position: absolute;
   top: 0;
-  left: 19px;
+  left: calc($timer__content-height / 2);
   height: $timer__content-height;
   border-top-right-radius: calc($timer__content-height / 2);
   border-bottom-right-radius: calc($timer__content-height / 2);
