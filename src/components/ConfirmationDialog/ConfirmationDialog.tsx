@@ -1,30 +1,32 @@
-import classNames from "classnames";
+import React from "react";
 import {Button} from "components/Button";
-import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {Portal} from "components/Portal";
 import "./ConfirmationDialog.scss";
 
-export interface ConfirmationDialogProps {
-  headline: string;
-  acceptMessage: string;
-  declineMessage: string;
+type ConfirmationDialogProps = {
+  title: string;
+  icon?: React.FC;
   onAccept: () => void;
   onDecline: () => void;
-  className?: string;
-}
+};
 
-export const ConfirmationDialog = ({headline, acceptMessage, onAccept, declineMessage, onDecline, className}: ConfirmationDialogProps) => (
-  <div className={classNames("confirmation-dialog__wrapper", className)}>
-    <div className="confirmation-dialog">
-      <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-      <h2>{headline}</h2>
-      <Button type="submit" color="primary" className="confirmation-dialog__button" onClick={() => onAccept()}>
-        {acceptMessage}
-      </Button>
-      <Button type="submit" color="primary" className="confirmation-dialog__button" variant="outlined" onClick={() => onDecline()} autoFocus>
-        {declineMessage}
-      </Button>
-    </div>
-  </div>
-);
+export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (props) => (
+    <Portal onClose={props.onDecline}>
+      <div className="confirmation-dialog__background" />
+      <div className="confirmation-dialog__wrapper">
+        <aside className="confirmation-dialog">
+          <h2 className="confirmation-dialog__title">{props.title}</h2>
+          <div className="confirmation-dialog__buttons">
+            <Button type="submit" color="secondary" className="confirmation-dialog__button" onClick={() => props.onAccept()}>
+              Yes
+            </Button>
+            <Button type="submit" color="secondary" className="confirmation-dialog__button" variant="outlined" onClick={() => props.onDecline()} autoFocus>
+              No
+            </Button>
+          </div>
+        </aside>
+      </div>
+    </Portal>
+  );
 
 export default ConfirmationDialog;

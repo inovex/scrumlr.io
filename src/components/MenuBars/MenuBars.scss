@@ -51,7 +51,7 @@
 
 .menu-bars-mobile__fab {
   background: $menu-icon-background-color--light;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   cursor: pointer;
   width: $action-bar__width;
   height: $action-bar__width;
@@ -70,7 +70,7 @@
 
 .menu-bars-mobile__fab-option {
   box-shadow: $box-shadow--light;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   margin: 0;
 
   &--vertical {

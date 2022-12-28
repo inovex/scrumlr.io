@@ -1,39 +1,32 @@
 @import "constants/style";
 
-.confirmation-dialog__wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  min-width: 100%;
-  min-height: 100%;
-  align-items: center;
-  justify-content: center;
-  z-index: $backdrop-z-index;
-  background: $color-white;
-  padding: 0px 2rem;
+.confirmation-dialog__background {
+  position: fixed;
+  @include inset-0;
+  backdrop-filter: blur(10px);
 }
 
-@media screen and (max-width: 920px) {
-  .confirmation-dialog__wrapper {
-    padding: $padding--medium;
-  }
+.confirmation-dialog__wrapper {
+  position: fixed;
+  @include inset-0;
+  @include flex-center;
 }
 
 .confirmation-dialog {
-  max-width: 420px;
-  color: $color-black;
+  background-color: $color-white;
+  border-radius: $rounded--medium;
+  width: 420px;
+  padding: $padding--medium;
+}
+[theme="dark"] .confirmation-dialog {
+  background-color: $color-dark-one;
 }
 
-.confirmation-dialog__button {
-  margin-right: $margin--small;
+.confirmation-dialog__title {
+  font-size: $text-size--large;
 }
-
-[theme="dark"] {
-  .confirmation-dialog__wrapper {
-    background: $color-dark-mode;
-  }
-  .confirmation-dialog {
-    color: $color-white;
-  }
+.confirmation-dialog__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: $margin--small;
 }
