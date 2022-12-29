@@ -22,6 +22,7 @@ export const Html: FC = () => {
     }
   });
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return <Helmet htmlAttributes={{lang, theme}} />;
 };
