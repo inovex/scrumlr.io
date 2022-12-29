@@ -87,6 +87,7 @@
   width: $icon--extralarge;
   border-radius: $rounded--full;
   border: 2px solid $color-backlog-blue;
+  padding: 0;
   background-color: $color-white;
   cursor: pointer;
   transition: color 80ms linear, background-color 80ms linear;
@@ -94,6 +95,10 @@
     color: $color-white;
     background-color: $color-backlog-blue;
   }
+}
+.confirmation-dialog__close-button > svg {
+  height: 100%;
+  width: 100%;
 }
 [theme="dark"] .confirmation-dialog__close-button {
   color: $color-planning-pink;
