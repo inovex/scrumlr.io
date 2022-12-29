@@ -22,5 +22,6 @@ export const Html: FC = () => {
     }
   });
 
+  // @ts-ignore
   return <Helmet htmlAttributes={{lang, theme}} />;
 };

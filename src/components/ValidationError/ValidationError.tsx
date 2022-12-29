@@ -1,7 +1,7 @@
 import "./ValidationError.scss";
-import {FC} from "react";
+import {FC, PropsWithChildren} from "react";
 
-export const ValidationError: FC = ({children}) => (
+export const ValidationError: FC<PropsWithChildren> = ({children}) => (
   <span role="alert" className="validation-error">
     {children}
   </span>

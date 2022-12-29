@@ -1,4 +1,4 @@
-import {FC, useEffect, useRef, useState} from "react";
+import {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
@@ -8,7 +8,7 @@ import classNames from "classnames";
 type RemoveVoteProps = {
   noteId: string;
   disabled?: boolean;
-};
+} & PropsWithChildren;
 
 export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, children}) => {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import React, {Suspense} from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
 import {DndProvider} from "react-dnd-multi-backend";
 import "index.scss";
@@ -22,7 +22,10 @@ if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
 }
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container!);
+
+root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
@@ -36,8 +39,7 @@ ReactDOM.render(
         </Suspense>
       </Provider>
     </I18nextProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 
 store.dispatch(Actions.initApplication());

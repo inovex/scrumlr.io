@@ -1,7 +1,7 @@
-import {ChangeEvent, FC} from "react";
+import {ChangeEvent, FC, PropsWithChildren} from "react";
 import "./SettingsInput.scss";
 
-export interface SettingsInputProps {
+export type SettingsInputProps = {
   label: string;
   id: string;
   value: string;
@@ -10,7 +10,7 @@ export interface SettingsInputProps {
   disabled?: boolean;
   type?: "text" | "password";
   placeholder?: string;
-}
+} & PropsWithChildren;
 
 export const SettingsInput: FC<SettingsInputProps> = ({label, id, value, onChange, submit, disabled, type, placeholder, children}) => (
   <div className="settings-input__container">

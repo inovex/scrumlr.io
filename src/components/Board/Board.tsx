@@ -3,10 +3,10 @@ import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
-import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
 import ReactTooltip from "react-tooltip";
 import CustomDragLayer from "./CustomDragLayer";
+import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
