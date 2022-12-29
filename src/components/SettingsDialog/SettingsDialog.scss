@@ -55,7 +55,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__content {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: 8px;
+    border-radius: $rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -63,7 +63,7 @@ $settings-dialog-container--bottom: 62px;
     display: block;
     width: 544px;
     height: 100%;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 $rounded--small $rounded--small 0;
     padding-top: 0;
   }
 }
@@ -82,7 +82,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: 8px;
+    border-radius: $rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -92,7 +92,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 318px;
     height: 100%;
-    border-radius: 8px 0 0 8px;
+    border-radius: $rounded--small 0 0 $rounded--small;
   }
 }
 
@@ -123,7 +123,7 @@ $settings-dialog-container--bottom: 62px;
   align-items: center;
   width: $icon--extralarge;
   height: $icon--extralarge;
-  border-radius: 22px;
+  border-radius: $rounded--full;
   transition: all 0.08s ease-out;
   border: 2px solid transparent;
   outline: none;
@@ -189,7 +189,7 @@ $settings-dialog-container--bottom: 62px;
     align-items: center;
     width: 32px;
     height: 32px;
-    border-radius: 22px;
+    border-radius: $rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {
     color: $color-planning-pink;
@@ -200,7 +200,7 @@ $settings-dialog-container--bottom: 62px;
   height: 56px;
   width: 252px;
   margin: 0 $margin--large;
-  border-radius: 28px;
+  border-radius: $rounded--full;
   text-align: center;
   text-decoration: none;
   color: $color-black;
@@ -252,7 +252,7 @@ $settings-dialog-container--bottom: 62px;
   left: 8px;
   width: 40px;
   height: 40px;
-  border-radius: 20px;
+  border-radius: $rounded--full;
   background: var(--accent-color);
   color: $color-white;
 }
@@ -302,7 +302,7 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: $rounded--small;
   background-color: $color-white;
 }
 
