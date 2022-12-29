@@ -1,8 +1,27 @@
-@import "constants/style";
+@import "src/constants/style";
 
-.settings-dialog__portal {
-  background-color: rgba(0, 0, 0, 0.8);
+.settings-dialog__background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
   backdrop-filter: blur(10px);
+}
+[theme="dark"] .settings-dialog__background {
+  background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+}
+
+.settings-dialog__wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 // settings-dialog container
@@ -11,11 +30,8 @@ $settings-dialog-container--sides-large: 92px;
 $settings-dialog-container--bottom: 62px;
 
 .settings-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
 }
