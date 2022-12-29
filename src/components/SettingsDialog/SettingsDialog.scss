@@ -2,10 +2,7 @@
 
 .settings-dialog__background {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  @include inset-0;
   background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
@@ -15,13 +12,8 @@
 
 .settings-dialog__wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include inset-0;
+  @include flex-center;
 }
 
 // settings-dialog container
@@ -39,7 +31,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog {
     height: 616px;
     width: auto;
-    border-radius: 8px;
+    border-radius: $rounded--small;
     box-shadow: 0 16px 32px #0057ff29;
   }
   [theme="dark"] .settings-dialog {
