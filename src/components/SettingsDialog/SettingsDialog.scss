@@ -37,9 +37,6 @@ $settings-dialog-container--bottom: 62px;
 }
 @media screen and (min-width: 450px) {
   .settings-dialog {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     height: 616px;
     width: auto;
     border-radius: 8px;
