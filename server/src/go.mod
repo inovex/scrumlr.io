@@ -14,8 +14,8 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
-	github.com/markbates/goth v1.75.2
-	github.com/nats-io/nats.go v1.22.0
+	github.com/markbates/goth v1.76.0
+	github.com/nats-io/nats.go v1.22.1
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.1
