@@ -7389,9 +7389,10 @@ react-spring@^9.6.1:
     "@react-spring/web" "~9.6.1"
     "@react-spring/zdog" "~9.6.1"
 
-react-to-print@^2.14.10:
-  version "2.14.10"
-  resolved "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.10.tgz"
+react-to-print@^2.14.11:
+  version "2.14.11"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.11.tgz#14ce17fce6ed238ae08c8c375c13847eb1aefbac"
+  integrity sha512-sePHBaCtZLp8/g4d/gRyI9XQZkveZq6xoukanAHfkzlXOa7sTuXCEQOYq37lIa5MkUoxySdJxYuyClaXPa9Zpg==
   dependencies:
     prop-types "^15.8.1"
 
