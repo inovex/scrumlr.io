@@ -31,7 +31,7 @@
     "react-focus-lock": "^2.9.2",
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.3.2",
-    "react-i18next": "^12.1.1",
+    "react-i18next": "^12.1.4",
     "react-redux": "^7.2.9",
     "react-router": "^6.6.0",
     "react-router-dom": "^6.6.0",
