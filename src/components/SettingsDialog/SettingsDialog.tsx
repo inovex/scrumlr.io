@@ -32,6 +32,11 @@ export const SettingsDialog: FC = () => {
     enter: {opacity: 1, transform: "translateY(0px)"},
     items: true,
   };
+  const transitionConfigMobile = {
+    from: {},
+    enter: {},
+    items: true,
+  };
 
   useEffect(() => {
     // If user is not a moderator of the board, he shouldn't see the board settings
@@ -49,7 +54,7 @@ export const SettingsDialog: FC = () => {
     <Portal onClose={() => navigate(`/board/${boardId}`)}>
       <div className="settings-dialog__background" />
       <div className="settings-dialog__wrapper">
-        <Transition {...transitionConfig}>
+        <Transition {...(window.screen.width >= 450 ? transitionConfig : transitionConfigMobile)}>
           {(styles) => (
             <animated.aside
               aria-label={t("settings-dialog.title")}
