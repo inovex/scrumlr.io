@@ -104,6 +104,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		AllowStacking:         body.AllowStacking,
+    TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
 	}
@@ -134,9 +135,11 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 }
 
 func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
-	timerEnd := time.Now().Local().Add(time.Minute * time.Duration(minutes))
+  timerStart := time.Now().Local();
+	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := database.BoardTimerUpdate{
 		ID:       id,
+    TimerStart: &timerStart,
 		TimerEnd: &timerEnd,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
@@ -149,6 +152,7 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
 	update := database.BoardTimerUpdate{
 		ID:       id,
+    TimerStart: nil,
 		TimerEnd: nil,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
