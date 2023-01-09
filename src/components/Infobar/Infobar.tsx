@@ -17,6 +17,7 @@ export const InfoBar = () => {
 
   const state = useAppSelector(
     (applicationState) => ({
+      startTime: applicationState.board.data?.timerStart,
       endTime: applicationState.board.data?.timerEnd,
       activeVoting: Boolean(applicationState.votings.open),
       possibleVotes: applicationState.votings.open?.voteLimit,
@@ -28,7 +29,7 @@ export const InfoBar = () => {
 
   return ReactDOM.createPortal(
     <aside className="info-bar">
-      {state.endTime && <Timer endTime={state.endTime} />}
+      {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
       {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
         <TooltipButton
