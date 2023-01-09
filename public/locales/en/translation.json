@@ -23,8 +23,8 @@
   },
   "AccessPolicy": {
     "PUBLIC": "Open",
-    "BY_PASSPHRASE": "Protected",
-    "BY_INVITE": "Manual approval"
+    "BY_PASSPHRASE": "Password protected",
+    "BY_INVITE": "Closed"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",

@@ -39,6 +39,7 @@ describe("InfoBar", () => {
           showAuthors: true,
           showNotesOfOtherUsers: true,
           allowStacking: true,
+          timerStart: new Date(123436789),
           timerEnd: new Date(123456789),
         },
       },
