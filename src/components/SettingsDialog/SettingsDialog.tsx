@@ -19,7 +19,7 @@ import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 import "./SettingsDialog.scss";
 
-export const SettingsDialog: React.FC = () => {
+export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
