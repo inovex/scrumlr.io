@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import {useEffect, FC} from "react";
 import {animated, Transition} from "react-spring";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
