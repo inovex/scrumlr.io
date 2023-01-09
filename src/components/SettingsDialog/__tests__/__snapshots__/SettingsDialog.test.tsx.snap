@@ -34,7 +34,6 @@ exports[`SettingsDialog should render correctly 1`] = `
               aria-modal="true"
               class="settings-dialog settings-dialog--selected"
               role="dialog"
-              style="opacity: 0; transform: translateY(-20px);"
             >
               <div
                 class="settings-dialog__sidebar"
