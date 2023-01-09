@@ -7,6 +7,7 @@ import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
+import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
@@ -27,11 +28,6 @@ export const SettingsDialog: FC = () => {
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
 
-  const transitionConfig = {
-    from: {opacity: 0, transform: "translateY(-20px)"},
-    enter: {opacity: 1, transform: "translateY(0px)"},
-    items: true,
-  };
   const transitionConfigMobile = {
     from: {},
     enter: {},
@@ -54,7 +50,7 @@ export const SettingsDialog: FC = () => {
     <Portal onClose={() => navigate(`/board/${boardId}`)}>
       <div className="settings-dialog__background" />
       <div className="settings-dialog__wrapper">
-        <Transition {...(window.screen.width >= 450 ? transitionConfig : transitionConfigMobile)}>
+        <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
           {(styles) => (
             <animated.aside
               aria-label={t("settings-dialog.title")}
