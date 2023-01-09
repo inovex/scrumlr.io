@@ -6,9 +6,6 @@
   background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
-[theme="dark"] .confirmation-dialog__background {
-  background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
-}
 
 .confirmation-dialog__wrapper {
   position: fixed;
@@ -17,18 +14,15 @@
 }
 
 .confirmation-dialog {
-  width: 360px;
+  width: 80%;
+  min-width: 220px;
+  max-width: 360px;
   color: $color-black;
   background-color: $color-white;
   border-radius: $rounded--medium;
   padding: $padding--medium;
   border: 2px solid;
   border-color: $color-backlog-blue;
-}
-[theme="dark"] .confirmation-dialog {
-  color: $color-white;
-  background-color: $color-dark-one;
-  border-color: $color-planning-pink;
 }
 
 .confirmation-dialog__title {
@@ -54,21 +48,6 @@
 .confirmation-dialog__button--decline {
   color: $color-backlog-blue;
   background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
-}
-[theme="dark"] {
-  .confirmation-dialog__button {
-    border-color: $color-planning-pink;
-    &:hover {
-      box-shadow: 0 4px 8px rgba($color: $color-planning-pink, $alpha: 0.2);
-    }
-  }
-  .confirmation-dialog__button--accept {
-    background-color: $color-planning-pink;
-  }
-  .confirmation-dialog__button--decline {
-    color: $color-planning-pink;
-    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
-  }
 }
 .confirmation-dialog__buttons {
   display: flex;
@@ -100,12 +79,38 @@
   height: 100%;
   width: 100%;
 }
-[theme="dark"] .confirmation-dialog__close-button {
-  color: $color-planning-pink;
-  background-color: $color-dark-one;
-  border-color: $color-planning-pink;
-  &:hover {
+[theme="dark"] {
+  .confirmation-dialog__background {
+    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  }
+
+  .confirmation-dialog {
     color: $color-white;
+    background-color: $color-dark-one;
+    border-color: $color-planning-pink;
+  }
+
+  .confirmation-dialog__button {
+    border-color: $color-planning-pink;
+    &:hover {
+      box-shadow: 0 4px 8px rgba($color: $color-planning-pink, $alpha: 0.2);
+    }
+  }
+  .confirmation-dialog__button--accept {
     background-color: $color-planning-pink;
+  }
+  .confirmation-dialog__button--decline {
+    color: $color-planning-pink;
+    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  }
+
+  .confirmation-dialog__close-button {
+    color: $color-planning-pink;
+    background-color: $color-dark-one;
+    border-color: $color-planning-pink;
+    &:hover {
+      color: $color-white;
+      background-color: $color-planning-pink;
+    }
   }
 }

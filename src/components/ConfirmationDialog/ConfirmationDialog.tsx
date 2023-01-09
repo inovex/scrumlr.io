@@ -1,8 +1,9 @@
-import React from "react";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {Portal} from "components/Portal";
-import {animated, Transition} from "react-spring";
+import {FC} from "react";
 import {useTranslation} from "react-i18next";
+import {animated, Transition} from "react-spring";
+import {dialogTransitionConfig} from "utils/transitionConfig";
+import {Portal} from "components/Portal";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./ConfirmationDialog.scss";
 
 type ConfirmationDialogProps = {
@@ -13,19 +14,14 @@ type ConfirmationDialogProps = {
   onDeclineLabel?: string;
 };
 
-export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = (props) => {
+export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
   const {t} = useTranslation();
-  const transitionConfig = {
-    from: {opacity: 0, transform: "translateY(-20px)"},
-    enter: {opacity: 1, transform: "translateY(0px)"},
-    items: true,
-  };
 
   return (
     <Portal onClose={props.onDecline}>
       <div className="confirmation-dialog__background" />
       <div className="confirmation-dialog__wrapper">
-        <Transition {...transitionConfig}>
+        <Transition {...dialogTransitionConfig}>
           {(styles) => (
             <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles}>
               <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
