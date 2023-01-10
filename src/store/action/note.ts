@@ -14,6 +14,8 @@ export const NoteAction = {
   ShareNote: "scrumlr.io/shareNote" as const,
   StopSharing: "scrumlr.io/stopSharing" as const,
 
+  OnNoteFocus: "scrumlr.io/onNoteFocus" as const,
+  OnNoteBlur: "scrumlr.io/onNoteBlur" as const,
   EditNote: "scrumlr.io/editNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
 
@@ -58,6 +60,14 @@ export const NoteActionFactory = {
     type: NoteAction.StopSharing,
   }),
 
+  onNoteFocus: () => ({
+    type: NoteAction.OnNoteFocus,
+  }),
+
+  onNoteBlur: () => ({
+    type: NoteAction.OnNoteBlur,
+  }),
+
   /**
    * Creates an action which should be dispatched when the user edits a note.
    *
@@ -95,6 +105,8 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.deletedNote>
   | ReturnType<typeof NoteActionFactory.shareNote>
   | ReturnType<typeof NoteActionFactory.stopSharing>
+  | ReturnType<typeof NoteActionFactory.onNoteFocus>
+  | ReturnType<typeof NoteActionFactory.onNoteBlur>
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
   | ReturnType<typeof NoteActionFactory.deleteNote>;

@@ -44,7 +44,7 @@ export const Request = ({requests, participantsWithRaisedHand}: RequestProps) =>
               {requests.map((joinRequest) => (
                 <li key={joinRequest.user.id} className="join-request__unique-request-container">
                   <figure className="join-request__request-figure">
-                    <UserAvatar id={joinRequest.user.id} avatar={joinRequest.user.avatar} name={joinRequest.user.name} />
+                    <UserAvatar id={joinRequest.user.id} avatar={joinRequest.user.avatar} title={joinRequest.user.name} />
                     <figcaption className="join-request__request-display-name">{joinRequest.user.name}</figcaption>
                   </figure>
 
@@ -62,7 +62,7 @@ export const Request = ({requests, participantsWithRaisedHand}: RequestProps) =>
               {participantsWithRaisedHand.map((p) => (
                 <li key={p.user.id} className="join-request__unique-request-container">
                   <figure className="join-request__request-figure">
-                    <UserAvatar id={p.user.id} avatar={p.user.avatar} name={p.user.name} />
+                    <UserAvatar id={p.user.id} avatar={p.user.avatar} title={p.user.name} />
                     <figcaption className="join-request__request-display-name">{p.user.name}</figcaption>
                   </figure>
 

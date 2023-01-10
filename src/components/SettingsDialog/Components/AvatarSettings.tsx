@@ -15,7 +15,7 @@ import {
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
-import {FC, useEffect, useState} from "react";
+import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
@@ -97,12 +97,11 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       <div className="avatar-settings__settings-wrapper">
         <div className="avatar-settings__settings">
           {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
-            <>
+            <Fragment key={label}>
               <SettingsAccordion
                 label={t(`Avatar.groups.${label}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
-                key={label}
                 headerClassName="avatar-settings__settings-group-header"
               >
                 <hr className="avatar-settings__settings-group-seperator" />
@@ -115,25 +114,24 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                         .some((val) => val);
 
                     return (
-                      <>
+                      <Fragment key={element.key}>
                         <SettingsCarousel
                           carouselItems={element.values}
                           currentValue={properties[element.key]}
-                          onValueChange={(value) => updateAvatar(element.key, value as typeof element.values[number])}
-                          key={element.key}
+                          onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
                           label={t(`Avatar.${element.key}.label`)}
                           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
                         />
                         {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                      </>
+                      </Fragment>
                     );
                   })}
                 </div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
-            </>
+            </Fragment>
           ))}
         </div>
       </div>

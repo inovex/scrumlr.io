@@ -56,6 +56,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
       showHiddenColumns: rootState.participants!.self.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
+      activeTimer: !!rootState.board.data?.timerEnd,
+      activeVoting: !!rootState.votings.open,
     }),
     _.isEqual
   );
@@ -73,6 +75,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleModeration = () => {
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+
     dispatch(Actions.setModerating(!state.moderation));
   };
 
@@ -131,16 +138,16 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
                   active={state.moderation}
                   direction="left"
-                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
@@ -227,7 +234,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   active={state.moderation}
                   direction="left"
-                  label={state.moderation ? t("MenuBars.stopFocusMode") : t("MenuBars.startFocusMode")}
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
                 />

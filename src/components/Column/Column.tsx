@@ -6,7 +6,7 @@ import {useDrop} from "react-dnd";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CloseIcon, ReactComponent as AbortIcon} from "assets/icon-close.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
@@ -100,7 +100,16 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
-        <h2 className={classNames("column__header-text", {"column__header-text--hidden": !visible})}>{name}</h2>
+        <h2
+          onDoubleClick={() => {
+            if (isModerator) {
+              setColumnNameMode("EDIT");
+            }
+          }}
+          className={classNames("column__header-text", {"column__header-text--hidden": !visible})}
+        >
+          {name}
+        </h2>
       </div>
     ) : (
       <input
@@ -123,9 +132,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           inputRef.current = ref!;
         }}
         onFocus={(e) => e.target.select()}
-        onBlur={(e) => {
-          handleEditColumnName((e.target as HTMLInputElement).value);
-        }}
       />
     );
 
@@ -153,7 +159,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             setColumnNameMode("VIEW");
           }}
         >
-          <AbortIcon className="column__header-edit-button-icon" />
+          <CloseIcon className="column__header-edit-button-icon" />
         </button>
       )}
       {!isTemporary && (
@@ -165,7 +171,10 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   );
 
   return (
-    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
+    <section
+      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
+      ref={columnRef}
+    >
       <div className="column__content">
         <div className="column__header">
           <NoteInput
@@ -196,8 +205,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
             {state.notes.map((note) => (
-              <li>
-                <Note key={note} noteId={note} viewer={state.viewer} />
+              <li key={note}>
+                <Note noteId={note} viewer={state.viewer} />
               </li>
             ))}
           </ul>

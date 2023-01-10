@@ -14,7 +14,8 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  showUnstackButton: boolean;
+  isStackedNote: boolean;
+  hasStackedNotes?: boolean;
   className?: string;
 
   viewer: Participant;

@@ -15,7 +15,7 @@ $tooltip-button-size: 42px;
   box-sizing: border-box;
 
   &:focus-visible {
-    outline: 2px solid rgba($color-black, 0.5);
+    outline: 2px solid var(--accent-color, rgba($color-white, 0.5));
   }
 }
 
@@ -204,7 +204,7 @@ $tooltip-button-size: 42px;
 
   .tooltip-button__icon {
     background: $menu-icon-background-color--dark;
-    color: var(--accent-color, $color-white);
+    color: var(--accent-color--dark, $color-white);
     fill: var(--accent-color--dark);
   }
 

@@ -15,6 +15,8 @@ export interface View {
 
   readonly route?: string;
 
+  readonly noteFocused: boolean;
+
   readonly hotkeysAreActive: boolean;
 }
 

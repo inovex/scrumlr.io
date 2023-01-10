@@ -1,6 +1,6 @@
 {
   "InfoBar": {
-    "ReturnToFocusedNote": "Zurück zur Fokuskarte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
   "NewBoard": {
     "boardName": "Sitzungsname",
@@ -38,7 +38,7 @@
   "AccessPolicySelection": {
     "title": "Zugriffseinstellung",
     "publicTitle": "Offen",
-    "byPassphraseTitle": "Passwortgeschützt",
+    "byPassphraseTitle": "Mit Passwort",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
     "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
@@ -108,7 +108,7 @@
     "settings": "Einstellungen",
     "editName": "Name ändern",
     "submitName": "Name bestätigen",
-    "resetName": "Name zurücksetzen",
+    "resetName": "Abbrechen",
     "hideColumn": "Ausblenden",
     "showColumn": "Einblenden",
     "deleteColumn": "Löschen",
@@ -129,12 +129,12 @@
     "rejectAll": "Alle ablehnen"
   },
   "RaiseRequest": {
-    "title": "Jemand hebt seine/ihre Hand",
+    "title": "Jemand hebt die Hand",
     "lower": "Senke die Hand",
     "lowerAll": "Alle Hände senken"
   },
   "Request": {
-    "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
+    "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
@@ -173,8 +173,8 @@
     "themeToggle": "Ändere Farbschema",
     "editColumns": "Bearbeite Spalten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
-    "startFocusMode": "Starte Fokus-Modus",
-    "stopFocusMode": "Beende Fokus-Modus",
+    "startPresenterMode": "Präsentiermodus starten",
+    "stopPresenterMode": "Präsentiermodus beenden",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
@@ -197,6 +197,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Beenden",
+    "abortActionTooltip": "Abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -228,6 +230,8 @@
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
     "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
+    "moderatorResetReadyStatesButton": "Zurücksetzen!",
     "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen"
   },
@@ -246,6 +250,9 @@
   },
   "Note": {
     "me": "Ich"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"
@@ -270,7 +277,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugangsrichtlinien",
+    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
@@ -278,6 +285,7 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
