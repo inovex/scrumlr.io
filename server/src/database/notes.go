@@ -7,7 +7,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 )
@@ -22,7 +21,6 @@ type Note struct {
 	Text          string
 	Stack         uuid.NullUUID
 	Rank          int
-	Assignee      []string `bun:",array"`
 }
 
 type NoteInsert struct {
@@ -45,7 +43,6 @@ type NoteUpdate struct {
 	Board         uuid.UUID
 	Text          *string
 	Position      *NoteUpdatePosition `bun:"embed"`
-	Assignee      []string `bun:",array"`
 }
 
 func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
@@ -94,13 +91,6 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 	}
 
 	var note Note
-	if update.Assignee != nil {
-		if precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
-			note, err = d.updateNoteAssignee(update)
-		} else {
-			err = errors.New("not permitted to assigne people to note")
-		}
-	}
 	if update.Text != nil && update.Position == nil {
 		if caller == precondition.Author || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
 			note, err = d.updateNoteText(update)
@@ -137,15 +127,6 @@ func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 		return note, err
 	}
 	return note, nil
-}
-
-func (d *Database) updateNoteAssignee(update NoteUpdate) (Note, error) {
-	var note Note
-	_, err := d.db.NewUpdate().Model(&update).Set("assignee = ?", pgdialect.Array(update.Assignee)).Where("id = ?", update.ID).Returning("*").Where("board = ?", update.Board).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
-	if err != nil {
-		return note, err
-	}
-	return note, err
 }
 
 func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
@@ -188,9 +169,6 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 		Returning("*")
 	if update.Text != nil {
 		query = query.Set("text = ?", &update.Text)
-	}
-	if update.Assignee != nil {
-		query = query.Set("assignee = ?", &update.Assignee)
 	}
 
 	var note []Note
@@ -240,9 +218,6 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 		Returning("*")
 	if update.Text != nil {
 		query = query.Set("text = ?", &update.Text)
-	}
-	if update.Assignee != nil {
-		query = query.Set("assignee = ?", &update.Assignee)
 	}
 
 	var note []Note

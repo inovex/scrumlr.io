@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS notes ADD COLUMN IF NOT EXISTS assignee text[];

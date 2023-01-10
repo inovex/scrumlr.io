@@ -31,6 +31,7 @@ type Server struct {
 	sessions   services.BoardSessions
 	health     services.Health
 	feedback   services.Feedback
+  assignments services.Assignments
 
 	upgrader websocket.Upgrader
 
@@ -50,6 +51,7 @@ func New(
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
+  assignments services.Assignments,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -90,6 +92,7 @@ func New(
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
+    assignments:                      assignments,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -158,6 +161,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initNoteResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
+      s.initAssignmentResources(r)
 		})
 
 		r.Route("/user", func(r chi.Router) {
@@ -249,5 +253,17 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Delete("/", s.deleteNote)
 		})
 	})
+}
+
+func (s *Server) initAssignmentResources(r chi.Router) {
+  r.Route("/assignments", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
+
+    r.Post("/", s.createAssignment)
+    r.Route("/{assignment}", func(r chi.Router) {
+      r.Use(s.AssignmentContext)
+      r.Delete("/", s.deleteAssignment)
+    })
+  })
 }
 

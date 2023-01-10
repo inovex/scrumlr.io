@@ -31,8 +31,6 @@ type Note struct {
 
 	// The position of the note.
 	Position NotePosition `json:"position"`
-
-	Assignee []string `json:"assignee"`
 }
 
 func (n *Note) From(note database.Note) *Note {
@@ -44,7 +42,6 @@ func (n *Note) From(note database.Note) *Note {
 		Stack:  note.Stack,
 		Rank:   note.Rank,
 	}
-	n.Assignee = note.Assignee
 	return n
 }
 
@@ -88,6 +85,4 @@ type NoteUpdateRequest struct {
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`
 
-	//The assignees of the note
-	Assignee []string `json:"assignee"`
 }

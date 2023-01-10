@@ -84,3 +84,8 @@ type Health interface {
 	IsRealtimeHealthy() bool
 }
 
+type Assignments interface {
+	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+}
+

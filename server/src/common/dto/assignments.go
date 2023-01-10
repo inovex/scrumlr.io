@@ -7,40 +7,40 @@ import (
 )
 
 // Assign is the response for all assign requests.
-type Assign struct {
+type Assignment struct {
+	Id    uuid.UUID `json:"id"`
 	Board uuid.UUID `json:"board"`
 	Note  uuid.UUID `json:"note"`
 	Name  string    `json:"name"`
-	Id    uuid.UUID `json:"id"`
 }
 
-func (a *Assign) From(assign database.Assign) *Assign {
+func (a *Assignment) From(assign database.Assignment) *Assignment {
+	a.Id = assign.Id
+  a.Board = assign.Board
 	a.Note = assign.Note
 	a.Name = assign.Name
-	a.Id = assign.Id
 	return a
 }
 
-func (*Assign) Render(_ http.ResponseWriter, _ *http.Request) error {
+func (*Assignment) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
 
-func Assignings(assignings []database.Assign) []*Assign {
-	if assignings == nil {
+func Assignments(assignments []database.Assignment) []*Assignment {
+	if assignments == nil {
 		return nil
 	}
 
-	list := make([]*Assign, len(assignings))
-	for index, assign := range assignings {
-		list[index] = new(Assign).From(assign)
+	list := make([]*Assignment, len(assignments))
+	for index, assignment := range assignments {
+		list[index] = new(Assignment).From(assignment)
 	}
 	return list
 }
 
 // AssignRequest represents the request to add or delete an assign.
-type AssignRequest struct {
+type AssignmentCreateRequest struct {
 	Board uuid.UUID `json:"board"`
 	Note  uuid.UUID `json:"note"`
 	Name  string    `json:"name"`
-	Id    uuid.UUID `json:"id"`
 }
