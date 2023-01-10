@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 type Assignment struct {
@@ -23,12 +25,12 @@ type AssignmentInsert struct {
 
 func (d *Database) CreateAssignment(insert AssignmentInsert) (Assignment, error) {
   var assignment Assignment
-  _, err := d.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &assignment)
+  _, err := d.db.NewInsert().Model(&insert).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &assignment)
   return assignment, err
 }
 
-func (d *Database) DeleteAssignment(id uuid.UUID) (error) {
-  _, err := d.db.NewDelete().Model((*Assignment)(nil)).Where("id = ?", id).Exec(context.Background())
+func (d *Database) DeleteAssignment(board, assignment uuid.UUID) (error) {
+  _, err := d.db.NewDelete().Model((*Assignment)(nil)).Where("id = ?", assignment).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Assignment", assignment))
   return err
 
 }

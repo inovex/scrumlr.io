@@ -23,7 +23,7 @@ type Observer interface {
 type DB interface {
   Observer
   CreateAssignment(insert database.AssignmentInsert) (database.Assignment, error)
-  DeleteAssignment(id uuid.UUID) error
+  DeleteAssignment(board, assignment uuid.UUID) error
 }
 
 func NewAssignmentService(db DB, rt *realtime.Broker) services.Assignments {
@@ -49,8 +49,29 @@ func (s *AssignmentService) Create(ctx context.Context, body dto.AssignmentCreat
 }
 
 func (s *AssignmentService) Delete(ctx context.Context, id uuid.UUID) error {
-  return s.database.DeleteAssignment(id)
+  return s.database.DeleteAssignment(ctx.Value("Board").(uuid.UUID), id)
 }
 
 func (s *AssignmentService) UpdatedAssignments(board uuid.UUID, assignments []database.Assignment) {
+  eventAssignments := make([]dto.Assignment, len(assignments))
+  for index, assignment := range assignments {
+    eventAssignments[index] = *new(dto.Assignment).From(assignment)
+  }
+  err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+    Type: realtime.BoardEventAssignmentsUpdated,
+    Data: eventAssignments,
+  })
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast created assignment", "err", err)
+	}
+}
+
+func (s *AssignmentService) DeletedAssignment(board, assignment uuid.UUID) {
+  err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+    Type: realtime.BoardEventAssignmentDeleted,
+    Data: assignment,
+  })
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast deleted assignment", "err", err)
+	}
 }
