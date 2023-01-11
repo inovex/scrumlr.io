@@ -215,7 +215,9 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.AllowNoteRepositioningOption")}
                   onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
                 >
-                  <Toggle className="board-settings__show-note-repositioning-value" active={state.board.allowStacking} />
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
                 </SettingsButton>
               </div>
 
