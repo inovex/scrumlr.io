@@ -46,7 +46,7 @@
   color: #333948; // TODO
   border: none;
   border-radius: $rounded--full;
-  padding: 0 $padding--default;
+  padding: 0 10px;
   font-weight: bold;
   font-size: 14px;
   letter-spacing: $letter-spacing--medium;
@@ -58,6 +58,14 @@
   }
   &:hover {
     background-color: var(--accent-color--desaturated-light);
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+}
+@media screen and (min-width: 920px) {
+  .participants__permisson-filter-button {
+    padding: 0 $padding--default;
   }
 }
 
@@ -77,6 +85,9 @@
   }
   &:hover {
     background-color: var(--accent-color--desaturated-light);
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
   }
   > svg {
     height: $icon--medium;
@@ -114,6 +125,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .participant__name {
@@ -122,11 +134,14 @@
   letter-spacing: $letter-spacing--medium;
   line-height: 18px;
   color: #333948; // TODO
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .participant__role {
-  height: 18px;
-  line-height: 18px;
+  height: 16px;
+  line-height: 16px;
   font-size: 12px;
   border-radius: $rounded--full;
   padding: 0 $padding--small;
@@ -144,7 +159,7 @@
 }
 
 .participant__role-button {
-  height: 18px;
+  height: 16px;
   font-size: 12px;
   border: 2px solid var(--accent-color--desaturated-light);
   background-color: $color-white;
@@ -163,5 +178,33 @@
   &:hover {
     border-color: var(--accent-color--desaturated-light);
     background-color: var(--accent-color--desaturated-light);
+  }
+}
+
+[theme="dark"] {
+  .participants__search-input {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+  }
+  .participants__search-icon {
+    color: $color-white;
+  }
+  .participants__permisson-filter-button,
+  .participant__status-filter-button {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+    &--active {
+      background-color: var(--accent-color);
+      color: $color-white;
+    }
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+  }
+  .participants__list-item {
+    background-color: $color-dark-mode-note;
+  }
+  .participant__name {
+    color: $color-white;
   }
 }
