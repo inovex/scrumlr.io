@@ -40,7 +40,7 @@ func Assignments(assignments []database.Assignment) []*Assignment {
 
 // AssignRequest represents the request to add or delete an assign.
 type AssignmentCreateRequest struct {
-	Board uuid.UUID `json:"board"`
+	Board uuid.UUID `json:"-"`
 	Note  uuid.UUID `json:"note"`
 	Name  string    `json:"name"`
 }
