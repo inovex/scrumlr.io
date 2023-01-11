@@ -38,13 +38,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     <>
       {showConfirmationDialog && (
         <ConfirmationDialog
-          headline={t("ConfirmationDialog.returnToHomepage")}
-          acceptMessage={t("ConfirmationDialog.yes")}
+          title={t("ConfirmationDialog.returnToHomepage")}
           onAccept={() => {
             store.dispatch(Actions.leaveBoard());
             navigate("/");
           }}
-          declineMessage={t("ConfirmationDialog.no")}
           onDecline={() => setShowConfirmationDialog(false)}
         />
       )}
