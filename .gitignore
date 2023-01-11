@@ -15,7 +15,7 @@ yarn-error.log*
 
 # builds
 build
-server/src/main
+server/src/server
 
 # misc
 .DS_Store
