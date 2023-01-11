@@ -1,90 +1,167 @@
 @import "src/constants/style";
 @import "../SettingsDialog";
 
-.participants__container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  margin-bottom: 62px;
-  overflow: auto;
-  flex-grow: 1;
-}
-
-.participants__user-list-wrapper {
-  overflow: auto;
+.participants__search-input-wrapper {
+  position: relative;
+  height: 40px;
   width: 100%;
-  // overflow-x: hidden; // firefox bug?
-
-  @include scrollbar();
 }
-
-.participants__user-list {
-  display: flex;
-  flex-direction: column;
+.participants__search-input {
+  height: 100%;
   width: 100%;
-  border-radius: 8px;
+  padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  color: #333948; // TODO
   background-color: $color-white;
-}
+  border: none;
+  border-radius: $rounded--full;
 
-[theme="dark"] {
-  .participants__user-list {
-    background-color: $color-dark-mode-note;
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
   }
 }
+.participants__search-icon {
+  position: absolute;
+  height: 100%;
+  width: $icon--medium;
+  color: #333948; // TODO
+  right: $padding--default;
+}
 
-.participants__user {
-  position: relative;
+.participants__filter-buttons {
+  margin-top: $margin--small;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px $padding--medium;
-  height: 48px;
 }
 
-.participants__user_avatar-name-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-}
-
-.participants__user_avatar {
-  height: 26px;
-  width: 26px;
-}
-
-.participants__user-name {
-  color: $color-black;
-  font-size: $text-size--medium;
+.participants__permisson-filter-button {
+  height: 42px;
+  background-color: $color-white;
+  color: #333948; // TODO
+  border: none;
+  border-radius: $rounded--full;
+  padding: 0 $padding--default;
+  font-weight: bold;
+  font-size: 14px;
   letter-spacing: $letter-spacing--medium;
-  width: 170px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  cursor: pointer;
 
-[theme="dark"] {
-  .participants__user-name {
+  &--active {
+    background-color: var(--accent-color);
     color: $color-white;
+  }
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
   }
 }
 
-.participants__online-mark {
-  position: absolute;
-  top: 18px;
-  left: 19px;
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: $color-grooming-green;
+.participant__status-filter-button {
+  height: 42px;
+  width: 42px;
+  border: none;
+  border-radius: $rounded--full;
+  background-color: $color-white;
+  color: var(--accent-color);
+  padding: 0;
+  cursor: pointer;
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
+  }
+  > svg {
+    height: $icon--medium;
+    width: $icon--medium;
+  }
 }
 
-.participants__offline-mark {
-  position: absolute;
-  top: 18px;
-  left: 19px;
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: $color-retro-red;
+.participants__list {
+  margin-top: $margin--default;
+  border-radius: $rounded--default;
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+}
+
+.participants__list-item {
+  height: 55px;
+  background-color: $color-white;
+  padding: $margin--small;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #edeff2;
+  }
+}
+
+.participant__avatar > svg {
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+}
+
+.participant__name-role-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.participant__name {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  line-height: 18px;
+  color: #333948; // TODO
+}
+
+.participant__role {
+  height: 18px;
+  line-height: 18px;
+  font-size: 12px;
+  border-radius: $rounded--full;
+  padding: 0 $padding--small;
+  font-weight: 500;
+  letter-spacing: $letter-spacing--medium;
+  background-color: var(--accent-color);
+  color: $color-white;
+  width: fit-content;
+}
+
+.participant__role-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: $margin--small;
+}
+
+.participant__role-button {
+  height: 18px;
+  font-size: 12px;
+  border: 2px solid var(--accent-color--desaturated-light);
+  background-color: $color-white;
+  border-radius: $rounded--full;
+  padding: 0 $padding--small;
+  font-weight: 500;
+  letter-spacing: $letter-spacing--medium;
+  color: #333948; // TODO
+  cursor: pointer;
+
+  &--active {
+    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:hover {
+    border-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--desaturated-light);
+  }
 }

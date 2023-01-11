@@ -2,37 +2,93 @@ import {useState} from "react";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import classNames from "classnames";
+import "./Participants.scss";
+import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
+import {UserAvatar} from "components/BoardUsers";
+import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 
 export const Participants = () => {
   const dispatch = useDispatch();
-  const [permissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
+  const [searchString, setSearchString] = useState<string>("");
+  const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
   const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
 
+  const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
 
   return (
-    <section className="participants">
-      <input className="participants__search-input" />
+    <section className="settings-dialog__container accent-color__poker-purple">
+      <header className="settings-dialog__header">
+        <h2 className="settings-dialog__header-text">Participants</h2>
+      </header>
+      <div className="participants__search-input-wrapper">
+        <input placeholder="Name..." className="participants__search-input" onChange={(e) => setSearchString(e.target.value)} />
+        <MagnifyingGlassIcon className="participants__search-icon" />
+      </div>
+      <div className="participants__filter-buttons">
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "OWNER"})}
+          onClick={() => setPermissionFilter(permissionFilter === "OWNER" ? "ALL" : "OWNER")}
+        >
+          Owner
+        </button>
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "MODERATOR"})}
+          onClick={() => setPermissionFilter(permissionFilter === "MODERATOR" ? "ALL" : "MODERATOR")}
+        >
+          Moderator
+        </button>
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "PARTICIPANT"})}
+          onClick={() => setPermissionFilter(permissionFilter === "PARTICIPANT" ? "ALL" : "PARTICIPANT")}
+        >
+          Participant
+        </button>
 
-      <button aria-label="" className="" onClick={() => setOnlineFilter((o) => !o)}>
-        {onlineFilter ? "Online" : "Offline"}
-      </button>
+        <button
+          aria-label=""
+          className={classNames("participant__status-filter-button", {"participant__status-filter-button--active": !onlineFilter})}
+          onClick={() => setOnlineFilter((o) => !o)}
+        >
+          <WifiIconDisabled />
+        </button>
+      </div>
 
       <ul className="participants__list">
         {participants
+          .filter((participant) =>
+            searchString
+              .toLowerCase()
+              .split(" ")
+              .every((s) => participant.user.name.toLowerCase().includes(s))
+          )
           .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
           .filter((participant) => participant.connected === onlineFilter)
           .map((participant) => (
-            <li key={participant.user.id}>
-              <span>{participant.user.name}</span>
-              {participant.role === "OWNER" ? (
-                <span>Owner</span>
-              ) : (
-                <>
-                  <button onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}>Moderator</button>
-                  <button onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}>Participant</button>
-                </>
-              )}
+            <li key={participant.user.id} className="participants__list-item">
+              <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} title={participant.user.name} />
+              <div className="participant__name-role-wrapper">
+                <span className="participant__name">{participant.user.name}</span>
+                {participant.role === "OWNER" || !isModerator ? (
+                  <span className="participant__role">{participant.role}</span>
+                ) : (
+                  <div className="participant__role-buttons">
+                    <button
+                      className={classNames("participant__role-button", {"participant__role-button--active": participant.role === "MODERATOR"})}
+                      onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
+                    >
+                      Moderator
+                    </button>
+                    <button
+                      className={classNames("participant__role-button", {"participant__role-button--active": participant.role === "PARTICIPANT"})}
+                      onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
+                    >
+                      Participant
+                    </button>
+                  </div>
+                )}
+              </div>
             </li>
           ))}
       </ul>
