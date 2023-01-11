@@ -1,0 +1,120 @@
+@import "constants/style.scss";
+@import "components/Votes/VoteButtons/AddVoteButton.scss";
+@import "./AssignAvatar.scss";
+
+.assignments__menu {
+  width: 300px;
+  position: absolute;
+  background-color: $color-white;
+  border-radius: 8px;
+  height: auto;
+  z-index: 999;
+  margin-top: 10px;
+}
+
+.assignments__summary {
+  background-color: var(--accent-color--desaturated-light);
+  padding: 0 4px;
+  border-radius: 21px;
+  height: 100%;
+  border: none;
+  min-width: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.assignments {
+  position: relative;
+  height: 100%;
+}
+
+.assignments-container {
+  position: relative;
+  height: var(--note-footer-height);
+}
+
+.assignments__icon {
+  height: 26px;
+  width: 26px;
+  color: var(--accent-color);
+}
+
+.assigning {
+  margin-left: 10px;
+  height: var(--note-footer-height);
+  min-width: 40px;
+  width: 100%;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+label {
+  font-size: inherit;
+  text-align: center;
+}
+
+.assigning__avatar-container {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 2px;
+  margin-left: 5px;
+}
+
+.avatar-on-note {
+  margin-left: -12px;
+}
+
+.assining__pill {
+  height: 100%;
+  width: fit-content;
+  border: none;
+  border-radius: 100px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+
+  background-color: var(--accent-color--desaturated-light);
+}
+
+.assining__add-button-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assining__add-button-plus__icon {
+  height: $icon--medium;
+  width: $icon--medium;
+  color: var(--accent-color);
+  pointer-events: none;
+}
+
+[theme="dark"] {
+  .assining__pill {
+    background-color: var(--accent-color--desaturated-dark);
+  }
+
+  & label {
+    color: $color-white;
+  }
+}
+
+.assining__pill-assign-label {
+  display: flex;
+  font-weight: bold;
+  padding-bottom: 3px;
+}
