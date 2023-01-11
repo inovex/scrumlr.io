@@ -27,7 +27,7 @@ const (
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
-  BoardEventAssignmentsUpdated BoardEventType = "ASSIGNMENTS_UPDATED"
+  BoardEventAssignmentCreated BoardEventType = "ASSIGNMENT_CREATED"
   BoardEventAssignmentDeleted BoardEventType = "ASSIGNMENT_DELETED"
 )
 

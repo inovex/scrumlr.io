@@ -45,6 +45,9 @@ func (s *AssignmentService) Create(ctx context.Context, body dto.AssignmentCreat
     log.Errorw("unable to create assignment", "board", body.Board, "note", body.Note, "error", err)
     return nil, common.InternalServerError
   }
+
+  s.CreatedAssignment(body.Board, assignment)
+
   return new(dto.Assignment).From(assignment), err
 }
 
@@ -52,17 +55,13 @@ func (s *AssignmentService) Delete(ctx context.Context, id uuid.UUID) error {
   return s.database.DeleteAssignment(ctx.Value("Board").(uuid.UUID), id)
 }
 
-func (s *AssignmentService) UpdatedAssignments(board uuid.UUID, assignments []database.Assignment) {
-  eventAssignments := make([]dto.Assignment, len(assignments))
-  for index, assignment := range assignments {
-    eventAssignments[index] = *new(dto.Assignment).From(assignment)
-  }
+func (s *AssignmentService) CreatedAssignment(board uuid.UUID, assignment database.Assignment) {
   err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-    Type: realtime.BoardEventAssignmentsUpdated,
-    Data: eventAssignments,
+    Type: realtime.BoardEventAssignmentCreated,
+    Data: new(dto.Assignment).From(assignment),
   })
 	if err != nil {
-		logger.Get().Errorw("unable to broadcast created assignment", "err", err)
+		logger.Get().Errorw("unable to broadcast deleted assignment", "err", err)
 	}
 }
 
