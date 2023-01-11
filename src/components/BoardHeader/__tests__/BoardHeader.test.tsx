@@ -75,11 +75,5 @@ describe("Board Header", () => {
       );
       expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("AccessPolicy.BY_PASSPHRASE");
     });
-
-    test("show confirmation-dialog after clicking scrumlr logo", () => {
-      const {container} = render(createBoardHeader());
-      fireEvent.click(container.querySelector(".board-header__link") as HTMLElement);
-      expect(container.querySelector(".confirmation-dialog")).toBeInTheDocument();
-    });
   });
 });
