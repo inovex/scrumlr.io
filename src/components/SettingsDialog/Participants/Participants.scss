@@ -100,7 +100,8 @@
   border-radius: $rounded--default;
   list-style-type: none;
   padding: 0;
-  overflow: hidden;
+  overflow: scroll;
+  margin-bottom: 70px;
 }
 
 .participants__list-item {
@@ -203,6 +204,9 @@
   }
   .participants__list-item {
     background-color: $color-dark-mode-note;
+    &:not(:last-child) {
+      border-bottom: 1px solid #242c3d; //TODO
+    }
   }
   .participant__name {
     color: $color-white;
