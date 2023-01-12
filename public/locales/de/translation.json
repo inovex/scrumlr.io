@@ -284,7 +284,11 @@
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Title" : "Teilnehmer"
+    "Title" : "Teilnehmer",
+    "OwnerFilterTooltip": "Zeige nur den Besitzer",
+    "ModeratorFilterTooltip": "Zeige nur Moderatoren",
+    "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer"
   },
   "UserRole": {
     "Owner": "Besitzer",

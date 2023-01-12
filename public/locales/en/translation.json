@@ -283,7 +283,11 @@
     "edit": "edit"
   },
   "Participants": {
-    "Title" : "Participants"
+    "Title" : "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants"
   },
   "UserRole": {
     "Owner": "Owner",

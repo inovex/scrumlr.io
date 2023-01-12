@@ -35,18 +35,21 @@ export const Participants = () => {
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "OWNER"})}
           onClick={() => setPermissionFilter(permissionFilter === "OWNER" ? "ALL" : "OWNER")}
+          title={t("Participants.OwnerFilterTooltip")}
         >
           {t("UserRole.Owner")}
         </button>
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "MODERATOR"})}
           onClick={() => setPermissionFilter(permissionFilter === "MODERATOR" ? "ALL" : "MODERATOR")}
+          title={t("Particpants.ModeratorFilterTooltip")}
         >
           {t("UserRole.Moderator")}
         </button>
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "PARTICIPANT"})}
           onClick={() => setPermissionFilter(permissionFilter === "PARTICIPANT" ? "ALL" : "PARTICIPANT")}
+          title={t("Participants.ParticipantFilterTooltip")}
         >
           {t("UserRole.Participant")}
         </button>
@@ -55,6 +58,7 @@ export const Participants = () => {
           aria-label="" // TODO
           className={classNames("participant__status-filter-button", {"participant__status-filter-button--active": !onlineFilter})}
           onClick={() => setOnlineFilter((o) => !o)}
+          title={t("Participants.OnlineFilterTooltip")}
         >
           <WifiIconDisabled />
         </button>
