@@ -7,10 +7,12 @@ import "./Participants.scss";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import {useDebounce} from "utils/hooks/useDebounce";
 
 export const Participants = () => {
   const dispatch = useDispatch();
-  const [searchString, setSearchString] = useState<string>("");
+  const [queryString, setQueryString] = useState<string>("");
+  const debouncedQueryString = useDebounce(queryString);
   const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
   const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
 
@@ -23,7 +25,7 @@ export const Participants = () => {
         <h2 className="settings-dialog__header-text">Participants</h2>
       </header>
       <div className="participants__search-input-wrapper">
-        <input placeholder="Name..." className="participants__search-input" onChange={(e) => setSearchString(e.target.value)} />
+        <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
         <MagnifyingGlassIcon className="participants__search-icon" />
       </div>
       <div className="participants__filter-buttons">
@@ -58,7 +60,7 @@ export const Participants = () => {
       <ul className="participants__list">
         {participants
           .filter((participant) =>
-            searchString
+            debouncedQueryString
               .toLowerCase()
               .split(" ")
               .every((s) => participant.user.name.toLowerCase().includes(s))
