@@ -87,13 +87,17 @@ export const Participants = () => {
                   <div className="participant__role-buttons">
                     <button
                       className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
+                      disabled={participant.role === "MODERATOR"}
                       onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
+                      title={t("Participants.ChangeRoleToModeratorTooltip")}
                     >
                       {t("UserRole.Moderator")}
                     </button>
                     <button
                       className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
+                      disabled={participant.role === "PARTICIPANT"}
                       onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
+                      title={t("Participants.ChangeRoleToParticipantTooltip")}
                     >
                       {t("UserRole.Participant")}
                     </button>

@@ -288,7 +288,9 @@
     "OwnerFilterTooltip": "Zeige nur den Besitzer",
     "ModeratorFilterTooltip": "Zeige nur Moderatoren",
     "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
-    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer"
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
+    "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator"
   },
   "UserRole": {
     "Owner": "Besitzer",

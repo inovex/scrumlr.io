@@ -287,7 +287,9 @@
     "OwnerFilterTooltip": "Show only the owner",
     "ModeratorFilterTooltip": "Show only moderators",
     "ParticipantFilterTooltip": "Show only participants",
-    "OnlineFilterTooltip": "Show disconnected participants"
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator"
   },
   "UserRole": {
     "Owner": "Owner",
