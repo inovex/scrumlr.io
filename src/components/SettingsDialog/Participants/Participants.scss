@@ -159,14 +159,18 @@
     color: #333948; // TODO
     cursor: pointer;
   }
-  &--active:is(button) {
+  &:is(button):hover,
+  &:is(button):focus {
+    outline: none;
+    border-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--desaturated-light);
+  }
+  &--active:is(button),
+  &--active:is(button):hover {
+    cursor: default;
     border-color: var(--accent-color);
     background-color: var(--accent-color);
     color: $color-white;
-  }
-  &:is(button):hover {
-    border-color: var(--accent-color--desaturated-light);
-    background-color: var(--accent-color--desaturated-light);
   }
 }
 
@@ -180,6 +184,9 @@
   .participants__search-input {
     background-color: $color-dark-mode-note;
     color: $color-white;
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
   }
   .participants__search-icon {
     color: $color-white;
@@ -211,12 +218,13 @@
       border: 2px solid var(--accent-color--desaturated-dark);
       color: $color-white;
     }
-    &--active:is(button) {
-      background-color: var(--accent-color);
-      border-color: var(--accent-color);
-    }
     &:is(button):hover {
       background-color: var(--accent-color--desaturated-dark);
+    }
+    &--active:is(button),
+    &--active:is(button):hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
     }
   }
 }
