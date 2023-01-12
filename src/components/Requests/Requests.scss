@@ -1,28 +1,23 @@
 @import "src/constants/style";
 
 $wrapper-position__top: 110px;
-$wrapper-position__bottom: 110px;
 $wrapper-position__right: 30px;
 $gap-between-requests: 15px;
+$wrapper-limit__bottom: 150px; // start overflowing with a scrollbar after exceeding this limit
 
-/* fixed wrapper in the top right containing all request */
+/* fixed wrapper in the top right containing all requests */
 .requests__wrapper {
   position: fixed;
   top: $wrapper-position__top;
-  bottom: $wrapper-position__bottom; // start overflowing here and show scrollbar
   right: $wrapper-position__right;
   z-index: $request-z-index;
 
-  max-height: 100%;
-  overflow-y: scroll;
-}
-
-.requests__main {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   row-gap: $gap-between-requests;
 
-  width: 100%;
   height: auto;
+  max-height: calc(100vh - $wrapper-limit__bottom);
+  overflow: auto;
 }
