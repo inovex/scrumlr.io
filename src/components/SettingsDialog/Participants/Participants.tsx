@@ -1,14 +1,14 @@
 import {useState} from "react";
+import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
+import classNames from "classnames";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import classNames from "classnames";
-import "./Participants.scss";
-import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
-import {UserAvatar} from "components/BoardUsers";
-import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {useDebounce} from "utils/hooks/useDebounce";
-import {useTranslation} from "react-i18next";
+import {UserAvatar} from "components/BoardUsers";
+import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
+import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import "./Participants.scss";
 
 export const Participants = () => {
   const {t} = useTranslation();
