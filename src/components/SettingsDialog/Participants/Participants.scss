@@ -123,9 +123,10 @@
 }
 
 .participant__name-role-wrapper {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 4px;
   overflow: hidden;
 }
 
@@ -142,7 +143,6 @@
 
 .participant__role {
   height: 16px;
-  line-height: 16px;
   font-size: 12px;
   border-radius: $rounded--full;
   padding: 0 $padding--small;
@@ -151,35 +151,29 @@
   background-color: var(--accent-color);
   color: $color-white;
   width: fit-content;
+
+  &:is(button) {
+    line-height: 12px;
+    background-color: $color-white;
+    border: 2px solid var(--accent-color--desaturated-light);
+    color: #333948; // TODO
+    cursor: pointer;
+  }
+  &--active:is(button) {
+    border-color: var(--accent-color);
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:is(button):hover {
+    border-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--desaturated-light);
+  }
 }
 
 .participant__role-buttons {
   display: flex;
   flex-direction: row;
   gap: $margin--small;
-}
-
-.participant__role-button {
-  height: 16px;
-  font-size: 12px;
-  border: 2px solid var(--accent-color--desaturated-light);
-  background-color: $color-white;
-  border-radius: $rounded--full;
-  padding: 0 $padding--small;
-  font-weight: 500;
-  letter-spacing: $letter-spacing--medium;
-  color: #333948; // TODO
-  cursor: pointer;
-
-  &--active {
-    border-color: var(--accent-color);
-    background-color: var(--accent-color);
-    color: $color-white;
-  }
-  &:hover {
-    border-color: var(--accent-color--desaturated-light);
-    background-color: var(--accent-color--desaturated-light);
-  }
 }
 
 [theme="dark"] {
@@ -210,5 +204,19 @@
   }
   .participant__name {
     color: $color-white;
+  }
+  .participant__role {
+    &:is(button) {
+      background-color: $color-dark-mode-note;
+      border: 2px solid var(--accent-color--desaturated-dark);
+      color: $color-white;
+    }
+    &--active:is(button) {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+    &:is(button):hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
   }
 }

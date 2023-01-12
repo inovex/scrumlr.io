@@ -52,7 +52,7 @@ export const Participants = () => {
         </button>
 
         <button
-          aria-label=""
+          aria-label="" // TODO
           className={classNames("participant__status-filter-button", {"participant__status-filter-button--active": !onlineFilter})}
           onClick={() => setOnlineFilter((o) => !o)}
         >
@@ -82,13 +82,13 @@ export const Participants = () => {
                 ) : (
                   <div className="participant__role-buttons">
                     <button
-                      className={classNames("participant__role-button", {"participant__role-button--active": participant.role === "MODERATOR"})}
+                      className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
                       onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
                     >
                       {t("UserRole.Moderator")}
                     </button>
                     <button
-                      className={classNames("participant__role-button", {"participant__role-button--active": participant.role === "PARTICIPANT"})}
+                      className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
                       onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
                     >
                       {t("UserRole.Participant")}
