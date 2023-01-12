@@ -13,7 +13,7 @@
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  color: #333948; // TODO
+  color: $color-black;
   background-color: $color-white;
   border: none;
   border-radius: $rounded--full;
@@ -29,7 +29,7 @@
   position: absolute;
   height: 100%;
   width: $icon--medium;
-  color: #333948; // TODO
+  color: $color-black;
   right: $padding--default;
 }
 
@@ -43,7 +43,7 @@
 .participants__permisson-filter-button {
   height: 42px;
   background-color: $color-white;
-  color: #333948; // TODO
+  color: $color-black;
   border: none;
   border-radius: $rounded--full;
   padding: 0 10px;
@@ -58,6 +58,7 @@
   }
   &:hover {
     background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
   }
   &:focus {
     outline: 2px solid var(--accent-color);
@@ -75,7 +76,7 @@
   border: none;
   border-radius: $rounded--full;
   background-color: $color-white;
-  color: #333948; // TODO
+  color: $color-black;
   padding: 0;
   cursor: pointer;
 
@@ -85,6 +86,7 @@
   }
   &:hover {
     background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
   }
   &:focus {
     outline: 2px solid var(--accent-color);
@@ -113,7 +115,7 @@
   align-items: center;
 
   &:not(:last-child) {
-    border-bottom: 1px solid #edeff2;
+    border-bottom: 1px solid $color-lighter-gray;
   }
 }
 
@@ -135,7 +137,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: 18px;
-  color: #333948; // TODO
+  color: $color-black;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -156,7 +158,7 @@
     line-height: 12px;
     background-color: $color-white;
     border: 2px solid var(--accent-color--desaturated-light);
-    color: #333948; // TODO
+    color: $color-black;
     cursor: pointer;
   }
   &:is(button):hover,
@@ -206,7 +208,7 @@
   .participants__list-item {
     background-color: $color-dark-mode-note;
     &:not(:last-child) {
-      border-bottom: 1px solid #242c3d; //TODO
+      border-bottom: 1px solid $color-dark-one;
     }
   }
   .participant__name {
