@@ -19,6 +19,7 @@ export const Participants = () => {
   const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
 
   const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
+  const self = useAppSelector((state) => state.participants!.self);
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
 
   return (
@@ -74,7 +75,7 @@ export const Participants = () => {
               <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} title={participant.user.name} />
               <div className="participant__name-role-wrapper">
                 <span className="participant__name">{participant.user.name}</span>
-                {participant.role === "OWNER" || !isModerator ? (
+                {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
                   <span className="participant__role">
                     {participant.role === "OWNER" ? t("UserRole.Owner") : participant.role === "MODERATOR" ? t("UserRole.Moderator") : t("UserRole.Participant")}
                   </span>
