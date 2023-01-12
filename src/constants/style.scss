@@ -14,6 +14,7 @@ $color-dark-gray: #859093;
 $color-darker-gray: #4f5253;
 $color-darkest-gray: #232323;
 $color-black: #111111;
+// $transparent: rgba(0, 0, 0, 0);
 
 // element colors
 $color-dark-mode: #272f41;
@@ -134,7 +135,7 @@ $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
 $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
-$request-z-index: $base-z-index + (10 * $base-z-index-step);
+$request-z-index: $base-z-index + (9 * $base-z-index-step);
 
 // responsive
 $mini-smartphone: "screen and (max-width: 480px)";
