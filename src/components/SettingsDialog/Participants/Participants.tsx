@@ -81,7 +81,9 @@ export const Participants = () => {
                 <span className="participant__name">{participant.user.name}</span>
                 {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
                   <span className="participant__role">
-                    {participant.role === "OWNER" ? t("UserRole.Owner") : participant.role === "MODERATOR" ? t("UserRole.Moderator") : t("UserRole.Participant")}
+                    {participant.role === "OWNER" && t("UserRole.Owner")}
+                    {participant.role === "MODERATOR" && t("UserRole.Moderator")}
+                    {participant.role === "PARTICIPANT" && t("UserRole.Participant")}
                   </span>
                 ) : (
                   <div className="participant__role-buttons">
