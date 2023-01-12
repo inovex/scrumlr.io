@@ -8,8 +8,10 @@ import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg"
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {useDebounce} from "utils/hooks/useDebounce";
+import {useTranslation} from "react-i18next";
 
 export const Participants = () => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const [queryString, setQueryString] = useState<string>("");
   const debouncedQueryString = useDebounce(queryString);
@@ -22,7 +24,7 @@ export const Participants = () => {
   return (
     <section className="settings-dialog__container accent-color__poker-purple">
       <header className="settings-dialog__header">
-        <h2 className="settings-dialog__header-text">Participants</h2>
+        <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>
       <div className="participants__search-input-wrapper">
         <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
@@ -33,19 +35,19 @@ export const Participants = () => {
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "OWNER"})}
           onClick={() => setPermissionFilter(permissionFilter === "OWNER" ? "ALL" : "OWNER")}
         >
-          Owner
+          {t("UserRole.Owner")}
         </button>
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "MODERATOR"})}
           onClick={() => setPermissionFilter(permissionFilter === "MODERATOR" ? "ALL" : "MODERATOR")}
         >
-          Moderator
+          {t("UserRole.Moderator")}
         </button>
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "PARTICIPANT"})}
           onClick={() => setPermissionFilter(permissionFilter === "PARTICIPANT" ? "ALL" : "PARTICIPANT")}
         >
-          Participant
+          {t("UserRole.Participant")}
         </button>
 
         <button
@@ -73,7 +75,9 @@ export const Participants = () => {
               <div className="participant__name-role-wrapper">
                 <span className="participant__name">{participant.user.name}</span>
                 {participant.role === "OWNER" || !isModerator ? (
-                  <span className="participant__role">{participant.role}</span>
+                  <span className="participant__role">
+                    {participant.role === "OWNER" ? t("UserRole.Owner") : participant.role === "MODERATOR" ? t("UserRole.Moderator") : t("UserRole.Participant")}
+                  </span>
                 ) : (
                   <div className="participant__role-buttons">
                     <button

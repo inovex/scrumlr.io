@@ -59,13 +59,6 @@
     "yes": "Ja",
     "no": "Nein"
   },
-  "ParticipantsList": {
-    "title": "Teilnehmer",
-    "search": "Suche",
-    "searchAndFilter": "Suche und Filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "button": "Sitzung löschen"
@@ -291,7 +284,12 @@
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Owner": "Besitzer"
+    "Title" : "Teilnehmer"
+  },
+  "UserRole": {
+    "Owner": "Besitzer",
+    "Moderator": "Moderator",
+    "Participant": "Teilnehmer"
   },
   "Appearance": {
     "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",
