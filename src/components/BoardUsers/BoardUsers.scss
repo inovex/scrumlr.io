@@ -47,7 +47,7 @@
   font-size: $text-size--medium;
   height: $icon--extralarge;
   width: $icon--extralarge;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   background-color: $menu-icon-background-color--dark;
   padding: 2px;
   color: $color-white;
@@ -55,7 +55,7 @@
 
   &__readiness {
     color: $color-progress-circle;
-    border-radius: $border-radius--round;
+    border-radius: $rounded--full;
 
     circle {
       transition: stroke-dashoffset 0.45s ease-in-out;

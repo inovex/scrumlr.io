@@ -43,7 +43,7 @@
     }
 
     svg {
-      border-radius: $border-radius--round;
+      border-radius: $rounded--full;
       width: $icon--large;
       height: $icon--large;
       padding: calc($padding--small / 2);

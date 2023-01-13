@@ -215,7 +215,9 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.AllowNoteRepositioningOption")}
                   onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
                 >
-                  <Toggle className="board-settings__show-note-repositioning-value" active={state.board.allowStacking} />
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
                 </SettingsButton>
               </div>
 
@@ -229,12 +231,9 @@ export const BoardSettings = () => {
 
           {showConfirmationDialog && (
             <ConfirmationDialog
-              headline={t("ConfirmationDialog.deleteBoard")}
-              acceptMessage={t("ConfirmationDialog.yes")}
+              title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
-              declineMessage={t("ConfirmationDialog.no")}
               onDecline={() => setShowConfirmationDialog(false)}
-              className="board-settings__confirmation-dialog"
             />
           )}
         </div>

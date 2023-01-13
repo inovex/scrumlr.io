@@ -32,7 +32,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   height: 42px;
   background: lighten($color-button, 35%);
   border: none;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   margin: $margin--small;
   cursor: pointer;
   font-weight: bold;
@@ -236,7 +236,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__note-info-votes {
   display: inline !important;
   float: right;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   padding: 6px 11px;
   background: rgba(var(--accent-color-rgb), 0.25);
   color: var(--accent-color);

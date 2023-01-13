@@ -1,39 +1,116 @@
 @import "constants/style";
 
-.confirmation-dialog__wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  min-width: 100%;
-  min-height: 100%;
-  align-items: center;
-  justify-content: center;
-  z-index: $backdrop-z-index;
-  background: $color-white;
-  padding: 0px 2rem;
+.confirmation-dialog__background {
+  position: fixed;
+  @include inset-0;
+  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
+  backdrop-filter: blur(10px);
 }
 
-@media screen and (max-width: 920px) {
-  .confirmation-dialog__wrapper {
-    padding: $padding--medium;
-  }
+.confirmation-dialog__wrapper {
+  position: fixed;
+  @include inset-0;
+  @include flex-center;
 }
 
 .confirmation-dialog {
-  max-width: 420px;
+  width: 80%;
+  min-width: 220px;
+  max-width: 360px;
   color: $color-black;
+  background-color: $color-white;
+  border-radius: $rounded--medium;
+  padding: $padding--medium;
+  border: 2px solid;
+  border-color: $color-backlog-blue;
 }
 
+.confirmation-dialog__title {
+  font-size: $text-size--large;
+}
 .confirmation-dialog__button {
-  margin-right: $margin--small;
+  border: 2px solid $color-backlog-blue;
+  border-radius: $rounded--full;
+  padding: $padding--small $padding--medium;
+  font-size: $text-size--medium;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 80ms linear, box-shadow 80ms linear;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px 0 rgba($color: $color-backlog-blue, $alpha: 0.2);
+  }
+}
+.confirmation-dialog__button--accept {
+  color: $color-white;
+  background-color: $color-backlog-blue;
+}
+.confirmation-dialog__button--decline {
+  color: $color-backlog-blue;
+  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
+}
+.confirmation-dialog__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: $margin--small;
 }
 
-[theme="dark"] {
-  .confirmation-dialog__wrapper {
-    background: $color-dark-mode;
+.confirmation-dialog__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  @include flex-center;
+  color: $color-backlog-blue;
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+  border-radius: $rounded--full;
+  border: 2px solid $color-backlog-blue;
+  padding: 0;
+  background-color: $color-white;
+  cursor: pointer;
+  transition: color 80ms linear, background-color 80ms linear;
+  &:hover {
+    color: $color-white;
+    background-color: $color-backlog-blue;
   }
+}
+.confirmation-dialog__close-button > svg {
+  height: 100%;
+  width: 100%;
+}
+[theme="dark"] {
+  .confirmation-dialog__background {
+    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  }
+
   .confirmation-dialog {
     color: $color-white;
+    background-color: $color-dark-one;
+    border-color: $color-planning-pink;
+  }
+
+  .confirmation-dialog__button {
+    border-color: $color-planning-pink;
+    &:hover {
+      box-shadow: 0 4px 8px rgba($color: $color-planning-pink, $alpha: 0.2);
+    }
+  }
+  .confirmation-dialog__button--accept {
+    background-color: $color-planning-pink;
+  }
+  .confirmation-dialog__button--decline {
+    color: $color-planning-pink;
+    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  }
+
+  .confirmation-dialog__close-button {
+    color: $color-planning-pink;
+    background-color: $color-dark-one;
+    border-color: $color-planning-pink;
+    &:hover {
+      color: $color-white;
+      background-color: $color-planning-pink;
+    }
   }
 }
