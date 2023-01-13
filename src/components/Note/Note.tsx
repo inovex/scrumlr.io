@@ -13,7 +13,6 @@ import {Participant} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
-import {getColorClassName} from "constants/colors";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 
 interface NoteProps {
@@ -28,7 +27,6 @@ export const Note = (props: NoteProps) => {
   const noteRef = useRef<HTMLButtonElement>(null);
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
-  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const author = useAppSelector((state) => {
@@ -111,7 +109,7 @@ export const Note = (props: NoteProps) => {
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
   return (
-    <div className={classNames("note__root", getColorClassName(column?.color))}>
+    <div className="note__root">
       <button
         className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
         onClick={handleClick}
