@@ -18,7 +18,7 @@
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.1.1",
     "js-cookie": "^3.0.1",
-    "marked": "4.2.5",
+    "marked": "4.2.12",
     "qrcode.react": "^3.1.0",
     "query-string": "^8.1.0",
     "rdndmb-html5-to-touch": "^8.0.0",
