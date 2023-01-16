@@ -20,7 +20,7 @@ $fly-in-time: 0.5s;
   animation: fly-in-right $fly-in-time ease-out;
 
   background-color: $color-white;
-  box-shadow: 0 3px 5px rgba($menu-icon-background-color--dark, 30%);
+  box-shadow: 3px 5px 3px rgba($menu-icon-background-color--dark, 30%);
 
   transition: margin-right $transition-time ease-out, padding-right $transition-time ease-out;
 

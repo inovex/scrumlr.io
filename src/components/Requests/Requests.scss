@@ -19,5 +19,7 @@ $wrapper-limit__bottom: 150px; // start overflowing with a scrollbar after excee
 
   height: auto;
   max-height: calc(100vh - $wrapper-limit__bottom);
-  overflow: auto;
+  overflow: visible auto; // overflow shadows on x-axis, show scrollbar on y-axis
+
+  padding: 0 5px 5px 0; // prevent shadow being cut off
 }
