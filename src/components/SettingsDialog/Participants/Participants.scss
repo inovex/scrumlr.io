@@ -21,7 +21,9 @@
   &:focus {
     outline: 2px solid var(--accent-color);
   }
-  &:hover {
+}
+@media (hover: hover) {
+  .participants__search-input:hover {
     background-color: var(--accent-color--desaturated-light);
   }
 }
@@ -56,12 +58,14 @@
     background-color: var(--accent-color);
     color: $color-white;
   }
-  &:hover {
-    background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
-  }
   &:focus {
     outline: 2px solid var(--accent-color);
+  }
+}
+@media (hover: hover) {
+  .participants__permisson-filter-button:hover {
+    background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
   }
 }
 @media screen and (min-width: 920px) {
@@ -84,16 +88,18 @@
     background-color: var(--accent-color);
     color: $color-white;
   }
-  &:hover {
-    background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
-  }
   &:focus {
     outline: 2px solid var(--accent-color);
   }
   > svg {
     height: $icon--medium;
     width: $icon--medium;
+  }
+}
+@media (hover: hover) {
+  .participant__status-filter-button:hover {
+    background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
   }
 }
 
@@ -186,7 +192,9 @@
   .participants__search-input {
     background-color: $color-dark-mode-note;
     color: $color-white;
-    &:hover {
+  }
+  @media (hover: hover) {
+    .participants__search-input:hover {
       background-color: var(--accent-color--desaturated-dark);
     }
   }
@@ -201,8 +209,12 @@
       background-color: var(--accent-color);
       color: $color-white;
     }
-    &:hover {
+  }
+  @media (hover: hover) {
+    .participants__permisson-filter-button:hover,
+    .participant__status-filter-button:hover {
       background-color: var(--accent-color--desaturated-dark);
+      color: $color-white;
     }
   }
   .participants__list-item {
