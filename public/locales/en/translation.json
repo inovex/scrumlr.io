@@ -59,13 +59,6 @@
     "yes": "Yes",
     "no": "No"
   },
-  "ParticipantsList": {
-    "title": "Participants",
-    "search": "Search",
-    "searchAndFilter": "Search and filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "button": "Delete board"
@@ -290,7 +283,18 @@
     "edit": "edit"
   },
   "Participants": {
-    "Owner": "Owner"
+    "Title" : "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
   },
   "Appearance": {
     "SyncMode": "Sync Appearance Mode with System",
