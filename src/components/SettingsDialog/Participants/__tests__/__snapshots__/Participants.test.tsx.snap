@@ -37,7 +37,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     </button>
     <button
       class="participants__permisson-filter-button"
-      title="Particpants.ModeratorFilterTooltip"
+      title="Participants.ModeratorFilterTooltip"
     >
       UserRole.Moderator
     </button>
