@@ -103,7 +103,7 @@
   list-style-type: none;
   padding: 0;
   overflow: scroll;
-  margin-bottom: 70px;
+  margin-bottom: $settings-dialog-container--bottom;
 }
 
 .participants__list-item {
