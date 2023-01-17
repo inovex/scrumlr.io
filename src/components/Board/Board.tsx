@@ -6,7 +6,6 @@ import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
 import ReactTooltip from "react-tooltip";
-import CustomDragLayer from "./CustomDragLayer";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -158,7 +157,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
         <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
         <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
-        <CustomDragLayer />
       </main>
     </>
   );

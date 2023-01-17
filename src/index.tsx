@@ -1,7 +1,6 @@
 import React, {Suspense} from "react";
 import ReactDOM from "react-dom";
 import {Provider} from "react-redux";
-import {DndProvider} from "react-dnd-multi-backend";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
@@ -14,7 +13,6 @@ import {Actions} from "store/action";
 import {Html} from "components/Html";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
-import {HTML5toTouch} from "rdndmb-html5-to-touch";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
@@ -29,9 +27,7 @@ ReactDOM.render(
         <Html />
         <Suspense fallback={<LoadingScreen />}>
           <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
-          <DndProvider options={HTML5toTouch}>
-            <Router />
-          </DndProvider>
+          <Router />
           {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
         </Suspense>
       </Provider>
