@@ -48,7 +48,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
       UserRole.Participant
     </button>
     <button
-      aria-label=""
+      aria-label="Participants.OnlineFilterTooltip"
       class="participant__status-filter-button"
       title="Participants.OnlineFilterTooltip"
     >

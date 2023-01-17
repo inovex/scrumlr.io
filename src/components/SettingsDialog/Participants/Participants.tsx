@@ -55,7 +55,7 @@ export const Participants = () => {
         </button>
 
         <button
-          aria-label="" // TODO
+          aria-label={t("Participants.OnlineFilterTooltip")}
           className={classNames("participant__status-filter-button", {"participant__status-filter-button--active": !onlineFilter})}
           onClick={() => setOnlineFilter((o) => !o)}
           title={t("Participants.OnlineFilterTooltip")}
