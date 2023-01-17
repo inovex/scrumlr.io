@@ -42,7 +42,7 @@ export const Participants = () => {
         <button
           className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "MODERATOR"})}
           onClick={() => setPermissionFilter(permissionFilter === "MODERATOR" ? "ALL" : "MODERATOR")}
-          title={t("Particpants.ModeratorFilterTooltip")}
+          title={t("Participants.ModeratorFilterTooltip")}
         >
           {t("UserRole.Moderator")}
         </button>
