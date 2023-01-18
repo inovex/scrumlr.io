@@ -5,7 +5,7 @@ import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
-import {dispatch} from "store";
+import {useDispatch} from "react-redux";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
@@ -18,6 +18,7 @@ export interface NoteInputProps {
 }
 
 export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
+  const dispatch = useDispatch();
   const {t} = useTranslation();
   const [value, setValue] = useState("");
   const noteInputRef = useRef<HTMLInputElement | null>(null);

@@ -79,7 +79,6 @@ exports[`BoardSettings should match snapshot 1`] = `
             >
               BoardSettings.Password
             </label>
-            
           </div>
         </div>
         <button
