@@ -2,6 +2,9 @@ import {FC, useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
 
+type HelmetProps = React.ComponentProps<typeof Helmet>;
+const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
+
 export const Html: FC = () => {
   const lang = useAppSelector((state) => state.view.language);
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
@@ -21,9 +24,6 @@ export const Html: FC = () => {
       document.documentElement.setAttribute("theme", colorScheme);
     }
   });
-
-  type HelmetProps = React.ComponentProps<typeof Helmet>;
-  const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
 
   return <HelmetWorkaround htmlAttributes={{lang, theme}} />;
 };
