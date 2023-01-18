@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@fontsource/raleway": "^4.5.11",
+    "@reduxjs/toolkit": "^1.9.1",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
@@ -39,8 +40,6 @@
     "react-to-print": "^2.14.11",
     "react-toastify": "^9.1.1",
     "react-tooltip": "^4.5.1",
-    "redux": "^4.2.0",
-    "redux-thunk": "^2.4.2",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
     "use-sound": "^4.0.1"
