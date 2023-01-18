@@ -26,8 +26,8 @@ export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, o
       {...other}
     >
       {label && <span className="settings-option-button__label">{label}</span>}
-      {children}
-      {icon && <Icon className="settings-option-button__icon" />}
+        {children}
+        {icon && <Icon className="settings-option-button__icon" />}
     </button>
   );
 };

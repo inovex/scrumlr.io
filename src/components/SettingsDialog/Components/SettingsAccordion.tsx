@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {FC} from "react";
+import {FC, PropsWithChildren} from "react";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsAccordion.scss";
 
@@ -11,7 +11,7 @@ export interface SettingsAccordionProps {
   className?: string;
 }
 
-export const SettingsAccordion: FC<SettingsAccordionProps> = ({label, isOpen, onClick, children, className, headerClassName}) => (
+export const SettingsAccordion: FC<PropsWithChildren<SettingsAccordionProps>> = ({label, isOpen, onClick, children, className, headerClassName}) => (
   <div className={classNames("accordion-item", className)}>
     <button className={classNames("accordion-item__header", headerClassName)} onClick={onClick}>
       {label}
