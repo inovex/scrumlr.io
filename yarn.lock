@@ -1409,34 +1409,6 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@react-dnd/asap@4.0.1", "@react-dnd/asap@^4.0.0":
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/@react-dnd/asap/-/asap-4.0.1.tgz"
-
-"@react-dnd/asap@^5.0.1":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@react-dnd/asap/-/asap-5.0.2.tgz#1f81f124c1cd6f39511c11a881cfb0f715343488"
-
-"@react-dnd/invariant@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@react-dnd/invariant/-/invariant-3.0.1.tgz"
-
-"@react-dnd/invariant@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@react-dnd/invariant/-/invariant-2.0.0.tgz"
-
-"@react-dnd/invariant@^4.0.1":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@react-dnd/invariant/-/invariant-4.0.2.tgz#b92edffca10a26466643349fac7cdfb8799769df"
-
-"@react-dnd/shallowequal@3.0.1":
-  version "3.0.1"
-  resolved "https://registry.npmjs.org/@react-dnd/shallowequal/-/shallowequal-3.0.1.tgz"
-
-"@react-dnd/shallowequal@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/@react-dnd/shallowequal/-/shallowequal-2.0.0.tgz"
-
 "@react-spring/animated@~9.6.1":
   version "9.6.1"
   resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.6.1.tgz#ccc626d847cbe346f5f8815d0928183c647eb425"
@@ -1841,7 +1813,7 @@
   dependencies:
     history "*"
 
-"@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
+"@types/hoist-non-react-statics@^3.3.0":
   version "3.3.1"
   resolved "https://registry.npmjs.org/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz"
   dependencies:
@@ -1942,26 +1914,6 @@
 "@types/range-parser@*":
   version "1.2.4"
   resolved "https://registry.npmjs.org/@types/range-parser/-/range-parser-1.2.4.tgz"
-
-"@types/react-dnd-html5-backend@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/@types/react-dnd-html5-backend/-/react-dnd-html5-backend-3.0.2.tgz"
-  dependencies:
-    react-dnd-html5-backend "*"
-
-"@types/react-dnd-multi-backend@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.npmjs.org/@types/react-dnd-multi-backend/-/react-dnd-multi-backend-6.0.2.tgz"
-  dependencies:
-    "@types/react" "*"
-    react-dnd "^10.0.2"
-    react-dnd-touch-backend "^10.0.2"
-
-"@types/react-dnd@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/@types/react-dnd/-/react-dnd-3.0.2.tgz"
-  dependencies:
-    react-dnd "*"
 
 "@types/react-dom@*", "@types/react-dom@^17.0.14":
   version "17.0.14"
@@ -3564,34 +3516,6 @@ dir-glob@^3.0.1:
 dlv@^1.1.3:
   version "1.1.3"
   resolved "https://registry.npmjs.org/dlv/-/dlv-1.1.3.tgz"
-
-dnd-core@15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/dnd-core/-/dnd-core-15.1.2.tgz"
-  dependencies:
-    "@react-dnd/asap" "4.0.1"
-    "@react-dnd/invariant" "3.0.1"
-    redux "^4.1.2"
-
-dnd-core@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.npmjs.org/dnd-core/-/dnd-core-10.0.2.tgz"
-  dependencies:
-    "@react-dnd/asap" "^4.0.0"
-    "@react-dnd/invariant" "^2.0.0"
-    redux "^4.0.4"
-
-dnd-core@^16.0.1:
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-16.0.1.tgz#a1c213ed08961f6bd1959a28bb76f1a868360d19"
-  dependencies:
-    "@react-dnd/asap" "^5.0.1"
-    "@react-dnd/invariant" "^4.0.1"
-    redux "^4.2.0"
-
-dnd-multi-backend@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-8.0.0.tgz#54c63d9ec12f71b7b13ac53971f60d70e2bc5487"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -7208,14 +7132,6 @@ raw-body@2.5.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-rdndmb-html5-to-touch@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/rdndmb-html5-to-touch/-/rdndmb-html5-to-touch-8.0.0.tgz#ccc0088fcf431eb4e50853a37a375012afbc24b6"
-  dependencies:
-    dnd-multi-backend "^8.0.0"
-    react-dnd-html5-backend "^16.0.1"
-    react-dnd-touch-backend "^16.0.1"
-
 react-app-polyfill@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/react-app-polyfill/-/react-app-polyfill-3.0.0.tgz"
@@ -7261,79 +7177,6 @@ react-dev-utils@^12.0.1:
     shell-quote "^1.7.3"
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
-
-react-dnd-html5-backend@*, react-dnd-html5-backend@^16.0.1:
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-16.0.1.tgz#87faef15845d512a23b3c08d29ecfd34871688b6"
-  dependencies:
-    dnd-core "^16.0.1"
-
-react-dnd-html5-backend@^15.1.3:
-  version "15.1.3"
-  resolved "https://registry.npmjs.org/react-dnd-html5-backend/-/react-dnd-html5-backend-15.1.3.tgz"
-  dependencies:
-    dnd-core "15.1.2"
-
-react-dnd-multi-backend@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-8.0.0.tgz#453a28cc266231422a1f90ba7f277a5837e5a712"
-  dependencies:
-    dnd-multi-backend "^8.0.0"
-    react-dnd-preview "^8.0.0"
-
-react-dnd-preview@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-8.0.0.tgz#5b90b1c934e3087e357f0c00714f9ea8429a20ac"
-
-react-dnd-test-backend@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd-test-backend/-/react-dnd-test-backend-15.1.2.tgz"
-  dependencies:
-    dnd-core "15.1.2"
-
-react-dnd-test-utils@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd-test-utils/-/react-dnd-test-utils-15.1.2.tgz"
-
-react-dnd-touch-backend@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.npmjs.org/react-dnd-touch-backend/-/react-dnd-touch-backend-10.0.2.tgz"
-  dependencies:
-    "@react-dnd/invariant" "^2.0.0"
-    dnd-core "^10.0.2"
-
-react-dnd-touch-backend@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd-touch-backend/-/react-dnd-touch-backend-15.1.2.tgz"
-  dependencies:
-    "@react-dnd/invariant" "3.0.1"
-    dnd-core "15.1.2"
-
-react-dnd-touch-backend@^16.0.1:
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/react-dnd-touch-backend/-/react-dnd-touch-backend-16.0.1.tgz#e73f8169e2b9fac0f687970f875cac0a4d02d6e2"
-  dependencies:
-    "@react-dnd/invariant" "^4.0.1"
-    dnd-core "^16.0.1"
-
-react-dnd@*, react-dnd@^15.1.2:
-  version "15.1.2"
-  resolved "https://registry.npmjs.org/react-dnd/-/react-dnd-15.1.2.tgz"
-  dependencies:
-    "@react-dnd/invariant" "3.0.1"
-    "@react-dnd/shallowequal" "3.0.1"
-    dnd-core "15.1.2"
-    fast-deep-equal "^3.1.3"
-    hoist-non-react-statics "^3.3.2"
-
-react-dnd@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.npmjs.org/react-dnd/-/react-dnd-10.0.2.tgz"
-  dependencies:
-    "@react-dnd/shallowequal" "^2.0.0"
-    "@types/hoist-non-react-statics" "^3.3.1"
-    dnd-core "^10.0.2"
-    hoist-non-react-statics "^3.3.0"
 
 react-dom@^17.0.2:
   version "17.0.2"
@@ -7584,7 +7427,7 @@ redux-thunk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.2.tgz"
 
-redux@^4.0.0, redux@^4.0.4, redux@^4.0.5, redux@^4.1.2, redux@^4.2.0:
+redux@^4.0.0, redux@^4.0.5, redux@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/redux/-/redux-4.2.0.tgz"
   dependencies:
