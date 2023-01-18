@@ -93,7 +93,6 @@
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
     "react-scripts": "^5.0.1",
-    "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
     "sass": "^1.57.1",
     "ts-jest": "^29.0.5",
