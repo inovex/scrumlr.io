@@ -1,7 +1,7 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
-import {DndProvider} from "react-dnd-multi-backend";
+import {DndProvider, MultiBackendOptions, MouseTransition, TouchTransition} from "react-dnd-multi-backend";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
@@ -14,13 +14,31 @@ import {Actions} from "store/action";
 import {Html} from "components/Html";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
-import {HTML5toTouch} from "rdndmb-html5-to-touch";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {TouchBackend} from "react-dnd-touch-backend";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
 }
+
+export const HTML5toTouch: MultiBackendOptions = {
+  backends: [
+    {
+      id: "html5",
+      backend: HTML5Backend,
+      transition: MouseTransition,
+    },
+    {
+      id: "touch",
+      backend: TouchBackend,
+      options: {enableMouseEvents: true, delayTouchStart: 200},
+      preview: true,
+      transition: TouchTransition,
+    },
+  ],
+};
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
