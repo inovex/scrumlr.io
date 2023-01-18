@@ -2,7 +2,6 @@ import {fireEvent, getByText} from "@testing-library/react";
 import {Request} from "components/Request";
 import {Actions} from "store/action";
 import {render} from "testUtils";
-import * as redux from "react-redux";
 import {Dispatch, Action} from "redux";
 
 describe("JoinRequest", () => {
@@ -21,10 +20,6 @@ describe("JoinRequest", () => {
   };
 
   describe("should render correctly", () => {
-    const useDispatchSpy = jest.spyOn(redux, "useDispatch");
-    const mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-
     test("on single join request", () => {
       const {container} = render(createJoinRequest(1));
       expect(container.firstChild).toMatchSnapshot();
@@ -41,9 +36,6 @@ describe("JoinRequest", () => {
 
     beforeEach(() => {
       jest.clearAllMocks();
-      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
-      mockDispatchFn = jest.fn();
-      useDispatchSpy.mockReturnValue(mockDispatchFn);
     });
 
     test("single join request should call rejectJoinRequest correctly", () => {
