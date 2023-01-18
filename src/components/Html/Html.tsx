@@ -22,6 +22,8 @@ export const Html: FC = () => {
     }
   });
 
-  /* @ts-ignore */
-  return <Helmet htmlAttributes={{lang, theme}} />;
+  type HelmetProps = React.ComponentProps<typeof Helmet>;
+  const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
+
+  return <HelmetWorkaround htmlAttributes={{lang, theme}} />;
 };
