@@ -59,13 +59,6 @@
     "yes": "Yes",
     "no": "No"
   },
-  "ParticipantsList": {
-    "title": "Participants",
-    "search": "Search",
-    "searchAndFilter": "Search and filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "button": "Delete board"
@@ -240,7 +233,7 @@
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2022, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
@@ -291,7 +284,18 @@
     "edit": "edit"
   },
   "Participants": {
-    "Owner": "Owner"
+    "Title" : "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
   },
   "Appearance": {
     "SyncMode": "Sync Appearance Mode with System",
