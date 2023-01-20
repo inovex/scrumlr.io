@@ -106,6 +106,7 @@
     "prepare": "husky install",
     "hash": "cross-env REACT_APP_LOCALES_HASH=$(hash-files --algorithm md5 public/locales/**)"
   },
+  "jest": { "transformIgnorePatterns": [ "/node_modules/(?!react-toastify|react-dnd|core-dnd|@react-dnd|dnd-core|react-dnd-html5-backend)" ] },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
     "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
