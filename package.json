@@ -10,7 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@fontsource/raleway": "^4.5.11",
+    "@fontsource/raleway": "^4.5.12",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
@@ -53,7 +53,7 @@
     "@types/file-saver": "^2.0.5",
     "@types/history": "^5.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
-    "@types/jest": "^29.2.5",
+    "@types/jest": "^29.2.6",
     "@types/js-cookie": "^3.0.2",
     "@types/marked": "^4.0.8",
     "@types/node": "^18.11.18",
