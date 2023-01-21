@@ -152,6 +152,13 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
+    - _id: stackTestBoard
+      id: "1acd6899-ad71-4479-8ffe-6c6401b20811"
+      name: Stack test board
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
 
 - model: BoardSessionInsert
   rows:
@@ -205,6 +212,10 @@
       role: OWNER
     - _id: justinSessionOnVotingSortingTestBoard
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      role: OWNER
+    - _id: justinSessionOnStackTestBoard
+      board: '{{ $.Board.stackTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
       role: OWNER
 
@@ -298,6 +309,13 @@
       id: "00c8c51b-d391-4472-8136-06efdfe7bbd2"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       name: Voting Sorting column
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: stackTestColumn
+      id: "00c8c51b-d391-4472-8136-06eadff7bbd6"
+      board: '{{ $.Board.stackTestBoard.ID }}'
+      name: Stack test column
       color: backlog-blue
       visible: true
       index: 0
@@ -472,6 +490,38 @@
       text: "Note 6"
       stack: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
       rank: 0
+    - _id: stackTestNote1
+      id: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.stackTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.stackTestColumn.ID }}'
+      text: "A"
+      stack: null
+      rank: 1337
+    - _id: stackTestNote2
+      id: "c98dd001-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.stackTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.stackTestColumn.ID }}'
+      text: "B"
+      stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
+      rank: 0
+    - _id: stackTestNote3
+      id: "c98dd002-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.stackTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.stackTestColumn.ID }}'
+      text: "C"
+      stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
+      rank: 1
+    - _id: stackTestNote4
+      id: "c98dd003-66ae-4c59-a7de-b7fee44e452a"
+      board: '{{ $.Board.stackTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.stackTestColumn.ID }}'
+      text: "D"
+      stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
+      rank: 2
 
 - model: Voting
   rows:
