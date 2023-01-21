@@ -1,12 +1,10 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
 import {Button} from "../Button";
@@ -22,8 +20,6 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
   const [passphrase, setPassphrase] = useState<string>("");
   const [visiblePassphrase, setVisiblePassphrase] = useState(false);
 
-  const tooManyJoinRequests = useAppSelector((state) => state.board.status) === "too_many_join_requests";
-
   const handleSubmit = async () => {
     await onSubmit(passphrase);
   };
@@ -31,22 +27,6 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
   const togglePassphraseVisibility = () => {
     setVisiblePassphrase(!visiblePassphrase);
   };
-
-  useEffect(() => {
-    let timeout: number | null = null;
-
-    if (tooManyJoinRequests) {
-      timeout = window.setTimeout(() => {
-        store.dispatch(Actions.requirePassphraseChallenge());
-      }, 10000);
-    }
-
-    return () => {
-      if (timeout !== null) {
-        window.clearTimeout(timeout);
-      }
-    };
-  }, [tooManyJoinRequests]);
 
   return (
     <div className="passphrase-dialog__wrapper">
@@ -68,8 +48,9 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
             value={passphrase}
             onChange={(e) => setPassphrase(e.target.value)}
           />
-          <Button type="submit" color="primary" className="passphrase-dialog__submit-button" disabled={!passphrase || tooManyJoinRequests}>
-            {tooManyJoinRequests ? t("PassphraseDialog.tooManyJoinRequests") : t("PassphraseDialog.submit")}
+
+          <Button type="submit" color="primary" className="passphrase-dialog__submit-button" disabled={!passphrase}>
+            {t("PassphraseDialog.submit")}
           </Button>
         </form>
       </div>
