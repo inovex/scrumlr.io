@@ -37,7 +37,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     return <Board />;
   }
 
-  if (boardStatus === "passphrase_required" || boardStatus === "too_many_join_requests") {
+  if (boardStatus === "passphrase_required") {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {
@@ -56,7 +56,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     );
   }
 
-  if (boardStatus === "rejected") {
+  if (boardStatus === "rejected" || boardStatus === "too_many_join_requests") {
     return (
       <div className="board-guard">
         <p className="board-guard__info">{t("BoardGuard.reject")}</p>
