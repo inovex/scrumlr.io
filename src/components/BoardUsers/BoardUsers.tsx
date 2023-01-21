@@ -3,7 +3,6 @@ import {useAppSelector} from "store";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
 import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {UserAvatar} from "./UserAvatar";
@@ -18,7 +17,6 @@ const getWindowDimensions = () => {
 
 export const BoardUsers = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const [showParticipants, setShowParticipants] = useState(false);
   const navigate = useNavigate();
   const {t} = useTranslation();
 
@@ -55,8 +53,7 @@ export const BoardUsers = () => {
           className="board-users__button board-users__button--others"
           aria-label={t("BoardHeader.showParticipants")}
           aria-haspopup
-          aria-pressed={showParticipants}
-          onClick={() => setShowParticipants(!showParticipants)}
+          onClick={() => navigate("settings/participants")}
         >
           {usersRest.length > 0 && (
             <div className="board-users__avatar board-users__avatar--others rest-users">
@@ -77,7 +74,7 @@ export const BoardUsers = () => {
                 avatar={participant.user.avatar}
                 ready={participant.ready}
                 raisedHand={participant.raisedHand}
-                name={participant.user.name}
+                title={participant.user.name}
                 className="board-users__avatar board-users__avatar--others"
               />
             ))}
@@ -91,10 +88,9 @@ export const BoardUsers = () => {
             navigate("settings/profile");
           }}
         >
-          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} className="board-users__avatar" />
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} title={me.user.name} className="board-users__avatar" />
         </button>
       )}
-      <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
     </div>
   );
 };

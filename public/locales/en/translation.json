@@ -1,6 +1,6 @@
 {
   "InfoBar": {
-    "ReturnToFocusedNote": "Return to focused note"
+    "ReturnToPresentedNote": "Return to presented note"
   },
   "NewBoard": {
     "boardName": "Board name",
@@ -59,13 +59,6 @@
     "yes": "Yes",
     "no": "No"
   },
-  "ParticipantsList": {
-    "title": "Participants",
-    "search": "Search",
-    "searchAndFilter": "Search and filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "button": "Delete board"
@@ -108,7 +101,7 @@
     "settings": "Settings",
     "editName": "Change the name",
     "submitName": "Confirm name",
-    "resetName": "Reset name",
+    "resetName": "Abort",
     "hideColumn": "Hide the column",
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
@@ -173,8 +166,8 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
-    "startFocusMode": "Start focused mode",
-    "stopFocusMode": "End focused mode",
+    "startPresenterMode": "Start presenter mode",
+    "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
@@ -197,6 +190,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Finish",
+    "abortActionTooltip": "Abort",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -228,6 +223,8 @@
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
     "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
     "noteToHiddenColumn": "You just added a note to a hidden column.",
     "noteToHiddenColumnButton": "Reveal column"
   },
@@ -236,7 +233,7 @@
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2022, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
@@ -246,6 +243,9 @@
   },
   "Note": {
     "me": "Me"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
@@ -278,12 +278,24 @@
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show notes of other users",
+    "AllowNoteRepositioningOption": "Allow note repositioning",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },
   "Participants": {
-    "Owner": "Owner"
+    "Title" : "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
   },
   "Appearance": {
     "SyncMode": "Sync Appearance Mode with System",

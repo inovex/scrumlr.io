@@ -1,0 +1,45 @@
+@import "constants/style";
+
+.share-button {
+  color: $color-backlog-blue;
+  outline: none;
+  border: 2px solid $menu-icon-background-color--dark;
+  color: $menu-icon-background-color--dark;
+  border-radius: 100%;
+  height: 36px;
+  width: 36px;
+  margin-left: $margin--default;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.08s ease-out;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+}
+
+.share-button > svg {
+  height: 36px;
+  width: 36px;
+}
+
+[theme="dark"] {
+  .share-button {
+    border: 2px solid $color-icon-light-blue;
+    color: $color-icon-light-blue;
+  }
+}
+
+@media #{$smartphone} {
+  .share-button {
+    display: none;
+  }
+}

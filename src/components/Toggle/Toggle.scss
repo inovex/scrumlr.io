@@ -42,10 +42,14 @@
 }
 
 .toggle.toggle--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+
   &::after {
     background-color: $color-middle-gray;
     box-shadow: none;
   }
+
   &:hover::after {
     filter: none;
     transform: none;

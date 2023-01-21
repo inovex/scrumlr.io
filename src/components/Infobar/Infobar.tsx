@@ -12,8 +12,12 @@ import "./Infobar.scss";
 export const InfoBar = () => {
   const navigate = useNavigate();
   const {t} = useTranslation();
+  const viewer = useAppSelector((state) => state.participants!.self);
+  const focusInitiator = useAppSelector((state) => state.participants?.focusInitiator);
+
   const state = useAppSelector(
     (applicationState) => ({
+      startTime: applicationState.board.data?.timerStart,
       endTime: applicationState.board.data?.timerEnd,
       activeVoting: Boolean(applicationState.votings.open),
       possibleVotes: applicationState.votings.open?.voteLimit,
@@ -25,14 +29,14 @@ export const InfoBar = () => {
 
   return ReactDOM.createPortal(
     <aside className="info-bar">
-      {state.endTime && <Timer endTime={state.endTime} />}
+      {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && (
+      {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
         <TooltipButton
-          className="info-bar__return-to-focused-note-button"
+          className="info-bar__return-to-presented-note-button"
           icon={ShareIcon}
           direction="right"
-          label={t("InfoBar.ReturnToFocusedNote")}
+          label={t("InfoBar.ReturnToPresentedNote")}
           onClick={() => navigate(`note/${state.sharedNote}/stack`)}
         />
       )}

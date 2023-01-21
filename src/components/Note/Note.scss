@@ -18,12 +18,12 @@ $note__author-image-size: 26px;
   border-radius: $note__border-radius;
   background-color: $color-white;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
-  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
   padding: $padding--default $padding--medium 20px;
   width: 100%;
   text-align: start;
-  border: unset;
+  border: 2px solid transparent;
 }
 
 .note .note__user-avatar {
@@ -44,6 +44,7 @@ $note__author-image-size: 26px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
+  transition: all 0.1s ease-in-out;
 }
 [theme="dark"] {
   .note__in-stack {
@@ -63,16 +64,48 @@ $note__author-image-size: 26px;
 .note:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
+
 .note:hover {
   transform: scale(1.02);
 }
+
 .note--isDragging {
   opacity: 0.5;
+
+  & ~ .note__in-stack {
+    opacity: 0.5;
+  }
 }
+
 .note--isOver {
-  padding: 14px 18px;
+  transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
+
+  &.note--stackOntop,
+  &.note--stackOntop ~ .note__in-stack {
+    transform: translatey(8px) scale(0.98);
+  }
+
+  &.note--stackBetween {
+    transform: translateY(-8px) scale(1.02);
+    z-index: $note-z-index + 2 * $base-z-index-step;
+
+    & ~ .note__in-stack {
+      z-index: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+
+  &.note--stackBelow {
+    transform: translateY(-8px) scale(1.02);
+    z-index: $note-z-index + 2 * $base-z-index-step;
+
+    & ~ .note__in-stack {
+      transform: translateY(-8px) scale(1.02);
+      z-index: $note-z-index + $base-z-index-step;
+    }
+  }
 }
 
 .note:focus-visible::before {
@@ -101,6 +134,15 @@ $note__author-image-size: 26px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+}
+
+.note__stack-icon {
+  height: $icon--huge;
+  width: $icon--huge;
+  position: absolute;
+  top: calc(50% - ($icon--huge/2));
+  left: calc(50% - ($icon--huge/2));
+  fill: var(--accent-color);
 }
 
 [theme="dark"] {

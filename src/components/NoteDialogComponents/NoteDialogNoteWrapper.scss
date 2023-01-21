@@ -3,7 +3,7 @@
 @import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
-  max-height: calc(100% - #{$stack-view__header-height} - #{$stack-view__parent-note-height});
+  height: calc(100vh - #{$stack-view__header-height} - #{$stack-view__navigation-height} - #{$stack-view__parent-note-height});
   width: calc(100vw - (2 * $column__border-width));
   overflow-y: auto;
   overflow-x: hidden;

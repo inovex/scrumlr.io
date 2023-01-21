@@ -1,66 +1,114 @@
-import classNames from "classnames";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {Toggle} from "components/Toggle";
-import {Avatar} from "components/Avatar";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {SettingsButton} from "../Components/SettingsButton";
+import {useDispatch} from "react-redux";
+import classNames from "classnames";
+import {useAppSelector} from "store";
+import {Actions} from "store/action";
+import {useDebounce} from "utils/hooks/useDebounce";
+import {UserAvatar} from "components/BoardUsers";
+import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
+import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import "./Participants.scss";
-import "../SettingsDialog.scss";
 
 export const Participants = () => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
+  const [queryString, setQueryString] = useState<string>("");
+  const debouncedQueryString = useDebounce(queryString);
+  const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
+  const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
 
-  const state = useAppSelector((applicationState) => ({
-    me: applicationState.participants!.self,
-    others: applicationState.participants!.others,
-  }));
+  const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
+  const self = useAppSelector((state) => state.participants!.self);
+  const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
 
   return (
-    <div className={classNames("settings-dialog__container", "accent-color__poker-purple")}>
+    <section className="settings-dialog__container accent-color__poker-purple">
       <header className="settings-dialog__header">
-        <h2 className="settings-dialog__header-text"> {t("SettingsDialog.Participants")}</h2>
+        <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>
-
-      <div className="participants__container">
-        <div className="participants__user-list-wrapper">
-          <div className="participants__user-list">
-            <SettingsButton className="participants__user" disabled>
-              <div className="participants__user_avatar-name-wrapper">
-                <Avatar className="participants__user_avatar" avatar={state.me.user.avatar} seed={state.me.user.id} />
-                <span className="participants__user-name">
-                  {state.me.user.name} {state.me.role === "OWNER" && `(${t("Participants.Owner")})`}
-                </span>
-                <div className={state.me.connected ? "participants__online-mark" : "participants__offline-mark"} />
-              </div>
-              {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && <Toggle active={state.me.role === "MODERATOR" || state.me.role === "OWNER"} disabled />}
-            </SettingsButton>
-            {state.others.length > 0 && <hr className="settings-dialog__separator" />}
-            {state.others.length > 0 &&
-              state.others.map((participant, index) => (
-                <>
-                  <SettingsButton
-                    className="participants__user"
-                    disabled={state.me.role === "PARTICIPANT" || participant.role === "OWNER"}
-                    onClick={() => store.dispatch(Actions.changePermission(participant.user.id, participant.role === "PARTICIPANT"))}
-                  >
-                    <div className="participants__user_avatar-name-wrapper">
-                      <Avatar className="participants__user_avatar" avatar={participant.user.avatar} seed={participant.user.id} />
-                      <span className="participants__user-name">
-                        {participant.role === "OWNER" && `(${t("Participants.Owner")})`} {participant.user.name}
-                      </span>
-                      <div className={participant.connected ? "participants__online-mark" : "participants__offline-mark"} />
-                    </div>
-                    {(state.me.role === "MODERATOR" || state.me.role === "OWNER") && (
-                      <Toggle active={participant.role === "MODERATOR" || participant.role === "OWNER"} disabled={participant.role === "OWNER"} />
-                    )}
-                  </SettingsButton>
-                  {state.others[index + 1] && <hr className="settings-dialog__separator" />}
-                </>
-              ))}
-          </div>
-        </div>
+      <div className="participants__search-input-wrapper">
+        <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
+        <MagnifyingGlassIcon className="participants__search-icon" />
       </div>
-    </div>
+      <div className="participants__filter-buttons">
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "OWNER"})}
+          onClick={() => setPermissionFilter(permissionFilter === "OWNER" ? "ALL" : "OWNER")}
+          title={t("Participants.OwnerFilterTooltip")}
+        >
+          {t("UserRole.Owner")}
+        </button>
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "MODERATOR"})}
+          onClick={() => setPermissionFilter(permissionFilter === "MODERATOR" ? "ALL" : "MODERATOR")}
+          title={t("Participants.ModeratorFilterTooltip")}
+        >
+          {t("UserRole.Moderator")}
+        </button>
+        <button
+          className={classNames("participants__permisson-filter-button", {"participants__permisson-filter-button--active": permissionFilter === "PARTICIPANT"})}
+          onClick={() => setPermissionFilter(permissionFilter === "PARTICIPANT" ? "ALL" : "PARTICIPANT")}
+          title={t("Participants.ParticipantFilterTooltip")}
+        >
+          {t("UserRole.Participant")}
+        </button>
+
+        <button
+          aria-label={t("Participants.OnlineFilterTooltip")}
+          className={classNames("participant__status-filter-button", {"participant__status-filter-button--active": !onlineFilter})}
+          onClick={() => setOnlineFilter((o) => !o)}
+          title={t("Participants.OnlineFilterTooltip")}
+        >
+          <WifiIconDisabled />
+        </button>
+      </div>
+
+      <ul className="participants__list">
+        {participants
+          .filter((participant) =>
+            debouncedQueryString
+              .toLowerCase()
+              .split(" ")
+              .every((s) => participant.user.name.toLowerCase().includes(s))
+          )
+          .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
+          .filter((participant) => participant.connected === onlineFilter)
+          .map((participant) => (
+            <li key={participant.user.id} className="participants__list-item">
+              <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} title={participant.user.name} />
+              <div className="participant__name-role-wrapper">
+                <span className="participant__name">{participant.user.name}</span>
+                {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
+                  <span className="participant__role">
+                    {participant.role === "OWNER" && t("UserRole.Owner")}
+                    {participant.role === "MODERATOR" && t("UserRole.Moderator")}
+                    {participant.role === "PARTICIPANT" && t("UserRole.Participant")}
+                  </span>
+                ) : (
+                  <div className="participant__role-buttons">
+                    <button
+                      className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
+                      disabled={participant.role === "MODERATOR"}
+                      onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
+                      title={t("Participants.ChangeRoleToModeratorTooltip")}
+                    >
+                      {t("UserRole.Moderator")}
+                    </button>
+                    <button
+                      className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
+                      disabled={participant.role === "PARTICIPANT"}
+                      onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
+                      title={t("Participants.ChangeRoleToParticipantTooltip")}
+                    >
+                      {t("UserRole.Participant")}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
+      </ul>
+    </section>
   );
 };

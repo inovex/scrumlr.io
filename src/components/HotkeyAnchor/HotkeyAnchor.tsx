@@ -7,7 +7,8 @@ import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import {hotkeyMap} from "constants/hotkeys";
 import "./HotkeyAnchor.scss";
-import {useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
+import {useEffect, useRef} from "react";
 
 /**
  * Anchor for general hotkeys
@@ -16,6 +17,13 @@ export const HotkeyAnchor = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {noteId} = useParams();
+  const note = useRef<string | undefined>();
+
+  // bugfix for noteId not being updated properly
+  useEffect(() => {
+    note.current = noteId;
+  }, [noteId]);
 
   const {
     TOGGLE_MODERATION,
@@ -62,6 +70,13 @@ export const HotkeyAnchor = () => {
   };
 
   const toggleModeration = () => {
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else {
+      dispatch(Actions.setFocusInitiator(state.currentUser));
+      if (note.current) dispatch(Actions.shareNote(note.current));
+    }
     dispatch(Actions.setModerating(!state.moderation));
   };
 

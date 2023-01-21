@@ -1,6 +1,5 @@
 import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {BoardUsers} from "components/BoardUsers";
@@ -13,6 +12,7 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
+import {ShareButton} from "components/ShareButton";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -38,13 +38,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     <>
       {showConfirmationDialog && (
         <ConfirmationDialog
-          headline={t("ConfirmationDialog.returnToHomepage")}
-          acceptMessage={t("ConfirmationDialog.yes")}
+          title={t("ConfirmationDialog.returnToHomepage")}
           onAccept={() => {
             store.dispatch(Actions.leaveBoard());
             navigate("/");
           }}
-          declineMessage={t("ConfirmationDialog.no")}
           onDecline={() => setShowConfirmationDialog(false)}
         />
       )}
@@ -61,6 +59,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             }}
             aria-haspopup
             aria-pressed={showMenu}
+            data-tip={state.name || DEFAULT_BOARD_NAME}
           >
             <div className="board-header__access-policy-status">
               {
@@ -80,16 +79,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
         <div className="board-header__users">
           <BoardUsers />
-
-          <button
-            className="board-header__share-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate("settings/share");
-            }}
-          >
-            <PlusIcon />
-          </button>
+          <ShareButton />
         </div>
 
         <HeaderMenu open={showMenu} onClose={() => setShowMenu(false)} currentUserIsModerator={props.currentUserIsModerator} />

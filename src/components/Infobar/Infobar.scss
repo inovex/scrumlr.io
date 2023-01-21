@@ -16,16 +16,11 @@
   margin-right: $margin--default;
 }
 
-.info-bar > *:only-child {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-}
-
-.info-bar__return-to-focused-note-button > svg {
+.info-bar__return-to-presented-note-button > svg {
   background-color: $menu-icon-background-color--dark;
   color: $color-white;
 }
-[theme="dark"] .info-bar__return-to-focused-note-button > svg {
+[theme="dark"] .info-bar__return-to-presented-note-button > svg {
   background-color: $color-white;
   color: $menu-icon-background-color--dark;
 }

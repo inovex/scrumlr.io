@@ -79,4 +79,27 @@ export const ParticipantsAPI = {
       throw new Error(`unable to update participant: ${error}`);
     }
   },
+  /**
+   * Updates the ready states of all participants.
+   *
+   * @param boardId the identifier of the board
+   * @param desiredReadyStates the value for the ready states
+   */
+  updateReadyStates: async (boardId: string, desiredReadyStates: boolean) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify({ready: desiredReadyStates}),
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to update ready states with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to update ready states: ${error}`);
+    }
+  },
 };

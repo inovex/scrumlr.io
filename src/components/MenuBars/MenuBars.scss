@@ -1,8 +1,5 @@
 @import "constants/style.scss";
 
-$box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
-$box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
-
 @keyframes expandHorizontally {
   to {
     margin-right: $margin--small;
@@ -54,7 +51,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 .menu-bars-mobile__fab {
   background: $menu-icon-background-color--light;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   cursor: pointer;
   width: $action-bar__width;
   height: $action-bar__width;
@@ -73,7 +70,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 .menu-bars-mobile__fab-option {
   box-shadow: $box-shadow--light;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
   margin: 0;
 
   &--vertical {
@@ -253,7 +250,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
   width: 42px;
   height: 42px;
 
-  background: white;
+  background: $color-white;
   border: none;
   border-radius: 100%;
   outline: none;

@@ -3,6 +3,7 @@ import {useDispatch} from "react-redux";
 import {useParams, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
+import {animated, Transition} from "react-spring";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
@@ -10,17 +11,35 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import "./StackView.scss";
+import {StackNavigation} from "components/StackNavigation";
+import {CSSProperties, useEffect, useRef, useState} from "react";
+import {Note} from "types/note";
+import {AvataaarProps} from "components/Avatar";
+
+type StackedNote = Note & {
+  authorName: string;
+  avatar?: AvataaarProps;
+};
+
+const getTransform = (state: "start" | "end", dir?: "left" | "right") => {
+  if (!dir) return "translateX(0%)";
+  const st = state === "start" ? -1 : 1;
+  const dr = dir === "right" ? -1 : 1;
+  return `translateX(${st * dr * 100}%)`;
+};
 
 export const StackView = () => {
-  const {t} = useTranslation();
   const {boardId, noteId} = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
-  const column = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column));
+  const prevNote = useRef<Note | undefined>(note);
+  const columns = useAppSelector((state) => state.columns, _.isEqual);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
-  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author!.user.name));
+  const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -28,13 +47,117 @@ export const StackView = () => {
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
-          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)!.user.avatar,
+          avatar: (state.participants?.others.find((p) => p.user.id === n.author) ?? state.participants?.self)?.user.avatar,
         })),
     _.isEqual
   );
-  const moderating = useAppSelector((state) => state.view.moderating);
-  const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true);
-  const viewer = useAppSelector((state) => state.participants!.self);
+  const column = columns.find((c) => c.id === note?.position.column);
+  const prevColumnParent = useAppSelector((state) => {
+    if (!column) return undefined;
+    // the last stack in the previous column
+    let prevColumns = state.columns.filter((c) => c.index < column.index).reverse(); // get all columns before current column, in descending order
+    if (viewer.role === "PARTICIPANT") prevColumns = prevColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
+    let prevStack;
+    while (prevColumns.length > 0 && !prevStack) {
+      prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
+      prevColumns.shift();
+    }
+    return prevStack?.id;
+  });
+  const nextColumnParent = useAppSelector((state) => {
+    if (!column) return undefined;
+    // the first stack in the next column
+    let nextColumns = state.columns.slice(column.index + 1); // get all columns after current column, in ascending order
+    if (viewer.role === "PARTICIPANT") nextColumns = nextColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
+    let nextStack;
+    while (nextColumns.length > 0 && !nextStack) {
+      nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
+      nextColumns.shift();
+    }
+    return nextStack?.id;
+  });
+  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
+  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
+  const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
+  const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
+
+  const [transitionConfig, setTransitionConfig] = useState({
+    from: {transform: "translateX(0%)", position: "relative", opacity: 0},
+    enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
+    leave: {
+      transform: "translateX(0%)",
+      position: "relative",
+      opacity: 0,
+    },
+    items: {
+      parent: note,
+      stack: stackedNotes,
+      avatar: author?.user.avatar,
+      authorName: authorName ?? "",
+    },
+  });
+
+  const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({name: authorName, avatar: author?.user.avatar});
+  const stackedNotesRef = useRef<StackedNote[]>(stackedNotes);
+
+  // update transition config when note changes so that the visible notes are updated without any animation
+  useEffect(() => {
+    if (
+      prevNote.current?.id === note?.id &&
+      (!_.isEqual(prevNote.current, note) || !_.isEqual(authorRef.current, {name: authorName, avatar: author?.user.avatar}) || !_.isEqual(stackedNotesRef.current, stackedNotes))
+    ) {
+      setTransitionConfig({
+        from: {transform: "translateX(0%)", position: "relative", opacity: 1},
+        enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
+        leave: {
+          transform: "translateX(0%)",
+          position: "absolute",
+          opacity: 1,
+        },
+        items: {
+          parent: note,
+          stack: stackedNotes,
+          avatar: author?.user.avatar,
+          authorName: authorName ?? "",
+        },
+      });
+    }
+    authorRef.current = {name: authorName, avatar: author?.user.avatar};
+    stackedNotesRef.current = stackedNotes;
+  }, [author, authorName, note, stackedNotes]);
+
+  useEffect(() => {
+    if (prevNote.current && prevNote.current?.id !== note?.id) {
+      let direction: "left" | "right" | undefined;
+      if (prevNote.current?.position?.column === note?.position?.column) {
+        direction = prevNote.current?.position?.rank > note.position.rank ? "right" : "left";
+      } else {
+        const oldColumnIndex = columns.findIndex((c) => c.id === prevNote.current?.position.column);
+        const newColumnIndex = columns.findIndex((c) => c.id === note?.position.column);
+        direction = oldColumnIndex > newColumnIndex ? "left" : "right";
+      }
+      setTransitionConfig({
+        from: {
+          transform: getTransform("start", direction),
+          position: "relative",
+          opacity: 0,
+        },
+        enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
+        leave: {
+          transform: getTransform("end", direction),
+          position: "absolute",
+          opacity: 0,
+        },
+        items: {
+          parent: note,
+          stack: stackedNotes,
+          avatar: author?.user.avatar,
+          authorName: authorName ?? "",
+        },
+      });
+      prevNote.current = note;
+    }
+  }, [author, authorName, columns, note, stackedNotes]);
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -42,48 +165,83 @@ export const StackView = () => {
   }
 
   const handleClose = () => {
-    if (moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER")) {
+    if (userIsModerating) {
       dispatch(Actions.stopSharing());
     }
     navigate(`/board/${boardId}`);
   };
 
+  const handleModeration = (id: string) => {
+    if (userIsModerating) {
+      dispatch(Actions.shareNote(id));
+    }
+  };
+
+  const navigationProps = {
+    stacks: stacksInColumn,
+    currentStack: note.id,
+    prevColumnStack: prevColumnParent,
+    nextColumnStack: nextColumnParent,
+    handleModeration,
+  };
+
   return (
-    <Portal onClose={handleClose} className={classNames("stack-view__portal", getColorClassName(column!.color as Color))} hiddenOverflow centered disabledPadding>
-      <div className={classNames("stack-view", getColorClassName(column!.color as Color))}>
-        <NoteDialogComponents.Header columnName={column!.name} />
-        <NoteDialogComponents.Note
-          key={noteId}
-          noteId={noteId!}
-          text={note!.text}
-          authorId={note!.author}
-          avatar={author!.user.avatar}
-          authorName={authorName}
-          showAuthors={showAuthors}
-          onClose={handleClose}
-          onDeleteOfParent={handleClose}
-          showUnstackButton={false}
-          viewer={viewer}
-          className="stack-view__parent-note"
-        />
-        <NoteDialogComponents.Wrapper>
-          {stackedNotes.map((n) => (
-            <NoteDialogComponents.Note
-              key={n.id}
-              noteId={n.id}
-              text={n.text}
-              authorId={n.author}
-              avatar={n.avatar}
-              authorName={n.authorName}
-              showAuthors={showAuthors}
-              onClose={handleClose}
-              onDeleteOfParent={handleClose}
-              showUnstackButton
-              viewer={viewer}
-            />
-          ))}
-        </NoteDialogComponents.Wrapper>
+    <Portal
+      onClose={handleClose}
+      className={classNames("stack-view__portal", getColorClassName(column?.color as Color), {"stack-view__portal-moderation-visible": moderating})}
+      hiddenOverflow
+      centered
+      disabledPadding
+    >
+      <div className={classNames("stack-view", getColorClassName(column?.color as Color))}>
+        <NoteDialogComponents.Header columnName={column?.name ?? ""} />
+        <StackNavigation {...navigationProps} />
+        <div className="stack-view__content">
+          <Transition {...transitionConfig}>
+            {(styles: CSSProperties, item: {parent?: Note; stack: StackedNote[]; avatar?: AvataaarProps; authorName: string}) => (
+              <animated.div style={styles} className="stack-view__animation-wrapper">
+                {item.parent && item.parent.position.column === column?.id && (
+                  <>
+                    <NoteDialogComponents.Note
+                      key={item.parent.id}
+                      noteId={item.parent.id}
+                      text={item.parent.text}
+                      authorId={item.parent.author}
+                      avatar={item.avatar}
+                      authorName={item.authorName}
+                      showAuthors={showAuthors}
+                      onClose={handleClose}
+                      onDeleteOfParent={handleClose}
+                      isStackedNote={false}
+                      hasStackedNotes={item.stack.length > 0}
+                      viewer={viewer}
+                      className="stack-view__parent-note"
+                    />
+                    <NoteDialogComponents.Wrapper>
+                      {item.stack?.map((n: StackedNote) => (
+                        <NoteDialogComponents.Note
+                          key={n.id}
+                          noteId={n.id}
+                          text={n.text}
+                          authorId={n.author}
+                          avatar={n.avatar}
+                          authorName={n.authorName}
+                          showAuthors={showAuthors}
+                          onClose={handleClose}
+                          onDeleteOfParent={handleClose}
+                          isStackedNote
+                          viewer={viewer}
+                        />
+                      ))}
+                    </NoteDialogComponents.Wrapper>
+                  </>
+                )}
+              </animated.div>
+            )}
+          </Transition>
+        </div>
       </div>
+      <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, getColorClassName(column?.color as Color))} />
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />
       </button>

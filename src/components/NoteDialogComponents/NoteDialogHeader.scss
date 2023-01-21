@@ -6,13 +6,14 @@
   color: $color-white;
   width: 100%;
   height: $stack-view__header-height;
+  min-height: $stack-view__min-height;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   text-align: center;
   cursor: initial;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
 
   h2 {
     width: max-content;
@@ -23,8 +24,10 @@
       display: block;
       height: 6px;
       background: var(--accent-color);
-      border-radius: $border-radius--round;
+      border-radius: $rounded--full;
       margin-top: $margin--default;
+
+      transition: all 0.2s ease-in-out;
     }
   }
 }

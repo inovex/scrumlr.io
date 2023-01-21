@@ -1,29 +1,140 @@
 @import "src/constants/style.scss";
 
+$vote-display-height: 42px;
+$vote-display-width: 114px;
+$vote-display__content-height: 38px;
+$vote-display__short-actions-height: 28px;
+
 .vote-display {
-  position: relative;
-  width: 85px;
-}
-
-.vote-display > * {
+  height: $vote-display-height;
+  width: $vote-display-width;
   color: $color-white;
-  background-color: $color-backlog-blue;
-  vertical-align: bottom;
-  box-shadow: 0 8px 16px #0057ff25;
+  background-color: $menu-icon-background-color--dark;
+  border-radius: calc($vote-display-height / 2);
+  position: relative;
+  border: 2px solid $menu-icon-background-color--dark;
 }
 
-[theme="dark"] {
-  .vote-display > * {
-    background-color: $color-planning-pink;
-    box-shadow: 0 8px 16px #e2036025;
+.vote-display > svg {
+  position: absolute;
+  height: 100%;
+  background-color: $menu-icon-background-color--dark;
+  border-radius: 100%;
+}
+[theme="dark"] .vote-display > svg {
+  background-color: $color-white;
+  color: $color-black;
+}
+
+.vote-display > span {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  padding-left: $vote-display__content-height;
+  line-height: $vote-display__content-height;
+  text-align: center;
+  font-weight: bold;
+}
+
+.vote-display__progress-bar {
+  position: absolute;
+  top: 0;
+  left: 19px;
+  height: $vote-display__content-height;
+  border-top-right-radius: calc($vote-display__content-height / 2);
+  border-bottom-right-radius: calc($vote-display__content-height / 2);
+  background-color: $color-progress-circle;
+}
+
+.vote-display__short-actions {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: calc($vote-display__content-height / 2);
+  background-color: $menu-icon-background-color--dark;
+  display: none;
+  justify-content: end;
+  align-items: center;
+  gap: $margin--small;
+  padding-right: 4px;
+}
+
+.vote-display:hover > .vote-display__short-actions {
+  display: flex;
+}
+
+.short-actions__button-wrapper {
+  position: relative;
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: calc($vote-display__short-actions-height / 2);
+}
+
+.short-actions__button-wrapper > button {
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: calc($vote-display__short-actions-height / 2);
+  background-color: $color-dark-gray;
+  color: $menu-icon-background-color--dark;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.short-actions__button-wrapper > button > svg {
+  height: $icon--small;
+  width: $icon--small;
+}
+.short-actions__button-wrapper > button:hover {
+  background-color: $color-progress-circle;
+  color: $color-white;
+}
+
+// Short Actions Button Tooltip
+.short-actions__button-wrapper > span {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 150ms linear;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 36px;
+  border-radius: 18px;
+  padding: 5px $padding--default;
+  background-color: $tooltip-background-color--light;
+  color: $menu-icon-background-color--dark;
+  font-weight: bold;
+  height: auto;
+  bottom: calc(100% + 4px);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+@media (prefers-reduced-motion) {
+  .short-actions__button-wrapper > span {
+    transition: none;
   }
 }
-.vote-display > span {
-  display: inline-block;
-  border-radius: 18px;
-  width: 84px;
-  cursor: default;
-  font-weight: bold;
-  line-height: $line-height--large;
-  text-align: center;
+.short-actions__button-wrapper:hover > span {
+  visibility: visible;
+  opacity: 1;
+}
+[theme="dark"] .short-actions__button-wrapper > span {
+  background-color: $tooltip-background-color--dark;
+  color: $color-white;
+}
+
+.short-actions__button-wrapper > span::after {
+  content: "";
+  position: absolute;
+  border: 4px solid;
+  border-color: $tooltip-background-color--light transparent transparent transparent;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
+}
+[theme="dark"] .short-actions__button-wrapper > span::after {
+  border-color: $tooltip-background-color--dark transparent transparent transparent;
 }

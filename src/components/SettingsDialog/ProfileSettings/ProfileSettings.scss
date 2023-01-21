@@ -90,7 +90,7 @@ $settings__item-height: 48px;
   }
 
   &:focus-visible {
-    border-radius: $border-radius--round;
+    border-radius: $rounded--full;
     outline: 2px solid var(--accent-color);
   }
 }
