@@ -1,0 +1,26 @@
+@import "constants/style";
+@import "./NoteDialogNoteOptions.scss";
+
+.note-dialog__note-option__remove {
+  height: $icon--large;
+  width: $icon--large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(var(--accent-color-rgb), 0.2);
+  color: var(--accent-color);
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+}
+.note-dialog__note-option__remove:hover {
+  background-color: var(--accent-color);
+  color: $color-white;
+}
+.note-dialog__note-option__remove:focus-visible {
+  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+}
+
+.note-dialog__note-option__remove-icon {
+  color: inherit;
+  height: $icon--medium;
+  width: $icon--medium;
+}

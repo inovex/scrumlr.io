@@ -4,6 +4,11 @@
   position: relative;
   width: 40px;
   height: 24px;
+
+  &:hover::after {
+    filter: brightness(1.1);
+    transform: scale(1.1);
+  }
 }
 
 .toggle::before {
@@ -13,7 +18,7 @@
   width: 100%;
   top: 8px;
   left: 0;
-  background: $color-light-gray 0 0 no-repeat padding-box;
+  background: $color-lighter-gray 0 0 no-repeat padding-box;
   border-radius: 4px;
 }
 
@@ -23,7 +28,7 @@
   height: 24px;
   width: 24px;
   border-radius: 100%;
-  transition: all 0.2s linear;
+  transition: all 0.16s ease-out, transform 0.08s ease-out;
   top: 0;
 
   left: 0;
@@ -33,16 +38,20 @@
 .toggle--active::after {
   left: 16px;
   background-color: var(--accent-color);
-  box-shadow: 0 4px 8px #0057ff29;
+  box-shadow: 0 4px 8px rgba(var(--accent-color-rgb), 0.24);
 }
 
-[theme="dark"] {
-  .toggle--active::after {
-    box-shadow: 0 4px 8px #ff006929;
+.toggle.toggle--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+
+  &::after {
+    background-color: $color-middle-gray;
+    box-shadow: none;
   }
-}
 
-.toggle.toggle--disabled::after {
-  background-color: $color-middle-gray;
-  box-shadow: none;
+  &:hover::after {
+    filter: none;
+    transform: none;
+  }
 }

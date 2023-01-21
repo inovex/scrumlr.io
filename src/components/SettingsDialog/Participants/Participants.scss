@@ -1,90 +1,244 @@
 @import "src/constants/style";
 @import "../SettingsDialog";
 
-.participants__container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  margin-bottom: 62px;
-  overflow: auto;
-  flex-grow: 1;
-}
-
-.participants__user-list-wrapper {
-  overflow: auto;
+.participants__search-input-wrapper {
+  position: relative;
+  height: 40px;
   width: 100%;
-  // overflow-x: hidden; // firefox bug?
-
-  @include scrollbar();
 }
-
-.participants__user-list {
-  display: flex;
-  flex-direction: column;
+.participants__search-input {
+  height: 100%;
   width: 100%;
-  border-radius: 8px;
+  padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  color: $color-black;
   background-color: $color-white;
-}
+  border: none;
+  border-radius: $rounded--full;
 
-[theme="dark"] {
-  .participants__user-list {
-    background-color: $color-dark-mode-note;
+  &:focus {
+    outline: 2px solid var(--accent-color);
   }
 }
+@media (hover: hover) {
+  .participants__search-input:hover {
+    background-color: var(--accent-color--desaturated-light);
+  }
+}
+.participants__search-icon {
+  position: absolute;
+  height: 100%;
+  width: $icon--medium;
+  color: $color-black;
+  right: $padding--default;
+}
 
-.participants__user {
-  position: relative;
+.participants__filter-buttons {
+  margin-top: $margin--small;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px $padding--medium;
-  height: 48px;
 }
 
-.participants__user_avatar-name-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: relative;
-}
-
-.participants__user_avatar {
-  height: 26px;
-  width: 26px;
-}
-
-.participants__user-name {
+.participants__permisson-filter-button {
+  height: 42px;
+  background-color: $color-white;
   color: $color-black;
-  font-size: $text-size--medium;
+  border: none;
+  border-radius: $rounded--full;
+  padding: 0 10px;
+  font-weight: bold;
+  font-size: 14px;
   letter-spacing: $letter-spacing--medium;
-  width: 170px;
+  cursor: pointer;
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+}
+@media (hover: hover) {
+  .participants__permisson-filter-button:hover {
+    background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
+  }
+}
+@media screen and (min-width: 920px) {
+  .participants__permisson-filter-button {
+    padding: 0 $padding--default;
+  }
+}
+
+.participant__status-filter-button {
+  height: 42px;
+  width: 42px;
+  border: none;
+  border-radius: $rounded--full;
+  background-color: $color-white;
+  color: $color-black;
+  padding: 0;
+  cursor: pointer;
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+  > svg {
+    height: $icon--medium;
+    width: $icon--medium;
+  }
+}
+@media (hover: hover) {
+  .participant__status-filter-button:hover {
+    background-color: var(--accent-color--desaturated-light);
+    color: $color-black;
+  }
+}
+
+.participants__list {
+  margin-top: $margin--default;
+  border-radius: $rounded--default;
+  list-style-type: none;
+  padding: 0;
+  overflow: scroll;
+  margin-bottom: $settings-dialog-container--bottom;
+}
+
+.participants__list-item {
+  height: 55px;
+  background-color: $color-white;
+  padding: $margin--small;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-lighter-gray;
+  }
+}
+
+.participant__avatar > svg {
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+}
+
+.participant__name-role-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   overflow: hidden;
+}
+
+.participant__name {
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: $letter-spacing--medium;
+  line-height: 18px;
+  color: $color-black;
   text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
-[theme="dark"] {
-  .participants__user-name {
+.participant__role {
+  height: 16px;
+  font-size: $text-size--small;
+  border-radius: $rounded--full;
+  padding: 0 $padding--small;
+  font-weight: 500;
+  letter-spacing: $letter-spacing--medium;
+  background-color: var(--accent-color);
+  color: $color-white;
+  width: fit-content;
+
+  &:is(button) {
+    line-height: 12px;
+    background-color: $color-white;
+    border: 2px solid var(--accent-color--desaturated-light);
+    color: $color-black;
+    cursor: pointer;
+  }
+  &:is(button):hover,
+  &:is(button):focus {
+    outline: none;
+    border-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--desaturated-light);
+  }
+  &--active:is(button),
+  &--active:is(button):hover {
+    cursor: default;
+    border-color: var(--accent-color);
+    background-color: var(--accent-color);
     color: $color-white;
   }
 }
 
-.participants__online-mark {
-  position: absolute;
-  top: 18px;
-  left: 19px;
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: $color-grooming-green;
+.participant__role-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: $margin--small;
 }
 
-.participants__offline-mark {
-  position: absolute;
-  top: 18px;
-  left: 19px;
-  height: 8px;
-  width: 8px;
-  border-radius: 50%;
-  background-color: $color-retro-red;
+[theme="dark"] {
+  .participants__search-input {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+  }
+  @media (hover: hover) {
+    .participants__search-input:hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+  }
+  .participants__search-icon {
+    color: $color-white;
+  }
+  .participants__permisson-filter-button,
+  .participant__status-filter-button {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+    &--active {
+      background-color: var(--accent-color);
+      color: $color-white;
+    }
+  }
+  @media (hover: hover) {
+    .participants__permisson-filter-button:hover,
+    .participant__status-filter-button:hover {
+      background-color: var(--accent-color--desaturated-dark);
+      color: $color-white;
+    }
+  }
+  .participants__list-item {
+    background-color: $color-dark-mode-note;
+    &:not(:last-child) {
+      border-bottom: 1px solid $color-dark-one;
+    }
+  }
+  .participant__name {
+    color: $color-white;
+  }
+  .participant__role {
+    &:is(button) {
+      background-color: $color-dark-mode-note;
+      border: 2px solid var(--accent-color--desaturated-dark);
+      color: $color-white;
+    }
+    &:is(button):hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+    &--active:is(button),
+    &--active:is(button):hover {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+  }
 }

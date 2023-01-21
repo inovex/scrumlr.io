@@ -10,9 +10,15 @@ $note-input__input-right: 40px;
   width: 100%;
   position: relative;
   margin-bottom: $margin--default;
-  background-color: $color-light-gray;
+  background-color: $color-lighter-gray;
   border-radius: 20px;
-  transition: box-shadow 0.2s ease-in-out;
+  transition: all 0.12s ease-in-out;
+
+  &:hover,
+  &:focus-within {
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  }
 }
 
 .note-input__input {
@@ -30,34 +36,62 @@ $note-input__input-right: 40px;
   margin-left: $margin--default;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   caret-color: var(--accent-color);
-}
-
-.note-input__input:focus {
   outline: none;
+
+  &:focus::placeholder {
+    color: transparent;
+  }
 }
 
-.note-input:hover,
-.note-input:focus-within {
-  box-shadow: 0 6px 9px 0 rgba(0, 87, 255, 0.16);
-}
-[theme="dark"] {
-  .note-input {
-    background-color: $color-dark-mode-note;
+.note-input__add-button {
+  all: unset;
+  cursor: pointer;
+
+  &:hover > .note-input__icon {
+    filter: brightness(1.2);
+    transform: scale(1.2);
   }
-  .note-input__input {
-    color: $color-white;
-  }
-  .note-input:hover,
-  .note-input:focus-within {
-    box-shadow: 0 6px 9px 0 #232323;
+
+  &:focus > .note-input__icon {
+    border-radius: 100%;
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
   }
 }
 
 .note-input__icon {
   margin-right: $margin--default;
-  width: 20px;
-  height: 20px;
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
   align-self: center;
-  cursor: pointer;
+  transition: all 0.08s ease-out;
+}
+
+.toast-button {
+  background-color: $color-backlog-blue;
+  border-style: none;
+  border-radius: 8px;
+  height: 40px;
+  width: 100%;
+  margin-top: $margin--default;
+  color: $color-white;
+}
+
+[theme="dark"] {
+  .note-input {
+    background-color: $color-dark-mode-note;
+
+    &:hover,
+    &:focus-within {
+      box-shadow: 0 6px 9px 0 #232323;
+    }
+  }
+
+  .note-input__input {
+    color: $color-white;
+  }
+
+  .toast-button {
+    background-color: $color-planning-pink;
+  }
 }

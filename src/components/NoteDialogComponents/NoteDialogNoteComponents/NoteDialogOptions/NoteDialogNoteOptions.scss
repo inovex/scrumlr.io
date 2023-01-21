@@ -1,0 +1,15 @@
+@import "src/constants/style";
+
+.note-dialog__note-options {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  grid-area: 1 / 2 / 2 / 2;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.note-dialog__note-option {
+  padding-top: 0;
+}

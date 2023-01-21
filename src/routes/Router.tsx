@@ -17,6 +17,7 @@ import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
+import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 
 const Router = () => (
@@ -37,10 +38,18 @@ const Router = () => (
       />
       <Route path="/login" element={<LoginBoard />} />
       <Route
+        path="/board/:boardId/print"
+        element={
+          <RequireAuthentication>
+            <BoardGuard printViewEnabled />
+          </RequireAuthentication>
+        }
+      />
+      <Route
         path="/board/:boardId"
         element={
           <RequireAuthentication>
-            <BoardGuard />
+            <BoardGuard printViewEnabled={false} />
           </RequireAuthentication>
         }
       >
@@ -55,6 +64,7 @@ const Router = () => (
         </Route>
         <Route path="voting" element={<VotingDialog />} />
         <Route path="timer" element={<TimerDialog />} />
+        <Route path="note/:noteId/stack" element={<StackView />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

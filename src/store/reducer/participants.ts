@@ -10,17 +10,19 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
 
       const self = action.participants.find((p) => p.user.id === ownUserId)!;
       const others = action.participants.filter((p) => p.user.id !== ownUserId);
+      const focusInitiator = null;
 
       return {
         ...state,
         self,
         others,
+        focusInitiator,
       };
     }
 
     case Action.CreatedParticipant: {
       return {
-        ...state,
+        ...state!,
         self: state!.self,
         others: [action.participant, ...state!.others],
       };
@@ -29,7 +31,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
     case Action.UpdatedParticipant: {
       if (action.participant.user.id === state!.self.user.id) {
         return {
-          ...state,
+          ...state!,
           self: action.participant,
           others: [...state!.others],
         };
@@ -41,7 +43,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
       newOthers.splice(index, 1, action.participant);
 
       return {
-        ...state,
+        ...state!,
         self: state!.self,
         others: newOthers,
       };
@@ -49,12 +51,31 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
 
     case Action.EditSelf: {
       return {
-        ...state,
+        ...state!,
         self: {
           ...state!.self,
           user: action.user,
         },
         others: [...state!.others],
+      };
+    }
+
+    case Action.SetFocusInitiator: {
+      const focusInitiator = action.participant;
+      return {
+        ...state,
+        self: state!.self,
+        others: [...state!.others],
+        focusInitiator,
+      };
+    }
+
+    case Action.ClearFocusInitiator: {
+      return {
+        ...state,
+        self: state!.self,
+        others: [...state!.others],
+        focusInitiator: null,
       };
     }
 

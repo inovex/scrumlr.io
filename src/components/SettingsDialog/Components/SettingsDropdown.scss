@@ -1,0 +1,94 @@
+@import "constants/style";
+
+.settings-dropdown {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+
+  &__button {
+    width: 100%;
+    background-color: $color-white;
+    border: none;
+    border-radius: 8px;
+    padding: $padding--default $padding--medium;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $text-size--medium;
+    cursor: pointer;
+
+    &:focus-visible {
+      position: relative;
+      outline: 2px solid rgba(var(--accent-color-rgb), 0.3);
+      z-index: 1;
+    }
+
+    &:hover {
+      background-color: rgba(var(--accent-color-rgb), 0.1);
+    }
+  }
+
+  &__item {
+    &--current {
+      display: flex;
+      align-items: center;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    span {
+      font-weight: bold;
+    }
+
+    &-icon {
+      margin-right: $margin--small;
+      width: $icon--medium;
+      height: $icon--medium;
+
+      &--dropdown {
+        margin-left: $margin--small;
+        transform: rotate(0.25turn);
+      }
+    }
+  }
+
+  &__list {
+    list-style: none;
+    position: absolute;
+    width: fit-content;
+    right: 0;
+    margin: 0 $margin--default 0 0;
+    padding: 0;
+    background-color: $color-white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 2px 0 rgba(var(--accent-color-rgb), 0.1);
+
+    &:not(.active) {
+      display: none;
+    }
+  }
+}
+
+[theme="dark"] {
+  .settings-dropdown {
+    &__button {
+      color: $color-white;
+      background-color: $color-dark-mode-note;
+
+      &:hover {
+        background-color: $color-dark-mode-note--hover;
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba(var(--accent-color-rgb), 0.6);
+      }
+    }
+
+    &__list {
+      color: $color-white;
+      background-color: $color-dark-mode-note;
+      box-shadow: 0 2px 2px 0 rgba($color-black, 0.3);
+    }
+  }
+}

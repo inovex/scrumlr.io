@@ -33,7 +33,7 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
 
   return ReactDOM.createPortal(
     <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>
-      <FocusLock>
+      <FocusLock autoFocus={false} returnFocus>
         <div
           className={classNames(
             "portal__frame",
@@ -43,7 +43,7 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
             theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink"
           )}
         >
-          <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
+          <div className="portal__content" role="dialog">
             {children}
           </div>
         </div>

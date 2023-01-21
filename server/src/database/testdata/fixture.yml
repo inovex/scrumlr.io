@@ -291,6 +291,13 @@
       color: backlog-blue
       visible: true
       index: 0
+    - _id: notesColumnC
+      id: "2cf7f80e-d3ed-4606-be72-59f5dc05ec47"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      name: C
+      color: backlog-blue
+      visible: true
+      index: 0
     - _id: notesObserverTestColumn
       id: "3113b196-986c-2951-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesObserverTestBoard.ID }}'
@@ -426,6 +433,14 @@
       column: '{{ $.Column.notesColumnB.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000b2"
+      rank: 0
+    - _id: notesTestC1
+      id: "00000000-0000-0000-0000-0000000000c1"
+      board: '{{ $.Board.notesTestBoard.ID }}'
+      author: '{{ $.User.jack.ID }}'
+      column: '{{ $.Column.notesColumnC.ID }}'
+      text: "Godfather!"
+      stack: null
       rank: 0
     - _id: votingSortingNote1
       id: "2638e01b-e38e-4360-a4ce-74af074ee0be"

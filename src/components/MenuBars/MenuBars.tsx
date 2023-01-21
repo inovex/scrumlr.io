@@ -1,35 +1,63 @@
-import React, {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {MenuToggle, MenuButton} from "components/MenuBars/MenuItem";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
-import {ReactComponent as ToggleSettingsMenuIcon} from "assets/icon-toggle-settings-menu.svg";
-import {ReactComponent as ToggleAddMenuIcon} from "assets/icon-toggle-add-menu.svg";
-import {TabIndex} from "constants/tabIndex";
+import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
+import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
+import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./MenuBars.scss";
+import {useHotkeys} from "react-hotkeys-hook";
+import {hotkeyMap} from "constants/hotkeys";
+import {TooltipButton} from "components/TooltipButton/TooltipButton";
 
-export const MenuBars = () => {
+export interface MenuBarsProps {
+  showPreviousColumn: boolean;
+  showNextColumn: boolean;
+  onPreviousColumn: () => void;
+  onNextColumn: () => void;
+}
+
+export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const menuBarsMobileRef = useRef<HTMLElement>(null);
 
-  const [showAdminMenu, toggleMenus] = useState(false);
-  const [animate, setAnimate] = useState(false);
+  const [fabIsExpanded, setFabIsExpanded] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = ({target}: MouseEvent) => {
+      if (!menuBarsMobileRef.current?.contains(target as Node) && fabIsExpanded) {
+        setFabIsExpanded(!fabIsExpanded);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [menuBarsMobileRef, fabIsExpanded]);
+
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
       currentUser: rootState.participants!.self,
       moderation: rootState.view.moderating,
+      showAuthors: rootState.board.data?.showAuthors,
+      showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
+      showHiddenColumns: rootState.participants!.self.showHiddenColumns,
+      hotkeysAreActive: rootState.view.hotkeysAreActive,
+      activeTimer: !!rootState.board.data?.timerEnd,
+      activeVoting: !!rootState.votings.open,
     }),
     _.isEqual
   );
@@ -38,80 +66,183 @@ export const MenuBars = () => {
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
 
-  const toggleModeration = () => {
-    dispatch(Actions.setModerating(!state.moderation));
-  };
-
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
-  };
-
-  const handleAnimate = (event: React.TransitionEvent<HTMLElement>) => {
-    if (event.currentTarget.attributes.getNamedItem("class")?.nodeValue?.includes("menu-animation")) {
-      setAnimate(false);
-    }
   };
 
   const toggleRaiseHand = () => {
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
   };
 
+  const toggleModeration = () => {
+    if (state.moderation) {
+      dispatch(Actions.stopSharing());
+      dispatch(Actions.clearFocusInitiator());
+    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+
+    dispatch(Actions.setModerating(!state.moderation));
+  };
+
+  const showTimerMenu = () => navigate("timer");
+  const showVotingMenu = () => navigate("voting");
+  const showSettings = () => navigate("settings");
+
+  const hotkeyOptionsAdmin = {
+    enabled: state.hotkeysAreActive && isAdmin,
+  };
+
+  useHotkeys(SHOW_TIMER_MENU, showTimerMenu, hotkeyOptionsAdmin, []);
+  useHotkeys(SHOW_VOTING_MENU, showVotingMenu, hotkeyOptionsAdmin, []);
+
   return (
-    <aside id="menu-bars" className={classNames("menu-bars", {"menu-bars--admin": showAdminMenu, "menu-bars--user": !showAdminMenu}, {"menu-bars--isAdmin": isAdmin})}>
-      <section className={classNames("menu", "user-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
-        <div className="menu__items">
-          <MenuToggle
-            direction="right"
-            value={isReady}
-            toggleStartLabel={t("MenuBars.markAsDone")}
-            toggleStopLabel={t("MenuBars.unmarkAsDone")}
-            icon={CheckIcon}
-            onToggle={toggleReadyState}
-            tabIndex={TabIndex.UserMenu}
-          />
-          <MenuToggle
-            tabIndex={TabIndex.UserMenu + 1}
-            direction="right"
-            toggleStartLabel={t("MenuBars.raiseHand")}
-            toggleStopLabel={t("MenuBars.lowerHand")}
-            icon={RaiseHand}
-            onToggle={toggleRaiseHand}
-            value={raisedHand}
-          />
-          <MenuButton tabIndex={TabIndex.UserMenu + 2} direction="right" label={t("MenuBars.settings")} onClick={() => navigate("settings")} icon={SettingsIcon} />
-        </div>
-      </section>
-      {isAdmin && (
-        <section className={classNames("menu", "admin-menu", {"menu-animation": animate})} onTransitionEnd={(event) => handleAnimate(event)}>
-          <div className="menu__items">
-            <MenuButton tabIndex={TabIndex.AdminMenu} direction="left" label="Timer" onClick={() => navigate("timer")} icon={TimerIcon} />
-            <MenuButton tabIndex={TabIndex.AdminMenu + 1} direction="left" label="Voting" onClick={() => navigate("voting")} icon={VoteIcon} />
-            <MenuToggle
-              value={state.moderation}
-              direction="left"
-              toggleStartLabel={t("MenuBars.startFocusMode")}
-              toggleStopLabel={t("MenuBars.stopFocusMode")}
-              icon={FocusIcon}
-              onToggle={toggleModeration}
-              tabIndex={TabIndex.AdminMenu + 2}
-              isFocusModeToggle
-            />
-          </div>
+    <>
+      <aside className="menu-bars">
+        <section className="menu user-menu">
+          <ul className="menu__items">
+            <li>
+              <TooltipButton
+                direction="right"
+                onClick={toggleReadyState}
+                label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+                icon={CheckIcon}
+                active={isReady}
+                hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
+              />
+            </li>
+            <li>
+              <TooltipButton
+                direction="right"
+                label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                icon={RaiseHand}
+                onClick={toggleRaiseHand}
+                active={raisedHand}
+                hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
+              />
+            </li>
+            <li>
+              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
+            </li>
+          </ul>
+
+          <button
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+            disabled={!showPreviousColumn}
+            onClick={onPreviousColumn}
+            aria-hidden
+          >
+            <LeftArrowIcon className="menu-bars__navigation-icon" />
+          </button>
         </section>
-      )}
-      {isAdmin && (
+
+        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
+          {isAdmin && (
+            <ul className="menu__items">
+              <li>
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
+              </li>
+              <li>
+                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
+              </li>
+              <li>
+                <TooltipButton
+                  active={state.moderation}
+                  direction="left"
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                  icon={FocusIcon}
+                  onClick={toggleModeration}
+                  hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
+                />
+              </li>
+            </ul>
+          )}
+
+          <button
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
+            disabled={!showNextColumn}
+            onClick={onNextColumn}
+            aria-hidden
+          >
+            <RightArrowIcon className="menu-bars__navigation-icon" />
+          </button>
+        </section>
+      </aside>
+      <aside className="menu-bars-mobile" ref={menuBarsMobileRef}>
         <button
-          className="menu-bars__switch"
+          className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
-            setAnimate(true);
-            toggleMenus((prevState) => !prevState);
+            setFabIsExpanded(!fabIsExpanded);
           }}
-          aria-label={showAdminMenu ? t("MenuBars.switchToUserMenu") : t("MenuBars.switchToAdminMenu")}
+          aria-label={t("MenuBars.openMenu")}
         >
-          <ToggleAddMenuIcon className="switch__icon switch__icon--add" aria-hidden />
-          <ToggleSettingsMenuIcon className="switch__icon switch__icon--settings" aria-hidden />
+          {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon aria-hidden />}
         </button>
-      )}
-    </aside>
+        {(fabIsExpanded || isReady || raisedHand) && (
+          <ul
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {
+              "menu-bars-mobile__options--isExpanded": fabIsExpanded,
+              "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
+            })}
+          >
+            {(fabIsExpanded || isReady) && (
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+                <TooltipButton
+                  active={isReady}
+                  direction="right"
+                  label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+                  icon={CheckIcon}
+                  onClick={toggleReadyState}
+                />
+              </li>
+            )}
+            {(fabIsExpanded || raisedHand) && (
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+                <TooltipButton
+                  active={raisedHand}
+                  direction="right"
+                  label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                  icon={RaiseHand}
+                  onClick={toggleRaiseHand}
+                />
+              </li>
+            )}
+            {fabIsExpanded && (
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+              </li>
+            )}
+          </ul>
+        )}
+        {isAdmin && (fabIsExpanded || state.moderation) && (
+          <ul
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
+              "menu-bars-mobile__options--isExpanded": fabIsExpanded,
+              "menu-bars-mobile__options--hasActiveButton": state.moderation,
+            })}
+          >
+            {fabIsExpanded && (
+              <>
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+                  <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                </li>
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+                  <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                </li>
+              </>
+            )}
+            {(fabIsExpanded || state.moderation) && (
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+                <TooltipButton
+                  active={state.moderation}
+                  direction="left"
+                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                  icon={FocusIcon}
+                  onClick={toggleModeration}
+                />
+              </li>
+            )}
+          </ul>
+        )}
+      </aside>
+    </>
   );
 };

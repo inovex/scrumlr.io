@@ -6,31 +6,35 @@ import {Actions} from "store/action";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
-import * as redux from "react-redux";
+import * as reactRouter from "react-router";
+import * as reactRedux from "react-redux";
 import {ApplicationState} from "types";
+import {ViewState} from "types/view";
+import {BoardState} from "types/board";
+import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestNote from "utils/test/getTestNote";
 
-type TestProps = {
-  showAuthors: boolean;
-  moderating: boolean;
-  currentUserIsModerator: boolean;
-  overwrite?: Partial<ApplicationState>;
+const NOTE_ID = "test-notes-id-1";
+
+const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<BoardState, "status">>): BoardState => {
+  return {
+    status: overwrite?.status ?? "ready",
+    data: {
+      id: overwrite?.id ?? "note-tests-board",
+      name: overwrite?.name ?? "note-tests-board",
+      accessPolicy: overwrite?.accessPolicy ?? "PUBLIC",
+      showAuthors: overwrite?.showAuthors ?? false,
+      showNotesOfOtherUsers: overwrite?.showNotesOfOtherUsers ?? true,
+      allowStacking: overwrite?.allowStacking ?? true,
+    },
+  };
 };
 
-const createNote = (props: Partial<TestProps>) => {
+const createNote = (isModerator: boolean, overwrite?: Partial<ApplicationState>) => {
   const [NoteContext] = wrapWithTestBackend(Note);
   return (
-    <Provider store={getTestStore(props.overwrite)}>
-      <NoteContext
-        key="test-notes-id-1"
-        noteId="test-notes-id-1"
-        columnId="test-columns-id-1"
-        columnName="test-columns-name-1"
-        columnColor="backlog-blue"
-        showAuthors={props.showAuthors || false}
-        moderating={props.moderating || false}
-        viewer={getTestParticipant(props.currentUserIsModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})}
-      />
+    <Provider store={getTestStore(overwrite)}>
+      <NoteContext key={NOTE_ID} noteId={NOTE_ID} viewer={getTestParticipant(isModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})} />
     </Provider>
   );
 };
@@ -46,181 +50,61 @@ describe("Note", () => {
     );
   });
 
-  describe("should render correctly", () => {
-    test("note__root is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.firstChild).toHaveClass("note__root");
+  describe("content", () => {
+    it("should display the text content of the note", () => {
+      const note = getTestApplicationState().notes.find((n) => n.id === NOTE_ID);
+      expect(note).toBeDefined();
+      const {container} = render(createNote(false));
+      expect(container.firstChild).toHaveTextContent(note!.text);
     });
 
-    test("note is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note");
-    });
-
-    test("note--own-card is present", () => {
-      const {container} = render(createNote({showAuthors: true, overwrite: {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}}));
-      expect(container.querySelector(".note__root")!.firstChild).toHaveClass("note--own-card");
-    });
-
-    test("note--own-card is not present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__root")!.firstChild).not.toHaveClass("note--own-card");
-    });
-
-    test("note content is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note")?.firstChild).toHaveClass("note__content");
-    });
-
-    test("note text is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__content")?.firstChild).toHaveClass("note__text");
-    });
-
-    test("note text has correct text", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.firstChild).toHaveTextContent("Lorem Ipsum");
-    });
-
-    test("note footer is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note")?.lastChild).toHaveClass("note__footer");
-    });
-
-    test("note author is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__footer")?.firstChild).toHaveClass("note__author");
-    });
-
-    test("note author is hidden", () => {
-      const {container} = render(createNote({showAuthors: false}));
-      expect(container.querySelector(".note__footer")).not.toHaveClass("note__author");
-    });
-
-    test("note author name is present", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.querySelector(".note__author")?.lastChild).toHaveClass("note__author-name");
+    test("own note author name is me", () => {
+      const {container} = render(createNote(false, {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}));
+      expect(container.firstChild).toHaveTextContent("Me");
     });
   });
 
-  describe("should have correct style", () => {
-    test("show note with correct style", () => {
-      const {container} = render(createNote({showAuthors: true}));
-      expect(container.firstChild).toMatchSnapshot();
+  describe("author information", () => {
+    it("should be displayed on enabled author visibility", () => {
+      const board = createBoardData({showAuthors: true});
+      const {container} = render(createNote(false, {board: board}));
+      expect(container.firstChild).toContainHTML("figure");
+    });
+    it("should not be displayed on disabled author visibility", () => {
+      const board = createBoardData({showAuthors: false});
+      const {container} = render(createNote(false, {board: board}));
+      expect(container.firstChild).not.toContainHTML("figure");
     });
   });
 
-  describe("should have note in stack", () => {
-    test("check div with class name note__in-stack", () => {
-      const {container} = render(
-        createNote({
-          showAuthors: true,
-          overwrite: {
-            notes: [getTestNote({id: "test-notes-id-1"}), getTestNote({id: "test-note-in-stack", position: {stack: "test-notes-id-1", column: "test-columns-id-1", rank: 0}})],
-          },
-        })
-      );
-      expect(container.querySelector(".note__root")!.lastChild).toHaveClass("note__in-stack");
+  describe("votes", () => {
+    it("should contain votes container element", () => {
+      const {container} = render(createNote(false));
+      expect(container.getElementsByClassName("votes").length).toBeGreaterThan(0);
     });
   });
 
-  describe("Test NoteDialog created/not created", () => {
-    beforeEach(() => {
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
+  describe("side effects", () => {
+    it("should share note during active moderation on click", () => {
+      const dispatchSpy = jest.fn();
+      jest.spyOn(reactRedux, "useDispatch").mockImplementationOnce(() => dispatchSpy);
+      const view: ViewState = {
+        moderating: true,
+        serverTimeOffset: 0,
+        feedbackEnabled: false,
+        enabledAuthProvider: [],
+        hotkeysAreActive: false,
+      };
+      const {container} = render(createNote(true, {view}));
+      fireEvent.click(container.querySelector(".note")!);
+      expect(dispatchSpy).toHaveBeenCalledWith(Actions.shareNote(NOTE_ID));
     });
-
-    test("NoteDialog is present: snapshot", () => {
-      const {container} = render(
-        createNote({
-          showAuthors: true,
-          overwrite: {
-            board: {
-              status: "ready",
-              data: {
-                id: "test-board-id",
-                name: "test-board-name",
-                accessPolicy: "PUBLIC",
-                showAuthors: true,
-                showNotesOfOtherUsers: true,
-                allowStacking: true,
-                sharedNote: "test-notes-id-1",
-              },
-            },
-          },
-        }),
-        {
-          container: global.document.querySelector("#portal")!,
-        }
-      );
-      expect(container).toMatchSnapshot();
-    });
-
-    test("NoteDialog is present: class", () => {
-      const {container} = render(
-        createNote({
-          showAuthors: true,
-          overwrite: {
-            board: {
-              status: "ready",
-              data: {
-                id: "test-board-id",
-                name: "test-board-name",
-                accessPolicy: "PUBLIC",
-                showAuthors: true,
-                showNotesOfOtherUsers: true,
-                allowStacking: true,
-                sharedNote: "test-notes-id-1",
-              },
-            },
-          },
-        }),
-        {
-          container: global.document.querySelector("#portal")!,
-        }
-      );
-      expect(container.querySelector(".note-dialog")).not.toBeNull();
-    });
-
-    test("NoteDialog is not present: snapshot", () => {
-      const {container} = render(createNote({showAuthors: true}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      expect(container).toMatchSnapshot();
-    });
-
-    test("NoteDialog isn't present: class", () => {
-      const {container} = render(createNote({showAuthors: true}), {
-        container: global.document.querySelector("#portal")!,
-      });
-      expect(container.querySelector(".note-dialog")).toBeNull();
-    });
-  });
-
-  describe("note clicked during moderation phase", () => {
-    beforeEach(() => {
-      const portal = global.document.createElement("div");
-      portal.setAttribute("id", "portal");
-      global.document.querySelector("body")!.appendChild(portal);
-    });
-
-    test("Note should be focused", () => {
-      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
-      const dispatchMock = jest.fn();
-      useDispatchSpy.mockReturnValue(dispatchMock);
-      const {container} = render(createNote({showAuthors: true, moderating: true}));
-      fireEvent.click(container.querySelector(".note__root")!);
-      expect(dispatchMock).toHaveBeenCalledWith(Actions.shareNote("test-notes-id-1"));
-    });
-
-    test("Note shouldn't be focused", () => {
-      const useDispatchSpy = jest.spyOn(redux, "useDispatch");
-      const dispatchMock = jest.fn();
-      useDispatchSpy.mockReturnValue(dispatchMock);
-      const {container} = render(createNote({showAuthors: true}));
-      fireEvent.click(container.querySelector(".note__root")!);
-      expect(dispatchMock).not.toBeCalled();
+    it("should navigate to stack route on click", () => {
+      const navigateSpy = jest.fn();
+      jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);
+      const {container} = render(createNote(false));
+      fireEvent.click(container.querySelector(".note")!);
+      expect(navigateSpy).toHaveBeenCalledWith(`note/${NOTE_ID}/stack`);
     });
   });
 });

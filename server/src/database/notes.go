@@ -335,11 +335,17 @@ func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
 					})
 			})
 
+		updateBoard := d.db.NewUpdate().
+			Model((*Board)(nil)).
+			Set("shared_note = null").
+			Where("id = ? AND shared_note = ?", board, id)
+
 		var notes []Note
 		_, err := d.db.NewDelete().
+			With("update_board", updateBoard).
 			With("update_ranks", updateRanks).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
 		return err
 	}
 	return errors.New("not permitted to delete note")

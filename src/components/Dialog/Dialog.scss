@@ -15,11 +15,16 @@
 [theme="dark"] .dialog {
   background: $color-dark-one;
 }
-@media screen and (min-width: 600px) {
+
+@media #{$tablet} {
   .dialog {
     width: 400px;
     height: auto;
     border-radius: 8px;
+  }
+
+  .dialog__close-button {
+    display: none;
   }
 }
 
@@ -45,27 +50,32 @@
 
 .dialog__close-button {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2px; // some space for the focus border
+  right: 2px;
   color: $color-planning-pink;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
   cursor: pointer;
-  border: none;
+  border: 2px solid transparent;
   padding: 0;
   background-color: transparent;
-}
-@media screen and (min-width: 600px) {
-  .dialog__close-button {
-    display: none;
+  transform: scale(1);
+  transition: all 0.08s ease-in-out;
+  border-radius: $rounded--full;
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
+  }
+  &:focus-visible {
+    border: 2px solid var(--accent-color);
+    outline: none;
   }
 }
-.close-button__icon {
-  width: 44px;
-  height: 44px;
+
+.dialog__close-icon {
+  width: $icon--extralarge;
+  height: $icon--extralarge;
 }
 
 .dialog__button {
@@ -76,19 +86,28 @@
   width: 100%;
   background: $color-white;
   cursor: pointer;
-}
-.dialog__button:focus {
+  transition: all 0.08s ease-out;
   outline: none;
+
+  &:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 1);
+  }
+
+  > label:first-of-type {
+    font-size: $text-size--medium;
+    color: $color-black;
+    letter-spacing: $letter-spacing--medium;
+    position: absolute;
+    left: 24px;
+    top: 16px;
+    cursor: pointer;
+  }
 }
-.dialog__button > label:first-of-type {
-  font-size: $text-size--medium;
-  color: $color-black;
-  letter-spacing: $letter-spacing--medium;
-  position: absolute;
-  left: 24px;
-  top: 16px;
-  cursor: pointer;
-}
+
 [theme="dark"] {
   .dialog__button {
     background-color: $color-dark-mode-note;
@@ -98,5 +117,8 @@
   }
   .dialog__button > label {
     color: $color-white;
+  }
+  .dialog__close-button:hover {
+    background-color: var(--accent-color--desaturated-dark);
   }
 }

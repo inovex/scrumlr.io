@@ -268,6 +268,22 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	visibleColumns := []*dto.Column{}
+	for _, column := range columns {
+		if column.Visible {
+			visibleColumns = append(visibleColumns, column)
+		}
+	}
+
+	visibleNotes := []*dto.Note{}
+	for _, note := range notes {
+		for _, column := range visibleColumns {
+			if note.Position.Column == column.ID {
+				visibleNotes = append(visibleNotes, note)
+			}
+		}
+	}
+
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
@@ -279,8 +295,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		}{
 			Board:        board,
 			Participants: sessions,
-			Columns:      columns,
-			Notes:        notes,
+			Columns:      visibleColumns,
+			Notes:        visibleNotes,
 			Votings:      votings,
 		})
 		return
@@ -293,7 +309,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		records := [][]string{header}
 
-		for _, note := range notes {
+		for _, note := range visibleNotes {
 			stack := "null"
 			if note.Position.Stack.Valid {
 				stack = note.Position.Stack.UUID.String()
@@ -307,7 +323,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			}
 
 			column := note.Position.Column.String()
-			for _, c := range columns {
+			for _, c := range visibleColumns {
 				if c.ID == note.Position.Column {
 					column = c.Name
 				}

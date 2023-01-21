@@ -1,0 +1,71 @@
+@import "constants/style";
+
+.settings-carousel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-label {
+      font-size: $text-size--small;
+      font-weight: 500;
+      color: rgba($color-black, 0.5);
+    }
+    &-value {
+      font-size: $text-size--medium;
+      font-weight: bold;
+    }
+  }
+
+  &__button {
+    display: flex;
+    cursor: pointer;
+    background-color: unset;
+    justify-items: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    color: var(--accent-color);
+    transition: all 0.08s ease-out;
+
+    &:hover > svg {
+      background-color: var(--accent-color--desaturated-light);
+      transform: scale(1.1);
+    }
+
+    &:focus-visible > svg {
+      background-color: var(--accent-color--desaturated-light);
+    }
+
+    svg {
+      border-radius: $rounded--full;
+      width: $icon--large;
+      height: $icon--large;
+      padding: calc($padding--small / 2);
+    }
+  }
+}
+
+[theme="dark"] {
+  .settings-carousel {
+    &__text {
+      &-label {
+        color: rgba($color-white, 0.65);
+      }
+    }
+
+    &__button {
+      color: var(--accent-color);
+
+      &:hover > svg,
+      &:focus-visible > svg {
+        background-color: var(--accent-color--desaturated-dark);
+      }
+    }
+  }
+}

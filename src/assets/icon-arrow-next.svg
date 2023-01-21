@@ -1,3 +1,5 @@
-<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-<polygon points="160 128.4 192.3 96 352 256 352 256 352 256 192.3 416 160 383.6 287.3 256" fill="currentColor"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g transform="translate(21489 16354)">
+    <path d="M5.88-19.218,16.119-8.876,5.88,1.465,8.635,4.247,21.628-8.876,8.635-22Z" transform="translate(-21485.754 -16329.124)" fill="currentColor"/>
+  </g>
 </svg>

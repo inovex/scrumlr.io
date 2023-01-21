@@ -12,6 +12,7 @@ export interface Board {
   showAuthors: boolean;
   showNotesOfOtherUsers: boolean;
   allowStacking: boolean;
+  timerStart?: Date;
   timerEnd?: Date;
 
   sharedNote?: string;
@@ -20,7 +21,7 @@ export interface Board {
 
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 
-export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase";
+export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase" | "too_many_join_requests";
 
 export interface BoardState {
   status: BoardStatus;

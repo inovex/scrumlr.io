@@ -1,0 +1,39 @@
+@import "constants/style";
+@import "routes/StackView/StackView.scss";
+
+.note-dialog__header {
+  font-size: calc(24px + 0.8vw);
+  color: $color-white;
+  width: 100%;
+  height: $stack-view__header-height;
+  min-height: $stack-view__min-height;
+  letter-spacing: $letter-spacing--large;
+  line-height: $line-height--large;
+  text-align: center;
+  cursor: initial;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  h2 {
+    width: max-content;
+    margin: $margin--medium 0 0 0;
+
+    &::after {
+      content: " ";
+      display: block;
+      height: 6px;
+      background: var(--accent-color);
+      border-radius: $rounded--full;
+      margin-top: $margin--default;
+
+      transition: all 0.2s ease-in-out;
+    }
+  }
+}
+
+[theme="dark"] {
+  .note-dialog__header > h2::after {
+    background: var(--accent-color--dark);
+  }
+}

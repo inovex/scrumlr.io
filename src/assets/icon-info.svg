@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
+  <g transform="translate(-1878 -303)">
+    <g id="info-icon" transform="translate(1878 303)" fill="none" stroke-width="1.5">
+      <circle cx="10.5" cy="10.5" r="10.5" stroke="none" />
+      <circle cx="10.5" cy="10.5" r="9.75" fill="none" />
+    </g>
+  </g>
+  <line y2="6" transform="translate(10.5 9.5)" fill="none" stroke-linecap="round" stroke-width="2" />
+  <line transform="translate(10.5 5.5)" fill="none" stroke-linecap="round" stroke-width="2" />
+</svg>

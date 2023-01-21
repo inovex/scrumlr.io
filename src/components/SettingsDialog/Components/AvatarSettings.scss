@@ -1,0 +1,154 @@
+@import "constants/style";
+@import "../SettingsDialog";
+
+.avatar-settings {
+  &__avatar {
+    position: relative;
+    margin: 0 auto;
+
+    &-icon {
+      height: 120px;
+      width: 120px;
+      flex-shrink: 0;
+    }
+
+    &-shuffle {
+      position: absolute;
+      cursor: pointer;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      width: 40px;
+      height: 40px;
+      padding: 4px;
+      border: 0;
+      border-radius: 20px;
+      background-color: $color-white;
+      box-shadow: 0 8px 16px rgba(var(--accent-color-rgb), 0.3);
+      align-items: center;
+      justify-content: center;
+      transition: all 0.08s ease-out;
+
+      &:hover {
+        background-color: mix($color-white, $color-lean-lilac, 92%);
+        transform: scale(1.06);
+        box-shadow: 0 12px 20px rgba(var(--accent-color-rgb), 0.2);
+      }
+
+      &:active {
+        transform: scale(1);
+      }
+
+      > svg {
+        width: $icon--large;
+        height: $icon--large;
+      }
+    }
+  }
+
+  &__settings {
+    background-color: $color-white;
+    border-radius: 8px;
+    max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+
+    &-wrapper {
+      padding-right: $padding--small;
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
+
+      @media screen and (min-width: 920px) {
+        padding-right: $padding--medium;
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
+      }
+    }
+
+    &-group {
+      &:last-child {
+        padding: calc(#{$padding--small} / 2) 0;
+      }
+
+      &-header {
+        border-radius: 8px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: rgba(var(--accent-color-rgb), 0.1);
+        }
+      }
+
+      &-item {
+        padding: $padding--small 0;
+        width: 90%;
+        margin: 0 auto;
+
+        &.disabled {
+          opacity: 0.3;
+
+          & > button {
+            cursor: default;
+          }
+        }
+
+        &:hover:not(.disabled) {
+          background-color: rgba(var(--accent-color-rgb), 0.1);
+        }
+
+        &-seperator {
+          margin: 0;
+          margin-left: 10%;
+          width: 80%;
+          border: 0;
+          border-top: 0.5px solid $color-lighter-gray;
+        }
+      }
+
+      &-seperator {
+        margin: 0;
+        margin-left: 5%;
+        width: 90%;
+        border: 0;
+        border-top: 0.5px solid $color-lighter-gray;
+      }
+    }
+  }
+}
+
+[theme="dark"] {
+  .avatar-settings {
+    &__avatar-shuffle {
+      background-color: $color-dark-mode-note;
+      box-shadow: 0 16px 32px rgba($color-darkest-gray, 0.8);
+
+      &:hover {
+        background-color: $color-dark-mode-note--hover;
+      }
+    }
+
+    &__settings {
+      background-color: $color-dark-mode-note;
+
+      &-group {
+        &-header {
+          &:hover {
+            background-color: $color-dark-mode-note--hover;
+          }
+        }
+
+        &-item {
+          color: $color-white;
+
+          &:hover:not(.disabled) {
+            background-color: $color-dark-mode-note--hover;
+          }
+
+          &-seperator {
+            border-top: 0.5px solid $color-dark-one;
+          }
+        }
+
+        &-seperator {
+          border-top: 0.5px solid $color-dark-one;
+        }
+      }
+    }
+  }
+}

@@ -49,16 +49,47 @@ func main() {
 				Value:   "nats://localhost:4222", // nats://nats:4222
 			},
 			&cli.StringFlag{
-				Name:    "database",
-				Aliases: []string{"d"},
-				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
-				Usage:   "the connection `url` for the database",
-				Value:   "postgresql://localhost:5432", // postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName?sslmode=disable
+				Name:    "redis-address",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_HOST"},
+				Usage:   "the `address` of the redis server. Example `localhost:6379`. If redis-address is set, it's used over the default nats",
+				Value:   "",
+			},
+			&cli.StringFlag{
+				Name:    "redis-username",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_USERNAME"},
+				Usage:   "the redis user (if required)",
+				Value:   "",
+			},
+			&cli.StringFlag{
+				Name:    "redis-password",
+				EnvVars: []string{"SCRUMLR_SERVER_REDIS_PASSWORD"},
+				Usage:   "the redis password (if required)",
+				Value:   "",
+			},
+			&cli.BoolFlag{
+				Name:    "insecure",
+				Aliases: []string{"i"},
+				EnvVars: []string{"SCRUMLR_INSECURE"},
+				Usage:   "use default and embedded key to sign jwt's",
+				Value:   false,
+			},
+			&cli.StringFlag{
+				Name:    "unsafe-key",
+				EnvVars: []string{"SCRUMLR_UNSAFE_PRIVATE_KEY"},
+				Usage:   "the private key which should be replaced by the new key, that'll be used to sign the jwt's - needed in ES512 (ecdsa)",
+				Value:   "",
 			},
 			&cli.StringFlag{
 				Name:    "key",
 				EnvVars: []string{"SCRUMLR_PRIVATE_KEY"},
 				Usage:   "the private key, used to sign the jwt's - needed in ES512 (ecdsa)",
+			},
+			&cli.StringFlag{
+				Name:    "database",
+				Aliases: []string{"d"},
+				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
+				Usage:   "the connection `url` for the database",
+				Value:   "postgresql://localhost:5432", // postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName?sslmode=disable
 			},
 			&cli.StringFlag{
 				Name:     "base-path",
@@ -159,7 +190,26 @@ func run(c *cli.Context) error {
 		return errors.Wrap(err, "unable to migrate database")
 	}
 
-	rt := realtime.New(c.String("nats"))
+	if !c.Bool("insecure") && c.String("key") == "" {
+		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
+	}
+
+	var rt *realtime.Broker
+	if c.String("redis-address") != "" {
+		rt, err = realtime.NewRedis(realtime.RedisServer{
+			Addr:     c.String("redis-address"),
+			Username: c.String("redis-username"),
+			Password: c.String("redis-password"),
+		})
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+		}
+	} else {
+		rt, err = realtime.NewNats(c.String("nats"))
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+		}
+	}
 
 	basePath := "/"
 	if c.IsSet("base-path") {
@@ -203,9 +253,12 @@ func run(c *cli.Context) error {
 		}
 	}
 
-	authConfig := auth.NewAuthConfiguration(providersMap, c.String("key"))
-
 	dbConnection := database.New(db, c.Bool("verbose"))
+
+	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
+	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
+	authConfig := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
+
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)

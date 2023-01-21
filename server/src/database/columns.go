@@ -115,7 +115,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 }
 
 // DeleteColumn deletes a column and adapts all indices of the other columns.
-func (d *Database) DeleteColumn(board, column uuid.UUID) error {
+func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
 	var columns []Column
 	selectPreviousIndex := d.db.NewSelect().Model((*Column)(nil)).Column("index", "board").Where("id = ?", column)
 	indexUpdate := d.db.NewUpdate().
@@ -123,12 +123,17 @@ func (d *Database) DeleteColumn(board, column uuid.UUID) error {
 		Model((*Column)(nil)).Set("index = index-1").
 		Where("board = (SELECT board from \"selectPreviousIndex\")").
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
+	boardUpdate := d.db.NewUpdate().
+		Model((*Board)(nil)).
+		Set("shared_note = null").
+		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
 	_, err := d.db.NewDelete().
+		With("boardUpdate", boardUpdate).
 		With("indexUpdate", indexUpdate).
 		Model((*Column)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Column", column, "User", user, "Result", &columns), &columns)
 
 	return err
 }

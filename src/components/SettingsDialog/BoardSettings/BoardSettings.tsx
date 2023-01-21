@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {useEffect, useRef, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -8,16 +8,14 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
+import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
-import {SettingsToggle} from "../Components/SettingsToggle";
+import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
-import "../SettingsDialog.scss";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -34,94 +32,71 @@ export const BoardSettings = () => {
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const [isProtectedOnInitialSettingsOpen, setIsProtectedOnInitialSettingsOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
-  const [activeEditMode, setActiveEditMode] = useState(false);
-
-  const boardInputRef = useRef<HTMLInputElement>(null);
-  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
 
+  useEffect(() => {
+    setBoardName(state.board.name ?? "");
+  }, [state.board.name]);
+
+  useEffect(() => {
+    setIsProtected(state.board.accessPolicy === "BY_PASSPHRASE");
+  }, [state.board.accessPolicy]);
+
   const handleSetPassword = (newPassword: string) => {
+    setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      if (!isProtected || activeEditMode) {
-        store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
-        navigator.clipboard.writeText(newPassword).then(() =>
-          Toast.success(
-            <div>
-              <div>{t("Toast.passwordCopied")}</div>
-            </div>,
-            1500
-          )
-        );
-        if (activeEditMode) {
-          setIsProtectedOnInitialSettingsOpen(false);
-          setActiveEditMode(false);
-        }
-        if (!isProtected) {
-          setIsProtected(true);
-        }
-      }
-    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
-      if (!activeEditMode) {
-        store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
-        setIsProtectedOnInitialSettingsOpen(false);
-        setIsProtected(false);
-        Toast.info(
+      store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
+      navigator.clipboard.writeText(newPassword).then(() =>
+        Toast.success(
           <div>
-            <div>{t("Toast.boardMadePublic")}</div>
-          </div>
-        );
-      } else {
-        setActiveEditMode(false);
-        if (passwordInputRef.current) passwordInputRef.current.placeholder = PLACEHOLDER_PASSWORD;
-      }
+            <div>{t("Toast.passwordCopied")}</div>
+          </div>,
+          TOAST_TIMER_SHORT
+        )
+      );
+      setIsProtected(true);
+    } else if (isProtected || isProtectedOnInitialSettingsOpen) {
+      store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
+      setIsProtectedOnInitialSettingsOpen(false);
+      setIsProtected(false);
+      Toast.info(
+        <div>
+          <div>{t("Toast.boardMadePublic")}</div>
+        </div>
+      );
     }
   };
 
-  useEffect(() => {
-    if (activeEditMode) {
-      passwordInputRef.current?.focus();
-      passwordInputRef.current?.select();
-    }
-  }, [activeEditMode]);
-
   const getPasswordManagementButton = () => {
-    if (!activeEditMode) {
-      if (isProtected) {
-        return (
-          <button
-            className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
-            onClick={() => {
-              setPassword("");
-              handleSetPassword("");
-            }}
-          >
-            <SetPolicyIcon />
-            <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
-          </button>
-        );
-      }
-      if (!password) {
-        return (
-          <button
-            className="board-settings__password-management-button board-settings__generate-password-button"
-            onClick={() => {
-              const pw = generateRandomString();
-              setPassword(pw);
-              handleSetPassword(pw);
-            }}
-          >
-            <RefreshIcon />
-            <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
-          </button>
-        );
-      }
+    if (isProtected) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__remove-protection-button button--centered"
+          onClick={() => {
+            handleSetPassword("");
+          }}
+        >
+          <SetPolicyIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
+        </button>
+      );
     }
-    return (
-      <span className="board-settings__password-management-button board-settings__password-input-hint board-settings__password-management-text">
-        {t("BoardSettings.SecurePasswordHint")}
-      </span>
-    );
+    if (!password) {
+      return (
+        <button
+          className="board-settings__password-management-button board-settings__generate-password-button"
+          onClick={() => {
+            const pw = generateRandomString();
+            handleSetPassword(pw);
+          }}
+        >
+          <RefreshIcon />
+          <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
+        </button>
+      );
+    }
+    return <span className="board-settings__password-input-hint board-settings__password-management-text">{t("BoardSettings.SecurePasswordHint")}</span>;
   };
 
   const getPasswordVisibilityButton = () =>
@@ -129,30 +104,8 @@ export const BoardSettings = () => {
       <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
     ) : (
       <HiddenIcon
-        className={!isProtectedOnInitialSettingsOpen || activeEditMode ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
-        onClick={() => !isProtectedOnInitialSettingsOpen && setShowPassword(true)}
-      />
-    );
-
-  const submitPasswordButton = (
-    <CheckIcon
-      className="board-settings__edit-password-button"
-      onClick={() => {
-        setActiveEditMode(false);
-        handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
-      }}
-    />
-  );
-
-  const getPasswordStatusButton = () =>
-    activeEditMode ? (
-      submitPasswordButton
-    ) : (
-      <EditIcon
-        className="board-settings__edit-password-button"
-        onClick={() => {
-          setActiveEditMode(true);
-        }}
+        className={password ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
+        onClick={() => password && setShowPassword(true)}
       />
     );
 
@@ -181,81 +134,43 @@ export const BoardSettings = () => {
       </header>
       <div className="board-settings__container-wrapper">
         <div className="board-settings__container">
-          <SettingsButton
-            className="board-settings__board-name-button"
+          <SettingsInput
+            value={boardName}
+            id="boardSettingsBoardName"
             label={t("BoardSettings.BoardName")}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
+            submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
             disabled={!state.currentUserIsModerator}
-            onClick={() => boardInputRef.current?.focus()}
-          >
-            <input
-              ref={boardInputRef}
-              className="board-settings__board-name-button_input"
-              value={boardName}
-              placeholder={DEFAULT_BOARD_NAME}
-              autoComplete="off"
-              onChange={(e) => setBoardName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && boardName && store.dispatch(Actions.editBoard({name: boardName}))}
-              onBlur={(e) => {
-                e.target.placeholder = DEFAULT_BOARD_NAME;
-                store.dispatch(Actions.editBoard({name: boardName}));
-              }}
-              onFocus={(e) => {
-                e.target.placeholder = "";
-                if (boardName) {
-                  e.target.select();
-                }
-              }}
-              disabled={!state.currentUserIsModerator}
-            />
-          </SettingsButton>
+            placeholder={DEFAULT_BOARD_NAME}
+          />
 
           <div className="board-settings__group-and-button">
             <div className="settings-dialog__group">
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
                 <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
               </SettingsButton>
-
               {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
-                  <SettingsButton
-                    id="password-input-section"
-                    className="board-settings__password-button"
+                  <SettingsInput
+                    id="boardSettingsPassword"
                     label={t("BoardSettings.Password")}
-                    onClick={() => passwordInputRef.current?.focus()}
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                    submit={() => handleSetPassword(password)}
+                    type={showPassword ? "text" : "password"}
+                    placeholder={!password && !isProtected ? undefined : PLACEHOLDER_PASSWORD}
                   >
-                    <div className="board-settings__password-button_value">
-                      <input
-                        ref={passwordInputRef}
-                        type={showPassword ? "text" : "password"}
-                        className="board-settings__password-button_value-input"
-                        value={password}
-                        readOnly={isProtected && !activeEditMode}
-                        disabled={isProtectedOnInitialSettingsOpen && !activeEditMode}
-                        placeholder={!isProtected || (isProtected && activeEditMode) ? "" : PLACEHOLDER_PASSWORD}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
-                        onKeyDown={(e) => e.key === "Enter" && handleSetPassword(passwordInputRef.current?.value ?? password ?? "")}
-                        onBlur={(e) => {
-                          if (e.relatedTarget?.id !== "password-input-section") {
-                            handleSetPassword(passwordInputRef.current?.value ?? password ?? "");
-                          }
-                        }}
-                      />
-                      {!isProtected && !activeEditMode && password !== "" && submitPasswordButton}
-                      {isProtected && getPasswordVisibilityButton()}
-                      {isProtected && getPasswordStatusButton()}
-                    </div>
-                  </SettingsButton>
+                    {password && getPasswordVisibilityButton()}
+                  </SettingsInput>
                 </>
               )}
             </div>
 
             {!isByInvite && state.currentUserIsModerator && getPasswordManagementButton()}
           </div>
-
           {state.currentUserIsModerator && (
             <>
               <div className="settings-dialog__group">
@@ -267,7 +182,9 @@ export const BoardSettings = () => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                 >
-                  <SettingsToggle active={state.board.showAuthors} />
+                  <div className="board-settings__show-author-value">
+                    <Toggle active={state.board.showAuthors} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -276,7 +193,9 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
-                  <SettingsToggle active={state.board.showNotesOfOtherUsers} />
+                  <div className="board-settings__show-notes-value">
+                    <Toggle active={state.board.showNotesOfOtherUsers} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -285,24 +204,36 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
-                  <SettingsToggle active={state.me?.showHiddenColumns} />
+                  <div className="board-settings__show-columns-value">
+                    <Toggle active={state.me?.showHiddenColumns ?? false} />
+                  </div>
+                </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                >
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
                 </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
-                <DeleteIcon />
+                <div className="board-settings__delete-value">
+                  <DeleteIcon />
+                </div>
               </SettingsButton>
             </>
           )}
 
           {showConfirmationDialog && (
             <ConfirmationDialog
-              headline={t("ConfirmationDialog.deleteBoard")}
-              acceptMessage={t("ConfirmationDialog.yes")}
+              title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
-              declineMessage={t("ConfirmationDialog.no")}
               onDecline={() => setShowConfirmationDialog(false)}
-              className="board-settings__confirmation-dialog"
             />
           )}
         </div>

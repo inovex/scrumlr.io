@@ -16,11 +16,13 @@ var columnInsertedSecond *Column
 var columnInsertedThird *Column
 var columnInsertedFourth *Column
 var columnInsertedFifth *Column
+var columnTestUser *User
 
 func TestRunnerForColumns(t *testing.T) {
 	firstColumn = fixture.MustRow("Column.firstColumn").(*Column)
 	secondColumn = fixture.MustRow("Column.secondColumn").(*Column)
 	thirdColumn = fixture.MustRow("Column.thirdColumn").(*Column)
+	columnTestUser = fixture.MustRow("User.john").(*User)
 	boardForColumnsTest = firstColumn.Board
 
 	t.Run("Getter=0", testGetColumn)
@@ -37,7 +39,8 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Delete=1", testDeleteColumnOnSecondIndex)
 	t.Run("Delete=2", testDeleteColumnOnFirstIndex)
 	t.Run("Delete=3", testDeleteLastColumn)
-	t.Run("Delete=4", testDeleteOthers)
+	t.Run("Delete=4", testDeleteColumnContainingSharedNote)
+	t.Run("Delete=5", testDeleteOthers)
 
 	t.Run("Update=0", testUpdateName)
 	t.Run("Update=1", testUpdateColor)
@@ -177,29 +180,56 @@ func testCreateColumnWithEmptyColor(t *testing.T) {
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFifth.ID)
+	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedThird.ID, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteColumnOnFirstIndex(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedThird.ID)
+	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteLastColumn(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFourth.ID)
+	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID)
 }
 
+func testDeleteColumnContainingSharedNote(t *testing.T) {
+	note, createNoteError := testDb.CreateNote(NoteInsert{
+		Board:  boardForColumnsTest,
+		Column: columnInsertedSecond.ID,
+		Text:   "Lorem Ipsum",
+		Author: fixture.MustRow("User.john").(*User).ID,
+	})
+	assert.Nil(t, createNoteError)
+
+	_, updateBoardError := testDb.UpdateBoard(BoardUpdate{
+		ID:         boardForColumnsTest,
+		SharedNote: uuid.NullUUID{UUID: note.ID, Valid: true},
+		ShowVoting: uuid.NullUUID{Valid: false},
+	})
+	assert.Nil(t, updateBoardError)
+
+	board, getBoardError := testDb.GetBoard(boardForColumnsTest)
+	assert.Nil(t, getBoardError)
+	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
+
+	deleteColumnError := testDb.DeleteColumn(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
+	assert.Nil(t, deleteColumnError)
+
+	updatedBoard, getUpdatedBoardError := testDb.GetBoard(boardForColumnsTest)
+	assert.Nil(t, getUpdatedBoardError)
+	assert.Equal(t, updatedBoard.SharedNote, uuid.NullUUID{Valid: false})
+}
+
 func testDeleteOthers(t *testing.T) {
-	_ = testDb.DeleteColumn(boardForColumnsTest, columnInsertedFirst.ID)
-	_ = testDb.DeleteColumn(boardForColumnsTest, columnInsertedSecond.ID)
+	_ = testDb.DeleteColumn(boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
 
 	verifyOrder(t, firstColumn.ID, secondColumn.ID, thirdColumn.ID)
 }

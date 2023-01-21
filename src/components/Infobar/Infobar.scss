@@ -4,24 +4,23 @@
   position: fixed;
   display: flex;
   align-items: center;
-  bottom: 16px;
+  bottom: auto;
+  top: $header__height;
   left: 50%;
   transform: translateX(-50%);
-  width: 270px;
   justify-content: center;
   z-index: $infobar-z-index;
-}
-
-@include collapsedColumns(".info-bar") {
-  bottom: auto;
-  top: 98px;
 }
 
 .info-bar > *:not(:last-child) {
   margin-right: $margin--default;
 }
 
-.info-bar > *:only-child {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+.info-bar__return-to-presented-note-button > svg {
+  background-color: $menu-icon-background-color--dark;
+  color: $color-white;
+}
+[theme="dark"] .info-bar__return-to-presented-note-button > svg {
+  background-color: $color-white;
+  color: $menu-icon-background-color--dark;
 }

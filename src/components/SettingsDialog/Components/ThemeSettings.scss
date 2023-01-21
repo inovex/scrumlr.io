@@ -1,0 +1,116 @@
+@import "constants/style";
+
+.appearance-settings__theme-container {
+  background-color: $color-white;
+  padding: $padding--default $padding--medium;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.appearance-settings__theme-title {
+  margin-bottom: $margin--default;
+}
+
+.appearance-settings__theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.appearence-settings__theme-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.08s ease-out;
+  min-width: 0;
+
+  &:hover {
+    color: var(--accent-color);
+  }
+
+  > input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+
+    &:checked {
+      + img {
+        box-shadow: 0 0 0 2px var(--accent-color);
+      }
+      ~ p {
+        background-color: var(--accent-color);
+        color: $color-white;
+      }
+    }
+
+    &:focus-within {
+      + img {
+        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+      }
+      ~ p {
+        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+      }
+    }
+  }
+
+  > img {
+    border-radius: 4px;
+    width: 100%;
+
+    &:not(:first-of-type) {
+      left: 0;
+      right: 0;
+      margin: auto;
+      position: absolute;
+      clip-path: polygon(100% 0, 0 100%, 100% 100%);
+      z-index: 0;
+    }
+  }
+
+  > p {
+    margin-bottom: 0;
+    margin-top: $margin--small;
+    display: flex;
+    max-width: 100%;
+    line-height: $line-height--medium;
+    font-weight: bold;
+    border-radius: $rounded--full;
+    gap: 4px;
+    align-items: center;
+
+    > span {
+      padding-right: 6px; // equalize the space to the paragraph
+      vertical-align: middle;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+}
+
+.appearance-settings__theme-icon {
+  height: $icon--medium;
+  width: $icon--medium;
+  flex: 0 0 auto;
+}
+
+[theme="dark"] {
+  .appearance-settings__theme-container {
+    color: $color-white;
+    background-color: $color-dark-mode-note;
+  }
+
+  .appearence-settings__theme-option:hover {
+    color: var(--accent-color--desaturated-light);
+  }
+}
+
+@media #{$smartphone} {
+  .appearance-settings__theme-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

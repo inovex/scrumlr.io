@@ -14,12 +14,12 @@
 
   border: 0;
   border-radius: 24px;
-  outline: none;
+  outline: 2px solid transparent;
 
   height: 48px;
   padding: $padding--small $padding--default;
 
-  transition: box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  transition: all 0.08s ease-out;
   box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
 }
 
@@ -43,7 +43,7 @@
   color: $color-black;
 }
 
-.button.button--text-link:focus,
+.button.button--text-link:focus-visible,
 .button.button--text-link:hover {
   text-decoration: underline;
 }
@@ -81,19 +81,31 @@
 }
 
 .button:not(:disabled):not(.button--text-link):hover {
-  box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
+  filter: brightness(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 6px 9px 0 rgba($color-backlog-blue, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:hover {
-  box-shadow: 0 2px 12px 6px rgba($color-planning-pink, 0.3);
+  filter: brightness(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 6px 9px 0 rgba($color-planning-pink, 0.24);
 }
 
-.button:not(:disabled):not(.button--text-link):focus {
-  box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
+.button:not(:disabled):not(.button--text-link):active {
+  transform: scale(1);
 }
 
-.button:not(:disabled):not(.button--text-link).button--primary:focus {
-  box-shadow: 0 2px 16px 8px rgba($color-planning-pink, 0.4);
+.button:not(:disabled):not(.button--text-link).button--primary:active {
+  transform: scale(1);
+}
+
+.button:not(:disabled):not(.button--text-link):focus-visible {
+  outline: 2px solid rgba($color-backlog-blue, 0.4);
+}
+
+.button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
+  outline: 2px solid rgba($color-planning-pink, 0.4);
 }
 
 .button__label {
@@ -120,5 +132,13 @@
   .button.button--text-link,
   .button.button--primary.button--outlined {
     color: $color-white;
+  }
+
+  .button:not(:disabled):not(.button--text-link):focus-visible {
+    outline: 2px solid $color-white;
+  }
+
+  .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
+    outline: 2px solid $color-white;
   }
 }

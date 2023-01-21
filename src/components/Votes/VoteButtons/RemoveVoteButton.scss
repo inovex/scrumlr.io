@@ -1,28 +1,49 @@
 @import "src/constants/style";
-@import "./VoteButton.scss";
+@import "../Votes.scss";
 
 .vote-button-remove {
   position: relative;
-  height: $vote-button-height;
-  width: $vote-button-width;
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  height: var(--note-footer-height, $votes-button-size);
+  width: var(--note-footer-height, $votes-button-size);
+  overflow: hidden;
+  background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
+  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+
+  filter: drop-shadow(0 4px 3px rgba(var(--accent-color-rgb), 0.48));
 }
 
-.vote-button-remove:not([disabled]) {
+.vote-button-remove:disabled {
+  cursor: default;
+}
+
+.vote-button-remove:active {
+  transform: none;
+}
+
+.vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
   color: $color-white;
 }
 
-.vote-button-remove:not([disabled]):focus > .vote-button-remove__folded-corner,
-.vote-button-remove:not([disabled]):hover > .vote-button-remove__folded-corner {
-  border-width: 12px 0 0 12px;
+.vote-button-remove:focus-visible {
+  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
-.vote-button-remove:not([disabled]):active {
-  transform: none;
+
+.bump {
+  animation: bump 0.2s linear;
 }
-.vote-button-remove:disabled {
-  cursor: default;
+
+@keyframes bump {
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 .vote-button-remove__folded-corner {
@@ -33,15 +54,26 @@
   right: 0;
   border-width: 0;
   border-style: solid;
-  background: rgba(234, 234, 234, 0.5);
-  box-shadow: 2px -2px 0px $color-white, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
+  background: rgba($color-middle-gray, 0.5);
+  box-shadow: 2px -2px 0px $color-white, 0 1px 1px rgba($color-black, 0.1), -1px 1px 1px rgba($color-black, 0.1);
   border-radius: 0 0 0 16px;
   border-color: $color-white $color-white transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
+
+.vote-button-remove:enabled:hover > .vote-button-remove__folded-corner {
+  border-width: 12px 0 0 12px;
+}
+
 [theme="dark"] {
+  .vote-button-remove {
+    color: var(--accent-color--dark);
+    background-color: var(--accent-color--desaturated-dark);
+    filter: drop-shadow(0 3px 4px rgba($color-black, 0.16));
+  }
+
   .vote-button-remove__folded-corner {
-    box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba(0, 0, 0, 0.1), -1px 1px 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba($color-black, 0.1), -1px 1px 1px rgba($color-black, 0.1);
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
   }
 }

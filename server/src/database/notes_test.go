@@ -37,6 +37,7 @@ func TestRunnerForNotes(t *testing.T) {
 
 	t.Run("Delete=0", testDeleteNote)
 	t.Run("Delete=1", testDeleteStackParent)
+	t.Run("Delete=2", testDeleteSharedNote)
 }
 
 var notesTestBoard *Board
@@ -53,6 +54,7 @@ var noteA6 *Note
 var noteB1 *Note
 var noteB2 *Note
 var noteB3 *Note
+var noteC1 *Note
 
 var stackTestBoard *Board
 var stackTestColumn *Column
@@ -80,7 +82,7 @@ func testGetNotes(t *testing.T) {
 	notesTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
 	notes, err := testDb.GetNotes(notesTestBoard.ID)
 	assert.Nil(t, err)
-	assert.Equal(t, 8, len(notes))
+	assert.Equal(t, 9, len(notes))
 }
 func testGetFilterByColumn(t *testing.T) {
 	columnA = fixture.MustRow("Column.notesColumnA").(*Column)
@@ -465,4 +467,25 @@ func testDeleteStackParent(t *testing.T) {
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
 	assert.Equal(t, 0, len(notes))
+}
+func testDeleteSharedNote(t *testing.T) {
+	noteC1 = fixture.MustRow("Note.notesTestC1").(*Note)
+
+	_, updateBoardError := testDb.UpdateBoard(BoardUpdate{
+		ID:         notesTestBoard.ID,
+		SharedNote: uuid.NullUUID{UUID: noteC1.ID, Valid: true},
+		ShowVoting: uuid.NullUUID{Valid: false},
+	})
+	assert.Nil(t, updateBoardError)
+
+	board, getBoardError := testDb.GetBoard(notesTestBoard.ID)
+	assert.Nil(t, getBoardError)
+	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
+
+	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteC1.ID)
+	assert.Nil(t, deleteNoteError)
+
+	updatedBoard, getUpdatedBoardError := testDb.GetBoard(notesTestBoard.ID)
+	assert.Nil(t, getUpdatedBoardError)
+	assert.Equal(t, uuid.NullUUID{Valid: false}, updatedBoard.SharedNote)
 }

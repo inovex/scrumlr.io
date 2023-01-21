@@ -45,6 +45,12 @@
   background-color: transparent;
   color: $color-backlog-blue;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.06);
+  }
 }
 
 .request__button + .request__button {

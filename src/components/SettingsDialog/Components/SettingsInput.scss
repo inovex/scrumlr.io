@@ -1,0 +1,91 @@
+@import "constants/style";
+.settings-input__container {
+  height: 48px;
+  position: relative;
+  display: flex;
+
+  input {
+    height: 48px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: $color-white;
+    border: none;
+    outline: none;
+    padding: 0 $padding--medium;
+    font-size: $text-size--medium;
+    font-weight: bold;
+    padding-top: 10px;
+
+    &:focus-visible,
+    &:hover {
+      background-color: rgba(var(--accent-color-rgb), 0.1);
+    }
+
+    &:disabled {
+      cursor: default;
+      background-color: $color-white;
+    }
+
+    &:focus-visible ~ label,
+    &:not(.settings-input__hidden-placeholder) ~ label,
+    &:not(:placeholder-shown) ~ label {
+      margin: 0 $margin--medium;
+      top: 2px;
+      font-size: $text-size--small;
+      line-height: $line-height--medium;
+    }
+  }
+
+  label {
+    margin: $margin--default $margin--medium;
+    position: absolute;
+    transition: all 0.08s ease-out;
+    cursor: text;
+    line-height: $line-height--small;
+  }
+}
+
+.settings-input__hidden-placeholder::placeholder {
+  visibility: hidden;
+  color: transparent;
+}
+
+.settings-input__children {
+  all: unset;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: $padding--small $padding--medium;
+  pointer-events: none;
+
+  * {
+    pointer-events: initial;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+  }
+
+  &:focus-visible * {
+    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5);
+  }
+}
+
+[theme="dark"] {
+  .settings-input__container {
+    input {
+      background-color: $color-dark-mode-note;
+      color: $color-white;
+
+      &:disabled {
+        color: $color-placeholder-dark;
+      }
+    }
+
+    label {
+      color: $color-white;
+    }
+  }
+}

@@ -1,37 +1,7 @@
 @import "constants/style";
 
-@media screen and (min-width: 600px) and (max-width: 767px) {
-  .voting-dialog {
-    left: calc(50% - 139px + 86px + 18px - 200px);
-    bottom: 100px;
-    right: auto;
-    top: auto;
-    height: auto;
-  }
-  .voting-dialog::before {
-    content: " ";
-    position: absolute;
-    left: calc(50% - 15px);
-    top: 100%;
-    border-width: 15px;
-    border-style: solid;
-    border-color: $color-planning-pink transparent transparent transparent;
-  }
-  .voting-dialog::after {
-    content: " ";
-    position: absolute;
-    left: calc(50% - 11px);
-    top: 100%;
-    border-width: 11px;
-    border-style: solid;
-    border-color: $color-white-one transparent transparent transparent;
-  }
-  [theme="dark"] .voting-dialog::after {
-    border-color: $color-dark-mode transparent transparent transparent;
-  }
-}
-@media screen and (min-width: 768px) {
-  #root[column-visibility="visible"] + #portal {
+@media #{$tablet} {
+  #portal {
     .voting-dialog {
       top: calc(50% - 25px);
       right: 100px;
@@ -59,42 +29,9 @@
     }
   }
 
-  [theme="dark"] #root[column-visibility="visible"] + #portal {
-    .voting-dialog::after {
+  [theme="dark"] {
+    #portal .voting-dialog::after {
       border-color: transparent transparent transparent $color-dark-mode;
-    }
-  }
-
-  #root[column-visibility="collapsed"] + #portal {
-    .voting-dialog {
-      left: calc(50% - 139px + 86px + 18px - 200px);
-      bottom: 100px;
-      right: auto;
-      top: auto;
-      height: auto;
-    }
-    .voting-dialog::before {
-      content: " ";
-      position: absolute;
-      left: calc(50% - 15px);
-      top: 100%;
-      border-width: 15px;
-      border-style: solid;
-      border-color: $color-planning-pink transparent transparent transparent;
-    }
-    .voting-dialog::after {
-      content: " ";
-      position: absolute;
-      left: calc(50% - 11px);
-      top: 100%;
-      border-width: 11px;
-      border-style: solid;
-      border-color: $color-white-one transparent transparent transparent;
-    }
-  }
-  [theme="dark"] #root[column-visibility="collapsed"] + #portal {
-    .voting-dialog::after {
-      border-color: $color-dark-mode transparent transparent transparent;
     }
   }
 }
@@ -106,7 +43,23 @@
   width: 80%;
   background: $color-planning-pink;
   cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.05);
+    transform: scale(1.01);
+    box-shadow: 0 4px 8px 0 rgba(var(--accent-color-rgb), 0.24);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+  }
 }
+
 .voting-dialog__start-button > label {
   font-weight: bold;
   font-size: $text-size--medium;
@@ -131,13 +84,31 @@
   position: absolute;
   top: 8px;
   padding: 0;
+  transition: all 0.08s ease-out;
+  outline: none;
+
+  &:first-of-type {
+    right: 80px;
+  }
+
+  &:last-of-type {
+    right: 24px;
+  }
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    transform: scale(1.1);
+  }
 }
-.voting-dialog__vote-button:first-of-type {
-  right: 80px;
-}
-.voting-dialog__vote-button:last-of-type {
-  right: 24px;
-}
+
 .voting-dialog__vote-label {
   position: absolute;
   top: 8px;
@@ -151,4 +122,10 @@
   user-select: none;
   -webkit-touch-callout: none;
   -webit-user-select: none;
+}
+
+[theme="dark"] {
+  .voting-dialog__start-button:focus-visible {
+    outline: 2px solid $color-white;
+  }
 }

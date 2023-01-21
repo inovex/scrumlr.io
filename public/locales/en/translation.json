@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToPresentedNote": "Return to presented note"
+  },
   "NewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
@@ -18,9 +21,10 @@
     "generateRandomName": "Generate random name",
     "username": "Username"
   },
-  "Board": {
-    "publicSession": "Public Session",
-    "privateSession": "Private Session"
+  "AccessPolicy": {
+    "PUBLIC": "Open",
+    "BY_PASSPHRASE": "Password protected",
+    "BY_INVITE": "Closed"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",
@@ -55,13 +59,6 @@
     "yes": "Yes",
     "no": "No"
   },
-  "ParticipantsList": {
-    "title": "Participants",
-    "search": "Search",
-    "searchAndFilter": "Search and filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "button": "Delete board"
@@ -70,19 +67,41 @@
     "title": "Export board",
     "button": "Export board",
     "exportAsJson": "Export as JSON",
-    "exportAsCSV": "Export as CSV"
+    "exportAsCSV": "Export as CSV",
+    "openPrintView": "Open print view",
+    "exportToClipboard": "Copy Markdown to Clipboard",
+    "copyToClipboardSuccess": "Markdown copied!",
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
+  },
+  "PrintView": {
+    "Participants": "Participants",
+    "GeneratedOn": "Generated on",
+    "ProvidedBy": "Provided with ♥️ by",
+    "Notes": "Notes",
+    "Votes": "Votes"
+  },
+  "MarkdownExport": {
+    "columns": "Columns",
+    "note": "Note",
+    "notes": "Notes",
+    "participants": "Participants",
+    "linkToBoard": "Link to board",
+    "vote": "Vote",
+    "votes": "Votes",
+    "stackSize": "Stack size",
+    "showAuthorsDisabled": "Note authors are hidden"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
     "button": "Share board",
     "copyInviteURL": "Copy Invite URL",
-    "inviteUrlCopied": "Invite URL Copied"
+    "inviteUrlCopied": "Invite URL copied"
   },
   "Column": {
     "settings": "Settings",
     "editName": "Change the name",
     "submitName": "Confirm name",
-    "resetName": "Reset name",
+    "resetName": "Abort",
     "hideColumn": "Hide the column",
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
@@ -146,14 +165,19 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
-    "startFocusMode": "Start focused mode",
-    "stopFocusMode": "End focused mode",
+    "startPresenterMode": "Start presenter mode",
+    "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
     "settings": "Settings",
-    "switchToUserMenu": "Switch to user menu",
-    "switchToAdminMenu": "Switch to admin menu"
+    "openMenu": "Open user menu"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys enabled!",
+    "hotkeysDisabled": "Hotkeys disabled!",
+    "hotkeyToggle": "Enable hotkeys",
+    "cheatSheet": "Hotkey Cheat Sheet"
   },
   "VoteConfigurationButton": {
     "label": "Voting",
@@ -165,6 +189,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Finish",
+    "abortActionTooltip": "Abort",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -172,6 +198,7 @@
     "1min": "1 minute",
     "3min": "3 minute",
     "5min": "5 minute",
+    "min": "minutes",
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
@@ -193,20 +220,31 @@
     "timerCancelled": "Timer cancelled!",
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
-    "boardMadePublic": "The board is now public!"
+    "boardMadePublic": "The board is now public!",
+    "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
+    "noteToHiddenColumn": "You just added a note to a hidden column.",
+    "noteToHiddenColumnButton": "Reveal column"
   },
   "Language": {
     "german": "German",
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2022, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
     "terms": "Terms & conditions"
+  },
+  "Note": {
+    "me": "Me"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
@@ -239,12 +277,24 @@
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show notes of other users",
+    "AllowNoteRepositioningOption": "Allow note repositioning",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },
   "Participants": {
-    "Owner": "Owner"
+    "Title" : "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
   },
   "Appearance": {
     "SyncMode": "Sync Appearance Mode with System",
@@ -282,6 +332,7 @@
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
     "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
@@ -301,5 +352,194 @@
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+  },
+  "Avatar": {
+    "groups": {
+      "hair": "Hats and hairstyle",
+      "facialFeatures": "Facial features",
+      "clothing": "Clothing"
+    },
+    "hairColor": {
+      "label": "Hair color",
+      "Auburn": "Auburn",
+      "Black": "Black",
+      "Blonde": "Blonde",
+      "BlondeGolden": "Golden blonde",
+      "Brown": "Brown",
+      "BrownDark": "Dark brown",
+      "PastelPink": "Pastel pink",
+      "Blue": "Blue",
+      "Platinum": "Platinum",
+      "Red": "Red",
+      "SilverGray": "Silver gray"
+    },
+    "eyebrowType": {
+      "label": "Eyebrow type",
+      "Angry": "Angry #1",
+      "AngryNatural": "Angry #2",
+      "Default": "Default #1",
+      "DefaultNatural": "Default #2",
+      "FlatNatural": "Flat",
+      "FrownNatural": "Frown",
+      "RaisedExcited": "Excited #1",
+      "RaisedExcitedNatural": "Excited #2",
+      "SadConcerned": "Concerned #1",
+      "SadConcernedNatural": "Concerned #2",
+      "UnibrowNatural": "Unibrow",
+      "UpDown": "Raised #1",
+      "UpDownNatural": "Raised #2"
+    },
+    "facialHairColor": {
+      "label": "Facial hair color",
+      "Auburn": "Auburn",
+      "Black": "Black",
+      "Blonde": "Blonde",
+      "BlondeGolden": "Golden blonde",
+      "Brown": "Brown",
+      "BrownDark": "Dark brown",
+      "Platinum": "Platinum",
+      "Red": "Red"
+    },
+    "facialHairType": {
+      "label": "Facial hair type",
+      "Blank": "Blank",
+      "BeardMedium": "Medium beard",
+      "BeardLight": "Light beard",
+      "BeardMajestic": "Majestic beard",
+      "MoustacheFancy": "Fancy moustache",
+      "MoustacheMagnum": "Magnum moustache"
+    },
+    "skinColor": {
+      "label": "Skin color",
+      "Tanned": "Tanned",
+      "Yellow": "Yellow",
+      "Pale": "Pale",
+      "Light": "Light",
+      "Brown": "Brown",
+      "DarkBrown": "Dark brown",
+      "Black": "Black"
+    },
+    "eyeType": {
+      "label": "Eye type",
+      "Close": "Closed",
+      "Cry": "Crying",
+      "Default": "Default",
+      "Dizzy": "Dizzy",
+      "EyeRoll": "Rolling eyes",
+      "Happy": "Happy",
+      "Hearts": "Hearts",
+      "Side": "Look sideways",
+      "Squint": "Squint",
+      "Surprised": "Surprised",
+      "Wink": "Wink",
+      "WinkWacky": "Wacky wink"
+    },
+    "mouthType": {
+      "label": "Mouth type",
+      "Concerned": "Concerned",
+      "Default": "Default",
+      "Disbelief": "Disbelief",
+      "Eating": "Eating",
+      "Grimace": "Grimace",
+      "Sad": "Sad",
+      "ScreamOpen": "Screaming",
+      "Serious": "Serious",
+      "Smile": "Smile",
+      "Tongue": "Tongue out",
+      "Twinkle": "Twinkle",
+      "Vomit": "Vomit"
+    },
+    "topType": {
+      "label": "Top type",
+      "Eyepatch": "Eyepatch",
+      "Hat": "Hat",
+      "Hijab": "Hijab",
+      "LongHairBigHair": "Long, wavy hair",
+      "LongHairBob": "Bob",
+      "LongHairBun": "Bun",
+      "LongHairCurly": "Long, curly hair",
+      "LongHairCurvy": "Long, curvy hair",
+      "LongHairDreads": "Dreadlocks",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro with headband",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Medium length hair",
+      "LongHairShavedSides": "Long hair with sidecut",
+      "LongHairStraight": "Straight, long hair #1",
+      "LongHairStraight2": "Straight, long hair #2",
+      "LongHairStraightStrand": "Straight, long hair #3",
+      "NoHair": "No hair",
+      "ShortHairDreads01": "Short dreads #1",
+      "ShortHairDreads02": "Short dreads #2",
+      "ShortHairFrizzle": "Frizzle",
+      "ShortHairShaggyMullet": "Shaggy Mullet",
+      "ShortHairShortCurly": "Short, curly hair",
+      "ShortHairShortFlat": "Short, flat hair",
+      "ShortHairShortRound": "Short, round hair",
+      "ShortHairShortWaved": "Short, wavy hair",
+      "ShortHairSides": "Half-bald",
+      "ShortHairTheCaesar": "The Caesar #1",
+      "ShortHairTheCaesarSidePart": "The Caesar #2",
+      "Turban": "Turban",
+      "WinterHat1": "Winter hat #1",
+      "WinterHat2": "Winter hat #2",
+      "WinterHat3": "Winter hat #3",
+      "WinterHat4": "Winter hat #4"
+    },
+    "accessoriesType": {
+      "label": "Glasses",
+      "Blank": "Blank",
+      "Kurt": "Kurt",
+      "Prescription01": "Prescription #1",
+      "Prescription02": "Prescription #2",
+      "Round": "Round glasses",
+      "Sunglasses": "Sunglasses",
+      "Wayfarers": "Wayfarers"
+    },
+    "clotheColor": {
+      "label": "Clothe color",
+      "Black": "Black",
+      "Blue01": "Blue #1",
+      "Blue02": "Blue #2",
+      "Blue03": "Blue #3",
+      "Gray01": "Gray #1",
+      "Gray02": "Gray #2",
+      "Heather": "Heather",
+      "PastelBlue": "Pastel blue",
+      "PastelGreen": "Pastel green",
+      "PastelOrange": "Pastel orange",
+      "PastelRed": "Pastel red",
+      "PastelYellow": "Pastel yellow",
+      "Pink": "Pink",
+      "Red": "Red",
+      "White": "White"
+    },
+    "clotheType": {
+      "label": "Clothe type",
+      "BlazerShirt": "Blazer with shirt",
+      "BlazerSweater": "Blazer with sweater",
+      "CollarSweater": "Collar sweater",
+      "GraphicShirt": "Graphic shirt",
+      "Hoodie": "Hoodie",
+      "Overall": "Overall",
+      "ShirtCrewNeck": "Crew neck shirt",
+      "ShirtScoopNeck": "Scoop neck shirt",
+      "ShirtVNeck": "V-neck shirt"
+    },
+    "graphicType": {
+      "label": "Graphic type",
+      "Bat": "Bat",
+      "Cumbia": "Cumbia!",
+      "Deer": "Deer",
+      "Diamond": "Diamond",
+      "Hola": "Hola!",
+      "Pizza": "Pizza",
+      "Resist": "Resist!",
+      "Selena": "Selena",
+      "Bear": "Bear",
+      "SkullOutline": "Outlined skull",
+      "Skull": "Skull"
+    }
   }
 }

@@ -24,7 +24,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
         props.onClose();
       }}
     >
-      <ul className="header-menu">
+      <ul className="header-menu" onClick={(e) => e.stopPropagation()}>
         <BoardSettings activeEditMode={activeEditMode} currentUserIsModerator={props.currentUserIsModerator} setActiveEditMode={setActiveEditMode} />
         {props.currentUserIsModerator && (
           <>

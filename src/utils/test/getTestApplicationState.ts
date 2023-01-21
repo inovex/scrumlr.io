@@ -58,6 +58,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         role: "PARTICIPANT",
       },
     ],
+    focusInitiator: null,
   },
   columns: [
     {
@@ -137,6 +138,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     serverTimeOffset: 0,
     enabledAuthProvider: [],
     feedbackEnabled: false,
+    hotkeysAreActive: true,
+    noteFocused: false,
   },
   ...overwrite,
 });

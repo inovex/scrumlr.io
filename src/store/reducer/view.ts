@@ -6,6 +6,8 @@ const INITIAL_VIEW_STATE: ViewState = {
   serverTimeOffset: 0,
   enabledAuthProvider: [],
   feedbackEnabled: false,
+  hotkeysAreActive: true,
+  noteFocused: false,
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -56,6 +58,27 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
         };
       }
       return state;
+    }
+
+    case Action.SetHotkeyState: {
+      return {
+        ...state,
+        hotkeysAreActive: action.active,
+      };
+    }
+
+    case Action.OnNoteFocus: {
+      return {
+        ...state,
+        noteFocused: true,
+      };
+    }
+
+    case Action.OnNoteBlur: {
+      return {
+        ...state,
+        noteFocused: false,
+      };
     }
 
     default:

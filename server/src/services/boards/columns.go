@@ -18,8 +18,8 @@ func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (
 	return new(dto.Column).From(column), err
 }
 
-func (s *BoardService) DeleteColumn(_ context.Context, board, columnID uuid.UUID) error {
-	return s.database.DeleteColumn(board, columnID)
+func (s *BoardService) DeleteColumn(_ context.Context, board, column, user uuid.UUID) error {
+	return s.database.DeleteColumn(board, column, user)
 }
 
 func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error) {
@@ -58,4 +58,40 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated columns", "err", err)
 	}
+}
+func (s *BoardService) DeletedColumn(user, board, column uuid.UUID, notes []database.Note, votes []database.Vote) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnDeleted,
+		Data: column,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated columns", "err", err)
+	}
+
+	eventNotes := make([]dto.Note, len(notes))
+	for index, note := range notes {
+		eventNotes[index] = *new(dto.Note).From(note)
+	}
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: eventNotes,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
+	}
+
+	personalVotes := []*dto.Vote{}
+	for _, vote := range votes {
+		if vote.User == user {
+			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
+		}
+	}
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotesUpdated,
+		Data: personalVotes,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated votes", "err", err)
+	}
+
 }

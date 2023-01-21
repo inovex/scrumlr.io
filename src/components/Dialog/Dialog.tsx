@@ -11,13 +11,13 @@ type DialogProps = {
 
 export const Dialog: FC<DialogProps> = ({title, className, onClose, children, ...other}) => (
   <Portal onClose={() => onClose?.()}>
-    <aside className={classNames("dialog", className)} {...other}>
+    <aside className={classNames("dialog", className)} {...other} onClick={(e) => e.stopPropagation()}>
       <article className="dialog__content">
         <h2 className="dialog__header-text">{title}</h2>
         {children}
       </article>
       <button onClick={() => onClose?.()} className="dialog__close-button">
-        <CloseIcon className="close-button__icon" />
+        <CloseIcon className="dialog__close-icon" />
       </button>
     </aside>
   </Portal>

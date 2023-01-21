@@ -3,17 +3,22 @@
 
 .board-settings__container-wrapper {
   overflow-y: auto;
-  padding-right: 10px;
-  margin-right: -20px;
-  padding-bottom: $padding--small;
+  padding-right: $padding--small;
+  margin-right: calc(-1 * ($padding--small + 10px));
+  margin-bottom: $settings-dialog-container--bottom;
+
+  &:focus-visible {
+    outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+    border-radius: 8px;
+  }
 
   @include scrollbar();
 }
 
 @media screen and (min-width: 920px) {
   .board-settings__container-wrapper {
-    padding-right: 20px;
-    margin-right: -30px;
+    padding-right: $padding--medium;
+    margin-right: calc(-1 * ($padding--medium + 10px));
   }
 }
 
@@ -60,7 +65,7 @@
   text-overflow: ellipsis;
 }
 
-.board-settings__board-name-button_input:focus {
+.board-settings__board-name-button_input:focus-visible {
   outline: none;
 }
 
@@ -154,19 +159,23 @@
   height: $icon--medium;
 }
 
-.board-settings__edit-password-button {
-  color: var(--accent-color);
-  cursor: pointer;
-  margin-left: 4px;
-}
-
-.board-settings__edit-password-button svg {
-  width: $icon--medium;
-  height: $icon--medium;
-}
-
 .board-settings__show-password-button--enabled {
   color: var(--accent-color);
+  cursor: pointer;
+  transition: all 0.08s ease-out;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    transform: scale(1.1);
+  }
 }
 
 .board-settings__show-password-button--disabled {
@@ -197,11 +206,12 @@
   }
 }
 
-.board-settings__password-button_value-input:focus {
+.board-settings__password-button_value-input:focus-visible {
   outline: none;
 }
 
-.board-settings__password-management-button {
+.board-settings__password-management-button,
+.board-settings__password-input-hint {
   display: flex;
   align-items: center;
   padding: 0 $padding--medium;
@@ -209,8 +219,26 @@
   border: none;
   background-color: inherit;
   color: var(--accent-color);
-  cursor: pointer;
   align-self: center;
+}
+
+.board-settings__password-management-button {
+  cursor: pointer;
+  transition: all 0.08s ease-out;
+  outline: none;
+
+  &:hover {
+    filter: brightness(1.4);
+    transform: scale(1.01);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    text-decoration: underline;
+  }
 }
 
 .board-settings__remove-protection-button svg {
@@ -226,11 +254,6 @@
   color: var(--accent-color);
 }
 
-.board-settings__password-input-hint {
-  cursor: default;
-  align-self: center;
-}
-
 .board-settings__password-management-text {
   padding-left: 4px;
   font-weight: bold;
@@ -238,24 +261,18 @@
   letter-spacing: $letter-spacing--medium;
 }
 
-.board-settings__show-author-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
+.board-settings__show-author,
+.board-settings__show-notes,
+.board-settings__delete,
+.board-settings__show-columns,
+.board-settings__allow-note-repositioning {
+  &-button {
+    justify-content: space-between;
+  }
 
-.board-settings__show-notes-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__show-columns-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__delete-button {
-  justify-content: space-between;
-  padding-right: 24px;
+  &-value {
+    padding-right: $padding--medium;
+  }
 }
 
 .board-settings__delete-button span {

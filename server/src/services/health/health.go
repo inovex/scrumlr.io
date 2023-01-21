@@ -8,10 +8,10 @@ import (
 
 type HealthService struct {
 	database *database.Database
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 }
 
-func NewHealthService(database *database.Database, realtime *realtime.Realtime) services.Health {
+func NewHealthService(database *database.Database, realtime *realtime.Broker) services.Health {
 	b := new(HealthService)
 	b.database = database
 	b.realtime = realtime

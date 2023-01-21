@@ -1,29 +1,118 @@
 @import "constants/style.scss";
 
 .board-users {
-  list-style-type: none;
-  align-self: center;
   display: flex;
-  flex-direction: row-reverse;
-  width: max-content;
+  flex-direction: row;
+  gap: $margin--default;
+}
+
+.board-users__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  background: none;
+  border: none;
+  outline: none;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  padding: 0;
-  margin: 0;
-}
+  border-radius: 16px;
 
-.board-users li {
-  display: inline;
-}
+  &--others {
+    flex-direction: row-reverse;
+    padding-left: $padding--default;
+  }
 
-@media screen and (max-width: 768px) {
-  .board-users {
-    margin-right: $margin--small;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
+  }
+
+  &:hover {
+    .board-users__avatar {
+      filter: brightness(1.1);
+      transform: scale(1.08);
+    }
   }
 }
 
-@media screen and (max-width: 500px) {
-  .board-users li:not(:last-child) {
+.board-users__avatar {
+  transition: all 0.08s ease-out;
+
+  &--others {
+    margin-left: -12px;
+  }
+}
+
+.rest-users {
+  position: relative;
+  font-size: $text-size--medium;
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+  border-radius: $rounded--full;
+  background-color: $menu-icon-background-color--dark;
+  padding: 2px;
+  color: $color-white;
+  font-weight: 700;
+
+  &__readiness {
+    color: $color-progress-circle;
+    border-radius: $rounded--full;
+
+    circle {
+      transition: stroke-dashoffset 0.45s ease-in-out;
+      fill: transparent;
+    }
+  }
+
+  &__count,
+  &__all-ready {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // line-height: 36px;
+    // font-size: $text-size--medium;
+  }
+
+  &__all-ready {
+    color: $color-white;
+    width: 100%;
+    height: 100%;
+
+    .circle {
+      display: none;
+    }
+
+    .check {
+      --dasharray: 20;
+      stroke-dasharray: var(--dasharray);
+      stroke-dashoffset: 0;
+      animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
+      transform-origin: 37% 40%;
+    }
+  }
+}
+
+@media #{$mini-smartphone} {
+  .board-users__button--others {
     display: none;
+  }
+}
+
+[theme="dark"] {
+  .rest-users {
+    background-color: $color-icon-light-blue;
+    color: $color-dark-two;
+  }
+
+  .board-users__button {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+    }
+  }
+}
+
+@keyframes draw {
+  0% {
+    stroke-dashoffset: var(--dasharray);
   }
 }

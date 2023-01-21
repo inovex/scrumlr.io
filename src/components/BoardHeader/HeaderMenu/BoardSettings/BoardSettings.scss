@@ -55,6 +55,7 @@ $header-menu-button-width: 24px;
     color: $color-white;
     opacity: 0.85;
   }
+
   &:disabled {
     border-color: transparent;
     opacity: 1;
@@ -70,17 +71,22 @@ $header-menu-button-width: 24px;
   background-color: transparent;
   color: $color-white;
   cursor: pointer;
+  outline: none;
   transition: all 0.1s ease-in-out;
 
-  &:focus {
-    outline: 0;
-  }
-  &:hover {
+  &:focus-visible {
     background-color: $color-white;
     color: var(--accent-color);
   }
+
+  &:hover {
+    background-color: $color-white;
+    color: var(--accent-color);
+    transform: scale(1.06);
+  }
+
   &:active {
-    transform: scale(0.95);
+    transform: scale(1);
   }
 }
 

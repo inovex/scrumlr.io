@@ -15,6 +15,7 @@ import {Button} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
+import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 interface State {
   from: {pathname: string};
@@ -26,7 +27,7 @@ export const LoginBoard = () => {
   const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(getRandomName());
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(!SHOW_LEGAL_DOCUMENTS);
   const [submitted, setSubmitted] = useState(false);
 
   let redirectPath = "/";
@@ -88,18 +89,20 @@ export const LoginBoard = () => {
               </div>
               {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
 
-              <label className="login-board__form-element login-board__terms">
-                <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
-                <span className="login-board__terms-label">
-                  <Trans
-                    i18nKey="LoginBoard.acceptTerms"
-                    components={{
-                      terms: <Link to="/legal/termsAndConditions" target="_blank" />,
-                      privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
-                    }}
-                  />
-                </span>
-              </label>
+              {SHOW_LEGAL_DOCUMENTS && (
+                <label className="login-board__form-element login-board__terms">
+                  <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+                  <span className="login-board__terms-label">
+                    <Trans
+                      i18nKey="LoginBoard.acceptTerms"
+                      components={{
+                        terms: <Link to="/legal/termsAndConditions" target="_blank" />,
+                        privacy: <Link to="/legal/privacyPolicy" target="_blank" />,
+                      }}
+                    />
+                  </span>
+                </label>
+              )}
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 

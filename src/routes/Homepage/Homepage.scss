@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .homepage {
-  background: $color-light-gray;
+  background: $color-lighter-gray;
 }
 
 .homepage__hero {
@@ -32,25 +32,17 @@
 
 .homepage__language {
   background: $color-light-gray;
-}
+  box-shadow: 0 0 rgba($color-middle-gray, 0);
 
-html:not([theme="dark"]) {
-  .homepage__language {
-    box-shadow: 0 0 0 0 rgba($color-middle-gray, 0) !important;
-  }
-
-  .homepage__language:hover {
-    box-shadow: 0 2px 12px 6px rgba($color-middle-gray, 0.2) !important;
-  }
-
-  .homepage__language:focus {
-    box-shadow: 0 2px 16px 8px rgba($color-middle-gray, 0.3) !important;
+  &:hover {
+    box-shadow: 0 2px 12px 6px rgba($color-middle-gray, 0.2);
   }
 }
 
 [theme="dark"] {
   .homepage__language {
     background: $color-dark-mode-note;
+    box-shadow: none;
   }
 }
 
@@ -177,6 +169,12 @@ html:not([theme="dark"]) {
 .homepage__footer-link a {
   color: currentColor;
   text-decoration: none;
+  transition: all 0.08s ease-out;
+
+  &:focus-visible {
+    outline: none;
+    text-decoration: underline;
+  }
 }
 
 [theme="dark"] {
@@ -198,6 +196,11 @@ html:not([theme="dark"]) {
 
   .homepage__footer-link {
     color: $color-middle-gray;
+
+    a:focus-visible,
+    a:hover {
+      color: $color-white;
+    }
   }
 
   .homepage__footer-developers {

@@ -29,24 +29,38 @@ $header-menu-border-bottom-color: #efefef;
   padding: $padding--small $padding--medium;
   margin-top: $margin--large;
   width: 260px;
-  border: none;
+  border: solid 2px var(--accent-color);
   border-radius: 32px;
   background-color: var(--accent-color);
   color: $color-white;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.1s ease-in-out;
-  &:active {
-    transform: scale(0.95);
-  }
+  transition: all 0.08s ease-out;
+
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.8);
+    filter: brightness(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.24);
   }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+  }
+
   &.--copied {
     background-color: transparent;
-    border: solid 2px var(--accent-color);
     color: var(--accent-color);
     cursor: default;
+
+    &:hover {
+      filter: none;
+      transform: none;
+      box-shadow: none;
+    }
   }
 }
 

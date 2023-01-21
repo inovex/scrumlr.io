@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import {TabIndex} from "constants/tabIndex";
 import "./ToggleButton.scss";
 import {Toggle} from "../Toggle";
 
@@ -35,15 +34,12 @@ type ToggleButtonProps<T> = {
    * Triggered if the toggle changes to the right.
    */
   onRight?: () => void;
-  /**
-   * Allows tabIndex
-   */
-  tabIndex?: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
   const onClick = () => {
+    if (props.disabled) return;
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
     props.onToggle?.(newValue);
     if (newValue === props.values[0]) {
@@ -56,13 +52,8 @@ export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => 
   const isActive = props.value === props.values[1];
 
   return (
-    <button
-      disabled={props.disabled}
-      onClick={onClick}
-      className={classNames("toggle-button", props.className)}
-      aria-pressed={isActive}
-      tabIndex={props.tabIndex ?? TabIndex.disabled}
-    >
+    // aria-disabled instead of disabled so that it is focusable but not editable
+    <button aria-disabled={props.disabled} onClick={onClick} className={classNames("toggle-button", props.className)} aria-pressed={isActive}>
       <Toggle active={isActive} disabled={props.disabled} />
     </button>
   );

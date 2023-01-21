@@ -1,13 +1,16 @@
 @import "src/constants/style";
+@import "src/components/TooltipButton/TooltipButton.scss";
+
+$votes-button-size: 28px;
 
 .votes {
   display: inline-flex;
   position: relative;
-  width: 60px;
-  height: 28px;
+  height: var(--note-footer-height, $votes-button-size);
   justify-content: flex-end;
-}
+  gap: 4px;
 
-.votes > * + * {
-  margin-left: 4px;
+  > *:last-child {
+    margin-left: $margin--small;
+  }
 }

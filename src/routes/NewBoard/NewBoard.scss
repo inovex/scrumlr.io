@@ -2,9 +2,10 @@
 
 .new-board__wrapper {
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-
   width: 100vw;
   min-height: 100vh;
 }
@@ -13,6 +14,30 @@
   position: relative;
   color: $color-black;
   padding: $padding--default;
+
+  a {
+    outline: none;
+
+    svg {
+      border-radius: 8px;
+      border: 1px solid transparent;
+      padding: 2px;
+    }
+
+    &:hover svg {
+      filter: $brighten--strongly;
+    }
+
+    &:focus-visible > svg {
+      border: 1px solid $color-backlog-blue;
+    }
+  }
+}
+
+.new-board__mode {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
 }
 
 .new-board__mode-selection {
@@ -20,7 +45,7 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   gap: 16px;
-
+  justify-items: center;
   margin-top: 1em;
 }
 
@@ -33,6 +58,10 @@
   z-index: -1;
   height: 1px;
   width: 1px;
+
+  &:focus-visible + .new-board__mode-label {
+    box-shadow: 0 0 0 2px $color-middle-gray;
+  }
 }
 
 .new-board__mode-input:checked + .new-board__mode-label {
@@ -40,11 +69,8 @@
 }
 
 .new-board__mode-input + .new-board__mode-label:hover {
-  box-shadow: 0 2px 12px 6px rgba($color-backlog-blue, 0.3);
-}
-
-.new-board__mode-input + .new-board__mode-label:focus {
-  box-shadow: 0 2px 16px 8px rgba($color-backlog-blue, 0.4);
+  box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.3);
+  transform: scale(1.02);
 }
 
 .new-board__mode-label {
@@ -57,9 +83,7 @@
   background: $color-white;
   border-radius: 16px;
   border: 1px solid transparent;
-
-  width: 100%;
-  max-width: 320px;
+  transition: all 0.08s ease-out;
   min-height: 76px;
 
   padding: $padding--default;
@@ -90,7 +114,12 @@
 
 .new-board__actions {
   display: flex;
-  margin-top: 2em;
+  position: sticky;
+  justify-content: center;
+  width: 100%;
+  bottom: 0;
+  padding: $padding--default;
+  background: linear-gradient(0deg, $color-white 0%, $color-white 80%, rgba(0, 0, 0, 0) 100%);
 }
 
 .new-board__action + .new-board__action {
@@ -106,6 +135,18 @@
     color: $color-white;
     background: $color-dark-mode-note;
     box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
+  }
+
+  .new-board__mode-input:focus-visible + .new-board__mode-label {
+    box-shadow: 0 0 0 2px $color-white;
+  }
+
+  .new-board__mode-input + .new-board__mode-label:hover {
+    box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.1);
+  }
+
+  .new-board__actions {
+    background: linear-gradient(0deg, $color-dark-mode 0%, $color-dark-mode 80%, rgba(0, 0, 0, 0) 100%);
   }
 }
 

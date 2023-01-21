@@ -12,11 +12,11 @@ import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
 import i18n from "i18next";
+import classNames from "classnames";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
 
 type ColumnSettingsProps = {
-  tabIndex: number;
   id: string;
   name: string;
   color: Color;
@@ -26,7 +26,7 @@ type ColumnSettingsProps = {
   onNameEdit?: () => void;
 };
 
-export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
@@ -61,7 +61,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
       <ul>
         <li>
           <button
-            tabIndex={tabIndex}
             onClick={() => {
               onClose?.();
               dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -73,7 +72,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         </li>
         <li>
           <button
-            tabIndex={tabIndex + 1}
             onClick={() => {
               onNameEdit?.();
               onClose?.();
@@ -85,7 +83,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         </li>
         <li>
           <button
-            tabIndex={tabIndex + 2}
             onClick={() => {
               onClose?.();
               handleAddColumn(index);
@@ -97,7 +94,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         </li>
         <li>
           <button
-            tabIndex={tabIndex + 3}
             onClick={() => {
               onClose?.();
               handleAddColumn(index + 1);
@@ -109,7 +105,6 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         </li>
         <li>
           <button
-            tabIndex={tabIndex + 4}
             onClick={() => {
               onClose?.();
               dispatch(Actions.deleteColumn(id));
@@ -121,52 +116,45 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({tabIndex, id, name, co
         </li>
         <li>
           <button
-            tabIndex={tabIndex + 5}
             aria-label="Backlog Blue"
             title="Backlog Blue"
-            className={getColorClassName("backlog-blue")}
+            className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 6}
             aria-label="Grooming Green"
             title="Grooming Green"
-            className={getColorClassName("grooming-green")}
+            className={classNames(getColorClassName("grooming-green"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "grooming-green", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 7}
             aria-label="Lean Lilac"
             title="Lean Lilac"
-            className={getColorClassName("lean-lilac")}
+            className={classNames(getColorClassName("lean-lilac"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "lean-lilac", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 8}
             aria-label="Online Orange"
             title="Online Orange"
-            className={getColorClassName("online-orange")}
+            className={classNames(getColorClassName("online-orange"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 9}
             aria-label="Planning Pink"
             title="Planning Pink"
-            className={getColorClassName("planning-pink")}
+            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 10}
             aria-label="Poker Purple"
             title="Poker Purple"
-            className={getColorClassName("poker-purple")}
+            className={classNames(getColorClassName("poker-purple"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
           />
           <button
-            tabIndex={tabIndex + 11}
             aria-label="Retro Red"
             title="Retro Red"
-            className={getColorClassName("retro-red")}
+            className={classNames(getColorClassName("retro-red"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "retro-red", index, visible}))}
           />
         </li>

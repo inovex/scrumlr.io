@@ -1,6 +1,15 @@
+@import "constants/style";
+
 .inovex-anchor {
   color: currentColor;
   text-decoration: none;
+
+  transition: all 0.08s ease-out;
+
+  &:focus-visible {
+    outline: none;
+    text-decoration: underline;
+  }
 }
 
 .inovex-anchor__logo {
@@ -8,4 +17,11 @@
   height: auto;
   margin-right: 4px;
   vertical-align: bottom;
+}
+
+[theme="dark"] {
+  .inovex-anchor:focus-visible,
+  .inovex-anchor:hover {
+    color: $color-white;
+  }
 }

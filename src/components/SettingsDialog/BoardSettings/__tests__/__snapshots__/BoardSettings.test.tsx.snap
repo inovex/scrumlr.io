@@ -20,22 +20,22 @@ exports[`BoardSettings should match snapshot 1`] = `
     <div
       class="board-settings__container"
     >
-      <button
-        class="settings-option-button board-settings__board-name-button"
-        type="button"
+      <div
+        class="settings-input__container"
       >
-        <span
-          class="settings-option-button__label"
-        >
-          BoardSettings.BoardName
-        </span>
         <input
           autocomplete="off"
-          class="board-settings__board-name-button_input"
+          id="boardSettingsBoardName"
           placeholder="scrumlr.io"
+          type="text"
           value="test-board-name"
         />
-      </button>
+        <label
+          for="boardSettingsBoardName"
+        >
+          BoardSettings.BoardName
+        </label>
+      </div>
       <div
         class="board-settings__group-and-button"
       >
@@ -63,28 +63,24 @@ exports[`BoardSettings should match snapshot 1`] = `
           <hr
             class="settings-dialog__separator"
           />
-          <button
-            class="settings-option-button board-settings__password-button"
-            id="password-input-section"
-            type="button"
+          <div
+            class="settings-input__container"
           >
-            <span
-              class="settings-option-button__label"
+            <input
+              autocomplete="off"
+              class="settings-input__hidden-placeholder"
+              id="boardSettingsPassword"
+              placeholder="BoardSettings.Password"
+              type="password"
+              value=""
+            />
+            <label
+              for="boardSettingsPassword"
             >
               BoardSettings.Password
-            </span>
-            <div
-              class="board-settings__password-button_value"
-            >
-              <input
-                autocomplete="off"
-                class="board-settings__password-button_value-input"
-                placeholder=""
-                type="password"
-                value=""
-              />
-            </div>
-          </button>
+            </label>
+            
+          </div>
         </div>
         <button
           class="board-settings__password-management-button board-settings__generate-password-button"
@@ -113,10 +109,10 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowAuthorOption
           </span>
           <div
-            class="settings-toggle"
+            class="board-settings__show-author-value"
           >
             <div
-              class="settings-toggle__switch settings-toggle__switch--right"
+              class="toggle toggle--active"
             />
           </div>
         </button>
@@ -134,10 +130,10 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowOtherUsersNotesOption
           </span>
           <div
-            class="settings-toggle"
+            class="board-settings__show-notes-value"
           >
             <div
-              class="settings-toggle__switch settings-toggle__switch--right"
+              class="toggle toggle--active"
             />
           </div>
         </button>
@@ -155,10 +151,31 @@ exports[`BoardSettings should match snapshot 1`] = `
             BoardSettings.ShowHiddenColumnsOption
           </span>
           <div
-            class="settings-toggle"
+            class="board-settings__show-columns-value"
           >
             <div
-              class="settings-toggle__switch settings-toggle__switch--left"
+              class="toggle"
+            />
+          </div>
+        </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button board-settings__allow-note-repositioning-button"
+          data-testid="note-repositioning"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            BoardSettings.AllowNoteRepositioningOption
+          </span>
+          <div
+            class="board-settings__allow-note-repositioning-value"
+          >
+            <div
+              class="toggle toggle--active"
             />
           </div>
         </button>
@@ -172,9 +189,13 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           BoardSettings.DeleteBoard
         </span>
-        <svg>
-          icon-delete.svg
-        </svg>
+        <div
+          class="board-settings__delete-value"
+        >
+          <svg>
+            icon-delete.svg
+          </svg>
+        </div>
       </button>
     </div>
   </div>

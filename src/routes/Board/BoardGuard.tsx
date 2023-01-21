@@ -7,13 +7,19 @@ import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
+import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {Board} from "./Board";
 
-export const BoardGuard = () => {
+interface BoardGuardProps {
+  printViewEnabled: boolean;
+}
+
+export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   const {boardId} = useParams<"boardId">();
   const {t} = useTranslation();
 
   const boardStatus = useAppSelector((state) => state.board.status);
+  const boardName = useAppSelector((applicationState) => applicationState.board.data?.name);
 
   useEffect(() => {
     store.dispatch(Actions.joinBoard(boardId!));
@@ -22,6 +28,10 @@ export const BoardGuard = () => {
       store.dispatch(Actions.leaveBoard());
     };
   }, [boardId]);
+
+  if (printViewEnabled && boardId) {
+    return <PrintView boardId={boardId} boardName={boardName ?? "scrumlr.io"} />;
+  }
 
   if (boardStatus === "accepted" || boardStatus === "ready") {
     return <Board />;
@@ -46,7 +56,7 @@ export const BoardGuard = () => {
     );
   }
 
-  if (boardStatus === "rejected") {
+  if (boardStatus === "rejected" || boardStatus === "too_many_join_requests") {
     return (
       <div className="board-guard">
         <p className="board-guard__info">{t("BoardGuard.reject")}</p>

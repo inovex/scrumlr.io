@@ -8,6 +8,7 @@ export const ColumnAction = {
    * Don't forget the `as` casting for each field, because the type inference
    * won't work otherwise (e.g. in reducers).
    */
+  DeletedColumn: "scrumlr.io/deletedColumn" as const,
   CreateColumn: "scrumlr.io/createColumn" as const,
   CreateColumnOptimistically: "scrumlr.io/createColumnOptimistically" as const,
   EditColumn: "scrumlr.io/editColumn" as const,
@@ -37,6 +38,10 @@ export const ColumnActionFactory = {
    *  color: the new color of the column
    *  hidden: the new hidden state
    */
+  deletedColumn: (columnId: string) => ({
+    type: ColumnAction.DeletedColumn,
+    columnId,
+  }),
   editColumn: (id: string, column: EditColumnRequest) => ({
     type: ColumnAction.EditColumn,
     id,
@@ -70,6 +75,7 @@ export const ColumnActionFactory = {
 };
 
 export type ColumnReduxAction =
+  | ReturnType<typeof ColumnActionFactory.deletedColumn>
   | ReturnType<typeof ColumnActionFactory.deleteColumn>
   | ReturnType<typeof ColumnActionFactory.deleteColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.createColumn>

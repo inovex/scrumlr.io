@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {Action, ReduxAction} from "store/action";
 import {BoardState} from "types/board";
+import {Timer} from "utils/timer";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
@@ -9,12 +10,23 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
     case Action.UpdatedBoard: {
       return {
         status: "ready",
-        data: {...action.board, timerEnd: action.board.timerEnd ? new Date(new Date(action.board.timerEnd).getTime() - action.context.serverTimeOffset) : undefined},
+        data: {
+          ...action.board,
+          timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
+          timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
+        },
       };
     }
     case Action.UpdatedBoardTimer: {
       if (action.board.timerEnd) {
-        return {...state, data: {...state.data!, timerEnd: new Date(new Date(action.board.timerEnd).getTime() - action.context.serverTimeOffset)}};
+        return {
+          ...state,
+          data: {
+            ...state.data!,
+            timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
+            timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
+          },
+        };
       }
       return {
         status: "ready",
@@ -42,7 +54,11 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "passphrase_required",
       };
     }
-
+    case Action.TooManyJoinRequests: {
+      return {
+        status: "too_many_join_requests",
+      };
+    }
     case Action.CreatedVoting: {
       // reset show voting, since websocket messages won't trigger update of board
       return {

@@ -3,10 +3,12 @@ package notes
 import (
 	"context"
 	"database/sql"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
 
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/realtime"
 
@@ -16,7 +18,7 @@ import (
 
 type NoteService struct {
 	database DB
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 }
 
 type Observer interface {
@@ -32,7 +34,7 @@ type DB interface {
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID) error
 }
 
-func NewNoteService(db DB, rt *realtime.Realtime) services.Notes {
+func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
 	b := new(NoteService)
 	b.database = db
 	b.realtime = rt
@@ -108,5 +110,28 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 	})
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
+	}
+}
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDeleted,
+		Data: note,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
+	}
+
+	personalVotes := []*dto.Vote{}
+	for _, vote := range votes {
+		if vote.User == user {
+			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
+		}
+	}
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotesUpdated,
+		Data: personalVotes,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated votes", "err", err)
 	}
 }

@@ -5,6 +5,7 @@ import Socket from "sockette";
 import {ServerEvent} from "types/websocket";
 import store from "store";
 import {API} from "api";
+import {Timer} from "utils/timer";
 import {Toast} from "../../utils/Toast";
 import i18n from "../../i18n";
 import {Button} from "../../components/Button";
@@ -46,9 +47,18 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updateColumns(columns));
         }
 
+        if (message.type === "COLUMN_DELETED") {
+          const columnId = message.data;
+          store.dispatch(Actions.deletedColumn(columnId));
+        }
+
         if (message.type === "NOTES_UPDATED") {
           const notes = message.data;
           store.dispatch(Actions.updatedNotes(notes));
+        }
+        if (message.type === "NOTE_DELETED") {
+          const noteId = message.data;
+          store.dispatch(Actions.deletedNote(noteId));
         }
 
         if (message.type === "PARTICIPANT_CREATED") {
@@ -68,6 +78,11 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updatedVoting(message.data.voting, message.data.notes));
         }
 
+        if (message.type === "VOTES_UPDATED") {
+          const votes = message.data;
+          store.dispatch(Actions.updatedVotes(votes));
+        }
+
         if (message.type === "REQUEST_CREATED") {
           store.dispatch(Actions.createJoinRequest(message.data));
         }
@@ -83,7 +98,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: currentState.sharedNote,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
       accessPolicy: action.board.accessPolicy,
       passphrase: action.board.passphrase,
       allowStacking: action.board.allowStacking,
@@ -112,10 +128,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
   if (action.type === Action.ShareNote) {
     const currentState = stateAPI.getState().board.data!;
+    const note = stateAPI.getState().notes.find((n) => n.id === action.note);
+    const column = stateAPI.getState().columns.find((c) => c.id === note?.position.column);
+    if (!column?.visible) return; // Do not share notes in hidden columns
     API.editBoard(action.context.board!, {
       sharedNote: action.note,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
       Toast.error(
         <div>
@@ -131,7 +151,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.editBoard(action.context.board!, {
       sharedNote: undefined,
       showVoting: currentState.showVoting,
-      timerEnd: currentState.timerEnd,
+      timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
+      timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
       Toast.error(
         <div>

@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
+  },
   "NewBoard": {
     "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
@@ -11,16 +14,17 @@
     "title": "Registrierung bei scrumlr.io",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
-    "termsValidationError": "Du musst den AGBs und der Datenschutzerklärung zustimmen",
+    "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
     "login": "Registrieren",
-    "acceptTerms": "Ich stimme den <terms>AGBs</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
+    "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
   },
-  "Board": {
-    "publicSession": "Öffentlich",
-    "privateSession": "Privat"
+  "AccessPolicy": {
+    "PUBLIC": "Offen",
+    "BY_PASSPHRASE": "Passwortgeschützt",
+    "BY_INVITE": "Geschlossen"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Falsches Passwort.",
@@ -34,10 +38,10 @@
   "AccessPolicySelection": {
     "title": "Zugriffseinstellung",
     "publicTitle": "Offen",
-    "byPassphraseTitle": "Passwortgeschützt",
+    "byPassphraseTitle": "Mit Passwort",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
-    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fälle sicher genug sein, da die URLs schwer zu erraten sind.",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
     "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt. Dies ist gut geeignet, wenn man mit einer Gruppe nicht gleichzeitig zusammenarbeitet und Benutzer jederzeit beitreten können.",
     "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
     "generatePassphrase": "Erstelle zufälliges Passwort",
@@ -55,13 +59,6 @@
     "yes": "Ja",
     "no": "Nein"
   },
-  "ParticipantsList": {
-    "title": "Teilnehmer",
-    "search": "Suche",
-    "searchAndFilter": "Suche und Filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "button": "Sitzung löschen"
@@ -70,7 +67,29 @@
     "title": "Sitzung exportieren",
     "button": "Sitzung exportieren",
     "exportAsJson": "JSON exportieren",
-    "exportAsCSV": "CSV exportieren"
+    "exportAsCSV": "CSV exportieren",
+    "openPrintView": "Druckansicht öffnen",
+    "exportToClipboard": "Markdown in die Zwischenablage kopieren",
+    "copyToClipboardSuccess": "Markdown kopiert!",
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+  },
+  "PrintView": {
+    "Participants": "Teilnehmer",
+    "GeneratedOn": "Erstellt auf",
+    "ProvidedBy": "Bereitgestellt mit ♥️ von",
+    "Notes": "Kärtchen",
+    "Votes": "Stimmen"
+  },
+  "MarkdownExport": {
+    "columns": "Spalten",
+    "note": "Kärtchen",
+    "notes": "Kärtchen",
+    "participants": "Teilnehmer",
+    "linkToBoard": "Link zum Board",
+    "vote": "Stimme",
+    "votes": "Stimmen",
+    "stackSize": "Stapelgröße",
+    "showAuthorsDisabled": "Kartenautoren werden nicht angezeigt"
   },
   "ShareQrCodeOption": {
     "title": "Sitzung teilen",
@@ -82,7 +101,7 @@
     "settings": "Einstellungen",
     "editName": "Name ändern",
     "submitName": "Name bestätigen",
-    "resetName": "Name zurücksetzen",
+    "resetName": "Abbrechen",
     "hideColumn": "Ausblenden",
     "showColumn": "Einblenden",
     "deleteColumn": "Löschen",
@@ -103,12 +122,12 @@
     "rejectAll": "Alle ablehnen"
   },
   "RaiseRequest": {
-    "title": "Jemand hebt seine/ihre Hand",
+    "title": "Jemand hebt die Hand",
     "lower": "Senke die Hand",
     "lowerAll": "Alle Hände senken"
   },
   "Request": {
-    "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
+    "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
@@ -120,7 +139,7 @@
     "placeholder": "Füge ein Kärtchen hinzu..."
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein um beizutreten",
+    "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
     "submit": "Absenden"
   },
@@ -147,14 +166,19 @@
     "themeToggle": "Ändere Farbschema",
     "editColumns": "Bearbeite Spalten",
     "stopEditingColumns": "Beende Spaltenbearbeitung",
-    "startFocusMode": "Starte Fokus-Modus",
-    "stopFocusMode": "Beende Fokus-Modus",
+    "startPresenterMode": "Präsentiermodus starten",
+    "stopPresenterMode": "Präsentiermodus beenden",
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
     "settings": "Einstellungen",
-    "switchToUserMenu": "Wechsle zum User-Menu",
-    "switchToAdminMenu": "Wechsle zum Admin-Menu"
+    "openMenu": "Öffne das Benutzermenü"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys aktiviert!",
+    "hotkeysDisabled": "Hotkeys deaktiviert!",
+    "hotkeyToggle": "Hotkeys aktivieren",
+    "cheatSheet": "Hotkey Spickzettel"
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
@@ -166,6 +190,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Beenden",
+    "abortActionTooltip": "Abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -173,6 +199,7 @@
     "1min": "1 Minute",
     "3min": "3 Minuten",
     "5min": "5 Minuten",
+    "min": "Minuten",
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },
@@ -186,7 +213,7 @@
     "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert.",
     "focusModeFinished": "Du hast die Moderation beendet!",
     "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
-    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weitere Stimmen werden gezählt!",
+    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weiteren Stimmen werden gezählt!",
     "moderationStarted": "Der Moderator wird nun Inhalte teilen!",
     "moderationEnded": "Die Moderation wurde beendet!",
     "timerStarted": "Ein Alarm wurde gesetzt!",
@@ -194,20 +221,31 @@
     "timerCancelled": "Der Alarm wurde abgebrochen!",
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
-    "boardMadePublic": "Das Board ist nun öffentlich!"
+    "boardMadePublic": "Das Board ist nun öffentlich!",
+    "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
+    "moderatorResetReadyStatesButton": "Zurücksetzen!",
+    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
+    "noteToHiddenColumnButton": "Spalte für alle anzeigen"
   },
   "Language": {
     "german": "Deutsch",
     "english": "Englisch"
   },
   "Homepage": {
-    "developers": "© 2021-2022, mit ❤️ von <inovex>inovex</inovex>",
+    "developers": "© 2021-2023, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
-    "teaserText": "Starte in kürzester Zeit deine Retrospektive - es ist keine Registrierung notwendig und komplett kostenlos.",
+    "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
     "terms": "AGB"
+  },
+  "Note": {
+    "me": "Ich"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Diese Notiz löschen"
@@ -223,7 +261,7 @@
     "Appearance": "Darstellung",
     "AppearanceDescription": "Mitteilungen, Sprache, UI",
     "ShareSession": "Sitzung teilen",
-    "ShareSessionDescription": "QR Code, URL",
+    "ShareSessionDescription": "QR-Code, URL",
     "ExportBoard": "Sitzung exportieren",
     "ExportBoardDescription": "Exportiere das Board",
     "Feedback": "Feedback",
@@ -232,7 +270,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugangsrichtlinien",
+    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
@@ -240,12 +278,24 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Owner": "Besitzer"
+    "Title" : "Teilnehmer",
+    "OwnerFilterTooltip": "Zeige nur den Besitzer",
+    "ModeratorFilterTooltip": "Zeige nur Moderatoren",
+    "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
+    "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator"
+  },
+  "UserRole": {
+    "Owner": "Besitzer",
+    "Moderator": "Moderator",
+    "Participant": "Teilnehmer"
   },
   "Appearance": {
     "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",
@@ -264,8 +314,8 @@
     "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail! (Optional)",
     "SubmitButton": "Feedback abschicken",
     "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
-    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail Adresse an!",
-    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünscht!",
+    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail-Adresse an!",
+    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünschst!",
     "ErrorMissingBugReportText": "Bitte gib an, welchen Bug du melden möchtest!",
     "SubmitNotification": "Vielen Dank für dein Feedback!"
   },
@@ -283,6 +333,7 @@
     "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",
     "addNote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen des Kärtchens. Bitte versuche es erneut.",
     "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
+    "deleteNoteWhenShared": "Das Kärtchen kann, während es geteilt wird, nicht von dir gelöscht werden.",
     "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
@@ -302,5 +353,194 @@
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+  },
+  "Avatar": {
+    "groups": {
+      "hair": "Hüte und Haare",
+      "facialFeatures": "Rund ums Gesicht",
+      "clothing": "Bekleidung und Accessoires"
+    },
+    "hairColor": {
+      "label": "Haarfarbe",
+      "Auburn": "Rotbraun",
+      "Black": "Schwarz",
+      "Blonde": "Blond",
+      "BlondeGolden": "Goldblond",
+      "Brown": "Braun",
+      "BrownDark": "Dunkelbraun",
+      "PastelPink": "Pastellpink",
+      "Blue": "Blau",
+      "Platinum": "Platin",
+      "Red": "Rot",
+      "SilverGray": "Grausilber"
+    },
+    "eyebrowType": {
+      "label": "Augenbrauen",
+      "Angry": "Wütend #1",
+      "AngryNatural": "Wütend #2",
+      "Default": "Normal #1",
+      "DefaultNatural": "Normal #2",
+      "FlatNatural": "Flach",
+      "FrownNatural": "Keine Augenbrauen",
+      "RaisedExcited": "Erstaunt #1",
+      "RaisedExcitedNatural": "Erstaunt #2",
+      "SadConcerned": "Traurig",
+      "SadConcernedNatural": "Traurig #2",
+      "UnibrowNatural": "Monobraue",
+      "UpDown": "Hochgezogen #1",
+      "UpDownNatural": "Hochgezogen #2"
+    },
+    "facialHairColor": {
+      "label": "Barthaarfarbe",
+      "Auburn": "Rotbraun",
+      "Black": "Schwarz",
+      "Blonde": "Blond",
+      "BlondeGolden": "Goldblond",
+      "Brown": "Braun",
+      "BrownDark": "Dunkelbraun",
+      "Platinum": "Platin",
+      "Red": "Rot"
+    },
+    "facialHairType": {
+      "label": "Bart",
+      "Blank": "Ohne Bart",
+      "BeardMedium": "Viel Bart",
+      "BeardLight": "Wenig Bart",
+      "BeardMajestic": "Vollbart",
+      "MoustacheFancy": "Schnurrbart",
+      "MoustacheMagnum": "Schnauzer"
+    },
+    "skinColor": {
+      "label": "Hauttyp",
+      "Tanned": "Gebräunt",
+      "Yellow": "Gelb",
+      "Pale": "Blass",
+      "Light": "Hell",
+      "Brown": "Braun",
+      "DarkBrown": "Dunkelbraun",
+      "Black": "Schwarz"
+    },
+    "eyeType": {
+      "label": "Augen",
+      "Close": "Geschlossen",
+      "Cry": "Weinend",
+      "Default": "Normal",
+      "Dizzy": "Schwindelig",
+      "EyeRoll": "Augenrollen",
+      "Happy": "Glücklich",
+      "Hearts": "Verliebt",
+      "Side": "Zur Seite",
+      "Squint": "Zusammengekniffen",
+      "Surprised": "Erstaunt",
+      "Wink": "Zwinkern #1",
+      "WinkWacky": "Zwinkern #2"
+    },
+    "mouthType": {
+      "label": "Mund",
+      "Concerned": "Besorgt",
+      "Default": "Normal",
+      "Disbelief": "Ungläubig",
+      "Eating": "Essend",
+      "Grimace": "Grimasse",
+      "Sad": "Traurig",
+      "ScreamOpen": "Entsetzt",
+      "Serious": "Ernst",
+      "Smile": "Grinsen",
+      "Tongue": "Zunge rausstrecken",
+      "Twinkle": "Lächeln",
+      "Vomit": "Kotzen"
+    },
+    "topType": {
+      "label": "Frisur/Kopfbedeckung",
+      "Eyepatch": "Augenklappe",
+      "Hat": "Hut",
+      "Hijab": "Hijab",
+      "LongHairBigHair": "Langes, gewelltes Haar",
+      "LongHairBob": "Bob",
+      "LongHairBun": "Bun",
+      "LongHairCurly": "Gelocktes Haar",
+      "LongHairCurvy": "Gewelltes Haar",
+      "LongHairDreads": "Dreads",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro mit Haarband",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Mittellanges Haar",
+      "LongHairShavedSides": "Langes Haar mit Sidecut",
+      "LongHairStraight": "Langes, geglättetes Haar",
+      "LongHairStraight2": "Langes Haar #1",
+      "LongHairStraightStrand": "Langes Haar #2",
+      "NoHair": "Glatze",
+      "ShortHairDreads01": "Kurze Dreads",
+      "ShortHairDreads02": "Ausgewachsene Dreads",
+      "ShortHairFrizzle": "Undercut",
+      "ShortHairShaggyMullet": "Shaggy Mullet",
+      "ShortHairShortCurly": "Kurze Locken",
+      "ShortHairShortFlat": "Kurzes, glattes Haar",
+      "ShortHairShortRound": "Kurzes Haar",
+      "ShortHairShortWaved": "Kurzes, gewelltes Haar",
+      "ShortHairSides": "Halbglatze",
+      "ShortHairTheCaesar": "Caesar Schnitt #1",
+      "ShortHairTheCaesarSidePart": "Caesar Schnitt #2",
+      "Turban": "Turban",
+      "WinterHat1": "Wintermütze #1",
+      "WinterHat2": "Wintermütze #2",
+      "WinterHat3": "Weihnachtsmütze",
+      "WinterHat4": "Elfenmütze"
+    },
+    "accessoriesType": {
+      "label": "Brille",
+      "Blank": "Keine Brille",
+      "Kurt": "Kurt",
+      "Prescription01": "Brille #1",
+      "Prescription02": "Brille #2",
+      "Round": "Runde Brille",
+      "Sunglasses": "Sonnenbrille",
+      "Wayfarers": "Wayfarer"
+    },
+    "clotheColor": {
+      "label": "Kleiderfarbe",
+      "Black": "Schwarz",
+      "Blue01": "Blau #1",
+      "Blue02": "Blau #2",
+      "Blue03": "Blau #3",
+      "Gray01": "Grau #1",
+      "Gray02": "Grau #2",
+      "Heather": "Heide",
+      "PastelBlue": "Pastellblau",
+      "PastelGreen": "Pastellgrün",
+      "PastelOrange": "Pastellorange",
+      "PastelRed": "Pastellrot",
+      "PastelYellow": "Pastellgelb",
+      "Pink": "Pink",
+      "Red": "Rot",
+      "White": "Weiß"
+    },
+    "clotheType": {
+      "label": "Kleidung",
+      "BlazerShirt": "Blazer mit Shirt",
+      "BlazerSweater": "Blazer mit Sweatshirt",
+      "CollarSweater": "Sweatshirt mit Kragen",
+      "GraphicShirt": "Shirt mit Aufdruck",
+      "Hoodie": "Hoodie",
+      "Overall": "Latzhose",
+      "ShirtCrewNeck": "Shirt",
+      "ShirtScoopNeck": "Shirt mit U-Ausschnitt",
+      "ShirtVNeck": "Shirt mit V-Ausschnitt"
+    },
+    "graphicType": {
+      "label": "Shirtaufdruck",
+      "Bat": "Fledermaus",
+      "Cumbia": "Cumbia!",
+      "Deer": "Reh",
+      "Diamond": "Diamant",
+      "Hola": "Hola!",
+      "Pizza": "Pizza",
+      "Resist": "Resist!",
+      "Selena": "Selena",
+      "Bear": "Bär",
+      "SkullOutline": "Totenkopf Kontur",
+      "Skull": "Totenkopf"
+    }
   }
 }

@@ -1,40 +1,109 @@
+@import "src/constants/style";
 @import "../SettingsDialog";
 
-.profile-settings__user-name-button {
+$settings__item-height: 48px;
+
+.profile-settings {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: $margin--large;
+    height: 100%;
+    width: 100%;
+    max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
+
+    @media screen and (min-width: 450px) {
+      max-width: calc(380px - (2 * #{$settings-dialog-container--sides-small}));
+    }
+
+    @media screen and (min-width: 920px) {
+      max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
+    }
+
+    &-wrapper {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: $padding--small;
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
+      margin-bottom: $settings-dialog-container--bottom;
+
+      @media screen and (min-width: 920px) {
+        padding-right: $padding--medium;
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
+      }
+
+      @include scrollbar();
+
+      &:focus-visible {
+        outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+        border-radius: 8px;
+      }
+    }
+
+    > button {
+      flex: 0;
+    }
+  }
+}
+
+.profile-settings__hotkey-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.profile-settings__toggle-hotkeys-button {
+  display: flex;
   justify-content: space-between;
-  cursor: text;
+  width: 100%;
+  padding-right: $padding--medium;
 }
 
-.profile-settings__user-name-button span {
-  cursor: inherit;
-}
+.profile-settings__open-cheat-sheet-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: $color-dark-gray;
+  gap: $margin--small;
+  margin: $margin--small;
+  padding: $padding--small;
+  transition: transform 0.08s ease-in-out;
 
-.profile-settings__user-name-button_input {
-  background-color: transparent;
-  border: none;
-  padding: $padding--default $padding--medium $padding--default $padding--default;
-  font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
-  text-align: right;
-  width: 60%;
-  cursor: inherit;
-}
+  > svg {
+    width: $icon--medium;
+    height: $icon--medium;
+    stroke: $color-dark-gray;
+  }
 
-.profile-settings__user-name-button_input:focus {
-  outline: none;
-}
+  > p {
+    margin: 0;
+  }
 
-.profile-settings__user-name-button_input::placeholder {
-  font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  font-size: $text-size--medium;
-  color: $color-black;
+  &:hover {
+    transform: scale(1.06);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    border-radius: $rounded--full;
+    outline: 2px solid var(--accent-color);
+  }
 }
 
 [theme="dark"] {
-  .profile-settings__user-name-button_input,
-  .profile-settings__user-name-button_input::placeholder {
-    color: $color-white;
+  .profile-settings__open-cheat-sheet-button {
+    color: $color-middle-gray;
+    svg {
+      stroke: $color-middle-gray;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+    }
   }
 }

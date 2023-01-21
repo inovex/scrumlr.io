@@ -1,0 +1,18 @@
+version: "3.9"
+
+name: scrumlr-dev
+services:
+  nats:
+    image: nats:2-alpine
+    ports:
+      - "4222:4222"
+
+  database:
+    image: postgres:14.1
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=supersecret
+      - POSTGRES_DB=scrumlr
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C

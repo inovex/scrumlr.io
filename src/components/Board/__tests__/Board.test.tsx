@@ -11,7 +11,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
   return (
     <Provider store={getTestStore()}>
-      <BoardContext currentUserIsModerator>
+      <BoardContext currentUserIsModerator moderating={false}>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
         ))}
@@ -164,33 +164,11 @@ describe("navigation", () => {
       return columns;
     };
 
-    test("navigation is hidden when all columns are visible", () => {
-      showColumns(true, true, true);
-      expect(container.querySelector(".board__navigation")).not.toBeInTheDocument();
-    });
-
-    test("navigation is shown when some columns are outside of the viewport", () => {
-      showColumns(false, true, false);
-      expect(container.querySelector(".board__navigation")).toBeInTheDocument();
-    });
-
-    test("column-visibility attribute is set correctly on fully visible columns", () => {
-      const rootContainer = render(createBoardWithColumns("planning-pink", "backlog-blue", "poker-purple"), {container: global.document.querySelector("#root")!});
-      showColumns(true, true, true);
-      expect(rootContainer.container.getAttribute("column-visibility")).toBe("visible");
-    });
-
-    test("column-visibility attribute is set correctly on partly visible columns", () => {
-      const rootContainer = render(createBoardWithColumns("planning-pink", "backlog-blue", "poker-purple"), {container: global.document.querySelector("#root")!});
-      showColumns(true, true, false);
-      expect(rootContainer.container.getAttribute("column-visibility")).toBe("collapsed");
-    });
-
     test("correct scroll of previous button", () => {
       const columns = showColumns(false, true, false);
       const scrollIntoView = jest.fn();
       columns[0].scrollIntoView = scrollIntoView;
-      fireEvent.click(container.querySelector(".board__navigation-prev") as HTMLElement);
+      fireEvent.click(container.querySelectorAll(".menu-bars__navigation")[0] as HTMLElement);
 
       expect(scrollIntoView).toHaveBeenCalled();
     });
@@ -200,19 +178,9 @@ describe("navigation", () => {
 
       const scrollIntoView = jest.fn();
       columns[2].scrollIntoView = scrollIntoView;
-      fireEvent.click(container.querySelector(".board__navigation-next") as HTMLElement);
+      fireEvent.click(container.querySelectorAll(".menu-bars__navigation")[1] as HTMLElement);
 
       expect(scrollIntoView).toHaveBeenCalled();
-    });
-
-    test("previous button has color of previous column", () => {
-      showColumns(false, true, false);
-      expect(container.querySelector(".board__navigation-prev")).toHaveClass("accent-color__planning-pink");
-    });
-
-    test("next button has color of next column", () => {
-      showColumns(false, true, false);
-      expect(container.querySelector(".board__navigation-next")).toHaveClass("accent-color__poker-purple");
     });
   });
 });

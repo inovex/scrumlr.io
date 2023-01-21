@@ -24,6 +24,10 @@ $header-menu-toggle-background-color: #c8c8c8;
   height: $header-menu-button-height;
   position: relative;
   display: inline-block;
+
+  &:hover::after {
+    transform: scale(1.2);
+  }
 }
 .board-option-toggle__switch::after {
   content: "";
@@ -32,7 +36,7 @@ $header-menu-toggle-background-color: #c8c8c8;
   position: absolute;
   border-radius: 100%;
   top: calc(50% - #{$header-menu-toggle-button-height} / 2);
-  transition: all 0.25s linear;
+  transition: all 0.16s ease-out, transform 0.08s ease-out;
 }
 .board-option-toggle__switch::before {
   content: "";

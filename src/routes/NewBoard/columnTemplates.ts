@@ -34,21 +34,22 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
+  plusDelta: {
+    name: "Plus/Delta",
+    columns: [
+      {name: "Plus", hidden: false, color: "backlog-blue"},
+      {name: "Delta", hidden: false, color: "lean-lilac"},
+      {name: "Actions", hidden: true, color: "planning-pink"},
+    ],
+  },
   kalm: {
-    name: "Keep/Add/Less/More",
+    name: "KALM",
+    description: "Keep, Add, Less, More",
     columns: [
       {name: "Keep", hidden: false, color: "backlog-blue"},
       {name: "Add", hidden: false, color: "retro-red"},
       {name: "Less", hidden: false, color: "grooming-green"},
       {name: "More", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
-    ],
-  },
-  plusDelta: {
-    name: "Plus & Delta",
-    columns: [
-      {name: "Plus", hidden: false, color: "backlog-blue"},
-      {name: "Delta", hidden: false, color: "lean-lilac"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
@@ -61,6 +62,16 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
       {name: "Lacked", hidden: false, color: "lean-lilac"},
       {name: "Longed for", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
+    ],
+  },
+  swot: {
+    name: "SWOT",
+    description: "Strengths, Weaknesses, Opportunities, Threats",
+    columns: [
+      {name: "Strengths", hidden: false, color: "backlog-blue"},
+      {name: "Weaknesses", hidden: false, color: "online-orange"},
+      {name: "Opportunities", hidden: false, color: "grooming-green"},
+      {name: "Threats", hidden: false, color: "retro-red"},
     ],
   },
 };

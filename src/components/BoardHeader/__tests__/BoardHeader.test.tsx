@@ -54,7 +54,7 @@ describe("Board Header", () => {
 
     test("show access policy public", () => {
       const {container} = render(createBoardHeader());
-      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("Board.publicSession");
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("AccessPolicy.PUBLIC");
     });
 
     test("show access policy private", () => {
@@ -73,13 +73,7 @@ describe("Board Header", () => {
           },
         })
       );
-      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("Board.privateSession");
-    });
-
-    test("show confirmation-dialog after clicking scrumlr logo", () => {
-      const {container} = render(createBoardHeader());
-      fireEvent.click(container.querySelector(".board-header__link") as HTMLElement);
-      expect(container.querySelector(".confirmation-dialog")).toBeInTheDocument();
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("AccessPolicy.BY_PASSPHRASE");
     });
   });
 });

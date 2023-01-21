@@ -5,6 +5,7 @@ export const VoteAction = {
   CreatedVote: "scrumlr.io/createdVote" as const,
   DeleteVote: "scrumlr.io/deleteVote" as const,
   DeletedVote: "scrumlr.io/deletedVote" as const,
+  UpdatedVotes: "scrumlr.io/updatedVotes" as const,
 };
 
 export const VoteActionFactory = {
@@ -25,10 +26,15 @@ export const VoteActionFactory = {
     type: VoteAction.DeletedVote,
     vote,
   }),
+  updatedVotes: (votes: Vote[]) => ({
+    type: VoteAction.UpdatedVotes,
+    votes,
+  }),
 };
 
 export type VoteReduxAction =
   | ReturnType<typeof VoteActionFactory.addVote>
   | ReturnType<typeof VoteActionFactory.deleteVote>
   | ReturnType<typeof VoteActionFactory.createdVote>
-  | ReturnType<typeof VoteActionFactory.deletedVote>;
+  | ReturnType<typeof VoteActionFactory.deletedVote>
+  | ReturnType<typeof VoteActionFactory.updatedVotes>;

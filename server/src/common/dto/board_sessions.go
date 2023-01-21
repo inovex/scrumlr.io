@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
@@ -34,8 +35,9 @@ type BoardSession struct {
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	user := User{
-		ID:   session.User,
-		Name: session.Name,
+		ID:     session.User,
+		Name:   session.Name,
+		Avatar: session.Avatar,
 	}
 	b.User = user
 	b.Connected = session.Connected

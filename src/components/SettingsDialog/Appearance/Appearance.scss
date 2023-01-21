@@ -9,50 +9,8 @@
   margin-bottom: $settings-dialog-container--bottom;
 }
 
-.appearance-container > :last-child {
-  margin-top: auto;
-}
-
 .appearance-container > button {
   flex: 0;
-}
-
-.appearance-settings_sync-button {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 0px 24px;
-}
-
-.appearance-settings_sync-button_label p {
-  color: $color-black;
-  margin: 0;
-  hyphens: auto;
-}
-
-[theme="dark"] {
-  .appearance-settings_sync-button_label p {
-    color: $color-white;
-  }
-}
-
-.appearance-settings_sync-button_label p:first-child {
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--small;
-  padding-top: $padding--default;
-  margin-bottom: $margin--small;
-}
-
-.appearance-settings_sync-button_label p:last-child {
-  font-size: 10px;
-  letter-spacing: $letter-spacing--small;
-  color: $color-middle-gray;
-  padding-bottom: 16px;
-}
-
-.appearance-settings_notifications-button {
-  justify-content: space-between;
-  padding-right: 24px;
 }
 
 .appearance-settings_language-dropdown {

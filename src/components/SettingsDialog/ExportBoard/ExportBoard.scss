@@ -5,6 +5,12 @@
   justify-content: flex-end;
 }
 
+.export-board__button-print-view {
+  svg {
+    height: $icon--medium;
+  }
+}
+
 [theme="dark"] {
   .export-board__button-reverse-order svg g g {
     opacity: 1;

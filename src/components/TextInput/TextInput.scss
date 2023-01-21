@@ -32,11 +32,11 @@ $text-input__adornment-padding: 36px;
 }
 
 .text-input[value=""] {
-  background: $color-light-gray;
+  background: $color-lighter-gray;
   border: 1px solid $color-retro-red;
 }
 
-.text-input:focus,
+.text-input:focus-visible,
 .text-input:hover {
   background: $color-white;
   border: 1px solid $color-backlog-blue;
@@ -46,7 +46,7 @@ $text-input__adornment-padding: 36px;
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
 }
 
-.text-input:focus {
+.text-input:focus-visible {
   box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
 }
 
@@ -82,7 +82,7 @@ $text-input__adornment-padding: 36px;
     box-shadow: 0 0 0 4px rgba($color-white, 0.2);
   }
 
-  .text-input:focus {
+  .text-input:focus-visible {
     box-shadow: 0 0 0 4px rgba($color-white, 0.4);
   }
 }

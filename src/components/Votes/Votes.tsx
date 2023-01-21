@@ -1,7 +1,6 @@
 import {VFC} from "react";
 import classNames from "classnames";
 import _ from "underscore";
-import {TabIndex} from "constants/tabIndex";
 import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
 import "./Votes.scss";
@@ -11,7 +10,6 @@ type VotesProps = {
   noteId: string;
   // Aggregate the votes of the child notes
   aggregateVotes?: boolean;
-  tabIndex?: number;
 };
 
 export const Votes: VFC<VotesProps> = (props) => {
@@ -34,22 +32,12 @@ export const Votes: VFC<VotesProps> = (props) => {
   return (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
-        <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default} disabled>
+        <VoteButtons.Remove noteId={props.noteId} disabled>
           {allPastVotes}
         </VoteButtons.Remove>
       )}
-      {voting && ongoingVotes.note > 0 && (
-        <VoteButtons.Remove noteId={props.noteId} tabIndex={props.tabIndex ? props.tabIndex + 1 : TabIndex.default}>
-          {ongoingVotes.note}
-        </VoteButtons.Remove>
-      )}
-      {voting && (
-        <VoteButtons.Add
-          noteId={props.noteId}
-          tabIndex={props.tabIndex ? props.tabIndex + 2 : TabIndex.default}
-          disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)}
-        />
-      )}
+      {voting && ongoingVotes.note > 0 && <VoteButtons.Remove noteId={props.noteId}>{ongoingVotes.note}</VoteButtons.Remove>}
+      {voting && <VoteButtons.Add noteId={props.noteId} disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)} />}
     </div>
   );
 };

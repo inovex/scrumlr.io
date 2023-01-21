@@ -16,3 +16,4 @@ export const SHOW_LEGAL_DOCUMENTS = showLegalDocuments !== undefined ? showLegal
 export const SERVER_HTTP_URL = serverURL || process.env.REACT_APP_SERVER_HTTP_URL || `${window.location.origin.replace(window.location.protocol, httpProtocol)}/api`;
 export const SERVER_WEBSOCKET_URL =
   websocketURL || process.env.REACT_APP_SERVER_WEBSOCKET_URL || `${window.location.origin.replace(window.location.protocol, websocketProtocol)}/api`;
+export const SERVER_WEBSOCKET_PROTOCOL = websocketProtocol;

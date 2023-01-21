@@ -1,20 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Note Input should render correctly 1`] = `
-<div
+<form
   class="note-input"
 >
   <input
     class="note-input__input"
+    maxlength="1024"
     placeholder="Add your note..."
-    tabindex="0"
     type="text"
     value=""
   />
-  <svg
-    class="note-input__icon"
+  <button
+    class="note-input__add-button"
+    tabindex="-1"
+    type="submit"
   >
-    icon-add.svg
-  </svg>
-</div>
+    <svg
+      class="note-input__icon"
+    >
+      icon-add.svg
+    </svg>
+  </button>
+</form>
 `;
