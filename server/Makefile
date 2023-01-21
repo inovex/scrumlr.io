@@ -2,8 +2,7 @@ LINKERFLAGS = -X main.Version=`git describe --tags --always --long --dirty` -X m
 
 .ONESHELL:
 build-alpine:
-	cd src
-	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -o main -ldflags "$(LINKERFLAGS)"
+	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -o main -ldflags "$(LINKERFLAGS)" ./cmd/scrumlr
 
 run-docker:
 	make build-alpine
@@ -12,18 +11,16 @@ run-docker:
 .ONESHELL:
 run-dev:
 	cd src
-	go run . -d postgresql://admin:supersecret@localhost:5432/scrumlr?sslmode=disable
+	docker-compose --profile dev up
 
 run-docker-dev:
-	docker-compose --profile dev up
+	make run-dev
+	go run . -d postgresql://admin:supersecret@localhost:5432/scrumlr?sslmode=disable
 
 .ONESHELL:
 test:
-	cd src
-	go test ./... -cover -coverprofile=coverage.txt
+	go test ./... -cover -coverprofile "coverage.txt"
 
 .ONESHELL:
 coverage:
-	make test
-	cd src
-	go tool cover -html=coverage.txt
+	go tool cover -html "coverage.txt"
