@@ -140,8 +140,7 @@
   "PassphraseDialog": {
     "passphraseInputLabel": "Enter the passphrase to access this board",
     "togglePassphraseVisibility": "Toggle passphrase visibility",
-    "submit": "Submit",
-    "tooManyJoinRequests": "You tried too often. Please wait."
+    "submit": "Submit"
   },
   "Timer": {
     "stopTimer": "Stop timer"
