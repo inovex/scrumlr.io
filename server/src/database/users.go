@@ -20,6 +20,7 @@ type User struct {
 	Avatar        *types.Avatar `bun:"type:jsonb,nullzero"`
 	Name          string
 	AccountType   types.AccountType
+	KeyMigration  *time.Time
 	CreatedAt     time.Time
 }
 
@@ -98,6 +99,44 @@ func (d *Database) createExternalUser(id, name, avatarUrl string, accountType ty
 func (d *Database) GetUser(id uuid.UUID) (User, error) {
 	var user User
 	err := d.db.NewSelect().Model(&user).Where("id = ?", id).Scan(context.Background())
+	return user, err
+}
+
+func (d *Database) IsUserAnonymous(id uuid.UUID) (bool, error) {
+	count, err := d.db.NewSelect().
+		Table("users").
+		Column("role").
+		Where("id = ?", id).
+		Where("account_type = ?", types.AccountTypeAnonymous).
+		Count(context.Background())
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (d *Database) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
+	count, err := d.db.NewSelect().
+		Table("users").
+		Column("role").
+		Where("id = ?", id).
+		Where("account_type = ?", types.AccountTypeAnonymous).
+		Where("key_migration IS NULL").
+		Count(context.Background())
+	if err != nil {
+		return false, err
+	}
+	return count > 0, nil
+}
+
+func (d *Database) SetKeyMigration(id uuid.UUID) (User, error) {
+	var user User
+	_, err := d.db.NewUpdate().
+		Table("users").
+		Set("key_migration = ?", time.Now()).
+		Where("id = ?", id).
+		Returning("*").
+		Exec(common.ContextWithValues(context.Background(), "Database", d), &user)
 	return user, err
 }
 
