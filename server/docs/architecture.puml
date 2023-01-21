@@ -1,4 +1,5 @@
 @startuml
+!theme amiga
 
 database "SQL database" as db
 queue nats.io as nats

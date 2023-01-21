@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    allow:
+      - dependency-type: "direct"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    target-branch: "main"
+    labels:
+      - "Type: Dependencies"
+    commit-message:
+      prefix: "go"
+      include: "scope"

@@ -1,0 +1,13 @@
+.github
+.git
+.DS_Store
+api/
+deployments/
+docs/
+.editorconfig
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+LICENSE
+Makefile
+README.md
+scrumlr.png
