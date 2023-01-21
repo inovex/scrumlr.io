@@ -8,6 +8,9 @@ This is the server application of [scrumlr.io](https://scrumlr.io) targeted by t
 It uses the Postgres database, as it's persistence layer and the nats.io service to synchronize all
 occurring events between multiple running instances.
 
+You can also use Redis instead of nats.io, which may help you to deploy faster to any
+cloud provider. Most of them offer managed Redis instances.
+
 The architecture is visualized by the PlantUML `docs/architecture.puml` or in this graphic:
 
 ![Architecture](docs/architecture.png)
