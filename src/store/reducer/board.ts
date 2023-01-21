@@ -54,7 +54,11 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "passphrase_required",
       };
     }
-
+    case Action.TooManyJoinRequests: {
+      return {
+        status: "too_many_join_requests",
+      };
+    }
     case Action.CreatedVoting: {
       // reset show voting, since websocket messages won't trigger update of board
       return {
