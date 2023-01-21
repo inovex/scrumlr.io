@@ -53,100 +53,6 @@ $ cd scrumlr.io
 
    The client will become available on [http://localhost:3000](http://localhost:3000)
 
-<details>
-  <summary>Read more on alternative development setups</summary>
-
-  ## Start server with nodemon and restart on code change
-
-  Start the database and the server in separate processes instead of booting up the whole compose file.
-
-  ```bash
-  $ docker compose --project-directory server/ up -d database dashboard
-  $ yarn --cwd server/ install
-  $ yarn --cwd server/ serve
-  ```
-
-  ## Run local Kubernetes development environment
-
-  You can **optionally** run the server on a local Kubernetes setup for development.
-
-  ### minikube
-
-  1. **Use the Docker daemon for minikube**
-
-     To make sure our local docker-built images are used for our minikube deployments.
-
-      ```bash
-      $ eval $(minikube docker-env)
-      ```
-     Important note: You have to run eval `$(minikube docker-env)` on each terminal you want to use, since it only sets the environment variables for the current shell session.
-
-  2. **Start your cluster**
-
-      ```bash
-      $ minikube start
-      ```
-
-     Optional: You can increase the available cpu cores and memory size in Docker desktop. The allocated resources can then also be used for minikube (e.g. 4 CPU cores and 8GB of ram):
-      ```bash
-      $ minikube start --cpus 4 --memory 7962
-      ```
-
-  3. **Create Nginx Ingress Controller**
-
-      ```bash
-      $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-      ```
-
-  4. **Run our deployment script**
-
-     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all Kubernetes resources afterwards.
-      ```bash
-      $ cd deployment
-      $ sh build.sh
-      $ sh deploy.sh
-      ```
-
-  5. **Create a minikube tunnel**
-
-     The minikube tunnel is needed so that our Ingress can be reached on `127.0.0.1`.
-      ```bash
-      $ minikube tunnel
-      ```
-
-  ### Docker Desktop
-
-  On MacOS and Windows machines you could also use the Docker Desktop application as Kubernetes context.
-
-  1. **Enable Kubernetes**
-
-     To enable Kubernetes support and install a standalone instance of Kubernetes running as a Docker container, go to `Docker Desktop > Preferences > Kubernetes` and then click `Enable Kubernetes`.
-
-  2. **Make sure to use the correct Kubernetes context**
-
-     Ensure that the context is pointing to `docker-desktop`.
-
-      ```bash
-      $ kubectl config get-contexts
-      $ kubectl config use-context docker-desktop
-      ```
-
-  3. **Create Nginx Ingress Controller**
-
-      ```bash
-      $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
-      ```
-
-  4. **Run our build & deployment script**
-
-     The build script will automatically search for all needed docker images, build them if they're missing and the deployment script will deploy all Kubernetes resources afterwards.
-      ```bash
-      $ cd deployment
-      $ sh build.sh
-      $ sh deploy.sh
-      ```
-</details>
-
 ## Contributing
 
 You're very welcome to be part of this project. You can contribute by opening an issue, by
@@ -167,7 +73,6 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/70689411?s=48&amp;v=4" width="48" height="48" alt="brandeins1403">](https://github.com/brandeins1403)
 [<img src="https://avatars.githubusercontent.com/u/56362368?s=48&v=4" width="48" height="48" alt="benedicthomuth">](https://github.com/benedicthomuth)
 [<img src="https://avatars.githubusercontent.com/u/7889564?s=48&amp;v=4" width="48" height="48" alt="schwehn42">](https://github.com/schwehn42)
-[<img src="https://avatars.githubusercontent.com/u/58441634?s=48&amp;v=4" width="48" height="48" alt="NNKKOO">](https://github.com/NNKKOO)
 
 [<img src="https://avatars.githubusercontent.com/u/741171?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/wlbr)
 [<img src="https://avatars.githubusercontent.com/u/5778920?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/bontscho)
@@ -184,6 +89,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/3976183?s=36&v=4" width="36" height="36" alt="dotcs">](https://github.com/dotcs)
 [<img src="https://avatars.githubusercontent.com/u/32651718?s=36&amp;v=4" width="36" height="36" alt="timengel">](https://github.com/timengel)
 [<img src="https://avatars.githubusercontent.com/u/68269653?s=36&amp;v=4" width="36" height="36" alt="louiskroener">](https://github.com/louiskroener)
+[<img src="https://avatars.githubusercontent.com/u/58441634?s=3648&amp;v=4" width="36" height="36" alt="NNKKOO">](https://github.com/NNKKOO)
 
 ... and many more!
 
