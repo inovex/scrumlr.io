@@ -5,6 +5,9 @@ import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
+import {useAppSelector} from "store";
+import {useTranslation} from "react-i18next";
+import {isEqual} from "underscore";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -15,7 +18,19 @@ type NoteDialogNoteContentProps = {
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
+
+  const author = useAppSelector((state) => {
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === authorId) ?? state.participants?.self;
+    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
+    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
+    return {
+      ...noteAuthor,
+      displayName,
+      isSelf,
+    };
+  }, isEqual);
 
   const onFocus = () => {
     dispatch(Actions.onNoteFocus());
@@ -36,7 +51,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         <img
           src={addProtocol(text)}
           className="note-dialog__note-content--image"
-          alt="user-provided media"
+          alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
           draggable={false} // safari bugfix
         />
       ) : (
