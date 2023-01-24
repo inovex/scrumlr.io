@@ -38,7 +38,7 @@
   "AccessPolicySelection": {
     "title": "Zugriffseinstellung",
     "publicTitle": "Offen",
-    "byPassphraseTitle": "Passwortgeschützt",
+    "byPassphraseTitle": "Mit Passwort",
     "manualVerificationTitle": "Mit Zustimmung",
     "passphrase": "Passwort",
     "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
@@ -58,13 +58,6 @@
     "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein"
-  },
-  "ParticipantsList": {
-    "title": "Teilnehmer",
-    "search": "Suche",
-    "searchAndFilter": "Suche und Filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -131,7 +124,7 @@
     "lower": "Hand senken"
   },
   "Request": {
-    "title": "Jemand möchte der Sitzung beitreten/hebt seine Hand"
+    "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
   },
   "LoginProviders": {
     "signInWithGoogle": "Einloggen mit Google",
@@ -237,7 +230,7 @@
     "english": "Englisch"
   },
   "Homepage": {
-    "developers": "© 2021-2022, mit ❤️ von <inovex>inovex</inovex>",
+    "developers": "© 2021-2023, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
@@ -274,7 +267,7 @@
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
-    "AccessPolicy": "Zugangsrichtlinien",
+    "AccessPolicy": "Zugriff",
     "Password": "Passwort",
     "SetAccessPolicyOpen": "Passwortschutz entfernen",
     "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
@@ -282,12 +275,24 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Owner": "Besitzer"
+    "Title" : "Teilnehmer",
+    "OwnerFilterTooltip": "Zeige nur den Besitzer",
+    "ModeratorFilterTooltip": "Zeige nur Moderatoren",
+    "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
+    "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator"
+  },
+  "UserRole": {
+    "Owner": "Besitzer",
+    "Moderator": "Moderator",
+    "Participant": "Teilnehmer"
   },
   "Appearance": {
     "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",

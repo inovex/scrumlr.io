@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth/v5"
@@ -16,6 +17,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 )
 
 type Server struct {
@@ -193,7 +195,21 @@ func (s *Server) initVotingResources(r chi.Router) {
 
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
-		r.Post("/", s.joinBoard)
+		r.Group(func(r chi.Router) {
+
+			r.Use(httprate.Limit(
+				3,
+				5*time.Second,
+				httprate.WithKeyFuncs(httprate.KeyByIP),
+				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusTooManyRequests)
+					w.Write([]byte(`{"error": "Too many requests"}`))
+				}),
+			))
+
+			r.Post("/", s.joinBoard)
+		})
 
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
 

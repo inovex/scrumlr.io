@@ -171,7 +171,10 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   );
 
   return (
-    <section className={classNames("column", {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))} ref={columnRef}>
+    <section
+      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
+      ref={columnRef}
+    >
       <div className="column__content">
         <div className="column__header">
           <NoteInput
@@ -202,8 +205,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
             {state.notes.map((note) => (
-              <li>
-                <Note key={note} noteId={note} viewer={state.viewer} />
+              <li key={note}>
+                <Note noteId={note} viewer={state.viewer} />
               </li>
             ))}
           </ul>

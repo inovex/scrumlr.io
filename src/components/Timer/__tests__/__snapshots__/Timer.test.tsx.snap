@@ -5,17 +5,33 @@ exports[`Timer should render correctly 1`] = `
   class="timer"
   id="timer"
 >
+  <div
+    class="vote-display__progress-bar"
+    style="right: calc(72px - NaN * 72px);"
+  />
   <span>
     02
     :
     59
   </span>
-  <button
-    title="Stop timer"
+  <div
+    class="timer__short-actions"
   >
-    <svg>
-      icon-close.svg
-    </svg>
-  </button>
+    <div
+      class="short-actions__button-wrapper"
+    >
+      <button>
+        <svg>
+          icon-cancel.svg
+        </svg>
+      </button>
+      <span>
+        Finish
+      </span>
+    </div>
+  </div>
+  <svg>
+    icon-timer.svg
+  </svg>
 </div>
 `;

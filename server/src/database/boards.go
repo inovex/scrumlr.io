@@ -21,6 +21,7 @@ type Board struct {
 	ShowNotesOfOtherUsers bool
 	AllowStacking         bool
 	CreatedAt             time.Time
+  TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -37,6 +38,7 @@ type BoardInsert struct {
 type BoardTimerUpdate struct {
 	bun.BaseModel `bun:"table:boards"`
 	ID            uuid.UUID
+  TimerStart    *time.Time
 	TimerEnd      *time.Time
 }
 
@@ -50,6 +52,7 @@ type BoardUpdate struct {
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
 	AllowStacking         *bool
+  TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -91,12 +94,12 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 
 func (d *Database) UpdateBoardTimer(update BoardTimerUpdate) (Board, error) {
 	var board Board
-	_, err := d.db.NewUpdate().Model(&update).Column("timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+	_, err := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
 	return board, err
 }
 
 func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
-	query := d.db.NewUpdate().Model(&update).Column("timer_end", "shared_note")
+	query := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end", "shared_note")
 
 	if update.Name != nil {
 		query.Column("name")

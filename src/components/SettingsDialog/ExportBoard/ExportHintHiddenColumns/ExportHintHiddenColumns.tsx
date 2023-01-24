@@ -20,7 +20,7 @@ export const ExportHintHiddenColumns: FC<ExportHintHiddenColumnsProps> = ({colum
         <div className="hint-hidden-columns__columns-list-container">
           <ul className="hint-hidden-columns__columns-list">
             {hiddenColumns.map((hiddenCol) => (
-              <li>{hiddenCol.name}</li>
+              <li key={hiddenCol.id}>{hiddenCol.name}</li>
             ))}
           </ul>
         </div>

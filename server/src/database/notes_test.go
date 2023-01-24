@@ -29,6 +29,12 @@ func TestRunnerForNotes(t *testing.T) {
 	t.Run("Update=10", testOrderOnShiftToStackWithinOtherColumn)
 	t.Run("Update=11", testOrderWhenMergingStacks)
 
+	t.Run("Update=12", testChangeOrderWhenMoveWithinStackToLower)
+	t.Run("Update=13", testChangeOrderWhenMoveWithinStackToHigher)
+	t.Run("Update=14", testChangeOrderWhenMoveWithinStackToNegative)
+	t.Run("Update=15", testChangeOrderWhenMoveWithinStackToLargeRank)
+	t.Run("Update=16", testOrderWhenChangeStackParent)
+
 	t.Run("Delete=0", testDeleteNote)
 	t.Run("Delete=1", testDeleteStackParent)
 	t.Run("Delete=2", testDeleteSharedNote)
@@ -49,6 +55,14 @@ var noteB1 *Note
 var noteB2 *Note
 var noteB3 *Note
 var noteC1 *Note
+
+var stackTestBoard *Board
+var stackTestColumn *Column
+var stackA *Note
+var stackB *Note
+var stackC *Note
+var stackD *Note
+var stackUser *User
 
 var author *User
 
@@ -330,6 +344,114 @@ func testOrderWhenMergingStacks(t *testing.T) {
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, notes, noteA1, noteA4, noteA2, noteA6, noteA3, noteA5)
+}
+
+func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
+	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
+	stackTestColumn = fixture.MustRow("Column.stackTestColumn").(*Column)
+	stackA = fixture.MustRow("Note.stackTestNote1").(*Note)
+	stackB = fixture.MustRow("Note.stackTestNote2").(*Note)
+	stackC = fixture.MustRow("Note.stackTestNote3").(*Note)
+	stackD = fixture.MustRow("Note.stackTestNote4").(*Note)
+	stackUser = fixture.MustRow("User.justin").(*User)
+
+	/*
+	   A: Rank 1337, Stack null
+	   B: Rank 0, Stack A
+	   C: Rank 1, Stack A
+	   D: Rank 2, Stack A
+	*/
+
+	notes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackA, stackD, stackC, stackB)
+
+	note, err := testDb.UpdateNote(stackUser.ID, NoteUpdate{
+		ID:    stackD.ID,
+		Board: stackTestBoard.ID,
+		Position: &NoteUpdatePosition{
+			Column: stackD.Column,
+			Stack:  uuid.NullUUID{UUID: stackA.ID, Valid: true},
+			Rank:   0,
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, note.Rank)
+
+	notes, _ = testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackA, stackC, stackB, stackD)
+}
+
+func testChangeOrderWhenMoveWithinStackToHigher(t *testing.T) {
+	note, err := testDb.UpdateNote(stackUser.ID, NoteUpdate{
+		ID:    stackD.ID,
+		Board: stackTestBoard.ID,
+		Position: &NoteUpdatePosition{
+			Column: stackA.Column,
+			Stack:  uuid.NullUUID{UUID: stackA.ID, Valid: true},
+			Rank:   2,
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, 2, note.Rank)
+
+	notes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackA, stackD, stackC, stackB)
+}
+
+func testChangeOrderWhenMoveWithinStackToNegative(t *testing.T) {
+	note, err := testDb.UpdateNote(stackUser.ID, NoteUpdate{
+		ID:    stackD.ID,
+		Board: stackTestBoard.ID,
+		Position: &NoteUpdatePosition{
+			Column: stackA.Column,
+			Stack:  uuid.NullUUID{UUID: stackA.ID, Valid: true},
+			Rank:   -100,
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, 0, note.Rank)
+
+	notes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackA, stackC, stackB, stackD)
+}
+
+func testChangeOrderWhenMoveWithinStackToLargeRank(t *testing.T) {
+	note, err := testDb.UpdateNote(stackUser.ID, NoteUpdate{
+		ID:    stackD.ID,
+		Board: stackTestBoard.ID,
+		Position: &NoteUpdatePosition{
+			Column: stackA.Column,
+			Stack:  uuid.NullUUID{UUID: stackA.ID, Valid: true},
+			Rank:   9999,
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, 2, note.Rank)
+
+	notes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackA, stackD, stackC, stackB)
+}
+
+func testOrderWhenChangeStackParent(t *testing.T) {
+	note, err := testDb.UpdateNote(stackUser.ID, NoteUpdate{
+		ID:    stackA.ID,
+		Board: stackTestBoard.ID,
+		Position: &NoteUpdatePosition{
+			Column: stackD.Column,
+			Stack:  uuid.NullUUID{UUID: stackD.ID, Valid: true},
+			Rank:   9999,
+		},
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, 2, note.Rank)
+
+	notes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumn.ID)
+	verifyNoteOrder(t, notes, stackD, stackA, stackC, stackB)
 }
 
 func testDeleteNote(t *testing.T) {

@@ -61,6 +61,7 @@ describe("StackView", () => {
         feedbackEnabled: false,
         enabledAuthProvider: [],
         hotkeysAreActive: false,
+        noteFocused: false,
       };
       const {container} = render(
         createStackView({
@@ -68,6 +69,7 @@ describe("StackView", () => {
           participants: {
             others: [],
             self: {user: {id: "test-user-id", name: "test-user-name"}, role: "MODERATOR", connected: true, ready: false, raisedHand: false, showHiddenColumns: true},
+            focusInitiator: null,
           },
         }),
         {container: global.document.querySelector("#portal")!}

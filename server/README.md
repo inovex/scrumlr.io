@@ -15,7 +15,7 @@ Afterwards you can start the server by executing:
 
 ```bash
 cd src/
-go run . --database "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" --disable-check-origin
+go run . --database "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" --disable-check-origin --insecure
 ```
 
 Or simply call `go run . -h` to see all available command line arguments. Many of those

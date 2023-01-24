@@ -89,14 +89,33 @@ $action-bar__width: 64px;
 
 // icons
 $icon--small: 16px;
-$icon--medium: 20px;
+$icon--medium: 24px;
 $icon--large: 32px;
-$icon--extralarge: 44px;
-$icon--huge: 64px;
+$icon--extralarge: 40px;
+$icon--huge: 48px;
+
+// flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// positioning
+@mixin inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 
 // border-radius
 $note__border-radius: 16px;
-$border-radius--round: 50px;
+$rounded--small: 8px;
+$rounded--default: 16px;
+$rounded--medium: 24px;
+$rounded--large: 32px;
+$rounded--full: 9999px;
 
 // margin and padding
 $margin--small: 8px;

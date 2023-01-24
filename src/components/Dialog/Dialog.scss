@@ -62,7 +62,7 @@
   background-color: transparent;
   transform: scale(1);
   transition: all 0.08s ease-in-out;
-  border-radius: $border-radius--round;
+  border-radius: $rounded--full;
 
   &:hover {
     background-color: var(--accent-color--desaturated-light);

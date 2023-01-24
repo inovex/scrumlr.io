@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -34,6 +34,14 @@ export const BoardSettings = () => {
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
+
+  useEffect(() => {
+    setBoardName(state.board.name ?? "");
+  }, [state.board.name]);
+
+  useEffect(() => {
+    setIsProtected(state.board.accessPolicy === "BY_PASSPHRASE");
+  }, [state.board.accessPolicy]);
 
   const handleSetPassword = (newPassword: string) => {
     setPassword(newPassword);
@@ -141,7 +149,6 @@ export const BoardSettings = () => {
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
                 <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
               </SettingsButton>
-
               {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
@@ -201,6 +208,17 @@ export const BoardSettings = () => {
                     <Toggle active={state.me?.showHiddenColumns ?? false} />
                   </div>
                 </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                >
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
+                </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
@@ -213,12 +231,9 @@ export const BoardSettings = () => {
 
           {showConfirmationDialog && (
             <ConfirmationDialog
-              headline={t("ConfirmationDialog.deleteBoard")}
-              acceptMessage={t("ConfirmationDialog.yes")}
+              title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
-              declineMessage={t("ConfirmationDialog.no")}
               onDecline={() => setShowConfirmationDialog(false)}
-              className="board-settings__confirmation-dialog"
             />
           )}
         </div>

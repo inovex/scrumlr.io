@@ -158,6 +158,27 @@ exports[`BoardSettings should match snapshot 1`] = `
             />
           </div>
         </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button board-settings__allow-note-repositioning-button"
+          data-testid="note-repositioning"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            BoardSettings.AllowNoteRepositioningOption
+          </span>
+          <div
+            class="board-settings__allow-note-repositioning-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
+        </button>
       </div>
       <button
         class="settings-option-button board-settings__delete-button"
