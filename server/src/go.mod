@@ -8,7 +8,7 @@ replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc 
 require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
-	github.com/go-chi/httprate v0.7.0
+	github.com/go-chi/httprate v0.7.1
 	github.com/go-chi/jwtauth/v5 v5.1.0
 	github.com/go-chi/render v1.0.2
 	github.com/go-redis/redis/v8 v8.11.5
