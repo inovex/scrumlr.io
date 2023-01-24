@@ -115,3 +115,31 @@ $fly-in-time: 0.5s;
     opacity: 100%;
   }
 }
+
+// DARK THEME
+[theme="dark"] {
+  .request__container {
+    background-color: $color-darkest-gray;
+    box-shadow: 3px 5px 3px rgba($color-black, 30%);
+  }
+
+  .request__participant-name,
+  .request__info-text {
+    color: $color-white;
+  }
+
+  .request__button {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+
+    &:hover {
+      background-color: $color-dark-mode-note--hover;
+    }
+  }
+
+  .request__icon-container {
+    svg {
+      color: $color-white;
+    }
+  }
+}
