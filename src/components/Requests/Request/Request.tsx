@@ -38,7 +38,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
   return (
     <div className="request__container">
       <figure className="request__request-figure">
-        <UserAvatar id={participant.id} avatar={participant.avatar} name={participant.name} />
+        <UserAvatar id={participant.id} avatar={participant.avatar} title={participant.name} />
       </figure>
 
       <div className="request__wrapper">
