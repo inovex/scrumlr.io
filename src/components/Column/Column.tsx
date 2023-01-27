@@ -40,6 +40,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         .map((note) => note.id),
       moderating: applicationState.view.moderating,
       viewer: applicationState.participants!.self,
+      allowStacking: applicationState.board.data?.allowStacking ?? true,
     }),
     _.isEqual
   );
@@ -188,7 +189,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
-                <Sortable mode="both" type="note" id={note} accentColor={getColorClassName(color)}>
+                <Sortable mode="both" type="note" id={note} accentColor={getColorClassName(color)} disabled={!(isModerator || state.allowStacking)}>
                   <Note noteId={note} viewer={state.viewer} />
                 </Sortable>
               </li>

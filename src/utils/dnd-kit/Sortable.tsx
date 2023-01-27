@@ -2,15 +2,17 @@ import {UniqueIdentifier} from "@dnd-kit/core";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {ReactNode} from "react";
+import {SortableMode, SortableType} from "./CustomDndContext";
 
 type SortableProps = {
   children: ReactNode;
   id: UniqueIdentifier;
-  type: "column" | "note";
-  mode: "drag" | "drop" | "both";
+  type: SortableType;
+  mode: SortableMode;
   className?: string;
   items?: (UniqueIdentifier | {id: UniqueIdentifier})[];
   accentColor?: string;
+  disabled?: boolean;
 };
 
 export const Sortable = ({children, id, type, mode, className, items, accentColor}: SortableProps) => {
