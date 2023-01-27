@@ -6,14 +6,15 @@ import {ReactNode} from "react";
 type SortableProps = {
   children: ReactNode;
   id: UniqueIdentifier;
-  type: string;
+  type: "column" | "note";
   mode: "drag" | "drop" | "both";
   className?: string;
   items?: (UniqueIdentifier | {id: UniqueIdentifier})[];
+  accentColor?: string;
 };
 
-export const Sortable = ({children, id, type, mode, className, items}: SortableProps) => {
-  const {setNodeRef, setDraggableNodeRef, setDroppableNodeRef, attributes, listeners, transition, transform, isDragging} = useSortable({id, data: {type}});
+export const Sortable = ({children, id, type, mode, className, items, accentColor}: SortableProps) => {
+  const {setNodeRef, setDraggableNodeRef, setDroppableNodeRef, attributes, listeners, transition, transform, isDragging} = useSortable({id, data: {type, accentColor}});
 
   let ref: ((element: HTMLElement | null) => void) | undefined;
 
@@ -40,7 +41,7 @@ export const Sortable = ({children, id, type, mode, className, items}: SortableP
       style={{
         transition,
         transform: CSS.Transform.toString(transform),
-        opacity: isDragging ? 0.5 : 1,
+        opacity: isDragging && mode !== "drop" ? 0.5 : 1,
       }}
       className={className}
     >

@@ -188,7 +188,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
-                <Sortable mode="both" type="note" id={note}>
+                <Sortable mode="both" type="note" id={note} accentColor={getColorClassName(color)}>
                   <Note noteId={note} viewer={state.viewer} />
                 </Sortable>
               </li>

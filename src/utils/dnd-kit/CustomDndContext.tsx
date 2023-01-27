@@ -1,4 +1,5 @@
 import {
+  Active,
   defaultDropAnimationSideEffects,
   DndContext,
   DragEndEvent,
@@ -21,7 +22,7 @@ type CustomDndContextProps = {
 };
 
 export const CustomDndContext = ({children}: CustomDndContextProps) => {
-  const [activeId, setActiveId] = useState<null | string>(null);
+  const [active, setActive] = useState<null | Active>(null);
   const self = useAppSelector((state) => state.participants?.self);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const dropAnimation: DropAnimation = {
@@ -34,8 +35,8 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     }),
   };
 
-  const onDragStart = ({active}: DragStartEvent) => {
-    setActiveId(active.id.toString());
+  const onDragStart = (event: DragStartEvent) => {
+    setActive(event.active);
     console.log("onDragStart");
   };
   const onDragOver = ({active, over}: DragOverEvent) => {
@@ -49,7 +50,12 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
   return (
     <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd}>
       {children}
-      {createPortal(<DragOverlay dropAnimation={dropAnimation}>{activeId && self ? <Note noteId={activeId} viewer={self} /> : null}</DragOverlay>, document.body)}
+      {createPortal(
+        <DragOverlay dropAnimation={dropAnimation} className={active?.data.current?.accentColor}>
+          {active?.id && self ? <Note noteId={active.id.toString()} viewer={self} /> : null}
+        </DragOverlay>,
+        document.body
+      )}
     </DndContext>
   );
 };
