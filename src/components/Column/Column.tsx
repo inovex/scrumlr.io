@@ -13,7 +13,7 @@ import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
-import {Sortable} from "utils/dnd-kit/Sortable";
+import {Sortable} from "components/DragAndDrop/Sortable";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 

@@ -6,7 +6,7 @@ import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
 import ReactTooltip from "react-tooltip";
-import {CustomDndContext} from "utils/dnd-kit/CustomDndContext";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];

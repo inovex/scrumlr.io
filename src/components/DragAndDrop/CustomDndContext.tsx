@@ -16,7 +16,8 @@ import {
 import {Note} from "components/Note";
 import {ReactNode, useState} from "react";
 import {createPortal} from "react-dom";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {Column} from "types/column";
 
 type CustomDndContextProps = {
@@ -42,7 +43,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     }),
   };
 
-  const findCurrentColumn = (over: Over): Column | undefined => {
+  const getColumn = (over: Over): Column | undefined => {
     const type = over.data.current?.type;
     switch (type) {
       case "note": {
@@ -62,12 +63,16 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
   };
   const onDragOver = (event: DragOverEvent) => {
     if (event.over) {
-      const col = findCurrentColumn(event.over);
+      const col = getColumn(event.over);
       console.log(col?.name);
     }
   };
   const onDragEnd = (event: DragEndEvent) => {
-    setActive(null);
+    if (!event.over || !active) return;
+
+    const column = getColumn(event.over);
+    if (!column) return;
+    store.dispatch(Actions.editNote(active.id.toString(), {position: {column: column.id, stack: undefined, rank: 0}}));
   };
 
   return (
