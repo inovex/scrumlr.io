@@ -13,6 +13,7 @@ import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
+import {Sortable} from "utils/dnd-kit/Sortable";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -183,15 +184,17 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
           </div>
         </div>
-        <div className="column__notes-wrapper">
+        <Sortable className="column__notes-wrapper" id={id} mode="drop" type="column" items={state.notes}>
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
-                <Note noteId={note} viewer={state.viewer} />
+                <Sortable mode="both" type="note" id={note}>
+                  <Note noteId={note} viewer={state.viewer} />
+                </Sortable>
               </li>
             ))}
           </ul>
-        </div>
+        </Sortable>
       </div>
     </section>
   );
