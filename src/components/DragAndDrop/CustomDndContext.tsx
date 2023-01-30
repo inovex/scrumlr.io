@@ -62,16 +62,17 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     setActive(event.active);
   };
   const onDragOver = (event: DragOverEvent) => {
-    if (event.over) {
-      const col = getColumn(event.over);
-      console.log(col?.name);
-    }
+    if (!event.over) return;
+
+    const col = getColumn(event.over);
+    console.log(col?.name);
   };
+
   const onDragEnd = (event: DragEndEvent) => {
     if (!event.over || !active) return;
 
     const column = getColumn(event.over);
-    if (!column) return;
+    if (!column || column.id === notes.find((note) => note.id === active.id)?.position.column) return;
     store.dispatch(Actions.editNote(active.id.toString(), {position: {column: column.id, stack: undefined, rank: 0}}));
   };
 

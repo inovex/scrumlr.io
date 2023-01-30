@@ -185,11 +185,11 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
           </div>
         </div>
-        <Sortable className="column__notes-wrapper" id={id} mode="drop" type="column" items={state.notes}>
+        <Sortable className="column__notes-wrapper" id={id} mode="drop" items={state.notes} data={{type: "column"}}>
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
-                <Sortable mode="both" type="note" id={note} accentColor={getColorClassName(color)} disabled={!(isModerator || state.allowStacking)}>
+                <Sortable mode="both" id={note} disabled={!(isModerator || state.allowStacking)} data={{type: "note", accentColor: getColorClassName(color)}}>
                   <Note noteId={note} viewer={state.viewer} />
                 </Sortable>
               </li>

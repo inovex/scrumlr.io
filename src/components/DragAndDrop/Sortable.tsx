@@ -1,22 +1,28 @@
 import {UniqueIdentifier} from "@dnd-kit/core";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
+import classNames from "classnames";
 import {ReactNode} from "react";
 import {SortableMode, SortableType} from "./CustomDndContext";
 
 type SortableProps = {
-  children: ReactNode;
   id: UniqueIdentifier;
-  type: SortableType;
+  disabled?: boolean;
+  items?: (UniqueIdentifier | {id: UniqueIdentifier})[];
+  children: ReactNode;
   mode: SortableMode;
   className?: string;
-  items?: (UniqueIdentifier | {id: UniqueIdentifier})[];
-  accentColor?: string;
-  disabled?: boolean;
+  data?: {
+    accentColor?: string;
+    type: SortableType;
+  };
 };
 
-export const Sortable = ({children, id, type, mode, className, items, accentColor}: SortableProps) => {
-  const {setNodeRef, setDraggableNodeRef, setDroppableNodeRef, attributes, listeners, transition, transform, isDragging} = useSortable({id, data: {type, accentColor}});
+export const Sortable = ({children, id, mode, className, items, data}: SortableProps) => {
+  const {setNodeRef, setDraggableNodeRef, setDroppableNodeRef, attributes, listeners, transition, transform, isDragging, isOver, over} = useSortable({
+    id,
+    data,
+  });
 
   let ref: ((element: HTMLElement | null) => void) | undefined;
 
@@ -45,7 +51,7 @@ export const Sortable = ({children, id, type, mode, className, items, accentColo
         transform: CSS.Transform.toString(transform),
         opacity: isDragging && mode !== "drop" ? 0.5 : 1,
       }}
-      className={className}
+      className={classNames(className, {isOver: isOver || (over?.id && items && items.includes(over.id.toString()))})}
     >
       {children}
     </div>
