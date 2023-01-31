@@ -1,4 +1,4 @@
-import {useEffect, useRef, VFC} from "react";
+import {VFC} from "react";
 import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
@@ -13,6 +13,7 @@ import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
 import i18n from "i18next";
 import classNames from "classnames";
+import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
 
@@ -30,17 +31,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
-  const columnSettingsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = ({target}: MouseEvent) => {
-      if (!columnSettingsRef.current?.contains(target as Node)) {
-        onClose?.();
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [columnSettingsRef, onClose]);
+  const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
