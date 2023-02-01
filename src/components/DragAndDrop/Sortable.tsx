@@ -1,4 +1,4 @@
-import {UniqueIdentifier} from "@dnd-kit/core";
+import {Active, Collision, UniqueIdentifier, useDndContext} from "@dnd-kit/core";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
@@ -18,17 +18,56 @@ type SortableProps = {
   };
 };
 
+const combineThreshold: [number, number] = [0.1, 0.5];
+const getShouldCombine = (id: string, items: UniqueIdentifier[], newIndex: number, collisions: Collision[] | null, active: Active | null) => {
+  if (!items) {
+    return false;
+  }
+  const newId = items[newIndex];
+
+  if (!collisions || collisions.length < 2) {
+    return false;
+  }
+
+  const {id: secondCollidingId, data: collisionData} = collisions[1];
+
+  if (!collisionData) {
+    return false;
+  }
+  const collisionRatio = collisionData.value;
+
+  // NOTE: This can be improved with a custom dnd-kit collision detection
+  return secondCollidingId === newId && collisionRatio != null && id !== active?.id && collisionRatio > combineThreshold[0] && collisionRatio < combineThreshold[1];
+};
+
 export const Sortable = ({children, id, mode, className, items, data}: SortableProps) => {
-  const {setNodeRef, setDraggableNodeRef, setDroppableNodeRef, attributes, listeners, transition, transform, isDragging, isOver, over} = useSortable({
+  const {
+    setNodeRef,
+    setDraggableNodeRef,
+    setDroppableNodeRef,
+    attributes,
+    listeners,
+    transition,
+    transform,
+    isDragging,
+    isOver,
+    over,
+    items: contextItems,
+    newIndex,
+    active,
+  } = useSortable({
     id,
     data,
   });
+  const {collisions} = useDndContext();
 
   let ref: ((element: HTMLElement | null) => void) | undefined;
+  let shouldCombine = false;
 
   switch (mode) {
     case "both":
       ref = setNodeRef;
+      shouldCombine = getShouldCombine(id.toString(), contextItems, newIndex, collisions, active);
       break;
     case "drag":
       ref = setDraggableNodeRef;
@@ -40,7 +79,6 @@ export const Sortable = ({children, id, mode, className, items, data}: SortableP
       ref = undefined;
       break;
   }
-
   const sortable = (
     <div
       ref={ref}
@@ -51,7 +89,7 @@ export const Sortable = ({children, id, mode, className, items, data}: SortableP
         transform: CSS.Transform.toString(transform),
         opacity: isDragging && mode !== "drop" ? 0.5 : 1,
       }}
-      className={classNames(className, {isOver: isOver || (over?.id && items && items.includes(over.id.toString()))})}
+      className={classNames(className, {shouldCombine, isOver: isOver || (over?.id && items && items.includes(over.id.toString()))})}
     >
       {children}
     </div>

@@ -77,7 +77,7 @@ $note__author-image-size: 26px;
   }
 }
 
-.note--isOver {
+.shouldCombine .note {
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
