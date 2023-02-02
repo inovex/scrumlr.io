@@ -3,7 +3,9 @@ import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {ReactNode} from "react";
-import {SortableMode, SortableType} from "./CustomDndContext";
+
+export type SortableType = "column" | "note";
+export type SortableMode = "drag" | "drop" | "both";
 
 type SortableProps = {
   id: UniqueIdentifier;
