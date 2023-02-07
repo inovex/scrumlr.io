@@ -4393,9 +4393,10 @@ flatted@^3.1.0:
   version "3.2.4"
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.2.4.tgz"
 
-focus-lock@^0.11.2:
-  version "0.11.2"
-  resolved "https://registry.npmjs.org/focus-lock/-/focus-lock-0.11.2.tgz"
+focus-lock@^0.11.5:
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/focus-lock/-/focus-lock-0.11.5.tgz#bef1bf86000ce5ee634a7fedeecf28a580dfbc9d"
+  integrity sha512-1mTr6pl9HBpJ8CqY7hRc38MCrcuTZIeYAkBD1gBTzbx5/to+bRBaBYtJ68iDq7ryTzAAbKrG3dVKjkrWTaaEaw==
   dependencies:
     tslib "^2.0.3"
 
@@ -7337,12 +7338,13 @@ react-fast-compare@^3.1.1:
   version "3.2.0"
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.0.tgz"
 
-react-focus-lock@^2.9.2:
-  version "2.9.2"
-  resolved "https://registry.npmjs.org/react-focus-lock/-/react-focus-lock-2.9.2.tgz"
+react-focus-lock@^2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/react-focus-lock/-/react-focus-lock-2.9.3.tgz#147bc783f4325b7ab52ac580c8afffdfc1d7ce23"
+  integrity sha512-cGNkz9p5Fpqio6hBHlkKxzRYrBYtcPosFOL6Q3N/LSbHjwP/PTBqHpvbgaOYoE7rWfzw8qXPKTB3Tk/VPgw4NQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
-    focus-lock "^0.11.2"
+    focus-lock "^0.11.5"
     prop-types "^15.6.2"
     react-clientside-effect "^1.2.6"
     use-callback-ref "^1.3.0"
