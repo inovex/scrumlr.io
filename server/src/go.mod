@@ -21,9 +21,9 @@ require (
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.1
-	github.com/uptrace/bun v1.1.9
+	github.com/uptrace/bun v1.1.11
 	github.com/uptrace/bun/dbfixture v1.1.9
-	github.com/uptrace/bun/dialect/pgdialect v1.1.9
+	github.com/uptrace/bun/dialect/pgdialect v1.1.11
 	github.com/uptrace/bun/extra/bundebug v1.1.9
 	github.com/urfave/cli/v2 v2.24.3
 	go.uber.org/zap v1.24.0
@@ -70,7 +70,7 @@ require (
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/markbates/going v1.0.3 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
 	github.com/nats-io/nats-server/v2 v2.8.2 // indirect
