@@ -6,6 +6,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
+import {Tooltip} from "react-tooltip";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
@@ -76,7 +77,15 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
           }
         }}
         maxLength={maxNoteLength}
-        data-tip={hotkeyKey}
+        id={`note-input-${columnId}`}
+        data-tooltip-content={hotkeyKey}
+      />
+      <Tooltip
+        anchorId={`note-input-${columnId}`}
+        place="bottom"
+        variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
+        delayShow={500}
+        style={{zIndex: 999}}
       />
       <button
         type="submit"
