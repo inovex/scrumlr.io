@@ -13,6 +13,7 @@ import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
+import {Tooltip} from "react-tooltip";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -59,7 +60,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             }}
             aria-haspopup
             aria-pressed={showMenu}
-            data-tip={state.name || DEFAULT_BOARD_NAME}
+            id="board-header__name-and-settings-button"
+            data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
           >
             <div className="board-header__access-policy-status">
               {
@@ -75,6 +77,13 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
             </div>
           </button>
+          <Tooltip
+            anchorId="board-header__name-and-settings-button"
+            place="bottom"
+            variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
+            delayShow={500}
+            style={{zIndex: 999}}
+          />
         </div>
 
         <div className="board-header__users">
