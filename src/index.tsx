@@ -17,6 +17,7 @@ import {saveToStorage} from "utils/storage";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {TouchBackend} from "react-dnd-touch-backend";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
+import "react-tooltip/dist/react-tooltip.css";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
