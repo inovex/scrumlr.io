@@ -12,15 +12,6 @@ exports[`Note Input should render correctly 1`] = `
     type="text"
     value=""
   />
-  <div
-    class="react-tooltip styles-module_tooltip__mnnfp styles-module_light__Z6W-X"
-    role="tooltip"
-    style="z-index: 999;"
-  >
-    <div
-      class="react-tooltip-arrow styles-module_arrow__K0L3T"
-    />
-  </div>
   <button
     class="note-input__add-button"
     tabindex="-1"
