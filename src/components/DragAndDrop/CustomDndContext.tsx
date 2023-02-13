@@ -1,5 +1,6 @@
 import {
-  Active,
+  Collision,
+  CollisionDetection,
   defaultDropAnimationSideEffects,
   DndContext,
   DragEndEvent,
@@ -16,10 +17,10 @@ import {
 } from "@dnd-kit/core";
 import {Note} from "components/Note";
 import {getColorClassName} from "constants/colors";
+import {MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
 import {createPortal} from "react-dom";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppSelector} from "store";
 import {Column} from "types/column";
 
 type CustomDndContextProps = {
@@ -27,7 +28,8 @@ type CustomDndContextProps = {
 };
 
 export const CustomDndContext = ({children}: CustomDndContextProps) => {
-  const [active, setActive] = useState<null | Active>(null);
+  const [maxCollision, setMaxCollision] = useState<null | Collision>(null);
+  const [dragActive, setDragActive] = useState<{id: string; colorClassName: string} | undefined>();
 
   const {self, columns, notes} = useAppSelector((state) => ({self: state.participants?.self, columns: state.columns, notes: state.notes}));
 
@@ -49,34 +51,41 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     return columns.find((column) => column.id === id);
   };
 
-  const onDragStart = (event: DragStartEvent) => {
-    setActive(event.active);
+  const onDragStart = ({active}: DragStartEvent) => {
+    if (!active) return;
+    const activeColumnColor = getColumn(active.id)?.color;
+    if (!activeColumnColor) return;
+    setDragActive({id: active.id.toString(), colorClassName: getColorClassName(activeColumnColor)});
   };
   const onDragOver = (event: DragOverEvent) => {
-    if (!event.over) return;
-
-    // const col = getColumn(event.over.id);
-    // console.log(col?.name);
+    setMaxCollision(event.collisions?.[0] ?? null);
   };
 
-  const onDragEnd = (event: DragEndEvent) => {
-    if (!event.over || !active) return;
+  const onDragEnd = ({over, collisions, active}: DragEndEvent) => {};
 
-    const column = getColumn(event.over.id);
-    if (!column || column.id === notes.find((note) => note.id === active.id)?.position.column) return;
-    store.dispatch(Actions.editNote(active.id.toString(), {position: {column: column.id, stack: undefined, rank: 0}}));
-  };
+  const collisionDetectionWrapper =
+    (collisionDetection: CollisionDetection) =>
+    (...[args]: Parameters<typeof collisionDetection>) => {
+      const collisions = collisionDetection(args);
+      // only reorder if intersectionRatio is above threshold, otherwise move last collision to top
+      // the first collision will be used as over id
+      // if the over id changes, the active draggable will be moved there
+      if (collisions?.[0]?.data?.value < MOVE_THRESHOLD && maxCollision) {
+        const lastCollisionId = maxCollision?.id;
+        const index = collisions.findIndex((collision) => collision.id === lastCollisionId);
+        collisions.unshift(...collisions.splice(index, 1));
+      }
 
-  const activeColumnColor = getColumn(active?.id)?.color;
-  let colorClassName: string | undefined;
-  if (activeColumnColor) colorClassName = getColorClassName(activeColumnColor);
+      return collisions;
+    };
 
   return (
-    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} collisionDetection={rectIntersection}>
+    // eslint-disable-next-line max-len
+    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
       {children}
       {createPortal(
-        <DragOverlay dropAnimation={dropAnimation} className={colorClassName}>
-          {active?.id && self ? <Note noteId={active.id.toString()} viewer={self} /> : null}
+        <DragOverlay dropAnimation={dropAnimation} className={dragActive?.colorClassName}>
+          {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
         </DragOverlay>,
         document.body
       )}

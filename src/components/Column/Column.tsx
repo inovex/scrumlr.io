@@ -13,7 +13,7 @@ import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
-import {SortableContext, useSortable} from "@dnd-kit/sortable";
+import {ColumnDroppable} from "components/DragAndDrop/ColumnDroppable";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -31,19 +31,22 @@ export interface ColumnProps {
 export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-
-  const state = useAppSelector(
-    (applicationState) => ({
-      notes: applicationState.notes
+  const notes = useAppSelector(
+    (state) =>
+      state.notes
         .filter((note) => !note.position.stack)
-        .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
+        .filter(
+          (note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id
+          // ((note.position.column === id && active?.id !== note.id) || (active?.id === note.id && id === (over?.data.current?.columnId ?? over?.id)))
+        )
         .map((note) => note.id),
-      moderating: applicationState.view.moderating,
-      viewer: applicationState.participants!.self,
-    }),
     _.isEqual
   );
-  const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
+  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const colorClassName = getColorClassName(color);
+
+  const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
   const [columnName, setColumnName] = useState(name);
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
@@ -51,7 +54,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
-  const {setDroppableNodeRef, attributes, listeners, isOver, over} = useSortable({id, data: {type: "column"}});
 
   const toggleVisibilityHandler = () => {
     dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -153,13 +155,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     </>
   );
 
-  const isOverColumn = isOver || (over?.id && state.notes.includes(over.id.toString()));
-
   return (
-    <section
-      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
-      ref={columnRef}
-    >
+    <section className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
           <NoteInput
@@ -172,7 +169,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           />
           <div className="column__header-title">
             {renderColumnName()}
-            {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
+            {columnNameMode === "VIEW" && <span className="column__header-card-number">{notes.length}</span>}
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
@@ -187,17 +184,15 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
           </div>
         </div>
-        <SortableContext items={state.notes}>
-          <div ref={setDroppableNodeRef} className={classNames("column__notes-wrapper", {isOver: isOverColumn})} {...attributes} {...listeners}>
-            <ul className="column__note-list">
-              {state.notes.map((note) => (
-                <li>
-                  <Note noteId={note} viewer={state.viewer} key={note} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </SortableContext>
+        <ColumnDroppable id={id} items={notes} className="column__notes-wrapper">
+          <ul className="column__note-list">
+            {notes.map((note) => (
+              <li key={note}>
+                <Note noteId={note} viewer={viewer} colorClassName={colorClassName} />
+              </li>
+            ))}
+          </ul>
+        </ColumnDroppable>
       </div>
     </section>
   );
