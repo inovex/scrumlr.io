@@ -8,6 +8,7 @@ import {AvataaarProps} from "components/Avatar";
 import _ from "underscore";
 import "./NoteDialogNoteFooter.scss";
 import {Votes} from "components/Votes";
+import {ReactComponent as ViewersIcon} from "assets/icon-visible.svg";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
@@ -21,6 +22,9 @@ type NoteDialogNoteFooterProps = {
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
   const {t} = useTranslation();
 
+  const them = useAppSelector((state) => state.participants!.others.filter((p) => p.connected), _.isEqual);
+  const viewers = them.filter((participant) => participant.viewsSharedNote);
+  const moderating = useAppSelector((state) => state.view.moderating);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
@@ -45,6 +49,11 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           />
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
+      )}
+      {moderating && (
+        <div className="note-dialog__note-viewers">
+          {viewers?.length}/{them?.length} <ViewersIcon className="note-dialog__note-viewers-icon" />
+        </div>
       )}
       <Votes {...props} className="note-dialog__note-votes" />
     </div>

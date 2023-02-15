@@ -7,10 +7,31 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  // justify-content: space-between;
   align-items: center;
   height: var(--note-footer-height);
   grid-area: 2 / 1 / 3 / 3;
+  gap: 10px;
+}
+
+// TODO remove magic numbers
+.note-dialog__note-viewers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(249, 250, 251, 1);
+  border-radius: 21px;
+  padding: 0px 16px;
+  height: var(--note-footer-height);
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--accent-color--desaturated-light);
+  letter-spacing: 0.25px;
+}
+
+.note-dialog__note-viewers-icon {
+  width: 20px;
+  margin-left: 8px;
 }
 
 .note-dialog__note-author {
@@ -75,6 +96,10 @@
   }
 }
 
+.note-dialog__note-votes {
+  margin-left: auto;
+}
+
 .note-dialog__note-votes > *:last-child {
   margin: 0 calc(($tooltip-button-size - var(--note-footer-height, $votes-button-size)) / 2);
 }
@@ -89,5 +114,9 @@
   }
   .note-dialog__note-user-avatar #Circle-Background {
     stroke: none;
+  }
+  .note-dialog__note-viewers {
+    background: $color-dark-mode;
+    color: var(--accent-color--desaturated-dark);
   }
 }

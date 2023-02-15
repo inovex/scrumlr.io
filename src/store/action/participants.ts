@@ -15,6 +15,7 @@ export const ParticipantAction = {
 
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
+  SetViewsSharedNoteStatus: "scrumlr.io/setViewsSharedNoteStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
   EditSelf: "scrumlr.io/editSelf" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
@@ -69,6 +70,12 @@ export const ParticipantActionFactory = {
     raisedHand,
   }),
 
+  setViewsSharedNote: (user: string, viewsSharedNote: boolean) => ({
+    type: ParticipantAction.SetViewsSharedNoteStatus,
+    user,
+    viewsSharedNote,
+  }),
+
   setShowHiddenColumns: (showHiddenColumns: boolean) => ({
     type: ParticipantAction.SetShowHiddenColumns,
     showHiddenColumns,
@@ -111,6 +118,7 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.updatedParticipant>
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
+  | ReturnType<typeof ParticipantActionFactory.setViewsSharedNote>
   | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>
   | ReturnType<typeof ParticipantActionFactory.editSelf>
   | ReturnType<typeof ParticipantActionFactory.changePermission>

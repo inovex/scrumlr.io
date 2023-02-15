@@ -34,12 +34,14 @@ export const StackView = () => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
+  // const currentUser = useAppSelector((state) => state.participants!.self.user.id);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const prevNote = useRef<Note | undefined>(note);
   const columns = useAppSelector((state) => state.columns, _.isEqual);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId); // isEqual?
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -158,6 +160,15 @@ export const StackView = () => {
       prevNote.current = note;
     }
   }, [author, authorName, columns, note, stackedNotes]);
+
+  useEffect(() => {
+    if (!moderating && isShared) {
+      dispatch(Actions.setViewsSharedNote(viewer.user.id, true));
+    }
+    return () => {
+      !moderating && isShared && dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
+    };
+  }, []);
 
   if (!note) {
     navigate(`/board/${boardId}`);

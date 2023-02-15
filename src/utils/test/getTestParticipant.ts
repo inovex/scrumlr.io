@@ -8,6 +8,7 @@ export default (overwrite?: Partial<Participant>): Participant => ({
   connected: true,
   ready: false,
   raisedHand: false,
+  viewsSharedNote: false,
   showHiddenColumns: false,
   role: "PARTICIPANT",
   ...overwrite,
