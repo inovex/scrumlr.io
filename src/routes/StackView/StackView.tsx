@@ -51,6 +51,8 @@ export const StackView = () => {
         })),
     _.isEqual
   );
+  // note: children in stacks aren't hidden
+  const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
   const column = columns.find((c) => c.id === note?.position.column);
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
@@ -59,7 +61,11 @@ export const StackView = () => {
     if (viewer.role === "PARTICIPANT") prevColumns = prevColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let prevStack;
     while (prevColumns.length > 0 && !prevStack) {
-      prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
+      // chained filters for readability
+      prevStack = state.notes
+        .filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null)
+        .filter((n) => (showNotesOfOtherUsers ? true : n.author === viewer.user.id))
+        .at(-1);
       prevColumns.shift();
     }
     return prevStack?.id;
@@ -71,12 +77,21 @@ export const StackView = () => {
     if (viewer.role === "PARTICIPANT") nextColumns = nextColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let nextStack;
     while (nextColumns.length > 0 && !nextStack) {
-      nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
+      nextStack = state.notes
+        .filter((n) => n.position.column === nextColumns[0].id)
+        .filter((n) => (showNotesOfOtherUsers ? true : n.author === viewer.user.id))
+        .at(0);
       nextColumns.shift();
     }
     return nextStack?.id;
   });
-  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
+  const stacksInColumn = useAppSelector(
+    (state) =>
+      state.notes
+        .filter((n) => n.position.column === column?.id && n.position.stack === null) // card in column and not part of a stack
+        .filter((n) => (showNotesOfOtherUsers ? true : n.author === viewer.user.id)), // if showNotesOfOtherUsers is disabled, only show own notes
+    _.isEqual
+  );
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
