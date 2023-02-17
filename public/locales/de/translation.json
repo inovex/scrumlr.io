@@ -115,16 +115,13 @@
     "navigateBack": "Gehe zurück"
   },
   "JoinRequest": {
-    "title": "Jemand möchte der Sitzung beitreten",
+    "title": "Möchte der Sitzung beitreten",
     "accept": "Akzeptieren",
-    "reject": "Ablehnen",
-    "acceptAll": "Alle akzeptieren",
-    "rejectAll": "Alle ablehnen"
+    "reject": "Ablehnen"
   },
   "RaiseRequest": {
-    "title": "Jemand hebt die Hand",
-    "lower": "Senke die Hand",
-    "lowerAll": "Alle Hände senken"
+    "title": "Hat sich gemeldet",
+    "lower": "Hand senken"
   },
   "Request": {
     "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
