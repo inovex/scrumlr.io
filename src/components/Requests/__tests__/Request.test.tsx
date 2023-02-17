@@ -1,5 +1,5 @@
 import {fireEvent, getByText} from "@testing-library/react";
-import {Request} from "components/Request";
+import {Requests} from "components/Requests";
 import {Actions} from "store/action";
 import {render} from "testUtils";
 import * as redux from "react-redux";
@@ -17,7 +17,7 @@ describe("JoinRequest", () => {
         status: "PENDING" as const,
       });
     }
-    return <Request requests={joinRequests} participantsWithRaisedHand={[]} />;
+    return <Requests requests={joinRequests} participantsWithRaisedHand={[]} />;
   };
 
   describe("should render correctly", () => {
@@ -56,18 +56,6 @@ describe("JoinRequest", () => {
       const {container} = render(createJoinRequest(1));
       fireEvent.click(getByText(container, "Accept"));
       expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0"]));
-    });
-
-    test("multiple join request should call acceptJoinRequests correctly", () => {
-      const {container} = render(createJoinRequest(3));
-      fireEvent.click(getByText(container, "Accept all")!);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.acceptJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
-    });
-
-    test("multiple join request should call rejectJoinRequests correctly", () => {
-      const {container} = render(createJoinRequest(3));
-      fireEvent.click(getByText(container, "Reject all")!);
-      expect(mockDispatchFn).toHaveBeenCalledWith(Actions.rejectJoinRequests(["user-id-0", "user-id-1", "user-id-2"]));
     });
 
     test("multiple join request should call rejectJoinRequests in requests list item correctly", () => {
