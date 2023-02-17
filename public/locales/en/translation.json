@@ -114,16 +114,13 @@
     "navigateBack": "Go back"
   },
   "JoinRequest": {
-    "title": "Someone requests to participate",
+    "title": "Is requesting to participate",
     "accept": "Accept",
-    "reject": "Reject",
-    "acceptAll": "Accept all",
-    "rejectAll": "Reject all"
+    "reject": "Reject"
   },
   "RaiseRequest": {
-    "title": "Someone raised their hand",
-    "lower": "Lower hand",
-    "lowerAll": "Lower all hands"
+    "title": "Is raising their hand",
+    "lower": "Lower hand"
   },
   "Request": {
     "title": "Someone requests to participate/raised their hand"
