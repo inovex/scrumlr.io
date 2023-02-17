@@ -40,12 +40,14 @@ export const StackView = () => {
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
-  // note: children in stacks aren't hidden, which can lead to unexpected results when stacking notes and then disabling showNotesOfOtherUsers.
   const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
         .filter((n) => n.position.stack === note?.id)
+        // if showNotesOfOtherUsers is disabled, only show own notes
+        // same as showNotesOfOtherUsers ? true : n.author === viewer.user.id
+        .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id)
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
@@ -88,12 +90,6 @@ export const StackView = () => {
     (state) =>
       state.notes
         .filter((n) => n.position.column === column?.id && n.position.stack === null) // card in column and not part of a stack
-        .map((n) => {
-          console.log("stack in column", n);
-          return n;
-        })
-        // if showNotesOfOtherUsers is disabled, only show own notes
-        // same as showNotesOfOtherUsers ? true : n.author === viewer.user.id
         .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id),
     _.isEqual
   );
