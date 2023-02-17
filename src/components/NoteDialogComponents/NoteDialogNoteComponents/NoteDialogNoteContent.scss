@@ -8,9 +8,14 @@
   max-height: 20vh;
   flex: 1;
   overflow: hidden;
+  justify-content: center;
+  position: relative;
 
   &:has(&--image) {
     padding: $padding--small;
+  }
+  &:has(&--image-zoom) {
+    overflow: visible;
   }
 }
 
@@ -43,8 +48,16 @@
 
 .note-dialog__note-content--image {
   height: 100%;
-  width: 100%;
   object-fit: contain;
+  cursor: zoom-in;
+  position: absolute;
+  margin-left: calc(100% / 12);
+
+  &-zoom {
+    transform: scale(2);
+    z-index: $request-z-index;
+    cursor: zoom-out;
+  }
 }
 
 [theme="dark"] {

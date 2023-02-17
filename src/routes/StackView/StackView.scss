@@ -81,6 +81,8 @@ $stack-view__min-height: 82px;
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
   font-size: $text-size--large;
+
+  z-index: $request-z-index;
   --note-footer-height: 36px;
 
   .note-dialog__note-content__text {

@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
@@ -8,6 +8,7 @@ import {addProtocol} from "utils/images";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
+import classNames from "classnames";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -17,6 +18,7 @@ type NoteDialogNoteContentProps = {
 };
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
+  const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
@@ -50,8 +52,9 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       {isImage ? (
         <img
           src={addProtocol(text)}
-          className="note-dialog__note-content--image"
+          className={classNames("note-dialog__note-content--image", {"note-dialog__note-content--image-zoom": imageZoom})}
           alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+          onClick={() => setImageZoom(!imageZoom)}
           draggable={false} // safari bugfix
         />
       ) : (
