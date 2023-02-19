@@ -9,7 +9,6 @@
   flex: 1;
   overflow: hidden;
   justify-content: center;
-  position: relative;
 
   &:has(&--image) {
     padding: $padding--small;
@@ -47,17 +46,37 @@
 }
 
 .note-dialog__note-content--image {
-  height: 100%;
   object-fit: contain;
   cursor: zoom-in;
-  position: absolute;
+  position: relative;
   margin-left: calc(100% / 12);
 
   &-zoom {
-    transform: scale(2);
+    object-fit: contain;
+    max-height: 80vh;
+    max-width: 80vw;
+    min-height: 80vh;
+    min-width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: $request-z-index;
     cursor: zoom-out;
+    position: fixed;
   }
+}
+
+.note-dialog__note-content--image-zoom-backdrop {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  cursor: zoom-out;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
+  background: rgba(var(--accent-color-rgb), 0.42);
+  transition: all 0.2s ease-in-out;
 }
 
 [theme="dark"] {

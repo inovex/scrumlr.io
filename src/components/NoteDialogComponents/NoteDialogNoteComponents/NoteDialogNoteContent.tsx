@@ -9,6 +9,7 @@ import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import classNames from "classnames";
+import {createPortal} from "react-dom";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -50,13 +51,28 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   return (
     <div className="note-dialog__note-content">
       {isImage ? (
-        <img
-          src={addProtocol(text)}
-          className={classNames("note-dialog__note-content--image", {"note-dialog__note-content--image-zoom": imageZoom})}
-          alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
-          onClick={() => setImageZoom(!imageZoom)}
-          draggable={false} // safari bugfix
-        />
+        <>
+          <img
+            src={addProtocol(text)}
+            className={classNames("note-dialog__note-content--image")}
+            alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+            onClick={() => setImageZoom(!imageZoom)}
+            draggable={false} // safari bugfix
+          />
+          {imageZoom &&
+            createPortal(
+              <>
+                <img
+                  src={addProtocol(text)}
+                  className="note-dialog__note-content--image-zoom"
+                  alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+                  onClick={() => setImageZoom(false)}
+                />
+                <div className="note-dialog__note-content--image-zoom-backdrop" onClick={() => setImageZoom(false)} role="dialog" />
+              </>,
+              document.getElementsByClassName("stack-view")[0]!
+            )}
+        </>
       ) : (
         <textarea
           className="note-dialog__note-content--text"
