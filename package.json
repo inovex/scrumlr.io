@@ -54,7 +54,7 @@
     "@types/history": "^5.0.0",
     "@types/i18next-fs-backend": "^1.1.2",
     "@types/jest": "^29.4.0",
-    "@types/js-cookie": "^3.0.2",
+    "@types/js-cookie": "^3.0.3",
     "@types/marked": "^4.0.8",
     "@types/node": "^18.14.0",
     "@types/qrcode.react": "^1.0.2",
