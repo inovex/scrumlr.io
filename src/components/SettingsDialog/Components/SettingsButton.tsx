@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {DefaultTFuncReturn} from "i18next";
-import {FC, ElementType, MouseEventHandler, FocusEventHandler} from "react";
+import {FC, ElementType, MouseEventHandler, FocusEventHandler, PropsWithChildren} from "react";
 import "./SettingsButton.scss";
 
 export interface SettingsButtonProps {
@@ -13,7 +13,7 @@ export interface SettingsButtonProps {
   [key: string]: unknown;
 }
 
-export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
+export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
   const Icon = icon!;
 
   return (

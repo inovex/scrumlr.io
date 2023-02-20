@@ -38,8 +38,8 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
         onClose?.();
       }
     };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("click", handleClickOutside, true);
+    return () => document.removeEventListener("click", handleClickOutside, true);
   }, [columnSettingsRef, onClose]);
 
   const handleAddColumn = (columnIndex: number) => {

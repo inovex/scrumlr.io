@@ -1,5 +1,5 @@
 import React, {Suspense} from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
 import {DndProvider, MultiBackendOptions, MouseTransition, TouchTransition} from "react-dnd-multi-backend";
 import "index.scss";
@@ -41,7 +41,9 @@ export const HTML5toTouch: MultiBackendOptions = {
   ],
 };
 
-ReactDOM.render(
+const root = createRoot(document.getElementById("root") as HTMLDivElement);
+
+root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
@@ -55,8 +57,7 @@ ReactDOM.render(
         </Suspense>
       </Provider>
     </I18nextProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
 
 store.dispatch(Actions.initApplication());
