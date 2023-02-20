@@ -193,6 +193,12 @@ export const StackView = () => {
     }
   };
 
+  // when showNotesOfOtherUsers is updated, check if user is currently looking at a note they are not supposed to see.
+  // if true, close the stack view.
+  if (!showNotesOfOtherUsers && note.author !== viewer.user.id) {
+    handleClose();
+  }
+
   const navigationProps = {
     stacks: stacksInColumn,
     currentStack: note.id,
