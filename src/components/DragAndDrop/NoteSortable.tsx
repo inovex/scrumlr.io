@@ -2,7 +2,7 @@ import {Active, Collision, UniqueIdentifier, useDndContext, useDndMonitor} from 
 import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
-import {COMBINE_THRESHOLD} from "constants/misc";
+import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode} from "react";
 import store from "store";
 import {Actions} from "store/action";
@@ -15,7 +15,7 @@ type NoteSortableProps = {
   className?: string;
 };
 
-const shouldCombine = (id: UniqueIdentifier, items: UniqueIdentifier[], newIndex: number, collisions: Collision[] | null, active: Active | null) => {
+export const shouldCombine = (id: UniqueIdentifier, items: UniqueIdentifier[], newIndex: number, collisions: Collision[] | null, active: Active | null) => {
   const newId = items?.[newIndex];
   const isColumn = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "column";
   const isActive = () => id !== active?.id;
@@ -25,7 +25,7 @@ const shouldCombine = (id: UniqueIdentifier, items: UniqueIdentifier[], newIndex
   if (!maxNoteCollision) return false;
   const collisionRatio = maxNoteCollision.data?.value;
 
-  return maxNoteCollision?.id === newId && isActive() && collisionRatio && collisionRatio > COMBINE_THRESHOLD;
+  return maxNoteCollision?.id === newId && isActive() && collisionRatio && collisionRatio > COMBINE_THRESHOLD && collisionRatio < MOVE_THRESHOLD;
 };
 
 export const NoteSortable = ({id, children, disabled, className, columnId}: NoteSortableProps) => {
@@ -41,7 +41,7 @@ export const NoteSortable = ({id, children, disabled, className, columnId}: Note
   useDndMonitor({
     onDragEnd: ({active: dragActive}) => {
       if (!combine || !columnId) return;
-      // combine only if i am target (over) note
+      // trigger combine only if i am target (over) note
       store.dispatch(Actions.editNote(dragActive.id.toString(), {position: {stack: id.toString(), column: columnId, rank: 0}}));
     },
   });

@@ -15,6 +15,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import classNames from "classnames";
 import {Note} from "components/Note";
 import {getColorClassName} from "constants/colors";
 import {MOVE_THRESHOLD} from "constants/misc";
@@ -28,7 +29,7 @@ type CustomDndContextProps = {
 };
 
 export const CustomDndContext = ({children}: CustomDndContextProps) => {
-  const [maxCollision, setMaxCollision] = useState<null | Collision>(null);
+  const [maxCollision, setMaxCollision] = useState<Collision | undefined>();
   const [dragActive, setDragActive] = useState<{id: string; colorClassName: string} | undefined>();
 
   const {self, columns, notes} = useAppSelector((state) => ({self: state.participants?.self, columns: state.columns, notes: state.notes}));
@@ -44,6 +45,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     }),
   };
 
+  const isNote = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "note";
   const getColumn = (id?: UniqueIdentifier): Column | undefined => {
     if (!id) return undefined;
     const note = notes.find((n) => n.id === id);
@@ -57,8 +59,12 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     if (!activeColumnColor) return;
     setDragActive({id: active.id.toString(), colorClassName: getColorClassName(activeColumnColor)});
   };
-  const onDragOver = (event: DragOverEvent) => {
-    setMaxCollision(event.collisions?.[0] ?? null);
+  const onDragOver = ({collisions}: DragOverEvent) => {
+    const overCollision = collisions?.at(0);
+    if (!overCollision) return;
+    if (isNote(overCollision)) setMaxCollision(overCollision);
+    // else setMaxCollision(undefined);
+    // console.log(maxCollision);
   };
 
   const onDragEnd = ({over, collisions, active}: DragEndEvent) => {};
@@ -67,13 +73,16 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     (collisionDetection: CollisionDetection) =>
     (...[args]: Parameters<typeof collisionDetection>) => {
       const collisions = collisionDetection(args);
-      // only reorder if intersectionRatio is above threshold, otherwise move last collision to top
-      // the first collision will be used as over id
-      // if the over id changes, the active draggable will be moved there
-      if (collisions?.[0]?.data?.value < MOVE_THRESHOLD && maxCollision) {
-        const lastCollisionId = maxCollision?.id;
-        const index = collisions.findIndex((collision) => collision.id === lastCollisionId);
-        collisions.unshift(...collisions.splice(index, 1));
+
+      const overCollision = collisions.at(0);
+      if (maxCollision && overCollision && isNote(overCollision) && overCollision.data?.value < MOVE_THRESHOLD) {
+        // find lastCollision
+        const lastOver = collisions.findIndex((collision) => collision.id === maxCollision?.id);
+        if (lastOver === -1) {
+          collisions.unshift({...maxCollision, data: {...maxCollision.data, value: 0}});
+        } else {
+          collisions.unshift(...collisions.splice(lastOver, 1));
+        }
       }
 
       return collisions;
@@ -84,7 +93,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
       {children}
       {createPortal(
-        <DragOverlay dropAnimation={dropAnimation} className={dragActive?.colorClassName}>
+        <DragOverlay zIndex={100} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
           {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
         </DragOverlay>,
         document.body

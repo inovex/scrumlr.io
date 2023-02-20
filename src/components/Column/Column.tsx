@@ -93,7 +93,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           }}
           className={classNames("column__header-text", {"column__header-text--hidden": !visible})}
         >
-          {name}
+          {id}
         </h2>
       </div>
     ) : (
