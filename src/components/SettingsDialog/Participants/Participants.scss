@@ -188,6 +188,22 @@
   gap: $margin--small;
 }
 
+.participants__reset-state-banner {
+  width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
+  height: 54px;
+  margin-top: auto; // position at the very bottom
+  margin-left: -$settings-dialog-container--sides-small;
+  background-color: $color-lighter-gray;
+}
+
+@media screen and (min-width: 920px) {
+  // SettingsDialog changes margin here, so we have to do the same
+  .participants__reset-state-banner {
+    width: calc(100% + 2 * $settings-dialog-container--sides-large);
+    margin-left: -$settings-dialog-container--sides-large;
+  }
+}
+
 [theme="dark"] {
   .participants__search-input {
     background-color: $color-dark-mode-note;

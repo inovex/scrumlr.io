@@ -109,6 +109,7 @@ export const Participants = () => {
             </li>
           ))}
       </ul>
+      <footer className="participants__reset-state-banner">Reset Ready State</footer>
     </section>
   );
 };
