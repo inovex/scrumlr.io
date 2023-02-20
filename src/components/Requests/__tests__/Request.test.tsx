@@ -1,5 +1,5 @@
-import {Request} from "components/Request";
 import {render} from "testUtils";
+import {Requests} from "../Requests";
 
 describe("JoinRequest", () => {
   const createJoinRequest = (numRequests: number) => {
@@ -13,7 +13,7 @@ describe("JoinRequest", () => {
         status: "PENDING" as const,
       });
     }
-    return <Request requests={joinRequests} participantsWithRaisedHand={[]} />;
+    return <Requests requests={joinRequests} participantsWithRaisedHand={[]} />;
   };
 
   describe("should render correctly", () => {
