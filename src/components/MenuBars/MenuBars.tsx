@@ -42,8 +42,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         setFabIsExpanded(!fabIsExpanded);
       }
     };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener("click", handleClickOutside, true);
+    return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded]);
 
   const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
