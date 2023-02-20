@@ -164,10 +164,9 @@ $note__author-image-size: 26px;
   vertical-align: baseline;
   flex-grow: 0;
   height: 28px;
-  padding: 0 $margin--default 0 0;
+  padding: 0 $margin--default 0 2px;
   background: $color-white;
   border-radius: 21px;
-  padding-left: 2px;
 }
 
 .note__author--self {
