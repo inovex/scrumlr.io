@@ -28,7 +28,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           type="submit"
         >
           <svg
-            class="note-input__icon"
+            class="note-input__icon--add"
           >
             icon-add.svg
           </svg>

@@ -58,13 +58,53 @@ $note-input__input-right: 40px;
   }
 }
 
-.note-input__icon {
-  margin-right: $margin--default;
+.note-input__icon--image,
+.note-input__icon--add {
   width: $icon--medium;
   height: $icon--medium;
   color: var(--accent-color);
   align-self: center;
   transition: all 0.08s ease-out;
+}
+
+.note-input__icon--add {
+  margin-right: $margin--default;
+}
+
+.note-input__icon--image {
+  margin: 0 $margin--small 4px $margin--small;
+  animation: fade-in 0.2s ease-in-out;
+}
+
+.note-input__isImage {
+  display: flex;
+  position: relative;
+}
+
+.note-input__icon--star {
+  position: absolute;
+  color: var(--accent-color);
+  animation: sparkle 1.5s ease-in-out infinite alternate;
+
+  &.star-1 {
+    transform: scale(0.35);
+    top: 2px;
+    left: -6px;
+  }
+
+  &.star-2 {
+    transform: scale(0.3);
+    top: -2px;
+    left: 10px;
+    animation-delay: 0.4s;
+  }
+
+  &.star-3 {
+    transform: scale(0.35);
+    bottom: -1px;
+    left: 9px;
+    animation-delay: 1.2s;
+  }
 }
 
 .toast-button {
@@ -93,5 +133,28 @@ $note-input__input-right: 40px;
 
   .toast-button {
     background-color: $color-planning-pink;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 20%;
+  }
+  100% {
+    opacity: 100%;
   }
 }
