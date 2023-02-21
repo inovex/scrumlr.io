@@ -250,6 +250,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
   },
+  "NoteDialogViewers": {
+    "title": "Aktuelle Betrachter dieses Kärtchens/Stapels"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",

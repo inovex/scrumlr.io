@@ -249,6 +249,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
   },
+  "NoteDialogViewers": {
+    "title": "Current viewers of this note/stack"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
     "BoardSettingsDescription": "Name, Access Policy",
