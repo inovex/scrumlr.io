@@ -24,6 +24,10 @@ export const Participants = () => {
   const self = useAppSelector((state) => state.participants!.self);
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
 
+  const resetReadyStateOfAllUsers = () => {
+    participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
+  };
+
   return (
     <section className="settings-dialog__container accent-color__poker-purple">
       <header className="settings-dialog__header">
@@ -116,7 +120,9 @@ export const Participants = () => {
           <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
           <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
         </div>
-        <button className="participants-reset-state-banner__button">{t("Participants.ResetBannerButton")}</button>
+        <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
+          {t("Participants.ResetBannerButton")}
+        </button>
         <CloseIcon className="participants-reset-state-banner__close-icon" />
       </footer>
     </section>
