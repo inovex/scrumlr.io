@@ -188,19 +188,80 @@
   gap: $margin--small;
 }
 
-.participants__reset-state-banner {
-  width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
-  height: 54px;
+.participants-reset-state-banner__container {
+  position: relative;
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
+  padding-right: 40px; // create some space
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
+  height: 54px;
+
   background-color: $color-lighter-gray;
+}
+
+.participants-reset-state-banner__icon-and-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.participants-reset-state-banner__check-icon {
+  margin-left: 15px; // small screen correction
+  width: $icon--large;
+  height: $icon--large;
+}
+
+.participants-reset-state-banner__text {
+  color: $menu-icon-background-color--dark;
+  font-weight: 600;
+}
+
+.participants-reset-state-banner__button {
+  padding: 0 $padding--medium;
+
+  height: 36px;
+  background-color: $menu-icon-background-color--dark;
+  color: $color-white;
+  border: none;
+  border-radius: $rounded--full;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: $letter-spacing--medium;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-dark;
+    color: $color-white;
+  }
+}
+
+.participants-reset-state-banner__close-icon {
+  // place the close icon on the very top right of the banner
+  position: absolute;
+  top: 3px;
+  right: 3px;
+
+  width: $icon--medium;
+  height: $icon--medium;
+  color: #8f939c;
 }
 
 @media screen and (min-width: 920px) {
   // SettingsDialog changes margin here, so we have to do the same
-  .participants__reset-state-banner {
+  .participants-reset-state-banner__container {
     width: calc(100% + 2 * $settings-dialog-container--sides-large);
     margin-left: -$settings-dialog-container--sides-large;
+  }
+
+  .participants-reset-state-banner__check-icon {
+    margin-left: 0;
   }
 }
 

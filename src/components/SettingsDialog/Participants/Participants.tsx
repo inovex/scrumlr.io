@@ -8,6 +8,8 @@ import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-cancel.svg";
 import "./Participants.scss";
 
 export const Participants = () => {
@@ -109,7 +111,14 @@ export const Participants = () => {
             </li>
           ))}
       </ul>
-      <footer className="participants__reset-state-banner">Reset Ready State</footer>
+      <footer className="participants-reset-state-banner__container">
+        <div className="participants-reset-state-banner__icon-and-text">
+          <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+          <div className="participants-reset-state-banner__text">Reset ready states of all users.</div>
+        </div>
+        <button className="participants-reset-state-banner__button">Reset</button>
+        <CloseIcon className="participants-reset-state-banner__close-icon" />
+      </footer>
     </section>
   );
 };
