@@ -25,6 +25,7 @@ type BoardSession struct {
 	Connected         bool
 	Ready             bool
 	RaisedHand        bool
+	ViewsSharedNote   bool
 	Role              types.SessionRole
 	CreatedAt         time.Time
 }
@@ -44,6 +45,7 @@ type BoardSessionUpdate struct {
 	ShowHiddenColumns *bool
 	Ready             *bool
 	RaisedHand        *bool
+	ViewsSharedNote   *bool
 	Role              *types.SessionRole
 }
 
@@ -63,6 +65,11 @@ func BoardSessionFilterTypeFromQueryString(query url.Values) filter.BoardSession
 	if raisedHandFilter != "" {
 		value, _ := strconv.ParseBool(raisedHandFilter)
 		filter.RaisedHand = &value
+	}
+	viewsSharedNoteFilter := query.Get("viewsSharedNote")
+	if viewsSharedNoteFilter != "" {
+		value, _ := strconv.ParseBool(viewsSharedNoteFilter)
+		filter.ViewsSharedNote = &value
 	}
 	roleFilter := query.Get("role")
 	if roleFilter != "" {
@@ -84,7 +91,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 		With("insertQuery", insertQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
 		Where("s.board = ?", boardSession.Board).
 		Where("s.user = ?", boardSession.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -112,6 +119,9 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 	if update.RaisedHand != nil {
 		updateQuery = updateQuery.Column("raised_hand")
 	}
+	if update.ViewsSharedNote != nil {
+		updateQuery = updateQuery.Column("views_shared_note")
+	}
 	if update.Role != nil {
 		updateQuery = updateQuery.Column("role")
 		if *update.Role == types.SessionRoleOwner {
@@ -126,7 +136,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -161,13 +171,13 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &sessions)
 
-    // send update to observers here, as bun .AfterScanRow() is triggered for each updated row
-    // see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
-    for _, observer := range d.observer {
-      if o, ok := observer.(BoardSessionsObserver); ok {
-        o.UpdatedSessions(update.Board, sessions)
-      }
-    }
+	// send update to observers here, as bun .AfterScanRow() is triggered for each updated row
+	// see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
+	for _, observer := range d.observer {
+		if o, ok := observer.(BoardSessionsObserver); ok {
+			o.UpdatedSessions(update.Board, sessions)
+		}
+	}
 
 	return sessions, err
 }
@@ -184,7 +194,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 	var session BoardSession
 	err := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -195,7 +205,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
 	query := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
 		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
@@ -206,6 +216,9 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 		}
 		if f.RaisedHand != nil {
 			query = query.Where("s.raised_hand = ?", *f.RaisedHand)
+		}
+		if f.ViewsSharedNote != nil {
+			query = query.Where("s.views_shared_note = ?", *f.ViewsSharedNote)
 		}
 		if f.Connected != nil {
 			query = query.Where("s.connected = ?", *f.Connected)

@@ -24,6 +24,9 @@ type BoardSession struct {
 	// Flag indicates whether user has raised his hand (...virtually).
 	RaisedHand bool `json:"raisedHand"`
 
+	// Flag indicates whether user is viewing the shared note.
+	ViewsSharedNote bool `json:"viewsSharedNote"`
+
 	// The role of the participant.
 	//
 	// Can be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants
@@ -43,6 +46,7 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.Connected = session.Connected
 	b.Ready = session.Ready
 	b.RaisedHand = session.RaisedHand
+	b.ViewsSharedNote = session.ViewsSharedNote
 	b.ShowHiddenColumns = session.ShowHiddenColumns
 	b.Role = session.Role
 	return b
@@ -75,6 +79,9 @@ type BoardSessionUpdateRequest struct {
 
 	// The raised hand state of the participant.
 	RaisedHand *bool `json:"raisedHand"`
+
+	// The viewsSharedNote state of the participant.
+	ViewsSharedNote *bool `json:"viewsSharedNote"`
 
 	// The role of the participant.
 	//
