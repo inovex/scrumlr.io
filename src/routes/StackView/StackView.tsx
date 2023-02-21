@@ -40,7 +40,7 @@ export const StackView = () => {
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
-  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId); // isEqual?
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
