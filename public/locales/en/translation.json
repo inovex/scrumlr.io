@@ -286,7 +286,9 @@
     "ParticipantFilterTooltip": "Show only participants",
     "OnlineFilterTooltip": "Show disconnected participants",
     "ChangeRoleToParticipantTooltip": "Change role to participant",
-    "ChangeRoleToModeratorTooltip": "Change role to moderator"
+    "ChangeRoleToModeratorTooltip": "Change role to moderator",
+    "ResetBannerText": "Reset ready states of all users.",
+    "ResetBannerButton": "Reset"
   },
   "UserRole": {
     "Owner": "Owner",

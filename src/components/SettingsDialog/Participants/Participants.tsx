@@ -114,9 +114,9 @@ export const Participants = () => {
       <footer className="participants-reset-state-banner__container">
         <div className="participants-reset-state-banner__icon-and-text">
           <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
-          <div className="participants-reset-state-banner__text">Reset ready states of all users.</div>
+          <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
         </div>
-        <button className="participants-reset-state-banner__button">Reset</button>
+        <button className="participants-reset-state-banner__button">{t("Participants.ResetBannerButton")}</button>
         <CloseIcon className="participants-reset-state-banner__close-icon" />
       </footer>
     </section>
