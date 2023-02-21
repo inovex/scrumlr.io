@@ -11,12 +11,12 @@
     "basicConfigurationTitle": "Wähle eine Vorlage"
   },
   "LoginBoard": {
-    "title": "Registrierung bei scrumlr.io",
+    "title": "Login bei scrumlr.io",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
     "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "login": "Registrieren",
+    "login": "Jetzt loslegen",
     "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
@@ -133,7 +133,8 @@
     "signInWithApple": "Einloggen mit Apple"
   },
   "NoteInput": {
-    "placeholder": "Füge ein Kärtchen hinzu..."
+    "placeholder": "Füge ein Kärtchen hinzu...",
+    "imageInfo": "Dieser Link wird als Bild eingefügt!"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
@@ -239,7 +240,9 @@
     "terms": "AGB"
   },
   "Note": {
-    "me": "Ich"
+    "me": "Ich",
+    "you": "dir",
+    "userImageAlt": "Von {{user}} hochgeladenes Bild"
   },
   "NoteDialogDeleteStackButton": {
     "title": "Diesen Stapel löschen"
@@ -284,7 +287,7 @@
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Title" : "Teilnehmer",
+    "Title": "Teilnehmer",
     "OwnerFilterTooltip": "Zeige nur den Besitzer",
     "ModeratorFilterTooltip": "Zeige nur Moderatoren",
     "ParticipantFilterTooltip": "Zeige nur Teilnehmer",

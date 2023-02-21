@@ -1,11 +1,14 @@
 import React, {useRef, useState} from "react";
 import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
+import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
+import {ReactComponent as StarIcon} from "assets/icon-star.svg";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
+import {useImageChecker} from "utils/hooks/useImageChecker";
+import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import {hotkeyMap} from "../../constants/hotkeys";
 
@@ -19,8 +22,8 @@ export interface NoteInputProps {
 }
 
 export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
-  const {t} = useTranslation();
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const [value, setValue] = useState("");
   const noteInputRef = useRef<HTMLInputElement | null>(null);
   const [toastDisplayed, setToastDisplayed] = useState(false);
@@ -37,6 +40,8 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     {enabled: columnIndex + 1 <= 9},
     [noteInputRef]
   );
+
+  const isImage = useImageChecker(value);
 
   const handleChangeNoteText = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Avoid long messages
@@ -87,6 +92,14 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         delayShow={500}
         style={{zIndex: 999}}
       />
+      {isImage && (
+        <div className="note-input__isImage" title={t("NoteInput.imageInfo")}>
+          <ImageIcon className="note-input__icon--image" />
+          <StarIcon className="note-input__icon--star star-1" />
+          <StarIcon className="note-input__icon--star star-2" />
+          <StarIcon className="note-input__icon--star star-3" />
+        </div>
+      )}
       <button
         type="submit"
         tabIndex={-1} // skip focus
@@ -96,7 +109,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
           onAddNote();
         }}
       >
-        <PlusIcon className="note-input__icon" />
+        <PlusIcon className="note-input__icon--add" />
       </button>
     </form>
   );

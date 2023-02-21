@@ -132,7 +132,8 @@
     "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {
-    "placeholder": "Add your note..."
+    "placeholder": "Add your note...",
+    "imageInfo": "This link will be added as an image!"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Enter the passphrase to access this board",
@@ -238,7 +239,9 @@
     "terms": "Terms & conditions"
   },
   "Note": {
-    "me": "Me"
+    "me": "Me",
+    "you": "you",
+    "userImageAlt": "media provided by {{user}}"
   },
   "NoteDialogDeleteStackButton": {
     "title": "Delete this stack"
@@ -283,7 +286,7 @@
     "edit": "edit"
   },
   "Participants": {
-    "Title" : "Participants",
+    "Title": "Participants",
     "OwnerFilterTooltip": "Show only the owner",
     "ModeratorFilterTooltip": "Show only moderators",
     "ParticipantFilterTooltip": "Show only participants",
