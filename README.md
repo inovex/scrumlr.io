@@ -73,6 +73,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/70689411?s=48&amp;v=4" width="48" height="48" alt="brandeins1403">](https://github.com/brandeins1403)
 [<img src="https://avatars.githubusercontent.com/u/56362368?s=48&v=4" width="48" height="48" alt="benedicthomuth">](https://github.com/benedicthomuth)
 [<img src="https://avatars.githubusercontent.com/u/7889564?s=48&amp;v=4" width="48" height="48" alt="schwehn42">](https://github.com/schwehn42)
+[<img src="https://avatars.githubusercontent.com/u/116653219?s=48&amp;v=4" width="48" height="48" alt="SelinaBuff">](https://github.com/SelinaBuff)
 
 [<img src="https://avatars.githubusercontent.com/u/741171?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/wlbr)
 [<img src="https://avatars.githubusercontent.com/u/5778920?s=36&amp;v=4" width="36" height="36" alt="cdreier">](https://github.com/bontscho)

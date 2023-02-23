@@ -1,0 +1,145 @@
+@import "src/constants/style";
+
+$transition-time: 0.2s;
+$transition-time--text: 0.1s;
+$fly-in-time: 0.5s;
+
+// CONTAINER
+.request__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 12px;
+
+  width: auto;
+  height: 56px;
+
+  padding: 0 $padding--small;
+  border-radius: 28px;
+
+  animation: fly-in-right $fly-in-time ease-out;
+
+  background-color: $color-white;
+  box-shadow: 3px 5px 3px rgba($menu-icon-background-color--dark, 30%);
+
+  transition: margin-right $transition-time ease-out, padding-right $transition-time ease-out;
+
+  &:hover {
+    padding-right: $padding--small;
+    margin-right: $margin--small;
+
+    .request__info-container {
+      opacity: 0;
+    }
+    .request__button {
+      opacity: 100%;
+    }
+  }
+}
+
+// FIGURE
+.request__request-figure {
+  margin: 0;
+}
+
+// MIDDLE WRAPPER
+.request__wrapper {
+  position: relative;
+}
+
+// NAME AND TEXT
+.request__info-container {
+  display: flex;
+  flex-direction: column;
+  font-size: $text-size--medium;
+
+  transition: opacity $transition-time--text ease-out;
+}
+
+.request__participant-name {
+  color: $menu-icon-background-color--dark;
+  font-weight: bold;
+}
+
+.request__info-text {
+  color: $menu-icon-background-color--dark;
+  opacity: 50%;
+}
+
+// BUTTON
+.request__button-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  column-gap: 6px;
+
+  // position button over .request__info-container and center vertically
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.request__button {
+  height: 40px;
+  width: 100%;
+
+  border: none;
+  border-radius: $rounded--medium;
+
+  font-weight: bold;
+  font-size: $text-size--medium;
+
+  opacity: 0;
+  transition: opacity $transition-time linear;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// ICON
+.request__icon-container {
+  width: $icon--extralarge;
+  height: $icon--extralarge;
+}
+
+// ANIMATION
+@keyframes fly-in-right {
+  0% {
+    margin-right: -500px;
+    opacity: 0;
+  }
+  100% {
+    margin-right: 0;
+    opacity: 100%;
+  }
+}
+
+// DARK THEME
+[theme="dark"] {
+  .request__container {
+    background-color: $color-darkest-gray;
+    box-shadow: 3px 5px 3px rgba($color-black, 30%);
+  }
+
+  .request__participant-name,
+  .request__info-text {
+    color: $color-white;
+  }
+
+  .request__button {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+
+    &:hover {
+      background-color: $color-dark-mode-note--hover;
+    }
+  }
+
+  .request__icon-container {
+    svg {
+      color: $color-white;
+    }
+  }
+}

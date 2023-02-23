@@ -1,4 +1,4 @@
-import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, DetailedHTMLProps, FC, ReactElement, useEffect, useRef, useState} from "react";
+import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, DetailedHTMLProps, FC, PropsWithChildren, ReactElement, useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import "./Button.scss";
 
@@ -11,7 +11,17 @@ export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTML
   block?: boolean;
 }
 
-export const Button: FC<ButtonProps> = ({className, variant = "contained", color = "secondary", leftIcon, rightIcon, block = false, hideLabel, children, ...other}) => {
+export const Button: FC<PropsWithChildren<ButtonProps>> = ({
+  className,
+  variant = "contained",
+  color = "secondary",
+  leftIcon,
+  rightIcon,
+  block = false,
+  hideLabel,
+  children,
+  ...other
+}) => {
   const labelRef = useRef<HTMLSpanElement>(null);
   const [label, setLabel] = useState<string>("");
 
