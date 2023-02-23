@@ -24,6 +24,7 @@ $note__author-image-size: 26px;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
+  overflow: hidden;
 }
 
 .note .note__user-avatar {
@@ -45,19 +46,6 @@ $note__author-image-size: 26px;
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
-}
-[theme="dark"] {
-  .note__in-stack {
-    background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
-}
-
-[theme="dark"] {
-  .note {
-    background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
-  }
 }
 
 .note:focus-within,
@@ -136,6 +124,19 @@ $note__author-image-size: 26px;
   word-wrap: break-word;
 }
 
+.note__image-wrapper {
+  height: 72px;
+}
+
+.note__image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .note__stack-icon {
   height: $icon--huge;
   width: $icon--huge;
@@ -143,12 +144,6 @@ $note__author-image-size: 26px;
   top: calc(50% - ($icon--huge/2));
   left: calc(50% - ($icon--huge/2));
   fill: var(--accent-color);
-}
-
-[theme="dark"] {
-  .note__text {
-    color: $color-white;
-  }
 }
 
 .note__footer {
@@ -169,13 +164,13 @@ $note__author-image-size: 26px;
   vertical-align: baseline;
   flex-grow: 0;
   height: 28px;
-  padding: 0 $margin--default 0 0;
+  padding: 0 $margin--default 0 2px;
+  background: $color-white;
+  border-radius: 21px;
 }
 
 .note__author--self {
   background: var(--accent-color--desaturated-light);
-  border-radius: 21px;
-  padding-left: 2px;
 }
 
 .note__author--self > .note__user-avatar #Circle-Background {
@@ -184,17 +179,6 @@ $note__author-image-size: 26px;
 
 .note__author--self > .note__author-name {
   color: $color-black;
-}
-
-[theme="dark"] {
-  .note__author--self {
-    background: var(--accent-color--desaturated-dark);
-  }
-
-  .note__author--self > .note__author-name {
-    color: $color-white;
-    font-weight: bold;
-  }
 }
 
 .note__author-image {
@@ -225,4 +209,33 @@ $note__author-image-size: 26px;
 
 .note__disabled-click {
   pointer-events: none;
+}
+
+[theme="dark"] {
+  .note,
+  .note__in-stack {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+  }
+
+  .note__text {
+    color: $color-white;
+  }
+
+  .note__author {
+    background: $color-dark-mode-note;
+  }
+
+  .note__author-name {
+    color: $color-white;
+  }
+
+  .note__author--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
+  .note__author--self > .note__author-name {
+    color: $color-white;
+    font-weight: bold;
+  }
 }

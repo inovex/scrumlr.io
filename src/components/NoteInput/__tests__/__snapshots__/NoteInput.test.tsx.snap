@@ -18,7 +18,7 @@ exports[`Note Input should render correctly 1`] = `
     type="submit"
   >
     <svg
-      class="note-input__icon"
+      class="note-input__icon--add"
     >
       icon-add.svg
     </svg>

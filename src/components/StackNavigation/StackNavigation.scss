@@ -4,7 +4,7 @@
 .stack-view__navigation {
   height: $stack-view__navigation-height;
   min-height: $stack-view__min-height;
-  width: 82%;
+  width: 82vw;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -71,6 +71,6 @@
 
 @media #{$tablet} {
   .stack-view__navigation {
-    width: 42%;
+    width: 42vw;
   }
 }

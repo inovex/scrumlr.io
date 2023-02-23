@@ -1,4 +1,4 @@
-import {FC, HTMLAttributes} from "react";
+import {FC, HTMLAttributes, PropsWithChildren} from "react";
 import classNames from "classnames";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
@@ -9,7 +9,7 @@ type DialogProps = {
   onClose?: () => void;
 } & HTMLAttributes<HTMLDivElement>;
 
-export const Dialog: FC<DialogProps> = ({title, className, onClose, children, ...other}) => (
+export const Dialog: FC<PropsWithChildren<DialogProps>> = ({title, className, onClose, children, ...other}) => (
   <Portal onClose={() => onClose?.()}>
     <aside className={classNames("dialog", className)} {...other} onClick={(e) => e.stopPropagation()}>
       <article className="dialog__content">
