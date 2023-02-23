@@ -15,7 +15,8 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <input
           class="note-input__input"
-          data-tip="OPTION/ALT + 1"
+          data-tooltip-content="OPTION/ALT + 1"
+          id="note-input-TestID"
           maxlength="1024"
           placeholder="Add your note..."
           type="text"
@@ -27,7 +28,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           type="submit"
         >
           <svg
-            class="note-input__icon"
+            class="note-input__icon--add"
           >
             icon-add.svg
           </svg>

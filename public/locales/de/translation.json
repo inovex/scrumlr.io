@@ -11,12 +11,12 @@
     "basicConfigurationTitle": "Wähle eine Vorlage"
   },
   "LoginBoard": {
-    "title": "Registrierung bei scrumlr.io",
+    "title": "Login bei scrumlr.io",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
     "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
-    "login": "Registrieren",
+    "login": "Jetzt loslegen",
     "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
     "generateRandomName": "Zufälligen Namen erstellen",
     "username": "Benutzername"
@@ -58,13 +58,6 @@
     "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein"
-  },
-  "ParticipantsList": {
-    "title": "Teilnehmer",
-    "search": "Suche",
-    "searchAndFilter": "Suche und Filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -122,16 +115,13 @@
     "navigateBack": "Gehe zurück"
   },
   "JoinRequest": {
-    "title": "Jemand möchte der Sitzung beitreten",
+    "title": "Möchte der Sitzung beitreten",
     "accept": "Akzeptieren",
-    "reject": "Ablehnen",
-    "acceptAll": "Alle akzeptieren",
-    "rejectAll": "Alle ablehnen"
+    "reject": "Ablehnen"
   },
   "RaiseRequest": {
-    "title": "Jemand hebt die Hand",
-    "lower": "Senke die Hand",
-    "lowerAll": "Alle Hände senken"
+    "title": "Hat sich gemeldet",
+    "lower": "Hand senken"
   },
   "Request": {
     "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
@@ -143,7 +133,8 @@
     "signInWithApple": "Einloggen mit Apple"
   },
   "NoteInput": {
-    "placeholder": "Füge ein Kärtchen hinzu..."
+    "placeholder": "Füge ein Kärtchen hinzu...",
+    "imageInfo": "Dieser Link wird als Bild eingefügt!"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
@@ -240,7 +231,7 @@
     "english": "Englisch"
   },
   "Homepage": {
-    "developers": "© 2021-2022, mit ❤️ von <inovex>inovex</inovex>",
+    "developers": "© 2021-2023, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
@@ -249,7 +240,9 @@
     "terms": "AGB"
   },
   "Note": {
-    "me": "Ich"
+    "me": "Ich",
+    "you": "dir",
+    "userImageAlt": "Von {{user}} hochgeladenes Bild"
   },
   "NoteDialogDeleteStackButton": {
     "title": "Diesen Stapel löschen"
@@ -291,7 +284,18 @@
     "edit": "bearbeiten"
   },
   "Participants": {
-    "Owner": "Besitzer"
+    "Title": "Teilnehmer",
+    "OwnerFilterTooltip": "Zeige nur den Besitzer",
+    "ModeratorFilterTooltip": "Zeige nur Moderatoren",
+    "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
+    "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator"
+  },
+  "UserRole": {
+    "Owner": "Besitzer",
+    "Moderator": "Moderator",
+    "Participant": "Teilnehmer"
   },
   "Appearance": {
     "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",

@@ -1,7 +1,5 @@
-import {applyMiddleware, combineReducers, compose, createStore, Dispatch, MiddlewareAPI} from "redux";
+import {combineReducers, configureStore, Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useSelector} from "react-redux";
-import thunk from "redux-thunk";
-import {composeWithDevTools} from "redux-devtools-extension";
 import {ApplicationState} from "types";
 import {ReduxAction} from "./action";
 import {boardReducer} from "./reducer/board";
@@ -61,12 +59,11 @@ const rootReducer = combineReducers<ApplicationState>({
   assignments: assignmentReducer,
 });
 
-// Disable redux dev tools in production
-const devTools =
-  process.env.NODE_ENV === "production"
-    ? compose(applyMiddleware(thunk), applyMiddleware(parseMiddleware))
-    : composeWithDevTools(applyMiddleware(thunk), applyMiddleware(parseMiddleware));
-const store = createStore(rootReducer, devTools);
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(parseMiddleware),
+  devTools: process.env.NODE_ENV !== "production",
+});
 
 export default store;
 

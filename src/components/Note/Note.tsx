@@ -1,10 +1,10 @@
 import classNames from "classnames";
-import React, {useRef, useEffect} from "react";
+import {useRef, useEffect, KeyboardEvent} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import _ from "underscore";
+import {isEqual} from "underscore";
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
@@ -13,6 +13,8 @@ import {Participant} from "types/participant";
 import "./Note.scss";
 import {Assignments} from "components/Assignees/Assignments";
 import {getEmptyImage} from "react-dnd-html5-backend";
+import {addProtocol} from "utils/images";
+import {useImageChecker} from "utils/hooks/useImageChecker";
 
 interface NoteProps {
   noteId: string;
@@ -25,7 +27,7 @@ export const Note = (props: NoteProps) => {
   const navigate = useNavigate();
   const noteRef = useRef<HTMLButtonElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const author = useAppSelector((state) => {
@@ -37,7 +39,7 @@ export const Note = (props: NoteProps) => {
       displayName,
       isSelf,
     };
-  }, _.isEqual);
+  }, isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
@@ -61,6 +63,8 @@ export const Note = (props: NoteProps) => {
     }
   }, [isShared]);
   /* eslint-enable */
+
+  const isImage = useImageChecker(note?.text ?? "");
 
   const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
@@ -93,7 +97,7 @@ export const Note = (props: NoteProps) => {
     navigate(`note/${props.noteId}/stack`);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === "Enter") {
       navigate(`note/${props.noteId}/stack`);
     }
@@ -106,14 +110,25 @@ export const Note = (props: NoteProps) => {
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
   return (
-    <div className={classNames("note__root")}>
+    <div className="note__root">
       <button
         className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
         onClick={handleClick}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         ref={noteRef}
       >
-        <p className="note__text">{note!.text}</p>
+        {isImage ? (
+          <div className="note__image-wrapper">
+            <img
+              src={addProtocol(note!.text)}
+              className="note__image"
+              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              draggable={false} // safari bugfix
+            />
+          </div>
+        ) : (
+          <p className="note__text">{note!.text}</p>
+        )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">

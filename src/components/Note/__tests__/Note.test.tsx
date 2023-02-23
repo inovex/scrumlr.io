@@ -2,14 +2,11 @@ import {fireEvent} from "@testing-library/react";
 import {Note} from "components/Note";
 import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
-import {Actions} from "store/action";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
 import * as reactRouter from "react-router";
-import * as reactRedux from "react-redux";
 import {ApplicationState} from "types";
-import {ViewState} from "types/view";
 import {BoardState} from "types/board";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestNote from "utils/test/getTestNote";
@@ -85,20 +82,6 @@ describe("Note", () => {
   });
 
   describe("side effects", () => {
-    it("should share note during active moderation on click", () => {
-      const dispatchSpy = jest.fn();
-      jest.spyOn(reactRedux, "useDispatch").mockImplementationOnce(() => dispatchSpy);
-      const view: ViewState = {
-        moderating: true,
-        serverTimeOffset: 0,
-        feedbackEnabled: false,
-        enabledAuthProvider: [],
-        hotkeysAreActive: false,
-      };
-      const {container} = render(createNote(true, {view}));
-      fireEvent.click(container.querySelector(".note")!);
-      expect(dispatchSpy).toHaveBeenCalledWith(Actions.shareNote(NOTE_ID));
-    });
     it("should navigate to stack route on click", () => {
       const navigateSpy = jest.fn();
       jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);

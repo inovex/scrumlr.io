@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import Socket from "sockette";
 import {ApplicationState} from "types";
 import store from "store";
@@ -23,6 +23,8 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
           store.dispatch(Actions.requirePassphraseChallenge());
         } else if (r.status === "PENDING") {
           store.dispatch(Actions.pendingBoardAccessConfirmation(action.boardId, r.joinRequestReference!));
+        } else if (r.status === "TOO_MANY_JOIN_REQUESTS") {
+          store.dispatch(Actions.tooManyJoinRequests());
         }
       })
       .catch(() => {
