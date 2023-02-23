@@ -1012,5 +1012,28 @@ exports[`Participants should render filter and participants correctly 1`] = `
       </div>
     </li>
   </ul>
+  <footer
+    class="participants-reset-state-banner__container"
+  >
+    <div
+      class="participants-reset-state-banner__icon-and-text"
+    >
+      <svg
+        class="participants-reset-state-banner__check-icon"
+      >
+        icon-check.svg
+      </svg>
+      <div
+        class="participants-reset-state-banner__text"
+      >
+        Participants.ResetBannerText
+      </div>
+    </div>
+    <button
+      class="participants-reset-state-banner__button"
+    >
+      Participants.ResetBannerButton
+    </button>
+  </footer>
 </section>
 `;
