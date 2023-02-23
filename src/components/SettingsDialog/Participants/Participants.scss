@@ -109,7 +109,6 @@
   list-style-type: none;
   padding: 0;
   overflow: scroll;
-  margin-bottom: $settings-dialog-container--bottom;
 }
 
 .participants__list-item {
@@ -191,7 +190,7 @@
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
-  padding-right: 40px; // create some space
+  padding: $padding--small $padding--medium; // create some space
 
   display: flex;
   flex-direction: row;
@@ -199,7 +198,6 @@
   align-items: center;
 
   width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
-  height: 54px;
 
   background-color: $color-lighter-gray;
 
@@ -219,9 +217,10 @@
 }
 
 .participants-reset-state-banner__check-icon {
-  margin-left: 15px; // small screen correction
   width: $icon--large;
   height: $icon--large;
+  min-width: $icon--large;
+  min-height: $icon--large;
 }
 
 .participants-reset-state-banner__text {
@@ -253,10 +252,6 @@
   .participants-reset-state-banner__container {
     width: calc(100% + 2 * $settings-dialog-container--sides-large);
     margin-left: -$settings-dialog-container--sides-large;
-  }
-
-  .participants-reset-state-banner__check-icon {
-    margin-left: 0;
   }
 }
 
