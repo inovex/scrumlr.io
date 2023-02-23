@@ -3,11 +3,12 @@ package database
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 type Note struct {
@@ -297,7 +298,9 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	return note[0], err
 }
 
-func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
+// Case: delete just a note => overhead?
+// Add DeleteNoteWithStack function here or decide in function by single condition?
+func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack bool, id uuid.UUID) error {
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
@@ -316,6 +319,12 @@ func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
 
 	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
+
+		updateBoard := d.db.NewUpdate().
+			Model((*Board)(nil)).
+			Set("shared_note = null").
+			Where("id = ? AND shared_note = ?", board, id)
+
 		updateRanks := d.db.NewUpdate().
 			With("previous", previous).
 			Model((*Note)(nil)).Set("rank = rank-1").
@@ -335,17 +344,39 @@ func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
 					})
 			})
 
-		updateBoard := d.db.NewUpdate().
-			Model((*Board)(nil)).
-			Set("shared_note = null").
-			Where("id = ? AND shared_note = ?", board, id)
-
 		var notes []Note
+
+		if deleteStack {
+			_, err := d.db.NewDelete().
+				With("update_board", updateBoard).
+				With("update_ranks", updateRanks).
+				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
+				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
+
+			return err
+		}
+
+		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id)
+
+		updateStackRefs := d.db.NewUpdate().
+			With("next_parent", nextParentSelect).
+			Model((*Note)(nil)).Set("stack = (SELECT id FROM next_parent)").
+			Where("board = ?", board).
+			Where("stack = ?", id)
+
+		updateNextParentStackId := d.db.NewUpdate().
+			With("next_parent", nextParentSelect).
+			Model((*Note)(nil)).Set("stack = null").
+			Where("id = (SELECT id FROM next_parent)")
+
 		_, err := d.db.NewDelete().
 			With("update_board", updateBoard).
 			With("update_ranks", updateRanks).
+			With("update_stackrefs", updateStackRefs).
+			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
 			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
+
 		return err
 	}
 	return errors.New("not permitted to delete note")
