@@ -116,18 +116,16 @@ export const Participants = () => {
             </li>
           ))}
       </ul>
-      {existsAtLeastOneReadyUser && (
-        <footer className="participants-reset-state-banner__container">
-          <div className="participants-reset-state-banner__icon-and-text">
-            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
-            <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
-          </div>
-          <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
-            {t("Participants.ResetBannerButton")}
-          </button>
-          <CloseIcon className="participants-reset-state-banner__close-icon" />
-        </footer>
-      )}
+      <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
+        <div className="participants-reset-state-banner__icon-and-text">
+          <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+          <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
+        </div>
+        <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
+          {t("Participants.ResetBannerButton")}
+        </button>
+        <CloseIcon className="participants-reset-state-banner__close-icon" />
+      </footer>
     </section>
   );
 };

@@ -203,6 +203,13 @@
   height: 54px;
 
   background-color: $color-lighter-gray;
+
+  transform: translateY(100%);
+  transition: transform ease-in-out 0.3s;
+}
+
+.participants-reset-state-banner__container--is-active {
+  transform: translateY(0);
 }
 
 .participants-reset-state-banner__icon-and-text {
