@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@fontsource/raleway": "^4.5.12",
+    "@reduxjs/toolkit": "^1.9.1",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
@@ -38,8 +39,6 @@
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.1",
     "react-tooltip": "^5.8.2",
-    "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
     "use-sound": "^4.0.1"
@@ -89,7 +88,6 @@
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
     "react-scripts": "^5.0.1",
-    "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
     "sass": "^1.58.3",
     "ts-jest": "^29.0.5",
