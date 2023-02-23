@@ -189,7 +189,6 @@
 }
 
 .participants-reset-state-banner__container {
-  position: relative;
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
   padding-right: 40px; // create some space
@@ -247,17 +246,6 @@
     background-color: $hover-background-dark;
     color: $color-white;
   }
-}
-
-.participants-reset-state-banner__close-icon {
-  // place the close icon on the very top right of the banner
-  position: absolute;
-  top: 3px;
-  right: 3px;
-
-  width: $icon--medium;
-  height: $icon--medium;
-  color: #8f939c;
 }
 
 @media screen and (min-width: 920px) {

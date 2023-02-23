@@ -9,7 +9,6 @@ import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as CloseIcon} from "assets/icon-cancel.svg";
 import "./Participants.scss";
 
 export const Participants = () => {
@@ -124,7 +123,6 @@ export const Participants = () => {
         <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
           {t("Participants.ResetBannerButton")}
         </button>
-        <CloseIcon className="participants-reset-state-banner__close-icon" />
       </footer>
     </section>
   );
