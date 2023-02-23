@@ -115,15 +115,17 @@ export const Participants = () => {
             </li>
           ))}
       </ul>
-      <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
-        <div className="participants-reset-state-banner__icon-and-text">
-          <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
-          <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
-        </div>
-        <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
-          {t("Participants.ResetBannerButton")}
-        </button>
-      </footer>
+      {isModerator && (
+        <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
+          <div className="participants-reset-state-banner__icon-and-text">
+            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+            <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
+          </div>
+          <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
+            {t("Participants.ResetBannerButton")}
+          </button>
+        </footer>
+      )}
     </section>
   );
 };
