@@ -32,7 +32,7 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         5000
       );
     } else {
-      API.deleteNote(action.context.board!, action.noteId).catch(() => {
+      API.deleteNote(action.context.board!, action.noteId, action.deleteStack).catch(() => {
         Toast.error(
           <div>
             <div>{i18n.t("Error.deleteNote")}</div>

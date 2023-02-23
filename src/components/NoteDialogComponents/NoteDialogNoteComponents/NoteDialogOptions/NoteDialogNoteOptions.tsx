@@ -44,12 +44,14 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       return;
     }
 
+    // remove
     if (deleteStack) {
       alert("stack wird gelöscht");
     } else {
       alert("note wird gelöscht");
     }
-    // dispatch(Actions.deleteNote(id, deleteStack))
+
+    dispatch(Actions.deleteNote(id, deleteStack));
   };
 
   const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";
@@ -88,9 +90,12 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         <ConfirmationDialog
           title="What do you want to delete?"
           onAccept={() => onDelete(props.noteId, false)} // del Note
+          onAcceptLabel="del note"
           onDecline={() => setShowParentDialog(false)} // cancel
-          onExtraOption={() => onDelete(props.noteId, true)}
-        /> // del Stack
+          onDeclineLabel="cancel"
+          onExtraOption={() => onDelete(props.noteId, true)} // del Stack
+          onExtraOptionLabel="del stack"
+        />
       )}
     </>
   );
