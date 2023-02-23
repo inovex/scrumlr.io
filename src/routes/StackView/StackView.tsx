@@ -211,7 +211,7 @@ export const StackView = () => {
                       authorName={item.authorName}
                       showAuthors={showAuthors}
                       onClose={handleClose}
-                      onDeleteOfParent={handleClose}
+                      onDeleteOfParent={handleClose} // remove ??
                       isStackedNote={false}
                       hasStackedNotes={item.stack.length > 0}
                       viewer={viewer}
@@ -228,7 +228,7 @@ export const StackView = () => {
                           authorName={n.authorName}
                           showAuthors={showAuthors}
                           onClose={handleClose}
-                          onDeleteOfParent={handleClose}
+                          onDeleteOfParent={handleClose} // remove ??
                           isStackedNote
                           viewer={viewer}
                         />

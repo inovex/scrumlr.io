@@ -12,6 +12,8 @@ type ConfirmationDialogProps = {
   onAcceptLabel?: string;
   onDecline: () => void;
   onDeclineLabel?: string;
+  onExtraOption?: () => void;
+  onExtraOptionLabel?: string;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -45,6 +47,16 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                 >
                   {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
                 </button>
+                {props.onExtraOption && (
+                  <button
+                    aria-label={props.onExtraOptionLabel ?? "ExtraOption"}
+                    className="confirmation-dialog__button confirmation-dialog__button--declne"
+                    onClick={() => props.onExtraOption!()}
+                    type="button"
+                  >
+                    {props.onExtraOptionLabel ?? "ExtraOption"}
+                  </button>
+                )}
               </div>
             </animated.aside>
           )}
