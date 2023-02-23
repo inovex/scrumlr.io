@@ -308,4 +308,21 @@
       border-color: var(--accent-color);
     }
   }
+
+  .participants-reset-state-banner__container {
+    background-color: $color-dark-mode-note;
+  }
+
+  .participants-reset-state-banner__check-icon,
+  .participants-reset-state-banner__text {
+    color: $color-white;
+  }
+
+  .participants-reset-state-banner__button {
+    background-color: $color-dark-mode;
+
+    &:hover {
+      background-color: $color-dark-one;
+    }
+  }
 }
