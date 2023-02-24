@@ -291,7 +291,7 @@
     "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
     "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
     "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
-    "ResetBannerText": "Bereit Status aller Teilnehmer zurücksetzen.",
+    "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
     "ResetBannerButton": "Zurücksetzen"
   },
   "UserRole": {
