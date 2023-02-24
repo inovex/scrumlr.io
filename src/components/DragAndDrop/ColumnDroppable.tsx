@@ -1,5 +1,5 @@
-import {Collision, UniqueIdentifier, useDndContext, useDndMonitor} from "@dnd-kit/core";
-import {SortableContext, useSortable} from "@dnd-kit/sortable";
+import {Collision, useDndContext, useDndMonitor} from "@dnd-kit/core";
+import {arrayMove, SortableContext, useSortable} from "@dnd-kit/sortable";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode} from "react";
@@ -7,13 +7,14 @@ import store from "store";
 import {Actions} from "store/action";
 
 type ColumnDroppableProps = {
-  id: UniqueIdentifier;
-  items: UniqueIdentifier[];
+  id: string;
+  items: string[];
+  setItems: (items: string[]) => void;
   className?: string;
   children: ReactNode;
 };
 
-export const ColumnDroppable = ({className, children, items, id}: ColumnDroppableProps) => {
+export const ColumnDroppable = ({className, children, items, id, setItems}: ColumnDroppableProps) => {
   const {setDroppableNodeRef, attributes, listeners, active, over, isOver} = useSortable({id, data: {type: "column"}});
   const {collisions} = useDndContext();
 
@@ -23,17 +24,47 @@ export const ColumnDroppable = ({className, children, items, id}: ColumnDroppabl
   const isOverCollision = over?.data.current?.type === "note" ? collisions?.at(0) : undefined;
 
   const isOverColumn = () => {
-    if (combineCollision) return items.includes(combineCollision.id);
-    if (isOverCollision) return items.includes(isOverCollision.id);
+    if (combineCollision) return items.includes(combineCollision.id.toString());
+    if (isOverCollision) return items.includes(isOverCollision.id.toString());
     return isOver;
   };
+
+  const topCollision = collisions?.at(0);
+  const hasActive = !!active && items.includes(active.id.toString());
+  const hasOver = !!topCollision && items.includes(topCollision.id.toString());
+  const isOverSelf = !!topCollision && topCollision.id.toString() === id;
 
   useDndMonitor({
     onDragEnd: () => {
       if (!active) return;
-      const topCollision = collisions?.at(0);
 
-      if (topCollision && topCollision.id === id) store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id.toString(), stack: undefined, rank: 0}}));
+      if (hasActive && hasOver && topCollision) {
+        const overIndex = items.indexOf(topCollision.id.toString());
+        const activeIndex = items.indexOf(active.id.toString());
+
+        setItems(arrayMove(items, activeIndex, overIndex));
+      }
+      if (topCollision && topCollision.id.toString() === id) {
+        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: undefined, rank: 0}}));
+      }
+    },
+    onDragOver: ({over: o}) => {
+      console.log(o?.id.toString().slice(0, 4), over?.id.toString().slice(0, 4));
+      if (!active || !over) return;
+
+      // from own column to column droppable
+      if (hasActive && isOverSelf) setItems([...items.filter((item) => item !== active.id.toString()), active.id.toString()]);
+      // from other column to column droppable
+      if (!hasActive && isOverSelf) setItems([...items, active.id.toString()]);
+      // from own column to other column/note
+      if (hasActive && !(hasOver || isOverSelf)) setItems(items.filter((item) => item !== active.id.toString()));
+      if (!hasActive && hasOver) {
+        const overIndex = items.indexOf(topCollision.id.toString());
+        if (overIndex === -1) return;
+        setItems([...items.slice(0, overIndex), active.id.toString(), ...items.slice(overIndex, items.length)]);
+      }
+      // from own column to own note droppable
+      // not necessary, will be handled in onDragEnd
     },
   });
 

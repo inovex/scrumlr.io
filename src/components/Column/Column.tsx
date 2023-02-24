@@ -155,6 +155,13 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     </>
   );
 
+  const [localNotes, setLocalNotes] = useState(notes);
+  useEffect(() => setLocalNotes(notes), [notes]);
+
+  const setItems = (items: string[]) => {
+    setLocalNotes(items);
+  };
+
   return (
     <section className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)} ref={columnRef}>
       <div className="column__content">
@@ -184,9 +191,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
           </div>
         </div>
-        <ColumnDroppable id={id} items={notes} className="column__notes-wrapper">
+        <ColumnDroppable id={id} items={localNotes} setItems={setItems} className="column__notes-wrapper">
           <ul className="column__note-list">
-            {notes.map((note) => (
+            {localNotes.map((note) => (
               <li key={note}>
                 <Note noteId={note} viewer={viewer} colorClassName={colorClassName} />
               </li>
