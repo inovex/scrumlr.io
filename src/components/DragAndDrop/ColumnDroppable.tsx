@@ -17,11 +17,12 @@ type ColumnDroppableProps = {
 export const ColumnDroppable = ({className, children, items, id, setItems}: ColumnDroppableProps) => {
   const {setDroppableNodeRef, attributes, listeners, active, over, isOver} = useSortable({id, data: {type: "column"}});
   const {collisions} = useDndContext();
+  const topCollision = collisions?.at(0);
 
   const isNote = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "note";
   const isWithinCombineRange = (collision: Collision) => collision.data?.value >= COMBINE_THRESHOLD && collision.data?.value < MOVE_THRESHOLD;
   const combineCollision = collisions?.find((collision) => isNote(collision) && isWithinCombineRange(collision) && collision.id !== over?.id);
-  const isOverCollision = over?.data.current?.type === "note" ? collisions?.at(0) : undefined;
+  const isOverCollision = topCollision && isNote(topCollision) ? topCollision : undefined;
 
   const isOverColumn = () => {
     if (combineCollision) return items.includes(combineCollision.id.toString());
@@ -29,7 +30,6 @@ export const ColumnDroppable = ({className, children, items, id, setItems}: Colu
     return isOver;
   };
 
-  const topCollision = collisions?.at(0);
   const hasActive = !!active && items.includes(active.id.toString());
   const hasOver = !!topCollision && items.includes(topCollision.id.toString());
   const isOverSelf = !!topCollision && topCollision.id.toString() === id;
