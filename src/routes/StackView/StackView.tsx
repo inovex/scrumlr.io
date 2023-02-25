@@ -40,10 +40,14 @@ export const StackView = () => {
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
         .filter((n) => n.position.stack === note?.id)
+        // if showNotesOfOtherUsers is disabled, only show own notes
+        // same as showNotesOfOtherUsers ? true : n.author === viewer.user.id
+        .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id)
         .map((n) => ({
           ...n,
           authorName: state.participants?.others.find((p) => p.user.id === n.author)?.user.name ?? t("Note.me")!,
@@ -59,7 +63,10 @@ export const StackView = () => {
     if (viewer.role === "PARTICIPANT") prevColumns = prevColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let prevStack;
     while (prevColumns.length > 0 && !prevStack) {
-      prevStack = state.notes.filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null).at(-1);
+      prevStack = state.notes
+        .filter((n) => n.position.column === prevColumns[0]?.id && n.position.stack === null)
+        .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id)
+        .at(-1);
       prevColumns.shift();
     }
     return prevStack?.id;
@@ -71,12 +78,21 @@ export const StackView = () => {
     if (viewer.role === "PARTICIPANT") nextColumns = nextColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let nextStack;
     while (nextColumns.length > 0 && !nextStack) {
-      nextStack = state.notes.find((n) => n.position.column === nextColumns[0].id);
+      nextStack = state.notes
+        .filter((n) => n.position.column === nextColumns[0].id && n.position.stack === null)
+        .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id)
+        .at(0);
       nextColumns.shift();
     }
     return nextStack?.id;
   });
-  const stacksInColumn = useAppSelector((state) => state.notes.filter((n) => n.position.column === column?.id && n.position.stack === null), _.isEqual);
+  const stacksInColumn = useAppSelector(
+    (state) =>
+      state.notes
+        .filter((n) => n.position.column === column?.id && n.position.stack === null) // card in column and not part of a stack
+        .filter((n) => showNotesOfOtherUsers || n.author === viewer.user.id),
+    _.isEqual
+  );
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
@@ -176,6 +192,12 @@ export const StackView = () => {
       dispatch(Actions.shareNote(id));
     }
   };
+
+  // when showNotesOfOtherUsers is updated, check if user is currently looking at a note they are not supposed to see.
+  // if true, close the stack view.
+  if (!showNotesOfOtherUsers && note.author !== viewer.user.id) {
+    handleClose();
+  }
 
   const navigationProps = {
     stacks: stacksInColumn,
