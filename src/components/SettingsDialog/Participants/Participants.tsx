@@ -121,7 +121,7 @@ export const Participants = () => {
             <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
             <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
           </div>
-          <button className="participants-reset-state-banner__button" onClick={() => resetReadyStateOfAllUsers()}>
+          <button className="participants-reset-state-banner__button" onClick={resetReadyStateOfAllUsers}>
             {t("Participants.ResetBannerButton")}
           </button>
         </footer>
