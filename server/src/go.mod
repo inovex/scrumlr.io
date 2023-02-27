@@ -20,7 +20,7 @@ require (
 	github.com/nats-io/nats.go v1.24.0
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 	github.com/uptrace/bun v1.1.12
 	github.com/uptrace/bun/dbfixture v1.1.12
 	github.com/uptrace/bun/dialect/pgdialect v1.1.12
