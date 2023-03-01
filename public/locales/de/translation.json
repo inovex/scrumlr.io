@@ -55,7 +55,8 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
-    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest?",
+    "warning": "Dieser Vorgang kann nicht rückgängig gemacht werden.",
     "yes": "Ja",
     "no": "Nein"
   },

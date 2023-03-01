@@ -43,14 +43,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       setShowChildDialog(true);
       return;
     }
-
-    // remove
-    if (deleteStack) {
-      alert("stack wird gelöscht");
-    } else {
-      alert("note wird gelöscht");
-    }
-
     dispatch(Actions.deleteNote(id, deleteStack));
   };
 
@@ -84,17 +76,27 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         )}
       </ul>
       {showChildDialog && (
-        <ConfirmationDialog title="Are you sure that you want to delete this note?" onAccept={() => onDelete(props.noteId, false)} onDecline={() => setShowChildDialog(false)} />
+        <ConfirmationDialog
+          title="Are you sure that you want to delete this note?"
+          onAccept={() => onDelete(props.noteId, false)}
+          onAcceptLabel="Delete note"
+          onDecline={() => setShowChildDialog(false)}
+          onDeclineLabel="Cancel"
+          icon={DeleteIcon}
+          warning
+        />
       )}
       {showParentDialog && (
         <ConfirmationDialog
           title="What do you want to delete?"
-          onAccept={() => onDelete(props.noteId, false)} // del Note
-          onAcceptLabel="del note"
-          onDecline={() => setShowParentDialog(false)} // cancel
-          onDeclineLabel="cancel"
-          onExtraOption={() => onDelete(props.noteId, true)} // del Stack
-          onExtraOptionLabel="del stack"
+          onAccept={() => onDelete(props.noteId, false)}
+          onAcceptLabel="Delete note"
+          onDecline={() => setShowParentDialog(false)}
+          onDeclineLabel="Cancel"
+          onExtraOption={() => onDelete(props.noteId, true)}
+          onExtraOptionLabel="Delete stack"
+          icon={DeleteIcon}
+          warning
         />
       )}
     </>
