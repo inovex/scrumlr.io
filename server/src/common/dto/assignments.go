@@ -8,14 +8,14 @@ import (
 
 // Assign is the response for all assign requests.
 type Assignment struct {
-	Id    uuid.UUID `json:"id"`
+	ID    uuid.UUID `json:"id"`
 	Board uuid.UUID `json:"board"`
 	Note  uuid.UUID `json:"note"`
 	Name  string    `json:"name"`
 }
 
 func (a *Assignment) From(assign database.Assignment) *Assignment {
-	a.Id = assign.Id
+	a.ID = assign.ID
   a.Board = assign.Board
 	a.Note = assign.Note
 	a.Name = assign.Name
