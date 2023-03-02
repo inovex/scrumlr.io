@@ -25,7 +25,7 @@ type AssignmentInsert struct {
 
 func (d *Database) CreateAssignment(insert AssignmentInsert) (Assignment, error) {
   var assignment Assignment
-  _, err := d.db.NewInsert().Model(&insert).On("CONFLICT (board, note, name) DO NOTHING").Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &assignment)
+  _, err := d.db.NewInsert().Model(&insert).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &assignment)
   return assignment, err
 }
 

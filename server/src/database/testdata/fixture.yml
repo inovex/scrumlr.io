@@ -673,11 +673,11 @@
     - _id: assignmentA
       id: "3331a396-2118-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
-      note: '{{ $.Note.assignmentsTestNote }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
       name: "John Doe"
     - _id: assignmentB
       id: "3732c396-2118-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
-      note: '{{ $.Note.assignmentsTestNote }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
       name: "Max Mustermann"
 
