@@ -27,6 +27,8 @@ const (
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
+  BoardEventAssignmentCreated BoardEventType = "ASSIGNMENT_CREATED"
+  BoardEventAssignmentDeleted BoardEventType = "ASSIGNMENT_DELETED"
 )
 
 type BoardEvent struct {

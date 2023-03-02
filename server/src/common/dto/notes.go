@@ -84,4 +84,5 @@ type NoteUpdateRequest struct {
 
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`
+
 }

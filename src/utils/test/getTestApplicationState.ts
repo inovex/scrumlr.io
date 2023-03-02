@@ -85,6 +85,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-1",
         rank: 0,
       },
+      assignee: ["test-note-assignee"],
     },
     {
       id: "test-notes-id-2",
@@ -94,6 +95,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-1",
         rank: 1,
       },
+      assignee: ["test-note-assignee"],
     },
     {
       id: "test-notes-id-3",
@@ -103,6 +105,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-2",
         rank: 0,
       },
+      assignee: ["test-note-assignee"],
     },
   ],
   votes: [
@@ -141,5 +144,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
   },
+  assignments: [],
   ...overwrite,
 });

@@ -128,6 +128,20 @@ func (s *Server) NoteContext(next http.Handler) http.Handler {
   })
 }
 
+func (s *Server) AssignmentContext(next http.Handler) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    assignmentParam := chi.URLParam(r, "assignment")
+    assignment, err := uuid.Parse(assignmentParam)
+    if err != nil {
+      common.Throw(w, r, common.BadRequestError(errors.New("invalid note id")))
+      return
+    }
+
+    columnContext := context.WithValue(r.Context(), "Assignment", assignment)
+    next.ServeHTTP(w, r.WithContext(columnContext))
+  })
+}
+
 func (s *Server) VotingContext(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     votingParam := chi.URLParam(r, "voting")
