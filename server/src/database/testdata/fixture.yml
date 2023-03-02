@@ -671,12 +671,12 @@
 - model: Assignment
   rows:
     - _id: assignmentA
-      id: "81ffdac9-1246-4d8d-a65b-290cc62e4070"
+      id: "3331a396-2118-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
       note: '{{ $.Note.assignmentsTestNote }}'
       name: "John Doe"
     - _id: assignmentB
-      id: "056ad8aa-2c91-4dca-9faf-2dd14108e396"
+      id: "3732c396-2118-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
       note: '{{ $.Note.assignmentsTestNote }}'
       name: "Max Mustermann"
