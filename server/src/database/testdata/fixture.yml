@@ -225,6 +225,10 @@
       board: '{{ $.Board.stackTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
       role: OWNER
+    - _id: justinSessionOnAssignmentsTestBoard
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      role: OWNER
 
 - model: Column
   rows:
