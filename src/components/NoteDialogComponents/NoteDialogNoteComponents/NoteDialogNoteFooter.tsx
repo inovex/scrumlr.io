@@ -8,6 +8,7 @@ import {AvataaarProps} from "components/Avatar";
 import _ from "underscore";
 import "./NoteDialogNoteFooter.scss";
 import {Votes} from "components/Votes";
+import {Assigning} from "components/Assignees/Assigning";
 
 type NoteDialogNoteFooterProps = {
   showAuthors: boolean;
@@ -46,6 +47,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
           <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
         </figure>
       )}
+      <Assigning noteId={props.noteId} />
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
   );

@@ -544,5 +544,12 @@
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
     }
-  }
+  },
+    "assigning":{
+      "header": "Weise jemanden zu",
+      "placeholder": "Suche",
+      "listHeader01": "Name",
+      "listHeader02": "Zugewiesen",
+      "addCustomName": "Eigenen Namen hinzufügen"
+    }
 }

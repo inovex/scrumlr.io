@@ -1,0 +1,42 @@
+@import "constants/style.scss";
+@import "components/Votes/VoteButtons/AddVoteButton.scss";
+@import "./AssignAvatar.scss";
+
+.assignments__menu {
+  width: 300px;
+  position: absolute;
+  background-color: $color-white;
+  border-radius: 8px;
+  height: auto;
+  z-index: 999;
+  margin-top: 10px;
+}
+
+.assignments__summary {
+  background-color: var(--accent-color--desaturated-light);
+  padding: 0 4px;
+  border-radius: 21px;
+  height: 100%;
+  border: none;
+  min-width: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+.assignments {
+  position: relative;
+  height: 100%;
+}
+
+.assignments-container {
+  position: relative;
+  height: var(--note-footer-height);
+}
+
+.assignments__icon {
+  height: 26px;
+  width: 26px;
+  color: var(--accent-color);
+}

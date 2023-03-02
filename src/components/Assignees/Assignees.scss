@@ -1,0 +1,78 @@
+.assign-input {
+  display: flex;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+  top: 100%;
+}
+
+.suggestion-list {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 0.5rem;
+}
+
+.suggestion-list button {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  height: 25px;
+}
+
+#assign-input {
+  background-color: transparent;
+  width: 22px;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+#assign-input:focus {
+  width: 80%;
+  border-radius: 4px;
+  left: 100%;
+}
+
+.assign-input ul {
+  width: 100%;
+  left: 0;
+}
+
+#suggestion-list {
+  height: 20px;
+  width: 80%;
+}
+
+.expand {
+  animation: expand 0.2s linear forwards;
+}
+
+.collapse {
+  animation: _collapse 1s linear forwards;
+}
+
+@keyframes expand {
+  from {
+    width: 0%;
+    background-color: red;
+  }
+  to {
+    width: 100%;
+    background-color: yellow;
+  }
+}
+
+@keyframes _collapse {
+  from {
+    width: 100%;
+    background-color: yellow;
+  }
+  to {
+    width: 0%;
+    background-color: red;
+  }
+}

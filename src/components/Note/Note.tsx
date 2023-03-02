@@ -11,6 +11,7 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
+import {Assignments} from "components/Assignees/Assignments";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
@@ -135,6 +136,7 @@ export const Note = (props: NoteProps) => {
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
+          <Assignments noteId={props.noteId} />
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>
