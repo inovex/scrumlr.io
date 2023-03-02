@@ -8,6 +8,5 @@ export default (overwrite?: Partial<Note>): Note => ({
     column: "test-note-position-column-id",
     rank: 0,
   },
-  assignee: ["test-note-assignee"],
   ...overwrite,
 });
