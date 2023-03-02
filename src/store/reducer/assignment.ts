@@ -1,6 +1,7 @@
 import {Action, ReduxAction} from "store/action";
 import {AssignmentsState} from "types/assignment";
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const assignmentReducer = (state: AssignmentsState = [], action: ReduxAction): AssignmentsState => {
   switch (action.type) {
     case Action.InitializeBoard:
