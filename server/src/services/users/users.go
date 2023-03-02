@@ -58,6 +58,11 @@ func (s *UserService) CreateMicrosoftUser(_ context.Context, id, name, avatarUrl
 	return new(dto.User).From(user), err
 }
 
+func (s *UserService) CreateAzureAdUser(_ context.Context, id, name, avatarUrl string) (*dto.User, error) {
+	user, err := s.database.CreateAzureAdUser(id, name, avatarUrl)
+	return new(dto.User).From(user), err
+}
+
 func (s *UserService) CreateAppleUser(_ context.Context, id, name, avatarUrl string) (*dto.User, error) {
 	user, err := s.database.CreateAppleUser(id, name, avatarUrl)
 	return new(dto.User).From(user), err

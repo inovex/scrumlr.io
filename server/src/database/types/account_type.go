@@ -18,6 +18,9 @@ const (
 	// AccountTypeMicrosoft users registered on Microsoft
 	AccountTypeMicrosoft AccountType = "MICROSOFT"
 
+	// AccountTypeAzureAd users registered on Azure AD
+	AccountTypeAzureAd AccountType = "AZURE_AD"
+
 	// AccountTypeGitHub users registered on GitHub
 	AccountTypeGitHub AccountType = "GITHUB"
 

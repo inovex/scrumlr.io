@@ -26,6 +26,9 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 	if s.auth.Exists(types.AccountTypeMicrosoft) {
 		info.AuthProvider = append(info.AuthProvider, types.AccountTypeMicrosoft)
 	}
+	if s.auth.Exists(types.AccountTypeAzureAd) {
+		info.AuthProvider = append(info.AuthProvider, types.AccountTypeAzureAd)
+	}
 	if s.auth.Exists(types.AccountTypeApple) {
 		info.AuthProvider = append(info.AuthProvider, types.AccountTypeApple)
 	}
