@@ -1,4 +1,3 @@
-import {Assign} from "types/assign";
 import {SERVER_HTTP_URL} from "../config";
 
 export const AssignmentAPI = {
@@ -14,7 +13,7 @@ export const AssignmentAPI = {
       });
 
       if (response.status === 201) {
-        return (await response.json()) as Assign;
+        return;
       }
 
       throw new Error(`add assignee request resulted in status ${response.status}`);
