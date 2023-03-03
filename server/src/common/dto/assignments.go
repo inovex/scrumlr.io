@@ -6,7 +6,6 @@ import (
 	"scrumlr.io/server/database"
 )
 
-// Assign is the response for all assign requests.
 type Assignment struct {
 	ID    uuid.UUID `json:"id"`
 	Board uuid.UUID `json:"board"`
@@ -14,11 +13,11 @@ type Assignment struct {
 	Name  string    `json:"name"`
 }
 
-func (a *Assignment) From(assign database.Assignment) *Assignment {
-	a.ID = assign.ID
-  a.Board = assign.Board
-	a.Note = assign.Note
-	a.Name = assign.Name
+func (a *Assignment) From(assignment database.Assignment) *Assignment {
+	a.ID = assignment.ID
+  a.Board = assignment.Board
+	a.Note = assignment.Note
+	a.Name = assignment.Name
 	return a
 }
 
@@ -38,7 +37,6 @@ func Assignments(assignments []database.Assignment) []*Assignment {
 	return list
 }
 
-// AssignRequest represents the request to add or delete an assign.
 type AssignmentCreateRequest struct {
 	Board uuid.UUID `json:"-"`
 	Note  uuid.UUID `json:"note"`
