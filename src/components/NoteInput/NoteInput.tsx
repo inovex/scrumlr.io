@@ -83,10 +83,11 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         }}
         maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
+        data-tooltip-id={`note-input__tooltip-${columnId}`}
         data-tooltip-content={hotkeyKey}
       />
       <Tooltip
-        anchorId={`note-input-${columnId}`}
+        id={`note-input__tooltip-${columnId}`}
         place="bottom"
         variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
         delayShow={500}

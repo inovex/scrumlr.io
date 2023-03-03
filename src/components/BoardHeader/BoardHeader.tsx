@@ -61,6 +61,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             aria-haspopup
             aria-pressed={showMenu}
             id="board-header__name-and-settings-button"
+            data-tooltip-id="board-header__tooltip"
             data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
           >
             <div className="board-header__access-policy-status">
@@ -78,7 +79,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             </div>
           </button>
           <Tooltip
-            anchorId="board-header__name-and-settings-button"
+            id="board-header__tooltip"
             place="bottom"
             variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
             delayShow={500}
