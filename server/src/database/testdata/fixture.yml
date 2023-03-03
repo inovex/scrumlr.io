@@ -680,4 +680,9 @@
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
       note: '{{ $.Note.assignmentsTestNote.ID }}'
       name: "Max Mustermann"
+    - _id: assignmentC
+      id: "3732c396-23c8-4ea1-8df7-c3fa19224bd4"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
+      name: "Assignments Observer Test Assignment"
 

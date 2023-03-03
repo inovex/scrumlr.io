@@ -17,36 +17,24 @@ func (o *AssignmentsObserverForTests) DeletedAssignment(board uuid.UUID, assignm
   o.deletedAssignment = &assignment
 }
 
-func (o *AssignmentsObserverForTests) Reset() {
-  o.board = nil
-  o.deletedAssignment = nil
-}
-
 var assignmentsObserver AssignmentsObserverForTests
 
 func TestAssignmentsObserver(t *testing.T) {
   assignmentsObserver = AssignmentsObserverForTests{t: t}
   testDb.AttachObserver(&assignmentsObserver)
 
+  t.Run("Test=1", testAssignmentsObserverOnDelete)
+
+	_, _ = testDb.DetachObserver(assignmentsObserver)
 }
 
 func testAssignmentsObserverOnDelete(t *testing.T) {
   board := fixture.MustRow("Board.assignmentsTestBoard").(*Board)
-  assignment := fixture.MustRow("Assignment.assignmentB").(*Assignment)
+  assignment := fixture.MustRow("Assignment.assignmentC").(*Assignment)
 
   err := testDb.DeleteAssignment(board.ID, assignment.ID)
   assert.NoError(t, err)
   assert.Equal(t, board.ID, *assignmentsObserver.board)
   assert.Equal(t, assignment.ID, *assignmentsObserver.deletedAssignment)
-}
-
-func testAssignmentsObserverOnDeleteNotExisting(t *testing.T) {
-  board := fixture.MustRow("Board.assignmentsTestBoard").(*Board)
-  assignment := fixture.MustRow("Assignment.assignmentB").(*Assignment)
-
-  err := testDb.DeleteAssignment(board.ID, assignment.ID)
-  assert.NoError(t, err)
-  assert.Nil(t, assignmentsObserver.board)
-  assert.Nil(t, assignmentsObserver.deletedAssignment)
 }
 
