@@ -133,12 +133,12 @@ func (s *Server) AssignmentContext(next http.Handler) http.Handler {
     assignmentParam := chi.URLParam(r, "assignment")
     assignment, err := uuid.Parse(assignmentParam)
     if err != nil {
-      common.Throw(w, r, common.BadRequestError(errors.New("invalid note id")))
+      common.Throw(w, r, common.BadRequestError(errors.New("invalid assignment id")))
       return
     }
 
-    columnContext := context.WithValue(r.Context(), "Assignment", assignment)
-    next.ServeHTTP(w, r.WithContext(columnContext))
+    assignmentContext := context.WithValue(r.Context(), "Assignment", assignment)
+    next.ServeHTTP(w, r.WithContext(assignmentContext))
   })
 }
 
