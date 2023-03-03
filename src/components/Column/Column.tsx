@@ -177,14 +177,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     >
       <div className="column__content">
         <div className="column__header">
-          <NoteInput
-            columnIndex={index}
-            columnId={id}
-            maxNoteLength={MAX_NOTE_LENGTH}
-            columnIsVisible={visible}
-            toggleColumnVisibility={toggleVisibilityHandler}
-            hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
-          />
           <div className="column__header-title">
             {renderColumnName()}
             {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
@@ -201,6 +193,14 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
               />
             )}
           </div>
+          <NoteInput
+            columnIndex={index}
+            columnId={id}
+            maxNoteLength={MAX_NOTE_LENGTH}
+            columnIsVisible={visible}
+            toggleColumnVisibility={toggleVisibilityHandler}
+            hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
+          />
         </div>
         <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
           <ul className="column__note-list">
