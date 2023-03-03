@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"time"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
