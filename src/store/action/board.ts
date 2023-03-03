@@ -5,6 +5,7 @@ import {Note} from "types/note";
 import {Vote} from "types/vote";
 import {Voting} from "types/voting";
 import {Request} from "types/request";
+import {Assignment} from "types/assignment";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardAction = {
@@ -58,7 +59,16 @@ export const BoardActionFactory = {
    * @param board the board data
    * @param columns the columns of the board
    */
-  initializeBoard: (board: Board, participants: Participant[], requests: Request[], columns: Column[], notes: Note[], votes: Vote[], votings: Voting[]) => ({
+  initializeBoard: (
+    board: Board,
+    participants: Participant[],
+    requests: Request[],
+    columns: Column[],
+    notes: Note[],
+    votes: Vote[],
+    votings: Voting[],
+    assignments: Assignment[]
+  ) => ({
     type: BoardAction.InitializeBoard,
     board,
     participants,
@@ -67,6 +77,7 @@ export const BoardActionFactory = {
     notes,
     votes,
     votings,
+    assignments,
   }),
   /**
    * Creates an action which should be dispatched when the user wants to edit the board.

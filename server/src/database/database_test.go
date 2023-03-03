@@ -115,6 +115,7 @@ func loadTestdata() error {
 		(*Note)(nil),
 		(*Voting)(nil),
 		(*Vote)(nil),
+    (*Assignment)(nil),
 	)
 	fixture = dbfixture.New(testDb.db)
 	return fixture.Load(context.Background(), os.DirFS("testdata"), "fixture.yml")
