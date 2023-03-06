@@ -298,8 +298,6 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	return note[0], err
 }
 
-// Case: delete just a note => overhead?
-// Add DeleteNoteWithStack function here or decide in function by single condition?
 func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack bool, id uuid.UUID) error {
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
@@ -356,7 +354,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 			return err
 		}
 
-		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id)
+		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id).Limit((1))
 
 		updateStackRefs := d.db.NewUpdate().
 			With("next_parent", nextParentSelect).
