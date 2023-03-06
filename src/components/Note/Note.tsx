@@ -28,16 +28,21 @@ export const Note = (props: NoteProps) => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
+  const noteChildren = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId));
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
-  const author = useAppSelector((state) => {
+  const authors = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
-    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
-    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
-    return {
-      ...noteAuthor,
-      displayName,
-      isSelf,
-    };
+    const childrenNoteAuthors = noteChildren.map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
+    const allAuthors = [noteAuthor, ...childrenNoteAuthors];
+    return allAuthors.map((a) => {
+      const isSelf = a?.user.id === state.participants?.self.user.id;
+      const displayName = isSelf ? t("Note.me") : a!.user.name;
+      return {
+        ...a,
+        displayName,
+        isSelf,
+      };
+    });
   }, isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
@@ -121,7 +126,7 @@ export const Note = (props: NoteProps) => {
             <img
               src={addProtocol(note!.text)}
               className="note__image"
-              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              alt={t("Note.userImageAlt", {user: authors[0].isSelf ? t("Note.you") : authors[0].displayName})}
               draggable={false} // safari bugfix
             />
           </div>
@@ -129,10 +134,10 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{note!.text}</p>
         )}
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === author.user!.id) && (
-            <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{author.displayName}</figcaption>
+          {(showAuthors || props.viewer.user.id === authors[0].user!.id) && (
+            <figure className={classNames("note__author", {"note__author--self": authors[0].isSelf})} aria-roledescription="author">
+              <UserAvatar id={note!.author} avatar={authors[0].user!.avatar} title={authors[0].displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <figcaption className="note__author-name">{authors[0].displayName}</figcaption>
             </figure>
           )}
           <Votes noteId={props.noteId!} aggregateVotes />
