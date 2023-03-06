@@ -70,6 +70,11 @@ export const ParticipantActionFactory = {
     raisedHand,
   }),
 
+  /**
+   * Sets the viewsSharedNote status of a user by the given value.
+   *
+   * @param viewsSharedNote represents whether a user is actively looking at the shared note (true) or not (false)
+   */
   setViewsSharedNote: (user: string, viewsSharedNote: boolean) => ({
     type: ParticipantAction.SetViewsSharedNoteStatus,
     user,
