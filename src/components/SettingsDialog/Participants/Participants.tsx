@@ -8,6 +8,7 @@ import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import "./Participants.scss";
 
 export const Participants = () => {
@@ -21,6 +22,11 @@ export const Participants = () => {
   const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
   const self = useAppSelector((state) => state.participants!.self);
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
+  const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
+
+  const resetReadyStateOfAllUsers = () => {
+    participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
+  };
 
   return (
     <section className="settings-dialog__container accent-color__poker-purple">
@@ -109,6 +115,17 @@ export const Participants = () => {
             </li>
           ))}
       </ul>
+      {isModerator && (
+        <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
+          <div className="participants-reset-state-banner__icon-and-text">
+            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+            <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
+          </div>
+          <button className="participants-reset-state-banner__button" onClick={resetReadyStateOfAllUsers}>
+            {t("Participants.ResetBannerButton")}
+          </button>
+        </footer>
+      )}
     </section>
   );
 };

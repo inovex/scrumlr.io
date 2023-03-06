@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Actions, Action, ReduxAction} from "store/action";
 import Socket from "sockette";
@@ -26,8 +26,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         const message: ServerEvent = JSON.parse(evt.data);
 
         if (message.type === "INIT") {
-          const {board, columns, participants, notes, votes, votings, requests} = message.data;
-          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || []));
+          const {board, columns, participants, notes, votes, votings, requests, assignments} = message.data;
+          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || [], assignments || []));
         }
 
         if (message.type === "BOARD_UPDATED") {
@@ -88,6 +88,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         }
         if (message.type === "REQUEST_UPDATED") {
           store.dispatch(Actions.updateJoinRequest(message.data));
+        }
+
+        if (message.type === "ASSIGNMENT_CREATED") {
+          store.dispatch(Actions.createdAssignment(message.data));
+        }
+
+        if (message.type === "ASSIGNMENT_DELETED") {
+          store.dispatch(Actions.deletedAssignment(message.data));
         }
       },
     });

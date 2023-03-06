@@ -293,7 +293,9 @@
     "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
     "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
     "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
-    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator"
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
+    "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
+    "ResetBannerButton": "Zurücksetzen"
   },
   "UserRole": {
     "Owner": "Besitzer",

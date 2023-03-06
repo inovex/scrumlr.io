@@ -159,6 +159,13 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
+    - _id: assignmentsTestBoard
+      id: "d036079d-0c5e-4322-9bf6-9f4a311aab43"
+      name: Assignments Test Board
+      access_policy: PUBLIC
+      show_authors: true
+      show_notes_of_other_users: true
+      created_at: '{{ now }}'
 
 - model: BoardSessionInsert
   rows:
@@ -216,6 +223,10 @@
       role: OWNER
     - _id: justinSessionOnStackTestBoard
       board: '{{ $.Board.stackTestBoard.ID }}'
+      user: '{{ $.User.justin.ID }}'
+      role: OWNER
+    - _id: justinSessionOnAssignmentsTestBoard
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
       role: OWNER
 
@@ -316,6 +327,13 @@
       id: "00c8c51b-d391-4472-8136-06eadff7bbd6"
       board: '{{ $.Board.stackTestBoard.ID }}'
       name: Stack test column
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: assignmentsTestColumn
+      id: "ea86db5c-bb75-4e81-b7b2-6774ff26acd4"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      name: Assignments Test Column
       color: backlog-blue
       visible: true
       index: 0
@@ -522,6 +540,14 @@
       text: "D"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 2
+    - _id: assignmentsTestNote
+      id: "000b077b-be7c-4c5d-88fd-c52db898df01"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      author: '{{ $.User.justin.ID }}'
+      column: '{{ $.Column.assignmentsTestColumn.ID }}'
+      text: "Assignments Test Note"
+      stack: null
+      rank: 0
 
 - model: Voting
   rows:
@@ -641,3 +667,22 @@
       voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
       user: '{{ $.User.justin.ID }}'
       note: '{{ $.Note.votingSortingNote6.ID }}'
+
+- model: Assignment
+  rows:
+    - _id: assignmentA
+      id: "3331a396-2118-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
+      name: "John Doe"
+    - _id: assignmentB
+      id: "3732c396-2118-4e23-adf7-c3fa19224bd4"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
+      name: "Max Mustermann"
+    - _id: assignmentC
+      id: "3732c396-23c8-4ea1-8df7-c3fa19224bd4"
+      board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      note: '{{ $.Note.assignmentsTestNote.ID }}'
+      name: "Assignments Observer Test Assignment"
+

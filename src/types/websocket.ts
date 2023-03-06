@@ -5,6 +5,7 @@ import {Note} from "./note";
 import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
+import {Assignment} from "./assignment";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -16,6 +17,7 @@ export interface BoardInitEvent {
     votes?: Vote[];
     participants: Participant[];
     requests?: Request[];
+    assignments?: Assignment[];
   };
 }
 
@@ -96,6 +98,15 @@ export interface UpdatedVotesEvent {
   data: Vote[];
 }
 
+export interface CreatedAssignmentEvent {
+  type: "ASSIGNMENT_CREATED";
+  data: Assignment;
+}
+export interface DeletedAssignmentEvent {
+  type: "ASSIGNMENT_DELETED";
+  data: string;
+}
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
@@ -112,4 +123,6 @@ export type ServerEvent =
   | ParticipantsUpdatedEvent
   | VotingCreatedEvent
   | VotingUpdatedEvent
-  | UpdatedVotesEvent;
+  | UpdatedVotesEvent
+  | CreatedAssignmentEvent
+  | DeletedAssignmentEvent;

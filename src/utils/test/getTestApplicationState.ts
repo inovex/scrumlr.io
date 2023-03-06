@@ -144,5 +144,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
   },
+  assignments: [],
   ...overwrite,
 });
