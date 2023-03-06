@@ -32,7 +32,6 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	result := ctx.Value("Result").(*[]Note)
-	//TODO: works but how to notify about UpdatedNotes in the right way
 	notifyNotesUpdated(ctx)
 
 	if len(*result) > 0 {

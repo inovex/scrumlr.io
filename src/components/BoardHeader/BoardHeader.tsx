@@ -2,6 +2,7 @@ import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
+import {ReactComponent as LeaveIcon} from "assets/icon-share.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -45,6 +46,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}
+          icon={LeaveIcon}
         />
       )}
       <header className="board-header">

@@ -53,14 +53,14 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                     >
                       {props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
                     </button>
-                    {props.onExtraOption && (
+                    {props.onExtraOption && props.onExtraOptionLabel && (
                       <button
-                        aria-label={props.onExtraOptionLabel ?? "ExtraOption"}
+                        aria-label={props.onExtraOptionLabel}
                         className="confirmation-dialog__button confirmation-dialog__button--decline"
                         onClick={() => props.onExtraOption!()}
                         type="button"
                       >
-                        {props.onExtraOptionLabel ?? "ExtraOption"}
+                        {props.onExtraOptionLabel}
                       </button>
                     )}
                     <button

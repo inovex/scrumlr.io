@@ -96,7 +96,6 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	// TODO: write second db method that gets called here on condition deleteStack flag true/false???
 	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), body.DeleteStack, id)
 }
 

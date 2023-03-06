@@ -55,10 +55,15 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
-    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest?",
-    "warning": "Dieser Vorgang kann nicht rückgängig gemacht werden.",
+    "deleteBoard": "Bist du dir absolut sicher, dass du die Sitzung löschen möchtest?",
+    "deleteNote": "Bist du dir sicher, dass du das Kärtchen löschen möchtest?",
+    "deleteNoteButton": "Kärtchen löschen",
+    "deleteStackButton": "Stapel löschen",
+    "deleteOptions": "Was möchtest du löschen?",
+    "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "cancel": "Abbrechen"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",

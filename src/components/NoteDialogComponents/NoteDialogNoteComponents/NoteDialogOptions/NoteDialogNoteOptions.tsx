@@ -66,8 +66,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           <li className="note-dialog__note-option">
             <TooltipButton
               onClick={() => {
-                onDelete(props.noteId); // reduce ??
-                // props.onDeleteOfParent(); remove ??
+                onDelete(props.noteId);
               }}
               label={props.isStackedNote || !props.hasStackedNotes ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
               icon={DeleteIcon}
@@ -77,24 +76,24 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       </ul>
       {showChildDialog && (
         <ConfirmationDialog
-          title="Are you sure that you want to delete this note?"
+          title={t("ConfirmationDialog.deleteNote")}
           onAccept={() => onDelete(props.noteId, false)}
-          onAcceptLabel="Delete note"
+          onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowChildDialog(false)}
-          onDeclineLabel="Cancel"
+          onDeclineLabel={t("ConfirmationDialog.cancel")}
           icon={DeleteIcon}
           warning
         />
       )}
       {showParentDialog && (
         <ConfirmationDialog
-          title="What do you want to delete?"
+          title={t("ConfirmationDialog.deleteOptions")}
           onAccept={() => onDelete(props.noteId, false)}
-          onAcceptLabel="Delete note"
+          onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowParentDialog(false)}
-          onDeclineLabel="Cancel"
+          onDeclineLabel={t("ConfirmationDialog.cancel")}
           onExtraOption={() => onDelete(props.noteId, true)}
-          onExtraOptionLabel="Delete stack"
+          onExtraOptionLabel={t("ConfirmationDialog.deleteStackButton")}
           icon={DeleteIcon}
           warning
         />
