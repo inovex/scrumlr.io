@@ -10,6 +10,12 @@
   overflow-y: auto;
   display: flex;
 }
+.column--first {
+  @include inset-border($top: true, $bottom: true, $left: true);
+}
+.column--last {
+  @include inset-border($top: true, $bottom: true, $right: true);
+}
 .column__moderation-isActive {
   @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
 }
@@ -223,4 +229,13 @@
 
 [theme="dark"] .column__header-edit-button-icon {
   color: $color-white;
+}
+
+@media #{$tablet} {
+  .column--first {
+    padding-left: $board__side-panel-width;
+  }
+  .column--last {
+    padding-right: $board__side-panel-width;
+  }
 }

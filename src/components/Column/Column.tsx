@@ -26,9 +26,11 @@ export interface ColumnProps {
   color: Color;
   visible: boolean;
   index: number;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
-export const Column = ({id, name, color, visible, index}: ColumnProps) => {
+export const Column = ({id, name, color, visible, index, isFirst, isLast}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
@@ -172,7 +174,14 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   return (
     <section
-      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
+      className={classNames(
+        "column",
+        {"column--hidden": !visible},
+        {"column--first": isFirst},
+        {"column--last": isLast},
+        {"column__moderation-isActive": isModerator && state.moderating},
+        getColorClassName(color)
+      )}
       ref={columnRef}
     >
       <div className="column__content">

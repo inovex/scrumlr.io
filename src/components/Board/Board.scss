@@ -2,14 +2,14 @@
 @import "components/Column/Column";
 
 .board {
-  --n: 1;
+  --visible-columns: 1;
 
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns:
-    minmax($board__side-panel-width, 1fr)
-    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--n))), #{$column__max-width}))
-    minmax($board__side-panel-width, 1fr);
+  grid-template-columns: repeat(
+    var(--board__columns),
+    minmax(calc((100vw - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{$column__max-width})
+  );
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
@@ -32,40 +32,9 @@
   scroll-snap-align: start;
 }
 
-.board__spacer-left {
-  @include inset-border($top: true, $left: true, $bottom: true);
-}
-.board__spacer-right {
-  @include inset-border($top: true, $right: true, $bottom: true);
-}
-
-.board__spacer-left:nth-child(odd),
-.board__spacer-right:nth-child(odd) {
-  background-color: $color-white-two;
-}
-
-.board__spacer-left:nth-child(even),
-.board__spacer-right:nth-child(even) {
-  background-color: $color-white-one;
-}
-
-[theme="dark"] {
-  .board__spacer-left:nth-child(odd),
-  .board__spacer-right:nth-child(odd) {
-    background-color: $color-dark-one;
-  }
-
-  .board__spacer-left:nth-child(even),
-  .board__spacer-right:nth-child(even) {
-    background-color: $color-dark-two;
-  }
-}
-
 @media screen and (max-width: $column__min-width+2*$board__side-panel-width) {
   .board {
-    grid-template-columns:
-      $column__border-width repeat(var(--board__columns), calc(100% - #{$column__border-width * 2}))
-      $column__border-width;
+    grid-template-columns: repeat(var(--board__columns), calc(100% - #{$column__border-width * 2}));
     scroll-padding: $column__border-width;
   }
 }
@@ -73,7 +42,7 @@
 @for $i from 1 through 16 {
   @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
     .board {
-      --n: #{$i};
+      --visible-columns: #{$i};
     }
   }
 }

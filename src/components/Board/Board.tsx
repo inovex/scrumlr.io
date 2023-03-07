@@ -132,7 +132,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   }
 
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
-  const columnColors = React.Children.map(children, (child) => child.props.color);
 
   const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
@@ -153,9 +152,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <HotkeyAnchor />
 
       <main className="board" ref={boardRef}>
-        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
-        <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
         <CustomDragLayer />
       </main>
     </>
