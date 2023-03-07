@@ -1,5 +1,4 @@
 import {Children, useEffect, useRef, useState} from "react";
-import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
@@ -121,23 +120,17 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <HotkeyAnchor />
-        <main className="board" ref={boardRef}>
-          {/* Fixed color - can also be dynamic */}
-          <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
-          <div className={`board__spacer-right ${getColorClassName("backlog-blue")}`} />
-        </main>
+        <main className="board" ref={boardRef} />
       </div>
     );
   }
 
-  const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
-
   const handlePreviousClick = () => {
-    boardRef.current!.children[firstVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[state.firstVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   const handleNextClick = () => {
-    boardRef.current!.children[lastVisibleColumnIndex].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[state.lastVisibleColumnIndex].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   return (
