@@ -6,10 +6,7 @@
 
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: repeat(
-    var(--board__columns),
-    minmax(calc((100vw - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{$column__max-width})
-  );
+  grid-template-columns: repeat(var(--board__columns), minmax(calc((100vw - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), 100vw));
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;

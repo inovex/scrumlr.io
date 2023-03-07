@@ -47,7 +47,6 @@ export const Board = () => {
       requests: applicationState.requests,
       participants: applicationState.participants,
       auth: applicationState.auth,
-      view: applicationState.view,
     }),
     _.isEqual
   );
@@ -70,18 +69,9 @@ export const Board = () => {
         )}
         <InfoBar />
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
+        <BoardComponent currentUserIsModerator={currentUserIsModerator}>
           {visibleColumns.map((column, index) => (
-            <Column
-              key={column.id}
-              id={column.id}
-              index={column.index}
-              name={column.name}
-              visible={column.visible}
-              color={column.color}
-              isFirst={index === 0}
-              isLast={index === visibleColumns.length - 1}
-            />
+            <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
           ))}
         </BoardComponent>
       </>

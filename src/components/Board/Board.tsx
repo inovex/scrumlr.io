@@ -10,7 +10,6 @@ import CustomDragLayer from "./CustomDragLayer";
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
-  moderating: boolean;
 }
 
 export interface BoardState {
@@ -23,7 +22,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
