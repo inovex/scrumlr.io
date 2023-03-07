@@ -32,13 +32,13 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
               <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
                 <CloseIcon className="dialog__close-icon" />
               </button>
-              <div className="confirmation-dialog_icon-content_wrapper">
-                {props.icon && <props.icon className="confirmation-dialog_icon" />}
-                <div className="confirmation-dialog_content">
-                  <div className="confirmation-dialog_content_text">
-                    <h2 className="confirmation-dialog_content_title">{props.title}</h2>
+              <div className="confirmation-dialog__icon-content-wrapper">
+                {props.icon && <props.icon className="confirmation-dialog__icon" />}
+                <div className="confirmation-dialog__content">
+                  <div>
+                    <h2 className="confirmation-dialog__title">{props.title}</h2>
                     {props.warning && (
-                      <div className="confirmation-dialog_content_warning">
+                      <div className="confirmation-dialog__warning">
                         <WarningIcon />
                         <p>{t("ConfirmationDialog.warning")}</p>
                       </div>

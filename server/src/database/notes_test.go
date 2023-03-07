@@ -1,9 +1,10 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestRunnerForNotes(t *testing.T) {
@@ -38,6 +39,7 @@ func TestRunnerForNotes(t *testing.T) {
 	t.Run("Delete=0", testDeleteNote)
 	t.Run("Delete=1", testDeleteStackParent)
 	t.Run("Delete=2", testDeleteSharedNote)
+	t.Run("Delete=3", testDeleteStack)
 }
 
 var notesTestBoard *Board
@@ -65,6 +67,8 @@ var stackD *Note
 var stackUser *User
 
 var author *User
+
+var deleteStack bool = false
 
 func testGetNote(t *testing.T) {
 	note := fixture.MustRow("Note.notesTestA1").(*Note)
@@ -455,14 +459,16 @@ func testOrderWhenChangeStackParent(t *testing.T) {
 }
 
 func testDeleteNote(t *testing.T) {
-	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteB1.ID)
+	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteB1.ID)
 	assert.Nil(t, err)
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, notes, noteB2, noteB3)
 }
+
+//TODO
 func testDeleteStackParent(t *testing.T) {
-	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteB2.ID)
+	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteB2.ID)
 	assert.Nil(t, err)
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
@@ -482,10 +488,17 @@ func testDeleteSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
 
-	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteC1.ID)
+	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteC1.ID)
 	assert.Nil(t, deleteNoteError)
 
 	updatedBoard, getUpdatedBoardError := testDb.GetBoard(notesTestBoard.ID)
 	assert.Nil(t, getUpdatedBoardError)
 	assert.Equal(t, uuid.NullUUID{Valid: false}, updatedBoard.SharedNote)
+}
+func testDeleteStack(t *testing.T) {
+	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteB2.ID)
+	assert.Nil(t, err)
+
+	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
+	assert.Equal(t, 0, len(notes))
 }
