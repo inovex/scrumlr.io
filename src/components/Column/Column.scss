@@ -34,11 +34,11 @@
   }
 }
 .column--hidden {
-  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, $color-white-two 20px, $color-white-two 40px);
+  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, rgba(var(--accent-color-rgb), 0.05) 20px, rgba(var(--accent-color-rgb), 0.05) 40px);
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, $color-dark-two 20px, $color-dark-two 40px);
+    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, rgba(var(--accent-color-rgb), 0.02) 20px, rgba(var(--accent-color-rgb), 0.02) 40px);
   }
 }
 
@@ -164,6 +164,7 @@
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   list-style: none;
+  overflow-x: hidden;
 }
 
 [theme="dark"] {
