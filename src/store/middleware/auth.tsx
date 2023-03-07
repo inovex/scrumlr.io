@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Actions, ReduxAction} from "store/action";
 import {AuthAction} from "store/action/auth";

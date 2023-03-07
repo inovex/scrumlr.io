@@ -16,18 +16,18 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
 	github.com/lestrrat-go/jwx/v2 v2.0.8
-	github.com/markbates/goth v1.76.0
-	github.com/nats-io/nats.go v1.23.0
+	github.com/markbates/goth v1.76.1
+	github.com/nats-io/nats.go v1.24.0
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.1
-	github.com/uptrace/bun v1.1.11
-	github.com/uptrace/bun/dbfixture v1.1.11
-	github.com/uptrace/bun/dialect/pgdialect v1.1.11
-	github.com/uptrace/bun/extra/bundebug v1.1.11
-	github.com/urfave/cli/v2 v2.24.4
+	github.com/stretchr/testify v1.8.2
+	github.com/uptrace/bun v1.1.12
+	github.com/uptrace/bun/dbfixture v1.1.12
+	github.com/uptrace/bun/dialect/pgdialect v1.1.12
+	github.com/uptrace/bun/extra/bundebug v1.1.12
+	github.com/urfave/cli/v2 v2.25.0
 	go.uber.org/zap v1.24.0
-	golang.org/x/crypto v0.6.0
+	golang.org/x/crypto v0.7.0
 )
 
 require (
@@ -92,9 +92,9 @@ require (
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
-	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb // indirect
-	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
