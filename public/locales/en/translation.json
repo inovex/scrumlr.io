@@ -223,7 +223,9 @@
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
     "noteToHiddenColumn": "You just added a note to a hidden column.",
-    "noteToHiddenColumnButton": "Reveal column"
+    "noteToHiddenColumnButton": "Reveal column",
+    "noteMovedToStack": "The note was moved to a stack.",
+    "noteDeleted": "The note was deleted."
   },
   "Language": {
     "german": "German",
