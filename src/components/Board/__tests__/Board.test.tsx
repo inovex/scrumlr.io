@@ -11,7 +11,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
   const [BoardContext] = wrapWithTestBackend(BoardComponent);
   return (
     <Provider store={getTestStore()}>
-      <BoardContext currentUserIsModerator moderating={false}>
+      <BoardContext currentUserIsModerator>
         {colors.map((color, index) => (
           <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
         ))}
@@ -39,57 +39,6 @@ describe("basic", () => {
   test("correct number of columns is set in inner styles", () => {
     const {container} = render(createBoardWithColumns("lean-lilac", "planning-pink", "backlog-blue", "poker-purple"));
     expect(container.querySelector("style")).toHaveTextContent(".board { --board__columns: 4 }");
-  });
-
-  describe("side-panels", () => {
-    test("left side-panel is present", () => {
-      const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
-    });
-
-    test("right side-panel is present", () => {
-      const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
-    });
-
-    test("left side-panel has correct accent color", () => {
-      const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
-    });
-
-    test("right side-panel has correct accent color", () => {
-      const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-      expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
-    });
-
-    describe("side-panels", () => {
-      test("left side-panel is present", () => {
-        const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board")?.firstChild).toHaveClass("board__spacer-left");
-      });
-
-      test("right side-panel is present", () => {
-        const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board")?.lastChild).toHaveClass("board__spacer-right");
-      });
-
-      test("left side-panel has correct accent color", () => {
-        const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board")?.firstChild).toHaveClass("accent-color__backlog-blue");
-      });
-
-      test("right side-panel has correct accent color", () => {
-        const {container} = render(createBoardWithColumns("backlog-blue", "planning-pink"));
-        expect(container.querySelector(".board")?.lastChild).toHaveClass("accent-color__planning-pink");
-      });
-
-      test("side-panels have correct accent color with single column", () => {
-        const {container} = render(createBoardWithColumns("lean-lilac"));
-        const board = container.querySelector(".board");
-        expect(board?.childNodes[1]).toHaveClass("accent-color__lean-lilac");
-        expect(board?.lastChild).toHaveClass("accent-color__lean-lilac");
-      });
-    });
   });
 });
 
@@ -177,7 +126,7 @@ describe("navigation", () => {
       const columns = showColumns(false, true, false);
 
       const scrollIntoView = jest.fn();
-      columns[2].scrollIntoView = scrollIntoView;
+      columns[1].scrollIntoView = scrollIntoView;
       fireEvent.click(container.querySelectorAll(".menu-bars__navigation")[1] as HTMLElement);
 
       expect(scrollIntoView).toHaveBeenCalled();

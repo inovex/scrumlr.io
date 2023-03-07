@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import {Children, useEffect, useRef, useState} from "react";
 import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
@@ -25,21 +25,21 @@ export interface ColumnState {
 export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: React.Children.count(children),
+    lastVisibleColumnIndex: Children.count(children),
     showNextButton: false,
     showPreviousButton: false,
   });
 
   const [columnState, setColumnState] = useState<ColumnState>({
     firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: React.Children.count(children),
+    lastVisibleColumnIndex: Children.count(children),
   });
 
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
-  const columnsCount = React.Children.count(children);
+  const columnsCount = Children.count(children);
 
   useEffect(() => {
     const board = boardRef.current;
@@ -51,7 +51,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
     if (board) {
       // initialize column visibility states
-      columnVisibilityStatesRef.current = new Array(React.Children.count(children));
+      columnVisibilityStatesRef.current = new Array(Children.count(children));
       const columnVisibilityStates = columnVisibilityStatesRef.current;
       columnVisibilityStates.fill(false);
 
@@ -59,11 +59,11 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       const observerOptions = {
         root: board,
         rootMargin: "0px",
-        threshold: 1.0,
+        threshold: 0.9,
       };
       const observerCallback: IntersectionObserverCallback = (entries) => {
         entries.forEach((entry) => {
-          const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
+          const index = Array.prototype.indexOf.call(board.children, entry.target);
           columnVisibilityStates[index] = entry.isIntersecting;
         });
 
@@ -79,7 +79,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
       // observe children
       const domChildren = board.children;
-      for (let i = 1; i < domChildren.length - 1; i += 1) {
+      for (let i = 0; i < domChildren.length; i += 1) {
         observer.observe(domChildren[i]);
       }
 
@@ -132,22 +132,24 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
 
-  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
-  const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
-
   const handlePreviousClick = () => {
-    boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[firstVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   const handleNextClick = () => {
-    boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[lastVisibleColumnIndex].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   return (
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
-      <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
+      <MenuBars
+        showPreviousColumn={state.firstVisibleColumnIndex > 0}
+        showNextColumn={state.showNextButton}
+        onPreviousColumn={handlePreviousClick}
+        onNextColumn={handleNextClick}
+      />
       <HotkeyAnchor />
 
       <main className="board" ref={boardRef}>
