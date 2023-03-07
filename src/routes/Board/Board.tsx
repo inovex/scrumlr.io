@@ -70,7 +70,7 @@ export const Board = () => {
         <InfoBar />
         <Outlet />
         <BoardComponent currentUserIsModerator={currentUserIsModerator}>
-          {visibleColumns.map((column, index) => (
+          {visibleColumns.map((column) => (
             <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
           ))}
         </BoardComponent>
