@@ -59,7 +59,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       const observerOptions = {
         root: board,
         rootMargin: "0px",
-        threshold: 0.9,
+        threshold: 1.0,
       };
       const observerCallback: IntersectionObserverCallback = (entries) => {
         entries.forEach((entry) => {
@@ -144,12 +144,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
-      <MenuBars
-        showPreviousColumn={state.firstVisibleColumnIndex > 0}
-        showNextColumn={state.showNextButton}
-        onPreviousColumn={handlePreviousClick}
-        onNextColumn={handleNextClick}
-      />
+      <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
 
       <main className="board" ref={boardRef}>
