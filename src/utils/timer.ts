@@ -7,10 +7,11 @@ const calculateTimeLeft = (endTime: Date): {h: number; m: number; s: number} => 
   };
 };
 
+// Returns the percentage of the total time that is left
 const calculateElapsedTimePercentage = (startTime: Date, endTime: Date): number => {
   const difference = +new Date() - +startTime;
   const total = +endTime - +startTime;
-  return Math.min(difference / total, 1);
+  return 1 - Math.min(difference / total, 1);
 };
 
 const addOffsetToDate = (date: Date | undefined, offset: number): Date | undefined => {
