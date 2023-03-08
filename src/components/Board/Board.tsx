@@ -4,6 +4,7 @@ import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
+import classNames from "classnames";
 import CustomDragLayer from "./CustomDragLayer";
 
 export interface BoardProps {
@@ -140,7 +141,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
 
-      <main className="board" ref={boardRef}>
+      <main className={classNames("board", `board--${columnsCount}-columns`)} ref={boardRef}>
         {children}
         <CustomDragLayer />
       </main>
