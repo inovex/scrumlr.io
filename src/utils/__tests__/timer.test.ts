@@ -3,7 +3,7 @@ import {Timer} from "utils/timer";
 describe("Timer", () => {
   beforeAll(() => {
     jest.useFakeTimers();
-    jest.setSystemTime(new Date(2022, 0, 1, 12, 0, 0));
+    jest.setSystemTime(new Date(2022, 0, 1, 13, 0, 0));
   });
 
   afterAll(() => {
@@ -13,7 +13,7 @@ describe("Timer", () => {
   describe("calculateTimeLeft", () => {
     it("should return the correct time left", () => {
       console.log(new Date());
-      const endTime = new Date(2022, 0, 1, 13, 5, 10);
+      const endTime = new Date(2022, 0, 1, 14, 5, 10);
       const timeLeft = Timer.calculateTimeLeft(endTime);
       expect(timeLeft).toEqual({h: 1, m: 5, s: 10});
     });
@@ -24,7 +24,7 @@ describe("Timer", () => {
       const startTime = new Date(2022, 0, 1, 10, 0, 0);
       const endTime = new Date(2022, 0, 1, 14, 0, 0);
       const elapsedTimePercentage = Timer.calculateElapsedTimePercentage(startTime, endTime);
-      expect(elapsedTimePercentage).toBe(0.5);
+      expect(elapsedTimePercentage).toBe(0.25);
     });
   });
 
