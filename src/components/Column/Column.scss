@@ -55,11 +55,17 @@
   }
 }
 .column--hidden {
-  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, rgba(var(--accent-color-rgb), 0.05) 20px, rgba(var(--accent-color-rgb), 0.05) 40px);
+  background-image: repeating-linear-gradient(
+    45deg,
+    $color-white-one,
+    $color-white-one 20px,
+    var(--accent-color--background-light) 20px,
+    var(--accent-color--background-light) 40px
+  );
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, rgba(var(--accent-color-rgb), 0.02) 20px, rgba(var(--accent-color-rgb), 0.02) 40px);
+    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, var(--accent-color--background-dark) 20px, var(--accent-color--background-dark) 40px);
   }
 }
 
