@@ -61,6 +61,10 @@ func (d *Database) CreateMicrosoftUser(id, name, avatarUrl string) (User, error)
 	return d.createExternalUser(id, name, avatarUrl, types.AccountTypeMicrosoft, "microsoft_users")
 }
 
+func (d *Database) CreateAzureAdUser(id, name, avatarUrl string) (User, error) {
+	return d.createExternalUser(id, name, avatarUrl, types.AccountTypeAzureAd, "azure_ad_users")
+}
+
 func (d *Database) CreateAppleUser(id, name, avatarUrl string) (User, error) {
 	return d.createExternalUser(id, name, avatarUrl, types.AccountTypeApple, "apple_users")
 }
