@@ -7,13 +7,13 @@
   display: grid;
   grid-auto-flow: column;
   grid-template-columns:
-    min(calc((100vw) / min(var(--board__columns), var(--visible-columns)) + #{$board__side-panel-width * 0.5}), 100vw)
-    repeat(calc(var(--board__columns) - 2), min(calc(((100vw)) / min(var(--board__columns), var(--visible-columns)) - #{$board__side-panel-width * 0.5}), 100vw))
-    min(calc((100vw) / min(var(--board__columns), var(--visible-columns)) + #{$board__side-panel-width * 0.5}), 100vw);
+    calc((100vw) / min(var(--board__columns), var(--visible-columns)) + calc($board__side-panel-width * 0.5 / var(--visible-columns)))
+    repeat(calc(var(--board__columns) - 2), calc(((100vw)) / min(var(--board__columns), var(--visible-columns)) - calc($board__side-panel-width * 1.5 / var(--visible-columns))))
+    calc((100vw) / min(var(--board__columns), var(--visible-columns)) + calc($board__side-panel-width * 0.5 / var(--visible-columns)));
 
   scroll-snap-type: x mandatory;
   scroll-snap-stop: always;
-  scroll-padding: $board__side-panel-width;
+  scroll-padding: calc($board__side-panel-width * 0.75);
   box-sizing: border-box;
 
   width: 100vw;
@@ -26,18 +26,18 @@
   overflow-x: scroll;
 
   &--1-columns {
-    grid-template-columns: minmax(calc((100vw - #{$board__side-panel-width}) / min(var(--board__columns), var(--visible-columns))), 100vw);
+    grid-template-columns: calc((100vw - #{$board__side-panel-width}) / min(var(--board__columns), var(--visible-columns)));
   }
 
   &--2-columns {
-    grid-template-columns: repeat(2, minmax(calc((100vw) / min(var(--board__columns), var(--visible-columns))), 100vw));
+    grid-template-columns: repeat(2, calc((100vw) / min(var(--board__columns), var(--visible-columns))));
   }
 
   &--3-columns {
     grid-template-columns:
-      min(calc((100vw) / min(var(--board__columns), var(--visible-columns)) + #{$board__side-panel-width * 1 / 3}), 100vw)
-      min(calc(100vw / min(var(--board__columns), var(--visible-columns)) - #{$board__side-panel-width * 2 / 3}), 100vw)
-      min(calc((100vw) / min(var(--board__columns), var(--visible-columns)) + #{$board__side-panel-width * 1 / 3}), 100vw);
+      calc((100vw) / min(var(--board__columns), var(--visible-columns)) + calc($board__side-panel-width * 1 / 3))
+      calc(100vw / min(var(--board__columns), var(--visible-columns)) - calc($board__side-panel-width * 2 / 3))
+      calc((100vw) / min(var(--board__columns), var(--visible-columns)) + calc($board__side-panel-width * 1 / 3));
   }
 }
 .board::-webkit-scrollbar {
@@ -59,6 +59,6 @@
 @media #{$smartphone} {
   .board {
     grid-template-columns: repeat(var(--board__columns), minmax(calc((100vw - #{$board__side-panel-width} / 2) / min(var(--board__columns), var(--visible-columns))), 100vw));
-    scroll-padding: $board__side-panel-width / 4;
+    scroll-padding: calc($board__side-panel-width / 4);
   }
 }

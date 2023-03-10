@@ -259,17 +259,6 @@
   color: $color-white;
 }
 
-@media #{$tablet} {
-  .column {
-    &:first-child {
-      padding-left: $board__side-panel-width;
-    }
-    &:last-child {
-      padding-right: $board__side-panel-width;
-    }
-  }
-}
-
 @media #{$smartphone} {
   .column {
     &:first-child {

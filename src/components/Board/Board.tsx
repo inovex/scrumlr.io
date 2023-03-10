@@ -59,7 +59,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       const observerOptions = {
         root: board,
         rootMargin: "0px",
-        threshold: 1.0,
+        threshold: 0.9,
       };
       const observerCallback: IntersectionObserverCallback = (entries) => {
         entries.forEach((entry) => {
@@ -131,7 +131,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
   };
 
   const handleNextClick = () => {
-    boardRef.current!.children[state.lastVisibleColumnIndex].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[state.lastVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   return (
