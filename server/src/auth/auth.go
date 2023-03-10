@@ -13,6 +13,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/apple"
+	"github.com/markbates/goth/providers/azureadv2"
 	"github.com/markbates/goth/providers/github"
 	"github.com/markbates/goth/providers/google"
 	"github.com/markbates/goth/providers/microsoftonline"
@@ -35,6 +36,7 @@ type Auth interface {
 }
 
 type AuthProviderConfiguration struct {
+	TenantId     string
 	ClientId     string
 	ClientSecret string
 	RedirectUri  string
@@ -92,6 +94,19 @@ func (a *AuthConfiguration) initializeProviders() {
 			"User.Read",
 		)
 		p.SetName(strings.ToLower((string)(types.AccountTypeMicrosoft)))
+		providers = append(providers, p)
+	}
+	if provider, ok := a.providers[(string)(types.AccountTypeAzureAd)]; ok {
+		p := azureadv2.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			azureadv2.ProviderOptions{
+				Tenant: azureadv2.TenantType(provider.TenantId),
+				Scopes: []azureadv2.ScopeType{"User.Read"},
+			},
+		)
+		p.SetName(strings.ToLower((string)(types.AccountTypeAzureAd)))
 		providers = append(providers, p)
 	}
 

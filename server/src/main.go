@@ -144,6 +144,24 @@ func main() {
 				Required: false,
 			},
 			&cli.StringFlag{
+				Name:     "auth-azure-ad-tenant-id",
+				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_TENANT_ID"},
+				Usage:    "the tenant `id` for Azure AD",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     "auth-azure-ad-client-id",
+				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"},
+				Usage:    "the client `id` for Azure AD",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     "auth-azure-ad-client-secret",
+				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"},
+				Usage:    "the client `secret` for Azure AD",
+				Required: false,
+			},
+			&cli.StringFlag{
 				Name:     "auth-apple-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_ID"},
 				Usage:    "the client `id` for Apple",
@@ -244,6 +262,14 @@ func run(c *cli.Context) error {
 			ClientId:     c.String("auth-microsoft-client-id"),
 			ClientSecret: c.String("auth-microsoft-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.IsSet("auth-azure-ad-tenant-id") && c.IsSet("auth-azure-ad-client-id") && c.IsSet("auth-azure-ad-client-secret") && c.IsSet("auth-callback-host") {
+		providersMap[(string)(types.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
+			TenantId:     c.String("auth-azure-ad-tenant-id"),
+			ClientId:     c.String("auth-azure-ad-client-id"),
+			ClientSecret: c.String("auth-azure-ad-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
 	if c.IsSet("auth-apple-client-id") && c.IsSet("auth-apple-client-secret") && c.IsSet("auth-callback-host") {
