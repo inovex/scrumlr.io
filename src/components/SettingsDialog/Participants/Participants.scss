@@ -201,11 +201,13 @@
 
   background-color: $color-lighter-gray;
 
+  visibility: hidden;
   transform: translateY(100%);
   transition: transform ease-in-out 0.3s;
 }
 
 .participants-reset-state-banner__container--is-active {
+  visibility: visible;
   transform: translateY(0);
 }
 
