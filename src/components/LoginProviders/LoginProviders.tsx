@@ -41,6 +41,11 @@ export const LoginProviders = ({originURL = window.location.href}) => {
           {t("LoginProviders.signInWithMicrosoft")}
         </Button>
       )}
+      {providers.some((provider) => provider === "AZURE_AD") && (
+        <Button id="azure-ad" className="login-providers__button" onClick={signIn("azure_ad")} leftIcon={<MicrosoftIcon className="login-providers__icon" />}>
+          {t("LoginProviders.signInWithAzureAd")}
+        </Button>
+      )}
       {providers.some((provider) => provider === "APPLE") && (
         <Button id="apple" className="login-providers__button" onClick={signIn("apple")} leftIcon={<AppleIcon className="login-providers__icon" />}>
           {t("LoginProviders.signInWithApple")}
