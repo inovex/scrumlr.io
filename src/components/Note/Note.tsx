@@ -5,7 +5,6 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
-import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
@@ -14,6 +13,7 @@ import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 
 interface NoteProps {
   noteId: string;
@@ -134,12 +134,7 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{note!.text}</p>
         )}
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === authors[0].user!.id) && (
-            <figure className={classNames("note__author", {"note__author--self": authors[0].isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={authors[0].user!.avatar} title={authors[0].displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{authors[0].displayName}</figcaption>
-            </figure>
-          )}
+          <NoteAuthorList authors={authors} showAuthors={showAuthors} note={note} viewer={props.viewer} />
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>
