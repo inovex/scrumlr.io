@@ -4,7 +4,7 @@
   min-width: $column__min-width;
   width: 100%;
   @include inset-border($top: true, $bottom: true);
-  padding-top: $header__height;
+  padding-top: calc($column__border-width + $header__height + $info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
@@ -72,7 +72,7 @@
 .column__content {
   max-height: 100%;
   max-width: 100%;
-  padding: $padding--large 0 $column__border-width 0;
+  padding: 0 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
   flex: 1;

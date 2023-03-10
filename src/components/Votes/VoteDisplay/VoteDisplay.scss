@@ -1,16 +1,15 @@
 @import "src/constants/style.scss";
 
-$vote-display-height: 42px;
 $vote-display-width: 114px;
 $vote-display__content-height: 38px;
 $vote-display__short-actions-height: 28px;
 
 .vote-display {
-  height: $vote-display-height;
+  height: 100%;
   width: $vote-display-width;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
-  border-radius: calc($vote-display-height / 2);
+  border-radius: $rounded--full;
   position: relative;
   border: 2px solid $menu-icon-background-color--dark;
 }
