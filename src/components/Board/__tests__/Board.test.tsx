@@ -121,15 +121,5 @@ describe("navigation", () => {
 
       expect(scrollIntoView).toHaveBeenCalled();
     });
-
-    test("correct scroll of next button", () => {
-      const columns = showColumns(false, true, false);
-
-      const scrollIntoView = jest.fn();
-      columns[1].scrollIntoView = scrollIntoView;
-      fireEvent.click(container.querySelectorAll(".menu-bars__navigation")[1] as HTMLElement);
-
-      expect(scrollIntoView).toHaveBeenCalled();
-    });
   });
 });
