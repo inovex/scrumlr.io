@@ -1,5 +1,10 @@
 @import "src/constants/style.scss";
 
+.note-author-list {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .note__author {
   display: inline-flex;
   align-items: center;
