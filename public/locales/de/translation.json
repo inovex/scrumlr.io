@@ -109,7 +109,6 @@
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
   },
-
   "ErrorPage": {
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
@@ -130,6 +129,7 @@
     "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Einloggen mit Github",
     "signInWithMicrosoft": "Einloggen mit Microsoft",
+    "signInWithAzureAd": "Einloggen mit Azure AD",
     "signInWithApple": "Einloggen mit Apple"
   },
   "NoteInput": {
