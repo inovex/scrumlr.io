@@ -5,6 +5,19 @@
   position: relative;
   height: 40px;
   width: 100%;
+
+  &:hover::before,
+  &:focus-within::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+    border: 2px solid var(--accent-color);
+    border-radius: $rounded--full;
+    pointer-events: none;
+  }
 }
 .participants__search-input {
   height: 100%;
@@ -17,16 +30,9 @@
   background-color: $color-white;
   border: none;
   border-radius: $rounded--full;
+  outline: none;
+}
 
-  &:focus {
-    outline: 2px solid var(--accent-color);
-  }
-}
-@media (hover: hover) {
-  .participants__search-input:hover {
-    background-color: var(--accent-color--desaturated-light);
-  }
-}
 .participants__search-icon {
   position: absolute;
   height: 100%;
@@ -260,11 +266,6 @@
   .participants__search-input {
     background-color: $color-dark-mode-note;
     color: $color-white;
-  }
-  @media (hover: hover) {
-    .participants__search-input:hover {
-      background-color: var(--accent-color--desaturated-dark);
-    }
   }
   .participants__search-icon {
     color: $color-white;
