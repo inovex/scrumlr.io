@@ -108,7 +108,8 @@
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
-    "notes": "{{count}} Kärtchen"
+    "notes_one": "{{count}} Kärtchen",
+    "notes_other": "{{count}} Kärtchen"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
