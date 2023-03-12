@@ -5,15 +5,13 @@
   display: flex;
   align-items: center;
   bottom: auto;
-  top: $header__height;
+  top: calc($column__border-width + $header__height);
   left: 50%;
   transform: translateX(-50%);
+  height: $info-bar__height;
   justify-content: center;
+  gap: $margin--small;
   z-index: $infobar-z-index;
-}
-
-.info-bar > *:not(:last-child) {
-  margin-right: $margin--default;
 }
 
 .info-bar__return-to-presented-note-button > svg {

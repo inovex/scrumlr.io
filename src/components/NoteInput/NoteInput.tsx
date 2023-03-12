@@ -86,7 +86,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         data-tooltip-content={hotkeyKey}
       />
       <Tooltip
-        anchorId={`note-input-${columnId}`}
+        anchorSelect={`#note-input-${columnId}`}
         place="bottom"
         variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
         delayShow={500}
