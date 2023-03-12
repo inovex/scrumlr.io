@@ -107,7 +107,8 @@
     "deleteColumn": "Löschen",
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
-    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
+    "notes": "{{count}} Kärtchen"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
