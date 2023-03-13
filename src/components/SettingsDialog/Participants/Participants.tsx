@@ -31,18 +31,13 @@ export const Participants = () => {
     if (!scrollableDiv) {
       return;
     }
-    setIsScrollable(scrollableDiv.offsetHeight < scrollableDiv.scrollHeight);
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(scrollableDiv);
-    return () => resizeObserver.disconnect();
-  }, []);
-
-  const handleResize = () => {
-    const scrollableDiv = scrollRef.current;
-    if (scrollableDiv) {
+    const mutationObserver = new MutationObserver(() => {
       setIsScrollable(scrollableDiv.offsetHeight < scrollableDiv.scrollHeight);
-    }
-  };
+    });
+
+    mutationObserver.observe(scrollableDiv, {childList: true, subtree: true});
+    return () => mutationObserver.disconnect();
+  }, []);
 
   const resetReadyStateOfAllUsers = () => {
     participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
