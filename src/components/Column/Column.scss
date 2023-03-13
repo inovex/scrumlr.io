@@ -3,43 +3,16 @@
 .column {
   min-width: $column__min-width;
   width: 100%;
+  max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
   padding-top: calc($column__border-width + $header__height + $info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
-
-  &:first-child {
-    padding-left: $board__side-panel-width;
-    @include inset-border($top: true, $bottom: true, $left: true);
-  }
-
-  &:last-child {
-    padding-right: $board__side-panel-width;
-    @include inset-border($top: true, $bottom: true, $right: true);
-  }
-
-  &:only-child {
-    @include inset-border($top: true, $bottom: true, $right: true, $left: true);
-  }
-
-  &__moderation-isActive {
-    @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
-
-    &.column:first-child {
-      @include inset-border($top: true, $bottom: true, $left: true, $color: $color-goal-green);
-    }
-
-    &.column:last-child {
-      @include inset-border($top: true, $bottom: true, $right: true, $color: $color-goal-green);
-    }
-
-    &.column:only-child {
-      @include inset-border($top: true, $bottom: true, $right: true, $left: true, $color: $color-goal-green);
-    }
-  }
 }
-
+.column__moderation-isActive {
+  @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
+}
 .column:nth-child(odd) {
   background-color: $color-white-one;
 }
@@ -55,6 +28,7 @@
   }
 }
 .column--hidden {
+  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, $color-white-two 20px, $color-white-two 40px);
   background-image: repeating-linear-gradient(
     45deg,
     $color-white-one,
@@ -65,6 +39,7 @@
 }
 [theme="dark"] {
   .column--hidden {
+    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, $color-dark-two 20px, $color-dark-two 40px);
     background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, var(--accent-color--background-dark) 20px, var(--accent-color--background-dark) 40px);
   }
 }
@@ -191,7 +166,6 @@
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   list-style: none;
-  overflow-x: hidden;
 }
 
 [theme="dark"] {
@@ -257,15 +231,4 @@
 
 [theme="dark"] .column__header-edit-button-icon {
   color: $color-white;
-}
-
-@media #{$smartphone} {
-  .column {
-    &:first-child {
-      padding-left: 2vw;
-    }
-    &:last-child {
-      padding-right: 2vw;
-    }
-  }
 }

@@ -47,12 +47,12 @@ export const Board = () => {
       requests: applicationState.requests,
       participants: applicationState.participants,
       auth: applicationState.auth,
+      view: applicationState.view,
     }),
     _.isEqual
   );
 
   const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
-  const visibleColumns = state.columns.filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns));
 
   if (state.board.status === "pending") {
     return <LoadingScreen />;
@@ -69,10 +69,12 @@ export const Board = () => {
         )}
         <InfoBar />
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator}>
-          {visibleColumns.map((column) => (
-            <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
-          ))}
+        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
+          {state.columns
+            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
+            .map((column) => (
+              <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
+            ))}
         </BoardComponent>
       </>
     );

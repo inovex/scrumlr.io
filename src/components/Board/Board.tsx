@@ -1,15 +1,16 @@
-import {Children, useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import classNames from "classnames";
 import CustomDragLayer from "./CustomDragLayer";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
+  moderating: boolean;
 }
 
 export interface BoardState {
@@ -22,24 +23,24 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: Children.count(children),
+    lastVisibleColumnIndex: React.Children.count(children),
     showNextButton: false,
     showPreviousButton: false,
   });
 
   const [columnState, setColumnState] = useState<ColumnState>({
     firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: Children.count(children),
+    lastVisibleColumnIndex: React.Children.count(children),
   });
 
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
-  const columnsCount = Children.count(children);
+  const columnsCount = React.Children.count(children);
 
   useEffect(() => {
     const board = boardRef.current;
@@ -51,7 +52,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
     if (board) {
       // initialize column visibility states
-      columnVisibilityStatesRef.current = new Array(Children.count(children));
+      columnVisibilityStatesRef.current = new Array(React.Children.count(children));
       const columnVisibilityStates = columnVisibilityStatesRef.current;
       columnVisibilityStates.fill(false);
 
@@ -59,11 +60,11 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       const observerOptions = {
         root: board,
         rootMargin: "0px",
-        threshold: 0.9,
+        threshold: 1.0,
       };
       const observerCallback: IntersectionObserverCallback = (entries) => {
         entries.forEach((entry) => {
-          const index = Array.prototype.indexOf.call(board.children, entry.target);
+          const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
           columnVisibilityStates[index] = entry.isIntersecting;
         });
 
@@ -79,7 +80,7 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
 
       // observe children
       const domChildren = board.children;
-      for (let i = 0; i < domChildren.length; i += 1) {
+      for (let i = 1; i < domChildren.length - 1; i += 1) {
         observer.observe(domChildren[i]);
       }
 
@@ -121,17 +122,27 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <HotkeyAnchor />
-        <main className="board" ref={boardRef} />
+        <main className="board" ref={boardRef}>
+          {/* Fixed color - can also be dynamic */}
+          <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
+          <div className={`board__spacer-right ${getColorClassName("backlog-blue")}`} />
+        </main>
       </div>
     );
   }
 
+  const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
+  const columnColors = React.Children.map(children, (child) => child.props.color);
+
+  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
+  const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
+
   const handlePreviousClick = () => {
-    boardRef.current!.children[state.firstVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   const handleNextClick = () => {
-    boardRef.current!.children[state.lastVisibleColumnIndex - 1].scrollIntoView({inline: "start", behavior: "smooth"});
+    boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
   };
 
   return (
@@ -141,8 +152,10 @@ export const BoardComponent = ({children, currentUserIsModerator}: BoardProps) =
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
 
-      <main className={classNames("board", `board--${columnsCount}-columns`)} ref={boardRef}>
+      <main className="board" ref={boardRef}>
+        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
+        <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
         <CustomDragLayer />
       </main>
     </>
