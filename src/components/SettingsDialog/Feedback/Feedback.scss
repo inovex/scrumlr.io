@@ -36,17 +36,18 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   position: relative;
   top: -19px;
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.1);
+    background-color: var(--accent-color--desaturated-light);
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
-  outline: 2px solid var(--accent-color);
+  color: $color-white;
+  background-color: var(--accent-color);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
   color: $color-white;
   background-color: $color-dark-mode-note;
   &:hover {
-    background-color: $color-dark-mode-note--hover;
+    background-color: var(--accent-color--desaturated-dark);
   }
 }
 

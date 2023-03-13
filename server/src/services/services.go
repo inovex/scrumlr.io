@@ -14,6 +14,7 @@ type Users interface {
 	CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
+	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
 }
