@@ -18,7 +18,7 @@ export const Participants = () => {
   const debouncedQueryString = useDebounce(queryString);
   const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
   const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
-  const [isScrollable, setIsScrollable] = useState<boolean>(false);
+  const [isScrollable, setIsScrollable] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
