@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -32,7 +33,8 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	result := ctx.Value("Result").(*[]Note)
-	notifyNotesUpdated(ctx)
+	fmt.Print("**** DELETION_RESULT", len(*result) > 0)
+	// notifyNotesUpdated(ctx)
 
 	if len(*result) > 0 {
 		return notifyNoteDeleted(ctx)

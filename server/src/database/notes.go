@@ -330,15 +330,19 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 			Where("\"column\" = (SELECT \"column\" FROM previous)").
 			WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 				return q.
-					WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+					Where("rank > (SELECT rank FROM previous)").
+					WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 						return q.
-							Where("(SELECT stack FROM previous) IS NULL").
-							Where("stack IS NULL")
-					}).
-					WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
-						return q.
-							Where("(SELECT stack FROM previous) IS NOT NULL").
-							Where("stack = (SELECT stack FROM previous)")
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(SELECT stack FROM previous) IS NULL").
+									Where("stack IS NULL")
+							}).
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(SELECT stack FROM previous) IS NOT NULL").
+									Where("stack = (SELECT stack FROM previous)")
+							})
 					})
 			})
 
