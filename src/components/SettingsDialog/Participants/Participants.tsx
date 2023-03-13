@@ -29,7 +29,7 @@ export const Participants = () => {
   useEffect(() => {
     const scrollableDiv = scrollRef.current;
     if (!scrollableDiv) {
-      return;
+      return undefined;
     }
     const mutationObserver = new MutationObserver(() => {
       setIsScrollable(scrollableDiv.offsetHeight < scrollableDiv.scrollHeight);
