@@ -45,6 +45,10 @@ export const Timer = (props: TimerProps) => {
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
 
+  const hideTimerInSeconds = (time: number) => {
+    setTimeout(() => store.dispatch(Actions.cancelTimer()), time * 1000);
+  };
+
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
       setTimeLeft(TimerUtils.calculateTimeLeft(props.endTime));
@@ -57,6 +61,7 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
+      hideTimerInSeconds(15);
       if (isModerator && anyReady) {
         Toast.info(
           <div>
