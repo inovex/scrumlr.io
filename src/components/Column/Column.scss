@@ -28,7 +28,6 @@
   }
 }
 .column--hidden {
-  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, $color-white-two 20px, $color-white-two 40px);
   background-image: repeating-linear-gradient(
     45deg,
     $color-white-one,
@@ -39,7 +38,6 @@
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, $color-dark-two 20px, $color-dark-two 40px);
     background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, var(--accent-color--background-dark) 20px, var(--accent-color--background-dark) 40px);
   }
 }
