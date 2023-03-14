@@ -30,19 +30,26 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const noteChildren = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId));
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
+  /* all authors of a note, including its children if it's a stack.
+     next to the Participant object there's also helper properties (displayName, isSelf) for easier identification. */
   const authors = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
     const childrenNoteAuthors = noteChildren.map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
     const allAuthors = [noteAuthor, ...childrenNoteAuthors];
-    return allAuthors.map((a) => {
-      const isSelf = a?.user.id === state.participants?.self.user.id;
-      const displayName = isSelf ? t("Note.me") : a!.user.name;
-      return {
-        ...a,
-        displayName,
-        isSelf,
-      };
-    });
+    return (
+      allAuthors
+        .map((a) => {
+          const isSelf = a?.user.id === state.participants?.self.user.id;
+          const displayName = isSelf ? t("Note.me") : a!.user.name;
+          return {
+            ...a,
+            displayName,
+            isSelf,
+          };
+        })
+        // remove duplicates (because notes can have multiple children by the same authors)
+        .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i)
+    );
   }, isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
