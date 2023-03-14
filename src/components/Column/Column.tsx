@@ -187,7 +187,11 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           />
           <div className="column__header-title">
             {renderColumnName()}
-            {columnNameMode === "VIEW" && <span className="column__header-card-number">{state.notes.length}</span>}
+            {columnNameMode === "VIEW" && state.notes.length > 0 && (
+              <span className="column__header-card-number" title={t("Column.notes", {count: state.notes.length})}>
+                {state.notes.length}
+              </span>
+            )}
             {isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
