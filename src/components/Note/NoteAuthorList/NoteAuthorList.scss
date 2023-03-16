@@ -38,6 +38,8 @@
 
   border: 1px solid $color-white-one;
   border-radius: 21px;
+
+  // background: var(--accent-color--desaturated-light);
 }
 
 // actually affects the first one, since the flex direction is reversed
@@ -82,5 +84,11 @@
   .note__author--self > .note__author-name {
     color: $color-white;
     font-weight: bold;
+  }
+
+  .note__author--others {
+    background-color: $color-icon-light-blue;
+    color: $color-dark-two;
+    border-color: $color-dark-one;
   }
 }
