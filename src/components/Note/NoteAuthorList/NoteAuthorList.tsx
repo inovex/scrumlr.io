@@ -11,15 +11,18 @@ type Props = {
   viewer: Participant;
 };
 export const NoteAuthorList = (props: Props) => {
+  const SHOW_MAX_AUTHORS = 2;
   const stackAuthor = props.authors[0];
+  const slicedAuthors = props.authors.slice(0, SHOW_MAX_AUTHORS); // max first n authors
+  const restUsersExist = props.authors.length > SHOW_MAX_AUTHORS;
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
     <div className="note-author-list">
-      {props.authors.map(
+      {slicedAuthors.map(
         (
           a // iterate over authors, order is changed in CSS
         ) => (
           // TODO: think about --self class behaviour, I chose to set the whole list with a background if yourself is author
-          <figure className={classNames("note__author", {"note__author--self": stackAuthor.isSelf})} aria-roledescription="author">
+          <figure className={classNames("note__author", {"note__author--self": stackAuthor.isSelf, "note__author--with-rest": restUsersExist})} aria-roledescription="author">
             <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
             {a.user!.id === stackAuthor.user!.id ? ( // only the stack authors name is displayed
               <figcaption className="note__author-name">{a.displayName}</figcaption>
@@ -27,6 +30,7 @@ export const NoteAuthorList = (props: Props) => {
           </figure>
         )
       )}
+      {restUsersExist && <div className="note__author--others">{props.authors.length}</div>}
     </div>
   ) : null;
 };
