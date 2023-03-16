@@ -11,10 +11,18 @@ type Props = {
   viewer: Participant;
 };
 export const NoteAuthorList = (props: Props) => {
-  const SHOW_MAX_AUTHORS = 2;
+  // expected behaviour:
+  // 1 => p
+  // 2 => p p
+  // 3 => p p p
+  // 4 => (2) p p
+  // n where n >= 4 => (n - 2) p p
+  // where (n) displays a number and p displays an avatar
+  const SHOW_MAX_AUTHORS = 3;
   const stackAuthor = props.authors[0];
-  const slicedAuthors = props.authors.slice(0, SHOW_MAX_AUTHORS); // max first n authors
-  const restUsersExist = props.authors.length > SHOW_MAX_AUTHORS;
+  const restAuthors = props.authors.slice();
+  const slicedAuthors = restAuthors.splice(0, props.authors.length > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
+  const restUsersExist = restAuthors.length > 0;
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
     <div className="note-author-list">
       {slicedAuthors.map(
@@ -30,7 +38,7 @@ export const NoteAuthorList = (props: Props) => {
           </figure>
         )
       )}
-      {restUsersExist && <div className="note__author--others">{props.authors.length}</div>}
+      {restUsersExist && <div className="note__author--others">{restAuthors.length}</div>}
     </div>
   ) : null;
 };
