@@ -23,6 +23,7 @@ export const NoteAuthorList = (props: Props) => {
   const restAuthors = props.authors.slice();
   const slicedAuthors = restAuthors.splice(0, props.authors.length > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
   const restUsersExist = restAuthors.length > 0;
+  const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
     <div className="note-author-list">
       {slicedAuthors.map(
@@ -38,7 +39,11 @@ export const NoteAuthorList = (props: Props) => {
           </figure>
         )
       )}
-      {restUsersExist && <div className="note__author--others">{restAuthors.length}</div>}
+      {restUsersExist && (
+        <div className="note__author--others" title={restUsersTitle}>
+          {restAuthors.length}
+        </div>
+      )}
     </div>
   ) : null;
 };
