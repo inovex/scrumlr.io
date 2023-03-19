@@ -2,17 +2,40 @@ package api
 
 import (
 	"context"
+	"encoding/json"
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
 	dto2 "scrumlr.io/server/common/dto"
+	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 type BoardSubscription struct {
-	subscription chan *realtime.BoardEvent
-	clients      map[uuid.UUID]*websocket.Conn
+	subscription      chan *realtime.BoardEvent
+	clients           map[uuid.UUID]*websocket.Conn
+	boardParticipants []*dto2.BoardSession
+	boardSettings     *dto2.Board
+	boardColumns      []*dto2.Column
+	boardNotes        []*dto2.Note
+}
+
+type InitEvent struct {
+	Type realtime.BoardEventType `json:"type"`
+	Data EventData               `json:"data"`
+}
+
+type EventData struct {
+	Board       *dto2.Board                 `json:"board"`
+	Columns     []*dto2.Column              `json:"columns"`
+	Notes       []*dto2.Note                `json:"notes"`
+	Votings     []*dto2.Voting              `json:"votings"`
+	Votes       []*dto2.Vote                `json:"votes"`
+	Sessions    []*dto2.BoardSession        `json:"participants"`
+	Requests    []*dto2.BoardSessionRequest `json:"requests"`
+	Assignments []*dto2.Assignment          `json:"assignments"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -35,31 +58,24 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = conn.WriteJSON(struct {
-		Type realtime.BoardEventType `json:"type"`
-		Data interface{}             `json:"data"`
-	}{
+	eventData := EventData{
+		Board:       board,
+		Columns:     columns,
+		Notes:       notes,
+		Votings:     votings,
+		Votes:       votes,
+		Sessions:    sessions,
+		Requests:    requests,
+		Assignments: assignments,
+	}
+
+	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: struct {
-			Board      *dto2.Board                 `json:"board"`
-			Columns    []*dto2.Column              `json:"columns"`
-			Notes      []*dto2.Note                `json:"notes"`
-			Votings    []*dto2.Voting              `json:"votings"`
-			Votes      []*dto2.Vote                `json:"votes"`
-			Sessions   []*dto2.BoardSession        `json:"participants"`
-			Requests   []*dto2.BoardSessionRequest `json:"requests"`
-      Assignments []*dto2.Assignment          `json:"assignments"`
-		}{
-			Board:    board,
-			Columns:  columns,
-			Notes:    notes,
-			Votings:  votings,
-			Votes:    votes,
-			Sessions: sessions,
-			Requests: requests,
-      Assignments: assignments,
-		},
-	})
+		Data: eventData,
+	}
+
+	initEvent = eventInitFilter(initEvent, userID)
+	err = conn.WriteJSON(initEvent)
 	if err != nil {
 		logger.Get().Errorw("failed to send init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
@@ -72,7 +88,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer s.closeBoardSocket(id, userID, conn)
 
-	s.listenOnBoard(id, userID, conn)
+	s.listenOnBoard(id, userID, conn, initEvent)
 
 	for {
 		_, message, err := conn.ReadMessage()
@@ -91,7 +107,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEvent InitEvent) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -100,6 +116,10 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) 
 
 	b := s.boardSubscriptions[boardID]
 	b.clients[userID] = conn
+	b.boardParticipants = initEvent.Data.Sessions
+	b.boardSettings = initEvent.Data.Board
+	b.boardColumns = initEvent.Data.Columns
+	b.boardNotes = initEvent.Data.Notes
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
@@ -113,7 +133,8 @@ func (b *BoardSubscription) startListeningOnBoard() {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			for _, conn := range b.clients {
+			for id, conn := range b.clients {
+				msg = b.eventFilter(msg, id)
 				err := conn.WriteJSON(msg)
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
@@ -121,6 +142,176 @@ func (b *BoardSubscription) startListeningOnBoard() {
 			}
 		}
 	}
+}
+
+func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
+	for _, session := range sessions {
+
+		if clientID == session.User.ID && (session.Role == types.SessionRoleModerator || session.Role == types.SessionRoleOwner) {
+			return true
+		}
+	}
+	return false
+}
+
+func parseColumnUpdatedEvent(data interface{}) ([]*dto2.Column, error) {
+	var ret []*dto2.Column
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func parseNotesUpdated(data interface{}) ([]*dto2.Note, error) {
+	var ret []*dto2.Note
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func parseBoardUpdated(data interface{}) (*dto2.Board, error) {
+	var ret *dto2.Board
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
+	isMod := isModerator(userID, boardSubscription.boardParticipants)
+
+	if event.Type == realtime.BoardEventColumnsUpdated {
+		columns, err := parseColumnUpdatedEvent(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+
+		// Cache the incoming changes, mod only since they receive all changes
+		if isMod {
+			boardSubscription.boardColumns = columns
+			event.Data = columns
+			return event
+		}
+		entriesToDelete := []int{}
+		for id, column := range columns {
+			if !column.Visible && !isMod {
+				entriesToDelete = append(entriesToDelete, id)
+			}
+		}
+		for i := len(entriesToDelete) - 1; i >= 0; i-- {
+			columns = append(columns[:entriesToDelete[i]], columns[entriesToDelete[i]+1:]...)
+		}
+		event.Data = columns
+	}
+
+	if event.Type == realtime.BoardEventNotesUpdated {
+		entriesToBeDeleted := []int{}
+		notes, err := parseNotesUpdated(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+
+		if isMod {
+			boardSubscription.boardNotes = notes
+			event.Data = notes
+			return event
+		}
+		for id, note := range notes {
+			isPresent := false
+			for _, column := range boardSubscription.boardColumns {
+				if note.Position.Column == column.ID && column.Visible {
+					isPresent = true
+				}
+			}
+			if !isPresent && !isMod {
+				entriesToBeDeleted = append(entriesToBeDeleted, id)
+			}
+		}
+		for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
+			notes = append(notes[:entriesToBeDeleted[i]], notes[entriesToBeDeleted[i]+1:]...)
+		}
+
+		// Authors
+		for id, note := range notes {
+			if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
+				notes[id].Author = uuid.Nil
+			}
+		}
+		event.Data = notes
+	}
+
+	if event.Type == realtime.BoardEventBoardUpdated {
+		boardSettings, err := parseBoardUpdated(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+		if isMod {
+			boardSubscription.boardSettings = boardSettings
+			event.Data = boardSettings
+			return event
+		}
+	}
+
+	return event
+}
+
+func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
+	isMod := isModerator(clientID, event.Data.Sessions)
+
+	// Columns
+	entriesToBeDeleted := []int{}
+	for id, column := range event.Data.Columns {
+		if !column.Visible && !isMod {
+			entriesToBeDeleted = append(entriesToBeDeleted, id)
+		}
+	}
+	for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
+		event.Data.Columns = append(event.Data.Columns[:entriesToBeDeleted[i]], event.Data.Columns[entriesToBeDeleted[i]+1:]...)
+	}
+
+	// Notes
+	entriesToBeDeleted = []int{}
+	for id, note := range event.Data.Notes {
+		isPresent := false
+		for _, column := range event.Data.Columns {
+			if note.Position.Column == column.ID {
+				isPresent = true
+			}
+		}
+		if !isPresent && !isMod {
+			entriesToBeDeleted = append(entriesToBeDeleted, id)
+		}
+	}
+	for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
+		event.Data.Notes = append(event.Data.Notes[:entriesToBeDeleted[i]], event.Data.Notes[entriesToBeDeleted[i]+1:]...)
+	}
+
+	// Authors
+	for id, note := range event.Data.Notes {
+		if !event.Data.Board.ShowAuthors && note.Author != clientID {
+			event.Data.Notes[id].Author = uuid.Nil
+		}
+	}
+
+	return event
 }
 
 func (s *Server) closeBoardSocket(board, user uuid.UUID, conn *websocket.Conn) {
