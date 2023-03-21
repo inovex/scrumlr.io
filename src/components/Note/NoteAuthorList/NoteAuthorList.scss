@@ -21,6 +21,15 @@
   border-radius: 21px;
 }
 
+.note-author-others__wrapper {
+  padding: 2px;
+  border-radius: 21px;
+}
+
+.note-author-others__wrapper--self {
+  background: var(--accent-color--desaturated-light);
+}
+
 .note__author--others {
   display: inline-flex;
   width: $icon--medium;
@@ -84,6 +93,10 @@
   .note__author--self > .note__author-name {
     color: $color-white;
     font-weight: bold;
+  }
+
+  .note-author-others__wrapper--self {
+    background: var(--accent-color--desaturated-dark);
   }
 
   .note__author--others {
