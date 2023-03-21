@@ -107,7 +107,9 @@
     "deleteColumn": "Delete column",
     "addColumnLeft": "Add column left",
     "addColumnRight": "Add column right",
-    "hiddenColumn": "Column is hidden for all participants"
+    "hiddenColumn": "Column is hidden for all participants",
+    "notes_one": "{{count}} note",
+    "notes_other": "{{count}} notes"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -129,6 +131,7 @@
     "signInWithGoogle": "Sign in with Google",
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
+    "signInWithAzureAd": "Sign in with Azure AD",
     "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {

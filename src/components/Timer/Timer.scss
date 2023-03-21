@@ -1,17 +1,16 @@
 @import "constants/style.scss";
 
-$timer-display-height: 42px;
 $timer-display-width: 114px;
 $timer__content-height: 38px;
 $timer__short-actions-height: 28px;
 $timer__short-actions-tooltip-height: 36px;
 
 .timer {
-  height: $timer-display-height;
+  height: 100%;
   width: $timer-display-width;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
-  border-radius: calc($timer-display-height / 2);
+  border-radius: $rounded--full;
   position: relative;
   border: 2px solid $menu-icon-background-color--dark;
 }

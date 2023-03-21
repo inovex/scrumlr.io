@@ -75,6 +75,13 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       visible: true,
       index: 1,
     },
+    {
+      id: "test-columns-id-3",
+      name: "test-columns-name-3",
+      color: "planning-pink",
+      visible: true,
+      index: 2,
+    },
   ],
   notes: [
     {
@@ -141,5 +148,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
   },
+  assignments: [],
   ...overwrite,
 });

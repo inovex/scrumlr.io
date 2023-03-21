@@ -262,7 +262,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	boardId := r.Context().Value("Board").(uuid.UUID)
 
-	board, _, sessions, columns, notes, votings, _, err := s.boards.FullBoard(r.Context(), boardId)
+	board, _, sessions, columns, notes, votings, _, _, err := s.boards.FullBoard(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

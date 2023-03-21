@@ -18,6 +18,9 @@ const (
 	// AccountTypeMicrosoft users registered on Microsoft
 	AccountTypeMicrosoft AccountType = "MICROSOFT"
 
+	// AccountTypeAzureAd users registered on Azure AD
+	AccountTypeAzureAd AccountType = "AZURE_AD"
+
 	// AccountTypeGitHub users registered on GitHub
 	AccountTypeGitHub AccountType = "GITHUB"
 
@@ -30,7 +33,7 @@ func (accountType *AccountType) UnmarshalJSON(b []byte) error {
 	json.Unmarshal(b, &s)
 	unmarshalledAccountType := AccountType(s)
 	switch unmarshalledAccountType {
-	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeGitHub, AccountTypeApple:
+	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeAzureAd, AccountTypeGitHub, AccountTypeApple:
 		*accountType = unmarshalledAccountType
 		return nil
 	}
