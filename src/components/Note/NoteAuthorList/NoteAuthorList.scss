@@ -21,16 +21,16 @@
   border-radius: 21px;
 }
 
-.note-author-others__wrapper {
+.note-author-rest__wrapper {
   padding: 2px;
   border-radius: 21px;
 }
 
-.note-author-others__wrapper--self {
+.note-author-rest__wrapper--self {
   background: var(--accent-color--desaturated-light);
 }
 
-.note__author--others {
+.note-author-rest {
   display: inline-flex;
   width: $icon--medium;
   height: $icon--medium;
@@ -47,8 +47,6 @@
 
   border: 1px solid $color-white-one;
   border-radius: 21px;
-
-  // background: var(--accent-color--desaturated-light);
 }
 
 // actually affects the first one, since the flex direction is reversed
@@ -95,11 +93,11 @@
     font-weight: bold;
   }
 
-  .note-author-others__wrapper--self {
+  .note-author-rest__wrapper--self {
     background: var(--accent-color--desaturated-dark);
   }
 
-  .note__author--others {
+  .note-author-rest {
     background-color: $color-icon-light-blue;
     color: $color-dark-two;
     border-color: $color-dark-one;

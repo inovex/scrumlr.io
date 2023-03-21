@@ -40,8 +40,8 @@ export const NoteAuthorList = (props: Props) => {
       )}
       {restUsersExist && (
         // wrapper allows for changing background
-        <div className={classNames("note-author-others__wrapper", {"note-author-others__wrapper--self": stackAuthor.isSelf})}>
-          <div className="note__author--others" title={restUsersTitle}>
+        <div className={classNames("note-author-rest__wrapper", {"note-author-rest__wrapper--self": stackAuthor.isSelf})}>
+          <div className="note-author-rest" title={restUsersTitle}>
             {restAuthors.length}
           </div>
         </div>
