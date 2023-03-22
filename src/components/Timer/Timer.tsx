@@ -17,6 +17,8 @@ type TimerProps = {
   endTime: Date;
 };
 
+const HIDE_TIMER_AFTER_SECONDS = 15;
+
 const usePrevious = (value: boolean) => {
   const ref = useRef<boolean>();
   useEffect(() => {
@@ -61,7 +63,7 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
-      hideTimerAfterSeconds(15);
+      hideTimerAfterSeconds(HIDE_TIMER_AFTER_SECONDS);
       if (isModerator && anyReady) {
         Toast.info(
           <div>
