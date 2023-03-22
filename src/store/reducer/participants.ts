@@ -29,6 +29,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
     }
 
     case Action.UpdatedParticipant: {
+      action.participant.user.unsavedAvatar = state!.self.user.unsavedAvatar; // don't update with db-value
       if (action.participant.user.id === state!.self.user.id) {
         return {
           ...state!,

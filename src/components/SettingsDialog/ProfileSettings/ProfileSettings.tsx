@@ -7,6 +7,7 @@ import "./ProfileSettings.scss";
 import {useDispatch} from "react-redux";
 import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 import {Toggle} from "components/Toggle";
+import {ApplicationState} from "types";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -15,13 +16,15 @@ export const ProfileSettings = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const state = useAppSelector((applicationState) => ({
+  const state = useAppSelector((applicationState: ApplicationState) => ({
     participant: applicationState.participants!.self,
     hotkeysAreActive: applicationState.view.hotkeysAreActive,
   }));
 
   const [userName, setUserName] = useState<string>(state.participant?.user.name);
   const [id] = useState<string | undefined>(state.participant?.user.id);
+  const [saved, setSaved] = useState<boolean | null>(null);
+  const [canceled, setCanceled] = useState<boolean | null>(null);
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
@@ -38,7 +41,7 @@ export const ProfileSettings = () => {
             submit={() => store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
           />
 
-          <AvatarSettings id={id} />
+          <AvatarSettings id={id} saved={saved} setSaved={setSaved} canceled={canceled} setCanceled={setCanceled} />
           <div className="profile-settings__hotkey-settings">
             <SettingsButton
               className="profile-settings__toggle-hotkeys-button"
@@ -56,6 +59,12 @@ export const ProfileSettings = () => {
           </div>
         </div>
       </div>
+      {state.participant.user.unsavedAvatar && (
+        <footer className="profile-settings__footer">
+          <button onClick={() => setSaved(true)}>Änderungen Speichern</button>
+          <button onClick={() => setCanceled(true)}>Änderungen verwerfen</button>
+        </footer>
+      )}
     </div>
   );
 };

@@ -18,16 +18,21 @@ import {
 import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
 import "./AvatarSettings.scss";
+import {Actions} from "store/action";
+import _ from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
 export interface AvatarSettingsProps {
   id?: string;
+  canceled: boolean | null;
+  saved: boolean | null;
+  setCanceled: (value: boolean) => void;
+  setSaved: (value: boolean) => void;
 }
 
-export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
+export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, canceled, setCanceled}) => {
   const {t} = useTranslation();
   const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
@@ -38,13 +43,19 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     initialState = generateRandomProps(id ?? "");
   }
 
-  const [properties, setProperties] = useState<AvataaarProps>(initialState!);
+  const {unsavedAvatar} = state.participant.user;
+
+  const [properties, setProperties] = useState<AvataaarProps>(unsavedAvatar || initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
-  const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
+  const changeAvatarSettings = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
     if (properties && properties[key] !== value) {
       setProperties({...properties, [key]: value});
     }
+  };
+
+  const updateAvatar = () => {
+    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties, unsavedAvatar: undefined}));
   };
 
   const handleAccordionOpen = (index: number) => {
@@ -53,9 +64,26 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   };
 
   useEffect(() => {
-    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (!_.isEqual(properties, initialState)) {
+      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: properties}));
+    }
+    if (unsavedAvatar && _.isEqual(properties, initialState)) {
+      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: undefined}));
+    }
   }, [properties]);
+
+  useEffect(() => {
+    if (saved && !_.isEqual(properties, initialState)) {
+      // remove equal because save isnt shown when equal?
+      updateAvatar();
+      setSaved(false);
+    }
+    if (canceled) {
+      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: undefined}));
+      setProperties(initialState!);
+      setCanceled(false);
+    }
+  }, [saved, canceled]);
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
     hair: [
@@ -118,7 +146,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                         <SettingsCarousel
                           carouselItems={element.values}
                           currentValue={properties[element.key]}
-                          onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
+                          onValueChange={(value) => changeAvatarSettings(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
                           label={t(`Avatar.${element.key}.label`)}
