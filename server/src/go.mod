@@ -15,7 +15,7 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/websocket v1.5.0
-	github.com/lestrrat-go/jwx/v2 v2.0.8
+	github.com/lestrrat-go/jwx/v2 v2.0.9
 	github.com/markbates/goth v1.76.1
 	github.com/nats-io/nats.go v1.24.0
 	github.com/ory/dockertest/v3 v3.9.1
@@ -48,7 +48,7 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/fatih/color v1.14.1 // indirect
-	github.com/goccy/go-json v0.9.11 // indirect
+	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -66,7 +66,7 @@ require (
 	github.com/lestrrat-go/httprc v1.0.4 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
 	github.com/lestrrat-go/jwx v1.2.25 // indirect
-	github.com/lestrrat-go/option v1.0.0 // indirect
+	github.com/lestrrat-go/option v1.0.1 // indirect
 	github.com/lib/pq v1.10.6 // indirect
 	github.com/markbates/going v1.0.3 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
