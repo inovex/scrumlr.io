@@ -14,7 +14,6 @@ type NoteDialogNoteOptionsProps = {
   hasStackedNotes?: boolean;
   noteId: string;
   authorId: string;
-  onDeleteOfParent: () => void;
   onClose: () => void;
   viewer: Participant;
 };

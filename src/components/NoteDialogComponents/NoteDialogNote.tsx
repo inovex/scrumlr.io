@@ -13,7 +13,6 @@ export type NoteDialogNoteProps = {
   authorName: string;
   showAuthors: boolean;
   onClose: () => void;
-  onDeleteOfParent: () => void;
   isStackedNote: boolean;
   hasStackedNotes?: boolean;
   className?: string;
