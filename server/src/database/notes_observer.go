@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -16,7 +15,7 @@ type NotesObserver interface {
 	UpdatedNotes(board uuid.UUID, notes []Note)
 
 	// DeletedNote will be called if a note has been deleted.
-	DeletedNote(user, board, note uuid.UUID, votes []Vote)
+	DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool)
 }
 
 var _ bun.AfterInsertHook = (*NoteInsert)(nil)
@@ -33,9 +32,6 @@ func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
 
 func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	result := ctx.Value("Result").(*[]Note)
-	fmt.Print("**** DELETION_RESULT", len(*result) > 0)
-	// notifyNotesUpdated(ctx)
-
 	if len(*result) > 0 {
 		return notifyNoteDeleted(ctx)
 	}
@@ -72,13 +68,14 @@ func notifyNoteDeleted(ctx context.Context) error {
 		user := ctx.Value("User").(uuid.UUID)
 		board := ctx.Value("Board").(uuid.UUID)
 		note := ctx.Value("Note").(uuid.UUID)
+		deleteStack := ctx.Value("DeleteStack").(bool)
 		votes, err := d.GetVotes(filter.VoteFilter{Board: board})
 		if err != nil {
 			return err
 		}
 		for _, observer := range d.observer {
 			if o, ok := observer.(NotesObserver); ok {
-				o.DeletedNote(user, board, note, votes)
+				o.DeletedNote(user, board, note, votes, deleteStack)
 				return nil
 			}
 		}

@@ -353,7 +353,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 				With("update_board", updateBoard).
 				With("update_ranks", updateRanks).
 				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
+				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 			return err
 		}
@@ -377,7 +377,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 		return err
 	}

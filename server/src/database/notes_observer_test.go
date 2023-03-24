@@ -19,7 +19,7 @@ func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
 	o.notes = &notes
 }
 
-func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote) {
+func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool) {
 	o.board = &board
 	o.deletedNote = &note
 }

@@ -47,9 +47,10 @@ export const NoteActionFactory = {
     notes,
   }),
 
-  deletedNote: (noteId: string) => ({
+  deletedNote: (noteId: string, deleteStack: boolean) => ({
     type: NoteAction.DeletedNote,
     noteId,
+    deleteStack,
   }),
 
   shareNote: (note: string) => ({
