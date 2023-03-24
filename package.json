@@ -15,7 +15,7 @@
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
-    "i18next": "^22.4.11",
+    "i18next": "^22.4.12",
     "i18next-browser-languagedetector": "^7.0.1",
     "i18next-http-backend": "^2.1.1",
     "js-cookie": "^3.0.1",
@@ -65,7 +65,7 @@
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
-    "@typescript-eslint/parser": "^5.54.1",
+    "@typescript-eslint/parser": "^5.56.0",
     "cross-env": "^7.0.3",
     "eslint": "8.36.0",
     "eslint-config-airbnb": "19.0.4",
@@ -91,7 +91,7 @@
     "redux-mock-store": "^1.5.4",
     "sass": "^1.59.2",
     "ts-jest": "^29.0.5",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

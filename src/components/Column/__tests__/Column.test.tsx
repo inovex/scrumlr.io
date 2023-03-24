@@ -9,7 +9,15 @@ const [ColumnContext] = wrapWithTestBackend(Column);
 const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <ColumnContext id="TestID" name="Testheader" color="planning-pink" visible={false} index={0} />
+      <ColumnContext id="test-columns-id-1" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+    </Provider>
+  );
+};
+
+const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
+  return (
+    <Provider store={getTestStore(overwrite)}>
+      <ColumnContext id="test-columns-id-3" name="Testheader 1" color="planning-pink" visible={false} index={0} />
     </Provider>
   );
 };
@@ -41,9 +49,19 @@ describe("Column", () => {
       expect(container.querySelector(".column__header-title")!.firstChild).toHaveClass("column__header-text-wrapper");
     });
 
-    test("column header cardnumber is present", () => {
+    test("column header card number is present", () => {
       const {container} = render(createColumn());
       expect(container.querySelector(".column__header-title")!.children[1]).toHaveClass("column__header-card-number");
+    });
+
+    test("column header card number is not present", () => {
+      const {container} = render(createEmptyColumn());
+      expect(container.querySelector(".column__header-title")!.children[1]).not.toHaveClass("column__header-card-number");
+    });
+
+    test("column header card number is correct number", () => {
+      const {container} = render(createColumn());
+      expect(container.querySelector(".column__header-card-number")!).toHaveTextContent("2");
     });
 
     test("header text has correct title", () => {
