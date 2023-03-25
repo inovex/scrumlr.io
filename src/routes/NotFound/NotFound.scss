@@ -16,6 +16,10 @@
 .not-found__content {
   display: flex;
   flex-direction: column;
+  align-items: start;
+
+  margin-top: 225px;
+  margin-left: 225px;
 }
 
 .not-found__title {
@@ -24,14 +28,15 @@
 }
 
 .not-found__description {
+  margin-top: $margin--default;
+
   font-weight: 400;
   font-size: 38px;
   line-height: 50px;
 }
 
 .not-found__return-button {
-  flex-shrink: 0;
-  max-width: 100%;
+  margin-top: 90px;
 
   padding: 20px 40px;
   color: $color-white;
@@ -39,6 +44,7 @@
 
   font-weight: 700;
   font-size: 21px;
+  letter-spacing: $letter-spacing--medium;
 
   border: none;
   border-radius: $rounded--full;
