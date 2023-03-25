@@ -1,26 +1,55 @@
-@import "constants/style.scss";
+@import "src/constants/style";
 
-$logo-height: 60px;
-$text-size--medium: 24px;
+.not-found__root {
+  // overflow: hidden visible;
+}
 
-.not-found {
+.not-found__main {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+  height: 100%;
+}
+
+// content (left)
+.not-found__content {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
 }
 
-.not-found__logo {
-  height: $logo-height;
+.not-found__title {
+  font-weight: 700;
+  font-size: 80px;
 }
 
-.not-found__text {
-  color: $color-black;
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--medium;
+.not-found__description {
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 50px;
 }
-[theme="dark"] .not-found__text {
+
+.not-found__return-button {
+  flex-shrink: 0;
+  max-width: 100%;
+
+  padding: 20px 40px;
   color: $color-white;
+  background: #ff0069;
+
+  font-weight: 700;
+  font-size: 21px;
+
+  border: none;
+  border-radius: $rounded--full;
+}
+
+// "background" (right)
+.not-found__background {
+  position: relative;
+}
+
+.not-found__logo404,
+.not-found__logo-stan {
+  position: absolute;
 }
