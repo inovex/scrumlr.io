@@ -4,28 +4,46 @@ $overlap-margin: -26px;
 
 .note-author-list {
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: center;
+
+  padding: 2px;
+  border-radius: $rounded--full;
+}
+
+.note-author-list--self {
+  background: var(--accent-color--desaturated-light);
 }
 
 .note__author {
   display: inline-flex;
   align-items: center;
   // reset css from figure-element:
-  margin: 0 0 0 $overlap-margin; // overlap
   border: 0;
   font: inherit;
   vertical-align: baseline;
   flex-grow: 0;
   height: 28px;
-  padding: 0 $padding--default 0 2px;
   background: $color-white;
   border-radius: $rounded--default;
+
+  padding: 0 $padding--default 0 0;
+  margin: 0 0 0 $overlap-margin;
+}
+
+.note__author:first-of-type {
+  margin: 0;
+}
+
+// change margin of last avatar unless there's a .note-author-rest after
+.note__author:last-of-type:not(.note__author--with-rest) {
+  padding-right: 0;
+  margin-right: 4px;
 }
 
 .note-author-rest__wrapper {
-  padding: 2px;
   border-radius: $rounded--default;
+  margin-right: 4px;
 }
 
 .note-author-rest__wrapper--self {
@@ -37,12 +55,12 @@ $overlap-margin: -26px;
   width: $icon--medium;
   height: $icon--medium;
 
-  margin: 0 $margin--default 0 2px;
-
   font-size: $text-size--small;
 
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
+
+  margin: 0 0 0 $overlap-margin;
 
   justify-content: center;
   align-items: center;
@@ -51,14 +69,7 @@ $overlap-margin: -26px;
   border-radius: $rounded--full;
 }
 
-// actually affects the first one, since the flex direction is reversed
-// also we only want to change the margin if no rest users exist, since they are displayed on the left
-.note__author:not(.note__author--with-rest):last-of-type {
-  margin-left: 0;
-}
-
 .note__author-name {
-  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
