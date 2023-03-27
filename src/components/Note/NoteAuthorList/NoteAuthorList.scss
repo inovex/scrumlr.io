@@ -1,5 +1,7 @@
 @import "src/constants/style.scss";
 
+$overlap-margin: -26px;
+
 .note-author-list {
   display: flex;
   flex-direction: row-reverse;
@@ -10,7 +12,7 @@
   display: inline-flex;
   align-items: center;
   // reset css from figure-element:
-  margin: 0 0 0 #{-$margin--medium}; // overlap
+  margin: 0 0 0 $overlap-margin; // overlap
   border: 0;
   font: inherit;
   vertical-align: baseline;
