@@ -15,8 +15,8 @@ export const NoteAuthorList = (props: Props) => {
   // 1 => p
   // 2 => p p
   // 3 => p p p
-  // 4 => (2) p p
-  // n where n >= 4 => (n - 2) p p
+  // 4 => p p (2)
+  // n where n >= 4 => p p (n - 2)
   // where (n) displays a number and p displays an avatar
   const SHOW_MAX_AUTHORS = 3;
   const stackAuthor = props.authors[0];
@@ -25,27 +25,33 @@ export const NoteAuthorList = (props: Props) => {
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
-    <div className="note-author-list">
+    <div className={classNames("note-author-list", {"note-author-list--self": stackAuthor.isSelf})}>
       {slicedAuthors.map(
         (
           a // iterate over authors, order is changed in CSS
         ) => (
-          <figure className={classNames("note__author", {"note__author--self": stackAuthor.isSelf, "note__author--with-rest": restUsersExist})} aria-roledescription="author">
+          <figure
+            className={classNames("note__author", {"note__author--self": stackAuthor.isSelf /* , "note__author--with-rest": restUsersExist */})}
+            aria-roledescription="author"
+          >
             <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-            {a.user!.id === stackAuthor.user!.id ? ( // only the stack authors name is displayed
-              <figcaption className="note__author-name">{a.displayName}</figcaption>
-            ) : null}
+            {/* index === self.length - 1 && !restUsersExist ? ( // only the stack authors name is displayed after the last figure
+              <figcaption className="note__author-name">{stackAuthor.displayName}</figcaption>
+            ) : null */}
           </figure>
         )
       )}
+
       {restUsersExist && (
         // wrapper allows for changing background
-        <div className={classNames("note-author-rest__wrapper", {"note-author-rest__wrapper--self": stackAuthor.isSelf})}>
-          <div className="note-author-rest" title={restUsersTitle}>
+        <div className={classNames("note-author-rest__wrapper")}>
+          <figure className="note-author-rest" title={restUsersTitle}>
             {restAuthors.length}
-          </div>
+          </figure>
         </div>
       )}
+
+      <div className="note__author-name">{stackAuthor.displayName}</div>
     </div>
   ) : null;
 };
