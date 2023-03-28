@@ -30,6 +30,8 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
     dispatch(Actions.unstackNote(id));
   };
 
+  const allowedToDeleteStack = props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR" || (props.authorId === props.viewer.user.id && !props.stackHasMixedAuthors);
+
   // determines which deletion dialog to show
   const onDelete = (id: string, deleteStack?: boolean) => {
     if (props.hasStackedNotes && !showParentDialog && allowedToDeleteStack) {
@@ -50,8 +52,6 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
     }
     dispatch(Actions.deleteNote(id, deleteStack));
   };
-
-  const allowedToDeleteStack = props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR" || (props.authorId === props.viewer.user.id && !props.stackHasMixedAuthors);
 
   const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";
   return (
