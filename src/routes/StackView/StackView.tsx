@@ -116,6 +116,14 @@ export const StackView = () => {
   const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({name: authorName, avatar: author?.user.avatar});
   const stackedNotesRef = useRef<StackedNote[]>(stackedNotes);
 
+  const hasMixedAuthors = (stack: Note[]) => {
+    if (!stack || !author) return undefined;
+    const authors = stack.map((n) => n.author);
+    return authors.some((item) => item !== authors[0]);
+  };
+  const entireStack = useAppSelector((state) => state.notes.filter((n) => n.id === note?.id || n.position.stack === note?.id));
+  const stackHasMixedAuthors = hasMixedAuthors(entireStack);
+
   // update transition config when note changes so that the visible notes are updated without any animation
   useEffect(() => {
     if (
@@ -233,9 +241,9 @@ export const StackView = () => {
                       authorName={item.authorName}
                       showAuthors={showAuthors}
                       onClose={handleClose}
-                      onDeleteOfParent={handleClose}
                       isStackedNote={false}
                       hasStackedNotes={item.stack.length > 0}
+                      stackHasMixedAuthors={stackHasMixedAuthors}
                       viewer={viewer}
                       className="stack-view__parent-note"
                     />
@@ -250,7 +258,6 @@ export const StackView = () => {
                           authorName={n.authorName}
                           showAuthors={showAuthors}
                           onClose={handleClose}
-                          onDeleteOfParent={handleClose}
                           isStackedNote
                           viewer={viewer}
                         />

@@ -15,6 +15,7 @@ export type NoteDialogNoteProps = {
   onClose: () => void;
   isStackedNote: boolean;
   hasStackedNotes?: boolean;
+  stackHasMixedAuthors?: boolean;
   className?: string;
 
   viewer: Participant;
