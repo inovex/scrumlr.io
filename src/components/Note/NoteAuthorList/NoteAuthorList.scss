@@ -1,13 +1,17 @@
 @import "src/constants/style.scss";
 
 $overlap-margin: -26px;
+$name-gap: 4px;
+
+// --self classes: indicates yourself as the stack author,
+// which is highlighted by a blue background.
 
 .note-author-list {
   display: flex;
   flex-direction: row;
   align-items: center;
 
-  padding: 2px;
+  padding: 2px 14px 2px 2px;
   border-radius: $rounded--full;
 }
 
@@ -31,25 +35,18 @@ $overlap-margin: -26px;
   margin: 0 0 0 $overlap-margin;
 }
 
+// reset negative margin on first avatar
 .note__author:first-of-type {
   margin: 0;
 }
 
-// change margin of last avatar unless there's a .note-author-rest after
+// make a gap after last avatar unless .note-author-rest bubble exists
 .note__author:last-of-type:not(.note__author--with-rest) {
   padding-right: 0;
-  margin-right: 4px;
+  margin-right: $name-gap;
 }
 
-.note-author-rest__wrapper {
-  border-radius: $rounded--default;
-  margin-right: 4px;
-}
-
-.note-author-rest__wrapper--self {
-  background: var(--accent-color--desaturated-light);
-}
-
+// the rest bubble should be about the same size as the avatars
 .note-author-rest {
   display: inline-flex;
   width: $icon--medium;
@@ -60,13 +57,18 @@ $overlap-margin: -26px;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
 
-  margin: 0 0 0 $overlap-margin;
+  // add 1px because it's a little bit off in comparison to .note__author margin
+  margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
 
   justify-content: center;
   align-items: center;
 
-  border: 1px solid $color-white-one;
+  border: 1.5px solid $color-white-one;
   border-radius: $rounded--full;
+}
+
+.note-author-rest--self {
+  border-color: $menu-icon-background-color--dark;
 }
 
 .note__author-name {
@@ -89,6 +91,10 @@ $overlap-margin: -26px;
 }
 
 [theme="dark"] {
+  .note-author-list--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
   .note__author {
     background: $color-dark-mode-note;
   }
@@ -105,13 +111,13 @@ $overlap-margin: -26px;
     font-weight: bold;
   }
 
-  .note-author-rest__wrapper--self {
-    background: var(--accent-color--desaturated-dark);
-  }
-
   .note-author-rest {
     background-color: $color-icon-light-blue;
     color: $color-dark-two;
     border-color: $color-dark-one;
+  }
+
+  .note-author-rest--self {
+    border-color: $color-icon-light-blue;
   }
 }
