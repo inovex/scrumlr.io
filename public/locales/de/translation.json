@@ -113,9 +113,10 @@
     "deleteColumn": "Löschen",
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
-    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
+    "notes_one": "{{count}} Kärtchen",
+    "notes_other": "{{count}} Kärtchen"
   },
-
   "ErrorPage": {
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
@@ -136,6 +137,7 @@
     "signInWithGoogle": "Einloggen mit Google",
     "signInWithGitHub": "Einloggen mit Github",
     "signInWithMicrosoft": "Einloggen mit Microsoft",
+    "signInWithAzureAd": "Einloggen mit Azure AD",
     "signInWithApple": "Einloggen mit Apple"
   },
   "NoteInput": {
