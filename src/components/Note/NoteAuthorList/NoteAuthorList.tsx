@@ -45,7 +45,7 @@ export const NoteAuthorList = (props: Props) => {
         </div>
       )}
 
-      <div className="note__author-name">{stackAuthor.displayName}</div>
+      <div className={classNames("note__author-name", {"note__author-name--self": stackAuthor.isSelf})}>{stackAuthor.displayName}</div>
     </div>
   ) : null;
 };

@@ -84,7 +84,7 @@ $overlap-margin: -26px;
   stroke: none;
 }
 
-.note__author--self > .note__author-name {
+.note__author-name--self {
   color: $color-black;
 }
 
@@ -93,16 +93,15 @@ $overlap-margin: -26px;
     background: $color-dark-mode-note;
   }
 
-  .note__author-name {
-    color: $color-white;
-  }
-
   .note__author--self {
     background: var(--accent-color--desaturated-dark);
   }
 
-  .note__author--self > .note__author-name {
+  .note__author-name {
     color: $color-white;
+  }
+
+  .note__author-name--self {
     font-weight: bold;
   }
 
