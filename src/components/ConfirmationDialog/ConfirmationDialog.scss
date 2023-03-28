@@ -21,7 +21,7 @@
   border-radius: $rounded--medium;
   padding: $padding--large;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgb(0 87 255 / 24%);
+  box-shadow: 0 16px 32px 0 rgba($color-backlog-blue, 0.24);
 }
 
 .confirmation-dialog__icon-content-wrapper {
@@ -65,11 +65,11 @@
 }
 .confirmation-dialog__warning > p {
   margin: 0px;
-  font-size: 16px;
-  letter-spacing: 0.25px;
+  font-size: $text-size--medium;
+  letter-spacing: $letter-spacing--small;
 }
 
-@media screen and (max-width: 450px) {
+@media #{$mini-smartphone} {
   .confirmation-dialog__icon {
     display: none;
   }
@@ -125,7 +125,7 @@
   width: $icon--extralarge;
   border-radius: $rounded--full;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgb(0 87 255 / 24%);
+  box-shadow: 0 16px 32px 0 rgba($color-backlog-blue, 0.24);
   padding: 0;
   background-color: $color-white;
   cursor: pointer;
@@ -148,7 +148,7 @@
     color: $color-white;
     background-color: $color-dark-one;
     border-color: $color-planning-pink;
-    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: $box-shadow--dark;
   }
 
   .confirmation-dialog__button {
@@ -169,7 +169,7 @@
     color: $color-planning-pink;
     background-color: $color-dark-mode;
     border-color: $color-planning-pink;
-    box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: $box-shadow--dark;
     &:hover {
       color: $color-white;
       background-color: $color-planning-pink;
