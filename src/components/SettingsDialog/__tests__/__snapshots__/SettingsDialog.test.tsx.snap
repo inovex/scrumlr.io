@@ -630,16 +630,15 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </svg>
                 </a>
               </article>
-              <a
+              <button
                 class="settings-dialog__close-button"
-                href="/board/test-board-id"
               >
                 <svg
                   class="close-button__icon"
                 >
                   icon-close.svg
                 </svg>
-              </a>
+              </button>
             </aside>
           </div>
         </div>
