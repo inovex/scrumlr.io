@@ -1017,7 +1017,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     </ul>
   </div>
   <footer
-    class="participants-reset-state-banner__container"
+    class="container participants-reset-state-banner__container"
   >
     <div
       class="participants-reset-state-banner__icon-and-text"

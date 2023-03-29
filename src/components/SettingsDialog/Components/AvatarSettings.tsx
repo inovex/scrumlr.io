@@ -70,6 +70,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
     if (unsavedAvatar && _.isEqual(properties, initialState)) {
       store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: undefined}));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
   useEffect(() => {
@@ -82,6 +83,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
       setProperties(initialState!);
       setCanceled(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saved, canceled]);
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
