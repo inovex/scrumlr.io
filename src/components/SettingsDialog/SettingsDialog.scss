@@ -116,6 +116,7 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__close-button {
+  all: unset;
   position: absolute;
   top: 6px;
   right: 6px;
@@ -129,6 +130,7 @@ $settings-dialog-container--bottom: 62px;
   transition: all 0.08s ease-out;
   border: 2px solid transparent;
   outline: none;
+  cursor: pointer;
 
   &:hover {
     background-color: $color-backlog-blue;

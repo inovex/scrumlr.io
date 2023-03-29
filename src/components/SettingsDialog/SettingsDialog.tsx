@@ -149,9 +149,9 @@ export const SettingsDialog: FC = () => {
                   </Link>
                   <Outlet />
                 </article>
-                <Link onClick={onClose} to={`/board/${boardId}`} className="settings-dialog__close-button">
+                <button onClick={onClose} className="settings-dialog__close-button">
                   <CloseIcon className="close-button__icon" />
-                </Link>
+                </button>
               </animated.aside>
             )}
           </Transition>
