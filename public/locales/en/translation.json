@@ -357,7 +357,10 @@
   },
   "ProfileSettings": {
     "Profile": "Profile",
-    "UserName": "User Name"
+    "UserName": "User Name",
+    "DialogUnsavedChanges": "You have made changes to your avatar that are unsaved. Do you still want to leave the settings?",
+    "SaveAvatar": "Update Avatar",
+    "Cancel": "Cancel"
   },
   "Error": {
     "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",

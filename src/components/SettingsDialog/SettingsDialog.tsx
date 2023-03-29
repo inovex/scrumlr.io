@@ -159,7 +159,7 @@ export const SettingsDialog: FC = () => {
       </Portal>
       {showDialog && (
         <ConfirmationDialog
-          title={t("You have made changes to your avatar that are unsaved. You still want to leave?")}
+          title={t("ProfileSettings.DialogUnsavedChanges")}
           onAccept={() => {
             store.dispatch(Actions.editSelf({...me, unsavedAvatar: undefined}));
             navigate(`/board/${boardId}`);

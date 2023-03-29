@@ -11,6 +11,7 @@ import {ApplicationState} from "types";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
+import {Footer} from "../Components/Footer";
 
 export const ProfileSettings = () => {
   const {t} = useTranslation();
@@ -60,10 +61,10 @@ export const ProfileSettings = () => {
         </div>
       </div>
       {state.participant.user.unsavedAvatar && (
-        <footer className="profile-settings__footer">
-          <button onClick={() => setSaved(true)}>Änderungen Speichern</button>
-          <button onClick={() => setCanceled(true)}>Änderungen verwerfen</button>
-        </footer>
+        <Footer className="profile-settings__footer">
+          <button onClick={() => setSaved(true)}>{t("ProfileSettings.SaveAvatar")}</button>
+          <button onClick={() => setCanceled(true)}>{t("ProfileSettings.Cancel")}</button>
+        </Footer>
       )}
     </div>
   );

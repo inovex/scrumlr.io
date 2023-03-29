@@ -73,8 +73,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
   }, [properties]);
 
   useEffect(() => {
-    if (saved && !_.isEqual(properties, initialState)) {
-      // remove equal because save isnt shown when equal?
+    if (saved) {
       updateAvatar();
       setSaved(false);
     }

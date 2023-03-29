@@ -357,7 +357,10 @@
   },
   "ProfileSettings": {
     "Profile": "Profil",
-    "UserName": "Nutzername"
+    "UserName": "Nutzername",
+    "DialogUnsavedChanges": "Du hast deine Änderungen an deinem Avatar nicht gespeichert. Möchtest du die Einstellungen dennoch verlassen?",
+    "SaveAvatar": "Avatar Speichern",
+    "Cancel": "Abbrechen"
   },
   "Error": {
     "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
