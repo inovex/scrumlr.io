@@ -44,6 +44,8 @@ $color-warning-red: #eb625b;
   --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
   --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
   --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
+  --accent-color--background-light: #{color.change($color, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
+  --accent-color--background-dark: #{color.change($color, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
 }
 
 .accent-color__backlog-blue {
