@@ -210,7 +210,7 @@
     "authenticationError": "Ein Fehler trat beim Einloggen auf",
     "votingStarted": "Du hast eine Abstimmung gestartet!",
     "votingFinished": "Du hast die Abstimmung beendet!",
-    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert.",
+    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert",
     "focusModeFinished": "Du hast die Moderation beendet!",
     "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
     "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weiteren Stimmen werden gezählt!",
@@ -222,11 +222,13 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
-    "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
-    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
-    "noteToHiddenColumnButton": "Spalte für alle anzeigen"
+    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt!",
+    "noteToHiddenColumnButton": "Spalte für alle anzeigen",
+    "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
+    "noteDeleted": "Die Karte wurde gelöscht!"
   },
   "Language": {
     "german": "Deutsch",

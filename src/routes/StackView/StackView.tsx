@@ -10,9 +10,10 @@ import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Toast} from "utils/Toast";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {CSSProperties, useEffect, useRef, useState} from "react";
+import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 
@@ -142,6 +143,7 @@ export const StackView = () => {
     stackedNotesRef.current = stackedNotes;
   }, [author, authorName, note, stackedNotes]);
 
+  // update transition config when navigating to a new note
   useEffect(() => {
     if (prevNote.current && prevNote.current?.id !== note?.id) {
       let direction: "left" | "right" | undefined;
@@ -174,6 +176,29 @@ export const StackView = () => {
       prevNote.current = note;
     }
   }, [author, authorName, columns, note, stackedNotes]);
+
+  // redirect to stack and show toast if note has been stacked on another note
+  useEffect(() => {
+    if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
+      navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
+      Toast.info(
+        <div>
+          <div>{t("Toast.noteMovedToStack")}</div>
+        </div>
+      );
+    }
+  }, [boardId, navigate, note, t]);
+
+  // show toast if note has been deleted
+  useLayoutEffect(() => {
+    if (prevNote.current && !note) {
+      Toast.error(
+        <div>
+          <div>{t("Toast.noteDeleted")}</div>
+        </div>
+      );
+    }
+  }, [note, t]);
 
   if (!note) {
     navigate(`/board/${boardId}`);

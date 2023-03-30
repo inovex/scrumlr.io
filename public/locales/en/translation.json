@@ -222,11 +222,13 @@
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
-    "allParticipantsDone": "All participants are ready.",
+    "allParticipantsDone": "All participants are ready!",
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
-    "noteToHiddenColumn": "You just added a note to a hidden column.",
-    "noteToHiddenColumnButton": "Reveal column"
+    "noteToHiddenColumn": "You just added a note to a hidden column!",
+    "noteToHiddenColumnButton": "Reveal column",
+    "noteMovedToStack": "The note was moved to a stack!",
+    "noteDeleted": "The note has been deleted!"
   },
   "Language": {
     "german": "German",
