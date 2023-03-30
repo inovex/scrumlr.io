@@ -1,8 +1,19 @@
-@import "constants/style";
+@import "src/constants/style";
 
-.settings-dialog__portal {
-  background-color: rgba(0, 0, 0, 0.8);
+.settings-dialog__background {
+  position: fixed;
+  @include inset-0;
+  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
   backdrop-filter: blur(10px);
+}
+[theme="dark"] .settings-dialog__background {
+  background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+}
+
+.settings-dialog__wrapper {
+  position: fixed;
+  @include inset-0;
+  @include flex-center;
 }
 
 // settings-dialog container
@@ -11,22 +22,16 @@ $settings-dialog-container--sides-large: 92px;
 $settings-dialog-container--bottom: 62px;
 
 .settings-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
 }
 @media screen and (min-width: 450px) {
   .settings-dialog {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     height: 616px;
     width: auto;
-    border-radius: 8px;
+    border-radius: $rounded--small;
     box-shadow: 0 16px 32px #0057ff29;
   }
   [theme="dark"] .settings-dialog {
@@ -39,6 +44,8 @@ $settings-dialog-container--bottom: 62px;
   background: $color-white-one;
   width: 100%;
   padding-top: 50px;
+
+  overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
   background: $color-dark-one;
@@ -50,7 +57,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__content {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: 8px;
+    border-radius: $rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -58,7 +65,7 @@ $settings-dialog-container--bottom: 62px;
     display: block;
     width: 544px;
     height: 100%;
-    border-radius: 0 8px 8px 0;
+    border-radius: 0 $rounded--small $rounded--small 0;
     padding-top: 0;
   }
 }
@@ -77,7 +84,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 380px;
     height: calc(100% + 50px);
-    border-radius: 8px;
+    border-radius: $rounded--small;
   }
 }
 @media screen and (min-width: 920px) {
@@ -87,7 +94,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__sidebar {
     width: 318px;
     height: 100%;
-    border-radius: 8px 0 0 8px;
+    border-radius: $rounded--small 0 0 $rounded--small;
   }
 }
 
@@ -116,10 +123,12 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 22px;
+  width: $icon--extralarge;
+  height: $icon--extralarge;
+  border-radius: $rounded--full;
   transition: all 0.08s ease-out;
+  border: 2px solid transparent;
+  outline: none;
 
   &:hover {
     background-color: $color-backlog-blue;
@@ -130,6 +139,14 @@ $settings-dialog-container--bottom: 62px;
   &:active {
     transform: scale(1);
   }
+
+  &:focus-visible {
+    border: 2px solid $color-backlog-blue;
+  }
+}
+.settings-dialog__close-button > svg {
+  height: 100%;
+  width: 100%;
 }
 [theme="dark"] .settings-dialog__close-button {
   color: $color-planning-pink;
@@ -137,6 +154,10 @@ $settings-dialog-container--bottom: 62px;
   &:hover {
     background-color: $color-planning-pink;
     color: $color-white;
+  }
+
+  &:focus-visible {
+    border: 2px solid $color-planning-pink;
   }
 }
 @media screen and (min-width: 450px) {
@@ -151,15 +172,11 @@ $settings-dialog-container--bottom: 62px;
     background: $color-dark-mode;
   }
 }
-.close-button__icon {
-  width: 44px;
-  height: 44px;
-  cursor: pointer;
-}
 
 .settings-dialog__back-link {
   display: none;
 }
+
 @media screen and (max-width: 920px) {
   .settings-dialog__back-link {
     display: inline;
@@ -174,7 +191,7 @@ $settings-dialog-container--bottom: 62px;
     align-items: center;
     width: 32px;
     height: 32px;
-    border-radius: 22px;
+    border-radius: $rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {
     color: $color-planning-pink;
@@ -185,51 +202,63 @@ $settings-dialog-container--bottom: 62px;
   height: 56px;
   width: 252px;
   margin: 0 $margin--large;
-  border-radius: 28px;
+  border-radius: $rounded--full;
   text-align: center;
   text-decoration: none;
   color: $color-black;
   position: relative;
   outline: none;
   overflow-x: hidden;
+
+  &:hover {
+    background: rgba(var(--accent-color-rgb), 0.8);
+    color: $color-white;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--accent-color);
+  }
+
+  p {
+    margin: 0;
+    position: absolute;
+    left: 64px;
+
+    &:first-child {
+      font-size: $text-size--medium;
+      font-weight: 600;
+      top: 12px;
+    }
+
+    &:nth-child(2) {
+      font-size: $text-size--small;
+      top: 30px;
+      opacity: 0.65;
+    }
+  }
 }
+
 [theme="dark"] .navigation__item {
   color: $color-white;
 }
-.navigation__item > p {
-  margin: 0;
-  position: absolute;
-  left: 64px;
-}
-.navigation__item > p:first-child {
-  font-size: $text-size--medium;
-  font-weight: 600;
-  top: 12px;
-}
-.navigation__item > p:nth-child(2) {
-  font-size: $text-size--small;
-  top: 30px;
-  opacity: 0.65;
-}
-.navigation__item:hover {
-  background: rgba(var(--accent-color-rgb), 0.8);
-  color: $color-white;
-}
+
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
   color: $color-white;
 }
+
 .navigation-item__icon {
   position: absolute;
   top: 8px;
   left: 8px;
   width: 40px;
   height: 40px;
-  border-radius: 20px;
+  border-radius: $rounded--full;
   background: var(--accent-color);
   color: $color-white;
 }
+
 .navigation-item__user-name {
   white-space: nowrap;
 }
@@ -266,17 +295,16 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__separator {
-  margin: 0;
-  margin-left: 5%;
+  margin: 0 0 0 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid $color-light-gray;
+  border-top: 0.5px solid $color-lighter-gray;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: $rounded--small;
   background-color: $color-white;
 }
 

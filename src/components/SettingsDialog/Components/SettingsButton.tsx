@@ -1,9 +1,10 @@
 import classNames from "classnames";
-import {FC, ElementType, MouseEventHandler, FocusEventHandler} from "react";
+import {DefaultTFuncReturn} from "i18next";
+import {FC, ElementType, MouseEventHandler, FocusEventHandler, PropsWithChildren} from "react";
 import "./SettingsButton.scss";
 
 export interface SettingsButtonProps {
-  label?: string;
+  label?: string | DefaultTFuncReturn;
   icon?: ElementType;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   onBlur?: FocusEventHandler<HTMLButtonElement> | undefined;
@@ -12,7 +13,7 @@ export interface SettingsButtonProps {
   [key: string]: unknown;
 }
 
-export const SettingsButton: FC<SettingsButtonProps> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
+export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({label, icon, onClick, onBlur, className, children, disabled, ...other}) => {
   const Icon = icon!;
 
   return (

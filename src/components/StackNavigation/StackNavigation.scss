@@ -1,0 +1,76 @@
+@import "constants/style.scss";
+@import "routes/StackView/StackView.scss";
+
+.stack-view__navigation {
+  height: $stack-view__navigation-height;
+  min-height: $stack-view__min-height;
+  width: 82vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: min(4vw, 48px);
+}
+
+.stack-view__navigation-button {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  background: $color-white;
+  border: 3px solid transparent;
+  border-radius: 100%;
+  outline: none;
+  box-shadow: $box-shadow--light;
+  color: $color-black;
+
+  transition: all 0.08s ease-out;
+
+  > svg {
+    height: $icon--small;
+    width: $icon--small;
+  }
+
+  &:enabled {
+    cursor: pointer;
+    opacity: 1;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      background: var(--accent-color);
+      color: $color-white;
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
+}
+
+[theme="dark"] {
+  .stack-view__navigation-button {
+    background: $menu-icon-background-color--dark;
+    color: $color-white;
+
+    &:enabled:focus-visible {
+      background: var(--accent-color--dark);
+      color: $color-black;
+    }
+
+    &:disabled {
+      color: $color-dark-mode--disabled;
+    }
+  }
+}
+
+@media #{$tablet} {
+  .stack-view__navigation {
+    width: 42vw;
+  }
+}

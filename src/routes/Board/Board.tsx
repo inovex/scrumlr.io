@@ -1,10 +1,9 @@
 import {LoadingScreen} from "components/LoadingScreen";
 import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
-import {Request} from "components/Request";
+import {Requests} from "components/Requests";
 import store, {useAppSelector} from "store";
 import {InfoBar} from "components/Infobar";
-import {TabIndex} from "constants/tabIndex";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {Actions} from "store/action";
@@ -63,7 +62,7 @@ export const Board = () => {
     return (
       <>
         {currentUserIsModerator && (
-          <Request
+          <Requests
             requests={state.requests.filter((request) => request.status === "PENDING")}
             participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
           />
@@ -73,16 +72,8 @@ export const Board = () => {
         <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
           {state.columns
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
-            .map((column, columnIndex) => (
-              <Column
-                tabIndex={TabIndex.Column + columnIndex * 17}
-                key={column.id}
-                id={column.id}
-                index={column.index}
-                name={column.name}
-                visible={column.visible}
-                color={column.color}
-              />
+            .map((column) => (
+              <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
             ))}
         </BoardComponent>
       </>

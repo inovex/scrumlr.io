@@ -29,17 +29,24 @@
     justify-items: center;
     align-items: center;
     border: none;
+    outline: none;
     color: var(--accent-color);
     transition: all 0.08s ease-out;
 
-    &:hover {
-      filter: brightness(1.4);
+    &:hover > svg {
+      background-color: var(--accent-color--desaturated-light);
       transform: scale(1.1);
     }
 
+    &:focus-visible > svg {
+      background-color: var(--accent-color--desaturated-light);
+    }
+
     svg {
-      width: 24px;
-      height: 24px;
+      border-radius: $rounded--full;
+      width: $icon--large;
+      height: $icon--large;
+      padding: calc($padding--small / 2);
     }
   }
 }
@@ -54,6 +61,11 @@
 
     &__button {
       color: var(--accent-color);
+
+      &:hover > svg,
+      &:focus-visible > svg {
+        background-color: var(--accent-color--desaturated-dark);
+      }
     }
   }
 }

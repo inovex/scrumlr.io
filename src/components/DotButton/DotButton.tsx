@@ -1,4 +1,4 @@
-import {ReactElement} from "react";
+import {FC, PropsWithChildren} from "react";
 import classNames from "classnames";
 import "./DotButton.scss";
 
@@ -6,12 +6,11 @@ type DotButtonProps = {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
-  children?: ReactElement | ReactElement[];
-  tabIndex?: number;
   title?: string;
+  onAnimationEnd?: () => void;
 };
 
-export const DotButton = (props: DotButtonProps) => (
+export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
   <button
     className={classNames("dot-button", props.className)}
     disabled={props.disabled}
@@ -19,8 +18,8 @@ export const DotButton = (props: DotButtonProps) => (
       e.stopPropagation();
       props.onClick?.();
     }}
-    tabIndex={props.tabIndex}
     title={props.title}
+    onAnimationEnd={props.onAnimationEnd}
   >
     {props.children}
   </button>

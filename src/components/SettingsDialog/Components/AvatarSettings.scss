@@ -52,21 +52,18 @@
     max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
     &-wrapper {
-      overflow-y: auto;
       padding-right: $padding--small;
-      margin-right: calc(-1 * ($padding--small + 10px));
-
-      @include scrollbar();
+      margin-right: calc(-1 * (#{$padding--small} + 10px));
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
-        margin-right: calc(-1 * ($padding--medium + 10px));
+        margin-right: calc(-1 * (#{$padding--medium} + 10px));
       }
     }
 
     &-group {
       &:last-child {
-        padding: calc($padding--small / 2) 0;
+        padding: calc(#{$padding--small} / 2) 0;
       }
 
       &-header {
@@ -100,7 +97,7 @@
           margin-left: 10%;
           width: 80%;
           border: 0;
-          border-top: 0.5px solid $color-light-gray;
+          border-top: 0.5px solid $color-lighter-gray;
         }
       }
 
@@ -109,7 +106,7 @@
         margin-left: 5%;
         width: 90%;
         border: 0;
-        border-top: 0.5px solid $color-light-gray;
+        border-top: 0.5px solid $color-lighter-gray;
       }
     }
   }

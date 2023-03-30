@@ -5,6 +5,7 @@ import {Note} from "types/note";
 import {Vote} from "types/vote";
 import {Voting} from "types/voting";
 import {Request} from "types/request";
+import {Assignment} from "types/assignment";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardAction = {
@@ -24,6 +25,7 @@ export const BoardAction = {
   RejectedBoardAccess: "scrumlr.io/rejectedBoardAccess" as const,
   PendingBoardAccessConfirmation: "scrumlr.io/pendingBoardAccessConfirmation" as const,
   PassphraseChallengeRequired: "scrumlr.io/passphraseChallengeRequired" as const,
+  TooManyJoinRequests: "scrumlr.io/tooManyJoinRequests" as const,
   SetTimer: "scrumlr.io/setTimer" as const,
   CancelTimer: "scrumlr.io/cancelTimer" as const,
 };
@@ -57,7 +59,16 @@ export const BoardActionFactory = {
    * @param board the board data
    * @param columns the columns of the board
    */
-  initializeBoard: (board: Board, participants: Participant[], requests: Request[], columns: Column[], notes: Note[], votes: Vote[], votings: Voting[]) => ({
+  initializeBoard: (
+    board: Board,
+    participants: Participant[],
+    requests: Request[],
+    columns: Column[],
+    notes: Note[],
+    votes: Vote[],
+    votings: Voting[],
+    assignments: Assignment[]
+  ) => ({
     type: BoardAction.InitializeBoard,
     board,
     participants,
@@ -66,6 +77,7 @@ export const BoardActionFactory = {
     notes,
     votes,
     votings,
+    assignments,
   }),
   /**
    * Creates an action which should be dispatched when the user wants to edit the board.
@@ -120,7 +132,9 @@ export const BoardActionFactory = {
   requirePassphraseChallenge: () => ({
     type: BoardAction.PassphraseChallengeRequired,
   }),
-
+  tooManyJoinRequests: () => ({
+    type: BoardAction.TooManyJoinRequests,
+  }),
   setTimer: (minutes: number) => ({
     type: BoardAction.SetTimer,
     minutes,
@@ -146,4 +160,5 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
   | ReturnType<typeof BoardActionFactory.setTimer>
   | ReturnType<typeof BoardActionFactory.cancelTimer>
-  | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>;
+  | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>
+  | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>;

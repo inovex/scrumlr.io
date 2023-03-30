@@ -7,11 +7,10 @@ import "./AddVoteButton.scss";
 
 type AddVoteProps = {
   noteId: string;
-  tabIndex: number;
   disabled: boolean;
 };
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) => {
+export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
   const dispatch = useDispatch();
 
   const addVote = () => {
@@ -19,7 +18,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, tabIndex, disabled}) =>
   };
 
   return (
-    <DotButton tabIndex={tabIndex} className="vote-button-add" onClick={addVote} disabled={disabled}>
+    <DotButton className="vote-button-add" onClick={addVote} disabled={disabled}>
       <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );

@@ -1,6 +1,7 @@
 import {toast, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {ReactNode} from "react";
+import {TOAST_TIMER_DEFAULT} from "constants/misc";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -13,7 +14,7 @@ const toastConfig: ToastOptions = {
  *
  * @param content Success message.
  */
-function success(content: ReactNode, autoClose: number | false = 3000) {
+function success(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
   toast.success(content, {...toastConfig, autoClose});
 }
 
@@ -22,7 +23,7 @@ function success(content: ReactNode, autoClose: number | false = 3000) {
  *
  * @param content Error message.
  */
-function error(content: ReactNode, autoClose: number | false = 3000) {
+function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
   toast.error(content, {...toastConfig, autoClose});
 }
 
@@ -31,7 +32,7 @@ function error(content: ReactNode, autoClose: number | false = 3000) {
  *
  * @param content Info message.
  */
-function info(content: ReactNode, autoClose: number | false = 3000) {
+function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
   toast.info(content, {...toastConfig, autoClose});
 }
 

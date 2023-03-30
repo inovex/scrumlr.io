@@ -13,15 +13,20 @@
 }
 
 .accent-color--pink {
-  --accent-color: #ff0069;
+  --accent-color: #e20360;
 }
 
 .scrumlr-logo__paths {
   fill: $color-backlog-blue;
+
+  path {
+    transition: all 0.08s ease-out;
+  }
 }
 
 .scrumlr-logo {
   height: 48px;
+  overflow: visible;
 }
 
 .scrumlr-logo__stop {

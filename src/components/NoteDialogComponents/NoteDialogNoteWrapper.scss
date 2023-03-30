@@ -1,23 +1,37 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
-
-$note-dialog__scrollbar-height: calc(100vh - #{$header__height} - #{$padding--default} - #{$margin--default} - #{$margin--large});
+@import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
-  max-height: calc(#{$note-dialog__scrollbar-height} - 100px);
-  overflow: auto;
-  margin-left: $margin--default;
+  height: calc(100vh - #{$stack-view__header-height} - #{$stack-view__navigation-height} - #{$stack-view__parent-note-height});
+  width: calc(100vw - (2 * $column__border-width));
+  overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-color: $color-middle-gray $color-white;
+  margin-bottom: $column__border-width;
+  padding-top: $padding--large;
+  padding-left: 10px;
+  box-sizing: border-box;
 
   @include scrollbar();
 }
 
 .note-dialog__note-wrapper {
-  margin-right: $margin--default;
+  margin: 0 $margin--default $margin--default 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .note-dialog__note-wrapper .note-dialog__note:last-child {
   margin-bottom: 0;
+}
+
+@media #{$smartphone} {
+  .note-dialog__scrollbar {
+    padding-left: 0;
+  }
 }
 
 [theme="dark"] {

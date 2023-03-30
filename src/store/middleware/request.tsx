@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import Socket from "sockette";
 import {ApplicationState} from "types";
 import store from "store";
@@ -7,6 +7,7 @@ import {API} from "api";
 import i18n from "i18next";
 import {Toast} from "../../utils/Toast";
 import {Button} from "../../components/Button";
+import {SERVER_WEBSOCKET_PROTOCOL} from "../../config";
 
 let socket: Socket | undefined;
 
@@ -22,6 +23,8 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
           store.dispatch(Actions.requirePassphraseChallenge());
         } else if (r.status === "PENDING") {
           store.dispatch(Actions.pendingBoardAccessConfirmation(action.boardId, r.joinRequestReference!));
+        } else if (r.status === "TOO_MANY_JOIN_REQUESTS") {
+          store.dispatch(Actions.tooManyJoinRequests());
         }
       })
       .catch(() => {
@@ -45,7 +48,7 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.PendingBoardAccessConfirmation) {
     // change protocol of url
     const websocketURL = new URL(action.requestReference);
-    websocketURL.protocol = "ws";
+    websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
 
     socket = new Socket(websocketURL.toString(), {
       timeout: 5000,

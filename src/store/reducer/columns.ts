@@ -19,5 +19,8 @@ export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): C
     const mutableState = [...state];
     return [...mutableState.map((c) => (c.id === TEMPORARY_COLUMN_ID ? {...c, name: action.column.name} : c))];
   }
+  if (action.type === Action.DeletedColumn) {
+    return state.filter((c) => c.id !== action.columnId);
+  }
   return state;
 };

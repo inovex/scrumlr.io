@@ -61,7 +61,7 @@ Object {
             class="settings-dialog__separator"
           />
           <button
-            class="settings-option-button export-board__button-reverse-order"
+            class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
             type="button"
           >
             <span
@@ -73,6 +73,25 @@ Object {
               class="settings-option-button__icon"
             >
               icon-print.svg
+            </svg>
+          </button>
+          <hr
+            class="settings-dialog__separator"
+          />
+          <button
+            class="settings-option-button export-board__button-reverse-order"
+            data-testid="export-markdown"
+            type="button"
+          >
+            <span
+              class="settings-option-button__label"
+            >
+              Copy Markdown to Clipboard
+            </span>
+            <svg
+              class="settings-option-button__icon"
+            >
+              icon-clipboard.svg
             </svg>
           </button>
         </div>
@@ -136,7 +155,7 @@ Object {
           class="settings-dialog__separator"
         />
         <button
-          class="settings-option-button export-board__button-reverse-order"
+          class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
           type="button"
         >
           <span
@@ -148,6 +167,25 @@ Object {
             class="settings-option-button__icon"
           >
             icon-print.svg
+          </svg>
+        </button>
+        <hr
+          class="settings-dialog__separator"
+        />
+        <button
+          class="settings-option-button export-board__button-reverse-order"
+          data-testid="export-markdown"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Copy Markdown to Clipboard
+          </span>
+          <svg
+            class="settings-option-button__icon"
+          >
+            icon-clipboard.svg
           </svg>
         </button>
       </div>

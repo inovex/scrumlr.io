@@ -5,6 +5,7 @@ import {Note} from "./note";
 import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
+import {Assignment} from "./assignment";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -16,6 +17,7 @@ export interface BoardInitEvent {
     votes?: Vote[];
     participants: Participant[];
     requests?: Request[];
+    assignments?: Assignment[];
   };
 }
 
@@ -38,9 +40,19 @@ export interface UpdatedColumnsEvent {
   data: Column[];
 }
 
+export interface DeletedColumnEvent {
+  type: "COLUMN_DELETED";
+  data: string;
+}
+
 export interface UpdatedNotesEvent {
   type: "NOTES_UPDATED";
   data: Note[];
+}
+
+export interface DeletedNoteEvent {
+  type: "NOTE_DELETED";
+  data: string;
 }
 
 export interface RequestCreatedEvent {
@@ -81,17 +93,36 @@ export interface VotingUpdatedEvent {
   };
 }
 
+export interface UpdatedVotesEvent {
+  type: "VOTES_UPDATED";
+  data: Vote[];
+}
+
+export interface CreatedAssignmentEvent {
+  type: "ASSIGNMENT_CREATED";
+  data: Assignment;
+}
+export interface DeletedAssignmentEvent {
+  type: "ASSIGNMENT_DELETED";
+  data: string;
+}
+
 export type ServerEvent =
   | BoardInitEvent
   | BoardUpdateEvent
   | BoardTimerUpdateEvent
   | BoardDeletedEvent
   | UpdatedColumnsEvent
+  | DeletedColumnEvent
   | UpdatedNotesEvent
+  | DeletedNoteEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent
   | ParticipantUpdatedEvent
   | ParticipantsUpdatedEvent
   | VotingCreatedEvent
-  | VotingUpdatedEvent;
+  | VotingUpdatedEvent
+  | UpdatedVotesEvent
+  | CreatedAssignmentEvent
+  | DeletedAssignmentEvent;

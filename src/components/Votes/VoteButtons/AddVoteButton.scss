@@ -1,16 +1,19 @@
 @import "src/constants/style";
+@import "../Votes.scss";
 
 .vote-button-add {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  height: $icon--large;
-  width: $icon--large;
+  height: var(--note-footer-height, $votes-button-size);
+  width: var(--note-footer-height, $votes-button-size);
 
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
   transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+
+  filter: drop-shadow(0 4px 3px rgba(var(--accent-color-rgb), 0.48));
 }
 .vote-button-add:disabled {
   opacity: 0.5;
@@ -26,12 +29,14 @@
   background-color: var(--accent-color);
   color: $color-white;
 }
-.vote-button-add:focus {
+.vote-button-add:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
 [theme="dark"] {
   .vote-button-add {
-    background-color: rgba(var(--accent-color-rgb), 0.25);
+    background-color: var(--accent-color--desaturated-dark);
+    color: var(--accent-color--dark);
+    filter: drop-shadow(0 3px 4px rgba($color-black, 0.16));
   }
 }

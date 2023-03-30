@@ -1,39 +1,97 @@
 @import "constants/style";
 @import "components/Note/Note.scss";
+@import "routes/StackView/StackView.scss";
 
 .note-dialog__note-content {
   display: flex;
   width: 100%;
+  max-height: 20vh;
+  flex: 1;
+  overflow: hidden;
+  justify-content: center;
+
+  &:has(&--image) {
+    padding: $padding--small;
+  }
+  &:has(&--image-zoom) {
+    overflow: visible;
+  }
 }
 
-.note-dialog__note-content__text {
+.note-dialog__note-content--text {
   background: none;
   margin: 0;
-  min-height: 3 * $line-height--medium;
+  overflow-y: scroll;
+  @include scrollbar();
   width: 100%;
   color: $color-black;
-  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
   margin-bottom: $margin--small;
-  padding: $padding--small;
   border: 2px dashed transparent;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
   outline: none;
   resize: none;
   word-wrap: break-word;
+  padding: 0 4px;
+  font-size: $text-size--large;
+
+  &:not(:disabled) {
+    &:hover,
+    &:focus-visible {
+      border-color: var(--accent-color--desaturated-dark);
+    }
+  }
 }
 
-.note-dialog__note-content__text[contentEditable] {
-  &:hover,
-  &:focus {
-    border-color: rgba(var(--accent-color-rgb), 0.3);
+.note-dialog__note-content--image {
+  object-fit: contain;
+  cursor: zoom-in;
+  position: relative;
+  margin-left: calc(100% / 12);
+
+  &-zoom {
+    object-fit: contain;
+    max-height: 80vh;
+    max-width: 80vw;
+    min-height: 80vh;
+    min-width: 80vw;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: $request-z-index;
+    cursor: zoom-out;
+    position: fixed;
+
+    animation: fade 0.1s ease-in-out;
+  }
+}
+
+.note-dialog__note-content--image-zoom-backdrop {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  cursor: zoom-out;
+  backdrop-filter: blur(10px) brightness(0.76) saturate(0);
+  background: rgba(var(--accent-color-rgb), 0.42);
+
+  animation: fade 0.1s ease-in-out;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
 [theme="dark"] {
-  .note-dialog__note-content__text {
+  .note-dialog__note-content--text {
     color: $color-white;
   }
 }

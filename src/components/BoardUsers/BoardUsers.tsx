@@ -3,8 +3,8 @@ import {useAppSelector} from "store";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import {TabIndex} from "constants/tabIndex";
-import {ParticipantsList} from "components/BoardHeader/ParticipantsList";
+import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
+import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {
@@ -17,7 +17,6 @@ const getWindowDimensions = () => {
 
 export const BoardUsers = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const [showParticipants, setShowParticipants] = useState(false);
   const navigate = useNavigate();
   const {t} = useTranslation();
 
@@ -44,47 +43,54 @@ export const BoardUsers = () => {
     me: state.participants!.self,
   }));
 
-  const usersToShow = them.slice().splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
+  const usersRest = them.slice();
+  const usersToShow = usersRest.splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);
 
   return (
-    <div>
-      <ul className="board-users">
-        {!!me && (
-          <li className="board-users__my-avatar">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate("settings/profile");
-              }}
-              tabIndex={TabIndex.BoardHeader + 3}
-            >
-              <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} name={me.user.name} />
-            </button>
-          </li>
-        )}
-        {them.length > 0 && (
-          <button
-            className="board-users__other-avatars"
-            aria-label={t("BoardHeader.showParticipants")}
-            tabIndex={TabIndex.BoardHeader + 2}
-            aria-haspopup
-            aria-pressed={showParticipants}
-            onClick={() => setShowParticipants(!showParticipants)}
-          >
-            {them.length > usersToShow.length && (
-              <li className="rest-users">
-                <div className="rest-users__count">{them.length - usersToShow.length}</div>
-              </li>
-            )}
-            {usersToShow.map((participant) => (
-              <li key={participant.user.id}>
-                <UserAvatar id={participant.user.id} avatar={participant.user.avatar} ready={participant.ready} raisedHand={participant.raisedHand} name={participant.user.name} />
-              </li>
+    <div className="board-users">
+      {them.length > 0 && (
+        <button
+          className="board-users__button board-users__button--others"
+          aria-label={t("BoardHeader.showParticipants")}
+          aria-haspopup
+          onClick={() => navigate("settings/participants")}
+        >
+          {usersRest.length > 0 && (
+            <div className="board-users__avatar board-users__avatar--others rest-users">
+              <ProgressCircle className="rest-users__readiness" percentage={usersRest.filter((participant) => participant.ready).length / usersRest.length} />
+              {usersRest.filter((participant) => participant.ready).length / usersRest.length < 1 ? (
+                <span className="rest-users__count">{usersRest.length}</span>
+              ) : (
+                <CheckIcon className="rest-users__all-ready" />
+              )}
+            </div>
+          )}
+          {usersToShow
+            .sort((parA, parB) => parA.user.name.localeCompare(parB.user.name))
+            .map((participant) => (
+              <UserAvatar
+                key={participant.user.id}
+                id={participant.user.id}
+                avatar={participant.user.avatar}
+                ready={participant.ready}
+                raisedHand={participant.raisedHand}
+                title={participant.user.name}
+                className="board-users__avatar board-users__avatar--others"
+              />
             ))}
-          </button>
-        )}
-      </ul>
-      <ParticipantsList open={showParticipants} onClose={() => setShowParticipants(false)} />
+        </button>
+      )}
+      {!!me && (
+        <button
+          className="board-users__button board-users__button--me"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate("settings/profile");
+          }}
+        >
+          <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} title={me.user.name} className="board-users__avatar" />
+        </button>
+      )}
     </div>
   );
 };

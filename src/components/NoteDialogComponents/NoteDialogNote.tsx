@@ -6,8 +6,7 @@ import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
 
 export type NoteDialogNoteProps = {
-  noteId?: string;
-  parentId?: string;
+  noteId: string;
   text: string;
   authorId: string;
   avatar?: AvataaarProps;
@@ -15,14 +14,18 @@ export type NoteDialogNoteProps = {
   showAuthors: boolean;
   onClose: () => void;
   onDeleteOfParent: () => void;
-  showUnstackButton: boolean;
+  isStackedNote: boolean;
+  hasStackedNotes?: boolean;
+  className?: string;
 
   viewer: Participant;
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
-  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId})}>
+  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)} onClick={(e) => e.stopPropagation()}>
     <NoteDialogNoteComponents.Content {...props} />
+    <NoteDialogNoteComponents.Options {...props} />
     <NoteDialogNoteComponents.Footer {...props} />
   </div>
 );

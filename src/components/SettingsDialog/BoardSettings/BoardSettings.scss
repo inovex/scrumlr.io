@@ -7,6 +7,11 @@
   margin-right: calc(-1 * ($padding--small + 10px));
   margin-bottom: $settings-dialog-container--bottom;
 
+  &:focus-visible {
+    outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+    border-radius: 8px;
+  }
+
   @include scrollbar();
 }
 
@@ -60,7 +65,7 @@
   text-overflow: ellipsis;
 }
 
-.board-settings__board-name-button_input:focus {
+.board-settings__board-name-button_input:focus-visible {
   outline: none;
 }
 
@@ -167,6 +172,10 @@
   &:active {
     transform: scale(1);
   }
+
+  &:focus-visible {
+    transform: scale(1.1);
+  }
 }
 
 .board-settings__show-password-button--disabled {
@@ -197,7 +206,7 @@
   }
 }
 
-.board-settings__password-button_value-input:focus {
+.board-settings__password-button_value-input:focus-visible {
   outline: none;
 }
 
@@ -216,10 +225,19 @@
 .board-settings__password-management-button {
   cursor: pointer;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:hover {
     filter: brightness(1.4);
     transform: scale(1.01);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    text-decoration: underline;
   }
 }
 
@@ -243,24 +261,18 @@
   letter-spacing: $letter-spacing--medium;
 }
 
-.board-settings__show-author-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
+.board-settings__show-author,
+.board-settings__show-notes,
+.board-settings__delete,
+.board-settings__show-columns,
+.board-settings__allow-note-repositioning {
+  &-button {
+    justify-content: space-between;
+  }
 
-.board-settings__show-notes-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__show-columns-button {
-  justify-content: space-between;
-  padding-right: 24px;
-}
-
-.board-settings__delete-button {
-  justify-content: space-between;
-  padding-right: 24px;
+  &-value {
+    padding-right: $padding--medium;
+  }
 }
 
 .board-settings__delete-button span {

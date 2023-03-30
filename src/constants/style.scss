@@ -7,15 +7,25 @@ $color-white-one: #f9fafb;
 $color-white-two: #f6f5fb;
 $color-dark-one: #242c3d;
 $color-dark-two: #272f41;
-$color-light-gray: #edeff2;
+$color-lighter-gray: #edeff2;
+$color-light-gray: #c3c9d3;
 $color-middle-gray: #a3a6aa;
 $color-dark-gray: #859093;
 $color-darker-gray: #4f5253;
 $color-darkest-gray: #232323;
 $color-black: #111111;
+
+// element colors
 $color-dark-mode: #272f41;
+$color-dark-mode--disabled: #1b202d;
 $color-dark-mode-note: #313949;
 $color-dark-mode-note--hover: #3d4555;
+$menu-icon-background-color--dark: #333948;
+$menu-icon-background-color--light: $color-white;
+$tooltip-background-color--light: #d3daf0;
+$tooltip-background-color--dark: #485064;
+$color-progress-circle: #3c7fff;
+$color-icon-light-blue: #9ebfff;
 
 // theme colors
 $color-backlog-blue: #0057ff;
@@ -23,7 +33,7 @@ $color-grooming-green: #18d8ab;
 $color-goal-green: #70e000;
 $color-lean-lilac: #c000ff;
 $color-online-orange: #ffaa5a;
-$color-planning-pink: #ff0069;
+$color-planning-pink: #e20360;
 $color-poker-purple: #5e00ff;
 $color-retro-red: #ea434b;
 $color-warning-red: #eb625b;
@@ -31,8 +41,9 @@ $color-warning-red: #eb625b;
 @mixin rgb($color) {
   --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
-  --accent-color--desaturated-light: #{color.adjust($color, $lightness: 35%)};
-  --accent-color--desaturated-dark: #{color.adjust($color, $lightness: 12%, $alpha: -.7)};
+  --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
+  --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
+  --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
 }
 
 .accent-color__backlog-blue {
@@ -70,15 +81,42 @@ $color-placeholder-dark: #ffffff4d;
 
 // board & column constants
 $board__side-panel-width: 64px;
-$header__height: 100px;
+$header__height: 92px;
+$info-bar__height: 42px;
 $column__min-width: 300px;
 $column__max-width: 960px;
 $column__border-width: 12px;
+$action-bar__width: 64px;
 
 // icons
 $icon--small: 16px;
-$icon--medium: 22px;
+$icon--medium: 24px;
 $icon--large: 32px;
+$icon--extralarge: 40px;
+$icon--huge: 48px;
+
+// flexbox
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// positioning
+@mixin inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+// border-radius
+$note__border-radius: 16px;
+$rounded--small: 8px;
+$rounded--default: 16px;
+$rounded--medium: 24px;
+$rounded--large: 32px;
+$rounded--full: 9999px;
 
 // margin and padding
 $margin--small: 8px;
@@ -101,6 +139,11 @@ $line-height--small: 16px;
 $line-height--medium: 20px;
 $line-height--large: 32px;
 
+// filters
+$darken--slightly: brightness(0.9);
+$brighten--slightly: brightness(1.1);
+$brighten--strongly: brightness(1.4);
+
 // z-index
 $base-z-index: 100;
 $base-z-index-step: 10;
@@ -111,14 +154,19 @@ $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
 $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
-$request-z-index: $base-z-index + (10 * $base-z-index-step);
+$request-z-index: $base-z-index + (9 * $base-z-index-step);
 
 // responsive
+$mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
+
+// shadows
+$box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
+$box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
@@ -134,28 +182,6 @@ $menu-desktop: "screen and (min-width: 1344px)";
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
 
-// apply styles on given selector if columns are collapsed (not all visible on a single screen)
-@mixin collapsedColumns($selector) {
-  @media screen and (max-width: 767px) {
-    #{$selector} {
-      @content;
-    }
-  }
-
-  [column-visibility="collapsed"] #{$selector} {
-    @content;
-  }
-}
-
-// apply styles on given selector if columns are visible entirely on the screen
-@mixin visibleColumns($selector) {
-  @media screen and (min-width: 768px) {
-    [column-visibility="visible"] #{$selector} {
-      @content;
-    }
-  }
-}
-
 // scrollbar
 @mixin scrollbar($width: 10px, $border-radius: 8px) {
   &::-webkit-scrollbar {
@@ -164,20 +190,16 @@ $menu-desktop: "screen and (min-width: 1344px)";
 
   &::-webkit-scrollbar-track {
     border-radius: #{$border-radius};
-    background-color: $color-white;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: $color-middle-gray;
+    background-color: rgba($color-light-gray, 0.3);
   }
 
   [theme="dark"] & {
-    &::-webkit-scrollbar-track {
-      background-color: $color-dark-mode-note;
-    }
     &::-webkit-scrollbar-thumb {
-      background-color: $color-darkest-gray;
+      background-color: rgba($color-black, 0.3);
     }
   }
 }

@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "redux";
+import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
@@ -30,6 +30,7 @@ export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
         false
       );
     });
+    API.updateReadyStates(action.context.board!, false);
   }
 
   if (action.type === Action.AbortVoting) {
@@ -42,5 +43,6 @@ export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
         false
       );
     });
+    API.updateReadyStates(action.context.board!, false);
   }
 };

@@ -5,14 +5,18 @@ import {ApplicationState} from "types";
 import getTestStore from "utils/test/getTestStore";
 import {I18nextProvider} from "react-i18next";
 import i18nTest from "i18nTest";
+import {Router} from "react-router";
+import {createBrowserHistory} from "history";
 
 const renderInfoBar = (overwrite?: Partial<ApplicationState>) => {
   return render(
-    <I18nextProvider i18n={i18nTest}>
-      <Provider store={getTestStore(overwrite)}>
-        <InfoBar />
-      </Provider>
-    </I18nextProvider>,
+    <Router navigator={createBrowserHistory()} location={location}>
+      <I18nextProvider i18n={i18nTest}>
+        <Provider store={getTestStore(overwrite)}>
+          <InfoBar />
+        </Provider>
+      </I18nextProvider>
+    </Router>,
     {container: document.getElementById("root")!}
   );
 };
@@ -24,52 +28,45 @@ describe("InfoBar", () => {
     global.document.body.appendChild(root);
   });
 
-  describe("should render correctly", () => {
-    test("with disabled voting and timer", () => {
-      const {container} = renderInfoBar({votings: {open: undefined, past: []}});
-      expect(container).toMatchSnapshot();
-    });
-
-    test("with disabled voting and active timer", () => {
-      const {container} = renderInfoBar({
-        votings: {open: undefined, past: []},
-        board: {
-          status: "ready",
-          data: {
-            id: "test-board-id",
-            name: "test-board-name",
-            accessPolicy: "PUBLIC",
-            showAuthors: true,
-            showNotesOfOtherUsers: true,
-            allowStacking: true,
-            timerEnd: new Date(123456789),
-          },
+  test("should have timer component during active timer", () => {
+    const {container} = renderInfoBar({
+      board: {
+        status: "ready",
+        data: {
+          id: "test-board-id",
+          name: "test-board-name",
+          accessPolicy: "PUBLIC",
+          showAuthors: true,
+          showNotesOfOtherUsers: true,
+          allowStacking: true,
+          timerStart: new Date(123436789),
+          timerEnd: new Date(123456789),
         },
-      });
-      expect(container).toMatchSnapshot();
+      },
     });
+    expect(container.getElementsByClassName("timer").length).toBe(1);
+  });
 
-    test("with active voting and disabled timer", () => {
-      const {container} = renderInfoBar();
-      expect(container).toMatchSnapshot();
-    });
+  test("should have vote display component during active voting", () => {
+    const {container} = renderInfoBar();
+    expect(container.getElementsByClassName("vote-display").length).toBe(1);
+  });
 
-    test("with active voting and timer", () => {
-      const {container} = renderInfoBar({
-        board: {
-          status: "ready",
-          data: {
-            id: "test-board-id",
-            name: "test-board-name",
-            accessPolicy: "PUBLIC",
-            showAuthors: true,
-            showNotesOfOtherUsers: true,
-            allowStacking: true,
-            timerEnd: new Date(123456789),
-          },
+  test("should have return to focused not button during active sharing", () => {
+    const {container} = renderInfoBar({
+      board: {
+        status: "ready",
+        data: {
+          id: "test-board-id",
+          name: "test-board-name",
+          accessPolicy: "PUBLIC",
+          showAuthors: true,
+          showNotesOfOtherUsers: true,
+          allowStacking: true,
+          sharedNote: "test",
         },
-      });
-      expect(container).toMatchSnapshot();
+      },
     });
+    expect(container.getElementsByClassName("info-bar__return-to-presented-note-button").length).toBe(1);
   });
 });

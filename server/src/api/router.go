@@ -1,12 +1,15 @@
 package api
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
+
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -14,21 +17,23 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httprate"
 )
 
 type Server struct {
 	basePath string
 
-	realtime *realtime.Realtime
+	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards   services.Boards
-	votings  services.Votings
-	users    services.Users
-	notes    services.Notes
-	sessions services.BoardSessions
-	health   services.Health
-	feedback services.Feedback
+	boards     services.Boards
+	votings    services.Votings
+	users      services.Users
+	notes      services.Notes
+	sessions   services.BoardSessions
+	health     services.Health
+	feedback   services.Feedback
+  assignments services.Assignments
 
 	upgrader websocket.Upgrader
 
@@ -39,7 +44,7 @@ type Server struct {
 
 func New(
 	basePath string,
-	rt *realtime.Realtime,
+	rt *realtime.Broker,
 	auth auth.Auth,
 	boards services.Boards,
 	votings services.Votings,
@@ -48,6 +53,7 @@ func New(
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
+  assignments services.Assignments,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -88,6 +94,7 @@ func New(
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
+    assignments:                      assignments,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -147,7 +154,6 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
 			r.With(s.BoardParticipantContext).Post("/timer", s.setTimer)
 			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
-
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
@@ -157,6 +163,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initNoteResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
+      s.initAssignmentResources(r)
 		})
 
 		r.Route("/user", func(r chi.Router) {
@@ -192,7 +199,21 @@ func (s *Server) initVotingResources(r chi.Router) {
 
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
-		r.Post("/", s.joinBoard)
+		r.Group(func(r chi.Router) {
+
+			r.Use(httprate.Limit(
+				3,
+				5*time.Second,
+				httprate.WithKeyFuncs(httprate.KeyByIP),
+				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusTooManyRequests)
+					w.Write([]byte(`{"error": "Too many requests"}`))
+				}),
+			))
+
+			r.Post("/", s.joinBoard)
+		})
 
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
 
@@ -249,3 +270,16 @@ func (s *Server) initNoteResources(r chi.Router) {
 		})
 	})
 }
+
+func (s *Server) initAssignmentResources(r chi.Router) {
+  r.Route("/assignments", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
+
+    r.Post("/", s.createAssignment)
+    r.Route("/{assignment}", func(r chi.Router) {
+      r.Use(s.AssignmentContext)
+      r.Delete("/", s.deleteAssignment)
+    })
+  })
+}
+

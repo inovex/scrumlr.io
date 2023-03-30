@@ -1,4 +1,4 @@
-import {FC, HTMLAttributes} from "react";
+import {FC, HTMLAttributes, PropsWithChildren} from "react";
 import FocusLock from "react-focus-lock";
 import ReactDOM from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
@@ -15,7 +15,7 @@ export type PortalProps = {
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disabledPadding, children, className, ...otherProps}) => {
+export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverflow, centered, disabledPadding, children, className, ...otherProps}) => {
   // Check existence of portal node
   const portal: HTMLElement | null = document.getElementById("portal");
   if (portal == null) {
@@ -43,7 +43,7 @@ export const Portal: FC<PortalProps> = ({onClose, hiddenOverflow, centered, disa
             theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink"
           )}
         >
-          <div className="portal__content" onClick={(e) => e.stopPropagation()} role="dialog">
+          <div className="portal__content" role="dialog">
             {children}
           </div>
         </div>

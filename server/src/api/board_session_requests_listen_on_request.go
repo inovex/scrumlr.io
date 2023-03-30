@@ -10,8 +10,8 @@ import (
 )
 
 type BoardSessionRequestSubscription struct {
-	subscription chan *realtime.BoardSessionRequestEventType
-	clients      map[uuid.UUID]*websocket.Conn
+	clients       map[uuid.UUID]*websocket.Conn
+	subscriptions map[uuid.UUID]chan *realtime.BoardSessionRequestEventType
 }
 
 func (s *Server) openBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +46,8 @@ func (s *Server) openBoardSessionRequestSocket(w http.ResponseWriter, r *http.Re
 func (s *Server) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *websocket.Conn) {
 	if _, exist := s.boardSessionRequestSubscriptions[boardID]; !exist {
 		s.boardSessionRequestSubscriptions[boardID] = &BoardSessionRequestSubscription{
-			clients: make(map[uuid.UUID]*websocket.Conn),
+			clients:       make(map[uuid.UUID]*websocket.Conn),
+			subscriptions: make(map[uuid.UUID]chan *realtime.BoardSessionRequestEventType),
 		}
 	}
 
@@ -54,22 +55,21 @@ func (s *Server) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *we
 	b.clients[userID] = conn
 
 	// if not already done, start listening to board session request changes
-	if b.subscription == nil {
-		b.subscription = s.realtime.GetBoardSessionRequestChannel(boardID, userID)
-		go b.startListeningOnBoardSessionRequest()
+	if _, exist := b.subscriptions[userID]; !exist {
+		b.subscriptions[userID] = s.realtime.GetBoardSessionRequestChannel(boardID, userID)
+		go b.startListeningOnBoardSessionRequest(userID)
 	}
 }
 
-func (b *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest() {
+func (b *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest(userId uuid.UUID) {
 	for {
 		select {
-		case msg := <-b.subscription:
+		case msg := <-b.subscriptions[userId]:
 			logger.Get().Debugw("message received", "message", msg)
-			for _, conn := range b.clients {
-				err := conn.WriteJSON(msg)
-				if err != nil {
-					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
-				}
+			conn := b.clients[userId]
+			err := conn.WriteJSON(msg)
+			if err != nil {
+				logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 			}
 		}
 	}

@@ -2,7 +2,9 @@ package realtime
 
 import (
 	"fmt"
+
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/logger"
 )
 
@@ -13,13 +15,20 @@ const (
 	RequestRejected                              = "SESSION_REJECTED"
 )
 
-func (r *Realtime) BroadcastUpdateOnBoardSessionRequest(board, user uuid.UUID, msg BoardSessionRequestEventType) error {
+func (b *Broker) BroadcastUpdateOnBoardSessionRequest(board, user uuid.UUID, msg BoardSessionRequestEventType) error {
 	logger.Get().Debugw("broadcasting to board session request", "board", board, "user", user, "msg", msg)
-	return r.con.Publish(fmt.Sprintf("request.%s.%s", board, user), msg)
+	return b.con.Publish(requestSubject(board, user), msg)
 }
 
-func (r *Realtime) GetBoardSessionRequestChannel(board, user uuid.UUID) chan *BoardSessionRequestEventType {
-	receiverChan := make(chan *BoardSessionRequestEventType)
-	r.con.BindRecvChan(fmt.Sprintf("request.%s.%s", board, user), receiverChan)
-	return receiverChan
+func (b *Broker) GetBoardSessionRequestChannel(board, user uuid.UUID) chan *BoardSessionRequestEventType {
+	c, err := b.con.SubscribeToBoardSessionEvents(requestSubject(board, user))
+	if err != nil {
+		// TODO: Bubble up this error, so the caller can retry to establish this subscription
+		logger.Get().Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
+	}
+	return c
+}
+
+func requestSubject(board, user uuid.UUID) string {
+	return fmt.Sprintf("request.%s.%s", board, user)
 }

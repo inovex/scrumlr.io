@@ -43,7 +43,7 @@ describe("MenuBars", () => {
       },
     });
     const {container} = render(createMenuBars(store));
-    expect(container.getElementsByClassName("admin-menu").length).toBe(0);
+    expect(container.getElementsByClassName("menu__items").length).toBe(1);
     expect(container.getElementsByClassName("user-menu").length).toBe(1);
   });
 });

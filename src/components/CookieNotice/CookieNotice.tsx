@@ -2,9 +2,9 @@ import "./CookieNotice.scss";
 import React from "react";
 import {Portal} from "components/Portal";
 import {useTranslation} from "react-i18next";
+import {COOKIE_CONSENT_STORAGE_KEY} from "constants/storage";
+import {getFromStorage, saveToStorage} from "utils/storage";
 import {CookiePolicy} from "./CookiePolicy";
-
-const COOKIE_CONSENT_NAME = "scrumlr_cookieConsent";
 
 export const CookieNotice = () => {
   const {t} = useTranslation();
@@ -16,23 +16,14 @@ export const CookieNotice = () => {
   };
 
   // show cookie notice if there's no cookie in local storage
-  const shouldShowCookieNotice = !localStorage.getItem(COOKIE_CONSENT_NAME);
-
-  /**
-   * Saves cookie consent to storage.
-   * @param value: true or false, depending on given consent for cookies
-   * @param key: scrumlrCookieName, i.e. scrumlr_consent
-   */
-  const saveToStorage = (key: string, value: string) => {
-    localStorage.setItem(key, value);
-  };
+  const shouldShowCookieNotice = !getFromStorage(COOKIE_CONSENT_STORAGE_KEY);
 
   /**
    * Sets cookie consent value i.e. scrumlrCookieName true.
    */
   const accept = () => {
     if (shouldShowCookieNotice) {
-      saveToStorage(COOKIE_CONSENT_NAME, "true");
+      saveToStorage(COOKIE_CONSENT_STORAGE_KEY, "true");
       setShowCookieNotice(false);
     }
   };
@@ -42,7 +33,7 @@ export const CookieNotice = () => {
    */
   const decline = () => {
     if (shouldShowCookieNotice) {
-      saveToStorage(COOKIE_CONSENT_NAME, "false");
+      saveToStorage(COOKIE_CONSENT_STORAGE_KEY, "false");
       setShowCookieNotice(false);
     }
   };
@@ -60,7 +51,8 @@ export const CookieNotice = () => {
         accept();
       }}
     >
-      <div className="cookie-notice">
+      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+      <div className="cookie-notice" onClick={(e) => e.stopPropagation()}>
         <div className="cookie-notice__header">
           <h3>Cookies</h3>
         </div>

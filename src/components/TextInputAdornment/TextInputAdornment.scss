@@ -15,7 +15,7 @@
   transition: color 0.15s ease;
 }
 
-.text-input-adornment:focus,
+.text-input-adornment:focus-visible,
 .text-input-adornment:hover {
   color: $color-backlog-blue;
 }

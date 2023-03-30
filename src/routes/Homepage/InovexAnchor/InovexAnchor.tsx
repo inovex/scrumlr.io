@@ -1,10 +1,10 @@
-import {FC} from "react";
+import {FC, PropsWithChildren} from "react";
 import InovexLogo from "assets/icon-inovex.svg";
 import "./InovexAnchor.scss";
 
-export const InovexAnchor: FC = ({children}) => (
+export const InovexAnchor: FC<PropsWithChildren> = ({children}) => (
   <a href="https://www.inovex.de/" target="_blank" className="inovex-anchor" rel="noreferrer">
-    <img src={InovexLogo} className="inovex-anchor__logo" alt="inovex" />
+    <img src={InovexLogo} className="inovex-anchor__logo" width={16} height={16} alt="inovex" />
     {children}
   </a>
 );

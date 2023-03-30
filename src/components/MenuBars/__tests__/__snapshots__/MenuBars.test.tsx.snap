@@ -2,191 +2,249 @@
 
 exports[`MenuBars should match snapshot 1`] = `
 <aside
-  class="menu-bars menu-bars--user menu-bars--isAdmin"
-  id="menu-bars"
+  class="menu-bars"
 >
   <section
     class="menu user-menu"
   >
-    <div
+    <ul
       class="menu__items"
     >
-      <button
-        aria-label="MenuBars.markAsDone"
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="300"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
+      <li>
+        <button
+          aria-label="MenuBars.markAsDone"
+          class="tooltip-button tooltip-button--right"
         >
-          <span
-            class="tooltip__text"
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
           >
-            MenuBars.markAsDone
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-check.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.raiseHand"
-        class="menu-item menu-item--disabled menu-item--right"
-        tabindex="301"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              MenuBars.markAsDone
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [D]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
           >
-            MenuBars.raiseHand
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-hand.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-close.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.settings"
-        class="menu-item menu-item--right"
-        tabindex="302"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            icon-check.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
           >
-            MenuBars.settings
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.raiseHand"
+          class="tooltip-button tooltip-button--right"
         >
-          icon-settings.svg
-        </svg>
-      </button>
-    </div>
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              MenuBars.raiseHand
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [H]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-hand.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.settings"
+          class="tooltip-button tooltip-button--right"
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              MenuBars.settings
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [S]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-settings.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+    </ul>
+    <button
+      aria-hidden="true"
+      class="menu-bars__navigation"
+      disabled=""
+    >
+      <svg
+        class="menu-bars__navigation-icon"
+      >
+        icon-arrow-previous.svg
+      </svg>
+    </button>
   </section>
   <section
     class="menu admin-menu"
   >
-    <div
+    <ul
       class="menu__items"
     >
-      <button
-        aria-label="Timer"
-        class="menu-item menu-item--left"
-        tabindex="400"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
+      <li>
+        <button
+          aria-label="Timer"
+          class="tooltip-button tooltip-button--left"
         >
-          <span
-            class="tooltip__text"
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
           >
-            Timer
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-timer.svg
-        </svg>
-      </button>
-      <button
-        aria-label="Voting"
-        class="menu-item menu-item--left"
-        tabindex="401"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Timer
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [T]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
           >
-            Voting
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
-        >
-          icon-vote.svg
-        </svg>
-      </button>
-      <button
-        aria-label="MenuBars.startFocusMode"
-        class="menu-item menu-item--disabled menu-item--left"
-        tabindex="402"
-      >
-        <div
-          aria-hidden="true"
-          class="menu-item__tooltip"
-        >
-          <span
-            class="tooltip__text"
+            icon-timer.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
           >
-            MenuBars.startFocusMode
-          </span>
-        </div>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Voting"
+          class="tooltip-button tooltip-button--left tooltip-button--active"
         >
-          icon-focus.svg
-        </svg>
-        <svg
-          aria-hidden="true"
-          class="menu-item__icon"
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Voting
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [V]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-vote.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="MenuBars.startPresenterMode"
+          class="tooltip-button tooltip-button--left"
         >
-          icon-close.svg
-        </svg>
-      </button>
-    </div>
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              MenuBars.startPresenterMode
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [P]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-focus.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+    </ul>
+    <button
+      aria-hidden="true"
+      class="menu-bars__navigation"
+      disabled=""
+    >
+      <svg
+        class="menu-bars__navigation-icon"
+      >
+        icon-arrow-next.svg
+      </svg>
+    </button>
   </section>
-  <button
-    aria-label="MenuBars.switchToAdminMenu"
-    class="menu-bars__switch"
-  >
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--add"
-    >
-      icon-toggle-add-menu.svg
-    </svg>
-    <svg
-      aria-hidden="true"
-      class="switch__icon switch__icon--settings"
-    >
-      icon-toggle-settings-menu.svg
-    </svg>
-  </button>
 </aside>
 `;

@@ -10,12 +10,14 @@ import {ReactComponent as ThreeIcon} from "assets/icon-three.svg";
 import {ReactComponent as FiveIcon} from "assets/icon-five.svg";
 import {Actions} from "store/action";
 import "./TimerDialog.scss";
+import {getNumberFromStorage, saveToStorage} from "utils/storage";
+import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";
 
 export const TimerDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
-  const [customTime, setCustomTime] = useState(10);
+  const [customTime, setCustomTime] = useState(getNumberFromStorage(CUSTOM_TIMER_STORAGE_KEY, 10));
 
   const startTimer = (minutes: number) => {
     store.dispatch(Actions.setTimer(minutes));
@@ -61,12 +63,19 @@ export const TimerDialog: VFC = () => {
         <label>{t("TimerToggleButton.5min")}</label>
         <FiveIcon className="timer-dialog__button-icon" />
       </button>
-      <button className="dialog__button" onClick={() => startTimer(customTime)} data-testid="timer-dialog__custom-minute-button">
+      <button
+        className="dialog__button"
+        onClick={() => {
+          startTimer(customTime);
+          saveToStorage(CUSTOM_TIMER_STORAGE_KEY, String(customTime));
+        }}
+        data-testid="timer-dialog__custom-minute-button"
+      >
         <label>{t("TimerToggleButton.customTime")}</label>
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setCustomTime((prev) => Math.max(--prev, 1));
+            setCustomTime((prev: number) => Math.max(--prev, 1));
           }}
           className="timer-dialog__time-button"
           data-testid="timer-dialog__minus-button"
@@ -79,7 +88,7 @@ export const TimerDialog: VFC = () => {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            setCustomTime((prev) => Math.min(++prev, 59));
+            setCustomTime((prev: number) => Math.min(++prev, 59));
           }}
           className="timer-dialog__time-button"
           data-testid="timer-dialog__plus-button"

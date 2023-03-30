@@ -49,13 +49,13 @@
 
   &-decline {
     @extend .cookie-policy__button;
-    background: $color-light-gray;
+    background: $color-lighter-gray;
     color: $color-darkest-gray;
     margin: 0 0 $margin--default auto;
   }
 }
 
-.cookie-policy__button:focus,
+.cookie-policy__button:focus-visible,
 .cookie-policy__button:hover {
   transform: scale(1.05);
 }

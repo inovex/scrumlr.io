@@ -16,64 +16,153 @@ exports[`Appearance should render all Settings correctly 1`] = `
   <div
     class="appearance-container"
   >
-    <button
-      class="settings-option-button appearance-settings_language-dropdown"
-      type="button"
+    <div
+      class="appearance-settings__theme-container"
     >
       <span
-        class="settings-option-button__label"
+        class="appearance-settings__theme-title"
       >
         Appearance.colorScheme
       </span>
-      <div
-        class="settings-dropdown"
+      <form
+        class="appearance-settings__theme-options"
       >
-        <svg
-          class="settings-dropdown-flag"
+        <label
+          class="appearence-settings__theme-option"
+          for="auto"
+          title="Appearance.SyncModeDescription"
         >
-          icon-lightmode.svg
-        </svg>
-        <span
-          class="settings-dropdown-button"
+          <input
+            checked=""
+            id="auto"
+            name="themeAuto"
+            type="radio"
+            value="auto"
+          />
+          <img
+            alt="Appearance.colorScheme Auto"
+            src="theme-preview-light.svg"
+          />
+          <img
+            alt="Appearance.colorScheme Auto"
+            src="theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-settings.svg
+            </svg>
+            <span>
+              Auto
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="light"
         >
-          Appearance.colorSchemeLight
-        </span>
-        <svg
-          class="settings-dropdown-icon"
+          <input
+            id="light"
+            name="themeLight"
+            type="radio"
+            value="light"
+          />
+          <img
+            alt="Appearance.colorScheme Appearance.colorSchemeLight"
+            src="theme-preview-light.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-lightmode.svg
+            </svg>
+            <span>
+              Appearance.colorSchemeLight
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="dark"
         >
-          icon-arrow-next.svg
-        </svg>
-      </div>
-    </button>
-    <button
-      class="settings-option-button appearance-settings_language-dropdown"
-      type="button"
+          <input
+            id="dark"
+            name="themeDark"
+            type="radio"
+            value="dark"
+          />
+          <img
+            alt="Appearance.colorScheme Appearance.colorSchemeDark"
+            src="theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              icon-darkmode.svg
+            </svg>
+            <span>
+              Appearance.colorSchemeDark
+            </span>
+          </p>
+        </label>
+      </form>
+    </div>
+    <div
+      class="settings-dropdown"
     >
-      <span
-        class="settings-option-button__label"
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
       >
-        Appearance.Language
-      </span>
-      <div
-        class="settings-dropdown"
-      >
-        <svg
-          class="settings-dropdown-flag"
-        >
-          US.svg
-        </svg>
-        <span
-          class="settings-dropdown-button"
-        >
-          Language.english
+        <span>
+          Appearance.Language
         </span>
-        <svg
-          class="settings-dropdown-icon"
+        <p
+          class="settings-dropdown__item--current"
         >
-          icon-arrow-next.svg
-        </svg>
-      </div>
-    </button>
+          <svg
+            class="settings-dropdown__item-icon"
+          >
+            US.svg
+          </svg>
+          <span>
+            Language.english
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+          >
+            icon-arrow-next.svg
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+            >
+              DE.svg
+            </svg>
+            <span>
+              Language.german
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>
 `;

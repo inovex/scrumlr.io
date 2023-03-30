@@ -1,20 +1,20 @@
 @import "constants/style";
 
-$board-header__hover-padding-top-bottom: 5px;
-$board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--large;
-
 .board-header {
   position: absolute;
   left: 30px;
   right: 30px;
-  top: 10px;
+  top: $column__border-width;
+  height: $header__height;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .board-header__link {
   position: absolute;
   left: 0;
-  top: 20px;
-  padding: $board-header__hover-padding;
+  padding: $padding--small $padding--large;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -22,29 +22,32 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   outline: none;
   background-color: transparent;
   border: none;
-}
 
-.board-header__link:focus,
-.board-header__link:hover {
-  background-color: rgba(0, 87, 255, 0.06);
-}
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+  }
 
-[theme="dark"] {
-  .board-header__link:focus,
-  .board-header__link:hover {
-    background-color: rgba(255, 0, 105, 0.15);
+  &:hover {
+    background-color: rgba($color-backlog-blue, 0.06);
   }
 }
 
-.board-header__name-and-settings {
-  margin: $margin--default auto 0;
+[theme="dark"] {
+  .board-header__link {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+    }
+
+    &:hover {
+      background-color: rgba($color-planning-pink, 0.15);
+    }
+  }
 }
 
 .board-header__users {
   position: absolute;
-  right: $margin--large;
-  top: calc(24px - #{$board-header__hover-padding-top-bottom});
-  padding: $board-header__hover-padding-top-bottom $padding--small;
+  right: 0;
+  padding: $padding--small;
 
   display: flex;
   flex-direction: row;
@@ -55,58 +58,12 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   outline: none;
 }
 
-.board-header__share-button {
-  color: $color-backlog-blue;
-  outline: none;
-  border: 2px solid $color-backlog-blue;
-  border-radius: 100%;
-  height: 44px;
-  width: 44px;
-  margin-left: $margin--default;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.08s ease-out;
-
-  background: none;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    color: $color-white;
-    background: $color-backlog-blue;
-  }
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-}
-
-[theme="dark"] {
-  .board-header__share-button {
-    color: $color-white;
-    border: 2px solid $color-planning-pink;
-
-    &:hover,
-    &:focus {
-      background: $color-planning-pink;
-    }
-  }
-}
-
-.board-header__name-and-settings {
-  display: flex;
-  justify-content: center;
-}
-
-.board-header_name-and-settings-button {
+.board-header_name-and-settings {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: max-content;
-  padding: $board-header__hover-padding;
+  padding: $padding--small $padding--large;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 
@@ -115,17 +72,25 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   background: none;
 
   cursor: pointer;
-}
 
-.board-header_name-and-settings-button:focus,
-.board-header_name-and-settings-button:hover {
-  background-color: rgba(0, 87, 255, 0.06);
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+  }
+
+  &:hover {
+    background-color: rgba($color-backlog-blue, 0.06);
+  }
 }
 
 [theme="dark"] {
-  .board-header_name-and-settings-button:focus,
-  .board-header_name-and-settings-button:hover {
-    background-color: rgba(255, 0, 105, 0.15); // Ask designer for correct color
+  .board-header_name-and-settings {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+    }
+
+    &:hover {
+      background-color: rgba($color-planning-pink, 0.15); // Ask designer for correct color
+    }
   }
 }
 
@@ -170,8 +135,8 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
   display: inline;
   vertical-align: bottom;
 
-  width: 20px;
-  height: 20px;
+  width: $icon--medium;
+  height: $icon--medium;
   align-self: center;
   margin-right: 2px;
 }
@@ -195,10 +160,6 @@ $board-header__hover-padding: $board-header__hover-padding-top-bottom $padding--
 @media #{$smartphone} {
   .board-header__users {
     right: 0;
-  }
-
-  .board-header__share-button {
-    display: none;
   }
 
   .board-header__link {

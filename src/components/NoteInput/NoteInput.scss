@@ -10,9 +10,23 @@ $note-input__input-right: 40px;
   width: 100%;
   position: relative;
   margin-bottom: $margin--default;
-  background-color: $color-light-gray;
+  background-color: $color-lighter-gray;
   border-radius: 20px;
   transition: all 0.12s ease-in-out;
+
+  &:hover::before,
+  &:focus-within::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+    border: 2px solid rgba(var(--accent-color-rgb), 0.5);
+    border-radius: $rounded--full;
+    pointer-events: none;
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
+  }
 }
 
 .note-input__input {
@@ -30,26 +44,10 @@ $note-input__input-right: 40px;
   margin-left: $margin--default;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   caret-color: var(--accent-color);
-}
-
-.note-input__input:focus {
   outline: none;
-}
 
-.note-input:hover,
-.note-input:focus-within {
-  box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
-}
-[theme="dark"] {
-  .note-input {
-    background-color: $color-dark-mode-note;
-  }
-  .note-input__input {
-    color: $color-white;
-  }
-  .note-input:hover,
-  .note-input:focus-within {
-    box-shadow: 0 6px 9px 0 #232323;
+  &:focus::placeholder {
+    color: transparent;
   }
 }
 
@@ -61,13 +59,110 @@ $note-input__input-right: 40px;
     filter: brightness(1.2);
     transform: scale(1.2);
   }
+
+  &:focus > .note-input__icon {
+    border-radius: 100%;
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  }
 }
 
-.note-input__icon {
-  margin-right: $margin--default;
-  width: 20px;
-  height: 20px;
+.note-input__icon--image,
+.note-input__icon--add {
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
   align-self: center;
   transition: all 0.08s ease-out;
+}
+
+.note-input__icon--add {
+  margin-right: $margin--default;
+}
+
+.note-input__icon--image {
+  margin: 0 $margin--small 4px $margin--small;
+  animation: fade-in 0.2s ease-in-out;
+}
+
+.note-input__isImage {
+  display: flex;
+  position: relative;
+}
+
+.note-input__icon--star {
+  position: absolute;
+  color: var(--accent-color);
+  animation: sparkle 1.5s ease-in-out infinite alternate;
+
+  &.star-1 {
+    transform: scale(0.35);
+    top: 2px;
+    left: -6px;
+  }
+
+  &.star-2 {
+    transform: scale(0.3);
+    top: -2px;
+    left: 10px;
+    animation-delay: 0.4s;
+  }
+
+  &.star-3 {
+    transform: scale(0.35);
+    bottom: -1px;
+    left: 9px;
+    animation-delay: 1.2s;
+  }
+}
+
+.toast-button {
+  background-color: $color-backlog-blue;
+  border-style: none;
+  border-radius: 8px;
+  height: 40px;
+  width: 100%;
+  margin-top: $margin--default;
+  color: $color-white;
+}
+
+[theme="dark"] {
+  .note-input {
+    background-color: $color-dark-mode-note;
+
+    &:hover,
+    &:focus-within {
+      box-shadow: 0 6px 9px 0 #232323;
+    }
+  }
+
+  .note-input__input {
+    color: $color-white;
+  }
+
+  .toast-button {
+    background-color: $color-planning-pink;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sparkle {
+  0% {
+    opacity: 20%;
+  }
+  100% {
+    opacity: 100%;
+  }
 }

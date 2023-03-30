@@ -10,29 +10,31 @@
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   z-index: 150;
 }
-[theme="dark"] .column__header-menu-dropdown {
-  background-color: $color-dark-mode-note;
-}
+
 .column__header-menu-dropdown > ul {
   list-style: none;
   padding: $padding--small 0;
   margin: 0;
 }
+
 .column__header-menu-dropdown > ul > li {
   height: 32px;
   padding: 0 16px;
+  background-color: $color-white;
+
   &:hover {
-    background-color: $color-white-one;
+    filter: $darken--slightly;
+  }
+
+  &:focus-within {
+    background-color: $color-white-two;
   }
 }
-[theme="dark"] .column__header-menu-dropdown > ul > li {
-  &:hover {
-    background-color: $color-dark-one;
-  }
-}
+
 .column__header-menu-dropdown > ul > li > button {
   cursor: pointer;
   border: 0;
+  outline: none;
   background-color: transparent;
   padding: 0;
   margin: 0;
@@ -43,18 +45,19 @@
   gap: 10px;
   font-size: $text-size--small;
 }
-[theme="dark"] .column__header-menu-dropdown > ul > li > button {
-  color: $color-white;
-}
+
 .column__header-menu-dropdown > ul > li > button > svg {
-  height: 24px;
+  height: $icon--medium;
+  width: $icon--medium;
 }
+
 .column__header-menu-dropdown > ul > li:last-of-type {
   height: auto;
   padding: $padding--small $padding--default;
   display: flex;
   justify-content: space-between;
 }
+
 .column__header-menu-dropdown > ul > li:last-child > button {
   height: 18px;
   width: 18px;
@@ -65,9 +68,39 @@
   &:hover {
     transform: scale(1.1);
   }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-darker-gray;
+  }
 }
 
 // Hacky way to not show delete column button if it's the last column
 .column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
   display: none;
+}
+
+[theme="dark"] {
+  .column__header-menu-dropdown {
+    background-color: $color-dark-mode-note;
+  }
+
+  .column__header-menu-dropdown > ul > li {
+    background-color: $color-dark-mode-note;
+
+    &:hover {
+      filter: $brighten--slightly;
+    }
+
+    &:focus-within {
+      background-color: $color-dark-mode-note--hover;
+    }
+  }
+
+  .column__header-menu-dropdown > ul > li > button {
+    color: $color-white;
+  }
+
+  .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
+    box-shadow: 0 0 0 2px $color-white;
+  }
 }

@@ -5,7 +5,7 @@
   width: 100%;
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
-  padding-top: $header__height;
+  padding-top: calc($column__border-width + $header__height + $info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
@@ -27,10 +27,19 @@
     background-color: $color-dark-two;
   }
 }
+.column--hidden {
+  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, $color-white-two 20px, $color-white-two 40px);
+}
+[theme="dark"] {
+  .column--hidden {
+    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, $color-dark-two 20px, $color-dark-two 40px);
+  }
+}
 
 .column__content {
   max-height: 100%;
-  padding: $padding--large 0 $column__border-width 0;
+  max-width: 100%;
+  padding: 0 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -40,6 +49,8 @@
 }
 
 .column__header {
+  display: flex;
+  flex-direction: column-reverse;
   padding: 0 $padding--large;
 }
 
@@ -47,6 +58,7 @@
   display: flex;
   word-break: break-word;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: $margin--default;
   height: 48px;
   position: relative;
@@ -60,6 +72,7 @@
   height: auto;
   border-bottom: solid 3px var(--accent-color);
   margin: 0 $margin--small 0 0;
+  overflow: hidden;
 }
 
 .column__header-text-wrapper--hidden {
@@ -73,6 +86,10 @@
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   color: $color-black;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .column__header-text--hidden {
@@ -86,7 +103,7 @@
   font-size: calc(#{$text-size--large} + 0.4vw);
   color: $color-black;
   border-bottom: dashed 3px var(--accent-color);
-  margin: 0 $margin--small 0 0;
+  margin: 0 auto 0 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -110,6 +127,7 @@
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
+  flex: 1 0 12px;
 }
 
 .column__notes-wrapper {
@@ -118,6 +136,7 @@
   border: 2px dashed transparent;
   transition: all 0.25s ease-in-out;
   flex: 1;
+  outline: none;
   scrollbar-width: 10px;
   scrollbar-color: $color-middle-gray $color-white;
 
@@ -138,43 +157,7 @@
   grid-row-gap: 20px;
   grid-column-gap: 24px;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-}
-[column-visibility="collapsed"] .column__note-list {
-  padding-bottom: 72px;
-}
-
-.column__header-toggle {
-  display: flex;
-  align-items: center;
-}
-.column__header-toggle:first-of-type {
-  margin-left: auto;
-}
-
-.column__header-toggle-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-}
-.column__header-toggle-button:focus > .column__header-toggle-button-icon,
-.column__header-toggle-button:hover > .column__header-toggle-button-icon {
-  animation: none;
-  color: var(--accent-color);
-}
-
-.column__header-toggle-button-icon {
-  color: $color-black;
-  width: 24px;
-}
-.column__edit-icon {
-  width: 20px;
-}
-.column__submit-icon {
-  width: 28px;
-}
-.column__reset-icon {
-  width: 32px;
+  list-style: none;
 }
 
 [theme="dark"] {
@@ -186,19 +169,18 @@
     color: $color-middle-gray;
   }
 
-  .column__header-toggle-button-icon {
-    color: $color-white;
-  }
-
   .column__notes-wrapper {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
 
 .column__header-hidden-icon {
-  height: 20px;
+  height: $icon--medium;
+  width: $icon--medium;
+  min-width: $icon--medium;
+  min-height: $icon--medium;
   margin: 0 $margin--small 0 0;
-  color: $color-middle-gray;
+  color: $color-warning-red;
   cursor: pointer;
   transition: all 0.08s ease-out;
 }
@@ -215,24 +197,22 @@
 
 .column__header-edit-button {
   height: 24px;
-  margin: auto calc(#{$margin--default} - 2px) auto 0; // Align with note-input__icon
+  // Align with note-input__icon
   background-color: transparent;
   border: none;
   cursor: pointer;
   outline: none;
   padding: 0;
   transition: all 0.08s ease-out;
+  flex: 0 0 24px;
+  margin: auto calc(#{$margin--default} - 2px) auto $margin--default;
 
   &:hover > svg,
-  &:focus > svg {
+  &:focus-visible > svg {
     transform: translate(-0.64px, -0.64px);
     filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
     color: var(--accent-color);
   }
-}
-
-.column__header-edit-button:first-of-type {
-  margin-left: auto;
 }
 
 .column__header-edit-button-icon {

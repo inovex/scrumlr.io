@@ -1,31 +1,32 @@
 import classNames from "classnames";
-import React, {useRef, useEffect} from "react";
+import {useRef, useEffect, KeyboardEvent} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import _ from "underscore";
-import {TabIndex} from "constants/tabIndex";
+import {isEqual} from "underscore";
 import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import "./Note.scss";
+import {getEmptyImage} from "react-dnd-html5-backend";
+import {addProtocol} from "utils/images";
+import {useImageChecker} from "utils/hooks/useImageChecker";
 
 interface NoteProps {
   noteId: string;
   viewer: Participant;
-  tabIndex?: number;
 }
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const noteRef = useRef<HTMLLIElement>(null);
+  const noteRef = useRef<HTMLButtonElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const author = useAppSelector((state) => {
@@ -37,22 +38,24 @@ export const Note = (props: NoteProps) => {
       displayName,
       isSelf,
     };
-  }, _.isEqual);
+  }, isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
+  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
   /* eslint-disable */
   useEffect(() => {
-    if (isShared && !document.location.pathname.endsWith(props.noteId)) {
-      navigate(`stack/${note!.id}`);
+    if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
+      navigate(`note/${note!.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
-      if (!document.location.pathname.endsWith(props.noteId)) {
-        navigate(`stack/${note!.id}`);
+      if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
+        navigate(`note/${note!.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
       navigate(`.`);
@@ -60,12 +63,15 @@ export const Note = (props: NoteProps) => {
   }, [isShared]);
   /* eslint-enable */
 
-  const [{isDragging}, drag] = useDrag({
+  const isImage = useImageChecker(note?.text ?? "");
+
+  const [{isDragging}, drag, preview] = useDrag({
     type: isStack ? "STACK" : "NOTE",
     item: {id: props.noteId, columnId: note!.position.column},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
+    canDrag: isModerator || allowStacking,
   });
 
   const [{isOver}, drop] = useDrop(() => ({
@@ -75,41 +81,64 @@ export const Note = (props: NoteProps) => {
         dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: note!.position.column, rank: 0}}));
       }
     },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true})}),
+    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}) && monitor.canDrop()}),
     canDrop: (item: {id: string}) => item.id !== props.noteId,
   }));
+
+  useEffect(() => {
+    preview(getEmptyImage());
+  }, [preview]);
 
   const handleClick = () => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
       dispatch(Actions.shareNote(props.noteId));
     }
-    navigate(`stack/${props.noteId}`);
+    navigate(`note/${props.noteId}/stack`);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === "Enter") {
-      navigate(`stack/${props.noteId}`);
+      navigate(`note/${props.noteId}/stack`);
     }
   };
 
   drag(noteRef);
   drop(noteRef);
 
+  // TODO: replace with stack setting from state when implemented. thanks, love u <3
+  const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
+
   return (
-    <li className={classNames("note__root")} onClick={handleClick} onKeyPress={handleKeyPress} ref={noteRef}>
-      <div className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver})} tabIndex={props.tabIndex ?? TabIndex.default}>
-        <p className="note__text">{note!.text}</p>
+    <div className="note__root">
+      <button
+        className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
+        onClick={handleClick}
+        onKeyDown={handleKeyPress}
+        ref={noteRef}
+      >
+        {isImage ? (
+          <div className="note__image-wrapper">
+            <img
+              src={addProtocol(note!.text)}
+              className="note__image"
+              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              draggable={false} // safari bugfix
+            />
+          </div>
+        ) : (
+          <p className="note__text">{note!.text}</p>
+        )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} name={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}
-          <Votes tabIndex={props.tabIndex} noteId={props.noteId!} aggregateVotes />
+          <Votes noteId={props.noteId!} aggregateVotes />
         </div>
-      </div>
+      </button>
       {isStack && <div className="note__in-stack" />}
-    </li>
+    </div>
   );
 };

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
@@ -8,7 +8,7 @@ import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD} from "constants/misc";
+import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
@@ -16,7 +16,6 @@ import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
-import "../SettingsDialog.scss";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
@@ -36,6 +35,14 @@ export const BoardSettings = () => {
 
   const isByInvite = state.board.accessPolicy === "BY_INVITE";
 
+  useEffect(() => {
+    setBoardName(state.board.name ?? "");
+  }, [state.board.name]);
+
+  useEffect(() => {
+    setIsProtected(state.board.accessPolicy === "BY_PASSPHRASE");
+  }, [state.board.accessPolicy]);
+
   const handleSetPassword = (newPassword: string) => {
     setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
@@ -45,7 +52,7 @@ export const BoardSettings = () => {
           <div>
             <div>{t("Toast.passwordCopied")}</div>
           </div>,
-          1500
+          TOAST_TIMER_SHORT
         )
       );
       setIsProtected(true);
@@ -142,7 +149,6 @@ export const BoardSettings = () => {
               <SettingsButton className="board-settings__policy-button" label={t("BoardSettings.AccessPolicy")} disabled>
                 <div className="board-settings__policy-button_value">{getAccessPolicyTitle()}</div>
               </SettingsButton>
-
               {!isByInvite && state.currentUserIsModerator && (
                 <>
                   <hr className="settings-dialog__separator" />
@@ -176,7 +182,9 @@ export const BoardSettings = () => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                 >
-                  <Toggle active={state.board.showAuthors} />
+                  <div className="board-settings__show-author-value">
+                    <Toggle active={state.board.showAuthors} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -185,7 +193,9 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                 >
-                  <Toggle active={state.board.showNotesOfOtherUsers} />
+                  <div className="board-settings__show-notes-value">
+                    <Toggle active={state.board.showNotesOfOtherUsers} />
+                  </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
                 <SettingsButton
@@ -194,24 +204,36 @@ export const BoardSettings = () => {
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
                 >
-                  <Toggle active={state.me?.showHiddenColumns ?? false} />
+                  <div className="board-settings__show-columns-value">
+                    <Toggle active={state.me?.showHiddenColumns ?? false} />
+                  </div>
+                </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                >
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
                 </SettingsButton>
               </div>
 
               <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
-                <DeleteIcon />
+                <div className="board-settings__delete-value">
+                  <DeleteIcon />
+                </div>
               </SettingsButton>
             </>
           )}
 
           {showConfirmationDialog && (
             <ConfirmationDialog
-              headline={t("ConfirmationDialog.deleteBoard")}
-              acceptMessage={t("ConfirmationDialog.yes")}
+              title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
-              declineMessage={t("ConfirmationDialog.no")}
               onDecline={() => setShowConfirmationDialog(false)}
-              className="board-settings__confirmation-dialog"
             />
           )}
         </div>

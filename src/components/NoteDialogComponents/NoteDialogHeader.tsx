@@ -5,4 +5,8 @@ type NoteDialogHeaderProps = {
   columnName: string;
 };
 
-export const NoteDialogHeader: FC<NoteDialogHeaderProps> = ({columnName}: NoteDialogHeaderProps) => <h2 className="note-dialog__header">{columnName}</h2>;
+export const NoteDialogHeader: FC<NoteDialogHeaderProps> = ({columnName}: NoteDialogHeaderProps) => (
+  <div className="note-dialog__header">
+    <h2 onClick={(e) => e.stopPropagation()}>{columnName}</h2>
+  </div>
+);

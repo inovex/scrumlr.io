@@ -1,37 +1,7 @@
 @import "constants/style";
 
-@media screen and (min-width: 600px) and (max-width: 767px) {
-  .timer-dialog {
-    left: calc(50% - 139px + 28px + 18px - 200px);
-    bottom: 100px;
-    top: auto;
-    right: auto;
-    height: auto;
-  }
-  .timer-dialog::before {
-    content: " ";
-    position: absolute;
-    left: calc(50% - 15px);
-    top: 100%;
-    border-width: 15px;
-    border-style: solid;
-    border-color: $color-planning-pink transparent transparent transparent;
-  }
-  .timer-dialog::after {
-    content: " ";
-    position: absolute;
-    left: calc(50% - 11px);
-    top: 100%;
-    border-width: 11px;
-    border-style: solid;
-    border-color: $color-white-one transparent transparent transparent;
-  }
-  [theme="dark"] .timer-dialog::after {
-    border-color: $color-dark-mode transparent transparent transparent;
-  }
-}
-@media screen and (min-width: 768px) {
-  #root[column-visibility="visible"] + #portal {
+@media #{$tablet} {
+  #portal {
     .timer-dialog {
       top: calc(50% - 105px - 25px + 46px);
       right: 100px;
@@ -60,49 +30,17 @@
       border-color: transparent transparent transparent $color-white-one;
     }
   }
-  [theme="dark"] #root[column-visibility="visible"] + #portal {
-    .timer-dialog::after {
-      border-color: transparent transparent transparent $color-dark-mode;
-    }
-  }
 
-  #root[column-visibility="collapsed"] + #portal {
-    .timer-dialog {
-      left: calc(50% - 139px + 28px + 18px - 200px);
-      bottom: 100px;
-      top: auto;
-      right: auto;
-      height: auto;
-    }
-    .timer-dialog::before {
-      content: " ";
-      position: absolute;
-      left: calc(50% - 15px);
-      top: 100%;
-      border-width: 15px;
-      border-style: solid;
-      border-color: $color-planning-pink transparent transparent transparent;
-    }
-    .timer-dialog::after {
-      content: " ";
-      position: absolute;
-      left: calc(50% - 11px);
-      top: 100%;
-      border-width: 11px;
-      border-style: solid;
-      border-color: $color-white-one transparent transparent transparent;
-    }
-  }
-  [theme="dark"] #root[column-visibility="collapsed"] + #portal {
-    .timer-dialog::after {
-      border-color: $color-dark-mode transparent transparent transparent;
+  [theme="dark"] {
+    #portal .timer-dialog::after {
+      border-color: transparent transparent transparent $color-dark-mode;
     }
   }
 }
 
 .timer-dialog__time-button {
-  height: 32px;
-  width: 32px;
+  height: $icon--large;
+  width: $icon--large;
   border: none;
   border-radius: 16px;
   background-color: transparent;
@@ -111,6 +49,7 @@
   top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
+  outline: none;
 
   &:first-of-type {
     right: 80px;
@@ -127,6 +66,10 @@
 
   &:active {
     transform: scale(1);
+  }
+
+  &:focus-visible {
+    transform: scale(1.1);
   }
 }
 

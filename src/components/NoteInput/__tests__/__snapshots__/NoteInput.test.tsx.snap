@@ -6,18 +6,19 @@ exports[`Note Input should render correctly 1`] = `
 >
   <input
     class="note-input__input"
+    id="note-input-TestID"
     maxlength="1024"
     placeholder="Add your note..."
-    tabindex="0"
     type="text"
     value=""
   />
   <button
     class="note-input__add-button"
+    tabindex="-1"
     type="submit"
   >
     <svg
-      class="note-input__icon"
+      class="note-input__icon--add"
     >
       icon-add.svg
     </svg>

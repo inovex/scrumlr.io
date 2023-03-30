@@ -4,13 +4,10 @@ import {Suspense} from "react";
 import {I18nextProvider} from "react-i18next";
 import {Provider} from "react-redux";
 import {Router} from "react-router";
-import * as reactRedux from "react-redux";
 import * as reactRouter from "react-router";
 import i18nTest from "i18nTest";
 import {StackView} from "../StackView";
-import {Actions} from "store/action";
 import {ApplicationState} from "types";
-import {ViewState} from "types/view";
 import getTestStore from "utils/test/getTestStore";
 
 const BOARD_ID = "test-board-id";
@@ -52,30 +49,6 @@ describe("StackView", () => {
   });
 
   describe("side effects", () => {
-    it("should unshare note during active moderation on close", () => {
-      const dispatchSpy = jest.fn();
-      jest.spyOn(reactRedux, "useDispatch").mockImplementationOnce(() => dispatchSpy);
-      const view: ViewState = {
-        moderating: true,
-        serverTimeOffset: 0,
-        feedbackEnabled: false,
-        enabledAuthProvider: [],
-      };
-      const {container} = render(
-        createStackView({
-          view,
-          participants: {
-            others: [],
-            self: {user: {id: "test-user-id", name: "test-user-name"}, role: "MODERATOR", connected: true, ready: false, raisedHand: false, showHiddenColumns: true},
-          },
-        }),
-        {container: global.document.querySelector("#portal")!}
-      );
-      expect(container.querySelector(".stack-view__portal")).not.toBeNull();
-      fireEvent.click(container.querySelector(".stack-view__portal")!);
-      expect(dispatchSpy).toHaveBeenCalledWith(Actions.stopSharing());
-    });
-
     it("should navigate to board route on close", () => {
       const navigateSpy = jest.fn();
       jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);

@@ -1,4 +1,4 @@
-import {ElementType, FC, MouseEventHandler, ReactNode} from "react";
+import {ElementType, FC, MouseEventHandler, PropsWithChildren} from "react";
 import "./BoardOptionButton.scss";
 import classNames from "classnames";
 
@@ -8,11 +8,10 @@ export interface BoardOptionButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   isExpandable?: boolean;
-  children?: ReactNode;
   [key: string]: unknown;
 }
 
-export const BoardOptionButton: FC<BoardOptionButtonProps> = ({label, icon, onClick, isExpandable = false, className, children, ...other}) => {
+export const BoardOptionButton: FC<PropsWithChildren<BoardOptionButtonProps>> = ({label, icon, onClick, isExpandable = false, className, children, ...other}) => {
   const Icon = icon!;
 
   return (

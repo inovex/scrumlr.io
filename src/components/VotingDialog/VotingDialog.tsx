@@ -8,15 +8,19 @@ import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {Actions} from "store/action";
 import "./VotingDialog.scss";
+import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
+import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
 
 export const VotingDialog: VFC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
-  const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(true);
-  // const [anonymousVoting, setAnonymousVoting] = useState(false);
-  const [numberOfVotes, setNumberOfVotes] = useState(5);
+
+  const cumulativeVotingStorage = getFromStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY);
+  const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
+  const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
+  const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
   const [startPositionX, setStartPositionX] = useState(0);
 
   useEffect(() => {
@@ -50,6 +54,8 @@ export const VotingDialog: VFC = () => {
         allowMultipleVotes: allowCumulativeVoting,
       })
     );
+    saveToStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, String(numberOfVotes));
+    saveToStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, String(allowCumulativeVoting));
     navigate("..");
   };
 
@@ -79,13 +85,9 @@ export const VotingDialog: VFC = () => {
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
           </button>
-          {/* <button className="dialog__button" data-testid="voting-dialog__anonymous-voting-button" onClick={() => setAnonymousVoting((state) => !state)}> */}
-          {/*   <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label> */}
-          {/*   <Toggle active={anonymousVoting} className="voting-dialog__toggle" /> */}
-          {/* </button> */}
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 0))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
+            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
               <MinusIcon />
             </button>
             <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>

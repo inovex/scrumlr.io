@@ -18,7 +18,7 @@
   width: 100%;
   top: 8px;
   left: 0;
-  background: $color-light-gray 0 0 no-repeat padding-box;
+  background: $color-lighter-gray 0 0 no-repeat padding-box;
   border-radius: 4px;
 }
 
@@ -42,10 +42,14 @@
 }
 
 .toggle.toggle--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+
   &::after {
     background-color: $color-middle-gray;
     box-shadow: none;
   }
+
   &:hover::after {
     filter: none;
     transform: none;

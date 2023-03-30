@@ -15,7 +15,7 @@
   background-color: var(--accent-color);
   color: $color-white;
 }
-.note-dialog__note-option__unstack:focus {
+.note-dialog__note-option__unstack:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 

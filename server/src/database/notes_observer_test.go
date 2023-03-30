@@ -7,9 +7,10 @@ import (
 )
 
 type NotesObserverForTests struct {
-	t     *testing.T
-	board *uuid.UUID
-	notes *[]Note
+	t           *testing.T
+	board       *uuid.UUID
+	notes       *[]Note
+	deletedNote *uuid.UUID
 }
 
 func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
@@ -17,9 +18,15 @@ func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
 	o.notes = &notes
 }
 
+func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote) {
+	o.board = &board
+	o.deletedNote = &note
+}
+
 func (o *NotesObserverForTests) Reset() {
 	o.board = nil
 	o.notes = nil
+	o.deletedNote = nil
 }
 
 var notesObserver NotesObserverForTests
@@ -85,14 +92,12 @@ func testNotesObserverOnDelete(t *testing.T) {
 	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, notesObserver.board)
-	assert.NotNil(t, notesObserver.notes)
-	assert.Equal(t, 0, len(*notesObserver.notes))
-
+	assert.NotNil(t, notesObserver.deletedNote)
 }
 func testNotesObserverOnDeleteNotExisting(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID)
 	assert.Nil(t, err)
 	assert.Nil(t, notesObserver.board)
-	assert.Nil(t, notesObserver.notes)
+	assert.Nil(t, notesObserver.deletedNote)
 }

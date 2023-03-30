@@ -18,6 +18,9 @@ export const ParticipantAction = {
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
   EditSelf: "scrumlr.io/editSelf" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
+
+  SetFocusInitiator: "scrumlr.io/setFocusInitiator" as const,
+  ClearFocusInitiator: "scrumlr.io/clearFocusInitiator" as const,
 };
 
 /** Factory or creator class of internal Redux board users object specific actions. */
@@ -91,6 +94,15 @@ export const ParticipantActionFactory = {
     userId,
     moderator,
   }),
+
+  setFocusInitiator: (participant: Participant) => ({
+    type: ParticipantAction.SetFocusInitiator,
+    participant,
+  }),
+
+  clearFocusInitiator: () => ({
+    type: ParticipantAction.ClearFocusInitiator,
+  }),
 };
 
 export type ParticipantReduxAction =
@@ -101,4 +113,6 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
   | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>
   | ReturnType<typeof ParticipantActionFactory.editSelf>
-  | ReturnType<typeof ParticipantActionFactory.changePermission>;
+  | ReturnType<typeof ParticipantActionFactory.changePermission>
+  | ReturnType<typeof ParticipantActionFactory.setFocusInitiator>
+  | ReturnType<typeof ParticipantActionFactory.clearFocusInitiator>;

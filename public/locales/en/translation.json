@@ -1,4 +1,7 @@
 {
+  "InfoBar": {
+    "ReturnToPresentedNote": "Return to presented note"
+  },
   "NewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
@@ -56,13 +59,6 @@
     "yes": "Yes",
     "no": "No"
   },
-  "ParticipantsList": {
-    "title": "Participants",
-    "search": "Search",
-    "searchAndFilter": "Search and filter?",
-    "headerLegendName": "Name",
-    "headerLegendAdmin": "Admin"
-  },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
     "button": "Delete board"
@@ -72,48 +68,61 @@
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
-    "openPrintView": "Open print view"
+    "openPrintView": "Open print view",
+    "exportToClipboard": "Copy Markdown to Clipboard",
+    "copyToClipboardSuccess": "Markdown copied!",
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
   },
   "PrintView": {
     "Participants": "Participants",
     "GeneratedOn": "Generated on",
     "ProvidedBy": "Provided with ♥️ by",
-    "Notes": "Kärtchen",
-    "Votes": "Stimmen"
+    "Notes": "Notes",
+    "Votes": "Votes"
+  },
+  "MarkdownExport": {
+    "columns": "Columns",
+    "note": "Note",
+    "notes": "Notes",
+    "participants": "Participants",
+    "linkToBoard": "Link to board",
+    "vote": "Vote",
+    "votes": "Votes",
+    "stackSize": "Stack size",
+    "showAuthorsDisabled": "Note authors are hidden"
   },
   "ShareQrCodeOption": {
     "title": "Share Session",
     "button": "Share board",
     "copyInviteURL": "Copy Invite URL",
-    "inviteUrlCopied": "Invite URL Copied"
+    "inviteUrlCopied": "Invite URL copied"
   },
   "Column": {
     "settings": "Settings",
     "editName": "Change the name",
     "submitName": "Confirm name",
-    "resetName": "Reset name",
+    "resetName": "Abort",
     "hideColumn": "Hide the column",
     "showColumn": "Show the column",
     "deleteColumn": "Delete column",
     "addColumnLeft": "Add column left",
     "addColumnRight": "Add column right",
-    "hiddenColumn": "Column is hidden for all participants"
+    "hiddenColumn": "Column is hidden for all participants",
+    "notes_one": "{{count}} note",
+    "notes_other": "{{count}} notes"
   },
   "ErrorPage": {
     "navigateHome": "Home",
     "navigateBack": "Go back"
   },
   "JoinRequest": {
-    "title": "Someone requests to participate",
+    "title": "Is requesting to participate",
     "accept": "Accept",
-    "reject": "Reject",
-    "acceptAll": "Accept all",
-    "rejectAll": "Reject all"
+    "reject": "Reject"
   },
   "RaiseRequest": {
-    "title": "Someone raised their hand",
-    "lower": "Lower hand",
-    "lowerAll": "Lower all hands"
+    "title": "Is raising their hand",
+    "lower": "Lower hand"
   },
   "Request": {
     "title": "Someone requests to participate/raised their hand"
@@ -122,10 +131,12 @@
     "signInWithGoogle": "Sign in with Google",
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
+    "signInWithAzureAd": "Sign in with Azure AD",
     "signInWithApple": "Sign in with Apple"
   },
   "NoteInput": {
-    "placeholder": "Add your note..."
+    "placeholder": "Add your note...",
+    "imageInfo": "This link will be added as an image!"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Enter the passphrase to access this board",
@@ -155,14 +166,19 @@
     "themeToggle": "Change color scheme",
     "editColumns": "Start column mode",
     "stopEditingColumns": "End column mode",
-    "startFocusMode": "Start focused mode",
-    "stopFocusMode": "End focused mode",
+    "startPresenterMode": "Start presenter mode",
+    "stopPresenterMode": "End presenter mode",
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
     "settings": "Settings",
-    "switchToUserMenu": "Switch to user menu",
-    "switchToAdminMenu": "Switch to admin menu"
+    "openMenu": "Open user menu"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys enabled!",
+    "hotkeysDisabled": "Hotkeys disabled!",
+    "hotkeyToggle": "Enable hotkeys",
+    "cheatSheet": "Hotkey Cheat Sheet"
   },
   "VoteConfigurationButton": {
     "label": "Voting",
@@ -174,6 +190,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
+    "finishActionTooltip": "Finish",
+    "abortActionTooltip": "Abort",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -181,6 +199,7 @@
     "1min": "1 minute",
     "3min": "3 minute",
     "5min": "5 minute",
+    "min": "minutes",
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
@@ -203,14 +222,18 @@
     "hiddenColumnsVisible": "Hidden columns are now visible to you!",
     "passwordCopied": "Board protected and password copied!",
     "boardMadePublic": "The board is now public!",
-    "allParticipantsDone": "All participants are ready."
+    "allParticipantsDone": "All participants are ready.",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
+    "noteToHiddenColumn": "You just added a note to a hidden column.",
+    "noteToHiddenColumnButton": "Reveal column"
   },
   "Language": {
     "german": "German",
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2022, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
@@ -219,7 +242,12 @@
     "terms": "Terms & conditions"
   },
   "Note": {
-    "me": "Me"
+    "me": "Me",
+    "you": "you",
+    "userImageAlt": "media provided by {{user}}"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
   },
   "NoteDialogDeleteNoteButton": {
     "title": "Delete this note"
@@ -252,12 +280,26 @@
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show notes of other users",
+    "AllowNoteRepositioningOption": "Allow note repositioning",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
   },
   "Participants": {
-    "Owner": "Owner"
+    "Title": "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator",
+    "ResetBannerText": "Reset ready states of all users.",
+    "ResetBannerButton": "Reset"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
   },
   "Appearance": {
     "SyncMode": "Sync Appearance Mode with System",
@@ -295,6 +337,7 @@
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
     "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",

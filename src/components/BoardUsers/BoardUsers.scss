@@ -1,121 +1,118 @@
 @import "constants/style.scss";
 
 .board-users {
-  list-style-type: none;
-  align-self: center;
   display: flex;
-  flex-direction: row-reverse;
-  width: max-content;
-  padding: 0;
-  margin: 0;
+  flex-direction: row;
+  gap: $margin--default;
 }
 
-.board-users li {
-  display: inline;
-}
-
-.board-users__other-avatars {
-  box-sizing: border-box;
+.board-users__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
   background: none;
   border: none;
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-
+  outline: none;
   cursor: pointer;
-  padding-left: $padding--default;
   border-radius: 16px;
 
-  & .user-avatar,
-  & .rest-users {
-    margin-left: -12px;
-    transition: all 0.08s ease-out;
+  &--others {
+    flex-direction: row-reverse;
+    padding-left: $padding--default;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
   }
 
   &:hover {
-    & > .rest-users {
-      color: $color-white;
-      background-color: $color-backlog-blue;
-      transform: scale(1.16);
-    }
-    & .user-avatar {
+    .board-users__avatar {
       filter: brightness(1.1);
       transform: scale(1.08);
     }
   }
-
-  &:focus {
-    outline: 2px solid $color-backlog-blue;
-  }
-
-  &:active {
-    & > .rest-users,
-    & > :not(.rest-users) {
-      transform: scale(1);
-    }
-  }
 }
 
-.board-users__my-avatar {
-  display: contents;
-  margin-left: $margin--small;
-
-  & > button {
-    border: none;
-    background: none;
-    border-radius: 16px;
-    cursor: pointer;
-
-    &:focus {
-      outline: 2px solid $color-backlog-blue;
-    }
-  }
-}
-
-.board-users__my-avatar .user-avatar {
+.board-users__avatar {
   transition: all 0.08s ease-out;
-  margin: 0;
 
-  &:hover {
-    filter: brightness(1.1);
-    transform: scale(1.08);
-  }
-
-  &:active {
-    transform: scale(1);
+  &--others {
+    margin-left: -12px;
   }
 }
 
-@media screen and (max-width: 768px) {
-  .board-users {
-    margin-right: $margin--small;
+.rest-users {
+  position: relative;
+  font-size: $text-size--medium;
+  height: $icon--extralarge;
+  width: $icon--extralarge;
+  border-radius: $rounded--full;
+  background-color: $menu-icon-background-color--dark;
+  padding: 2px;
+  color: $color-white;
+  font-weight: 700;
+
+  &__readiness {
+    color: $color-progress-circle;
+    border-radius: $rounded--full;
+
+    circle {
+      transition: stroke-dashoffset 0.45s ease-in-out;
+      fill: transparent;
+    }
+  }
+
+  &__count,
+  &__all-ready {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // line-height: 36px;
+    // font-size: $text-size--medium;
+  }
+
+  &__all-ready {
+    color: $color-white;
+    width: 100%;
+    height: 100%;
+
+    .circle {
+      display: none;
+    }
+
+    .check {
+      --dasharray: 20;
+      stroke-dasharray: var(--dasharray);
+      stroke-dashoffset: 0;
+      animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
+      transform-origin: 37% 40%;
+    }
   }
 }
 
-@media screen and (max-width: 500px) {
-  .board-users {
-    margin-right: 0;
-  }
-
-  .board-users__other-avatars {
+@media #{$mini-smartphone} {
+  .board-users__button--others {
     display: none;
-  }
-
-  .board-users__my-avatar {
-    margin-right: 0;
   }
 }
 
 [theme="dark"] {
-  .board-users__other-avatars:hover > .rest-users {
-    background-color: $color-planning-pink;
+  .rest-users {
+    background-color: $color-icon-light-blue;
+    color: $color-dark-two;
   }
 
-  .board-users__other-avatars:focus {
-    outline: 2px solid $color-planning-pink;
+  .board-users__button {
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+    }
   }
+}
 
-  .board-users__my-avatar > button:focus {
-    outline: 2px solid $color-planning-pink;
+@keyframes draw {
+  0% {
+    stroke-dashoffset: var(--dasharray);
   }
 }

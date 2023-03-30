@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"math"
-	"net"
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
@@ -47,7 +46,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
-	s.sealCookie(r, &cookie)
+	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
 	render.Status(r, http.StatusCreated)
@@ -56,13 +55,13 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-	s.sealCookie(r, &cookie)
+	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
-	if getHostWithoutPort(r) != getTopLevelHost(r) {
+	if common.GetHostWithoutPort(r) != common.GetTopLevelHost(r) {
 		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-		s.sealCookie(r, &cookieWithSubdomain)
-		cookieWithSubdomain.Domain = getHostWithoutPort(r)
+		common.SealCookie(r, &cookieWithSubdomain)
+		cookieWithSubdomain.Domain = common.GetHostWithoutPort(r)
 		http.SetCookie(w, &cookieWithSubdomain)
 	}
 
@@ -92,6 +91,8 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		internalUser, err = s.users.CreateGitHubUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
 	case (string)(types.AccountTypeMicrosoft):
 		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
+	case (string)(types.AccountTypeAzureAd):
+		internalUser, err = s.users.CreateAzureAdUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
 	case (string)(types.AccountTypeApple):
 		internalUser, err = s.users.CreateAppleUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
 	}
@@ -102,7 +103,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
 	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
-	s.sealCookie(r, &cookie)
+	common.SealCookie(r, &cookie)
 	http.SetCookie(w, &cookie)
 
 	state := gothic.GetState(r)
@@ -117,32 +118,4 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
 	}
 	w.WriteHeader(http.StatusSeeOther)
-}
-
-func (s *Server) sealCookie(r *http.Request, cookie *http.Cookie) {
-	if common.GetProtocol(r) == "https" {
-		cookie.Secure = true
-		cookie.SameSite = http.SameSiteStrictMode
-	}
-
-	cookie.Domain = getTopLevelHost(r)
-	cookie.HttpOnly = true
-}
-
-func getHostWithoutPort(r *http.Request) string {
-	hostname := r.Host
-	if strings.Contains(hostname, ":") {
-		hostname, _, _ = net.SplitHostPort(hostname)
-	}
-	return hostname
-}
-
-func getTopLevelHost(r *http.Request) string {
-	hostname := getHostWithoutPort(r)
-	hostWithSubdomain := strings.Split(hostname, ".")
-	if len(hostWithSubdomain) >= 2 {
-		return fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
-	}
-
-	return hostname
 }

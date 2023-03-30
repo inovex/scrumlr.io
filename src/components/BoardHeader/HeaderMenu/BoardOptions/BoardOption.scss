@@ -5,7 +5,7 @@
 }
 
 .board-option + .board-option {
-  border-top: 1px solid $color-light-gray;
+  border-top: 1px solid $color-lighter-gray;
 }
 
 [theme="dark"] {
@@ -14,7 +14,7 @@
   }
 }
 
-.board-option:focus,
+.board-option:focus-visible,
 .board-option:hover {
   background: $color-dark-mode-note--hover;
 }

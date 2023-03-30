@@ -11,7 +11,6 @@ jest.mock("utils/export", () => ({
   ...jest.requireActual("utils/export"),
   exportAsJSON: jest.fn(),
   exportAsCSV: jest.fn(),
-  exportAsCSVZip: jest.fn(),
 }));
 
 const renderExportBoard = () => {
