@@ -4,7 +4,7 @@
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "48x48",
       "type": "image/x-icon"
     },
     {
@@ -12,6 +12,24 @@
       "type": "image/png",
       "sizes": "310x150",
       "purpose": "maskable"
+    },
+    {
+      "src": "icons/1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/1024_maskable.png",
+      "type": "image/png",
+      "sizes": "1024x1024",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
     },
     {
       "src": "icons/310.png",
@@ -80,7 +98,15 @@
       "name": "Start a new session",
       "short_name": "New session",
       "description": "Start a new session",
-      "url": "/new"
+      "url": "/new",
+      "icons": [
+        {
+          "src": "icons/shortcut-icon--new.png",
+          "type": "image/png",
+          "sizes": "96x96",
+          "purpose": "any"
+        }
+      ]
     }
   ]
 }
