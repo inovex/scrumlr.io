@@ -99,7 +99,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 Thanks to all our users, contributors & supporters! ❤️
 
 <a href="https://inovex.de">
-<img src="https://www.inovex.de/wp-content/uploads/2020/10/inovex-logo-dunkelblau-quadrat-1.svg" alt="inovex">
+<img src="inovex.svg" alt="inovex">
 </a>
 
 A special shout-out goes to [inovex](https://inovex.de) for all the support and the opportunity to realize this project! 🙌
