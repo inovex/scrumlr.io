@@ -62,30 +62,46 @@ export const HotkeyAnchor = () => {
 
   const toggleHotkeys = () => {
     if (state.hotkeysAreActive) {
+      dispatch(Actions.setHotkeyState(false));
       Toast.info(t("Hotkeys.hotkeysDisabled"), 1500);
     } else {
+      dispatch(Actions.setHotkeyState(true));
       Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
     }
-    dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
   };
 
   const toggleModeration = () => {
     if (state.moderation) {
       dispatch(Actions.stopSharing());
       dispatch(Actions.clearFocusInitiator());
+      dispatch(Actions.setModerating(false));
+      Toast.info(t("Hotkeys.togglePresentationMode.endPresenting"), 1500);
     } else {
       dispatch(Actions.setFocusInitiator(state.currentUser));
       if (note.current) dispatch(Actions.shareNote(note.current));
+      dispatch(Actions.setModerating(true));
+      Toast.info(t("Hotkeys.togglePresentationMode.startPresenting"), 1500);
     }
-    dispatch(Actions.setModerating(!state.moderation));
   };
 
   const toggleReadyState = () => {
-    dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
+    if (isReady) {
+      dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, false));
+      Toast.info(t("Hotkeys.toggleReadyState.notReady"), 1500);
+    } else {
+      dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, true));
+      Toast.info(t("Hotkeys.toggleReadyState.ready"), 1500);
+    }
   };
 
   const toggleRaiseHand = () => {
-    dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
+    if (raisedHand) {
+      dispatch(Actions.setRaisedHand(state.currentUser.user.id, false));
+      Toast.info(t("Hotkeys.toggleRaisedHand.lower"), 1500);
+    } else {
+      dispatch(Actions.setRaisedHand(state.currentUser.user.id, true));
+      Toast.info(t("Hotkeys.toggleRaisedHand.raise"), 1500);
+    }
   };
 
   const startTimer = (minutes: number) => {
@@ -104,7 +120,13 @@ export const HotkeyAnchor = () => {
     TOGGLE_SHOW_AUTHORS,
     (e: KeyboardEvent) => {
       e.preventDefault();
-      dispatch(Actions.editBoard({showAuthors: !state.showAuthors}));
+      if (state.showAuthors) {
+        dispatch(Actions.editBoard({showAuthors: false}));
+        Toast.info(t("Hotkeys.toggleShowAuthors.hide"));
+      } else {
+        dispatch(Actions.editBoard({showAuthors: true}));
+        Toast.info(t("Hotkeys.toggleShowAuthors.show"));
+      }
     },
     hotkeyOptionsAdmin,
     [state.showAuthors]
@@ -113,7 +135,13 @@ export const HotkeyAnchor = () => {
     TOGGLE_SHOW_OTHER_USERS_NOTES,
     (e: KeyboardEvent) => {
       e.preventDefault();
-      dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.showNotesOfOtherUsers}));
+      if (state.showNotesOfOtherUsers) {
+        dispatch(Actions.editBoard({showNotesOfOtherUsers: false}));
+        Toast.info(t("Hotkeys.toggleShowOtherUsersNotes.hide"));
+      } else {
+        dispatch(Actions.editBoard({showNotesOfOtherUsers: true}));
+        Toast.info(t("Hotkeys.toggleShowOtherUsersNotes.show"));
+      }
     },
     hotkeyOptionsAdmin,
     [state.showNotesOfOtherUsers]
@@ -122,7 +150,13 @@ export const HotkeyAnchor = () => {
     TOGGLE_COLUMN_VISIBILITY,
     (e: KeyboardEvent) => {
       e.preventDefault();
-      dispatch(Actions.setShowHiddenColumns(!state.showHiddenColumns));
+      if (state.showHiddenColumns) {
+        dispatch(Actions.setShowHiddenColumns(false));
+        Toast.info(t("Hotkeys.toggleColumnVisibility.hide"), 1500);
+      } else {
+        dispatch(Actions.setShowHiddenColumns(true));
+        Toast.info(t("Hotkeys.toggleColumnVisibility.show"), 1500);
+      }
     },
     hotkeyOptionsAdmin,
     [state.showHiddenColumns]

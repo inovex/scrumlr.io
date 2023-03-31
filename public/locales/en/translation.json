@@ -178,7 +178,31 @@
     "hotkeysEnabled": "Hotkeys enabled!",
     "hotkeysDisabled": "Hotkeys disabled!",
     "hotkeyToggle": "Enable hotkeys",
-    "cheatSheet": "Hotkey Cheat Sheet"
+    "cheatSheet": "Hotkey Cheat Sheet",
+    "toggleColumnVisibility": {
+      "hide": "Columns that are hidden are now hidden to you",
+      "show": "Columns that are hidden are now visible to you"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "The notes of other participants are hidden",
+      "show": "The notes of other participants are now visible"
+    },
+    "toggleShowAuthors": {
+      "hide": "The authors of the notes are hidden",
+      "show": "The authors of the notes are now visible"
+    },
+    "toggleRaisedHand": {
+      "raise": "You have raised your hand",
+      "lower": "You have lowered your hand"
+    },
+    "toggleReadyState": {
+      "ready": "You have marked yourself as ready",
+      "notReady": "You have marked yourself as not ready"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "You have started the presenter mode",
+      "endPresenting": "You have ended the presenter mode"
+    }
   },
   "VoteConfigurationButton": {
     "label": "Voting",
