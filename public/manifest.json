@@ -93,6 +93,36 @@
   "categories": ["business", "developer", "developer tools", "development", "productivity", "utilities", "agile", "scrum"],
   "description": "scrumlr.io is an online collaboration tool that helps teams reach new heights. Start your first retrospective or collaborative session in an instant - no registration required and completely free and open source.",
   "orientation": "landscape",
+  "screenshots": [
+    {
+      "src": "screenshots/signup.png",
+      "type": "image/png",
+      "sizes": "2560x1440",
+      "platfrom": "wide",
+      "label": "Jump right in, no registration required!"
+    },
+    {
+      "src": "screenshots/templates.png",
+      "type": "image/png",
+      "sizes": "2560x1440",
+      "platfrom": "wide",
+      "label": "Choose from a variety of templates!"
+    },
+    {
+      "src": "screenshots/config.png",
+      "type": "image/png",
+      "sizes": "2560x1440",
+      "platfrom": "wide",
+      "label": "Configure and protect your session!"
+    },
+    {
+      "src": "screenshots/board.png",
+      "type": "image/png",
+      "sizes": "2560x1440",
+      "platfrom": "wide",
+      "label": "Awesome retros and collaborative sessions!"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Start a new session",
