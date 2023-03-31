@@ -41,7 +41,10 @@
     "react-tooltip": "^5.10.4",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
-    "use-sound": "^4.0.1"
+    "use-sound": "^4.0.1",
+    "workbox-core": "^6.5.3",
+    "workbox-precaching": "^6.5.3",
+    "workbox-routing": "^6.5.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.2.0",
@@ -64,10 +67,13 @@
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/underscore": "^1.11.4",
     "@types/uuid": "^9.0.1",
+    "@types/workbox-core": "^4.3.1",
+    "@types/workbox-precaching": "^4.3.1",
+    "@types/workbox-routing": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
-    "cross-env": "^7.0.3",
     "eslint": "8.37.0",
+    "cross-env": "^7.0.3",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.8.0",
