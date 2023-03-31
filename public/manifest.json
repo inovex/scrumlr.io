@@ -1,6 +1,6 @@
 {
-  "short_name": "Scrumlr",
-  "name": "scrumlr.io - Online collaboration",
+  "short_name": "scrumlr.io",
+  "name": "scrumlr.io",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,26 +8,79 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "icons/310x150.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any maskable"
+      "sizes": "310x150",
+      "purpose": "maskable"
     },
     {
-      "src": "logo512.png",
+      "src": "icons/310.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "sizes": "310x310",
+      "purpose": "maskable"
     },
     {
-      "src": "logo1024.png",
+      "src": "icons/196.png",
       "type": "image/png",
-      "sizes": "1024x1024",
-      "purpose": "any maskable"
+      "sizes": "196x196",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/180.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/167.png",
+      "type": "image/png",
+      "sizes": "167x167",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/152.png",
+      "type": "image/png",
+      "sizes": "152x152",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/150.png",
+      "type": "image/png",
+      "sizes": "150x150",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/70.png",
+      "type": "image/png",
+      "sizes": "70x70",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/32.png",
+      "type": "image/png",
+      "sizes": "32x32",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/16.png",
+      "type": "image/png",
+      "sizes": "16x16",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "display": "fullscreen",
+  "theme_color": "#0057ff",
+  "background_color": "#ffffff",
+  "categories": ["business", "developer", "developer tools", "development", "productivity", "utilities", "agile", "scrum"],
+  "description": "scrumlr.io is an online collaboration tool that helps teams reach new heights. Start your first retrospective or collaborative session in an instant - no registration required and completely free and open source.",
+  "orientation": "landscape",
+  "shortcuts": [
+    {
+      "name": "Start a new session",
+      "short_name": "New session",
+      "description": "Start a new session",
+      "url": "/new"
+    }
+  ]
 }
