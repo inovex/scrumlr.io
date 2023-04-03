@@ -1,3 +1,5 @@
+@import "constants/style";
+
 // .Toastify__toast-container {
 // }
 
@@ -36,28 +38,55 @@
 
 .content {
   display: flex;
-  gap: 15px;
   padding: 10px;
+  padding: 16px 10px;
+}
+.icon {
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  margin: 0px 12px 0px 5px;
+
+  > svg {
+    height: 32px;
+    width: 32px;
+  }
 }
 
 .info {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  justify-content: center;
+}
+.info-text {
+  font-size: 18px;
+  letter-spacing: $letter-spacing--small;
 }
 .info-hint {
+  margin: 6px 0px;
   display: flex;
   gap: 7px;
 }
+.info-hint-text {
+  font-size: 14px;
+}
 .info-hint-button {
+  border: 2px solid lightgrey;
+  height: 16px;
+  width: 16px;
   cursor: pointer;
 }
+.info-hint-button:hover {
+  background-color: grey;
+}
+
 .actions {
-  border-top: solid 2px #000000;
+  border-top: solid 2px rgba(0, 0, 0, 0.3);
   background: lightgrey;
   display: flex;
   justify-content: space-evenly;
-  min-height: 40px;
+  min-height: 42px;
 }
 .actions-single-button {
   height: 100%;
