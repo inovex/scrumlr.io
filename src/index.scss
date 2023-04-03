@@ -46,23 +46,23 @@ code {
   --toastify-icon-color-error: #{$color-warning-red};
 }
 
-.toast-container__container .toast-container__toast {
-  margin-bottom: 0;
-  font-size: $text-size--medium;
+// .toast-container__container .toast-container__toast {
+//   margin-bottom: 0;
+//   font-size: $text-size--medium;
 
-  background: $color-white;
-  color: $color-black;
-}
+//   background: $color-white;
+//   color: $color-black;
+// }
 
-.toast-container__container .toast-container__toast + .toast-container__toast {
-  margin-top: $margin--small;
-}
+// .toast-container__container .toast-container__toast + .toast-container__toast {
+//   margin-top: $margin--small;
+// }
 
 [theme="dark"] {
-  .toast-container__container .toast-container__toast {
-    background: $color-dark-mode-note;
-    color: $color-white;
-  }
+  // .toast-container__container .toast-container__toast {
+  //   background: $color-dark-mode-note;
+  //   color: $color-white;
+  // }
 
   body,
   #root {

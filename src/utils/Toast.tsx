@@ -2,11 +2,13 @@ import {toast, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {ReactNode} from "react";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
+import {CustomToast} from "components/CustomToast/CustomToast";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
   hideProgressBar: true,
   closeOnClick: true,
+  autoClose: false,
 };
 
 /**
@@ -33,7 +35,7 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
  * @param content Info message.
  */
 function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
-  toast.info(content, {...toastConfig, autoClose});
+  toast.info(<CustomToast />, {...toastConfig});
 }
 
 export const Toast = {
