@@ -1,0 +1,85 @@
+// .Toastify__toast-container {
+// }
+
+.Toastify__toast {
+  max-width: 390px;
+  min-height: 56px;
+  border-radius: 28px;
+  margin-left: -90px;
+  padding: 0px;
+  cursor: default;
+}
+
+.Toastify__toast-icon {
+  display: none;
+}
+
+.Toastify__toast-body {
+  padding: 0;
+  margin: 0;
+  > div {
+    height: 100%;
+  }
+}
+
+.Toastify__close-button {
+  display: none;
+}
+
+.toast {
+  height: 100%;
+}
+
+.toast__single-button-container {
+  display: flex;
+}
+
+.content {
+  display: flex;
+  gap: 15px;
+  padding: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.info-hint {
+  display: flex;
+  gap: 7px;
+}
+.info-hint-button {
+  cursor: pointer;
+}
+.actions {
+  border-top: solid 2px #000000;
+  background: lightgrey;
+  display: flex;
+  justify-content: space-evenly;
+  min-height: 40px;
+}
+.actions-single-button {
+  height: 100%;
+  min-width: 60px;
+  border: none;
+  background: lightgrey;
+  cursor: pointer;
+  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  margin-left: auto;
+}
+.actions-button {
+  border: none;
+  background: inherit;
+  padding: 0;
+  width: 100%;
+  cursor: pointer;
+}
+.actions-button:not(:last-child) {
+  border-right: 2px solid rgba(0, 0, 0, 0.3); /* add border to all buttons except the last one */
+}
+
+.actions-button:hover,
+.actions-single-button:hover {
+  background-color: grey;
+}
