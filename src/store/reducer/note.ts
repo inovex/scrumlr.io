@@ -17,6 +17,29 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       }
       return state;
     }
+    case Action.DeleteNoteTemporary: {
+      return state.filter((n) => n.id !== action.noteId);
+    }
+    case Action.ReAddNote: {
+      return state.concat(action.note);
+    }
+    case Action.UnstackNoteTemporary: {
+      const note = state.find((n) => n.id === action.noteId)!;
+      const parent = state.find((n) => n.id === note!.position.stack)!;
+      note.position.stack = undefined;
+      note.position.rank = Math.max(parent.position.rank - 1, 0);
+      return state.map((n) => {
+        if (n.id === note.id) {
+          return note;
+        } if (n.id === parent.id) {
+          return parent;
+        }
+        return n;
+      });
+    }
+    // case Action.ReStackNote: {
+    //   // return
+    // }
     default:
       return state;
   }

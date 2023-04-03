@@ -18,8 +18,12 @@ export const NoteAction = {
   OnNoteBlur: "scrumlr.io/onNoteBlur" as const,
   EditNote: "scrumlr.io/editNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
+  UnstackNoteTemporary: "scrumlr.io/unstackNoteTemporary" as const,
+  ReStackNote: "scrumlr.io/reStackNote" as const,
 
   DeleteNote: "scrumlr.io/deleteNote" as const,
+  DeleteNoteTemporary: "scrumlr.io/deleteNoteTemporary" as const,
+  ReAddNote: "scrumlr.io/reAddNote" as const,
 };
 
 /** Factory or creator class of internal Redux note object specific actions. */
@@ -88,6 +92,16 @@ export const NoteActionFactory = {
     note,
   }),
 
+  unstackNoteTemporary: (noteId: string) => ({
+    type: NoteAction.UnstackNoteTemporary,
+    noteId,
+  }),
+
+  reStackNote: (note: Note) => ({
+    type: NoteAction.ReStackNote,
+    note,
+  }),
+
   /**
    * Creates an action which should be dispatched when the user wants to delete a note.
    *
@@ -96,6 +110,16 @@ export const NoteActionFactory = {
   deleteNote: (noteId: string) => ({
     type: NoteAction.DeleteNote,
     noteId,
+  }),
+
+  deleteNoteTemporary: (noteId: string) => ({
+    type: NoteAction.DeleteNoteTemporary,
+    noteId,
+  }),
+
+  reAddNote: (note: Note) => ({
+    type: NoteAction.ReAddNote,
+    note,
   }),
 };
 
@@ -109,4 +133,8 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.onNoteBlur>
   | ReturnType<typeof NoteActionFactory.editNote>
   | ReturnType<typeof NoteActionFactory.unstackNote>
-  | ReturnType<typeof NoteActionFactory.deleteNote>;
+  | ReturnType<typeof NoteActionFactory.deleteNote>
+  | ReturnType<typeof NoteActionFactory.deleteNoteTemporary>
+  | ReturnType<typeof NoteActionFactory.reAddNote>
+  | ReturnType<typeof NoteActionFactory.unstackNoteTemporary>
+  | ReturnType<typeof NoteActionFactory.reStackNote>;

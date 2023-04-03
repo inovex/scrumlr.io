@@ -59,6 +59,7 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     const parent = stateAPI.getState().notes.find((n) => n.id === note.position.stack)!;
 
     API.editNote(action.context.board!, action.note, {position: {column: note.position.column, stack: undefined, rank: Math.max(parent.position.rank - 1, 0)}}).catch(() => {
+      // RestackNote?
       Toast.error(
         <div>
           <div>{i18n.t("Error.unstackNote")}</div>

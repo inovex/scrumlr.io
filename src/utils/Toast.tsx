@@ -1,7 +1,9 @@
-import {toast, ToastOptions} from "react-toastify";
+import {toast, ToastItem, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {ReactNode} from "react";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
+import "./Toast.scss";
+// import { Actions } from "store/action";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -32,9 +34,29 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
  *
  * @param content Info message.
  */
-function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
-  toast.info(content, {...toastConfig, autoClose});
+function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT, data?: {}) {
+  toast(content, {...toastConfig, autoClose, data});
 }
+
+toast.onChange((payload: ToastItem) => {
+  switch (payload.status) {
+    case "added": // new toast added
+      break;
+    case "updated": // toast updated
+      break;
+    case "removed": // toast has been removed
+      switch (
+        payload.data.case // remove case distinction
+      ) {
+        case "deletedNote":
+          payload.data.callback();
+          break;
+        case "unstackedNote":
+          payload.data.callback();
+      }
+      break;
+  }
+});
 
 export const Toast = {
   success,

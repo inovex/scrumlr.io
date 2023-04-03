@@ -39,30 +39,45 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.toast-container__container {
+.Toastify__toast-container {
   --toastify-icon-color-info: #{$color-backlog-blue};
   --toastify-icon-color-success: #{$color-grooming-green};
   --toastify-icon-color-warning: #{$color-online-orange};
   --toastify-icon-color-error: #{$color-warning-red};
 }
 
-.toast-container__container .toast-container__toast {
-  margin-bottom: 0;
-  font-size: $text-size--medium;
+// .Toastify__toast {
+//   width: 390px;
+//   height: 56px;
+//   border-radius: 28px !important;
+//   margin-left: -90px;
+// }
 
-  background: $color-white;
-  color: $color-black;
-}
+/** Used to position the icon **/
+// .Toastify__toast-body {
+//   all: unset;
+//   display: flex !important;
+//   justify-content: center !important;
+//   align-items: center !important;
+// }
 
-.toast-container__container .toast-container__toast + .toast-container__toast {
-  margin-top: $margin--small;
-}
+// .toast-container__container .toast-container__toast {
+//   margin-bottom: 0;
+//   font-size: $text-size--medium;
+
+//   background: $color-white;
+//   color: $color-black;
+// }
+
+// .toast-container__container .toast-container__toast + .toast-container__toast {
+//   margin-top: $margin--small;
+// }
 
 [theme="dark"] {
-  .toast-container__container .toast-container__toast {
-    background: $color-dark-mode-note;
-    color: $color-white;
-  }
+  // .toast-container__container .toast-container__toast {
+  //   background: $color-dark-mode-note;
+  //   color: $color-white;
+  // }
 
   body,
   #root {
