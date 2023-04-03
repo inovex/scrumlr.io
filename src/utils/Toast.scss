@@ -1,0 +1,47 @@
+@import "constants/style";
+
+// .Toastify__toast-container {
+// }
+
+.Toastify__toast {
+  max-width: 390px;
+  min-height: 56px;
+  border-radius: 28px;
+  margin-left: -90px;
+}
+
+.Toastify__toast-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div > div {
+    margin-bottom: $margin--small;
+    margin-right: $margin--small;
+  }
+  > div > button {
+    border-radius: 28px;
+
+    background-color: $color-backlog-blue;
+    border-style: none;
+    height: 40px;
+    width: 200px;
+    color: $color-white;
+  }
+}
+
+.Toastify__toast-icon {
+  // within body
+  width: 22px;
+  height: 22px;
+  margin: 3px 15px 0px 3px;
+  align-self: baseline;
+  // > svg {
+  //     align-self: baseline;
+  //     fill: red;
+  // }
+}
+
+// still there just invisible?
+.Toastify__close-button {
+  display: none;
+}
