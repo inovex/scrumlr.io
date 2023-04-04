@@ -524,12 +524,12 @@ exports[`Column should have correct style show column with correct style 1`] = `
                         </g>
                       </svg>
                     </div>
-                    <figcaption
-                      class="note__author-name"
-                    >
-                      test-participants-others-user-name-1
-                    </figcaption>
                   </figure>
+                  <div
+                    class="note__author-name"
+                  >
+                    test-participants-others-user-name-1
+                  </div>
                 </div>
                 <div
                   class="votes"
@@ -1008,12 +1008,12 @@ exports[`Column should have correct style show column with correct style 1`] = `
                         </g>
                       </svg>
                     </div>
-                    <figcaption
-                      class="note__author-name"
-                    >
-                      test-participants-others-user-name-1
-                    </figcaption>
                   </figure>
+                  <div
+                    class="note__author-name"
+                  >
+                    test-participants-others-user-name-1
+                  </div>
                 </div>
                 <div
                   class="votes"
