@@ -35,7 +35,7 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
  * @param content Info message.
  */
 function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
-  toast.info(<CustomToast />, {...toastConfig});
+  toast.info(<CustomToast />, {...toastConfig}); // .info/success/error = set different icons and colors?
 }
 
 export const Toast = {

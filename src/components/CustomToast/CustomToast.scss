@@ -4,11 +4,14 @@
 // }
 
 .Toastify__toast {
-  max-width: 390px;
   min-height: 56px;
-  border-radius: $note__border-radius;
+  max-width: 390px;
+  max-height: var(--toast-height); //if no height set take default 56px
+  // min-height: 56px;
+  border-radius: var(--toast-border-radius);
   margin-left: -90px;
   padding: 0px;
+  box-shadow: $box-shadow--light;
   cursor: default;
 }
 
@@ -18,7 +21,6 @@
 
 .Toastify__toast-body {
   padding: 0;
-  margin: 0;
   > div {
     height: 100%;
   }
@@ -37,46 +39,51 @@
 }
 
 .content {
+  height: 100%;
   display: flex;
-  padding: 10px;
-  padding: 16px 10px;
+  padding: 7px 8px 7px 0px;
 }
-.icon {
-  // display: flex;
-  // flex-direction: column;
-  // justify-content: center;
-  margin: 0px 12px 0px 5px;
 
+.icon {
+  margin: 10px 12px 0px 15px;
   > svg {
     height: 32px;
     width: 32px;
   }
 }
-
+.icon-singleLine {
+  margin: 0px 12px 0px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .info {
   display: flex;
   flex-direction: column;
   gap: 5px;
   justify-content: center;
 }
+.info-singleLine {
+  margin-top: 16px;
+}
 .info-text {
   font-size: 16px;
   line-height: 16px;
-  // letter-spacing: $letter-spacing--small;
-  letter-spacing: 0.49px;
+  letter-spacing: $letter-spacing--small;
   color: #333948;
-  // font: var(--unnamed-font-style-normal) normal medium var(--unnamed-font-size-14)/var(--unnamed-line-spacing-18) var(--unnamed-font-family-raleway);
 }
 .info-hint {
-  margin: 6px 0px;
+  margin: 10px 0px;
   display: flex;
   gap: 7px;
 }
 .info-hint-text {
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.3);
 }
 .info-hint-button {
+  background-color: white;
   border: 2px solid lightgrey;
   height: 16px;
   width: 16px;
@@ -87,34 +94,38 @@
 }
 
 .actions {
-  border-top: solid 2px rgba(0, 0, 0, 0.3);
-  background: lightgrey;
+  // border-top: solid 2px rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: space-evenly;
   min-height: 42px;
+  background: #333948 0% 0% no-repeat padding-box;
 }
 .actions-single-button {
   height: 100%;
-  min-width: 60px;
+  padding: 13px 24px 13px 24px;
   border: none;
-  background: lightgrey;
-  cursor: pointer;
-  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  background: #333948 0% 0% no-repeat padding-box;
+  color: white;
+  font-weight: bold;
+  border-radius: 28px;
   margin-left: auto;
+  cursor: pointer;
 }
 .actions-button {
   border: none;
-  background: inherit;
+  background: #333948 0% 0% no-repeat padding-box;
+  color: white;
   padding: 0;
   width: 100%;
   cursor: pointer;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.7);
 }
-.actions-button:not(:last-child) {
-  border-right: 2px solid rgba(0, 0, 0, 0.3); /* add border to all buttons except the last one */
+// .actions-button:not(:last-child) {
+//   border-right: 2px solid rgba(0, 0, 0, 0.3); /* add border to all buttons except the last one */
+// }
+.actions-button-seperator {
+  border: 1px solid lightgrey;
 }
-
 .actions-button:hover,
 .actions-single-button:hover {
   background-color: grey;
