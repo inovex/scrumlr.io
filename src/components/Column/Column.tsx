@@ -2,9 +2,8 @@ import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
-import {useDrop} from "react-dnd";
 import classNames from "classnames";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
@@ -51,24 +50,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
-
-  const [{isOver, canDrop}, drop] = useDrop(() => ({
-    accept: ["NOTE", "STACK"],
-    drop: (item: {id: string; columnId: string}, monitor) => {
-      if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(Actions.editNote(item.id, {position: {column: id, stack: undefined, rank: 0}}));
-      }
-    },
-    collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
-    canDrop: (item: {id: string; columnId: string}) => item.columnId !== id,
-  }));
-
-  if (columnRef.current && isOver) {
-    const rect = columnRef.current.getBoundingClientRect();
-    if (rect.left <= 0 || rect.right >= document.documentElement.clientWidth) {
-      columnRef.current.scrollIntoView({inline: "start", behavior: "smooth"});
-    }
-  }
 
   const toggleVisibilityHandler = () => {
     dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -206,7 +187,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
           />
         </div>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
+        <div className="column__notes-wrapper">
           <ul className="column__note-list">
             {state.notes.map((note) => (
               <li key={note}>
