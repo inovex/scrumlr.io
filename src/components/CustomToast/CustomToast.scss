@@ -6,7 +6,7 @@
 .Toastify__toast {
   max-width: 390px;
   min-height: 56px;
-  border-radius: 28px;
+  border-radius: $note__border-radius;
   margin-left: -90px;
   padding: 0px;
   cursor: default;
@@ -60,8 +60,12 @@
   justify-content: center;
 }
 .info-text {
-  font-size: 18px;
-  letter-spacing: $letter-spacing--small;
+  font-size: 16px;
+  line-height: 16px;
+  // letter-spacing: $letter-spacing--small;
+  letter-spacing: 0.49px;
+  color: #333948;
+  // font: var(--unnamed-font-style-normal) normal medium var(--unnamed-font-size-14)/var(--unnamed-line-spacing-18) var(--unnamed-font-family-raleway);
 }
 .info-hint {
   margin: 6px 0px;
@@ -69,7 +73,8 @@
   gap: 7px;
 }
 .info-hint-text {
-  font-size: 14px;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
 }
 .info-hint-button {
   border: 2px solid lightgrey;
@@ -103,6 +108,8 @@
   padding: 0;
   width: 100%;
   cursor: pointer;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
 }
 .actions-button:not(:last-child) {
   border-right: 2px solid rgba(0, 0, 0, 0.3); /* add border to all buttons except the last one */
