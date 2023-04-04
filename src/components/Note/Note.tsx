@@ -12,10 +12,12 @@ import {Participant} from "types/participant";
 import "./Note.scss";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {Sortable} from "components/DragAndDrop/Sortable";
 
 interface NoteProps {
   noteId: string;
   viewer: Participant;
+  colorClassName?: string;
 }
 
 export const Note = (props: NoteProps) => {
@@ -27,6 +29,7 @@ export const Note = (props: NoteProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
+  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
@@ -40,6 +43,7 @@ export const Note = (props: NoteProps) => {
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
+  const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
 
   /* eslint-disable */
   useEffect(() => {
@@ -62,7 +66,7 @@ export const Note = (props: NoteProps) => {
   const isImage = useImageChecker(note?.text ?? "");
 
   const handleClick = () => {
-    if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
+    if (moderating && isModerator) {
       dispatch(Actions.shareNote(props.noteId));
     }
     navigate(`note/${props.noteId}/stack`);
@@ -78,7 +82,7 @@ export const Note = (props: NoteProps) => {
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
   return (
-    <div className="note__root">
+    <Sortable id={props.noteId} columnId={note?.position.column} className={classNames("note__root", props.colorClassName)} disabled={!(isModerator || allowStacking)}>
       <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         {isImage ? (
           <div className="note__image-wrapper">
@@ -103,6 +107,6 @@ export const Note = (props: NoteProps) => {
         </div>
       </button>
       {isStack && <div className="note__in-stack" />}
-    </div>
+    </Sortable>
   );
 };

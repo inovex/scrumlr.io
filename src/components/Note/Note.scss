@@ -53,19 +53,12 @@ $note__author-image-size: 26px;
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
-.note:hover {
+// Only applies hover transform while not dragging
+body:not(:has(> div.drag-overlay)) .note:hover {
   transform: scale(1.02);
 }
 
-.note--isDragging {
-  opacity: 0.5;
-
-  & ~ .note__in-stack {
-    opacity: 0.5;
-  }
-}
-
-.note--isOver {
+.shouldCombine .note {
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
