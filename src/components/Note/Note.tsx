@@ -8,7 +8,7 @@ import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {Participant, ParticipantExtendedInfo} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
@@ -32,7 +32,7 @@ export const Note = (props: NoteProps) => {
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   // all authors of a note, including its children if it's a stack.
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
-  const authors = useAppSelector((state) => {
+  const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
     const childrenNoteAuthors = noteChildren.map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
     const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
@@ -45,7 +45,7 @@ export const Note = (props: NoteProps) => {
           ...a,
           displayName,
           isSelf,
-        };
+        } as ParticipantExtendedInfo;
       })
       // remove duplicates (because notes can have multiple children by the same authors)
       .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);

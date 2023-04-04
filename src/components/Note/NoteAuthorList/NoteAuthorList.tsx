@@ -1,12 +1,10 @@
 import classNames from "classnames";
+import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {UserAvatar} from "../../BoardUsers";
-import {Participant, ParticipantRole} from "../../../types/participant";
 import "./NoteAuthorList.scss";
-import {Auth} from "../../../types/auth";
 
 type Props = {
-  // essentially Array<Participant & {displayName: string, isSelf: boolean}> but that sadly doesn't work
-  authors: {displayName: string; isSelf: boolean; user?: Auth; connected?: boolean; ready?: boolean; raisedHand?: boolean; showHiddenColumns?: boolean; role?: ParticipantRole}[];
+  authors: ParticipantExtendedInfo[];
   showAuthors: boolean;
   viewer: Participant;
 };
