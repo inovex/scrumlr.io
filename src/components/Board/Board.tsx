@@ -5,6 +5,7 @@ import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -150,12 +151,13 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
-
-      <main className="board" ref={boardRef}>
-        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
-        {children}
-        <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
-      </main>
+      <CustomDndContext>
+        <main className="board" ref={boardRef}>
+          <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
+          {children}
+          <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
+        </main>
+      </CustomDndContext>
     </>
   );
 };
