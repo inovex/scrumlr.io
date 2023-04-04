@@ -30,7 +30,14 @@ export const NoteAuthorList = (props: Props) => {
         (
           a // iterate over authors, order is changed in CSS
         ) => (
-          <figure className={classNames("note__author", {"note__author--self": stackAuthor.isSelf, "note__author--with-rest": restUsersExist})} aria-roledescription="author">
+          <figure
+            className={classNames("note__author", {
+              "note__author--self": stackAuthor.isSelf,
+              "note__author--with-rest": restUsersExist,
+            })}
+            aria-roledescription="author"
+            key={a.user!.id}
+          >
             <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
           </figure>
         )
