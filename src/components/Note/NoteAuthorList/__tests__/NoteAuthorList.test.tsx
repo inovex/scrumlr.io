@@ -21,16 +21,6 @@ const createNoteAuthorList = (authors: ParticipantExtendedInfo[], showAuthors: b
 };
 
 describe("NoteAuthorList", () => {
-  beforeEach(() => {
-    window.IntersectionObserver = jest.fn(
-      () =>
-        ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
-    );
-  });
-
   describe("display", () => {
     it("should not display since it's deactivated", () => {
       const {container} = render(createNoteAuthorList([AUTHOR3], false));
