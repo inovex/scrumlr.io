@@ -30,6 +30,10 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const noteChildren = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId));
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
+  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
+  const moderating = useAppSelector((state) => state.view.moderating);
+  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
   // all authors of a note, including its children if it's a stack.
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
@@ -57,13 +61,14 @@ export const Note = (props: NoteProps) => {
       [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
     }
 
+    // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
+    // the other authors are excluded as we only require the stack author
+    if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
+      return [allAuthors[0]]; // stack author is always first element
+    }
+
     return allAuthors;
   }, isEqual);
-
-  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
-  const moderating = useAppSelector((state) => state.view.moderating);
-  const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
-  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
   /* eslint-disable */
   useEffect(() => {
