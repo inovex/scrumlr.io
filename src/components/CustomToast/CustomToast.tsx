@@ -6,23 +6,25 @@ import classNames from "classnames";
 // import {ReactComponent as IconHand} from "assets/icon-hand.svg";
 
 export interface CustomToastProps {
-  icon?: Element;
-  message?: string;
-  hintMessage?: string;
+  message: string;
+  hintMessage?: string | null;
   hintOnClick?: () => void;
-  buttonTitle?: string;
-  buttonOnClick?: () => void;
+  buttons?: string[] | null;
+  firstButtonOnClick?: () => void;
+  secondButtonOnClick?: () => void;
+  icon?: Element;
 }
 
 // MOCKING
+// const buttons = null;
 // const buttons = ["CANCEL"];
-const buttons = ["YES", "CANCEL"];
-const message = "Du hast eine Karte gelöscht. Möchtest du die aktion widerrufen?";
+// const buttons = ["YES", "CANCEL"];
+// const message = "Du hast eine Karte gelöscht. Möchtest du die aktion widerrufen?";
 // const message = "Karte wurde gelöscht";
-const hintMessage = "Don't show this anymore";
+// const hintMessage = "Don't show this anymore";
 // const hintMessage = null;
 
-export const CustomToast: FC<CustomToastProps> = () => {
+export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick}) => {
   const [isSingleTextLine, setIsSingleTextLine] = useState<boolean>(true);
   const textRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +38,7 @@ export const CustomToast: FC<CustomToastProps> = () => {
     }
   }, [message]);
 
-  const isSingleLineToast = buttons.length === 1 && isSingleTextLine && !hintMessage;
+  const isSingleLineToast = buttons?.length === 1 && isSingleTextLine && !hintMessage;
 
   return (
     <>
@@ -45,7 +47,7 @@ export const CustomToast: FC<CustomToastProps> = () => {
         --toast-border-radius: ${isSingleLineToast ? "28px;" : "16px;"}
     }`}</style>
       <div className="toast">
-        <div className="content">
+        <div className={classNames("content", {"content-singleLine-multipleButtons": isSingleTextLine && !hintMessage && buttons && buttons.length > 1})}>
           <div className={classNames({icon: !isSingleTextLine || hintMessage}, {"icon-singleLine": isSingleTextLine && !hintMessage})}>
             <IconDelete />
           </div>
@@ -61,20 +63,27 @@ export const CustomToast: FC<CustomToastProps> = () => {
               </div>
             )}
           </div>
-          {isSingleLineToast && <button className="actions-single-button">Zurücksetzen</button>}
+          {isSingleLineToast && (
+            <button className="actions-single-button" onClick={firstButtonOnClick}>
+              Zurücksetzen
+            </button>
+          )}
         </div>
-        {(buttons.length > 1 || !isSingleTextLine || hintMessage) && (
+        {buttons && (buttons.length > 1 || !isSingleTextLine || hintMessage) && (
           <div className="actions">
-            {buttons.map((button, index) => {
-              console.log(index, buttons.length - 1);
-              console.log(index < buttons.length - 1);
-              return (
-                <>
-                  <button className="actions-button">{button}</button>
-                  {index < buttons.length - 1 && <hr className="actions-button-seperator" />}
-                </>
-              );
-            })}
+            {buttons &&
+              buttons.map((button, index) => {
+                console.log(index, buttons.length - 1);
+                console.log(index < buttons.length - 1);
+                return (
+                  <>
+                    <button className="actions-button" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
+                      {button}
+                    </button>
+                    {index < buttons.length - 1 && <hr className="actions-button-seperator" />}
+                  </>
+                );
+              })}
           </div>
         )}
       </div>

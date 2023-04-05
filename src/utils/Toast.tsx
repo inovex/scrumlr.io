@@ -34,8 +34,15 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
  *
  * @param content Info message.
  */
-function info(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAULT) {
-  toast.info(<CustomToast />, {...toastConfig}); // .info/success/error = set different icons and colors?
+function info(
+  content: ReactNode | null,
+  autoClose: number | false = TOAST_TIMER_DEFAULT,
+  message: string,
+  hintMessage: string | null,
+  buttons: string[] | null,
+  firstButtonOnClick?: () => void
+) {
+  toast.info(<CustomToast buttons={buttons} message={message} hintMessage={hintMessage} firstButtonOnClick={firstButtonOnClick} />, {...toastConfig}); // .info/success/error = set different icons and colors?
 }
 
 export const Toast = {

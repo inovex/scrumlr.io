@@ -58,13 +58,14 @@
   justify-content: center;
 }
 .info {
+  margin: 16px 12px 16px 0px;
+}
+
+.info-singleLine {
   display: flex;
   flex-direction: column;
   gap: 5px;
   justify-content: center;
-}
-.info-singleLine {
-  margin-top: 16px;
 }
 .info-text {
   font-size: 16px;
@@ -73,7 +74,7 @@
   color: #333948;
 }
 .info-hint {
-  margin: 10px 0px;
+  margin-top: 10px;
   display: flex;
   gap: 7px;
 }
