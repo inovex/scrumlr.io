@@ -2354,17 +2354,17 @@
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.1.tgz#98586dc36aee8dacc98cc396dbca8d0429647aa6"
   integrity sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==
 
-"@types/workbox-core@*", "@types/workbox-core@^4.3.1":
+"@types/workbox-core@^4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@types/workbox-core/-/workbox-core-4.3.1.tgz#b062a8130fd8ec01d5241ebe7a110a0b1591038e"
   integrity sha512-KTXHNijPQ+LpEdS+MvSdFn+YBzdfoNzgWjkTy68WrByVrsVU0wzE9536fCBIZrbruaEUcmf50vY94crpF3Vong==
 
-"@types/workbox-precaching@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@types/workbox-precaching/-/workbox-precaching-4.3.1.tgz#e0162384303f241e5f6135a06821fee342406c87"
-  integrity sha512-FDpEzz2iiArZkIhOANoU8WbL3EdvnzA+DZmtDLLgysRJB/iHPHhvzjyveRwfVQh7QOk3O+c5hINlnldVMEPb1g==
+"@types/workbox-precaching@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/workbox-precaching/-/workbox-precaching-5.0.0.tgz#891e667816a6d5634c260b2826c8ba7d5ad089a6"
+  integrity sha512-Oytxs/I0nE6oM3p4vJsYyLcLldFb9tyG+WBk+UrL2aWizEdpTeVeV+CYG5/lWBhCyXaiEQPgYzWaf3kzLFZAiQ==
   dependencies:
-    "@types/workbox-core" "*"
+    workbox-precaching "*"
 
 "@types/workbox-routing@^5.0.0":
   version "5.0.0"
@@ -10354,7 +10354,7 @@ workbox-navigation-preload@6.5.4:
   dependencies:
     workbox-core "6.5.4"
 
-workbox-precaching@6.5.4, workbox-precaching@^6.5.4:
+workbox-precaching@*, workbox-precaching@6.5.4, workbox-precaching@^6.5.4:
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/workbox-precaching/-/workbox-precaching-6.5.4.tgz#740e3561df92c6726ab5f7471e6aac89582cab72"
   integrity sha512-hSMezMsW6btKnxHB4bFy2Qfwey/8SYdGWvVIKFaUm8vJ4E53JAY+U2JwLTRD8wbLWoP6OVUdFlXsTdKu9yoLTg==
