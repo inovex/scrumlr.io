@@ -2354,10 +2354,12 @@
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.1.tgz#98586dc36aee8dacc98cc396dbca8d0429647aa6"
   integrity sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==
 
-"@types/workbox-core@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@types/workbox-core/-/workbox-core-4.3.1.tgz#b062a8130fd8ec01d5241ebe7a110a0b1591038e"
-  integrity sha512-KTXHNijPQ+LpEdS+MvSdFn+YBzdfoNzgWjkTy68WrByVrsVU0wzE9536fCBIZrbruaEUcmf50vY94crpF3Vong==
+"@types/workbox-core@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/workbox-core/-/workbox-core-5.0.0.tgz#b9c603f86cdd82efd26882e6fa9714e09132a687"
+  integrity sha512-OlX1pE5nBeXC4N96dpPP6sOJRFhdAuUkHnbOCZbpWVL7Pbi03fudiH/zfj0bNaPdYALbORbchYldc7zaRCUnHA==
+  dependencies:
+    workbox-core "*"
 
 "@types/workbox-precaching@^5.0.0":
   version "5.0.0"
@@ -10324,7 +10326,7 @@ workbox-cacheable-response@6.5.4:
   dependencies:
     workbox-core "6.5.4"
 
-workbox-core@6.5.4, workbox-core@^6.5.3:
+workbox-core@*, workbox-core@6.5.4, workbox-core@^6.5.3:
   version "6.5.4"
   resolved "https://registry.yarnpkg.com/workbox-core/-/workbox-core-6.5.4.tgz#df48bf44cd58bb1d1726c49b883fb1dffa24c9ba"
   integrity sha512-OXYb+m9wZm8GrORlV2vBbE5EC1FKu71GGp0H4rjmxmF4/HLbMCoTFws87M3dFwgpmg0v00K++PImpNQ6J5NQ6Q==
