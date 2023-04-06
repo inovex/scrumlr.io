@@ -61,4 +61,6 @@ root.render(
   </React.StrictMode>
 );
 store.dispatch(Actions.initApplication());
-serviceWorkerRegistration.register();
+
+// Disable the service worker for now since there are known issues where our third party authentication services cannot be used 
+//serviceWorkerRegistration.register();
