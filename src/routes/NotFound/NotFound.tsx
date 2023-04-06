@@ -1,6 +1,5 @@
 import "./NotFound.scss";
-import {ReactComponent as StanToilet} from "assets/stan/stan-toilet.svg";
-import {ReactComponent as Logo404} from "assets/pages/error/404.svg";
+import {ReactComponent as StanWebLight} from "assets/stan/Stan_404_Web_Light.svg";
 
 export const NotFound = () => (
   <div className="not-found__root">
@@ -16,9 +15,8 @@ export const NotFound = () => (
         </div>
         <button className="not-found__return-button">Back to Homepage</button>
       </div>
-      <div className="not-found__background">
-        <Logo404 className="not-found__logo404" />
-        <StanToilet className="not-found__logo-stan" />
+      <div className="not-found__image-wrapper">
+        <StanWebLight className="not-found__logo-stan--web-light" />
       </div>
     </main>
   </div>

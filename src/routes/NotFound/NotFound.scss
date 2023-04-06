@@ -8,18 +8,17 @@
   display: flex;
   flex-direction: row;
 
-  width: 100%;
-  height: 100%;
+  justify-content: center;
 }
 
 // content (left)
 .not-found__content {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: start; // prevent button from taking the whole space
 
   margin-top: 225px;
-  margin-left: 225px;
+  // margin-left: 225px;
 }
 
 .not-found__title {
@@ -50,12 +49,9 @@
   border-radius: $rounded--full;
 }
 
-// "background" (right)
-.not-found__background {
-  position: relative;
+// image (right / top)
+.not-found__image-wrapper {
 }
 
-.not-found__logo404,
-.not-found__logo-stan {
-  position: absolute;
+.not-found__logo-stan--web-light {
 }
