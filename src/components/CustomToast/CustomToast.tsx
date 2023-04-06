@@ -1,7 +1,6 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
 // import classNames from "classnames";
-import {ReactComponent as IconDelete} from "assets/icon-delete.svg";
 import classNames from "classnames";
 // import {ReactComponent as IconHand} from "assets/icon-hand.svg";
 
@@ -12,7 +11,7 @@ export interface CustomToastProps {
   buttons?: string[] | null;
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
-  icon?: Element;
+  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 // MOCKING
@@ -24,9 +23,10 @@ export interface CustomToastProps {
 // const hintMessage = "Don't show this anymore";
 // const hintMessage = null;
 
-export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick}) => {
+export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
   const [isSingleTextLine, setIsSingleTextLine] = useState<boolean>(true);
   const textRef = useRef<HTMLDivElement>(null);
+  const Icon = icon;
 
   useEffect(() => {
     // console.log(textRef.current?.offsetHeight);
@@ -48,9 +48,7 @@ export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage
     }`}</style>
       <div className="toast">
         <div className={classNames("content", {"content-singleLine-multipleButtons": isSingleTextLine && !hintMessage && buttons && buttons.length > 1})}>
-          <div className={classNames({icon: !isSingleTextLine || hintMessage}, {"icon-singleLine": isSingleTextLine && !hintMessage})}>
-            <IconDelete />
-          </div>
+          <div className={classNames({icon: !isSingleTextLine || hintMessage}, {"icon-singleLine": isSingleTextLine && !hintMessage})}>{Icon && <Icon />}</div>
           <div className={classNames({info: !isSingleTextLine || hintMessage}, {"info-singleLine": isSingleLineToast || (isSingleTextLine && !hintMessage)})}>
             {/* TODO buttons but single text info-singleLine inverted? */}
             <div className="info-text" ref={textRef}>
@@ -72,18 +70,14 @@ export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage
         {buttons && (buttons.length > 1 || !isSingleTextLine || hintMessage) && (
           <div className="actions">
             {buttons &&
-              buttons.map((button, index) => {
-                console.log(index, buttons.length - 1);
-                console.log(index < buttons.length - 1);
-                return (
+              buttons.map((button, index) => (
                   <>
                     <button className="actions-button" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
                       {button}
                     </button>
                     {index < buttons.length - 1 && <hr className="actions-button-seperator" />}
                   </>
-                );
-              })}
+                ))}
           </div>
         )}
       </div>
