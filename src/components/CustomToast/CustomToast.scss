@@ -1,5 +1,8 @@
 @import "constants/style";
 
+// the namings "single" and "mutli" refer the two types of toasts.
+// The single line toast or a toast that spans multiple lines of content
+
 // .Toastify__toast-container {
 // }
 
@@ -7,8 +10,6 @@
   min-height: 56px;
   width: 460px;
   height: var(--toast-height);
-  // max-height: var(--toast-height); //if no height set take default 56px
-  // min-height: 56px;
   border-radius: var(--toast-border-radius);
   margin-left: -160px;
   padding: 0px;
@@ -37,6 +38,9 @@
   padding: 7px 8px 7px 8px;
   align-items: center;
   height: 100%;
+}
+.toast-single:hover .toast__button-single {
+  background-color: blue;
 }
 .toast-multi {
   padding: 30px 54px 24px 54px;
@@ -83,6 +87,8 @@
 .toast__close-icon-single {
   width: 40px;
   height: 40px;
+  margin-left: 4px;
+  border-radius: 50%;
 }
 .toast__close-icon-multi {
   position: absolute;
@@ -90,62 +96,50 @@
   height: 40px;
   top: 10px;
   right: 15px;
+  border-radius: 50%;
+}
+.toast__close-icon-single:hover,
+.toast__close-icon-multi:hover {
+  cursor: pointer;
+  background-color: lightgrey;
 }
 .toast__title-single {
   font-size: 16px;
   line-height: 16px;
-  font-weight: bold;
   margin: 0px 15px;
+  font-weight: 700;
+  color: #333948;
 }
 .toast__title-multi {
   font-size: 16px;
   line-height: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-// --------------------------------
-.info {
-  margin: 16px 12px 16px 0px;
-}
-.info-singleLine {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-}
-.info-text {
-  font-size: 16px;
-  line-height: 16px;
-  letter-spacing: $letter-spacing--small;
+  margin-bottom: 8px;
+  font-weight: 700;
   color: #333948;
 }
-.info-hint {
-  margin-top: 10px;
-  display: flex;
-  gap: 7px;
-}
-.info-hint-text {
+
+//message naming multi?
+.toast__message {
+  margin-bottom: 16px;
   font-size: 14px;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.3);
-}
-.info-hint-button {
-  background-color: white;
-  border: 2px solid lightgrey;
-  height: 16px;
-  width: 16px;
-  cursor: pointer;
-}
-.info-hint-button:hover {
-  background-color: grey;
+  line-height: 18px;
+  font-weight: 500;
+  color: #333948;
 }
 
-// .toast__buttons-multi {
-// }
+//hint naming multi?
+.toast__hint {
+  margin-bottom: 16px;
+}
+
+.toast__buttons-multi {
+  display: flex;
+  gap: 10px;
+}
+
 .toast__button-single {
   height: 100%;
-  padding: 0px 24px;
+  padding: 14px 24px;
   border: none;
   background: #333948 0% 0% no-repeat padding-box;
   color: white;
@@ -153,14 +147,16 @@
   border-radius: 28px;
   margin-left: auto;
   cursor: pointer;
+  border: none;
 }
 .toast__button-multi {
   background: #333948 0% 0% no-repeat padding-box;
   color: white;
-  padding: 8px 16px;
+  padding: 14px 24px;
   border-radius: 28px;
   cursor: pointer;
   font-weight: bold;
+  border: none;
 }
 .toast__button-multi:hover,
 .toast__button-single:hover {

@@ -1,7 +1,5 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
-// import classNames from "classnames";
-import classNames from "classnames";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 
 export interface CustomToastProps {
@@ -15,7 +13,6 @@ export interface CustomToastProps {
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
-// export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
 export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
   const [hintChecked, setHintChecked] = useState<boolean>(false); // retrieve setting from somewhere redux?
@@ -62,8 +59,8 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
                 hintOnClick;
               }}
             >
-              <input className={hintChecked ? "info-hint-button-checked" : "info-hint-button"} type="checkbox" defaultChecked={hintChecked} />
-              <span className="info-hint-text">{hintMessage}</span>
+              <input className={hintChecked ? "toast__hint-button-checked" : "toast__hint-button"} type="checkbox" defaultChecked={hintChecked} />
+              <span className="toast__hint-text">{hintMessage}</span>
             </label>
           </div>
         )}
@@ -77,8 +74,8 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             {buttons &&
               buttons.map((button, index) => (
                 <button className="toast__button-multi" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
-                    {button}
-                  </button>
+                  {button}
+                </button>
               ))}
           </div>
         )}

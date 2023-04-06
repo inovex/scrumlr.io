@@ -53,7 +53,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   // MOCKING
   // const buttons = null;
   const buttons = ["CANCEL"];
-  // const buttons = ["YES", "CANCEL"];
+  // const buttons = ["Save", "Revert"];
   const title = "Karte wurde gelöscht";
   // const message = "Du hast eine Karte gelöscht. Möchtest du die aktion widerrufen?";
 
@@ -68,7 +68,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
         Toast.info({title, buttons, firstButtonOnClick: toggleColumnVisibility, autoClose: false});
-        // Toast.info({title, message: t("Toast.noteToHiddenColumn"), hintMessage: "Don't show this anymore", hintOnClick: () => console.log("works") ,buttons: [t("Toast.noteToHiddenColumnButton")], firstButtonOnClick: toggleColumnVisibility, autoClose: false});
+        // Toast.info({title, message: t("Toast.noteToHiddenColumn"), hintMessage: "Don't show this anymore", hintOnClick: () => console.log("works") ,buttons, firstButtonOnClick: toggleColumnVisibility, autoClose: false});
         setToastDisplayed(true);
       }
       setValue("");
