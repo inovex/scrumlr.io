@@ -2,43 +2,43 @@ import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
 // import classNames from "classnames";
 import classNames from "classnames";
-// import {ReactComponent as IconHand} from "assets/icon-hand.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 
 export interface CustomToastProps {
-  message: string;
+  title: string;
+  message?: string;
   hintMessage?: string | null;
   hintOnClick?: () => void;
-  buttons?: string[] | null;
+  buttons?: string[];
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
-// MOCKING
-// const buttons = null;
-// const buttons = ["CANCEL"];
-// const buttons = ["YES", "CANCEL"];
-// const message = "Du hast eine Karte gelöscht. Möchtest du die aktion widerrufen?";
-// const message = "Karte wurde gelöscht";
-// const hintMessage = "Don't show this anymore";
-// const hintMessage = null;
-
-export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
-  const [isSingleTextLine, setIsSingleTextLine] = useState<boolean>(true);
-  const textRef = useRef<HTMLDivElement>(null);
+// export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
+export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
+  const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
+  const [hintChecked, setHintChecked] = useState<boolean>(false); // retrieve setting from somewhere redux?
+  const titleRef = useRef<HTMLDivElement>(null);
   const Icon = icon;
 
   useEffect(() => {
     // console.log(textRef.current?.offsetHeight);
-    if (textRef.current && textRef.current.offsetHeight > 16) {
+    if (titleRef.current && titleRef.current.offsetHeight > 16) {
       // adjust this value to match your font-size and line-height
-      setIsSingleTextLine(false);
+      setIsSingleLineTitle(false);
     } else {
-      setIsSingleTextLine(true);
+      setIsSingleLineTitle(true);
     }
-  }, [message]);
+  }, [title]);
 
-  const isSingleLineToast = buttons?.length === 1 && isSingleTextLine && !hintMessage;
+  const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage; // maybe two line Title ok aswell?
+  console.log("------");
+  console.log(!buttons || buttons?.length <= 1);
+  console.log(isSingleLineTitle);
+  console.log(!message);
+  console.log(!hintMessage);
+  console.log("------");
 
   return (
     <>
@@ -46,40 +46,45 @@ export const CustomToast: FC<CustomToastProps> = ({message, buttons, hintMessage
         --toast-height: ${isSingleLineToast ? "56px;" : "fit-content;"} 
         --toast-border-radius: ${isSingleLineToast ? "28px;" : "16px;"}
     }`}</style>
-      <div className="toast">
-        <div className={classNames("content", {"content-singleLine-multipleButtons": isSingleTextLine && !hintMessage && buttons && buttons.length > 1})}>
-          <div className={classNames({icon: !isSingleTextLine || hintMessage}, {"icon-singleLine": isSingleTextLine && !hintMessage})}>{Icon && <Icon />}</div>
-          <div className={classNames({info: !isSingleTextLine || hintMessage}, {"info-singleLine": isSingleLineToast || (isSingleTextLine && !hintMessage)})}>
-            {/* TODO buttons but single text info-singleLine inverted? */}
-            <div className="info-text" ref={textRef}>
-              {message}
-            </div>
-            {hintMessage && (
-              <div className="info-hint">
-                <button className="info-hint-button" />
-                <div className="info-hint-text">{hintMessage}</div>
-              </div>
-            )}
-          </div>
-          {isSingleLineToast && (
-            <button className="actions-single-button" onClick={firstButtonOnClick}>
-              Zurücksetzen
-            </button>
-          )}
+
+      <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
+        <div className={`${isSingleLineToast ? "toast__icon-single" : "toast__icon-multi"}`}>{Icon && <Icon />}</div>
+        <div className={`${isSingleLineToast ? "toast__title-single" : "toast__title-multi"}`} ref={titleRef}>
+          {title}
         </div>
-        {buttons && (buttons.length > 1 || !isSingleTextLine || hintMessage) && (
-          <div className="actions">
-            {buttons &&
-              buttons.map((button, index) => (
-                  <>
-                    <button className="actions-button" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
-                      {button}
-                    </button>
-                    {index < buttons.length - 1 && <hr className="actions-button-seperator" />}
-                  </>
-                ))}
+        {message && <div className="toast__message">{message}</div>}
+        {hintMessage && (
+          <div className="toast__hint">
+            <label
+              onClick={(e) => {
+                e.stopPropagation();
+                setHintChecked(true);
+                hintOnClick;
+              }}
+            >
+              <input className={hintChecked ? "info-hint-button-checked" : "info-hint-button"} type="checkbox" defaultChecked={hintChecked} />
+              <span className="info-hint-text">{hintMessage}</span>
+            </label>
           </div>
         )}
+        {isSingleLineToast && buttons?.length == 1 && (
+          <button className="toast__button-single" onClick={firstButtonOnClick}>
+            Zurücksetzen
+          </button>
+        )}
+        {!isSingleLineToast && (
+          <div className="toast__buttons-multi">
+            {buttons &&
+              buttons.map((button, index) => (
+                <button className="toast__button-multi" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
+                    {button}
+                  </button>
+              ))}
+          </div>
+        )}
+        <div className={`${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
+          <CloseIcon />
+        </div>
       </div>
     </>
   );

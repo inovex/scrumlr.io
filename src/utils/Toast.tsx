@@ -31,14 +31,15 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
 }
 
 type Options = {
-  message: string;
+  title: string;
+  message?: string;
   hintMessage?: string | undefined;
   hintOnClick?: (() => void) | undefined;
   buttons?: string[] | undefined;
   firstButtonOnClick?: (() => void) | undefined;
   secondButtonOnClick?: (() => void) | undefined;
-  autoClose: number | false = TOAST_TIMER_DEFAULT;
-  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = InfoIcon;
+  autoClose?: number | false;
+  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 /**
  * Display info message via toast.
@@ -46,9 +47,10 @@ type Options = {
  * @param content Info message.
  */
 function info(options: Options) {
-  const {message, hintMessage, hintOnClick} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon} = options;
   toast.info(
     <CustomToast
+      title={title}
       message={message}
       hintMessage={hintMessage}
       hintOnClick={hintOnClick}

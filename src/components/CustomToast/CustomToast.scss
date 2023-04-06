@@ -5,62 +5,109 @@
 
 .Toastify__toast {
   min-height: 56px;
-  max-width: 390px;
-  max-height: var(--toast-height); //if no height set take default 56px
+  width: 460px;
+  height: var(--toast-height);
+  // max-height: var(--toast-height); //if no height set take default 56px
   // min-height: 56px;
   border-radius: var(--toast-border-radius);
-  margin-left: -90px;
+  margin-left: -160px;
   padding: 0px;
   box-shadow: $box-shadow--light;
+  overflow: inherit;
   cursor: default;
 }
-
 .Toastify__toast-icon {
   display: none;
 }
-
 .Toastify__toast-body {
   padding: 0;
+  height: 100%;
   > div {
     height: 100%;
   }
 }
-
 .Toastify__close-button {
   display: none;
 }
 
-.toast {
+//-----------------------------------------
+
+.toast-single {
+  display: flex;
+  padding: 7px 8px 7px 8px;
+  align-items: center;
   height: 100%;
 }
-
-.toast__single-button-container {
-  display: flex;
+.toast-multi {
+  padding: 30px 54px 24px 54px;
 }
+.toast__icon-single {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-.content {
+  border-radius: 28px;
+  background-color: #333948;
+  width: 44px;
   height: 100%;
-  display: flex;
-  padding: 7px 8px 7px 0px;
-}
 
-.icon {
-  margin: 10px 12px 0px 15px;
   > svg {
-    height: 32px;
-    width: 32px;
+    > g path {
+      fill: white;
+    }
   }
 }
-.icon-singleLine {
-  margin: 0px 12px 0px 15px;
+.toast__icon-multi {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transform: translate(-40%, -40%);
+
+  width: 64px;
+  height: 64px;
+  background-color: #333948;
+  border-radius: 50%;
+
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  > svg {
+    height: 46px;
+    width: 46px;
+    > g path {
+      fill: white;
+    }
+  }
 }
+.toast__close-icon-single {
+  width: 40px;
+  height: 40px;
+}
+.toast__close-icon-multi {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 10px;
+  right: 15px;
+}
+.toast__title-single {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: bold;
+  margin: 0px 15px;
+}
+.toast__title-multi {
+  font-size: 16px;
+  line-height: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+// --------------------------------
 .info {
   margin: 16px 12px 16px 0px;
 }
-
 .info-singleLine {
   display: flex;
   flex-direction: column;
@@ -94,16 +141,11 @@
   background-color: grey;
 }
 
-.actions {
-  // border-top: solid 2px rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: space-evenly;
-  min-height: 42px;
-  background: #333948 0% 0% no-repeat padding-box;
-}
-.actions-single-button {
+// .toast__buttons-multi {
+// }
+.toast__button-single {
   height: 100%;
-  padding: 13px 24px 13px 24px;
+  padding: 0px 24px;
   border: none;
   background: #333948 0% 0% no-repeat padding-box;
   color: white;
@@ -112,22 +154,15 @@
   margin-left: auto;
   cursor: pointer;
 }
-.actions-button {
-  border: none;
+.toast__button-multi {
   background: #333948 0% 0% no-repeat padding-box;
   color: white;
-  padding: 0;
-  width: 100%;
+  padding: 8px 16px;
+  border-radius: 28px;
   cursor: pointer;
   font-weight: bold;
 }
-// .actions-button:not(:last-child) {
-//   border-right: 2px solid rgba(0, 0, 0, 0.3); /* add border to all buttons except the last one */
-// }
-.actions-button-seperator {
-  border: 1px solid lightgrey;
-}
-.actions-button:hover,
-.actions-single-button:hover {
+.toast__button-multi:hover,
+.toast__button-single:hover {
   background-color: grey;
 }
