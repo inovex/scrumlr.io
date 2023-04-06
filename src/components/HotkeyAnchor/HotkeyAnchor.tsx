@@ -62,7 +62,7 @@ export const HotkeyAnchor = () => {
 
   const toggleHotkeys = () => {
     if (state.hotkeysAreActive) {
-      Toast.info(t("Hotkeys.hotkeysDisabled"), 1500);
+      Toast.info((message = "blub"));
     } else {
       Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
     }
@@ -90,7 +90,7 @@ export const HotkeyAnchor = () => {
 
   const startTimer = (minutes: number) => {
     dispatch(Actions.setTimer(minutes));
-    Toast.info(`${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`);
+    Toast.info(3000, `${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`);
   };
 
   const showSettings = () => navigate("settings");

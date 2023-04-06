@@ -53,14 +53,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
-        Toast.info(
-          <div>
-            <div>{t("Toast.noteToHiddenColumn")}</div>
-            <button className="toast-button" onClick={toggleColumnVisibility}>
-              {t("Toast.noteToHiddenColumnButton")}
-            </button>
-          </div>
-        );
+        Toast.info((message = "blub"), t("Toast.noteToHiddenColumn"), undefined, undefined, [t("Toast.noteToHiddenColumnButton")], toggleColumnVisibility);
         setToastDisplayed(true);
       }
       setValue("");

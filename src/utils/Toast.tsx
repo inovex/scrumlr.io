@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import {ReactNode} from "react";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
+import {ReactComponent as InfoIcon} from "assets/icon-delete.svg"; // info-icon broken?
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -29,20 +30,35 @@ function error(content: ReactNode, autoClose: number | false = TOAST_TIMER_DEFAU
   toast.error(content, {...toastConfig, autoClose});
 }
 
+type Options = {
+  message: string;
+  hintMessage?: string | undefined;
+  hintOnClick?: (() => void) | undefined;
+  buttons?: string[] | undefined;
+  firstButtonOnClick?: (() => void) | undefined;
+  secondButtonOnClick?: (() => void) | undefined;
+  autoClose: number | false = TOAST_TIMER_DEFAULT;
+  icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = InfoIcon;
+};
 /**
  * Display info message via toast.
  *
  * @param content Info message.
  */
-function info(
-  content: ReactNode | null,
-  autoClose: number | false = TOAST_TIMER_DEFAULT,
-  message: string,
-  hintMessage: string | null,
-  buttons: string[] | null,
-  firstButtonOnClick?: () => void
-) {
-  toast.info(<CustomToast buttons={buttons} message={message} hintMessage={hintMessage} firstButtonOnClick={firstButtonOnClick} />, {...toastConfig}); // .info/success/error = set different icons and colors?
+function info(options: Options) {
+  const {message, hintMessage, hintOnClick} = options;
+  toast.info(
+    <CustomToast
+      message={message}
+      hintMessage={hintMessage}
+      hintOnClick={hintOnClick}
+      buttons={buttons}
+      firstButtonOnClick={firstButtonOnClick}
+      secondButtonOnClick={secondButtonOnClick}
+      icon={icon}
+    />,
+    {...toastConfig, autoClose}
+  ); // .info/success/error = set different icons and colors?
 }
 
 export const Toast = {
