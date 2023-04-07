@@ -19,13 +19,12 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.userCheckCompleted(true));
       })
       .catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.serverConnection")}</div>
-            <Button onClick={() => store.dispatch(Actions.initApplication())}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.serverConnection"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.initApplication()),
+          autoClose: false,
+        });
         dispatch(Actions.userCheckCompleted(false));
       });
   }

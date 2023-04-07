@@ -66,7 +66,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         )}
         {isSingleLineToast && buttons?.length == 1 && (
           <button className="toast__button-single" onClick={firstButtonOnClick}>
-            Zurücksetzen
+            {buttons[0]}
           </button>
         )}
         {!isSingleLineToast && (
