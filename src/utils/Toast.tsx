@@ -10,8 +10,9 @@ const toastConfig: ToastOptions = {
   position: "bottom-right",
   hideProgressBar: true,
   closeOnClick: true,
-  autoClose: false,
 };
+
+export type ToastTypes = "info" | "success" | "warning" | "error";
 
 type Options = {
   title: string;
@@ -23,6 +24,7 @@ type Options = {
   secondButtonOnClick?: (() => void) | undefined;
   autoClose?: number | false;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  type?: ToastTypes;
 };
 
 // .info/success/error = set different icons and colors?
@@ -33,8 +35,19 @@ type Options = {
  * @param content Success message.
  */
 function success(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = SuccessIcon} = options;
-  toast.info(
+  const {
+    title,
+    message,
+    hintMessage,
+    hintOnClick,
+    buttons,
+    firstButtonOnClick,
+    secondButtonOnClick,
+    autoClose = TOAST_TIMER_DEFAULT,
+    icon = SuccessIcon,
+    type = "success",
+  } = options;
+  toast.success(
     <CustomToast
       title={title}
       message={message}
@@ -44,6 +57,7 @@ function success(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      type={type}
     />,
     {...toastConfig, autoClose}
   );
@@ -55,8 +69,8 @@ function success(options: Options) {
  * @param content Error message.
  */
 function error(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = ErrorIcon} = options;
-  toast.info(
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = ErrorIcon, type = "error"} = options;
+  toast.error(
     <CustomToast
       title={title}
       message={message}
@@ -66,6 +80,7 @@ function error(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      type={type}
     />,
     {...toastConfig, autoClose}
   );
@@ -77,7 +92,7 @@ function error(options: Options) {
  * @param content Info message.
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;
   toast.info(
     <CustomToast
       title={title}
@@ -88,6 +103,7 @@ function info(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      type={type}
     />,
     {...toastConfig, autoClose}
   );

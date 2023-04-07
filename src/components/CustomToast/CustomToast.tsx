@@ -1,6 +1,8 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {ToastTypes} from "utils/Toast";
+import classNames from "classnames";
 
 export interface CustomToastProps {
   title: string;
@@ -11,9 +13,10 @@ export interface CustomToastProps {
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  type?: ToastTypes;
 }
 
-export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon}) => {
+export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, type}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
   const [hintChecked, setHintChecked] = useState<boolean>(false); // retrieve setting from somewhere redux?
   const titleRef = useRef<HTMLDivElement>(null);
@@ -45,7 +48,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
     }`}</style>
 
       <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
-        <div className={`${isSingleLineToast ? "toast__icon-single" : "toast__icon-multi"}`}>{Icon && <Icon />}</div>
+        <div className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `${`toast__icon-${  type}`}`)}>{Icon && <Icon />}</div>
         <div className={`${isSingleLineToast ? "toast__title-single" : "toast__title-multi"}`} ref={titleRef}>
           {title}
         </div>

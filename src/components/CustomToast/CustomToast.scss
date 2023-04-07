@@ -45,18 +45,30 @@
 .toast-multi {
   padding: 30px 54px 24px 54px;
 }
+.toast__icon-info {
+  background-color: $menu-icon-background-color--dark; // add duplicate with new name?
+}
+.toast__icon-success {
+  background-color: $color-grooming-green;
+}
+.toast__icon-error {
+  background-color: $color-retro-red;
+}
 .toast__icon-single {
   display: flex;
   justify-content: center;
   align-items: center;
 
   border-radius: 28px;
-  background-color: #333948;
   width: 44px;
   height: 100%;
 
   > svg {
+    height: 30px;
+    width: 30px;
+    fill: white;
     > g path {
+      //uniform svgs
       fill: white;
     }
   }
@@ -69,7 +81,6 @@
 
   width: 64px;
   height: 64px;
-  background-color: #333948;
   border-radius: 50%;
 
   display: flex;
@@ -79,7 +90,9 @@
   > svg {
     height: 46px;
     width: 46px;
+    fill: white;
     > g path {
+      // uniform svgs
       fill: white;
     }
   }
