@@ -48,7 +48,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
     }`}</style>
 
       <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
-        <div className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `${`toast__icon-${  type}`}`)}>{Icon && <Icon />}</div>
+        <div className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `toast__icon-${type}`)}>{Icon && <Icon />}</div>
         <div className={`${isSingleLineToast ? "toast__title-single" : "toast__title-multi"}`} ref={titleRef}>
           {title}
         </div>
@@ -76,7 +76,10 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           <div className="toast__buttons-multi">
             {buttons &&
               buttons.map((button, index) => (
-                <button className="toast__button-multi" onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}>
+                <button
+                  className={index == 0 ? `toast__button-multi-primary toast__button-${type}` : `toast__button-multi-secondary toast__button-${type}`}
+                  onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
+                >
                   {button}
                 </button>
               ))}

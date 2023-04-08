@@ -56,7 +56,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       if (!columnIsVisible && !toastDisplayed) {
         Toast.info({
           title: t("Toast.noteToHiddenColumn"),
-          buttons: [t("Toast.noteToHiddenColumnButton")],
+          buttons: [t("Toast.noteToHiddenColumnButton"), "blubb"],
           firstButtonOnClick: toggleColumnVisibility,
         });
         setToastDisplayed(true);

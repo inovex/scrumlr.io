@@ -16,6 +16,7 @@
   box-shadow: $box-shadow--light;
   overflow: inherit;
   cursor: default;
+  background-color: $color-white;
 }
 .Toastify__toast-icon {
   display: none;
@@ -46,7 +47,7 @@
   padding: 30px 54px 24px 54px;
 }
 .toast__icon-info {
-  background-color: $menu-icon-background-color--dark; // add duplicate with new name?
+  background-color: $menu-icon-background-color--dark;
 }
 .toast__icon-success {
   background-color: $color-grooming-green;
@@ -66,11 +67,7 @@
   > svg {
     height: 30px;
     width: 30px;
-    fill: white;
-    > g path {
-      //uniform svgs
-      fill: white;
-    }
+    color: white;
   }
 }
 .toast__icon-multi {
@@ -90,11 +87,7 @@
   > svg {
     height: 46px;
     width: 46px;
-    fill: white;
-    > g path {
-      // uniform svgs
-      fill: white;
-    }
+    color: white;
   }
 }
 .toast__close-icon-single {
@@ -102,6 +95,7 @@
   height: 40px;
   margin-left: 4px;
   border-radius: 50%;
+  color: #bfc1c5;
 }
 .toast__close-icon-multi {
   position: absolute;
@@ -110,6 +104,7 @@
   top: 10px;
   right: 15px;
   border-radius: 50%;
+  color: #bfc1c5;
 }
 .toast__close-icon-single:hover,
 .toast__close-icon-multi:hover {
@@ -148,13 +143,30 @@
 .toast__buttons-multi {
   display: flex;
   gap: 10px;
+  margin-top: 20px;
 }
-
+// coloring of butttons intended like that? if not at least for the hover
+.toast__button-info {
+  background-color: $menu-icon-background-color--dark;
+  color: $menu-icon-background-color--dark;
+  border: 2px solid $menu-icon-background-color--dark;
+}
+.toast__button-success {
+  background-color: $color-grooming-green;
+  color: $color-grooming-green;
+  border: 2px solid $color-grooming-green;
+}
+.toast__button-error {
+  background-color: $color-retro-red;
+  color: $color-retro-red;
+  border: 2px solid $color-retro-red;
+}
+// -----------
 .toast__button-single {
   height: 100%;
   padding: 14px 24px;
   border: none;
-  background: #333948 0% 0% no-repeat padding-box;
+  background: $menu-icon-background-color--dark;
   color: white;
   font-weight: bold;
   border-radius: 28px;
@@ -162,16 +174,46 @@
   cursor: pointer;
   border: none;
 }
-.toast__button-multi {
-  background: #333948 0% 0% no-repeat padding-box;
-  color: white;
+.toast__button-multi-primary {
   padding: 14px 24px;
   border-radius: 28px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
   border: none;
+
+  color: $color-white;
 }
+.toast__button-multi-secondary {
+  padding: 14px 24px;
+  border-radius: 28px;
+  font-weight: bold;
+  cursor: pointer;
+
+  background: $color-white;
+}
+
 .toast__button-multi:hover,
 .toast__button-single:hover {
   background-color: grey;
+}
+
+// --------------------------------------------
+
+[theme="dark"] {
+  .Toastify__toast {
+    background-color: $menu-icon-background-color--dark;
+  }
+  .toast__icon-info {
+    background-color: $color-white;
+    > svg {
+      fill: black;
+    }
+    g path {
+      fill: black;
+    }
+  }
+  .toast__title-multi,
+  .toast__title-single {
+    color: $color-white;
+  }
 }

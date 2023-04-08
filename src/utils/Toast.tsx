@@ -27,8 +27,6 @@ type Options = {
   type?: ToastTypes;
 };
 
-// .info/success/error = set different icons and colors?
-
 /**
  * Display success message via toast.
  *
@@ -92,7 +90,7 @@ function error(options: Options) {
  * @param content Info message.
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = false, icon = InfoIcon, type = "info"} = options;
   toast.info(
     <CustomToast
       title={title}
