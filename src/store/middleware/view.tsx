@@ -2,7 +2,7 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import i18n from "i18next";
+import i18n from "i18n";
 import {Toast} from "../../utils/Toast";
 import store from "../index";
 
@@ -13,11 +13,13 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.setServerInfo(r.authProvider || [], new Date(r.serverTime), r.feedbackEnabled));
       })
       .catch(() => {
-        Toast.error({
-          title: i18n.t("Error.initApplication"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.initApplication()),
-          autoClose: false,
+        i18n.on("loaded", () => {
+          Toast.error({
+            title: i18n.t("Error.initApplication"),
+            buttons: [i18n.t("Error.retry")],
+            firstButtonOnClick: () => store.dispatch(Actions.initApplication()),
+            autoClose: false,
+          });
         });
       });
   }
