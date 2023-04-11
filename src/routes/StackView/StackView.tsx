@@ -181,22 +181,14 @@ export const StackView = () => {
   useEffect(() => {
     if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
       navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
-      Toast.info(
-        <div>
-          <div>{t("Toast.noteMovedToStack")}</div>
-        </div>
-      );
+      Toast.info({title: t("Toast.noteMovedToStack")});
     }
   }, [boardId, navigate, note, t]);
 
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.error(
-        <div>
-          <div>{t("Toast.noteDeleted")}</div>
-        </div>
-      );
+      Toast.error({title: t("Toast.noteDeleted")});
     }
   }, [note, t]);
 

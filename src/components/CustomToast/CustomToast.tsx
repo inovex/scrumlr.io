@@ -48,7 +48,14 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
     }`}</style>
 
       <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
-        <div className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `toast__icon-${type}`)}>{Icon && <Icon />}</div>
+        <div
+          className={classNames(
+            {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
+            `toast__icon-${type}-${isSingleLineToast ? "single" : "multi"}`
+          )}
+        >
+          {Icon && <Icon />}
+        </div>
         <div className={`${isSingleLineToast ? "toast__title-single" : "toast__title-multi"}`} ref={titleRef}>
           {title}
         </div>
@@ -68,7 +75,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           </div>
         )}
         {isSingleLineToast && buttons?.length == 1 && (
-          <button className="toast__button-single" onClick={firstButtonOnClick}>
+          <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
             {buttons[0]}
           </button>
         )}
@@ -77,7 +84,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             {buttons &&
               buttons.map((button, index) => (
                 <button
-                  className={index == 0 ? `toast__button-multi-primary toast__button-${type}` : `toast__button-multi-secondary toast__button-${type}`}
+                  className={index == 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
                   onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
                 >
                   {button}
@@ -85,7 +92,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
               ))}
           </div>
         )}
-        <div className={`${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
+        <div className={`toast__close-icon ${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
           <CloseIcon />
         </div>
       </div>

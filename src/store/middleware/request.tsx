@@ -28,13 +28,12 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
         }
       })
       .catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.joinBoard")}</div>
-            <Button onClick={() => store.dispatch(Actions.joinBoard(action.boardId, action.passphrase))}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.joinBoard"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.joinBoard(action.boardId, action.passphrase)),
+          autoClose: false,
+        });
       });
   }
 
@@ -67,13 +66,12 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.AcceptJoinRequests) {
     action.userIds.forEach((userId) => {
       API.acceptJoinRequest(action.context.board!, userId).catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.acceptJoinRequests")}</div>
-            <Button onClick={() => store.dispatch(Actions.acceptJoinRequests(action.userIds))}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.acceptJoinRequests"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.acceptJoinRequests(action.userIds)),
+          autoClose: false,
+        });
       });
     });
   }
@@ -81,13 +79,12 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
   if (action.type === Action.RejectJoinRequests) {
     action.userIds.forEach((userId) => {
       API.rejectJoinRequest(action.context.board!, userId).catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.rejectJoinRequest")}</div>
-            <Button onClick={() => store.dispatch(Actions.rejectJoinRequests(action.userIds))}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.rejectJoinRequest"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.rejectJoinRequests(action.userIds)),
+          autoClose: false,
+        });
       });
     });
   }

@@ -55,7 +55,8 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
         Toast.info({
-          title: t("Toast.noteToHiddenColumn"),
+          title: "Hidden column",
+          message: t("Toast.noteToHiddenColumn"),
           buttons: [t("Toast.noteToHiddenColumnButton"), "blubb"],
           firstButtonOnClick: toggleColumnVisibility,
         });
@@ -70,6 +71,15 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
+        onClick={() =>
+          Toast.info({
+            title: "Karte wurde gelöscht",
+            // message: "doppelblubb gönn doch brudi",
+            buttons: ["Retry"],
+            firstButtonOnClick: () => console.log("toastüüü"),
+            autoClose: false,
+          })
+        }
         type="text"
         value={value}
         onChange={handleChangeNoteText}

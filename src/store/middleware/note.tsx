@@ -10,12 +10,11 @@ import store from "../index";
 export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.AddNote) {
     API.addNote(action.context.board!, action.columnId, action.text).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.addNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.addNote(action.columnId, action.text))}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      Toast.error({
+        title: i18n.t("Error.addNote"),
+        buttons: [i18n.t("Error.retry")],
+        firstButtonOnClick: () => store.dispatch(Actions.addNote(action.columnId, action.text)),
+      });
     });
   }
 
@@ -25,32 +24,25 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     const {moderating} = stateAPI.getState().view;
 
     if (sharedNoteId === currentNoteId && !moderating) {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.deleteNoteWhenShared")}</div>
-        </div>,
-        5000
-      );
+      Toast.error({title: i18n.t("Error.deleteNoteWhenShared")});
     } else {
       API.deleteNote(action.context.board!, action.noteId).catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.deleteNote")}</div>
-            <Button onClick={() => store.dispatch(Actions.deleteNote(action.noteId))}>{i18n.t("Error.retry")}</Button>
-          </div>
-        );
+        Toast.error({
+          title: i18n.t("Error.deleteNote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.deleteNote(action.noteId)),
+        });
       });
     }
   }
 
   if (action.type === Action.EditNote) {
     API.editNote(action.context.board!, action.note, action.request).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.editNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.editNote(action.note, action.request))}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      Toast.error({
+        title: i18n.t("Error.editNote"),
+        buttons: [i18n.t("Error.retry")],
+        firstButtonOnClick: () => store.dispatch(Actions.editNote(action.note, action.request)),
+      });
     });
   }
 
@@ -59,12 +51,11 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     const parent = stateAPI.getState().notes.find((n) => n.id === note.position.stack)!;
 
     API.editNote(action.context.board!, action.note, {position: {column: note.position.column, stack: undefined, rank: Math.max(parent.position.rank - 1, 0)}}).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.unstackNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.unstackNote(action.note))}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      Toast.error({
+        title: i18n.t("Error.unstackNote"),
+        buttons: [i18n.t("Error.retry")],
+        firstButtonOnClick: () => store.dispatch(Actions.unstackNote(action.note)),
+      });
     });
   }
 };

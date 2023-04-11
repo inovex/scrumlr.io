@@ -15,7 +15,9 @@ export const FeedbackAPI = {
         }),
       });
       if (response.ok) {
-        Toast.success(i18n.t("Feedback.SubmitNotification"));
+        i18n.on("loaded", () => {
+          Toast.success({title: i18n.t("Feedback.SubmitNotification")});
+        });
       }
     } catch (error) {
       throw new Error(`unable to send feedback: ${error}`);

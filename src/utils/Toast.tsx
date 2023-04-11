@@ -2,8 +2,8 @@ import {toast, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
-import {ReactComponent as InfoIcon} from "assets/icon-delete.svg"; // info-icon broken?
-import {ReactComponent as SuccessIcon} from "assets/icon-check.svg"; // exchange to success-icon
+import {ReactComponent as InfoIcon} from "assets/icon-info.svg"; // info-icon broken?
+import {ReactComponent as SuccessIcon} from "assets/icon-success.svg"; // exchange to success-icon
 import {ReactComponent as ErrorIcon} from "assets/icon-cancel.svg"; // exchange to error-icon ?
 
 const toastConfig: ToastOptions = {
@@ -90,7 +90,7 @@ function error(options: Options) {
  * @param content Info message.
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = false, icon = InfoIcon, type = "info"} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;
   toast.info(
     <CustomToast
       title={title}

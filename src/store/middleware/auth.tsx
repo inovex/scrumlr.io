@@ -37,11 +37,13 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         location.reload();
       })
       .catch(() => {
-        Toast.error({
-          title: i18n.t("Error.logout"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.signOut()),
-          autoClose: false,
+        i18n.on("loaded", () => {
+          Toast.error({
+            title: i18n.t("Error.logout"),
+            buttons: [i18n.t("Error.retry")],
+            firstButtonOnClick: () => store.dispatch(Actions.signOut()),
+            autoClose: false,
+          });
         });
       });
   }
