@@ -59,7 +59,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const [localNotes, setLocalNotes] = useState(notes);
   useEffect(() => {
-    console.log("notes changed", columnName);
     setLocalNotes(notes);
   }, [notes]);
 
