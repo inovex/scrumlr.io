@@ -4,7 +4,11 @@
   overflow-y: hidden;
   height: 100%;
   width: 100%;
+  padding: 20px;
   background: linear-gradient(to bottom, rgb(107, 156, 255, 3%), rgb(255, 255, 255, 3%));
+}
+
+.not-found__header {
 }
 
 .not-found__main {

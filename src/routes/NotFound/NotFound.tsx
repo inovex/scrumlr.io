@@ -1,10 +1,13 @@
 import "./NotFound.scss";
 import {ReactComponent as StanWebLight} from "assets/stan/Stan_404_Web_Light.svg";
+import {ReactComponent as ScrumlrLogoLight} from "assets/scrumlr-logo-light.svg";
 
 export const NotFound = () => (
   <div className="not-found__root">
     <header className="not-found__header">
-      <div className="scrumlr-logo">logo</div>
+      <div className="scrumlr-logo">
+        <ScrumlrLogoLight className="not-found__scrumlr-logo" />
+      </div>
     </header>
     <main className="not-found__main">
       <div className="not-found__content">
