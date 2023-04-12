@@ -32,17 +32,16 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const {notes, moderating, viewer} = useAppSelector(
-    (state) => ({
-      notes: state.notes
+  const notes = useAppSelector(
+    (state) =>
+      state.notes
         .filter((note) => !note.position.stack)
         .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
         .map((note) => note.id),
-      moderating: state.view.moderating,
-      viewer: state.participants!.self,
-    }),
     _.isEqual
   );
+  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
@@ -59,7 +58,10 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   };
 
   const [localNotes, setLocalNotes] = useState(notes);
-  useEffect(() => setLocalNotes(notes), [notes]);
+  useEffect(() => {
+    console.log("notes changed", columnName);
+    setLocalNotes(notes);
+  }, [notes]);
 
   const setItems = (items: string[]) => {
     setLocalNotes(items);
