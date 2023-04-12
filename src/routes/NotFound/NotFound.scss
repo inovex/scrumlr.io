@@ -14,7 +14,7 @@
 .not-found__main {
   display: flex;
   flex-direction: row;
-  gap: 200px;
+  gap: 20px;
 
   height: 100%;
 
@@ -64,4 +64,5 @@
 }
 
 .not-found__logo-stan--web-light {
+  width: clamp(200px, 50vw, 1000px); // min bound doesn't quite work
 }
