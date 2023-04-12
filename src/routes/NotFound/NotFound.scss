@@ -1,7 +1,10 @@
 @import "src/constants/style";
 
 .not-found__root {
-  // overflow: hidden visible;
+  overflow-y: hidden;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom, rgb(107, 156, 255, 3%), rgb(255, 255, 255, 3%));
 }
 
 .not-found__main {
