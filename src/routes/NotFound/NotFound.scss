@@ -10,8 +10,12 @@
 .not-found__main {
   display: flex;
   flex-direction: row;
+  gap: 200px;
+
+  height: 100%;
 
   justify-content: center;
+  align-items: center;
 }
 
 // content (left)
@@ -20,7 +24,6 @@
   flex-direction: column;
   align-items: start; // prevent button from taking the whole space
 
-  margin-top: 225px;
   // margin-left: 225px;
 }
 
