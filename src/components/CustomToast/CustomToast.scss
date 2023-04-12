@@ -45,8 +45,8 @@
 .toast__icon-info-single {
   background-color: $menu-icon-background-color--dark;
   svg {
-    height: 26px;
-    width: 26px;
+    height: 28px;
+    width: 28px;
   }
 }
 .toast__icon-success-single {
@@ -79,6 +79,9 @@
   svg {
     height: 36px;
     width: 36px;
+    path {
+      stroke: rgba($color-white, 0.7);
+    }
   }
 }
 .toast__icon-success-multi {
@@ -99,7 +102,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  transform: translate(-40%, -40%);
+  transform: translate(-38%, -31%);
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -107,7 +110,7 @@
   justify-content: center;
   align-items: center;
   svg {
-    color: white;
+    color: $color-white;
   }
 }
 .toast__close-icon {
@@ -118,7 +121,7 @@
   transition: all 0.1s ease-in-out;
 }
 .toast__close-icon-single {
-  margin-left: 4px;
+  margin-left: 6px;
 }
 .toast__close-icon-multi {
   position: absolute;
@@ -152,10 +155,25 @@
   font-weight: 500;
   color: #333948;
 }
-
+// -------  TODO
 .toast__hint {
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  // margin-bottom: 16px;
+  gap: 7px;
+  color: #989ba3;
 }
+// .toast__hint-button[type=checkbox] {
+//     -webkit-appearance: none;
+//     height: 18px;
+//     width: 18px;
+//     border: 2px solid #989ba383;
+//     border-radius: 15%;
+// }
+// .toast__hint-button[type=checkbox]:hover {
+//   background-color: rgba(#989ba383, 0.2);
+// }
+// ----------------
 
 .toast__buttons-multi {
   display: flex;
@@ -163,7 +181,8 @@
   margin-top: 20px;
 }
 .toast__button {
-  padding: 14px 24px;
+  font-size: 14px;
+  padding: 13px 24px;
   border-radius: 28px;
   cursor: pointer;
   font-weight: bold;
@@ -179,11 +198,13 @@
   color: white;
 }
 .toast__button-multi-primary {
+  padding: 13px 32px;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
   border: 2px solid $menu-icon-background-color--dark;
 }
 .toast__button-multi-secondary {
+  padding: 13px 32px;
   background: $color-white;
   border: 2px solid $menu-icon-background-color--dark;
 }
@@ -248,5 +269,65 @@
     border: none;
     background: $color-white;
     color: $menu-icon-background-color--dark;
+  }
+}
+
+// --------------------------------------
+
+// @media #{$tablet} {
+// }
+
+@media #{$smartphone} {
+  .Toastify__toast {
+    width: calc(100vw - 38px);
+    max-height: 210px; // needed?
+    min-height: 60px;
+    // margin: 0px auto calc(5vw) auto; ??
+    margin: 0px auto 19px auto;
+  }
+  .toast-multi {
+    padding: 39px 31px 17px 31px;
+  }
+  .toast__icon-multi {
+    height: 55px;
+    width: 55px;
+    transform: translate(-28%, -32%);
+  }
+  .toast__icon-info-multi {
+    background-color: $menu-icon-background-color--dark;
+    svg {
+      height: 29px;
+      width: 29px;
+    }
+  }
+  .toast__close-icon-multi {
+    width: 38px;
+    height: 38px;
+    top: 9px;
+    right: 11px;
+  }
+  .toast__title-multi {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    margin-bottom: 5px;
+  }
+  .toast__message {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    margin-bottom: 13px;
+  }
+  .toast__hint-text {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+  }
+  .toast__buttons-multi {
+    max-height: 42px;
+    margin-top: 20px;
+  }
+  .toast__button {
+    padding: 12px 30px;
   }
 }

@@ -72,10 +72,11 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
         onClick={() =>
-          Toast.info({
-            title: "Karte wurde gelöscht",
-            // message: "doppelblubb gönn doch brudi",
-            buttons: ["Retry"],
+          Toast.error({
+            title: "Lorem ipsum",
+            message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
+            buttons: ["Save", "Delete"],
+            hintMessage: "Don't show this again",
             firstButtonOnClick: () => console.log("toastüüü"),
             autoClose: false,
           })

@@ -32,13 +32,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
     }
   }, [title]);
 
-  const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage; // maybe two line Title ok aswell?
-  console.log("------");
-  console.log(!buttons || buttons?.length <= 1);
-  console.log(isSingleLineTitle);
-  console.log(!message);
-  console.log(!hintMessage);
-  console.log("------");
+  const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage;
 
   return (
     <>
@@ -61,18 +55,17 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         </div>
         {message && <div className="toast__message">{message}</div>}
         {hintMessage && (
-          <div className="toast__hint">
-            <label
-              onClick={(e) => {
-                e.stopPropagation();
-                setHintChecked(true);
-                hintOnClick;
-              }}
-            >
-              <input className={hintChecked ? "toast__hint-button-checked" : "toast__hint-button"} type="checkbox" defaultChecked={hintChecked} />
-              <span className="toast__hint-text">{hintMessage}</span>
-            </label>
-          </div>
+          <label
+            className="toast__hint"
+            onClick={(e) => {
+              e.stopPropagation();
+              setHintChecked(true);
+              hintOnClick;
+            }}
+          >
+            <input className={classNames("toast__hint-button", {"toast__hint-button-checked": hintChecked})} type="checkbox" defaultChecked={hintChecked} />
+            <span className="toast__hint-text">{hintMessage}</span>
+          </label>
         )}
         {isSingleLineToast && buttons?.length == 1 && (
           <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
