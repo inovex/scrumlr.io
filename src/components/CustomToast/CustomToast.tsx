@@ -35,13 +35,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage;
 
   return (
-    <>
-      <style>{`.Toastify__toast { 
-        --toast-height: ${isSingleLineToast ? "56px;" : "fit-content;"} 
-        --toast-border-radius: ${isSingleLineToast ? "28px;" : "16px;"}
-    }`}</style>
-
-      <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
+    <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
         <div
           className={classNames(
             {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
@@ -50,9 +44,20 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         >
           {Icon && <Icon />}
         </div>
-        <div className={`${isSingleLineToast ? "toast__title-single" : "toast__title-multi"}`} ref={titleRef}>
-          {title}
-        </div>
+        {isSingleLineToast ? (
+          <div className="toast__title-button-single-wrapper">
+            <div className="toast__title-single">{title}</div>
+            {buttons?.length == 1 && (
+              <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
+                {buttons[0]}
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="toast__title-multi" ref={titleRef}>
+            {title}
+          </div>
+        )}
         {message && <div className="toast__message">{message}</div>}
         {hintMessage && (
           <label
@@ -66,11 +71,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             <input className={classNames("toast__hint-button", {"toast__hint-button-checked": hintChecked})} type="checkbox" defaultChecked={hintChecked} />
             <span className="toast__hint-text">{hintMessage}</span>
           </label>
-        )}
-        {isSingleLineToast && buttons?.length == 1 && (
-          <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
-            {buttons[0]}
-          </button>
         )}
         {!isSingleLineToast && (
           <div className="toast__buttons-multi">
@@ -89,6 +89,5 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           <CloseIcon />
         </div>
       </div>
-    </>
   );
 };

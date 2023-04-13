@@ -1,5 +1,6 @@
 import {toast, ToastOptions} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
 import {ReactComponent as InfoIcon} from "assets/icon-info.svg"; // info-icon broken?
@@ -45,7 +46,7 @@ function success(options: Options) {
     icon = SuccessIcon,
     type = "success",
   } = options;
-  toast.success(
+  toast(
     <CustomToast
       title={title}
       message={message}
@@ -68,7 +69,7 @@ function success(options: Options) {
  */
 function error(options: Options) {
   const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = ErrorIcon, type = "error"} = options;
-  toast.error(
+  toast(
     <CustomToast
       title={title}
       message={message}
@@ -91,7 +92,7 @@ function error(options: Options) {
  */
 function info(options: Options) {
   const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;
-  toast.info(
+  toast(
     <CustomToast
       title={title}
       message={message}
