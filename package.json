@@ -97,7 +97,7 @@
     "redux-mock-store": "^1.5.4",
     "sass": "^1.62.0",
     "ts-jest": "^29.1.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "start": "react-scripts start",
