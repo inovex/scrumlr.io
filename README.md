@@ -1,21 +1,26 @@
-<div align="center" markdown="1" style="margin-bottom: 2.5em">
-  <p>
-    <img src="scrumlr.png" alt="scrumlr.io" style="width: 284px; max-width: 80%; height: auto;" />
-  </p>
-  <p>
-    <a href="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml">
-      <img src="https://github.com/inovex/scrumlr.io/actions/workflows/continuous-integration.yml/badge.svg?branch=main"/>
-    </a>
-  </p>
-</div>
+<p align="center">
+  <img src="scrumlr.png" alt="scrumlr.io" />
+</p>
 
-Webapp for collaborative online retrospectives hosted on [scrumlr.io](https://scrumlr.io).
-Read our ['Welcome' wiki page](https://github.com/inovex/scrumlr.io/wiki/Welcome) to learn more
-about the history and the vision of this tool.
+<h3 align="center">Online retrospectives made easy</h3>
+<p align="center"><a href="https://scrumlr.io">scrumlr.io</a> is an online collaboration tool that helps teams reach new heights. Start your first retrospective or collaborative session in an instant - no registration required and completely free and open source. </p>
 
-We developed the client with the help of [React](https://reactjs.org/) while our server is implemented in [Go](https://go.dev/).
+---
 
-# Getting Started
+<p align="center">
+  <img alt="GitHub" src="https://img.shields.io/github/license/inovex/scrumlr.io?style=for-the-badge">
+  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/inovex/scrumlr.io?style=for-the-badge">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/inovex/scrumlr.io/continuous-integration.yml?style=for-the-badge">
+</p>
+
+
+<p align="center">
+  <a href="https://scrumlr.io">
+    <img src="./public/screenshots/board.png" alt="scrumlr.io" />
+  </a>
+</p>
+
+## Getting Started
 
 Checkout the sources.
 
@@ -24,7 +29,7 @@ $ git clone https://github.com/inovex/scrumlr.io.git
 $ cd scrumlr.io
 ```
 
-## Prerequisites
+### Prerequisites
 
 - [Node.js](https://nodejs.org/)
 - [yarn](https://yarnpkg.com/)
@@ -33,7 +38,7 @@ $ cd scrumlr.io
 - _(optional)_ [minikube](https://kubernetes.io/docs/tasks/tools/)
 - _(optional)_ [kubectl](https://kubernetes.io/docs/tasks/tools/)
 
-## Run
+### Run
 
 1. run the server (backend) with docker
 
@@ -65,7 +70,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/35272402?s=48&amp;v=4" width="48" height="48" alt="Resaki1">](https://github.com/Resaki1)
 [<img src="https://avatars.githubusercontent.com/u/49522775?s=48&amp;v=4" width="48" height="48" alt="Benjosh95">](https://github.com/Benjosh95)
 [<img src="https://avatars.githubusercontent.com/u/44020029?s=48&amp;v=4" width="48" height="48" alt="CronJorian">](https://github.com/CronJorian)
-[<img src="https://avatars.githubusercontent.com/u/79283124?v=4&amp;v=4" width="48" height="48" alt="Lennart01">](https//github.com/lennart01)
+[<img src="https://avatars.githubusercontent.com/u/79283124?v=4&amp;v=4" width="48" height="48" alt="Lennart01">](https://github.com/lennart01)
 [<img src="https://avatars.githubusercontent.com/u/1539948?s=48&amp;v=4" width="48" height="48" alt="bitionaire">](https://github.com/bitionaire)
 [<img src="https://avatars.githubusercontent.com/u/88541778?s=48&amp;v=4" width="48" height="48" alt="dbaderINO">](https://github.com/dbaderINO)
 [<img src="https://avatars.githubusercontent.com/u/105675885?s=48&amp;v=4" width="48" height="48" alt="Kraft16">](https://github.com/Kraft16)
@@ -107,4 +112,4 @@ A special shout-out goes to [inovex](https://inovex.de) for all the support and 
 
 ## License
 
-Scrumlr is [MIT licensed](https://github.com/inovex/scrumlr.io/blob/main/LICENSE).
+See the [LICENSE](./LICENSE) file for licensing information.
