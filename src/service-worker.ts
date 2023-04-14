@@ -31,7 +31,7 @@ registerRoute(
     if (url.pathname.match(fileExtensionRegexp)) return false;
 
     // if this URL is a login provider URL, skip
-    if (url.pathname.includes("/api/login")) return false;
+    if (url.pathname.includes("/api/login/")) return false;
 
     // Return true to signal that we want to use the handler.
     return true;
