@@ -1,9 +1,10 @@
 name: Deployment
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types: [completed]
   pull_request:
-    branches: [main]
+    types: [labeled]
 jobs:
   build-frontend:
     runs-on: self-hosted
