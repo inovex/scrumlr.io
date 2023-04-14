@@ -23,8 +23,8 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   const Icon = icon;
 
   useEffect(() => {
-    // console.log(textRef.current?.offsetHeight);
-    if (titleRef.current && titleRef.current.offsetHeight > 16) {
+    console.log(titleRef.current?.offsetHeight);
+    if (titleRef.current && titleRef.current.offsetHeight > 19) {
       // adjust this value to match your font-size and line-height
       setIsSingleLineTitle(false);
     } else {
@@ -33,61 +33,65 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   }, [title]);
 
   const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage;
-
+  console.log("isSingleLineToast", isSingleLineToast);
   return (
     <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
-        <div
-          className={classNames(
-            {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
-            `toast__icon-${type}-${isSingleLineToast ? "single" : "multi"}`
-          )}
-        >
-          {Icon && <Icon />}
-        </div>
-        {isSingleLineToast ? (
-          <div className="toast__title-button-single-wrapper">
-            <div className="toast__title-single">{title}</div>
-            {buttons?.length == 1 && (
-              <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
-                {buttons[0]}
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="toast__title-multi" ref={titleRef}>
+      <div
+        className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `toast__icon-${type}-${isSingleLineToast ? "single" : "multi"}`)}
+      >
+        {Icon && <Icon />}
+      </div>
+      {isSingleLineToast ? (
+        <div className="toast__title-button-single-wrapper">
+          <div className="toast__title-single" ref={titleRef}>
             {title}
           </div>
-        )}
-        {message && <div className="toast__message">{message}</div>}
-        {hintMessage && (
-          <label
-            className="toast__hint"
+          {buttons?.length == 1 && (
+            <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
+              {buttons[0]}
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="toast__title-multi" ref={titleRef}>
+          {title}
+        </div>
+      )}
+      {message && <div className="toast__message">{message}</div>}
+      {hintMessage && (
+        <label
+          className="toast__hint"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <input
+            type="checkbox"
+            name="checkbox"
             onClick={(e) => {
               e.stopPropagation();
-              setHintChecked(true);
-              hintOnClick;
+              hintOnClick && hintOnClick();
             }}
-          >
-            <input className={classNames("toast__hint-button", {"toast__hint-button-checked": hintChecked})} type="checkbox" defaultChecked={hintChecked} />
-            <span className="toast__hint-text">{hintMessage}</span>
-          </label>
-        )}
-        {!isSingleLineToast && (
-          <div className="toast__buttons-multi">
-            {buttons &&
-              buttons.map((button, index) => (
-                <button
-                  className={index == 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
-                  onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
-                >
-                  {button}
-                </button>
-              ))}
-          </div>
-        )}
-        <div className={`toast__close-icon ${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
-          <CloseIcon />
+          />
+          {hintMessage}
+        </label>
+      )}
+      {!isSingleLineToast && (
+        <div className="toast__buttons-multi">
+          {buttons &&
+            buttons.map((button, index) => (
+              <button
+                className={index == 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
+                onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
+              >
+                {button}
+              </button>
+            ))}
         </div>
+      )}
+      <div className={`toast__close-icon ${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
+        <CloseIcon />
       </div>
+    </div>
   );
 };

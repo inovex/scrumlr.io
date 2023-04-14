@@ -157,38 +157,19 @@
 }
 .toast__title-multi {
   font-size: 16px;
-  line-height: 16px;
+  line-height: 19px;
   margin-bottom: 8px;
   font-weight: 700;
   color: #333948;
 }
 
 .toast__message {
-  margin-bottom: 16px;
+  margin-bottom: 13px;
   font-size: 14px;
   line-height: 18px;
   font-weight: 500;
   color: #333948;
 }
-// -------  TODO
-.toast__hint {
-  display: flex;
-  align-items: center;
-  // margin-bottom: 16px;
-  gap: 7px;
-  color: #989ba3;
-}
-// .toast__hint-button[type=checkbox] {
-//     -webkit-appearance: none;
-//     height: 18px;
-//     width: 18px;
-//     border: 2px solid #989ba383;
-//     border-radius: 15%;
-// }
-// .toast__hint-button[type=checkbox]:hover {
-//   background-color: rgba(#989ba383, 0.2);
-// }
-// ----------------
 
 .toast__buttons-multi {
   display: flex;
@@ -197,6 +178,7 @@
 }
 .toast__button {
   font-size: 14px;
+  line-height: 16px;
   padding: 13px 24px;
   border-radius: 28px;
   cursor: pointer;
@@ -267,6 +249,51 @@
 }
 // --------------------------------------------
 
+//--------------------
+// hint checkbox
+.toast__hint {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  display: grid;
+  grid-template-columns: 16px auto;
+  gap: 10px;
+  // margin-bottom: 19px;
+  color: $color-middle-gray;
+}
+input[type="checkbox"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+  font: inherit;
+  color: $color-light-gray;
+  width: 1.125em;
+  height: 1.125em;
+  border: 0.15em solid currentColor;
+  border-radius: 0.2em;
+  // transform: translateY(-0.075em);
+
+  display: grid;
+  place-content: center;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.625em;
+  height: 0.625em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  background-color: $color-light-gray;
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+//-------------------
 [theme="dark"] {
   .Toastify__toast {
     background-color: $menu-icon-background-color--dark;
@@ -317,11 +344,11 @@
     min-height: 60px;
     margin: 0px auto 19px auto;
   }
-  // .Toastify__toast-body {
-  //   margin: 0px;
-  //   min-height: 172px;
-  //   height: auto;
-  // }
+  .Toastify__toast-body {
+    margin: 0px;
+    // min-height: 172px;
+    height: auto;
+  }
   .toast-multi {
     padding: 39px 34px 17px 31px;
     height: 100%;
@@ -347,9 +374,9 @@
     right: 8px;
   }
   .toast__title-multi {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 19px;
+    // font-weight: 700;
+    // font-size: 16px;
+    // line-height: 19px;
     margin-bottom: 5px;
   }
   .toast__message {
@@ -358,14 +385,7 @@
     line-height: 18px;
     margin-bottom: 13px;
   }
-  .toast__hint {
-    margin-bottom: 19px;
-  }
-  .toast__hint-text {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 16px;
-  }
+
   .toast__buttons-multi {
     max-height: 42px;
     margin-top: auto;
@@ -382,11 +402,71 @@
     font-weight: 600;
     margin-top: 3px;
   }
-  // TODO changes color on click of rückgängig
-  // .toast-single:hover {
-  //   background-color: inherit;
-  // }
+
+  // TODO changes color on click of button - not smart
+  .toast-single:hover .toast__button-single.toast__button-info {
+    border-color: $color-white;
+    background-color: $color-white;
+    color: $color-backlog-blue;
+  }
+  .toast-single:hover .toast__button-single.toast__button-error {
+    border-color: $color-white;
+    background-color: $color-white;
+    color: #ff0069;
+  }
+  .toast-single:hover .toast__button-single.toast__button-success {
+    border-color: $color-white;
+    background-color: $color-white;
+    color: #17bf71;
+  }
+
   .toast__title-button-single-wrapper {
     display: block;
+  }
+
+  [theme="dark"] {
+    .Toastify__toast.Toastify__toast:has(div.toast-multi),
+    .Toastify__toast.Toastify__toast:has(div.toast-single) {
+      background-color: $menu-icon-background-color--dark;
+    }
+    .toast__icon-info-single,
+    .toast__icon-info-multi {
+      background-color: $color-white;
+      svg path {
+        stroke: $menu-icon-background-color--dark;
+      }
+    }
+    .toast__title-multi,
+    .toast__title-single,
+    .toast__message {
+      color: $color-white;
+    }
+    .toast__button-multi-primary {
+      background-color: $color-white;
+      color: $menu-icon-background-color--dark;
+    }
+    .toast__button-multi-secondary {
+      background-color: $menu-icon-background-color--dark;
+      border-color: $color-white;
+      color: $color-white;
+    }
+    // .toast__button-single {
+    //   background: $menu-icon-background-color--dark;
+    //   color: #6B9CFF; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+    // }
+
+    // TODO changes color on click of button - not smart
+    .toast-single:hover .toast__button-single.toast__button-info {
+      background: $menu-icon-background-color--dark;
+      color: #6b9cff;
+    }
+    .toast-single:hover .toast__button-single.toast__button-error {
+      background-color: $color-white;
+      color: #ff0069;
+    }
+    .toast-single:hover .toast__button-single.toast__button-success {
+      background-color: $color-white;
+      color: #17bf71;
+    }
   }
 }
