@@ -57,7 +57,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         Toast.info({
           title: "Hidden column",
           message: t("Toast.noteToHiddenColumn"),
-          buttons: [t("Toast.noteToHiddenColumnButton"), "blubb"],
+          buttons: [t("Toast.noteToHiddenColumnButton")],
           firstButtonOnClick: toggleColumnVisibility,
         });
         setToastDisplayed(true);
@@ -72,12 +72,12 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
         onClick={() =>
-          Toast.success({
+          Toast.info({
             title: "Karte gelöscht",
-            message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
+            // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
             buttons: ["Rückgängig"],
-            hintMessage: "Don't show this again",
-            hintOnClick: () => console.log("hint clicked"),
+            // hintMessage: "Don't show this again",
+            // hintOnClick: () => console.log("hint clicked"),
             firstButtonOnClick: () => console.log("button clicked"),
             autoClose: false,
           })

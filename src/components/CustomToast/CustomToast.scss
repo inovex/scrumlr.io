@@ -188,7 +188,7 @@
   align-items: center;
 }
 .toast__button:hover {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 .toast__title-button-single-wrapper {
   display: flex;
@@ -258,7 +258,7 @@
   display: grid;
   grid-template-columns: 16px auto;
   gap: 10px;
-  // margin-bottom: 19px;
+  margin-bottom: 19px;
   color: $color-middle-gray;
   width: fit-content;
 }
@@ -462,10 +462,6 @@ input[type="checkbox"]:checked::before {
       border-color: $color-white;
       color: $color-white;
     }
-    // .toast__button-single {
-    //   background: $menu-icon-background-color--dark;
-    //   color: #6B9CFF; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
-    // }
 
     // TODO changes color on click of button - not smart
     .toast-single:hover .toast__button-single.toast__button-info {
@@ -473,12 +469,24 @@ input[type="checkbox"]:checked::before {
       color: #6b9cff;
     }
     .toast-single:hover .toast__button-single.toast__button-error {
-      background-color: $color-white;
+      background: $menu-icon-background-color--dark;
       color: #ff0069;
     }
     .toast-single:hover .toast__button-single.toast__button-success {
-      background-color: $color-white;
+      background: $menu-icon-background-color--dark;
       color: #17bf71;
+    }
+    .toast__button-single.toast__button-info {
+      background: $menu-icon-background-color--dark;
+      color: #6b9cff; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+    }
+    .toast__button-single.toast__button-error {
+      background: $menu-icon-background-color--dark;
+      color: #ff0069; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+    }
+    .toast__button-single.toast__button-success {
+      background: $menu-icon-background-color--dark;
+      color: #17bf71; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
     }
   }
 }

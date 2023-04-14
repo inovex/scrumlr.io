@@ -23,7 +23,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   const Icon = icon;
 
   useEffect(() => {
-    console.log(titleRef.current?.offsetHeight);
+    // console.log(titleRef.current?.offsetHeight);
     if (titleRef.current && titleRef.current.offsetHeight > 19) {
       // adjust this value to match your font-size and line-height
       setIsSingleLineTitle(false);
@@ -33,7 +33,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   }, [title]);
 
   const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage;
-  console.log("isSingleLineToast", isSingleLineToast);
+
   return (
     <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
       <div
