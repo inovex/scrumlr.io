@@ -4,7 +4,6 @@
 // https://github.com/cra-template/pwa/blob/main/packages/cra-template-pwa-typescript/template/src/service-worker.ts
 // See https://cra.link/PWA for more information
 
-import {SERVER_HTTP_URL} from "config";
 import {clientsClaim} from "workbox-core";
 import {precacheAndRoute, createHandlerBoundToURL} from "workbox-precaching";
 import {registerRoute} from "workbox-routing";
@@ -22,25 +21,17 @@ registerRoute(
   // Return false to exempt requests from being fulfilled by index.html.
   ({request, url}: {request: Request; url: URL}) => {
     // If this isn't a navigation, skip.
-    if (request.mode !== "navigate") {
-      return false;
-    }
+    if (request.mode !== "navigate") return false;
 
     // If this is a URL that starts with /_, skip.
-    if (url.pathname.startsWith("/_")) {
-      return false;
-    }
+    if (url.pathname.startsWith("/_")) return false;
 
     // If this looks like a URL for a resource, because it contains
     // a file extension, skip.
-    if (url.pathname.match(fileExtensionRegexp)) {
-      return false;
-    }
+    if (url.pathname.match(fileExtensionRegexp)) return false;
 
-    // if this URL is a login provider URK, skip
-    if (url.pathname.startsWith(`${SERVER_HTTP_URL}/login/`)) {
-      return false;
-    }
+    // if this URL is a login provider URL, skip
+    if (url.pathname.includes("/api/login")) return false;
 
     // Return true to signal that we want to use the handler.
     return true;
