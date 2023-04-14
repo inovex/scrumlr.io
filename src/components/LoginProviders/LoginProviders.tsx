@@ -16,9 +16,9 @@ export const LoginProviders = ({originURL = window.location.href}) => {
   const {t} = useTranslation();
   const providers = useAppSelector((state) => state.view.enabledAuthProvider);
 
-  if (providers.length === 0) {
+  /* if (providers.length === 0) {
     return null;
-  }
+  } */
 
   const signIn = (provider: string) => async () => {
     await Auth.signInWithAuthProvider(provider, originURL);
@@ -26,11 +26,10 @@ export const LoginProviders = ({originURL = window.location.href}) => {
 
   return (
     <div className="login-providers">
-      {providers.some((provider) => provider === "GOOGLE") && (
-        <Button id="google" className="login-providers__button" onClick={signIn("google")} leftIcon={<GoogleIcon className="login-providers__icon" />}>
-          {t("LoginProviders.signInWithGoogle")}
-        </Button>
-      )}
+      <Button id="google" className="login-providers__button" onClick={signIn("google")} leftIcon={<GoogleIcon className="login-providers__icon" />}>
+        {t("LoginProviders.signInWithGoogle")}
+      </Button>
+
       {providers.some((provider) => provider === "GITHUB") && (
         <Button id="github" className="login-providers__button" onClick={signIn("github")} leftIcon={<GitHubIcon className="login-providers__icon" />}>
           {t("LoginProviders.signInWithGitHub")}
