@@ -70,7 +70,7 @@ fixing a bug or by adding a feature and open a pull request. Just make sure that
 [<img src="https://avatars.githubusercontent.com/u/35272402?s=48&amp;v=4" width="48" height="48" alt="Resaki1">](https://github.com/Resaki1)
 [<img src="https://avatars.githubusercontent.com/u/49522775?s=48&amp;v=4" width="48" height="48" alt="Benjosh95">](https://github.com/Benjosh95)
 [<img src="https://avatars.githubusercontent.com/u/44020029?s=48&amp;v=4" width="48" height="48" alt="CronJorian">](https://github.com/CronJorian)
-[<img src="https://avatars.githubusercontent.com/u/79283124?v=4&amp;v=4" width="48" height="48" alt="Lennart01">](https//github.com/lennart01)
+[<img src="https://avatars.githubusercontent.com/u/79283124?v=4&amp;v=4" width="48" height="48" alt="Lennart01">](https://github.com/lennart01)
 [<img src="https://avatars.githubusercontent.com/u/1539948?s=48&amp;v=4" width="48" height="48" alt="bitionaire">](https://github.com/bitionaire)
 [<img src="https://avatars.githubusercontent.com/u/88541778?s=48&amp;v=4" width="48" height="48" alt="dbaderINO">](https://github.com/dbaderINO)
 [<img src="https://avatars.githubusercontent.com/u/105675885?s=48&amp;v=4" width="48" height="48" alt="Kraft16">](https://github.com/Kraft16)
