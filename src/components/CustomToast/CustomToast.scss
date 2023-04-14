@@ -260,27 +260,28 @@
   gap: 10px;
   // margin-bottom: 19px;
   color: $color-middle-gray;
+  width: fit-content;
 }
 input[type="checkbox"] {
-  /* Add if not using autoprefixer */
   -webkit-appearance: none;
   appearance: none;
-  /* For iOS < 15 to remove gradient background */
   background-color: #fff;
-  /* Not removed via appearance */
   margin: 0;
+
   font: inherit;
   color: $color-light-gray;
   width: 1.125em;
   height: 1.125em;
   border: 0.15em solid currentColor;
   border-radius: 0.2em;
-  // transform: translateY(-0.075em);
 
   display: grid;
   place-content: center;
 }
-
+input[type="checkbox"]:hover {
+  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba($color-light-gray, 0.3);
+}
 input[type="checkbox"]::before {
   content: "";
   width: 0.625em;
@@ -295,7 +296,8 @@ input[type="checkbox"]:checked::before {
 }
 //-------------------
 [theme="dark"] {
-  .Toastify__toast {
+  .Toastify__toast.Toastify__toast:has(div.toast-multi),
+  .Toastify__toast.Toastify__toast:has(div.toast-single) {
     background-color: $menu-icon-background-color--dark;
   }
   .toast__icon-info-single,
@@ -323,6 +325,16 @@ input[type="checkbox"]:checked::before {
     border: none;
     background: $color-white;
     color: $menu-icon-background-color--dark;
+  }
+  input[type="checkbox"] {
+    background-color: $menu-icon-background-color--dark;
+    color: inherit;
+  }
+  input[type="checkbox"]::before {
+    background-color: $menu-icon-background-color--dark;
+  }
+  input[type="checkbox"]:checked::before {
+    background-color: $color-middle-gray;
   }
 }
 
