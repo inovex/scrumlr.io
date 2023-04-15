@@ -37,7 +37,11 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   return (
     <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
       <div
-        className={classNames({"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast}, `toast__icon-${type}-${isSingleLineToast ? "single" : "multi"}`)}
+        className={classNames(
+          "toast__icon",
+          {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
+          `toast__icon-${isSingleLineToast ? "single" : "multi"}-${type}`
+        )}
       >
         {Icon && <Icon />}
       </div>

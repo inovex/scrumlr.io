@@ -4,11 +4,9 @@
 // The single line toast or a toast that spans multiple lines of content
 
 // Toastify
-.Toastify__toast:has(div.toast-single) {
+.Toastify__toast {
   min-height: 56px;
   width: 460px;
-  height: 56px;
-  border-radius: 28px;
   margin-left: -160px;
   padding: 0px;
   box-shadow: $box-shadow--light;
@@ -16,17 +14,13 @@
   cursor: default;
   background-color: $color-white;
 }
+.Toastify__toast:has(div.toast-single) {
+  height: 56px;
+  border-radius: 28px;
+}
 .Toastify__toast:has(div.toast-multi) {
-  min-height: 56px;
-  width: 460px;
   height: fit-content;
   border-radius: 16px;
-  margin-left: -160px;
-  padding: 0px;
-  box-shadow: $box-shadow--light;
-  overflow: inherit;
-  cursor: default;
-  background-color: $color-white;
 }
 .Toastify__toast-icon {
   display: none;
@@ -53,61 +47,40 @@
   padding: 30px 54px 24px 54px;
 }
 
+// TODO uniform sizes of svgs?
 // Toast icons
-.toast__icon-info-single {
+.toast__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  svg {
+    color: $color-white;
+  }
+}
+.toast__icon-single {
+  min-width: 44px;
+  min-height: 100%;
+}
+.toast__icon-single-info {
   background-color: $menu-icon-background-color--dark;
   svg {
     height: 28px;
     width: 28px;
   }
 }
-.toast__icon-success-single {
+.toast__icon-single-success {
   background-color: #17bf71;
   svg {
     height: 22px;
     width: 22px;
   }
 }
-.toast__icon-error-single {
+.toast__icon-single-error {
   background-color: #ff0069;
   svg {
     height: 32px;
     width: 32px;
-  }
-}
-.toast__icon-single {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 28px;
-  min-width: 44px;
-  min-height: 100%;
-  svg {
-    color: $color-white;
-  }
-}
-.toast__icon-info-multi {
-  background-color: $menu-icon-background-color--dark;
-  svg {
-    height: 36px;
-    width: 36px;
-    path {
-      stroke: rgba($color-white, 0.7);
-    }
-  }
-}
-.toast__icon-success-multi {
-  background-color: #17bf71;
-  svg {
-    height: 30px;
-    width: 30px;
-  }
-}
-.toast__icon-error-multi {
-  background-color: #ff0069;
-  svg {
-    height: 42px;
-    width: 42px;
   }
 }
 .toast__icon-multi {
@@ -117,20 +90,36 @@
   transform: translate(-38%, -31%);
   width: 64px;
   height: 64px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+}
+.toast__icon-multi-info {
+  background-color: $menu-icon-background-color--dark;
   svg {
-    color: $color-white;
+    height: 36px;
+    width: 36px;
+    path {
+      stroke: rgba($color-white, 0.7);
+    }
   }
 }
-
+.toast__icon-multi-success {
+  background-color: #17bf71;
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+}
+.toast__icon-multi-error {
+  background-color: #ff0069;
+  svg {
+    height: 42px;
+    width: 42px;
+  }
+}
+//-------------------- checkpoint
 // Toast close icon
 .toast__close-icon {
-  min-width: 40px;
-  min-height: 40px;
-  border-radius: 50%;
+  min-width: 36px;
+  min-height: 36px;
   color: #bfc1c5;
   transition: all 0.1s ease-in-out;
 }
@@ -303,8 +292,8 @@ input[type="checkbox"]:checked::before {
   .Toastify__toast.Toastify__toast:has(div.toast-multi) {
     background-color: $menu-icon-background-color--dark;
   }
-  .toast__icon-info-single,
-  .toast__icon-info-multi {
+  .toast__icon-single-info,
+  .toast__icon-multi-info {
     background-color: $color-white;
     svg path {
       stroke: $menu-icon-background-color--dark;
@@ -370,7 +359,7 @@ input[type="checkbox"]:checked::before {
     width: 55px;
     transform: translate(-28%, -32%);
   }
-  .toast__icon-info-multi {
+  .toast__icon-multi-info {
     background-color: $menu-icon-background-color--dark;
     svg {
       height: 29px;
@@ -434,8 +423,8 @@ input[type="checkbox"]:checked::before {
     .Toastify__toast.Toastify__toast:has(div.toast-single) {
       background-color: $menu-icon-background-color--dark;
     }
-    .toast__icon-info-single,
-    .toast__icon-info-multi {
+    .toast__icon-single-info,
+    .toast__icon-multi-info {
       background-color: $color-white;
       svg path {
         stroke: $menu-icon-background-color--dark;
