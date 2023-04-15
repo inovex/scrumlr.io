@@ -18,7 +18,7 @@ export interface CustomToastProps {
 
 export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, type}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
-  const [hintChecked, setHintChecked] = useState<boolean>(false); // retrieve setting from somewhere redux?
+  // const [hintChecked, setHintChecked] = useState<boolean>(true); // retrieve setting from somewhere redux?
   const titleRef = useRef<HTMLDivElement>(null);
   const Icon = icon;
 
@@ -81,6 +81,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           {buttons &&
             buttons.map((button, index) => (
               <button
+                key={index}
                 className={index == 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
                 onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
               >

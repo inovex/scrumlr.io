@@ -3,9 +3,6 @@
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
 
-// .Toastify__toast-container {
-// }
-
 .Toastify__toast:has(div.toast-single) {
   min-height: 56px;
   width: 460px;
@@ -338,16 +335,11 @@ input[type="checkbox"]:checked::before {
   }
 }
 
-// --------------------------------------
-// @media #{$tablet} {
-// }
-
 @media #{$smartphone} {
   .Toastify__toast:has(div.toast-multi) {
     width: calc(100vw - 38px);
-    max-height: 210px; // needed???
+    max-height: 210px;
     min-height: 172px;
-    // margin: 0px auto calc(5vw) auto; ??
     margin: 0px auto 19px auto;
   }
   .Toastify__toast:has(div.toast-single) {
@@ -358,7 +350,6 @@ input[type="checkbox"]:checked::before {
   }
   .Toastify__toast-body {
     margin: 0px;
-    // min-height: 172px;
     height: auto;
   }
   .toast-multi {
@@ -386,9 +377,6 @@ input[type="checkbox"]:checked::before {
     right: 8px;
   }
   .toast__title-multi {
-    // font-weight: 700;
-    // font-size: 16px;
-    // line-height: 19px;
     margin-bottom: 5px;
   }
   .toast__message {
