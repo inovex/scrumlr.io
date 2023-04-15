@@ -3,6 +3,7 @@
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
 
+// Toastify
 .Toastify__toast:has(div.toast-single) {
   min-height: 56px;
   width: 460px;
@@ -40,8 +41,8 @@
 .Toastify__close-button {
   display: none;
 }
-//-----------------------------------------
 
+// Toast styles
 .toast-single {
   display: flex;
   padding: 7px 8px 7px 8px;
@@ -51,6 +52,8 @@
 .toast-multi {
   padding: 30px 54px 24px 54px;
 }
+
+// Toast icons
 .toast__icon-info-single {
   background-color: $menu-icon-background-color--dark;
   svg {
@@ -122,6 +125,8 @@
     color: $color-white;
   }
 }
+
+// Toast close icon
 .toast__close-icon {
   min-width: 40px;
   min-height: 40px;
@@ -145,10 +150,11 @@
   cursor: pointer;
   transform: scale(1.08);
 }
+
+// Toast title
 .toast__title-single {
   font-size: 16px;
   line-height: 19px;
-  // margin: 0px auto 0px 18px;
   font-weight: 700;
   color: #333948;
 }
@@ -160,6 +166,7 @@
   color: #333948;
 }
 
+// Toast message
 .toast__message {
   margin-bottom: 13px;
   font-size: 14px;
@@ -168,11 +175,7 @@
   color: #333948;
 }
 
-.toast__buttons-multi {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
+//Toast buttons
 .toast__button {
   font-size: 14px;
   line-height: 16px;
@@ -202,6 +205,11 @@
   background: $menu-icon-background-color--dark;
   color: white;
   margin-left: auto;
+}
+.toast__buttons-multi {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
 }
 .toast__button-multi-primary {
   padding: 13px 32px;
@@ -244,10 +252,8 @@
   color: #17bf71;
   border-color: #17bf71;
 }
-// --------------------------------------------
 
-//--------------------
-// hint checkbox
+// Toast hint
 .toast__hint {
   font-size: 14px;
   font-weight: 500;
@@ -287,14 +293,14 @@ input[type="checkbox"]::before {
   transition: 120ms transform ease-in-out;
   background-color: $color-light-gray;
 }
-
 input[type="checkbox"]:checked::before {
   transform: scale(1);
 }
-//-------------------
+
+// Toast Dark Theme (Desktop)
 [theme="dark"] {
-  .Toastify__toast.Toastify__toast:has(div.toast-multi),
-  .Toastify__toast.Toastify__toast:has(div.toast-single) {
+  .Toastify__toast.Toastify__toast:has(div.toast-single),
+  .Toastify__toast.Toastify__toast:has(div.toast-multi) {
     background-color: $menu-icon-background-color--dark;
   }
   .toast__icon-info-single,
@@ -304,10 +310,15 @@ input[type="checkbox"]:checked::before {
       stroke: $menu-icon-background-color--dark;
     }
   }
-  .toast__title-multi,
   .toast__title-single,
+  .toast__title-multi,
   .toast__message {
     color: $color-white;
+  }
+  .toast__button-single {
+    border: none;
+    background: $color-white;
+    color: $menu-icon-background-color--dark;
   }
   .toast__button-multi-primary {
     background-color: $color-white;
@@ -317,11 +328,6 @@ input[type="checkbox"]:checked::before {
     background-color: $menu-icon-background-color--dark;
     border-color: $color-white;
     color: $color-white;
-  }
-  .toast__button-single {
-    border: none;
-    background: $color-white;
-    color: $menu-icon-background-color--dark;
   }
   input[type="checkbox"] {
     background-color: $menu-icon-background-color--dark;
@@ -335,17 +341,18 @@ input[type="checkbox"]:checked::before {
   }
 }
 
+// Toast screensize mobile
 @media #{$smartphone} {
-  .Toastify__toast:has(div.toast-multi) {
-    width: calc(100vw - 38px);
-    max-height: 210px;
-    min-height: 172px;
-    margin: 0px auto 19px auto;
-  }
   .Toastify__toast:has(div.toast-single) {
     width: calc(100vw - 38px);
     max-height: 60px;
     min-height: 60px;
+    margin: 0px auto 19px auto;
+  }
+  .Toastify__toast:has(div.toast-multi) {
+    width: calc(100vw - 38px);
+    max-height: 210px;
+    min-height: 172px;
     margin: 0px auto 19px auto;
   }
   .Toastify__toast-body {
@@ -370,12 +377,7 @@ input[type="checkbox"]:checked::before {
       width: 29px;
     }
   }
-  .toast__close-icon-multi {
-    width: 38px;
-    height: 38px;
-    top: 7px;
-    right: 8px;
-  }
+
   .toast__title-multi {
     margin-bottom: 5px;
   }
@@ -385,7 +387,12 @@ input[type="checkbox"]:checked::before {
     line-height: 18px;
     margin-bottom: 13px;
   }
-
+  .toast__close-icon-multi {
+    width: 38px;
+    height: 38px;
+    top: 7px;
+    right: 8px;
+  }
   .toast__buttons-multi {
     max-height: 42px;
     margin-top: auto;
@@ -402,7 +409,6 @@ input[type="checkbox"]:checked::before {
     font-weight: 600;
     margin-top: 3px;
   }
-
   // TODO changes color on click of button - not smart
   .toast-single:hover .toast__button-single.toast__button-info {
     border-color: $color-white;
@@ -419,7 +425,6 @@ input[type="checkbox"]:checked::before {
     background-color: $color-white;
     color: #17bf71;
   }
-
   .toast__title-button-single-wrapper {
     display: block;
   }
