@@ -18,14 +18,12 @@ export interface CustomToastProps {
 
 export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, type}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
-  // const [hintChecked, setHintChecked] = useState<boolean>(true); // retrieve setting from somewhere redux?
   const titleRef = useRef<HTMLDivElement>(null);
   const Icon = icon;
 
+  // detects whether title spans two lines
   useEffect(() => {
-    // console.log(titleRef.current?.offsetHeight);
     if (titleRef.current && titleRef.current.offsetHeight > 19) {
-      // adjust this value to match your font-size and line-height
       setIsSingleLineTitle(false);
     } else {
       setIsSingleLineTitle(true);

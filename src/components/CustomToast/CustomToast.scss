@@ -160,17 +160,14 @@ $color-close-icon: #bfc1c5;
   font-weight: 700;
   color: $menu-icon-background-color--dark;
 }
-.toast__title-multi {
-  margin-bottom: 5px;
-}
 
 // Toast message
 .toast__message {
-  margin-bottom: 13px;
   font-size: 14px;
   line-height: 18px;
   font-weight: 500;
   color: $menu-icon-background-color--dark;
+  margin-top: 5px;
 }
 
 //Toast buttons
@@ -257,6 +254,7 @@ $color-close-icon: #bfc1c5;
   display: grid;
   grid-template-columns: 16px auto;
   gap: 10px;
+  margin-top: 13px;
   margin-bottom: 17px;
   color: $color-middle-gray;
   width: fit-content;

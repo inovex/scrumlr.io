@@ -3,9 +3,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
-import {ReactComponent as InfoIcon} from "assets/icon-info.svg"; // info-icon broken?
-import {ReactComponent as SuccessIcon} from "assets/icon-success.svg"; // exchange to success-icon
-import {ReactComponent as ErrorIcon} from "assets/icon-cancel.svg"; // exchange to error-icon ?
+import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
+import {ReactComponent as SuccessIcon} from "assets/icon-success.svg";
+import {ReactComponent as ErrorIcon} from "assets/icon-cancel.svg";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
