@@ -3,6 +3,13 @@
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
 
+// These and other darkmode collors need to be added/moved to style.css
+$color-info-darkmode: #6b9cff;
+$color-error: #ff0069;
+$color-success: #17bf71;
+
+$color-close-icon: #bfc1c5;
+
 // Toastify
 .Toastify__toast {
   min-height: 56px;
@@ -51,7 +58,6 @@
   flex-direction: column;
 }
 
-// TODO uniform sizes of svgs?
 // Toast icons
 .toast__icon {
   display: flex;
@@ -74,14 +80,14 @@
   }
 }
 .toast__icon-single-success {
-  background-color: #17bf71;
+  background-color: $color-success;
   svg {
     height: 22px;
     width: 22px;
   }
 }
 .toast__icon-single-error {
-  background-color: #ff0069;
+  background-color: $color-error;
   svg {
     height: 32px;
     width: 32px;
@@ -106,14 +112,14 @@
   }
 }
 .toast__icon-multi-success {
-  background-color: #17bf71;
+  background-color: $color-success;
   svg {
     height: 30px;
     width: 30px;
   }
 }
 .toast__icon-multi-error {
-  background-color: #ff0069;
+  background-color: $color-error;
   svg {
     height: 42px;
     width: 42px;
@@ -124,7 +130,7 @@
 .toast__close-icon {
   min-width: 32px;
   min-height: 32px;
-  color: #bfc1c5; // ??
+  color: $color-close-icon;
   transition: all 0.1s ease-in-out;
 }
 .toast__close-icon-single {
@@ -149,7 +155,7 @@
   font-size: 16px;
   line-height: 19px;
   font-weight: 700;
-  color: #333948; // ??
+  color: $menu-icon-background-color--dark;
 }
 .toast__title-multi {
   margin-bottom: 5px;
@@ -161,7 +167,7 @@
   font-size: 14px;
   line-height: 18px;
   font-weight: 500;
-  color: #333948; // ??
+  color: $menu-icon-background-color--dark;
 }
 
 //Toast buttons
@@ -185,7 +191,6 @@
   align-items: center;
   width: 100%;
   margin-left: 18px;
-  // margin-right: auto;
 }
 .toast__button-single {
   // height: 100%;
@@ -198,6 +203,7 @@
   display: flex;
   gap: 12px;
   margin-top: auto;
+  max-height: 42px;
 }
 .toast__button-multi-primary {
   padding: 13px 32px;
@@ -222,23 +228,23 @@
 }
 .toast-single:hover .toast__button-single.toast__button-error,
 .toast__button-multi-primary.toast__button-error:hover {
-  border-color: #ff0069;
-  background-color: #ff0069;
+  border-color: $color-error;
+  background-color: $color-error;
   color: $color-white;
 }
 .toast__button-multi-secondary.toast__button-error:hover {
-  color: #ff0069;
-  border-color: #ff0069;
+  color: $color-error;
+  border-color: $color-error;
 }
 .toast-single:hover .toast__button-single.toast__button-success,
 .toast__button-multi-primary.toast__button-success:hover {
-  border-color: #17bf71;
-  background-color: #17bf71;
+  border-color: $color-success;
+  background-color: $color-success;
   color: $color-white;
 }
 .toast__button-multi-secondary.toast__button-success:hover {
-  color: #17bf71;
-  border-color: #17bf71;
+  color: $color-success;
+  border-color: $color-success;
 }
 
 // Toast hint
@@ -249,14 +255,14 @@
   display: grid;
   grid-template-columns: 16px auto;
   gap: 10px;
-  margin-bottom: 19px;
+  margin-bottom: 17px;
   color: $color-middle-gray;
   width: fit-content;
 }
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
-  background-color: #fff;
+  background-color: $color-white;
   margin: 0;
   font: inherit;
   color: $color-light-gray;
@@ -370,12 +376,11 @@ input[type="checkbox"]:checked::before {
     margin-top: 3px;
   }
   .toast__button-single.toast__button-success {
-    color: #17bf71;
+    color: $color-success;
   }
   .toast__button-single.toast__button-error {
-    color: #ff0069;
+    color: $color-error;
   }
-  // to unset hover effects on mobile screen size
   .toast-single:hover .toast__button-single.toast__button-info {
     border-color: $color-white;
     background-color: $color-white;
@@ -384,40 +389,38 @@ input[type="checkbox"]:checked::before {
   .toast-single:hover .toast__button-single.toast__button-error {
     border-color: $color-white;
     background-color: $color-white;
-    color: #ff0069;
+    color: $color-error;
   }
   .toast-single:hover .toast__button-single.toast__button-success {
     border-color: $color-white;
     background-color: $color-white;
-    color: #17bf71;
+    color: $color-success;
   }
-  // ---------------------------------
 
   [theme="dark"] {
-    // to unset hover effects on mobile screen size
     .toast-single:hover .toast__button-single.toast__button-info {
       background: $menu-icon-background-color--dark;
-      color: #6b9cff; // ?? new colors variables
+      color: $color-info-darkmode;
     }
     .toast-single:hover .toast__button-single.toast__button-error {
       background: $menu-icon-background-color--dark;
-      color: #ff0069;
+      color: $color-error;
     }
     .toast-single:hover .toast__button-single.toast__button-success {
       background: $menu-icon-background-color--dark;
-      color: #17bf71;
+      color: $color-success;
     }
     .toast__button-single.toast__button-info {
       background: $menu-icon-background-color--dark;
-      color: #6b9cff; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+      color: $color-info-darkmode;
     }
     .toast__button-single.toast__button-error {
       background: $menu-icon-background-color--dark;
-      color: #ff0069; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+      color: $color-error;
     }
     .toast__button-single.toast__button-success {
       background: $menu-icon-background-color--dark;
-      color: #17bf71; // darkmode blue as variable also for rest of variables (red,green, .. Darkmode)?
+      color: $color-success;
     }
   }
 }

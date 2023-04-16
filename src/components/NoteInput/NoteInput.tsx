@@ -74,11 +74,11 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         onClick={() =>
           Toast.info({
             title: "Karte gelöscht",
-            message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
-            buttons: ["Rückgängig", "Cancel"],
-            hintMessage: "Don't show this again",
-            hintOnClick: () => console.log("hint clicked"),
-            firstButtonOnClick: () => console.log("button clicked"),
+            // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
+            buttons: ["Rückgängig"],
+            // hintMessage: "Don't show this again",
+            // hintOnClick: () => console.log("hint clicked"),
+            // firstButtonOnClick: () => console.log("button clicked"),
             autoClose: false,
           })
         }
