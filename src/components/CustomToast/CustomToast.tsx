@@ -47,7 +47,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       </div>
       {isSingleLineToast ? (
         <div className="toast__title-button-single-wrapper">
-          <div className="toast__title-single" ref={titleRef}>
+          <div className="toast__title" ref={titleRef}>
             {title}
           </div>
           {buttons?.length == 1 && (
@@ -57,7 +57,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           )}
         </div>
       ) : (
-        <div className="toast__title-multi" ref={titleRef}>
+        <div className="toast__title toast__title-multi" ref={titleRef}>
           {title}
         </div>
       )}
