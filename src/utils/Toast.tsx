@@ -13,7 +13,7 @@ const toastConfig: ToastOptions = {
   closeOnClick: true,
 };
 
-export type ToastTypes = "info" | "success" | "warning" | "error";
+export type ToastTypes = "info" | "success" | "error";
 
 type Options = {
   title: string;
@@ -29,9 +29,19 @@ type Options = {
 };
 
 /**
- * Display success message via toast.
+ * Displays a success toast notification.
  *
- * @param content Success message.
+ * @param options An object containing options for the toast notification.
+ * @param options.title The title of the toast notification.
+ * @param options.message The message to display in the toast notification.
+ * @param options.hintMessage An optional hint message to display in the toast notification.
+ * @param options.hintOnClick An optional callback function to execute when the hint message/checkbox is clicked.
+ * @param options.buttons An array of button-labels to display in the toast notification. (for e.g. ["Save", "Cancel"])
+ * @param options.firstButtonOnClick An optional callback function to execute when the first button is clicked.
+ * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
+ * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
+ * @param options.icon An optional icon to display in the toast notification.
+ * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function success(options: Options) {
   const {
@@ -63,9 +73,19 @@ function success(options: Options) {
 }
 
 /**
- * Display error message via toast.
+ * Displays an error toast notification.
  *
- * @param content Error message.
+ * @param options An object containing options for the toast notification.
+ * @param options.title The title of the toast notification.
+ * @param options.message The message to display in the toast notification.
+ * @param options.hintMessage An optional hint message to display in the toast notification.
+ * @param options.hintOnClick An optional callback function to execute when the hint message/checkbox is clicked.
+ * @param options.buttons An array of button-labels to display in the toast notification. (for e.g. ["Save", "Cancel"])
+ * @param options.firstButtonOnClick An optional callback function to execute when the first button is clicked.
+ * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
+ * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
+ * @param options.icon An optional icon to display in the toast notification.
+ * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function error(options: Options) {
   const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = ErrorIcon, type = "error"} = options;
@@ -86,9 +106,19 @@ function error(options: Options) {
 }
 
 /**
- * Display info message via toast.
+ * Displays an info toast notification.
  *
- * @param content Info message.
+ * @param options An object containing options for the toast notification.
+ * @param options.title The title of the toast notification.
+ * @param options.message The message to display in the toast notification.
+ * @param options.hintMessage An optional hint message to display in the toast notification.
+ * @param options.hintOnClick An optional callback function to execute when the hint message/checkbox is clicked.
+ * @param options.buttons An array of button-labels to display in the toast notification. (for e.g. ["Save", "Cancel"])
+ * @param options.firstButtonOnClick An optional callback function to execute when the first button is clicked.
+ * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
+ * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
+ * @param options.icon An optional icon to display in the toast notification.
+ * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function info(options: Options) {
   const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;

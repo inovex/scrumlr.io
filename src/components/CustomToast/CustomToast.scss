@@ -3,7 +3,7 @@
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
 
-// These and other darkmode collors need to be added/moved to style.css
+// These and other darkmode collors from Figma need to be added/moved to style.css
 $color-info-darkmode: #6b9cff;
 $color-error: #ff0069;
 $color-success: #17bf71;
@@ -75,8 +75,11 @@ $color-close-icon: #bfc1c5;
 .toast__icon-single-info {
   background-color: $menu-icon-background-color--dark;
   svg {
-    height: 28px;
-    width: 28px;
+    height: 30px;
+    width: 30px;
+    path {
+      stroke: rgba($color-white, 0.7);
+    }
   }
 }
 .toast__icon-single-success {
@@ -104,8 +107,8 @@ $color-close-icon: #bfc1c5;
 .toast__icon-multi-info {
   background-color: $menu-icon-background-color--dark;
   svg {
-    height: 36px;
-    width: 36px;
+    height: 38px;
+    width: 38px;
     path {
       stroke: rgba($color-white, 0.7);
     }
@@ -193,7 +196,6 @@ $color-close-icon: #bfc1c5;
   margin-left: 18px;
 }
 .toast__button-single {
-  // height: 100%;
   border: none;
   background: $menu-icon-background-color--dark;
   color: $color-white;
