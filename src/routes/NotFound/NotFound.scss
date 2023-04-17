@@ -1,21 +1,25 @@
 @import "src/constants/style";
 
 .not-found__root {
-  z-index: 192; // TODO proper z-index
   overflow: hidden;
   height: 100%;
   width: 100%;
   padding: 20px 0 20px 20px;
-  // background: linear-gradient(320deg, rgb(107, 156, 255, 30%), rgb(255, 255, 255, 30%));
-  background: #18d8ab;
+  background: linear-gradient(320deg, rgb(107, 156, 255, 30%), rgb(255, 255, 255, 30%));
+  //  background: $color-grooming-green;
 }
 
 .not-found__background {
   position: absolute;
-  z-index: 191;
+}
+
+.not-found__scrumlr-logo--light,
+.not-found__scrumlr-logo--dark {
+  width: 160px;
 }
 
 .not-found__header {
+  position: absolute;
 }
 
 .not-found__main {
@@ -69,12 +73,14 @@
 .not-found__image-wrapper {
 }
 
-.not-found__logo-stan--web-light {
+.not-found__logo-stan--web-light,
+.not-found__logo-stan--web-dark {
   width: clamp(200px, 50vw, 1000px); // min bound doesn't quite work
   display: none;
 }
 
-.not-found__logo-stan--mobile-light {
+.not-found__logo-stan--mobile-light,
+.not-found__logo-stan--mobile-dark {
   display: block;
 }
 
@@ -95,11 +101,13 @@
     flex-direction: row; // in desktop, stan is next to the content
   }
 
-  .not-found__logo-stan--web-light {
+  .not-found__logo-stan--web-light,
+  .not-found__logo-stan--web-dark {
     display: block;
   }
 
-  .not-found__logo-stan--mobile-light {
+  .not-found__logo-stan--mobile-light,
+  .not-found__logo-stan--mobile-dark {
     display: none;
   }
 }
@@ -108,5 +116,32 @@
   .not-found__background {
     top: -100px;
     left: 0;
+  }
+}
+
+// display or hide light/dark logos.
+[theme="light"] {
+  .not-found_background-form--dark,
+  .not-found__scrumlr-logo--dark,
+  .not-found__logo-stan--web-dark,
+  .not-found__logo-stan--mobile-dark {
+    display: none;
+  }
+}
+
+[theme="dark"] {
+  .not-found_background-form--light,
+  .not-found__scrumlr-logo--light,
+  .not-found__logo-stan--web-light,
+  .not-found__logo-stan--mobile-light {
+    display: none;
+  }
+
+  .not-found__root {
+    background: linear-gradient(308.2deg, #181d27 6.47%, #171f30 30.58%, #4a5775 61.85%, #7385b2 81.57%);
+  }
+
+  .not-found__content {
+    color: $color-white;
   }
 }
