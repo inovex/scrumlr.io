@@ -1,11 +1,18 @@
 @import "src/constants/style";
 
 .not-found__root {
-  overflow-y: hidden;
+  z-index: 192; // TODO proper z-index
+  overflow: hidden;
   height: 100%;
   width: 100%;
-  padding: 20px;
-  background: linear-gradient(to bottom, rgb(107, 156, 255, 3%), rgb(255, 255, 255, 3%));
+  padding: 20px 0 20px 20px;
+  // background: linear-gradient(320deg, rgb(107, 156, 255, 30%), rgb(255, 255, 255, 30%));
+  background: #18d8ab;
+}
+
+.not-found__background {
+  position: absolute;
+  z-index: 191;
 }
 
 .not-found__header {
@@ -13,7 +20,7 @@
 
 .not-found__main {
   display: flex;
-  flex-direction: column-reverse; // in mobile, the content is over the content
+  flex-direction: column-reverse; // in mobile, stan is above the content
   gap: 20px;
 
   height: 100%;
@@ -71,9 +78,21 @@
   display: block;
 }
 
-@media #{$desktop} {
+@media screen and (max-width: 1279px) {
+  .not-found__background {
+    top: -400px;
+    left: -900px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .not-found__background {
+    top: -100px;
+    left: -800px;
+  }
+
   .not-found__main {
-    flex-direction: row; // in desktop, the image is next to the content
+    flex-direction: row; // in desktop, stan is next to the content
   }
 
   .not-found__logo-stan--web-light {
@@ -82,5 +101,12 @@
 
   .not-found__logo-stan--mobile-light {
     display: none;
+  }
+}
+
+@media screen and (min-width: 2048px) {
+  .not-found__background {
+    top: -100px;
+    left: 0;
   }
 }
