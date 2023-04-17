@@ -25,6 +25,7 @@ type Options = {
   secondButtonOnClick?: (() => void) | undefined;
   autoClose?: number | false;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  iconName?: string;
   type?: ToastTypes;
 };
 
@@ -41,6 +42,7 @@ type Options = {
  * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
  * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
  * @param options.icon An optional icon to display in the toast notification.
+ * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function success(options: Options) {
@@ -54,6 +56,7 @@ function success(options: Options) {
     secondButtonOnClick,
     autoClose = TOAST_TIMER_DEFAULT,
     icon = SuccessIcon,
+    iconName = "success",
     type = "success",
   } = options;
   toast(
@@ -66,6 +69,7 @@ function success(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      iconName={iconName}
       type={type}
     />,
     {...toastConfig, autoClose}
@@ -85,10 +89,23 @@ function success(options: Options) {
  * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
  * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
  * @param options.icon An optional icon to display in the toast notification.
+ * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function error(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = ErrorIcon, type = "error"} = options;
+  const {
+    title,
+    message,
+    hintMessage,
+    hintOnClick,
+    buttons,
+    firstButtonOnClick,
+    secondButtonOnClick,
+    autoClose = TOAST_TIMER_DEFAULT,
+    icon = ErrorIcon,
+    iconName = "error",
+    type = "error",
+  } = options;
   toast(
     <CustomToast
       title={title}
@@ -99,6 +116,7 @@ function error(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      iconName={iconName}
       type={type}
     />,
     {...toastConfig, autoClose}
@@ -118,10 +136,23 @@ function error(options: Options) {
  * @param options.secondButtonOnClick An optional callback function to execute when the second button is clicked.
  * @param options.autoClose The time in milliseconds after which the toast notification should automatically close.
  * @param options.icon An optional icon to display in the toast notification.
+ * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  * @param options.type The type of the toast notification. Can be "success", "error", or "info".
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, type = "info"} = options;
+  const {
+    title,
+    message,
+    hintMessage,
+    hintOnClick,
+    buttons,
+    firstButtonOnClick,
+    secondButtonOnClick,
+    autoClose = TOAST_TIMER_DEFAULT,
+    icon = InfoIcon,
+    iconName = "info",
+    type = "info",
+  } = options;
   toast(
     <CustomToast
       title={title}
@@ -132,6 +163,7 @@ function info(options: Options) {
       firstButtonOnClick={firstButtonOnClick}
       secondButtonOnClick={secondButtonOnClick}
       icon={icon}
+      iconName={iconName}
       type={type}
     />,
     {...toastConfig, autoClose}

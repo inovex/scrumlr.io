@@ -64,16 +64,22 @@ $color-close-icon: #bfc1c5;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+  background-color: $menu-icon-background-color--dark;
   svg {
+    height: 46px;
+    width: 46px;
     color: $color-white;
   }
 }
 .toast__icon-single {
   height: 48px;
   min-width: 48px;
+  svg {
+    height: 38px;
+    width: 38px;
+  }
 }
 .toast__icon-single-info {
-  background-color: $menu-icon-background-color--dark;
   svg {
     height: 30px;
     width: 30px;
@@ -295,6 +301,12 @@ input[type="checkbox"]:checked::before {
   .Toastify__toast.Toastify__toast:has(div.toast-multi) {
     background-color: $menu-icon-background-color--dark;
   }
+  .toast__icon {
+    background-color: $color-white;
+    svg {
+      color: $menu-icon-background-color--dark;
+    }
+  }
   .toast__icon-single-info,
   .toast__icon-multi-info {
     background-color: $color-white;
@@ -348,6 +360,10 @@ input[type="checkbox"]:checked::before {
     height: 55px;
     width: 55px;
     transform: translate(-28%, -32%);
+    svg {
+      height: 42px;
+      width: 42px;
+    }
   }
   .toast__icon-multi-info {
     background-color: $menu-icon-background-color--dark;

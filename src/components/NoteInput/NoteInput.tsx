@@ -10,7 +10,10 @@ import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
+import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {hotkeyMap} from "../../constants/hotkeys";
+
+// To delete
 
 export interface NoteInputProps {
   columnId: string;
@@ -54,7 +57,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
-        Toast.success({
+        Toast.info({
           title: "Hidden column",
           message: t("Toast.noteToHiddenColumn"),
           buttons: [t("Toast.noteToHiddenColumnButton")],
@@ -76,9 +79,12 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
             title: "Karte gelöscht",
             // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
             buttons: ["Rückgängig"],
-            hintMessage: "Don't show this again",
+            // hintMessage: "Don't show this again",
             // hintOnClick: () => console.log("hint clicked"),
             // firstButtonOnClick: () => console.log("button clicked"),
+            // icon: DeleteIcon,
+            // iconName: "delete",
+            autoClose: false,
           })
         }
         type="text"

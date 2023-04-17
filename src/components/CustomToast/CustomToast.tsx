@@ -7,21 +7,23 @@ import classNames from "classnames";
 export interface CustomToastProps {
   title: string;
   message?: string;
-  hintMessage?: string | null;
+  hintMessage?: string;
   hintOnClick?: () => void;
   buttons?: string[];
   firstButtonOnClick?: () => void;
   secondButtonOnClick?: () => void;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  iconName?: string;
   type?: ToastTypes;
 }
 
-export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, type}) => {
+export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, iconName, type}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
   const titleRef = useRef<HTMLDivElement>(null);
   const Icon = icon;
+  const standardIcon = ["info", "success", "error"].includes(iconName!);
 
-  // detects whether title spans two lines
+  // detects whether the title spans two lines
   useEffect(() => {
     if (titleRef.current && titleRef.current.offsetHeight > 19) {
       setIsSingleLineTitle(false);
@@ -38,7 +40,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         className={classNames(
           "toast__icon",
           {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
-          `toast__icon-${isSingleLineToast ? "single" : "multi"}-${type}`
+          standardIcon && `toast__icon-${isSingleLineToast ? "single" : "multi"}-${type}`
         )}
       >
         {Icon && <Icon />}
