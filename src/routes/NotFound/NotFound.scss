@@ -13,7 +13,7 @@
 
 .not-found__main {
   display: flex;
-  flex-direction: row;
+  flex-direction: column-reverse; // in mobile, the content is over the content
   gap: 20px;
 
   height: 100%;
@@ -64,23 +64,23 @@
 
 .not-found__logo-stan--web-light {
   width: clamp(200px, 50vw, 1000px); // min bound doesn't quite work
-  display: block;
-}
-
-.not-found__logo-stan--mobile-light {
   display: none;
 }
 
-@media screen and (max-width: 1000px) {
+.not-found__logo-stan--mobile-light {
+  display: block;
+}
+
+@media #{$desktop} {
   .not-found__main {
-    flex-direction: column-reverse; // put mobile image over content
+    flex-direction: row; // in desktop, the image is next to the content
   }
 
   .not-found__logo-stan--web-light {
-    display: none;
+    display: block;
   }
 
   .not-found__logo-stan--mobile-light {
-    display: block;
+    display: none;
   }
 }
