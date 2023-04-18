@@ -9,7 +9,7 @@
   //  background: $color-grooming-green;
 }
 
-.not-found__background {
+.not-found__background-form {
   position: absolute;
 }
 
@@ -87,14 +87,14 @@
 }
 
 @media screen and (max-width: 1279px) {
-  .not-found__background {
+  .not-found__background-form {
     top: -400px;
     left: -900px;
   }
 }
 
 @media screen and (min-width: 1280px) {
-  .not-found__background {
+  .not-found__background-form {
     top: -100px;
     left: -800px;
   }
@@ -115,7 +115,7 @@
 }
 
 @media screen and (min-width: 2048px) {
-  .not-found__background {
+  .not-found__background-form {
     top: -100px;
     left: 0;
   }
@@ -123,7 +123,7 @@
 
 // display or hide light/dark logos.
 [theme="light"] {
-  .not-found_background-form--dark,
+  .not-found__background-form--dark,
   .not-found__scrumlr-logo--dark,
   .not-found__logo-stan--web-dark,
   .not-found__logo-stan--mobile-dark {
@@ -132,7 +132,7 @@
 }
 
 [theme="dark"] {
-  .not-found_background-form--light,
+  .not-found__background-form--light,
   .not-found__scrumlr-logo--light,
   .not-found__logo-stan--web-light,
   .not-found__logo-stan--mobile-light {

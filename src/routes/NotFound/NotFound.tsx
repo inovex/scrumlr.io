@@ -14,8 +14,8 @@ import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Bac
 export const NotFound = () => (
   <div className="not-found__root">
     <div className="not-found__background">
-      <BackgroundFreeFormLight className="not-found-background-form not-found_background-form--light" />
-      <BackgroundFreeFormDark className="not-found-background-form not-found_background-form--dark" />
+      <BackgroundFreeFormLight className="not-found__background-form not-found__background-form--light" />
+      <BackgroundFreeFormDark className="not-found__background-form not-found__background-form--dark" />
     </div>
     <header className="not-found__header">
       <div className="scrumlr-logo">
