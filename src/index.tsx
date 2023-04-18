@@ -16,6 +16,7 @@ import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {TouchBackend} from "react-dnd-touch-backend";
+// import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import {SHOW_LEGAL_DOCUMENTS} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
 
@@ -59,5 +60,7 @@ root.render(
     </I18nextProvider>
   </React.StrictMode>
 );
-
 store.dispatch(Actions.initApplication());
+
+// Disable the service worker for now since there are known issues where our third party authentication services cannot be used 
+// serviceWorkerRegistration.register();
