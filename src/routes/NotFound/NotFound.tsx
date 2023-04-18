@@ -14,13 +14,13 @@ import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Bac
 export const NotFound = () => (
   <div className="not-found__root">
     <div className="not-found__background">
-      <BackgroundFreeFormLight className="not-found_background-form--light" />
-      <BackgroundFreeFormDark className="not-found_background-form--dark" />
+      <BackgroundFreeFormLight className="not-found-background-form not-found_background-form--light" />
+      <BackgroundFreeFormDark className="not-found-background-form not-found_background-form--dark" />
     </div>
     <header className="not-found__header">
       <div className="scrumlr-logo">
-        <ScrumlrLogoLight className="not-found__scrumlr-logo--light" />
-        <ScrumlrLogoDark className="not-found__scrumlr-logo--dark" />
+        <ScrumlrLogoLight className="not-found__scrumlr-logo not-found__scrumlr-logo--light" />
+        <ScrumlrLogoDark className="not-found__scrumlr-logo not-found__scrumlr-logo--dark" />
       </div>
     </header>
     <main className="not-found__main">
@@ -33,11 +33,11 @@ export const NotFound = () => (
         <button className="not-found__return-button">Back to Homepage</button>
       </div>
       <div className="not-found__image-wrapper">
-        <StanWebLight className="not-found__logo-stan--web-light" />
-        <StanWebDark className="not-found__logo-stan--web-dark" />
+        <StanWebLight className="not-found__logo-stan not-found__logo-stan--web-light" />
+        <StanWebDark className="not-found__logo-stan not-found__logo-stan--web-dark" />
 
-        <StanMobileLight className="not-found__logo-stan--mobile-light" />
-        <StanMobileDark className="not-found__logo-stan--mobile-dark" />
+        <StanMobileLight className="not-found__logo-stan not-found__logo-stan--mobile-light" />
+        <StanMobileDark className="not-found__logo-stan not-found__logo-stan--mobile-dark" />
       </div>
     </main>
   </div>
