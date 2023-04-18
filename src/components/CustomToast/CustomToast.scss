@@ -123,8 +123,8 @@ $color-close-icon: #bfc1c5;
 .toast__icon-multi-success {
   background-color: $color-success;
   svg {
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
   }
 }
 .toast__icon-multi-error {
@@ -372,6 +372,19 @@ input[type="checkbox"]:checked::before {
       width: 29px;
     }
   }
+  .toast__icon-multi-error {
+    svg {
+      height: 42px;
+      width: 42px;
+    }
+  }
+  .toast__icon-multi-success {
+    svg {
+      height: 28px;
+      width: 28px;
+    }
+  }
+
   .toast__button {
     padding: 12px 30px;
   }

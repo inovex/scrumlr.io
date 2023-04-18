@@ -3,7 +3,7 @@ import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
 import i18n from "i18n";
-import {Toast} from "../../utils/Toast";
+import {Toast} from "../../utils/toast";
 import store from "../index";
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {

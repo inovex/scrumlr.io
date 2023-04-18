@@ -15,14 +15,14 @@ const toastConfig: ToastOptions = {
 
 export type ToastTypes = "info" | "success" | "error";
 
-type Options = {
+export type Options = {
   title: string;
   message?: string;
-  hintMessage?: string | undefined;
-  hintOnClick?: (() => void) | undefined;
-  buttons?: string[] | undefined;
-  firstButtonOnClick?: (() => void) | undefined;
-  secondButtonOnClick?: (() => void) | undefined;
+  hintMessage?: string;
+  hintOnClick?: () => void;
+  buttons?: string[];
+  firstButtonOnClick?: () => void;
+  secondButtonOnClick?: () => void;
   autoClose?: number | false;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   iconName?: string;
@@ -59,7 +59,7 @@ function success(options: Options) {
     iconName = "success",
     type = "success",
   } = options;
-  toast(
+  return toast(
     <CustomToast
       title={title}
       message={message}

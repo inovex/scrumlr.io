@@ -1,4 +1,4 @@
-import {Toast} from "utils/Toast";
+import {Toast} from "utils/toast";
 import {API} from "api";
 import i18n from "i18next";
 import store from "store";

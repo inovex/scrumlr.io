@@ -12,7 +12,7 @@ import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
 import classNames from "classnames";
-import {Toast} from "../../utils/Toast";
+import {Toast} from "../../utils/toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 
 type ColumnSettingsProps = {

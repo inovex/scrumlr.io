@@ -1,7 +1,7 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {ToastTypes} from "utils/Toast";
+import {ToastTypes} from "utils/toast";
 import classNames from "classnames";
 
 export interface CustomToastProps {
@@ -20,8 +20,8 @@ export interface CustomToastProps {
 export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, iconName, type}) => {
   const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
   const titleRef = useRef<HTMLDivElement>(null);
-  const Icon = icon;
   const standardIcon = ["info", "success", "error"].includes(iconName!);
+  const Icon = icon;
 
   // detects whether the title spans two lines
   useEffect(() => {

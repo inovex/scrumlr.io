@@ -4,7 +4,7 @@ import {Actions, ReduxAction} from "store/action";
 import {AuthAction} from "store/action/auth";
 import {API} from "api";
 import {ViewAction} from "store/action/view";
-import {Toast} from "utils/Toast";
+import {Toast} from "utils/toast";
 import i18n from "i18n";
 import store from "store";
 

@@ -6,14 +6,13 @@ import {ReactComponent as StarIcon} from "assets/icon-star.svg";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
-import {Toast} from "utils/Toast";
+import {Toast} from "utils/toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
+// To delete
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {hotkeyMap} from "../../constants/hotkeys";
-
-// To delete
 
 export interface NoteInputProps {
   columnId: string;
@@ -77,10 +76,10 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         onClick={() =>
           Toast.success({
             title: "Karte gelöscht",
-            // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
+            message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
             buttons: ["Rückgängig"],
-            // hintMessage: "Don't show this again",
-            // hintOnClick: () => console.log("hint clicked"),
+            hintMessage: "Don't show this again",
+            hintOnClick: () => console.log("hint clicked"),
             // firstButtonOnClick: () => console.log("button clicked"),
             // icon: DeleteIcon,
             // iconName: "delete",
