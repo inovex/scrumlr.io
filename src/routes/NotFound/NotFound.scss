@@ -10,6 +10,7 @@
 }
 
 .not-found__background-form {
+  width: 100%; // fixes overflow bug
   position: absolute;
 }
 
