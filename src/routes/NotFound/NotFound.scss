@@ -13,9 +13,10 @@
   position: absolute;
 }
 
-.not-found__scrumlr-logo--light,
-.not-found__scrumlr-logo--dark {
+.not-found__scrumlr-logo--web,
+.not-found__scrumlr-logo--web {
   width: 160px;
+  display: none;
 }
 
 .not-found__header {
@@ -97,6 +98,14 @@
   .not-found__background-form {
     top: -100px;
     left: -800px;
+  }
+
+  .not-found__scrumlr-logo--web {
+    display: block;
+  }
+
+  .not-found__scrumlr-logo--mobile {
+    display: none;
   }
 
   .not-found__main {

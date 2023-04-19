@@ -5,8 +5,10 @@ import {ReactComponent as StanWebDark} from "assets/stan/Stan_404_Web_Dark.svg";
 import {ReactComponent as StanMobileLight} from "assets/stan/Stan_404_Mobile_Light.svg";
 import {ReactComponent as StanMobileDark} from "assets/stan/Stan_404_Mobile_Dark.svg";
 
-import {ReactComponent as ScrumlrLogoLight} from "assets/scrumlr-logo-light.svg";
-import {ReactComponent as ScrumlrLogoDark} from "assets/scrumlr-logo-dark.svg";
+import {ReactComponent as ScrumlrLogoWebLight} from "assets/scrumlr-logo-light.svg";
+import {ReactComponent as ScrumlrLogoWebDark} from "assets/scrumlr-logo-dark.svg";
+import {ReactComponent as ScrumlrLogoMobileLight} from "assets/scrumlr-logo-mobile-light.svg";
+import {ReactComponent as ScrumlrLogoMobileDark} from "assets/scrumlr-logo-mobile-dark.svg";
 
 import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
 import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
@@ -22,8 +24,10 @@ export const NotFound = () => {
       </div>
       <header className="not-found__header">
         <div className="scrumlr-logo">
-          <ScrumlrLogoLight className="not-found__scrumlr-logo not-found__scrumlr-logo--light" />
-          <ScrumlrLogoDark className="not-found__scrumlr-logo not-found__scrumlr-logo--dark" />
+          <ScrumlrLogoWebLight className="not-found__scrumlr-logo not-found__scrumlr-logo--web not-found__scrumlr-logo--light" />
+          <ScrumlrLogoWebDark className="not-found__scrumlr-logo not-found__scrumlr-logo--web not-found__scrumlr-logo--dark" />
+          <ScrumlrLogoMobileLight className="not-found__scrumlr-logo not-found__scrumlr-logo--mobile not-found__scrumlr-logo--light" />
+          <ScrumlrLogoMobileDark className="not-found__scrumlr-logo not-found__scrumlr-logo--mobile not-found__scrumlr-logo--dark" />
         </div>
       </header>
       <main className="not-found__main">
