@@ -69,6 +69,9 @@
 
   border: none;
   border-radius: $rounded--full;
+  box-shadow: 0 5px 4px rgba(255, 0, 105, 25%);
+
+  cursor: pointer;
 }
 
 // image (right / top)

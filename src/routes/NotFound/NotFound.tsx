@@ -13,9 +13,11 @@ import {ReactComponent as ScrumlrLogoMobileDark} from "assets/scrumlr-logo-mobil
 import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
 import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
 
 export const NotFound = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   return (
     <div className="not-found__root">
       <div className="not-found__background">
@@ -37,7 +39,9 @@ export const NotFound = () => {
             <div>{t("NotFoundPage.descriptionLine1")}</div>
             <div>{t("NotFoundPage.descriptionLine2")}</div>
           </div>
-          <button className="not-found__return-button">{t("NotFoundPage.navigateHome")}</button>
+          <button className="not-found__return-button" onClick={() => navigate("/")}>
+            {t("NotFoundPage.navigateHome")}
+          </button>
         </div>
         <div className="not-found__image-wrapper">
           <StanWebLight className="not-found__logo-stan not-found__logo-stan--web not-found__logo-stan--light" />
