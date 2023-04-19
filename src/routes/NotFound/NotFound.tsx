@@ -12,6 +12,8 @@ import {ReactComponent as ScrumlrLogoMobileDark} from "assets/scrumlr-logo-mobil
 
 import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
 import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
+import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
+
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 
@@ -23,6 +25,7 @@ export const NotFound = () => {
       <div className="not-found__background">
         <BackgroundFreeFormLight className="not-found__background-form not-found__background-form--light" />
         <BackgroundFreeFormDark className="not-found__background-form not-found__background-form--dark" />
+        <BackgroundDetails className="not-found__background-details" />
       </div>
       <header className="not-found__header">
         <div className="scrumlr-logo">
