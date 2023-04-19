@@ -197,12 +197,15 @@ $color-close-icon: #bfc1c5;
   align-items: center;
   width: 100%;
   margin-left: 18px;
+  gap: 5px;
 }
 .toast__button-single {
   border: none;
   background: $menu-icon-background-color--dark;
   color: $color-white;
   margin-left: auto;
+  white-space: nowrap;
+  min-width: auto;
 }
 .toast__buttons-multi {
   display: flex;
@@ -384,7 +387,6 @@ input[type="checkbox"]:checked::before {
       width: 28px;
     }
   }
-
   .toast__button {
     padding: 12px 30px;
   }

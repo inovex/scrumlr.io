@@ -75,12 +75,13 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         placeholder={t("NoteInput.placeholder")}
         onClick={() =>
           Toast.success({
-            title: "Karte gelöscht",
-            message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
-            buttons: ["Rückgängig"],
-            hintMessage: "Don't show this again",
-            hintOnClick: () => console.log("hint clicked"),
-            // firstButtonOnClick: () => console.log("button clicked"),
+            title: "Karte gelöscht geilo zum ende hin passt auch auf ",
+            // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
+            // buttons: ["Rückgängig"],
+            // hintMessage: "Don't show this again",
+            // hintOnClick: () => console.log("hint clicked"),
+            firstButtonOnClick: () => console.log("button clicked"),
+            // secondButtonOnClick: () => console.log("button clicked"),
             // icon: DeleteIcon,
             // iconName: "delete",
             autoClose: false,

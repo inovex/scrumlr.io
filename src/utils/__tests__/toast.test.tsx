@@ -21,6 +21,7 @@ describe("Toast", () => {
     const toastId = Toast.success(testOptions);
     // assert
     expect(toastId).toBe("1");
-    expect(await screen.findByText(testOptions.title)).toBeInTheDocument();
+    const toastElement = await screen.findByText(testOptions.title);
+    expect(toastElement).toBeInTheDocument();
   });
 });

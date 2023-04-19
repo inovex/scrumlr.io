@@ -18,34 +18,70 @@ export interface CustomToastProps {
 }
 
 export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hintMessage, hintOnClick, firstButtonOnClick, secondButtonOnClick, icon, iconName, type}) => {
-  const [isSingleLineTitle, setIsSingleLineTitle] = useState<boolean>(true);
+  const [isSingleToastTitle, setIsSingleToastTitle] = useState<boolean>(true);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
   const titleRef = useRef<HTMLDivElement>(null);
   const standardIcon = ["info", "success", "error"].includes(iconName!);
   const Icon = icon;
 
-  // detects whether the title spans two lines
-  useEffect(() => {
-    if (titleRef.current && titleRef.current.offsetHeight > 19) {
-      setIsSingleLineTitle(false);
-    } else {
-      setIsSingleLineTitle(true);
-    }
-  }, [title]);
+  const titleMaxHeightDesktop = 38; // two lines of text
+  const titleMaxHeightMobile = 19; // one line of text
+  const maxWidthMobile = 767; // $smartphone: "screen and (max-width: 767px)"
 
-  const isSingleLineToast = (!buttons || buttons?.length <= 1) && isSingleLineTitle && !message && !hintMessage;
+  // check whether screensize is mobile/desktop
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= maxWidthMobile);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // detects whether the title spans one or two lines
+  useEffect(() => {
+    if (!titleRef.current) {
+      return;
+    }
+    if (!isMobile) {
+      if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
+        setIsSingleToastTitle(false);
+      } else {
+        setIsSingleToastTitle(true);
+      }
+    }
+    if (isMobile) {
+      if (buttons) {
+        if (buttons.length < 2) {
+          if (titleRef.current.offsetHeight > titleMaxHeightMobile) {
+            setIsSingleToastTitle(false);
+            
+          }
+        } else {
+          setIsSingleToastTitle(false);
+          
+        }
+      } else if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
+          setIsSingleToastTitle(false);
+          
+        }
+    }
+  }, [title, isMobile]);
+
+  const isSingleToast = (!buttons || buttons?.length <= 1) && isSingleToastTitle && !message && !hintMessage;
 
   return (
-    <div className={`${isSingleLineToast ? "toast-single" : "toast-multi"}`}>
+    <div className={`${isSingleToast ? "toast-single" : "toast-multi"}`}>
       <div
         className={classNames(
           "toast__icon",
-          {"toast__icon-single": isSingleLineToast, "toast__icon-multi": !isSingleLineToast},
-          standardIcon && `toast__icon-${isSingleLineToast ? "single" : "multi"}-${type}`
+          {"toast__icon-single": isSingleToast, "toast__icon-multi": !isSingleToast},
+          standardIcon && `toast__icon-${isSingleToast ? "single" : "multi"}-${type}`
         )}
       >
         {Icon && <Icon />}
       </div>
-      {isSingleLineToast ? (
+      {isSingleToast ? (
         <div className="toast__title-button-single-wrapper">
           <div className="toast__title" ref={titleRef}>
             {title}
@@ -57,7 +93,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           )}
         </div>
       ) : (
-        <div className="toast__title toast__title-multi" ref={titleRef}>
+        <div className="toast__title" ref={titleRef}>
           {title}
         </div>
       )}
@@ -80,7 +116,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           {hintMessage}
         </label>
       )}
-      {!isSingleLineToast && (
+      {!isSingleToast && (
         <div className="toast__buttons-multi">
           {buttons &&
             buttons.map((button, index) => (
@@ -94,7 +130,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             ))}
         </div>
       )}
-      <div className={`toast__close-icon ${isSingleLineToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
+      <div className={`toast__close-icon ${isSingleToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
         <CloseIcon />
       </div>
     </div>
