@@ -48,7 +48,7 @@
 .not-found__content {
   display: flex;
   flex-direction: column;
-  align-items: start; // prevent button from taking the whole space
+  align-items: flex-start; // prevent button from taking the whole space
 
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
