@@ -40,11 +40,11 @@ export const NotFound = () => {
           <button className="not-found__return-button">{t("NotFoundPage.navigateHome")}</button>
         </div>
         <div className="not-found__image-wrapper">
-          <StanWebLight className="not-found__logo-stan not-found__logo-stan--web-light" />
-          <StanWebDark className="not-found__logo-stan not-found__logo-stan--web-dark" />
+          <StanWebLight className="not-found__logo-stan not-found__logo-stan--web not-found__logo-stan--light" />
+          <StanWebDark className="not-found__logo-stan not-found__logo-stan--web not-found__logo-stan--dark" />
 
-          <StanMobileLight className="not-found__logo-stan not-found__logo-stan--mobile-light" />
-          <StanMobileDark className="not-found__logo-stan not-found__logo-stan--mobile-dark" />
+          <StanMobileLight className="not-found__logo-stan not-found__logo-stan--mobile not-found__logo-stan--light" />
+          <StanMobileDark className="not-found__logo-stan not-found__logo-stan--mobile not-found__logo-stan--dark" />
         </div>
       </main>
     </div>

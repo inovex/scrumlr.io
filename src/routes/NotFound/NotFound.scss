@@ -76,8 +76,8 @@
 .not-found__image-wrapper {
 }
 
-.not-found__logo-stan--web-light,
-.not-found__logo-stan--web-dark {
+.not-found__logo-stan--web,
+.not-found__logo-stan--web {
   width: clamp(200px, 50vw, 1000px); // min bound doesn't quite work
   display: none;
 }
@@ -112,13 +112,11 @@
     flex-direction: row; // in desktop, stan is next to the content
   }
 
-  .not-found__logo-stan--web-light,
-  .not-found__logo-stan--web-dark {
+  .not-found__logo-stan--web {
     display: block;
   }
 
-  .not-found__logo-stan--mobile-light,
-  .not-found__logo-stan--mobile-dark {
+  .not-found__logo-stan--mobile {
     display: none;
   }
 }
@@ -134,8 +132,7 @@
 [theme="light"] {
   .not-found__background-form--dark,
   .not-found__scrumlr-logo--dark,
-  .not-found__logo-stan--web-dark,
-  .not-found__logo-stan--mobile-dark {
+  .not-found__logo-stan--dark {
     display: none;
   }
 }
@@ -143,8 +140,7 @@
 [theme="dark"] {
   .not-found__background-form--light,
   .not-found__scrumlr-logo--light,
-  .not-found__logo-stan--web-light,
-  .not-found__logo-stan--mobile-light {
+  .not-found__logo-stan--light {
     display: none;
   }
 
