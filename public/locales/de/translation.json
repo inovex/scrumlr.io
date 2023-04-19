@@ -180,7 +180,7 @@
     "hotkeyToggle": "Hotkeys aktivieren",
     "cheatSheet": "Hotkey Spickzettel",
     "toggleColumnVisibility": {
-      "hide": "Ausgeblendete Spalten sind nun für dich ausgeblendet",
+      "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
       "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
     },
     "toggleShowOtherUsersNotes": {
