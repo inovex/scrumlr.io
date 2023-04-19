@@ -115,6 +115,12 @@
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
   },
+  "NotFoundPage": {
+    "title": "Och nö! Fehler",
+    "descriptionLine1": "Diese Seite existiert nicht.",
+    "descriptionLine2": "Geh zur Startseite zurück.",
+    "navigateHome": "Zurück zur Startseite"
+  },
   "JoinRequest": {
     "title": "Möchte der Sitzung beitreten",
     "accept": "Akzeptieren",
