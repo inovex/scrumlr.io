@@ -2,7 +2,7 @@ import _ from "underscore";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
-import {Toast} from "utils/toast";
+import {Toast} from "utils/Toast";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import {hotkeyMap} from "constants/hotkeys";

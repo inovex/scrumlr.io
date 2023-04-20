@@ -5,7 +5,7 @@ import {Actions} from "store/action";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {useTranslation} from "react-i18next";
-import {Toast} from "utils/toast";
+import {Toast} from "utils/Toast";
 import useSound from "use-sound";
 import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";

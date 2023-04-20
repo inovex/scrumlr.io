@@ -1,6 +1,6 @@
 import i18n from "i18n";
 import {SERVER_HTTP_URL} from "../config";
-import {Toast} from "../utils/toast";
+import {Toast} from "../utils/Toast";
 
 export const FeedbackAPI = {
   sendFeedback: async (type: string, text: string, contact?: string) => {

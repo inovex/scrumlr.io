@@ -1,7 +1,7 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {ToastTypes} from "utils/toast";
+import {ToastTypes} from "utils/Toast";
 import classNames from "classnames";
 
 export interface CustomToastProps {

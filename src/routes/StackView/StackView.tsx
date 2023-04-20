@@ -10,7 +10,7 @@ import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {Toast} from "utils/toast";
+import {Toast} from "utils/Toast";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";

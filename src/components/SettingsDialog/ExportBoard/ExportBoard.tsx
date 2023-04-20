@@ -7,7 +7,7 @@ import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
 import {ReactComponent as ClipboardIcon} from "assets/icon-clipboard.svg";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
-import {Toast} from "utils/toast";
+import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
 import {ExportHintHiddenColumns} from "./ExportHintHiddenColumns";

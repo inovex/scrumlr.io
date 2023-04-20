@@ -2,7 +2,7 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import {Toast} from "../../utils/toast";
+import {Toast} from "../../utils/Toast";
 import i18n from "../../i18n";
 import store from "../index";
 

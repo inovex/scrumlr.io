@@ -1,7 +1,7 @@
 import {Link, useNavigate} from "react-router-dom";
 import {getRandomName} from "constants/name";
 import {Auth} from "utils/auth";
-import {Toast} from "utils/toast";
+import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {Trans, useTranslation} from "react-i18next";

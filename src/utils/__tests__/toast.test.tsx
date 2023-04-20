@@ -1,6 +1,6 @@
 import {render, screen} from "@testing-library/react";
 import {ToastContainer} from "react-toastify";
-import {Toast, Options} from "utils/toast";
+import {Toast, Options} from "utils/Toast";
 
 const testOptions: Options = {
   title: "Titeliger titel",
