@@ -1,14 +1,15 @@
+import {useEffect} from "react";
+import {t} from "i18next";
 import {ReactComponent as DarkIcon} from "assets/icon-darkmode.svg";
 import {ReactComponent as LightIcon} from "assets/icon-lightmode.svg";
 import {ReactComponent as AutoIcon} from "assets/icon-settings.svg";
 import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
 import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
-import {t} from "i18next";
-import {useEffect, useState} from "react";
+import {useLocalStorage} from "utils/hooks/useLocalStorage";
 import "./ThemeSettings.scss";
 
 export const ThemeSettings = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
+  const [theme, setTheme] = useLocalStorage("theme", "auto");
   useEffect(() => {
     if (theme === "auto") {
       const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
