@@ -4,7 +4,6 @@ import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
 import {Toast} from "../../utils/toast";
 import i18n from "../../i18n";
-import {Button} from "../../components/Button";
 import store from "../index";
 
 export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {

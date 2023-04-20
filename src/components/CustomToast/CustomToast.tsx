@@ -61,6 +61,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         setIsSingleToastTitle(false);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, isMobile]);
 
   const isSingleToast = (!buttons || buttons?.length <= 1) && isSingleToastTitle && !message && !hintMessage;
@@ -81,7 +82,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           <div className="toast__title" ref={titleRef}>
             {title}
           </div>
-          {buttons?.length == 1 && (
+          {buttons?.length === 1 && (
             <button className={`toast__button toast__button-single toast__button-${type}`} onClick={firstButtonOnClick}>
               {buttons[0]}
             </button>
@@ -105,6 +106,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
             name="checkbox"
             onClick={(e) => {
               e.stopPropagation();
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               hintOnClick && hintOnClick();
             }}
           />
@@ -116,9 +118,10 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           {buttons &&
             buttons.map((button, index) => (
               <button
+                // eslint-disable-next-line react/no-array-index-key
                 key={index}
-                className={index == 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
-                onClick={index == 0 ? firstButtonOnClick : secondButtonOnClick}
+                className={index === 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
+                onClick={index === 0 ? firstButtonOnClick : secondButtonOnClick}
               >
                 {button}
               </button>
