@@ -111,7 +111,6 @@ $color-close-icon: #bfc1c5;
   height: 64px;
 }
 .toast__icon-multi-info {
-  background-color: $menu-icon-background-color--dark;
   svg {
     height: 38px;
     width: 38px;
@@ -211,7 +210,9 @@ $color-close-icon: #bfc1c5;
   display: flex;
   gap: 12px;
   margin-top: auto;
-  max-height: 42px;
+  padding-top: 17px;
+  min-height: 42px;
+  max-height: 59px;
 }
 .toast__button-multi-primary {
   padding: 13px 32px;
@@ -264,7 +265,6 @@ $color-close-icon: #bfc1c5;
   grid-template-columns: 16px auto;
   gap: 10px;
   margin-top: 13px;
-  margin-bottom: 17px;
   color: $color-middle-gray;
   width: fit-content;
 }
@@ -304,6 +304,7 @@ input[type="checkbox"]:checked::before {
   .Toastify__toast.Toastify__toast:has(div.toast-multi) {
     background-color: $menu-icon-background-color--dark;
   }
+
   .toast__icon {
     background-color: $color-white;
     svg {
@@ -312,9 +313,22 @@ input[type="checkbox"]:checked::before {
   }
   .toast__icon-single-info,
   .toast__icon-multi-info {
-    background-color: $color-white;
     svg path {
       stroke: $menu-icon-background-color--dark;
+    }
+  }
+  .toast__icon-single-success,
+  .toast__icon-multi-success {
+    background-color: $color-success;
+    svg {
+      color: $color-white;
+    }
+  }
+  .toast__icon-single-error,
+  .toast__icon-multi-error {
+    background-color: $color-error;
+    svg {
+      color: $color-white;
     }
   }
   .toast__title,
@@ -353,7 +367,6 @@ input[type="checkbox"]:checked::before {
     height: 60px;
   }
   .Toastify__toast:has(div.toast-multi) {
-    max-height: 210px;
     min-height: 172px;
   }
   .toast-multi {
@@ -389,10 +402,6 @@ input[type="checkbox"]:checked::before {
   }
   .toast__button {
     padding: 12px 30px;
-  }
-  .toast__buttons-multi {
-    max-height: 42px;
-    margin-top: auto;
   }
   .toast__title-button-single-wrapper {
     display: block;

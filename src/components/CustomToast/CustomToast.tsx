@@ -46,8 +46,6 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
     if (!isMobile) {
       if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
         setIsSingleToastTitle(false);
-      } else {
-        setIsSingleToastTitle(true);
       }
     }
     if (isMobile) {
@@ -55,16 +53,13 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         if (buttons.length < 2) {
           if (titleRef.current.offsetHeight > titleMaxHeightMobile) {
             setIsSingleToastTitle(false);
-            
           }
         } else {
           setIsSingleToastTitle(false);
-          
         }
       } else if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
-          setIsSingleToastTitle(false);
-          
-        }
+        setIsSingleToastTitle(false);
+      }
     }
   }, [title, isMobile]);
 
@@ -116,7 +111,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
           {hintMessage}
         </label>
       )}
-      {!isSingleToast && (
+      {!isSingleToast && buttons && buttons.length > 0 && (
         <div className="toast__buttons-multi">
           {buttons &&
             buttons.map((button, index) => (

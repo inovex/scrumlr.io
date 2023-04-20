@@ -10,8 +10,6 @@ import {Toast} from "utils/toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
-// To delete
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
@@ -57,8 +55,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
         Toast.info({
-          title: "Hidden column",
-          message: t("Toast.noteToHiddenColumn"),
+          title: t("Toast.noteToHiddenColumn"),
           buttons: [t("Toast.noteToHiddenColumnButton")],
           firstButtonOnClick: toggleColumnVisibility,
         });
@@ -73,20 +70,6 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        onClick={() =>
-          Toast.success({
-            title: "Karte gelöscht geilo zum ende hin passt auch auf ",
-            // message: "At vero eos et accusam et justo is leta dolores et ea rebum lorem.",
-            // buttons: ["Rückgängig"],
-            // hintMessage: "Don't show this again",
-            // hintOnClick: () => console.log("hint clicked"),
-            firstButtonOnClick: () => console.log("button clicked"),
-            // secondButtonOnClick: () => console.log("button clicked"),
-            // icon: DeleteIcon,
-            // iconName: "delete",
-            autoClose: false,
-          })
-        }
         type="text"
         value={value}
         onChange={handleChangeNoteText}
