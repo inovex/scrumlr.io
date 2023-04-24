@@ -2,13 +2,13 @@
 @import "components/Column/Column";
 
 .board {
-  --n: 1;
+  --visible-columns: 1;
 
   display: grid;
   grid-auto-flow: column;
   grid-template-columns:
     minmax($board__side-panel-width, 1fr)
-    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--n))), #{$column__max-width}))
+    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{$column__max-width}))
     minmax($board__side-panel-width, 1fr);
 
   scroll-snap-type: x mandatory;
@@ -73,7 +73,7 @@
 @for $i from 1 through 16 {
   @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
     .board {
-      --n: #{$i};
+      --visible-columns: #{$i};
     }
   }
 }

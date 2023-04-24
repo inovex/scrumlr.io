@@ -10,30 +10,6 @@ exports[`Column should have correct style show column with correct style 1`] = `
     <div
       class="column__header"
     >
-      <form
-        class="note-input"
-      >
-        <input
-          class="note-input__input"
-          data-tooltip-content="OPTION/ALT + 1"
-          id="note-input-test-columns-id-1"
-          maxlength="1024"
-          placeholder="Add your note..."
-          type="text"
-          value=""
-        />
-        <button
-          class="note-input__add-button"
-          tabindex="-1"
-          type="submit"
-        >
-          <svg
-            class="note-input__icon--add"
-          >
-            icon-add.svg
-          </svg>
-        </button>
-      </form>
       <div
         class="column__header-title"
       >
@@ -69,6 +45,30 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
         </button>
       </div>
+      <form
+        class="note-input"
+      >
+        <input
+          class="note-input__input"
+          data-tooltip-content="OPTION/ALT + 1"
+          id="note-input-test-columns-id-1"
+          maxlength="1024"
+          placeholder="Add your note..."
+          type="text"
+          value=""
+        />
+        <button
+          class="note-input__add-button"
+          tabindex="-1"
+          type="submit"
+        >
+          <svg
+            class="note-input__icon--add"
+          >
+            icon-add.svg
+          </svg>
+        </button>
+      </form>
     </div>
     <div
       class="column__notes-wrapper"

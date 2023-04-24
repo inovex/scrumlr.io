@@ -5,12 +5,7 @@ $votes-button-size: 28px;
 
 .votes {
   display: inline-flex;
-  position: relative;
   height: var(--note-footer-height, $votes-button-size);
   justify-content: flex-end;
-  gap: 4px;
-
-  > *:last-child {
-    margin-left: $margin--small;
-  }
+  gap: 6px;
 }

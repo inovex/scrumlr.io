@@ -41,7 +41,7 @@ describe("Column", () => {
 
     test("column header title is present", () => {
       const {container} = render(createColumn());
-      expect(container.querySelector(".column__header")!.childNodes.item(1)).toHaveClass("column__header-title");
+      expect(container.querySelector(".column__header")!.childNodes.item(0)).toHaveClass("column__header-title");
     });
 
     test("column header text is present", () => {
