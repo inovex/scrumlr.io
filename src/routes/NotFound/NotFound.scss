@@ -1,12 +1,11 @@
 @import "src/constants/style";
 
 .not-found__root {
-  overflow: hidden;
   height: 100%;
   width: 100%;
   padding: 20px 0 20px 20px;
+  overflow-x: hidden;
   background: linear-gradient(320deg, rgb(107, 156, 255, 30%), rgb(255, 255, 255, 30%));
-  //  background: $color-grooming-green;
 }
 
 .not-found__background {
@@ -49,6 +48,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start; // prevent button from taking the whole space
+
+  padding: 0 $padding--default;
 
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
@@ -104,6 +105,23 @@
   .not-found__background-form {
     top: -400px;
     left: -900px;
+  }
+
+  .not-found__image-wrapper {
+    padding-top: $padding--large;
+  }
+
+  .not-found__title {
+    font-size: 60px;
+  }
+
+  .not-found__description {
+    font-size: 30px;
+  }
+
+  .not-found__return-button {
+    margin-top: $margin--large;
+    margin-bottom: $margin--small;
   }
 }
 
