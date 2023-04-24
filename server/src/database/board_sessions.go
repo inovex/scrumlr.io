@@ -26,6 +26,7 @@ type BoardSession struct {
 	Ready             bool
 	RaisedHand        bool
 	ViewsSharedNote   bool
+	Moderating        bool
 	Role              types.SessionRole
 	CreatedAt         time.Time
 }
@@ -46,6 +47,7 @@ type BoardSessionUpdate struct {
 	Ready             *bool
 	RaisedHand        *bool
 	ViewsSharedNote   *bool
+	Moderating        *bool
 	Role              *types.SessionRole
 }
 
@@ -71,6 +73,11 @@ func BoardSessionFilterTypeFromQueryString(query url.Values) filter.BoardSession
 		value, _ := strconv.ParseBool(viewsSharedNoteFilter)
 		filter.ViewsSharedNote = &value
 	}
+	moderatingFilter := query.Get("moderating")
+	if moderatingFilter != "" {
+		value, _ := strconv.ParseBool(moderatingFilter)
+		filter.Moderating = &value
+	}
 	roleFilter := query.Get("role")
 	if roleFilter != "" {
 		filter.Role = (*types.SessionRole)(&roleFilter)
@@ -91,7 +98,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 		With("insertQuery", insertQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.moderating, s.role").
 		Where("s.board = ?", boardSession.Board).
 		Where("s.user = ?", boardSession.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -122,6 +129,9 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 	if update.ViewsSharedNote != nil {
 		updateQuery = updateQuery.Column("views_shared_note")
 	}
+	if update.Moderating != nil {
+		updateQuery = updateQuery.Column("moderating")
+	}
 	if update.Role != nil {
 		updateQuery = updateQuery.Column("role")
 		if *update.Role == types.SessionRoleOwner {
@@ -136,7 +146,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.moderating, s.role").
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -194,7 +204,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 	var session BoardSession
 	err := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.moderating, s.role").
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -205,7 +215,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
 	query := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.role").
+		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.views_shared_note, s.moderating, s.role").
 		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
@@ -219,6 +229,9 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 		}
 		if f.ViewsSharedNote != nil {
 			query = query.Where("s.views_shared_note = ?", *f.ViewsSharedNote)
+		}
+		if f.Moderating != nil {
+			query = query.Where("s.moderating = ?", *f.Moderating)
 		}
 		if f.Connected != nil {
 			query = query.Where("s.connected = ?", *f.Connected)

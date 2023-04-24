@@ -40,6 +40,17 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
     });
   }
 
+  if (action.type === Action.SetUserModeratingStatus) {
+    API.editParticipant(action.context.board!, action.user, {moderating: action.moderating}).catch(() => {
+      Toast.error(
+        <div>
+          <div>{i18n.t("Error.setUserReady")}</div>
+          <Button onClick={() => store.dispatch(Actions.setUserModeratingStatus(action.user, action.moderating))}>{i18n.t("Error.retry")}</Button>
+        </div>
+      );
+    });
+  }
+
   if (action.type === Action.SetShowHiddenColumns) {
     API.editParticipant(action.context.board!, action.context.user!, {showHiddenColumns: action.showHiddenColumns}).catch(() => {
       Toast.error(

@@ -23,12 +23,11 @@ type NoteDialogNoteFooterProps = {
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => {
   const {t} = useTranslation();
 
-  const them = useAppSelector((state) => state.participants!.others.filter((p) => p.connected), _.isEqual);
-  const me = useAppSelector((state) => state.participants!.self);
-  const participants = [...them, me];
-  const viewers = participants.filter((participant) => participant.viewsSharedNote);
+  const participants = useAppSelector((state) => state.participants!.others.filter((p) => p.connected && !(p.role === "MODERATOR" || p.role === "OWNER")), _.isEqual);
+  const viewers = participants.filter((p) => p.viewsSharedNote && !(p.role === "MODERATOR" || p.role === "OWNER"));
   const moderating = useAppSelector((state) => state.view.moderating);
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), _.isEqual);
+  const isInVisibleColumn = useAppSelector((state) => state.columns.find((c) => c.id === note?.position.column)?.visible);
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
@@ -55,7 +54,7 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
       )}
       {moderating && !props.isStackedNote && (
         <div className="note-dialog__note-viewers" title={t("NoteDialogViewers.title")}>
-          {viewers?.length}/{participants?.length} <ViewersIcon className="note-dialog__note-viewers-icon" />
+          {isInVisibleColumn ? viewers?.length : 0}/{participants?.length} <ViewersIcon className="note-dialog__note-viewers-icon" />
         </div>
       )}
       <Votes {...props} className="note-dialog__note-votes" />

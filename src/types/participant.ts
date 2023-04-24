@@ -8,6 +8,7 @@ export interface Participant {
   ready: boolean;
   raisedHand: boolean;
   viewsSharedNote: boolean;
+  moderating: boolean;
   showHiddenColumns: boolean;
   role: ParticipantRole;
 }

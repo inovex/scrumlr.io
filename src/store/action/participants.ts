@@ -16,6 +16,7 @@ export const ParticipantAction = {
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
   SetViewsSharedNoteStatus: "scrumlr.io/setViewsSharedNoteStatus" as const,
+  SetUserModeratingStatus: "scrumlr.io/setUserModeratingStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
   EditSelf: "scrumlr.io/editSelf" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
@@ -81,6 +82,17 @@ export const ParticipantActionFactory = {
     viewsSharedNote,
   }),
 
+  /**
+   * Sets the moderating status of a user by the given value.
+   *
+   * @param moderating represents whether a user is moderating.
+   */
+  setUserModeratingStatus: (user: string, moderating: boolean) => ({
+    type: ParticipantAction.SetUserModeratingStatus,
+    user,
+    moderating,
+  }),
+
   setShowHiddenColumns: (showHiddenColumns: boolean) => ({
     type: ParticipantAction.SetShowHiddenColumns,
     showHiddenColumns,
@@ -128,4 +140,5 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.editSelf>
   | ReturnType<typeof ParticipantActionFactory.changePermission>
   | ReturnType<typeof ParticipantActionFactory.setFocusInitiator>
-  | ReturnType<typeof ParticipantActionFactory.clearFocusInitiator>;
+  | ReturnType<typeof ParticipantActionFactory.clearFocusInitiator>
+  | ReturnType<typeof ParticipantActionFactory.setUserModeratingStatus>;

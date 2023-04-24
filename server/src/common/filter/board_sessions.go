@@ -7,5 +7,6 @@ type BoardSessionFilter struct {
 	Ready           *bool
 	RaisedHand      *bool
 	ViewsSharedNote *bool
+	Moderating      *bool
 	Role            *types.SessionRole
 }

@@ -58,6 +58,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
+      moderators: rootState.participants?.others.filter((p) => p.moderating),
     }),
     _.isEqual
   );
@@ -76,10 +77,15 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const toggleModeration = () => {
     if (state.moderation) {
-      dispatch(Actions.stopSharing());
-      dispatch(Actions.clearFocusInitiator());
-    } else dispatch(Actions.setFocusInitiator(state.currentUser));
-
+      dispatch(Actions.setUserModeratingStatus(state.currentUser.user.id, false));
+      if (state.moderators?.length === 0) {
+        dispatch(Actions.stopSharing());
+        dispatch(Actions.clearFocusInitiator());
+      }
+    } else {
+      dispatch(Actions.setUserModeratingStatus(state.currentUser.user.id, true));
+      dispatch(Actions.setFocusInitiator(state.currentUser));
+    }
     dispatch(Actions.setModerating(!state.moderation));
   };
 

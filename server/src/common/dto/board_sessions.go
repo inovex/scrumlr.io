@@ -27,6 +27,9 @@ type BoardSession struct {
 	// Flag indicates whether user is viewing the shared note.
 	ViewsSharedNote bool `json:"viewsSharedNote"`
 
+	// Flag indicates whether user is moderating.
+	Moderating bool `json:"moderating"`
+
 	// The role of the participant.
 	//
 	// Can be one of 'PARTICIPANT', 'MODERATOR' or 'OWNER'. Participants
@@ -47,6 +50,7 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.Ready = session.Ready
 	b.RaisedHand = session.RaisedHand
 	b.ViewsSharedNote = session.ViewsSharedNote
+	b.Moderating = session.Moderating
 	b.ShowHiddenColumns = session.ShowHiddenColumns
 	b.Role = session.Role
 	return b
@@ -82,6 +86,9 @@ type BoardSessionUpdateRequest struct {
 
 	// The viewsSharedNote state of the participant.
 	ViewsSharedNote *bool `json:"viewsSharedNote"`
+
+	// The moderating state of the participant.
+	Moderating *bool `json:"moderating"`
 
 	// The role of the participant.
 	//

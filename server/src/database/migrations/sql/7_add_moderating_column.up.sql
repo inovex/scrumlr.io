@@ -1,0 +1,3 @@
+ALTER TABLE board_sessions
+ADD COLUMN IF NOT EXISTS views_shared_note BOOLEAN,
+ADD COLUMN IF NOT EXISTS moderating BOOLEAN;
