@@ -27,6 +27,12 @@ export const InfoBar = () => {
     _.isEqual
   );
 
+  // console.log("sharedNote && viewer !== initiator", state.sharedNote && viewer.user.id !== focusInitiator?.user.id)
+  console.log("sharedNote", state.sharedNote);
+  console.log("viewer!== initiaor", viewer.user.id !== focusInitiator?.user.id);
+  console.log("viewer", viewer.user.id);
+  console.log("focusBre", focusInitiator?.user.id);
+
   return ReactDOM.createPortal(
     <aside className="info-bar">
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}

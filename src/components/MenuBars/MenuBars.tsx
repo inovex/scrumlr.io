@@ -59,6 +59,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
       moderators: rootState.participants?.others.filter((p) => p.moderating),
+      presentingModerators: rootState.participants?.others.filter((p) => p.moderating),
     }),
     _.isEqual
   );

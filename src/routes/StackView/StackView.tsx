@@ -42,6 +42,7 @@ export const StackView = () => {
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId, _.isEqual);
   const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
+  const focusInitiator = useAppSelector((state) => state.participants?.focusInitiator);
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
@@ -98,7 +99,7 @@ export const StackView = () => {
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
   const owner = viewer.role === "OWNER";
-  const moderators = useAppSelector((state) => state.participants?.others.filter((p) => p.moderating));
+  const presentingModerators = useAppSelector((state) => state.participants?.others.filter((p) => p.moderating));
   const [transitionConfig, setTransitionConfig] = useState({
     from: {transform: "translateX(0%)", position: "relative", opacity: 0},
     enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
@@ -181,11 +182,6 @@ export const StackView = () => {
     if (!userIsModerating && isShared) {
       dispatch(Actions.setViewsSharedNote(viewer.user.id, true));
     }
-    // return () => {
-    //   if (isShared) {
-    //     dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
-    //   }
-    // };
   }, [isShared]);
 
   if (!note) {
@@ -194,11 +190,14 @@ export const StackView = () => {
   }
 
   const handleClose = () => {
-    if (userIsModerating && moderators?.length === 0) {
+    if (userIsModerating && presentingModerators?.length === 0) {
       dispatch(Actions.stopSharing());
     }
     if (!userIsModerating && isShared) {
       dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
+    }
+    if (userIsModerating && focusInitiator) {
+      dispatch(Actions.clearFocusInitiator());
     }
     navigate(`/board/${boardId}`);
   };
