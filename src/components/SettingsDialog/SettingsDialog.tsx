@@ -1,4 +1,4 @@
-import {useEffect, FC, useState} from "react";
+import {useEffect, FC, useState, useMemo, useCallback} from "react";
 import {animated, Transition} from "react-spring";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
@@ -6,7 +6,7 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
@@ -20,7 +20,7 @@ import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 import "./SettingsDialog.scss";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
-import {Actions} from "store/action";
+import {SettingsContext, SettingsContextData} from "./settingsContext";
 
 export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
@@ -29,8 +29,8 @@ export const SettingsDialog: FC = () => {
   const me = useAppSelector((applicationState) => applicationState.participants!.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
-  const unsavedAvatar = useAppSelector((state) => state.participants?.self.user.unsavedAvatar);
   const [showDialog, setShowDialog] = useState<boolean>();
+  const [settings, setSettings] = useState<SettingsContextData>();
 
   const transitionConfigMobile = {
     from: {},
@@ -51,15 +51,22 @@ export const SettingsDialog: FC = () => {
   }, [navigate, me, boardId, isBoardModerator]);
 
   const onClose = () => {
-    if (!unsavedAvatar) {
+    if (!settings?.profile?.unsavedAvatarChanges) {
       navigate(`/board/${boardId}`);
     } else {
       setShowDialog(true);
     }
   };
 
+  const updateSettings = useCallback((newSettings: SettingsContextData) => {
+    setSettings(newSettings);
+  }, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const contextValue = useMemo(() => ({settings, updateSettings}), [settings]);
+
   return (
-    <>
+    <SettingsContext.Provider value={contextValue}>
       <Portal onClose={onClose}>
         <div className="settings-dialog__background" />
         <div className="settings-dialog__wrapper">
@@ -161,7 +168,6 @@ export const SettingsDialog: FC = () => {
         <ConfirmationDialog
           title={t("ProfileSettings.DialogUnsavedChanges")}
           onAccept={() => {
-            store.dispatch(Actions.editSelf({...me, unsavedAvatar: undefined}));
             navigate(`/board/${boardId}`);
           }}
           onDecline={() => {
@@ -169,6 +175,6 @@ export const SettingsDialog: FC = () => {
           }}
         />
       )}
-    </>
+    </SettingsContext.Provider>
   );
 };

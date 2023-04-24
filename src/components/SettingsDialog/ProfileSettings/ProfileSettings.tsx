@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./ProfileSettings.scss";
@@ -12,16 +12,16 @@ import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
 import {Footer} from "../Components/Footer";
+import {SettingsContext} from "../settingsContext";
 
 export const ProfileSettings = () => {
+  const {settings} = useContext(SettingsContext);
   const {t} = useTranslation();
   const dispatch = useDispatch();
-
   const state = useAppSelector((applicationState: ApplicationState) => ({
     participant: applicationState.participants!.self,
     hotkeysAreActive: applicationState.view.hotkeysAreActive,
   }));
-
   const [userName, setUserName] = useState<string>(state.participant?.user.name);
   const [id] = useState<string | undefined>(state.participant?.user.id);
   const [saved, setSaved] = useState<boolean | null>(null);
@@ -60,7 +60,7 @@ export const ProfileSettings = () => {
           </div>
         </div>
       </div>
-      {state.participant.user.unsavedAvatar && (
+      {settings?.profile?.unsavedAvatarChanges && (
         <Footer className="profile-settings__footer">
           <button onClick={() => setSaved(true)}>{t("ProfileSettings.SaveAvatar")}</button>
           <button onClick={() => setCanceled(true)}>{t("ProfileSettings.Cancel")}</button>

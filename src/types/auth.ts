@@ -4,7 +4,6 @@ export interface Auth {
   id: string;
   name: string;
   avatar?: AvataaarProps;
-  unsavedAvatar?: AvataaarProps;
 }
 
 export interface AuthState {

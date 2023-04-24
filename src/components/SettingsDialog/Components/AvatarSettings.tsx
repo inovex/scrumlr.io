@@ -15,7 +15,7 @@ import {
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
-import {FC, Fragment, useEffect, useState} from "react";
+import {FC, Fragment, useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import "./AvatarSettings.scss";
@@ -23,6 +23,7 @@ import {Actions} from "store/action";
 import _ from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
+import {SettingsContext} from "../settingsContext";
 
 export interface AvatarSettingsProps {
   id?: string;
@@ -33,19 +34,16 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, canceled, setCanceled}) => {
+  const {settings, updateSettings} = useContext(SettingsContext);
   const {t} = useTranslation();
   const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
   }));
-
   let initialState = state.participant.user.avatar;
   if (initialState === null || initialState === undefined) {
     initialState = generateRandomProps(id ?? "");
   }
-
-  const {unsavedAvatar} = state.participant.user;
-
-  const [properties, setProperties] = useState<AvataaarProps>(unsavedAvatar || initialState!);
+  const [properties, setProperties] = useState<AvataaarProps>(initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
   const changeAvatarSettings = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
@@ -55,7 +53,8 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
   };
 
   const updateAvatar = () => {
-    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties, unsavedAvatar: undefined}));
+    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
+    updateSettings({...settings, profile: {unsavedAvatarChanges: undefined}});
   };
 
   const handleAccordionOpen = (index: number) => {
@@ -65,10 +64,10 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
 
   useEffect(() => {
     if (!_.isEqual(properties, initialState)) {
-      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: properties}));
+      updateSettings({...settings, profile: {unsavedAvatarChanges: properties}});
     }
-    if (unsavedAvatar && _.isEqual(properties, initialState)) {
-      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: undefined}));
+    if (settings?.profile?.unsavedAvatarChanges && _.isEqual(properties, initialState)) {
+      updateSettings({...settings, profile: {unsavedAvatarChanges: undefined}});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
@@ -79,7 +78,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
       setSaved(false);
     }
     if (canceled) {
-      store.dispatch(Actions.editSelf({...state.participant.user, unsavedAvatar: undefined}));
+      updateSettings({...settings, profile: {unsavedAvatarChanges: undefined}});
       setProperties(initialState!);
       setCanceled(false);
     }
