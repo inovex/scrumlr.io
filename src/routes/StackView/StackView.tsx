@@ -40,7 +40,7 @@ export const StackView = () => {
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
-  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId);
+  const isShared = useAppSelector((state) => state.board.data?.sharedNote === noteId, _.isEqual);
   const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
   const stackedNotes = useAppSelector(
     (state) =>
@@ -97,7 +97,8 @@ export const StackView = () => {
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
-
+  const owner = viewer.role === "OWNER";
+  const moderators = useAppSelector((state) => state.participants?.others.filter((p) => p.moderating));
   const [transitionConfig, setTransitionConfig] = useState({
     from: {transform: "translateX(0%)", position: "relative", opacity: 0},
     enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
@@ -177,15 +178,15 @@ export const StackView = () => {
   }, [author, authorName, columns, note, stackedNotes]);
 
   useEffect(() => {
-    if (isShared) {
+    if (!userIsModerating && isShared) {
       dispatch(Actions.setViewsSharedNote(viewer.user.id, true));
     }
-    return () => {
-      if (isShared) {
-        dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
-      }
-    };
-  }, [isShared, dispatch, viewer.user.id]);
+    // return () => {
+    //   if (isShared) {
+    //     dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
+    //   }
+    // };
+  }, [isShared]);
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -193,8 +194,11 @@ export const StackView = () => {
   }
 
   const handleClose = () => {
-    if (userIsModerating) {
+    if (userIsModerating && moderators?.length === 0) {
       dispatch(Actions.stopSharing());
+    }
+    if (!userIsModerating && isShared) {
+      dispatch(Actions.setViewsSharedNote(viewer.user.id, false));
     }
     navigate(`/board/${boardId}`);
   };
