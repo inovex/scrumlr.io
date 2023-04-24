@@ -43,7 +43,8 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id, saved, setSaved, ca
   if (initialState === null || initialState === undefined) {
     initialState = generateRandomProps(id ?? "");
   }
-  const [properties, setProperties] = useState<AvataaarProps>(initialState!);
+  const unsavedAvatar = settings?.profile?.unsavedAvatarChanges;
+  const [properties, setProperties] = useState<AvataaarProps>(unsavedAvatar || initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
   const changeAvatarSettings = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {

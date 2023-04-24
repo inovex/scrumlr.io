@@ -6,7 +6,7 @@
 // $settings-dialog-container--sides-large: 92px;
 // $settings-dialog-container--bottom: 62px;
 
-.container {
+.settings-dialog__footer {
   margin-top: auto;
   padding: $padding--small $padding--medium;
   background-color: $color-lighter-gray;
@@ -26,7 +26,7 @@
   font-weight: 600;
 }
 
-.container button {
+.settings-dialog__footer button {
   padding: 0 $padding--medium;
   height: 36px;
   background-color: $menu-icon-background-color--dark;
@@ -44,19 +44,19 @@
 }
 
 @media screen and (min-width: 920px) {
-  .container {
+  .settings-dialog__footer {
     width: calc(100% + 2 * $settings-dialog-container--sides-large);
     margin-left: -$settings-dialog-container--sides-large;
   }
 }
 
 [theme="dark"] {
-  .container {
+  .settings-dialog__footer {
     background-color: $color-dark-mode-note;
     // text
     color: $color-white;
   }
-  .container button {
+  .settings-dialog__footer button {
     background-color: $color-dark-mode;
 
     &:hover {
