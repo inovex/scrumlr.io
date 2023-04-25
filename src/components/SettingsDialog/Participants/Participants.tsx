@@ -10,6 +10,7 @@ import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg"
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import "./Participants.scss";
+import _ from "underscore";
 
 export const Participants = () => {
   const {t} = useTranslation();
@@ -19,25 +20,22 @@ export const Participants = () => {
   const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
   const [onlineFilter, setOnlineFilter] = useState<boolean>(true);
   const [isScrollable, setIsScrollable] = useState<boolean>(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
+  const listRef = useRef<HTMLUListElement>(null);
+  const listWrapperRef = useRef<HTMLDivElement>(null);
   const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
   const self = useAppSelector((state) => state.participants!.self);
-  const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])]);
+  const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])], _.isEqual);
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
   useEffect(() => {
-    const scrollableDiv = scrollRef.current;
-    if (!scrollableDiv) {
-      return undefined;
+    const listWrapperHeight = listWrapperRef.current?.offsetWidth;
+    const listHeight = listRef.current?.offsetHeight;
+    if (listHeight && listWrapperHeight && listHeight > listWrapperHeight) {
+      setIsScrollable(true);
+    } else {
+      setIsScrollable(false);
     }
-    const mutationObserver = new MutationObserver(() => {
-      setIsScrollable(scrollableDiv.offsetHeight < scrollableDiv.scrollHeight);
-    });
-
-    mutationObserver.observe(scrollableDiv, {childList: true, subtree: true});
-    return () => mutationObserver.disconnect();
-  }, []);
+  }, [participants]);
 
   const resetReadyStateOfAllUsers = () => {
     participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
@@ -84,8 +82,8 @@ export const Participants = () => {
           <WifiIconDisabled />
         </button>
       </div>
-      <div className={classNames("participants__list-wrapper", {"participants__list-scrollable": isScrollable})} ref={scrollRef}>
-        <ul className="participants__list">
+      <div className={classNames("participants__list-wrapper", {"participants__list-scrollable": isScrollable})} ref={listWrapperRef}>
+        <ul className="participants__list" ref={listRef}>
           {participants
             .filter((participant) =>
               debouncedQueryString
