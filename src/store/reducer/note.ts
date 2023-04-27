@@ -9,9 +9,11 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       return action.notes;
     }
     case Action.DeletedNote: {
+      const deletedNote = state.find((n) => n.id === action.noteId);
+
       // Delete stack
       if (action.deleteStack) {
-        return state.filter((n) => {
+        const newState = state.filter((n) => {
           if (n.id === action.noteId) {
             return false;
           }
@@ -20,10 +22,15 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
           }
           return true;
         });
+        return newState.map((n) => {
+          if (!n.position.stack && n.position.rank > deletedNote!.position.rank) {
+            const newRank = n.position.rank - 1;
+            return {...n, position: {...n.position, rank: newRank}};
+          }
+          return n;
+        });
       }
-
       // Delete parent note
-      const deletedNote = state.find((n) => n.id === action.noteId);
       const childrenOfDeletedNote = state.filter((n) => n.position.stack === deletedNote?.id);
       if (deletedNote?.position.stack === null && childrenOfDeletedNote.length > 0) {
         // Find the next parent note among its children
@@ -35,7 +42,7 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
         }, childrenOfDeletedNote[0]);
 
         // Update the children notes' stack to the next parent note's ID
-        const updatedNotes = state.map((note) => {
+        const newState = state.map((note) => {
           if (note.id === nextParentNote.id) {
             // The next parent note should now have null stack
             return {...note, position: {...note.position, stack: null, rank: deletedNote.position.rank}}; // rank
@@ -48,9 +55,28 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
         });
 
         // Delete the old parent note
-        return updatedNotes.filter((n) => n.id !== deletedNote.id);
+        return newState.filter((n) => n.id !== deletedNote.id);
       }
-      return state.filter((n) => n.id !== action.noteId);
+      // Delete child note
+      if (deletedNote?.position.stack) {
+        const newState = state.filter((n) => n.id !== action.noteId);
+        return newState.map((n) => {
+          if (n.position.stack === deletedNote.position.stack) {
+            const newRank = n.position.rank - 1;
+            return {...n, position: {...n.position, rank: newRank}};
+          }
+          return n;
+        });
+      }
+      // Delete note
+      const newState = state.filter((n) => n.id !== action.noteId);
+      return newState.map((n) => {
+        if (!n.position.stack && n.position.rank > deletedNote!.position.rank) {
+          const newRank = n.position.rank - 1;
+          return {...n, position: {...n.position, rank: newRank}};
+        }
+        return n;
+      });
     }
     case Action.UpdatedVoting: {
       if (action.notes) {
