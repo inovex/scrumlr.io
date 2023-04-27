@@ -298,7 +298,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	return note[0], err
 }
 
-func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack bool, id uuid.UUID) error {
+func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
@@ -318,6 +318,8 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
 
+		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)
+
 		updateBoard := d.db.NewUpdate().
 			Model((*Board)(nil)).
 			Set("shared_note = null").
@@ -325,6 +327,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 
 		updateRanks := d.db.NewUpdate().
 			With("previous", previous).
+			With("children", children).
 			Model((*Note)(nil)).Set("rank = rank-1").
 			Where("board = ?", board).
 			Where("\"column\" = (SELECT \"column\" FROM previous)").
@@ -335,13 +338,21 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 						return q.
 							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 								return q.
+									Where("(?) IS FALSE", deleteStack).
 									Where("(SELECT stack FROM previous) IS NULL").
+									Where("NOT EXISTS (?)", children).
 									Where("stack IS NULL")
 							}).
 							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 								return q.
+									Where("(?) IS FALSE", deleteStack).
 									Where("(SELECT stack FROM previous) IS NOT NULL").
 									Where("stack = (SELECT stack FROM previous)")
+							}).
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(?) IS TRUE", deleteStack).
+									Where("stack IS NULL")
 							})
 					})
 			})
@@ -367,8 +378,11 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, deleteStack boo
 			Where("stack = ?", id)
 
 		updateNextParentStackId := d.db.NewUpdate().
+			With("previous", previous).
 			With("next_parent", nextParentSelect).
-			Model((*Note)(nil)).Set("stack = null").
+			Model((*Note)(nil)).
+			Set("stack = null").
+			Set("rank = (SELECT rank FROM previous)").
 			Where("id = (SELECT id FROM next_parent)")
 
 		_, err := d.db.NewDelete().

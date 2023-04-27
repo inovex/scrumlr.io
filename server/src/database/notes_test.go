@@ -465,7 +465,7 @@ func testOrderWhenChangeStackParent(t *testing.T) {
 }
 
 func testDeleteNote(t *testing.T) {
-	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteB1.ID)
+	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteB1.ID, deleteStack)
 	assert.Nil(t, err)
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
@@ -486,7 +486,7 @@ func testDeleteSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
 
-	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, deleteStack, noteC1.ID)
+	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteC1.ID, deleteStack)
 	assert.Nil(t, deleteNoteError)
 
 	updatedBoard, getUpdatedBoardError := testDb.GetBoard(notesTestBoard.ID)
@@ -501,16 +501,44 @@ func testDeleteStackParent(t *testing.T) {
 	stackF = fixture.MustRow("Note.stackTestNote6").(*Note)
 	stackG = fixture.MustRow("Note.stackTestNote7").(*Note)
 	stackH = fixture.MustRow("Note.stackTestNote8").(*Note)
-
 	stackUser = fixture.MustRow("User.justin").(*User)
-
 	deleteStack = false
-	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, deleteStack, stackE.ID)
+
+	/*
+	   E: Rank 1338, Stack null
+	   F: Rank 0, Stack E
+	   G: Rank 1, Stack E
+	   H: Rank 2, Stack E
+	*/
+
+	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackE.ID, deleteStack)
 	assert.Nil(t, err)
 
 	stackNotes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumnB.ID)
+
+	var newParent Note
+	for _, note := range stackNotes {
+		if note.Text == "H" {
+			newParent = note
+			break
+		}
+	}
+
+	// length should have shrinked from 4 to 3
 	assert.Equal(t, 3, len(stackNotes))
+	// order should stay consistent
 	verifyNoteOrder(t, stackNotes, stackH, stackG, stackF)
+	// newParent stack should be null (uuid.Nil in GO)
+	assert.Equal(t, uuid.Nil, newParent.Stack.UUID)
+	// children should have id of stackH(newParent) as their stack
+	for _, note := range stackNotes {
+		switch note.Text {
+		case "F":
+			assert.Equal(t, newParent.ID, note.Stack.UUID)
+		case "G":
+			assert.Equal(t, newParent.ID, note.Stack.UUID)
+		}
+	}
 }
 
 func testDeleteStack(t *testing.T) {
@@ -523,7 +551,7 @@ func testDeleteStack(t *testing.T) {
 	assert.Equal(t, 3, len(notesInStack))
 
 	deleteStack = true
-	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, deleteStack, stackH.ID)
+	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackH.ID, deleteStack)
 	assert.Nil(t, err)
 
 	notesInStack, _ = testDb.GetNotes(stackTestBoard.ID, stackTestColumnB.ID)
