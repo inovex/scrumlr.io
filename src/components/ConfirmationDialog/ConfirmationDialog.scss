@@ -93,6 +93,7 @@
   padding: $padding--small $padding--medium;
   font-size: $text-size--medium;
   font-weight: bold;
+  min-height: 48px;
   cursor: pointer;
   transition: transform 80ms linear, box-shadow 80ms linear;
   &:hover {
