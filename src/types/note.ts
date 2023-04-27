@@ -7,7 +7,7 @@ export interface Note {
   text: string;
   position: {
     column: string;
-    stack?: string;
+    stack: string | null;
     rank: number;
   };
 }
