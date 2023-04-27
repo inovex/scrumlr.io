@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -93,7 +94,13 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	note := r.Context().Value("Note").(uuid.UUID)
 
-	if err := s.notes.Delete(r.Context(), note); err != nil {
+	var body dto.NoteDeleteRequest
+	if err := render.Decode(r, &body); err != nil {
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	if err := s.notes.Delete(r.Context(), body, note); err != nil {
 		common.Throw(w, r, err)
 		return
 	}

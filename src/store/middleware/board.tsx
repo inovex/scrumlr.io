@@ -57,8 +57,9 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updatedNotes(notes));
         }
         if (message.type === "NOTE_DELETED") {
-          const noteId = message.data;
-          store.dispatch(Actions.deletedNote(noteId));
+          const noteId = message.data.note;
+          const {deleteStack} = message.data;
+          store.dispatch(Actions.deletedNote(noteId, deleteStack));
         }
 
         if (message.type === "PARTICIPANT_CREATED") {
