@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import classNames from "classnames";
+import _ from "underscore";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {useDebounce} from "utils/hooks/useDebounce";
@@ -11,7 +12,6 @@ import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glas
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import {Footer} from "../Components/Footer";
 import "./Participants.scss";
-import _ from "underscore";
 
 export const Participants = () => {
   const {t} = useTranslation();
