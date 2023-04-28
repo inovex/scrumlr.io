@@ -1033,9 +1033,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
         Participants.ResetBannerText
       </div>
     </div>
-    <button
-      class="participants-reset-state-banner__button"
-    >
+    <button>
       Participants.ResetBannerButton
     </button>
   </footer>
