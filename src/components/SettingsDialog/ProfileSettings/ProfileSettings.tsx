@@ -10,7 +10,7 @@ import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
 import {Footer} from "../Components/Footer";
-import {SettingsContext} from "../SettingsContext__";
+import {SettingsContext} from "../SettingsContext";
 import "./ProfileSettings.scss";
 
 export const ProfileSettings = () => {
