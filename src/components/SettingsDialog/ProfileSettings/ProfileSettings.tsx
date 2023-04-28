@@ -3,29 +3,28 @@ import {useTranslation} from "react-i18next";
 import {useContext, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import "./ProfileSettings.scss";
 import {useDispatch} from "react-redux";
 import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 import {Toggle} from "components/Toggle";
-import {ApplicationState} from "types";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
 import {Footer} from "../Components/Footer";
 import {SettingsContext} from "../settingsContext";
+import "./ProfileSettings.scss";
 
 export const ProfileSettings = () => {
   const {settings} = useContext(SettingsContext);
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const state = useAppSelector((applicationState: ApplicationState) => ({
+  const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
     hotkeysAreActive: applicationState.view.hotkeysAreActive,
   }));
   const [userName, setUserName] = useState<string>(state.participant?.user.name);
   const [id] = useState<string | undefined>(state.participant?.user.id);
-  const [saved, setSaved] = useState<boolean | null>(null);
-  const [canceled, setCanceled] = useState<boolean | null>(null);
+  const [saved, setSaved] = useState<boolean>(false);
+  const [canceled, setCanceled] = useState<boolean>(false);
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>

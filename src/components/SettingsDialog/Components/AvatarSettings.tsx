@@ -18,17 +18,17 @@ import {
 import {FC, Fragment, useContext, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
-import "./AvatarSettings.scss";
 import {Actions} from "store/action";
 import _ from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 import {SettingsContext} from "../settingsContext";
+import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
   id?: string;
-  canceled: boolean | null;
-  saved: boolean | null;
+  canceled: boolean;
+  saved: boolean;
   setCanceled: (value: boolean) => void;
   setSaved: (value: boolean) => void;
 }

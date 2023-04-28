@@ -208,7 +208,6 @@
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
-  padding: $padding--small $padding--medium; // create some space
 
   display: flex;
   flex-direction: row;
@@ -246,24 +245,6 @@
 .participants-reset-state-banner__text {
   color: $menu-icon-background-color--dark;
   font-weight: 600;
-}
-
-.participants-reset-state-banner__button {
-  padding: 0 $padding--medium;
-
-  height: 36px;
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
-  border: none;
-  border-radius: $rounded--full;
-  font-weight: bold;
-  letter-spacing: $letter-spacing--medium;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $hover-background-dark;
-    color: $color-white;
-  }
 }
 
 @media screen and (min-width: 920px) {
@@ -330,13 +311,5 @@
   .participants-reset-state-banner__check-icon,
   .participants-reset-state-banner__text {
     color: $color-white;
-  }
-
-  .participants-reset-state-banner__button {
-    background-color: $color-dark-mode;
-
-    &:hover {
-      background-color: $color-dark-one;
-    }
   }
 }

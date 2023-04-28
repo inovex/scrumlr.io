@@ -116,7 +116,9 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__close-button {
-  all: unset;
+  background-color: inherit;
+  padding: 0;
+  margin: 0;
   position: absolute;
   top: 6px;
   right: 6px;

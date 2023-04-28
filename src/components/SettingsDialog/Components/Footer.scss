@@ -8,7 +8,7 @@
 
 .settings-dialog__footer {
   margin-top: auto;
-  padding: $padding--small $padding--medium;
+  padding: 10px $padding--medium;
   background-color: $color-lighter-gray;
 
   // overflow itsparent
@@ -20,7 +20,6 @@
   justify-content: space-evenly;
   align-items: center;
 
-  // Text
   color: $menu-icon-background-color--dark;
   letter-spacing: $letter-spacing--medium;
   font-weight: 600;
@@ -29,17 +28,20 @@
 .settings-dialog__footer button {
   padding: 0 $padding--medium;
   height: 36px;
-  background-color: $menu-icon-background-color--dark;
+  background-color: var(--accent-color);
   color: $color-white;
   border: none;
   border-radius: $rounded--full;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
+  transition: all 0.08s ease-out;
 
   &:hover {
-    background-color: $hover-background-dark;
     color: $color-white;
+    filter: brightness(1.05);
+    transform: scale(1.02);
+    box-shadow: 0 3px 4px 0 rgba(var(--accent-color), 0.24);
   }
 }
 
@@ -53,14 +55,6 @@
 [theme="dark"] {
   .settings-dialog__footer {
     background-color: $color-dark-mode-note;
-    // text
     color: $color-white;
-  }
-  .settings-dialog__footer button {
-    background-color: $color-dark-mode;
-
-    &:hover {
-      background-color: $hover-background-dark;
-    }
   }
 }
