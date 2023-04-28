@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 )
 
@@ -84,4 +85,11 @@ type NoteUpdateRequest struct {
 
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`
+}
+
+// NoteDeleteRequest represents the request to delete a note.
+type NoteDeleteRequest struct {
+
+	// Delete note or the complete stack.
+	DeleteStack bool `json:"deleteStack"`
 }

@@ -62,5 +62,5 @@ root.render(
 );
 store.dispatch(Actions.initApplication());
 
-// Disable the service worker for now since there are known issues where our third party authentication services cannot be used 
+// Disable the service worker for now since there are known issues where our third party authentication services cannot be used
 // serviceWorkerRegistration.register();
