@@ -22,7 +22,7 @@ import {Actions} from "store/action";
 import _ from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
-import {SettingsContext} from "../SettingsContext";
+import {SettingsContext} from "../SettingsContext__";
 import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {

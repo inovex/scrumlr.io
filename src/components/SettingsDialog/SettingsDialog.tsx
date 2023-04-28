@@ -20,7 +20,7 @@ import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
 import "./SettingsDialog.scss";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
-import {SettingsContext, SettingsContextData} from "./SettingsContext";
+import {SettingsContext, SettingsContextData} from "./SettingsContext__";
 
 export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
