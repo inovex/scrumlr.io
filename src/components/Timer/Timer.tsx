@@ -70,7 +70,6 @@ export const Timer = (props: TimerProps) => {
           title: t("Toast.ready"),
           buttons: [t("Toast.readyButton")],
           firstButtonOnClick: () => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true)),
-          autoClose: false,
         });
       }
       if (isModerator && anyReady) {
