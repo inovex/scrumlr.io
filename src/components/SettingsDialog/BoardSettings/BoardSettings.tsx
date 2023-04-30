@@ -223,6 +223,8 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
+              icon={DeleteIcon}
+              warning
             />
           )}
         </div>

@@ -25,7 +25,7 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     if (sharedNoteId === currentNoteId && !moderating) {
       Toast.error({title: i18n.t("Error.deleteNoteWhenShared")});
     } else {
-      API.deleteNote(action.context.board!, action.noteId).catch(() => {
+      API.deleteNote(action.context.board!, action.noteId, action.deleteStack).catch(() => {
         Toast.error({
           title: i18n.t("Error.deleteNote"),
           buttons: [i18n.t("Error.retry")],
@@ -49,7 +49,7 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     const note = stateAPI.getState().notes.find((n) => n.id === action.note)!;
     const parent = stateAPI.getState().notes.find((n) => n.id === note.position.stack)!;
 
-    API.editNote(action.context.board!, action.note, {position: {column: note.position.column, stack: undefined, rank: Math.max(parent.position.rank - 1, 0)}}).catch(() => {
+    API.editNote(action.context.board!, action.note, {position: {column: note.position.column, stack: null, rank: Math.max(parent.position.rank - 1, 0)}}).catch(() => {
       Toast.error({
         title: i18n.t("Error.unstackNote"),
         buttons: [i18n.t("Error.retry")],

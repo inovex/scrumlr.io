@@ -4,6 +4,7 @@ import {animated, Transition} from "react-spring";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {ReactComponent as WarningIcon} from "assets/icon-warning.svg";
 import "./ConfirmationDialog.scss";
 
 type ConfirmationDialogProps = {
@@ -12,6 +13,10 @@ type ConfirmationDialogProps = {
   onAcceptLabel?: string;
   onDecline: () => void;
   onDeclineLabel?: string;
+  onExtraOption?: () => void;
+  onExtraOptionLabel?: string;
+  icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  warning?: boolean;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -27,24 +32,47 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
               <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
                 <CloseIcon className="dialog__close-icon" />
               </button>
-              <h2 className="confirmation-dialog__title">{props.title}</h2>
-              <div className="confirmation-dialog__buttons">
-                <button
-                  aria-label={props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
-                  className="confirmation-dialog__button confirmation-dialog__button--accept"
-                  onClick={() => props.onAccept()}
-                  type="button"
-                >
-                  {props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
-                </button>
-                <button
-                  aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                  className="confirmation-dialog__button confirmation-dialog__button--decline"
-                  onClick={() => props.onDecline()}
-                  type="button"
-                >
-                  {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                </button>
+              <div className="confirmation-dialog__icon-content-wrapper">
+                {props.icon && <props.icon className="confirmation-dialog__icon" />}
+                <div className="confirmation-dialog__content">
+                  <div>
+                    <h2 className="confirmation-dialog__title">{props.title}</h2>
+                    {props.warning && (
+                      <div className="confirmation-dialog__warning">
+                        <WarningIcon />
+                        <p>{t("ConfirmationDialog.warning")}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="confirmation-dialog__buttons">
+                    <button
+                      aria-label={props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
+                      className="confirmation-dialog__button confirmation-dialog__button--accept"
+                      onClick={() => props.onAccept()}
+                      type="button"
+                    >
+                      {props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
+                    </button>
+                    {props.onExtraOption && props.onExtraOptionLabel && (
+                      <button
+                        aria-label={props.onExtraOptionLabel}
+                        className="confirmation-dialog__button confirmation-dialog__button--decline"
+                        onClick={() => props.onExtraOption!()}
+                        type="button"
+                      >
+                        {props.onExtraOptionLabel}
+                      </button>
+                    )}
+                    <button
+                      aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                      className="confirmation-dialog__button confirmation-dialog__button--decline"
+                      onClick={() => props.onDecline()}
+                      type="button"
+                    >
+                      {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                    </button>
+                  </div>
+                </div>
               </div>
             </animated.aside>
           )}

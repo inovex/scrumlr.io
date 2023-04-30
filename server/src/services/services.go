@@ -66,7 +66,7 @@ type Notes interface {
 	Get(ctx context.Context, id uuid.UUID) (*dto.Note, error)
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*dto.Note, error)
-	Delete(ctx context.Context, id uuid.UUID) error
+	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
 
 type Votings interface {
