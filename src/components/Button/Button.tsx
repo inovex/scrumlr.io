@@ -3,7 +3,7 @@ import classNames from "classnames";
 import "./Button.scss";
 
 export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
-  color?: "primary" | "secondary";
+  color?: "primary" | "secondary" | "inherit";
   variant?: "contained" | "outlined" | "text-link";
   leftIcon?: ReactElement;
   rightIcon?: ReactElement;
