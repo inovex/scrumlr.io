@@ -137,13 +137,13 @@ $color-close-icon: #bfc1c5;
 // Toast close icon
 .toast__close-icon {
   min-width: 32px;
-  height: 100%;
   color: $color-close-icon;
   transition: all 0.1s ease-in-out;
 }
 .toast__close-icon-single {
   margin: 0px 6px;
   display: flex;
+  height: 100%;
   justify-content: center;
   align-items: center;
   svg {
