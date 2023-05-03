@@ -3,7 +3,7 @@
 .not-found__root {
   height: 100%;
   width: 100%;
-  padding: 20px 0 20px 20px;
+  padding: $margin--default 0 $margin--default 20px;
   overflow-x: hidden;
   background: linear-gradient(320deg, rgb(107, 156, 255, 30%), rgb(255, 255, 255, 30%));
 }
@@ -35,7 +35,7 @@
 .not-found__main {
   display: flex;
   flex-direction: column-reverse; // in mobile, stan is above the content
-  gap: 20px;
+  gap: $margin--medium;
 
   height: 100%;
 
@@ -75,7 +75,7 @@
   background: #ff0069;
 
   font-weight: 700;
-  font-size: 21px;
+  font-size: $text-size--large;
   letter-spacing: $letter-spacing--medium;
 
   border: none;
@@ -83,11 +83,6 @@
   box-shadow: 0 5px 4px rgba(255, 0, 105, 25%);
 
   cursor: pointer;
-}
-
-// image (right / top)
-// images are toggled depending on theme preference and screen width
-.not-found__image-wrapper {
 }
 
 .not-found__logo-stan--web,
@@ -101,6 +96,7 @@
   display: block;
 }
 
+// images are toggled depending on theme preference and screen width
 @media screen and (max-width: 1279px) {
   .not-found__background-form {
     top: -400px;
