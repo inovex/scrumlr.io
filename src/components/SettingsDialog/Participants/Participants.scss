@@ -20,7 +20,7 @@
   }
 }
 .participants__search-input {
-  height: 100%;
+  height: 40px;
   width: 100%;
   padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
   font-size: 14px;
@@ -109,12 +109,24 @@
   }
 }
 
+.participants__list-wrapper {
+  overflow: auto;
+  margin: $margin--default 0px;
+  border-radius: $rounded--default;
+
+  @include scrollbar();
+}
+
 .participants__list {
-  margin-top: $margin--default;
   border-radius: $rounded--default;
   list-style-type: none;
   padding: 0;
-  overflow: scroll;
+  margin: 0;
+  overflow: hidden;
+}
+
+.participants__list-scrollable {
+  padding-right: $padding--medium;
 }
 
 .participants__list-item {
