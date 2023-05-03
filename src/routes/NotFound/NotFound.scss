@@ -57,7 +57,7 @@
 }
 
 .not-found__description {
-  margin-top: $margin--default;
+  margin-top: $margin--small;
 
   font-weight: 400;
   font-size: 24px;
@@ -67,7 +67,7 @@
 .not-found__return-button {
   margin-top: 20px;
 
-  padding: 20px 40px;
+  padding: 15px 30px;
   color: $color-white;
   background: #ff0069;
 
@@ -95,6 +95,10 @@
 
 // default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
 @media screen and (min-height: 900px) {
+  .not-found__description {
+    margin-top: $margin--default;
+  }
+
   .not-found__return-button {
     margin-top: 90px;
   }
@@ -121,6 +125,10 @@
   .not-found__description {
     font-size: 30px;
     line-height: 50px;
+  }
+
+  .not-found__return-button {
+    padding: 20px 40px;
   }
 }
 
