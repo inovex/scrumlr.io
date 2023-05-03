@@ -88,7 +88,7 @@
 
 .not-found__logo-stan--mobile-light,
 .not-found__logo-stan--mobile-dark {
-  display: block;
+  display: initial;
 }
 
 // images are toggled depending on theme preference and screen width
@@ -127,7 +127,7 @@
   }
 
   .not-found__logo-stan--web {
-    display: block;
+    display: initial;
   }
 
   .not-found__logo-stan--mobile {
