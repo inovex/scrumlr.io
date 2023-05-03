@@ -42,7 +42,7 @@
 .not-found__content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // prevent button from taking the whole space
+  align-items: center;
 
   padding: 0 $padding--default;
 
@@ -124,6 +124,10 @@
 
   .not-found__main {
     flex-direction: row; // in desktop, stan is next to the content
+  }
+
+  .not-found__content {
+    align-items: flex-start; // prevent button from taking the whole space
   }
 
   .not-found__logo-stan--web {
