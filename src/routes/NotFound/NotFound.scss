@@ -92,7 +92,7 @@
 }
 
 // images are toggled depending on theme preference and screen width
-@media screen and (max-width: 1279px) {
+@media screen and (max-width: 767px) {
   .not-found__background-form {
     top: -400px;
     left: -900px;
@@ -116,7 +116,7 @@
   }
 }
 
-@media screen and (min-width: 1280px) {
+@media screen and (min-width: 768px) {
   .not-found__background-form {
     top: -100px;
     left: -800px;
