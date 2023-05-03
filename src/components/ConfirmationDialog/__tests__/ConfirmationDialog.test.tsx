@@ -9,9 +9,12 @@ describe("<ConfirmationDialog />", () => {
   });
 
   test("snapshot test", () => {
-    const {container} = render(<ConfirmationDialog title="headline" onAcceptLabel="accept" onDeclineLabel="decline" onAccept={jest.fn()} onDecline={jest.fn()} />, {
-      container: global.document.querySelector("#portal")!,
-    });
+    const {container} = render(
+      <ConfirmationDialog title="headline" onAcceptLabel="accept" onDeclineLabel="decline" onAccept={jest.fn()} onDecline={jest.fn()} onClose={jest.fn()} />,
+      {
+        container: global.document.querySelector("#portal")!,
+      }
+    );
     expect(container.firstChild).toMatchSnapshot();
   });
 });

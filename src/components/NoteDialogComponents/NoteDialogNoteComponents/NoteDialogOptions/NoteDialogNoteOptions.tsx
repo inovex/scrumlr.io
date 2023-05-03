@@ -88,8 +88,9 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowChildDialog(false)}
           onDeclineLabel={t("ConfirmationDialog.cancel")}
+          onClose={() => setShowChildDialog(false)}
           icon={DeleteIcon}
-          warning
+          warning={t("ConfirmationDialog.deleteWarning")}
         />
       )}
       {showParentDialog && (
@@ -101,8 +102,9 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onDeclineLabel={t("ConfirmationDialog.cancel")}
           onExtraOption={() => onDelete(props.noteId, true)}
           onExtraOptionLabel={t("ConfirmationDialog.deleteStackButton")}
+          onClose={() => setShowChildDialog(false)}
           icon={DeleteIcon}
-          warning
+          warning={t("ConfirmationDialog.deleteWarning")}
         />
       )}
     </>

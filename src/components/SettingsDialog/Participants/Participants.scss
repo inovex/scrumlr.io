@@ -113,6 +113,7 @@
   overflow: auto;
   margin: $margin--default 0px;
   border-radius: $rounded--default;
+  margin-bottom: auto;
 
   @include scrollbar();
 }
@@ -218,13 +219,11 @@
 
   background-color: $color-lighter-gray;
 
-  visibility: hidden;
   transform: translateY(100%);
   transition: transform ease-in-out 0.3s;
 }
 
 .participants-reset-state-banner__container--is-active {
-  visibility: visible;
   transform: translateY(0);
 }
 

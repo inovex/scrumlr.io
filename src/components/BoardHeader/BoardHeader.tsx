@@ -46,6 +46,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}
+          onClose={() => setShowConfirmationDialog(false)}
           icon={LeaveIcon}
         />
       )}

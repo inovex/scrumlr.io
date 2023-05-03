@@ -23,6 +23,15 @@
   color: $menu-icon-background-color--dark;
   letter-spacing: $letter-spacing--medium;
   font-weight: 600;
+
+  transform: translateY(100%);
+  transition: transform ease-in-out 0.3s;
+  margin-top: 6px;
+}
+
+.settings-dialog__footer-visible {
+  transform: translateY(0);
+  margin-top: $margin--large;
 }
 
 .settings-dialog__footer button {

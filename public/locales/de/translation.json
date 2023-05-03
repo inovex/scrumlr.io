@@ -60,7 +60,11 @@
     "deleteNoteButton": "Kärtchen löschen",
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
-    "warning": "Die Aktion ist nicht umkehrbar.",
+    "unsavedChanges": "Möchtest du die Änderungen an deinem {{setting}} speichern?",
+    "deleteWarning": "Die Aktion ist nicht umkehrbar.",
+    "saveWarning": "Ungespeicherte Änderungen gehen verloren",
+    "discard": "Verwerfen",
+    "save": "Speichern",
     "yes": "Ja",
     "no": "Nein",
     "cancel": "Abbrechen"
@@ -358,7 +362,6 @@
   "ProfileSettings": {
     "Profile": "Profil",
     "UserName": "Nutzername",
-    "DialogUnsavedChanges": "Du hast deine Änderungen an deinem Avatar nicht gespeichert. Möchtest du die Einstellungen dennoch verlassen?",
     "SaveAvatar": "Avatar Speichern",
     "Cancel": "Abbrechen"
   },

@@ -6,7 +6,8 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
@@ -18,9 +19,9 @@ import {ReactComponent as ParticipantsIcon} from "assets/icon-participants.svg";
 import {ReactComponent as AppearanceIcon} from "assets/icon-appearance.svg";
 import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
 import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
-import "./SettingsDialog.scss";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsContext, SettingsContextData} from "./SettingsContext";
+import "./SettingsDialog.scss";
 
 export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
@@ -166,13 +167,19 @@ export const SettingsDialog: FC = () => {
       </Portal>
       {showDialog && (
         <ConfirmationDialog
-          title={t("ProfileSettings.DialogUnsavedChanges")}
+          title={t("ConfirmationDialog.unsavedChanges", {setting: t("ProfileSettings.Profile")})}
+          warning={t("ConfirmationDialog.saveWarning")}
+          icon={SettingsIcon}
+          onAcceptLabel={t("ConfirmationDialog.save")}
           onAccept={() => {
+            store.dispatch(Actions.editSelf({...me, avatar: settings?.profile?.unsavedAvatarChanges}));
             navigate(`/board/${boardId}`);
           }}
+          onDeclineLabel={t("ConfirmationDialog.discard")}
           onDecline={() => {
-            setShowDialog(false);
+            navigate(`/board/${boardId}`);
           }}
+          onClose={() => setShowDialog(false)}
         />
       )}
     </SettingsContext.Provider>

@@ -60,7 +60,11 @@
     "deleteNoteButton": "Delete Note",
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
-    "warning": "This action cannot be undone.",
+    "unsavedChanges": "Do you want to save the changes to your {{setting}}?",
+    "deleteWarning": "This action cannot be undone.",
+    "saveWarning": "Unsaved changes will be lost",
+    "discard": "Discard",
+    "save": "Save",
     "yes": "Yes",
     "no": "No",
     "cancel": "Cancel"
@@ -358,8 +362,7 @@
   "ProfileSettings": {
     "Profile": "Profile",
     "UserName": "User Name",
-    "DialogUnsavedChanges": "You have made changes to your avatar that are unsaved. Do you still want to leave the settings?",
-    "SaveAvatar": "Update Avatar",
+    "SaveAvatar": "Save Avatar",
     "Cancel": "Cancel"
   },
   "Error": {

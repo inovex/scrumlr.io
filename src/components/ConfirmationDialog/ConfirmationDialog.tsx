@@ -11,36 +11,41 @@ type ConfirmationDialogProps = {
   title: string;
   onAccept: () => void;
   onAcceptLabel?: string;
-  onDecline: () => void;
+  onDecline?: () => void;
   onDeclineLabel?: string;
   onExtraOption?: () => void;
   onExtraOptionLabel?: string;
+  onClose: () => void;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
-  warning?: boolean;
+  warning?: string;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
   const {t} = useTranslation();
 
   return (
-    <Portal onClose={props.onDecline}>
+    <Portal onClose={props.onClose}>
       <div className="confirmation-dialog__background" />
       <div className="confirmation-dialog__wrapper">
         <Transition {...dialogTransitionConfig}>
           {(styles) => (
             <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles}>
-              <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
+              <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onClose()} type="button">
                 <CloseIcon className="dialog__close-icon" />
               </button>
               <div className="confirmation-dialog__icon-content-wrapper">
-                {props.icon && <props.icon className="confirmation-dialog__icon" />}
+                {props.icon && (
+                  <div className="confirmation-dialog__icon">
+                    <props.icon />
+                  </div>
+                )}
                 <div className="confirmation-dialog__content">
                   <div>
                     <h2 className="confirmation-dialog__title">{props.title}</h2>
                     {props.warning && (
                       <div className="confirmation-dialog__warning">
                         <WarningIcon />
-                        <p>{t("ConfirmationDialog.warning")}</p>
+                        <p>{props.warning}</p>
                       </div>
                     )}
                   </div>
@@ -63,14 +68,16 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                         {props.onExtraOptionLabel}
                       </button>
                     )}
-                    <button
-                      aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                      className="confirmation-dialog__button confirmation-dialog__button--decline"
-                      onClick={() => props.onDecline()}
-                      type="button"
-                    >
-                      {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                    </button>
+                    {props.onDecline && (
+                      <button
+                        aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                        className="confirmation-dialog__button confirmation-dialog__button--decline"
+                        onClick={() => props.onDecline && props.onDecline()}
+                        type="button"
+                      >
+                        {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

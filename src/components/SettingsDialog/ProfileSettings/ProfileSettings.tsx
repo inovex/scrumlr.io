@@ -6,6 +6,7 @@ import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 import {Toggle} from "components/Toggle";
+import {Button} from "components/Button";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -25,6 +26,7 @@ export const ProfileSettings = () => {
   const [id] = useState<string | undefined>(state.participant?.user.id);
   const [saved, setSaved] = useState<boolean>(false);
   const [canceled, setCanceled] = useState<boolean>(false);
+  const isFooterVisible = settings?.profile?.unsavedAvatarChanges !== undefined;
 
   return (
     <div className={classNames("settings-dialog__container", "accent-color__lean-lilac")}>
@@ -59,12 +61,14 @@ export const ProfileSettings = () => {
           </div>
         </div>
       </div>
-      {settings?.profile?.unsavedAvatarChanges && (
-        <Footer className="profile-settings__footer">
-          <button onClick={() => setSaved(true)}>{t("ProfileSettings.SaveAvatar")}</button>
-          <button onClick={() => setCanceled(true)}>{t("ProfileSettings.Cancel")}</button>
-        </Footer>
-      )}
+      <Footer visible={isFooterVisible} className="profile-settings__footer">
+        <Button color="inherit" onClick={() => setSaved(true)}>
+          {t("ProfileSettings.SaveAvatar")}
+        </Button>
+        <Button variant="outlined" color="inherit" onClick={() => setCanceled(true)}>
+          {t("ProfileSettings.Cancel")}
+        </Button>
+      </Footer>
     </div>
   );
 };
