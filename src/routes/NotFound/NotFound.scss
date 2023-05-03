@@ -23,12 +23,6 @@
   height: 100%;
 }
 
-.not-found__scrumlr-logo--web,
-.not-found__scrumlr-logo--web {
-  width: 160px;
-  display: none;
-}
-
 .not-found__header {
   position: absolute;
 }
@@ -128,14 +122,6 @@
     left: -800px;
   }
 
-  .not-found__scrumlr-logo--web {
-    display: block;
-  }
-
-  .not-found__scrumlr-logo--mobile {
-    display: none;
-  }
-
   .not-found__main {
     flex-direction: row; // in desktop, stan is next to the content
   }
@@ -159,7 +145,6 @@
 // display or hide light/dark logos.
 [theme="light"] {
   .not-found__background-form--dark,
-  .not-found__scrumlr-logo--dark,
   .not-found__logo-stan--dark {
     display: none;
   }
@@ -167,7 +152,6 @@
 
 [theme="dark"] {
   .not-found__background-form--light,
-  .not-found__scrumlr-logo--light,
   .not-found__logo-stan--light {
     display: none;
   }

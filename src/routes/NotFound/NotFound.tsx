@@ -5,17 +5,13 @@ import {ReactComponent as StanWebDark} from "assets/stan/Stan_404_Web_Dark.svg";
 import {ReactComponent as StanMobileLight} from "assets/stan/Stan_404_Mobile_Light.svg";
 import {ReactComponent as StanMobileDark} from "assets/stan/Stan_404_Mobile_Dark.svg";
 
-import {ReactComponent as ScrumlrLogoWebLight} from "assets/scrumlr-logo-light.svg";
-import {ReactComponent as ScrumlrLogoWebDark} from "assets/scrumlr-logo-dark.svg";
-import {ReactComponent as ScrumlrLogoMobileLight} from "assets/scrumlr-logo-mobile-light.svg";
-import {ReactComponent as ScrumlrLogoMobileDark} from "assets/scrumlr-logo-mobile-dark.svg";
-
 import {ReactComponent as BackgroundFreeFormLight} from "assets/pages/404/404_Background_light.svg";
 import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Background_dark.svg";
 import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
 
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
+import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
 export const NotFound = () => {
   const {t} = useTranslation();
@@ -28,11 +24,8 @@ export const NotFound = () => {
         <BackgroundDetails className="not-found__background-details" />
       </div>
       <header className="not-found__header">
-        <div className="scrumlr-logo">
-          <ScrumlrLogoWebLight className="not-found__scrumlr-logo not-found__scrumlr-logo--web not-found__scrumlr-logo--light" />
-          <ScrumlrLogoWebDark className="not-found__scrumlr-logo not-found__scrumlr-logo--web not-found__scrumlr-logo--dark" />
-          <ScrumlrLogoMobileLight className="not-found__scrumlr-logo not-found__scrumlr-logo--mobile not-found__scrumlr-logo--light" />
-          <ScrumlrLogoMobileDark className="not-found__scrumlr-logo not-found__scrumlr-logo--mobile not-found__scrumlr-logo--dark" />
+        <div className="not-found__logo-container">
+          <ScrumlrLogo className="not-found__scrumlr-logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </div>
       </header>
       <main className="not-found__main">
