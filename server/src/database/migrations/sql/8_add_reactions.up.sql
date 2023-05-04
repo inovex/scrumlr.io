@@ -2,7 +2,7 @@
     every reaction is bound to a note that it sits on, as well as
     the user that made the reaction. */
 CREATE TABLE reactions (
-    "reaction" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "note" UUID NOT NULL REFERENCES notes,
     "user" UUID NOT NULL REFERENCES users,
     /* type could also be an enum or something else */
