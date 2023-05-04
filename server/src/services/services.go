@@ -69,6 +69,11 @@ type Notes interface {
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
 
+type Reactions interface {
+	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
+	List(ctx context.Context, noteID uuid.UUID) ([]*dto.Reaction, error)
+}
+
 type Votings interface {
 	Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error)
 	Update(ctx context.Context, body dto.VotingUpdateRequest) (*dto.Voting, error)
@@ -89,4 +94,3 @@ type Assignments interface {
 	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }
-
