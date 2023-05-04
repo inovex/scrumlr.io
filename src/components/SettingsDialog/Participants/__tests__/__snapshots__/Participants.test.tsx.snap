@@ -1017,7 +1017,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     </ul>
   </div>
   <footer
-    class="settings-dialog__footer participants-reset-state-banner__container"
+    class="settings-dialog__footer"
   >
     <div
       class="participants-reset-state-banner__icon-and-text"
@@ -1033,8 +1033,14 @@ exports[`Participants should render filter and participants correctly 1`] = `
         Participants.ResetBannerText
       </div>
     </div>
-    <button>
-      Participants.ResetBannerButton
+    <button
+      class="button button--inherit button--contained button__label--shown"
+    >
+      <span
+        class="button__label"
+      >
+        Participants.ResetBannerButton
+      </span>
     </button>
   </footer>
 </section>
