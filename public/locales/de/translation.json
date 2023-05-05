@@ -55,9 +55,15 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
-    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "deleteBoard": "Bist du dir absolut sicher, dass du die Sitzung löschen möchtest?",
+    "deleteNote": "Bist du dir sicher, dass du das Kärtchen löschen möchtest?",
+    "deleteNoteButton": "Kärtchen löschen",
+    "deleteStackButton": "Stapel löschen",
+    "deleteOptions": "Was möchtest du löschen?",
+    "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "cancel": "Abbrechen"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -178,7 +184,31 @@
     "hotkeysEnabled": "Hotkeys aktiviert!",
     "hotkeysDisabled": "Hotkeys deaktiviert!",
     "hotkeyToggle": "Hotkeys aktivieren",
-    "cheatSheet": "Hotkey Spickzettel"
+    "cheatSheet": "Hotkey Spickzettel",
+    "toggleColumnVisibility": {
+      "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
+      "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "Die Kärtchen anderer Teilnehmer sind nun ausgeblendet",
+      "show": "Die Kärtchen anderer Teilnehmer sind nun sichtbar"
+    },
+    "toggleShowAuthors": {
+      "hide": "Die Autoren der Kärtchen sind  nun ausgeblendet",
+      "show": "Die Autoren der Kärtchen sind nun sichtbar"
+    },
+    "toggleRaisedHand": {
+      "raise": "Du hast deine Hand gehoben",
+      "lower": "Du hast deine Hand gesenkt"
+    },
+    "toggleReadyState": {
+      "ready": "Du hast dich als bereit markiert",
+      "notReady": "Du hast dich als nicht bereit markiert"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "Du hast den Präsentiermodus gestartet",
+      "endPresenting": "Du hast den Präsentiermodus beendet"
+    }
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",

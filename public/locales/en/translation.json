@@ -54,10 +54,16 @@
     "showAllBoardSettings": "Show all board settings"
   },
   "ConfirmationDialog": {
-    "returnToHomepage": "Are you sure that you want to leave the session and return to the homepage?",
-    "deleteBoard": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
+    "returnToHomepage": "Are you sure that you want to leave this session and return to the homepage?",
+    "deleteBoard": "Are you absolutely sure that you want to delete this board?",
+    "deleteNote": "Are you sure that you want to delete this note?",
+    "deleteNoteButton": "Delete Note",
+    "deleteStackButton": "Delete Stack",
+    "deleteOptions": "What do you want to delete?",
+    "warning": "This action cannot be undone.",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "cancel": "Cancel"
   },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
@@ -178,7 +184,31 @@
     "hotkeysEnabled": "Hotkeys enabled!",
     "hotkeysDisabled": "Hotkeys disabled!",
     "hotkeyToggle": "Enable hotkeys",
-    "cheatSheet": "Hotkey Cheat Sheet"
+    "cheatSheet": "Hotkey Cheat Sheet",
+    "toggleColumnVisibility": {
+      "hide": "Columns that are hidden are now hidden to you",
+      "show": "Columns that are hidden are now visible to you"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "The notes of other participants are now hidden",
+      "show": "The notes of other participants are now visible"
+    },
+    "toggleShowAuthors": {
+      "hide": "The authors of the notes are now hidden",
+      "show": "The authors of the notes are now visible"
+    },
+    "toggleRaisedHand": {
+      "raise": "You have raised your hand",
+      "lower": "You have lowered your hand"
+    },
+    "toggleReadyState": {
+      "ready": "You have marked yourself as ready",
+      "notReady": "You have marked yourself as not ready"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "You have started the presenter mode",
+      "endPresenting": "You have ended the presenter mode"
+    }
   },
   "VoteConfigurationButton": {
     "label": "Voting",
