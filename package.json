@@ -34,7 +34,7 @@
     "react-hotkeys-hook": "^4.4.0",
     "react-i18next": "^12.2.2",
     "react-router": "^6.6.0",
-    "react-router-dom": "^6.11.0",
+    "react-router-dom": "^6.11.1",
     "react-spring": "^9.7.1",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.2",
