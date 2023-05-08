@@ -26,14 +26,15 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards     services.Boards
-	votings    services.Votings
-	users      services.Users
-	notes      services.Notes
-	sessions   services.BoardSessions
-	health     services.Health
-	feedback   services.Feedback
-  assignments services.Assignments
+	boards      services.Boards
+	votings     services.Votings
+	users       services.Users
+	notes       services.Notes
+	reactions   services.Reactions
+	sessions    services.BoardSessions
+	health      services.Health
+	feedback    services.Feedback
+	assignments services.Assignments
 
 	upgrader websocket.Upgrader
 
@@ -50,10 +51,11 @@ func New(
 	votings services.Votings,
 	users services.Users,
 	notes services.Notes,
+	reactions services.Reactions,
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
-  assignments services.Assignments,
+	assignments services.Assignments,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -91,10 +93,11 @@ func New(
 		votings:                          votings,
 		users:                            users,
 		notes:                            notes,
+		reactions:                        reactions,
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
-    assignments:                      assignments,
+		assignments:                      assignments,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -163,7 +166,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initNoteResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
-      s.initAssignmentResources(r)
+			s.initAssignmentResources(r)
 		})
 
 		r.Route("/user", func(r chi.Router) {
@@ -267,19 +270,22 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Put("/", s.updateNote)
 
 			r.Delete("/", s.deleteNote)
+
+			r.Route("/reactions", func(r chi.Router) {
+				r.Get("/", s.getReactions)
+			})
 		})
 	})
 }
 
 func (s *Server) initAssignmentResources(r chi.Router) {
-  r.Route("/assignments", func(r chi.Router) {
-    r.Use(s.BoardParticipantContext)
+	r.Route("/assignments", func(r chi.Router) {
+		r.Use(s.BoardParticipantContext)
 
-    r.Post("/", s.createAssignment)
-    r.Route("/{assignment}", func(r chi.Router) {
-      r.Use(s.AssignmentContext)
-      r.Delete("/", s.deleteAssignment)
-    })
-  })
+		r.Post("/", s.createAssignment)
+		r.Route("/{assignment}", func(r chi.Router) {
+			r.Use(s.AssignmentContext)
+			r.Delete("/", s.deleteAssignment)
+		})
+	})
 }
-
