@@ -54,5 +54,4 @@ jobs:
   package:
     needs: test
     if: ${{ github.event_name == 'push' }}
-    # TODO revert to inovex on Merge to main
-    uses: lennart01/scrumlr.io/.github/workflows/package.yml@main
+    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
