@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: lts/hydrogen
+          node-version: 18
 
       - name: scrumlr.io - Frontend image meta information
         id: meta-frontend
