@@ -3,8 +3,10 @@ package reactions
 import (
 	"context"
 	"github.com/google/uuid"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database"
+	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
 )
@@ -17,6 +19,7 @@ type ReactionService struct {
 type DB interface {
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(note uuid.UUID) ([]database.Reaction, error)
+	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
 }
 
 func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
@@ -34,5 +37,20 @@ func (s *ReactionService) List(_ context.Context, noteID uuid.UUID) ([]*dto.Reac
 
 func (s *ReactionService) Get(_ context.Context, id uuid.UUID) (*dto.Reaction, error) {
 	reaction, err := s.database.GetReaction(id)
+	return new(dto.Reaction).From(reaction), err
+}
+
+func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateRequest) (*dto.Reaction, error) {
+	log := logger.FromContext(ctx)
+	reaction, err := s.database.CreateReaction(database.ReactionInsert{
+		Note:         body.Note,
+		User:         body.User,
+		ReactionType: body.ReactionType,
+	})
+
+	if err != nil {
+		log.Errorw("unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
+		return nil, common.InternalServerError
+	}
 	return new(dto.Reaction).From(reaction), err
 }

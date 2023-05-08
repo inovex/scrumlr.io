@@ -14,6 +14,13 @@ type Reaction struct {
 	ReactionType  string
 }
 
+type ReactionInsert struct {
+	bun.BaseModel `bun:"table:reactions"`
+	Note          uuid.UUID
+	User          uuid.UUID
+	ReactionType  string
+}
+
 // GetReaction gets a specific Reaction
 func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 	var reaction Reaction
@@ -34,4 +41,15 @@ func (d *Database) GetReactions(note uuid.UUID) ([]Reaction, error) {
 		Where("note = ?", note).
 		Scan(context.Background())
 	return reactions, err
+}
+
+// CreateReaction inserts a new reaction
+func (d *Database) CreateReaction(insert ReactionInsert) (Reaction, error) {
+	var reaction Reaction
+	_, err := d.db.NewInsert().
+		Model(&insert).
+		Returning("*").
+		Exec(context.Background(), &reaction)
+
+	return reaction, err
 }

@@ -273,6 +273,7 @@ func (s *Server) initNoteResources(r chi.Router) {
 
 			r.Route("/reactions", func(r chi.Router) {
 				r.Get("/", s.getReactions)
+				r.Post("/", s.createReaction)
 				// TODO other REST operations
 
 				r.Route("/{reaction}", func(r chi.Router) {

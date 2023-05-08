@@ -20,6 +20,18 @@ type Reaction struct {
 	ReactionType string `json:"reaction_type"`
 }
 
+// ReactionCreateRequest is the struct to use when creating a new reaction
+type ReactionCreateRequest struct {
+	// The note the reaction corresponds to (from context)
+	Note uuid.UUID `json:"-"`
+
+	// The user who made the reaction (from context)
+	User uuid.UUID `json:"-"`
+
+	// The type of reaction
+	ReactionType string `json:"reaction_type"`
+}
+
 func (r *Reaction) From(reaction database.Reaction) *Reaction {
 	r.ID = reaction.ID
 	r.Note = reaction.Note
