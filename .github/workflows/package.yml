@@ -10,9 +10,6 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/setup-node@v3
-        with:
-          node-version: lts/hydrogen
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -22,6 +19,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/hydrogen
 
       - name: scrumlr.io - Frontend image meta information
         id: meta-frontend
@@ -84,3 +86,6 @@ jobs:
           tags: ${{ steps.meta-server.outputs.tags }}
           labels: ${{ steps.meta-server.outputs.labels }}
 
+          - uses: actions/setup-node@v3
+          with:
+            node-version: lts/hydrogen
