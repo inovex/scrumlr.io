@@ -8,7 +8,6 @@ import (
 )
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
-	// TODO correct context
 	id := r.Context().Value("Reaction").(uuid.UUID)
 
 	reaction, err := s.reactions.Get(r.Context(), id)
