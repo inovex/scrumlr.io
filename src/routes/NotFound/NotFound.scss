@@ -14,6 +14,8 @@
 }
 
 .not-found__background-form {
+  // position the form to overlap in the upper left corner.
+  // depending on screen size we tweak those numbers a bit
   position: absolute;
   top: -440px;
   left: -960px;
@@ -51,6 +53,7 @@
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
 
+// TODO adjust values
 .not-found__title {
   font-weight: 700;
   font-size: 45px;
@@ -65,14 +68,14 @@
 }
 
 .not-found__return-button {
-  margin-top: 20px;
+  margin-top: $margin--default;
 
-  padding: 15px 30px;
+  padding: $padding--default $padding--large;
   color: $color-white;
   background: #ff0069;
 
   font-weight: 700;
-  font-size: $text-size--large;
+  font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
 
   border: none;
@@ -118,6 +121,7 @@
     gap: $margin--medium;
   }
 
+  // TODO adjust values and add new default values where needed
   .not-found__title {
     font-size: 60px;
   }
