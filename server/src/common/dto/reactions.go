@@ -29,7 +29,7 @@ type ReactionCreateRequest struct {
 	User uuid.UUID `json:"-"`
 
 	// The type of reaction
-	ReactionType string `json:"reaction_type"`
+	ReactionType string `json:"reactionType"`
 }
 
 func (r *Reaction) From(reaction database.Reaction) *Reaction {
