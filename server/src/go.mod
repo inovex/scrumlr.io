@@ -24,7 +24,7 @@ require (
 	github.com/uptrace/bun v1.1.13
 	github.com/uptrace/bun/dbfixture v1.1.13
 	github.com/uptrace/bun/dialect/pgdialect v1.1.13
-	github.com/uptrace/bun/extra/bundebug v1.1.12
+	github.com/uptrace/bun/extra/bundebug v1.1.13
 	github.com/urfave/cli/v2 v2.25.3
 	go.uber.org/zap v1.24.0
 	golang.org/x/crypto v0.8.0
@@ -47,7 +47,7 @@ require (
 	github.com/docker/docker v20.10.24+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
-	github.com/fatih/color v1.14.1 // indirect
+	github.com/fatih/color v1.15.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.1 // indirect
