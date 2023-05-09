@@ -8,7 +8,7 @@ export interface Name {
   G: string[];
   H: string[];
   I: string[];
-  J?: string[];
+  J: string[];
   K: string[];
   L: string[];
   M: string[];
@@ -62,6 +62,7 @@ export const MYTHICAL_CREATURES: Name = {
   G: ["Gargoyle", "Genie", "Ghost", "Ghoul", "Giant", "Gnome", "Goblin", "Golem", "Gorgon", "Gremlin", "Griffin"],
   H: ["Harpy", "Hellhound"],
   I: ["Imp", "Incubus"],
+  J: ["Jackalope"],
   K: ["Kobold", "Kraken"],
   L: ["Leprechaun"],
   M: ["Magician", "Mandrake", "Manticore", "Medusa", "Merman", "Mermaid", "Minotaur", "Mummy"],
