@@ -17,7 +17,7 @@ type Reaction struct {
 	User uuid.UUID `json:"user"`
 
 	// The type of reaction
-	ReactionType string `json:"reaction_type"`
+	ReactionType string `json:"reactionType"`
 }
 
 // ReactionCreateRequest is the struct to use when creating a new reaction
