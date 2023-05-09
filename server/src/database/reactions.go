@@ -53,3 +53,13 @@ func (d *Database) CreateReaction(insert ReactionInsert) (Reaction, error) {
 
 	return reaction, err
 }
+
+func (d *Database) RemoveReaction(id uuid.UUID) error {
+	// no safeguards or anything yet
+	_, err := d.db.NewDelete().
+		Model((*Reaction)(nil)).
+		Where("id = ?", id).
+		Exec(context.Background())
+
+	return err
+}

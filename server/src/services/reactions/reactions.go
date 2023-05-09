@@ -20,6 +20,7 @@ type DB interface {
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(note uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
+	RemoveReaction(id uuid.UUID) error
 }
 
 func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
@@ -53,4 +54,8 @@ func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateReq
 		return nil, common.InternalServerError
 	}
 	return new(dto.Reaction).From(reaction), err
+}
+
+func (s *ReactionService) Delete(_ context.Context, id uuid.UUID) error {
+	return s.database.RemoveReaction(id)
 }
