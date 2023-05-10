@@ -116,16 +116,23 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       {!isSingleToast && buttons && buttons.length > 0 && (
         <div className="toast__buttons-multi">
           {buttons &&
-            buttons.map((button, index) => (
-              <button
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                className={index === 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
-                onClick={index === 0 ? firstButtonOnClick : secondButtonOnClick}
-              >
-                {button}
-              </button>
-            ))}
+            buttons.map((button, index) => {
+              if (index > 1) return false;
+              return (
+                <button
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  className={
+                    index === 0
+                      ? `toast__button toast__button-multi toast__button-multi-primary toast__button-${type}`
+                      : `toast__button toast__button-multi toast__button-multi-secondary toast__button-${type}`
+                  }
+                  onClick={index === 0 ? firstButtonOnClick : secondButtonOnClick}
+                >
+                  {button}
+                </button>
+              );
+            })}
         </div>
       )}
       <div className={`toast__close-icon ${isSingleToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>

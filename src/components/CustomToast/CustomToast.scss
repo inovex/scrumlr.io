@@ -406,6 +406,9 @@ input[type="checkbox"]:checked::before {
   .toast__button {
     padding: 12px 30px;
   }
+  .toast__button-multi {
+    padding: 12px 20px;
+  }
   .toast__title-button-single-wrapper {
     display: block;
   }
