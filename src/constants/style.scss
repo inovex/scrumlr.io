@@ -142,13 +142,14 @@ $line-height--medium: 20px;
 $line-height--large: 32px;
 
 // new font size constants
-$text--small: 12px;
-$text--base: 16px;
-$text--medium: 20px;
-$text--large: 24px;
-$text--xl: 32px;
-$text--2xl: 40px;
-$text--3xl: 62px;
+$text--extrasmall: 0.75rem;
+$text--small: 0.875rem;
+$text--base: 1rem;
+$text--medium: 1.25rem;
+$text--large: 1.5rem;
+$text--xl: 2rem;
+$text--2xl: 2.5rem;
+$text--3xl: 3.875rem;
 
 // filters
 $darken--slightly: brightness(0.9);
