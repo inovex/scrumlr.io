@@ -53,6 +53,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
     if (boardData) {
       handlePrint();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardData]);
 
   const currDate = new Date();
