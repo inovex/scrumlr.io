@@ -53,18 +53,17 @@
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
 
-// TODO adjust values
 .not-found__title {
   font-weight: 700;
-  font-size: 45px;
+  font-size: $text--2xl;
 }
 
 .not-found__description {
-  margin-top: $margin--small;
+  margin-top: 12px;
 
   font-weight: 400;
-  font-size: 24px;
-  line-height: 30px;
+  font-size: $text-size--large;
+  line-height: $line-height--large;
 }
 
 .not-found__return-button {
@@ -75,7 +74,7 @@
   background: #ff0069;
 
   font-weight: 700;
-  font-size: $text-size--medium;
+  font-size: $text--base;
   letter-spacing: $letter-spacing--medium;
 
   border: none;
@@ -97,13 +96,13 @@
 }
 
 // default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
-@media screen and (min-height: 900px) {
+@media screen and (min-height: 600px) {
   .not-found__description {
     margin-top: $margin--default;
   }
 
   .not-found__return-button {
-    margin-top: 90px;
+    margin-top: $margin--large + $margin--small; // 40px
   }
 }
 
@@ -121,14 +120,13 @@
     gap: $margin--medium;
   }
 
-  // TODO adjust values and add new default values where needed
   .not-found__title {
-    font-size: 60px;
+    font-size: $text--3xl;
   }
 
   .not-found__description {
-    font-size: 30px;
-    line-height: 50px;
+    font-size: $text--lg;
+    line-height: 40px;
   }
 
   .not-found__return-button {
