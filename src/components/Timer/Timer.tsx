@@ -4,6 +4,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
+import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -16,8 +17,6 @@ type TimerProps = {
   startTime: Date;
   endTime: Date;
 };
-
-const HIDE_TIMER_AFTER_SECONDS = 15;
 
 const usePrevious = (value: boolean) => {
   const ref = useRef<boolean>();
@@ -36,6 +35,7 @@ export const Timer = (props: TimerProps) => {
       state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready)
   );
   const anyReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected).some((participant) => participant.ready));
+  const me = useAppSelector((state) => state.participants?.self);
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
 
   const boardId = useAppSelector((state) => state.board.data!.id);
@@ -46,10 +46,6 @@ export const Timer = (props: TimerProps) => {
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
-
-  const hideTimerAfterSeconds = (time: number) => {
-    setTimeout(() => store.dispatch(Actions.cancelTimer()), time * 1000);
-  };
 
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
@@ -63,7 +59,6 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
-      hideTimerAfterSeconds(HIDE_TIMER_AFTER_SECONDS);
       if (isModerator && anyReady) {
         Toast.info(
           <div>
@@ -113,16 +108,23 @@ export const Timer = (props: TimerProps) => {
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
-      {isModerator && (
-        <div className="timer__short-actions">
+      <div className="timer__short-actions">
+        {isModerator ? (
           <div className="short-actions__button-wrapper">
             <button onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
             <span>{t("VoteDisplay.finishActionTooltip")}</span>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="short-actions__button-wrapper">
+            <button onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true))}>
+              <CheckIcon />
+            </button>
+            <span>Mark me as done</span>
+          </div>
+        )}
+      </div>
       <TimerIcon />
     </div>
   );

@@ -95,6 +95,7 @@ $timer__short-actions-tooltip-height: 36px;
 
 // Short Actions Button Tooltip
 .short-actions__button-wrapper > span {
+  width: max-content;
   visibility: hidden;
   opacity: 0;
   transition: opacity 150ms linear;
@@ -108,8 +109,9 @@ $timer__short-actions-tooltip-height: 36px;
   color: $menu-icon-background-color--dark;
   font-weight: bold;
   height: auto;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 6px);
   box-shadow: $box-shadow--light;
+  z-index: calc($infobar-z-index + 50);
 }
 @media (prefers-reduced-motion) {
   .short-actions__button-wrapper > span {
@@ -139,7 +141,7 @@ $timer__short-actions-tooltip-height: 36px;
 }
 
 // Shake animation on expired timer
-.timer--expired > span {
+.timer--expired {
   animation: shake 0.5s;
   animation-iteration-count: 10;
 }
