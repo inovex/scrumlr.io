@@ -7,3 +7,5 @@ export interface Reaction {
   user: string;
   reactionType: string;
 }
+
+export type ReactionState = Reaction[];
