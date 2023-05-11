@@ -3,9 +3,9 @@
     the user that made the reaction. */
 CREATE TABLE reactions (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    "note" UUID NOT NULL REFERENCES notes,
-    "user" UUID NOT NULL REFERENCES users,
-    /* type could also be an enum or something else */
+    "note" UUID NOT NULL REFERENCES notes ON DELETE CASCADE,
+    "user" UUID NOT NULL REFERENCES users ON DELETE CASCADE,
+    /* CLDR short name in order to allow custom emojis */
     "reaction_type" VARCHAR(50) NOT NULL
 );
 
