@@ -371,7 +371,7 @@
   "ProfileSettings": {
     "Profile": "Profil",
     "UserName": "Nutzername",
-    "SaveAvatar": "Avatar Speichern",
+    "Save": "Speichern",
     "Cancel": "Abbrechen"
   },
   "Error": {

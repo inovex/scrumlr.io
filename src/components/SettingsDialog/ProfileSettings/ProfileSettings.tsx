@@ -63,7 +63,7 @@ export const ProfileSettings = () => {
       </div>
       <Footer visible={isFooterVisible} className="profile-settings__footer">
         <Button color="inherit" onClick={() => setSaved(true)}>
-          {t("ProfileSettings.SaveAvatar")}
+          {t("ProfileSettings.Save")}
         </Button>
         <Button variant="outlined" color="inherit" onClick={() => setCanceled(true)}>
           {t("ProfileSettings.Cancel")}
