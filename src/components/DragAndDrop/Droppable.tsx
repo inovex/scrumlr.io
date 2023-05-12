@@ -1,5 +1,5 @@
 import {Collision, useDndContext, useDndMonitor} from "@dnd-kit/core";
-import {arrayMove, SortableContext, useSortable} from "@dnd-kit/sortable";
+import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode} from "react";
@@ -10,16 +10,18 @@ type DroppableProps = {
   id: string;
   items: string[];
   setItems: (items: string[]) => void;
+  globalNotes: string[];
   className?: string;
   children: ReactNode;
 };
+
+const isNote = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "note";
 
 export const Droppable = ({className, children, items, id, setItems}: DroppableProps) => {
   const {setDroppableNodeRef, attributes, listeners, active, over, isOver} = useSortable({id, data: {type: "column"}});
   const {collisions} = useDndContext();
   const topCollision = collisions?.at(0);
 
-  const isNote = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "note";
   const isWithinCombineRange = (collision: Collision) => collision.data?.value >= COMBINE_THRESHOLD && collision.data?.value < MOVE_THRESHOLD;
   const combineCollision = collisions?.find((collision) => isNote(collision) && isWithinCombineRange(collision) && collision.id !== over?.id);
   const isOverCollision = topCollision && isNote(topCollision) ? topCollision : undefined;
@@ -38,14 +40,8 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
     onDragEnd: () => {
       if (!active) return;
 
-      if (hasActive && hasOver && topCollision) {
-        const overIndex = items.indexOf(topCollision.id.toString());
-        const activeIndex = items.indexOf(active.id.toString());
-
-        setItems(arrayMove(items, activeIndex, overIndex));
-      }
       if (topCollision && topCollision.id.toString() === id) {
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: undefined, rank: 0}}));
+        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: null, rank: 0}}));
       }
     },
     onDragOver: () => {

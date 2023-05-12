@@ -3,7 +3,6 @@ import {
   CollisionDetection,
   defaultDropAnimationSideEffects,
   DndContext,
-  DragEndEvent,
   DragOverEvent,
   DragOverlay,
   DragStartEvent,
@@ -46,6 +45,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
   };
 
   const isNote = (collision: Collision) => collision.data?.droppableContainer.data.current.type === "note";
+
   const getColumn = (id?: UniqueIdentifier): Column | undefined => {
     if (!id) return undefined;
     const note = notes.find((n) => n.id === id);
@@ -66,7 +66,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     if (isNote(overCollision)) setMaxCollision(overCollision);
   };
 
-  const onDragEnd = ({over, collisions, active}: DragEndEvent) => {};
+  const onDragEnd = () => {};
 
   const collisionDetectionWrapper =
     (collisionDetection: CollisionDetection) =>

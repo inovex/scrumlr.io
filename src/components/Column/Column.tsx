@@ -195,7 +195,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
           />
         </div>
-        <Droppable id={id} items={localNotes} setItems={setItems} className="column__notes-wrapper">
+        <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
             {localNotes.map((note) => (
               <li key={note}>

@@ -38,11 +38,24 @@ export const Sortable = ({id, children, disabled, className, columnId}: Sortable
 
   const combine = shouldCombine(id, items, newIndex, collisions, active);
 
+  const topCollision = collisions?.at(0);
+  const hasActive = !!active && items.includes(active.id.toString());
+  const hasOver = !!topCollision && items.includes(topCollision.id.toString());
+
   useDndMonitor({
     onDragEnd: ({active: dragActive}) => {
-      if (!combine || !columnId) return;
-      // trigger combine only if i am target (over) note
-      store.dispatch(Actions.editNote(dragActive.id.toString(), {position: {stack: id.toString(), column: columnId, rank: 0}}));
+      if (!columnId) return;
+
+      if (combine) {
+        // combine notes
+        store.dispatch(Actions.editNote(dragActive.id.toString(), {position: {stack: id.toString(), column: columnId, rank: 0}}));
+        return;
+      }
+      if (hasActive && hasOver && topCollision && active?.id === id) {
+        const rank = items.length - newIndex - 1;
+        // move note within column
+        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: columnId, stack: null, rank}}));
+      }
     },
   });
 

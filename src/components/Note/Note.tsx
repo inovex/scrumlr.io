@@ -94,7 +94,7 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">{note!.text}</p>
+          <p className="note__text">{note!.id}</p>
         )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
