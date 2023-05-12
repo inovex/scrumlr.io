@@ -194,6 +194,7 @@ export const SettingsDialog: FC = () => {
             navigate(`/board/${boardId}`);
           }}
           onClose={() => setShowDialog(false)}
+          reverseButtonOrder
         />
       )}
     </SettingsContext.Provider>

@@ -118,6 +118,10 @@
   justify-content: flex-end;
   gap: $margin--small;
 }
+.confirmation-dialog__buttons-reverse {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
 
 .confirmation-dialog__close-button {
   position: absolute;

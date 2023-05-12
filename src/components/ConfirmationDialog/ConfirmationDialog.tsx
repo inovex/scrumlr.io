@@ -5,6 +5,7 @@ import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as WarningIcon} from "assets/icon-warning.svg";
+import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
 type ConfirmationDialogProps = {
@@ -18,6 +19,7 @@ type ConfirmationDialogProps = {
   onClose: () => void;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   warning?: string;
+  reverseButtonOrder?: boolean;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -49,7 +51,7 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                       </div>
                     )}
                   </div>
-                  <div className="confirmation-dialog__buttons">
+                  <div className={classNames("confirmation-dialog__buttons", {"confirmation-dialog__buttons-reverse": props.reverseButtonOrder})}>
                     <button
                       aria-label={props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
                       className="confirmation-dialog__button confirmation-dialog__button--accept"
