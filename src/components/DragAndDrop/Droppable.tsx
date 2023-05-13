@@ -41,7 +41,7 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
       if (!active) return;
 
       if (topCollision && topCollision.id.toString() === id) {
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: null, rank: 0}}));
+        // store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: null, rank: 0}}));
       }
     },
     onDragOver: () => {

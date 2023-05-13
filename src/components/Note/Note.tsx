@@ -94,7 +94,9 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">{note!.id}</p>
+          <p className="note__text">
+            {note!.id} - {note!.position.rank}
+          </p>
         )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
