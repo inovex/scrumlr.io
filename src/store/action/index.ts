@@ -8,12 +8,14 @@ import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
 import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
 import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
 import {AssignmentAction, AssignmentActionFactory, AssignmentReduxAction} from "./assignment";
+import {ReactionAction, ReactionReduxAction} from "./reaction";
 
 /** This object lists all internal Redux Action types. */
 export const Action = {
   ...BoardAction,
   ...ColumnAction,
   ...NoteAction,
+  ...ReactionAction,
   ...AuthAction,
   ...ParticipantAction,
   ...RequestAction,
@@ -28,6 +30,7 @@ export const Actions = {
   ...BoardActionFactory,
   ...ColumnActionFactory,
   ...NoteActionFactory,
+  ...RequestActionFactory,
   ...AuthActionFactory,
   ...ParticipantActionFactory,
   ...RequestActionFactory,
@@ -42,6 +45,7 @@ export type ReduxAction = {context: {board?: string; user?: string; voting?: str
   | BoardReduxAction
   | ColumnReduxAction
   | NoteReduxAction
+  | ReactionReduxAction
   | AuthReduxAction
   | ParticipantReduxAction
   | RequestReduxAction
