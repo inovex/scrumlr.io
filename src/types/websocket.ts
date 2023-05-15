@@ -6,6 +6,7 @@ import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
 import {Assignment} from "./assignment";
+import {Reaction} from "./reaction";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -13,6 +14,7 @@ export interface BoardInitEvent {
     board: Board;
     columns: Column[];
     notes?: Note[];
+    reactions?: Reaction[];
     votings?: Voting[];
     votes?: Vote[];
     participants: Participant[];

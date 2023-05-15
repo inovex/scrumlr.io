@@ -26,8 +26,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         const message: ServerEvent = JSON.parse(evt.data);
 
         if (message.type === "INIT") {
-          const {board, columns, participants, notes, votes, votings, requests, assignments} = message.data;
-          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || [], assignments || []));
+          const {board, columns, participants, notes, reactions, votes, votings, requests, assignments} = message.data;
+          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], reactions || [], votes || [], votings || [], assignments || []));
         }
 
         if (message.type === "BOARD_UPDATED") {
@@ -61,6 +61,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           const {deleteStack} = message.data;
           store.dispatch(Actions.deletedNote(noteId, deleteStack));
         }
+
+        // TOOD: dispatch reaction events!
 
         if (message.type === "PARTICIPANT_CREATED") {
           store.dispatch(Actions.createdParticipant(message.data));
