@@ -76,10 +76,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error) {
-	board, requests, sessions, columns, notes, votings, votes, assignments, err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error) {
+	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil, err
+		return nil, nil, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	personalVotes := []*dto.Vote{}
@@ -89,7 +89,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 		}
 	}
 
-	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Votings(votings, votes), personalVotes, dto.Assignments(assignments), err
+	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, dto.Assignments(assignments), err
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
@@ -104,7 +104,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		AllowStacking:         body.AllowStacking,
-    TimerStart:            body.TimerStart,
+		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
 	}
@@ -135,12 +135,12 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 }
 
 func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
-  timerStart := time.Now().Local();
+	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: &timerStart,
-		TimerEnd: &timerEnd,
+		ID:         id,
+		TimerStart: &timerStart,
+		TimerEnd:   &timerEnd,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
@@ -151,9 +151,9 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 
 func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: nil,
-		TimerEnd: nil,
+		ID:         id,
+		TimerStart: nil,
+		TimerEnd:   nil,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {

@@ -28,7 +28,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	board, requests, sessions, columns, notes, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
+	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
 		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
@@ -41,23 +41,25 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}{
 		Type: realtime.BoardEventInit,
 		Data: struct {
-			Board      *dto2.Board                 `json:"board"`
-			Columns    []*dto2.Column              `json:"columns"`
-			Notes      []*dto2.Note                `json:"notes"`
-			Votings    []*dto2.Voting              `json:"votings"`
-			Votes      []*dto2.Vote                `json:"votes"`
-			Sessions   []*dto2.BoardSession        `json:"participants"`
-			Requests   []*dto2.BoardSessionRequest `json:"requests"`
-      Assignments []*dto2.Assignment          `json:"assignments"`
+			Board       *dto2.Board                 `json:"board"`
+			Columns     []*dto2.Column              `json:"columns"`
+			Notes       []*dto2.Note                `json:"notes"`
+			Reactions   []*dto2.Reaction            `json:"reactions"`
+			Votings     []*dto2.Voting              `json:"votings"`
+			Votes       []*dto2.Vote                `json:"votes"`
+			Sessions    []*dto2.BoardSession        `json:"participants"`
+			Requests    []*dto2.BoardSessionRequest `json:"requests"`
+			Assignments []*dto2.Assignment          `json:"assignments"`
 		}{
-			Board:    board,
-			Columns:  columns,
-			Notes:    notes,
-			Votings:  votings,
-			Votes:    votes,
-			Sessions: sessions,
-			Requests: requests,
-      Assignments: assignments,
+			Board:       board,
+			Columns:     columns,
+			Notes:       notes,
+			Reactions:   reactions,
+			Votings:     votings,
+			Votes:       votes,
+			Sessions:    sessions,
+			Requests:    requests,
+			Assignments: assignments,
 		},
 	})
 	if err != nil {
