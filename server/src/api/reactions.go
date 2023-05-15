@@ -22,9 +22,9 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
-	note := r.Context().Value("Note").(uuid.UUID)
+	board := r.Context().Value("Board").(uuid.UUID)
 
-	reactions, err := s.reactions.List(r.Context(), note)
+	reactions, err := s.reactions.List(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

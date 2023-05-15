@@ -32,13 +32,16 @@ func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 	return reaction, err
 }
 
-// GetReactions gets all reactions for a specific Note
-func (d *Database) GetReactions(note uuid.UUID) ([]Reaction, error) {
+// GetReactions gets all reactions for a specific board
+// query:
+// SELECT r.* FROM reactions r JOIN notes n ON r.note = n.id WHERE n.board = ?;
+func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 	var reactions []Reaction
 	err := d.db.
 		NewSelect().
 		Model(&reactions).
-		Where("note = ?", note).
+		Join("JOIN notes ON notes.id = reaction.note"). // important: 'reaction.note' instead of 'reactions.note'
+		Where("notes.board = ?", board).
 		Scan(context.Background())
 	return reactions, err
 }

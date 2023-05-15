@@ -18,7 +18,7 @@ type ReactionService struct {
 
 type DB interface {
 	GetReaction(id uuid.UUID) (database.Reaction, error)
-	GetReactions(note uuid.UUID) ([]database.Reaction, error)
+	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
 	RemoveReaction(id uuid.UUID) error
 }
@@ -31,8 +31,9 @@ func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
 	return b
 }
 
-func (s *ReactionService) List(_ context.Context, noteID uuid.UUID) ([]*dto.Reaction, error) {
-	reactions, err := s.database.GetReactions(noteID)
+func (s *ReactionService) List(_ context.Context, boardID uuid.UUID) ([]*dto.Reaction, error) {
+	reactions, err := s.database.GetReactions(boardID)
+
 	return dto.Reactions(reactions), err
 }
 
