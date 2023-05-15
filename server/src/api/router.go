@@ -164,6 +164,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardSessionResources(r)
 			s.initColumnResources(r)
 			s.initNoteResources(r)
+			s.initReactionResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
 			s.initAssignmentResources(r)
@@ -270,17 +271,22 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Put("/", s.updateNote)
 
 			r.Delete("/", s.deleteNote)
+		})
+	})
+}
 
-			r.Route("/reactions", func(r chi.Router) {
-				r.Get("/", s.getReactions)
-				r.Post("/", s.createReaction)
+func (s *Server) initReactionResources(r chi.Router) {
+	r.Route("/reactions", func(r chi.Router) {
+		r.Use(s.BoardParticipantContext)
 
-				r.Route("/{reaction}", func(r chi.Router) {
-					r.Use(s.ReactionContext)
-					r.Get("/", s.getReaction)
-					r.Delete("/", s.removeReaction)
-				})
-			})
+		r.Get("/", s.getReactions)
+		r.Post("/", s.createReaction)
+
+		r.Route("/{reaction}", func(r chi.Router) {
+			r.Use(s.ReactionContext)
+
+			r.Get("/", s.getReaction)
+			r.Delete("/", s.removeReaction)
 		})
 	})
 }

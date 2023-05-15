@@ -35,7 +35,6 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
-	note := r.Context().Value("Note").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
 
 	var body dto.ReactionCreateRequest
@@ -44,8 +43,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// only reaction type is required in body, rest is filled in from context
-	body.Note = note
+	// user is filled from context
 	body.User = user
 
 	reaction, err := s.reactions.Create(r.Context(), body)
