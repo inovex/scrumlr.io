@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 )
 
 type Reaction struct {
@@ -53,7 +54,7 @@ func (d *Database) CreateReaction(insert ReactionInsert) (Reaction, error) {
 	_, err := d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
-		Exec(context.Background(), &reaction)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &reaction)
 
 	return reaction, err
 }

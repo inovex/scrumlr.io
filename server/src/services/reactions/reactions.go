@@ -16,7 +16,12 @@ type ReactionService struct {
 	realtime *realtime.Broker
 }
 
+type Observer interface {
+	AttachObserver(observer database.Observer)
+}
+
 type DB interface {
+	Observer
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
@@ -27,6 +32,7 @@ func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
 	b := new(ReactionService)
 	b.database = db
 	b.realtime = rt
+	b.database.AttachObserver((database.ReactionsObserver)(b))
 
 	return b
 }
@@ -60,4 +66,24 @@ func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateReq
 
 func (s *ReactionService) Delete(_ context.Context, id uuid.UUID) error {
 	return s.database.RemoveReaction(id)
+}
+
+func (s *ReactionService) UpdatedReactions(board uuid.UUID, reactions []database.Reaction) {
+	eventReactions := make([]dto.Reaction, len(reactions))
+	for index, reaction := range reactions {
+		eventReactions[index] = *new(dto.Reaction).From(reaction)
+	}
+
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventReactionsUpdated,
+		Data: eventReactions,
+	})
+
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated reactions", "err", err)
+	}
+}
+
+func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
+
 }
