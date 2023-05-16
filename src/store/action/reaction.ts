@@ -37,7 +37,7 @@ export const ReactionActionFactory = {
    * Creates an action which should be dispatched when one or more reactions are updated (i.e. added)
    * @param reactions
    */
-  updatedReaction: (reactions: Reaction[]) => ({
+  updatedReactions: (reactions: Reaction[]) => ({
     type: ReactionAction.UpdatedReactions,
     reactions,
   }),
@@ -63,6 +63,6 @@ export const ReactionActionFactory = {
 
 export type ReactionReduxAction =
   | ReturnType<typeof ReactionActionFactory.addReaction>
-  | ReturnType<typeof ReactionActionFactory.updatedReaction>
+  | ReturnType<typeof ReactionActionFactory.updatedReactions>
   | ReturnType<typeof ReactionActionFactory.deleteReaction>
   | ReturnType<typeof ReactionActionFactory.deletedReaction>;
