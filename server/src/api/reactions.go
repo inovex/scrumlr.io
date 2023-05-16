@@ -44,11 +44,10 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// board and user is filled from context
-	body.Board = board
+	// user is filled from context
 	body.User = user
 
-	reaction, err := s.reactions.Create(r.Context(), body)
+	reaction, err := s.reactions.Create(r.Context(), board, body)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

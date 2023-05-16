@@ -17,7 +17,6 @@ type Reaction struct {
 
 type ReactionInsert struct {
 	bun.BaseModel `bun:"table:reactions"`
-	Board         uuid.UUID `bun:"-"` // not directly required for the model, but for the observer.
 	Note          uuid.UUID
 	User          uuid.UUID
 	ReactionType  string
@@ -49,16 +48,17 @@ func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 }
 
 // CreateReaction inserts a new reaction
-func (d *Database) CreateReaction(insert ReactionInsert) (Reaction, error) {
+func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (Reaction, error) {
 	var reaction Reaction
 	_, err := d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &reaction)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board), &reaction)
 
 	return reaction, err
 }
 
+// RemoveReaction deletes a reaction
 func (d *Database) RemoveReaction(board, id uuid.UUID) error {
 	_, err := d.db.NewDelete().
 		Model((*Reaction)(nil)).

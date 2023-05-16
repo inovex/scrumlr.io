@@ -72,7 +72,7 @@ type Notes interface {
 type Reactions interface {
 	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
 	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
-	Create(ctx context.Context, body dto.ReactionCreateRequest) (*dto.Reaction, error)
+	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
 	Delete(ctx context.Context, board, id uuid.UUID) error
 }
 

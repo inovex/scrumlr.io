@@ -24,7 +24,7 @@ type DB interface {
 	Observer
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
-	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
+	CreateReaction(board uuid.UUID, insert database.ReactionInsert) (database.Reaction, error)
 	RemoveReaction(board, id uuid.UUID) error
 }
 
@@ -48,14 +48,15 @@ func (s *ReactionService) Get(_ context.Context, id uuid.UUID) (*dto.Reaction, e
 	return new(dto.Reaction).From(reaction), err
 }
 
-func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateRequest) (*dto.Reaction, error) {
+func (s *ReactionService) Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := s.database.CreateReaction(database.ReactionInsert{
-		Board:        body.Board,
-		Note:         body.Note,
-		User:         body.User,
-		ReactionType: body.ReactionType,
-	})
+	reaction, err := s.database.CreateReaction(
+		board,
+		database.ReactionInsert{
+			Note:         body.Note,
+			User:         body.User,
+			ReactionType: body.ReactionType,
+		})
 
 	if err != nil {
 		log.Errorw("unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
