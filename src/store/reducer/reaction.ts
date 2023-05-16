@@ -5,9 +5,16 @@ import {ReactionState} from "../../types/reaction";
 export const reactionReducer = (state: ReactionState = [], action: ReduxAction): ReactionState => {
   switch (action.type) {
     case Action.InitializeBoard:
-    case Action.UpdatedReactions: // TODO?
+    case Action.UpdatedReactions:
       return action.reactions;
-    // TODO: other actions
+    case Action.DeletedReaction:
+      const newReactions = state.slice();
+      const index = state.findIndex((r) => r.id === action.reactionId);
+      if (index >= 0) {
+        newReactions.splice(index, 1);
+      }
+      return newReactions;
+
     default:
       return state;
   }
