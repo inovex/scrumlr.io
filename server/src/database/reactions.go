@@ -16,6 +16,7 @@ type Reaction struct {
 
 type ReactionInsert struct {
 	bun.BaseModel `bun:"table:reactions"`
+	Board         uuid.UUID `bun:"-"` // not directly required for the model, but for the observer.
 	Note          uuid.UUID
 	User          uuid.UUID
 	ReactionType  string

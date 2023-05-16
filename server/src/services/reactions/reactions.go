@@ -45,6 +45,7 @@ func (s *ReactionService) Get(_ context.Context, id uuid.UUID) (*dto.Reaction, e
 func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateRequest) (*dto.Reaction, error) {
 	log := logger.FromContext(ctx)
 	reaction, err := s.database.CreateReaction(database.ReactionInsert{
+		Board:        body.Board,
 		Note:         body.Note,
 		User:         body.User,
 		ReactionType: body.ReactionType,

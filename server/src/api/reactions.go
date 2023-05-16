@@ -35,6 +35,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
+	board := r.Context().Value("Board").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
 
 	var body dto.ReactionCreateRequest
@@ -43,7 +44,8 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// user is filled from context
+	// board and user is filled from context
+	body.Board = board
 	body.User = user
 
 	reaction, err := s.reactions.Create(r.Context(), body)

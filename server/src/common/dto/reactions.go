@@ -22,7 +22,10 @@ type Reaction struct {
 
 // ReactionCreateRequest is the struct to use when creating a new reaction
 type ReactionCreateRequest struct {
-	// The note the reaction corresponds to (from context)
+	// The board the reaction corresponds to (from context)
+	Board uuid.UUID `json:"-"`
+
+	// The note the reaction corresponds to
 	Note uuid.UUID `json:"note"`
 
 	// The user who made the reaction (from context)
