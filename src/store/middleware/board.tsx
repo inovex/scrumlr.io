@@ -61,9 +61,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           const {deleteStack} = message.data;
           store.dispatch(Actions.deletedNote(noteId, deleteStack));
         }
-
-        // TOOD: dispatch reaction events!
-
+        if (message.type === "REACTIONS_UPDATED") {
+          const reactions = message.data;
+          store.dispatch(Actions.updatedReactions(reactions));
+        }
+        if (message.type === "REACTION_DELETED") {
+          const reactionId = message.data;
+          store.dispatch(Actions.deletedReaction(reactionId));
+        }
         if (message.type === "PARTICIPANT_CREATED") {
           store.dispatch(Actions.createdParticipant(message.data));
         }
