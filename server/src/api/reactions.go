@@ -59,9 +59,10 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
+	board := r.Context().Value("Board").(uuid.UUID)
 	id := r.Context().Value("Reaction").(uuid.UUID)
 
-	if err := s.reactions.Delete(r.Context(), id); err != nil {
+	if err := s.reactions.Delete(r.Context(), board, id); err != nil {
 		common.Throw(w, r, err)
 		return
 	}

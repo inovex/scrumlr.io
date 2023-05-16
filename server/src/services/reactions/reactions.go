@@ -25,7 +25,7 @@ type DB interface {
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(insert database.ReactionInsert) (database.Reaction, error)
-	RemoveReaction(id uuid.UUID) error
+	RemoveReaction(board, id uuid.UUID) error
 }
 
 func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
@@ -64,8 +64,8 @@ func (s *ReactionService) Create(ctx context.Context, body dto.ReactionCreateReq
 	return new(dto.Reaction).From(reaction), err
 }
 
-func (s *ReactionService) Delete(_ context.Context, id uuid.UUID) error {
-	return s.database.RemoveReaction(id)
+func (s *ReactionService) Delete(_ context.Context, board, id uuid.UUID) error {
+	return s.database.RemoveReaction(board, id)
 }
 
 func (s *ReactionService) UpdatedReactions(board uuid.UUID, reactions []database.Reaction) {
@@ -85,5 +85,12 @@ func (s *ReactionService) UpdatedReactions(board uuid.UUID, reactions []database
 }
 
 func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventReactionDeleted,
+		Data: reaction,
+	})
 
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast deleted reaction", "err", err)
+	}
 }

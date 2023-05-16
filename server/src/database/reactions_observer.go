@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
@@ -18,10 +17,15 @@ type ReactionsObserver interface {
 }
 
 // ensure that model implements a hook interface (compile time check)
-var _ bun.AfterInsertHook = (*NoteInsert)(nil)
+var _ bun.AfterInsertHook = (*ReactionInsert)(nil)
+var _ bun.AfterDeleteHook = (*Reaction)(nil)
 
 func (*ReactionInsert) AfterInsert(ctx context.Context, _ *bun.InsertQuery) error {
 	return notifyReactionsUpdated(ctx)
+}
+
+func (*Reaction) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
+	return notifyReactionDeleted(ctx)
 }
 
 func notifyReactionsUpdated(ctx context.Context) error {
@@ -42,5 +46,26 @@ func notifyReactionsUpdated(ctx context.Context) error {
 			}
 		}
 	}
+	return nil
+}
+
+func notifyReactionDeleted(ctx context.Context) error {
+	if ctx.Value("Database") == nil {
+		return nil
+	}
+	d := ctx.Value("Database").(*Database)
+
+	if len(d.observer) > 0 {
+		board := ctx.Value("Board").(uuid.UUID)
+		reaction := ctx.Value("Reaction").(uuid.UUID)
+
+		for _, observer := range d.observer {
+			if o, ok := observer.(ReactionsObserver); ok {
+				o.DeletedReaction(board, reaction)
+				return nil
+			}
+		}
+	}
+
 	return nil
 }
