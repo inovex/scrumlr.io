@@ -5,8 +5,11 @@ import {ReactionState} from "../../types/reaction";
 export const reactionReducer = (state: ReactionState = [], action: ReduxAction): ReactionState => {
   switch (action.type) {
     case Action.InitializeBoard:
-    case Action.UpdatedReactions:
       return action.reactions;
+
+    case Action.AddedReaction:
+      return [...state, action.reaction];
+
     case Action.DeletedReaction:
       const newReactions = state.slice();
       const index = state.findIndex((r) => r.id === action.reactionId);

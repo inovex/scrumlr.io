@@ -8,7 +8,7 @@ export const ReactionAction = {
    * won't work otherwise (e.g. in reducers).
    */
   AddReaction: "scrumlr.io/addReaction" as const,
-  UpdatedReactions: "scrumlr.io/updatedReactions" as const,
+  AddedReaction: "scrumlr.io/addedReaction" as const,
   DeleteReaction: "scrumlr.io/deleteReaction" as const,
   DeletedReaction: "scrumlr.io/deletedReaction" as const,
 };
@@ -35,11 +35,11 @@ export const ReactionActionFactory = {
 
   /**
    * Creates an action which should be dispatched when one or more reactions are updated (i.e. added)
-   * @param reactions
+   * @param reaction
    */
-  updatedReactions: (reactions: Reaction[]) => ({
-    type: ReactionAction.UpdatedReactions,
-    reactions,
+  addedReaction: (reaction: Reaction) => ({
+    type: ReactionAction.AddedReaction,
+    reaction,
   }),
 
   /**
@@ -63,6 +63,6 @@ export const ReactionActionFactory = {
 
 export type ReactionReduxAction =
   | ReturnType<typeof ReactionActionFactory.addReaction>
-  | ReturnType<typeof ReactionActionFactory.updatedReactions>
+  | ReturnType<typeof ReactionActionFactory.addedReaction>
   | ReturnType<typeof ReactionActionFactory.deleteReaction>
   | ReturnType<typeof ReactionActionFactory.deletedReaction>;

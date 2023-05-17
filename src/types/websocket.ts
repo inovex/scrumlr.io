@@ -61,8 +61,8 @@ export interface DeletedNoteEvent {
 }
 
 export interface UpdatedReactionsEvent {
-  type: "REACTIONS_UPDATED";
-  data: Reaction[];
+  type: "REACTION_ADDED";
+  data: Reaction;
 }
 
 export interface DeletedReactionEvent {
