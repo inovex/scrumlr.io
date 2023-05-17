@@ -50,7 +50,7 @@ root.render(
       <Provider store={store}>
         <Html />
         <Suspense fallback={<LoadingScreen />}>
-          <ToastContainer className="toast-container__container" toastClassName="toast-container__toast" bodyClassName="toast-container__body" limit={2} />
+          <ToastContainer limit={2} />
           <DndProvider options={HTML5toTouch}>
             <Router />
           </DndProvider>

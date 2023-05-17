@@ -9,8 +9,8 @@ import {Toast} from "utils/Toast";
 import useSound from "use-sound";
 import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
-import {Button} from "../Button";
 import "./Timer.scss";
+import {TOAST_TIMER_DEFAULT} from "constants/misc";
 
 type TimerProps = {
   startTime: Date;
@@ -65,15 +65,12 @@ export const Timer = (props: TimerProps) => {
       playTimesUpSound();
       hideTimerAfterSeconds(HIDE_TIMER_AFTER_SECONDS);
       if (isModerator && anyReady) {
-        Toast.info(
-          <div>
-            {t("Toast.moderatorResetReadyStates")}
-            <Button style={{marginTop: "1rem"}} onClick={() => API.updateReadyStates(boardId, false)}>
-              {t("Toast.moderatorResetReadyStatesButton")}
-            </Button>
-          </div>,
-          false
-        );
+        Toast.info({
+          title: t("Toast.moderatorResetReadyStates"),
+          buttons: [t("Toast.moderatorResetReadyStatesButton")],
+          firstButtonOnClick: () => API.updateReadyStates(boardId, false),
+          autoClose: false,
+        });
       }
     }
 
@@ -97,12 +94,7 @@ export const Timer = (props: TimerProps) => {
 
   useEffect(() => {
     if (isModerator && allParticipantsReady && Object.values(timeLeft).some((time) => time > 0)) {
-      Toast.success(
-        <div>
-          <div>{t("Toast.allParticipantsDone")}</div>
-        </div>,
-        5000
-      );
+      Toast.info({title: t("Toast.allParticipantsDone"), autoClose: TOAST_TIMER_DEFAULT});
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allParticipantsReady, isModerator]);
