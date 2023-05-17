@@ -49,18 +49,16 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       setValue(e.target.value);
     }
   };
+
   const onAddNote = () => {
     if (value) {
       dispatch(Actions.addNote(columnId!, value));
       if (!columnIsVisible && !toastDisplayed) {
-        Toast.info(
-          <div>
-            <div>{t("Toast.noteToHiddenColumn")}</div>
-            <button className="toast-button" onClick={toggleColumnVisibility}>
-              {t("Toast.noteToHiddenColumnButton")}
-            </button>
-          </div>
-        );
+        Toast.info({
+          title: t("Toast.noteToHiddenColumn"),
+          buttons: [t("Toast.noteToHiddenColumnButton")],
+          firstButtonOnClick: toggleColumnVisibility,
+        });
         setToastDisplayed(true);
       }
       setValue("");
