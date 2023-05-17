@@ -74,7 +74,9 @@ $settings__item-height: 48px;
   > svg {
     width: $icon--medium;
     height: $icon--medium;
-    stroke: $color-dark-gray;
+    path {
+      stroke: $color-dark-gray;
+    }
   }
 
   > p {

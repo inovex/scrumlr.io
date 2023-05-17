@@ -1,26 +1,192 @@
-@import "constants/style.scss";
+@use "sass:color";
+@import "src/constants/style";
 
-$logo-height: 60px;
-$text-size--medium: 24px;
-
-.not-found {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.not-found__root {
   height: 100%;
   width: 100%;
+  padding: $padding--small 0 0 $padding--medium;
+  overflow-x: hidden;
+  background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($color-white, $alpha: 0.3));
 }
 
-.not-found__logo {
-  height: $logo-height;
+.not-found__background {
+  position: relative;
 }
 
-.not-found__text {
-  color: $color-black;
-  font-size: $text-size--medium;
-  letter-spacing: $letter-spacing--medium;
+.not-found__background-form {
+  // position the form to overlap in the upper left corner.
+  // depending on screen size we tweak those numbers a bit
+  position: absolute;
+  top: -440px;
+  left: -960px;
 }
-[theme="dark"] .not-found__text {
+
+.not-found__background-details {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.not-found__header {
+  position: absolute;
+}
+
+.not-found__main {
+  display: flex;
+  flex-direction: column-reverse; // in mobile, stan is above the content
+  gap: 0;
+
+  height: 100%;
+
+  justify-content: center;
+  align-items: center;
+}
+
+// content (left)
+.not-found__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 0 $padding--default;
+
+  z-index: $base-z-index; // layer content over background, using any z-index works
+}
+
+.not-found__title {
+  font-weight: 700;
+  font-size: $text--2xl;
+}
+
+.not-found__description {
+  margin-top: 12px;
+
+  font-weight: 400;
+  font-size: $text--md;
+  line-height: $line-height--large;
+}
+
+.not-found__return-button {
+  margin-top: $margin--default;
+
+  padding: $padding--default $padding--large;
   color: $color-white;
+  background: #ff0069;
+
+  font-weight: 700;
+  font-size: $text--base;
+  letter-spacing: $letter-spacing--medium;
+
+  border: none;
+  border-radius: $rounded--full;
+  box-shadow: 0 5px 4px color.change($color-planning-pink, $alpha: 0.25);
+
+  cursor: pointer;
+}
+
+.not-found__logo-stan--web,
+.not-found__logo-stan--web {
+  width: clamp(200px, 50vw, 1000px); // min bound doesn't quite work
+  display: none;
+}
+
+.not-found__logo-stan--mobile-light,
+.not-found__logo-stan--mobile-dark {
+  display: initial;
+}
+
+// default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
+@media screen and (min-height: 600px) {
+  .not-found__description {
+    margin-top: $margin--default;
+  }
+
+  .not-found__return-button {
+    margin-top: $margin--large + $margin--small; // 40px
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .not-found__root {
+    padding: $padding--default;
+  }
+
+  .not-found__background-form {
+    top: -400px;
+    left: -900px;
+  }
+
+  .not-found__main {
+    gap: $margin--medium;
+  }
+
+  .not-found__title {
+    font-size: $text--3xl;
+  }
+
+  .not-found__description {
+    font-size: $text--lg;
+    line-height: 40px;
+  }
+}
+
+// this looks better with min-width: 920px instead because of line breaks, but this is consistent with the logo
+@media screen and (min-width: 768px) {
+  .not-found__background-form {
+    top: -100px;
+    left: -800px;
+  }
+
+  .not-found__main {
+    flex-direction: row; // in desktop, stan is next to the content
+  }
+
+  .not-found__content {
+    align-items: flex-start; // prevent button from taking the whole space
+  }
+
+  // images are toggled depending on theme preference and screen width
+  .not-found__logo-stan--web {
+    display: initial;
+  }
+
+  .not-found__logo-stan--mobile {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 2048px) {
+  .not-found__background-form {
+    top: -100px;
+    left: 0;
+  }
+}
+
+// display or hide light/dark logos.
+[theme="light"] {
+  .not-found__background-form--dark,
+  .not-found__logo-stan--dark {
+    display: none;
+  }
+}
+
+[theme="dark"] {
+  .not-found__background-form--light,
+  .not-found__logo-stan--light {
+    display: none;
+  }
+
+  .not-found__root {
+    background: linear-gradient(
+      320deg,
+      color.change($color-backlog-blue, $lightness: 12%, $saturation: 25%) 6%,
+      color.change($color-backlog-blue, $lightness: 14%, $saturation: 35%) 30%,
+      color.change($color-backlog-blue, $lightness: 37%, $saturation: 23%) 60%,
+      color.change($color-backlog-blue, $lightness: 56%, $saturation: 28%) 80%
+    );
+  }
+
+  .not-found__content {
+    color: $color-white;
+  }
 }
