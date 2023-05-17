@@ -9,6 +9,7 @@ import {hotkeyMap} from "constants/hotkeys";
 import "./HotkeyAnchor.scss";
 import {useNavigate, useParams} from "react-router";
 import {useEffect, useRef} from "react";
+import {TOAST_TIMER_SHORT} from "constants/misc";
 
 /**
  * Anchor for general hotkeys
@@ -63,10 +64,10 @@ export const HotkeyAnchor = () => {
   const toggleHotkeys = () => {
     if (state.hotkeysAreActive) {
       dispatch(Actions.setHotkeyState(false));
-      Toast.info(t("Hotkeys.hotkeysDisabled"), 1500);
+      Toast.info({title: t("Hotkeys.hotkeysDisabled"), autoClose: TOAST_TIMER_SHORT});
     } else {
       dispatch(Actions.setHotkeyState(true));
-      Toast.info(t("Hotkeys.hotkeysEnabled"), 1500);
+      Toast.info({title: t("Hotkeys.hotkeysEnabled"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
@@ -75,38 +76,38 @@ export const HotkeyAnchor = () => {
       dispatch(Actions.stopSharing());
       dispatch(Actions.clearFocusInitiator());
       dispatch(Actions.setModerating(false));
-      Toast.info(t("Hotkeys.togglePresentationMode.endPresenting"), 1500);
+      Toast.info({title: t("Hotkeys.togglePresentationMode.endPresenting"), autoClose: TOAST_TIMER_SHORT});
     } else {
       dispatch(Actions.setFocusInitiator(state.currentUser));
       if (note.current) dispatch(Actions.shareNote(note.current));
       dispatch(Actions.setModerating(true));
-      Toast.info(t("Hotkeys.togglePresentationMode.startPresenting"), 1500);
+      Toast.info({title: t("Hotkeys.togglePresentationMode.startPresenting"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
   const toggleReadyState = () => {
     if (isReady) {
       dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, false));
-      Toast.info(t("Hotkeys.toggleReadyState.notReady"), 1500);
+      Toast.info({title: t("Hotkeys.toggleReadyState.notReady"), autoClose: TOAST_TIMER_SHORT});
     } else {
       dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, true));
-      Toast.info(t("Hotkeys.toggleReadyState.ready"), 1500);
+      Toast.info({title: t("Hotkeys.toggleReadyState.ready"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
   const toggleRaiseHand = () => {
     if (raisedHand) {
       dispatch(Actions.setRaisedHand(state.currentUser.user.id, false));
-      Toast.info(t("Hotkeys.toggleRaisedHand.lower"), 1500);
+      Toast.info({title: t("Hotkeys.toggleRaisedHand.lower"), autoClose: TOAST_TIMER_SHORT});
     } else {
       dispatch(Actions.setRaisedHand(state.currentUser.user.id, true));
-      Toast.info(t("Hotkeys.toggleRaisedHand.raise"), 1500);
+      Toast.info({title: t("Hotkeys.toggleRaisedHand.raise"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
   const startTimer = (minutes: number) => {
     dispatch(Actions.setTimer(minutes));
-    Toast.info(`${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`);
+    Toast.info({title: `${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`});
   };
 
   const showSettings = () => navigate("settings");
@@ -122,10 +123,10 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showAuthors) {
         dispatch(Actions.editBoard({showAuthors: false}));
-        Toast.info(t("Hotkeys.toggleShowAuthors.hide"));
+        Toast.info({title: t("Hotkeys.toggleShowAuthors.hide")});
       } else {
         dispatch(Actions.editBoard({showAuthors: true}));
-        Toast.info(t("Hotkeys.toggleShowAuthors.show"));
+        Toast.info({title: t("Hotkeys.toggleShowAuthors.show")});
       }
     },
     hotkeyOptionsAdmin,
@@ -137,10 +138,10 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showNotesOfOtherUsers) {
         dispatch(Actions.editBoard({showNotesOfOtherUsers: false}));
-        Toast.info(t("Hotkeys.toggleShowOtherUsersNotes.hide"));
+        Toast.info({title: t("Hotkeys.toggleShowOtherUsersNotes.hide")});
       } else {
         dispatch(Actions.editBoard({showNotesOfOtherUsers: true}));
-        Toast.info(t("Hotkeys.toggleShowOtherUsersNotes.show"));
+        Toast.info({title: t("Hotkeys.toggleShowOtherUsersNotes.show")});
       }
     },
     hotkeyOptionsAdmin,
@@ -152,10 +153,10 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showHiddenColumns) {
         dispatch(Actions.setShowHiddenColumns(false));
-        Toast.info(t("Hotkeys.toggleColumnVisibility.hide"), 1500);
+        Toast.info({title: t("Hotkeys.toggleColumnVisibility.hide"), autoClose: TOAST_TIMER_SHORT});
       } else {
         dispatch(Actions.setShowHiddenColumns(true));
-        Toast.info(t("Hotkeys.toggleColumnVisibility.show"), 1500);
+        Toast.info({title: t("Hotkeys.toggleColumnVisibility.show"), autoClose: TOAST_TIMER_SHORT});
       }
     },
     hotkeyOptionsAdmin,

@@ -63,7 +63,9 @@ export const ExportBoard: VFC = () => {
           className="export-board__button-reverse-order"
           onClick={() => {
             getMarkdownExport(boardId).then((result) => {
-              navigator.clipboard.writeText(result).then(() => Toast.success(t("ExportBoardOption.copyToClipboardSuccess"), TOAST_TIMER_SHORT));
+              navigator.clipboard.writeText(result).then(() => {
+                Toast.success({title: t("ExportBoardOption.copyToClipboardSuccess"), autoClose: TOAST_TIMER_SHORT});
+              });
             });
           }}
           data-testid="export-markdown"
