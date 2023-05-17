@@ -8587,10 +8587,10 @@ react-toastify@^9.1.3:
   dependencies:
     clsx "^1.1.1"
 
-react-tooltip@^5.11.2:
-  version "5.11.2"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.11.2.tgz#6131108d30944e9e5294ebe069677340c828d13b"
-  integrity sha512-yKTX6FeHtv2DjvuHHIjvNkBcTzbTk63wqVbAe7+Ub09ePzby54AdfYppZKbx5KT1+k9+vEv+k+jTaOZMNxsTnA==
+react-tooltip@^5.13.0:
+  version "5.13.0"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.13.0.tgz#d9d91ec91ec7852651d557e1335a27d6b7b81406"
+  integrity sha512-7D+vJL2FCwx8t4s4YJnnq0umpkIj47l/c80Lp56zG7++efrN0F5JFVcqQ2d7BrcOeWsADCf5ysWlPa9n0+Srxg==
   dependencies:
     "@floating-ui/dom" "^1.0.0"
     classnames "^2.3.0"
