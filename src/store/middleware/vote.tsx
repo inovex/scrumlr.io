@@ -4,7 +4,6 @@ import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
 import i18n from "i18next";
 import {Toast} from "../../utils/Toast";
-import {Button} from "../../components/Button";
 import store from "../index";
 
 export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
@@ -14,13 +13,12 @@ export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.createdVote(r));
       })
       .catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.addVote")}</div>
-            <Button onClick={() => store.dispatch(Actions.addVote(action.note))}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.addVote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.addVote(action.note)),
+          autoClose: false,
+        });
       });
   }
 
@@ -30,13 +28,12 @@ export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
         dispatch(Actions.deletedVote({voting: action.context.voting!, note: action.note}));
       })
       .catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.deleteVote")}</div>
-            <Button onClick={() => store.dispatch(Actions.deleteVote(action.note))}>{i18n.t("Error.retry")}</Button>
-          </div>,
-          false
-        );
+        Toast.error({
+          title: i18n.t("Error.deleteVote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.deleteVote(action.note)),
+          autoClose: false,
+        });
       });
   }
 };

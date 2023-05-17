@@ -11,10 +11,9 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
-import i18n from "i18next";
 import classNames from "classnames";
 import {Toast} from "../../utils/Toast";
-import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
+import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 
 type ColumnSettingsProps = {
   id: string;
@@ -45,12 +44,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
       dispatch(Actions.setShowHiddenColumns(true));
-      Toast.success(
-        <div>
-          <div>{i18n.t("Toast.hiddenColumnsVisible")}</div>
-        </div>,
-        3000
-      );
+      Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
     const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
