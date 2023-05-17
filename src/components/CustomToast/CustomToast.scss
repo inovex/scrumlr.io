@@ -358,7 +358,7 @@ input[type="checkbox"]:checked::before {
 }
 
 // Toast (mobile)
-@media #{$smartphone} {
+@media #{$mini-smartphone} {
   .Toastify__toast {
     width: calc(100vw - 38px);
     margin: 0px auto 19px auto;
