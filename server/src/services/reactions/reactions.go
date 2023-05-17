@@ -62,6 +62,10 @@ func (s *ReactionService) Create(ctx context.Context, board uuid.UUID, body dto.
 		log.Errorw("unable to create reaction", "note", body.Note, "user", body.User, "type", body.ReactionType, "error", err)
 		return nil, common.InternalServerError
 	}
+
+	// notify
+	s.AddedReaction(board, reaction)
+
 	return new(dto.Reaction).From(reaction), err
 }
 
@@ -69,15 +73,12 @@ func (s *ReactionService) Delete(_ context.Context, board, id uuid.UUID) error {
 	return s.database.RemoveReaction(board, id)
 }
 
-func (s *ReactionService) UpdatedReactions(board uuid.UUID, reactions []database.Reaction) {
-	eventReactions := make([]dto.Reaction, len(reactions))
-	for index, reaction := range reactions {
-		eventReactions[index] = *new(dto.Reaction).From(reaction)
-	}
+func (s *ReactionService) AddedReaction(board uuid.UUID, reaction database.Reaction) {
+	eventReaction := *new(dto.Reaction).From(reaction)
 
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionsUpdated,
-		Data: eventReactions,
+		Data: eventReaction,
 	})
 
 	if err != nil {
