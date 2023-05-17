@@ -264,7 +264,9 @@
     "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
-    "noteDeleted": "Die Karte wurde gelöscht!"
+    "noteDeleted": "Die Karte wurde gelöscht!",
+    "ready": "Bist du fertig?",
+    "readyButton": "Fertig!"
   },
   "Language": {
     "german": "Deutsch",
