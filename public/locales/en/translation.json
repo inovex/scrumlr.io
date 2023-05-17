@@ -121,6 +121,12 @@
     "navigateHome": "Home",
     "navigateBack": "Go back"
   },
+  "NotFoundPage": {
+    "title": "Oh no! Error",
+    "descriptionLine1": "This page does not exist.",
+    "descriptionLine2": "Go back to the Homepage.",
+    "navigateHome": "Back to Homepage"
+  },
   "JoinRequest": {
     "title": "Is requesting to participate",
     "accept": "Accept",

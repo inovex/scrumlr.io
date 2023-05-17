@@ -24,14 +24,14 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
   const standardIcon = ["info", "success", "error"].includes(iconName!);
   const Icon = icon;
 
-  const titleMaxHeightDesktop = 38; // two lines of text
-  const titleMaxHeightMobile = 19; // one line of text
-  const maxWidthMobile = 767; // $smartphone: "screen and (max-width: 767px)"
+  const TITLE_MAX_HEIGHT_DESKTOP = 38; // two lines of text
+  const TITLE_MAX_HEIGHT_MOBILE = 19; // one line of text
+  const MAX_WIDTH_MOBILE = 767; // $smartphone: "screen and (max-width: 767px)"
 
   // check whether screensize is mobile/desktop
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= maxWidthMobile);
+      setIsMobile(window.innerWidth <= MAX_WIDTH_MOBILE);
     };
     window.addEventListener("resize", handleResize);
     handleResize();
@@ -44,20 +44,20 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       return;
     }
     if (!isMobile) {
-      if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
+      if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_DESKTOP) {
         setIsSingleToastTitle(false);
       }
     }
     if (isMobile) {
       if (buttons) {
         if (buttons.length < 2) {
-          if (titleRef.current.offsetHeight > titleMaxHeightMobile) {
+          if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_MOBILE) {
             setIsSingleToastTitle(false);
           }
         } else {
           setIsSingleToastTitle(false);
         }
-      } else if (titleRef.current.offsetHeight > titleMaxHeightDesktop) {
+      } else if (titleRef.current.offsetHeight > TITLE_MAX_HEIGHT_DESKTOP) {
         setIsSingleToastTitle(false);
       }
     }
@@ -116,16 +116,23 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
       {!isSingleToast && buttons && buttons.length > 0 && (
         <div className="toast__buttons-multi">
           {buttons &&
-            buttons.map((button, index) => (
-              <button
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                className={index === 0 ? `toast__button toast__button-multi-primary toast__button-${type}` : `toast__button toast__button-multi-secondary toast__button-${type}`}
-                onClick={index === 0 ? firstButtonOnClick : secondButtonOnClick}
-              >
-                {button}
-              </button>
-            ))}
+            buttons.map((button, index) => {
+              if (index > 1) return false;
+              return (
+                <button
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  className={
+                    index === 0
+                      ? `toast__button toast__button-multi toast__button-multi-primary toast__button-${type}`
+                      : `toast__button toast__button-multi toast__button-multi-secondary toast__button-${type}`
+                  }
+                  onClick={index === 0 ? firstButtonOnClick : secondButtonOnClick}
+                >
+                  {button}
+                </button>
+              );
+            })}
         </div>
       )}
       <div className={`toast__close-icon ${isSingleToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
