@@ -69,9 +69,11 @@ export const SettingsDialog: FC = () => {
                       to="board"
                       className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
                     >
-                      <p>{t("SettingsDialog.BoardSettings")}</p>
-                      <p>{t("SettingsDialog.BoardSettingsDescription")}</p>
                       <SettingsIcon className="navigation-item__icon" />
+                      <div>
+                        <p>{t("SettingsDialog.BoardSettings")}</p>
+                        <p>{t("SettingsDialog.BoardSettingsDescription")}</p>
+                      </div>
                     </Link>
                   )}
                   <Link
@@ -80,42 +82,52 @@ export const SettingsDialog: FC = () => {
                       "navigation__item--active": window.location.pathname.endsWith("/settings/participants"),
                     })}
                   >
-                    <p>{t("SettingsDialog.Participants")}</p>
-                    <p>{t("SettingsDialog.ParticipantsDescription")}</p>
                     <ParticipantsIcon className="navigation-item__icon" />
+                    <div>
+                      <p>{t("SettingsDialog.Participants")}</p>
+                      <p>{t("SettingsDialog.ParticipantsDescription")}</p>
+                    </div>
                   </Link>
                   <Link
                     to="appearance"
                     className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
                   >
-                    <p>{t("SettingsDialog.Appearance")}</p>
-                    <p>{t("SettingsDialog.AppearanceDescription")}</p>
                     <AppearanceIcon className="navigation-item__icon" />
+                    <div>
+                      <p>{t("SettingsDialog.Appearance")}</p>
+                      <p>{t("SettingsDialog.AppearanceDescription")}</p>
+                    </div>
                   </Link>
                   <Link
                     to="share"
                     className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}
                   >
-                    <p>{t("SettingsDialog.ShareSession")}</p>
-                    <p>{t("SettingsDialog.ShareSessionDescription")}</p>
                     <ShareIcon className="navigation-item__icon" />
+                    <div>
+                      <p>{t("SettingsDialog.ShareSession")}</p>
+                      <p>{t("SettingsDialog.ShareSessionDescription")}</p>
+                    </div>
                   </Link>
                   <Link
                     to="export"
                     className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}
                   >
-                    <p>{t("SettingsDialog.ExportBoard")}</p>
-                    <p>{t("SettingsDialog.ExportBoardDescription")}</p>
                     <ExportIcon className="navigation-item__icon" />
+                    <div>
+                      <p>{t("SettingsDialog.ExportBoard")}</p>
+                      <p>{t("SettingsDialog.ExportBoardDescription")}</p>
+                    </div>
                   </Link>
                   {feedbackEnabled && (
                     <Link
                       to="feedback"
                       className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
                     >
-                      <p>{t("SettingsDialog.Feedback")}</p>
-                      <p>{t("SettingsDialog.FeedbackDescription")}</p>
                       <FeedbackIcon className="navigation-item__icon" />
+                      <div>
+                        <p>{t("SettingsDialog.Feedback")}</p>
+                        <p>{t("SettingsDialog.FeedbackDescription")}</p>
+                      </div>
                     </Link>
                   )}
                   {me && (
@@ -123,9 +135,11 @@ export const SettingsDialog: FC = () => {
                       to="profile"
                       className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
                     >
-                      <p className="navigation-item__user-name">{me.name}</p>
-                      <p>{t("SettingsDialog.ProfileDescription")}</p>
                       <Avatar seed={me.id} avatar={me.avatar} className="navigation-item__icon" />
+                      <div>
+                        <p className="navigation-item__user-name">{me.name}</p>
+                        <p>{t("SettingsDialog.ProfileDescription")}</p>
+                      </div>
                     </Link>
                   )}
                 </nav>

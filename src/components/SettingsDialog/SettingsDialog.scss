@@ -209,6 +209,20 @@ $settings-dialog-container--bottom: 62px;
   outline: none;
   overflow-x: hidden;
 
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  // new
+  padding: 8px;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+
   &:hover {
     background: rgba(var(--accent-color-rgb), 0.8);
     color: $color-white;
@@ -220,19 +234,18 @@ $settings-dialog-container--bottom: 62px;
 
   p {
     margin: 0;
-    position: absolute;
-    left: 64px;
+    width: max-content;
 
     &:first-child {
-      font-size: $text-size--medium;
-      font-weight: 600;
-      top: 12px;
+      font-size: $text--base;
+      line-height: 1.25rem;
+      font-weight: 700;
     }
 
     &:nth-child(2) {
-      font-size: $text-size--small;
-      top: 30px;
-      opacity: 0.65;
+      font-size: $text--xs;
+      line-height: 15px;
+      font-weight: 500;
     }
   }
 }
@@ -248,9 +261,6 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .navigation-item__icon {
-  position: absolute;
-  top: 8px;
-  left: 8px;
   width: 40px;
   height: 40px;
   border-radius: $rounded--full;
