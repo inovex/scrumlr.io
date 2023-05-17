@@ -44,12 +44,17 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
 
   useEffect(() => {
     if (!boardData) {
-      getBoardData()
-        .then((data) => setBoardData(data))
-        .then(handlePrint);
+      getBoardData().then((data) => setBoardData(data));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (boardData) {
+      handlePrint();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardData]);
 
   const currDate = new Date();
   const currDateStr = `${String(currDate.getDate()).padStart(2, "0")}.${String(currDate.getMonth() + 1).padStart(2, "0")}.${currDate.getFullYear()}, ${String(

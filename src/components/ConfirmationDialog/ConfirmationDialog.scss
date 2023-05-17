@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style.scss";
 
 .confirmation-dialog__background {
   position: fixed;
@@ -147,7 +147,7 @@
 
   .confirmation-dialog {
     color: $color-white;
-    background-color: $color-dark-one;
+    background-color: $color-dark-two;
     border-color: $color-planning-pink;
     box-shadow: $box-shadow--dark;
   }
@@ -168,7 +168,7 @@
 
   .confirmation-dialog__close-button {
     color: $color-planning-pink;
-    background-color: $color-dark-mode;
+    background-color: $color-dark-mode-note;
     border-color: $color-planning-pink;
     box-shadow: $box-shadow--dark;
     &:hover {
