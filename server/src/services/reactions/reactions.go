@@ -77,7 +77,7 @@ func (s *ReactionService) AddedReaction(board uuid.UUID, reaction database.React
 	eventReaction := *new(dto.Reaction).From(reaction)
 
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventReactionsUpdated,
+		Type: realtime.BoardEventReactionAdded,
 		Data: eventReaction,
 	})
 
