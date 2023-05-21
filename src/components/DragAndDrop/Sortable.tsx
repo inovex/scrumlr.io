@@ -3,7 +3,7 @@ import {arrayMove, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
-import {ReactNode} from "react";
+import {ReactNode, useState} from "react";
 import store from "store";
 import {Actions} from "store/action";
 
@@ -57,6 +57,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const hasActive = !!active && items.includes(active.id.toString());
   const hasOver = !!topCollision && items.includes(topCollision.id.toString());
 
+  const [localItems, setLocalItems] = useState(items);
+
   useDndMonitor({
     onDragEnd: (event: DragEndEvent) => {
       if (!columnId || !active) return;
@@ -99,6 +101,12 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
       if (collisions && topCollision) {
         console.log(event);
+        if (items !== localItems) {
+          const newIndex = items.length - items.indexOf(id.toString()) - 1;
+          console.log("REORDERING", newIndex);
+          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: columnId, stack: null, rank: newIndex}}));
+          return;
+        }
         if (isColumn(topCollision)) {
           console.log("MOVE TO COLUMN 1");
           // BUG: rank: 0 is not correct
