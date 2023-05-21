@@ -88,6 +88,11 @@ $vote-display__short-actions-height: 28px;
   height: $icon--small;
   width: $icon--small;
 }
+.short-actions__button-wrapper > button > .short-actions-button__check-icon {
+  width: 100%;
+  height: 100%;
+}
+
 .short-actions__button-wrapper > button:hover {
   background-color: $color-progress-circle;
   color: $color-white;

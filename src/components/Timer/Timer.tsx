@@ -118,7 +118,7 @@ export const Timer = (props: TimerProps) => {
         ) : (
           <div className="short-actions__button-wrapper">
             <button onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true))}>
-              <CheckIcon />
+              <CheckIcon className="short-actions-button__check-icon" />
             </button>
             <span>Mark me as done</span>
           </div>
