@@ -1,5 +1,5 @@
-import {Active, Collision, UniqueIdentifier, useDndContext, useDndMonitor} from "@dnd-kit/core";
-import {useSortable} from "@dnd-kit/sortable";
+import {Active, Collision, UniqueIdentifier, useDndContext, useDndMonitor, DragEndEvent, DragOverEvent} from "@dnd-kit/core";
+import {arrayMove, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
@@ -12,6 +12,7 @@ type SortableProps = {
   columnId?: string;
   children: ReactNode;
   disabled?: boolean;
+  setItems: (items: string[]) => void;
   className?: string;
 };
 
@@ -31,20 +32,18 @@ export const shouldCombine = (id: UniqueIdentifier, items: UniqueIdentifier[], n
 
 export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], newIndex: number, collisions: Collision[] | null, active: Active | null) => {
   if (id !== active?.id) return false;
-  if (items?.[newIndex] !== active.id) return false;
+  // if (items?.[newIndex] !== active.id) return false;
   const noteCollisions = collisions?.filter((collision) => !isColumn(collision));
   const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
 
   if (!maxNoteCollision) return false;
 
   const collisionRatio = maxNoteCollision.data?.value;
-  console.log(maxNoteCollision.id, collisionRatio);
-  console.log(newIndex, items?.[newIndex], active.id);
 
   return collisionRatio && collisionRatio >= COMBINE_THRESHOLD && collisionRatio < MOVE_THRESHOLD;
 };
 
-export const Sortable = ({id, children, disabled, className, columnId}: SortableProps) => {
+export const Sortable = ({id, children, disabled, className, columnId, setItems}: SortableProps) => {
   const {collisions} = useDndContext();
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
@@ -59,8 +58,7 @@ export const Sortable = ({id, children, disabled, className, columnId}: Sortable
   const hasOver = !!topCollision && items.includes(topCollision.id.toString());
 
   useDndMonitor({
-    onDragEnd: () => {
-      console.log(items);
+    onDragEnd: (event: DragEndEvent) => {
       if (!columnId || !active) return;
 
       /*  if (combine) {
@@ -75,16 +73,32 @@ export const Sortable = ({id, children, disabled, className, columnId}: Sortable
         const noteCollisions = collisions?.filter((collision) => !isColumn(collision));
         const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
         if (!maxNoteCollision) return;
-        console.log("STACKING");
+        console.log("new index:", newIndex);
+        console.log("STACKING", items);
+        console.log("maybe on top of", maxNoteCollision.id);
+        console.log("or on top of", items[newIndex]);
+        console.log(event.active.id === event.over?.id);
         // BUG: colmn should be columnId of maxNoteCollision
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {stack: maxNoteCollision.id.toString(), column: columnId, rank: 0}}));
+        // const stackId = !event.over || maxNoteCollision.id !== active.id ? maxNoteCollision.id.toString() : event.over?.id.toString();
+        // const stackId = event.over?.id.toString() ?? maxNoteCollision.id.toString();
+        /* let stackId = maxNoteCollision.id.toString();
+        if (event.over && maxNoteCollision.id === active.id) {
+          stackId = event.over.id.toString();
+        } */
+        /* let stackId = event.over?.id.toString();
+        if (!stackId || stackId === active.id.toString()) {
+          stackId = maxNoteCollision.id.toString();
+        } */
+        const stackId = maxNoteCollision.id.toString();
+        console.log("stackId", stackId);
+        store.dispatch(Actions.editNote(active.id.toString(), {position: {stack: stackId, column: columnId, rank: 0}}));
         return;
       }
 
-      console.log("isActive", isActive(id, active));
       if (!isActive(id, active)) return;
 
       if (collisions && topCollision) {
+        console.log(event);
         if (isColumn(topCollision)) {
           console.log("MOVE TO COLUMN 1");
           // BUG: rank: 0 is not correct
@@ -103,6 +117,16 @@ export const Sortable = ({id, children, disabled, className, columnId}: Sortable
         console.log("REORDERING, rank: ", rank);
         store.dispatch(Actions.editNote(active.id.toString(), {position: {column: columnId, stack: null, rank}}));
       }
+    },
+    onDragOver: (event: DragOverEvent) => {
+      if (id !== active?.id) return;
+      if (!event.over) return;
+      const currentIndex = items.indexOf(id.toString());
+      const newNoteIndex = items.indexOf(event.over.id.toString());
+
+      const newItems = arrayMove(items, currentIndex, newNoteIndex).map((item) => item.toString());
+
+      setItems(newItems);
     },
   });
 

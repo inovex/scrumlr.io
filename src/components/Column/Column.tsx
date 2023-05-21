@@ -199,7 +199,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <ul className="column__note-list">
             {localNotes.map((note) => (
               <li key={note}>
-                <Note noteId={note} viewer={viewer} colorClassName={colorClassName} />
+                <Note setItems={setItems} noteId={note} viewer={viewer} colorClassName={colorClassName} />
               </li>
             ))}
           </ul>

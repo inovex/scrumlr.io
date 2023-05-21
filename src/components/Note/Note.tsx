@@ -17,6 +17,7 @@ import {Sortable} from "components/DragAndDrop/Sortable";
 interface NoteProps {
   noteId: string;
   viewer: Participant;
+  setItems: (items: string[]) => void;
   colorClassName?: string;
 }
 
@@ -82,7 +83,13 @@ export const Note = (props: NoteProps) => {
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
   return (
-    <Sortable id={props.noteId} columnId={note?.position.column} className={classNames("note__root", props.colorClassName)} disabled={!(isModerator || allowStacking)}>
+    <Sortable
+      setItems={props.setItems}
+      id={props.noteId}
+      columnId={note?.position.column}
+      className={classNames("note__root", props.colorClassName)}
+      disabled={!(isModerator || allowStacking)}
+    >
       <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         {isImage ? (
           <div className="note__image-wrapper">

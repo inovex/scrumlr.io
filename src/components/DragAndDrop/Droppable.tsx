@@ -1,5 +1,5 @@
 import {Collision, useDndContext, useDndMonitor} from "@dnd-kit/core";
-import {SortableContext, useSortable} from "@dnd-kit/sortable";
+import {SortableContext, arrayMove, useSortable} from "@dnd-kit/sortable";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode} from "react";
@@ -39,7 +39,13 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
   useDndMonitor({
     onDragEnd: () => {
       if (!active) return;
+      /* if (hasActive && hasOver && topCollision) {
+        const overIndex = items.indexOf(topCollision.id.toString());
+        const activeIndex = items.indexOf(active.id.toString());
 
+        console.log("--- moving ---", arrayMove(items, activeIndex, overIndex));
+        setItems(arrayMove(items, activeIndex, overIndex));
+      } */
       if (topCollision && topCollision.id.toString() === id) {
         // store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: null, rank: 0}}));
       }
@@ -48,13 +54,23 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
       if (!active || !over) return;
 
       // from own column to column droppable
-      if (hasActive && isOverSelf) setItems([...items.filter((item) => item !== active.id.toString()), active.id.toString()]);
+      if (hasActive && isOverSelf) {
+        console.log(1);
+        setItems([...items.filter((item) => item !== active.id.toString()), active.id.toString()]);
+      }
       // from other column to column droppable
-      if (!hasActive && isOverSelf) setItems([...items, active.id.toString()]);
+      if (!hasActive && isOverSelf) {
+        console.log(2);
+        setItems([...items, active.id.toString()]);
+      }
       // from own column to other column/note
-      if (hasActive && !(hasOver || isOverSelf)) setItems(items.filter((item) => item !== active.id.toString()));
+      if (hasActive && !(hasOver || isOverSelf)) {
+        console.log(3);
+        setItems(items.filter((item) => item !== active.id.toString()));
+      }
       // from other column to over own note
       if (!hasActive && hasOver) {
+        console.log(4);
         const overIndex = items.indexOf(topCollision.id.toString());
         if (overIndex === -1) return;
         setItems([...items.slice(0, overIndex), active.id.toString(), ...items.slice(overIndex, items.length)]);
