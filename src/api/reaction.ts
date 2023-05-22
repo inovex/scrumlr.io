@@ -1,13 +1,14 @@
 import {SERVER_HTTP_URL} from "../config";
-import {Reaction} from "../types/reaction";
+import {Reaction, ReactionType} from "../types/reaction";
 
 export const ReactionAPI = {
-  addReaction: async (board: string, note: string, reactionType: string) => {
+  addReaction: async (board: string, note: string, reactionType: ReactionType) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${note}/reactions`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
+          note,
           reactionType,
         }),
       });
@@ -22,9 +23,9 @@ export const ReactionAPI = {
     }
   },
 
-  removeReaction: async (board: string, note: string, reaction: string) => {
+  deleteReaction: async (board: string, reaction: string) => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/notes/${note}/reactions/${reaction}`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {
         method: "DELETE",
         credentials: "include",
       });

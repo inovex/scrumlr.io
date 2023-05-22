@@ -1,4 +1,4 @@
-import {Reaction} from "../../types/reaction";
+import {Reaction, ReactionType} from "../../types/reaction";
 
 /** This object lists note object specific internal Redux Action types. */
 export const ReactionAction = {
@@ -24,12 +24,12 @@ export const ReactionActionFactory = {
   /**
    * Creates an action which should be dispatched when the user wants to add a reaction for the specified note.
    *
-   * @param reactionId which note is being reaction to
+   * @param noteId which note is being reaction to
    * @param reactionType the type of reaction
    */
-  addReaction: (reactionId: string, reactionType: string) => ({
+  addReaction: (noteId: string, reactionType: ReactionType) => ({
     type: ReactionAction.AddReaction,
-    reactionId,
+    noteId,
     reactionType,
   }),
 
