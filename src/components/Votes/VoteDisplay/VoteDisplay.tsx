@@ -31,13 +31,13 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         {isAdmin && (
           <>
             <div className="short-actions__short-action">
-              <button className="short-action__button" onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
+              <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
                 <FlagIcon />
               </button>
               <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
             </div>
             <div className="short-actions__short-action">
-              <button className="short-action__button" onClick={() => store.dispatch(Actions.abortVoting(voting!))}>
+              <button aria-label={t("VoteDisplay.abortActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.abortVoting(voting!))}>
                 <CancelIcon />
               </button>
               <span className="short-action__tooltip">{t("VoteDisplay.abortActionTooltip")}</span>
@@ -47,6 +47,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         {!isAdmin && (
           <div className="short-actions__short-action">
             <button
+              aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
               onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
             >

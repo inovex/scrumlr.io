@@ -110,7 +110,7 @@ export const Timer = (props: TimerProps) => {
       <div className="timer__short-actions">
         {isModerator ? (
           <div className="short-actions__short-action">
-            <button className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
+            <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
             <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
@@ -118,6 +118,7 @@ export const Timer = (props: TimerProps) => {
         ) : (
           <div className="short-actions__short-action">
             <button
+              aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
               onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
             >
