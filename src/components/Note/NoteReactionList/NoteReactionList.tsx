@@ -3,6 +3,7 @@ import "./NoteReactionList.scss";
 import {useAppSelector} from "../../../store";
 import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
+import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 
 interface NoteReactionListProps {
   noteId: string;
@@ -53,5 +54,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         }, []),
     isEqual
   );
-  return <div className="note-reaction-list__root">{reactions.length > 0 ? <div>{reactions.map((r) => `${r.reactionType}: ${r.amount}`).join(", ")}</div> : null}</div>;
+
+  return (
+    <div className="note-reaction-list__root">
+      {reactions.map((r) => (
+        <NoteReactionChip reaction={r} />
+      ))}
+    </div>
+  );
 };
