@@ -4,9 +4,9 @@ import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
 import {InfoBar} from "components/Infobar";
 import {BoardHeader} from "components/BoardHeader";
-import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
 import CustomDragLayer from "./CustomDragLayer";
+import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -121,6 +121,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <div className="board--empty">
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
+        <InfoBar />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <HotkeyAnchor />
         <main className="board" ref={boardRef}>
