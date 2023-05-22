@@ -54,14 +54,15 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           }
 
           return acc;
-        }, []),
+        }, [])
+        .sort((a, b) => a.reactionType.localeCompare(b.reactionType)), // always the same order to avoid confusion
     isEqual
   );
 
   return (
     <div className="note-reaction-list__root">
       {reactions.map((r) => (
-        <NoteReactionChip reaction={r} />
+        <NoteReactionChip reaction={r} key={r.reactionType} />
       ))}
     </div>
   );
