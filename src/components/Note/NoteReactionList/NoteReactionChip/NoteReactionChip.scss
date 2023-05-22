@@ -1,6 +1,8 @@
 @import "src/constants/style";
 
 .note-reaction-chip__root {
+  all: unset; // remove default buttons styling
+
   display: flex;
   flex-direction: row;
   gap: 3px;
