@@ -109,18 +109,22 @@ export const Timer = (props: TimerProps) => {
       </span>
       <div className="timer__short-actions">
         {isModerator ? (
-          <div className="short-actions__button-wrapper">
-            <button onClick={() => store.dispatch(Actions.cancelTimer())}>
+          <div className="short-actions__short-action">
+            <button className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
-            <span>{t("VoteDisplay.finishActionTooltip")}</span>
+            <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
           </div>
         ) : (
-          <div className="short-actions__button-wrapper">
-            <button onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true))}>
-              <CheckIcon className="short-actions-button__check-icon" />
+          <div className="short-actions__short-action">
+            <button
+              className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
+              onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+            >
+              <CheckIcon className="short-action__check-icon" />
+              <CancelIcon className="short-action__cancel-icon" />
             </button>
-            <span>Mark me as done</span>
+            <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
           </div>
         )}
       </div>

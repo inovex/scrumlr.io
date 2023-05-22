@@ -64,17 +64,17 @@ $vote-display__short-actions-height: 28px;
   display: flex;
 }
 
-.short-actions__button-wrapper {
+.short-actions__short-action {
   position: relative;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: calc($vote-display__short-actions-height / 2);
+  border-radius: $rounded--full;
 }
 
-.short-actions__button-wrapper > button {
+.short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-  border-radius: calc($vote-display__short-actions-height / 2);
+  border-radius: $rounded--full;
   background-color: $color-dark-gray;
   color: $menu-icon-background-color--dark;
   border: none;
@@ -84,22 +84,36 @@ $vote-display__short-actions-height: 28px;
   justify-content: center;
   align-items: center;
 }
-.short-actions__button-wrapper > button > svg {
+.short-action__button > svg {
+  position: absolute;
   height: $icon--small;
   width: $icon--small;
+}
+.short-action__button--ready > .short-action__cancel-icon,
+.short-action__button--unready > .short-action__cancel-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover > .short-action__check-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover > .short-action__cancel-icon {
+  visibility: visible;
 }
 .short-actions__button-wrapper > button > .short-actions-button__check-icon {
   width: 100%;
   height: 100%;
 }
+.short-action__button > .short-action__check-icon {
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+}
 
-.short-actions__button-wrapper > button:hover {
+.short-action__button:hover {
   background-color: $color-progress-circle;
   color: $color-white;
 }
 
-// Short Actions Button Tooltip
-.short-actions__button-wrapper > span {
+.short-action__tooltip {
   max-width: max-content;
   visibility: hidden;
   opacity: 0;
@@ -107,32 +121,31 @@ $vote-display__short-actions-height: 28px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  height: 36px;
-  border-radius: 18px;
-  padding: 5px $padding--default;
+  border-radius: $rounded--full;
+  padding: $padding--small $padding--default;
   background-color: $tooltip-background-color--light;
   color: $menu-icon-background-color--dark;
+  font-size: $text--base;
   font-weight: bold;
-  height: auto;
   bottom: calc(100% + 6px);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: $box-shadow--light;
   z-index: calc($infobar-z-index + 50);
 }
 @media (prefers-reduced-motion) {
-  .short-actions__button-wrapper > span {
+  .short-action__tooltip {
     transition: none;
   }
 }
-.short-actions__button-wrapper:hover > span {
+.short-actions__short-action:hover > .short-action__tooltip {
   visibility: visible;
   opacity: 1;
 }
-[theme="dark"] .short-actions__button-wrapper > span {
+[theme="dark"] .short-action__tooltip {
   background-color: $tooltip-background-color--dark;
   color: $color-white;
 }
 
-.short-actions__button-wrapper > span::after {
+.short-action__tooltip::after {
   content: "";
   position: absolute;
   border: 4px solid;
@@ -141,6 +154,6 @@ $vote-display__short-actions-height: 28px;
   transform: translateX(-50%);
   top: 100%;
 }
-[theme="dark"] .short-actions__button-wrapper > span::after {
+[theme="dark"] .short-action__tooltip::after {
   border-color: $tooltip-background-color--dark transparent transparent transparent;
 }
