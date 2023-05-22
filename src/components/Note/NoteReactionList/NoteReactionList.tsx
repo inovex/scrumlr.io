@@ -13,7 +13,9 @@ export interface ReactionModeled {
   reactionType: ReactionType;
   amount: number;
   users: Participant[];
-  reactedSelf: boolean;
+  // since we reduce the reactions, we still need to know what out specific reaction id is (if it exists) so that we can operate on it (e.g. remove)
+  myReactionId?: string;
+  noteId: string;
 }
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
@@ -28,25 +30,26 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     (state) =>
       state.reactions
         .filter((r) => r.note === props.noteId)
-        .reduce((acc: ReactionModeled[], reaction: Reaction) => {
+        .reduce((acc: ReactionModeled[], reaction: Reaction, _, self) => {
+          // check if a reaction of respective reaction type is already in the accumulator
           const existingReaction = acc.find((r) => r.reactionType === reaction.reactionType);
+          // get the participant who issued that reaction
           const participant = participants.find((p) => p?.user.id === reaction.user);
-          const existingParticipant = existingReaction?.users.find((p) => p.user.id === participant?.user.id);
-          const reactedSelf = participant?.user.id === me?.user.id;
+          // if yourself made a reaction of a respective type, get the id
+          const myReactionId = self.find((s) => s.user === me?.user.id && s.reactionType === reaction.reactionType)?.id;
 
           if (!participant) throw new Error("participant must exist");
 
           if (existingReaction) {
             existingReaction.amount++;
-            if (!existingParticipant) {
-              existingReaction.users.push(participant);
-            }
+            existingReaction.users.push(participant);
           } else {
             acc.push({
               reactionType: reaction.reactionType,
               amount: 1,
               users: [participant],
-              reactedSelf,
+              myReactionId,
+              noteId: props.noteId,
             });
           }
 
