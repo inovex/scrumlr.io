@@ -21,6 +21,7 @@ exports[`Timer should render correctly 1`] = `
       class="short-actions__short-action"
     >
       <button
+        aria-label="Finish"
         class="short-action__button"
       >
         <svg>
