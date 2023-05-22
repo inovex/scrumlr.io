@@ -9,7 +9,7 @@ interface NoteReactionListProps {
 }
 
 interface ReactionModeled {
-  reaction: Reaction;
+  reactionType: string;
   amount: number;
   users: Participant[];
 }
@@ -23,7 +23,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
       state.reactions
         .filter((r) => r.note === props.noteId)
         .reduce((acc: ReactionModeled[], reaction: Reaction) => {
-          const existingReaction = acc.find((r) => r.reaction.reactionType === reaction.reactionType);
+          const existingReaction = acc.find((r) => r.reactionType === reaction.reactionType);
           const participant = participants.find((p) => p?.user.id === reaction.user);
 
           if (!participant) throw new Error("participant must exist");
@@ -33,7 +33,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             existingReaction.users.push(participant);
           } else {
             acc.push({
-              reaction,
+              reactionType: reaction.reactionType,
               amount: 1,
               users: [participant],
             });
@@ -43,5 +43,5 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         }, []),
     isEqual
   );
-  return <div className="note-reaction-list__root">{reactions.length > 0 ? <div>{reactions.map((r) => `${r.reaction.reactionType}: ${r.amount}`).join(", ")}</div> : null}</div>;
+  return <div className="note-reaction-list__root">{reactions.length > 0 ? <div>{reactions.map((r) => `${r.reactionType}: ${r.amount}`).join(", ")}</div> : null}</div>;
 };
