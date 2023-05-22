@@ -121,6 +121,12 @@
     "navigateHome": "Home",
     "navigateBack": "Go back"
   },
+  "NotFoundPage": {
+    "title": "Oh no! Error",
+    "descriptionLine1": "This page does not exist.",
+    "descriptionLine2": "Go back to the Homepage.",
+    "navigateHome": "Back to Homepage"
+  },
   "JoinRequest": {
     "title": "Is requesting to participate",
     "accept": "Accept",
@@ -258,7 +264,9 @@
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
-    "noteDeleted": "The note has been deleted!"
+    "noteDeleted": "The note has been deleted!",
+    "ready": "Are you ready?",
+    "readyButton": "Ready!"
   },
   "Language": {
     "german": "German",

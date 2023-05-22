@@ -44,11 +44,10 @@ $settings-dialog-container--bottom: 62px;
   background: $color-white-one;
   width: 100%;
   padding-top: 50px;
-
   overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
-  background: $color-dark-one;
+  background: $color-dark-two;
 }
 .settings-dialog--selected .settings-dialog__content {
   display: block;
@@ -72,10 +71,10 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__sidebar {
   width: 100%;
-  background: $color-white;
+  background-color: $color-white;
 }
 [theme="dark"] .settings-dialog__sidebar {
-  background: $color-dark-mode;
+  background-color: $color-dark-mode-note;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -169,7 +168,7 @@ $settings-dialog-container--bottom: 62px;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-    background: $color-dark-mode;
+    background: $color-dark-mode-note;
   }
 }
 
@@ -203,12 +202,13 @@ $settings-dialog-container--bottom: 62px;
   width: 252px;
   margin: 0 $margin--large;
   border-radius: $rounded--full;
-  text-align: center;
   text-decoration: none;
   color: $color-black;
-  position: relative;
   outline: none;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 8px;
 
   &:hover {
     background: rgba(var(--accent-color-rgb), 0.8);
@@ -218,24 +218,32 @@ $settings-dialog-container--bottom: 62px;
   &:focus-visible {
     box-shadow: 0 0 0 2px var(--accent-color);
   }
+}
 
-  p {
-    margin: 0;
-    position: absolute;
-    left: 64px;
+.navigation-item__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+}
 
-    &:first-child {
-      font-size: $text-size--medium;
-      font-weight: 600;
-      top: 12px;
-    }
+.navigation-item__name {
+  font-size: $text--base;
+  line-height: $text--md;
+  font-weight: 700;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
-    &:nth-child(2) {
-      font-size: $text-size--small;
-      top: 30px;
-      opacity: 0.65;
-    }
-  }
+.navigation-item__description {
+  font-size: $text--xs;
+  line-height: $text--base;
+  font-weight: 500;
+  margin: 0;
+  width: max-content;
 }
 
 [theme="dark"] .navigation__item {
@@ -249,18 +257,11 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .navigation-item__icon {
-  position: absolute;
-  top: 8px;
-  left: 8px;
   width: 40px;
   height: 40px;
   border-radius: $rounded--full;
   background: var(--accent-color);
   color: $color-white;
-}
-
-.navigation-item__user-name {
-  white-space: nowrap;
 }
 
 .settings-dialog__container {

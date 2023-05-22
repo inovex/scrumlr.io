@@ -55,94 +55,126 @@ exports[`SettingsDialog should render correctly 1`] = `
                     class="navigation__item accent-color__backlog-blue"
                     href="/board"
                   >
-                    <p>
-                      SettingsDialog.BoardSettings
-                    </p>
-                    <p>
-                      SettingsDialog.BoardSettingsDescription
-                    </p>
                     <svg
                       class="navigation-item__icon"
                     >
                       icon-settings.svg
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        SettingsDialog.BoardSettings
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.BoardSettingsDescription
+                      </p>
+                    </div>
                   </a>
                   <a
                     class="navigation__item accent-color__poker-purple"
                     href="/participants"
                   >
-                    <p>
-                      SettingsDialog.Participants
-                    </p>
-                    <p>
-                      SettingsDialog.ParticipantsDescription
-                    </p>
                     <svg
                       class="navigation-item__icon"
                     >
                       icon-participants.svg
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        SettingsDialog.Participants
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.ParticipantsDescription
+                      </p>
+                    </div>
                   </a>
                   <a
                     class="navigation__item accent-color__lean-lilac"
                     href="/appearance"
                   >
-                    <p>
-                      SettingsDialog.Appearance
-                    </p>
-                    <p>
-                      SettingsDialog.AppearanceDescription
-                    </p>
                     <svg
                       class="navigation-item__icon"
                     >
                       icon-appearance.svg
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        SettingsDialog.Appearance
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.AppearanceDescription
+                      </p>
+                    </div>
                   </a>
                   <a
                     class="navigation__item accent-color__planning-pink"
                     href="/share"
                   >
-                    <p>
-                      SettingsDialog.ShareSession
-                    </p>
-                    <p>
-                      SettingsDialog.ShareSessionDescription
-                    </p>
                     <svg
                       class="navigation-item__icon"
                     >
                       icon-share.svg
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        SettingsDialog.ShareSession
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.ShareSessionDescription
+                      </p>
+                    </div>
                   </a>
                   <a
                     class="navigation__item accent-color__backlog-blue"
                     href="/export"
                   >
-                    <p>
-                      SettingsDialog.ExportBoard
-                    </p>
-                    <p>
-                      SettingsDialog.ExportBoardDescription
-                    </p>
                     <svg
                       class="navigation-item__icon"
                     >
                       icon-export.svg
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        SettingsDialog.ExportBoard
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.ExportBoardDescription
+                      </p>
+                    </div>
                   </a>
                   <a
                     class="navigation__item accent-color__lean-lilac"
                     href="/profile"
                   >
-                    <p
-                      class="navigation-item__user-name"
-                    >
-                      test-participants-self-user-name
-                    </p>
-                    <p>
-                      SettingsDialog.ProfileDescription
-                    </p>
                     <svg
                       class="avatar navigation-item__icon accent-color__lean-lilac"
                       height="280px"
@@ -615,6 +647,20 @@ exports[`SettingsDialog should render correctly 1`] = `
                         </g>
                       </g>
                     </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        test-participants-self-user-name
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        SettingsDialog.ProfileDescription
+                      </p>
+                    </div>
                   </a>
                 </nav>
               </div>
