@@ -1,0 +1,23 @@
+@import "src/constants/style";
+
+.note-reaction-chip__root {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+
+  padding: 5px 8px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
+}
+
+.note-reaction-chip__root--self {
+  background-color: var(--accent-color--desaturated-light);
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light-hover);
+  }
+}
