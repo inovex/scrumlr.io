@@ -18,14 +18,18 @@ exports[`Timer should render correctly 1`] = `
     class="timer__short-actions"
   >
     <div
-      class="short-actions__button-wrapper"
+      class="short-actions__short-action"
     >
-      <button>
+      <button
+        class="short-action__button"
+      >
         <svg>
           icon-cancel.svg
         </svg>
       </button>
-      <span>
+      <span
+        class="short-action__tooltip"
+      >
         Finish
       </span>
     </div>
