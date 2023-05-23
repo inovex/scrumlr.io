@@ -12,7 +12,7 @@ type SortableProps = {
   columnId?: string;
   children: ReactNode;
   disabled?: boolean;
-  setItems: (items: string[]) => void;
+  setItems?: (items: string[]) => void;
   className?: string;
 };
 
@@ -83,7 +83,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
         try {
           store.dispatch(Actions.editNote(active.id.toString(), {position}));
-          setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
+          if (setItems) setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
         } catch {}
 
         return;
@@ -115,7 +115,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
       const newItems = arrayMove(items, currentIndex, newNoteIndex).map((item) => item.toString());
 
-      setItems(newItems);
+      if (setItems) setItems(newItems);
     },
   });
 

@@ -17,7 +17,7 @@ import {Sortable} from "components/DragAndDrop/Sortable";
 interface NoteProps {
   noteId: string;
   viewer: Participant;
-  setItems: (items: string[]) => void;
+  setItems?: (items: string[]) => void;
   colorClassName?: string;
 }
 

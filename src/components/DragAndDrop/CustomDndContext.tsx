@@ -19,7 +19,6 @@ import {Note} from "components/Note";
 import {getColorClassName} from "constants/colors";
 import {MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
-import {createPortal} from "react-dom";
 import {useAppSelector} from "store";
 import {Column} from "types/column";
 
@@ -66,8 +65,6 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     if (isNote(overCollision)) setMaxCollision(overCollision);
   };
 
-  const onDragEnd = () => {};
-
   const collisionDetectionWrapper =
     (collisionDetection: CollisionDetection) =>
     (...[args]: Parameters<typeof collisionDetection>) => {
@@ -86,14 +83,12 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     };
 
   return (
-    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} onDragEnd={onDragEnd} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
+    <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
       {children}
-      {createPortal(
-        <DragOverlay zIndex={100} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
-          {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
-        </DragOverlay>,
-        document.body
-      )}
+
+      <DragOverlay zIndex={100} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
+        {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
+      </DragOverlay>
     </DndContext>
   );
 };

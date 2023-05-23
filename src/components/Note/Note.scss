@@ -70,7 +70,7 @@ body:not(:has(> div.drag-overlay)) .note:hover {
 
   &.note--stackBetween {
     transform: translateY(-8px) scale(1.02);
-    z-index: $note-z-index + 2 * $base-z-index-step;
+    z-index: $note-z-index + 2 * $base-z-index-step * 100;
 
     & ~ .note__in-stack {
       z-index: 0;
