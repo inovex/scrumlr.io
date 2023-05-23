@@ -36,7 +36,7 @@ export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], new
   const noteCollisions = collisions?.filter((collision) => !isColumn(collision));
   const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
 
-  if (!maxNoteCollision) return false;
+  if (!maxNoteCollision || maxNoteCollision.id === active?.id) return false;
 
   const collisionRatio = maxNoteCollision.data?.value;
 
@@ -56,8 +56,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const globalNotes = useAppSelector((state) => state.notes);
 
   const topCollision = collisions?.at(0);
-  const hasActive = !!active && items.includes(active.id.toString());
-  const hasOver = !!topCollision && items.includes(topCollision.id.toString());
+  /* const hasActive = !!active && items.includes(active.id.toString());
+  const hasOver = !!topCollision && items.includes(topCollision.id.toString()); */
 
   const [localItems, setLocalItems] = useState(items);
 
@@ -92,6 +92,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       if (!isActive(id, active)) return;
 
       if (collisions && topCollision) {
+        console.log(items === localItems);
         if (items !== localItems || isColumn(topCollision)) {
           const position = {
             column: event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId,
@@ -99,9 +100,6 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
             rank: globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank ?? 0,
           };
 
-          /* setLocalItems(items); */
-
-          console.log(items, localItems);
           console.log(globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())]));
           console.log(position);
 

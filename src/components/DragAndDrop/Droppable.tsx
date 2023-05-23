@@ -1,10 +1,8 @@
 import {Collision, useDndContext, useDndMonitor} from "@dnd-kit/core";
-import {SortableContext, arrayMove, useSortable} from "@dnd-kit/sortable";
+import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode} from "react";
-import store from "store";
-import {Actions} from "store/action";
 
 type DroppableProps = {
   id: string;
@@ -37,19 +35,6 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
   const isOverSelf = !!topCollision && topCollision.id.toString() === id;
 
   useDndMonitor({
-    onDragEnd: () => {
-      if (!active) return;
-      /* if (hasActive && hasOver && topCollision) {
-        const overIndex = items.indexOf(topCollision.id.toString());
-        const activeIndex = items.indexOf(active.id.toString());
-
-        console.log("--- moving ---", arrayMove(items, activeIndex, overIndex));
-        setItems(arrayMove(items, activeIndex, overIndex));
-      } */
-      if (topCollision && topCollision.id.toString() === id) {
-        // store.dispatch(Actions.editNote(active.id.toString(), {position: {column: id, stack: null, rank: 0}}));
-      }
-    },
     onDragOver: () => {
       if (!active || !over) return;
 
@@ -76,7 +61,7 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
         setItems([...items.slice(0, overIndex), active.id.toString(), ...items.slice(overIndex, items.length)]);
       }
       // from own column to own note droppable
-      // not necessary, will be handled in onDragEnd
+      // not necessary, will be handled in Sortable.tsx onDragEnd
     },
   });
 
