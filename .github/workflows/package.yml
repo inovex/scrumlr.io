@@ -31,7 +31,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,enable={{is_default_branch}},prefix=sha-,format=short
+            type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
             org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-frontend
@@ -52,7 +52,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,enable={{is_default_branch}},prefix=sha-,format=short
+            type=sha,prefix=sha-,format=short
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
             org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-server
