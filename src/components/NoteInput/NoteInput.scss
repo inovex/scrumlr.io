@@ -43,7 +43,6 @@ $note-input__input-right: 40px;
   border: none;
   margin-left: $margin--default;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
-  caret-color: var(--accent-color);
   outline: none;
 
   &:focus::placeholder {
