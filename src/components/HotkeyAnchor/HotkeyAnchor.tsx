@@ -119,10 +119,10 @@ export const HotkeyAnchor = () => {
 
   const showSettings = () => navigate("settings");
 
-  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive]);
-  useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation]);
-  useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady]);
-  useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand]);
+  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand, state.hotkeyNotificationsEnabled]);
   useHotkeys(SHOW_SETTINGS, showSettings, hotkeyOptions);
   useHotkeys(
     TOGGLE_SHOW_AUTHORS,
@@ -137,7 +137,7 @@ export const HotkeyAnchor = () => {
       }
     },
     hotkeyOptionsAdmin,
-    [state.showAuthors]
+    [state.showAuthors, state.hotkeyNotificationsEnabled]
   );
   useHotkeys(
     TOGGLE_SHOW_OTHER_USERS_NOTES,
@@ -152,7 +152,7 @@ export const HotkeyAnchor = () => {
       }
     },
     hotkeyOptionsAdmin,
-    [state.showNotesOfOtherUsers]
+    [state.showNotesOfOtherUsers, state.hotkeyNotificationsEnabled]
   );
   useHotkeys(
     TOGGLE_COLUMN_VISIBILITY,
@@ -167,7 +167,7 @@ export const HotkeyAnchor = () => {
       }
     },
     hotkeyOptionsAdmin,
-    [state.showHiddenColumns]
+    [state.showHiddenColumns, state.hotkeyNotificationsEnabled]
   );
   const hotkeyTimerCombo = SET_TIMER_FIRST_KEY.map((firstKey) => _.range(1, 10).map((minute) => `${firstKey}+${minute}`)).join(",");
   useHotkeys(hotkeyTimerCombo, (e) => {
