@@ -32,7 +32,7 @@ export const Note = (props: NoteProps) => {
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
     const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
     return {
@@ -49,14 +49,14 @@ export const Note = (props: NoteProps) => {
   /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
-      navigate(`note/${note!.id}/stack`);
+      navigate(`note/${note?.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
-        navigate(`note/${note!.id}/stack`);
+        navigate(`note/${note?.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
       navigate(`.`);
@@ -82,11 +82,13 @@ export const Note = (props: NoteProps) => {
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
+  if (!note) return null;
+
   return (
     <Sortable
       setItems={props.setItems}
       id={props.noteId}
-      columnId={note?.position.column}
+      columnId={note.position.column}
       className={classNames("note__root", props.colorClassName)}
       disabled={!(isModerator || allowStacking)}
     >
@@ -94,7 +96,7 @@ export const Note = (props: NoteProps) => {
         {isImage ? (
           <div className="note__image-wrapper">
             <img
-              src={addProtocol(note!.text)}
+              src={addProtocol(note.text)}
               className="note__image"
               alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
               draggable={false} // safari bugfix
@@ -102,13 +104,13 @@ export const Note = (props: NoteProps) => {
           </div>
         ) : (
           <p className="note__text">
-            {note!.id} - {note!.position.rank}
+            {note.id} - {note.position.rank}
           </p>
         )}
         <div className="note__footer">
           {(showAuthors || props.viewer.user.id === author.user!.id) && (
             <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
+              <UserAvatar id={note.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
               <figcaption className="note__author-name">{author.displayName}</figcaption>
             </figure>
           )}

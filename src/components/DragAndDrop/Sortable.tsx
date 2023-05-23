@@ -4,7 +4,7 @@ import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
-import store from "store";
+import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 
 type SortableProps = {
@@ -53,6 +53,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
   const combine = shouldCombine(id, items, newIndex, collisions, active);
 
+  const globalNotes = useAppSelector((state) => state.notes);
+
   const topCollision = collisions?.at(0);
   const hasActive = !!active && items.includes(active.id.toString());
   const hasOver = !!topCollision && items.includes(topCollision.id.toString());
@@ -60,6 +62,9 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
   const [localItems, setLocalItems] = useState(items);
 
   useDndMonitor({
+    onDragStart: () => {
+      setLocalItems(items);
+    },
     onDragEnd: (event: DragEndEvent) => {
       if (!columnId || !active) return;
 
@@ -102,9 +107,16 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       if (collisions && topCollision) {
         console.log(event);
         if (items !== localItems) {
+          // BUG: newIndex should not be the index but rather the rank of the note that was at that index
           const newIndex = items.length - items.indexOf(id.toString()) - 1;
-          console.log("REORDERING", newIndex);
-          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: columnId, stack: null, rank: newIndex}}));
+          const newColumnId = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
+          console.log(localItems[newIndex]);
+          const newRank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
+          console.log(active.id, newRank);
+
+          /* setLocalItems(items); */
+
+          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: newColumnId, stack: null, rank: newRank!}}));
           return;
         }
         if (isColumn(topCollision)) {
