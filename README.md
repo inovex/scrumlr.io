@@ -16,7 +16,7 @@
 
 <p align="center">
   <a href="https://scrumlr.io">
-    <img src="./public/screenshots/board.png" alt="scrumlr.io" />
+    <img src="board.png" alt="scrumlr.io" />
   </a>
 </p>
 
