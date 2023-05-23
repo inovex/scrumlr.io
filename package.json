@@ -10,7 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@fontsource/raleway": "^5.0.0",
+    "@fontsource/raleway": "^5.0.1",
     "@reduxjs/toolkit": "^1.9.5",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
