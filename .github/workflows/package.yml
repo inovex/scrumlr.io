@@ -62,6 +62,9 @@ jobs:
             org.opencontainers.image.title=scrumlr.io Server
             org.opencontainers.image.description=The server for scrumlr.io
 
+      - name: Print frontend image tags
+        run: echo ${{ steps.meta-frontend.outputs.tags }}
+
       - name: Set up Docker buildx
         uses: docker/setup-buildx-action@v2
 
