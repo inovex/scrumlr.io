@@ -80,37 +80,33 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
         const noteCollisions = collisions?.filter((collision) => !isColumn(collision));
         const maxNoteCollision = noteCollisions?.at(noteCollisions.length > 1 ? 1 : 0);
         if (!maxNoteCollision) return;
-        console.log("new index:", newIndex);
-        console.log("STACKING", items);
-        console.log("maybe on top of", maxNoteCollision.id);
-        console.log("or on top of", items[newIndex]);
-        console.log(event.active.id === event.over?.id);
-        // BUG: colmn should be columnId of maxNoteCollision
-        // const stackId = !event.over || maxNoteCollision.id !== active.id ? maxNoteCollision.id.toString() : event.over?.id.toString();
-        // const stackId = event.over?.id.toString() ?? maxNoteCollision.id.toString();
-        /* let stackId = maxNoteCollision.id.toString();
-        if (event.over && maxNoteCollision.id === active.id) {
-          stackId = event.over.id.toString();
-        } */
-        /* let stackId = event.over?.id.toString();
-        if (!stackId || stackId === active.id.toString()) {
-          stackId = maxNoteCollision.id.toString();
-        } */
-        const stackId = maxNoteCollision.id.toString();
-        console.log("stackId", stackId);
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {stack: stackId, column: columnId, rank: 0}}));
+
+        const note = globalNotes.find((n) => n.id === maxNoteCollision.id.toString());
+        const position = {
+          stack: maxNoteCollision.id.toString(),
+          column: note?.position.column ?? columnId,
+          rank: note?.position.rank ?? 0,
+        };
+
+        try {
+          store.dispatch(Actions.editNote(active.id.toString(), {position}));
+          setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
+        } catch {}
+
         return;
       }
 
       if (!isActive(id, active)) return;
+      console.log(globalNotes.find((note) => note.id === id.toString()));
 
       if (collisions && topCollision) {
+        console.log(isColumn(topCollision));
         console.log(event);
-        if (items !== localItems) {
+        if (items !== localItems || isColumn(topCollision)) {
           // BUG: newIndex should not be the index but rather the rank of the note that was at that index
           const newIndex = items.length - items.indexOf(id.toString()) - 1;
           const newColumnId = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
-          console.log(localItems[newIndex]);
+          console.log(items, localItems);
           const newRank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
           console.log(active.id, newRank);
 

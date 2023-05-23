@@ -167,7 +167,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <div className="column__content">
         <div className="column__header">
           <div className="column__header-title">
-            {renderColumnName()}
+            {/* renderColumnName() */ id.slice(0, 4)}
             {columnNameMode === "VIEW" && notes.length > 0 && (
               <span className="column__header-card-number" title={t("Column.notes", {count: notes.length})}>
                 {notes.length}
