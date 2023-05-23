@@ -68,13 +68,6 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
     onDragEnd: (event: DragEndEvent) => {
       if (!columnId || !active) return;
 
-      /*  if (combine) {
-        // combine notes
-        console.log("STACKING");
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {stack: id.toString(), column: columnId, rank: 0}}));
-        return;
-      } */
-
       if (shouldStack(id, items, newIndex, collisions, active)) {
         // combine notes
         const noteCollisions = collisions?.filter((collision) => !isColumn(collision));
@@ -97,41 +90,23 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       }
 
       if (!isActive(id, active)) return;
-      console.log(globalNotes.find((note) => note.id === id.toString()));
 
       if (collisions && topCollision) {
-        console.log(isColumn(topCollision));
-        console.log(event);
         if (items !== localItems || isColumn(topCollision)) {
-          // BUG: newIndex should not be the index but rather the rank of the note that was at that index
-          const newIndex = items.length - items.indexOf(id.toString()) - 1;
-          const newColumnId = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
-          console.log(items, localItems);
-          const newRank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
-          console.log(active.id, newRank);
+          const position = {
+            column: event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId,
+            stack: null,
+            rank: globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank ?? 0,
+          };
 
           /* setLocalItems(items); */
 
-          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: newColumnId, stack: null, rank: newRank!}}));
-          return;
+          console.log(items, localItems);
+          console.log(globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())]));
+          console.log(position);
+
+          store.dispatch(Actions.editNote(active.id.toString(), {position}));
         }
-        if (isColumn(topCollision)) {
-          console.log("MOVE TO COLUMN 1");
-          // BUG: rank: 0 is not correct
-          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: topCollision.id.toString(), stack: null, rank: 0}}));
-          return;
-        }
-        if (active.id === topCollision.id && collisions?.at(1) && isColumn(collisions[1])) {
-          console.log("MOVE TO COLUMN 2");
-          store.dispatch(Actions.editNote(active.id.toString(), {position: {column: collisions[1].id.toString(), stack: null, rank: 0}}));
-          return;
-        }
-      }
-      if (hasActive && hasOver && topCollision && active?.id === id) {
-        const rank = items.length - newIndex - 1;
-        // move note within column
-        console.log("REORDERING, rank: ", rank);
-        store.dispatch(Actions.editNote(active.id.toString(), {position: {column: columnId, stack: null, rank}}));
       }
     },
     onDragOver: (event: DragOverEvent) => {
