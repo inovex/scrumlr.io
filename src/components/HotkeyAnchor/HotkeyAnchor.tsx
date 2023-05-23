@@ -51,8 +51,6 @@ export const HotkeyAnchor = () => {
     _.isEqual
   );
 
-  console.log(state);
-
   const {raisedHand} = state.currentUser;
   const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
   const isReady = state.currentUser.ready;
