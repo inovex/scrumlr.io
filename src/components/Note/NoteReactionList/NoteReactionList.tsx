@@ -1,9 +1,10 @@
 import {isEqual} from "underscore";
-import "./NoteReactionList.scss";
+import {ReactComponent as IconEmoji} from "assets/icon-dots.svg";
 import {useAppSelector} from "../../../store";
 import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
+import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
   noteId: string;
@@ -64,6 +65,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
       {reactions.map((r) => (
         <NoteReactionChip reaction={r} key={r.reactionType} />
       ))}
+      <div className="note-reaction-list__add-reaction-sticker-container">
+        <IconEmoji className="note-reaction-list__add-reaction-sticker" />
+      </div>
     </div>
   );
 };

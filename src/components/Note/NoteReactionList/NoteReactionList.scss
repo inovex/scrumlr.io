@@ -1,5 +1,28 @@
+@import "src/constants/style";
+
 .note-reaction-list__root {
   display: flex;
   flex-direction: row;
   gap: 5px;
+}
+
+.note-reaction-list__add-reaction-sticker-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
+}
+
+.note-reaction-list__add-reaction-sticker {
+  width: $icon--large;
+  height: $icon--large;
 }
