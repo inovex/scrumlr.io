@@ -118,7 +118,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         <span
           class="settings-option-button__label"
         >
-          Show hotkey notifications
+          Appearance.showHotkeyNotifications
         </span>
         <div
           class="toggle"
