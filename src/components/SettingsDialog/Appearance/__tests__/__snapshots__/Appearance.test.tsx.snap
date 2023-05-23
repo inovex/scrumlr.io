@@ -110,6 +110,21 @@ exports[`Appearance should render all Settings correctly 1`] = `
         </label>
       </form>
     </div>
+    <section>
+      <button
+        class="settings-option-button"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show hotkey notifications
+        </span>
+        <div
+          class="toggle"
+        />
+      </button>
+    </section>
     <div
       class="settings-dropdown"
     >
