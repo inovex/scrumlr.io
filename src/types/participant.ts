@@ -16,3 +16,5 @@ export type ParticipantsState = null | {
   self: Participant;
   focusInitiator: Participant | null;
 };
+
+export type ParticipantExtendedInfo = Participant & {displayName: string; isSelf: boolean};
