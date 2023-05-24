@@ -12,8 +12,10 @@ export const NotificationSettings: FC = () => {
   return (
     <section>
       <SettingsButton
+        aria-checked={hotkeyNotificationsEnabled}
         label={t("Appearance.showHotkeyNotifications")}
         onClick={() => (hotkeyNotificationsEnabled ? store.dispatch(Actions.disableHotkeyNotifications()) : store.dispatch(Actions.enableHotkeyNotifications()))}
+        role="switch"
       >
         <Toggle active={hotkeyNotificationsEnabled} />
       </SettingsButton>

@@ -112,7 +112,9 @@ exports[`Appearance should render all Settings correctly 1`] = `
     </div>
     <section>
       <button
+        aria-label="Appearance.showHotkeyNotifications"
         class="settings-option-button"
+        role="switch"
         type="button"
       >
         <span
