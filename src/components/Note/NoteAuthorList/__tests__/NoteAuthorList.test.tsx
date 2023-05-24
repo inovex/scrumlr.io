@@ -4,7 +4,7 @@ import getTestStore from "utils/test/getTestStore";
 import {NoteAuthorList} from "../NoteAuthorList";
 import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {render} from "testUtils";
-import getTestParticipant from "../../../../utils/test/getTestParticipant";
+import getTestParticipant from "utils/test/getTestParticipant";
 
 const AUTHOR1: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}}), isSelf: true, displayName: "Me"};
 const AUTHOR2: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}}), isSelf: false, displayName: "test-user-2"};
