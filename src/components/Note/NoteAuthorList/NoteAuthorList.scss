@@ -51,9 +51,7 @@ $name-gap: 4px;
   display: inline-flex;
   width: $icon--medium;
   height: $icon--medium;
-
-  font-size: $text-size--small;
-
+  font-size: $text--xs;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
 
@@ -73,7 +71,7 @@ $name-gap: 4px;
 
 .note__author-name {
   color: $color-dark-gray;
-  font-size: $text-size--small;
+  font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
   line-height: $line-height--small;
 }
