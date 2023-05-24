@@ -8,7 +8,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   feedbackEnabled: false,
   hotkeysAreActive: true,
   noteFocused: false,
-  hotkeyNotificationsEnabled: typeof window !== "undefined" && window.localStorage.getItem("hotkeyNotificationsEnabled") !== "false",
+  hotkeyNotificationsEnabled: typeof window !== "undefined" && window.localStorage.getItem("scrumlr/hotkeyNotificationsEnabled") !== "false",
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

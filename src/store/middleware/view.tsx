@@ -26,13 +26,13 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
 
   if (action.type === Action.EnableHotkeyNotifications) {
     if (typeof window !== undefined) {
-      window.localStorage.setItem("hotkeyNotificationsEnabled", JSON.stringify(true));
+      window.localStorage.setItem("scrumlr/hotkeyNotificationsEnabled", JSON.stringify(true));
     }
   }
 
   if (action.type === Action.DisableHotkeyNotifications) {
     if (typeof window !== undefined) {
-      window.localStorage.setItem("hotkeyNotificationsEnabled", JSON.stringify(false));
+      window.localStorage.setItem("scrumlr/hotkeyNotificationsEnabled", JSON.stringify(false));
     }
   }
 };
