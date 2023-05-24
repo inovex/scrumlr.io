@@ -47,24 +47,13 @@ export const BoardSettings = () => {
     setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
       store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
-      navigator.clipboard.writeText(newPassword).then(() =>
-        Toast.success(
-          <div>
-            <div>{t("Toast.passwordCopied")}</div>
-          </div>,
-          TOAST_TIMER_SHORT
-        )
-      );
+      navigator.clipboard.writeText(newPassword).then(() => Toast.success({title: t("Toast.passwordCopied"), autoClose: TOAST_TIMER_SHORT}));
       setIsProtected(true);
     } else if (isProtected || isProtectedOnInitialSettingsOpen) {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnInitialSettingsOpen(false);
       setIsProtected(false);
-      Toast.info(
-        <div>
-          <div>{t("Toast.boardMadePublic")}</div>
-        </div>
-      );
+      Toast.info({title: t("Toast.boardMadePublic"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
@@ -234,6 +223,8 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
+              icon={DeleteIcon}
+              warning
             />
           )}
         </div>

@@ -55,9 +55,15 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
-    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "deleteBoard": "Bist du dir absolut sicher, dass du die Sitzung löschen möchtest?",
+    "deleteNote": "Bist du dir sicher, dass du das Kärtchen löschen möchtest?",
+    "deleteNoteButton": "Kärtchen löschen",
+    "deleteStackButton": "Stapel löschen",
+    "deleteOptions": "Was möchtest du löschen?",
+    "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "cancel": "Abbrechen"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -114,6 +120,12 @@
   "ErrorPage": {
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
+  },
+  "NotFoundPage": {
+    "title": "Och nö! Fehler",
+    "descriptionLine1": "Diese Seite existiert nicht.",
+    "descriptionLine2": "Geh zur Startseite zurück.",
+    "navigateHome": "Zurück zur Startseite"
   },
   "JoinRequest": {
     "title": "Möchte der Sitzung beitreten",
@@ -249,10 +261,12 @@
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
-    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt!",
+    "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
-    "noteDeleted": "Die Karte wurde gelöscht!"
+    "noteDeleted": "Die Karte wurde gelöscht!",
+    "ready": "Bist du fertig?",
+    "readyButton": "Fertig!"
   },
   "Language": {
     "german": "Deutsch",

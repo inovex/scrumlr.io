@@ -141,6 +141,16 @@ $line-height--small: 16px;
 $line-height--medium: 20px;
 $line-height--large: 32px;
 
+// new font size constants
+$text--xs: 0.75rem; // 12px
+$text--sm: 0.875rem; // 14px
+$text--base: 1rem; // 16px
+$text--md: 1.25rem; // 20px
+$text--lg: 1.5rem; // 24px
+$text--xl: 2rem; // 32px
+$text--2xl: 2.5rem; // 40px
+$text--3xl: 3.875rem; // 62px
+
 // filters
 $darken--slightly: brightness(0.9);
 $brighten--slightly: brightness(1.1);
