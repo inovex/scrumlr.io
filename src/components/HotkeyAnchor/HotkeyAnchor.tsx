@@ -62,11 +62,11 @@ export const HotkeyAnchor = () => {
     enabled: state.hotkeysAreActive && isAdmin,
   };
 
-  function dispatchHotkeyNotification(title: string) {
+  const dispatchHotkeyNotification = (title: string) => {
     if (state.hotkeyNotificationsEnabled) {
       Toast.info({title, autoClose: TOAST_TIMER_SHORT});
     }
-  }
+  };
 
   const toggleHotkeys = () => {
     if (state.hotkeysAreActive) {
