@@ -28,7 +28,6 @@ export const Note = (props: NoteProps) => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
-  const noteChildren = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId));
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
@@ -38,7 +37,11 @@ export const Note = (props: NoteProps) => {
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
-    const childrenNoteAuthors = noteChildren.map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
+    const childrenNoteAuthors = state.notes
+      // get all notes which are in the same stack as the main note
+      .filter((n) => n.position.stack === props.noteId)
+      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
+      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
     const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
     // process and filter
     const allAuthors = allAuthorsRaw
