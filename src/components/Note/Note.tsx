@@ -5,15 +5,15 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
-import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {Participant, ParticipantExtendedInfo} from "types/participant";
 import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 
 interface NoteProps {
   noteId: string;
@@ -29,21 +29,49 @@ export const Note = (props: NoteProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
-  const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
-    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
-    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
-    return {
-      ...noteAuthor,
-      displayName,
-      isSelf,
-    };
-  }, isEqual);
-
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  // all authors of a note, including its children if it's a stack.
+  // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
+  const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
+    const childrenNoteAuthors = state.notes
+      // get all notes which are in the same stack as the main note
+      .filter((n) => n.position.stack === props.noteId)
+      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
+      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
+    const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
+    // process and filter
+    const allAuthors = allAuthorsRaw
+      .map((a) => {
+        const isSelf = a?.user.id === state.participants?.self.user.id;
+        const displayName = isSelf ? t("Note.me") : a!.user.name;
+        return {
+          ...a,
+          displayName,
+          isSelf,
+        } as ParticipantExtendedInfo;
+      })
+      // remove duplicates (because notes can have multiple children by the same authors)
+      .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
+
+    // if self is part of the authors, we always want it to be visible
+    const selfIndex = allAuthors.findIndex((a) => a.isSelf);
+    if (selfIndex > 1) {
+      // in-place swap with second author
+      [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
+    }
+
+    // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
+    // the other authors are excluded as we only require the stack author
+    if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
+      return [allAuthors[0]]; // stack author is always first element
+    }
+
+    return allAuthors;
+  }, isEqual);
 
   /* eslint-disable */
   useEffect(() => {
@@ -121,7 +149,7 @@ export const Note = (props: NoteProps) => {
             <img
               src={addProtocol(note!.text)}
               className="note__image"
-              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              alt={t("Note.userImageAlt", {user: authors[0].isSelf ? t("Note.you") : authors[0].displayName})}
               draggable={false} // safari bugfix
             />
           </div>
@@ -129,12 +157,7 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{note!.text}</p>
         )}
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === author.user!.id) && (
-            <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{author.displayName}</figcaption>
-            </figure>
-          )}
+          <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>
