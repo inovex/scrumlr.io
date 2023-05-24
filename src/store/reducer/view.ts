@@ -1,5 +1,7 @@
 import {ViewState} from "types/view";
 import {Action, ReduxAction} from "store/action";
+import {getFromStorage} from "utils/storage";
+import {HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
 
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
@@ -8,7 +10,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   feedbackEnabled: false,
   hotkeysAreActive: true,
   noteFocused: false,
-  hotkeyNotificationsEnabled: typeof window !== "undefined" && window.localStorage.getItem("scrumlr/hotkeyNotificationsEnabled") !== "false",
+  hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
