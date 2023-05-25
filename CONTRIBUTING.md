@@ -1,5 +1,5 @@
 # Contributing
-Thank you for considering contributing to Scrumlr and taking the time to explore our contribution guide. We greatly appreciate your interest and willingness to help improve Scrumlr with your valuable contributions. Your involvement and contributions play a significant role in enhancing the project and making it even better. We warmly welcome pull requests from all contributors, big or small. For major changes, we kindly request [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first, allowing us to collaborate and discuss your ideas and proposed changes. Once again, we extend our heartfelt gratitude for your dedication and passion in helping us shape the future of Scrumlr.
+Thank you for considering contributing to Scrumlr and taking the time to explore our contribution guide. We greatly appreciate your interest and willingness to help improve Scrumlr with your valuable contributions. Your involvement and contributions play a significant role in enhancing Scrumlr and making it even better. We warmly welcome pull requests from all contributors, big or small. For major changes, we kindly request [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first, allowing us to collaborate and discuss your ideas and proposed changes. Once again, we extend our heartfelt gratitude for your dedication and passion in helping us shape the future of Scrumlr.
 
 ## Prerequisites
 Before you start contributing to our web application, please ensure that you have the following prerequisites set up on your development environment. On the front-end, you'll need to have **Node.js** installed, as well as **Yarn** (a fast and reliable package manager) to work with **React** and **TypeScript**. For the back-end, make sure you have **Go** installed, which will be used to build and run the back-end. Additionally, **Docker** is required to run the database locally. You can install Docker by following the official installation instructions for your operating system. Having these prerequisites in place will enable you to seamlessly set up and contribute to our web application. If you have any questions or need assistance with the setup, feel free to reach out for support.
@@ -75,6 +75,16 @@ The 'Visual Changes' section of a pull request focuses on documenting any altera
 
 ## Code Review
 Code reviews are mandatory in our project. While it may add overhead to each change, it plays a crucial role in maintaining code quality. Code reviews ensure that simple yet often overlooked problems are identified and resolved early on, reducing the likelihood of bugs and technical debt. By engaging in code reviews, team members can leverage their collective expertise, identify potential improvements, and maintain consistent coding standards. 
+
+## Contact and Communication
+
+If you have any questions, need assistance, or would like to discuss any aspect of Scrumlr, we encourage you to reach out to us. The [GitHub Discussions](https://github.com/inovex/scrumlr.io/discussions) section is a great place for community engagement.
+- **Q&A**: The Discussions Q&A section is the appropriate place to ask questions, seek clarifications, and engage in technical discussions. Please make sure to search for existing discussions and questions before starting a new thread to avoid duplicates and find relevant information.
+- **Proposals**: If you have a feature request or would like to propose an idea for Scrumlr, the Discussions Proposal section is the right place. This section enables you to suggest new features, improvements, or changes to Scrumlr.
+
+Additionally, you can use the issue tracker for reporting bugs. Our team actively monitors the issue tracker and will respond as soon as possible.
+
+We value your input, feedback, and contributions, and we're here to support you throughout your journey with Scrumlr. Don't hesitate to engage in discussions, propose ideas, or raise questions – together, we can shape the future of Scrumlr!
 
 ## Code of Conduct
 See the [Code of Conduct](./CODE_OF_CONDUCT.md) file.
