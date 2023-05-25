@@ -34,7 +34,7 @@
 
 ## Contributing
 
-- Missing something? Add a **Proposal** to [GitHub Discussions](https://github.com/inovex/scrumlr.io/discussions/new?category=proposals)
+- Missing something? Add a **Proposal** to [GitHub Discussions.](https://github.com/inovex/scrumlr.io/discussions/new?category=proposals)
 - Found a bug? [Report here!](https://github.com/inovex/scrumlr.io/issues)
 - Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
 
