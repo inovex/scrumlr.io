@@ -24,7 +24,7 @@ $ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disab
 
 
 ## Pull Request Guidelines
-This section outlines the typical structure and guidelines followed for pull requests in our repositories. This section provides a set of instructions and recommendations to ensure consistency and clarity when submitting pull requests. It covers the expected format, information, and steps to follow when creating a pull request
+This section outlines the typical structure and guidelines followed for pull requests in our repositories. This section provides a set of instructions and recommendations to ensure consistency and clarity when submitting pull requests. It covers the expected format, information, and steps to follow when creating a pull request.
 
 ### Title
 Make sure the title starts with a semantic prefix:
@@ -41,6 +41,8 @@ Make sure the title starts with a semantic prefix:
 
 ### Description
 The description section serves as a crucial component of a pull request, providing an overview of the changes made and explaining the purpose and context of the proposed modifications. It should clearly articulate the problem being addressed or the feature being added, along with a concise explanation of how the changes solve the issue. A well-written description is informative, organized, and easy to comprehend, allowing reviewers to assess the impact and significance of the proposed changes. It should be concise and to the point while still providing enough information to convey the purpose and significance of the pull request.
+
+If your pull request refers to or fixes an issue, be sure to add refs #XXX or fixes #XXX to the PR description. Replacing XXX with the respective issue number. See more about Linking a pull request to an issue.
 
 ### Changelog
 The Changelog section of a pull request provides a concise and organized summary of the changes made to the code base, documentation, or any other relevant components. It is typically presented as a bullet point list, highlighting the specific modifications introduced by the pull request. The Changelog serves as a valuable reference for developers and project maintainers, enabling them to quickly grasp the nature and extent of the changes. Each bullet point in the Changelog should focus on a specific alteration or addition, providing a clear and brief description of the corresponding update. 
