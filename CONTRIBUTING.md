@@ -1,10 +1,21 @@
 # Contributing
 Thank you for considering contributing to Scrumlr and taking the time to explore our contribution guide. We greatly appreciate your interest and willingness to help improve Scrumlr with your valuable contributions. Your involvement and contributions play a significant role in enhancing Scrumlr and making it even better. We warmly welcome pull requests from all contributors, big or small. For major changes, we kindly request [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first, allowing us to collaborate and discuss your ideas and proposed changes. Once again, we extend our heartfelt gratitude for your dedication and passion in helping us shape the future of Scrumlr.
 
+- [Prerequisites](#prerequisites)
+- [Development](#development)
+- [Testing](#testing)
+- [Translating](#translating)
+- [Definition of Done](#definition-of-done)
+- [Pull Request Guidelines](#pull-request-guidelines)
+- [Code Review](#code-review)
+- [Contact and Communication](#contact-and-communication)
+- [Code of Conduct](#code-of-conduct)
+- [License](#license)
+
 ## Prerequisites
 Before you start contributing to our web application, please ensure that you have the following prerequisites set up on your development environment. On the front-end, you'll need to have **Node.js** installed, as well as **Yarn** (a fast and reliable package manager) to work with **React** and **TypeScript**. For the back-end, make sure you have **Go** installed, which will be used to build and run the back-end. Additionally, **Docker** is required to run the database locally. You can install Docker by following the official installation instructions for your operating system. Having these prerequisites in place will enable you to seamlessly set up and contribute to our web application. If you have any questions or need assistance with the setup, feel free to reach out for support.
 
-## Setup
+## Development
 1. Fork and clone the repository
 2. Create a branch for your pull request with `git checkout -b your-branch-name`
 
@@ -24,8 +35,19 @@ $ docker compose --project-directory server/ --profile build up -d
 $ docker compose --project-directory server/ --profile dev up -d
 $ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
 ```
+## Testing
+To run the tests locally, you can use the following command in your terminal:
+```bash
+yarn test
+```
 
-## Translation
+This command will execute the test suite and provide you with detailed feedback on the test results, including any failures or errors encountered. Running tests locally helps you verify that your changes have not introduced any regressions and ensures that the existing functionality remains intact.
+
+In addition to local testing, we utilize GitHub Actions to automate the testing process for every pull request. GitHub Actions automatically runs the test suite against the proposed changes, providing a clear indication of whether the tests pass or not. This ensures that all tests are passing before merging any changes into the main branch, maintaining the stability and integrity of our codebase.
+
+We strongly encourage contributors to write new tests when introducing new features or modifying existing functionality. These tests help validate the behavior and correctness of the code, making it easier to identify and fix issues early on.
+
+## Translating
 If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
 
 ## Definition of Done
