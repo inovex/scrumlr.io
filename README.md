@@ -60,9 +60,9 @@ $ cd scrumlr.io
 
 ## Contributing
 
-You're very welcome to be part of this project. You can contribute by opening an issue, by
-fixing a bug or by adding a feature and open a pull request. Just make sure that the jobs
-`yarn test` and `yarn lint` are passing and that every change is covered by unit tests.
+- Missing something? Add a **Proposal** to [GitHub Discussions](https://github.com/inovex/scrumlr.io/discussions/new?category=proposals)
+- Found a bug? [Report here!](https://github.com/inovex/scrumlr.io/issues)
+- Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
 
 ## Our team and beloved friends
 
