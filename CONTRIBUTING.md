@@ -1,5 +1,5 @@
 # Contributing
-Thank you for looking into our contribution guide, and taking the time to improve Scrumlr with your contribution. Pull requests are welcome. For major changes, please [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first to discuss what you would like to change.
+Thank you for considering contributing to Scrumlr and taking the time to explore our contribution guide. We greatly appreciate your interest and willingness to help improve Scrumlr with your valuable contributions. Your involvement and contributions play a significant role in enhancing the project and making it even better. We warmly welcome pull requests from all contributors, big or small. For major changes, we kindly request [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first, allowing us to collaborate and discuss your ideas and proposed changes. Once again, we extend our heartfelt gratitude for your dedication and passion in helping us shape the future of Scrumlr.
 
 ## Setup
 1. Fork and clone the repository
@@ -22,6 +22,23 @@ $ docker compose --project-directory server/ --profile dev up -d
 $ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
 ```
 
+## Definition of Done
+Behold our Definition of Done, an agreement we have established to ensure the quality and completeness of our work:
+
+- If the pull request is based on an issue:
+  - All (sub-) tasks have been diligently completed.
+  - Every acceptance criterion has been successfully met.
+- The code is meticulously implemented, satisfying these criteria:
+  - It seamlessly passes the lint tests, showcasing our commitment to clean code.
+  - BEM-CSS methodology is employed, promoting a modular and maintainable codebase.
+- Variable names are thoughtfully chosen, conveying clear meaning and intent.
+- Documentation within the codebase is present where necessary, empowering future developers.
+- Both light and dark themes are gracefully supported and extensively tested.
+- The design implementation is exemplary, exhibiting responsiveness across all devices and screen sizes.
+- Rigorous testing has been conducted across commonly used browsers, including Chrome, Firefox, and Safari.
+- All existing tests continue to pass, assuring the preservation of expected functionality.
+- New tests have been meticulously introduced to cover newly implemented features.
+- Prior to merging into our main branch, a diligent code review by a fellow team member has been undertaken, ensuring quality, adherence to best practices, and fostering collaborative growth.
 
 ## Pull Request Guidelines
 This section outlines the typical structure and guidelines followed for pull requests in our repositories. This section provides a set of instructions and recommendations to ensure consistency and clarity when submitting pull requests. It covers the expected format, information, and steps to follow when creating a pull request.
@@ -50,23 +67,11 @@ The Changelog section of a pull request provides a concise and organized summary
 ### Visual Changes
 The 'Visual Changes' section of a pull request focuses on documenting any alterations to the user interface or visual appearance of a component or part of the web application. This section is particularly useful when there are noticeable visual modifications resulting from the pull request, such as changes to the design, layout, or styling. It is common practice to include 'Before' and 'After' screenshots to clearly illustrate the visual differences. If a new feature or part of the web app has been implemented, a screenshot showcasing the new addition should be included as well. 
 
-## Definition of Done
-Behold our Definition of Done, an agreement we have established to ensure the quality and completeness of our work:
-
-- If the pull request is based on an issue:
-  - All (sub-) tasks have been diligently completed.
-  - Every acceptance criterion has been successfully met.
-- The code is meticulously implemented, satisfying these criteria:
-  - It seamlessly passes the lint tests, showcasing our commitment to clean code.
-  - BEM-CSS methodology is employed, promoting a modular and maintainable codebase.
-- Variable names are thoughtfully chosen, conveying clear meaning and intent.
-- Documentation within the codebase is present where necessary, empowering future developers.
-- Both light and dark themes are gracefully supported and extensively tested.
-- The design implementation is exemplary, exhibiting responsiveness across all devices and screen sizes.
-- Rigorous testing has been conducted across commonly used browsers, including Chrome, Firefox, and Safari.
-- All existing tests continue to pass, assuring the preservation of expected functionality.
-- New tests have been meticulously introduced to cover newly implemented features.
-- Prior to merging into our main branch, a diligent code review by a fellow team member has been undertaken, ensuring quality, adherence to best practices, and fostering collaborative growth.
+## Code Review
+Code reviews are mandatory in our project. While it may add overhead to each change, it plays a crucial role in maintaining code quality. Code reviews ensure that simple yet often overlooked problems are identified and resolved early on, reducing the likelihood of bugs and technical debt. By engaging in code reviews, team members can leverage their collective expertise, identify potential improvements, and maintain consistent coding standards. 
 
 ## Translation
 If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
+
+## License
+See the [LICENSE](./LICENSE) file for licensing information.
