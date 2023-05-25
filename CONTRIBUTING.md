@@ -25,6 +25,9 @@ $ docker compose --project-directory server/ --profile dev up -d
 $ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
 ```
 
+## Translation
+If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
+
 ## Definition of Done
 Behold our Definition of Done, an agreement we have established to ensure the quality and completeness of our work:
 
@@ -48,16 +51,16 @@ This section outlines the typical structure and guidelines followed for pull req
 
 ### Title
 Make sure the title starts with a semantic prefix:
--   **feat**: A new feature
--   **fix**: A bug fix
--   **docs**: Documentation only changes
--   **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
--   **refactor**: A code change that neither fixes a bug nor adds a feature
--   **perf**: A code change that improves performance
--   **test**: Adding missing tests or correcting existing tests
--   **build**: Changes that affect the build system 
--   **chore**: Other changes that don't modify src or test files
--   **revert**: Reverts a previous commit
+-   **feat**: A new feature.
+-   **fix**: A bug fix.
+-   **docs**: Documentation only changes.
+-   **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
+-   **refactor**: A code change that neither fixes a bug nor adds a feature.
+-   **perf**: A code change that improves performance.
+-   **test**: Adding missing tests or correcting existing tests.
+-   **build**: Changes that affect the build system.
+-   **chore**: Other changes that don't modify src or test files.
+-   **revert**: Reverts a previous commit.
 
 ### Description
 The description section serves as a crucial component of a pull request, providing an overview of the changes made and explaining the purpose and context of the proposed modifications. It should clearly articulate the problem being addressed or the feature being added, along with a concise explanation of how the changes solve the issue. A well-written description is informative, organized, and easy to comprehend, allowing reviewers to assess the impact and significance of the proposed changes. It should be concise and to the point while still providing enough information to convey the purpose and significance of the pull request.
@@ -73,8 +76,8 @@ The 'Visual Changes' section of a pull request focuses on documenting any altera
 ## Code Review
 Code reviews are mandatory in our project. While it may add overhead to each change, it plays a crucial role in maintaining code quality. Code reviews ensure that simple yet often overlooked problems are identified and resolved early on, reducing the likelihood of bugs and technical debt. By engaging in code reviews, team members can leverage their collective expertise, identify potential improvements, and maintain consistent coding standards. 
 
-## Translation
-If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
+## Code of Conduct
+See the [Code of Conduct](./CODE_OF_CONDUCT.md) file.
 
 ## License
 See the [LICENSE](./LICENSE) file for licensing information.
