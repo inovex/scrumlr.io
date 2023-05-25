@@ -20,43 +20,15 @@
   </a>
 </p>
 
-## Getting Started
-
-Checkout the sources.
-
-```bash
-$ git clone https://github.com/inovex/scrumlr.io.git
-$ cd scrumlr.io
-```
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/)
-- [yarn](https://yarnpkg.com/)
-- [Go](https://go.dev/dl/)
-- [Docker](https://www.docker.com/)
-- _(optional)_ [minikube](https://kubernetes.io/docs/tasks/tools/)
-- _(optional)_ [kubectl](https://kubernetes.io/docs/tasks/tools/)
-
-### Run
-
-1. run the server (backend) with docker
-
-    ```bash
-    $ docker compose --project-directory server/ --profile build up -d
-    ```
-
-    *If server code has been changed make sure to run it with the `--build` option.
-
-
-2. run the client (frontend)
-
-    ```bash
-    $ yarn install
-    $ yarn start
-    ```
-
-   The client will become available on [http://localhost:3000](http://localhost:3000)
+## Features
+- 💯 Free & open-source.
+- 🕵️ No registration required.
+- 🔁 Retrospectives made easy.
+- 🤝 Collaborate with your team.
+- 🌓 Dark mode.
+- 📱 Responsive.
+- 👅 Localization (i18n) support.
+- 📋 Export to PDF, JSON, CSV and Markdown.
 
 ## Contributing
 
