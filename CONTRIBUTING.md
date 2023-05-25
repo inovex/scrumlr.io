@@ -1,34 +1,70 @@
-# Contributing to scrumlr.io
+# Contributing
+Thank you for looking into our contribution guide, and taking the time to improve Scrumlr with your contribution. Pull requests are welcome. For major changes, please [open a discussion](https://github.com/inovex/scrumlr.io/discussions) first to discuss what you would like to change.
 
-Thank you 🙏 for looking into our contribution guide, and taking the time to improve scrumlr.io with your contribution.
+## Setup
+1. Fork and clone the repository
+2. Create a branch for your pull request with `git checkout -b your-branch-name`
 
-At the moment we are a small community, and we're open to discuss any of your ideas in order to establish some kind of
-standards here. Try to contribute to the best of our knowledge and belief, and we will treat you with respect and share
-our opinion with you.
+### Client
+1. Run `yarn` to install the Front-end dependencies
+2. Run `yarn start` to start the Front-end in development mode. 
+3. Open http://localhost:3000 to view it in the browser. The page will automatically reload if you make changes to the code. You will see the build errors and lint warnings in the console.
 
-## Definition of done
+### Server
+#### Option 1: Run the Back-end & Database with Docker
+```bash
+$ docker compose --project-directory server/ --profile build up -d
+```
 
-Here's our definition done, which we agreed on.
+#### Option 2: Run the Back-end from your CLI & the Database with Docker
+```bash
+$ docker compose --project-directory server/ --profile dev up -d
+$ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
+```
 
-* If the pull requests is based on an issue ...
-  * All (sub-) tasks are done
-  * All acceptance criteria are met
-* The code is well implemented, e.g. passes the lint tests, uses BEM-CSS, variable names are meaningful,
-  documented in-code where necessary, ...
-* The light- and dark-theme are both supported and tested
-* The design was implemented and is responsive for all devices and screen sizes
-* The application was tested in the most commonly used browsers (e.g. Chrome, Firefox, Safari)
-* All existing tests are (still) passing
-* New tests were introduced for new features
-* Someone reviewed the code before it got merged into our `main` branch
 
-## FAQ
+## Pull Request Guidelines
+This section outlines the typical structure and guidelines followed for pull requests in our repositories. This section provides a set of instructions and recommendations to ensure consistency and clarity when submitting pull requests. It covers the expected format, information, and steps to follow when creating a pull request
 
-<details>
-  <summary>How can I add the support for another language?</summary>
+### Title
+Make sure the title starts with a semantic prefix:
+-   **feat**: A new feature
+-   **fix**: A bug fix
+-   **docs**: Documentation only changes
+-   **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+-   **refactor**: A code change that neither fixes a bug nor adds a feature
+-   **perf**: A code change that improves performance
+-   **test**: Adding missing tests or correcting existing tests
+-   **build**: Changes that affect the build system 
+-   **chore**: Other changes that don't modify src or test files
+-   **revert**: Reverts a previous commit
 
-  Just copy the base configuration `public/locales/en/translation.json` into a new
-  directory with your language code `public/locales/{language code}/translation.json`
-  and translate all values of the JSON properly. Once you're done you can open a pull
-  request, and we will try to review your translation by a few samples.
-</details>
+### Description
+The description section serves as a crucial component of a pull request, providing an overview of the changes made and explaining the purpose and context of the proposed modifications. It should clearly articulate the problem being addressed or the feature being added, along with a concise explanation of how the changes solve the issue. A well-written description is informative, organized, and easy to comprehend, allowing reviewers to assess the impact and significance of the proposed changes. It should be concise and to the point while still providing enough information to convey the purpose and significance of the pull request.
+
+### Changelog
+The Changelog section of a pull request provides a concise and organized summary of the changes made to the code base, documentation, or any other relevant components. It is typically presented as a bullet point list, highlighting the specific modifications introduced by the pull request. The Changelog serves as a valuable reference for developers and project maintainers, enabling them to quickly grasp the nature and extent of the changes. Each bullet point in the Changelog should focus on a specific alteration or addition, providing a clear and brief description of the corresponding update. 
+
+### Visual Changes
+The 'Visual Changes' section of a pull request focuses on documenting any alterations to the user interface or visual appearance of a component or part of the web application. This section is particularly useful when there are noticeable visual modifications resulting from the pull request, such as changes to the design, layout, or styling. It is common practice to include 'Before' and 'After' screenshots to clearly illustrate the visual differences. If a new feature or part of the web app has been implemented, a screenshot showcasing the new addition should be included as well. 
+
+## Definition of Done
+Behold our Definition of Done, an agreement we have established to ensure the quality and completeness of our work:
+
+- If the pull request is based on an issue:
+  - All (sub-) tasks have been diligently completed.
+  - Every acceptance criterion has been successfully met.
+- The code is meticulously implemented, satisfying these criteria:
+  - It seamlessly passes the lint tests, showcasing our commitment to clean code.
+  - BEM-CSS methodology is employed, promoting a modular and maintainable codebase.
+- Variable names are thoughtfully chosen, conveying clear meaning and intent.
+- Documentation within the codebase is present where necessary, empowering future developers.
+- Both light and dark themes are gracefully supported and extensively tested.
+- The design implementation is exemplary, exhibiting responsiveness across all devices and screen sizes.
+- Rigorous testing has been conducted across commonly used browsers, including Chrome, Firefox, and Safari.
+- All existing tests continue to pass, assuring the preservation of expected functionality.
+- New tests have been meticulously introduced to cover newly implemented features.
+- Prior to merging into our main branch, a diligent code review by a fellow team member has been undertaken, ensuring quality, adherence to best practices, and fostering collaborative growth.
+
+## Translation
+If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
