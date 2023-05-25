@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="scrumlr.png" alt="scrumlr.io" />
+  <a href="https://scrumlr.io">
+    <img src="scrumlr.png" alt="scrumlr.io" />
+  </a>
 </p>
 
 <h3 align="center">Online retrospectives made easy</h3>
@@ -37,6 +39,7 @@
 - Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
 
 ## Collaborators and beloved friends
+Thanks to all our users, collaborators, contributors & supporters! ❤️
 
 [<img src="https://avatars.githubusercontent.com/u/36969812?s=48&amp;v=4" width="48" height="48" style="border-radius: 24px" alt="brandstetterm">](https://github.com/brandstetterm)
 [<img src="https://avatars.githubusercontent.com/u/35272402?s=48&amp;v=4" width="48" height="48" style="border-radius: 24px" alt="Resaki1">](https://github.com/Resaki1)
@@ -70,16 +73,16 @@
 
 ... and many more!
 
-## Thank you
-
-Thanks to all our users, contributors & supporters! ❤️
-
-<a href="https://inovex.de">
-<img src="inovex.svg" alt="inovex">
-</a>
-
+## Sponsors
 A special shout-out goes to [inovex](https://inovex.de) for all the support and the opportunity to realize this project! 🙌
 [Contact us](https://www.inovex.de/de/kontakt/) if you look for the best IT service provider out there.
+<p align="center" style="margin: 0">
+  <a href="https://inovex.de" align="center">
+    <img src="inovex.svg" height="128" alt="inovex">
+  </a>
+</p>
+
+
 
 ## License
 
