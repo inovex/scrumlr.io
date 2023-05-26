@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -36,6 +37,11 @@ type EventData struct {
 	Sessions    []*dto2.BoardSession        `json:"participants"`
 	Requests    []*dto2.BoardSessionRequest `json:"requests"`
 	Assignments []*dto2.Assignment          `json:"assignments"`
+}
+
+type Event struct {
+	Type realtime.BoardEventType `json:"type"`
+	Data interface{}             `json:"data"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -207,55 +213,73 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		// Cache the incoming changes, mod only since they receive all changes
 		if isMod {
 			boardSubscription.boardColumns = columns
-			event.Data = columns
 			return event
 		}
-		entriesToDelete := []int{}
-		for id, column := range columns {
-			if !column.Visible && !isMod {
-				entriesToDelete = append(entriesToDelete, id)
+
+		var ret realtime.BoardEvent
+		var seableColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
+
+		for _, column := range columns {
+			if column.Visible && !isMod {
+				seableColumns = append(seableColumns, column)
 			}
 		}
-		for i := len(entriesToDelete) - 1; i >= 0; i-- {
-			columns = append(columns[:entriesToDelete[i]], columns[entriesToDelete[i]+1:]...)
-		}
-		event.Data = columns
+		ret.Type = event.Type
+		ret.Data = seableColumns
+		return &ret
 	}
 
 	if event.Type == realtime.BoardEventNotesUpdated {
-		entriesToBeDeleted := []int{}
 		notes, err := parseNotesUpdated(event.Data)
+		fmt.Printf("DebugNoteFiltering: Notes -> %v | len(notes) -> %d |\n", notes, len(notes))
 		if err != nil {
 			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
 
 		if isMod {
 			boardSubscription.boardNotes = notes
-			event.Data = notes
 			return event
-		}
-		for id, note := range notes {
-			isPresent := false
-			for _, column := range boardSubscription.boardColumns {
-				if note.Position.Column == column.ID && column.Visible {
-					isPresent = true
-				}
-			}
-			if !isPresent && !isMod {
-				entriesToBeDeleted = append(entriesToBeDeleted, id)
-			}
-		}
-		for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
-			notes = append(notes[:entriesToBeDeleted[i]], notes[entriesToBeDeleted[i]+1:]...)
+
+			// // New Code
+			// newSlice := make([]*dto2.Note, len(boardSubscription.boardNotes)+1, cap(boardSubscription.boardNotes)+1)
+
+			// // copy the original slice to the new slice
+			// copy(newSlice, boardSubscription.boardNotes)
+
+			// // create a new MyStruct instance for the new entry
+			// newEntry := notes[len(notes)-1]
+
+			// // append the new entry to the new slice
+			// newSlice[len(newSlice)-1] = newEntry
+
+			// // update the pointer reference to point to the new slice
+			// boardSubscription.boardNotes = newSlice
+
+			// return event
 		}
 
-		// Authors
-		for id, note := range notes {
-			if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
-				notes[id].Author = uuid.Nil
+		var ret realtime.BoardEvent
+		var seableNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
+
+		for _, note := range notes {
+			for _, column := range boardSubscription.boardColumns {
+				if (note.Position.Column == column.ID) && column.Visible {
+					seableNotes = append(seableNotes, note)
+				}
 			}
 		}
-		event.Data = notes
+		ret.Type = event.Type
+		ret.Data = seableNotes
+
+		return &ret
+
+		// // Authors
+		// for id, note := range ret.Data {
+		// 	if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
+		// 		notes[id].Author = uuid.Nil
+		// 	}
+		// }
+		// event.Data = notes
 	}
 
 	if event.Type == realtime.BoardEventBoardUpdated {
