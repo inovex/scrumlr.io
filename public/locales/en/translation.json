@@ -348,7 +348,8 @@
     "Language": "Language",
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
-    "colorSchemeDark": "Dark"
+    "colorSchemeDark": "Dark",
+    "showHotkeyNotifications": "Show hotkey notifications"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",

@@ -124,12 +124,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             </li>
           </ul>
 
-          <button
-            className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
-            disabled={!showPreviousColumn}
-            onClick={onPreviousColumn}
-            aria-hidden
-          >
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
             <LeftArrowIcon className="menu-bars__navigation-icon" />
           </button>
         </section>
@@ -157,8 +152,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           )}
 
           <button
-            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showPreviousColumn || showNextColumn})}
-            disabled={!showNextColumn}
+            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showNextColumn})}
             onClick={onNextColumn}
             aria-hidden
           >

@@ -88,6 +88,7 @@ exports[`Feedback should match snapshot 1`] = `
       </div>
     </div>
     <button
+      aria-label="Feedback.PraiseInputLabel"
       class="settings-option-button feedback-form__settings-button"
       type="button"
     >
@@ -103,6 +104,7 @@ exports[`Feedback should match snapshot 1`] = `
       />
     </button>
     <button
+      aria-label="Feedback.ContactInputLabel"
       class="settings-option-button feedback-form__settings-button"
       type="button"
     >

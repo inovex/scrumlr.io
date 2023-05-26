@@ -26,7 +26,6 @@
   width: 100%;
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
-  line-height: $line-height--medium;
   margin-bottom: $margin--small;
   border: 2px dashed transparent;
   border-radius: 5px;
@@ -35,7 +34,8 @@
   resize: none;
   word-wrap: break-word;
   padding: 0 4px;
-  font-size: $text-size--large;
+  font-size: $text--md;
+  line-height: 1.5rem;
 
   &:not(:disabled) {
     &:hover,

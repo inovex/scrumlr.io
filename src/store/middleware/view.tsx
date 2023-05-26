@@ -3,7 +3,9 @@ import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
 import i18n from "i18n";
-import {Toast} from "../../utils/Toast";
+import {Toast} from "utils/Toast";
+import {saveToStorage} from "utils/storage";
+import {HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
 import store from "../index";
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
@@ -22,5 +24,17 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
           });
         });
       });
+  }
+
+  if (action.type === Action.EnableHotkeyNotifications) {
+    if (typeof window !== undefined) {
+      saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(true));
+    }
+  }
+
+  if (action.type === Action.DisableHotkeyNotifications) {
+    if (typeof window !== undefined) {
+      saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(false));
+    }
   }
 };
