@@ -37,8 +37,9 @@ export const Timer = (props: TimerProps) => {
   );
   const anyReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected).some((participant) => participant.ready));
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
-
+  const isReady = useAppSelector((state) => state.participants?.self.ready);
   const boardId = useAppSelector((state) => state.board.data!.id);
+  const me = useAppSelector((state) => state.participants?.self);
 
   const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(TimerUtils.calculateTimeLeft(props.endTime));
@@ -64,6 +65,13 @@ export const Timer = (props: TimerProps) => {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
       hideTimerAfterSeconds(HIDE_TIMER_AFTER_SECONDS);
+      if (!isModerator && !isReady) {
+        Toast.info({
+          title: t("Toast.ready"),
+          buttons: [t("Toast.readyButton")],
+          firstButtonOnClick: () => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true)),
+        });
+      }
       if (isModerator && anyReady) {
         Toast.info({
           title: t("Toast.moderatorResetReadyStates"),

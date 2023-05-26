@@ -46,6 +46,7 @@ export const HotkeyAnchor = () => {
       showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
       showHiddenColumns: rootState.participants!.self.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
+      hotkeyNotificationsEnabled: rootState.view.hotkeyNotificationsEnabled,
     }),
     _.isEqual
   );
@@ -61,13 +62,19 @@ export const HotkeyAnchor = () => {
     enabled: state.hotkeysAreActive && isAdmin,
   };
 
+  const dispatchHotkeyNotification = (title: string) => {
+    if (state.hotkeyNotificationsEnabled) {
+      Toast.info({title, autoClose: TOAST_TIMER_SHORT});
+    }
+  };
+
   const toggleHotkeys = () => {
     if (state.hotkeysAreActive) {
       dispatch(Actions.setHotkeyState(false));
-      Toast.info({title: t("Hotkeys.hotkeysDisabled"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.hotkeysDisabled"));
     } else {
       dispatch(Actions.setHotkeyState(true));
-      Toast.info({title: t("Hotkeys.hotkeysEnabled"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.hotkeysEnabled"));
     }
   };
 
@@ -76,32 +83,32 @@ export const HotkeyAnchor = () => {
       dispatch(Actions.stopSharing());
       dispatch(Actions.clearFocusInitiator());
       dispatch(Actions.setModerating(false));
-      Toast.info({title: t("Hotkeys.togglePresentationMode.endPresenting"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.endPresenting"));
     } else {
       dispatch(Actions.setFocusInitiator(state.currentUser));
       if (note.current) dispatch(Actions.shareNote(note.current));
       dispatch(Actions.setModerating(true));
-      Toast.info({title: t("Hotkeys.togglePresentationMode.startPresenting"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.togglePresentationMode.startPresenting"));
     }
   };
 
   const toggleReadyState = () => {
     if (isReady) {
       dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, false));
-      Toast.info({title: t("Hotkeys.toggleReadyState.notReady"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.toggleReadyState.notReady"));
     } else {
       dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, true));
-      Toast.info({title: t("Hotkeys.toggleReadyState.ready"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.toggleReadyState.ready"));
     }
   };
 
   const toggleRaiseHand = () => {
     if (raisedHand) {
       dispatch(Actions.setRaisedHand(state.currentUser.user.id, false));
-      Toast.info({title: t("Hotkeys.toggleRaisedHand.lower"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.toggleRaisedHand.lower"));
     } else {
       dispatch(Actions.setRaisedHand(state.currentUser.user.id, true));
-      Toast.info({title: t("Hotkeys.toggleRaisedHand.raise"), autoClose: TOAST_TIMER_SHORT});
+      dispatchHotkeyNotification(t("Hotkeys.toggleRaisedHand.raise"));
     }
   };
 
@@ -112,10 +119,10 @@ export const HotkeyAnchor = () => {
 
   const showSettings = () => navigate("settings");
 
-  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive]);
-  useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation]);
-  useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady]);
-  useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand]);
+  useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady, state.hotkeyNotificationsEnabled]);
+  useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand, state.hotkeyNotificationsEnabled]);
   useHotkeys(SHOW_SETTINGS, showSettings, hotkeyOptions);
   useHotkeys(
     TOGGLE_SHOW_AUTHORS,
@@ -123,14 +130,14 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showAuthors) {
         dispatch(Actions.editBoard({showAuthors: false}));
-        Toast.info({title: t("Hotkeys.toggleShowAuthors.hide")});
+        dispatchHotkeyNotification(t("Hotkeys.toggleShowAuthors.hide"));
       } else {
         dispatch(Actions.editBoard({showAuthors: true}));
-        Toast.info({title: t("Hotkeys.toggleShowAuthors.show")});
+        dispatchHotkeyNotification(t("Hotkeys.toggleShowAuthors.show"));
       }
     },
     hotkeyOptionsAdmin,
-    [state.showAuthors]
+    [state.showAuthors, state.hotkeyNotificationsEnabled]
   );
   useHotkeys(
     TOGGLE_SHOW_OTHER_USERS_NOTES,
@@ -138,14 +145,14 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showNotesOfOtherUsers) {
         dispatch(Actions.editBoard({showNotesOfOtherUsers: false}));
-        Toast.info({title: t("Hotkeys.toggleShowOtherUsersNotes.hide")});
+        dispatchHotkeyNotification(t("Hotkeys.toggleShowOtherUsersNotes.hide"));
       } else {
         dispatch(Actions.editBoard({showNotesOfOtherUsers: true}));
-        Toast.info({title: t("Hotkeys.toggleShowOtherUsersNotes.show")});
+        dispatchHotkeyNotification(t("Hotkeys.toggleShowOtherUsersNotes.show"));
       }
     },
     hotkeyOptionsAdmin,
-    [state.showNotesOfOtherUsers]
+    [state.showNotesOfOtherUsers, state.hotkeyNotificationsEnabled]
   );
   useHotkeys(
     TOGGLE_COLUMN_VISIBILITY,
@@ -153,14 +160,14 @@ export const HotkeyAnchor = () => {
       e.preventDefault();
       if (state.showHiddenColumns) {
         dispatch(Actions.setShowHiddenColumns(false));
-        Toast.info({title: t("Hotkeys.toggleColumnVisibility.hide"), autoClose: TOAST_TIMER_SHORT});
+        dispatchHotkeyNotification(t("Hotkeys.toggleColumnVisibility.hide"));
       } else {
         dispatch(Actions.setShowHiddenColumns(true));
-        Toast.info({title: t("Hotkeys.toggleColumnVisibility.show"), autoClose: TOAST_TIMER_SHORT});
+        dispatchHotkeyNotification(t("Hotkeys.toggleColumnVisibility.show"));
       }
     },
     hotkeyOptionsAdmin,
-    [state.showHiddenColumns]
+    [state.showHiddenColumns, state.hotkeyNotificationsEnabled]
   );
   const hotkeyTimerCombo = SET_TIMER_FIRST_KEY.map((firstKey) => _.range(1, 10).map((minute) => `${firstKey}+${minute}`)).join(",");
   useHotkeys(hotkeyTimerCombo, (e) => {

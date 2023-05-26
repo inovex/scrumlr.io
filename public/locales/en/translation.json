@@ -264,7 +264,9 @@
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
-    "noteDeleted": "The note has been deleted!"
+    "noteDeleted": "The note has been deleted!",
+    "ready": "Are you ready?",
+    "readyButton": "Ready!"
   },
   "Language": {
     "german": "German",
@@ -346,7 +348,8 @@
     "Language": "Language",
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
-    "colorSchemeDark": "Dark"
+    "colorSchemeDark": "Dark",
+    "showHotkeyNotifications": "Show hotkey notifications"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",
