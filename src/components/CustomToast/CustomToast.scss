@@ -137,6 +137,7 @@ $color-close-icon: #bfc1c5;
 // Toast close icon
 .toast__close-icon {
   min-width: 32px;
+  min-height: 32px;
   color: $color-close-icon;
   transition: all 0.1s ease-in-out;
 }
