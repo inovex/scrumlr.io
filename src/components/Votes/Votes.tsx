@@ -29,7 +29,7 @@ export const Votes: FC<VotesProps> = (props) => {
         : 0)
   );
 
-  return (
+  return voting || allPastVotes > 0 ? (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
         <VoteButtons.Remove noteId={props.noteId} disabled>
@@ -39,5 +39,5 @@ export const Votes: FC<VotesProps> = (props) => {
       {voting && ongoingVotes.note > 0 && <VoteButtons.Remove noteId={props.noteId}>{ongoingVotes.note}</VoteButtons.Remove>}
       {voting && <VoteButtons.Add noteId={props.noteId} disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)} />}
     </div>
-  );
+  ) : null;
 };
