@@ -28,11 +28,11 @@
     "react-dnd-multi-backend": "^8.0.0",
     "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.0.0-rc.3",
-    "react-redux": "^8.0.0-beta.1",
     "react-focus-lock": "^2.9.4",
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.4.0",
     "react-i18next": "^12.3.1",
+    "react-redux": "^8.0.0-beta.1",
     "react-router": "^6.6.0",
     "react-router-dom": "^6.11.2",
     "react-spring": "^9.7.1",
@@ -72,8 +72,8 @@
     "@types/workbox-routing": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.7",
-    "eslint": "8.41.0",
     "cross-env": "^7.0.3",
+    "eslint": "8.41.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.8.0",
@@ -110,7 +110,11 @@
     "prepare": "husky install",
     "hash": "cross-env REACT_APP_LOCALES_HASH=$(hash-files --algorithm md5 public/locales/**)"
   },
-  "jest": { "transformIgnorePatterns": [ "/node_modules/(?!react-toastify|react-dnd|core-dnd|@react-dnd|dnd-core|react-dnd-html5-backend)" ] },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!react-toastify|react-dnd|core-dnd|@react-dnd|dnd-core|react-dnd-html5-backend)"
+    ]
+  },
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --fix",
     "src/**/*.{ts,tsx,json,css,scss,md}": "prettier --write"
