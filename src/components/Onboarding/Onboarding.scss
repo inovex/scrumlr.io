@@ -1,0 +1,71 @@
+@import "constants/style.scss";
+
+.react-floater-portal {
+  z-index: 1000;
+}
+
+.floater {
+  z-index: 1000;
+  background-color: $color-white-one;
+  color: $color-dark-one;
+  min-width: 200px;
+  min-height: 100px;
+}
+[theme="dark"] .floater {
+  background-color: $color-dark-one;
+  color: $color-white-one;
+}
+
+.onboarding-base {
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.close-floater {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  color: $color-backlog-blue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $icon--extralarge;
+  height: $icon--extralarge;
+  border-radius: $rounded--full;
+  transition: all 0.08s ease-out;
+  border: 2px solid transparent;
+  outline: none;
+
+  &:hover {
+    background-color: $color-backlog-blue;
+    color: $color-white;
+    cursor: pointer;
+    transform: scale(1.04);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+
+  &:focus-visible {
+    border: 2px solid $color-backlog-blue;
+  }
+}
+
+.close-floater>svg {
+  height: 100%;
+  width: 100%;
+}
+
+[theme="dark"] .close-floater {
+  color: $color-planning-pink;
+
+  &:hover {
+    background-color: $color-planning-pink;
+    color: $color-white;
+  }
+
+  &:focus-visible {
+    border: 2px solid $color-planning-pink;
+  }
+}

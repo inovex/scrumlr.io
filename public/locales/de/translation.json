@@ -185,7 +185,8 @@
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
     "settings": "Einstellungen",
-    "openMenu": "Öffne das Benutzermenü"
+    "openMenu": "Öffne das Benutzermenü",
+    "onboarding": "Öffne letzten Einführungs-Schritt"
   },
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys aktiviert!",

@@ -185,7 +185,8 @@
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
     "settings": "Settings",
-    "openMenu": "Open user menu"
+    "openMenu": "Open user menu",
+    "onboarding": "Open last onboarding step"
   },
   "Hotkeys": {
     "hotkeysEnabled": "Hotkeys enabled!",

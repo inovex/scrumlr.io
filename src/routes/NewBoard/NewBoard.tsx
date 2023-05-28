@@ -11,15 +11,22 @@ import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
 import {Button} from "../../components/Button";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
+import { useDispatch } from "react-redux";
+import { Actions } from "store/action";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [boardName, setBoardName] = useState<string | undefined>();
   const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
+
+  if (window.location.pathname.includes("onboarding")) {
+    dispatch(Actions.changePhase("newBoard"));
+  }
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -41,6 +48,7 @@ export const NewBoard = () => {
       if (!window.location.pathname.includes("onboarding")) {
         navigate(`/board/${boardId}`);
       } else {
+        dispatch(Actions.changePhase("board_configure_template"));
         navigate(`/onboarding-board/${boardId}`);
       }
     }
@@ -52,7 +60,7 @@ export const NewBoard = () => {
     <div className="new-board__wrapper">
       <div className="new-board">
         <div>
-          <Link to="/">
+          <Link to="/" onClick={() => {dispatch(Actions.changePhase("none"))}}>
             <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </Link>
 

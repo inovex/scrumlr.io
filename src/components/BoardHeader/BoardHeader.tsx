@@ -15,6 +15,9 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
+import Floater from "react-floater"
+import { isEqual } from "underscore";
+import { OnboardingStan } from "components/Onboarding/OnboardingStan";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -36,8 +39,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
-  const isOnboarding = window.location.pathname.startsWith("/onboarding");
-
+  const onboardingState = useAppSelector((rootState) => rootState.onboarding, isEqual);
   return (
     <>
       {showConfirmationDialog && (
@@ -45,6 +47,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           title={t("ConfirmationDialog.returnToHomepage")}
           onAccept={() => {
             store.dispatch(Actions.leaveBoard());
+            store.dispatch(Actions.changePhase("none"));
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}
@@ -67,7 +70,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
         >
           <div className="board-header__access-policy-status">
-            { isOnboarding ? (
+            { onboardingState.phase !== "newBoard" ? (
               <LockIcon className="board-header__access-policy-status-icon" />
               ) : (
                 {
@@ -78,7 +81,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
               )
 
             }
-            <span>{t(isOnboarding ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
+            <span>{t(onboardingState.phase !== "newBoard" ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
             <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
@@ -93,6 +96,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         </button>
 
         <div className="board-header__users">
+          {onboardingState.phase !== "newBoard" &&
+            <OnboardingStan />
+          }
           <BoardUsers />
           <ShareButton />
         </div>
