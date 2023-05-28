@@ -125,6 +125,8 @@ export const StackView = () => {
   const entireStack = useAppSelector((state) => state.notes.filter((n) => n.id === note?.id || n.position.stack === note?.id));
   const stackHasMixedAuthors = hasMixedAuthors(entireStack);
 
+  const isOnboarding = window.location.pathname.startsWith("/onboarding");
+
   // update transition config when note changes so that the visible notes are updated without any animation
   useEffect(() => {
     if (
@@ -188,10 +190,15 @@ export const StackView = () => {
   // redirect to stack and show toast if note has been stacked on another note
   useEffect(() => {
     if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
-      navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
+      if(!isOnboarding) {
+        navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
+      } else {
+        navigate(`/onboarding-board/${boardId}/note/${note.position.stack}/stack`);
+      }
+
       Toast.info({title: t("Toast.noteMovedToStack")});
     }
-  }, [boardId, navigate, note, t]);
+  }, [boardId, navigate, note, t, isOnboarding]);
 
   // show toast if note has been deleted
   useLayoutEffect(() => {
@@ -201,7 +208,11 @@ export const StackView = () => {
   }, [note, t]);
 
   if (!note) {
-    navigate(`/board/${boardId}`);
+    if(!isOnboarding) {
+      navigate(`/board/${boardId}`);
+    } else {
+      navigate(`/onboarding-board/${boardId}`);
+    }
     return null;
   }
 
@@ -209,7 +220,11 @@ export const StackView = () => {
     if (userIsModerating) {
       dispatch(Actions.stopSharing());
     }
-    navigate(`/board/${boardId}`);
+    if(!isOnboarding) {
+      navigate(`/board/${boardId}`);
+    } else {
+      navigate(`/onboarding-board/${boardId}`);
+    }
   };
 
   const handleModeration = (id: string) => {

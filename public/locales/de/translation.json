@@ -24,7 +24,8 @@
   "AccessPolicy": {
     "PUBLIC": "Offen",
     "BY_PASSPHRASE": "Passwortgeschützt",
-    "BY_INVITE": "Geschlossen"
+    "BY_INVITE": "Geschlossen",
+    "ONBOARDING": "Einführung"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Falsches Passwort.",
@@ -277,6 +278,7 @@
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
+    "onboardingButton": "Neu hier?",
     "privacyPolicy": "Datenschutzerklärung",
     "cookiePolicy": "Cookie Richtlinien",
     "terms": "AGB"

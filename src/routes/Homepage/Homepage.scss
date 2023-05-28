@@ -104,8 +104,15 @@
   line-height: 1.375em;
 }
 
+.homepage__buttons {
+  display: flex;
+  flex-direction: column;
+}
+
 .homepage__start-button {
+  max-width: fit-content;
   padding-left: 20px;
+  margin-bottom: 20px;
 }
 
 .homepage__start-button .homepage__proceed-icon {

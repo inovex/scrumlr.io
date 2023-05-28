@@ -38,7 +38,11 @@ export const NewBoard = () => {
         },
         columnTemplates[columnTemplate].columns
       );
-      navigate(`/board/${boardId}`);
+      if (!window.location.pathname.includes("onboarding")) {
+        navigate(`/board/${boardId}`);
+      } else {
+        navigate(`/onboarding-board/${boardId}`);
+      }
     }
   }
 

@@ -24,7 +24,8 @@
   "AccessPolicy": {
     "PUBLIC": "Open",
     "BY_PASSPHRASE": "Password protected",
-    "BY_INVITE": "Closed"
+    "BY_INVITE": "Closed",
+    "ONBOARDING": "Onboarding"
   },
   "BoardGuard": {
     "incorrectPassphrase": "Incorrect passphrase used.",
@@ -277,6 +278,7 @@
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
+    "onboardingButton": "New here?",
     "privacyPolicy": "Privacy policy",
     "cookiePolicy": "Cookie policy",
     "terms": "Terms & conditions"

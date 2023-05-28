@@ -27,6 +27,7 @@ export const SettingsDialog: FC = () => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
+  const isOnboarding = window.location.pathname.startsWith("/onboarding");
 
   const transitionConfigMobile = {
     from: {},
@@ -37,17 +38,21 @@ export const SettingsDialog: FC = () => {
   useEffect(() => {
     // If user is not a moderator of the board, he shouldn't see the board settings
     if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
-      navigate(`/board/${boardId}/settings/participants`);
+      if (!isOnboarding) {
+        navigate(`/board/${boardId}/settings/participants`);
+      } else {
+        navigate(`/onboarding-board/${boardId}/settings/participants`);
+      }
     }
     // If the window is large enough the show the whole dialog, automatically select the
     // first navigation item to show
     if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
       navigate(isBoardModerator ? "board" : "participants");
     }
-  }, [navigate, me, boardId, isBoardModerator]);
+  }, [navigate, me, boardId, isBoardModerator, isOnboarding]);
 
   return (
-    <Portal onClose={() => navigate(`/board/${boardId}`)}>
+    <Portal onClose={() => !isOnboarding ? navigate(`/board/${boardId}`) : navigate(`/onboarding-board/${boardId}`)}>
       <div className="settings-dialog__background" />
       <div className="settings-dialog__wrapper">
         <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
@@ -150,7 +155,7 @@ export const SettingsDialog: FC = () => {
                 </Link>
                 <Outlet />
               </article>
-              <Link to={`/board/${boardId}`} className="settings-dialog__close-button">
+              <Link to={!isOnboarding? `/board/${boardId}` : `/onboarding-board/${boardId}`} className="settings-dialog__close-button">
                 <CloseIcon className="close-button__icon" />
               </Link>
             </animated.aside>

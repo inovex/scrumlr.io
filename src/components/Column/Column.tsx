@@ -56,7 +56,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     accept: ["NOTE", "STACK"],
     drop: (item: {id: string; columnId: string}, monitor) => {
       if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(Actions.editNote(item.id, {position: {column: id, stack: undefined, rank: 0}}));
+        store.dispatch(Actions.editNote(item.id, {position: {column: id, stack: null, rank: 0}}));
       }
     },
     collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),

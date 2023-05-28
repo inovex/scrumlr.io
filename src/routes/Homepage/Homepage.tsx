@@ -18,6 +18,7 @@ import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
+  const onboardingHref = useHref("/onboarding-new");
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -72,9 +73,14 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
-                <Trans i18nKey="Homepage.startButton" />
-              </Button>
+              <div className="homepage__buttons">
+                <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
+                  <Trans i18nKey="Homepage.startButton" />
+                </Button>
+                <Button href={onboardingHref} color="secondary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
+                  <Trans i18nKey="Homepage.onboardingButton" />
+                </Button>
+              </div>
             </main>
 
             <HeroIllustration className="homepage__illustration" />

@@ -36,6 +36,14 @@ const Router = () => (
           </RequireAuthentication>
         }
       />
+      <Route
+        path="/onboarding-new"
+        element={
+          <RequireAuthentication>
+            <NewBoard />
+          </RequireAuthentication>
+        }
+      />
       <Route path="/login" element={<LoginBoard />} />
       <Route
         path="/board/:boardId/print"
@@ -47,6 +55,27 @@ const Router = () => (
       />
       <Route
         path="/board/:boardId"
+        element={
+          <RequireAuthentication>
+            <BoardGuard printViewEnabled={false} />
+          </RequireAuthentication>
+        }
+      >
+        <Route path="settings" element={<SettingsDialog />}>
+          <Route path="board" element={<BoardSettings />} />
+          <Route path="participants" element={<Participants />} />
+          <Route path="appearance" element={<Appearance />} />
+          <Route path="share" element={<ShareSession />} />
+          <Route path="export" element={<ExportBoard />} />
+          <Route path="feedback" element={<Feedback />} />
+          <Route path="profile" element={<ProfileSettings />} />
+        </Route>
+        <Route path="voting" element={<VotingDialog />} />
+        <Route path="timer" element={<TimerDialog />} />
+        <Route path="note/:noteId/stack" element={<StackView />} />
+      </Route>
+      <Route
+        path="/onboarding-board/:boardId"
         element={
           <RequireAuthentication>
             <BoardGuard printViewEnabled={false} />

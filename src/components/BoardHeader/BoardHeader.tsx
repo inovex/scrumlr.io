@@ -36,6 +36,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
+  const isOnboarding = window.location.pathname.startsWith("/onboarding");
+
   return (
     <>
       {showConfirmationDialog && (
@@ -65,14 +67,18 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
         >
           <div className="board-header__access-policy-status">
-            {
-              {
-                BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
-                BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
-                PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
-              }[state.accessPolicy!]
+            { isOnboarding ? (
+              <LockIcon className="board-header__access-policy-status-icon" />
+              ) : (
+                {
+                  BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
+                  BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
+                  PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
+                }[state.accessPolicy!]
+              )
+
             }
-            <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
+            <span>{t(isOnboarding ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
             <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
