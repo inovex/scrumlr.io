@@ -1,7 +1,12 @@
 import {Action, ReduxAction} from "store/action";
 import { OnboardingState } from "types/onboarding";
 
-export const onboardingReducer = (state: OnboardingState = { phase: "none", step: 1 }, action: ReduxAction ): OnboardingState => {
+const initialState: OnboardingState = {
+  phase: "none",
+  step: 1
+}
+
+export const onboardingReducer = (state: OnboardingState = initialState, action: ReduxAction ): OnboardingState => {
   switch (action.type) {
     case Action.ChangePhase: {
       state.phase = action.phase
