@@ -8,6 +8,7 @@ import {ParticipantsState} from "./participant";
 import {NotesState} from "./note";
 import {ViewState} from "./view";
 import {AssignmentsState} from "./assignment";
+import { OnboardingState } from "./onboarding";
 
 export interface ApplicationState {
   auth: AuthState;
@@ -20,4 +21,5 @@ export interface ApplicationState {
   votings: VotingsState;
   view: ViewState;
   assignments: AssignmentsState;
+  onboarding: OnboardingState;
 }
