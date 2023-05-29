@@ -22,7 +22,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
   const isReady = currentUser.ready;
 
   return (
-    <div className="vote-display">
+    <div className={classNames("vote-display", {"vote-display--votes-depleted": usedVotes === possibleVotes})}>
       {usedVotes > 0 && <div className="vote-display__progress-bar" style={{right: `calc(72px - (${usedVotes} / ${possibleVotes}) * 72px)`}} />}
       <span title={t("VoteDisplay.tooltip", {remaining: possibleVotes - usedVotes, total: possibleVotes})}>
         {usedVotes} / {possibleVotes}
