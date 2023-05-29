@@ -18,6 +18,8 @@ export interface View {
   readonly noteFocused: boolean;
 
   readonly hotkeysAreActive: boolean;
+
+  readonly hotkeyNotificationsEnabled: boolean;
 }
 
 export type ViewState = View;
