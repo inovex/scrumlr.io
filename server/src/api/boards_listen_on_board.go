@@ -139,6 +139,7 @@ func (b *BoardSubscription) startListeningOnBoard() {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
+			fmt.Printf("Message: Notes -> %v\n", msg)
 			for id, conn := range b.clients {
 				msg = b.eventFilter(msg, id)
 				err := conn.WriteJSON(msg)
@@ -231,7 +232,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 	if event.Type == realtime.BoardEventNotesUpdated {
 		notes, err := parseNotesUpdated(event.Data)
-		fmt.Printf("DebugNoteFiltering: Notes -> %v | len(notes) -> %d |\n", notes, len(notes))
+		fmt.Printf("DebugNoteFiltering: Notes -> %v | len(notes) -> %d | %v\n", notes, len(notes), userID)
 		if err != nil {
 			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
