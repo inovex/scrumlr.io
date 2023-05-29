@@ -590,5 +590,11 @@
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
     }
+  },
+  "Onboarding": {
+    "newBoardWelcome": "Great that you are here!",
+    "skip": "Skip",
+    "ok": "Understood!",
+    "next": "Next"
   }
 }

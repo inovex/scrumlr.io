@@ -5,20 +5,31 @@ import Floater from "react-floater";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import { useDispatch } from "react-redux";
 import { Actions } from "store/action";
+import { useTranslation } from "react-i18next";
 import { OnboardingBase } from "./OnboardingBase";
 import "./Onboarding.scss";
 
+
 export const OnboardingStan = () => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
   const stepOpen = useAppSelector((state) => state.onboarding.stepOpen, isEqual);
   let floater;
   switch (phase) {
+    case "newBoard":
+      if (step === 1) {
+        const text = t("Onboarding.newBoardWelcome")
+        floater = <Floater open={stepOpen} component={<OnboardingBase text={text} isExercisePrompt />}
+        placement="center" styles={{arrow: {color: "#0057ff"}}} />
+      }
+      break;
     case "board_configure_template":
       if (step === 1) {
-        floater = <Floater open={stepOpen} component={OnboardingBase} target=".user-menu"
-        placement="right" styles={{arrow: {color: "#f9fafb"}}} />
+        const text = t("Onboarding.newBoardWelcome")
+        floater = <Floater open={stepOpen} component={<OnboardingBase text={text} isExercisePrompt={false} />} target=".user-menu"
+        placement="right" styles={{arrow: {color: "#0057ff"}}} />
       }
       break;
     case "board_check_in":
@@ -41,7 +52,7 @@ export const OnboardingStan = () => {
   }
 
   return (
-    <div>
+    <div className="onboarding">
       <button
         className="share-button"
         aria-label="Toggle Onboarding Popup"

@@ -157,7 +157,7 @@ $brighten--slightly: brightness(1.1);
 $brighten--strongly: brightness(1.4);
 
 // z-index
-$base-z-index: 50;
+$base-z-index: 10;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);

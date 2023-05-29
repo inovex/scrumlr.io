@@ -2,19 +2,57 @@ import { useDispatch } from "react-redux";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import { Actions } from "store/action";
 import "./Onboarding.scss";
+import { useTranslation } from "react-i18next";
 
-export const OnboardingBase = () => {
+type OnboardingFloaterProps = {
+  text: string,
+  isExercisePrompt: boolean
+}
+
+export const OnboardingBase = (props: OnboardingFloaterProps) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   return (
     <div className="floater onboarding-base">
-      <button className="close-floater"
-        onClick={() => {
-          dispatch(Actions.toggleStepOpen());
-        }}>
-        <CloseIcon />
-      </button>
-      <p>This is content</p>
+      <div className="onboarding-img">
+        <p>here comes an image</p>
+      </div>
+      <div className="onboarding-content">
+        <p>{props.text}</p>
+      </div>
+      {props.isExercisePrompt ?
+        <div className="onboarding-actions">
+          <button className="button onboarding-skip"
+            onClick={() => {}}>
+            {t("Onboarding.skip")}
+          </button>
+          <button className="button onboarding-ok" onClick={() => {dispatch(Actions.toggleStepOpen())}}>
+            {t("Onboarding.ok")}
+          </button>
+        </div>
+      :
+        <div className="onboarding-actions">
+          <button className="button onboarding-next" onClick={() => {dispatch(Actions.incrementStep())}}>
+            {t("Onboarding.next")}
+          </button>
+        </div>
+      }
+      {/* <div className="onboarding-actions">
+        <button className="button onboarding-skip"
+          onClick={() => {}}>
+          {t("Onboarding.skip")}
+        </button>
+        {props.isExercisePrompt ?
+          <button className="button onboarding-ok" onClick={() => {dispatch(Actions.toggleStepOpen())}}>
+            {t("Onboarding.ok")}
+          </button>
+          :
+          <button className="button onboarding-next" onClick={() => {dispatch(Actions.incrementStep())}}>
+            {t("Onboarding.next")}
+          </button>}
+      </div> */}
+
 
     </div>
   )

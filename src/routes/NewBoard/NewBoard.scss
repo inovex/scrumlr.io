@@ -10,6 +10,12 @@
   min-height: 100vh;
 }
 
+.new-board__onboarding {
+  position: fixed;
+  top: 15px;
+  right: 50px;
+}
+
 .new-board {
   position: relative;
   color: $color-black;

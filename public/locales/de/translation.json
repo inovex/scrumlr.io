@@ -590,5 +590,11 @@
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
     }
+  },
+  "Onboarding": {
+    "newBoardWelcome": "Schön, dass du da bist!",
+    "skip": "Überspringen",
+    "ok": "Alles klar!",
+    "next": "Weiter"
   }
 }
