@@ -4,7 +4,7 @@ import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
 import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
-import {Link, useHref} from "react-router-dom";
+import {Link, useHref, useNavigate} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
@@ -18,7 +18,7 @@ import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
-  const onboardingHref = useHref("/onboarding-new");
+  const navigate = useNavigate();
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -77,9 +77,14 @@ export const Homepage = withTranslation()(() => {
                 <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
                   <Trans i18nKey="Homepage.startButton" />
                 </Button>
-                <Button href={onboardingHref} color="secondary" className="homepage__start-button" rightIcon={<IconArrowRight className="homepage__proceed-icon" />}>
-                  <Trans i18nKey="Homepage.onboardingButton" />
-                </Button>
+
+                <button className="button homepage__start-button"
+                  onClick={() => {
+                    dispatch(Actions.changePhase("newBoard"));
+                    navigate("/onboarding-new");
+                  }}>
+                  <Trans i18nKey="Homepage.onboardingButton" /><IconArrowRight className="homepage__proceed-icon" />
+                </button>
               </div>
             </main>
 

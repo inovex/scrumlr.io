@@ -6,13 +6,14 @@ import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {Link} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Actions } from "store/action";
+import { OnboardingStan } from "components/Onboarding/OnboardingStan";
 import {columnTemplates} from "./columnTemplates";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
 import {Button} from "../../components/Button";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
-import { useDispatch } from "react-redux";
-import { Actions } from "store/action";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -23,10 +24,11 @@ export const NewBoard = () => {
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
+  const isOnboarding = window.location.pathname.includes("onboarding");
 
-  if (window.location.pathname.includes("onboarding")) {
-    dispatch(Actions.changePhase("newBoard"));
-  }
+  // if (isOnboarding) {
+  //   dispatch(Actions.changePhase("newBoard"));
+  // }
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -58,6 +60,11 @@ export const NewBoard = () => {
 
   return (
     <div className="new-board__wrapper">
+      {isOnboarding &&
+        <div className="new-board__onboarding">
+          <OnboardingStan />
+        </div>
+      }
       <div className="new-board">
         <div>
           <Link to="/" onClick={() => {dispatch(Actions.changePhase("none"))}}>
