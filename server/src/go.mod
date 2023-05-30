@@ -23,7 +23,7 @@ require (
 	github.com/stretchr/testify v1.8.3
 	github.com/uptrace/bun v1.1.14
 	github.com/uptrace/bun/dbfixture v1.1.13
-	github.com/uptrace/bun/dialect/pgdialect v1.1.13
+	github.com/uptrace/bun/dialect/pgdialect v1.1.14
 	github.com/uptrace/bun/extra/bundebug v1.1.13
 	github.com/urfave/cli/v2 v2.25.5
 	go.uber.org/zap v1.24.0
