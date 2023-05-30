@@ -158,6 +158,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   font-weight: bold;
   bottom: calc(100% + 6px);
   box-shadow: $box-shadow--light;
+  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
   z-index: calc($infobar-z-index + 50);
 }
 @media (prefers-reduced-motion) {
