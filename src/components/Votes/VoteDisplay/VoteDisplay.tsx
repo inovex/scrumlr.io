@@ -15,11 +15,10 @@ type VoteDisplayProps = {
 
 export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
   const {t} = useTranslation();
-  const me = useAppSelector((state) => state.participants?.self);
+  const me = useAppSelector((state) => state.participants!.self);
   const voting = useAppSelector((state) => state.votings.open?.id);
-  const currentUser = useAppSelector((state) => state.participants!.self);
-  const isAdmin = currentUser.role === "OWNER" || currentUser.role === "MODERATOR";
-  const isReady = currentUser.ready;
+  const isAdmin = me.role === "OWNER" || me.role === "MODERATOR";
+  const isReady = me.ready;
 
   return (
     <div className={classNames("vote-display", {"vote-display--votes-depleted": usedVotes === possibleVotes})}>
