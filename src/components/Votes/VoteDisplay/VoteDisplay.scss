@@ -4,25 +4,36 @@ $vote-display-width: 114px;
 $vote-display__content-height: 38px;
 $vote-display__short-actions-height: 28px;
 
+$vote-display__progress-bar-color: #6096ff;
+$vote-display__progress-bar-color--depleted-light: #1bd47e;
+$vote-display__progress-bar-color--depleted-dark: #4ae89f;
+
 .vote-display {
   height: 100%;
   width: $vote-display-width;
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
+  color: $color-dark-mode-note;
+  background-color: $menu-icon-background-color--light;
   border-radius: $rounded--full;
   position: relative;
-  border: 2px solid $menu-icon-background-color--dark;
+  border: 2px solid $menu-icon-background-color--light;
+  box-shadow: $box-shadow--light;
+}
+[theme="dark"] .vote-display {
+  color: $color-white;
+  background-color: $menu-icon-background-color--dark;
+  border-color: $menu-icon-background-color--dark;
 }
 
 .vote-display > svg {
   position: absolute;
   height: 100%;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $color-dark-mode-note;
+  color: $color-white;
   border-radius: 100%;
 }
 [theme="dark"] .vote-display > svg {
   background-color: $color-white;
-  color: $color-black;
+  color: $color-dark-mode-note;
 }
 
 .vote-display > span {
@@ -42,21 +53,19 @@ $vote-display__short-actions-height: 28px;
   top: 0;
   left: 19px;
   height: $vote-display__content-height;
-  border-top-right-radius: calc($vote-display__content-height / 2);
-  border-bottom-right-radius: calc($vote-display__content-height / 2);
-  background-color: $color-progress-circle;
+  border-top-right-radius: $rounded--full;
+  border-bottom-right-radius: $rounded--full;
+  background-color: $vote-display__progress-bar-color;
 }
 
 .vote-display--votes-depleted {
-  animation: shake 0.3s;
+  animation: shake 1s;
 
   .vote-display__progress-bar {
-    background-color: $color-grooming-green;
+    background-color: $vote-display__progress-bar-color--depleted-light;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vote-display--votes-depleted {
-    animation: none;
+  [theme="dark"] .vote-display__progress-bar {
+    background-color: $vote-display__progress-bar-color--depleted-dark;
   }
 }
 
@@ -64,13 +73,16 @@ $vote-display__short-actions-height: 28px;
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: calc($vote-display__content-height / 2);
-  background-color: $menu-icon-background-color--dark;
+  border-radius: $rounded--full;
+  background-color: $menu-icon-background-color--light;
   display: none;
   justify-content: end;
   align-items: center;
   gap: $margin--small;
   padding-right: 4px;
+}
+[theme="dark"] .vote-display__short-actions {
+  background-color: $menu-icon-background-color--dark;
 }
 
 .vote-display:hover > .vote-display__short-actions {
@@ -88,14 +100,18 @@ $vote-display__short-actions-height: 28px;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
   border-radius: $rounded--full;
-  background-color: $color-dark-one;
-  color: $color-white;
+  background-color: $color-lighter-gray;
+  color: $color-dark-mode-note;
   border: none;
   padding: 0;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+[theme="dark"] .short-action__button {
+  background-color: $color-dark-one;
+  color: $color-white;
 }
 .short-action__button > svg {
   position: absolute;
@@ -122,7 +138,7 @@ $vote-display__short-actions-height: 28px;
 }
 
 .short-action__button:hover {
-  background-color: $color-progress-circle;
+  background-color: $vote-display__progress-bar-color;
   color: $color-white;
 }
 
@@ -137,7 +153,7 @@ $vote-display__short-actions-height: 28px;
   border-radius: $rounded--full;
   padding: $padding--small $padding--default;
   background-color: $tooltip-background-color--light;
-  color: $menu-icon-background-color--dark;
+  color: $color-dark-mode-note;
   font-size: $text--base;
   font-weight: bold;
   bottom: calc(100% + 6px);
@@ -175,16 +191,34 @@ $vote-display__short-actions-height: 28px;
   0% {
     transform: translate(1px, 1px) rotate(0deg);
   }
-  25% {
+  10% {
     transform: translate(-1px, -2px) rotate(-1deg);
   }
-  50% {
+  20% {
     transform: translate(-3px, 0px) rotate(1deg);
   }
-  75% {
+  30% {
     transform: translate(3px, 2px) rotate(0deg);
   }
-  100% {
+  40% {
     transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
   }
 }
