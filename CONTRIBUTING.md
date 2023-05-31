@@ -17,7 +17,7 @@ Before you start contributing to our web application, please ensure that you hav
 
 ## Development
 1. Fork and clone the repository
-2. Create a branch for your pull request with `git checkout -b your-branch-name`
+2. Create a branch for your pull request with `git checkout -b your-branch-name`. Your branch should have the first letters of your first and last name as prefix. For example, John Doe would create the branch `jd/branch-name`.
 
 ### Client
 1. Run `yarn` to install the Front-end dependencies
