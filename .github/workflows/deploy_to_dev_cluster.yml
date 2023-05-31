@@ -1,0 +1,31 @@
+# deploy to dev cluster using own runner
+
+name: Deploy to dev cluster
+
+on:
+  workflow_call:
+    inputs:
+        sha_tag:
+          required: true
+          description: 'The SHA tag of the image to deploy'
+          type: string
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy to dev cluster 
+        uses: Azure/k8s-deploy@v4
+        with:
+          manifests: |
+            k8s/deployment.yaml
+          images: |
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ github.event.inputs.sha_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ github.event.inputs.sha_tag }}
