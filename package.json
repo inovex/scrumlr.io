@@ -44,7 +44,7 @@
     "use-sound": "^4.0.1",
     "workbox-core": "^6.5.3",
     "workbox-precaching": "^6.6.0",
-    "workbox-routing": "^6.5.3"
+    "workbox-routing": "^6.6.1"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.0",
