@@ -77,7 +77,7 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
 A special shout-out goes to [inovex](https://inovex.de) for all the support and the opportunity to realize this project! 🙌
 [Contact us](https://www.inovex.de/de/kontakt/) if you look for the best IT service provider out there.
 <p align="center" style="margin: 0">
-  <a href="https://inovex.de" align="center">
+  <a href="https://inovex.de/en/" align="center">
     <img src="inovex.svg" height="128" alt="inovex">
   </a>
 </p>
