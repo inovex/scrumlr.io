@@ -14,7 +14,6 @@ import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
-import { onboardingAuthorAvatars } from "types/onboardingNotes";
 
 interface NoteProps {
   noteId: string;

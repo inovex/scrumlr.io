@@ -2,7 +2,6 @@ import { useDispatch } from "react-redux";
 import { Actions } from "store/action";
 import "./Onboarding.scss";
 import { useTranslation } from "react-i18next";
-import { getColorForIndex } from "constants/colors";
 
 type OnboardingFloaterProps = {
   text: string,
@@ -35,7 +34,7 @@ export const OnboardingBase = (props: OnboardingFloaterProps) => {
         <div className="onboarding-actions">
           <button className="button onboarding-next" onClick={() => {
             dispatch(Actions.incrementStep());
-            let randomColor = getColorForIndex(Math.floor(Math.random() * 100));
+            // let randomColor = getColorForIndex(Math.floor(Math.random() * 100));
             // dispatch(Actions.addNote("test", "asda"))
             }}>
             {t("Onboarding.next")}

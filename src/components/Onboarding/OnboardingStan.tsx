@@ -40,8 +40,8 @@ export const OnboardingStan = () => {
         dispatch(Actions.addOnboardingNote((gladColumn?.id ?? ""), "i am very glad", "Mike"));
         dispatch(Actions.incrementStep());
       } else if (step === 3) {
-        const note1 = rootState.notes.find((n) => n.text === "i am mad");
-        console.log("Note: " + note1?.id);
+        // const note1 = rootState.notes.find((n) => n.text === "i am mad");
+        // console.log("Note: " + note1?.id);
         dispatch(Actions.changePhase("board_check_in"));
       }
       break;

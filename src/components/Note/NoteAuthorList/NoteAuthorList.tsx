@@ -1,8 +1,9 @@
 import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "types/participant";
+import { onboardingAuthorAvatars } from "types/onboardingNotes";
 import {UserAvatar} from "../../BoardUsers";
 import "./NoteAuthorList.scss";
-import { onboardingAuthorAvatars } from "types/onboardingNotes";
+
 
 type Props = {
   authors: ParticipantExtendedInfo[];
