@@ -13,7 +13,7 @@ Thank you for considering contributing to Scrumlr and taking the time to explore
 - [License](#license)
 
 ## Prerequisites
-Before you start contributing to our web application, please ensure that you have the following prerequisites set up on your development environment. On the front-end, you'll need to have **Node.js** installed, as well as **Yarn** (a fast and reliable package manager) to work with **React** and **TypeScript**. For the back-end, make sure you have **Go** installed, which will be used to build and run the back-end. Additionally, **Docker** is required to run the database locally. You can install Docker by following the official installation instructions for your operating system. Having these prerequisites in place will enable you to seamlessly set up and contribute to our web application. If you have any questions or need assistance with the setup, feel free to reach out for support.
+Before you start contributing to our web application, please ensure that you have the following prerequisites set up on your development environment. On the front-end, you'll need to have **Node.js** installed, as well as **Yarn** to work with **React** and **TypeScript**. For the back-end, make sure you have **Go** installed, which will be used to build and run the back-end. Additionally, **Docker** is required to run the database locally. You can install Docker by following the official installation instructions for your operating system. Having these prerequisites in place will enable you to seamlessly set up and contribute to our web application. If you have any questions or need assistance with the setup, feel free to reach out for support.
 
 ## Development
 1. Fork and clone the repository
