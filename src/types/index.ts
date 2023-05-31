@@ -9,6 +9,7 @@ import {NotesState} from "./note";
 import {ViewState} from "./view";
 import {AssignmentsState} from "./assignment";
 import { OnboardingState } from "./onboarding";
+import { OnboardingNotesState } from "./onboardingNotes";
 
 export interface ApplicationState {
   auth: AuthState;
@@ -22,4 +23,5 @@ export interface ApplicationState {
   view: ViewState;
   assignments: AssignmentsState;
   onboarding: OnboardingState;
+  onboardingNotes: OnboardingNotesState
 }

@@ -3,7 +3,7 @@ import { OnboardingPhase } from "types/onboarding";
 export const OnboardingAction = {
   ChangePhase: "scrumlr.io/changePhase" as const,
   IncrementStep: "scrumlr.io/incrementStep" as const,
-  DecrementStep: "scrumlr.io/decrementStep" as const,
+  AddOnboardingColumn: "scrumlr.io/addOnboardingColumn" as const,
   ToggleStepOpen: "scrumlr.io/toggleStepOpen" as const,
 }
 
@@ -15,8 +15,10 @@ export const OnboardingActionFactory = {
   incrementStep: () => ({
     type: OnboardingAction.IncrementStep
   }),
-  decrementStep: () => ({
-    type: OnboardingAction.DecrementStep
+  addOnboardingColumn: (columnId: string, title: string) => ({
+    type: OnboardingAction.AddOnboardingColumn,
+    columnId,
+    title
   }),
   toggleStepOpen: () => ({
     type: OnboardingAction.ToggleStepOpen
@@ -26,5 +28,5 @@ export const OnboardingActionFactory = {
 export type OnboardingReduxAction =
   | ReturnType<typeof OnboardingActionFactory.changePhase>
   | ReturnType<typeof OnboardingActionFactory.incrementStep>
-  | ReturnType<typeof OnboardingActionFactory.decrementStep>
+  | ReturnType<typeof OnboardingActionFactory.addOnboardingColumn>
   | ReturnType<typeof OnboardingActionFactory.toggleStepOpen>
