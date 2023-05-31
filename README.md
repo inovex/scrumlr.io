@@ -23,10 +23,10 @@
 </p>
 
 ## Features
-- 💯 Free & open-source.
-- 🕵️ No registration required.
 - 🔁 Retrospectives made easy.
 - 🤝 Collaborate with your team.
+- 💯 Free & open-source.
+- 🕵️ No registration required.
 - 🌓 Dark mode.
 - 📱 Responsive.
 - 👅 Localization (i18n) support.
