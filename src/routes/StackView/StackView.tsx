@@ -16,6 +16,7 @@ import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
+import { onboardingAuthorAvatars } from "types/onboardingNotes";
 
 type StackedNote = Note & {
   authorName: string;
@@ -36,6 +37,7 @@ export const StackView = () => {
   const {t} = useTranslation();
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
+  const onboardingNotes = useAppSelector((state) => state.onboardingNotes, _.isEqual);
   const prevNote = useRef<Note | undefined>(note);
   const columns = useAppSelector((state) => state.columns, _.isEqual);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
@@ -269,8 +271,12 @@ export const StackView = () => {
                       noteId={item.parent.id}
                       text={item.parent.text}
                       authorId={item.parent.author}
-                      avatar={item.avatar}
-                      authorName={item.authorName}
+                      avatar={
+                        onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === onboardingNotes.find((on) => on.id === item?.parent?.id)?.onboardingAuthor)?.avatar
+                        ??
+                        item.avatar
+                      }
+                      authorName={onboardingNotes.find((on) => on.id === item?.parent?.id)?.onboardingAuthor ?? item.authorName}
                       showAuthors={showAuthors}
                       onClose={handleClose}
                       isStackedNote={false}
@@ -286,8 +292,12 @@ export const StackView = () => {
                           noteId={n.id}
                           text={n.text}
                           authorId={n.author}
-                          avatar={n.avatar}
-                          authorName={n.authorName}
+                          avatar={
+                            onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === onboardingNotes.find((on) => on.id === n.id)?.onboardingAuthor)?.avatar
+                            ??
+                            item.avatar
+                          }
+                          authorName={onboardingNotes.find((on) => on.id === n.id)?.onboardingAuthor ?? n.authorName}
                           showAuthors={showAuthors}
                           onClose={handleClose}
                           isStackedNote

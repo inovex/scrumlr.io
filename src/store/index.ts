@@ -23,6 +23,7 @@ import {passViewMiddleware} from "./middleware/view";
 import {assignmentReducer} from "./reducer/assignment";
 import {passAssignmentMiddlware} from "./middleware/assignment";
 import { onboardingReducer } from "./reducer/onboarding";
+import { onboardingNoteReducer } from "./reducer/onboardingNote";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -58,7 +59,8 @@ const rootReducer = combineReducers<ApplicationState>({
   votings: votingReducer,
   view: viewReducer,
   assignments: assignmentReducer,
-  onboarding: onboardingReducer
+  onboarding: onboardingReducer,
+  onboardingNotes: onboardingNoteReducer
 });
 
 const store = configureStore({

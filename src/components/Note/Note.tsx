@@ -14,6 +14,7 @@ import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
+import { onboardingAuthorAvatars } from "types/onboardingNotes";
 
 interface NoteProps {
   noteId: string;
@@ -33,44 +34,78 @@ export const Note = (props: NoteProps) => {
   const moderating = useAppSelector((state) => state.view.moderating);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  const onboardingNotes = useAppSelector((state) => state.onboardingNotes, isEqual)
   // all authors of a note, including its children if it's a stack.
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
-    const childrenNoteAuthors = state.notes
-      // get all notes which are in the same stack as the main note
-      .filter((n) => n.position.stack === props.noteId)
-      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
-      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
-    const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
-    // process and filter
-    const allAuthors = allAuthorsRaw
-      .map((a) => {
-        const isSelf = a?.user.id === state.participants?.self.user.id;
-        const displayName = isSelf ? t("Note.me") : a!.user.name;
-        return {
-          ...a,
-          displayName,
-          isSelf,
-        } as ParticipantExtendedInfo;
-      })
-      // remove duplicates (because notes can have multiple children by the same authors)
-      .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
 
-    // if self is part of the authors, we always want it to be visible
-    const selfIndex = allAuthors.findIndex((a) => a.isSelf);
+     // get all notes which are in the same stack as the main note
+    const childrenNotes = state.notes.filter((n) => n.position.stack === props.noteId);
+    const allNotes = [note, ...childrenNotes];
+    const allAuthors: ParticipantExtendedInfo[] = [];
+    allNotes.forEach((n) => {
+      const onboardingNote = onboardingNotes.find((on) => on.id === n?.id);
+      if (onboardingNote !== undefined) {
+        const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
+        if (authorRaw) {
+          const fakeName = onboardingNote.onboardingAuthor;
+          allAuthors.push({...authorRaw, displayName: fakeName, isSelf: false})
+        }
+      } else {
+        const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
+        if (authorRaw) {
+          const isSelf = authorRaw?.user.id === state.participants?.self.user.id;
+          const displayName = isSelf ? t("Note.me") : authorRaw!.user.name;
+          allAuthors.push({...authorRaw, displayName, isSelf: false})
+        }
+      }
+    });
+    const allAuthorsFiltered = allAuthors.filter((v, i, self) => self.findIndex((a) => (a.user?.id === v.user?.id) && (a.displayName === v.displayName)) === i);
+    const selfIndex = allAuthorsFiltered.findIndex((a) => a.isSelf);
     if (selfIndex > 1) {
       // in-place swap with second author
-      [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
+      [allAuthorsFiltered[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthorsFiltered[selfIndex]];
     }
+    if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
+      return [allAuthorsFiltered[0]]; // stack author is always first element
+    }
+
+    return allAuthorsFiltered;
+
+    // const childrenNoteAuthors = childrenNotes
+    //   // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
+    //   .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
+    // const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
+    // // process and filter
+    // const allAuthors = allAuthorsRaw
+    //   .map((a) => {
+    //     const isSelf = a?.user.id === state.participants?.self.user.id;
+    //     const displayName = isSelf ? t("Note.me") : a!.user.name;
+
+    //     return {
+    //       ...a,
+    //       displayName,
+    //       isSelf,
+    //     } as ParticipantExtendedInfo;
+    //   })
+      // remove duplicates (because notes can have multiple children by the same authors)
+      // .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
+
+    // if self is part of the authors, we always want it to be visible
+    // const selfIndex = allAuthors.findIndex((a) => a.isSelf);
+    // if (selfIndex > 1) {
+    //   // in-place swap with second author
+    //   [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
+    // }
 
     // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
     // the other authors are excluded as we only require the stack author
-    if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
-      return [allAuthors[0]]; // stack author is always first element
-    }
+    // if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
+    //   return [allAuthors[0]]; // stack author is always first element
+    // }
 
-    return allAuthors;
+    // return allAuthors;
   }, isEqual);
 
   /* eslint-disable */
