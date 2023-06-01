@@ -10,7 +10,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@fontsource/raleway": "^5.0.1",
+    "@fontsource/raleway": "^5.0.2",
     "@reduxjs/toolkit": "^1.9.5",
     "avataaars": "^2.0.0",
     "classnames": "^2.3.2",
@@ -19,7 +19,7 @@
     "i18next-browser-languagedetector": "^7.0.2",
     "i18next-http-backend": "^2.2.1",
     "js-cookie": "^3.0.5",
-    "marked": "5.0.3",
+    "marked": "5.0.4",
     "qrcode.react": "^3.1.0",
     "query-string": "^8.1.0",
     "react": "^18.0.0-rc.3",
@@ -43,7 +43,7 @@
     "underscore": "^1.13.6",
     "use-sound": "^4.0.1",
     "workbox-core": "^6.5.3",
-    "workbox-precaching": "^6.6.0",
+    "workbox-precaching": "^6.6.1",
     "workbox-routing": "^6.5.3"
   },
   "devDependencies": {
