@@ -60,7 +60,14 @@ jobs:
     # needs: test
     # TODO change to @main once the package workflow is merged
     uses: inovex/scrumlr.io/.github/workflows/package.yml@feat/deploy_to_dev_cluster
-
+  
+  print_sha_tag:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print sha tag
+        run: echo ${{ needs.package.outputs.sha-tag }}
+        
   deploy_to_dev_cluster:
     needs: package
     # TODO change to @main once the package workflow is merged
