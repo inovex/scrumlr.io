@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up Kubernetes Auth
-        uses: azure/k8s-set-context@v2
+        uses: azure/k8s-set-context@v3
         with:
           method: service-account
           K8s-url: https://kubernetes.default.svc
