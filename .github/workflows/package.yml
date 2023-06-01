@@ -68,15 +68,14 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Push frontend image
+        id: push-frontend
         uses: docker/build-push-action@v4
 
         with:
           push: true
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
-        
-        env:
-          SHA_TAG: ${{ steps.meta-frontend.outputs.tags }}
+
 
       - name: Push server image
         uses: docker/build-push-action@v4
@@ -85,6 +84,5 @@ jobs:
           push: true
           tags: ${{ steps.meta-server.outputs.tags }}
           labels: ${{ steps.meta-server.outputs.labels }}
-        
-        env:
-          SHA_TAG: ${{ steps.meta-server.outputs.sha }}
+        env: 
+          SHA_TAG: ${{ steps.push-frontend.outputs.ImageID }}
