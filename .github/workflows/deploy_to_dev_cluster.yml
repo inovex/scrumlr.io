@@ -21,6 +21,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Set up Kubernetes Auth
+        uses: azure/k8s-set-context@v2
+        with:
+          method: service-account
+          K8s-url: https://kubernetes.default.svc
+          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
