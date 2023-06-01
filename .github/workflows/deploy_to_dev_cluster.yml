@@ -38,5 +38,5 @@ jobs:
           manifests: |
             k8s/deployment.yaml
           images: |
-            ${{ github.event.inputs.sha_tag }}
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ github.event.inputs.sha_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ github.event.inputs.frontend_image_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ github.event.inputs.server_image_tag }}
