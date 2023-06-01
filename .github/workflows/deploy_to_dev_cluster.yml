@@ -26,7 +26,7 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           method: service-account
-          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+          k8s-secret: TEST_CLUSTER
           k8s-url: https://127.0.0.1:56349/7f148eaed4ec1b5eac3454c20d5f36b2
 
       - name: Checkout
