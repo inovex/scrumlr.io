@@ -16,28 +16,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # test:
-  #   name: Build and Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout repository
-  #       uses: actions/checkout@v3
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Get yarn cache directory path
-  #       id: yarn-cache-dir-path
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-  #     - uses: actions/cache@v3
-  #       id: yarn-cache
-  #       with:
-  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-  #     - uses: actions/setup-go@v3
-  #       with:
-  #         go-version: '^1.18'
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.18'
 
   #     - name: Build server
   #       working-directory: ./server
