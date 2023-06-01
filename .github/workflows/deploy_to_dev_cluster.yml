@@ -5,9 +5,13 @@ name: Deploy to dev cluster
 on:
   workflow_call:
     inputs:
-        sha_tag:
+        frontend_image_tag:
           required: true
-          description: 'The SHA tag of the image to deploy'
+          description: 'frontend image tag'
+          type: string
+        server_image_tag:
+          required: true
+          description: 'server image tag'
           type: string
 
 jobs:

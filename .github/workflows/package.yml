@@ -3,14 +3,20 @@ name: Package
 on:
   workflow_call:
     outputs:
-      sha-tag:
-        description: The SHA tag of the pushed image
-        value: ${{ jobs.package.outputs.sha-tag }}
+      frontend-image-tag:
+        description: The tag of the frontend image
+        value: ${{ jobs.package.outputs.frontend-image-tag }}
+      server-image:
+        description: The tag of the server image
+        value: ${{ jobs.package.outputs.server-image-tag }}
+
+
 
 jobs:
   package:
     outputs:
-      sha-tag: ${{ steps.meta-frontend.outputs.tags }}
+      frontend-image-tag: ${{ steps.push-frontend.outputs.digest }}
+      server-image-tag: ${{ steps.push-server.outputs.digest }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -81,6 +87,7 @@ jobs:
           labels: ${{ steps.meta-frontend.outputs.labels }}
 
       - name: Push server image
+        id: push-server
         uses: docker/build-push-action@v4
         with:
           context: ./server/src
