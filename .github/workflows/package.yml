@@ -76,6 +76,8 @@ jobs:
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
 
+      - name: Export SHA image tag
+        run: echo "::set-env name=SHA_TAG::${{ steps.meta-frontend.outputs.tags }}"
 
       - name: Push server image
         uses: docker/build-push-action@v4
