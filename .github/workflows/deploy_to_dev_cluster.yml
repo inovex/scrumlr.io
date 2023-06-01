@@ -26,7 +26,7 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           method: service-account
-          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+          k8s-secret: secrets.KUBERNETES_SECRET
           k8s-url: https://kubernetes.default.svc
 
       - name: Checkout
