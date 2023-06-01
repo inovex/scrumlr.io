@@ -18,9 +18,6 @@ jobs:
       contents: read
       actions: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Set up Kubernetes Auth
         uses: azure/k8s-set-context@v3
         with:
@@ -28,11 +25,14 @@ jobs:
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
           k8s-url: https://kubernetes.default.svc
 
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
           manifests: |
             k8s/deployment.yaml
           images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ github.event.inputs.sha_tag }}
+            ${{ github.event.inputs.sha_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ github.event.inputs.sha_tag }}
