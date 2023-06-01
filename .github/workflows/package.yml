@@ -2,6 +2,10 @@ name: Package
 
 on:
   workflow_call:
+    outputs:
+      sha-tag:
+        description: The SHA tag of the pushed image
+        value: ${{ jobs.package.outputs.sha-tag }}
 
 jobs:
   package:
