@@ -64,4 +64,4 @@ jobs:
     # TODO change to @main once the package workflow is merged
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@feat/deploy_to_dev_cluster
     with: 
-      sha_tag: ${{ env.SHA_TAG }}
+      sha_tag: ${{ needs.package.steps.meta-frontend.outputs.tags }}
