@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: scrumlr-backend
+  name: scrumlr-backend-BRANCH_NAME
   namespace: scrumlr
 spec:
   selector:
@@ -14,23 +14,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scrumlr-deployment
+  name: scrumlr-deployment-BRANCH_NAME
   namespace: scrumlr
   labels:
-    app: scrumlr
+    app: scrumlr-BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scrumlr
+      app: scrumlr-BRANCH_NAME
   template:
     metadata:
       labels:
-        app: scrumlr
+        app: scrumlr-BRANCH_NAME
     spec:
       containers:
       - name: scrumlr
-        image: ghcr.io/inovex/scrumlr.io/scrumlr-server:sha-1d404a8
+        image: ghcr.io/inovex/scrumlr.io/scrumlr-server
         args: 
           - "/app/main"
           - "-disable-check-origin"
@@ -97,10 +97,10 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: scrumlr
-  name: scrumlr-frontend
+  name: scrumlr-frontend-BRANCH_NAME
 spec:
   selector:
-    app: frontend
+    app: frontend-BRANCH_NAME
   ports:
     - port: 80
       targetPort: 8080
@@ -110,22 +110,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: scrumlr
-  name: frontend-deployment
+  name: frontend-deployment-BRANCH_NAME
   labels:
-    app: frontend
+    app: frontend-BRANCH_NAME
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: frontend-BRANCH_NAME
   template:
     metadata:
       labels:
-        app: frontend
+        app: frontend-BRANCH_NAME
     spec:
       containers:
       - name: frontend
-        image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:sha-1d404a8
+        image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
         resources:
           requests:
             cpu: "500m"
@@ -144,7 +144,7 @@ spec:
           value: "true"
         ports:
         - containerPort: 80
-        
+
 ---
 # ingress definition
 apiVersion: networking.k8s.io/v1
@@ -154,8 +154,8 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-production
-  name: scrumlr-ingress
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+  name: scrumlr-ingress-BRANCH_NAME
 spec:
   rules:
   - host: "development.scrumlr.fra.ics.inovex.io"
@@ -165,58 +165,47 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: scrumlr-frontend
+            name: scrumlr-frontend-BRANCH_NAME
             port:
               number: 80
       - path: /api
         pathType: Prefix
         backend:
           service:
-            name: scrumlr-backend
+            name: scrumlr-backend-BRANCH_NAME
             port:
               number: 8080
   tls:
   - hosts:
-    - "development.scrumlr.fra.ics.inovex.io"
+    - "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
     secretName: scrumlr-test-certificate 
----
-# redirect middleware
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  namespace: scrumlr
-  name: redirectscheme
-spec:
-  redirectScheme:
-    scheme: https
-    permanent: true
 ---
 # redirect to https
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: scrumlr
-  name: redirect-to-https
+  name: redirect-to-https-BRANCH_NAME
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
     traefik.ingress.kubernetes.io/router.middlewares: scrumlr-redirectscheme@kubernetescrd
 spec:
   rules:
-  - host: "development.scrumlr.fra.ics.inovex.io"
+  - host: "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: scrumlr-frontend
+            name: scrumlr-frontend-BRANCH_NAME
             port:
               number: 80
       - path: /api
         pathType: Prefix
         backend:
           service:
-            name: scrumlr-backend
+            name: scrumlr-backend-BRANCH_NAME
             port:
               number: 8080
 ---
@@ -224,13 +213,13 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   namespace: scrumlr
-  name: scrumlr-test-certificate
+  name: scrumlr-development-certificate-BRANCH_NAME
 spec:
-  secretName: scrumlr-test-certificate
+  secretName: scrumlr-development-certificate-BRANCH_NAME
   issuerRef:
     name: 
-      letsencrypt-production
+      letsencrypt-staging
     kind: ClusterIssuer
-  commonName: development.scrumlr.fra.ics.inovex.io
+  commonName: BRANCH_NAME.development.scrumlr.fra.ics.inovex.io
   dnsNames:
-  - development.scrumlr.fra.ics.inovex.io
+  - BRANCH_NAME.development.scrumlr.fra.ics.inovex.io

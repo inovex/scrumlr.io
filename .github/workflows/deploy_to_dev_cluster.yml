@@ -31,6 +31,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Replace Branch specific Values
+        run: |
+          sed -i "s/BRANCH_NAME/${{ github.head_ref }}/g" k8s/deployment.yaml
 
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
