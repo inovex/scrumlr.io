@@ -23,7 +23,7 @@ jobs:
       actions: read
     steps:
       - name: Set up Kubernetes Auth
-        uses: azure/k8s-set-context@v3
+        uses: azure/k8s-set-context@v1
         with:
           method: service-account
           k8s-secret: secrets.KUBERNETES_SECRET
