@@ -6,7 +6,7 @@ on:
       frontend-image-tag:
         description: The tag of the frontend image
         value: ${{ jobs.package.outputs.frontend-image-tag }}
-      server-image:
+      server-image-tag:
         description: The tag of the server image
         value: ${{ jobs.package.outputs.server-image-tag }}
 
