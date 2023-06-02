@@ -43,7 +43,7 @@
     "underscore": "^1.13.6",
     "use-sound": "^4.0.1",
     "workbox-core": "^7.0.0",
-    "workbox-precaching": "^6.6.1",
+    "workbox-precaching": "^7.0.0",
     "workbox-routing": "^7.0.0"
   },
   "devDependencies": {
