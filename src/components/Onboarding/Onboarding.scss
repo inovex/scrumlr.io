@@ -1,5 +1,30 @@
 @import "constants/style.scss";
 
+.onboarding-controller-wrapper {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 2rem;
+}
+
+.onboarding-controller {
+  background-color: $color-retro-red;
+  color: $color-white;
+  display: inline-flex;
+  border-radius: 20px;
+  padding: 0 2rem;
+}
+
+.onboarding-icon-button {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background-color: $color-white;
+}
+
 .floater {
   z-index: 1000;
   background-color: $color-white;

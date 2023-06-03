@@ -15,9 +15,7 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
-import Floater from "react-floater"
 import { isEqual } from "underscore";
-import { OnboardingStan } from "components/Onboarding/OnboardingStan";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -96,9 +94,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         </button>
 
         <div className="board-header__users">
-          {onboardingState.phase !== "newBoard" &&
-            <OnboardingStan />
-          }
+          {/* TODO: add fake users? */}
           <BoardUsers />
           <ShareButton />
         </div>

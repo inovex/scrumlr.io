@@ -1,5 +1,4 @@
 import { useAppSelector } from "store";
-import "../BoardUsers/BoardUsers.scss";
 import { isEqual } from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
@@ -9,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { OnboardingBase } from "./OnboardingBase";
 import "./Onboarding.scss";
 
-export const OnboardingStan = () => {
+export const OnboardingController = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
@@ -18,14 +17,23 @@ export const OnboardingStan = () => {
   const rootState = useAppSelector((state) => state, shallowEqual)
   let floater;
   switch (phase) {
+    case "intro":
+      if(step === 1) {
+        // placeholder
+      } else if (step === 2) {
+        // placeholder
+      }
+      break;
     case "newBoard":
       if (step === 1) {
         const text = t("Onboarding.newBoardWelcome")
         floater = <Floater open={stepOpen} component={<OnboardingBase text={text} isExercisePrompt />}
         placement="center" styles={{arrow: {color: "#0057ff"}}} />
+      } else if (step === 2) {
+        // placeholder
       }
       break;
-    case "board_configure_template":
+    case "board_check_in":
       if (step === 1) {
         const text = t("Onboarding.newBoardWelcome")
         floater = <Floater open={stepOpen} component={<OnboardingBase text={text} isExercisePrompt={false} />} target=".user-menu"
@@ -40,24 +48,38 @@ export const OnboardingStan = () => {
         dispatch(Actions.addOnboardingNote((gladColumn?.id ?? ""), "i am very glad", "Mike"));
         dispatch(Actions.incrementStep());
       } else if (step === 3) {
-        // const note1 = rootState.notes.find((n) => n.text === "i am mad");
-        // console.log("Note: " + note1?.id);
         dispatch(Actions.changePhase("board_check_in"));
       }
       break;
-    case "board_check_in":
-
+    case "board_data":
+      if (step === 1) {
+        // placeholder
+      } else if (step === 2) {
+        // placeholder
+      }
       break;
-    case "board_note":
-
+    case "board_insights":
+      if (step === 1) {
+        // placeholder
+      }
       break;
-    case "board_voting_timer":
-
+    case "board_actions":
+      if (step === 1) {
+        // placeholder
+      } else if (step === 2) {
+        // placeholder
+      } else if (step === 3) {
+        // placeholder
+      }
       break;
-    case "board_present":
-
+    case "board_check_out":
+      if (step === 1) {
+        // placeholder
+      } else if (step === 2) {
+        // placeholder
+      }
       break;
-    case "board_export":
+    case "outro":
 
       break;
     default:
@@ -65,16 +87,19 @@ export const OnboardingStan = () => {
   }
 
   return (
-    <div className="onboarding">
-      <button
-        className="share-button"
-        aria-label="Toggle Onboarding Popup"
-        onClick={() => {
-          dispatch(Actions.toggleStepOpen())
-        }}
-      >
+    <div className="onboarding-controller-wrapper">
+      <div className="onboarding-controller">
+        <button
+          className="onboarding-icon-button"
+          aria-label="Toggle Onboarding Popup"
+          onClick={() => {
+            dispatch(Actions.toggleStepOpen())
+          }}
+        >
         <PlusIcon />
-      </button>
+        </button>
+      </div>
+
       {floater}
     </div>
 

@@ -1,0 +1,28 @@
+@import "constants/style.scss";
+
+.onboarding-intro-wrapper {
+  inset: 0;
+  padding-top: 3rem;
+  padding-left: 5rem;
+}
+
+.onboarding-intro-container {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+
+  width: 800px;
+}
+
+.onboarding-intro-hero {
+  width: 100%;
+  min-height: 100px;
+  background-color: $color-icon-light-blue;
+}
+
+.onboarding-intro-content {
+  text-align: center;
+}
