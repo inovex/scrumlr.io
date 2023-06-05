@@ -62,8 +62,7 @@ $name-gap: 4px;
   background-color: $menu-icon-background-color--dark;
 
   // add 1px because it's a little bit off in comparison to .note__author margin
-  // margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
-  margin: 0;
+  margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
 
   justify-content: center;
   align-items: center;
