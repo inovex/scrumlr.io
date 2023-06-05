@@ -7,6 +7,7 @@ export default (overwrite?: Partial<Note>): Note => ({
   position: {
     column: "test-note-position-column-id",
     rank: 0,
+    stack: null,
   },
   ...overwrite,
 });

@@ -7,7 +7,7 @@ import {SettingsDropdown} from "./SettingsDropdown";
 
 export const LanguageSettingsDropdown: VFC = () => {
   const {t} = useTranslation();
-  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.resolvedLanguage);
+  const [currentlanguage, setCurrentlanguage] = useState<string>(i18n.resolvedLanguage!);
 
   const changeLanguage = (language: string) => {
     setCurrentlanguage(language);

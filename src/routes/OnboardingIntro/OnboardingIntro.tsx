@@ -1,17 +1,15 @@
-import { useTranslation } from "react-i18next";
-import { useAppSelector } from "store";
-import { isEqual } from "underscore";
-import { OnboardingController } from "components/Onboarding/OnboardingController";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { Actions } from "store/action";
-import { ScrumlrLogo } from "components/ScrumlrLogo";
-import "./OnboardingIntro.scss"
-import { ReactElement } from "react";
-
+// import { useTranslation } from "react-i18next";
+import {useAppSelector} from "store";
+import {isEqual} from "underscore";
+import {OnboardingController} from "components/Onboarding/OnboardingController";
+import {Link, useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
+import "./OnboardingIntro.scss";
 
 export const OnboardingIntro = () => {
-  const {t} = useTranslation();
+  // const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
@@ -36,18 +34,21 @@ export const OnboardingIntro = () => {
 
   return (
     <div className="onboarding-intro-wrapper">
-      <Link to="/" onClick={() => {dispatch(Actions.changePhase("none"))}}>
+      <Link
+        to="/"
+        onClick={() => {
+          dispatch(Actions.changePhase("none"));
+        }}
+      >
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
       <div className="onboarding-intro-container">
-        <div className="onboarding-intro-hero">
-          {intro_image}
-        </div>
+        <div className="onboarding-intro-hero">{intro_image}</div>
         <div className="onboarding-intro-content">
           <p>{content}</p>
         </div>
       </div>
       <OnboardingController />
     </div>
-  )
-}
+  );
+};
