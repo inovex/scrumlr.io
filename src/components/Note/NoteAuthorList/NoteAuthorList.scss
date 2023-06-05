@@ -95,14 +95,6 @@ $name-gap: 4px;
     background: var(--accent-color--desaturated-dark);
   }
 
-  .note__author {
-    background: $color-dark-mode-note;
-  }
-
-  .note__author--self {
-    background: var(--accent-color--desaturated-dark);
-  }
-
   .note__author-name {
     color: $color-white;
   }
