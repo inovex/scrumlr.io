@@ -1,6 +1,6 @@
 @import "src/constants/style.scss";
 
-$overlap-margin: -26px;
+$overlap-margin: -10px;
 $name-gap: 4px;
 
 // --self classes: indicates yourself as the stack author,
@@ -22,26 +22,34 @@ $name-gap: 4px;
 .note__author {
   align-self: center;
   // reset css from figure-element:
-  margin: 0;
   border: 0;
 
   font: inherit;
   height: 28px;
   border-radius: $rounded--default;
 
+  // reset margin and overlap avatars on top of each other
+  margin: 0 0 0 $overlap-margin;
   // counter the slight offset from centering because UserAvatar real size is larger than what you actually see
   transform: translateY(-2px);
-}
 
-// reset negative margin on first avatar
-.note__author:first-of-type {
-  margin: 0;
-}
+  &:first-of-type {
+    // reset negative margin on first avatar
+    margin: 0;
+    // render above second avatar
+    z-index: $note-z-index + 2;
+  }
 
-// make a gap after last avatar unless .note-author-rest bubble exists
-.note__author:last-of-type:not(.note__author--with-rest) {
-  padding-right: 0;
-  margin-right: $name-gap;
+  &:nth-of-type(2) {
+    // render above third avatar / rest bubble
+    z-index: $note-z-index + 1;
+  }
+
+  &:last-of-type:not(.note__author--with-rest) {
+    padding-right: 0;
+    // make a gap after last avatar unless .note-author-rest bubble exists
+    margin-right: $name-gap;
+  }
 }
 
 // the rest bubble should be about the same size as the avatars
