@@ -16,13 +16,14 @@ interface OnboardingPhaseSteps {
 
 const phaseSteps: OnboardingPhaseSteps[] = [
   { name: "none", steps: 0 },
-  { name: "newBoard", steps: 1},
-  { name: "board_configure_template", steps: 3},
-  { name: "board_check_in", steps: 1},
-  { name: "board_note", steps: 2},
-  { name: "board_voting_timer", steps: 1},
-  { name: "board_present", steps: 1},
-  { name: "board_export", steps: 1},
+  { name: "intro", steps: 3},
+  { name: "newBoard", steps: 2},
+  { name: "board_check_in", steps: 3},
+  { name: "board_data", steps: 2},
+  { name: "board_insights", steps: 1},
+  { name: "board_actions", steps: 3},
+  { name: "board_check_out", steps: 2},
+  { name: "outro", steps: 2},
 ]
 
 export const onboardingReducer = (state: OnboardingState = initialState, action: ReduxAction ): OnboardingState => {
@@ -37,7 +38,8 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
     }
     case Action.IncrementStep: {
       const currentPhaseIndex = phaseSteps.findIndex((p) => p.name === state.phase);
-      if (phaseSteps[currentPhaseIndex].steps === state.step) {
+      const increment = action.amount ?? 1;
+      if (state.step + increment > phaseSteps[currentPhaseIndex].steps) {
         return {
           ...state,
           phase: phaseSteps[currentPhaseIndex + 1].name,
@@ -47,7 +49,7 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
       }
       return {
           ...state,
-          step: state.step + 1,
+          step: state.step + increment,
           stepOpen: true
         };
 

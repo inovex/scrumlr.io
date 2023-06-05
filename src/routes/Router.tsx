@@ -19,6 +19,7 @@ import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
+import { OnboardingIntro } from "./OnboardingIntro/OnboardingIntro";
 
 const Router = () => (
   <BrowserRouter>
@@ -44,6 +45,7 @@ const Router = () => (
           </RequireAuthentication>
         }
       />
+      <Route path="/onboarding-intro" element={<OnboardingIntro />} />
       <Route path="/login" element={<LoginBoard />} />
       <Route
         path="/board/:boardId/print"

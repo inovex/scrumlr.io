@@ -8,7 +8,7 @@ import {useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Actions } from "store/action";
-import { OnboardingStan } from "components/Onboarding/OnboardingStan";
+import { OnboardingController } from "components/Onboarding/OnboardingController";
 import {columnTemplates} from "./columnTemplates";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
@@ -24,11 +24,7 @@ export const NewBoard = () => {
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
-  const isOnboarding = window.location.pathname.includes("onboarding");
-
-  // if (isOnboarding) {
-  //   dispatch(Actions.changePhase("newBoard"));
-  // }
+  const isOnboarding = window.location.pathname.startsWith("/onboarding");
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -47,10 +43,10 @@ export const NewBoard = () => {
         },
         columnTemplates[columnTemplate].columns
       );
-      if (!window.location.pathname.includes("onboarding")) {
+      if (!isOnboarding) {
         navigate(`/board/${boardId}`);
       } else {
-        dispatch(Actions.changePhase("board_configure_template"));
+        dispatch(Actions.changePhase("board_check_in"));
         navigate(`/onboarding-board/${boardId}`);
       }
     }
@@ -61,9 +57,7 @@ export const NewBoard = () => {
   return (
     <div className="new-board__wrapper">
       {isOnboarding &&
-        <div className="new-board__onboarding">
-          <OnboardingStan />
-        </div>
+        <OnboardingController />
       }
       <div className="new-board">
         <div>
