@@ -57,9 +57,7 @@ export const NewBoard = () => {
   return (
     <div className="new-board__wrapper">
       {isOnboarding &&
-        <div className="new-board__onboarding">
-          <OnboardingController />
-        </div>
+        <OnboardingController />
       }
       <div className="new-board">
         <div>

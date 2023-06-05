@@ -1,7 +1,7 @@
 import { useAppSelector } from "store";
 import { isEqual } from "underscore";
 import Floater from "react-floater";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
+import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg"
 import { shallowEqual, useDispatch } from "react-redux";
 import { Actions } from "store/action";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,7 @@ export const OnboardingController = () => {
         dispatch(Actions.addOnboardingNote((gladColumn?.id ?? ""), "i am very glad", "Mike"));
         dispatch(Actions.incrementStep());
       } else if (step === 3) {
-        dispatch(Actions.changePhase("board_check_in"));
+        dispatch(Actions.changePhase("board_data"));
       }
       break;
     case "board_data":
@@ -90,13 +90,30 @@ export const OnboardingController = () => {
     <div className="onboarding-controller-wrapper">
       <div className="onboarding-controller">
         <button
+          className="onboarding-button onboarding-skip-button"
+          aria-label="Skip this phase"
+          onClick={() => {
+            dispatch(Actions.incrementStep(100))
+          }}>
+          {t("Onboarding.skip")}
+        </button>
+
+        <button
           className="onboarding-icon-button"
           aria-label="Toggle Onboarding Popup"
           onClick={() => {
             dispatch(Actions.toggleStepOpen())
-          }}
-        >
-        <PlusIcon />
+          }}>
+          <StanIcon />
+        </button>
+
+        <button
+          className="onboarding-button onboarding-next-button"
+          aria-label="Go to next step"
+          onClick={() => {
+            dispatch(Actions.incrementStep())
+          }}>
+          {t("Onboarding.next")}
         </button>
       </div>
 

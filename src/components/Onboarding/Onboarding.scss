@@ -6,23 +6,76 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  z-index: 1000;
 }
 
 .onboarding-controller {
-  background-color: $color-retro-red;
-  color: $color-white;
-  display: inline-flex;
-  border-radius: 20px;
-  padding: 0 2rem;
+  // background-color: $color-retro-red;
+  // color: $color-white;
+  // border-radius: 20px;
+  // border: 2.5px solid $color-white;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  justify-content: space-between;
 }
 
 .onboarding-icon-button {
-  width: 45px;
-  height: 45px;
   border-radius: 50%;
   border: none;
   background-color: $color-white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 1.5rem;
+  padding: .5rem 0;
+}
+.onboarding-icon-button svg {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background-color: $color-white;
+  border: 2.5px solid $color-white;
+  transition: ease-in-out .1s;
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+}
+
+.onboarding-button {
+  color: $color-white;
+  background-color: transparent;
+  border: none;
+  font-size: $text--md;
+  padding: .5rem 0;
+}
+
+.onboarding-skip-button, .onboarding-next-button {
+  background-color: $color-retro-red;
+  color: $color-white;
+  border: 2.5px solid $color-white;
+  &:hover {
+    cursor: pointer;
+    background-color: $color-white;
+    color: $color-retro-red;
+    border: 2px solid $color-retro-red;
+  }
+}
+.onboarding-next-button {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding-right: 2rem;
+  padding-left: 1rem;
+}
+.onboarding-skip-button {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  padding-left: 2rem;
+  padding-right: 1rem;
 }
 
 .floater {

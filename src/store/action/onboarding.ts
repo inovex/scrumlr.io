@@ -12,8 +12,9 @@ export const OnboardingActionFactory = {
     type: OnboardingAction.ChangePhase,
     phase
   }),
-  incrementStep: () => ({
-    type: OnboardingAction.IncrementStep
+  incrementStep: (amount?: number) => ({
+    type: OnboardingAction.IncrementStep,
+    amount
   }),
   addOnboardingColumn: (columnId: string, title: string) => ({
     type: OnboardingAction.AddOnboardingColumn,
