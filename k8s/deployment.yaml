@@ -223,3 +223,48 @@ spec:
   commonName: BRANCH_NAME.development.scrumlr.fra.ics.inovex.io
   dnsNames:
   - BRANCH_NAME.development.scrumlr.fra.ics.inovex.io
+---
+# Database for the deployment
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: scrumlr-postgres
+  namespace: scrumlr
+spec:
+  chart:
+    spec:
+      chart: postgresql
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami
+  install: {}
+  interval: 1m0s
+  targetNamespace: scrumlr
+  values:
+    auth:
+      database: scrumlr
+      username: scrumlr
+      existingSecret: postgresql-creds
+      secretKeys:
+        adminPasswordKey: password
+        userPasswordKey: password
+        replicationPasswordKey: password
+    primary:
+      persistence:
+        enabled: true
+        size: 1Gi
+        storageClass: csi-cinder-sc-delete
+--- 
+# Service for the postgres deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: scrumlr
+spec:
+  selector:
+    app.kubernetes.io/name: postgresql
+  ports:
+  - name: tcp-postgresql
+    port: 5432
+    targetPort: 5432
