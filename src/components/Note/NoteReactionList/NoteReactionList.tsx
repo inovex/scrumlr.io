@@ -62,12 +62,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   return (
     <div className="note-reaction-list__root">
-      {reactions.map((r) => (
-        <NoteReactionChip reaction={r} key={r.reactionType} />
-      ))}
       <div className="note-reaction-list__add-reaction-sticker-container">
         <IconEmoji className="note-reaction-list__add-reaction-sticker" />
       </div>
+      {reactions.map((r) => (
+        <NoteReactionChip reaction={r} key={r.reactionType} />
+      ))}
     </div>
   );
 };
