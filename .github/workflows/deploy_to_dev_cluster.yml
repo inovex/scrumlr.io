@@ -60,6 +60,7 @@ jobs:
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
+          namespace: scrumlr-dev-deployments
           manifests: |
             k8s/deployment.yaml
           images: |
