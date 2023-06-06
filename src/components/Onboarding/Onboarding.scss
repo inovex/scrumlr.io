@@ -1,6 +1,6 @@
 @import "constants/style.scss";
 
-.onboarding-controller-wrapper {
+.onboarding-controller {
   position: absolute;
   top: auto;
   bottom: 0;
@@ -8,13 +8,6 @@
   transform: translateX(-50%);
   margin-bottom: 2.5rem;
   z-index: 1000;
-}
-
-.onboarding-controller {
-  // background-color: $color-retro-red;
-  // color: $color-white;
-  // border-radius: 20px;
-  // border: 2.5px solid $color-white;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   justify-content: space-between;
@@ -28,7 +21,7 @@
   justify-content: center;
   align-items: center;
   margin: 0 1.5rem;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
 .onboarding-icon-button svg {
   position: absolute;
@@ -39,7 +32,7 @@
   border-radius: 50%;
   background-color: $color-white;
   border: 2.5px solid $color-white;
-  transition: ease-in-out .1s;
+  transition: ease-in-out 0.1s;
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
@@ -51,10 +44,11 @@
   background-color: transparent;
   border: none;
   font-size: $text--md;
-  padding: .5rem 0;
+  padding: 0.5rem 0;
 }
 
-.onboarding-skip-button, .onboarding-next-button {
+.onboarding-skip-button,
+.onboarding-next-button {
   background-color: $color-retro-red;
   color: $color-white;
   border: 2.5px solid $color-white;
@@ -78,13 +72,19 @@
   padding-right: 1rem;
 }
 
+.onboarding-new_board {
+  position: absolute;
+  top: 4rem;
+  right: 6rem;
+}
+
 .floater {
   z-index: 1000;
   background-color: $color-white;
   color: $color-dark-one;
   min-width: 300px;
   min-height: 100px;
-  border: 3px solid $color-backlog-blue;
+  // border: 3px solid $color-backlog-blue;
 }
 
 .onboarding-base {
@@ -92,6 +92,7 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
+  max-width: 350px;
 }
 
 .onboarding-img {
@@ -113,43 +114,8 @@
   color: $color-backlog-blue;
   border: 1px solid $color-backlog-blue;
 }
-.onboarding-ok, .onboarding-next {
+.onboarding-ok,
+.onboarding-next {
   background-color: $color-backlog-blue;
   padding: 0 2rem;
-}
-
-.close-floater {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  color: $color-backlog-blue;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: $icon--extralarge;
-  height: $icon--extralarge;
-  border-radius: $rounded--full;
-  transition: all 0.08s ease-out;
-  border: 2px solid transparent;
-  outline: none;
-
-  &:hover {
-    background-color: $color-backlog-blue;
-    color: $color-white;
-    cursor: pointer;
-    transform: scale(1.04);
-  }
-
-  &:active {
-    transform: scale(1);
-  }
-
-  &:focus-visible {
-    border: 2px solid $color-backlog-blue;
-  }
-}
-
-.close-floater>svg {
-  height: 100%;
-  width: 100%;
 }

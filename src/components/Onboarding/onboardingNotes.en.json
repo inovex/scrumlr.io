@@ -1,0 +1,26 @@
+{
+  "Check-In": [
+    {
+      "author": "Mike",
+      "text": "Highway to Hell"
+    }
+  ],
+  "Mad": [
+    {
+      "author": "Mike",
+      "text": "I am mad about something"
+    }
+  ],
+  "Sad": [
+    {
+      "author": "Mike",
+      "text": "I am sad about something"
+    }
+  ],
+  "Glad": [
+    {
+      "author": "Mike",
+      "text": "I am glad about something"
+    }
+  ]
+}

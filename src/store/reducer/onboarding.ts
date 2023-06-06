@@ -15,8 +15,8 @@ interface OnboardingPhaseSteps {
 const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
   {name: "intro", steps: 3},
-  {name: "newBoard", steps: 2},
-  {name: "board_check_in", steps: 3},
+  {name: "newBoard", steps: 3},
+  {name: "board_check_in", steps: 4},
   {name: "board_data", steps: 2},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},

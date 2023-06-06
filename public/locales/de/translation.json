@@ -595,9 +595,15 @@
 
   },
   "Onboarding": {
-    "newBoardWelcome": "Schön, dass du da bist!",
     "skip": "Überspringen",
     "ok": "Alles klar!",
-    "next": "Weiter"
+    "next": "Weiter",
+    "newBoardWelcome": "Schön, dass du da bist!",
+    "checkInWelcome": "Das Team scheint wird mit den Gedanken noch bei den aktuellen Problemen sein.\nLass uns eine Check-In Phase einbauen, um die Stimmung etwas aufzulockern!",
+    "checkAddColumn": "Das Board lässt sich zum Glück ganz leicht anpassen! \nFüge bitte ganz links eine neue sichtbare Spalte mit dem Namen 'Check-In' ein.",
+    "checkInAddTeam": "Super, jetzt kann es losgehen! \nIch habe das Team schon einmal zu unserer Sitzung eingeladen.",
+    "dataWelcome": "Jetzt wo du die Aufmerksamkeit deines Teams hast wird es Zeit, den Problemen auf den Grund zu gehen! \nEs wird Zeit, die Macht der Templates zu nutzen.",
+    "dataCardsAdded": "Es ist gut, dass das Team so viele Punkte benennen konnte. Leider ist das Ganze etwas unübersichtlich geworden. \nZum Glück bietet Scrumlr dafür eine Lösung!",
+    "dataStacks": "Führe bitte ähnliche Kärtchen per Drag&Drop zu Stapeln zusammen"
   }
 }

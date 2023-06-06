@@ -1,14 +1,15 @@
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
+import "components/Onboarding/Onboarding.scss";
 import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {Link} from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { Actions } from "store/action";
-import { OnboardingController } from "components/Onboarding/OnboardingController";
+import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
+import {OnboardingController} from "components/Onboarding/OnboardingController";
 import {columnTemplates} from "./columnTemplates";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
@@ -52,16 +53,21 @@ export const NewBoard = () => {
     }
   }
 
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
+  const isCreatedBoardDisabled = isOnboarding
+    ? !columnTemplate || columnTemplate !== "madSadGlad"
+    : !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
 
   return (
     <div className="new-board__wrapper">
-      {isOnboarding &&
-        <OnboardingController />
-      }
+      {isOnboarding && <OnboardingController />}
       <div className="new-board">
         <div>
-          <Link to="/" onClick={() => {dispatch(Actions.changePhase("none"))}}>
+          <Link
+            to="/"
+            onClick={() => {
+              dispatch(Actions.changePhase("none"));
+            }}
+          >
             <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </Link>
 
@@ -110,7 +116,7 @@ export const NewBoard = () => {
           {t("NewBoard.createNewBoard")}
         </Button>
         {!extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+          <Button className="new-board__action new-board__extended" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
             {t("NewBoard.extendedConfigurationButton")}
           </Button>
         )}

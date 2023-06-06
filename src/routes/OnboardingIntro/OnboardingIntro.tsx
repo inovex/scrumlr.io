@@ -15,21 +15,21 @@ export const OnboardingIntro = () => {
   const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
   let content;
-  let intro_image;
+  let introImage;
 
   if (phase === "newBoard") {
     navigate("/onboarding-new");
   }
 
   if (step === 1) {
-    content = "content step 1";
-    intro_image = <img src="" alt="onboarding img 1" />;
+    content = "Step 1 is about the company sloth inc. Things shoud be peaceful, but...";
+    introImage = <img src="" alt="onboarding img 1" />;
   } else if (step === 2) {
-    content = "content step 2";
-    intro_image = <img src="" alt="onboarding img 2" />;
+    content = "Step 2 is about the conflict. Due to insufficient communication and missing retrospectives, the mood is down";
+    introImage = <img src="" alt="onboarding img 2" />;
   } else {
-    content = "content step 3";
-    intro_image = <img src="" alt="onboarding img 3" />;
+    content = "Step 3 is about hope. With your help and Scrumlr, the team might be able to reach new heights and reconcile.";
+    introImage = <img src="" alt="onboarding img 3" />;
   }
 
   return (
@@ -43,7 +43,7 @@ export const OnboardingIntro = () => {
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </Link>
       <div className="onboarding-intro-container">
-        <div className="onboarding-intro-hero">{intro_image}</div>
+        <div className="onboarding-intro-hero">{introImage}</div>
         <div className="onboarding-intro-content">
           <p>{content}</p>
         </div>
