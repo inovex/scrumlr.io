@@ -4,11 +4,6 @@ name: Deploy to dev cluster
 
 on:
   workflow_call:
-    # secrets:
-    #   k8s_secret:
-    #     required: true
-    #     description: 'k8s secret to authenticate against cluster'
-
     inputs:
         frontend_image_tag:
           required: true
@@ -49,7 +44,7 @@ jobs:
       
       - name: Replace Branch specific Values
         run: |
-          sed -i "s/BRANCH_NAME/${{ github.head_ref }}/g" k8s/deployment.yaml
+          sed -i "s#BRANCH_NAME#${{ github.head_ref }}#g" k8s/deployment.yaml
 
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
