@@ -25,6 +25,14 @@ jobs:
             echo "KUBERNETES_SECRET is not defined"
             exit 1
           fi
+  print_inputs:
+    name: Print Inputs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Inputs
+        run: |
+          echo "frontend_image_tag: ${{ github.event.inputs.frontend_image_tag }}"
+          echo "server_image_tag: ${{ github.event.inputs.server_image_tag }}"
   deploy:
     runs-on: self-hosted
     permissions:
@@ -40,7 +48,7 @@ jobs:
         with:
           method: service-account
           k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
-          k8s-url: https://127.0.0.1:56349/7f148eaed4ec1b5eac3454c20d5f36b2
+          k8s-url: https://kubernetes.default.svc
 
       - name: Checkout
         uses: actions/checkout@v3
