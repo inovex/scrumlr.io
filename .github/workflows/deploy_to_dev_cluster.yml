@@ -55,7 +55,7 @@ jobs:
       
       - name: Replace Branch specific Values
         run: |
-          branch_name=$(echo "${{ github.head_ref }}" | sed 's/[/_-]/./g')
+          echo "CURRENT_BRANCH=$(echo "${{ github.head_ref }}" | sed 's/[/_-]/./g')" >> $GITHUB_ENV
           sed -i "s#BRANCH_NAME#${branch_name}#g" k8s/deployment.yaml
 
       - name: Deploy to dev cluster 
