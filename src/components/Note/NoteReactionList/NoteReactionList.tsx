@@ -1,5 +1,5 @@
 import {isEqual} from "underscore";
-import {ReactComponent as IconEmoji} from "assets/icon-dots.svg";
+import {ReactComponent as IconEmoji} from "assets/icon-smiley.svg";
 import {useAppSelector} from "../../../store";
 import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
