@@ -60,6 +60,16 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     isEqual
   );
 
+  const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
+  const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setShowReactionBar(!showReactionBar);
+  };
+  const handleBarClick = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+    e.stopPropagation();
+    console.log(reactionType);
+  };
+
   return (
     <div className="note-reaction-list__root">
       <div className="note-reaction-list__add-reaction-sticker-container">
