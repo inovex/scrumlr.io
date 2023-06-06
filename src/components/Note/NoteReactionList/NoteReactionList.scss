@@ -1,5 +1,8 @@
 @import "src/constants/style";
 
+$size--inner: 28px;
+$gap--reaction-bar: 10px;
+
 .note-reaction-list__root {
   display: flex;
   flex-direction: row;
@@ -7,12 +10,14 @@
 }
 
 .note-reaction-list__add-reaction-sticker-container {
+  all: unset; // button reset
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 28px;
-  height: 28px;
+  width: $size--inner;
+  height: $size--inner;
 
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
@@ -22,7 +27,44 @@
   }
 }
 
+.note-reaction-list__reaction-bar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $gap--reaction-bar;
+
+  padding: 0 3px;
+  border-radius: $rounded--full;
+
+  &--active {
+    background-color: $color-lighter-gray;
+  }
+}
+
+.note-reaction-list__reaction-bar {
+  display: inline-flex;
+  flex-direction: row;
+  gap: $gap--reaction-bar;
+}
+
 .note-reaction-list__add-reaction-sticker {
   width: $icon--large;
   height: $icon--large;
+}
+
+.note-reaction-list__reaction-bar-reaction {
+  all: unset;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $size--inner;
+  height: $size--inner;
+  border-radius: $rounded--full;
+  font-size: $text--md;
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
 }

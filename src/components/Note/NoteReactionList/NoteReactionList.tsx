@@ -1,7 +1,9 @@
 import {isEqual} from "underscore";
 import {ReactComponent as IconEmoji} from "assets/icon-smiley.svg";
+import React, {useState} from "react";
+import classNames from "classnames";
 import {useAppSelector} from "../../../store";
-import {Reaction, ReactionType} from "../../../types/reaction";
+import {Reaction, ReactionImageMap, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import "./NoteReactionList.scss";
@@ -72,12 +74,21 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   return (
     <div className="note-reaction-list__root">
-      <div className="note-reaction-list__add-reaction-sticker-container">
-        <IconEmoji className="note-reaction-list__add-reaction-sticker" />
+      <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
+        <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
+          <IconEmoji className="note-reaction-list__add-reaction-sticker" />
+        </button>
+        {showReactionBar && (
+          <div className="note-reaction-list__reaction-bar">
+            {[...ReactionImageMap.entries()].map((r) => (
+              <button className="note-reaction-list__reaction-bar-reaction" onClick={(e) => handleBarClick(e, r[0])}>
+                {r[1]}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-      {reactions.map((r) => (
-        <NoteReactionChip reaction={r} key={r.reactionType} />
-      ))}
+      {!showReactionBar && reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} />)}
     </div>
   );
 };

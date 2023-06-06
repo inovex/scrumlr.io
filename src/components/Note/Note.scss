@@ -146,13 +146,21 @@ $note__author-image-size: 26px;
   fill: var(--accent-color);
 }
 
-.note__header,
-.note__footer {
+.note__header {
   position: relative;
   height: 28px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.note__footer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  height: 38px;
 }
 
 .note__author-image {
