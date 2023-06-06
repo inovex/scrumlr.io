@@ -55,6 +55,17 @@ jobs:
 
   #     - name: Test with coverage
   #       run: yarn test --coverage --watchAll=false --passWithNoTests
+  
+  test_if_secret_is_defined:
+    name: Test if secret is defined
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test if secret is defined
+        run: |
+          if [ -z "${{ secrets.KUBERNETES_SECRET }}" ]; then
+            echo "KUBERNETES_SECRET is not defined"
+            exit 1
+          fi
 
   package:
     # needs: test
