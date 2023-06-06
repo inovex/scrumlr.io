@@ -1,4 +1,8 @@
 ### This file is used to automatically deploy the application to the development environment.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scrumlr-dev-deployments
 ---
 apiVersion: v1
 kind: Service

@@ -68,3 +68,4 @@ jobs:
     with: 
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
+      k8s_secret: ${{ needs.secrets.KUBERNETES_SECRET }}

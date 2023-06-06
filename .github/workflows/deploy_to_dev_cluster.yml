@@ -13,6 +13,10 @@ on:
           required: true
           description: 'server image tag'
           type: string
+        k8s_secret:
+          required: true
+          description: 'k8s secret to authenticate against cluster'
+          type: string
 
 jobs:
   test_if_secret_is_defined:
@@ -21,9 +25,12 @@ jobs:
     steps:
       - name: Test if secret is defined
         run: |
-          if [ -z "${{ secrets.KUBERNETES_SECRET }}" ]; then
-            echo "KUBERNETES_SECRET is not defined"
+          if [ -z "${{ github.event.inputs.k8s_secret }}" ]; then
+            echo "k8s_secret is not defined"
             exit 1
+          else {
+            echo "k8s_secret is defined"
+          }
           fi
   deploy:
     runs-on: self-hosted
@@ -36,7 +43,7 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           method: service-account
-          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+          k8s-secret: ${{ github.event.inputs.k8s_secret }}
           k8s-url: https://127.0.0.1:56349/7f148eaed4ec1b5eac3454c20d5f36b2
 
       - name: Checkout
