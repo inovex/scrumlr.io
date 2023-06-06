@@ -15,6 +15,16 @@ on:
           type: string
 
 jobs:
+  test_if_secret_is_defined:
+    name: Test if secret is defined
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test if secret is defined
+        run: |
+          if [ -z "${{ secrets.KUBERNETES_SECRET }}" ]; then
+            echo "KUBERNETES_SECRET is not defined"
+            exit 1
+          fi
   deploy:
     runs-on: self-hosted
     permissions:
