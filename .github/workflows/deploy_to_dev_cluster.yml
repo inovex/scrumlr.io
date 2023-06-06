@@ -32,6 +32,9 @@ jobs:
       contents: read
       actions: read
     steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        id: install
       - name: Set up Kubernetes Auth
         uses: azure/k8s-set-context@v3
         with:
