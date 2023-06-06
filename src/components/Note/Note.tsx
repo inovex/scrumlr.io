@@ -145,6 +145,10 @@ export const Note = (props: NoteProps) => {
         onKeyDown={handleKeyPress}
         ref={noteRef}
       >
+        <header className="note__header">
+          <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          <Votes noteId={props.noteId!} aggregateVotes />
+        </header>
         {isImage ? (
           <div className="note__image-wrapper">
             <img
@@ -157,11 +161,9 @@ export const Note = (props: NoteProps) => {
         ) : (
           <p className="note__text">{note!.text}</p>
         )}
-        <div className="note__footer">
-          <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+        <footer className="note__footer">
           <NoteReactionList noteId={props.noteId} />
-          <Votes noteId={props.noteId!} aggregateVotes />
-        </div>
+        </footer>
       </button>
       {isStack && <div className="note__in-stack" />}
     </div>
