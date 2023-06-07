@@ -58,14 +58,14 @@ jobs:
         run: |
           echo "CURRENT_BRANCH=$(echo ${{ github.head_ref }} | sed 's/[/_.]/-/g')" >> "$GITHUB_ENV"
       
-      - name: install yq
-        run: |
-          wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O /usr/bin/yq
-          chmod +x /usr/bin/yq
+      # - name: install yq
+      #   run: |
+      #     wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O /usr/bin/yq
+      #     chmod +x /usr/bin/yq
       
-      - name: parse_to_json
-        run:
-          yq -o=json eval k8s/deployment.yaml > k8s/deployment_json.yaml
+      # - name: parse_to_json
+      #   run:
+      #     yq -o=json eval k8s/deployment.yaml > k8s/deployment_json.yaml
 
       
       - name: Replace Branch specific Values

@@ -1,0 +1,416 @@
+# this is a json Version of the deployment.yaml file generated using yq and formatted to match the syntax
+{
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "scrumlr-backend-BRANCH_NAME"
+  },
+  "spec": {
+    "selector": {
+      "app": "scrumlr"
+    },
+    "ports": [
+      {
+        "port": 8080,
+        "targetPort": 8080
+      }
+    ]
+  }
+},
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "scrumlr-deployment-BRANCH_NAME",
+    "labels": {
+      "app": "scrumlr-BRANCH_NAME"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "scrumlr-BRANCH_NAME"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "scrumlr-BRANCH_NAME"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "scrumlr",
+            "image": "ghcr.io/inovex/scrumlr.io/scrumlr-server",
+            "args": [
+              "/app/main",
+              "-disable-check-origin"
+            ],
+            "resources": {
+              "requests": {
+                "cpu": "500m",
+                "memory": "500Mi"
+              },
+              "limits": {
+                "cpu": "800m",
+                "memory": "800Mi"
+              }
+            },
+            "env": [
+              {
+                "name": "SCRUMLR_SERVER_PORT",
+                "value": "8080"
+              },
+              {
+                "name": "SCRUMLR_API_HOST",
+                "value": "https://development.scrumlr.fra.ics.inovex.io"
+              },
+              {
+                "name": "SCRUMLR_SERVER_NATS_URL",
+                "value": "nats://scrumlr-scrumlr-nats:4222"
+              },
+              {
+                "name": "SCRUMLR_AUTH_CALLBACK_HOST",
+                "value": "https://development.scrumlr.fra.ics.inovex.io"
+              },
+              {
+                "name": "SCRUMLR_UNSAFE_PRIVATE_KEY",
+                "value": "-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAArAAAABNlY2RzYS\n1zaGEyLW5pc3RwNTIxAAAACG5pc3RwNTIxAAAAhQQA6zgG1vHujjrCagonqdAohU76Vk1p\nxFbQg9cP79qORmU61AaWgF34vl4ZYe7TIVxlE+7cGDwGpVldAZANsfDKuMYAERIXnA0XYg\nrTKIzdzYqrDVqK1cA9EstRNRFUn3xqKLP7yYBgSfntCNEKziZDPxAMNGr9mnxCpEWnsnN4\nH1Hua30AAAEYHuFx2B7hcdgAAAATZWNkc2Etc2hhMi1uaXN0cDUyMQAAAAhuaXN0cDUyMQ\nAAAIUEAOs4Btbx7o46wmoKJ6nQKIVO+lZNacRW0IPXD+/ajkZlOtQGloBd+L5eGWHu0yFc\nZRPu3Bg8BqVZXQGQDbHwyrjGABESF5wNF2IK0yiM3c2Kqw1aitXAPRLLUTURVJ98aiiz+8\nmAYEn57QjRCs4mQz8QDDRq/Zp8QqRFp7JzeB9R7mt9AAAAQQftU8WU2CCqtVvTp6Nc5GBd\nDVB34c0DszsSU9HWuURDJdJDZ6wYm9bSnJwgyKilBsNets+sDHzpjSCwUcCT9csOAAAAGW\nNocmlzdGlhbmRyZWllckBjZHJlaWVybmIBAg==\n-----END OPENSSH PRIVATE KEY-----\n"
+              },
+              {
+                "name": "SCRUMLR_PRIVATE_KEY",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-ecdsa-key",
+                    "key": "private_key"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_SERVER_DATABASE_URL",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "postgresql-creds",
+                    "key": "url"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_AUTH_GOOGLE_CLIENT_ID",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-secrets",
+                    "key": "GOOGLE_CLIENT_ID"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-secrets",
+                    "key": "GOOGLE_CLIENT_SECRET"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_AUTH_MICROSOFT_CLIENT_ID",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-secrets",
+                    "key": "MICROSOFT_CLIENT_ID"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-secrets",
+                    "key": "MICROSOFT_CLIENT_SECRET"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_FEEDBACK_WEBHOOK_URL",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "scrumlr-secrets",
+                    "key": "WEBHOOK_URL"
+                  }
+                }
+              },
+              {
+                "name": "SCRUMLR_BASE_PATH",
+                "value": "/api"
+              }
+            ],
+            "ports": [
+              {
+                "containerPort": 8080
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "scrumlr-frontend-BRANCH_NAME"
+  },
+  "spec": {
+    "selector": {
+      "app": "frontend-BRANCH_NAME"
+    },
+    "ports": [
+      {
+        "port": 80,
+        "targetPort": 8080
+      }
+    ]
+  }
+},
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "frontend-deployment-BRANCH_NAME",
+    "labels": {
+      "app": "frontend-BRANCH_NAME"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "frontend-BRANCH_NAME"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "frontend-BRANCH_NAME"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "frontend",
+            "image": "ghcr.io/inovex/scrumlr.io/scrumlr-frontend",
+            "resources": {
+              "requests": {
+                "cpu": "500m",
+                "memory": "500Mi"
+              },
+              "limits": {
+                "cpu": "800m",
+                "memory": "800Mi"
+              }
+            },
+            "env": [
+              {
+                "name": "SCRUMLR_SERVER_URL",
+                "value": "/api"
+              },
+              {
+                "name": "SCRUMLR_SHOW_LEGAL_DOCUMENTS",
+                "value": "true"
+              }
+            ],
+            "ports": [
+              {
+                "containerPort": 80
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "Ingress",
+  "metadata": {
+    "annotations": {
+      "traefik.ingress.kubernetes.io/router.entrypoints": "websecure",
+      "traefik.ingress.kubernetes.io/router.tls": "true",
+      "cert-manager.io/cluster-issuer": "letsencrypt-staging"
+    },
+    "name": "scrumlr-ingress-BRANCH_NAME"
+  },
+  "spec": {
+    "rules": [
+      {
+        "host": "development.scrumlr.fra.ics.inovex.io",
+        "http": {
+          "paths": [
+            {
+              "path": "/",
+              "pathType": "Prefix",
+              "backend": {
+                "service": {
+                  "name": "scrumlr-frontend-BRANCH_NAME",
+                  "port": {
+                    "number": 80
+                  }
+                }
+              }
+            },
+            {
+              "path": "/api",
+              "pathType": "Prefix",
+              "backend": {
+                "service": {
+                  "name": "scrumlr-backend-BRANCH_NAME",
+                  "port": {
+                    "number": 8080
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "tls": [
+      {
+        "hosts": [
+          "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
+        ],
+        "secretName": "scrumlr-test-certificate"
+      }
+    ]
+  }
+},
+{
+  "apiVersion": "networking.k8s.io/v1",
+  "kind": "Ingress",
+  "metadata": {
+    "name": "redirect-to-https-BRANCH_NAME",
+    "annotations": {
+      "traefik.ingress.kubernetes.io/router.entrypoints": "web",
+      "traefik.ingress.kubernetes.io/router.middlewares": "scrumlr-redirectscheme@kubernetescrd"
+    }
+  },
+  "spec": {
+    "rules": [
+      {
+        "host": "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io",
+        "http": {
+          "paths": [
+            {
+              "path": "/",
+              "pathType": "Prefix",
+              "backend": {
+                "service": {
+                  "name": "scrumlr-frontend-BRANCH_NAME",
+                  "port": {
+                    "number": 80
+                  }
+                }
+              }
+            },
+            {
+              "path": "/api",
+              "pathType": "Prefix",
+              "backend": {
+                "service": {
+                  "name": "scrumlr-backend-BRANCH_NAME",
+                  "port": {
+                    "number": 8080
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+},
+{
+  "apiVersion": "cert-manager.io/v1",
+  "kind": "Certificate",
+  "metadata": {
+    "name": "scrumlr-development-certificate-BRANCH_NAME"
+  },
+  "spec": {
+    "secretName": "scrumlr-development-certificate-BRANCH_NAME",
+    "issuerRef": {
+      "name": "letsencrypt-staging",
+      "kind": "ClusterIssuer"
+    },
+    "commonName": "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io",
+    "dnsNames": [
+      "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
+    ]
+  }
+},
+{
+  "apiVersion": "helm.toolkit.fluxcd.io/v2beta1",
+  "kind": "HelmRelease",
+  "metadata": {
+    "name": "scrumlr-postgres-BRANCH_NAME"
+  },
+  "spec": {
+    "chart": {
+      "spec": {
+        "chart": "postgresql",
+        "sourceRef": {
+          "kind": "HelmRepository",
+          "name": "bitnami"
+        }
+      }
+    },
+    "install": {},
+    "interval": "1m0s",
+    "targetNamespace": "scrumlr-dev-deployments",
+    "values": {
+      "auth": {
+        "database": "scrumlr",
+        "username": "scrumlr",
+        "existingSecret": "postgresql-creds",
+        "secretKeys": {
+          "adminPasswordKey": "password",
+          "userPasswordKey": "password",
+          "replicationPasswordKey": "password"
+        }
+      },
+      "primary": {
+        "persistence": {
+          "enabled": true,
+          "size": "1Gi",
+          "storageClass": "csi-cinder-sc-delete"
+        }
+      }
+    }
+  }
+},
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "postgres"
+  },
+  "spec": {
+    "selector": {
+      "app.kubernetes.io/name": "postgresql"
+    },
+    "ports": [
+      {
+        "name": "tcp-postgresql",
+        "port": 5432,
+        "targetPort": 5432
+      }
+    ]
+  }
+}
+}
