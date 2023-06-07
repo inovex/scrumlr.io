@@ -6,6 +6,7 @@ $gap--reaction-bar: 10px;
 .note-reaction-list__root {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 5px;
 }
 
