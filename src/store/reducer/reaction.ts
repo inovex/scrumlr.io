@@ -11,12 +11,7 @@ export const reactionReducer = (state: ReactionState = [], action: ReduxAction):
       return [...state, action.reaction];
 
     case Action.DeletedReaction:
-      const newReactions = state.slice();
-      const index = state.findIndex((r) => r.id === action.reactionId);
-      if (index >= 0) {
-        newReactions.splice(index, 1);
-      }
-      return newReactions;
+      return state.filter((r) => r.id !== action.reactionId);
 
     default:
       return state;
