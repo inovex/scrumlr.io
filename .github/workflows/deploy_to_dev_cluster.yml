@@ -61,7 +61,6 @@ jobs:
         uses: mikefarah/yq@master
         with:
           cmd: yq -o=json eval k8s/deployment.yaml > k8s/deployment.json
-          
       
       - name: Replace Branch specific Values
         run: |
