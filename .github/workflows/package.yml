@@ -98,5 +98,5 @@ jobs:
       - name: Set outputs
         id: outputs
         run: |
-          echo frontend-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep sha- | cut -d '-' -f 2)") >> $GITHUB_OUTPUT
-          echo server-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-server:$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep sha- | cut -d '-' -f 2)") >> $GITHUB_OUTPUT
+          echo frontend-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep sha- | cut -d ' ' | cut -d '-' -f 2)") >> $GITHUB_OUTPUT
+          echo server-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-server:$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep sha- | cut -d ' ' | cut -d '-' -f 2)") >> $GITHUB_OUTPUT
