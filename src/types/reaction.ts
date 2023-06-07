@@ -10,12 +10,14 @@ export interface Reaction {
 
 export type ReactionState = Reaction[];
 
-export type ReactionType = "like" | "dislike" | "laughing" | "heart" | "applause";
+export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop";
 
 export const ReactionImageMap = new Map<ReactionType, string>([
+  ["thinking", "🤔"],
+  ["heart", "💖"],
   ["like", "👍"],
   ["dislike", "👎"],
-  ["laughing", "😄"],
-  ["heart", "💖"],
-  ["applause", "👏"],
+  ["joy", "😂"],
+  ["celebration", "🥳"],
+  ["poop", "💩"],
 ]);
