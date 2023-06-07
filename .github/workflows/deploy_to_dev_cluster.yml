@@ -57,20 +57,25 @@ jobs:
         run: |
           echo "CURRENT_BRANCH=$(echo ${{ github.head_ref }} | sed 's/[/_.]/-/g')" >> "$GITHUB_ENV"
       
+      - name: parse_to_json
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -o=json eval k8s/deployment.yaml > k8s/deployment.json
+      
       - name: Replace Branch specific Values
         run: |
-          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.yaml
+          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.json
       
-      - name: yaml_debug
+      - name: json_debug
         run: |
-          cat k8s/deployment.yaml
+          cat k8s/deployment.json
 
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
           manifests: |
-            k8s/deployment.yaml
+            k8s/deployment.json
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
