@@ -23,4 +23,12 @@ $size--inner: 28px;
   &:hover {
     background-color: $color-light-gray;
   }
+
+  &--active {
+    background-color: var(--accent-color--desaturated-light);
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-light-hover);
+    }
+  }
 }
