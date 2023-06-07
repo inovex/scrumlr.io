@@ -74,14 +74,14 @@ jobs:
       
       - name: json_debug
         run: |
-          cat k8s/deployment.json
+          cat k8s/deployment_json.yaml
 
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
           manifests: |
-            k8s/deployment.json
+            k8s/deployment_json.yaml
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
