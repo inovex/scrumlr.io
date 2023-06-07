@@ -98,6 +98,8 @@ jobs:
       - name: test
         id: test
         run: |
+          echo {{ steps.meta-frontend.outputs.tags }}
+          echo _______________------------_______________
           echo {{ steps.meta-frontend.outputs.tags }} | grep ghcr.io/inovex/scrumlr.io/scrumlr-frontend:sha-
           echo {{ steps.meta-server.outputs.tags }} | grep ghcr.io/inovex/scrumlr.io/scrumlr-server:sha-
       - name: Set outputs
