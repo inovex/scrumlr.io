@@ -59,9 +59,7 @@ jobs:
       
       - name: Replace Branch specific Values
         run: |
-          echo $CURRENT_BRANCH
-          echo ${{ env.CURRENT_BRANCH }}
-          sed -i "s#BRANCH_NAME#${CURRENT_BRANCH}#g" k8s/deployment.yaml
+          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.yaml
       
       - name: yaml_debug
         run: |
