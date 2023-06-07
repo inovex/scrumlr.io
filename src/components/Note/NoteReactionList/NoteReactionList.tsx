@@ -80,9 +80,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         </button>
         {showReactionBar && (
           <div className="note-reaction-list__reaction-bar">
-            {[...ReactionImageMap.entries()].map((r) => (
-              <button className="note-reaction-list__reaction-bar-reaction" onClick={(e) => handleBarClick(e, r[0])}>
-                {r[1]}
+            {[...ReactionImageMap.entries()].map(([type, emoji]) => (
+              <button className="note-reaction-list__reaction-bar-reaction" onClick={(e) => handleBarClick(e, type)}>
+                {emoji}
               </button>
             ))}
           </div>
