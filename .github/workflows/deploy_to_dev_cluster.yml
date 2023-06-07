@@ -56,7 +56,8 @@ jobs:
       - name: Replace Branch specific Values
         run: |
           echo "CURRENT_BRANCH=$(echo "${{ github.head_ref }}" | sed 's/[/_-]/./g')" >> $GITHUB_ENV
-          sed -i "s#BRANCH_NAME#$CURRENT_BRANCH#g" k8s/deployment.yaml
+          echo $CURRENT_BRANCH
+          sed -i "s#BRANCH_NAME#${CURRENT_BRANCH}#g" k8s/deployment.yaml
       
       - name: yaml_debug
         run: |
