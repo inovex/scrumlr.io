@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: scrumlr-backend-BRANCH_NAME
-  # namespace: scrumlr-dev-deployments
 spec:
   selector:
     app: scrumlr
@@ -15,7 +14,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scrumlr-deployment-BRANCH_NAME
-  # namespace: scrumlr-dev-deployments
   labels:
     app: scrumlr-BRANCH_NAME
 spec:
@@ -96,7 +94,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  # namespace: scrumlr-dev-deployments
   name: scrumlr-frontend-BRANCH_NAME
 spec:
   selector:
@@ -109,7 +106,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  # namespace: scrumlr-dev-deployments
   name: frontend-deployment-BRANCH_NAME
   labels:
     app: frontend-BRANCH_NAME
@@ -150,7 +146,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  # namespace: scrumlr-dev-deployments
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
@@ -184,7 +179,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  # namespace: scrumlr-dev-deployments
   name: redirect-to-https-BRANCH_NAME
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
@@ -212,7 +206,6 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  # namespace: scrumlr-dev-deployments
   name: scrumlr-development-certificate-BRANCH_NAME
 spec:
   secretName: scrumlr-development-certificate-BRANCH_NAME
@@ -229,7 +222,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: scrumlr-postgres-BRANCH_NAME
-  # namespace: scrumlr-dev-deployments
 spec:
   chart:
     spec:
@@ -260,7 +252,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres
-  # namespace: scrumlr-dev-deployments
 spec:
   selector:
     app.kubernetes.io/name: postgresql
