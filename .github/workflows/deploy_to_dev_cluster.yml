@@ -31,8 +31,8 @@ jobs:
     steps:
       - name: Print Inputs
         run: |
-          echo "frontend_image_tag: ${{ github.event.inputs.frontend_image_tag }}"
-          echo "server_image_tag: ${{ github.event.inputs.server_image_tag }}"
+          echo "frontend_image_tag: ${{ inputs.frontend_image_tag }}"
+          echo "server_image_tag: ${{ inputs.server_image_tag }}"
   deploy:
     runs-on: self-hosted
     permissions:
@@ -70,5 +70,5 @@ jobs:
           manifests: |
             k8s/deployment.yaml
           images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ github.event.inputs.frontend_image_tag }}
-            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ github.event.inputs.server_image_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
