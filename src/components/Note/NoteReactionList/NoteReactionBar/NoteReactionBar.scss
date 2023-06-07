@@ -1,0 +1,26 @@
+@import "src/constants/style";
+$gap--reaction-bar: 5px; // TODO: default 10px and adjust via media queries
+$size--inner: 28px;
+
+.note-reaction-bar__root {
+  display: inline-flex;
+  flex-direction: row;
+  gap: $gap--reaction-bar;
+}
+
+.note-reaction-bar__reaction {
+  all: unset;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $size--inner;
+  height: $size--inner;
+  border-radius: $rounded--full;
+  font-size: $text--md;
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
+}
