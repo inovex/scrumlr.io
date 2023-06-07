@@ -98,5 +98,7 @@ jobs:
       - name: Set outputs
         id: outputs
         run: |
-          echo "::set-output name=frontend-image-tag::$(echo {{ steps.meta-frontend.outputs.tags }} | grep sha-)"
-          echo "::set-output name=server-image-tag::$(echo {{ steps.meta-server.outputs.tags }} | grep sha-)"
+          echo {{ steps.meta-frontend.outputs.tags }} | grep sha-
+          echo {{ steps.meta-server.outputs.tags }} | grep sha-
+          echo "frontend-image-tag=$(echo {{ steps.meta-frontend.outputs.tags }} | grep sha-)" >> $GITHUB_OUTPUT
+          echo "server-image-tag=$(echo {{ steps.meta-server.outputs.tags }} | grep sha-)" >> $GITHUB_OUTPUT
