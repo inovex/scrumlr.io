@@ -1,4 +1,5 @@
 import {isEqual} from "underscore";
+import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-smiley.svg";
 import React, {useState} from "react";
 import classNames from "classnames";
@@ -7,6 +8,7 @@ import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
+import {Actions} from "../../../store/action";
 import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
@@ -23,6 +25,7 @@ export interface ReactionModeled {
 }
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
+  const dispatch = useDispatch();
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
@@ -69,6 +72,41 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionBar(!showReactionBar);
   };
 
+  const addReaction = (noteId: string, reactionType: ReactionType) => {
+    dispatch(Actions.addReaction(noteId, reactionType));
+  };
+
+  const deleteReaction = (reactionId: string) => {
+    dispatch(
+      Actions.deleteReaction(reactionId) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
+    );
+  };
+
+  const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+    // in board overview, prevent note from opening stack view
+    e.stopPropagation();
+    // only one reaction can be made per user per note, so if one already made we need to remove that one first.
+    // for that purpose, we need to find a reaction that's been made by the user
+    const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
+    const isSameReaction = reactionMadeByUser?.reactionType === reactionType;
+
+    // no reaction exists -> add
+    if (!reactionMadeByUser) {
+      addReaction(props.noteId, reactionType);
+      return;
+    }
+
+    // same reaction -> remove
+    if (isSameReaction) {
+      deleteReaction(reactionMadeByUser.myReactionId!);
+    }
+    // other reaction -> replace
+    else {
+      deleteReaction(reactionMadeByUser.myReactionId!);
+      addReaction(props.noteId, reactionType);
+    }
+  };
+
   return (
     <div className="note-reaction-list__root">
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
@@ -77,7 +115,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         </button>
         {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} />}
       </div>
-      {!showReactionBar && reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} />)}
+      {!showReactionBar && reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)}
     </div>
   );
 };
