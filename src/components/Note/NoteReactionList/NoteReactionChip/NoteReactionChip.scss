@@ -5,9 +5,12 @@
 
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
   gap: 3px;
 
-  padding: 5px 8px;
+  width: 34px;
+  padding: 5px 8px; // total width: 50px
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
@@ -24,4 +27,13 @@
   &:hover {
     background-color: var(--accent-color--desaturated-light-hover);
   }
+}
+
+.note-reaction-chip__reaction {
+  font-size: $text--md;
+}
+
+.note-reaction-chip__amount {
+  font-size: $text--sm;
+  font-weight: 600;
 }

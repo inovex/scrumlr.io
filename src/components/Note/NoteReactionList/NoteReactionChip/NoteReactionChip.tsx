@@ -39,8 +39,8 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
       title={reactionUsers}
       onClick={(e) => handleClick(e)}
     >
-      <div>{reactionImage}</div>
-      <div>{props.reaction.amount}</div>
+      <div className="note-reaction-chip__reaction">{reactionImage}</div>
+      <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
     </button>
   );
 };
