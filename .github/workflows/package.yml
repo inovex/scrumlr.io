@@ -98,7 +98,7 @@ jobs:
       - name: test
         id: test
         run: |
-          echo {{ steps.meta-frontend.outputs.tags }}
+          echo $DOCKER_METADATA_OUTPUT_TAGS
           echo _______________------------_______________
           echo {{ steps.meta-frontend.outputs.tags }} | grep ghcr.io/inovex/scrumlr.io/scrumlr-frontend:sha-
           echo {{ steps.meta-server.outputs.tags }} | grep ghcr.io/inovex/scrumlr.io/scrumlr-server:sha-
