@@ -228,7 +228,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: scrumlr-postgres
+  name: scrumlr-postgres-BRANCH_NAME
   # namespace: scrumlr-dev-deployments
 spec:
   chart:
