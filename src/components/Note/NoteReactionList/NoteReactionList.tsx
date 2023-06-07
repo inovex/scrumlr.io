@@ -113,7 +113,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
           <IconEmoji className="note-reaction-list__add-reaction-sticker" />
         </button>
-        {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} />}
+        {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} handleClickReaction={handleClickReaction} />}
       </div>
       {!showReactionBar && reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)}
     </div>

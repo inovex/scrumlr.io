@@ -8,13 +8,13 @@ interface NoteReactionBarProps {
   // injecting state setter to easily communicate with parent
   setShowReactionBar: React.Dispatch<React.SetStateAction<boolean>>;
   reactions: ReactionModeled[];
+  handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
 }
 
 export const NoteReactionBar = (props: NoteReactionBarProps) => {
-  const handleBarClick = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
-    e.stopPropagation();
-    console.log(reactionType);
+  const handleClickBar = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
     props.setShowReactionBar(false);
+    props.handleClickReaction(e, reactionType);
   };
 
   return (
@@ -23,7 +23,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
         // highlight reaction made by yourself
         const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
         return (
-          <button className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})} onClick={(e) => handleBarClick(e, type)}>
+          <button className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})} onClick={(e) => handleClickBar(e, type)}>
             {emoji}
           </button>
         );
