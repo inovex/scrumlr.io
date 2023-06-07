@@ -65,12 +65,12 @@ jobs:
       
       - name: parse_to_json
         run:
-          yq -o=json eval k8s/deployment.yaml > k8s/deployment.json
+          yq -o=json eval k8s/deployment.yaml > k8s/deployment_json.yaml
 
       
       - name: Replace Branch specific Values
         run: |
-          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.json
+          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment_json.yaml
       
       - name: json_debug
         run: |
