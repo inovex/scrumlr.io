@@ -7,11 +7,12 @@ export interface OnboardingNote {
 
 export interface OnboardingColumn {
   id: string;
-  title: string;
+  name: string;
 }
 
 export interface OnboardingState {
   phase: OnboardingPhase;
   step: number;
   stepOpen: boolean;
+  columns: OnboardingColumn[];
 }

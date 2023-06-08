@@ -25,7 +25,7 @@ export const OnboardingController = () => {
       onboardingNotes[columnName].forEach((n: {text: string; author: string}) => {
         setTimeout(() => {
           dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author));
-        }, 200);
+        }, 500);
       });
     }
   };
@@ -40,13 +40,16 @@ export const OnboardingController = () => {
       break;
     case "board_check_in-4":
       spawnNotes("Check-In");
-      dispatch(Actions.changePhase("board_data"));
+      setTimeout(() => {
+        dispatch(Actions.incrementStep());
+      }, 200);
       break;
     case "board-check-in_3":
       break;
     case "board_data-1":
       break;
     case "board_data-2":
+      // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
       spawnNotes("Mad");
       setTimeout(() => {
         spawnNotes("Sad");

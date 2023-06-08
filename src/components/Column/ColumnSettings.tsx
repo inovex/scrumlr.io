@@ -30,6 +30,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
   const columnSettingsRef = useRef<HTMLDivElement>(null);
+  const onboardingColumns = useAppSelector((state) => state.onboarding.columns);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
@@ -57,7 +58,9 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
           <button
             onClick={() => {
               onClose?.();
-              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+              if (!onboardingColumns.find((oc) => oc.id === id)) {
+                dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+              }
             }}
           >
             {visible ? <HideIcon /> : <ShowIcon />}
@@ -67,7 +70,9 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
         <li>
           <button
             onClick={() => {
-              onNameEdit?.();
+              if (!onboardingColumns.find((oc) => oc.id === id)) {
+                onNameEdit?.();
+              }
               onClose?.();
             }}
           >
@@ -101,7 +106,10 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
           <button
             onClick={() => {
               onClose?.();
-              dispatch(Actions.deleteColumn(id));
+              // TODO: better handling for these checks -> some alert?
+              if (!onboardingColumns.find((oc) => oc.id === id)) {
+                dispatch(Actions.deleteColumn(id));
+              }
             }}
           >
             <TrashIcon />

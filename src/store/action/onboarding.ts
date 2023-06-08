@@ -1,33 +1,33 @@
-import { OnboardingPhase } from "types/onboarding";
+import {Column} from "types/column";
+import {OnboardingPhase} from "types/onboarding";
 
 export const OnboardingAction = {
   ChangePhase: "scrumlr.io/changePhase" as const,
   IncrementStep: "scrumlr.io/incrementStep" as const,
-  AddOnboardingColumn: "scrumlr.io/addOnboardingColumn" as const,
   ToggleStepOpen: "scrumlr.io/toggleStepOpen" as const,
-}
+  RegisterOnboardingColumns: "scrumlr.io/registerOnboardingColumns" as const,
+};
 
 export const OnboardingActionFactory = {
   changePhase: (phase: OnboardingPhase) => ({
     type: OnboardingAction.ChangePhase,
-    phase
+    phase,
   }),
   incrementStep: (amount?: number) => ({
     type: OnboardingAction.IncrementStep,
-    amount
-  }),
-  addOnboardingColumn: (columnId: string, title: string) => ({
-    type: OnboardingAction.AddOnboardingColumn,
-    columnId,
-    title
+    amount,
   }),
   toggleStepOpen: () => ({
-    type: OnboardingAction.ToggleStepOpen
+    type: OnboardingAction.ToggleStepOpen,
   }),
-}
+  registerOnboardingColumns: (columns: Column[]) => ({
+    type: OnboardingAction.RegisterOnboardingColumns,
+    columns,
+  }),
+};
 
 export type OnboardingReduxAction =
   | ReturnType<typeof OnboardingActionFactory.changePhase>
   | ReturnType<typeof OnboardingActionFactory.incrementStep>
-  | ReturnType<typeof OnboardingActionFactory.addOnboardingColumn>
   | ReturnType<typeof OnboardingActionFactory.toggleStepOpen>
+  | ReturnType<typeof OnboardingActionFactory.registerOnboardingColumns>;

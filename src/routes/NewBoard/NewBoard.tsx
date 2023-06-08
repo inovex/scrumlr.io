@@ -36,6 +36,7 @@ export const NewBoard = () => {
     }
 
     if (columnTemplate) {
+      // TODO: implement onboarding columns by adding new createBoard middleware function
       const boardId = await API.createBoard(
         boardName,
         {

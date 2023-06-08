@@ -26,6 +26,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
         if (message.type === "INIT") {
           const {board, columns, participants, notes, votes, votings, requests, assignments} = message.data;
+          store.dispatch(Actions.registerOnboardingColumns(columns));
           store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || [], assignments || []));
         }
 

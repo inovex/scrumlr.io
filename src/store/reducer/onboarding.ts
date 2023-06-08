@@ -1,10 +1,11 @@
 import {Action, ReduxAction} from "store/action";
-import {OnboardingPhase, OnboardingState} from "types/onboarding";
+import {OnboardingColumn, OnboardingPhase, OnboardingState} from "types/onboarding";
 
 const initialState: OnboardingState = {
   phase: "none",
   step: 1,
   stepOpen: true,
+  columns: [],
 };
 
 interface OnboardingPhaseSteps {
@@ -16,7 +17,7 @@ const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
   {name: "intro", steps: 3},
   {name: "newBoard", steps: 3},
-  {name: "board_check_in", steps: 4},
+  {name: "board_check_in", steps: 5},
   {name: "board_data", steps: 2},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},
@@ -56,6 +57,19 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
         ...state,
         stepOpen: !state.stepOpen,
       };
+    }
+    case Action.RegisterOnboardingColumns: {
+      if (state.phase === "board_check_in" && state.step === 1) {
+        const newOnboardingColumns: OnboardingColumn[] = [];
+        action.columns.forEach((c) => {
+          newOnboardingColumns.push({id: c.id, name: c.name});
+        });
+        return {
+          ...state,
+          columns: newOnboardingColumns,
+        };
+      }
+      return state;
     }
     default:
       return state;
