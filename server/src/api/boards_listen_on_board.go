@@ -292,7 +292,12 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		for _, note := range notes {
 			for _, column := range boardSubscription.boardColumns {
 				if (note.Position.Column == column.ID) && column.Visible {
-					seeableNotes = append(seeableNotes, note)
+					// BoardSettings -> Remove other participant cards
+					if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
+						seeableNotes = append(seeableNotes, note)
+					} else if !boardSubscription.boardSettings.ShowNotesOfOtherUsers && (userID == note.Author) {
+						seeableNotes = append(seeableNotes, note)
+					}
 				}
 			}
 		}
@@ -357,12 +362,17 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	for _, note := range event.Data.Notes {
 		for _, column := range seeableColumns {
 			if note.Position.Column == column.ID {
-				seeableNotes = append(seeableNotes, note)
+				// BoardSettings -> Remove other participant cards
+				if retEvent.Data.Board.ShowNotesOfOtherUsers {
+					seeableNotes = append(seeableNotes, note)
+				} else if !retEvent.Data.Board.ShowNotesOfOtherUsers && (clientID == note.Author) {
+					seeableNotes = append(seeableNotes, note)
+				}
 			}
 		}
 	}
 
-	// Author
+	// BoardSettings -> Author
 	for _, note := range seeableNotes {
 		if !retEvent.Data.Board.ShowAuthors && note.Author != clientID {
 			note.Author = uuid.Nil
