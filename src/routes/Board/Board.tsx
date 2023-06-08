@@ -9,6 +9,8 @@ import {toast} from "react-toastify";
 import {Actions} from "store/action";
 import _ from "underscore";
 import {Outlet} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {OnboardingController} from "components/Onboarding/OnboardingController";
 
 export const Board = () => {
   useEffect(
@@ -54,6 +56,12 @@ export const Board = () => {
 
   const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
 
+  const dispatch = useDispatch();
+  const isOnboarding = window.location.pathname.startsWith("/onboarding");
+  if (!isOnboarding) {
+    dispatch(Actions.changePhase("none"));
+  }
+
   if (state.board.status === "pending") {
     return <LoadingScreen />;
   }
@@ -76,6 +84,7 @@ export const Board = () => {
               <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
             ))}
         </BoardComponent>
+        {isOnboarding && <OnboardingController />}
       </>
     );
   }

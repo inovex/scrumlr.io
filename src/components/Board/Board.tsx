@@ -5,9 +5,9 @@ import {MenuBars} from "components/MenuBars";
 import {BoardHeader} from "components/BoardHeader";
 import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import {OnboardingController} from "components/Onboarding/OnboardingController";
-import {useDispatch} from "react-redux";
-import {Actions} from "store/action";
+// import {OnboardingController} from "components/Onboarding/OnboardingController";
+// import {useDispatch} from "react-redux";
+// import {Actions} from "store/action";
 import CustomDragLayer from "./CustomDragLayer";
 
 export interface BoardProps {
@@ -44,12 +44,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
   const columnsCount = React.Children.count(children);
-
-  const dispatch = useDispatch();
-  const isOnboarding = window.location.pathname.startsWith("/onboarding");
-  if (!isOnboarding) {
-    dispatch(Actions.changePhase("none"));
-  }
 
   useEffect(() => {
     const board = boardRef.current;
@@ -160,7 +154,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
-      {isOnboarding && <OnboardingController />}
 
       <main className="board" ref={boardRef}>
         <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />

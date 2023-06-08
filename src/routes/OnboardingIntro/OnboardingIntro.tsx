@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./OnboardingIntro.scss";
+import {useEffect} from "react";
 
 export const OnboardingIntro = () => {
   // const {t} = useTranslation();
@@ -17,9 +18,11 @@ export const OnboardingIntro = () => {
   let content;
   let introImage;
 
-  if (phase === "newBoard") {
-    navigate("/onboarding-new");
-  }
+  useEffect(() => {
+    if (phase === "newBoard") {
+      navigate("/onboarding-new");
+    }
+  }, [phase, navigate]);
 
   if (step === 1) {
     content = "Step 1 is about the company sloth inc. Things shoud be peaceful, but...";

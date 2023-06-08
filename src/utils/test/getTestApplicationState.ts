@@ -156,7 +156,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     phase: "none",
     step: 1,
     stepOpen: false,
-    columns: [],
+    onboardingColumns: [],
   },
   onboardingNotes: [],
   assignments: [],

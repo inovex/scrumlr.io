@@ -14,5 +14,5 @@ export interface OnboardingState {
   phase: OnboardingPhase;
   step: number;
   stepOpen: boolean;
-  columns: OnboardingColumn[];
+  onboardingColumns: OnboardingColumn[];
 }

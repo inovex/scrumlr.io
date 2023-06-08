@@ -5,6 +5,7 @@ import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import {shallowEqual, useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
+import {useEffect} from "react";
 import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
@@ -16,60 +17,60 @@ export const OnboardingController = () => {
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
   const phaseStep = `${phase}-${step}`;
   const stepOpen = useAppSelector((state) => state.onboarding.stepOpen, isEqual);
-  const rootState = useAppSelector((state) => state, shallowEqual);
+  const columns = useAppSelector((state) => state.columns, shallowEqual);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const spawnNotes = (columnName: string) => {
-    const column = rootState.columns.find((c) => c.name === columnName);
-    if (column) {
-      onboardingNotes[columnName].forEach((n: {text: string; author: string}) => {
+  useEffect(() => {
+    const spawnNotes = (columnName: string) => {
+      const column = columns.find((c) => c.name === columnName);
+      if (column) {
+        onboardingNotes[columnName].forEach((n: {text: string; author: string}) => {
+          setTimeout(() => {
+            dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author));
+          }, 750);
+        });
+      }
+    };
+    switch (phaseStep) {
+      /* phase "intro" handles itself - phase "none" has no onboarding activities */
+      case "newBoard-1":
+        break;
+      case "newBoard-2":
+        break;
+      case "board_check_in-1":
+        break;
+      case "board_check_in-2":
+        break;
+      case "board_check_in-3":
+        break;
+      case "board_check_in-4":
+        spawnNotes("Check-In");
+        break;
+      case "board-check-in_3":
+        break;
+      case "board_data-1":
+        break;
+      case "board_data-2":
+        // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
+        spawnNotes("Mad");
         setTimeout(() => {
-          dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author));
+          spawnNotes("Sad");
         }, 500);
-      });
+        setTimeout(() => {
+          spawnNotes("Glad");
+        }, 1500);
+        break;
+      case "board_insights":
+        break;
+      case "board_actions":
+        break;
+      case "board_check_out":
+        break;
+      case "outro":
+        break;
+      default:
+        break;
     }
-  };
-
-  switch (phaseStep) {
-    /* phase "intro" handles itself - phase "none" has no onboarding activities */
-    case "newBoard-1":
-      break;
-    case "newBoard-2":
-      break;
-    case "board_check_in-1":
-      break;
-    case "board_check_in-4":
-      spawnNotes("Check-In");
-      setTimeout(() => {
-        dispatch(Actions.incrementStep());
-      }, 200);
-      break;
-    case "board-check-in_3":
-      break;
-    case "board_data-1":
-      break;
-    case "board_data-2":
-      // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
-      spawnNotes("Mad");
-      setTimeout(() => {
-        spawnNotes("Sad");
-      }, 500);
-      setTimeout(() => {
-        spawnNotes("Glad");
-      }, 700);
-      dispatch(Actions.incrementStep());
-      break;
-    case "board_insights":
-      break;
-    case "board_actions":
-      break;
-    case "board_check_out":
-      break;
-    case "outro":
-      break;
-    default:
-      break;
-  }
+  }, [phaseStep, columns, dispatch]);
 
   return (
     <div className="onboarding-controller-wrapper">
@@ -124,7 +125,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
           target=".new-board__mode-selection"
           placement="right"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-2" && (
@@ -133,7 +134,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
           target=".new-board__extended"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-1" && (
@@ -141,7 +142,8 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.checkInWelcome")} isExercisePrompt={false} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}}}
+          target=".board"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-2" && (
@@ -150,7 +152,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.checkAddColumn")} isExercisePrompt />}
           target=".column__header-edit-button-icon"
           placement="right"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-3" && (
@@ -159,7 +161,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.checkInAddTeam")} isExercisePrompt={false} />}
           target=".share-button"
           placement="bottom-end"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {/* placeholder board_check_in-4 */}
@@ -169,24 +171,26 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.dataWelcome")} isExercisePrompt={false} />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "board_data-2" && (
+      {/* placeholder board_data-2 */}
+      {phaseStep === "board_data-3" && (
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.dataCardsAdded")} isExercisePrompt={false} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}}}
+          target=".board"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "board_data-3" && (
+      {phaseStep === "board_data-4" && (
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt={false} />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
     </div>

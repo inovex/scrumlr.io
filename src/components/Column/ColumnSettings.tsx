@@ -30,7 +30,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
   const columnSettingsRef = useRef<HTMLDivElement>(null);
-  const onboardingColumns = useAppSelector((state) => state.onboarding.columns);
+  const onboardingColumns = useAppSelector((state) => state.onboarding.onboardingColumns);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
