@@ -134,10 +134,10 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
-// Refactor this client sorting, since it copies the websocket conn, which is a mutex
+// Refactor the client sorting
 type client struct {
 	userID uuid.UUID
-	conn   websocket.Conn
+	conn   *websocket.Conn
 	role   types.SessionRole
 }
 
@@ -161,7 +161,7 @@ func (b *BoardSubscription) startListeningOnBoard() {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
 
-			sortedClients := make([]client, 0, len(b.clients))
+			mappedClients := make([]client, 0, len(b.clients))
 			for id := range b.clients {
 				var role types.SessionRole
 				// retrieve role
@@ -173,18 +173,18 @@ func (b *BoardSubscription) startListeningOnBoard() {
 				// create client
 				aClient := client{
 					userID: id,
-					conn:   *b.clients[id],
+					conn:   b.clients[id],
 					role:   role,
 				}
 
 				// Add client to sortedClients slice
-				sortedClients = append(sortedClients, aClient)
+				mappedClients = append(mappedClients, aClient)
 			}
 
 			// Sort new slice via Role and iterate over it
-			sort.Sort(ByRole(sortedClients))
+			sort.Sort(ByRole(mappedClients))
 
-			for _, user := range sortedClients {
+			for _, user := range mappedClients {
 				msg = b.eventFilter(msg, user.userID)
 				err := user.conn.WriteJSON(msg)
 				if err != nil {
@@ -285,28 +285,10 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		if isMod {
 			boardSubscription.boardNotes = notes
 			return event
-
-			// // New Code
-			// newSlice := make([]*dto2.Note, len(boardSubscription.boardNotes)+1, cap(boardSubscription.boardNotes)+1)
-
-			// // copy the original slice to the new slice
-			// copy(newSlice, boardSubscription.boardNotes)
-
-			// // create a new MyStruct instance for the new entry
-			// newEntry := notes[len(notes)-1]
-
-			// // append the new entry to the new slice
-			// newSlice[len(newSlice)-1] = newEntry
-
-			// // update the pointer reference to point to the new slice
-			// boardSubscription.boardNotes = newSlice
-
-			// return event
 		}
 
 		var ret realtime.BoardEvent
 		var seeableNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
-
 		for _, note := range notes {
 			for _, column := range boardSubscription.boardColumns {
 				if (note.Position.Column == column.ID) && column.Visible {
@@ -314,18 +296,17 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 				}
 			}
 		}
+
+		// Authors
+		for _, note := range seeableNotes {
+			if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
+				note.Author = uuid.Nil
+			}
+		}
+
 		ret.Type = event.Type
 		ret.Data = seeableNotes
-
 		return &ret
-
-		// // Authors
-		// for id, note := range ret.Data {
-		// 	if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
-		// 		notes[id].Author = uuid.Nil
-		// 	}
-		// }
-		// event.Data = notes
 	}
 
 	if event.Type == realtime.BoardEventBoardUpdated {
@@ -378,6 +359,13 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			if note.Position.Column == column.ID {
 				seeableNotes = append(seeableNotes, note)
 			}
+		}
+	}
+
+	// Author
+	for _, note := range seeableNotes {
+		if !retEvent.Data.Board.ShowAuthors && note.Author != clientID {
+			note.Author = uuid.Nil
 		}
 	}
 
