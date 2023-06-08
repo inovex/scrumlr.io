@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -46,10 +45,7 @@ func notifyNotesUpdated(ctx context.Context) error {
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
 		board := ctx.Value("Board").(uuid.UUID)
-		// Log id, notes len(notes)
 		notes, err := d.GetNotes(board)
-		// fmt.Printf("DebugNoteObserver: Notes -> %v | len(notes) -> %d |", notes, len(notes))
-		fmt.Printf("DebugObserverFiltering: len(notes) -> %d |\n", len(notes))
 		if err != nil {
 			return err
 		}
