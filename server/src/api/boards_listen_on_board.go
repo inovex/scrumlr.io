@@ -3,8 +3,8 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
+	"sort"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -134,15 +134,59 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
+// Refactor this client sorting, since it copies the websocket conn, which is a mutex
+type client struct {
+	userID uuid.UUID
+	conn   websocket.Conn
+	role   types.SessionRole
+}
+
+type ByRole []client
+
+func (b ByRole) Len() int {
+	return len(b)
+}
+
+func (b ByRole) Less(i, j int) bool {
+	return b[i].role < b[j].role
+}
+
+func (b ByRole) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
+}
+
 func (b *BoardSubscription) startListeningOnBoard() {
 	for {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			fmt.Printf("Message: Notes -> %v\n", msg)
-			for id, conn := range b.clients {
-				msg = b.eventFilter(msg, id)
-				err := conn.WriteJSON(msg)
+
+			sortedClients := make([]client, 0, len(b.clients))
+			for id := range b.clients {
+				var role types.SessionRole
+				// retrieve role
+				for _, user := range b.boardParticipants {
+					if id == user.User.ID {
+						role = user.Role
+					}
+				}
+				// create client
+				aClient := client{
+					userID: id,
+					conn:   *b.clients[id],
+					role:   role,
+				}
+
+				// Add client to sortedClients slice
+				sortedClients = append(sortedClients, aClient)
+			}
+
+			// Sort new slice via Role and iterate over it
+			sort.Sort(ByRole(sortedClients))
+
+			for _, user := range sortedClients {
+				msg = b.eventFilter(msg, user.userID)
+				err := user.conn.WriteJSON(msg)
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 				}
@@ -153,9 +197,10 @@ func (b *BoardSubscription) startListeningOnBoard() {
 
 func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
 	for _, session := range sessions {
-
-		if clientID == session.User.ID && (session.Role == types.SessionRoleModerator || session.Role == types.SessionRoleOwner) {
-			return true
+		if clientID == session.User.ID {
+			if session.Role == types.SessionRoleModerator || session.Role == types.SessionRoleOwner {
+				return true
+			}
 		}
 	}
 	return false
@@ -218,21 +263,21 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		var ret realtime.BoardEvent
-		var seableColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
+		var seeableColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
 
 		for _, column := range columns {
 			if column.Visible && !isMod {
-				seableColumns = append(seableColumns, column)
+				seeableColumns = append(seeableColumns, column)
 			}
 		}
 		ret.Type = event.Type
-		ret.Data = seableColumns
+		ret.Data = seeableColumns
+
 		return &ret
 	}
 
 	if event.Type == realtime.BoardEventNotesUpdated {
 		notes, err := parseNotesUpdated(event.Data)
-		fmt.Printf("DebugNoteFiltering: Notes -> %v | len(notes) -> %d | %v\n", notes, len(notes), userID)
 		if err != nil {
 			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
@@ -260,17 +305,17 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		var ret realtime.BoardEvent
-		var seableNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
+		var seeableNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
 
 		for _, note := range notes {
 			for _, column := range boardSubscription.boardColumns {
 				if (note.Position.Column == column.ID) && column.Visible {
-					seableNotes = append(seableNotes, note)
+					seeableNotes = append(seeableNotes, note)
 				}
 			}
 		}
 		ret.Type = event.Type
-		ret.Data = seableNotes
+		ret.Data = seeableNotes
 
 		return &ret
 
@@ -300,43 +345,46 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	isMod := isModerator(clientID, event.Data.Sessions)
+	if isMod {
+		return event
+	}
+
+	var seeableColumns = make([]*dto2.Column, 0)
+	var seeableNotes = make([]*dto2.Note, 0)
+	retEvent := InitEvent{
+		Type: event.Type,
+		Data: EventData{
+			Board:       event.Data.Board,
+			Notes:       nil,
+			Columns:     nil,
+			Votings:     event.Data.Votings,
+			Votes:       event.Data.Votes,
+			Sessions:    event.Data.Sessions,
+			Requests:    event.Data.Requests,
+			Assignments: event.Data.Assignments,
+		},
+	}
 
 	// Columns
-	entriesToBeDeleted := []int{}
-	for id, column := range event.Data.Columns {
-		if !column.Visible && !isMod {
-			entriesToBeDeleted = append(entriesToBeDeleted, id)
+	for _, column := range event.Data.Columns {
+		if column.Visible {
+			seeableColumns = append(seeableColumns, column)
 		}
-	}
-	for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
-		event.Data.Columns = append(event.Data.Columns[:entriesToBeDeleted[i]], event.Data.Columns[entriesToBeDeleted[i]+1:]...)
 	}
 
 	// Notes
-	entriesToBeDeleted = []int{}
-	for id, note := range event.Data.Notes {
-		isPresent := false
-		for _, column := range event.Data.Columns {
+	for _, note := range event.Data.Notes {
+		for _, column := range seeableColumns {
 			if note.Position.Column == column.ID {
-				isPresent = true
+				seeableNotes = append(seeableNotes, note)
 			}
 		}
-		if !isPresent && !isMod {
-			entriesToBeDeleted = append(entriesToBeDeleted, id)
-		}
-	}
-	for i := len(entriesToBeDeleted) - 1; i >= 0; i-- {
-		event.Data.Notes = append(event.Data.Notes[:entriesToBeDeleted[i]], event.Data.Notes[entriesToBeDeleted[i]+1:]...)
 	}
 
-	// Authors
-	for id, note := range event.Data.Notes {
-		if !event.Data.Board.ShowAuthors && note.Author != clientID {
-			event.Data.Notes[id].Author = uuid.Nil
-		}
-	}
+	retEvent.Data.Columns = seeableColumns
+	retEvent.Data.Notes = seeableNotes
 
-	return event
+	return retEvent
 }
 
 func (s *Server) closeBoardSocket(board, user uuid.UUID, conn *websocket.Conn) {
