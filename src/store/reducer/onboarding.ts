@@ -2,10 +2,10 @@ import {Action, ReduxAction} from "store/action";
 import {OnboardingColumn, OnboardingPhase, OnboardingState} from "types/onboarding";
 
 const initialState: OnboardingState = {
-  phase: "none",
-  step: 1,
-  stepOpen: true,
-  onboardingColumns: [],
+  phase: JSON.parse(sessionStorage.getItem("onboarding_phase") ?? "none"),
+  step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
+  stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
+  onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
 };
 
 interface OnboardingPhaseSteps {
@@ -17,8 +17,8 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
   {name: "intro", steps: 3},
   {name: "newBoard", steps: 3},
-  {name: "board_check_in", steps: 4},
-  {name: "board_data", steps: 4},
+  {name: "board_check_in", steps: 5},
+  {name: "board_data", steps: 5},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},
   {name: "board_check_out", steps: 2},

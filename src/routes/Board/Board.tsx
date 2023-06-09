@@ -25,6 +25,12 @@ export const Board = () => {
     window.addEventListener(
       "beforeunload",
       () => {
+        const {onboarding, onboardingNotes} = store.getState();
+        sessionStorage.setItem("onboarding_phase", JSON.stringify(onboarding.phase));
+        sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
+        sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
+        sessionStorage.setItem("onboarding_columns", JSON.stringify(onboarding.onboardingColumns));
+        sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
         store.dispatch(Actions.leaveBoard());
       },
       false
@@ -33,6 +39,12 @@ export const Board = () => {
     window.addEventListener(
       "onunload",
       () => {
+        const {onboarding, onboardingNotes} = store.getState();
+        sessionStorage.setItem("onboarding_phase", JSON.stringify(onboarding.phase));
+        sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
+        sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
+        sessionStorage.setItem("onboarding_columns", JSON.stringify(onboarding.onboardingColumns));
+        sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
         store.dispatch(Actions.leaveBoard());
       },
       false

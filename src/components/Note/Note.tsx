@@ -13,6 +13,7 @@ import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {onboardingAuthorAvatars} from "types/onboardingNotes";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 
 interface NoteProps {
@@ -33,34 +34,37 @@ export const Note = (props: NoteProps) => {
   const moderating = useAppSelector((state) => state.view.moderating);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
-  const onboardingNotes = useAppSelector((state) => state.onboardingNotes, isEqual)
+  const onboardingNotes = useAppSelector((state) => state.onboardingNotes, isEqual);
   // all authors of a note, including its children if it's a stack.
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
 
-     // get all notes which are in the same stack as the main note
+    // get all notes which are in the same stack as the main note
     const childrenNotes = state.notes.filter((n) => n.position.stack === props.noteId);
     const allNotes = [note, ...childrenNotes];
     const allAuthors: ParticipantExtendedInfo[] = [];
     allNotes.forEach((n) => {
+      // TODO: refactor if time allows for it, this doesn't look good tbh
       const onboardingNote = onboardingNotes.find((on) => on.id === n?.id);
-      if (onboardingNote !== undefined) {
-        const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
-        if (authorRaw) {
-          const fakeName = onboardingNote.onboardingAuthor;
-          allAuthors.push({...authorRaw, displayName: fakeName, isSelf: false})
-        }
-      } else {
-        const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
-        if (authorRaw) {
-          const isSelf = authorRaw?.user.id === state.participants?.self.user.id;
-          const displayName = isSelf ? t("Note.me") : authorRaw!.user.name;
-          allAuthors.push({...authorRaw, displayName, isSelf: false})
-        }
+      const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
+      if (onboardingNote !== undefined && authorRaw) {
+        const fakeName = onboardingNote.onboardingAuthor;
+        const onboardingAvatar = onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === fakeName)?.avatar;
+
+        allAuthors.push({
+          ...authorRaw,
+          displayName: fakeName,
+          isSelf: false,
+          user: {...authorRaw.user, avatar: onboardingAvatar ?? authorRaw.user.avatar, id: `${authorRaw.user.id}-${fakeName}`},
+        });
+      } else if (authorRaw) {
+        const isSelf = authorRaw?.user.id === state.participants?.self.user.id;
+        const displayName = isSelf ? t("Note.me") : authorRaw!.user.name;
+        allAuthors.push({...authorRaw, displayName, isSelf: false});
       }
     });
-    const allAuthorsFiltered = allAuthors.filter((v, i, self) => self.findIndex((a) => (a.user?.id === v.user?.id) && (a.displayName === v.displayName)) === i);
+    const allAuthorsFiltered = allAuthors.filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id && a.displayName === v.displayName) === i);
     const selfIndex = allAuthorsFiltered.findIndex((a) => a.isSelf);
     if (selfIndex > 1) {
       // in-place swap with second author
@@ -88,8 +92,8 @@ export const Note = (props: NoteProps) => {
     //       isSelf,
     //     } as ParticipantExtendedInfo;
     //   })
-      // remove duplicates (because notes can have multiple children by the same authors)
-      // .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
+    // remove duplicates (because notes can have multiple children by the same authors)
+    // .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
 
     // if self is part of the authors, we always want it to be visible
     // const selfIndex = allAuthors.findIndex((a) => a.isSelf);

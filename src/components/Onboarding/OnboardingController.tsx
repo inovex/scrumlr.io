@@ -44,6 +44,7 @@ export const OnboardingController = () => {
         break;
       case "board_check_in-4":
         spawnNotes("Check-In");
+        dispatch(Actions.incrementStep());
         break;
       case "board-check-in_3":
         break;
@@ -58,6 +59,7 @@ export const OnboardingController = () => {
         setTimeout(() => {
           spawnNotes("Glad");
         }, 1500);
+        dispatch(Actions.incrementStep());
         break;
       case "board_insights":
         break;
@@ -164,7 +166,7 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {/* placeholder board_check_in-4 */}
+      {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
       {phaseStep === "board_data-1" && (
         <Floater
           open={stepOpen}
@@ -174,8 +176,8 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {/* placeholder board_data-2 */}
-      {phaseStep === "board_data-3" && (
+      {/* board_data-2 and board_data-3 just handle spawning notes */}
+      {phaseStep === "board_data-4" && (
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.dataCardsAdded")} isExercisePrompt={false} />}
@@ -184,10 +186,19 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "board_data-4" && (
+      {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt={false} />}
+          component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt />}
+          target=".column + .column"
+          placement="left"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_insights-1" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingBase text={t("Onboarding.insightsWelcome")} isExercisePrompt />}
           target=".column + .column"
           placement="left"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
