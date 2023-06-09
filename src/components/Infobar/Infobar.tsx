@@ -2,7 +2,6 @@ import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Timer} from "components/Timer";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
-import ReactDOM from "react-dom";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
@@ -27,7 +26,7 @@ export const InfoBar = () => {
     _.isEqual
   );
 
-  return ReactDOM.createPortal(
+  return (
     <aside className="info-bar">
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
@@ -40,7 +39,6 @@ export const InfoBar = () => {
           onClick={() => navigate(`note/${state.sharedNote}/stack`)}
         />
       )}
-    </aside>,
-    document.getElementById("root")!
+    </aside>
   );
 };
