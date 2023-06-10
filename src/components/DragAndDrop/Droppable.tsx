@@ -1,4 +1,4 @@
-import {Collision, useDndContext, useDndMonitor} from "@dnd-kit/core";
+import {Collision, DragOverEvent, useDndContext, useDndMonitor} from "@dnd-kit/core";
 import {SortableContext, useSortable} from "@dnd-kit/sortable";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
@@ -35,7 +35,7 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
   const isOverSelf = !!topCollision && topCollision.id.toString() === id;
 
   useDndMonitor({
-    onDragOver: () => {
+    onDragOver: (event: DragOverEvent) => {
       if (!active || !over) return;
 
       // from own column to column droppable
@@ -49,8 +49,8 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
         setItems([...items, active.id.toString()]);
       }
       // from own column to other column/note
-      if (hasActive && !(hasOver || isOverSelf)) {
-        console.log(3);
+      if (hasActive && !(hasOver || isOverSelf) && event.over !== null) {
+        console.log(3, event);
         setItems(items.filter((item) => item !== active.id.toString()));
       }
       // from other column to over own note
