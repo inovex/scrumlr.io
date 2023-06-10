@@ -63,7 +63,14 @@ body:not(:has(> div.drag-overlay)) .note:hover {
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
 
-  &.note--stackOntop,
+  transform: scale(0.98);
+
+  ~ .note__in-stack {
+    transform: scale(0.98);
+  }
+
+  // re-active this to bring back the different stacking mode effects
+  /* &.note--stackOntop,
   &.note--stackOntop ~ .note__in-stack {
     transform: translatey(8px) scale(0.98);
   }
@@ -76,7 +83,7 @@ body:not(:has(> div.drag-overlay)) .note:hover {
       z-index: 0;
       transform: translateY(8px) scale(0.98);
     }
-  }
+  } */
 
   &.note--stackBelow {
     transform: translateY(-8px) scale(1.02);

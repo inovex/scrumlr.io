@@ -86,7 +86,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
     <DndContext sensors={sensors} onDragStart={onDragStart} onDragOver={onDragOver} collisionDetection={collisionDetectionWrapper(rectIntersection)}>
       {children}
 
-      <DragOverlay zIndex={100} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
+      <DragOverlay zIndex={1000} dropAnimation={dropAnimation} className={classNames("drag-overlay", dragActive?.colorClassName)}>
         {dragActive?.id && self ? <Note noteId={dragActive.id.toString()} viewer={self} /> : null}
       </DragOverlay>
     </DndContext>

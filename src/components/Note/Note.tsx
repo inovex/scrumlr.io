@@ -120,6 +120,7 @@ export const Note = (props: NoteProps) => {
   };
 
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
+  // de-activated in css for now
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
   if (!note) return null;
