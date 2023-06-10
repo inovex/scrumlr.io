@@ -23,6 +23,7 @@ Object {
           class="settings-dialog__group accent-color__backlog-blue"
         >
           <button
+            aria-label="Export as JSON"
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-json"
             type="button"
@@ -42,6 +43,7 @@ Object {
             class="settings-dialog__separator"
           />
           <button
+            aria-label="Export as CSV"
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-csv"
             type="button"
@@ -61,6 +63,7 @@ Object {
             class="settings-dialog__separator"
           />
           <button
+            aria-label="Open print view"
             class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
             type="button"
           >
@@ -79,6 +82,7 @@ Object {
             class="settings-dialog__separator"
           />
           <button
+            aria-label="Copy Markdown to Clipboard"
             class="settings-option-button export-board__button-reverse-order"
             data-testid="export-markdown"
             type="button"
@@ -117,6 +121,7 @@ Object {
         class="settings-dialog__group accent-color__backlog-blue"
       >
         <button
+          aria-label="Export as JSON"
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-json"
           type="button"
@@ -136,6 +141,7 @@ Object {
           class="settings-dialog__separator"
         />
         <button
+          aria-label="Export as CSV"
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-csv"
           type="button"
@@ -155,6 +161,7 @@ Object {
           class="settings-dialog__separator"
         />
         <button
+          aria-label="Open print view"
           class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
           type="button"
         >
@@ -173,6 +180,7 @@ Object {
           class="settings-dialog__separator"
         />
         <button
+          aria-label="Copy Markdown to Clipboard"
           class="settings-option-button export-board__button-reverse-order"
           data-testid="export-markdown"
           type="button"

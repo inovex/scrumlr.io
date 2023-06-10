@@ -53,5 +53,4 @@ jobs:
 
   package:
     needs: test
-    if: ${{ github.event_name == 'push' }}
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
