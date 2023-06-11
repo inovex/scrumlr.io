@@ -10,6 +10,7 @@ import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
+import TextareaAutosize from "react-textarea-autosize";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
@@ -25,7 +26,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [value, setValue] = useState("");
-  const noteInputRef = useRef<HTMLInputElement | null>(null);
+  const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
   const [toastDisplayed, setToastDisplayed] = useState(false);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
@@ -43,7 +44,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const isImage = useImageChecker(value);
 
-  const handleChangeNoteText = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeNoteText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Avoid long messages
     if (e.target.value.length <= maxNoteLength) {
       setValue(e.target.value);
@@ -66,14 +67,13 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   };
   return (
     <form className="note-input">
-      <input
+      <TextareaAutosize
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        type="text"
         value={value}
         onChange={handleChangeNoteText}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
           if (e.key === "Enter") {
             e.preventDefault();
             onAddNote();
