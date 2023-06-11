@@ -10,7 +10,7 @@ import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
-import TextareaAutosize from "react-textarea-autosize";
+import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "../../constants/hotkeys";
 
 export interface NoteInputProps {
