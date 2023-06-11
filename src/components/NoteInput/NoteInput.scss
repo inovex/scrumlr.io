@@ -11,7 +11,7 @@ $note-input__input-right: 40px;
   position: relative;
   margin-bottom: $margin--default;
   background-color: $color-lighter-gray;
-  border-radius: $rounded--default;
+  border-radius: $rounded--medium;
   transition: all 0.12s ease-in-out;
   border: 2px solid transparent;
 
@@ -29,6 +29,7 @@ $note-input__input-right: 40px;
   font-size: $text-size--medium;
   font-weight: bold;
   line-height: 24px;
+  max-height: 70vh;
   letter-spacing: $letter-spacing--small;
   padding: $padding--small 0;
   font-family: Raleway, sans-serif;
@@ -38,6 +39,8 @@ $note-input__input-right: 40px;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   outline: none;
 
+  resize: none;
+
   &:focus::placeholder {
     color: transparent;
   }
@@ -46,6 +49,9 @@ $note-input__input-right: 40px;
 .note-input__add-button {
   all: unset;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: $padding--small 0;
 
   &:hover > .note-input__icon {
     filter: brightness(1.2);
