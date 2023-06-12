@@ -220,7 +220,7 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: scrumlr-postgres-cluster
+  name: scrumlr-postgres-cluster-BRANCH_NAME
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:15.1
   instances: 1
@@ -240,16 +240,3 @@ spec:
       owner: scrumlr
       secret:
         name: postgresql-creds
---- 
-# Service for the postgres deployment
-apiVersion: v1
-kind: Service
-metadata:
-  name: postgres
-spec:
-  selector:
-    app.kubernetes.io/name: postgresql
-  ports:
-  - name: tcp-postgresql
-    port: 5432
-    targetPort: 5432
