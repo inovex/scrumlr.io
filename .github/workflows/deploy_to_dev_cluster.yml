@@ -1,7 +1,6 @@
 # deploy to dev cluster using own runner
 
 name: Deploy to dev cluster
-
 on:
   workflow_call:
     inputs:
