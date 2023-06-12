@@ -249,3 +249,20 @@ metadata:
 type: Opaque
 stringData:
   url: postgres://scrumlr:POSTGRES_DEV_PASSWORD@cluster-BRANCH_NAME-rw:5432/scrumlr
+---
+# nats deployment
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: scrumlr-nats-BRANCH_NAME
+spec:
+  chart:
+    spec:
+      chart: nats
+      version: 0.19.12
+      sourceRef:
+        kind: HelmRepository
+        name: nats
+  install: {}
+  interval: 1m0s
+  targetNamespace: scrumlr-dev-deployments
