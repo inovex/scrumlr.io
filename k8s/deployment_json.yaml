@@ -1,4 +1,3 @@
-# this is a json Version of the deployment.yaml file generated using yq and formatted to match the syntax
 [
 {
   "apiVersion": "v1",
