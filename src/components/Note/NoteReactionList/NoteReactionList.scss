@@ -1,13 +1,23 @@
 @import "src/constants/style";
 
-$size--inner: 28px;
-$gap--reaction-bar: 5px; // TODO: default 10px and adjust via media queries
-
 .note-reaction-list__root {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 5px;
+  gap: $reaction__gap-size;
+}
+
+.note-reaction-list__reaction-bar-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $reaction__gap-size;
+
+  border-radius: $rounded--full;
+
+  &--active {
+    background-color: $color-lighter-gray;
+  }
 }
 
 .note-reaction-list__add-reaction-sticker-container {
@@ -17,28 +27,16 @@ $gap--reaction-bar: 5px; // TODO: default 10px and adjust via media queries
   justify-content: center;
   align-items: center;
 
-  width: $size--inner;
-  height: $size--inner;
+  width: $reaction__inner-size;
+  height: $reaction__inner-size;
+
+  padding: $reaction__padding;
 
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
   &:hover {
     background-color: $color-light-gray;
-  }
-}
-
-.note-reaction-list__reaction-bar-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: $gap--reaction-bar;
-
-  padding: 0 3px;
-  border-radius: $rounded--full;
-
-  &--active {
-    background-color: $color-lighter-gray;
   }
 }
 

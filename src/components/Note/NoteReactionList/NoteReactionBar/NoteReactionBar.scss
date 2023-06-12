@@ -1,11 +1,9 @@
 @import "src/constants/style";
-$gap--reaction-bar: 5px; // TODO: default 10px and adjust via media queries
-$size--inner: 28px;
 
 .note-reaction-bar__root {
   display: inline-flex;
   flex-direction: row;
-  gap: $gap--reaction-bar;
+  gap: $reaction__gap-size;
 }
 
 .note-reaction-bar__reaction {
@@ -15,8 +13,10 @@ $size--inner: 28px;
   justify-content: center;
   align-items: center;
 
-  width: $size--inner;
-  height: $size--inner;
+  width: $reaction__inner-size;
+  height: $reaction__inner-size;
+  padding: $reaction__padding;
+
   border-radius: $rounded--full;
   font-size: $text--md;
 

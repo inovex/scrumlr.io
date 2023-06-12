@@ -7,11 +7,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: $reaction__gap-size;
 
   width: 34px;
-  height: 28px;
-  padding: 0 8px; // total width: 50px
+  height: $reaction__inner-size;
+  padding: $reaction__padding 8px; // total dimensions: 50px * 28px
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
