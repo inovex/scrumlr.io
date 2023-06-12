@@ -250,6 +250,15 @@ type: Opaque
 stringData:
   url: postgres://scrumlr:POSTGRES_DEV_PASSWORD@cluster-BRANCH_NAME-rw:5432/scrumlr
 ---
+# nats repository
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: nats
+spec:
+  interval: 30m
+  url: https://nats-io.github.io/k8s/helm/charts/
+---
 # nats deployment
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -264,5 +273,5 @@ spec:
         kind: HelmRepository
         name: nats
   install: {}
-  interval: 1m0s
+  interval: 10m0s
   targetNamespace: scrumlr-dev-deployments
