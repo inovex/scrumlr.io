@@ -152,7 +152,7 @@ metadata:
   name: scrumlr-ingress-BRANCH_NAME
 spec:
   rules:
-  - host: "development.scrumlr.fra.ics.inovex.io"
+  - host: "BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
     http:
       paths:
       - path: /
