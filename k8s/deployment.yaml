@@ -220,7 +220,7 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: scrumlr-postgres-cluster-BRANCH_NAME
+  name: cluster-BRANCH_NAME
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:15.1
   instances: 1
