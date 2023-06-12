@@ -13,7 +13,7 @@ import "./Note.scss";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
-import {onboardingAuthorAvatars} from "types/onboardingNotes";
+import {onboardingAuthors} from "types/onboardingNotes";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 
 interface NoteProps {
@@ -50,7 +50,7 @@ export const Note = (props: NoteProps) => {
       const authorRaw = state.participants?.others.find((p) => p.user.id === n?.author) ?? state.participants?.self;
       if (onboardingNote !== undefined && authorRaw) {
         const fakeName = onboardingNote.onboardingAuthor;
-        const onboardingAvatar = onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === fakeName)?.avatar;
+        const onboardingAvatar = onboardingAuthors.find((oa) => oa.user.name === fakeName)?.user.avatar;
 
         allAuthors.push({
           ...authorRaw,

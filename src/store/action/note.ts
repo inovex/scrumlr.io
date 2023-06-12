@@ -47,7 +47,7 @@ export const NoteActionFactory = {
     type: NoteAction.AddOnboardingNote,
     columnId,
     text,
-    author
+    author,
   }),
 
   updatedNotes: (notes: Note[]) => ({
@@ -60,7 +60,7 @@ export const NoteActionFactory = {
     noteId,
     deleteStack,
   }),
-
+  // TODO: add middleware for checking onboarding share-task
   shareNote: (note: string) => ({
     type: NoteAction.ShareNote,
     note,

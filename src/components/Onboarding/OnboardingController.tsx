@@ -6,6 +6,7 @@ import {shallowEqual, useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
+import {onboardingAuthors} from "types/onboardingNotes";
 import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
@@ -17,16 +18,19 @@ export const OnboardingController = () => {
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
   const phaseStep = `${phase}-${step}`;
   const stepOpen = useAppSelector((state) => state.onboarding.stepOpen, isEqual);
+  const inUserTask = useAppSelector((state) => state.onboarding.inUserTask, isEqual);
   const columns = useAppSelector((state) => state.columns, shallowEqual);
 
   useEffect(() => {
     const spawnNotes = (columnName: string) => {
       const column = columns.find((c) => c.name === columnName);
       if (column) {
+        let index = 0;
         onboardingNotes[columnName].forEach((n: {text: string; author: string}) => {
           setTimeout(() => {
             dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author));
-          }, 750);
+          }, index * 500);
+          index++;
         });
       }
     };
@@ -36,19 +40,22 @@ export const OnboardingController = () => {
         break;
       case "newBoard-2":
         break;
-      case "board_check_in-1":
+      case "board_check_in-1": // welcome
         break;
-      case "board_check_in-2":
+      case "board_check_in-2": // add column task
+        dispatch(Actions.setInUserTask(true));
         break;
-      case "board_check_in-3":
+      case "board_check_in-3": // invite team
+        dispatch(Actions.setInUserTask(false));
+        onboardingAuthors.forEach((oa) => {
+          dispatch(Actions.createdParticipant(oa));
+        });
         break;
-      case "board_check_in-4":
+      case "board_check_in-4": // simulate team adding notes
         spawnNotes("Check-In");
         dispatch(Actions.incrementStep());
         break;
-      case "board-check-in_3":
-        break;
-      case "board_data-1":
+      case "board_data-1": // welcome
         break;
       case "board_data-2":
         // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
@@ -99,10 +106,12 @@ export const OnboardingController = () => {
           </button>
 
           <button
-            className="onboarding-button onboarding-next-button"
+            className={`onboarding-button onboarding-next-button ${inUserTask ? "onboarding-button-disabled" : ""}`}
             aria-label="Go to next step"
             onClick={() => {
-              dispatch(Actions.incrementStep());
+              if (!inUserTask) {
+                dispatch(Actions.incrementStep());
+              }
             }}
           >
             {t("Onboarding.next")}

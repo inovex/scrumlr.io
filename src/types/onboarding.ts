@@ -15,4 +15,5 @@ export interface OnboardingState {
   step: number;
   stepOpen: boolean;
   onboardingColumns: OnboardingColumn[];
+  inUserTask: boolean;
 }

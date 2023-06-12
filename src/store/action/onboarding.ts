@@ -6,6 +6,7 @@ export const OnboardingAction = {
   IncrementStep: "scrumlr.io/incrementStep" as const,
   ToggleStepOpen: "scrumlr.io/toggleStepOpen" as const,
   RegisterOnboardingColumns: "scrumlr.io/registerOnboardingColumns" as const,
+  SetInUserTask: "scrumlr.io/setInUserTask" as const,
 };
 
 export const OnboardingActionFactory = {
@@ -24,10 +25,15 @@ export const OnboardingActionFactory = {
     type: OnboardingAction.RegisterOnboardingColumns,
     columns,
   }),
+  setInUserTask: (inTask: boolean) => ({
+    type: OnboardingAction.SetInUserTask,
+    inTask,
+  }),
 };
 
 export type OnboardingReduxAction =
   | ReturnType<typeof OnboardingActionFactory.changePhase>
   | ReturnType<typeof OnboardingActionFactory.incrementStep>
   | ReturnType<typeof OnboardingActionFactory.toggleStepOpen>
-  | ReturnType<typeof OnboardingActionFactory.registerOnboardingColumns>;
+  | ReturnType<typeof OnboardingActionFactory.registerOnboardingColumns>
+  | ReturnType<typeof OnboardingActionFactory.setInUserTask>;

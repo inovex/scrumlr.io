@@ -38,6 +38,8 @@ $color-poker-purple: #5e00ff;
 $color-retro-red: #ea434b;
 $color-warning-red: #eb625b;
 
+$color-retro-red-disabled: #eb787e;
+
 @mixin rgb($color) {
   --accent-color: #{$color};
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};

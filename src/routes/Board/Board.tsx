@@ -30,6 +30,7 @@ export const Board = () => {
         sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
         sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
         sessionStorage.setItem("onboarding_columns", JSON.stringify(onboarding.onboardingColumns));
+        sessionStorage.setItem("onboarding_inUserTask", JSON.stringify(onboarding.inUserTask));
         sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
         store.dispatch(Actions.leaveBoard());
       },
@@ -44,6 +45,7 @@ export const Board = () => {
         sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
         sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
         sessionStorage.setItem("onboarding_columns", JSON.stringify(onboarding.onboardingColumns));
+        sessionStorage.setItem("onboarding_inUserTask", JSON.stringify(onboarding.inUserTask));
         sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
         store.dispatch(Actions.leaveBoard());
       },

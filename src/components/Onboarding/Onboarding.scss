@@ -71,6 +71,15 @@
   padding-left: 2rem;
   padding-right: 1rem;
 }
+.onboarding-button-disabled {
+  background-color: $color-retro-red-disabled;
+  &:hover {
+    cursor: not-allowed;
+    background-color: $color-retro-red-disabled;
+    color: $color-white;
+    border: 2px solid $color-white;
+  }
+}
 
 .onboarding-new_board {
   position: absolute;

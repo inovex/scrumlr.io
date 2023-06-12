@@ -2,10 +2,11 @@ import {Action, ReduxAction} from "store/action";
 import {OnboardingColumn, OnboardingPhase, OnboardingState} from "types/onboarding";
 
 const initialState: OnboardingState = {
-  phase: JSON.parse(sessionStorage.getItem("onboarding_phase") ?? "none"),
+  phase: (sessionStorage.getItem("onboarding_phase") as OnboardingPhase) ?? "none",
   step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
   stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
+  inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
 };
 
 interface OnboardingPhaseSteps {
@@ -33,6 +34,7 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
         phase: action.phase,
         step: 1,
         stepOpen: true,
+        inUserTask: false,
       };
     }
     case Action.IncrementStep: {
@@ -44,6 +46,7 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
           phase: phaseSteps[currentPhaseIndex + 1].name,
           step: 1,
           stepOpen: true,
+          inUserTask: false,
         };
       }
       return {
@@ -70,6 +73,12 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
         };
       }
       return state;
+    }
+    case Action.SetInUserTask: {
+      return {
+        ...state,
+        inUserTask: action.inTask,
+      };
     }
     default:
       return state;

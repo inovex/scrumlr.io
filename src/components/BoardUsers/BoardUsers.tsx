@@ -19,6 +19,7 @@ export const BoardUsers = () => {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const navigate = useNavigate();
   const {t} = useTranslation();
+  // const isOnboarding = window.location.pathname.startsWith("/onboarding");
 
   useEffect(() => {
     function handleResize() {

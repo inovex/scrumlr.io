@@ -8,6 +8,7 @@ import store from "../index";
 
 export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.CreateVoting) {
+    // TODO: add check for onboarding task
     API.createVoting(action.context.board!, action.voting).catch(() => {
       Toast.error({
         title: i18n.t("Error.createVoting"),

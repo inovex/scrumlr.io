@@ -34,4 +34,10 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
       });
     });
   }
+  if (action.type === Action.UpdatedColumns) {
+    const {phase, step} = store.getState().onboarding;
+    if (phase === "board_check_in" && step === 2 && action.columns[0].name === "Check-In" && action.columns[0].visible) {
+      dispatch(Actions.incrementStep());
+    }
+  }
 };

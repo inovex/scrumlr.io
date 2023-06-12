@@ -16,7 +16,7 @@ import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
-import { onboardingAuthorAvatars } from "types/onboardingNotes";
+import {onboardingAuthors} from "types/onboardingNotes";
 
 type StackedNote = Note & {
   authorName: string;
@@ -192,7 +192,7 @@ export const StackView = () => {
   // redirect to stack and show toast if note has been stacked on another note
   useEffect(() => {
     if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
-      if(!isOnboarding) {
+      if (!isOnboarding) {
         navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
       } else {
         navigate(`/onboarding-board/${boardId}/note/${note.position.stack}/stack`);
@@ -210,7 +210,7 @@ export const StackView = () => {
   }, [note, t]);
 
   if (!note) {
-    if(!isOnboarding) {
+    if (!isOnboarding) {
       navigate(`/board/${boardId}`);
     } else {
       navigate(`/onboarding-board/${boardId}`);
@@ -222,7 +222,7 @@ export const StackView = () => {
     if (userIsModerating) {
       dispatch(Actions.stopSharing());
     }
-    if(!isOnboarding) {
+    if (!isOnboarding) {
       navigate(`/board/${boardId}`);
     } else {
       navigate(`/onboarding-board/${boardId}`);
@@ -272,9 +272,7 @@ export const StackView = () => {
                       text={item.parent.text}
                       authorId={item.parent.author}
                       avatar={
-                        onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === onboardingNotes.find((on) => on.id === item?.parent?.id)?.onboardingAuthor)?.avatar
-                        ??
-                        item.avatar
+                        onboardingAuthors.find((oa) => oa.user.name === onboardingNotes.find((on) => on.id === item?.parent?.id)?.onboardingAuthor)?.user.avatar ?? item.avatar
                       }
                       authorName={onboardingNotes.find((on) => on.id === item?.parent?.id)?.onboardingAuthor ?? item.authorName}
                       showAuthors={showAuthors}
@@ -292,11 +290,7 @@ export const StackView = () => {
                           noteId={n.id}
                           text={n.text}
                           authorId={n.author}
-                          avatar={
-                            onboardingAuthorAvatars.find((oa) => oa.onboardingAuthor === onboardingNotes.find((on) => on.id === n.id)?.onboardingAuthor)?.avatar
-                            ??
-                            item.avatar
-                          }
+                          avatar={onboardingAuthors.find((oa) => oa.user.name === onboardingNotes.find((on) => on.id === n.id)?.onboardingAuthor)?.user.avatar ?? item.avatar}
                           authorName={onboardingNotes.find((on) => on.id === n.id)?.onboardingAuthor ?? n.authorName}
                           showAuthors={showAuthors}
                           onClose={handleClose}
