@@ -70,18 +70,18 @@ jobs:
       
       - name: Replace Branch specific Values
         run: |
-          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment_json.yaml
+          sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.yaml
       
       - name: json_debug
         run: |
-          cat k8s/deployment_json.yaml
+          cat k8s/deployment.yaml
 
       - name: Deploy to dev cluster 
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
           manifests: |
-            k8s/deployment_json.yaml
+            k8s/deployment.yaml
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
