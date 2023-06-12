@@ -58,7 +58,7 @@ spec:
         - name: SCRUMLR_SERVER_DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: postgresql-creds
+              name: postgres-url-BRANCH_NAME
               key: url
         - name: SCRUMLR_AUTH_GOOGLE_CLIENT_ID
           valueFrom:
@@ -240,3 +240,12 @@ spec:
       owner: scrumlr
       secret:
         name: postgresql-creds
+---
+# secret containing the database url
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-url-BRANCH_NAME
+type: Opaque
+stringData:
+  url: postgres://scrumlr:POSTGRES_DEV_PASSWORD@cluster-BRANCH_NAME-rw:5432/scrumlr
