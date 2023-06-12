@@ -100,5 +100,5 @@ jobs:
         run: |
           echo $DOCKER_METADATA_OUTPUT_TAGS
           echo _________________________________________________________________
-          echo frontend-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:sha-$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-\K[a-f0-9]+')") >> $GITHUB_OUTPUT
-          echo server-image-tag=$(echo "ghcr.io/inovex/scrumlr.io/scrumlr-server:sha-$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-\K[a-f0-9]+')") >> $GITHUB_OUTPUT
+          echo frontend-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')") >> $GITHUB_OUTPUT
+          echo server-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')") >> $GITHUB_OUTPUT
