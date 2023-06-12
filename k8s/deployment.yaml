@@ -217,34 +217,30 @@ spec:
   - BRANCH_NAME.development.scrumlr.fra.ics.inovex.io
 ---
 # Database for the deployment
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
 metadata:
-  name: scrumlr-postgres-BRANCH_NAME
+  name: scrumlr-postgres-cluster
+  namespace: scrumlr
 spec:
-  chart:
-    spec:
-      chart: postgresql
-      sourceRef:
-        kind: HelmRepository
-        name: bitnami
-  install: {}
-  interval: 1m0s
-  targetNamespace: scrumlr-dev-deployments
-  values:
-    auth:
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.1
+  instances: 1
+  storage:
+    storageClass: csi-cinder-sc-delete
+    size: 1Gi
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: failure-domain.beta.kubernetes.io/zone
+  postgresql:
+    parameters:
+      shared_buffers: 256MB
+      max_connections: '200'
+  bootstrap:
+    initdb:
       database: scrumlr
-      username: scrumlr
-      existingSecret: postgresql-creds
-      secretKeys:
-        adminPasswordKey: password
-        userPasswordKey: password
-        replicationPasswordKey: password
-    primary:
-      persistence:
-        enabled: true
-        size: 1Gi
-        storageClass: csi-cinder-sc-delete
+      owner: scrumlr
+      secret:
+        name: postgresql-creds
 --- 
 # Service for the postgres deployment
 apiVersion: v1
