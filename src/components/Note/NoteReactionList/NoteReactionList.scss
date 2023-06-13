@@ -13,6 +13,8 @@
   align-items: center;
   gap: $reaction__gap-size;
 
+  padding-left: $reaction__padding--outer-left-right;
+
   border-radius: $rounded--full;
 
   &--active {

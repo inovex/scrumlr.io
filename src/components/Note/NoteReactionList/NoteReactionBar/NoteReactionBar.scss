@@ -4,6 +4,8 @@
   display: inline-flex;
   flex-direction: row;
   gap: $reaction__gap-size;
+
+  padding: $reaction__padding--outer-top-bottom $reaction__padding--outer-left-right $reaction__padding--outer-top-bottom 0; // left padding in NoteReactionList because of icon
 }
 
 .note-reaction-bar__reaction {
