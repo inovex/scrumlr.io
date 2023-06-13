@@ -11,7 +11,7 @@
 
   width: 34px;
   height: $reaction__inner-size;
-  padding: $reaction__padding 8px; // total dimensions: 50px * 28px
+  padding: $reaction__padding--inner 8px; // total dimensions: 50px * 28px
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
