@@ -1,6 +1,7 @@
 import {isEqual} from "underscore";
 import {useDispatch} from "react-redux";
-import {ReactComponent as IconEmoji} from "assets/icon-smiley.svg";
+import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
+import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
 import React, {useState} from "react";
 import classNames from "classnames";
 import {useAppSelector} from "../../../store";
@@ -111,7 +112,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     <div className="note-reaction-list__root">
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
         <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
-          <IconEmoji className="note-reaction-list__add-reaction-sticker" />
+          {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} handleClickReaction={handleClickReaction} />}
       </div>
