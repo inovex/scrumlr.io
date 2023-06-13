@@ -5,7 +5,7 @@ metadata:
   name: scrumlr-backend-BRANCH_NAME
 spec:
   selector:
-    app: scrumlr
+    app: scrumlr-BRANCH_NAME
   ports:
     - port: 8080
       targetPort: 8080
