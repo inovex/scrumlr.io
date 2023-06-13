@@ -1,0 +1,31 @@
+@import "src/constants/style";
+
+.note-reaction-chip-condensed__root {
+  all: unset; // remove default buttons styling
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: $reaction__gap-size;
+
+  height: $reaction__inner-size;
+  padding: $reaction__padding 8px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  font-size: $text--base;
+
+  &:hover {
+    background-color: $color-light-gray;
+  }
+}
+
+.note-reaction-chip-condensed__reaction {
+  font-size: $text--md;
+}
+
+.note-reaction-chip-condensed__amount {
+  font-size: $text--sm;
+  font-weight: 600;
+}

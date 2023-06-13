@@ -9,6 +9,7 @@ import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
+import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {Actions} from "../../../store/action";
 import "./NoteReactionList.scss";
 
@@ -24,6 +25,8 @@ export interface ReactionModeled {
   myReactionId?: string;
   noteId: string;
 }
+
+const ACTIVATE_CONDENSED_VIEW_MIN_USER_AMOUNT = 3;
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const dispatch = useDispatch();
@@ -66,6 +69,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         .sort((a, b) => a.reactionType.localeCompare(b.reactionType)), // always the same order to avoid confusion
     isEqual
   );
+
+  const showCondensed = reactions.length > ACTIVATE_CONDENSED_VIEW_MIN_USER_AMOUNT; // TODO: only when width is below limit
 
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -116,7 +121,13 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         </button>
         {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} handleClickReaction={handleClickReaction} />}
       </div>
-      {!showReactionBar && reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)}
+      {!showReactionBar &&
+        // show either condensed or normal reaction chips
+        (showCondensed ? (
+          <NoteReactionChipCondensed reactions={reactions} />
+        ) : (
+          reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)
+        ))}
     </div>
   );
 };
