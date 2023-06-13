@@ -70,6 +70,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     isEqual
   );
 
+  // only one reaction can be made per user per note
+  const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
+
   const showCondensed = reactions.length > ACTIVATE_CONDENSED_VIEW_MIN_USER_AMOUNT; // TODO: only when width is below limit
 
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
@@ -91,9 +94,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
-    // only one reaction can be made per user per note, so if one already made we need to remove that one first.
-    // for that purpose, we need to find a reaction that's been made by the user
-    const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
     const isSameReaction = reactionMadeByUser?.reactionType === reactionType;
 
     // no reaction exists -> add
@@ -124,7 +124,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
       {!showReactionBar &&
         // show either condensed or normal reaction chips
         (showCondensed ? (
-          <NoteReactionChipCondensed reactions={reactions} />
+          <>
+            <NoteReactionChipCondensed reactions={reactions} />
+            {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} />}
+          </>
         ) : (
           reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)
         ))}
