@@ -1,4 +1,5 @@
 import {Tooltip} from "react-tooltip";
+import {hashCode} from "utils/hash";
 import {ReactionModeled} from "../NoteReactionList";
 import {ReactionImageMap} from "../../../../types/reaction";
 
@@ -23,14 +24,17 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
     <>
       <div id={`reactions-condensed-${noteId}`} className="note-reaction-chip-condensed__root">
         {reactionImages.map((emoji) => (
-          <div className="note-reaction-chip-condensed__reaction">{emoji}</div>
+          <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
+            {emoji}
+          </div>
         ))}
         <div className="note-reaction-chip-condensed__amount">{totalAmount}</div>
       </div>
       <Tooltip anchorSelect={`#reactions-condensed-${noteId}`} place="top" variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}>
         <div className="note-reaction-chip-condensed__tooltip">
           {reactionUsersTitle.map((t) => (
-            <span>{t}</span>
+            // hash because a unique key is required to make linter happy
+            <span key={hashCode(t)}>{t}</span>
           ))}
         </div>
       </Tooltip>
