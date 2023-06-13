@@ -162,7 +162,7 @@ spec:
             name: scrumlr-frontend-BRANCH_NAME
             port:
               number: 80
-      - path: /api
+      - path: /api/
         pathType: Prefix
         backend:
           service:
@@ -194,7 +194,7 @@ spec:
             name: scrumlr-frontend-BRANCH_NAME
             port:
               number: 80
-      - path: /api
+      - path: /api/
         pathType: Prefix
         backend:
           service:
