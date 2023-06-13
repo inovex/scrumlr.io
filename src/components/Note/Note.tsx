@@ -1,8 +1,7 @@
 import classNames from "classnames";
-import {useRef, useEffect, KeyboardEvent, useState, useLayoutEffect, RefObject} from "react";
+import {useRef, useEffect, KeyboardEvent} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
-import useResizeObserver from "@react-hook/resize-observer";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
@@ -13,6 +12,7 @@ import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {useSize} from "utils/hooks/useSize";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import "./Note.scss";
@@ -21,14 +21,6 @@ interface NoteProps {
   noteId: string;
   viewer: Participant;
 }
-
-const useSize = (target: RefObject<HTMLButtonElement>) => {
-  const [size, setSize] = useState<DOMRect>();
-
-  useLayoutEffect(() => setSize(target.current?.getBoundingClientRect()), [target]);
-  useResizeObserver(target, (entry) => setSize(entry.contentRect));
-  return size;
-};
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
