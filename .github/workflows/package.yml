@@ -99,6 +99,6 @@ jobs:
         id: outputs
         run: |
           echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _________________________________________________________________
+          echo __________________________________________________________________
           echo frontend-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')") >> $GITHUB_OUTPUT
           echo server-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')") >> $GITHUB_OUTPUT
