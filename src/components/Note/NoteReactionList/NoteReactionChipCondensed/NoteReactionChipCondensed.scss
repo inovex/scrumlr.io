@@ -29,3 +29,8 @@
   font-size: $text--sm;
   font-weight: 600;
 }
+
+.note-reaction-chip-condensed__tooltip {
+  display: flex;
+  flex-direction: column;
+}
