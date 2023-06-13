@@ -45,7 +45,7 @@ spec:
         - name: SCRUMLR_API_HOST
           value: "https://BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
         - name: SCRUMLR_SERVER_NATS_URL
-          value: nats://scrumlr-scrumlr-nats:4222
+          value: nats://nats-BRANCH_NAME:4222
         - name: SCRUMLR_AUTH_CALLBACK_HOST
           value: "https://BRANCH_NAME.development.scrumlr.fra.ics.inovex.io"
         - name: SCRUMLR_UNSAFE_PRIVATE_KEY
