@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import {useRef, useEffect, KeyboardEvent} from "react";
+import {useRef, useEffect, KeyboardEvent, useState, useLayoutEffect, RefObject} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import {useDispatch} from "react-redux";
+import useResizeObserver from "@react-hook/resize-observer";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
@@ -20,6 +21,14 @@ interface NoteProps {
   noteId: string;
   viewer: Participant;
 }
+
+const useSize = (target: RefObject<HTMLButtonElement>) => {
+  const [size, setSize] = useState<DOMRect>();
+
+  useLayoutEffect(() => setSize(target.current?.getBoundingClientRect()), [target]);
+  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  return size;
+};
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
@@ -118,6 +127,8 @@ export const Note = (props: NoteProps) => {
     preview(getEmptyImage());
   }, [preview]);
 
+  const dimensions = useSize(noteRef);
+
   const handleClick = () => {
     if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
       dispatch(Actions.shareNote(props.noteId));
@@ -162,7 +173,7 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{note!.text}</p>
         )}
         <footer className="note__footer">
-          <NoteReactionList noteId={props.noteId} />
+          <NoteReactionList noteId={props.noteId} dimensions={dimensions} />
         </footer>
       </button>
       {isStack && <div className="note__in-stack" />}

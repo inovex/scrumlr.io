@@ -15,6 +15,7 @@ import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
   noteId: string;
+  dimensions?: DOMRect; // used for note width
 }
 
 export interface ReactionModeled {
@@ -26,7 +27,8 @@ export interface ReactionModeled {
   noteId: string;
 }
 
-const ACTIVATE_CONDENSED_VIEW_MIN_USER_AMOUNT = 3;
+const CONDENSED_VIEW_MIN_USER_AMOUNT = 3;
+const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const dispatch = useDispatch();
@@ -73,7 +75,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   // only one reaction can be made per user per note
   const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
 
-  const showCondensed = reactions.length > ACTIVATE_CONDENSED_VIEW_MIN_USER_AMOUNT; // TODO: only when width is below limit
+  const showCondensed = reactions.length > CONDENSED_VIEW_MIN_USER_AMOUNT && (props.dimensions?.width ?? 0) < CONDENSED_VIEW_WIDTH_LIMIT;
 
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
