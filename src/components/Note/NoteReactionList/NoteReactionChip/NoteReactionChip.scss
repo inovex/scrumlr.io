@@ -19,7 +19,7 @@
   font-size: $text--base;
 
   &:hover {
-    background-color: $color-light-gray;
+    background-color: $color-reaction-chip--light-hover;
   }
 }
 
@@ -38,4 +38,20 @@
 .note-reaction-chip__amount {
   font-size: $text--sm;
   font-weight: 600;
+  line-height: 18px;
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .note-reaction-chip__root {
+    background-color: $color-dark-one;
+
+    &:hover {
+      background-color: $color-reaction-chip--dark-hover;
+    }
+  }
+
+  .note-reaction-chip__amount {
+    color: $color-white;
+  }
 }
