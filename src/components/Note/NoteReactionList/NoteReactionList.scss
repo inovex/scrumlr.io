@@ -38,11 +38,31 @@
   background-color: $color-lighter-gray;
 
   &:hover {
-    background-color: $color-light-gray;
+    background-color: $color-reaction-chip--light-hover;
   }
 }
 
 .note-reaction-list__add-reaction-sticker {
-  width: $icon--large;
-  height: $icon--large;
+  width: $icon--medium;
+  height: $icon--medium;
+}
+
+[theme="dark"] {
+  .note-reaction-list__reaction-bar-container {
+    &--active {
+      background-color: $color-dark-one;
+    }
+  }
+
+  .note-reaction-list__add-reaction-sticker-container {
+    background-color: $color-dark-one;
+
+    &:hover {
+      background-color: $color-reaction-chip--dark-hover;
+    }
+  }
+
+  .note-reaction-list__add-reaction-sticker {
+    color: $color-white;
+  }
 }
