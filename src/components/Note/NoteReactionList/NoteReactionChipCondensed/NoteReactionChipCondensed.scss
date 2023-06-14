@@ -7,10 +7,10 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: $reaction__gap-size;
+  gap: 8px;
 
-  height: $reaction__inner-size;
-  padding: $reaction__padding--inner 8px;
+  height: 18px;
+  padding: 5px 8px 5px 7px;
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
@@ -19,6 +19,14 @@
   &:hover {
     background-color: $color-reaction-chip--light-hover;
   }
+}
+
+.note-reaction-chip-condensed__reactions-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .note-reaction-chip-condensed__reaction {

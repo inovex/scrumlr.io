@@ -23,11 +23,13 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   return (
     <>
       <div id={`reactions-condensed-${noteId}`} className="note-reaction-chip-condensed__root">
-        {reactionImages.map((emoji) => (
-          <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
-            {emoji}
-          </div>
-        ))}
+        <div className="note-reaction-chip-condensed__reactions-container">
+          {reactionImages.map((emoji) => (
+            <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
+              {emoji}
+            </div>
+          ))}
+        </div>
         <div className="note-reaction-chip-condensed__amount">{totalAmount}</div>
       </div>
       <Tooltip anchorSelect={`#reactions-condensed-${noteId}`} place="top" variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}>
