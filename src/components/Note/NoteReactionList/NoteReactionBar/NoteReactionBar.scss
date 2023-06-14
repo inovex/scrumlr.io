@@ -23,7 +23,7 @@
   font-size: $text--md;
 
   &:hover {
-    background-color: $color-reaction-chip--light-hover;
+    background-color: $hover-background-light;
   }
 
   &--active {
@@ -38,7 +38,7 @@
 [theme="dark"] {
   .note-reaction-bar__reaction {
     &:hover {
-      background-color: $color-reaction-chip--dark-hover;
+      background-color: $hover-background-dark;
     }
   }
 }

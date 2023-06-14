@@ -19,7 +19,7 @@
   font-size: $text--base;
 
   &:hover {
-    background-color: $color-reaction-chip--light-hover;
+    background-color: $hover-background-light;
   }
 }
 
@@ -47,7 +47,7 @@
     background-color: $color-dark-one;
 
     &:hover {
-      background-color: $color-reaction-chip--dark-hover;
+      background-color: $hover-background-dark;
     }
   }
 
