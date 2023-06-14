@@ -61,7 +61,7 @@
     "@types/marked": "^5.0.0",
     "@types/node": "^20.2.5",
     "@types/qrcode.react": "^1.0.2",
-    "@types/react": "^18.2.8",
+    "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.4",
     "@types/react-helmet": "^6.1.6",
     "@types/redux-mock-store": "^1.0.3",
