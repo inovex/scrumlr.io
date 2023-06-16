@@ -206,7 +206,6 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) error {
 		Type: realtime.BoardEventNotesSync,
 		Data: dto.Notes(notes),
 	})
-
 	return err
 }
 
