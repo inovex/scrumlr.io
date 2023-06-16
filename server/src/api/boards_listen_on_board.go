@@ -134,7 +134,7 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
-// Refactor the client sorting
+// ToDo: Refactor the client sorting or even find a better solution to avoid it
 type client struct {
 	userID uuid.UUID
 	conn   *websocket.Conn
@@ -162,6 +162,7 @@ func (b *BoardSubscription) startListeningOnBoard() {
 			logger.Get().Debugw("message received", "message", msg)
 
 			mappedClients := make([]client, 0, len(b.clients))
+			// ToDo: Refactor this sorting
 			for id := range b.clients {
 				var role types.SessionRole
 				// retrieve role
@@ -324,6 +325,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			event.Data = boardSettings
 			return event
 		}
+		// TODO -> trigger a NoteUpdate() when these settings change, so that participants get all notes updated while the setting was active
 	}
 
 	return event
