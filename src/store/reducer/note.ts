@@ -11,6 +11,9 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
     case Action.DeletedNote: {
       return state.filter((n) => n.id !== action.noteId);
     }
+    case Action.SyncNotes: {
+      return action.notes;
+    }
     case Action.UpdatedVoting: {
       if (action.notes) {
         return action.notes;

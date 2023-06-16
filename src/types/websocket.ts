@@ -50,6 +50,11 @@ export interface UpdatedNotesEvent {
   data: Note[];
 }
 
+export interface SyncNotesEvent {
+  type: "NOTES_SYNC";
+  data: Note[];
+}
+
 export interface DeletedNoteEvent {
   type: "NOTE_DELETED";
   data: string;
@@ -116,6 +121,7 @@ export type ServerEvent =
   | DeletedColumnEvent
   | UpdatedNotesEvent
   | DeletedNoteEvent
+  | SyncNotesEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent
