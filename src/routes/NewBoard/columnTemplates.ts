@@ -72,7 +72,6 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
       {name: "Weaknesses", hidden: false, color: "online-orange"},
       {name: "Opportunities", hidden: false, color: "grooming-green"},
       {name: "Threats", hidden: false, color: "retro-red"},
-      {name: "Actions", hidden: true, color: "poker-purple"},
     ],
   },
 };
